@@ -120,8 +120,15 @@ if __name__ == '__main__':
     PP = pprint.PrettyPrinter(indent=3, width=150)
     filename = 'persephone.json' # TODO: make this a command-line argument
 
+    # TODO: need a game object -- it'll deal with starting fights, etc.
+
     # Arriving -- read our stuff
     with CaJson(filename) as world:
+
+        # Enter into the mainloop
+        #with CaDisplay() as display:
+        #    while display.GetInput() != 'e':
+        #        pass
 
         # Build convenient data structures starting from:
         #   {
@@ -131,11 +138,6 @@ if __name__ == '__main__':
         #       'opponent': null
         #   }, 
 
-        # Enter into the mainloop
-        #with CaDisplay() as display:
-        #    while display.GetInput() != 'e':
-        #        pass
-
         fighters = []
         if 'characters' not in world:
             #display.Error('No "characters" in %s' % filename)
@@ -144,6 +146,14 @@ if __name__ == '__main__':
         if ('current-fight' in world and 
                 world['current-fight'] in world['monsters']):
             fighters.extend(world['monsters'][world['current-fight']])
+
+        # Sort by initiative = basic-speed followed by DEX followed by random
+        # TODO: add DEX and random
+        # TODO: there should be an 'initiative' value so that someone can
+        #   change their initiative with a 'wait' action (although, maybe,
+        #   that just changes the order in the list)
+        fighters.sort(key=lambda fighter: fighter['current']['basic-speed'],
+                      reverse=True)
 
         PP.pprint(fighters)
 
