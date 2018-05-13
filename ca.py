@@ -3,6 +3,7 @@
 import curses
 import json
 import pprint
+# import requests # Easy to use HTTP, requires Python 3
 
 # read character via json
 #  - whole thing in one JSON
@@ -105,7 +106,7 @@ if __name__ == '__main__':
 
     # Leaving -- save our stuff
     with open(filename, "w") as f:
-        data = json.dump(world, f)
+        data = json.dump(world, f, indent=4, encoding="ascii")
 
 
 
