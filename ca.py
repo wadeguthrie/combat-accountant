@@ -1,11 +1,13 @@
 #! /usr/bin/python
 
 import curses
+import json
+import pprint
 
 # read character via json
 #  - whole thing in one JSON
 #  - characters: perm-stats, current-stats
-#    * needs init, hp, fp, opponent
+#    * needs basic-speed, hp, fp, opponent
 #  - current fight: which monsters
 #  - monster groups: each group needs a 'used' feature
 #  - timers
@@ -87,9 +89,23 @@ class CaDisplay(object):
 
 # Main
 if __name__ == '__main__':
-    with CaDisplay() as display:
-        while display.GetInput() != 'e':
-            pass
+    PP = pprint.PrettyPrinter(indent=3, width=150)
+    filename = "persephone.json" # TODO: make this a command-line argument
+
+    # Arriving -- read our stuff
+    with open(filename, "r") as f:
+      world = json.load(f)
+
+    # Enter into the mainloop
+    #with CaDisplay() as display:
+    #    while display.GetInput() != 'e':
+    #        pass
+
+    PP.pprint(world)
+
+    # Leaving -- save our stuff
+    with open(filename, "w") as f:
+        data = json.dump(world, f)
 
 
 
