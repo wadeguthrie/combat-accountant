@@ -86,6 +86,7 @@ class CaDisplay(object):
         height = 5; width = 40
         win = curses.newwin(height, width, begin_y, begin_x)
 
+
 class CaJson(object):
 
     def __init__(self, filename):
@@ -93,7 +94,7 @@ class CaJson(object):
 
     def __enter__(self):
         try:
-            with open(self.__filename, "r") as f:
+            with open(self.__filename, 'r') as f:
               world = json.load(f)
         except:
             pass
@@ -109,7 +110,7 @@ class CaJson(object):
             print 'EXCEPTION val: %s' % exception_value
             print 'Traceback: %r' % exception_traceback
 
-        with open(self.__filename, "w") as f:
+        with open(self.__filename, 'w') as f:
             json.dump(world, f, indent=4)
         return True
 
@@ -117,17 +118,17 @@ class CaJson(object):
 # Main
 if __name__ == '__main__':
     PP = pprint.PrettyPrinter(indent=3, width=150)
-    filename = "persephone.json" # TODO: make this a command-line argument
+    filename = 'persephone.json' # TODO: make this a command-line argument
 
     # Arriving -- read our stuff
     with CaJson(filename) as world:
 
         # Build convenient data structures starting from:
         #   {
-        #       "current": { "fp": 10, "hp": 10, "basic-speed": 1 }, 
-        #       "permenant": { "fp": 10, "hp": 10, "basic-speed": 1 }, 
-        #       "name": "groucho", 
-        #       "opponent": null
+        #       'current': { 'fp': 10, 'hp': 10, 'basic-speed': 1 }, 
+        #       'permenant': { 'fp': 10, 'hp': 10, 'basic-speed': 1 }, 
+        #       'name': 'groucho', 
+        #       'opponent': null
         #   }, 
 
         # Enter into the mainloop
@@ -135,13 +136,15 @@ if __name__ == '__main__':
         #    while display.GetInput() != 'e':
         #        pass
 
-        #fighters = []
-        #if "" not in world:
-        #    display.Error("No 'characters' in %s" % filename)
-        #fighters.extend(world["characters"])
+        fighters = []
+        if 'characters' not in world:
+            #display.Error('No "characters" in %s' % filename)
+            print 'No "characters" in %s' % filename # TODO: dump when display
+        fighters.extend(world['characters'])
+        if ('current-fight' in world and 
+                world['current-fight'] in world['monsters']):
+            fighters.extend(world['monsters'][world['current-fight']])
 
-        PP.pprint(world)
-
-
+        PP.pprint(fighters)
 
 
