@@ -1,20 +1,123 @@
 {
-    "monsters": {}, 
+    "monsters": {
+        "marx": [
+            {
+                "current": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 1
+                }, 
+                "permenant": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 1
+                }, 
+                "name": "groucho", 
+                "opponent": null
+            }, 
+            {
+                "current": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 3
+                }, 
+                "permenant": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 3
+                }, 
+                "name": "chico", 
+                "opponent": null
+            }, 
+            {
+                "current": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 5
+                }, 
+                "permenant": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 5
+                }, 
+                "name": "harpo", 
+                "opponent": null
+            }
+        ], 
+        "stooges": [
+            {
+                "current": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 2
+                }, 
+                "permenant": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 2
+                }, 
+                "name": "larry", 
+                "opponent": null
+            }, 
+            {
+                "current": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 4
+                }, 
+                "permenant": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 4
+                }, 
+                "name": "curly", 
+                "opponent": null
+            }, 
+            {
+                "current": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 6
+                }, 
+                "permenant": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 6
+                }, 
+                "name": "moe", 
+                "opponent": null
+            }
+        ]
+    }, 
     "characters": [
         {
-            "fp": 10, 
-            "hp": 10, 
-            "basic-speed": 3, 
+            "current": {
+                "fp": 10, 
+                "hp": 10, 
+                "basic-speed": 3
+            }, 
+            "permenant": {
+                "fp": 10, 
+                "hp": 10, 
+                "basic-speed": 3
+            }, 
             "name": "bob", 
             "opponent": null
         }, 
         {
-            "fp": 10, 
-            "hp": 10, 
-            "basic-speed": 5, 
+            "current": {
+                "fp": 10, 
+                "hp": 10, 
+                "basic-speed": 5
+            }, 
+            "permenant": {
+                "fp": 10, 
+                "hp": 10, 
+                "basic-speed": 5
+            }, 
             "name": "tom", 
             "opponent": null
         }
     ], 
-    "current-fight": "xxx"
+    "current-fight": "stooges"
 }
