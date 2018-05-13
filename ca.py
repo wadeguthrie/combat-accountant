@@ -86,6 +86,32 @@ class CaDisplay(object):
         height = 5; width = 40
         win = curses.newwin(height, width, begin_y, begin_x)
 
+class CaJson(object):
+
+    def __init__(self, filename):
+        self.__filename = filename
+
+    def __enter__(self):
+        try:
+            with open(self.__filename, "r") as f:
+              world = json.load(f)
+        except:
+            pass
+        return world
+
+    def __exit__ (self, exception_type, exception_value, exception_traceback):
+        if exception_type is IOError:
+            print 'IOError: %r' % exception_type
+            print 'EXCEPTION val: %s' % exception_value
+            print 'Traceback: %r' % exception_traceback
+        elif exception_type is not None:
+            print 'EXCEPTION type: %r' % exception_type
+            print 'EXCEPTION val: %s' % exception_value
+            print 'Traceback: %r' % exception_traceback
+
+        with open(self.__filename, "w") as f:
+            json.dump(world, f, indent=4)
+        return True
 
 
 # Main
@@ -94,19 +120,28 @@ if __name__ == '__main__':
     filename = "persephone.json" # TODO: make this a command-line argument
 
     # Arriving -- read our stuff
-    with open(filename, "r") as f:
-      world = json.load(f)
+    with CaJson(filename) as world:
 
-    # Enter into the mainloop
-    #with CaDisplay() as display:
-    #    while display.GetInput() != 'e':
-    #        pass
+        # Build convenient data structures starting from:
+        #   {
+        #       "current": { "fp": 10, "hp": 10, "basic-speed": 1 }, 
+        #       "permenant": { "fp": 10, "hp": 10, "basic-speed": 1 }, 
+        #       "name": "groucho", 
+        #       "opponent": null
+        #   }, 
 
-    PP.pprint(world)
+        # Enter into the mainloop
+        #with CaDisplay() as display:
+        #    while display.GetInput() != 'e':
+        #        pass
 
-    # Leaving -- save our stuff
-    with open(filename, "w") as f:
-        data = json.dump(world, f, indent=4, encoding="ascii")
+        #fighters = []
+        #if "" not in world:
+        #    display.Error("No 'characters' in %s" % filename)
+        #fighters.extend(world["characters"])
+
+        PP.pprint(world)
+
 
 
 
