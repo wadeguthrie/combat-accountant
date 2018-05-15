@@ -46,6 +46,7 @@ class CaDisplay(object):
 
     def __init__(self):
         self.__stdscr = None
+        self.__y = 0 # For debug printouts
 
     def __enter__(self):
         try:
@@ -74,6 +75,11 @@ class CaDisplay(object):
         curses.endwin()
         self.__stdscr = None
         return True
+
+    def show(self, string):
+        self.__stdscr.addstr(self.__y, 0, string)
+        self.__y = 0 if self.__y == curses.LINES else self.__y + 1
+        self.__stdscr.refresh()
 
     def GetInput(self):
         c = self.__stdscr.getch()
@@ -161,11 +167,6 @@ if __name__ == '__main__':
     # Arriving -- read our stuff
     with CaJson(filename) as world:
 
-        # Enter into the mainloop
-        #with CaDisplay() as display:
-        #    while display.GetInput() != 'e':
-        #        pass
-
         # Build convenient data structures starting from:
         #   {
         #       'current': { 'fp': 10, 'hp': 10, 'basic-speed': 1 }, 
@@ -191,6 +192,14 @@ if __name__ == '__main__':
         fighters.sort(key=lambda fighter: fighter['current']['basic-speed'],
                       reverse=True)
 
-        PP.pprint(fighters)
+        # PP.pprint(fighters)
+
+
+        # Enter into the mainloop
+        with CaDisplay() as display:
+            for fighter in fighters:
+                display.show(fighter['name'])
+            while display.GetInput() != 'e':
+                pass
 
 
