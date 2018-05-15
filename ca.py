@@ -82,11 +82,11 @@ class CaDisplay(object):
         self.__y = 0 if self.__y == curses.LINES else self.__y + 1
         self.__stdscr.refresh()
 
-    def GetInput(self):
+    def get_input(self):
         c = self.__stdscr.getch()
         # 'c' will be something like ord('p') or curses.KEY_HOME
         # TODO: convert 'c' to something ascii-like
-        return chr(c) # I _think_ converts it to ASCII
+        return c
 
     def menu(self, title, strings):
         # TODO: doesn't handle scrolling
@@ -105,22 +105,51 @@ class CaDisplay(object):
 
         border_win = curses.newwin(height+2, width+2, begin_y-1, begin_x-1)
         border_win.border()
-        # border_win.noutrefresh()
+
+        title_start = ((width + 2) - (len(title))) / 2
+        border_win.addstr(0, title_start, title)
         border_win.refresh()
 
         # TODO: may want to use 'newpad' when scrolling is desired
         menu_win = curses.newwin(height, width, begin_y, begin_x)
+        index = 0
         for line, string in enumerate(strings):
             # Maybe use A_BOLD instead of A_STANDOUT -- could also use
             # curses.color_pair(1) or whatever
-            mode = curses.A_STANDOUT if line == 0 else curses.A_NORMAL
-            print 'line %d is "%s"' % (line, string)
+            mode = curses.A_STANDOUT if line == index else curses.A_NORMAL
             menu_win.addstr(line, 0, string, mode)
-            #menu_win.addstr(line, 1, string)
         menu_win.refresh()
-        #menu_win.noutrefresh()
-        #curses.doupdate() # redraw the whole screen
 
+        keep_going = True
+        while keep_going:
+            input = self.get_input()
+            new_index = index
+            if input == curses.KEY_HOME:
+                new_index = 0
+            elif input == curses.KEY_UP:
+                new_index -= 1
+            elif input == curses.KEY_DOWN:
+                new_index += 1
+            elif input == ord('\n'):
+                del border_win
+                del menu_win
+                # TODO: the following shouldn't be stdscr, it should be part
+                # of a stack of windows
+                self.__stdscr.touchwin()
+                self.__stdscr.refresh()
+                return strings[index]
+            if new_index != index:
+                old_index = index
+                index = new_index if new_index < height else 0
+                menu_win.addstr(old_index,
+                                0,
+                                strings[old_index],
+                                curses.A_NORMAL)
+                menu_win.addstr(index,
+                                0,
+                                strings[new_index],
+                                curses.A_STANDOUT)
+                menu_win.refresh()
 
 
 class CaJson(object):
@@ -230,9 +259,10 @@ if __name__ == '__main__':
             # display.menu('foo', ['sss', 'ttt'])
 
             fight_names = world['monsters'].keys()
-            display.menu('Fights', ['marx', 'stooges']) #fight_names)
+            result = display.menu('Fights', ['marx', 'stooges']) #fight_names)
+            print "MENU RESULT=%s" % result
 
-            while display.GetInput() != 'e':
+            while display.get_input() != ord('e'):
                 pass
 
 
