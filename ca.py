@@ -77,7 +77,8 @@ class CaDisplay(object):
         return True
 
     def show(self, string):
-        self.__stdscr.addstr(self.__y, 0, string)
+        mode = curses.A_STANDOUT if (self.__y % 3 == 0) else curses.A_NORMAL
+        self.__stdscr.addstr(self.__y, 0, string, mode)
         self.__y = 0 if self.__y == curses.LINES else self.__y + 1
         self.__stdscr.refresh()
 
@@ -87,10 +88,38 @@ class CaDisplay(object):
         # TODO: convert 'c' to something ascii-like
         return chr(c) # I _think_ converts it to ASCII
 
-    def Menu(self):
-        begin_x = 20; begin_y = 7
-        height = 5; width = 40
-        win = curses.newwin(height, width, begin_y, begin_x)
+    def menu(self, title, strings):
+        # TODO: doesn't handle scrolling
+
+        # height and width of text box (not border)
+        height = len(strings)
+        width = 0 if title is None else len(title)
+        for string in strings:
+            if len(string) > width:
+                width = len(string)
+        width += 1 # Seems to need one more space (or Curses freaks out)
+
+        # x and y of text box (not border)
+        begin_x = (curses.COLS / 2) - (width/2)
+        begin_y = (curses.LINES / 2) - (height/2)
+
+        border_win = curses.newwin(height+2, width+2, begin_y-1, begin_x-1)
+        border_win.border()
+        # border_win.noutrefresh()
+        border_win.refresh()
+
+        # TODO: may want to use 'newpad' when scrolling is desired
+        menu_win = curses.newwin(height, width, begin_y, begin_x)
+        for line, string in enumerate(strings):
+            # Maybe use A_BOLD instead of A_STANDOUT -- could also use
+            # curses.color_pair(1) or whatever
+            mode = curses.A_STANDOUT if line == 0 else curses.A_NORMAL
+            print 'line %d is "%s"' % (line, string)
+            menu_win.addstr(line, 0, string, mode)
+            #menu_win.addstr(line, 1, string)
+        menu_win.refresh()
+        #menu_win.noutrefresh()
+        #curses.doupdate() # redraw the whole screen
 
 
 
@@ -194,11 +223,15 @@ if __name__ == '__main__':
 
         # PP.pprint(fighters)
 
-
         # Enter into the mainloop
         with CaDisplay() as display:
             for fighter in fighters:
                 display.show(fighter['name'])
+            # display.menu('foo', ['sss', 'ttt'])
+
+            fight_names = world['monsters'].keys()
+            display.menu('Fights', ['marx', 'stooges']) #fight_names)
+
             while display.GetInput() != 'e':
                 pass
 
