@@ -116,6 +116,15 @@ class CaJson(object):
             json.dump(world, f, indent=4)
         return True
 
+    # Used to keep JSON load from automatically converting to Unicode.
+    # Alternatively, I could have gone to Python 3 (which doesn't have that
+    # problem) but I didn't want to install a new version of Python and a new
+    # version of Curses.
+    #
+    # Solution from https://stackoverflow.com/questions/956867/
+    #        how-to-get-string-objects-instead-of-unicode-from-json?
+    #        utm_medium=organic&utm_source=google_rich_qa&
+    #        utm_campaign=google_rich_qa
     @staticmethod
     def __json_load_byteified(file_handle):
         return CaJson.__byteify(
