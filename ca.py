@@ -253,10 +253,10 @@ class CaDisplay(object):
             current_fighter['permenant']['hp'],
             current_fighter['current']['fp'],
             current_fighter['permenant']['fp'])
-        self.__stdscr.move(2, 0)
+        self.__stdscr.move(2, 1)
         self.__stdscr.clrtoeol()
         self.__stdscr.addstr(2, # TODO: parameterize this
-                             0,
+                             1,
                              fighter_string,
                              curses.A_NORMAL)
         self.__stdscr.refresh()

@@ -12,7 +12,7 @@
                     "hp": 10, 
                     "basic-speed": 1
                 }, 
-                "name": "famine", 
+                "name": "Famine", 
                 "opponent": null
             }, 
             {
@@ -26,7 +26,7 @@
                     "hp": 10, 
                     "basic-speed": 3
                 }, 
-                "name": "pestilence", 
+                "name": "Pestilence", 
                 "opponent": null
             }, 
             {
@@ -40,7 +40,7 @@
                     "hp": 10, 
                     "basic-speed": 5
                 }, 
-                "name": "war", 
+                "name": "War", 
                 "opponent": null
             }, 
             {
@@ -54,7 +54,7 @@
                     "hp": 10, 
                     "basic-speed": 5
                 }, 
-                "name": "death", 
+                "name": "Death", 
                 "opponent": null
             }
         ], 
@@ -70,7 +70,7 @@
                     "hp": 10, 
                     "basic-speed": 1
                 }, 
-                "name": "groucho", 
+                "name": "Groucho", 
                 "opponent": null
             }, 
             {
@@ -84,7 +84,7 @@
                     "hp": 10, 
                     "basic-speed": 3
                 }, 
-                "name": "chico", 
+                "name": "Chico", 
                 "opponent": null
             }, 
             {
@@ -98,7 +98,7 @@
                     "hp": 10, 
                     "basic-speed": 5
                 }, 
-                "name": "harpo", 
+                "name": "Harpo", 
                 "opponent": null
             }
         ], 
@@ -114,7 +114,7 @@
                     "hp": 10, 
                     "basic-speed": 2
                 }, 
-                "name": "larry", 
+                "name": "Larry", 
                 "opponent": null
             }, 
             {
@@ -128,7 +128,7 @@
                     "hp": 10, 
                     "basic-speed": 4
                 }, 
-                "name": "curly", 
+                "name": "Curly", 
                 "opponent": null
             }, 
             {
@@ -142,7 +142,7 @@
                     "hp": 10, 
                     "basic-speed": 6
                 }, 
-                "name": "moe", 
+                "name": "Moe", 
                 "opponent": null
             }
         ]
@@ -159,7 +159,7 @@
                 "hp": 10, 
                 "basic-speed": 3
             }, 
-            "name": "bob", 
+            "name": "Bob", 
             "opponent": null
         }, 
         {
@@ -173,7 +173,7 @@
                 "hp": 10, 
                 "basic-speed": 5
             }, 
-            "name": "tom", 
+            "name": "Tom", 
             "opponent": null
         }
     ], 
