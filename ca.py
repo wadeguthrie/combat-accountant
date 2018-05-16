@@ -346,7 +346,7 @@ class MainScreen(object):
                            for name in self.__world['monsters'].keys()]
         # PP.pprint(fight_name_menu)
         monster_list = display.menu('Fights', fight_name_menu)
-        print "MENU RESULT=%s" % result  # For debugging
+        print "MENU RESULT=%s" % monster_list  # For debugging
 
         if (monster_list is None or
                 monster_list not in self.__world['monsters']):
@@ -371,8 +371,6 @@ class MainScreen(object):
 if __name__ == '__main__':
     PP = pprint.PrettyPrinter(indent=3, width=150)
     filename = 'persephone.json' # TODO: make this a command-line argument
-
-    # TODO: need a game object -- it'll deal with starting fights, etc.
 
     # Arriving -- read our stuff
     with CaJson(filename) as world:
