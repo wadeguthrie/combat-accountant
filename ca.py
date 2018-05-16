@@ -92,7 +92,7 @@ class CaDisplay(object):
              title,
              strings_results # array of tuples (string, return value)
             ):
-        # TODO: doesn't handle scrolling
+        # TODO: doesn't handle more entries that would fit on screen
 
         # height and width of text box (not border)
         height = len(strings_results)
@@ -113,7 +113,6 @@ class CaDisplay(object):
         border_win.addstr(0, title_start, title)
         border_win.refresh()
 
-        # TODO: may want to use 'newpad' when scrolling is desired
         menu_win = curses.newwin(height, width, begin_y, begin_x)
         index = 0
         for line, string_result in enumerate(strings_results):
@@ -143,14 +142,23 @@ class CaDisplay(object):
                 return strings_results[index][1]
             if new_index != index:
                 old_index = index
-                index = new_index if new_index < height else 0
+                if new_index < 0:
+                    index = height-1
+                elif new_index >= height:
+                    index = 0
+                else:
+                    index = new_index
+
+                print "INDEX - old:%d, new:%d, final:%d" % (old_index,
+                                                            new_index,
+                                                            index)
                 menu_win.addstr(old_index,
                                 0,
                                 strings_results[old_index][0],
                                 curses.A_NORMAL)
                 menu_win.addstr(index,
                                 0,
-                                strings_results[new_index][0],
+                                strings_results[index][0],
                                 curses.A_STANDOUT)
                 menu_win.refresh()
 
@@ -261,13 +269,13 @@ if __name__ == '__main__':
             for fighter in fighters:
                 display.show(fighter['name'])
 
-            fight_name_menu = [(name, index) for index, name in
-                enumerate(world['monsters'].keys())]
-            PP.pprint(fight_name_menu)
+            fight_name_menu = [(name, name)
+                               for name in world['monsters'].keys()]
+            # PP.pprint(fight_name_menu)
             result = display.menu('Fights', fight_name_menu)
-            print "MENU RESULT=%d" % result
+            print "MENU RESULT=%s" % result
 
-            while display.get_input() != ord('e'):
+            while display.get_input() != ord('q'):
                 pass
 
 
