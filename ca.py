@@ -272,7 +272,29 @@ class CaDisplay(object):
         self.__stdscr.refresh()
 
 
-class Fight(object):
+class ScreenHandler(object):
+    def __init__(self, display):
+        self._display = display
+        self._choices = { }
+
+    def doit(self):
+        '''
+        Draws the screen and does event loop (gets input, responds to input)
+        '''
+        self._draw_screen()
+
+        keep_going = True
+        while keep_going:
+            string = self._display.get_input()
+            if string in self._choices:
+                keep_going = self._choices[string]['func']()
+
+    def _draw_screen(self):
+        pass
+
+
+
+class FightHandler(ScreenHandler):
     def __init__(self,
                  display,
                  characters,
@@ -281,7 +303,15 @@ class Fight(object):
                  fighters=None, # Current initiative order of fighters
                  index=0 # Index into fighters order for current fight
                 ):
-        self.__display = display
+        super(FightHandler, self).__init__(display)
+
+        self._choices = {
+            ord(' '): {'name': 'next', 'func': self.__next_fighter},
+            ord('-'): {'name': 'damage', 'func': self.__damage},
+            ord('o'): {'name': 'opponent', 'func': self.__pick_opponent},
+            ord('q'): {'name': 'quit', 'func': self.__quit}
+        }
+
         self.__characters = characters
         self.__monsters = monsters
         self.__round = fight_round
@@ -307,45 +337,40 @@ class Fight(object):
         else:
             self.__fighters = fighters
 
-    def doit(self):
-        # TODO draw screen
+    def _draw_screen(self):
+        self._display.clear()
+        self._display.command_ribbon(self._choices)
 
-        keep_going = True
-        while keep_going:
-            string = display.get_input()
-            keep_going = self.handle_input(string)
+    def __next_fighter(self):
+        return True # Keep going
 
+    def __damage(self):
+        return True # Keep going
 
-class MainScreen(object):
+    def __pick_opponent(self):
+        return True # Keep going
+
+    def __quit(self):
+        return False # Leave
+
+class MainHandler(ScreenHandler):
     def __init__(self, display, world):
-        self.__display = display
+        super(MainHandler, self).__init__(display)
         self.__world = world
-        self.__choices = {
+        self._choices = {
             ord('f'): {'name': 'fight', 'func': self.__new_fight},
             ord('q'): {'name': 'quit',  'func': self.__quit}
         }
 
-    def doit(self):
-        '''
-        Draws the screen and does event loop (gets input, responds to input)
-        '''
-        self._draw_screen()
-
-        keep_going = True
-        while keep_going:
-            string = display.get_input()
-            if string in self.__choices:
-                keep_going = self.__choices[string]['func']()
-
     def _draw_screen(self):
-        self.__display.clear()
-        self.__display.command_ribbon(self.__choices)
+        self._display.clear()
+        self._display.command_ribbon(self._choices)
 
     def __new_fight(self):
         fight_name_menu = [(name, name)
                            for name in self.__world['monsters'].keys()]
         # PP.pprint(fight_name_menu)
-        monster_list = display.menu('Fights', fight_name_menu)
+        monster_list = self._display.menu('Fights', fight_name_menu)
         print "MENU RESULT=%s" % monster_list  # For debugging
 
         if (monster_list is None or
@@ -355,9 +380,9 @@ class MainScreen(object):
         # NOTE: this makes the displays recursive (though, the implementation
         # only makes the code recursive but the actual screens will just get
         # reused).
-        fight = Fight(self.__display,
-                      self.__world['characters'],
-                      self.__world['monsters'][monster_list])
+        fight = FightHandler(self._display,
+                             self.__world['characters'],
+                             self.__world['monsters'][monster_list])
         fight.doit()
 
         return True # Keep going
@@ -400,7 +425,7 @@ if __name__ == '__main__':
 
         # Enter into the mainloop
         with CaDisplay() as display:
-            main_screen = MainScreen(display, world)
-            main_screen.doit()
+            main_handler = MainHandler(display, world)
+            main_handler.doit()
 
 
