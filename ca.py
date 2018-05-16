@@ -232,6 +232,35 @@ class CaDisplay(object):
     def clear(self):
         self.__stdscr.clear()
 
+    def round_ribbon(self,
+                     round_no,
+                     current_fighter, # use in future
+                     next_fighter # use in future
+                    ):
+        round_string = 'Round %d' % round_no
+        self.__stdscr.addstr(0,
+                             0,
+                             round_string,
+                             curses.A_NORMAL)
+        self.__stdscr.refresh()
+
+    def current_fighter(self,
+                        current_fighter
+                       ):
+        fighter_string = '%s HP: %d/%d FP: %d/%d' % (
+            current_fighter['name'],
+            current_fighter['current']['hp'],
+            current_fighter['permenant']['hp'],
+            current_fighter['current']['fp'],
+            current_fighter['permenant']['fp'])
+        self.__stdscr.move(2, 0)
+        self.__stdscr.clrtoeol()
+        self.__stdscr.addstr(2, # TODO: parameterize this
+                             0,
+                             fighter_string,
+                             curses.A_NORMAL)
+        self.__stdscr.refresh()
+
     def command_ribbon(
             self,
             choices # hash: ord('f'): {'name': 'xxx', 'func': self.func}
@@ -325,6 +354,9 @@ class FightHandler(ScreenHandler):
         self.__fighters = [] if fighters is None else fighters
         self.__index = index
 
+        # TODO: if we're mid-fight, I need to find this
+        self.__most_recent_character = None
+
         if fighters is None:
             self.__fighters = []
             self.__fighters.extend(self.__characters)
@@ -346,15 +378,32 @@ class FightHandler(ScreenHandler):
 
     def _draw_screen(self):
         self._display.clear()
+        # TODO: look-up "up next" in self.__characters after
+        # self.__most_recent_character (which may be 'None')
+        self._display.round_ribbon(self.__round,
+                                   None, #self.xxx, # up now
+                                   None) #self.xxx) # next PC
+        self._display.current_fighter(self.__fighters[self.__index])
         self._display.command_ribbon(self._choices)
 
     def __next_fighter(self):
+        self.__index = self.__index + 1
+        if self.__index >= len(self.__fighters):
+            self.__index = 0
+            self.__round += 1
+        # TODO: maybe combine the following two
+        self._display.round_ribbon(self.__round,
+                                   None, # current fighter
+                                   None) # next PC
+        self._display.current_fighter(self.__fighters[self.__index])
         return True # Keep going
 
     def __damage(self):
+        # TODO
         return True # Keep going
 
     def __pick_opponent(self):
+        # TODO
         return True # Keep going
 
     def __quit(self):
