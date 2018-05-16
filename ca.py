@@ -92,6 +92,10 @@ class CaJson(object):
 
 
 class CaDisplay(object):
+    '''
+    CaDisplay addresses the graphical part of the user interface.  Here,
+    this is provided with the Curses package.
+    '''
 
     # NOTE: remember to call win.refresh()
     # win.addstr(y, x, "String", attrib)
@@ -149,7 +153,6 @@ class CaDisplay(object):
     def get_input(self):
         c = self.__stdscr.getch()
         # 'c' will be something like ord('p') or curses.KEY_HOME
-        # TODO: convert 'c' to something ascii-like
         return c
 
     def menu(self,
@@ -199,7 +202,7 @@ class CaDisplay(object):
             elif input == ord('\n'):
                 del border_win
                 del menu_win
-                # NOTE: assumes this is on top of stdscr
+                # NOTE: assumes this menu is on top of stdscr
                 self.__stdscr.touchwin()
                 self.__stdscr.refresh()
                 return strings_results[index][1]
@@ -273,6 +276,10 @@ class CaDisplay(object):
 
 
 class ScreenHandler(object):
+    '''
+    Base class for the "business logic" backing the user interface.
+    '''
+
     def __init__(self, display):
         self._display = display
         self._choices = { }
@@ -384,6 +391,7 @@ class MainHandler(ScreenHandler):
                              self.__world['characters'],
                              self.__world['monsters'][monster_list])
         fight.doit()
+        self._draw_screen() # Redraw current screen when done with the fight.
 
         return True # Keep going
 
