@@ -29,6 +29,69 @@ import pprint
 #    * '>' delays the initiative for a creature from the list
 
 
+class CaJson(object):
+
+    def __init__(self, filename):
+        self.__filename = filename
+
+    def __enter__(self):
+        try:
+            with open(self.__filename, 'r') as f:
+              #world = json.load(f)
+              world = CaJson.__json_load_byteified(f)
+        except:
+            pass
+        return world
+
+    def __exit__ (self, exception_type, exception_value, exception_traceback):
+        if exception_type is IOError:
+            print 'IOError: %r' % exception_type
+            print 'EXCEPTION val: %s' % exception_value
+            print 'Traceback: %r' % exception_traceback
+        elif exception_type is not None:
+            print 'EXCEPTION type: %r' % exception_type
+            print 'EXCEPTION val: %s' % exception_value
+            print 'Traceback: %r' % exception_traceback
+
+        with open(self.__filename, 'w') as f:
+            json.dump(world, f, indent=4)
+        return True
+
+    # Used to keep JSON load from automatically converting to Unicode.
+    # Alternatively, I could have gone to Python 3 (which doesn't have that
+    # problem) but I didn't want to install a new version of Python and a new
+    # version of Curses.
+    #
+    # Solution from https://stackoverflow.com/questions/956867/
+    #        how-to-get-string-objects-instead-of-unicode-from-json?
+    #        utm_medium=organic&utm_source=google_rich_qa&
+    #        utm_campaign=google_rich_qa
+    @staticmethod
+    def __json_load_byteified(file_handle):
+        return CaJson.__byteify(
+            json.load(file_handle, object_hook=CaJson.__byteify),
+            ignore_dicts=True
+        )
+
+    @staticmethod
+    def __byteify(data, ignore_dicts = False):
+        # if this is a unicode string, return its string representation
+        if isinstance(data, unicode):
+            return data.encode('utf-8')
+        # if this is a list of values, return list of byteified values
+        if isinstance(data, list):
+            return [ CaJson.__byteify(item, ignore_dicts=True) for item in data ]
+        # if this is a dictionary, return dictionary of byteified keys and values
+        # but only if we haven't already byteified it
+        if isinstance(data, dict) and not ignore_dicts:
+            return {
+                CaJson.__byteify(key, ignore_dicts=True): CaJson.__byteify(value, ignore_dicts=True)
+                for key, value in data.iteritems()
+            }
+        # if it's anything else, return it in its original form
+        return data
+
+
 class CaDisplay(object):
 
     # NOTE: remember to call win.refresh()
@@ -73,7 +136,12 @@ class CaDisplay(object):
         self.__stdscr = None
         return True
 
-    def show(self, string):
+    def printit(self,
+                string  # String to print
+               ):
+        '''
+        Really just for debug.  Prints strings on the screen.
+        '''
         mode = curses.A_STANDOUT if (self.__y % 3 == 0) else curses.A_NORMAL
         self.__stdscr.addstr(self.__y, 0, string, mode)
         self.__y = 0 if self.__y == curses.LINES else self.__y + 1
@@ -146,9 +214,10 @@ class CaDisplay(object):
                 else:
                     index = new_index
 
-                print "INDEX - old:%d, new:%d, final:%d" % (old_index,
-                                                            new_index,
-                                                            index)
+                #print "INDEX - old:%d, new:%d, final:%d" % (old_index,
+                #                                            new_index,
+                #                                            index)
+
                 menu_win.addstr(old_index,
                                 0,
                                 strings_results[old_index][0],
@@ -158,69 +227,6 @@ class CaDisplay(object):
                                 strings_results[index][0],
                                 curses.A_STANDOUT)
                 menu_win.refresh()
-
-
-class CaJson(object):
-
-    def __init__(self, filename):
-        self.__filename = filename
-
-    def __enter__(self):
-        try:
-            with open(self.__filename, 'r') as f:
-              #world = json.load(f)
-              world = CaJson.__json_load_byteified(f)
-        except:
-            pass
-        return world
-
-    def __exit__ (self, exception_type, exception_value, exception_traceback):
-        if exception_type is IOError:
-            print 'IOError: %r' % exception_type
-            print 'EXCEPTION val: %s' % exception_value
-            print 'Traceback: %r' % exception_traceback
-        elif exception_type is not None:
-            print 'EXCEPTION type: %r' % exception_type
-            print 'EXCEPTION val: %s' % exception_value
-            print 'Traceback: %r' % exception_traceback
-
-        with open(self.__filename, 'w') as f:
-            json.dump(world, f, indent=4)
-        return True
-
-    # Used to keep JSON load from automatically converting to Unicode.
-    # Alternatively, I could have gone to Python 3 (which doesn't have that
-    # problem) but I didn't want to install a new version of Python and a new
-    # version of Curses.
-    #
-    # Solution from https://stackoverflow.com/questions/956867/
-    #        how-to-get-string-objects-instead-of-unicode-from-json?
-    #        utm_medium=organic&utm_source=google_rich_qa&
-    #        utm_campaign=google_rich_qa
-    @staticmethod
-    def __json_load_byteified(file_handle):
-        return CaJson.__byteify(
-            json.load(file_handle, object_hook=CaJson.__byteify),
-            ignore_dicts=True
-        )
-
-    @staticmethod
-    def __byteify(data, ignore_dicts = False):
-        # if this is a unicode string, return its string representation
-        if isinstance(data, unicode):
-            return data.encode('utf-8')
-        # if this is a list of values, return list of byteified values
-        if isinstance(data, list):
-            return [ CaJson.__byteify(item, ignore_dicts=True) for item in data ]
-        # if this is a dictionary, return dictionary of byteified keys and values
-        # but only if we haven't already byteified it
-        if isinstance(data, dict) and not ignore_dicts:
-            return {
-                CaJson.__byteify(key, ignore_dicts=True): CaJson.__byteify(value, ignore_dicts=True)
-                for key, value in data.iteritems()
-            }
-        # if it's anything else, return it in its original form
-        return data
 
 
 # Main
@@ -264,13 +270,13 @@ if __name__ == '__main__':
         # Enter into the mainloop
         with CaDisplay() as display:
             for fighter in fighters:
-                display.show(fighter['name'])
+                display.printit(fighter['name'])
 
             fight_name_menu = [(name, name)
                                for name in world['monsters'].keys()]
             # PP.pprint(fight_name_menu)
             result = display.menu('Fights', fight_name_menu)
-            # print "MENU RESULT=%s" % result
+            print "MENU RESULT=%s" % result  # For debugging
 
             while display.get_input() != ord('q'):
                 pass
