@@ -6,7 +6,6 @@ import pprint
 # import requests # Easy to use HTTP, requires Python 3
 
 # TODO:
-#   - ESC from menu returns None
 #   - HP/FP (will require special kind of menu/dialog box)
 #   - save (init list, opponents, current monster list)
 #   - restore on startup
@@ -98,6 +97,8 @@ class CaDisplay(object):
     CaDisplay addresses the graphical part of the user interface.  Here,
     this is provided with the Curses package.
     '''
+
+    ESCAPE = 27 # ASCII value for the escape character
 
     # NOTE: remember to call win.refresh()
     # win.addstr(y, x, "String", attrib)
@@ -199,21 +200,27 @@ class CaDisplay(object):
 
         keep_going = True
         while keep_going:
-            input = self.get_input()
+            user_input = self.get_input()
             new_index = index
-            if input == curses.KEY_HOME:
+            if user_input == curses.KEY_HOME:
                 new_index = 0
-            elif input == curses.KEY_UP:
+            elif user_input == curses.KEY_UP:
                 new_index -= 1
-            elif input == curses.KEY_DOWN:
+            elif user_input == curses.KEY_DOWN:
                 new_index += 1
-            elif input == ord('\n'):
+            elif user_input == ord('\n'):
                 del border_win
                 del menu_win
                 # NOTE: assumes this menu is on top of stdscr
                 self.__stdscr.touchwin()
                 self.__stdscr.refresh()
                 return strings_results[index][1]
+            elif user_input == CaDisplay.ESCAPE:
+                # NOTE: assumes this menu is on top of stdscr
+                self.__stdscr.touchwin()
+                self.__stdscr.refresh()
+                return None
+
             if new_index != index:
                 old_index = index
                 if new_index < 0:
@@ -445,7 +452,8 @@ class FightHandler(ScreenHandler):
         opponent_menu = [(fighter['name'], fighter['name']) for fighter in
                 self.__fighters]
         opponent_name = self._display.menu('Opponent', opponent_menu)
-        self.__fighters[self.__index]['opponent'] = opponent_name
+        if opponent_name is not None:
+            self.__fighters[self.__index]['opponent'] = opponent_name
 
         opponent = self.__find_opponent(self.__fighters[self.__index])
         self._display.show_fighters(self.__fighters[self.__index], opponent)
@@ -477,6 +485,8 @@ class MainHandler(ScreenHandler):
                            for name in self.__world['monsters'].keys()]
         # PP.pprint(fight_name_menu)
         monster_list = self._display.menu('Fights', fight_name_menu)
+        if monster_list is None:
+            return True
         print "MENU RESULT=%s" % monster_list  # For debugging
 
         if (monster_list is None or
