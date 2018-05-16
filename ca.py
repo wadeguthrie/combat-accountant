@@ -88,13 +88,16 @@ class CaDisplay(object):
         # TODO: convert 'c' to something ascii-like
         return c
 
-    def menu(self, title, strings):
+    def menu(self,
+             title,
+             strings_results # array of tuples (string, return value)
+            ):
         # TODO: doesn't handle scrolling
 
         # height and width of text box (not border)
-        height = len(strings)
+        height = len(strings_results)
         width = 0 if title is None else len(title)
-        for string in strings:
+        for string, result in strings_results:
             if len(string) > width:
                 width = len(string)
         width += 1 # Seems to need one more space (or Curses freaks out)
@@ -113,11 +116,11 @@ class CaDisplay(object):
         # TODO: may want to use 'newpad' when scrolling is desired
         menu_win = curses.newwin(height, width, begin_y, begin_x)
         index = 0
-        for line, string in enumerate(strings):
+        for line, string_result in enumerate(strings_results):
             # Maybe use A_BOLD instead of A_STANDOUT -- could also use
             # curses.color_pair(1) or whatever
             mode = curses.A_STANDOUT if line == index else curses.A_NORMAL
-            menu_win.addstr(line, 0, string, mode)
+            menu_win.addstr(line, 0, string_result[0], mode)
         menu_win.refresh()
 
         keep_going = True
@@ -137,17 +140,17 @@ class CaDisplay(object):
                 # of a stack of windows
                 self.__stdscr.touchwin()
                 self.__stdscr.refresh()
-                return strings[index]
+                return strings_results[index][1]
             if new_index != index:
                 old_index = index
                 index = new_index if new_index < height else 0
                 menu_win.addstr(old_index,
                                 0,
-                                strings[old_index],
+                                strings_results[old_index][0],
                                 curses.A_NORMAL)
                 menu_win.addstr(index,
                                 0,
-                                strings[new_index],
+                                strings_results[new_index][0],
                                 curses.A_STANDOUT)
                 menu_win.refresh()
 
@@ -252,15 +255,17 @@ if __name__ == '__main__':
 
         # PP.pprint(fighters)
 
+
         # Enter into the mainloop
         with CaDisplay() as display:
             for fighter in fighters:
                 display.show(fighter['name'])
-            # display.menu('foo', ['sss', 'ttt'])
 
-            fight_names = world['monsters'].keys()
-            result = display.menu('Fights', ['marx', 'stooges']) #fight_names)
-            print "MENU RESULT=%s" % result
+            fight_name_menu = [(name, index) for index, name in
+                enumerate(world['monsters'].keys())]
+            PP.pprint(fight_name_menu)
+            result = display.menu('Fights', fight_name_menu)
+            print "MENU RESULT=%d" % result
 
             while display.get_input() != ord('e'):
                 pass
