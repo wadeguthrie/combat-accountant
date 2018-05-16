@@ -129,7 +129,7 @@
                     "basic-speed": 4
                 }, 
                 "name": "Curly", 
-                "opponent": null
+                "opponent": "Bob"
             }, 
             {
                 "current": {
@@ -143,7 +143,7 @@
                     "basic-speed": 6
                 }, 
                 "name": "Moe", 
-                "opponent": null
+                "opponent": "Tom"
             }
         ]
     }, 

@@ -5,24 +5,26 @@ import json
 import pprint
 # import requests # Easy to use HTTP, requires Python 3
 
-# read character via json
-#  - monster groups: each group needs a 'used' feature
-#  - timers
-
-# sort characters and current monster group by initiative
-
-# use curses
-#  - top of page: round, current person, next person
-#  - current person shows: init, hp, fp, opponent
-#  - opponent also shown on screen
-#  - single key input
-#    * space is next initiative
-#    * '-' removes HP
-#    * ? removes FP
-#    * 'o' picks opponent off list
-#    * 'backspace' or 'del' removes creature from initiative list
-#    * 't' sets an x-round timer for this creature
-#    * '>' delays the initiative for a creature from the list
+# TODO:
+#   - ESC from menu returns None
+#   - HP/FP (will require special kind of menu/dialog box)
+#   - save (init list, opponents, current monster list)
+#   - restore on startup
+#   - initiative based on DX and random for 2nd and 3rd key (after basic move)
+#   - '>' delays the initiative for a creature from the list
+#   - monster groups: each group needs a 'used' feature
+#   - 'backspace' or 'del' removes creature from initiative list
+#   - timers ('t' sets an x-round timer for this creature)
+#   - main screen should have a 'h' heal one creature at a time and a 'H'
+#     heal everyone up to full
+#
+# TODO (eventually)
+#   - errors to the Curses screen
+#   - separating out ruleset-based stuff into its own class
+#   - scrolling menus (et al.)
+#   - entering monsters and characters from the screen
+#   - make filename a command-line argument
+#   - derived features (basic move is based on some stuff, e.g.)
 
 
 class CaJson(object):
@@ -110,6 +112,9 @@ class CaDisplay(object):
     def __init__(self):
         self.__stdscr = None
         self.__y = 0 # For debug printouts
+        self.__FIGHTER_LINE = 2
+        self.__FIGHTER_COL = 0
+        self.__OPPONENT_COL = 0
 
     def __enter__(self):
         try:
@@ -118,6 +123,9 @@ class CaDisplay(object):
             curses.cbreak() # respond instantly to keystrokes
             self.__stdscr.keypad(1) # special characters converted by curses
                                     # (e.g., curses.KEY_LEFT)
+
+            self.__FIGHTER_COL = 1
+            self.__OPPONENT_COL = (curses.COLS / 2)
         except:
             curses.endwin()
         return self
@@ -244,22 +252,33 @@ class CaDisplay(object):
                              curses.A_NORMAL)
         self.__stdscr.refresh()
 
-    def current_fighter(self,
-                        current_fighter
-                       ):
-        fighter_string = '%s HP: %d/%d FP: %d/%d' % (
-            current_fighter['name'],
-            current_fighter['current']['hp'],
-            current_fighter['permenant']['hp'],
-            current_fighter['current']['fp'],
-            current_fighter['permenant']['fp'])
-        self.__stdscr.move(2, 1)
+    def show_fighters(self,
+                      current_fighter,
+                      current_opponent
+                     ):
+        self.__stdscr.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
         self.__stdscr.clrtoeol()
-        self.__stdscr.addstr(2, # TODO: parameterize this
-                             1,
+        self.__some_fighter(current_fighter, self.__FIGHTER_COL)
+
+        if current_opponent is not None:
+            self.__stdscr.addstr(self.__FIGHTER_LINE,
+                                 self.__OPPONENT_COL, 'vs.')
+            self.__some_fighter(current_opponent,
+                                self.__OPPONENT_COL+4)
+
+        self.__stdscr.refresh()
+
+    def __some_fighter(self, fighter, column):
+        fighter_string = '%s HP: %d/%d FP: %d/%d' % (
+            fighter['name'],
+            fighter['current']['hp'],
+            fighter['permenant']['hp'],
+            fighter['current']['fp'],
+            fighter['permenant']['fp'])
+        self.__stdscr.addstr(self.__FIGHTER_LINE,
+                             column,
                              fighter_string,
                              curses.A_NORMAL)
-        self.__stdscr.refresh()
 
     def command_ribbon(
             self,
@@ -343,7 +362,9 @@ class FightHandler(ScreenHandler):
 
         self._choices = {
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
-            ord('-'): {'name': 'damage', 'func': self.__damage},
+            # TODO: 'h' and 'f' are based on the ruleset
+            ord('h'): {'name': 'damage', 'func': self.__damage_HP},
+            ord('f'): {'name': 'damage', 'func': self.__damage_FP},
             ord('o'): {'name': 'opponent', 'func': self.__pick_opponent},
             ord('q'): {'name': 'quit', 'func': self.__quit}
         }
@@ -383,8 +404,21 @@ class FightHandler(ScreenHandler):
         self._display.round_ribbon(self.__round,
                                    None, #self.xxx, # up now
                                    None) #self.xxx) # next PC
-        self._display.current_fighter(self.__fighters[self.__index])
+        opponent = self.__find_opponent(self.__fighters[self.__index])
+        self._display.show_fighters(self.__fighters[self.__index], opponent)
         self._display.command_ribbon(self._choices)
+
+    def __find_opponent(self,
+                        current_fighter # struct containing fighter
+                       ):
+        # TODO: there's got to be a better way 
+        if current_fighter is None or current_fighter['opponent'] is None:
+            return None
+        opponent_name = current_fighter['opponent']
+        for fighter in self.__fighters:
+            if fighter['name'] == opponent_name:
+                return fighter
+        return None
 
     def __next_fighter(self):
         self.__index = self.__index + 1
@@ -395,19 +429,35 @@ class FightHandler(ScreenHandler):
         self._display.round_ribbon(self.__round,
                                    None, # current fighter
                                    None) # next PC
-        self._display.current_fighter(self.__fighters[self.__index])
+        opponent = self.__find_opponent(self.__fighters[self.__index])
+        self._display.show_fighters(self.__fighters[self.__index], opponent)
         return True # Keep going
 
-    def __damage(self):
+    def __damage_HP(self):
+        # TODO
+        return True # Keep going
+
+    def __damage_FP(self):
         # TODO
         return True # Keep going
 
     def __pick_opponent(self):
-        # TODO
+        opponent_menu = [(fighter['name'], fighter['name']) for fighter in
+                self.__fighters]
+        opponent_name = self._display.menu('Opponent', opponent_menu)
+        self.__fighters[self.__index]['opponent'] = opponent_name
+
+        opponent = self.__find_opponent(self.__fighters[self.__index])
+        self._display.show_fighters(self.__fighters[self.__index], opponent)
         return True # Keep going
 
     def __quit(self):
-        return False # Leave
+        # Put all fighters into a non-fighting mode (mostly, just remove
+        # their opponents)
+        for fighter in self.__fighters:
+            fighter['opponent'] = None
+        return False # Leave the fight
+
 
 class MainHandler(ScreenHandler):
     def __init__(self, display, world):
