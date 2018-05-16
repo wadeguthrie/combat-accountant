@@ -159,10 +159,34 @@ class CaDisplay(object):
         self.__y = 0 if self.__y == curses.LINES else self.__y + 1
         self.__stdscr.refresh()
 
-    def get_input(self):
-        c = self.__stdscr.getch()
+    def get_one_character(self, window=None):
+        if window is None:
+            window = self.__stdscr
+        c = window.getch()
         # 'c' will be something like ord('p') or curses.KEY_HOME
         return c
+
+    def get_string(self, window=None):
+        if window is None:
+            window = self.__stdscr
+        curses.nocbreak()
+        curses.echo()
+        string = window.getstr()
+        curses.cbreak()
+        curses.noecho()
+        return string
+
+    def input_box(self, height, width, title):
+        border_win, menu_win = self.__centered_boxed_window(height, width,
+                                                            title)
+        string = self.get_string(menu_win)
+
+        del border_win
+        del menu_win
+        self.__stdscr.touchwin() # NOTE: assumes this menu is on top of stdscr
+        self.__stdscr.refresh()
+        return string
+    
 
     def menu(self,
              title,
@@ -178,18 +202,9 @@ class CaDisplay(object):
                 width = len(string)
         width += 1 # Seems to need one more space (or Curses freaks out)
 
-        # x and y of text box (not border)
-        begin_x = (curses.COLS / 2) - (width/2)
-        begin_y = (curses.LINES / 2) - (height/2)
+        border_win, menu_win = self.__centered_boxed_window(height, width,
+                                                            title)
 
-        border_win = curses.newwin(height+2, width+2, begin_y-1, begin_x-1)
-        border_win.border()
-
-        title_start = ((width + 2) - (len(title))) / 2
-        border_win.addstr(0, title_start, title)
-        border_win.refresh()
-
-        menu_win = curses.newwin(height, width, begin_y, begin_x)
         index = 0
         for line, string_result in enumerate(strings_results):
             # Maybe use A_BOLD instead of A_STANDOUT -- could also use
@@ -200,7 +215,7 @@ class CaDisplay(object):
 
         keep_going = True
         while keep_going:
-            user_input = self.get_input()
+            user_input = self.get_one_character()
             new_index = index
             if user_input == curses.KEY_HOME:
                 new_index = 0
@@ -329,6 +344,28 @@ class CaDisplay(object):
 
         self.__stdscr.refresh()
 
+    def __centered_boxed_window(self,
+                                height, # height of INSIDE window
+                                width, # width of INSIDE window
+                                title
+                               ):
+
+        # x and y of text box (not border)
+        begin_x = (curses.COLS / 2) - (width/2)
+        begin_y = (curses.LINES / 2) - (height/2)
+
+        border_win = curses.newwin(height+2, width+2, begin_y-1, begin_x-1)
+        border_win.border()
+
+        if title is not None:
+            title_start = ((width + 2) - (len(title))) / 2
+            border_win.addstr(0, title_start, title)
+        border_win.refresh()
+
+        menu_win = curses.newwin(height, width, begin_y, begin_x)
+
+        return border_win, menu_win
+
 
 class ScreenHandler(object):
     '''
@@ -347,7 +384,7 @@ class ScreenHandler(object):
 
         keep_going = True
         while keep_going:
-            string = self._display.get_input()
+            string = self._display.get_one_character()
             if string in self._choices:
                 keep_going = self._choices[string]['func']()
 
@@ -441,7 +478,15 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
     def __damage_HP(self):
-        # TODO
+        opponent = self.__find_opponent(self.__fighters[self.__index])
+        if opponent is not None:
+            title = 'Change HP By...'
+            height = 1
+            width = len(title)
+            adj_string = self._display.input_box(height, width, title)
+            adj = int(adj_string)
+            opponent['current']['hp'] += adj # TODO: this should be in rules
+            self._display.show_fighters(self.__fighters[self.__index], opponent)
         return True # Keep going
 
     def __damage_FP(self):
