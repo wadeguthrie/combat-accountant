@@ -1,5 +1,63 @@
 {
     "monsters": {
+        "horsemen": [
+            {
+                "current": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 1
+                }, 
+                "permenant": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 1
+                }, 
+                "name": "famine", 
+                "opponent": null
+            }, 
+            {
+                "current": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 3
+                }, 
+                "permenant": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 3
+                }, 
+                "name": "pestilence", 
+                "opponent": null
+            }, 
+            {
+                "current": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 5
+                }, 
+                "permenant": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 5
+                }, 
+                "name": "war", 
+                "opponent": null
+            }, 
+            {
+                "current": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 5
+                }, 
+                "permenant": {
+                    "fp": 10, 
+                    "hp": 10, 
+                    "basic-speed": 5
+                }, 
+                "name": "death", 
+                "opponent": null
+            }
+        ], 
         "marx": [
             {
                 "current": {

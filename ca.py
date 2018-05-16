@@ -29,9 +29,6 @@ import pprint
 #    * '>' delays the initiative for a creature from the list
 
 
-
-#def do_stuff():  # Defines a function.
-
 class CaDisplay(object):
 
     # NOTE: remember to call win.refresh()
@@ -273,7 +270,7 @@ if __name__ == '__main__':
                                for name in world['monsters'].keys()]
             # PP.pprint(fight_name_menu)
             result = display.menu('Fights', fight_name_menu)
-            print "MENU RESULT=%s" % result
+            # print "MENU RESULT=%s" % result
 
             while display.get_input() != ord('q'):
                 pass
