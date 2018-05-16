@@ -6,10 +6,6 @@ import pprint
 # import requests # Easy to use HTTP, requires Python 3
 
 # read character via json
-#  - whole thing in one JSON
-#  - characters: perm-stats, current-stats
-#    * needs basic-speed, hp, fp, opponent
-#  - current fight: which monsters
 #  - monster groups: each group needs a 'used' feature
 #  - timers
 
@@ -66,6 +62,7 @@ class CaJson(object):
     #        how-to-get-string-objects-instead-of-unicode-from-json?
     #        utm_medium=organic&utm_source=google_rich_qa&
     #        utm_campaign=google_rich_qa
+
     @staticmethod
     def __json_load_byteified(file_handle):
         return CaJson.__byteify(
@@ -80,13 +77,15 @@ class CaJson(object):
             return data.encode('utf-8')
         # if this is a list of values, return list of byteified values
         if isinstance(data, list):
-            return [ CaJson.__byteify(item, ignore_dicts=True) for item in data ]
-        # if this is a dictionary, return dictionary of byteified keys and values
-        # but only if we haven't already byteified it
+            return [ CaJson.__byteify(item,
+                                      ignore_dicts=True) for item in data ]
+        # if this is a dictionary, return dictionary of byteified keys and
+        # values but only if we haven't already byteified it
         if isinstance(data, dict) and not ignore_dicts:
             return {
-                CaJson.__byteify(key, ignore_dicts=True): CaJson.__byteify(value, ignore_dicts=True)
-                for key, value in data.iteritems()
+                CaJson.__byteify(key, ignore_dicts=True):
+                    CaJson.__byteify(value, ignore_dicts=True)
+                    for key, value in data.iteritems()
             }
         # if it's anything else, return it in its original form
         return data
@@ -200,8 +199,7 @@ class CaDisplay(object):
             elif input == ord('\n'):
                 del border_win
                 del menu_win
-                # TODO: the following shouldn't be stdscr, it should be part
-                # of a stack of windows
+                # NOTE: assumes this is on top of stdscr
                 self.__stdscr.touchwin()
                 self.__stdscr.refresh()
                 return strings_results[index][1]
@@ -228,6 +226,146 @@ class CaDisplay(object):
                                 curses.A_STANDOUT)
                 menu_win.refresh()
 
+    def clear(self):
+        self.__stdscr.clear()
+
+    def command_ribbon(
+            self,
+            choices # hash: ord('f'): {'name': 'xxx', 'func': self.func}
+           ):
+        '''
+        Draws a list of commands across the bottom of the screen
+        '''
+        left = 0
+
+        self.__stdscr.addstr(curses.LINES - 1,
+                             left,
+                             '|',
+                             curses.A_NORMAL)
+        left += 2 # adds a space
+
+        for choice, body in choices.iteritems():
+            if choice == ord(' '):
+                choice_string = '" "'
+            else:
+                choice_string = '%c' % chr(choice)
+
+            self.__stdscr.addstr(curses.LINES - 1,
+                                 left,
+                                 choice_string,
+                                 curses.A_REVERSE)
+            left += len(choice_string) + 1 # add a space after the choice
+
+            self.__stdscr.addstr(curses.LINES - 1,
+                                 left,
+                                 body['name'],
+                                 curses.A_BOLD)
+
+            left += len(body['name']) + 1 # add a space after the choice
+
+            self.__stdscr.addstr(curses.LINES - 1,
+                                 left,
+                                 '|',
+                                 curses.A_NORMAL)
+            left += 2 # adds a space
+
+        self.__stdscr.refresh()
+
+
+class Fight(object):
+    def __init__(self,
+                 display,
+                 characters,
+                 monsters,
+                 fight_round=0,
+                 fighters=None, # Current initiative order of fighters
+                 index=0 # Index into fighters order for current fight
+                ):
+        self.__display = display
+        self.__characters = characters
+        self.__monsters = monsters
+        self.__round = fight_round
+        self.__fighters = [] if fighters is None else fighters
+        self.__index = index
+
+        if fighters is None:
+            self.__fighters = []
+            self.__fighters.extend(self.__characters)
+            if self.__monsters is not None:
+                self.__fighters.extend(self.__monsters)
+
+            # Sort by initiative = basic-speed followed by DEX followed by
+            # random
+            # TODO: add DEX and random
+            # TODO: there should be an 'initiative' value so that someone can
+            #   change their initiative with a 'wait' action (although, maybe,
+            #   that just changes the order in the list)
+            # NOTE: initiative trait is rule
+            self.__fighters.sort(key=lambda fighter: 
+                fighter['current']['basic-speed'],
+                reverse=True) # NOTE: initiative order is a rule
+        else:
+            self.__fighters = fighters
+
+    def doit(self):
+        # TODO draw screen
+
+        keep_going = True
+        while keep_going:
+            string = display.get_input()
+            keep_going = self.handle_input(string)
+
+
+class MainScreen(object):
+    def __init__(self, display, world):
+        self.__display = display
+        self.__world = world
+        self.__choices = {
+            ord('f'): {'name': 'fight', 'func': self.__new_fight},
+            ord('q'): {'name': 'quit',  'func': self.__quit}
+        }
+
+    def doit(self):
+        '''
+        Draws the screen and does event loop (gets input, responds to input)
+        '''
+        self._draw_screen()
+
+        keep_going = True
+        while keep_going:
+            string = display.get_input()
+            if string in self.__choices:
+                keep_going = self.__choices[string]['func']()
+
+    def _draw_screen(self):
+        self.__display.clear()
+        self.__display.command_ribbon(self.__choices)
+
+    def __new_fight(self):
+        fight_name_menu = [(name, name)
+                           for name in self.__world['monsters'].keys()]
+        # PP.pprint(fight_name_menu)
+        monster_list = display.menu('Fights', fight_name_menu)
+        print "MENU RESULT=%s" % result  # For debugging
+
+        if (monster_list is None or
+                monster_list not in self.__world['monsters']):
+            print "ERROR, monster list %s not found" % monster_list
+
+        # NOTE: this makes the displays recursive (though, the implementation
+        # only makes the code recursive but the actual screens will just get
+        # reused).
+        fight = Fight(self.__display,
+                      self.__world['characters'],
+                      self.__world['monsters'][monster_list])
+        fight.doit()
+
+        return True # Keep going
+
+    def __quit(self):
+        return False # Leave
+
+
 
 # Main
 if __name__ == '__main__':
@@ -247,38 +385,24 @@ if __name__ == '__main__':
         #       'opponent': null
         #   }, 
 
-        fighters = []
+        # Error checking for JSON
+
         if 'characters' not in world:
             #display.Error('No "characters" in %s' % filename)
             print 'No "characters" in %s' % filename # TODO: dump when display
-        fighters.extend(world['characters'])
-        if ('current-fight' in world and 
-                world['current-fight'] in world['monsters']):
-            fighters.extend(world['monsters'][world['current-fight']])
 
-        # Sort by initiative = basic-speed followed by DEX followed by random
-        # TODO: add DEX and random
-        # TODO: there should be an 'initiative' value so that someone can
-        #   change their initiative with a 'wait' action (although, maybe,
-        #   that just changes the order in the list)
-        fighters.sort(key=lambda fighter: fighter['current']['basic-speed'],
-                      reverse=True)
+
+        # TODO: if there's a fight in progress, we need to start it
+        #self.__fighters.extend
+        #if ('current-fight' in world and 
+        #        world['current-fight'] in world['monsters']):
+        #    self.__fighters.extend(world['monsters'][world['current-fight']])
 
         # PP.pprint(fighters)
 
-
         # Enter into the mainloop
         with CaDisplay() as display:
-            for fighter in fighters:
-                display.printit(fighter['name'])
-
-            fight_name_menu = [(name, name)
-                               for name in world['monsters'].keys()]
-            # PP.pprint(fight_name_menu)
-            result = display.menu('Fights', fight_name_menu)
-            print "MENU RESULT=%s" % result  # For debugging
-
-            while display.get_input() != ord('q'):
-                pass
+            main_screen = MainScreen(display, world)
+            main_screen.doit()
 
 
