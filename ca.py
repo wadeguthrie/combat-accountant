@@ -6,7 +6,6 @@ import pprint
 # import requests # Easy to use HTTP, requires Python 3
 
 # TODO:
-#   - HP/FP (will require special kind of menu/dialog box)
 #   - save (init list, opponents, current monster list)
 #   - restore on startup
 #   - initiative based on DX and random for 2nd and 3rd key (after basic move)
@@ -14,8 +13,7 @@ import pprint
 #   - monster groups: each group needs a 'used' feature
 #   - 'backspace' or 'del' removes creature from initiative list
 #   - timers ('t' sets an x-round timer for this creature)
-#   - main screen should have a 'h' heal one creature at a time and a 'H'
-#     heal everyone up to full
+#   - main screen should have a 'h' heal one creature at a time
 #
 # TODO (eventually)
 #   - errors to the Curses screen
@@ -294,9 +292,9 @@ class CaDisplay(object):
         fighter_string = '%s HP: %d/%d FP: %d/%d' % (
             fighter['name'],
             fighter['current']['hp'],
-            fighter['permenant']['hp'],
+            fighter['permanent']['hp'],
             fighter['current']['fp'],
-            fighter['permenant']['fp'])
+            fighter['permanent']['fp'])
         self.__stdscr.addstr(self.__FIGHTER_LINE,
                              column,
                              fighter_string,
@@ -526,6 +524,15 @@ class FightHandler(ScreenHandler):
             self.__fighters[self.__index]['opponent'] = opponent_name
 
         opponent = self.__find_opponent(self.__fighters[self.__index])
+
+        # Ask to have them fight each other
+        if opponent is not None and opponent['opponent'] is None:
+            back_menu = [('Yes', True), ('No', False)]
+            answer = self._display.menu('Make Opponents Go Both Ways',
+                                        back_menu)
+            if answer == True:
+                opponent['opponent'] = self.__fighters[self.__index]['name']
+
         self._display.show_fighters(self.__fighters[self.__index], opponent)
         return True # Keep going
 
@@ -543,12 +550,19 @@ class MainHandler(ScreenHandler):
         self.__world = world
         self._choices = {
             ord('f'): {'name': 'fight', 'func': self.__new_fight},
+            ord('H'): {'name': 'HEAL',  'func': self.__fully_heal},
             ord('q'): {'name': 'quit',  'func': self.__quit}
         }
 
     def _draw_screen(self):
         self._display.clear()
         self._display.command_ribbon(self._choices)
+
+    def __fully_heal(self):
+        for character in self.__world['characters']:
+            for stat in character['permanent']:
+                character['current'][stat] = character['permanent'][stat]
+        return True
 
     def __new_fight(self):
         fight_name_menu = [(name, name)
@@ -590,7 +604,7 @@ if __name__ == '__main__':
         # Build convenient data structures starting from:
         #   {
         #       'current': { 'fp': 10, 'hp': 10, 'basic-speed': 1 }, 
-        #       'permenant': { 'fp': 10, 'hp': 10, 'basic-speed': 1 }, 
+        #       'permanent': { 'fp': 10, 'hp': 10, 'basic-speed': 1 }, 
         #       'name': 'groucho', 
         #       'opponent': null
         #   }, 
