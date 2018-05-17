@@ -406,6 +406,7 @@ class FightHandler(ScreenHandler):
 
         self._choices = {
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
+            ord('<'): {'name': 'prev', 'func': self.__prev_fighter},
             # TODO: 'h' and 'f' are based on the ruleset
             ord('h'): {'name': 'damage', 'func': self.__damage_HP},
             ord('f'): {'name': 'damage', 'func': self.__damage_FP},
@@ -465,10 +466,26 @@ class FightHandler(ScreenHandler):
         return None
 
     def __next_fighter(self):
-        self.__index = self.__index + 1
+        self.__index += 1
         if self.__index >= len(self.__fighters):
             self.__index = 0
             self.__round += 1
+        # TODO: maybe combine the following two
+        self._display.round_ribbon(self.__round,
+                                   None, # current fighter
+                                   None) # next PC
+        opponent = self.__find_opponent(self.__fighters[self.__index])
+        self._display.show_fighters(self.__fighters[self.__index], opponent)
+        return True # Keep going
+
+    def __prev_fighter(self):
+        if self.__index == 0 and self.__round == 0:
+            return True # Not going backwards from the origin
+
+        self.__index -= 1
+        if self.__index < 0:
+            self.__index = len(self.__fighters) - 1
+            self.__round -= 1
         # TODO: maybe combine the following two
         self._display.round_ribbon(self.__round,
                                    None, # current fighter
@@ -490,7 +507,15 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
     def __damage_FP(self):
-        # TODO
+        opponent = self.__find_opponent(self.__fighters[self.__index])
+        if opponent is not None:
+            title = 'Change FP By...'
+            height = 1
+            width = len(title)
+            adj_string = self._display.input_box(height, width, title)
+            adj = int(adj_string)
+            opponent['current']['fp'] += adj # TODO: this should be in rules
+            self._display.show_fighters(self.__fighters[self.__index], opponent)
         return True # Keep going
 
     def __pick_opponent(self):
