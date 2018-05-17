@@ -98,6 +98,9 @@ class CaDisplay(object):
 
     ESCAPE = 27 # ASCII value for the escape character
 
+    # Foreground / background colors
+    (RED_BLACK, RED_WHITE) = range(1, 3) # red text over black
+
     # NOTE: remember to call win.refresh()
     # win.addstr(y, x, "String", attrib)
     #   attrib can be curses.color_pair(1) or curses.A_REVERSE, ...
@@ -118,10 +121,18 @@ class CaDisplay(object):
     def __enter__(self):
         try:
             self.__stdscr = curses.initscr()
+            curses.start_color()
             curses.noecho()
             curses.cbreak() # respond instantly to keystrokes
             self.__stdscr.keypad(1) # special characters converted by curses
                                     # (e.g., curses.KEY_LEFT)
+
+            curses.init_pair(CaDisplay.RED_BLACK,
+                             curses.COLOR_RED, # fg
+                             curses.COLOR_BLACK) # bg
+            curses.init_pair(CaDisplay.RED_WHITE,
+                             curses.COLOR_RED, # fg
+                             curses.COLOR_WHITE) # bg
 
             self.__FIGHTER_COL = 1
             self.__OPPONENT_COL = (curses.COLS / 2)
@@ -295,10 +306,15 @@ class CaDisplay(object):
             fighter['permanent']['hp'],
             fighter['current']['fp'],
             fighter['permanent']['fp'])
+        if fighter['current']['fp'] <= 0 or fighter['current']['hp'] <= 0:
+            mode = curses.color_pair(CaDisplay.RED_BLACK)
+        else:
+            mode = curses.A_NORMAL
+
         self.__stdscr.addstr(self.__FIGHTER_LINE,
                              column,
                              fighter_string,
-                             curses.A_NORMAL)
+                             mode)
 
     def command_ribbon(
             self,
@@ -406,8 +422,8 @@ class FightHandler(ScreenHandler):
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
             ord('<'): {'name': 'prev', 'func': self.__prev_fighter},
             # TODO: 'h' and 'f' are based on the ruleset
-            ord('h'): {'name': 'damage', 'func': self.__damage_HP},
-            ord('f'): {'name': 'damage', 'func': self.__damage_FP},
+            ord('h'): {'name': 'HP damage', 'func': self.__damage_HP},
+            ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
             ord('o'): {'name': 'opponent', 'func': self.__pick_opponent},
             ord('q'): {'name': 'quit', 'func': self.__quit}
         }

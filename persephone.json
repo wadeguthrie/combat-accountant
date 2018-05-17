@@ -45,8 +45,8 @@
             }, 
             {
                 "current": {
-                    "fp": 12, 
-                    "hp": 5, 
+                    "fp": 10, 
+                    "hp": 10, 
                     "basic-speed": 5
                 }, 
                 "permanent": {
