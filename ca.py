@@ -7,9 +7,7 @@ import pprint
 # import requests # Easy to use HTTP, requires Python 3
 
 # TODO:
-#   - save (init list, opponents, current monster list)
 #   - restore on startup
-#   - initiative based on DX and random for 2nd and 3rd key (after basic move)
 #   - '>' delays the initiative for a creature from the list
 #   - monster groups: each group needs a 'used' feature
 #   - 'backspace' or 'del' removes creature from initiative list
@@ -26,9 +24,15 @@ import pprint
 
 
 class CaJson(object):
+    '''
+    Context manager that opens and loads a JSON for combat accountant on entry
+    and saves and closes it on exit.
+    '''
+
 
     def __init__(self, filename):
         self.__filename = filename
+
 
     def __enter__(self):
         try:
@@ -38,6 +42,7 @@ class CaJson(object):
         except:
             pass
         return world
+
 
     def __exit__ (self, exception_type, exception_value, exception_traceback):
         if exception_type is IOError:
@@ -63,12 +68,6 @@ class CaJson(object):
     #        utm_medium=organic&utm_source=google_rich_qa&
     #        utm_campaign=google_rich_qa
 
-    @staticmethod
-    def __json_load_byteified(file_handle):
-        return CaJson.__byteify(
-            json.load(file_handle, object_hook=CaJson.__byteify),
-            ignore_dicts=True
-        )
 
     @staticmethod
     def __byteify(data, ignore_dicts = False):
@@ -91,10 +90,18 @@ class CaJson(object):
         return data
 
 
+    @staticmethod
+    def __json_load_byteified(file_handle):
+        return CaJson.__byteify(
+            json.load(file_handle, object_hook=CaJson.__byteify),
+            ignore_dicts=True
+        )
+
+
 class CaDisplay(object):
     '''
-    CaDisplay addresses the graphical part of the user interface.  Here,
-    this is provided with the Curses package.
+    CaDisplay addresses the graphical part of the user interface for combat
+    accountant.  Here, this is provided with the Curses package.
     '''
 
     ESCAPE = 27 # ASCII value for the escape character
@@ -112,12 +119,14 @@ class CaDisplay(object):
     #                      5:magenta, 6:cyan, and 7:white
     # 
 
+
     def __init__(self):
         self.__stdscr = None
         self.__y = 0 # For debug printouts
         self.__FIGHTER_LINE = 2
         self.__FIGHTER_COL = 0
         self.__OPPONENT_COL = 0
+
 
     def __enter__(self):
         try:
@@ -141,6 +150,7 @@ class CaDisplay(object):
             curses.endwin()
         return self
 
+
     def __exit__ (self, exception_type, exception_value, exception_traceback):
         if exception_type is IOError:
             print 'IOError: %r' % exception_type
@@ -158,25 +168,83 @@ class CaDisplay(object):
         self.__stdscr = None
         return True
 
-    def printit(self,
-                string  # String to print
-               ):
+    #
+    # Public Methods
+    #
+
+
+    def command_ribbon(
+            self,
+            choices # hash: ord('f'): {'name': 'xxx', 'func': self.func}
+           ):
         '''
-        Really just for debug.  Prints strings on the screen.
+        Draws a list of commands across the bottom of the screen
         '''
-        mode = curses.A_STANDOUT if (self.__y % 3 == 0) else curses.A_NORMAL
-        self.__stdscr.addstr(self.__y, 0, string, mode)
-        self.__y = 0 if self.__y == curses.LINES else self.__y + 1
+        left = 0
+
+        self.__stdscr.addstr(curses.LINES - 1,
+                             left,
+                             '|',
+                             curses.A_NORMAL)
+        left += 2 # adds a space
+
+        for choice, body in choices.iteritems():
+            if choice == ord(' '):
+                choice_string = '" "'
+            else:
+                choice_string = '%c' % chr(choice)
+
+            self.__stdscr.addstr(curses.LINES - 1,
+                                 left,
+                                 choice_string,
+                                 curses.A_REVERSE)
+            left += len(choice_string) + 1 # add a space after the choice
+
+            self.__stdscr.addstr(curses.LINES - 1,
+                                 left,
+                                 body['name'],
+                                 curses.A_BOLD)
+
+            left += len(body['name']) + 1 # add a space after the choice
+
+            self.__stdscr.addstr(curses.LINES - 1,
+                                 left,
+                                 '|',
+                                 curses.A_NORMAL)
+            left += 2 # adds a space
+
         self.__stdscr.refresh()
 
-    def get_one_character(self, window=None):
+
+    def clear(self):
+        '''Clears the screen.'''
+
+        self.__stdscr.clear()
+
+
+    def get_one_character(self,
+                          window=None # Window (for Curses)
+                         ):
+        '''Reads one character from the keyboard.'''
+
         if window is None:
             window = self.__stdscr
         c = window.getch()
         # 'c' will be something like ord('p') or curses.KEY_HOME
         return c
 
+
     def get_string(self, window=None):
+        '''
+        Gets a complete string from the keyboard.  For Curses, you have to 
+        turn off raw mode to get the string then turn it back on when you're
+        done.
+        '''
+
+        # TODO(eventually): this be a mini-context manager that should get the
+        # current state of cbreak and echo and set them on entry and then
+        # reinstate them on exit.
+
         if window is None:
             window = self.__stdscr
         curses.nocbreak()
@@ -186,7 +254,14 @@ class CaDisplay(object):
         curses.noecho()
         return string
 
-    def input_box(self, height, width, title):
+
+    def input_box(self,
+                  height,
+                  width,
+                  title
+                 ):
+        '''Provides a window to get input from the screen.'''
+
         border_win, menu_win = self.__centered_boxed_window(height, width,
                                                             title)
         string = self.get_string(menu_win)
@@ -202,6 +277,10 @@ class CaDisplay(object):
              title,
              strings_results # array of tuples (string, return value)
             ):
+        '''
+        Presents a menu to the user and returns the result.
+        '''
+
         # TODO: doesn't handle more entries that would fit on screen
 
         # height and width of text box (not border)
@@ -269,14 +348,26 @@ class CaDisplay(object):
                                 curses.A_STANDOUT)
                 menu_win.refresh()
 
-    def clear(self):
-        self.__stdscr.clear()
+
+    def printit(self,
+                string  # String to print
+               ):
+        '''
+        Really just for debug.  Prints strings on the screen.
+        '''
+        mode = curses.A_STANDOUT if (self.__y % 3 == 0) else curses.A_NORMAL
+        self.__stdscr.addstr(self.__y, 0, string, mode)
+        self.__y = 0 if self.__y == curses.LINES else self.__y + 1
+        self.__stdscr.refresh()
+
 
     def round_ribbon(self,
                      round_no,
                      current_fighter, # use in future
                      next_fighter # use in future
                     ):
+        '''Prints the fight round information at the top of the screen.'''
+
         round_string = 'Round %d' % round_no
         self.__stdscr.addstr(0,
                              0,
@@ -284,12 +375,18 @@ class CaDisplay(object):
                              curses.A_NORMAL)
         self.__stdscr.refresh()
 
+
     def show_fighters(self,
                       current_name,
                       current_fighter,
                       opponent_name,
                       opponent
                      ):
+        '''
+        Displays the current state of the current fighter and his opponent,
+        if he has one.
+        '''
+
         self.__stdscr.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
         self.__stdscr.clrtoeol()
         self.__some_fighter(current_name, current_fighter, self.__FIGHTER_COL)
@@ -303,64 +400,10 @@ class CaDisplay(object):
 
         self.__stdscr.refresh()
 
-    def __some_fighter(self, fighter_name, fighter, column):
-        fighter_string = '%s HP: %d/%d FP: %d/%d' % (
-            fighter_name,
-            fighter['current']['hp'],
-            fighter['permanent']['hp'],
-            fighter['current']['fp'],
-            fighter['permanent']['fp'])
-        if fighter['current']['fp'] <= 0 or fighter['current']['hp'] <= 0:
-            mode = curses.color_pair(CaDisplay.RED_BLACK)
-        else:
-            mode = curses.A_NORMAL
+    #
+    # Private Methods
+    #
 
-        self.__stdscr.addstr(self.__FIGHTER_LINE,
-                             column,
-                             fighter_string,
-                             mode)
-
-    def command_ribbon(
-            self,
-            choices # hash: ord('f'): {'name': 'xxx', 'func': self.func}
-           ):
-        '''
-        Draws a list of commands across the bottom of the screen
-        '''
-        left = 0
-
-        self.__stdscr.addstr(curses.LINES - 1,
-                             left,
-                             '|',
-                             curses.A_NORMAL)
-        left += 2 # adds a space
-
-        for choice, body in choices.iteritems():
-            if choice == ord(' '):
-                choice_string = '" "'
-            else:
-                choice_string = '%c' % chr(choice)
-
-            self.__stdscr.addstr(curses.LINES - 1,
-                                 left,
-                                 choice_string,
-                                 curses.A_REVERSE)
-            left += len(choice_string) + 1 # add a space after the choice
-
-            self.__stdscr.addstr(curses.LINES - 1,
-                                 left,
-                                 body['name'],
-                                 curses.A_BOLD)
-
-            left += len(body['name']) + 1 # add a space after the choice
-
-            self.__stdscr.addstr(curses.LINES - 1,
-                                 left,
-                                 '|',
-                                 curses.A_NORMAL)
-            left += 2 # adds a space
-
-        self.__stdscr.refresh()
 
     def __centered_boxed_window(self,
                                 height, # height of INSIDE window
@@ -385,6 +428,28 @@ class CaDisplay(object):
         return border_win, menu_win
 
 
+    def __some_fighter(self,
+                       fighter_name,
+                       fighter,
+                       column
+                      ):
+        fighter_string = '%s HP: %d/%d FP: %d/%d' % (
+            fighter_name,
+            fighter['current']['hp'],
+            fighter['permanent']['hp'],
+            fighter['current']['fp'],
+            fighter['permanent']['fp'])
+        if fighter['current']['fp'] <= 0 or fighter['current']['hp'] <= 0:
+            mode = curses.color_pair(CaDisplay.RED_BLACK)
+        else:
+            mode = curses.A_NORMAL
+
+        self.__stdscr.addstr(self.__FIGHTER_LINE,
+                             column,
+                             fighter_string,
+                             mode)
+
+
 class ScreenHandler(object):
     '''
     Base class for the "business logic" backing the user interface.
@@ -393,6 +458,7 @@ class ScreenHandler(object):
     def __init__(self, display):
         self._display = display
         self._choices = { }
+
 
     def doit(self):
         '''
@@ -406,43 +472,13 @@ class ScreenHandler(object):
             if string in self._choices:
                 keep_going = self._choices[string]['func']()
 
+
     def _draw_screen(self):
         pass
 
 
 
 class FightHandler(ScreenHandler):
-    def __fighter(self,
-                  group, # 'PCs' or some group under world['monsters']
-                  name   # name of a fighter in the aforementioned group
-                 ):
-        return (self.__world['PCs'][name] if group == 'PCs' else
-                self.__world['monsters'][group][name])
-
-    def __current_fighter(self):
-        index = self.__fight['index']
-        return (self.__fight['fighters'][index][1],
-                self.__fighter(self.__fight['fighters'][index][0], # group
-                               self.__fight['fighters'][index][1])) # name
-
-    def __opponent(self,
-                   fighter # dict for a fighter as in the JSON
-                  ):
-        opponent_name = None
-        opponent = None
-        if fighter is not None and fighter['opponent'] is not None:
-            opponent_name = fighter['opponent'][1]
-            opponent = self.__fighter(fighter['opponent'][0],
-                                      fighter['opponent'][1])
-        return opponent_name, opponent
-
-
-    # NOTE: initiative trait is rule
-    def __init(self,
-               fighter # dict for the creature as in the json file
-              ):
-        return fighter['current']['basic-speed'], fighter['current']['dx']
-
     def __init__(self,
                  display,
                  world,
@@ -480,8 +516,9 @@ class FightHandler(ScreenHandler):
             # random
             # TODO: there should be a random value for equal initiatives
             self.__fight['fighters'].sort(key=lambda fighter: 
-                    self.__init(self.__fighter(fighter[0],fighter[1])),
-                    reverse=True) # NOTE: initiative order is a rule
+                    # NOTE: initiative order is a rule
+                    self.__initiative(self.__fighter(fighter[0],fighter[1])),
+                                      reverse=True)
 
             # Make sure nobody has an opponent, already
             for fight_info in self.__fight['fighters']:
@@ -489,6 +526,43 @@ class FightHandler(ScreenHandler):
                 fighter['opponent'] = None
 
         self.__fight['saved'] = False
+
+
+    def __current_fighter(self):
+        index = self.__fight['index']
+        return (self.__fight['fighters'][index][1],
+                self.__fighter(self.__fight['fighters'][index][0], # group
+                               self.__fight['fighters'][index][1])) # name
+
+
+    def __damage_FP(self):
+        current_name, current_fighter = self.__current_fighter()
+        opponent_name, opponent = self.__opponent(current_fighter)
+        if opponent is not None:
+            title = 'Change FP By...'
+            height = 1
+            width = len(title)
+            adj_string = self._display.input_box(height, width, title)
+            adj = int(adj_string)
+            opponent['current']['fp'] += adj # TODO: this should be in rules
+            self._display.show_fighters(current_name, current_fighter,
+                                        opponent_name, opponent)
+        return True # Keep going
+
+
+    def __damage_HP(self):
+        current_name, current_fighter = self.__current_fighter()
+        opponent_name, opponent = self.__opponent(current_fighter)
+        if opponent is not None:
+            title = 'Change HP By...'
+            height = 1
+            width = len(title)
+            adj_string = self._display.input_box(height, width, title)
+            adj = int(adj_string)
+            opponent['current']['hp'] += adj # TODO: this should be in rules
+            self._display.show_fighters(current_name, current_fighter,
+                                        opponent_name, opponent)
+        return True # Keep going
 
 
     def _draw_screen(self):
@@ -503,6 +577,22 @@ class FightHandler(ScreenHandler):
         self._display.show_fighters(current_name, current_fighter,
                                     opponent_name, opponent)
         self._display.command_ribbon(self._choices)
+
+
+    def __fighter(self,
+                  group, # 'PCs' or some group under world['monsters']
+                  name   # name of a fighter in the aforementioned group
+                 ):
+        return (self.__world['PCs'][name] if group == 'PCs' else
+                self.__world['monsters'][group][name])
+
+
+    def __initiative(self,
+                     fighter # dict for the creature as in the json file
+                    ):
+        # NOTE: initiative trait is rule
+        return fighter['current']['basic-speed'], fighter['current']['dx']
+
 
     def __next_fighter(self):
         self.__fight['index'] += 1
@@ -519,54 +609,20 @@ class FightHandler(ScreenHandler):
                                     opponent_name, opponent)
         return True # Keep going
 
-    def __prev_fighter(self):
-        if self.__fight['index'] == 0 and self.__fight['round'] == 0:
-            return True # Not going backwards from the origin
 
-        self.__fight['index'] -= 1
-        if self.__fight['index'] < 0:
-            self.__fight['index'] = len(self.__fight['fighters']) - 1
-            self.__fight['round'] -= 1
-        # TODO: maybe combine the following two
-        self._display.round_ribbon(self.__fight['round'],
-                                   None, # current fighter
-                                   None) # next PC
-        current_name, current_fighter = self.__current_fighter()
-        opponent_name, opponent = self.__opponent(current_fighter)
-        self._display.show_fighters(current_name, current_fighter,
-                                    opponent_name, opponent)
-        return True # Keep going
+    def __opponent(self,
+                   fighter # dict for a fighter as in the JSON
+                  ):
+        opponent_name = None
+        opponent = None
+        if fighter is not None and fighter['opponent'] is not None:
+            opponent_name = fighter['opponent'][1]
+            opponent = self.__fighter(fighter['opponent'][0],
+                                      fighter['opponent'][1])
+        return opponent_name, opponent
 
-    def __damage_HP(self):
-        current_name, current_fighter = self.__current_fighter()
-        opponent_name, opponent = self.__opponent(current_fighter)
-        if opponent is not None:
-            title = 'Change HP By...'
-            height = 1
-            width = len(title)
-            adj_string = self._display.input_box(height, width, title)
-            adj = int(adj_string)
-            opponent['current']['hp'] += adj # TODO: this should be in rules
-            self._display.show_fighters(current_name, current_fighter,
-                                        opponent_name, opponent)
-        return True # Keep going
-
-    def __damage_FP(self):
-        current_name, current_fighter = self.__current_fighter()
-        opponent_name, opponent = self.__opponent(current_fighter)
-        if opponent is not None:
-            title = 'Change FP By...'
-            height = 1
-            width = len(title)
-            adj_string = self._display.input_box(height, width, title)
-            adj = int(adj_string)
-            opponent['current']['fp'] += adj # TODO: this should be in rules
-            self._display.show_fighters(current_name, current_fighter,
-                                        opponent_name, opponent)
-        return True # Keep going
 
     def __pick_opponent(self):
-
         current_name, current_fighter = self.__current_fighter()
         current_index = self.__fight['index']
         current_group = self.__fight['fighters'][current_index][0]
@@ -597,6 +653,26 @@ class FightHandler(ScreenHandler):
                                     opponent_name, opponent)
         return True # Keep going
 
+
+    def __prev_fighter(self):
+        if self.__fight['index'] == 0 and self.__fight['round'] == 0:
+            return True # Not going backwards from the origin
+
+        self.__fight['index'] -= 1
+        if self.__fight['index'] < 0:
+            self.__fight['index'] = len(self.__fight['fighters']) - 1
+            self.__fight['round'] -= 1
+        # TODO: maybe combine the following two
+        self._display.round_ribbon(self.__fight['round'],
+                                   None, # current fighter
+                                   None) # next PC
+        current_name, current_fighter = self.__current_fighter()
+        opponent_name, opponent = self.__opponent(current_fighter)
+        self._display.show_fighters(current_name, current_fighter,
+                                    opponent_name, opponent)
+        return True # Keep going
+
+
     def __quit(self):
         return False # Leave the fight
 
@@ -611,15 +687,18 @@ class MainHandler(ScreenHandler):
             ord('q'): {'name': 'quit',  'func': self.__quit}
         }
 
+
     def _draw_screen(self):
         self._display.clear()
         self._display.command_ribbon(self._choices)
+
 
     def __fully_heal(self):
         for character in self.__world['PCs']:
             for stat in character['permanent'].itervalues():
                 character['current'][stat] = character['permanent'][stat]
         return True
+
 
     def __new_fight(self):
         fight_name_menu = [(name, name)
@@ -644,6 +723,7 @@ class MainHandler(ScreenHandler):
         self._draw_screen() # Redraw current screen when done with the fight.
 
         return True # Keep going
+
 
     def __quit(self):
         return False # Leave
