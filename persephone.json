@@ -19,7 +19,10 @@
                 "dx": 10, 
                 "basic-speed": 3
             }, 
-            "opponent": null
+            "opponent": [
+                "stooges", 
+                "Curly"
+            ]
         }, 
         "Tom": {
             "current": {
@@ -41,8 +44,8 @@
                 "basic-speed": 5
             }, 
             "opponent": [
-                "horsemen", 
-                "Death"
+                "stooges", 
+                "Moe"
             ]
         }
     }, 
@@ -269,40 +272,39 @@
                     "dx": 10, 
                     "basic-speed": 6
                 }, 
-                "opponent": null
+                "opponent": [
+                    "PCs", 
+                    "Tom"
+                ]
             }
         }
     }, 
     "current-fight": {
-        "index": 4, 
+        "index": 2, 
         "fighters": [
+            [
+                "stooges", 
+                "Moe"
+            ], 
             [
                 "PCs", 
                 "Tom"
             ], 
             [
-                "horsemen", 
-                "Death"
-            ], 
-            [
-                "horsemen", 
-                "War"
+                "stooges", 
+                "Curly"
             ], 
             [
                 "PCs", 
                 "Bob"
             ], 
             [
-                "horsemen", 
-                "Pestilence"
-            ], 
-            [
-                "horsemen", 
-                "Famine"
+                "stooges", 
+                "Larry"
             ]
         ], 
         "saved": false, 
-        "round": 1, 
-        "monsters": "horsemen"
+        "round": 2, 
+        "monsters": "stooges"
     }
 }

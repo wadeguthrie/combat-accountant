@@ -7,11 +7,10 @@ import pprint
 # import requests # Easy to use HTTP, requires Python 3
 
 # TODO:
-#   - restore on startup
-#   - '>' delays the initiative for a creature from the list
 #   - monster groups: each group needs a 'used' feature
 #   - 'backspace' or 'del' removes creature from initiative list
 #   - timers ('t' sets an x-round timer for this creature)
+#   - '>' delays the initiative for a creature from the list
 #   - main screen should have a 'h' heal one creature at a time
 #
 # TODO (eventually)
@@ -180,6 +179,8 @@ class CaDisplay(object):
         '''
         Draws a list of commands across the bottom of the screen
         '''
+
+        # TODO: use multiple lines if there's too much stuff
         left = 0
 
         self.__stdscr.addstr(curses.LINES - 1,
@@ -368,6 +369,7 @@ class CaDisplay(object):
                     ):
         '''Prints the fight round information at the top of the screen.'''
 
+        # TODO: should indicate 'saved' when the fight is saved
         round_string = 'Round %d' % round_no
         self.__stdscr.addstr(0,
                              0,
@@ -490,10 +492,11 @@ class FightHandler(ScreenHandler):
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
             ord('<'): {'name': 'prev', 'func': self.__prev_fighter},
             # TODO: 'h' and 'f' are based on the ruleset
-            ord('h'): {'name': 'HP damage', 'func': self.__damage_HP},
-            ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
+            ord('h'): {'name': 'HP dmg', 'func': self.__damage_HP},
+            ord('f'): {'name': 'FP dmg', 'func': self.__damage_FP},
             ord('o'): {'name': 'opponent', 'func': self.__pick_opponent},
-            ord('q'): {'name': 'quit', 'func': self.__quit}
+            ord('q'): {'name': 'quit', 'func': self.__quit},
+            ord('s'): {'name': 'save', 'func': self.__save}
         }
 
         self.__world = world
@@ -675,6 +678,10 @@ class FightHandler(ScreenHandler):
 
     def __quit(self):
         return False # Leave the fight
+
+    def __save(self):
+        self.__fight['saved'] = True
+        return True # Keep going
 
 
 class MainHandler(ScreenHandler):
