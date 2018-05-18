@@ -19,11 +19,14 @@
                 "dx": 10, 
                 "basic-speed": 3
             }, 
-            "opponent": null
+            "opponent": [
+                "marx", 
+                "Harpo"
+            ]
         }, 
         "Tom": {
             "current": {
-                "fp": -10, 
+                "fp": 10, 
                 "iq": 10, 
                 "hp": 10, 
                 "ht": 10, 
@@ -40,10 +43,7 @@
                 "dx": 10, 
                 "basic-speed": 5
             }, 
-            "opponent": [
-                "horsemen", 
-                "Death"
-            ]
+            "opponent": null
         }
     }, 
     "monsters": {
@@ -73,7 +73,7 @@
                 "current": {
                     "fp": 10, 
                     "iq": 10, 
-                    "hp": 7, 
+                    "hp": 10, 
                     "ht": 10, 
                     "st": 10, 
                     "dx": 10, 
@@ -177,7 +177,10 @@
                     "dx": 10, 
                     "basic-speed": 5
                 }, 
-                "opponent": null
+                "opponent": [
+                    "PCs", 
+                    "Bob"
+                ]
             }, 
             "Chico": {
                 "current": {
@@ -268,6 +271,31 @@
         }
     }, 
     "current-fight": {
-        "active": 0
+        "index": 3, 
+        "fighters": [
+            [
+                "PCs", 
+                "Tom"
+            ], 
+            [
+                "marx", 
+                "Harpo"
+            ], 
+            [
+                "PCs", 
+                "Bob"
+            ], 
+            [
+                "marx", 
+                "Chico"
+            ], 
+            [
+                "marx", 
+                "Groucho"
+            ]
+        ], 
+        "saved": false, 
+        "round": 1, 
+        "monsters": "marx"
     }
 }

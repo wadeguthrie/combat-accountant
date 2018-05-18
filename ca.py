@@ -446,8 +446,7 @@ class FightHandler(ScreenHandler):
     def __init__(self,
                  display,
                  world,
-                 monster_list_name,
-                 existing_fight
+                 monster_list_name
                 ):
         super(FightHandler, self).__init__(display)
 
@@ -462,30 +461,20 @@ class FightHandler(ScreenHandler):
         }
 
         self.__world = world
+        self.__fight = world["current-fight"]
 
-        if existing_fight['active']:
-            # TODO: save should do a key-by-key deepcopy of this
-            self.__fight = copy.deepcopy(existing_fight)
+        if not self.__fight['saved']:
+            self.__fight['round'] = 0
+            self.__fight['index'] = 0
+            self.__fight['monsters'] = monster_list_name
 
-        else:
-
-            self.__fight = {
-                'active': True,
-                'round': 0,
-                'index': 0,
-                'monsters': monster_list_name,
-                'fighters': [] # list of [list, name] in initiative order
-            }
-
-            self.__fight['fighters'] = []
+            self.__fight['fighters'] = [] # list of [list, name] in init order
             self.__fight['fighters'].extend(['PCs', name] for name in
                     world['PCs'].keys())
             if monster_list_name is not None:
                 self.__fight['fighters'].extend(
                         [monster_list_name, name] for name in
                          self.__world['monsters'][monster_list_name].keys())
-
-            # PP.pprint(self.__fight['fighters'])
 
             # Sort by initiative = basic-speed followed by DEX followed by
             # random
@@ -494,12 +483,12 @@ class FightHandler(ScreenHandler):
                     self.__init(self.__fighter(fighter[0],fighter[1])),
                     reverse=True) # NOTE: initiative order is a rule
 
-            # OK to here.
-            # PP.pprint(self.__fight['fighters'])
+            # Make sure nobody has an opponent, already
+            for fight_info in self.__fight['fighters']:
+                fighter = self.__fighter(fight_info[0], fight_info[1])
+                fighter['opponent'] = None
 
-
-        # TODO: if we're mid-fight, I need to find this
-        self.__most_recent_character = None
+        self.__fight['saved'] = False
 
 
     def _draw_screen(self):
@@ -609,10 +598,6 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
     def __quit(self):
-        # Put all fighters into a non-fighting mode (mostly, just remove
-        # their opponents)
-        for fighter in self.__fight['fighters']:
-            fighter['opponent'] = None
         return False # Leave the fight
 
 
@@ -654,8 +639,7 @@ class MainHandler(ScreenHandler):
         # reused).
         fight = FightHandler(self._display,
                              self.__world,
-                             monster_list,
-                             self.__world['current-fight'])
+                             monster_list)
         fight.doit()
         self._draw_screen() # Redraw current screen when done with the fight.
 
@@ -690,11 +674,10 @@ if __name__ == '__main__':
         # Enter into the mainloop
         with CaDisplay() as display:
             main_handler = MainHandler(display, world)
-            if world['current-fight']['active']:
+            if world['current-fight']['saved']:
                 fight_handler = FightHandler(display,
                                              world,
-                                             None,
-                                             world['current-fight'])
+                                             None)
                 fight_handler.doit()
             main_handler.doit()
 
