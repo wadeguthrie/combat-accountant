@@ -1,5 +1,6 @@
 #! /usr/bin/python
 
+import copy
 import curses
 import json
 import pprint
@@ -284,24 +285,27 @@ class CaDisplay(object):
         self.__stdscr.refresh()
 
     def show_fighters(self,
+                      current_name,
                       current_fighter,
-                      current_opponent
+                      opponent_name,
+                      opponent
                      ):
         self.__stdscr.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
         self.__stdscr.clrtoeol()
-        self.__some_fighter(current_fighter, self.__FIGHTER_COL)
+        self.__some_fighter(current_name, current_fighter, self.__FIGHTER_COL)
 
-        if current_opponent is not None:
+        if opponent is not None:
             self.__stdscr.addstr(self.__FIGHTER_LINE,
                                  self.__OPPONENT_COL, 'vs.')
-            self.__some_fighter(current_opponent,
+            self.__some_fighter(opponent_name,
+                                opponent,
                                 self.__OPPONENT_COL+4)
 
         self.__stdscr.refresh()
 
-    def __some_fighter(self, fighter, column):
+    def __some_fighter(self, fighter_name, fighter, column):
         fighter_string = '%s HP: %d/%d FP: %d/%d' % (
-            fighter['name'],
+            fighter_name,
             fighter['current']['hp'],
             fighter['permanent']['hp'],
             fighter['current']['fp'],
@@ -408,13 +412,42 @@ class ScreenHandler(object):
 
 
 class FightHandler(ScreenHandler):
+    def __fighter(self,
+                  group, # 'PCs' or some group under world['monsters']
+                  name   # name of a fighter in the aforementioned group
+                 ):
+        return (self.__world['PCs'][name] if group == 'PCs' else
+                self.__world['monsters'][group][name])
+
+    def __current_fighter(self):
+        index = self.__fight['index']
+        return (self.__fight['fighters'][index][1],
+                self.__fighter(self.__fight['fighters'][index][0], # group
+                               self.__fight['fighters'][index][1])) # name
+
+    def __opponent(self,
+                   fighter # dict for a fighter as in the JSON
+                  ):
+        opponent_name = None
+        opponent = None
+        if fighter is not None and fighter['opponent'] is not None:
+            opponent_name = fighter['opponent'][1]
+            opponent = self.__fighter(fighter['opponent'][0],
+                                      fighter['opponent'][1])
+        return opponent_name, opponent
+
+
+    # NOTE: initiative trait is rule
+    def __init(self,
+               fighter # dict for the creature as in the json file
+              ):
+        return fighter['current']['basic-speed'], fighter['current']['dx']
+
     def __init__(self,
                  display,
-                 characters,
-                 monsters,
-                 fight_round=0,
-                 fighters=None, # Current initiative order of fighters
-                 index=0 # Index into fighters order for current fight
+                 world,
+                 monster_list_name,
+                 existing_fight
                 ):
         super(FightHandler, self).__init__(display)
 
@@ -428,88 +461,96 @@ class FightHandler(ScreenHandler):
             ord('q'): {'name': 'quit', 'func': self.__quit}
         }
 
-        self.__characters = characters
-        self.__monsters = monsters
-        self.__round = fight_round
-        self.__fighters = [] if fighters is None else fighters
-        self.__index = index
+        self.__world = world
+
+        if existing_fight['active']:
+            # TODO: save should do a key-by-key deepcopy of this
+            self.__fight = copy.deepcopy(existing_fight)
+
+        else:
+
+            self.__fight = {
+                'active': True,
+                'round': 0,
+                'index': 0,
+                'monsters': monster_list_name,
+                'fighters': [] # list of [list, name] in initiative order
+            }
+
+            self.__fight['fighters'] = []
+            self.__fight['fighters'].extend(['PCs', name] for name in
+                    world['PCs'].keys())
+            if monster_list_name is not None:
+                self.__fight['fighters'].extend(
+                        [monster_list_name, name] for name in
+                         self.__world['monsters'][monster_list_name].keys())
+
+            # PP.pprint(self.__fight['fighters'])
+
+            # Sort by initiative = basic-speed followed by DEX followed by
+            # random
+            # TODO: there should be a random value for equal initiatives
+            self.__fight['fighters'].sort(key=lambda fighter: 
+                    self.__init(self.__fighter(fighter[0],fighter[1])),
+                    reverse=True) # NOTE: initiative order is a rule
+
+            # OK to here.
+            # PP.pprint(self.__fight['fighters'])
+
 
         # TODO: if we're mid-fight, I need to find this
         self.__most_recent_character = None
 
-        if fighters is None:
-            self.__fighters = []
-            self.__fighters.extend(self.__characters)
-            if self.__monsters is not None:
-                self.__fighters.extend(self.__monsters)
-
-            # Sort by initiative = basic-speed followed by DEX followed by
-            # random
-            # TODO: add DEX and random
-            # TODO: there should be an 'initiative' value so that someone can
-            #   change their initiative with a 'wait' action (although, maybe,
-            #   that just changes the order in the list)
-            # NOTE: initiative trait is rule
-            self.__fighters.sort(key=lambda fighter: 
-                fighter['current']['basic-speed'],
-                reverse=True) # NOTE: initiative order is a rule
-        else:
-            self.__fighters = fighters
 
     def _draw_screen(self):
         self._display.clear()
         # TODO: look-up "up next" in self.__characters after
         # self.__most_recent_character (which may be 'None')
-        self._display.round_ribbon(self.__round,
-                                   None, #self.xxx, # up now
+        current_name, current_fighter = self.__current_fighter()
+        opponent_name, opponent = self.__opponent(current_fighter)
+        self._display.round_ribbon(self.__fight['round'],
+                                   current_fighter, # up now
                                    None) #self.xxx) # next PC
-        opponent = self.__find_opponent(self.__fighters[self.__index])
-        self._display.show_fighters(self.__fighters[self.__index], opponent)
+        self._display.show_fighters(current_name, current_fighter,
+                                    opponent_name, opponent)
         self._display.command_ribbon(self._choices)
 
-    def __find_opponent(self,
-                        current_fighter # struct containing fighter
-                       ):
-        # TODO: there's got to be a better way 
-        if current_fighter is None or current_fighter['opponent'] is None:
-            return None
-        opponent_name = current_fighter['opponent']
-        for fighter in self.__fighters:
-            if fighter['name'] == opponent_name:
-                return fighter
-        return None
-
     def __next_fighter(self):
-        self.__index += 1
-        if self.__index >= len(self.__fighters):
-            self.__index = 0
-            self.__round += 1
+        self.__fight['index'] += 1
+        if self.__fight['index'] >= len(self.__fight['fighters']):
+            self.__fight['index'] = 0
+            self.__fight['round'] += 1
         # TODO: maybe combine the following two
-        self._display.round_ribbon(self.__round,
+        self._display.round_ribbon(self.__fight['round'],
                                    None, # current fighter
                                    None) # next PC
-        opponent = self.__find_opponent(self.__fighters[self.__index])
-        self._display.show_fighters(self.__fighters[self.__index], opponent)
+        current_name, current_fighter = self.__current_fighter()
+        opponent_name, opponent = self.__opponent(current_fighter)
+        self._display.show_fighters(current_name, current_fighter,
+                                    opponent_name, opponent)
         return True # Keep going
 
     def __prev_fighter(self):
-        if self.__index == 0 and self.__round == 0:
+        if self.__fight['index'] == 0 and self.__fight['round'] == 0:
             return True # Not going backwards from the origin
 
-        self.__index -= 1
-        if self.__index < 0:
-            self.__index = len(self.__fighters) - 1
-            self.__round -= 1
+        self.__fight['index'] -= 1
+        if self.__fight['index'] < 0:
+            self.__fight['index'] = len(self.__fight['fighters']) - 1
+            self.__fight['round'] -= 1
         # TODO: maybe combine the following two
-        self._display.round_ribbon(self.__round,
+        self._display.round_ribbon(self.__fight['round'],
                                    None, # current fighter
                                    None) # next PC
-        opponent = self.__find_opponent(self.__fighters[self.__index])
-        self._display.show_fighters(self.__fighters[self.__index], opponent)
+        current_name, current_fighter = self.__current_fighter()
+        opponent_name, opponent = self.__opponent(current_fighter)
+        self._display.show_fighters(current_name, current_fighter,
+                                    opponent_name, opponent)
         return True # Keep going
 
     def __damage_HP(self):
-        opponent = self.__find_opponent(self.__fighters[self.__index])
+        current_name, current_fighter = self.__current_fighter()
+        opponent_name, opponent = self.__opponent(current_fighter)
         if opponent is not None:
             title = 'Change HP By...'
             height = 1
@@ -517,11 +558,13 @@ class FightHandler(ScreenHandler):
             adj_string = self._display.input_box(height, width, title)
             adj = int(adj_string)
             opponent['current']['hp'] += adj # TODO: this should be in rules
-            self._display.show_fighters(self.__fighters[self.__index], opponent)
+            self._display.show_fighters(current_name, current_fighter,
+                                        opponent_name, opponent)
         return True # Keep going
 
     def __damage_FP(self):
-        opponent = self.__find_opponent(self.__fighters[self.__index])
+        current_name, current_fighter = self.__current_fighter()
+        opponent_name, opponent = self.__opponent(current_fighter)
         if opponent is not None:
             title = 'Change FP By...'
             height = 1
@@ -529,17 +572,29 @@ class FightHandler(ScreenHandler):
             adj_string = self._display.input_box(height, width, title)
             adj = int(adj_string)
             opponent['current']['fp'] += adj # TODO: this should be in rules
-            self._display.show_fighters(self.__fighters[self.__index], opponent)
+            self._display.show_fighters(current_name, current_fighter,
+                                        opponent_name, opponent)
         return True # Keep going
 
     def __pick_opponent(self):
-        opponent_menu = [(fighter['name'], fighter['name']) for fighter in
-                self.__fighters]
-        opponent_name = self._display.menu('Opponent', opponent_menu)
-        if opponent_name is not None:
-            self.__fighters[self.__index]['opponent'] = opponent_name
 
-        opponent = self.__find_opponent(self.__fighters[self.__index])
+        current_name, current_fighter = self.__current_fighter()
+        current_index = self.__fight['index']
+        current_group = self.__fight['fighters'][current_index][0]
+        current_name  = self.__fight['fighters'][current_index][1]
+
+        opponent_group = None
+        opponent_menu = []
+        for fighter in self.__fight['fighters']:
+            if fighter[0] != current_group:
+                opponent_group = fighter[0]
+                opponent_menu.append((fighter[1], fighter[1]))
+        opponent_name = self._display.menu('Opponent', opponent_menu)
+
+        if opponent_name is not None:
+            current_fighter['opponent'] = [opponent_group, opponent_name]
+
+        opponent = self.__fighter(opponent_group, opponent_name)
 
         # Ask to have them fight each other
         if opponent is not None and opponent['opponent'] is None:
@@ -547,15 +602,16 @@ class FightHandler(ScreenHandler):
             answer = self._display.menu('Make Opponents Go Both Ways',
                                         back_menu)
             if answer == True:
-                opponent['opponent'] = self.__fighters[self.__index]['name']
+                opponent['opponent'] = [current_group, current_name]
 
-        self._display.show_fighters(self.__fighters[self.__index], opponent)
+        self._display.show_fighters(current_name, current_fighter,
+                                    opponent_name, opponent)
         return True # Keep going
 
     def __quit(self):
         # Put all fighters into a non-fighting mode (mostly, just remove
         # their opponents)
-        for fighter in self.__fighters:
+        for fighter in self.__fight['fighters']:
             fighter['opponent'] = None
         return False # Leave the fight
 
@@ -575,8 +631,8 @@ class MainHandler(ScreenHandler):
         self._display.command_ribbon(self._choices)
 
     def __fully_heal(self):
-        for character in self.__world['characters']:
-            for stat in character['permanent']:
+        for character in self.__world['PCs']:
+            for stat in character['permanent'].itervalues():
                 character['current'][stat] = character['permanent'][stat]
         return True
 
@@ -597,8 +653,9 @@ class MainHandler(ScreenHandler):
         # only makes the code recursive but the actual screens will just get
         # reused).
         fight = FightHandler(self._display,
-                             self.__world['characters'],
-                             self.__world['monsters'][monster_list])
+                             self.__world,
+                             monster_list,
+                             self.__world['current-fight'])
         fight.doit()
         self._draw_screen() # Redraw current screen when done with the fight.
 
@@ -618,31 +675,27 @@ if __name__ == '__main__':
     with CaJson(filename) as world:
 
         # Build convenient data structures starting from:
-        #   {
+        #   'groucho': {
         #       'current': { 'fp': 10, 'hp': 10, 'basic-speed': 1 }, 
         #       'permanent': { 'fp': 10, 'hp': 10, 'basic-speed': 1 }, 
-        #       'name': 'groucho', 
-        #       'opponent': null
+        #       'opponent': ['PCs', 'Foo'] # group, name
         #   }, 
 
         # Error checking for JSON
 
-        if 'characters' not in world:
-            #display.Error('No "characters" in %s' % filename)
-            print 'No "characters" in %s' % filename # TODO: dump when display
-
-
-        # TODO: if there's a fight in progress, we need to start it
-        #self.__fighters.extend
-        #if ('current-fight' in world and 
-        #        world['current-fight'] in world['monsters']):
-        #    self.__fighters.extend(world['monsters'][world['current-fight']])
-
-        # PP.pprint(fighters)
+        if 'PCs' not in world:
+            #display.Error('No "PCs" in %s' % filename)
+            print 'No "PCs" in %s' % filename # TODO: dump when display
 
         # Enter into the mainloop
         with CaDisplay() as display:
             main_handler = MainHandler(display, world)
+            if world['current-fight']['active']:
+                fight_handler = FightHandler(display,
+                                             world,
+                                             None,
+                                             world['current-fight'])
+                fight_handler.doit()
             main_handler.doit()
 
 

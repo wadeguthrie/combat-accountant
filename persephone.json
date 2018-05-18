@@ -1,181 +1,273 @@
 {
-    "monsters": {
-        "horsemen": [
-            {
-                "current": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 1
-                }, 
-                "permanent": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 1
-                }, 
-                "name": "Famine", 
-                "opponent": null
-            }, 
-            {
-                "current": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 3
-                }, 
-                "permanent": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 3
-                }, 
-                "name": "Pestilence", 
-                "opponent": null
-            }, 
-            {
-                "current": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 5
-                }, 
-                "permanent": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 5
-                }, 
-                "name": "War", 
-                "opponent": null
-            }, 
-            {
-                "current": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 5
-                }, 
-                "permanent": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 5
-                }, 
-                "name": "Death", 
-                "opponent": null
-            }
-        ], 
-        "marx": [
-            {
-                "current": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 1
-                }, 
-                "permanent": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 1
-                }, 
-                "name": "Groucho", 
-                "opponent": null
-            }, 
-            {
-                "current": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 3
-                }, 
-                "permanent": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 3
-                }, 
-                "name": "Chico", 
-                "opponent": null
-            }, 
-            {
-                "current": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 5
-                }, 
-                "permanent": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 5
-                }, 
-                "name": "Harpo", 
-                "opponent": null
-            }
-        ], 
-        "stooges": [
-            {
-                "current": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 2
-                }, 
-                "permanent": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 2
-                }, 
-                "name": "Larry", 
-                "opponent": null
-            }, 
-            {
-                "current": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 4
-                }, 
-                "permanent": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 4
-                }, 
-                "name": "Curly", 
-                "opponent": "Bob"
-            }, 
-            {
-                "current": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 6
-                }, 
-                "permanent": {
-                    "fp": 10, 
-                    "hp": 10, 
-                    "basic-speed": 6
-                }, 
-                "name": "Moe", 
-                "opponent": "Tom"
-            }
-        ]
-    }, 
-    "characters": [
-        {
+    "PCs": {
+        "Bob": {
             "current": {
                 "fp": 10, 
+                "iq": 10, 
                 "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
                 "basic-speed": 3
             }, 
             "permanent": {
                 "fp": 10, 
+                "iq": 10, 
                 "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
                 "basic-speed": 3
             }, 
-            "name": "Bob", 
             "opponent": null
         }, 
-        {
+        "Tom": {
             "current": {
-                "fp": 10, 
+                "fp": -10, 
+                "iq": 10, 
                 "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
                 "basic-speed": 5
             }, 
             "permanent": {
                 "fp": 10, 
+                "iq": 10, 
                 "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
                 "basic-speed": 5
             }, 
-            "name": "Tom", 
-            "opponent": null
+            "opponent": [
+                "horsemen", 
+                "Death"
+            ]
         }
-    ], 
-    "current-fight": null
+    }, 
+    "monsters": {
+        "horsemen": {
+            "Famine": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 1
+                }, 
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 1
+                }, 
+                "opponent": null
+            }, 
+            "Death": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 7, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5
+                }, 
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5
+                }, 
+                "opponent": [
+                    "PCs", 
+                    "Tom"
+                ]
+            }, 
+            "Pestilence": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 3
+                }, 
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 3
+                }, 
+                "opponent": null
+            }, 
+            "War": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5
+                }, 
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5
+                }, 
+                "opponent": null
+            }
+        }, 
+        "marx": {
+            "Groucho": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 1
+                }, 
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 1
+                }, 
+                "opponent": null
+            }, 
+            "Harpo": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5
+                }, 
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5
+                }, 
+                "opponent": null
+            }, 
+            "Chico": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 3
+                }, 
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 3
+                }, 
+                "opponent": null
+            }
+        }, 
+        "stooges": {
+            "Larry": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 2
+                }, 
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 2
+                }, 
+                "opponent": null
+            }, 
+            "Curly": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 4
+                }, 
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 4
+                }, 
+                "opponent": null
+            }, 
+            "Moe": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 6
+                }, 
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 6
+                }, 
+                "opponent": null
+            }
+        }
+    }, 
+    "current-fight": {
+        "active": 0
+    }
 }
