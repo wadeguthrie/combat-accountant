@@ -7,7 +7,6 @@ import pprint
 # import requests # Easy to use HTTP, requires Python 3
 
 # TODO:
-#   - monster groups: each group needs a 'used' feature
 #   - if HP < 1/3 permHP, basic-speed, move are /2
 #   - if HP <= 0, 3d vs HT or pass out - each round
 #   - if HP < -premHP, 3d vs HT or die
@@ -42,7 +41,8 @@ class CaJson(object):
               #world = json.load(f)
               world = CaJson.__json_load_byteified(f)
         except:
-            pass
+            # TODO: ship out an error message
+            world = None
         return world
 
 
@@ -543,6 +543,12 @@ class FightHandler(ScreenHandler):
 
         self.__fight['saved'] = False
 
+    def doit(self):
+        super(FightHandler, self).doit()
+        if not self.__fight['saved']:
+            self.__world['dead-monsters'][self.__fight['monsters']] = (
+                    self.__world['monsters'][self.__fight['monsters']])
+            del(self.__world['monsters'][self.__fight['monsters']])
 
     def __current_fighter(self):
         index = self.__fight['index']
