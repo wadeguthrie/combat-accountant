@@ -724,21 +724,21 @@ class MainHandler(ScreenHandler):
         fight_name_menu = [(name, name)
                            for name in self.__world['monsters'].keys()]
         # PP.pprint(fight_name_menu)
-        monster_list = self._display.menu('Fights', fight_name_menu)
-        if monster_list is None:
+        monster_list_name = self._display.menu('Fights', fight_name_menu)
+        if monster_list_name is None:
             return True
-        print "MENU RESULT=%s" % monster_list  # For debugging
+        print "MENU RESULT=%s" % monster_list_name  # For debugging
 
-        if (monster_list is None or
-                monster_list not in self.__world['monsters']):
-            print "ERROR, monster list %s not found" % monster_list
+        if (monster_list_name is None or
+                monster_list_name not in self.__world['monsters']):
+            print "ERROR, monster list %s not found" % monster_list_name
 
         # NOTE: this makes the displays recursive (though, the implementation
         # only makes the code recursive but the actual screens will just get
         # reused).
         fight = FightHandler(self._display,
                              self.__world,
-                             monster_list)
+                             monster_list_name)
         fight.doit()
         self._draw_screen() # Redraw current screen when done with the fight.
 
