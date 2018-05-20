@@ -43,8 +43,7 @@
             "opponent": null
         }
     }, 
-    "dead-monsters": {
-    }, 
+    "dead-monsters": {}, 
     "monsters": {
         "horsemen": {
             "Famine": {
@@ -132,6 +131,71 @@
                 "opponent": null
             }
         }, 
+        "marx": {
+            "Groucho": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 1
+                }, 
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 1
+                }, 
+                "opponent": null
+            }, 
+            "Harpo": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5
+                }, 
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5
+                }, 
+                "opponent": null
+            }, 
+            "Chico": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 3
+                }, 
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 3
+                }, 
+                "opponent": null
+            }
+        }, 
         "stooges": {
             "Larry": {
                 "current": {
@@ -199,99 +263,38 @@
                     "Tom"
                 ]
             }
-        },
-        "marx": {
-            "Groucho": {
-                "current": {
-                    "fp": 10, 
-                    "iq": 10, 
-                    "hp": 10, 
-                    "ht": 10, 
-                    "st": 10, 
-                    "dx": 10, 
-                    "basic-speed": 1
-                }, 
-                "permanent": {
-                    "fp": 10, 
-                    "iq": 10, 
-                    "hp": 10, 
-                    "ht": 10, 
-                    "st": 10, 
-                    "dx": 10, 
-                    "basic-speed": 1
-                }, 
-                "opponent": null
-            }, 
-            "Harpo": {
-                "current": {
-                    "fp": 10, 
-                    "iq": 10, 
-                    "hp": 10, 
-                    "ht": 10, 
-                    "st": 10, 
-                    "dx": 10, 
-                    "basic-speed": 5
-                }, 
-                "permanent": {
-                    "fp": 10, 
-                    "iq": 10, 
-                    "hp": 10, 
-                    "ht": 10, 
-                    "st": 10, 
-                    "dx": 10, 
-                    "basic-speed": 5
-                }, 
-                "opponent": null
-            }, 
-            "Chico": {
-                "current": {
-                    "fp": 10, 
-                    "iq": 10, 
-                    "hp": 10, 
-                    "ht": 10, 
-                    "st": 10, 
-                    "dx": 10, 
-                    "basic-speed": 3
-                }, 
-                "permanent": {
-                    "fp": 10, 
-                    "iq": 10, 
-                    "hp": 10, 
-                    "ht": 10, 
-                    "st": 10, 
-                    "dx": 10, 
-                    "basic-speed": 3
-                }, 
-                "opponent": null
-            }
         }
     }, 
     "current-fight": {
         "index": 0, 
         "fighters": [
             [
+                "horsemen", 
+                "Death"
+            ], 
+            [
+                "horsemen", 
+                "War"
+            ], 
+            [
                 "PCs", 
                 "Tom"
             ], 
             [
-                "marx", 
-                "Harpo"
+                "horsemen", 
+                "Pestilence"
             ], 
             [
                 "PCs", 
                 "Bob"
             ], 
             [
-                "marx", 
-                "Chico"
-            ], 
-            [
-                "marx", 
-                "Groucho"
+                "horsemen", 
+                "Famine"
             ]
         ], 
         "saved": false, 
         "round": 0, 
-        "monsters": "marx"
+        "monsters": "horsemen"
     }
 }

@@ -4,6 +4,7 @@ import copy
 import curses
 import json
 import pprint
+import random
 # import requests # Easy to use HTTP, requires Python 3
 
 # TODO:
@@ -24,7 +25,7 @@ import pprint
 #   - derived features (basic move is based on some stuff, e.g.)
 
 
-class CaJson(object):
+class GmJson(object):
     '''
     Context manager that opens and loads a JSON for combat accountant on entry
     and saves and closes it on exit.
@@ -39,7 +40,7 @@ class CaJson(object):
         try:
             with open(self.__filename, 'r') as f:
               #world = json.load(f)
-              world = CaJson.__json_load_byteified(f)
+              world = GmJson.__json_load_byteified(f)
         except:
             # TODO: ship out an error message
             world = None
@@ -78,14 +79,14 @@ class CaJson(object):
             return data.encode('utf-8')
         # if this is a list of values, return list of byteified values
         if isinstance(data, list):
-            return [ CaJson.__byteify(item,
+            return [ GmJson.__byteify(item,
                                       ignore_dicts=True) for item in data ]
         # if this is a dictionary, return dictionary of byteified keys and
         # values but only if we haven't already byteified it
         if isinstance(data, dict) and not ignore_dicts:
             return {
-                CaJson.__byteify(key, ignore_dicts=True):
-                    CaJson.__byteify(value, ignore_dicts=True)
+                GmJson.__byteify(key, ignore_dicts=True):
+                    GmJson.__byteify(value, ignore_dicts=True)
                     for key, value in data.iteritems()
             }
         # if it's anything else, return it in its original form
@@ -94,15 +95,15 @@ class CaJson(object):
 
     @staticmethod
     def __json_load_byteified(file_handle):
-        return CaJson.__byteify(
-            json.load(file_handle, object_hook=CaJson.__byteify),
+        return GmJson.__byteify(
+            json.load(file_handle, object_hook=GmJson.__byteify),
             ignore_dicts=True
         )
 
 
-class CaDisplay(object):
+class GmDisplay(object):
     '''
-    CaDisplay addresses the graphical part of the user interface for combat
+    GmDisplay addresses the graphical part of the user interface for combat
     accountant.  Here, this is provided with the Curses package.
     '''
 
@@ -139,10 +140,10 @@ class CaDisplay(object):
             self.__stdscr.keypad(1) # special characters converted by curses
                                     # (e.g., curses.KEY_LEFT)
 
-            curses.init_pair(CaDisplay.RED_BLACK,
+            curses.init_pair(GmDisplay.RED_BLACK,
                              curses.COLOR_RED, # fg
                              curses.COLOR_BLACK) # bg
-            curses.init_pair(CaDisplay.RED_WHITE,
+            curses.init_pair(GmDisplay.RED_WHITE,
                              curses.COLOR_RED, # fg
                              curses.COLOR_WHITE) # bg
 
@@ -333,7 +334,7 @@ class CaDisplay(object):
                 self.__stdscr.touchwin()
                 self.__stdscr.refresh()
                 return strings_results[index][1]
-            elif user_input == CaDisplay.ESCAPE:
+            elif user_input == GmDisplay.ESCAPE:
                 # NOTE: assumes this menu is on top of stdscr
                 self.__stdscr.touchwin()
                 self.__stdscr.refresh()
@@ -455,7 +456,7 @@ class CaDisplay(object):
             fighter['current']['fp'],
             fighter['permanent']['fp'])
         if fighter['current']['fp'] <= 0 or fighter['current']['hp'] <= 0:
-            mode = curses.color_pair(CaDisplay.RED_BLACK)
+            mode = curses.color_pair(GmDisplay.RED_BLACK)
         else:
             mode = curses.A_NORMAL
 
@@ -463,6 +464,33 @@ class CaDisplay(object):
                              column,
                              fighter_string,
                              mode)
+
+class GurpsRuleset(object):
+    '''
+    This is a place for all of the ruleset (e.g., GURPS, AD&D) specific
+    stuff.
+    '''
+
+    @staticmethod
+    def roll(number, # the number of dice
+             dice,   # the type of dice
+             plus=0  # a number to add to the total of the dice roll
+            ):
+        '''Simulates a roll of dice.'''
+        result = plus
+        for count in range(number):
+            result += random.randint(1, dice)
+        return result
+
+
+    @staticmethod
+    def initiative(fighter # dict for the creature as in the json file
+                  ):
+        return (fighter['current']['basic-speed'],
+                fighter['current']['dx'],
+                GurpsRuleset.roll(1, 6)
+                )
+
 
 
 class ScreenHandler(object):
@@ -532,9 +560,9 @@ class FightHandler(ScreenHandler):
             # random
             # TODO: there should be a random value for equal initiatives
             self.__fight['fighters'].sort(key=lambda fighter: 
-                    # NOTE: initiative order is a rule
-                    self.__initiative(self.__fighter(fighter[0],fighter[1])),
-                                      reverse=True)
+                    GurpsRuleset.initiative(self.__fighter(fighter[0],
+                                                           fighter[1])),
+                    reverse=True)
 
             # Make sure nobody has an opponent, already
             for fight_info in self.__fight['fighters']:
@@ -607,13 +635,6 @@ class FightHandler(ScreenHandler):
                  ):
         return (self.__world['PCs'][name] if group == 'PCs' else
                 self.__world['monsters'][group][name])
-
-
-    def __initiative(self,
-                     fighter # dict for the creature as in the json file
-                    ):
-        # NOTE: initiative trait is rule
-        return fighter['current']['basic-speed'], fighter['current']['dx']
 
 
     def __next_fighter(self):
@@ -762,7 +783,7 @@ if __name__ == '__main__':
     filename = 'persephone.json' # TODO: make this a command-line argument
 
     # Arriving -- read our stuff
-    with CaJson(filename) as world:
+    with GmJson(filename) as world:
 
         # Build convenient data structures starting from:
         #   'groucho': {
@@ -778,7 +799,7 @@ if __name__ == '__main__':
             print 'No "PCs" in %s' % filename # TODO: dump when display
 
         # Enter into the mainloop
-        with CaDisplay() as display:
+        with GmDisplay() as display:
             main_handler = MainHandler(display, world)
             if world['current-fight']['saved']:
                 fight_handler = FightHandler(display,
