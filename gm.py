@@ -17,8 +17,7 @@ import random
 #   - main screen should have a 'h' heal one creature at a time
 #
 # TODO (eventually)
-#   - errors to the Curses screen
-#   - separating out ruleset-based stuff into its own class
+#   - errors go to the Curses screen
 #   - scrolling menus (et al.)
 #   - entering monsters and characters from the screen
 #   - make filename a command-line argument
@@ -126,7 +125,8 @@ class GmDisplay(object):
     def __init__(self):
         self.__stdscr = None
         self.__y = 0 # For debug printouts
-        self.__FIGHTER_LINE = 2
+        self.__NEXT_LINE = 2
+        self.__FIGHTER_LINE = 3
         self.__FIGHTER_COL = 0
         self.__OPPONENT_COL = 0
 
@@ -378,17 +378,27 @@ class GmDisplay(object):
 
     def round_ribbon(self,
                      round_no,
+                     saved,
                      current_fighter, # use in future
                      next_fighter # use in future
                     ):
         '''Prints the fight round information at the top of the screen.'''
 
-        # TODO: should indicate 'saved' when the fight is saved
+        self.__stdscr.move(0, 0)
+        self.__stdscr.clrtoeol()
+
         round_string = 'Round %d' % round_no
-        self.__stdscr.addstr(0,
-                             0,
+        self.__stdscr.addstr(0, # y
+                             0, # x
                              round_string,
                              curses.A_NORMAL)
+        if saved:
+            string = "SAVED"
+            length = len(string)
+            self.__stdscr.addstr(0, # y
+                                 curses.COLS - (length + 1), # x
+                                 string,
+                                 curses.A_NORMAL)
         self.__stdscr.refresh()
 
 
@@ -396,12 +406,21 @@ class GmDisplay(object):
                       current_name,
                       current_fighter,
                       opponent_name,
-                      opponent
+                      opponent,
+                      next_name # name of next PC
                      ):
         '''
         Displays the current state of the current fighter and his opponent,
         if he has one.
         '''
+
+        if next_name is not None:
+            self.__stdscr.move(self.__NEXT_LINE, self.__FIGHTER_COL)
+            self.__stdscr.clrtoeol()
+            self.__stdscr.addstr(self.__NEXT_LINE,
+                                 self.__FIGHTER_COL,
+                                 '(Next: %s)' % next_name)
+
 
         self.__stdscr.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
         self.__stdscr.clrtoeol()
@@ -587,6 +606,7 @@ class FightHandler(ScreenHandler):
 
     def __damage_FP(self):
         current_name, current_fighter = self.__current_fighter()
+        next_PC = self.__next_PC()
         opponent_name, opponent = self.__opponent(current_fighter)
         if opponent is not None:
             title = 'Change FP By...'
@@ -596,12 +616,14 @@ class FightHandler(ScreenHandler):
             adj = int(adj_string)
             opponent['current']['fp'] += adj # TODO: this should be in rules
             self._display.show_fighters(current_name, current_fighter,
-                                        opponent_name, opponent)
+                                        opponent_name, opponent,
+                                        next_PC)
         return True # Keep going
 
 
     def __damage_HP(self):
         current_name, current_fighter = self.__current_fighter()
+        next_PC = self.__next_PC()
         opponent_name, opponent = self.__opponent(current_fighter)
         if opponent is not None:
             title = 'Change HP By...'
@@ -611,21 +633,23 @@ class FightHandler(ScreenHandler):
             adj = int(adj_string)
             opponent['current']['hp'] += adj # TODO: this should be in rules
             self._display.show_fighters(current_name, current_fighter,
-                                        opponent_name, opponent)
+                                        opponent_name, opponent,
+                                        next_PC)
         return True # Keep going
 
 
     def _draw_screen(self):
         self._display.clear()
-        # TODO: look-up "up next" in self.__characters after
-        # self.__most_recent_character (which may be 'None')
         current_name, current_fighter = self.__current_fighter()
+        next_PC = self.__next_PC()
         opponent_name, opponent = self.__opponent(current_fighter)
         self._display.round_ribbon(self.__fight['round'],
+                                   self.__fight['saved'],
                                    current_fighter, # up now
                                    None) #self.xxx) # next PC
         self._display.show_fighters(current_name, current_fighter,
-                                    opponent_name, opponent)
+                                    opponent_name, opponent,
+                                    next_PC)
         self._display.command_ribbon(self._choices)
 
 
@@ -644,13 +668,29 @@ class FightHandler(ScreenHandler):
             self.__fight['round'] += 1
         # TODO: maybe combine the following two
         self._display.round_ribbon(self.__fight['round'],
+                                   self.__fight['saved'],
                                    None, # current fighter
                                    None) # next PC
         current_name, current_fighter = self.__current_fighter()
+        next_PC = self.__next_PC()
         opponent_name, opponent = self.__opponent(current_fighter)
         self._display.show_fighters(current_name, current_fighter,
-                                    opponent_name, opponent)
+                                    opponent_name, opponent,
+                                    next_PC)
         return True # Keep going
+
+    def __next_PC(self):
+        next_PC = None
+        next_index = self.__fight['index'] + 1
+        for ignore in self.__fight['fighters']:
+            if next_index >= len(self.__fight['fighters']):
+                next_index = 0
+            if self.__fight['fighters'][next_index][0] == 'PCs':
+                next_PC = self.__fight['fighters'][next_index][1]
+                break
+            next_index += 1
+        # TODO: perhaps I should check if next PC is active
+        return next_PC
 
 
     def __opponent(self,
@@ -667,6 +707,7 @@ class FightHandler(ScreenHandler):
 
     def __pick_opponent(self):
         current_name, current_fighter = self.__current_fighter()
+        next_PC = self.__next_PC()
         current_index = self.__fight['index']
         current_group = self.__fight['fighters'][current_index][0]
         current_name  = self.__fight['fighters'][current_index][1]
@@ -693,7 +734,8 @@ class FightHandler(ScreenHandler):
                 opponent['opponent'] = [current_group, current_name]
 
         self._display.show_fighters(current_name, current_fighter,
-                                    opponent_name, opponent)
+                                    opponent_name, opponent,
+                                    next_PC)
         return True # Keep going
 
 
@@ -707,12 +749,15 @@ class FightHandler(ScreenHandler):
             self.__fight['round'] -= 1
         # TODO: maybe combine the following two
         self._display.round_ribbon(self.__fight['round'],
+                                   self.__fight['saved'],
                                    None, # current fighter
                                    None) # next PC
         current_name, current_fighter = self.__current_fighter()
+        next_PC = self.__next_PC()
         opponent_name, opponent = self.__opponent(current_fighter)
         self._display.show_fighters(current_name, current_fighter,
-                                    opponent_name, opponent)
+                                    opponent_name, opponent,
+                                    next_PC)
         return True # Keep going
 
 
@@ -721,6 +766,10 @@ class FightHandler(ScreenHandler):
 
     def __save(self):
         self.__fight['saved'] = True
+        self._display.round_ribbon(self.__fight['round'],
+                                   self.__fight['saved'],
+                                   None, # up now
+                                   None) #self.xxx) # next PC
         return True # Keep going
 
 
