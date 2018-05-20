@@ -8,9 +8,12 @@ import pprint
 
 # TODO:
 #   - monster groups: each group needs a 'used' feature
-#   - 'backspace' or 'del' removes creature from initiative list
+#   - if HP < 1/3 permHP, basic-speed, move are /2
+#   - if HP <= 0, 3d vs HT or pass out - each round
+#   - if HP < -premHP, 3d vs HT or die
+#   - if you take damage this round, DX & IQ are down 
 #   - timers ('t' sets an x-round timer for this creature)
-#   - '>' delays the initiative for a creature from the list
+#   - notes
 #   - main screen should have a 'h' heal one creature at a time
 #
 # TODO (eventually)
@@ -180,10 +183,10 @@ class CaDisplay(object):
         Draws a list of commands across the bottom of the screen
         '''
 
-        # TODO: use multiple lines if there's too much stuff
         left = 0
+        line = curses.LINES - 1
 
-        self.__stdscr.addstr(curses.LINES - 1,
+        self.__stdscr.addstr(line,
                              left,
                              '|',
                              curses.A_NORMAL)
@@ -195,20 +198,30 @@ class CaDisplay(object):
             else:
                 choice_string = '%c' % chr(choice)
 
-            self.__stdscr.addstr(curses.LINES - 1,
+            length = len(choice_string) + len(body['name']) + 4
+            if (left + length) >= (curses.COLS - 1):
+                left = 0
+                line -= 1
+                self.__stdscr.addstr(line,
+                                     left,
+                                     '|',
+                                     curses.A_NORMAL)
+                left += 2 # adds a space
+
+            self.__stdscr.addstr(line,
                                  left,
                                  choice_string,
                                  curses.A_REVERSE)
             left += len(choice_string) + 1 # add a space after the choice
 
-            self.__stdscr.addstr(curses.LINES - 1,
+            self.__stdscr.addstr(line,
                                  left,
                                  body['name'],
                                  curses.A_BOLD)
 
             left += len(body['name']) + 1 # add a space after the choice
 
-            self.__stdscr.addstr(curses.LINES - 1,
+            self.__stdscr.addstr(line,
                                  left,
                                  '|',
                                  curses.A_NORMAL)
@@ -492,8 +505,8 @@ class FightHandler(ScreenHandler):
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
             ord('<'): {'name': 'prev', 'func': self.__prev_fighter},
             # TODO: 'h' and 'f' are based on the ruleset
-            ord('h'): {'name': 'HP dmg', 'func': self.__damage_HP},
-            ord('f'): {'name': 'FP dmg', 'func': self.__damage_FP},
+            ord('h'): {'name': 'HP damage', 'func': self.__damage_HP},
+            ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
             ord('o'): {'name': 'opponent', 'func': self.__pick_opponent},
             ord('q'): {'name': 'quit', 'func': self.__quit},
             ord('s'): {'name': 'save', 'func': self.__save}
