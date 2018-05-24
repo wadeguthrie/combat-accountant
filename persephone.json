@@ -19,6 +19,7 @@
                 "dx": 10, 
                 "basic-speed": 6
             }, 
+            "shock": null, 
             "opponent": null
         }, 
         "Bob": {
@@ -40,13 +41,14 @@
                 "dx": 10, 
                 "basic-speed": 3
             }, 
+            "shock": null, 
             "opponent": null
         }, 
         "Tom": {
             "current": {
                 "fp": 10, 
                 "iq": 10, 
-                "hp": 10, 
+                "hp": 7, 
                 "ht": 10, 
                 "st": 10, 
                 "dx": 10, 
@@ -61,7 +63,11 @@
                 "dx": 10, 
                 "basic-speed": 5
             }, 
-            "opponent": null
+            "shock": null, 
+            "opponent": [
+                "horsemen", 
+                "Death"
+            ]
         }
     }, 
     "dead-monsters": {}, 
@@ -86,6 +92,7 @@
                     "dx": 10, 
                     "basic-speed": 1
                 }, 
+                "shock": null, 
                 "opponent": null
             }, 
             "Death": {
@@ -107,7 +114,11 @@
                     "dx": 10, 
                     "basic-speed": 5
                 }, 
-                "opponent": null
+                "shock": null, 
+                "opponent": [
+                    "PCs", 
+                    "Tom"
+                ]
             }, 
             "Pestilence": {
                 "current": {
@@ -128,6 +139,7 @@
                     "dx": 10, 
                     "basic-speed": 3
                 }, 
+                "shock": null, 
                 "opponent": null
             }, 
             "War": {
@@ -149,7 +161,11 @@
                     "dx": 10, 
                     "basic-speed": 5
                 }, 
-                "opponent": null
+                "shock": null, 
+                "opponent": [
+                    "PCs", 
+                    "Tom"
+                ]
             }
         }, 
         "marx": {
@@ -172,6 +188,7 @@
                     "dx": 10, 
                     "basic-speed": 1
                 }, 
+                "shock": null, 
                 "opponent": null
             }, 
             "Harpo": {
@@ -193,6 +210,7 @@
                     "dx": 10, 
                     "basic-speed": 5
                 }, 
+                "shock": null, 
                 "opponent": null
             }, 
             "Chico": {
@@ -214,6 +232,7 @@
                     "dx": 10, 
                     "basic-speed": 3
                 }, 
+                "shock": null, 
                 "opponent": null
             }
         }, 
@@ -237,6 +256,7 @@
                     "dx": 10, 
                     "basic-speed": 2
                 }, 
+                "shock": null, 
                 "opponent": null
             }, 
             "Curly": {
@@ -258,6 +278,7 @@
                     "dx": 10, 
                     "basic-speed": 4
                 }, 
+                "shock": null, 
                 "opponent": null
             }, 
             "Moe": {
@@ -279,6 +300,7 @@
                     "dx": 10, 
                     "basic-speed": 6
                 }, 
+                "shock": null, 
                 "opponent": [
                     "PCs", 
                     "Tom"
@@ -287,7 +309,7 @@
         }
     }, 
     "current-fight": {
-        "index": 0, 
+        "index": 1, 
         "fighters": [
             [
                 "PCs", 
@@ -306,12 +328,12 @@
                 "War"
             ], 
             [
-                "horsemen", 
-                "Pestilence"
-            ], 
-            [
                 "PCs", 
                 "Bob"
+            ], 
+            [
+                "horsemen", 
+                "Pestilence"
             ], 
             [
                 "horsemen", 
@@ -319,7 +341,7 @@
             ]
         ], 
         "saved": false, 
-        "round": 1, 
+        "round": 2, 
         "monsters": "horsemen"
     }
 }

@@ -11,7 +11,6 @@ import random
 #   - if HP < 1/3 permHP, basic-speed, move are /2
 #   - if HP <= 0, 3d vs HT or pass out - each round
 #   - if HP < -premHP, 3d vs HT or die
-#   - if you take damage this round, DX & IQ are down 
 #   - timers ('t' sets an x-round timer for this creature)
 #   - notes
 #   - main screen should have a 'h' heal one creature at a time
@@ -126,7 +125,7 @@ class GmDisplay(object):
         self.__stdscr = None
         self.__y = 0 # For debug printouts
         self.__NEXT_LINE = 2
-        self.__FIGHTER_LINE = 3
+        self.__FIGHTER_LINE = 4
         self.__FIGHTER_COL = 0
         self.__OPPONENT_COL = 0
 
@@ -398,7 +397,7 @@ class GmDisplay(object):
             self.__stdscr.addstr(0, # y
                                  curses.COLS - (length + 1), # x
                                  string,
-                                 curses.A_NORMAL)
+                                 curses.A_BOLD)
         self.__stdscr.refresh()
 
 
@@ -424,12 +423,15 @@ class GmDisplay(object):
 
         self.__stdscr.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
         self.__stdscr.clrtoeol()
-        self.__some_fighter(current_name, current_fighter, self.__FIGHTER_COL)
+        self.__stdscr.move(self.__FIGHTER_LINE+1, self.__FIGHTER_COL)
+        self.__stdscr.clrtoeol()
+
+        self.__show_fighter(current_name, current_fighter, self.__FIGHTER_COL)
 
         if opponent is not None:
             self.__stdscr.addstr(self.__FIGHTER_LINE,
                                  self.__OPPONENT_COL, 'vs.')
-            self.__some_fighter(opponent_name,
+            self.__show_fighter(opponent_name,
                                 opponent,
                                 self.__OPPONENT_COL+4)
 
@@ -462,8 +464,7 @@ class GmDisplay(object):
 
         return border_win, menu_win
 
-
-    def __some_fighter(self,
+    def __show_fighter(self,
                        fighter_name,
                        fighter,
                        column
@@ -479,10 +480,14 @@ class GmDisplay(object):
         else:
             mode = curses.A_NORMAL
 
-        self.__stdscr.addstr(self.__FIGHTER_LINE,
-                             column,
-                             fighter_string,
-                             mode)
+        line = self.__FIGHTER_LINE
+        self.__stdscr.addstr(line, column, fighter_string, mode)
+
+        # TODO: shock is rule-based
+        line += 1
+        if fighter['shock'] is not None:
+            string = 'DX and IQ are at %d' % fighter['shock']
+            self.__stdscr.addstr(line, column, string, mode)
 
 class GurpsRuleset(object):
     '''
@@ -583,10 +588,11 @@ class FightHandler(ScreenHandler):
                                                            fighter[1])),
                     reverse=True)
 
-            # Make sure nobody has an opponent, already
-            for fight_info in self.__fight['fighters']:
-                fighter = self.__fighter(fight_info[0], fight_info[1])
+            # Make sure this looks like a _NEW_ fight.
+            for fighter_info in self.__fight['fighters']:
+                fighter = self.__fighter(fighter_info[0], fighter_info[1])
                 fighter['opponent'] = None
+                fighter['shock'] = None
 
         self.__fight['saved'] = False
 
@@ -631,6 +637,12 @@ class FightHandler(ScreenHandler):
             width = len(title)
             adj_string = self._display.input_box(height, width, title)
             adj = int(adj_string)
+
+            # TODO: shock is rule-based
+            shock_amount = -4 if adj <= -4 else adj
+            if opponent['shock'] is None or opponent['shock'] > shock_amount:
+                opponent['shock'] = shock_amount
+
             opponent['current']['hp'] += adj # TODO: this should be in rules
             self._display.show_fighters(current_name, current_fighter,
                                         opponent_name, opponent,
@@ -662,6 +674,10 @@ class FightHandler(ScreenHandler):
 
 
     def __next_fighter(self):
+        # TODO: shock is rule-set
+        prev_name, prev_fighter = self.__current_fighter()
+        prev_fighter['shock'] = None # remove expired shock entry
+
         self.__fight['index'] += 1
         if self.__fight['index'] >= len(self.__fight['fighters']):
             self.__fight['index'] = 0
