@@ -8,19 +8,15 @@ import random
 # import requests # Easy to use HTTP, requires Python 3
 
 # TODO:
-#   - if HP < 1/3 permHP, dodge, move are /2
-#   - if HP <= 0, 3d vs HT or pass out - each round
-#   - if HP < -premHP, 3d vs HT or die
 #   - timers ('t' sets an x-round timer for this creature)
 #   - notes
 #   - main screen should have a 'h' heal one creature at a time
 #
 # TODO (eventually)
+#   - make filename a command-line argument
 #   - errors go to the Curses screen
 #   - scrolling menus (et al.)
 #   - entering monsters and characters from the screen
-#   - make filename a command-line argument
-#   - derived features (basic move is based on some stuff, e.g.)
 
 
 class GmJson(object):
@@ -517,18 +513,38 @@ class GmDisplay(object):
         line = self.__FIGHTER_LINE
         self.__stdscr.addstr(line, column, fighter_string, mode)
 
+
     def __show_fighter_notes(self,
-                             window, # Curses window: shows the fighter's notes
-                             fighter # The dict holding the fighter info
+                             window,  # Curses window: shows the fighter's notes
+                             fighter, # The dict holding the fighter info
                             ):
+        '''
+        Displays ancillary information about the fighter
+        '''
         window.clear()
         line = 0
         mode = curses.A_NORMAL
 
-        # TODO: shock is rule-based
-        if fighter['shock'] is not None:
+        # TODO: This stuff is largely rule-based
+
+        if fighter['shock'] is not None: # Shock
             string = 'DX and IQ are at %d' % fighter['shock']
             window.addstr(line, 0, string, mode)
+            line += 1
+
+        if fighter['current']['hp'] < fighter['permanent']['hp']/3.0:
+            window.addstr(line, 0, "Dodge/move are at 1/2", mode)
+            line += 1
+
+        # Each round you do something
+        if fighter['current']['hp'] <= 0:
+            window.addstr(line, 0, "On turn: 3d vs HT or pass out", mode)
+            line += 1
+
+        if fighter['check_for_death']:
+            window.addstr(line, 0, "3d vs HT or DIE", curses.A_REVERSE)
+            fighter['check_for_death'] = False  # Only show/roll once
+            line += 1
 
         window.refresh()
 
@@ -682,6 +698,15 @@ class FightHandler(ScreenHandler):
             width = len(title)
             adj_string = self._display.input_box(height, width, title)
             adj = int(adj_string)
+
+            # TODO: check for death is rule-based
+            if adj < 0 and opponent['current']['hp'] < 0:
+                before_hp = opponent['current']['hp']
+                before_hp_multiple = before_hp / opponent['permanent']['hp']
+                after_hp = (opponent['current']['hp'] + adj) * 1.0 + 0.1
+                after_hp_multiple = after_hp / opponent['permanent']['hp']
+                if int(before_hp_multiple) != int(after_hp_multiple):
+                    opponent['check_for_death'] = True
 
             # TODO: shock is rule-based
             shock_amount = -4 if adj <= -4 else adj
@@ -852,9 +877,11 @@ class MainHandler(ScreenHandler):
 
 
     def __fully_heal(self):
-        for character in self.__world['PCs']:
-            for stat in character['permanent'].itervalues():
+        for character in self.__world['PCs'].itervalues():
+            for stat in character['permanent'].iterkeys():
                 character['current'][stat] = character['permanent'][stat]
+            character['shock'] = None
+            character['check_for_death'] = False
         return True
 
 

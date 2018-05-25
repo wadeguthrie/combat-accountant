@@ -1,6 +1,8 @@
 {
     "PCs": {
         "Wade": {
+            "shock": null, 
+            "last_negative_hp": 0, 
             "current": {
                 "fp": 10, 
                 "iq": 10, 
@@ -19,10 +21,12 @@
                 "dx": 10, 
                 "basic-speed": 6
             }, 
-            "shock": null, 
+            "check_for_death": false, 
             "opponent": null
         }, 
         "Bob": {
+            "shock": null, 
+            "last_negative_hp": 0, 
             "current": {
                 "fp": 10, 
                 "iq": 10, 
@@ -41,14 +45,16 @@
                 "dx": 10, 
                 "basic-speed": 3
             }, 
-            "shock": null, 
+            "check_for_death": false, 
             "opponent": null
         }, 
         "Tom": {
+            "shock": null, 
+            "last_negative_hp": 0, 
             "current": {
                 "fp": 10, 
                 "iq": 10, 
-                "hp": 7, 
+                "hp": 10, 
                 "ht": 10, 
                 "st": 10, 
                 "dx": 10, 
@@ -63,7 +69,7 @@
                 "dx": 10, 
                 "basic-speed": 5
             }, 
-            "shock": null, 
+            "check_for_death": false, 
             "opponent": [
                 "horsemen", 
                 "Death"
@@ -83,6 +89,7 @@
                     "dx": 10, 
                     "basic-speed": 1
                 }, 
+                "check_for_death": false, 
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -105,6 +112,7 @@
                     "dx": 10, 
                     "basic-speed": 5
                 }, 
+                "check_for_death": false, 
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -130,6 +138,7 @@
                     "dx": 10, 
                     "basic-speed": 3
                 }, 
+                "check_for_death": false, 
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -152,6 +161,7 @@
                     "dx": 10, 
                     "basic-speed": 5
                 }, 
+                "check_for_death": false, 
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -179,6 +189,7 @@
                     "dx": 10, 
                     "basic-speed": 1
                 }, 
+                "check_for_death": false, 
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -201,6 +212,7 @@
                     "dx": 10, 
                     "basic-speed": 5
                 }, 
+                "check_for_death": false, 
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -223,6 +235,7 @@
                     "dx": 10, 
                     "basic-speed": 3
                 }, 
+                "check_for_death": false, 
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -247,6 +260,7 @@
                     "dx": 10, 
                     "basic-speed": 2
                 }, 
+                "check_for_death": false, 
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -269,6 +283,7 @@
                     "dx": 10, 
                     "basic-speed": 4
                 }, 
+                "check_for_death": false, 
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -291,6 +306,7 @@
                     "dx": 10, 
                     "basic-speed": 6
                 }, 
+                "check_for_death": false, 
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
