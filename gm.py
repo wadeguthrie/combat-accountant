@@ -8,7 +8,7 @@ import random
 # import requests # Easy to use HTTP, requires Python 3
 
 # TODO:
-#   - if HP < 1/3 permHP, basic-speed, move are /2
+#   - if HP < 1/3 permHP, dodge, move are /2
 #   - if HP <= 0, 3d vs HT or pass out - each round
 #   - if HP < -premHP, 3d vs HT or die
 #   - timers ('t' sets an x-round timer for this creature)
@@ -128,6 +128,8 @@ class GmDisplay(object):
         self.__FIGHTER_LINE = 4
         self.__FIGHTER_COL = 0
         self.__OPPONENT_COL = 0
+        self.__character_window = None
+        self.__opponent_window = None
 
 
     def __enter__(self):
@@ -423,19 +425,51 @@ class GmDisplay(object):
 
         self.__stdscr.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
         self.__stdscr.clrtoeol()
-        self.__stdscr.move(self.__FIGHTER_LINE+1, self.__FIGHTER_COL)
-        self.__stdscr.clrtoeol()
 
         self.__show_fighter(current_name, current_fighter, self.__FIGHTER_COL)
+        self.__show_fighter_notes(self.__character_window, current_fighter)
 
-        if opponent is not None:
+        if opponent is None:
+            self.__opponent_window.clear()
+            self.__opponent_window.refresh()
+        else:
             self.__stdscr.addstr(self.__FIGHTER_LINE,
                                  self.__OPPONENT_COL, 'vs.')
             self.__show_fighter(opponent_name,
                                 opponent,
                                 self.__OPPONENT_COL+4)
+            self.__show_fighter_notes(self.__opponent_window, opponent)
 
         self.__stdscr.refresh()
+
+    def start_fight(self):
+        height = (curses.LINES          # The whole screen height, except...
+            - (self.__FIGHTER_LINE+1)   # ...a block at the top, and...
+            - 4)                        # ...a space for the command ribbon.
+        
+        width = (curses.COLS            # The screen width for...
+            - (self.__OPPONENT_COL+4)   # ...the opponent...
+            - 1)                        # ...minus a little margin
+
+        top_line = self.__FIGHTER_LINE+1 # Start after the main fighter info
+
+        self.__character_window = curses.newwin(height,
+                                                width,
+                                                top_line,
+                                                self.__FIGHTER_COL)
+        self.__opponent_window  = curses.newwin(height,
+                                                width,
+                                                top_line,
+                                                self.__OPPONENT_COL+4)
+
+    def stop_fight(self):
+        if self.__character_window is not None:
+            del self.__character_window
+            self.__character_window = None
+
+        if self.__opponent_window is not None:
+            del self.__opponent_window
+            self.__opponent_window = None
 
     #
     # Private Methods
@@ -465,8 +499,8 @@ class GmDisplay(object):
         return border_win, menu_win
 
     def __show_fighter(self,
-                       fighter_name,
-                       fighter,
+                       fighter_name,  # String holding name of fighter
+                       fighter,       # dict holding fighter information
                        column
                       ):
         fighter_string = '%s HP: %d/%d FP: %d/%d' % (
@@ -483,11 +517,21 @@ class GmDisplay(object):
         line = self.__FIGHTER_LINE
         self.__stdscr.addstr(line, column, fighter_string, mode)
 
+    def __show_fighter_notes(self,
+                             window, # Curses window: shows the fighter's notes
+                             fighter # The dict holding the fighter info
+                            ):
+        window.clear()
+        line = 0
+        mode = curses.A_NORMAL
+
         # TODO: shock is rule-based
-        line += 1
         if fighter['shock'] is not None:
             string = 'DX and IQ are at %d' % fighter['shock']
-            self.__stdscr.addstr(line, column, string, mode)
+            window.addstr(line, 0, string, mode)
+
+        window.refresh()
+
 
 class GurpsRuleset(object):
     '''
@@ -595,6 +639,7 @@ class FightHandler(ScreenHandler):
                 fighter['shock'] = None
 
         self.__fight['saved'] = False
+        self._display.start_fight()
 
     def doit(self):
         super(FightHandler, self).doit()
@@ -778,6 +823,7 @@ class FightHandler(ScreenHandler):
 
 
     def __quit(self):
+        self._display.stop_fight()
         return False # Leave the fight
 
     def __save(self):
