@@ -11,7 +11,6 @@ import sys
 
 # TODO:
 #   - notes
-#   - errors go to the Curses screen
 #
 # TODO (eventually)
 #   - TESTS, for the love of God
@@ -1070,24 +1069,10 @@ if __name__ == '__main__':
     with GmDisplay() as display:
         PP = pprint.PrettyPrinter(indent=3, width=150)
 
-        display.error(['this is an error',
-                       'and this is the second line'])
-
-
-        # Arriving -- read our stuff
         with GmJson(ARGS.filename) as world:
-
-            # Build convenient data structures starting from:
-            #   'groucho': {
-            #       'current': { 'fp': 10, 'hp': 10, 'basic-speed': 1 }, 
-            #       'permanent': { 'fp': 10, 'hp': 10, 'basic-speed': 1 }, 
-            #       'opponent': ['PCs', 'Foo'] # group, name
-            #   }, 
-
             # Error checking for JSON
-
             if 'PCs' not in world:
-                display.error('No "PCs" in %s' % ARGS.filename)
+                display.error(['No "PCs" in %s' % ARGS.filename])
 
             # Enter into the mainloop
             main_handler = MainHandler(display, world)
