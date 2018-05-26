@@ -10,6 +10,9 @@ import random
 import sys
 
 # TODO:
+#   - add 'action' to fight menu.  It has a rule-specific menu for the
+#     different things someone can do during a fight.  It should add a timer
+#     describing the action and the restrictions on defense actions.
 #   - notes
 #
 # TODO (eventually)
@@ -370,9 +373,17 @@ class GmDisplay(object):
                 self.__stdscr.touchwin()
                 self.__stdscr.refresh()
                 return None
-
-            # TODO: else: look in the menu for the first entry that
-            # starts with the character and select that
+            else:
+                # Look for a match and return the selection
+                for index, entry in enumerate(strings_results):
+                    # (string, return value)
+                    if user_input == ord(entry[0][0]): # 1st char of the string
+                        del border_win
+                        del menu_win
+                        # NOTE: assumes this menu is on top of stdscr
+                        self.__stdscr.touchwin()
+                        self.__stdscr.refresh()
+                        return strings_results[index][1]
 
             if new_index != index:
                 old_index = index
@@ -580,6 +591,7 @@ class GmDisplay(object):
 
         # NOTE: { belongs in Ruleset
 
+        # TODO: shock should be 0 by default, not None
         if fighter['shock'] is not None: # Shock
             string = 'DX and IQ are at %d' % fighter['shock']
             window.addstr(line, 0, string, mode)
@@ -616,6 +628,16 @@ class GurpsRuleset(object):
     This is a place for all of the ruleset (e.g., GURPS, AD&D) specific
     stuff.
     '''
+
+    # TODO: template for fighters
+
+    def end_of_fight(self, fighter):
+        # TODO: change what needs to change when a fight is over
+        pass
+
+    def heal_fighter(self, fighter):
+        # TODO: change what needs to change when a fighter is healed
+        pass
 
     @staticmethod
     def roll(number, # the number of dice
@@ -714,8 +736,12 @@ class FightHandler(ScreenHandler):
             # Make sure this looks like a _NEW_ fight.
             for fighter_info in self.__fight['fighters']:
                 fighter = self.__fighter(fighter_info[0], fighter_info[1])
-                fighter['opponent'] = None
                 fighter['shock'] = None
+                fighter['alive'] = True
+                # fighter['last_negative_hp'] = 0 -- not if not healed
+                # fighter['check_for_death'] = False -- not if not healed
+                fighter['timers'] = []
+                fighter['opponent'] = None
 
         self.__fight['saved'] = False
         self._display.start_fight()
@@ -1007,10 +1033,13 @@ class MainHandler(ScreenHandler):
 
 
     def __fully_heal(self):
+        # TODO: should in the Ruleset
         for character in self.__world['PCs'].itervalues():
             for stat in character['permanent'].iterkeys():
                 character['current'][stat] = character['permanent'][stat]
             character['shock'] = None
+            character['alive'] = True
+            character['last_negative_hp'] = 0
             character['check_for_death'] = False
         return True
 
@@ -1022,7 +1051,7 @@ class MainHandler(ScreenHandler):
         monster_list_name = self._display.menu('Fights', fight_name_menu)
         if monster_list_name is None:
             return True
-        print "MENU RESULT=%s" % monster_list_name  # For debugging
+        # print "MENU RESULT=%s" % monster_list_name  # For debugging
 
         if (monster_list_name is None or
                 monster_list_name not in self.__world['monsters']):
