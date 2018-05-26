@@ -19,7 +19,6 @@ import sys
 #   - TESTS, for the love of God
 #   - scrolling menus (et al.)
 #   - entering monsters and characters from the screen
-#   - main screen should have a 'h' heal one creature at a time
 
 
 class GmJson(object):
@@ -631,13 +630,27 @@ class GurpsRuleset(object):
 
     # TODO: template for fighters
 
-    def end_of_fight(self, fighter):
-        # TODO: change what needs to change when a fight is over
-        pass
+    @staticmethod
+    def new_fight(fighter):
+        '''
+        Removes all the stuff from the old fight except injury.
+        '''
+        fighter['shock'] = None
+        fighter['alive'] = True
+        fighter['timers'] = []
+        fighter['opponent'] = None
 
-    def heal_fighter(self, fighter):
-        # TODO: change what needs to change when a fighter is healed
-        pass
+    @staticmethod
+    def heal_fighter(fighter):
+        '''
+        Removes all injury (and their side-effects) from a fighter.
+        '''
+        for stat in fighter['permanent'].iterkeys():
+            fighter['current'][stat] = fighter['permanent'][stat]
+        fighter['shock'] = None
+        fighter['alive'] = True
+        fighter['last_negative_hp'] = 0
+        fighter['check_for_death'] = False
 
     @staticmethod
     def roll(number, # the number of dice
@@ -736,12 +749,7 @@ class FightHandler(ScreenHandler):
             # Make sure this looks like a _NEW_ fight.
             for fighter_info in self.__fight['fighters']:
                 fighter = self.__fighter(fighter_info[0], fighter_info[1])
-                fighter['shock'] = None
-                fighter['alive'] = True
-                # fighter['last_negative_hp'] = 0 -- not if not healed
-                # fighter['check_for_death'] = False -- not if not healed
-                fighter['timers'] = []
-                fighter['opponent'] = None
+                GurpsRuleset.new_fight(fighter)
 
         self.__fight['saved'] = False
         self._display.start_fight()
@@ -1033,14 +1041,8 @@ class MainHandler(ScreenHandler):
 
 
     def __fully_heal(self):
-        # TODO: should in the Ruleset
         for character in self.__world['PCs'].itervalues():
-            for stat in character['permanent'].iterkeys():
-                character['current'][stat] = character['permanent'][stat]
-            character['shock'] = None
-            character['alive'] = True
-            character['last_negative_hp'] = 0
-            character['check_for_death'] = False
+            GurpsRuleset.heal_fighter(character)
         return True
 
 
