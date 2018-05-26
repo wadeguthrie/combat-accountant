@@ -126,6 +126,9 @@ class GmDisplay(object):
         self.__character_window = None
         self.__opponent_window = None
         self.fighter_win_width = 0
+        self.__round_count_string = '%d Rnds: '
+        # assume rounds takes as much space as '%d' 
+        self.len_timer_leader = len(self.__round_count_string)
 
 
     def __enter__(self):
@@ -562,9 +565,10 @@ class GmDisplay(object):
 
         # NOTE: end of Ruleset }
 
-        # Timers are _not_ rule based
+        # Timers
         for timer in fighter['timers']:
-            string = '%d Rnds: %s' % (timer['rounds'], timer['string'])
+            round_count_string = self.__round_count_string % timer['rounds']
+            string = '%s%s' % (round_count_string, timer['string'])
             window.addstr(line, 0, string, mode)
             line += 1
 
@@ -939,10 +943,9 @@ class FightHandler(ScreenHandler):
         width = curses.COLS - 4
         timer['string'] = self._display.input_box(
                 height,
-                self._display.fighter_win_width - 9, # TODO: should get 9 from
-                                                     #  display code
-                title
-               )
+                self._display.fighter_win_width - 
+                        self._display.len_timer_leader,
+                title)
 
         if timer['string'] is not None and len(timer['string']) != 0:
             current_name, current_fighter = self.__current_fighter()
@@ -1014,8 +1017,6 @@ class MyArgumentParser(argparse.ArgumentParser):
 
 # Main
 if __name__ == '__main__':
-
-
     parser = MyArgumentParser()
     parser.add_argument('filename',
              help='Input JSON file containing characters and monsters')
