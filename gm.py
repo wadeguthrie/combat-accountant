@@ -25,7 +25,6 @@ class GmJson(object):
     and saves and closes it on exit.
     '''
 
-
     def __init__(self, filename):
         self.__filename = filename
 
@@ -126,6 +125,7 @@ class GmDisplay(object):
         self.__OPPONENT_COL = 0
         self.__character_window = None
         self.__opponent_window = None
+        self.fighter_win_width = 0
 
 
     def __enter__(self):
@@ -443,18 +443,19 @@ class GmDisplay(object):
             - (self.__FIGHTER_LINE+1)   # ...a block at the top, and...
             - 4)                        # ...a space for the command ribbon.
         
-        width = (curses.COLS            # The screen width for...
+        self.fighter_win_width = (
+            curses.COLS                 # The screen width for...
             - (self.__OPPONENT_COL+4)   # ...the opponent...
             - 1)                        # ...minus a little margin
 
         top_line = self.__FIGHTER_LINE+1 # Start after the main fighter info
 
         self.__character_window = curses.newwin(height,
-                                                width,
+                                                self.fighter_win_width,
                                                 top_line,
                                                 self.__FIGHTER_COL)
         self.__opponent_window  = curses.newwin(height,
-                                                width,
+                                                self.fighter_win_width,
                                                 top_line,
                                                 self.__OPPONENT_COL+4)
 
@@ -548,7 +549,7 @@ class GmDisplay(object):
 
         # Timers are _not_ rule based
         for timer in fighter['timers']:
-            string = '%d Rounds Left: %s' % (timer['rounds'], timer['string'])
+            string = '%d Rnds: %s' % (timer['rounds'], timer['string'])
             window.addstr(line, 0, string, mode)
             line += 1
 
@@ -892,7 +893,12 @@ class FightHandler(ScreenHandler):
         title = 'What happens in %d rounds?' % timer['rounds']
         height = 1
         width = curses.COLS - 4
-        timer['string'] = self._display.input_box(height, width, title)
+        timer['string'] = self._display.input_box(
+                height,
+                self._display.fighter_win_width - 9, # TODO: should get 9 from
+                                                     #  display
+                title
+               )
 
         if timer['string'] is not None and len(timer['string']) != 0:
             current_name, current_fighter = self.__current_fighter()
