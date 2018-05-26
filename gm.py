@@ -8,7 +8,7 @@ import random
 # import requests # Easy to use HTTP, requires Python 3
 
 # TODO:
-#   - timers ('t' sets an x-round timer for this creature)
+#   - be able to remove characters from the fight (death)
 #   - notes
 #   - main screen should have a 'h' heal one creature at a time
 #
@@ -546,6 +546,12 @@ class GmDisplay(object):
             fighter['check_for_death'] = False  # Only show/roll once
             line += 1
 
+        # Timers are _not_ rule based
+        for timer in fighter['timers']:
+            string = '%d Rounds Left: %s' % (timer['rounds'], timer['string'])
+            window.addstr(line, 0, string, mode)
+            line += 1
+
         window.refresh()
 
 
@@ -620,6 +626,7 @@ class FightHandler(ScreenHandler):
             ord('h'): {'name': 'HP damage', 'func': self.__damage_HP},
             ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
             ord('o'): {'name': 'opponent', 'func': self.__pick_opponent},
+            ord('t'): {'name': 'timer', 'func': self.__timer},
             ord('q'): {'name': 'quit', 'func': self.__quit},
             ord('s'): {'name': 'save', 'func': self.__save}
         }
@@ -748,16 +755,25 @@ class FightHandler(ScreenHandler):
         prev_name, prev_fighter = self.__current_fighter()
         prev_fighter['shock'] = None # remove expired shock entry
 
+        # remove any expired timers
+        remove_these = []
+        for index, timer in enumerate(prev_fighter['timers']):
+            if timer['rounds'] <= 0:
+                remove_these.insert(0, index) # largest indexes last
+        for index in remove_these:
+            del prev_fighter['timers'][index]
+
         self.__fight['index'] += 1
         if self.__fight['index'] >= len(self.__fight['fighters']):
             self.__fight['index'] = 0
             self.__fight['round'] += 1
-        # TODO: maybe combine the following two
         self._display.round_ribbon(self.__fight['round'],
                                    self.__fight['saved'],
                                    None, # current fighter
                                    None) # next PC
         current_name, current_fighter = self.__current_fighter()
+        for timer in current_fighter['timers']:
+            timer['rounds'] -= 1
         next_PC = self.__next_PC()
         opponent_name, opponent = self.__opponent(current_fighter)
         self._display.show_fighters(current_name, current_fighter,
@@ -858,6 +874,31 @@ class FightHandler(ScreenHandler):
                                    None, # up now
                                    None) #self.xxx) # next PC
         return True # Keep going
+
+    def __timer(self):
+        '''
+        Asks user for information for timer to add to fighter.
+        '''
+        timer = {'rounds': 0, 'string': None}
+
+        title = 'Rounds To Wait...'
+        height = 1
+        width = len(title)
+        adj_string = self._display.input_box(height, width, title)
+        timer['rounds'] = int(adj_string)
+        if timer['rounds'] < 1:
+            return True # Keep fighting (even without installing the timer)
+
+        title = 'What happens in %d rounds?' % timer['rounds']
+        height = 1
+        width = curses.COLS - 4
+        timer['string'] = self._display.input_box(height, width, title)
+
+        if timer['string'] is not None and len(timer['string']) != 0:
+            current_name, current_fighter = self.__current_fighter()
+            current_fighter['timers'].append(timer)
+
+        return True # Keep fighting
 
 
 class MainHandler(ScreenHandler):

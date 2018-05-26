@@ -22,6 +22,7 @@
                 "basic-speed": 6
             }, 
             "check_for_death": false, 
+            "timers": [],
             "opponent": null
         }, 
         "Bob": {
@@ -46,6 +47,7 @@
                 "basic-speed": 3
             }, 
             "check_for_death": false, 
+            "timers": [],
             "opponent": null
         }, 
         "Tom": {
@@ -70,6 +72,7 @@
                 "basic-speed": 5
             }, 
             "check_for_death": false, 
+            "timers": [],
             "opponent": [
                 "horsemen", 
                 "Death"
@@ -90,6 +93,7 @@
                     "basic-speed": 1
                 }, 
                 "check_for_death": false, 
+                "timers": [],
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -113,6 +117,7 @@
                     "basic-speed": 5
                 }, 
                 "check_for_death": false, 
+                "timers": [],
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -139,6 +144,7 @@
                     "basic-speed": 3
                 }, 
                 "check_for_death": false, 
+                "timers": [],
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -162,6 +168,7 @@
                     "basic-speed": 5
                 }, 
                 "check_for_death": false, 
+                "timers": [],
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -190,6 +197,7 @@
                     "basic-speed": 1
                 }, 
                 "check_for_death": false, 
+                "timers": [],
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -213,6 +221,7 @@
                     "basic-speed": 5
                 }, 
                 "check_for_death": false, 
+                "timers": [],
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -236,6 +245,7 @@
                     "basic-speed": 3
                 }, 
                 "check_for_death": false, 
+                "timers": [],
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -261,6 +271,7 @@
                     "basic-speed": 2
                 }, 
                 "check_for_death": false, 
+                "timers": [],
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -284,6 +295,7 @@
                     "basic-speed": 4
                 }, 
                 "check_for_death": false, 
+                "timers": [],
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
@@ -307,6 +319,7 @@
                     "basic-speed": 6
                 }, 
                 "check_for_death": false, 
+                "timers": [],
                 "permanent": {
                     "fp": 10, 
                     "iq": 10, 
