@@ -147,6 +147,9 @@ class GmDisplay(object):
                              curses.COLOR_RED, # fg
                              curses.COLOR_WHITE) # bg
 
+            self.__stdscr.clear()
+            self.__stdscr.refresh()
+
             self.__FIGHTER_COL = 1
             self.__OPPONENT_COL = (curses.COLS / 2)
         except:
@@ -408,9 +411,6 @@ class GmDisplay(object):
         self.__y = 0 if self.__y == curses.LINES else self.__y + 1
         self.__stdscr.refresh()
 
-    def refresh(self):
-        self.__stdscr.refresh()
-
 
     def round_ribbon(self,
                      round_no,
@@ -530,21 +530,15 @@ class GmDisplay(object):
             height+2, width+2, begin_y-1, begin_x-1)
 
         border_win = curses.newwin(height+2, width+2, begin_y-1, begin_x-1)
-        print 'd' # TODO: remove
         border_win.border()
-        print 'e' # TODO: remove
 
         if title is not None:
             title_start = ((width + 2) - (len(title))) / 2
             border_win.addstr(0, title_start, title)
-        print 'f' # TODO: remove
         border_win.refresh()
-        print 'g' # TODO: remove
 
         menu_win = curses.newwin(height, width, begin_y, begin_x)
-        print 'h' # TODO: remove
         menu_win.bkgd(' ', mode)
-        print 'i' # TODO: remove
 
         return border_win, menu_win
 
@@ -1101,8 +1095,6 @@ if __name__ == '__main__':
 
             # TODO: { test
 
-            display.clear()
-            display.refresh()
             display.error_box(['this is an error',
                                'and this is the second line'])
 
