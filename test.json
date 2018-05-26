@@ -1,0 +1,389 @@
+{
+    "PCs": {
+        "Wade": {
+            "shock": null, 
+            "alive": true,
+            "last_negative_hp": 0, 
+            "current": {
+                "fp": 10, 
+                "iq": 10, 
+                "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 6
+            }, 
+            "permanent": {
+                "fp": 10, 
+                "iq": 10, 
+                "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 6
+            }, 
+            "check_for_death": false, 
+            "timers": [],
+            "opponent": null
+        }, 
+        "Bob": {
+            "shock": null, 
+            "alive": true,
+            "last_negative_hp": 0, 
+            "current": {
+                "fp": 10, 
+                "iq": 10, 
+                "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 3
+            }, 
+            "permanent": {
+                "fp": 10, 
+                "iq": 10, 
+                "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 3
+            }, 
+            "check_for_death": false, 
+            "timers": [],
+            "opponent": null
+        }, 
+        "Tom": {
+            "shock": null, 
+            "alive": true,
+            "last_negative_hp": 0, 
+            "current": {
+                "fp": 10, 
+                "iq": 10, 
+                "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 5
+            }, 
+            "permanent": {
+                "fp": 10, 
+                "iq": 10, 
+                "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 5
+            }, 
+            "check_for_death": false, 
+            "timers": [],
+            "opponent": [
+                "horsemen", 
+                "Death"
+            ]
+        }
+    }, 
+    "dead-monsters": {}, 
+    "monsters": {
+        "horsemen": {
+            "Famine": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 1
+                }, 
+                "check_for_death": false, 
+                "timers": [],
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 1
+                }, 
+                "shock": null, 
+                "alive": true,
+                "opponent": null
+            }, 
+            "Death": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5
+                }, 
+                "check_for_death": false, 
+                "timers": [],
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5
+                }, 
+                "shock": null, 
+                "alive": true,
+                "opponent": [
+                    "PCs", 
+                    "Tom"
+                ]
+            }, 
+            "Pestilence": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 3
+                }, 
+                "check_for_death": false, 
+                "timers": [],
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 3
+                }, 
+                "shock": null, 
+                "alive": true,
+                "opponent": null
+            }, 
+            "War": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5
+                }, 
+                "check_for_death": false, 
+                "timers": [],
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5
+                }, 
+                "shock": null, 
+                "alive": true,
+                "opponent": [
+                    "PCs", 
+                    "Tom"
+                ]
+            }
+        }, 
+        "marx": {
+            "Groucho": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 1
+                }, 
+                "check_for_death": false, 
+                "timers": [],
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 1
+                }, 
+                "shock": null, 
+                "alive": true,
+                "opponent": null
+            }, 
+            "Harpo": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5
+                }, 
+                "check_for_death": false, 
+                "timers": [],
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5
+                }, 
+                "shock": null, 
+                "alive": true,
+                "opponent": null
+            }, 
+            "Chico": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 3
+                }, 
+                "check_for_death": false, 
+                "timers": [],
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 3
+                }, 
+                "shock": null, 
+                "alive": true,
+                "opponent": null
+            }
+        }, 
+        "stooges": {
+            "Larry": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 2
+                }, 
+                "check_for_death": false, 
+                "timers": [],
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 2
+                }, 
+                "shock": null, 
+                "alive": true,
+                "opponent": null
+            }, 
+            "Curly": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 4
+                }, 
+                "check_for_death": false, 
+                "timers": [],
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 4
+                }, 
+                "shock": null, 
+                "alive": true,
+                "opponent": null
+            }, 
+            "Moe": {
+                "current": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 6
+                }, 
+                "check_for_death": false, 
+                "timers": [],
+                "permanent": {
+                    "fp": 10, 
+                    "iq": 10, 
+                    "hp": 10, 
+                    "ht": 10, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 6
+                }, 
+                "shock": null, 
+                "alive": true,
+                "opponent": [
+                    "PCs", 
+                    "Tom"
+                ]
+            }
+        }
+    }, 
+    "current-fight": {
+        "index": 1, 
+        "fighters": [
+            [
+                "PCs", 
+                "Wade"
+            ], 
+            [
+                "PCs", 
+                "Tom"
+            ], 
+            [
+                "horsemen", 
+                "Death"
+            ], 
+            [
+                "horsemen", 
+                "War"
+            ], 
+            [
+                "PCs", 
+                "Bob"
+            ], 
+            [
+                "horsemen", 
+                "Pestilence"
+            ], 
+            [
+                "horsemen", 
+                "Famine"
+            ]
+        ], 
+        "saved": false, 
+        "round": 2, 
+        "monsters": "horsemen"
+    }
+}

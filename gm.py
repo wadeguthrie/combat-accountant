@@ -1,15 +1,16 @@
 #! /usr/bin/python
 
+import argparse
 import copy
 import curses
 import json
 import pprint
 import random
 # import requests # Easy to use HTTP, requires Python 3
+import sys
 
 # TODO:
 #   - notes
-#   - make filename a command-line argument
 #   - errors go to the Curses screen
 #
 # TODO (eventually)
@@ -32,7 +33,6 @@ class GmJson(object):
     def __enter__(self):
         try:
             with open(self.__filename, 'r') as f:
-              #world = json.load(f)
               world = GmJson.__json_load_byteified(f)
         except:
             # TODO: ship out an error message
@@ -190,8 +190,7 @@ class GmDisplay(object):
                              curses.A_NORMAL)
         left += 2 # adds a space
 
-        # TODO: should be reverse sorted by the key
-        for choice, body in choices.iteritems():
+        for choice, body in sorted(choices.iteritems(), reverse=True):
             if choice == ord(' '):
                 choice_string = '" "'
             else:
@@ -540,7 +539,7 @@ class GmDisplay(object):
         line = 0
         mode = curses.A_NORMAL
 
-        # TODO: This stuff is largely rule-based
+        # TODO: { belongs in Ruleset
 
         if fighter['shock'] is not None: # Shock
             string = 'DX and IQ are at %d' % fighter['shock']
@@ -560,6 +559,8 @@ class GmDisplay(object):
             window.addstr(line, 0, "3d vs HT or DIE", curses.A_REVERSE)
             fighter['check_for_death'] = False  # Only show/roll once
             line += 1
+
+        # TODO: end of Ruleset }
 
         # Timers are _not_ rule based
         for timer in fighter['timers']:
@@ -637,7 +638,7 @@ class FightHandler(ScreenHandler):
         self._choices = {
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
             ord('<'): {'name': 'prev', 'func': self.__prev_fighter},
-            # TODO: 'h' and 'f' are based on the ruleset
+            # TODO: 'h' and 'f' belong in Ruleset
             ord('d'): {'name': 'dead', 'func': self.__dead},
             ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
             ord('h'): {'name': 'HP damage', 'func': self.__damage_HP},
@@ -715,7 +716,7 @@ class FightHandler(ScreenHandler):
             width = len(title)
             adj_string = self._display.input_box(height, width, title)
             adj = int(adj_string)
-            opponent['current']['fp'] += adj # TODO: this should be in rules
+            opponent['current']['fp'] += adj # TODO: belongs in Ruleset
             self._display.show_fighters(current_name, current_fighter,
                                         opponent_name, opponent,
                                         next_PC)
@@ -733,7 +734,7 @@ class FightHandler(ScreenHandler):
             adj_string = self._display.input_box(height, width, title)
             adj = int(adj_string)
 
-            # TODO: check for death is rule-based
+            # TODO: check for death belongs in Ruleset
             if adj < 0 and opponent['current']['hp'] < 0:
                 before_hp = opponent['current']['hp']
                 before_hp_multiple = before_hp / opponent['permanent']['hp']
@@ -742,12 +743,12 @@ class FightHandler(ScreenHandler):
                 if int(before_hp_multiple) != int(after_hp_multiple):
                     opponent['check_for_death'] = True
 
-            # TODO: shock is rule-based
+            # TODO: shock belongs in Ruleset
             shock_amount = -4 if adj <= -4 else adj
             if opponent['shock'] is None or opponent['shock'] > shock_amount:
                 opponent['shock'] = shock_amount
 
-            opponent['current']['hp'] += adj # TODO: this should be in rules
+            opponent['current']['hp'] += adj # TODO: belongs in Ruleset
             self._display.show_fighters(current_name, current_fighter,
                                         opponent_name, opponent,
                                         next_PC)
@@ -802,7 +803,7 @@ class FightHandler(ScreenHandler):
 
 
     def __next_fighter(self):
-        # TODO: shock is rule-set
+        # TODO: shock belongs in Ruleset
         prev_name, prev_fighter = self.__current_fighter()
         prev_fighter['shock'] = None # remove expired shock entry
 
@@ -1004,14 +1005,34 @@ class MainHandler(ScreenHandler):
         return False # Leave
 
 
+class MyArgumentParser(argparse.ArgumentParser):
+    def error(self, message):
+        sys.stderr.write('error: %s\n' % message)
+        self.print_help()
+        sys.exit(2) 
+
 
 # Main
 if __name__ == '__main__':
+
+
+    parser = MyArgumentParser()
+    parser.add_argument('filename',
+             help='Input JSON file containing characters and monsters')
+    #parser.add_argument('-v', '--verbose', help='verbose', action='store_true',
+    #                    default=False)
+
+    # Parse the command-line parameters
+    ARGS = parser.parse_args()
+
+    if ARGS.filename is None:
+        parser.print_help()
+        sys.exit(2)
+
     PP = pprint.PrettyPrinter(indent=3, width=150)
-    filename = 'persephone.json' # TODO: make this a command-line argument
 
     # Arriving -- read our stuff
-    with GmJson(filename) as world:
+    with GmJson(ARGS.filename) as world:
 
         # Build convenient data structures starting from:
         #   'groucho': {
@@ -1023,8 +1044,8 @@ if __name__ == '__main__':
         # Error checking for JSON
 
         if 'PCs' not in world:
-            #display.Error('No "PCs" in %s' % filename)
-            print 'No "PCs" in %s' % filename # TODO: dump when display
+            #display.Error('No "PCs" in %s' % ARGS.filename)
+            print 'No "PCs" in %s' % ARGS.filename # TODO: dump when display
 
         # Enter into the mainloop
         with GmDisplay() as display:
