@@ -278,7 +278,9 @@ class GmDisplay(object):
         #mode = curses.A_NORMAL # curses.color_pair(GmDisplay.RED_WHITE)
         mode = curses.color_pair(GmDisplay.RED_WHITE)
         width = max(len(string) for string in strings)
-        width += 2 # why not?
+        if width < len(title):
+            width = len(title)
+        width += 2 # Need some margin
         print 'Width: %d' % width # TODO: remove
         border_win, error_win = self.__centered_boxed_window(len(strings),
                                                              width,
@@ -287,10 +289,10 @@ class GmDisplay(object):
         for line, string in enumerate(strings):
             print "line %r string %r (len=%d)" % (line, string, len(string))
             error_win.addstr(line, 0, string, mode)
-
-        border_win.refresh()
         error_win.refresh()
+
         ignored = self.get_one_character()
+        #ignored = self.get_string(error_win)
 
         del border_win
         del error_win
@@ -305,20 +307,14 @@ class GmDisplay(object):
                  ):
         '''Provides a window to get input from the screen.'''
 
-        print 'b' # TODO: remove
         border_win, menu_win = self.__centered_boxed_window(height, width,
                                                             title)
-        print 'j' # TODO: remove
         string = self.get_string(menu_win)
-        print 'k' # TODO: remove
 
         del border_win
         del menu_win
-        print 'l' # TODO: remove
         self.__stdscr.touchwin() # NOTE: assumes this menu is on top of stdscr
-        print 'm' # TODO: remove
         self.__stdscr.refresh()
-        print 'n' # TODO: remove
         return string
     
 
@@ -410,6 +406,9 @@ class GmDisplay(object):
         mode = curses.A_STANDOUT if (self.__y % 3 == 0) else curses.A_NORMAL
         self.__stdscr.addstr(self.__y, 0, string, mode)
         self.__y = 0 if self.__y == curses.LINES else self.__y + 1
+        self.__stdscr.refresh()
+
+    def refresh(self):
         self.__stdscr.refresh()
 
 
@@ -1102,16 +1101,8 @@ if __name__ == '__main__':
 
             # TODO: { test
 
-            title = 'What happens in %d rounds?' % 3
-            height = 1
-            width = curses.COLS - 4
-            print 'a' # TODO: remove
-            ignored = display.input_box(
-                    height,
-                    width,
-                    title)
-
-            print 'z' # TODO: remove
+            display.clear()
+            display.refresh()
             display.error_box(['this is an error',
                                'and this is the second line'])
 
