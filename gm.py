@@ -269,6 +269,33 @@ class GmDisplay(object):
         curses.noecho()
         return string
 
+    def error_box(self,
+                  strings, # array of single-line strings
+                  title=" ERROR "
+                 ):
+        '''Provides an error to the screen.'''
+
+        mode = curses.A_NORMAL # curses.color_pair(GmDisplay.RED_WHITE)
+        width = max(len(string) for string in strings)
+        width += 2 # why not?
+        print 'Width: %d' % width # TODO: remove
+        border_win, error_win = self.__centered_boxed_window(len(strings),
+                                                             width,
+                                                             title,
+                                                             mode)
+        for line, string in enumerate(strings):
+            print "line %r string %r (len=%d)" % (line, string, len(string))
+            error_win.addstr(line, 0, string, mode)
+
+        border_win.refresh()
+        error_win.refresh()
+        ignored = self.get_one_character()
+
+        del border_win
+        del error_win
+        self.__stdscr.touchwin() # NOTE: assumes this menu is on top of stdscr
+        self.__stdscr.refresh()
+        return string
 
     def input_box(self,
                   height,
@@ -277,14 +304,20 @@ class GmDisplay(object):
                  ):
         '''Provides a window to get input from the screen.'''
 
+        print 'b' # TODO: remove
         border_win, menu_win = self.__centered_boxed_window(height, width,
                                                             title)
+        print 'j' # TODO: remove
         string = self.get_string(menu_win)
+        print 'k' # TODO: remove
 
         del border_win
         del menu_win
+        print 'l' # TODO: remove
         self.__stdscr.touchwin() # NOTE: assumes this menu is on top of stdscr
+        print 'm' # TODO: remove
         self.__stdscr.refresh()
+        print 'n' # TODO: remove
         return string
     
 
@@ -485,22 +518,33 @@ class GmDisplay(object):
     def __centered_boxed_window(self,
                                 height, # height of INSIDE window
                                 width, # width of INSIDE window
-                                title
+                                title,
+                                mode=curses.A_NORMAL
                                ):
 
         # x and y of text box (not border)
         begin_x = (curses.COLS / 2) - (width/2)
         begin_y = (curses.LINES / 2) - (height/2)
 
+        print 'c h:%d, w:%d, y:%d, x:%d' % ( # TODO: remove
+            height+2, width+2, begin_y-1, begin_x-1)
+
         border_win = curses.newwin(height+2, width+2, begin_y-1, begin_x-1)
+        print 'd' # TODO: remove
         border_win.border()
+        print 'e' # TODO: remove
 
         if title is not None:
             title_start = ((width + 2) - (len(title))) / 2
             border_win.addstr(0, title_start, title)
+        print 'f' # TODO: remove
         border_win.refresh()
+        print 'g' # TODO: remove
 
         menu_win = curses.newwin(height, width, begin_y, begin_x)
+        print 'h' # TODO: remove
+        #menu_win.bkgd(' ', mode)
+        print 'i' # TODO: remove
 
         return border_win, menu_win
 
@@ -1054,6 +1098,24 @@ if __name__ == '__main__':
         # error messages.
         with GmDisplay() as display:
             main_handler = MainHandler(display, world)
+
+            # TODO: { test
+
+            title = 'What happens in %d rounds?' % 3
+            height = 1
+            width = curses.COLS - 4
+            print 'a' # TODO: remove
+            ignored = display.input_box(
+                    height,
+                    width,
+                    title)
+
+            print 'z' # TODO: remove
+            display.error_box(['this is an error',
+                               'and this is the second line'])
+
+            # end of test }
+
             if world['current-fight']['saved']:
                 fight_handler = FightHandler(display,
                                              world,
