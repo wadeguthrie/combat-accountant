@@ -14,10 +14,10 @@ import sys
 #   - errors go to the Curses screen
 #
 # TODO (eventually)
+#   - TESTS, for the love of God
 #   - scrolling menus (et al.)
 #   - entering monsters and characters from the screen
 #   - main screen should have a 'h' heal one creature at a time
-#   - TESTS, for the love of God
 
 
 class GmJson(object):
@@ -539,7 +539,7 @@ class GmDisplay(object):
         line = 0
         mode = curses.A_NORMAL
 
-        # TODO: { belongs in Ruleset
+        # NOTE: { belongs in Ruleset
 
         if fighter['shock'] is not None: # Shock
             string = 'DX and IQ are at %d' % fighter['shock']
@@ -560,7 +560,7 @@ class GmDisplay(object):
             fighter['check_for_death'] = False  # Only show/roll once
             line += 1
 
-        # TODO: end of Ruleset }
+        # NOTE: end of Ruleset }
 
         # Timers are _not_ rule based
         for timer in fighter['timers']:
@@ -638,7 +638,7 @@ class FightHandler(ScreenHandler):
         self._choices = {
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
             ord('<'): {'name': 'prev', 'func': self.__prev_fighter},
-            # TODO: 'h' and 'f' belong in Ruleset
+            # NOTE: 'h' and 'f' belong in Ruleset
             ord('d'): {'name': 'dead', 'func': self.__dead},
             ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
             ord('h'): {'name': 'HP damage', 'func': self.__damage_HP},
@@ -716,7 +716,7 @@ class FightHandler(ScreenHandler):
             width = len(title)
             adj_string = self._display.input_box(height, width, title)
             adj = int(adj_string)
-            opponent['current']['fp'] += adj # TODO: belongs in Ruleset
+            opponent['current']['fp'] += adj # NOTE: belongs in Ruleset
             self._display.show_fighters(current_name, current_fighter,
                                         opponent_name, opponent,
                                         next_PC)
@@ -734,7 +734,7 @@ class FightHandler(ScreenHandler):
             adj_string = self._display.input_box(height, width, title)
             adj = int(adj_string)
 
-            # TODO: check for death belongs in Ruleset
+            # NOTE: check for death belongs in Ruleset
             if adj < 0 and opponent['current']['hp'] < 0:
                 before_hp = opponent['current']['hp']
                 before_hp_multiple = before_hp / opponent['permanent']['hp']
@@ -743,12 +743,12 @@ class FightHandler(ScreenHandler):
                 if int(before_hp_multiple) != int(after_hp_multiple):
                     opponent['check_for_death'] = True
 
-            # TODO: shock belongs in Ruleset
+            # NOTE: shock belongs in Ruleset
             shock_amount = -4 if adj <= -4 else adj
             if opponent['shock'] is None or opponent['shock'] > shock_amount:
                 opponent['shock'] = shock_amount
 
-            opponent['current']['hp'] += adj # TODO: belongs in Ruleset
+            opponent['current']['hp'] += adj # NOTE: belongs in Ruleset
             self._display.show_fighters(current_name, current_fighter,
                                         opponent_name, opponent,
                                         next_PC)
@@ -803,7 +803,7 @@ class FightHandler(ScreenHandler):
 
 
     def __next_fighter(self):
-        # TODO: shock belongs in Ruleset
+        # NOTE: shock belongs in Ruleset
         prev_name, prev_fighter = self.__current_fighter()
         prev_fighter['shock'] = None # remove expired shock entry
 
@@ -1048,6 +1048,9 @@ if __name__ == '__main__':
             print 'No "PCs" in %s' % ARGS.filename # TODO: dump when display
 
         # Enter into the mainloop
+        #
+        # TODO: GmDisplay should be outside everything in order to service
+        # error messages.
         with GmDisplay() as display:
             main_handler = MainHandler(display, world)
             if world['current-fight']['saved']:
