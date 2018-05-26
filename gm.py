@@ -272,10 +272,10 @@ class GmDisplay(object):
         curses.noecho()
         return string
 
-    def error_box(self,
-                  strings, # array of single-line strings
-                  title=" ERROR "
-                 ):
+    def error(self,
+              strings, # array of single-line strings
+              title=" ERROR "
+             ):
         '''Provides an error to the screen.'''
 
         #mode = curses.A_NORMAL # curses.color_pair(GmDisplay.RED_WHITE)
@@ -284,7 +284,6 @@ class GmDisplay(object):
         if width < len(title):
             width = len(title)
         width += 2 # Need some margin
-        print 'Width: %d' % width # TODO: remove
         border_win, error_win = self.__centered_boxed_window(len(strings),
                                                              width,
                                                              title,
@@ -526,8 +525,8 @@ class GmDisplay(object):
         begin_x = (curses.COLS / 2) - (width/2)
         begin_y = (curses.LINES / 2) - (height/2)
 
-        print 'c h:%d, w:%d, y:%d, x:%d' % ( # TODO: remove
-            height+2, width+2, begin_y-1, begin_x-1)
+        #print 'c h:%d, w:%d, y:%d, x:%d' % (
+        #    height+2, width+2, begin_y-1, begin_x-1)
 
         border_win = curses.newwin(height+2, width+2, begin_y-1, begin_x-1)
         border_win.border()
@@ -1068,37 +1067,30 @@ if __name__ == '__main__':
         parser.print_help()
         sys.exit(2)
 
-    PP = pprint.PrettyPrinter(indent=3, width=150)
+    with GmDisplay() as display:
+        PP = pprint.PrettyPrinter(indent=3, width=150)
 
-    # Arriving -- read our stuff
-    with GmJson(ARGS.filename) as world:
+        display.error(['this is an error',
+                       'and this is the second line'])
 
-        # Build convenient data structures starting from:
-        #   'groucho': {
-        #       'current': { 'fp': 10, 'hp': 10, 'basic-speed': 1 }, 
-        #       'permanent': { 'fp': 10, 'hp': 10, 'basic-speed': 1 }, 
-        #       'opponent': ['PCs', 'Foo'] # group, name
-        #   }, 
 
-        # Error checking for JSON
+        # Arriving -- read our stuff
+        with GmJson(ARGS.filename) as world:
 
-        if 'PCs' not in world:
-            #display.Error('No "PCs" in %s' % ARGS.filename)
-            print 'No "PCs" in %s' % ARGS.filename # TODO: dump when display
+            # Build convenient data structures starting from:
+            #   'groucho': {
+            #       'current': { 'fp': 10, 'hp': 10, 'basic-speed': 1 }, 
+            #       'permanent': { 'fp': 10, 'hp': 10, 'basic-speed': 1 }, 
+            #       'opponent': ['PCs', 'Foo'] # group, name
+            #   }, 
 
-        # Enter into the mainloop
-        #
-        # TODO: GmDisplay should be outside everything in order to service
-        # error messages.
-        with GmDisplay() as display:
+            # Error checking for JSON
+
+            if 'PCs' not in world:
+                display.error('No "PCs" in %s' % ARGS.filename)
+
+            # Enter into the mainloop
             main_handler = MainHandler(display, world)
-
-            # TODO: { test
-
-            display.error_box(['this is an error',
-                               'and this is the second line'])
-
-            # end of test }
 
             if world['current-fight']['saved']:
                 fight_handler = FightHandler(display,
