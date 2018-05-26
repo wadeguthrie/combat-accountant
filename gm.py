@@ -275,7 +275,8 @@ class GmDisplay(object):
                  ):
         '''Provides an error to the screen.'''
 
-        mode = curses.A_NORMAL # curses.color_pair(GmDisplay.RED_WHITE)
+        #mode = curses.A_NORMAL # curses.color_pair(GmDisplay.RED_WHITE)
+        mode = curses.color_pair(GmDisplay.RED_WHITE)
         width = max(len(string) for string in strings)
         width += 2 # why not?
         print 'Width: %d' % width # TODO: remove
@@ -543,7 +544,7 @@ class GmDisplay(object):
 
         menu_win = curses.newwin(height, width, begin_y, begin_x)
         print 'h' # TODO: remove
-        #menu_win.bkgd(' ', mode)
+        menu_win.bkgd(' ', mode)
         print 'i' # TODO: remove
 
         return border_win, menu_win
