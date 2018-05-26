@@ -16,6 +16,7 @@ import random
 #   - scrolling menus (et al.)
 #   - entering monsters and characters from the screen
 #   - main screen should have a 'h' heal one creature at a time
+#   - TESTS, for the love of God
 
 
 class GmJson(object):
@@ -336,6 +337,9 @@ class GmDisplay(object):
                 self.__stdscr.touchwin()
                 self.__stdscr.refresh()
                 return None
+
+            # TODO: else: look in the menu for the first entry that
+            # starts with the character and select that
 
             if new_index != index:
                 old_index = index
@@ -661,7 +665,6 @@ class FightHandler(ScreenHandler):
 
             # Sort by initiative = basic-speed followed by DEX followed by
             # random
-            # TODO: there should be a random value for equal initiatives
             self.__fight['fighters'].sort(key=lambda fighter: 
                     GurpsRuleset.initiative(self.__fighter(fighter[0],
                                                            fighter[1])),
@@ -837,7 +840,6 @@ class FightHandler(ScreenHandler):
                 next_PC = self.__fight['fighters'][next_index][1]
                 break
             next_index += 1
-        # TODO: perhaps I should check if next PC is active
         return next_PC
 
 
@@ -937,7 +939,7 @@ class FightHandler(ScreenHandler):
         timer['string'] = self._display.input_box(
                 height,
                 self._display.fighter_win_width - 9, # TODO: should get 9 from
-                                                     #  display
+                                                     #  display code
                 title
                )
 
