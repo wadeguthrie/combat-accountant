@@ -2,6 +2,7 @@
     "PCs": {
         "Wade": {
             "shock": null, 
+            "alive": true,
             "last_negative_hp": 0, 
             "current": {
                 "fp": 10, 
@@ -27,6 +28,7 @@
         }, 
         "Bob": {
             "shock": null, 
+            "alive": true,
             "last_negative_hp": 0, 
             "current": {
                 "fp": 10, 
@@ -52,6 +54,7 @@
         }, 
         "Tom": {
             "shock": null, 
+            "alive": true,
             "last_negative_hp": 0, 
             "current": {
                 "fp": 10, 
@@ -104,6 +107,7 @@
                     "basic-speed": 1
                 }, 
                 "shock": null, 
+                "alive": true,
                 "opponent": null
             }, 
             "Death": {
@@ -128,6 +132,7 @@
                     "basic-speed": 5
                 }, 
                 "shock": null, 
+                "alive": true,
                 "opponent": [
                     "PCs", 
                     "Tom"
@@ -155,6 +160,7 @@
                     "basic-speed": 3
                 }, 
                 "shock": null, 
+                "alive": true,
                 "opponent": null
             }, 
             "War": {
@@ -179,6 +185,7 @@
                     "basic-speed": 5
                 }, 
                 "shock": null, 
+                "alive": true,
                 "opponent": [
                     "PCs", 
                     "Tom"
@@ -208,6 +215,7 @@
                     "basic-speed": 1
                 }, 
                 "shock": null, 
+                "alive": true,
                 "opponent": null
             }, 
             "Harpo": {
@@ -232,6 +240,7 @@
                     "basic-speed": 5
                 }, 
                 "shock": null, 
+                "alive": true,
                 "opponent": null
             }, 
             "Chico": {
@@ -256,6 +265,7 @@
                     "basic-speed": 3
                 }, 
                 "shock": null, 
+                "alive": true,
                 "opponent": null
             }
         }, 
@@ -282,6 +292,7 @@
                     "basic-speed": 2
                 }, 
                 "shock": null, 
+                "alive": true,
                 "opponent": null
             }, 
             "Curly": {
@@ -306,6 +317,7 @@
                     "basic-speed": 4
                 }, 
                 "shock": null, 
+                "alive": true,
                 "opponent": null
             }, 
             "Moe": {
@@ -330,6 +342,7 @@
                     "basic-speed": 6
                 }, 
                 "shock": null, 
+                "alive": true,
                 "opponent": [
                     "PCs", 
                     "Tom"

@@ -8,15 +8,14 @@ import random
 # import requests # Easy to use HTTP, requires Python 3
 
 # TODO:
-#   - be able to remove characters from the fight (death)
 #   - notes
-#   - main screen should have a 'h' heal one creature at a time
-#
-# TODO (eventually)
 #   - make filename a command-line argument
 #   - errors go to the Curses screen
+#
+# TODO (eventually)
 #   - scrolling menus (et al.)
 #   - entering monsters and characters from the screen
+#   - main screen should have a 'h' heal one creature at a time
 
 
 class GmJson(object):
@@ -190,6 +189,7 @@ class GmDisplay(object):
                              curses.A_NORMAL)
         left += 2 # adds a space
 
+        # TODO: should be reverse sorted by the key
         for choice, body in choices.iteritems():
             if choice == ord(' '):
                 choice_string = '" "'
@@ -422,8 +422,11 @@ class GmDisplay(object):
         self.__stdscr.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
         self.__stdscr.clrtoeol()
 
-        self.__show_fighter(current_name, current_fighter, self.__FIGHTER_COL)
-        self.__show_fighter_notes(self.__character_window, current_fighter)
+        if self.__show_fighter(current_name,
+                               current_fighter,
+                               self.__FIGHTER_COL):
+            self.__show_fighter_notes(self.__character_window,
+                                      current_fighter)
 
         if opponent is None:
             self.__opponent_window.clear()
@@ -431,10 +434,10 @@ class GmDisplay(object):
         else:
             self.__stdscr.addstr(self.__FIGHTER_LINE,
                                  self.__OPPONENT_COL, 'vs.')
-            self.__show_fighter(opponent_name,
-                                opponent,
-                                self.__OPPONENT_COL+4)
-            self.__show_fighter_notes(self.__opponent_window, opponent)
+            if self.__show_fighter(opponent_name,
+                                   opponent,
+                                   self.__OPPONENT_COL+4):
+                self.__show_fighter_notes(self.__opponent_window, opponent)
 
         self.__stdscr.refresh()
 
@@ -500,19 +503,26 @@ class GmDisplay(object):
                        fighter,       # dict holding fighter information
                        column
                       ):
-        fighter_string = '%s HP: %d/%d FP: %d/%d' % (
-            fighter_name,
-            fighter['current']['hp'],
-            fighter['permanent']['hp'],
-            fighter['current']['fp'],
-            fighter['permanent']['fp'])
-        if fighter['current']['fp'] <= 0 or fighter['current']['hp'] <= 0:
-            mode = curses.color_pair(GmDisplay.RED_BLACK)
-        else:
-            mode = curses.A_NORMAL
+        is_alive = True # alive
+        if fighter['alive']:
+            fighter_string = '%s HP: %d/%d FP: %d/%d' % (
+                fighter_name,
+                fighter['current']['hp'],
+                fighter['permanent']['hp'],
+                fighter['current']['fp'],
+                fighter['permanent']['fp'])
+            if fighter['current']['fp'] <= 0 or fighter['current']['hp'] <= 0:
+                mode = curses.color_pair(GmDisplay.RED_BLACK)
+            else:
+                mode = curses.A_NORMAL
 
-        line = self.__FIGHTER_LINE
-        self.__stdscr.addstr(line, column, fighter_string, mode)
+        else:
+            fighter_string = '(DEAD)'
+            mode = curses.color_pair(GmDisplay.RED_BLACK)
+            is_alive = False
+
+        self.__stdscr.addstr(self.__FIGHTER_LINE, column, fighter_string, mode)
+        return is_alive
 
 
     def __show_fighter_notes(self,
@@ -624,12 +634,13 @@ class FightHandler(ScreenHandler):
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
             ord('<'): {'name': 'prev', 'func': self.__prev_fighter},
             # TODO: 'h' and 'f' are based on the ruleset
-            ord('h'): {'name': 'HP damage', 'func': self.__damage_HP},
+            ord('d'): {'name': 'dead', 'func': self.__dead},
             ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
+            ord('h'): {'name': 'HP damage', 'func': self.__damage_HP},
             ord('o'): {'name': 'opponent', 'func': self.__pick_opponent},
-            ord('t'): {'name': 'timer', 'func': self.__timer},
             ord('q'): {'name': 'quit', 'func': self.__quit},
-            ord('s'): {'name': 'save', 'func': self.__save}
+            ord('s'): {'name': 'save', 'func': self.__save},
+            ord('t'): {'name': 'timer', 'func': self.__timer}
         }
 
         self.__world = world
@@ -677,6 +688,18 @@ class FightHandler(ScreenHandler):
         return (self.__fight['fighters'][index][1],
                 self.__fighter(self.__fight['fighters'][index][0], # group
                                self.__fight['fighters'][index][1])) # name
+
+
+    def __dead(self):
+        current_name, current_fighter = self.__current_fighter()
+        next_PC = self.__next_PC()
+        opponent_name, opponent = self.__opponent(current_fighter)
+        if opponent is not None:
+            opponent['alive'] = False
+            self._display.show_fighters(current_name, current_fighter,
+                                        opponent_name, opponent,
+                                        next_PC)
+        return True # Keep going
 
 
     def __damage_FP(self):
@@ -750,6 +773,30 @@ class FightHandler(ScreenHandler):
         return (self.__world['PCs'][name] if group == 'PCs' else
                 self.__world['monsters'][group][name])
 
+    def __modify_index(self,
+                       adj      # 1 or -1, adjust the index by this
+                      ):
+        '''
+        Increment or decrement the index.  Only stop on living creatures.
+        '''
+
+        first_index = self.__fight['index']
+
+        keep_going = True
+
+        while keep_going:
+            self.__fight['index'] += adj
+            if self.__fight['index'] >= len(self.__fight['fighters']):
+                self.__fight['index'] = 0
+                self.__fight['round'] += adj 
+            elif self.__fight['index'] < 0:
+                self.__fight['index'] = len(self.__fight['fighters']) - 1
+                self.__fight['round'] += adj 
+            current_name, current_fighter = self.__current_fighter()
+            if (current_fighter['alive'] or
+                    (self.__fight['index'] == first_index)):
+                keep_going = False
+
 
     def __next_fighter(self):
         # TODO: shock is rule-set
@@ -764,10 +811,8 @@ class FightHandler(ScreenHandler):
         for index in remove_these:
             del prev_fighter['timers'][index]
 
-        self.__fight['index'] += 1
-        if self.__fight['index'] >= len(self.__fight['fighters']):
-            self.__fight['index'] = 0
-            self.__fight['round'] += 1
+        # get next fighter
+        self.__modify_index(1)
         self._display.round_ribbon(self.__fight['round'],
                                    self.__fight['saved'],
                                    None, # current fighter
@@ -846,11 +891,7 @@ class FightHandler(ScreenHandler):
         if self.__fight['index'] == 0 and self.__fight['round'] == 0:
             return True # Not going backwards from the origin
 
-        self.__fight['index'] -= 1
-        if self.__fight['index'] < 0:
-            self.__fight['index'] = len(self.__fight['fighters']) - 1
-            self.__fight['round'] -= 1
-        # TODO: maybe combine the following two
+        self.__modify_index(-1)
         self._display.round_ribbon(self.__fight['round'],
                                    self.__fight['saved'],
                                    None, # current fighter
