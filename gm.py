@@ -13,6 +13,10 @@ import sys
 #   - add 'action' to fight menu.  It has a rule-specific menu for the
 #     different things someone can do during a fight.  It should add a timer
 #     describing the action and the restrictions on defense actions.
+#   - need FightDisplay that, at the very least, can be refreshed and it'll
+#     refresh the notes displays.  It's something that can be handed to a
+#     menu so that, when the menu is removed, it can be refreshed as a whole.
+#     (parts of the GameDisplay should really go into a window manager).
 #   - notes
 #
 # TODO (eventually)
@@ -615,9 +619,16 @@ class GmDisplay(object):
         # Timers
         for timer in fighter['timers']:
             round_count_string = self.__round_count_string % timer['rounds']
-            string = '%s%s' % (round_count_string, timer['string'])
-            window.addstr(line, 0, string, mode)
-            line += 1
+            if type(timer['string']) is list:
+                for i, substring in enumerate(timer['string']):
+                    string = substring if i != 0 else (
+                        '%s%s' % (round_count_string, substring))
+                    window.addstr(line, 0, string, mode)
+                    line += 1
+            else:
+                string = '%s%s' % (round_count_string, timer['string'])
+                window.addstr(line, 0, string, mode)
+                line += 1
 
         window.refresh()
 
@@ -713,8 +724,9 @@ class FightHandler(ScreenHandler):
         self._choices = {
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
             ord('<'): {'name': 'prev', 'func': self.__prev_fighter},
-            # NOTE: 'h' and 'f' belong in Ruleset
+            ord('a'): {'name': 'action', 'func': self.__action},
             ord('d'): {'name': 'dead', 'func': self.__dead},
+            # NOTE: 'h' and 'f' belong in Ruleset
             ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
             ord('h'): {'name': 'HP damage', 'func': self.__damage_HP},
             ord('o'): {'name': 'opponent', 'func': self.__pick_opponent},
@@ -722,6 +734,53 @@ class FightHandler(ScreenHandler):
             ord('s'): {'name': 'save', 'func': self.__save},
             ord('t'): {'name': 'timer', 'func': self.__timer}
         }
+
+        # TODO: menus need assigned single-character launch.
+
+        self.__action_menu = [
+            ('attack',                 ['Attack',
+                                        ' Defense: any',
+                                        ' Move: step']),
+            ('Attack, all out',        ['All out attack',
+                                        ' Defense: none',
+                                        ' Move: 1/2']),
+            ('ready',                  ['Ready',
+                                        ' Defense: any',
+                                        ' Move: step']),
+            ('move',                   ['Move',
+                                        ' Defense: any',
+                                        ' Move: full']),
+            ('Move and attack',        ['Move & Attack',
+                                        ' Defense: Dodge,block',
+                                        ' Move: full']),
+            ('Defense, all out',       ['All out defense',
+                                        ' Defense: double',
+                                        ' Move: step']),
+            ('change posture',         ['Change posture',
+                                        ' Defense: any',
+                                        ' Move: none']),
+            ('concentrate',            ['Concentrate',
+                                        ' Defense: any w/will roll',
+                                        ' Move: step']),
+            ('nothing: stun/surprise', ['Do nothing',
+                                        ' Defense: any @-4',
+                                        ' Move: none']),
+            ('Nothing',                ['Do nothing',
+                                        ' Defense: any',
+                                        ' Move: none']),
+            ('aim',                    ['Aim',
+                                        ' Defense: any loses aim',
+                                        ' Move: step']),
+            ('feint',                  ['Feint',
+                                        ' Defense: any, parry *',
+                                        ' Move: step']),
+            ('wait',                   ['Wait',
+                                        ' Defense: any, no AA attack ',
+                                        ' Move: none']),
+            ('evaluate',               ['Evaluate',
+                                        ' Defense: any',
+                                        ' Move: step']),
+        ]
 
         self.__world = world
         self.__fight = world["current-fight"]
@@ -760,6 +819,14 @@ class FightHandler(ScreenHandler):
             self.__world['dead-monsters'][self.__fight['monsters']] = (
                     self.__world['monsters'][self.__fight['monsters']])
             del(self.__world['monsters'][self.__fight['monsters']])
+
+    def __action(self):
+        action = self._display.menu('Action', self.__action_menu)
+        if action is not None:
+            current_name, current_fighter = self.__current_fighter()
+            current_fighter['timers'].append({'rounds': 1,
+                                              'string': action})
+            return True # Keep going
 
     def __current_fighter(self):
         index = self.__fight['index']
