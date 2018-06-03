@@ -107,25 +107,24 @@ class GmWindow(object):
         #   window.getbegyx()
         #   window.getmaxyx()
         # both return a (y, x) tuple to solve this
-        self._window = self.__window_manager.new_native_window(height,
-                                                               width,
-                                                               top_line,
-                                                               left_column)
-
-    def __enter__(self):
-        return self
+        self._window = self._window_manager.new_native_window(height,
+                                                              width,
+                                                              top_line,
+                                                              left_column)
 
 
-    def __exit__ (self, exception_type, exception_value, exception_traceback):
-        if exception_type is IOError:
-            print 'IOError: %r' % exception_type
-            print 'EXCEPTION val: %s' % exception_value
-            print 'Traceback: %r' % exception_traceback
-        elif exception_type is not None:
-            print 'EXCEPTION type: %r' % exception_type
-            print 'EXCEPTION val: %s' % exception_value
-            print 'Traceback: %r' % exception_traceback
 
+    def clear(self):
+        '''Clears the screen.'''
+
+        self._window.clear()
+
+
+    def close(self):
+        '''
+        Explicit destructor because Python is broken when it comes to
+        destructors.
+        '''
         self._window_manager.pop_window(self._window)
         print 'Is self._window already deleted' # TODO: remove
         del self._window                   # kill ourselves
@@ -133,189 +132,6 @@ class GmWindow(object):
         self._window_manager.refresh_all() # refresh everything else
         return True
 
-
-    # TODO: whould refresh parent window on exit
-    def error(self,
-              strings, # array of single-line strings
-              title=" ERROR "
-             ):
-        '''Provides an error to the screen.'''
-
-        #mode = curses.A_NORMAL # curses.color_pair(GmWindowManager.RED_WHITE)
-        mode = curses.color_pair(GmWindowManager.RED_WHITE)
-        width = max(len(string) for string in strings)
-        if width < len(title):
-            width = len(title)
-        width += 2 # Need some margin
-        border_win, error_win = self.__centered_boxed_window(len(strings),
-                                                             width,
-                                                             title,
-                                                             mode)
-        for line, string in enumerate(strings):
-            print "line %r string %r (len=%d)" % (line, string, len(string))
-            error_win.addstr(line, 0, string, mode)
-        error_win.refresh()
-
-        ignored = self.get_one_character()
-        #ignored = self.get_string(error_win)
-
-        del border_win
-        del error_win
-        self._window.touchwin()
-        self._window.refresh()
-        return string
-
-    def input_box(self,
-                  height,
-                  width,
-                  title
-                 ):
-        '''Provides a window to get input from the screen.'''
-
-        border_win, menu_win = self.__centered_boxed_window(height, width,
-                                                            title)
-        string = self.get_string(menu_win)
-
-        del border_win
-        del menu_win
-        self._window.touchwin()
-        self._window.refresh()
-        return string
-    
-
-    # TODO: this, input_box, and others go directly to Curses to create
-    # and delete windows but, really, they should go to the window manager.
-
-    def menu(self,
-             title,
-             strings_results # array of tuples (string, return value)
-            ):
-        '''
-        Presents a menu to the user and returns the result.
-        '''
-
-        # TODO: doesn't handle more entries that would fit on screen
-
-        # height and width of text box (not border)
-        height = len(strings_results)
-        width = 0 if title is None else len(title)
-        for string, result in strings_results:
-            if len(string) > width:
-                width = len(string)
-        width += 1 # Seems to need one more space (or Curses freaks out)
-
-        border_win, menu_win = self.__centered_boxed_window(height, width,
-                                                            title)
-
-        index = 0
-        for line, string_result in enumerate(strings_results):
-            # Maybe use A_BOLD instead of A_STANDOUT -- could also use
-            # curses.color_pair(1) or whatever
-            mode = curses.A_STANDOUT if line == index else curses.A_NORMAL
-            menu_win.addstr(line, 0, string_result[0], mode)
-        menu_win.refresh()
-
-        keep_going = True
-        while keep_going:
-            user_input = self.get_one_character()
-            new_index = index
-            if user_input == curses.KEY_HOME:
-                new_index = 0
-            elif user_input == curses.KEY_UP:
-                new_index -= 1
-            elif user_input == curses.KEY_DOWN:
-                new_index += 1
-            elif user_input == ord('\n'):
-                del border_win
-                del menu_win
-                self._window.touchwin()
-                self._window.refresh()
-                return strings_results[index][1]
-            elif user_input == GmWindowManager.ESCAPE:
-                self._window.touchwin()
-                self._window.refresh()
-                return None
-            else:
-                # Look for a match and return the selection
-                for index, entry in enumerate(strings_results):
-                    # (string, return value)
-                    if user_input == ord(entry[0][0]): # 1st char of the string
-                        del border_win
-                        del menu_win
-                        self._window.touchwin()
-                        self._window.refresh()
-                        return strings_results[index][1]
-
-            if new_index != index:
-                old_index = index
-                if new_index < 0:
-                    index = height-1
-                elif new_index >= height:
-                    index = 0
-                else:
-                    index = new_index
-
-                #print "INDEX - old:%d, new:%d, final:%d" % (old_index,
-                #                                            new_index,
-                #                                            index)
-
-                menu_win.addstr(old_index,
-                                0,
-                                strings_results[old_index][0],
-                                curses.A_NORMAL)
-                menu_win.addstr(index,
-                                0,
-                                strings_results[index][0],
-                                curses.A_STANDOUT)
-                menu_win.refresh()
-
-
-    def refresh(self):
-        self._window.refresh()
-
-    #
-    # Private methods
-    #
-
-    def __centered_boxed_window(self,
-                                height, # height of INSIDE window
-                                width, # width of INSIDE window
-                                title,
-                                mode=curses.A_NORMAL
-                               ):
-        '''
-        Creates a temporary window, on top of the current one, that is
-        centered and has a box around it.
-        '''
-
-        # x and y of text box (not border)
-        begin_x = (curses.COLS / 2) - (width/2)
-        begin_y = (curses.LINES / 2) - (height/2)
-
-        #print 'c h:%d, w:%d, y:%d, x:%d' % (
-        #    height+2, width+2, begin_y-1, begin_x-1)
-
-        border_win = curses.newwin(height+2, width+2, begin_y-1, begin_x-1)
-        border_win.border()
-
-        if title is not None:
-            title_start = ((width + 2) - (len(title))) / 2
-            border_win.addstr(0, title_start, title)
-        border_win.refresh()
-
-        menu_win = curses.newwin(height, width, begin_y, begin_x)
-        menu_win.bkgd(' ', mode)
-
-        return border_win, menu_win
-
-
-class TopGmWindow(GmWindow):
-    def __init__(self, window_manager):
-        super(TopGmWindow, self).__init__(window_manager,
-                                          curses.LINES,
-                                          curses.COLS,
-                                          0,
-                                          0)
 
     def command_ribbon(
             self,
@@ -325,6 +141,7 @@ class TopGmWindow(GmWindow):
         Draws a list of commands across the bottom of the screen
         '''
 
+        print 'command_ribbon'
         left = 0
         lines, cols = self._window.getmaxyx()
         line = lines - 1
@@ -356,6 +173,25 @@ class TopGmWindow(GmWindow):
             left += 2 # adds a space
 
         self.refresh()
+        print 'command_ribbon (done)'
+
+
+    def refresh(self):
+        self._window.refresh()
+
+    #
+    # Private methods
+    #
+
+
+
+class TopGmWindow(GmWindow):
+    def __init__(self, window_manager):
+        super(TopGmWindow, self).__init__(window_manager,
+                                          curses.LINES,
+                                          curses.COLS,
+                                          0,
+                                          0)
 
 
 class FightGmWindow(GmWindow):
@@ -376,6 +212,18 @@ class FightGmWindow(GmWindow):
         self.__round_count_string = '%d Rnds: '
         # assume rounds takes as much space as '%d' 
         self.len_timer_leader = len(self.__round_count_string)
+
+
+    def close(self):
+        # Kill my subwindows, first
+        if self.__character_window is not None:
+            del self.__character_window
+            self.__character_window = None
+        if self.__opponent_window is not None:
+            del self.__opponent_window
+            self.__opponent_window = None
+        super(FightGmWindow, self).close()
+
 
     def show_fighters(self,
                       current_name,
@@ -471,15 +319,6 @@ class FightGmWindow(GmWindow):
                                                 top_line,
                                                 self.__OPPONENT_COL+4)
 
-    def stop_fight(self):
-        # TODO: part of __exit__?
-        if self.__character_window is not None:
-            del self.__character_window
-            self.__character_window = None
-
-        if self.__opponent_window is not None:
-            del self.__opponent_window
-            self.__opponent_window = None
 
     def __show_fighter(self,
                        fighter_name,  # String holding name of fighter
@@ -632,6 +471,137 @@ class GmWindowManager(object):
     # Public Methods
     #
 
+    def error(self,
+              strings, # array of single-line strings
+              title=" ERROR "
+             ):
+        '''Provides an error to the screen.'''
+
+        #mode = curses.A_NORMAL # curses.color_pair(GmWindowManager.RED_WHITE)
+        mode = curses.color_pair(GmWindowManager.RED_WHITE)
+        width = max(len(string) for string in strings)
+        if width < len(title):
+            width = len(title)
+        width += 2 # Need some margin
+        border_win, error_win = self.__centered_boxed_window(len(strings),
+                                                             width,
+                                                             title,
+                                                             mode)
+        for line, string in enumerate(strings):
+            print "line %r string %r (len=%d)" % (line, string, len(string))
+            error_win.addstr(line, 0, string, mode)
+        error_win.refresh()
+
+        ignored = self.get_one_character()
+        #ignored = self.get_string(error_win)
+
+        del border_win
+        del error_win
+        self.hard_refresh_all()
+        return string
+
+    def input_box(self,
+                  height,
+                  width,
+                  title
+                 ):
+        '''Provides a window to get input from the screen.'''
+
+        border_win, menu_win = self.__centered_boxed_window(height, width,
+                                                            title)
+        string = self.get_string(menu_win)
+
+        del border_win
+        del menu_win
+        self.hard_refresh_all()
+        return string
+    
+
+    # TODO: this, input_box, and others go directly to Curses to create
+    # and delete windows but, really, they should go to the window manager.
+
+    def menu(self,
+             title,
+             strings_results # array of tuples (string, return value)
+            ):
+        '''
+        Presents a menu to the user and returns the result.
+        '''
+
+        # TODO: doesn't handle more entries that would fit on screen
+
+        # height and width of text box (not border)
+        height = len(strings_results)
+        width = 0 if title is None else len(title)
+        for string, result in strings_results:
+            if len(string) > width:
+                width = len(string)
+        width += 1 # Seems to need one more space (or Curses freaks out)
+
+        border_win, menu_win = self.__centered_boxed_window(height, width,
+                                                            title)
+
+        index = 0
+        for line, string_result in enumerate(strings_results):
+            # Maybe use A_BOLD instead of A_STANDOUT -- could also use
+            # curses.color_pair(1) or whatever
+            mode = curses.A_STANDOUT if line == index else curses.A_NORMAL
+            menu_win.addstr(line, 0, string_result[0], mode)
+        menu_win.refresh()
+
+        keep_going = True
+        while keep_going:
+            user_input = self.get_one_character()
+            new_index = index
+            if user_input == curses.KEY_HOME:
+                new_index = 0
+            elif user_input == curses.KEY_UP:
+                new_index -= 1
+            elif user_input == curses.KEY_DOWN:
+                new_index += 1
+            elif user_input == ord('\n'):
+                del border_win
+                del menu_win
+                self.hard_refresh_all()
+                return strings_results[index][1]
+            elif user_input == GmWindowManager.ESCAPE:
+                del border_win
+                del menu_win
+                self.hard_refresh_all()
+                return None
+            else:
+                # Look for a match and return the selection
+                for index, entry in enumerate(strings_results):
+                    # (string, return value)
+                    if user_input == ord(entry[0][0]): # 1st char of the string
+                        del border_win
+                        del menu_win
+                        self.hard_refresh_all()
+                        return strings_results[index][1]
+
+            if new_index != index:
+                old_index = index
+                if new_index < 0:
+                    index = height-1
+                elif new_index >= height:
+                    index = 0
+                else:
+                    index = new_index
+
+                #print "INDEX - old:%d, new:%d, final:%d" % (old_index,
+                #                                            new_index,
+                #                                            index)
+
+                menu_win.addstr(old_index,
+                                0,
+                                strings_results[old_index][0],
+                                curses.A_NORMAL)
+                menu_win.addstr(index,
+                                0,
+                                strings_results[index][0],
+                                curses.A_STANDOUT)
+                menu_win.refresh()
+
     def new_native_window(self,
                           height=None,
                           width=None, # window size
@@ -680,11 +650,6 @@ class GmWindowManager(object):
             window.refresh()
 
 
-    def clear(self):
-        '''Clears the screen.'''
-
-        self.__stdscr.clear()
-
 
     def get_one_character(self,
                           window=None # Window (for Curses)
@@ -729,6 +694,42 @@ class GmWindowManager(object):
         self.__stdscr.addstr(self.__y, 0, string, mode)
         self.__y = 0 if self.__y == curses.LINES else self.__y + 1
         self.__stdscr.refresh()
+
+    #
+    # Private Methods
+    #
+
+    def __centered_boxed_window(self,
+                                height, # height of INSIDE window
+                                width, # width of INSIDE window
+                                title,
+                                mode=curses.A_NORMAL
+                               ):
+        '''
+        Creates a temporary window, on top of the current one, that is
+        centered and has a box around it.
+        '''
+
+        # x and y of text box (not border)
+        begin_x = (curses.COLS / 2) - (width/2)
+        begin_y = (curses.LINES / 2) - (height/2)
+
+        #print 'c h:%d, w:%d, y:%d, x:%d' % (
+        #    height+2, width+2, begin_y-1, begin_x-1)
+
+        # TODO: should use window manager new_native_window
+        border_win = curses.newwin(height+2, width+2, begin_y-1, begin_x-1)
+        border_win.border()
+
+        if title is not None:
+            title_start = ((width + 2) - (len(title))) / 2
+            border_win.addstr(0, title_start, title)
+        border_win.refresh()
+
+        menu_win = curses.newwin(height, width, begin_y, begin_x)
+        menu_win.bkgd(' ', mode)
+
+        return border_win, menu_win
 
 
 class GurpsRuleset(object):
@@ -788,9 +789,10 @@ class ScreenHandler(object):
     '''
 
     def __init__(self, window_manager):
+        print 'ScreenHandler.__init__'
         self._window_manager = window_manager
-        self._display = self._window_manager.new_native_window()
         self._choices = { }
+        print 'ScreenHandler.__init__ (done)'
 
 
     def doit(self):
@@ -801,7 +803,7 @@ class ScreenHandler(object):
 
         keep_going = True
         while keep_going:
-            string = self._display.get_one_character()
+            string = self._window_manager.get_one_character()
             if string in self._choices:
                 keep_going = self._choices[string]['func']()
 
@@ -818,6 +820,7 @@ class FightHandler(ScreenHandler):
                  monster_list_name
                 ):
         super(FightHandler, self).__init__(window_manager)
+        self._window = FightGmWindow(self._window_manager)
 
         self._choices = {
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
@@ -909,7 +912,7 @@ class FightHandler(ScreenHandler):
                 GurpsRuleset.new_fight(fighter)
 
         self.__fight['saved'] = False
-        self._display.start_fight()
+        self._window.start_fight()
 
     def doit(self):
         super(FightHandler, self).doit()
@@ -919,7 +922,7 @@ class FightHandler(ScreenHandler):
             del(self.__world['monsters'][self.__fight['monsters']])
 
     def __action(self):
-        action = self._display.menu('Action', self.__action_menu)
+        action = self._window_manager.menu('Action', self.__action_menu)
         if action is not None:
             current_name, current_fighter = self.__current_fighter()
             current_fighter['timers'].append({'rounds': 1,
@@ -939,7 +942,7 @@ class FightHandler(ScreenHandler):
         opponent_name, opponent = self.__opponent(current_fighter)
         if opponent is not None:
             opponent['alive'] = False
-            self._display.show_fighters(current_name, current_fighter,
+            self._window.show_fighters(current_name, current_fighter,
                                         opponent_name, opponent,
                                         next_PC)
         return True # Keep going
@@ -953,10 +956,10 @@ class FightHandler(ScreenHandler):
             title = 'Change FP By...'
             height = 1
             width = len(title)
-            adj_string = self._display.input_box(height, width, title)
+            adj_string = self._window_manager.input_box(height, width, title)
             adj = int(adj_string)
             opponent['current']['fp'] += adj # NOTE: belongs in Ruleset
-            self._display.show_fighters(current_name, current_fighter,
+            self._window.show_fighters(current_name, current_fighter,
                                         opponent_name, opponent,
                                         next_PC)
         return True # Keep going
@@ -970,7 +973,7 @@ class FightHandler(ScreenHandler):
             title = 'Change HP By...'
             height = 1
             width = len(title)
-            adj_string = self._display.input_box(height, width, title)
+            adj_string = self._window_manager.input_box(height, width, title)
             adj = int(adj_string)
 
             # NOTE: check for death belongs in Ruleset
@@ -988,25 +991,25 @@ class FightHandler(ScreenHandler):
                 opponent['shock'] = shock_amount
 
             opponent['current']['hp'] += adj # NOTE: belongs in Ruleset
-            self._display.show_fighters(current_name, current_fighter,
+            self._window.show_fighters(current_name, current_fighter,
                                         opponent_name, opponent,
                                         next_PC)
         return True # Keep going
 
 
     def _draw_screen(self):
-        self._display.clear()
+        self._window.clear()
         current_name, current_fighter = self.__current_fighter()
         next_PC = self.__next_PC()
         opponent_name, opponent = self.__opponent(current_fighter)
-        self._display.round_ribbon(self.__fight['round'],
+        self._window.round_ribbon(self.__fight['round'],
                                    self.__fight['saved'],
                                    current_fighter, # up now
                                    None) #self.xxx) # next PC
-        self._display.show_fighters(current_name, current_fighter,
+        self._window.show_fighters(current_name, current_fighter,
                                     opponent_name, opponent,
                                     next_PC)
-        self._display.command_ribbon(self._choices)
+        self._window.command_ribbon(self._choices)
 
 
     def __fighter(self,
@@ -1056,7 +1059,7 @@ class FightHandler(ScreenHandler):
 
         # get next fighter
         self.__modify_index(1)
-        self._display.round_ribbon(self.__fight['round'],
+        self._window.round_ribbon(self.__fight['round'],
                                    self.__fight['saved'],
                                    None, # current fighter
                                    None) # next PC
@@ -1065,7 +1068,7 @@ class FightHandler(ScreenHandler):
             timer['rounds'] -= 1
         next_PC = self.__next_PC()
         opponent_name, opponent = self.__opponent(current_fighter)
-        self._display.show_fighters(current_name, current_fighter,
+        self._window.show_fighters(current_name, current_fighter,
                                     opponent_name, opponent,
                                     next_PC)
         return True # Keep going
@@ -1108,7 +1111,7 @@ class FightHandler(ScreenHandler):
             if fighter[0] != current_group:
                 opponent_group = fighter[0]
                 opponent_menu.append((fighter[1], fighter[1]))
-        opponent_name = self._display.menu('Opponent', opponent_menu)
+        opponent_name = self._window_manager.menu('Opponent', opponent_menu)
 
         if opponent_name is not None:
             current_fighter['opponent'] = [opponent_group, opponent_name]
@@ -1118,12 +1121,12 @@ class FightHandler(ScreenHandler):
         # Ask to have them fight each other
         if opponent is not None and opponent['opponent'] is None:
             back_menu = [('Yes', True), ('No', False)]
-            answer = self._display.menu('Make Opponents Go Both Ways',
+            answer = self._window_manager.menu('Make Opponents Go Both Ways',
                                         back_menu)
             if answer == True:
                 opponent['opponent'] = [current_group, current_name]
 
-        self._display.show_fighters(current_name, current_fighter,
+        self._window.show_fighters(current_name, current_fighter,
                                     opponent_name, opponent,
                                     next_PC)
         return True # Keep going
@@ -1134,26 +1137,26 @@ class FightHandler(ScreenHandler):
             return True # Not going backwards from the origin
 
         self.__modify_index(-1)
-        self._display.round_ribbon(self.__fight['round'],
+        self._window.round_ribbon(self.__fight['round'],
                                    self.__fight['saved'],
                                    None, # current fighter
                                    None) # next PC
         current_name, current_fighter = self.__current_fighter()
         next_PC = self.__next_PC()
         opponent_name, opponent = self.__opponent(current_fighter)
-        self._display.show_fighters(current_name, current_fighter,
+        self._window.show_fighters(current_name, current_fighter,
                                     opponent_name, opponent,
                                     next_PC)
         return True # Keep going
 
 
     def __quit(self):
-        self._display.stop_fight()
+        self._window.close()
         return False # Leave the fight
 
     def __save(self):
         self.__fight['saved'] = True
-        self._display.round_ribbon(self.__fight['round'],
+        self._window.round_ribbon(self.__fight['round'],
                                    self.__fight['saved'],
                                    None, # up now
                                    None) #self.xxx) # next PC
@@ -1168,7 +1171,7 @@ class FightHandler(ScreenHandler):
         title = 'Rounds To Wait...'
         height = 1
         width = len(title)
-        adj_string = self._display.input_box(height, width, title)
+        adj_string = self._window_manager.input_box(height, width, title)
         timer['rounds'] = int(adj_string)
         if timer['rounds'] < 1:
             return True # Keep fighting (even without installing the timer)
@@ -1176,10 +1179,10 @@ class FightHandler(ScreenHandler):
         title = 'What happens in %d rounds?' % timer['rounds']
         height = 1
         width = curses.COLS - 4
-        timer['string'] = self._display.input_box(
+        timer['string'] = self._window_manager.input_box(
                 height,
-                self._display.fighter_win_width - 
-                        self._display.len_timer_leader,
+                self._window.fighter_win_width - 
+                        self._window.len_timer_leader,
                 title)
 
         if timer['string'] is not None and len(timer['string']) != 0:
@@ -1191,6 +1194,7 @@ class FightHandler(ScreenHandler):
 
 class MainHandler(ScreenHandler):
     def __init__(self, window_manager, world):
+        print 'MainHandler.__init__'
         super(MainHandler, self).__init__(window_manager)
         self.__world = world
         self._choices = {
@@ -1198,11 +1202,13 @@ class MainHandler(ScreenHandler):
             ord('H'): {'name': 'HEAL',  'func': self.__fully_heal},
             ord('q'): {'name': 'quit',  'func': self.__quit}
         }
+        print 'MainHandler.__init__ (done)'
+        self._window = TopGmWindow(self._window_manager)
 
 
     def _draw_screen(self):
-        self._display.clear()
-        self._display.command_ribbon(self._choices)
+        self._window.clear()
+        self._window.command_ribbon(self._choices)
 
 
     def __fully_heal(self):
@@ -1215,7 +1221,7 @@ class MainHandler(ScreenHandler):
         fight_name_menu = [(name, name)
                            for name in self.__world['monsters'].keys()]
         # PP.pprint(fight_name_menu)
-        monster_list_name = self._display.menu('Fights', fight_name_menu)
+        monster_list_name = self._window_manager.menu('Fights', fight_name_menu)
         if monster_list_name is None:
             return True
         # print "MENU RESULT=%s" % monster_list_name  # For debugging
@@ -1227,7 +1233,7 @@ class MainHandler(ScreenHandler):
         # NOTE: this makes the displays recursive (though, the implementation
         # only makes the code recursive but the actual screens will just get
         # reused).
-        fight = FightHandler(self._display,
+        fight = FightHandler(self._window_manager,
                              self.__world,
                              monster_list_name)
         fight.doit()
@@ -1237,6 +1243,9 @@ class MainHandler(ScreenHandler):
 
 
     def __quit(self):
+        self._window.close()
+        del self._window
+        self._window = None
         return False # Leave
 
 
@@ -1262,23 +1271,28 @@ if __name__ == '__main__':
         parser.print_help()
         sys.exit(2)
 
+    print 'window manager'
     with GmWindowManager() as window_manager:
         PP = pprint.PrettyPrinter(indent=3, width=150)
 
+        print 'json'
         with GmJson(ARGS.filename) as world:
             # Error checking for JSON
-            # TODO: error isn't a method of window_manager
-            #if 'PCs' not in world:
-            #    window_manager.error(['No "PCs" in %s' % ARGS.filename])
+            if 'PCs' not in world:
+                window_manager.error(['No "PCs" in %s' % ARGS.filename])
 
             # Enter into the mainloop
+            print 'main handler'
             main_handler = MainHandler(window_manager, world)
 
             if world['current-fight']['saved']:
+                print 'fight handler (saved)'
                 fight_handler = FightHandler(window_manager,
                                              world,
                                              None)
+                print 'fight_handler.doit()'
                 fight_handler.doit()
+            print 'main_handler.doit()'
             main_handler.doit()
 
 
