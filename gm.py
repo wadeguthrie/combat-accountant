@@ -304,27 +304,28 @@ class FightGmWindow(GmWindow):
         if saved:
             string = "SAVED"
             length = len(string)
-            # TODO: curses.COLS, and curses.LINES needs to be changed
+            lines, cols = self._window.getmaxyx()
             self._window.addstr(0, # y
-                                curses.COLS - (length + 1), # x
+                                cols - (length + 1), # x
                                 string,
                                 curses.A_BOLD)
         self._window.refresh()
 
 
     def start_fight(self):
-        height = (curses.LINES          # The whole screen height, except...
+        lines, cols = self._window.getmaxyx()
+        height = (lines                 # The whole window height, except...
             - (self.__FIGHTER_LINE+1)   # ...a block at the top, and...
             - 4)                        # ...a space for the command ribbon.
         
         self.fighter_win_width = (
-            curses.COLS                 # The screen width for...
+            cols                        # The window width for...
             - (self.__OPPONENT_COL+4)   # ...the opponent...
             - 1)                        # ...minus a little margin
 
         top_line = self.__FIGHTER_LINE+1 # Start after the main fighter info
 
-        # TODO: get from window manager
+        # TODO: get from self._window_manager.new_native_window(...)
         self.__character_window = curses.newwin(height,
                                                 self.fighter_win_width,
                                                 top_line,
@@ -532,9 +533,6 @@ class GmWindowManager(object):
         return string
     
 
-    # TODO: this, input_box, and others go directly to Curses to create
-    # and delete windows but, really, they should go to the window manager.
-
     def menu(self,
              title,
              strings_results # array of tuples (string, return value)
@@ -736,7 +734,6 @@ class GmWindowManager(object):
         #print 'c h:%d, w:%d, y:%d, x:%d' % (
         #    height+2, width+2, begin_y-1, begin_x-1)
 
-        # TODO: should use window manager new_native_window
         border_win = curses.newwin(height+2, width+2, begin_y-1, begin_x-1)
         border_win.border()
 
@@ -757,7 +754,7 @@ class GurpsRuleset(object):
     stuff.
     '''
 
-    # TODO: template for fighters
+    # TODO: template for new characters
 
     @staticmethod
     def new_fight(fighter):

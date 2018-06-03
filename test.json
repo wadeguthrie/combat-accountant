@@ -82,6 +82,89 @@
             ]
         }
     }, 
+    "Templates": {
+        "Wade": {
+            "shock": null, 
+            "last_negative_hp": 0, 
+            "alive": true, 
+            "current": {
+                "fp": 10, 
+                "iq": 10, 
+                "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 6
+            }, 
+            "permanent": {
+                "fp": 10, 
+                "iq": 10, 
+                "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 6
+            }, 
+            "timers": [], 
+            "check_for_death": false, 
+            "opponent": null
+        }, 
+        "Bob": {
+            "shock": null, 
+            "last_negative_hp": 0, 
+            "alive": true, 
+            "current": {
+                "fp": 10, 
+                "iq": 10, 
+                "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 3
+            }, 
+            "permanent": {
+                "fp": 10, 
+                "iq": 10, 
+                "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 3
+            }, 
+            "timers": [], 
+            "check_for_death": false, 
+            "opponent": null
+        }, 
+        "Tom": {
+            "shock": null, 
+            "last_negative_hp": 0, 
+            "alive": true, 
+            "current": {
+                "fp": 10, 
+                "iq": 10, 
+                "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 5
+            }, 
+            "permanent": {
+                "fp": 10, 
+                "iq": 10, 
+                "hp": 10, 
+                "ht": 10, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 5
+            }, 
+            "timers": [], 
+            "check_for_death": false, 
+            "opponent": [
+                "horsemen", 
+                "Death"
+            ]
+        }
+    }, 
     "dead-monsters": {}, 
     "monsters": {
         "horsemen": {
