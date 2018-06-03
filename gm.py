@@ -6,13 +6,9 @@ import curses
 import json
 import pprint
 import random
-# import requests # Easy to use HTTP, requires Python 3
 import sys
 
 # TODO:
-#   - add 'action' to fight menu.  It has a rule-specific menu for the
-#     different things someone can do during a fight.  It should add a timer
-#     describing the action and the restrictions on defense actions.
 #   - need FightDisplay that, at the very least, can be refreshed and it'll
 #     refresh the notes displays.  It's something that can be handed to a
 #     menu so that, when the menu is removed, it can be refreshed as a whole.
@@ -98,67 +94,25 @@ class GmJson(object):
             ignore_dicts=True
         )
 
-
-class GmDisplay(object):
-    '''
-    GmDisplay addresses the graphical part of the user interface for combat
-    accountant.  Here, this is provided with the Curses package.
-    '''
-
-    ESCAPE = 27 # ASCII value for the escape character
-
-    # Foreground / background colors
-    (RED_BLACK, RED_WHITE) = range(1, 3) # red text over black
-
-    # NOTE: remember to call win.refresh()
-    # win.addstr(y, x, "String", attrib)
-    #   attrib can be curses.color_pair(1) or curses.A_REVERSE, ...
-    #   color_pair is setup using: curses.init_pair(1, # should be a symbol
-    #                                               curses.COLOR_RED, # fg
-    #                                               curses.COLOR_WHITE) # bg
-    #   only legal colors: 0:black, 1:red, 2:green, 3:yellow, 4:blue,
-    #                      5:magenta, 6:cyan, and 7:white
-    # 
-
-
-    def __init__(self):
-        self.__stdscr = None
-        self.__y = 0 # For debug printouts
-        self.__NEXT_LINE = 2
-        self.__FIGHTER_LINE = 4
-        self.__FIGHTER_COL = 0
-        self.__OPPONENT_COL = 0
-        self.__character_window = None
-        self.__opponent_window = None
-        self.fighter_win_width = 0
-        self.__round_count_string = '%d Rnds: '
-        # assume rounds takes as much space as '%d' 
-        self.len_timer_leader = len(self.__round_count_string)
-
+class GmWindow(object):
+    def __init__(self,
+                 window_manager, # A GmWindowManager object
+                 # Using curses screen addressing w/0,0 in upper left corner
+                 height,
+                 width,
+                 top_line,
+                 left_column):
+        self._window_manager = window_manager
+        # Don't need to save the window location and size because:
+        #   window.getbegyx()
+        #   window.getmaxyx()
+        # both return a (y, x) tuple to solve this
+        self._window = self.__window_manager.new_native_window(height,
+                                                               width,
+                                                               top_line,
+                                                               left_column)
 
     def __enter__(self):
-        try:
-            self.__stdscr = curses.initscr()
-            curses.start_color()
-            curses.noecho()
-            curses.cbreak() # respond instantly to keystrokes
-            self.__stdscr.keypad(1) # special characters converted by curses
-                                    # (e.g., curses.KEY_LEFT)
-
-            curses.init_pair(GmDisplay.RED_BLACK,
-                             curses.COLOR_RED, # fg
-                             curses.COLOR_BLACK) # bg
-            curses.init_pair(GmDisplay.RED_WHITE,
-                             curses.COLOR_RED, # fg
-                             curses.COLOR_WHITE) # bg
-
-            self.__stdscr.clear()
-            self.__stdscr.refresh()
-
-            self.__FIGHTER_COL = 1
-            self.__OPPONENT_COL = (curses.COLS / 2)
-        except:
-            curses.endwin()
         return self
 
 
@@ -172,119 +126,23 @@ class GmDisplay(object):
             print 'EXCEPTION val: %s' % exception_value
             print 'Traceback: %r' % exception_traceback
 
-        self.__stdscr.keypad(0)
-        curses.nocbreak()
-        curses.echo()
-        curses.endwin()
-        self.__stdscr = None
+        self._window_manager.pop_window(self._window)
+        print 'Is self._window already deleted' # TODO: remove
+        del self._window                   # kill ourselves
+        print 'I guess not' # TODO: remove
+        self._window_manager.refresh_all() # refresh everything else
         return True
 
-    #
-    # Public Methods
-    #
 
-
-    def command_ribbon(
-            self,
-            choices # hash: ord('f'): {'name': 'xxx', 'func': self.func}
-           ):
-        '''
-        Draws a list of commands across the bottom of the screen
-        '''
-
-        left = 0
-        line = curses.LINES - 1
-
-        self.__stdscr.addstr(line,
-                             left,
-                             '|',
-                             curses.A_NORMAL)
-        left += 2 # adds a space
-
-        for choice, body in sorted(choices.iteritems(), reverse=True):
-            if choice == ord(' '):
-                choice_string = '" "'
-            else:
-                choice_string = '%c' % chr(choice)
-
-            length = len(choice_string) + len(body['name']) + 4
-            if (left + length) >= (curses.COLS - 1):
-                left = 0
-                line -= 1
-                self.__stdscr.addstr(line,
-                                     left,
-                                     '|',
-                                     curses.A_NORMAL)
-                left += 2 # adds a space
-
-            self.__stdscr.addstr(line,
-                                 left,
-                                 choice_string,
-                                 curses.A_REVERSE)
-            left += len(choice_string) + 1 # add a space after the choice
-
-            self.__stdscr.addstr(line,
-                                 left,
-                                 body['name'],
-                                 curses.A_BOLD)
-
-            left += len(body['name']) + 1 # add a space after the choice
-
-            self.__stdscr.addstr(line,
-                                 left,
-                                 '|',
-                                 curses.A_NORMAL)
-            left += 2 # adds a space
-
-        self.__stdscr.refresh()
-
-
-    def clear(self):
-        '''Clears the screen.'''
-
-        self.__stdscr.clear()
-
-
-    def get_one_character(self,
-                          window=None # Window (for Curses)
-                         ):
-        '''Reads one character from the keyboard.'''
-
-        if window is None:
-            window = self.__stdscr
-        c = window.getch()
-        # 'c' will be something like ord('p') or curses.KEY_HOME
-        return c
-
-
-    def get_string(self, window=None):
-        '''
-        Gets a complete string from the keyboard.  For Curses, you have to 
-        turn off raw mode to get the string then turn it back on when you're
-        done.
-        '''
-
-        # TODO(eventually): this be a mini-context manager that should get the
-        # current state of cbreak and echo and set them on entry and then
-        # reinstate them on exit.
-
-        if window is None:
-            window = self.__stdscr
-        curses.nocbreak()
-        curses.echo()
-        string = window.getstr()
-        curses.cbreak()
-        curses.noecho()
-        return string
-
+    # TODO: whould refresh parent window on exit
     def error(self,
               strings, # array of single-line strings
               title=" ERROR "
              ):
         '''Provides an error to the screen.'''
 
-        #mode = curses.A_NORMAL # curses.color_pair(GmDisplay.RED_WHITE)
-        mode = curses.color_pair(GmDisplay.RED_WHITE)
+        #mode = curses.A_NORMAL # curses.color_pair(GmWindowManager.RED_WHITE)
+        mode = curses.color_pair(GmWindowManager.RED_WHITE)
         width = max(len(string) for string in strings)
         if width < len(title):
             width = len(title)
@@ -303,8 +161,8 @@ class GmDisplay(object):
 
         del border_win
         del error_win
-        self.__stdscr.touchwin() # NOTE: assumes this menu is on top of stdscr
-        self.__stdscr.refresh()
+        self._window.touchwin()
+        self._window.refresh()
         return string
 
     def input_box(self,
@@ -320,10 +178,13 @@ class GmDisplay(object):
 
         del border_win
         del menu_win
-        self.__stdscr.touchwin() # NOTE: assumes this menu is on top of stdscr
-        self.__stdscr.refresh()
+        self._window.touchwin()
+        self._window.refresh()
         return string
     
+
+    # TODO: this, input_box, and others go directly to Curses to create
+    # and delete windows but, really, they should go to the window manager.
 
     def menu(self,
              title,
@@ -367,14 +228,12 @@ class GmDisplay(object):
             elif user_input == ord('\n'):
                 del border_win
                 del menu_win
-                # NOTE: assumes this menu is on top of stdscr
-                self.__stdscr.touchwin()
-                self.__stdscr.refresh()
+                self._window.touchwin()
+                self._window.refresh()
                 return strings_results[index][1]
-            elif user_input == GmDisplay.ESCAPE:
-                # NOTE: assumes this menu is on top of stdscr
-                self.__stdscr.touchwin()
-                self.__stdscr.refresh()
+            elif user_input == GmWindowManager.ESCAPE:
+                self._window.touchwin()
+                self._window.refresh()
                 return None
             else:
                 # Look for a match and return the selection
@@ -383,9 +242,8 @@ class GmDisplay(object):
                     if user_input == ord(entry[0][0]): # 1st char of the string
                         del border_win
                         del menu_win
-                        # NOTE: assumes this menu is on top of stdscr
-                        self.__stdscr.touchwin()
-                        self.__stdscr.refresh()
+                        self._window.touchwin()
+                        self._window.refresh()
                         return strings_results[index][1]
 
             if new_index != index:
@@ -412,120 +270,12 @@ class GmDisplay(object):
                 menu_win.refresh()
 
 
-    def printit(self,
-                string  # String to print
-               ):
-        '''
-        Really just for debug.  Prints strings on the screen.
-        '''
-        mode = curses.A_STANDOUT if (self.__y % 3 == 0) else curses.A_NORMAL
-        self.__stdscr.addstr(self.__y, 0, string, mode)
-        self.__y = 0 if self.__y == curses.LINES else self.__y + 1
-        self.__stdscr.refresh()
-
-
-    def round_ribbon(self,
-                     round_no,
-                     saved,
-                     current_fighter, # use in future
-                     next_fighter # use in future
-                    ):
-        '''Prints the fight round information at the top of the screen.'''
-
-        self.__stdscr.move(0, 0)
-        self.__stdscr.clrtoeol()
-
-        round_string = 'Round %d' % round_no
-        self.__stdscr.addstr(0, # y
-                             0, # x
-                             round_string,
-                             curses.A_NORMAL)
-        if saved:
-            string = "SAVED"
-            length = len(string)
-            self.__stdscr.addstr(0, # y
-                                 curses.COLS - (length + 1), # x
-                                 string,
-                                 curses.A_BOLD)
-        self.__stdscr.refresh()
-
-
-    def show_fighters(self,
-                      current_name,
-                      current_fighter,
-                      opponent_name,
-                      opponent,
-                      next_name # name of next PC
-                     ):
-        '''
-        Displays the current state of the current fighter and his opponent,
-        if he has one.
-        '''
-
-        if next_name is not None:
-            self.__stdscr.move(self.__NEXT_LINE, self.__FIGHTER_COL)
-            self.__stdscr.clrtoeol()
-            self.__stdscr.addstr(self.__NEXT_LINE,
-                                 self.__FIGHTER_COL,
-                                 '(Next: %s)' % next_name)
-
-
-        self.__stdscr.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
-        self.__stdscr.clrtoeol()
-
-        if self.__show_fighter(current_name,
-                               current_fighter,
-                               self.__FIGHTER_COL):
-            self.__show_fighter_notes(self.__character_window,
-                                      current_fighter)
-
-        if opponent is None:
-            self.__opponent_window.clear()
-            self.__opponent_window.refresh()
-        else:
-            self.__stdscr.addstr(self.__FIGHTER_LINE,
-                                 self.__OPPONENT_COL, 'vs.')
-            if self.__show_fighter(opponent_name,
-                                   opponent,
-                                   self.__OPPONENT_COL+4):
-                self.__show_fighter_notes(self.__opponent_window, opponent)
-
-        self.__stdscr.refresh()
-
-    def start_fight(self):
-        height = (curses.LINES          # The whole screen height, except...
-            - (self.__FIGHTER_LINE+1)   # ...a block at the top, and...
-            - 4)                        # ...a space for the command ribbon.
-        
-        self.fighter_win_width = (
-            curses.COLS                 # The screen width for...
-            - (self.__OPPONENT_COL+4)   # ...the opponent...
-            - 1)                        # ...minus a little margin
-
-        top_line = self.__FIGHTER_LINE+1 # Start after the main fighter info
-
-        self.__character_window = curses.newwin(height,
-                                                self.fighter_win_width,
-                                                top_line,
-                                                self.__FIGHTER_COL)
-        self.__opponent_window  = curses.newwin(height,
-                                                self.fighter_win_width,
-                                                top_line,
-                                                self.__OPPONENT_COL+4)
-
-    def stop_fight(self):
-        if self.__character_window is not None:
-            del self.__character_window
-            self.__character_window = None
-
-        if self.__opponent_window is not None:
-            del self.__opponent_window
-            self.__opponent_window = None
+    def refresh(self):
+        self._window.refresh()
 
     #
-    # Private Methods
+    # Private methods
     #
-
 
     def __centered_boxed_window(self,
                                 height, # height of INSIDE window
@@ -533,6 +283,10 @@ class GmDisplay(object):
                                 title,
                                 mode=curses.A_NORMAL
                                ):
+        '''
+        Creates a temporary window, on top of the current one, that is
+        centered and has a box around it.
+        '''
 
         # x and y of text box (not border)
         begin_x = (curses.COLS / 2) - (width/2)
@@ -554,6 +308,179 @@ class GmDisplay(object):
 
         return border_win, menu_win
 
+
+class TopGmWindow(GmWindow):
+    def __init__(self, window_manager):
+        super(TopGmWindow, self).__init__(window_manager,
+                                          curses.LINES,
+                                          curses.COLS,
+                                          0,
+                                          0)
+
+    def command_ribbon(
+            self,
+            choices # hash: ord('f'): {'name': 'xxx', 'func': self.func}
+           ):
+        '''
+        Draws a list of commands across the bottom of the screen
+        '''
+
+        left = 0
+        lines, cols = self._window.getmaxyx()
+        line = lines - 1
+
+        self._window.addstr(line, left, '|', curses.A_NORMAL)
+        left += 2 # adds a space
+
+        for choice, body in sorted(choices.iteritems(), reverse=True):
+            if choice == ord(' '):
+                choice_string = '" "'
+            else:
+                choice_string = '%c' % chr(choice)
+
+            length = len(choice_string) + len(body['name']) + 4
+            if (left + length) >= (cols - 1):
+                left = 0
+                line -= 1
+                self._window.addstr(line, left, '|', curses.A_NORMAL)
+                left += 2 # adds a space
+
+            self._window.addstr(line, left, choice_string, curses.A_REVERSE)
+            left += len(choice_string) + 1 # add a space after the choice
+
+            self._window.addstr(line, left, body['name'], curses.A_BOLD)
+
+            left += len(body['name']) + 1 # add a space after the choice
+
+            self._window.addstr(line, left, '|', curses.A_NORMAL)
+            left += 2 # adds a space
+
+        self.refresh()
+
+
+class FightGmWindow(GmWindow):
+    def __init__(self, window_manager):
+        super(FightGmWindow, self).__init__(window_manager,
+                                           curses.LINES,
+                                           curses.COLS,
+                                           0,
+                                           0)
+
+        self.__FIGHTER_COL = 1
+        self.__FIGHTER_LINE = 4
+        self.__NEXT_LINE = 2
+        self.__OPPONENT_COL = (curses.COLS / 2)
+        self.__character_window = None
+        self.__opponent_window = None
+        self.fighter_win_width = 0
+        self.__round_count_string = '%d Rnds: '
+        # assume rounds takes as much space as '%d' 
+        self.len_timer_leader = len(self.__round_count_string)
+
+    def show_fighters(self,
+                      current_name,
+                      current_fighter,
+                      opponent_name,
+                      opponent,
+                      next_name # name of next PC
+                     ):
+        '''
+        Displays the current state of the current fighter and his opponent,
+        if he has one.
+        '''
+
+        if next_name is not None:
+            self._window.move(self.__NEXT_LINE, self.__FIGHTER_COL)
+            self._window.clrtoeol()
+            self._window.addstr(self.__NEXT_LINE,
+                                self.__FIGHTER_COL,
+                                '(Next: %s)' % next_name)
+
+
+        self._window.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
+        self._window.clrtoeol()
+
+        if self.__show_fighter(current_name,
+                               current_fighter,
+                               self.__FIGHTER_COL):
+            self.__show_fighter_notes(self.__character_window,
+                                      current_fighter)
+
+        if opponent is None:
+            self.__opponent_window.clear()
+            self.__opponent_window.refresh()
+        else:
+            self._window.addstr(self.__FIGHTER_LINE,
+                                self.__OPPONENT_COL, 'vs.')
+            if self.__show_fighter(opponent_name,
+                                   opponent,
+                                   self.__OPPONENT_COL+4):
+                self.__show_fighter_notes(self.__opponent_window, opponent)
+
+        self.refresh()
+
+
+    def round_ribbon(self,
+                     round_no,
+                     saved,
+                     current_fighter, # use in future
+                     next_fighter # use in future
+                    ):
+        '''Prints the fight round information at the top of the screen.'''
+
+        self._window.move(0, 0)
+        self._window.clrtoeol()
+
+        round_string = 'Round %d' % round_no
+        self._window.addstr(0, # y
+                            0, # x
+                            round_string,
+                            curses.A_NORMAL)
+        if saved:
+            string = "SAVED"
+            length = len(string)
+            # TODO: curses.COLS, and curses.LINES needs to be changed
+            self._window.addstr(0, # y
+                                curses.COLS - (length + 1), # x
+                                string,
+                                curses.A_BOLD)
+        self._window.refresh()
+
+
+    def start_fight(self):
+        height = (curses.LINES          # The whole screen height, except...
+            - (self.__FIGHTER_LINE+1)   # ...a block at the top, and...
+            - 4)                        # ...a space for the command ribbon.
+        
+        self.fighter_win_width = (
+            curses.COLS                 # The screen width for...
+            - (self.__OPPONENT_COL+4)   # ...the opponent...
+            - 1)                        # ...minus a little margin
+
+        top_line = self.__FIGHTER_LINE+1 # Start after the main fighter info
+
+        # TODO: get from window manager
+        # TODO: refresh should refresh these windows
+        # TODO: menu should take a GmWindow as an option
+        self.__character_window = curses.newwin(height,
+                                                self.fighter_win_width,
+                                                top_line,
+                                                self.__FIGHTER_COL)
+        self.__opponent_window  = curses.newwin(height,
+                                                self.fighter_win_width,
+                                                top_line,
+                                                self.__OPPONENT_COL+4)
+
+    def stop_fight(self):
+        # TODO: part of __exit__?
+        if self.__character_window is not None:
+            del self.__character_window
+            self.__character_window = None
+
+        if self.__opponent_window is not None:
+            del self.__opponent_window
+            self.__opponent_window = None
+
     def __show_fighter(self,
                        fighter_name,  # String holding name of fighter
                        fighter,       # dict holding fighter information
@@ -568,16 +495,16 @@ class GmDisplay(object):
                 fighter['current']['fp'],
                 fighter['permanent']['fp'])
             if fighter['current']['fp'] <= 0 or fighter['current']['hp'] <= 0:
-                mode = curses.color_pair(GmDisplay.RED_BLACK)
+                mode = curses.color_pair(GmWindowManager.RED_BLACK)
             else:
                 mode = curses.A_NORMAL
 
         else:
             fighter_string = '(DEAD)'
-            mode = curses.color_pair(GmDisplay.RED_BLACK)
+            mode = curses.color_pair(GmWindowManager.RED_BLACK)
             is_alive = False
 
-        self.__stdscr.addstr(self.__FIGHTER_LINE, column, fighter_string, mode)
+        self._window.addstr(self.__FIGHTER_LINE, column, fighter_string, mode)
         return is_alive
 
 
@@ -633,6 +560,177 @@ class GmDisplay(object):
         window.refresh()
 
 
+class GmWindowManager(object):
+    '''
+    GmWindowManager addresses the graphical part of the user interface for
+    gm.py.  Here, this is provided with the Curses package.
+    '''
+
+    ESCAPE = 27 # ASCII value for the escape character
+
+    # Foreground / background colors
+    (RED_BLACK, RED_WHITE) = range(1, 3) # red text over black
+
+    # NOTE: remember to call win.refresh()
+    # win.addstr(y, x, "String", attrib)
+    #   attrib can be curses.color_pair(1) or curses.A_REVERSE, ...
+    #   color_pair is setup using: curses.init_pair(1, # should be a symbol
+    #                                               curses.COLOR_RED, # fg
+    #                                               curses.COLOR_WHITE) # bg
+    #   only legal colors: 0:black, 1:red, 2:green, 3:yellow, 4:blue,
+    #                      5:magenta, 6:cyan, and 7:white
+    # 
+
+
+    def __init__(self):
+        self.__stdscr = None
+        self.__y = 0 # For debug printouts
+        self.__window_stack = [] # Stack of GmWindow
+
+
+    def __enter__(self):
+        try:
+            self.__stdscr = curses.initscr()
+            curses.start_color()
+            curses.noecho()
+            curses.cbreak() # respond instantly to keystrokes
+            self.__stdscr.keypad(1) # special characters converted by curses
+                                    # (e.g., curses.KEY_LEFT)
+
+            curses.init_pair(GmWindowManager.RED_BLACK,
+                             curses.COLOR_RED, # fg
+                             curses.COLOR_BLACK) # bg
+            curses.init_pair(GmWindowManager.RED_WHITE,
+                             curses.COLOR_RED, # fg
+                             curses.COLOR_WHITE) # bg
+
+            self.__stdscr.clear()
+            self.__stdscr.refresh()
+        except:
+            curses.endwin()
+        return self
+
+
+    def __exit__ (self, exception_type, exception_value, exception_traceback):
+        if exception_type is IOError:
+            print 'IOError: %r' % exception_type
+            print 'EXCEPTION val: %s' % exception_value
+            print 'Traceback: %r' % exception_traceback
+        elif exception_type is not None:
+            print 'EXCEPTION type: %r' % exception_type
+            print 'EXCEPTION val: %s' % exception_value
+            print 'Traceback: %r' % exception_traceback
+
+        self.__stdscr.keypad(0)
+        curses.nocbreak()
+        curses.echo()
+        curses.endwin()
+        self.__stdscr = None
+        return True
+
+    #
+    # Public Methods
+    #
+
+    def new_native_window(self,
+                          height=None,
+                          width=None, # window size
+                          top_line=0,
+                          left_column=0 # window placement
+                         ):
+        '''
+        Returns native-typed window (a curses window, in this case).
+        '''
+
+        # Doing this because I can't use curses.LINES in the autoassignment
+        if height is None:
+            height=curses.LINES
+        if width is None:
+            width=curses.COLS
+
+        window = curses.newwin(height, width, top_line, left_column)
+        self.__window_stack.append(window)
+        return window
+
+    def pop_window(self, window):
+        top_window = self.__window_stack[-1]
+        if window is top_window:
+            del self.__window_stack[-1]
+        else:
+            print 'ERROR: trying to remove non-top window %r' % window
+            print 'Window stack looks like this:'
+            PP.pprint(self.__window_stack)
+
+
+    def refresh_all(self):
+        '''
+        Refreshes all of the windows, from back to front
+        '''
+        for window in self.__window_stack:
+            window.refresh()
+
+    def hard_refresh_all(self):
+        '''
+        Touches and refreshes all of the windows, from back to front
+        '''
+        for window in self.__window_stack:
+            window.touchwin()
+
+        for window in self.__window_stack:
+            window.refresh()
+
+
+    def clear(self):
+        '''Clears the screen.'''
+
+        self.__stdscr.clear()
+
+
+    def get_one_character(self,
+                          window=None # Window (for Curses)
+                         ):
+        '''Reads one character from the keyboard.'''
+
+        if window is None:
+            window = self.__stdscr
+        c = window.getch()
+        # 'c' will be something like ord('p') or curses.KEY_HOME
+        return c
+
+
+    def get_string(self, window=None):
+        '''
+        Gets a complete string from the keyboard.  For Curses, you have to 
+        turn off raw mode to get the string then turn it back on when you're
+        done.
+        '''
+
+        # TODO(eventually): this be a mini-context manager that should get the
+        # current state of cbreak and echo and set them on entry and then
+        # reinstate them on exit.
+
+        if window is None:
+            window = self.__stdscr
+        curses.nocbreak()
+        curses.echo()
+        string = window.getstr()
+        curses.cbreak()
+        curses.noecho()
+        return string
+
+
+    def printit(self,
+                string  # String to print
+               ):
+        '''
+        Really just for debug.  Prints strings on the screen.
+        '''
+        mode = curses.A_STANDOUT if (self.__y % 3 == 0) else curses.A_NORMAL
+        self.__stdscr.addstr(self.__y, 0, string, mode)
+        self.__y = 0 if self.__y == curses.LINES else self.__y + 1
+        self.__stdscr.refresh()
+
+
 class GurpsRuleset(object):
     '''
     This is a place for all of the ruleset (e.g., GURPS, AD&D) specific
@@ -684,14 +782,14 @@ class GurpsRuleset(object):
                 )
 
 
-
 class ScreenHandler(object):
     '''
     Base class for the "business logic" backing the user interface.
     '''
 
-    def __init__(self, display):
-        self._display = display
+    def __init__(self, window_manager):
+        self._window_manager = window_manager
+        self._display = self._window_manager.new_native_window()
         self._choices = { }
 
 
@@ -715,11 +813,11 @@ class ScreenHandler(object):
 
 class FightHandler(ScreenHandler):
     def __init__(self,
-                 display,
+                 window_manager,
                  world,
                  monster_list_name
                 ):
-        super(FightHandler, self).__init__(display)
+        super(FightHandler, self).__init__(window_manager)
 
         self._choices = {
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
@@ -1092,8 +1190,8 @@ class FightHandler(ScreenHandler):
 
 
 class MainHandler(ScreenHandler):
-    def __init__(self, display, world):
-        super(MainHandler, self).__init__(display)
+    def __init__(self, window_manager, world):
+        super(MainHandler, self).__init__(window_manager)
         self.__world = world
         self._choices = {
             ord('f'): {'name': 'fight', 'func': self.__new_fight},
@@ -1164,19 +1262,20 @@ if __name__ == '__main__':
         parser.print_help()
         sys.exit(2)
 
-    with GmDisplay() as display:
+    with GmWindowManager() as window_manager:
         PP = pprint.PrettyPrinter(indent=3, width=150)
 
         with GmJson(ARGS.filename) as world:
             # Error checking for JSON
-            if 'PCs' not in world:
-                display.error(['No "PCs" in %s' % ARGS.filename])
+            # TODO: error isn't a method of window_manager
+            #if 'PCs' not in world:
+            #    window_manager.error(['No "PCs" in %s' % ARGS.filename])
 
             # Enter into the mainloop
-            main_handler = MainHandler(display, world)
+            main_handler = MainHandler(window_manager, world)
 
             if world['current-fight']['saved']:
-                fight_handler = FightHandler(display,
+                fight_handler = FightHandler(window_manager,
                                              world,
                                              None)
                 fight_handler.doit()
