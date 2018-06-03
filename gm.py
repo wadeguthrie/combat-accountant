@@ -9,10 +9,6 @@ import random
 import sys
 
 # TODO:
-#   - need FightDisplay that, at the very least, can be refreshed and it'll
-#     refresh the notes displays.  It's something that can be handed to a
-#     menu so that, when the menu is removed, it can be refreshed as a whole.
-#     (parts of the GameDisplay should really go into a window manager).
 #   - notes
 #
 # TODO (eventually)
@@ -94,7 +90,11 @@ class GmJson(object):
             ignore_dicts=True
         )
 
+
 class GmWindow(object):
+    '''
+    Generic window for the GM tool.
+    '''
     def __init__(self,
                  window_manager, # A GmWindowManager object
                  # Using curses screen addressing w/0,0 in upper left corner
@@ -111,12 +111,13 @@ class GmWindow(object):
                                                               width,
                                                               top_line,
                                                               left_column)
+        self._window_manager.push_gm_window(self)
+
 
 
 
     def clear(self):
         '''Clears the screen.'''
-
         self._window.clear()
 
 
@@ -125,10 +126,8 @@ class GmWindow(object):
         Explicit destructor because Python is broken when it comes to
         destructors.
         '''
-        self._window_manager.pop_window(self._window)
-        print 'Is self._window already deleted' # TODO: remove
+        self._window_manager.pop_gm_window(self)
         del self._window                   # kill ourselves
-        print 'I guess not' # TODO: remove
         self._window_manager.refresh_all() # refresh everything else
         return True
 
@@ -141,7 +140,6 @@ class GmWindow(object):
         Draws a list of commands across the bottom of the screen
         '''
 
-        print 'command_ribbon'
         left = 0
         lines, cols = self._window.getmaxyx()
         line = lines - 1
@@ -173,11 +171,14 @@ class GmWindow(object):
             left += 2 # adds a space
 
         self.refresh()
-        print 'command_ribbon (done)'
 
 
     def refresh(self):
         self._window.refresh()
+
+
+    def touchwin(self):
+        self._window.touchwin()
 
     #
     # Private methods
@@ -223,6 +224,22 @@ class FightGmWindow(GmWindow):
             del self.__opponent_window
             self.__opponent_window = None
         super(FightGmWindow, self).close()
+
+
+    def refresh(self):
+        super(FightGmWindow, self).refresh()
+        if self.__character_window is not None:
+            self.__character_window.refresh()
+        if self.__opponent_window is not None:
+            self.__opponent_window.refresh()
+
+
+    def touchwin(self):
+        super(FightGmWindow, self).touchwin()
+        if self.__character_window is not None:
+            self.__character_window.touchwin()
+        if self.__opponent_window is not None:
+            self.__opponent_window.touchwin()
 
 
     def show_fighters(self,
@@ -308,8 +325,6 @@ class FightGmWindow(GmWindow):
         top_line = self.__FIGHTER_LINE+1 # Start after the main fighter info
 
         # TODO: get from window manager
-        # TODO: refresh should refresh these windows
-        # TODO: menu should take a GmWindow as an option
         self.__character_window = curses.newwin(height,
                                                 self.fighter_win_width,
                                                 top_line,
@@ -488,7 +503,7 @@ class GmWindowManager(object):
                                                              title,
                                                              mode)
         for line, string in enumerate(strings):
-            print "line %r string %r (len=%d)" % (line, string, len(string))
+            #print "line %r string %r (len=%d)" % (line, string, len(string))
             error_win.addstr(line, 0, string, mode)
         error_win.refresh()
 
@@ -619,10 +634,14 @@ class GmWindowManager(object):
             width=curses.COLS
 
         window = curses.newwin(height, width, top_line, left_column)
-        self.__window_stack.append(window)
         return window
 
-    def pop_window(self, window):
+
+    def push_gm_window(self, window):
+        self.__window_stack.append(window)
+
+
+    def pop_gm_window(self, window):
         top_window = self.__window_stack[-1]
         if window is top_window:
             del self.__window_stack[-1]
@@ -789,10 +808,8 @@ class ScreenHandler(object):
     '''
 
     def __init__(self, window_manager):
-        print 'ScreenHandler.__init__'
         self._window_manager = window_manager
         self._choices = { }
-        print 'ScreenHandler.__init__ (done)'
 
 
     def doit(self):
@@ -927,6 +944,12 @@ class FightHandler(ScreenHandler):
             current_name, current_fighter = self.__current_fighter()
             current_fighter['timers'].append({'rounds': 1,
                                               'string': action})
+
+            next_PC = self.__next_PC()
+            opponent_name, opponent = self.__opponent(current_fighter)
+            self._window.show_fighters(current_name, current_fighter,
+                                        opponent_name, opponent,
+                                        next_PC)
             return True # Keep going
 
     def __current_fighter(self):
@@ -1194,7 +1217,6 @@ class FightHandler(ScreenHandler):
 
 class MainHandler(ScreenHandler):
     def __init__(self, window_manager, world):
-        print 'MainHandler.__init__'
         super(MainHandler, self).__init__(window_manager)
         self.__world = world
         self._choices = {
@@ -1202,7 +1224,6 @@ class MainHandler(ScreenHandler):
             ord('H'): {'name': 'HEAL',  'func': self.__fully_heal},
             ord('q'): {'name': 'quit',  'func': self.__quit}
         }
-        print 'MainHandler.__init__ (done)'
         self._window = TopGmWindow(self._window_manager)
 
 
@@ -1271,28 +1292,22 @@ if __name__ == '__main__':
         parser.print_help()
         sys.exit(2)
 
-    print 'window manager'
     with GmWindowManager() as window_manager:
         PP = pprint.PrettyPrinter(indent=3, width=150)
 
-        print 'json'
         with GmJson(ARGS.filename) as world:
             # Error checking for JSON
             if 'PCs' not in world:
                 window_manager.error(['No "PCs" in %s' % ARGS.filename])
 
             # Enter into the mainloop
-            print 'main handler'
             main_handler = MainHandler(window_manager, world)
 
             if world['current-fight']['saved']:
-                print 'fight handler (saved)'
                 fight_handler = FightHandler(window_manager,
                                              world,
                                              None)
-                print 'fight_handler.doit()'
                 fight_handler.doit()
-            print 'main_handler.doit()'
             main_handler.doit()
 
 
