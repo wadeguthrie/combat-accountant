@@ -10,6 +10,7 @@ import sys
 
 # TODO:
 #   - notes
+#   - templates and stuff (see below)
 #
 # TODO (eventually)
 #   - TESTS, for the love of God
@@ -173,6 +174,9 @@ class GmWindow(object):
         self.refresh()
 
 
+    def getmaxyx(self):
+        return self._window.getmaxyx()
+
     def refresh(self):
         self._window.refresh()
 
@@ -193,6 +197,25 @@ class TopGmWindow(GmWindow):
                                           curses.COLS,
                                           0,
                                           0)
+
+
+class BuildFightGmWindow(GmWindow):
+    def __init__(self, window_manager):
+        super(BuildFightGmWindow, self).__init__(window_manager,
+                                                 curses.LINES,
+                                                 curses.COLS,
+                                                 0,
+                                                 0)
+
+    def _draw_screen(self):
+        self._window.clear()
+        self._window.command_ribbon(self._choices)
+
+    def __quit(self):
+        self._window.close()
+        del self._window
+        self._window = None
+        return False # Leave
 
 
 class FightGmWindow(GmWindow):
@@ -826,6 +849,98 @@ class ScreenHandler(object):
         pass
 
 
+class BuildFightHandler(ScreenHandler):
+    def __init__(self,
+                 window_manager,
+                 world,
+                 template_name
+                ):
+        super(BuildFightHandler, self).__init__(window_manager)
+        self._window = BuildFightGmWindow(self._window_manager)
+        self._choices = {
+            ord('a'): {'name': 'add monster', 'func': self.__add_monster},
+            ord('d'): {'name': 'delete monster', 'func': self.__delete_monster},
+            ord('q'): {'name': 'quit', 'func': self.__quit},
+            # TODO: need a quit but don't save option
+        }
+        self.__world = world
+
+        lines, cols = self._window.getmaxyx()
+        template_menu = [(template_name, template_name)
+                for template_name in self.__world["Templates"]]
+        self.__template_name = self._window_manager.menu('From Which Template',
+                                                         template_menu)
+        keep_asking = True
+        while keep_asking:
+            self.__monsters_name = self._window_manager.input_box(
+                                                            1,      # height
+                                                            cols-4, # width
+                                                            'New Fight Name')
+            if self.__monsters_name is None:
+                self._window_manager.error(['You have to name your fight'])
+                keep_asking = True
+            elif self.__monsters_name in self.__world['monsters']:
+                self._window_manager.error(
+                    ['Fight name "%s" alread exists' % self.__monsters_name])
+                keep_asking = True
+            else:
+                keep_asking = False
+
+        self.__monsters = {}
+        # TODO: may want to show what we've added thus far
+
+    def __add_monster(self):
+        # Based on which monster from the template
+        monster_menu = [(monster_name, monster_name)
+                for monster_name in world["Templates"][self.__template_name]]
+        monster_name = self._window_manager.menu('Monster', monster_menu)
+        if monster_name is None:
+            return True # Keep going
+
+        from_monster = world["Templates"][self.__template_name][monster_name]
+        to_monster = {'alive': True,
+                      'timers': [],
+                      'opponent': None,
+                      'permanent': {},
+                      'current': {}}
+
+        for key, value in from_monster.iteritems():
+            if key == 'permanent':
+                for ikey, ivalue in value.iteritems():
+                    to_monster['permanent'][ikey] = (
+                        self.__get_value_from_template(value, from_monster))
+                    to_monster['current'][ikey] = monster['permanent'][ikey]
+                else:
+                    to_monster[key] = self.__get_value_from_template(value,
+                                                                  from_monster)
+        self.__monsters[monster_name] = to_monster
+
+    def __delete_monster(self):
+        # TODO
+        pass
+
+    def __get_value_from_template(self,
+                                  template_value,
+                                  template
+                                 ):
+        if template_value['type'] == 'value':
+            return template_value['value']
+
+        # TODO(eventually):
+        #   {'type': 'ask-string', 'value': x}
+        #   {'type': 'ask-numeric', 'value': x}
+        #   {'type': 'ask-logical', 'value': x}
+        #   {'type': 'dice', 'value': 'ndm+x'}
+        #   {'type': 'derived', 'value': comlicated bunch of crap -- eventually}
+
+        return None
+
+    def __quit(self):
+        # TODO: need a way to exit without saving
+        self.__world['monsters'][self.__monsters_name] = self.__monsters
+        self._window.close()
+        return False # Stop building this fight
+
 
 class FightHandler(ScreenHandler):
     def __init__(self,
@@ -1217,16 +1332,41 @@ class MainHandler(ScreenHandler):
         super(MainHandler, self).__init__(window_manager)
         self.__world = world
         self._choices = {
-            ord('f'): {'name': 'fight', 'func': self.__new_fight},
-            ord('H'): {'name': 'HEAL',  'func': self.__fully_heal},
+            # TODO: template - (build a template of monsters)
+            ord('F'): {'name': 'Fight (build)', 'func': self.__build_fight},
+            ord('f'): {'name': 'fight (run)', 'func': self.__run_fight},
+            ord('H'): {'name': 'Heal',  'func': self.__fully_heal},
             ord('q'): {'name': 'quit',  'func': self.__quit}
         }
         self._window = TopGmWindow(self._window_manager)
 
-
     def _draw_screen(self):
         self._window.clear()
         self._window.command_ribbon(self._choices)
+
+
+    def __build_fight(self):
+        # Fight (build) - make a set of monsters from a template
+
+        template_name_menu = [(name, name)
+                           for name in self.__world['monsters'].keys()]
+        # PP.pprint(template_name_menu)
+        template_name = self._window_manager.menu('Templates',
+                                                  template_name_menu)
+        if template_name is None:
+            return True
+        # print "MENU RESULT=%s" % template_name  # For debugging
+
+        if (template_name not in self.__world['Templates']):
+            print "ERROR, template %s not found" % template_name
+
+        build_fight = BuildFightHandler(self._window_manager,
+                                        self.__world,
+                                        template_name)
+        build_fight.doit()
+        self._draw_screen() # Redraw current screen when done building fight.
+
+        return True # Keep going
 
 
     def __fully_heal(self):
@@ -1235,7 +1375,7 @@ class MainHandler(ScreenHandler):
         return True
 
 
-    def __new_fight(self):
+    def __run_fight(self):
         fight_name_menu = [(name, name)
                            for name in self.__world['monsters'].keys()]
         # PP.pprint(fight_name_menu)
@@ -1244,13 +1384,9 @@ class MainHandler(ScreenHandler):
             return True
         # print "MENU RESULT=%s" % monster_list_name  # For debugging
 
-        if (monster_list_name is None or
-                monster_list_name not in self.__world['monsters']):
+        if (monster_list_name not in self.__world['monsters']):
             print "ERROR, monster list %s not found" % monster_list_name
 
-        # NOTE: this makes the displays recursive (though, the implementation
-        # only makes the code recursive but the actual screens will just get
-        # reused).
         fight = FightHandler(self._window_manager,
                              self.__world,
                              monster_list_name)
@@ -1279,8 +1415,8 @@ if __name__ == '__main__':
     parser = MyArgumentParser()
     parser.add_argument('filename',
              help='Input JSON file containing characters and monsters')
-    #parser.add_argument('-v', '--verbose', help='verbose', action='store_true',
-    #                    default=False)
+    parser.add_argument('-v', '--verbose', help='verbose', action='store_true',
+                        default=False)
 
     # Parse the command-line parameters
     ARGS = parser.parse_args()
@@ -1289,22 +1425,50 @@ if __name__ == '__main__':
         parser.print_help()
         sys.exit(2)
 
+    if ARGS.verbose:
+        print 'A'
     with GmWindowManager() as window_manager:
+        if ARGS.verbose:
+            print 'B'
         PP = pprint.PrettyPrinter(indent=3, width=150)
+        if ARGS.verbose:
+            print 'C'
 
         with GmJson(ARGS.filename) as world:
+            if world is None:
+                window_manager.error(['JSON file "%s" did not parse right'
+                                        % ARGS.filename])
+                sys.exit(2)
+
+            if ARGS.verbose:
+                print 'D'
             # Error checking for JSON
             if 'PCs' not in world:
                 window_manager.error(['No "PCs" in %s' % ARGS.filename])
+                sys.exit(2)
+            if ARGS.verbose:
+                print 'E'
 
             # Enter into the mainloop
             main_handler = MainHandler(window_manager, world)
+            if ARGS.verbose:
+                print 'F'
 
             if world['current-fight']['saved']:
+                if ARGS.verbose:
+                    print 'G'
                 fight_handler = FightHandler(window_manager,
                                              world,
                                              None)
+                if ARGS.verbose:
+                    print 'H'
                 fight_handler.doit()
+                if ARGS.verbose:
+                    print 'I'
+            if ARGS.verbose:
+                print 'J'
             main_handler.doit()
+            if ARGS.verbose:
+                print 'K'
 
 

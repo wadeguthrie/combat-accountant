@@ -83,86 +83,59 @@
         }
     }, 
     "Templates": {
-        "Wade": {
-            "shock": null, 
-            "last_negative_hp": 0, 
-            "alive": true, 
-            "current": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
-                "st": 10, 
-                "dx": 10, 
-                "basic-speed": 6
+        "Arena Combat": {
+            "Template-Famine": {
+                "shock": {"type": "value", "value": null}, 
+                "permanent": {
+                    "fp": {"type": "value", "value": 10}, 
+                    "iq": {"type": "value", "value": 10}, 
+                    "hp": {"type": "value", "value": 10}, 
+                    "ht": {"type": "value", "value": 10}, 
+                    "st": {"type": "value", "value": 10}, 
+                    "dx": {"type": "value", "value": 10}, 
+                    "basic-speed": {"type": "value", "value": 1}
+                }, 
+                "check_for_death": {"type": "value", "value": false}
             }, 
-            "permanent": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
-                "st": 10, 
-                "dx": 10, 
-                "basic-speed": 6
+            "Template-Death": {
+                "shock": {"type": "value", "value": null}, 
+                "permanent": {
+                    "fp": {"type": "value", "value": 10}, 
+                    "iq": {"type": "value", "value": 10}, 
+                    "hp": {"type": "value", "value": 10}, 
+                    "ht": {"type": "value", "value": 10}, 
+                    "st": {"type": "value", "value": 10}, 
+                    "dx": {"type": "value", "value": 10}, 
+                    "basic-speed": {"type": "value", "value": 5}
+                }, 
+                "check_for_death": {"type": "value", "value": false}
             }, 
-            "timers": [], 
-            "check_for_death": false, 
-            "opponent": null
-        }, 
-        "Bob": {
-            "shock": null, 
-            "last_negative_hp": 0, 
-            "alive": true, 
-            "current": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
-                "st": 10, 
-                "dx": 10, 
-                "basic-speed": 3
+            "Template-Pestilence": {
+                "shock": {"type": "value", "value": null}, 
+                "permanent": {
+                    "fp": {"type": "value", "value": 10}, 
+                    "iq": {"type": "value", "value": 10}, 
+                    "hp": {"type": "value", "value": 10}, 
+                    "ht": {"type": "value", "value": 10}, 
+                    "st": {"type": "value", "value": 10}, 
+                    "dx": {"type": "value", "value": 10}, 
+                    "basic-speed": {"type": "value", "value": 3}
+                }, 
+                "check_for_death": {"type": "value", "value": false}
             }, 
-            "permanent": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
-                "st": 10, 
-                "dx": 10, 
-                "basic-speed": 3
-            }, 
-            "timers": [], 
-            "check_for_death": false, 
-            "opponent": null
-        }, 
-        "Tom": {
-            "shock": null, 
-            "last_negative_hp": 0, 
-            "alive": true, 
-            "current": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
-                "st": 10, 
-                "dx": 10, 
-                "basic-speed": 5
-            }, 
-            "permanent": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
-                "st": 10, 
-                "dx": 10, 
-                "basic-speed": 5
-            }, 
-            "timers": [], 
-            "check_for_death": false, 
-            "opponent": [
-                "horsemen", 
-                "Death"
-            ]
+            "Template-War": {
+                "shock": {"type": "value", "value": null}, 
+                "permanent": {
+                    "fp": {"type": "value", "value": 10}, 
+                    "iq": {"type": "value", "value": 10}, 
+                    "hp": {"type": "value", "value": 10}, 
+                    "ht": {"type": "value", "value": 10}, 
+                    "st": {"type": "value", "value": 10}, 
+                    "dx": {"type": "value", "value": 10}, 
+                    "basic-speed": {"type": "value", "value": 5}
+                }, 
+                "check_for_death": {"type": "value", "value": false}
+            }
         }
     }, 
     "dead-monsters": {}, 
