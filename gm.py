@@ -91,6 +91,36 @@ class GmJson(object):
             ignore_dicts=True
         )
 
+'''
+How to use this GUI.
+
+You need an XxxHandler object to handle the business logic:
+    class XxxHandler(ScreenHandler):
+
+And an XxxGmWindow to do the actual window manipulation:
+    class XxxGmWindow(GmWindow):
+
+The XxxHandler is handed a WindowManager object which it uses to instantiate
+an XxxGmWindow.
+
+    class XxxHandler(ScreenHandler):
+        def __init__(self, window_manager, ...):
+            super(XxxHandler, self).__init__(window_manager)
+            self._choices = {
+                ord('f'): {'name': 'fight (run)', 'func': self.__run_fight},
+                ord('H'): {'name': 'Heal',  'func': self.__fully_heal},
+                ord('q'): {'name': 'quit',  'func': self.__quit}
+            }
+            self._window = XxxGmWindow(self._window_manager)
+
+
+And, then, invoke like so:
+
+    xxx_handler = XxxHandler(self._window_manager, ...)
+    xxx_handler.handle_user_input_until_done()
+    self._draw_screen() # Redraw current screen when done with XxxHandler
+
+'''
 
 class GmWindow(object):
     '''
@@ -190,13 +220,13 @@ class GmWindow(object):
 
 
 
-class TopGmWindow(GmWindow):
+class MainGmWindow(GmWindow):
     def __init__(self, window_manager):
-        super(TopGmWindow, self).__init__(window_manager,
-                                          curses.LINES,
-                                          curses.COLS,
-                                          0,
-                                          0)
+        super(MainGmWindow, self).__init__(window_manager,
+                                           curses.LINES,
+                                           curses.COLS,
+                                           0,
+                                           0)
 
 
 class BuildFightGmWindow(GmWindow):
@@ -206,10 +236,6 @@ class BuildFightGmWindow(GmWindow):
                                                  curses.COLS,
                                                  0,
                                                  0)
-
-    def _draw_screen(self):
-        self._window.clear()
-        self._window.command_ribbon(self._choices)
 
     def __quit(self):
         self._window.close()
@@ -832,7 +858,7 @@ class ScreenHandler(object):
         self._choices = { }
 
 
-    def doit(self):
+    def handle_user_input_until_done(self):
         '''
         Draws the screen and does event loop (gets input, responds to input)
         '''
@@ -852,17 +878,17 @@ class ScreenHandler(object):
 class BuildFightHandler(ScreenHandler):
     def __init__(self,
                  window_manager,
-                 world,
-                 template_name
+                 world
                 ):
         super(BuildFightHandler, self).__init__(window_manager)
-        self._window = BuildFightGmWindow(self._window_manager)
         self._choices = {
             ord('a'): {'name': 'add monster', 'func': self.__add_monster},
             ord('d'): {'name': 'delete monster', 'func': self.__delete_monster},
             ord('q'): {'name': 'quit', 'func': self.__quit},
             # TODO: need a quit but don't save option
         }
+        self._window = BuildFightGmWindow(self._window_manager)
+
         self.__world = world
 
         lines, cols = self._window.getmaxyx()
@@ -889,15 +915,42 @@ class BuildFightHandler(ScreenHandler):
         self.__monsters = {}
         # TODO: may want to show what we've added thus far
 
+
+    def _draw_screen(self):
+        self._window.clear()
+        self._window.command_ribbon(self._choices)
+
+
     def __add_monster(self):
         # Based on which monster from the template
-        monster_menu = [(monster_name, monster_name)
-                for monster_name in world["Templates"][self.__template_name]]
-        monster_name = self._window_manager.menu('Monster', monster_menu)
-        if monster_name is None:
+        monster_menu = [(from_monster_name, from_monster_name)
+                for from_monster_name in world["Templates"][self.__template_name]]
+        from_monster_name = self._window_manager.menu('Monster', monster_menu)
+        if from_monster_name is None:
             return True # Keep going
 
-        from_monster = world["Templates"][self.__template_name][monster_name]
+        # Get the new Monster Name
+
+        keep_asking = True
+        lines, cols = self._window.getmaxyx()
+        while keep_asking:
+            to_monster_name = self._window_manager.input_box(1,      # height
+                                                             cols-4, # width
+                                                             'Monster Name')
+            if to_monster_name is None:
+                self._window_manager.error(['You have to name your monster'])
+                keep_asking = True
+            elif to_monster_name in self.__monsters:
+                self._window_manager.error(
+                    ['Monster "%s" alread exists' % to_monster_name])
+                keep_asking = True
+            else:
+                keep_asking = False
+
+        # Generate the Monster
+
+        from_monster = (
+            world["Templates"][self.__template_name][from_monster_name])
         to_monster = {'alive': True,
                       'timers': [],
                       'opponent': None,
@@ -908,16 +961,18 @@ class BuildFightHandler(ScreenHandler):
             if key == 'permanent':
                 for ikey, ivalue in value.iteritems():
                     to_monster['permanent'][ikey] = (
-                        self.__get_value_from_template(value, from_monster))
-                    to_monster['current'][ikey] = monster['permanent'][ikey]
-                else:
-                    to_monster[key] = self.__get_value_from_template(value,
+                        self.__get_value_from_template(ivalue, from_monster))
+                    to_monster['current'][ikey] = to_monster['permanent'][ikey]
+            else:
+                to_monster[key] = self.__get_value_from_template(value,
                                                                   from_monster)
-        self.__monsters[monster_name] = to_monster
+        self.__monsters[to_monster_name] = to_monster
+        return True # Keep going
 
     def __delete_monster(self):
         # TODO
         pass
+        return True # Keep going
 
     def __get_value_from_template(self,
                                   template_value,
@@ -937,6 +992,9 @@ class BuildFightHandler(ScreenHandler):
 
     def __quit(self):
         # TODO: need a way to exit without saving
+        if ARGS.verbose:
+            print 'monsters:'
+            PP.pprint(self.__monsters)
         self.__world['monsters'][self.__monsters_name] = self.__monsters
         self._window.close()
         return False # Stop building this fight
@@ -1043,8 +1101,8 @@ class FightHandler(ScreenHandler):
         self.__fight['saved'] = False
         self._window.start_fight()
 
-    def doit(self):
-        super(FightHandler, self).doit()
+    def handle_user_input_until_done(self):
+        super(FightHandler, self).handle_user_input_until_done()
         if not self.__fight['saved']:
             self.__world['dead-monsters'][self.__fight['monsters']] = (
                     self.__world['monsters'][self.__fight['monsters']])
@@ -1338,7 +1396,7 @@ class MainHandler(ScreenHandler):
             ord('H'): {'name': 'Heal',  'func': self.__fully_heal},
             ord('q'): {'name': 'quit',  'func': self.__quit}
         }
-        self._window = TopGmWindow(self._window_manager)
+        self._window = MainGmWindow(self._window_manager)
 
     def _draw_screen(self):
         self._window.clear()
@@ -1346,24 +1404,9 @@ class MainHandler(ScreenHandler):
 
 
     def __build_fight(self):
-        # Fight (build) - make a set of monsters from a template
-
-        template_name_menu = [(name, name)
-                           for name in self.__world['monsters'].keys()]
-        # PP.pprint(template_name_menu)
-        template_name = self._window_manager.menu('Templates',
-                                                  template_name_menu)
-        if template_name is None:
-            return True
-        # print "MENU RESULT=%s" % template_name  # For debugging
-
-        if (template_name not in self.__world['Templates']):
-            print "ERROR, template %s not found" % template_name
-
         build_fight = BuildFightHandler(self._window_manager,
-                                        self.__world,
-                                        template_name)
-        build_fight.doit()
+                                        self.__world)
+        build_fight.handle_user_input_until_done()
         self._draw_screen() # Redraw current screen when done building fight.
 
         return True # Keep going
@@ -1386,11 +1429,12 @@ class MainHandler(ScreenHandler):
 
         if (monster_list_name not in self.__world['monsters']):
             print "ERROR, monster list %s not found" % monster_list_name
+            return True
 
         fight = FightHandler(self._window_manager,
                              self.__world,
                              monster_list_name)
-        fight.doit()
+        fight.handle_user_input_until_done()
         self._draw_screen() # Redraw current screen when done with the fight.
 
         return True # Keep going
@@ -1462,12 +1506,12 @@ if __name__ == '__main__':
                                              None)
                 if ARGS.verbose:
                     print 'H'
-                fight_handler.doit()
+                fight_handler.handle_user_input_until_done()
                 if ARGS.verbose:
                     print 'I'
             if ARGS.verbose:
                 print 'J'
-            main_handler.doit()
+            main_handler.handle_user_input_until_done()
             if ARGS.verbose:
                 print 'K'
 
