@@ -236,6 +236,36 @@ class BuildFightGmWindow(GmWindow):
                                                  curses.COLS,
                                                  0,
                                                  0)
+        lines, cols = self._window.getmaxyx()
+        self.__monster_window = self._window_manager.new_native_window(
+                                                                    lines - 4,
+                                                                    cols / 2,
+                                                                    1,
+                                                                    1)
+
+    def close(self):
+        # Kill my subwindows, first
+        if self.__monster_window is not None:
+            del self.__monster_window
+            self.__monster_window = None
+        super(BuildFightGmWindow, self).close()
+
+
+    def refresh(self):
+        super(BuildFightGmWindow, self).refresh()
+        if self.__monster_window is not None:
+            self.__monster_window.refresh()
+
+
+    def show_monsters(self, name, monsters):
+        if self.__monster_window is not None:
+            self.__monster_window.clear()
+            mode = curses.A_NORMAL
+            for line, monster_name in enumerate(monsters):
+                self.__monster_window.addstr(line, 0, monster_name, mode)
+
+        self.refresh()
+
 
     def __quit(self):
         self._window.close()
@@ -967,11 +997,11 @@ class BuildFightHandler(ScreenHandler):
                 to_monster[key] = self.__get_value_from_template(value,
                                                                   from_monster)
         self.__monsters[to_monster_name] = to_monster
+        self._window.show_monsters(self.__monsters_name, self.__monsters)
         return True # Keep going
 
     def __delete_monster(self):
         # TODO
-        pass
         return True # Keep going
 
     def __get_value_from_template(self,
@@ -992,9 +1022,9 @@ class BuildFightHandler(ScreenHandler):
 
     def __quit(self):
         # TODO: need a way to exit without saving
-        if ARGS.verbose:
-            print 'monsters:'
-            PP.pprint(self.__monsters)
+        #if ARGS.verbose:
+        #    print 'monsters:'
+        #    PP.pprint(self.__monsters)
         self.__world['monsters'][self.__monsters_name] = self.__monsters
         self._window.close()
         return False # Stop building this fight
@@ -1103,6 +1133,8 @@ class FightHandler(ScreenHandler):
 
     def handle_user_input_until_done(self):
         super(FightHandler, self).handle_user_input_until_done()
+
+        # When done, move current fight to 'dead-monsters'
         if not self.__fight['saved']:
             self.__world['dead-monsters'][self.__fight['monsters']] = (
                     self.__world['monsters'][self.__fight['monsters']])
