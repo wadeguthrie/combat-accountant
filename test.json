@@ -84,55 +84,55 @@
     }, 
     "Templates": {
         "Arena Combat": {
-            "Template-Famine": {
+            "VodouCleric": {
                 "shock": {"type": "value", "value": null}, 
                 "permanent": {
-                    "fp": {"type": "value", "value": 10}, 
-                    "iq": {"type": "value", "value": 10}, 
+                    "fp": {"type": "value", "value": 12}, 
+                    "iq": {"type": "value", "value": 13}, 
                     "hp": {"type": "value", "value": 10}, 
-                    "ht": {"type": "value", "value": 10}, 
+                    "ht": {"type": "value", "value": 11}, 
                     "st": {"type": "value", "value": 10}, 
-                    "dx": {"type": "value", "value": 10}, 
-                    "basic-speed": {"type": "value", "value": 1}
+                    "dx": {"type": "value", "value": 11}, 
+                    "basic-speed": {"type": "value", "value": 5.5}
                 }, 
                 "check_for_death": {"type": "value", "value": false}
             }, 
-            "Template-Death": {
+            "Tank": {
                 "shock": {"type": "value", "value": null}, 
                 "permanent": {
-                    "fp": {"type": "value", "value": 10}, 
-                    "iq": {"type": "value", "value": 10}, 
-                    "hp": {"type": "value", "value": 10}, 
-                    "ht": {"type": "value", "value": 10}, 
+                    "fp": {"type": "value", "value": 11}, 
+                    "iq": {"type": "value", "value": 12}, 
+                    "hp": {"type": "value", "value": 11}, 
+                    "ht": {"type": "value", "value": 11}, 
                     "st": {"type": "value", "value": 10}, 
-                    "dx": {"type": "value", "value": 10}, 
-                    "basic-speed": {"type": "value", "value": 5}
+                    "dx": {"type": "value", "value": 12}, 
+                    "basic-speed": {"type": "value", "value": 5.75}
                 }, 
                 "check_for_death": {"type": "value", "value": false}
             }, 
-            "Template-Pestilence": {
+            "Thief": {
                 "shock": {"type": "value", "value": null}, 
                 "permanent": {
-                    "fp": {"type": "value", "value": 10}, 
-                    "iq": {"type": "value", "value": 10}, 
-                    "hp": {"type": "value", "value": 10}, 
-                    "ht": {"type": "value", "value": 10}, 
+                    "fp": {"type": "value", "value": 11}, 
+                    "iq": {"type": "value", "value": 12}, 
+                    "hp": {"type": "value", "value": 12}, 
+                    "ht": {"type": "value", "value": 11}, 
                     "st": {"type": "value", "value": 10}, 
-                    "dx": {"type": "value", "value": 10}, 
-                    "basic-speed": {"type": "value", "value": 3}
+                    "dx": {"type": "value", "value": 12}, 
+                    "basic-speed": {"type": "value", "value": 5.75}
                 }, 
                 "check_for_death": {"type": "value", "value": false}
             }, 
-            "Template-War": {
+            "Bokor": {
                 "shock": {"type": "value", "value": null}, 
                 "permanent": {
-                    "fp": {"type": "value", "value": 10}, 
-                    "iq": {"type": "value", "value": 10}, 
+                    "fp": {"type": "value", "value": 11}, 
+                    "iq": {"type": "value", "value": 12}, 
                     "hp": {"type": "value", "value": 10}, 
-                    "ht": {"type": "value", "value": 10}, 
+                    "ht": {"type": "value", "value": 11}, 
                     "st": {"type": "value", "value": 10}, 
                     "dx": {"type": "value", "value": 10}, 
-                    "basic-speed": {"type": "value", "value": 5}
+                    "basic-speed": {"type": "value", "value": 5.25}
                 }, 
                 "check_for_death": {"type": "value", "value": false}
             }
