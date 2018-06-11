@@ -466,9 +466,22 @@ class FightGmWindow(GmWindow):
             line += 1
 
         # Each round you do something
-        if fighter['current']['hp'] <= 0:
-            window.addstr(line, 0, "On turn: 3d vs HT or pass out", mode)
+
+        if fighter['current']['fp'] <= -fighter['permanent']['fp']:
+            # TODO: have an 'unconscious' flag that allows creatures to
+            # show up but doesn't allow them to do anything.  Maybe make
+            # 'dead' act different between monsters and PCs
+            window.addstr(line, 0, "*UNCONSCIOUS*", curses.A_REVERSE)
             line += 1
+
+        else:
+            if fighter['current']['fp'] <= 0:
+                window.addstr(line, 0, "On action: Will roll or pass out", mode)
+                line += 1
+
+            if fighter['current']['hp'] <= 0:
+                window.addstr(line, 0, "On turn: 3d vs HT or pass out", mode)
+                line += 1
 
         if fighter['check_for_death']:
             window.addstr(line, 0, "3d vs HT or DIE", curses.A_REVERSE)
