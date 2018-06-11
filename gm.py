@@ -1177,16 +1177,28 @@ class FightHandler(ScreenHandler):
         current_name, current_fighter = self.__current_fighter()
         next_PC = self.__next_PC()
         opponent_name, opponent = self.__opponent(current_fighter)
-        if opponent is not None:
-            title = 'Change FP By...'
-            height = 1
-            width = len(title)
-            adj_string = self._window_manager.input_box(height, width, title)
-            adj = int(adj_string)
-            opponent['current']['fp'] += adj # NOTE: belongs in Ruleset
-            self._window.show_fighters(current_name, current_fighter,
-                                        opponent_name, opponent,
-                                        next_PC)
+        if opponent is None:
+            return True
+
+        title = 'Change FP By...'
+        height = 1
+        width = len(title)
+        adj_string = self._window_manager.input_box(height, width, title)
+        adj = int(adj_string)
+        hp_adj = 0
+
+        # If FP go below zero, you lose HP along with FP
+        # TODO: belongs in Ruleset
+        if adj < 0  and -adj > opponent['current']['fp']:
+            hp_adj = adj
+            if opponent['current']['fp'] > 0:
+                hp_adj += opponent['current']['fp']
+
+        opponent['current']['hp'] += hp_adj # NOTE: belongs in Ruleset
+        opponent['current']['fp'] += adj # NOTE: belongs in Ruleset
+        self._window.show_fighters(current_name, current_fighter,
+                                    opponent_name, opponent,
+                                    next_PC)
         return True # Keep going
 
 
