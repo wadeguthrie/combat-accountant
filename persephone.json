@@ -38,7 +38,7 @@
                 }, 
                 "shock": {
                     "type": "value", 
-                    "value": null
+                    "value": 0
                 }
             }, 
             "Bokor": {
@@ -78,7 +78,7 @@
                 }, 
                 "shock": {
                     "type": "value", 
-                    "value": null
+                    "value": 0
                 }
             }, 
             "Tank": {
@@ -118,7 +118,7 @@
                 }, 
                 "shock": {
                     "type": "value", 
-                    "value": null
+                    "value": 0
                 }
             }, 
             "Thief": {
@@ -158,14 +158,14 @@
                 }, 
                 "shock": {
                     "type": "value", 
-                    "value": null
+                    "value": 0
                 }
             }
         }
     }, 
     "PCs": {
         "Wade": {
-            "shock": null, 
+            "shock": 0, 
             "last_negative_hp": 0, 
             "alive": true, 
             "current": {
@@ -191,7 +191,7 @@
             "opponent": null
         }, 
         "Bob": {
-            "shock": null, 
+            "shock": 0, 
             "last_negative_hp": 0, 
             "alive": true, 
             "current": {
@@ -217,7 +217,7 @@
             "opponent": null
         }, 
         "Tom": {
-            "shock": null, 
+            "shock": 0, 
             "last_negative_hp": 0, 
             "alive": true, 
             "current": {
@@ -250,7 +250,7 @@
     "monsters": {
         "Arena Attack Monsters": {
             "Thief-1": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -275,7 +275,7 @@
                 "opponent": null
             }, 
             "Thief-2": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -300,7 +300,7 @@
                 "opponent": null
             }, 
             "Tank-1": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -325,7 +325,7 @@
                 "opponent": null
             }, 
             "Tank-3": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -350,7 +350,7 @@
                 "opponent": null
             }, 
             "Tank-2": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -375,7 +375,7 @@
                 "opponent": null
             }, 
             "Tank-5": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -400,7 +400,7 @@
                 "opponent": null
             }, 
             "Tank-4": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -425,7 +425,7 @@
                 "opponent": null
             }, 
             "Tank-6": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -452,7 +452,7 @@
         }, 
         "Arena Attack Characters": {
             "Thief-1": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -477,7 +477,7 @@
                 "opponent": null
             }, 
             "Thief-2": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -502,7 +502,7 @@
                 "opponent": null
             }, 
             "Tank-1": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -527,7 +527,7 @@
                 "opponent": null
             }, 
             "Tank-3": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -552,7 +552,7 @@
                 "opponent": null
             }, 
             "Tank-2": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -577,7 +577,7 @@
                 "opponent": null
             }, 
             "Tank-4": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -602,7 +602,7 @@
                 "opponent": null
             }, 
             "Bokor-1": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -627,7 +627,7 @@
                 "opponent": null
             }, 
             "Cleric-1": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 12, 
@@ -654,7 +654,7 @@
         }, 
         "Arena Capture the Flag": {
             "Cleric": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 12, 
@@ -679,7 +679,7 @@
                 "opponent": null
             }, 
             "Thief-1": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -704,7 +704,7 @@
                 "opponent": null
             }, 
             "Bokor": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -729,7 +729,7 @@
                 "opponent": null
             }, 
             "Tank-1": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -754,7 +754,7 @@
                 "opponent": null
             }, 
             "Tank-3": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -779,7 +779,7 @@
                 "opponent": null
             }, 
             "Tank-2": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -804,7 +804,7 @@
                 "opponent": null
             }, 
             "Tank-4": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -829,7 +829,7 @@
                 "opponent": null
             }, 
             "Thief-2": {
-                "shock": null, 
+                "shock": 0, 
                 "alive": true, 
                 "current": {
                     "fp": 11, 

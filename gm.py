@@ -10,7 +10,7 @@ import sys
 
 # TODO:
 #   - notes
-#   - templates and stuff (see below)
+#   - guns w/shots and reload time
 #
 # TODO (eventually)
 #   - TESTS, for the love of God
@@ -24,8 +24,12 @@ class GmJson(object):
     and saves and closes it on exit.
     '''
 
-    def __init__(self, filename):
+    def __init__(self,
+                 filename,      # file containing the JSON to be read
+                 window_manager # place to send the error messages
+                ):
         self.__filename = filename
+        self.__window_manager = window_manager
 
 
     def __enter__(self):
@@ -33,7 +37,8 @@ class GmJson(object):
             with open(self.__filename, 'r') as f:
               world = GmJson.__json_load_byteified(f)
         except:
-            # TODO: ship out an error message
+            self.__window_manager.error(['Could not read JSON file "%s"' %
+                                            self.__filename])
             world = None
         return world
 
@@ -49,7 +54,7 @@ class GmJson(object):
             print 'Traceback: %r' % exception_traceback
 
         with open(self.__filename, 'w') as f:
-            json.dump(world, f, indent=4)
+            json.dump(world, f, indent=2)
         return True
 
     # Used to keep JSON load from automatically converting to Unicode.
@@ -455,8 +460,7 @@ class FightGmWindow(GmWindow):
 
         # NOTE: { belongs in Ruleset
 
-        # TODO: shock should be 0 by default, not None
-        if fighter['shock'] is not None: # Shock
+        if fighter['shock'] != 0:
             string = 'DX and IQ are at %d' % fighter['shock']
             window.addstr(line, 0, string, mode)
             line += 1
@@ -853,7 +857,7 @@ class GurpsRuleset(object):
         '''
         Removes all the stuff from the old fight except injury.
         '''
-        fighter['shock'] = None
+        fighter['shock'] = 0
         fighter['alive'] = True
         fighter['timers'] = []
         fighter['opponent'] = None
@@ -865,7 +869,7 @@ class GurpsRuleset(object):
         '''
         for stat in fighter['permanent'].iterkeys():
             fighter['current'][stat] = fighter['permanent'][stat]
-        fighter['shock'] = None
+        fighter['shock'] = 0
         fighter['alive'] = True
         fighter['last_negative_hp'] = 0
         fighter['check_for_death'] = False
@@ -956,7 +960,6 @@ class BuildFightHandler(ScreenHandler):
                 keep_asking = False
 
         self.__monsters = {}
-        # TODO: may want to show what we've added thus far
 
 
     def _draw_screen(self):
@@ -1237,7 +1240,7 @@ class FightHandler(ScreenHandler):
 
             # NOTE: shock belongs in Ruleset
             shock_amount = -4 if adj <= -4 else adj
-            if opponent['shock'] is None or opponent['shock'] > shock_amount:
+            if opponent['shock'] > shock_amount:
                 opponent['shock'] = shock_amount
 
             opponent['current']['hp'] += adj # NOTE: belongs in Ruleset
@@ -1297,7 +1300,7 @@ class FightHandler(ScreenHandler):
     def __next_fighter(self):
         # NOTE: shock belongs in Ruleset
         prev_name, prev_fighter = self.__current_fighter()
-        prev_fighter['shock'] = None # remove expired shock entry
+        prev_fighter['shock'] = 0 # remove expired shock entry
 
         # remove any expired timers
         remove_these = []
@@ -1535,7 +1538,7 @@ if __name__ == '__main__':
         if ARGS.verbose:
             print 'C'
 
-        with GmJson(ARGS.filename) as world:
+        with GmJson(ARGS.filename, window_manager) as world:
             if world is None:
                 window_manager.error(['JSON file "%s" did not parse right'
                                         % ARGS.filename])
