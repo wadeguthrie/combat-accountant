@@ -602,10 +602,8 @@ class GmWindowManager(object):
             border_win.refresh()
             edit_win.refresh()
 
-        print 'edit window: "%r"' % contents
         if contents is not None:
             for line, string in enumerate(contents.split('\n')):
-                print 'at line %d: "%r"' % (line, string)
                 edit_win.addstr(line, 0, string, curses.A_NORMAL)
         textbox = curses.textpad.Textbox(edit_win)
         contents = textbox.edit()
@@ -1384,6 +1382,13 @@ class FightHandler(ScreenHandler):
                     '%s Notes' % current_name,
                     '^G to exit')
         current_fighter['notes'] = notes
+
+        # Redraw the fighters
+        next_PC = self.__next_PC()
+        opponent_name, opponent = self.__opponent(current_fighter)
+        self._window.show_fighters(current_name, current_fighter,
+                                    opponent_name, opponent,
+                                    next_PC)
         return True # Keep going
 
     def __opponent(self,
