@@ -408,12 +408,13 @@ class FightGmWindow(GmWindow):
 
         top_line = self.__FIGHTER_LINE+1 # Start after the main fighter info
 
-        # TODO: get from self._window_manager.new_native_window(...)
-        self.__character_window = curses.newwin(height,
+        self.__character_window = self._window_manager.new_native_window(
+                                                height,
                                                 self.fighter_win_width,
                                                 top_line,
                                                 self.__FIGHTER_COL)
-        self.__opponent_window  = curses.newwin(height,
+        self.__opponent_window  = self._window_manager.new_native_window(
+                                                height,
                                                 self.fighter_win_width,
                                                 top_line,
                                                 self.__OPPONENT_COL+4)
@@ -671,6 +672,9 @@ class GmWindowManager(object):
 
         # height and width of text box (not border)
         height = len(strings_results)
+        max_height = curses.LINES - 2 # 2 for the box
+        if height > max_height:
+            height = max_height
         width = 0 if title is None else len(title)
         for string, result in strings_results:
             if len(string) > width:
