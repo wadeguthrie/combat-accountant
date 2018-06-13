@@ -605,7 +605,7 @@ class GmWindowManager(object):
         if contents is not None:
             for line, string in enumerate(contents.split('\n')):
                 edit_win.addstr(line, 0, string, curses.A_NORMAL)
-        textbox = curses.textpad.Textbox(edit_win)
+        textbox = curses.textpad.Textbox(edit_win, insert_mode=True)
         contents = textbox.edit()
 
         del border_win
