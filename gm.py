@@ -3,13 +3,13 @@
 import argparse
 import copy
 import curses
+import curses.textpad
 import json
 import pprint
 import random
 import sys
 
 # TODO:
-#   - notes
 #   - guns w/shots and reload time
 #
 # TODO (eventually)
@@ -286,7 +286,6 @@ class FightGmWindow(GmWindow):
                                            curses.COLS,
                                            0,
                                            0)
-
         self.__FIGHTER_COL = 1
         self.__FIGHTER_LINE = 4
         self.__NEXT_LINE = 2
@@ -508,6 +507,11 @@ class FightGmWindow(GmWindow):
                 window.addstr(line, 0, string, mode)
                 line += 1
 
+        if 'notes' in fighter and fighter['notes'] is not None:
+            for note in fighter['notes'].split('\n'):
+                window.addstr(line, 0, note, mode)
+                line += 1
+
         window.refresh()
 
 
@@ -582,6 +586,34 @@ class GmWindowManager(object):
     #
     # Public Methods
     #
+
+    def edit_window(self,
+                    height, width,
+                    contents,  # initial string (w/ \n) for the window
+                    title,
+                    footer
+                   ):
+
+        border_win, edit_win = self.__centered_boxed_window(height, width,
+                                                            title)
+        if footer is not None:
+            footer_start = ((width+2) - (len(footer))) / 2
+            border_win.addstr((height+1), footer_start, footer)
+            border_win.refresh()
+            edit_win.refresh()
+
+        print 'edit window: "%r"' % contents
+        if contents is not None:
+            for line, string in enumerate(contents.split('\n')):
+                print 'at line %d: "%r"' % (line, string)
+                edit_win.addstr(line, 0, string, curses.A_NORMAL)
+        textbox = curses.textpad.Textbox(edit_win)
+        contents = textbox.edit()
+
+        del border_win
+        del edit_win
+        self.hard_refresh_all()
+        return contents
 
     def error(self,
               strings, # array of single-line strings
@@ -1063,6 +1095,7 @@ class FightHandler(ScreenHandler):
             # NOTE: 'h' and 'f' belong in Ruleset
             ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
             ord('h'): {'name': 'HP damage', 'func': self.__damage_HP},
+            ord('n'): {'name': 'notes', 'func': self.__notes},
             ord('o'): {'name': 'opponent', 'func': self.__pick_opponent},
             ord('q'): {'name': 'quit', 'func': self.__quit},
             ord('s'): {'name': 'save', 'func': self.__save},
@@ -1338,6 +1371,20 @@ class FightHandler(ScreenHandler):
             next_index += 1
         return next_PC
 
+    def __notes(self):
+        current_name, current_fighter = self.__current_fighter()
+        lines, cols = self._window.getmaxyx()
+
+        notes = (None if 'notes' not in current_fighter else
+                                            current_fighter['notes'])
+        notes = self._window_manager.edit_window(
+                    lines - 4,
+                    self._window.fighter_win_width,
+                    notes,  # initial string (w/ \n) for the window
+                    '%s Notes' % current_name,
+                    '^G to exit')
+        current_fighter['notes'] = notes
+        return True # Keep going
 
     def __opponent(self,
                    fighter # dict for a fighter as in the JSON
