@@ -5,12 +5,13 @@ import copy
 import curses
 import curses.textpad
 import json
+import os
 import pprint
 import random
 import sys
 
 # TODO:
-#   - guns w/shots and reload time
+#   - guns w/shots and reload time (so equipment, equip, unequip, ...)
 #
 # TODO (eventually)
 #   - TESTS, for the love of God
@@ -1104,8 +1105,6 @@ class FightHandler(ScreenHandler):
             ord('t'): {'name': 'timer', 'func': self.__timer}
         }
 
-        # TODO: menus need assigned single-character launch.
-
         self.__action_menu = [
             ('attack',                 ['Attack',
                                         ' Defense: any',
@@ -1239,7 +1238,7 @@ class FightHandler(ScreenHandler):
         hp_adj = 0
 
         # If FP go below zero, you lose HP along with FP
-        # TODO: belongs in Ruleset
+        # TODO: all of FP belongs in Ruleset
         if adj < 0  and -adj > opponent['current']['fp']:
             hp_adj = adj
             if opponent['current']['fp'] > 0:
@@ -1574,61 +1573,49 @@ class MyArgumentParser(argparse.ArgumentParser):
 if __name__ == '__main__':
     parser = MyArgumentParser()
     parser.add_argument('filename',
-             help='Input JSON file containing characters and monsters')
+             help='Input JSON file containing characters and monsters',
+             nargs='?')
     parser.add_argument('-v', '--verbose', help='verbose', action='store_true',
                         default=False)
 
     # Parse the command-line parameters
     ARGS = parser.parse_args()
 
-    if ARGS.filename is None:
-        parser.print_help()
-        sys.exit(2)
+    # parser.print_help()
+    # sys.exit(2)
 
-    if ARGS.verbose:
-        print 'A'
     with GmWindowManager() as window_manager:
-        if ARGS.verbose:
-            print 'B'
-        PP = pprint.PrettyPrinter(indent=3, width=150)
-        if ARGS.verbose:
-            print 'C'
+        filename = ARGS.filename
+        if filename is None:
+            filename_menu = [(x, x)
+                             for x in os.listdir('.') if x.endswith('.json')]
 
-        with GmJson(ARGS.filename, window_manager) as world:
+            filename = window_manager.menu('Which File', filename_menu)
+            if filename is None:
+                window_manager.error(['Need to specify a JSON file'])
+                sys.exit(2)
+
+        PP = pprint.PrettyPrinter(indent=3, width=150)
+
+        with GmJson(filename, window_manager) as world:
             if world is None:
                 window_manager.error(['JSON file "%s" did not parse right'
-                                        % ARGS.filename])
+                                        % filename])
                 sys.exit(2)
 
-            if ARGS.verbose:
-                print 'D'
             # Error checking for JSON
             if 'PCs' not in world:
-                window_manager.error(['No "PCs" in %s' % ARGS.filename])
+                window_manager.error(['No "PCs" in %s' % filename])
                 sys.exit(2)
-            if ARGS.verbose:
-                print 'E'
 
             # Enter into the mainloop
             main_handler = MainHandler(window_manager, world)
-            if ARGS.verbose:
-                print 'F'
 
             if world['current-fight']['saved']:
-                if ARGS.verbose:
-                    print 'G'
                 fight_handler = FightHandler(window_manager,
                                              world,
                                              None)
-                if ARGS.verbose:
-                    print 'H'
                 fight_handler.handle_user_input_until_done()
-                if ARGS.verbose:
-                    print 'I'
-            if ARGS.verbose:
-                print 'J'
             main_handler.handle_user_input_until_done()
-            if ARGS.verbose:
-                print 'K'
 
 

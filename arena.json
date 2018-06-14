@@ -249,7 +249,7 @@
     "dead-monsters": {}, 
     "monsters": {
         "Arena Attack Monsters": {
-            "Thief-1": {
+            "1-Thief-A": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -274,7 +274,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Thief-2": {
+            "2-Thief-B": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -299,7 +299,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Tank-1": {
+            "3-Tank-A": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -324,7 +324,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Tank-3": {
+            "4-Tank-C": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -349,7 +349,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Tank-2": {
+            "5-Tank-B": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -374,7 +374,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Tank-5": {
+            "6-Tank-E": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -399,7 +399,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Tank-4": {
+            "7-Tank-D": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -424,7 +424,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Tank-6": {
+            "8-Tank-F": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -451,7 +451,7 @@
             }
         }, 
         "Arena Attack Characters": {
-            "Thief-1": {
+            "1-Thief-A": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -476,7 +476,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Thief-2": {
+            "2-Thief-B": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -501,7 +501,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Tank-1": {
+            "3-Tank-A": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -526,7 +526,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Tank-3": {
+            "4-Tank-C": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -551,7 +551,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Tank-2": {
+            "5-Tank-B": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -576,7 +576,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Tank-4": {
+            "6-Tank-D": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -601,7 +601,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Bokor-1": {
+            "7-Bokor-A": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -626,7 +626,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Cleric-1": {
+            "8-Cleric-A": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -653,7 +653,7 @@
             }
         }, 
         "Arena Capture the Flag": {
-            "Cleric": {
+            "1-Cleric": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -678,7 +678,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Thief-1": {
+            "2-Thief-A": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -703,7 +703,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Bokor": {
+            "3-Bokor": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -728,7 +728,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Tank-1": {
+            "4-Tank-A": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -753,7 +753,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Tank-3": {
+            "5-Tank-C": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -778,7 +778,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Tank-2": {
+            "6-Tank-B": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -803,7 +803,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Tank-4": {
+            "7-Tank-D": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
@@ -828,7 +828,7 @@
                 "check_for_death": false, 
                 "opponent": null
             }, 
-            "Thief-2": {
+            "8-Thief-B": {
                 "shock": 0, 
                 "alive": true, 
                 "current": {
