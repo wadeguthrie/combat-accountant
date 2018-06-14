@@ -163,6 +163,71 @@
             }
         }
     }, 
+    "Names": {
+        "Venezuelan": {
+            "female" : [
+                "Salome", "Luciana", "Isabella", "Mariana", "Gabriela",
+                "Valentina", "Valeria", "Sofia", "Sara", "Antonella"
+            ],
+            "male" : [
+                "Santiago", "Matias", "Sebastian", "Mateo", "Nicolas",
+                "Alejandro", "Samuel", "Diego", "Daniel", "Benjamin",
+                "Leonardo", "Tomas", "Joaquin", "Gabriel", "Emiliano",
+                "Martin", "Lucas", "Agustin", "David", "Iker", "Juan Jose",
+                "Maximiliano", "Adrian", "Emmanuel", "Felipe", "Juan Pablo",
+                "Andres", "Jeronimo/Geronimo", "Angel", "Rodrigo", "Bruno",
+                "Alexander", "Thiago", "Pablo", "Ian", "Isaac", "Miguel Angel",
+                "Fernando", "Javier", "Emilio", "Juan Sebastian", "Alonso",
+                "Aaron", "Rafael", "Esteban", "Juan Diego", "Axel",
+                "Francisco", "Bautista", "Carlos", "Dylan", "Juan", "Julian",
+                "Manuel", "Facundo", "Gael", "Valentino", "Damian", "Santino",
+                "Vicente", "Maximo", "Christopher", "Jorge", "Luciano", "Dante",
+                "Alan", "Cristobal", "Jesus", "Lorenzo", "Alex", "Juan Esteban",
+                "Patricio", "Pedro", "Juan Manuel", "Matthew", "Antonio",
+                "Ivan", "Jose", "Hugo", "Josue", "Lautaro", "Diego Alejandro",
+                "Miguel", "Franco", "Kevin", "Luis", "Simon", "Elias",
+                "Caleb", "Eduardo", "Ricardo", "Juan David", "Marcos",
+                "Salvador", "Jacobo", "Juan Ignacio", "Camilo", "Mauricio",
+                "Juan Felipe", "Gonzalo"
+            ]
+        },
+        "Russian": {
+            "female": [
+                "Anastasia", "Anna", "Alina", "Alexandra", "Arina", "Anya",
+                "Alena", "Alice", "Alisa", "Asya", "Albina", "Alyona",
+                "Christina", "Catherine", "Dasha", "Darya", "Diana", "Dina",
+                "Elena", "Ekaterina", "Elizabeth", "Eva", "Evgeniya", "Galina",
+                "Helena", "Inna", "Ira", "Irina", "Juliya", "Karina",
+                "Katerina", "Katherine", "Katya", "Kira", "Kristina",
+                "Ksenya", "Ksusha", "Lena", "Lera", "Liza", "Lyuba",
+                "Madina", "Margarita", "Mariya", "Marina", "Marta", "Masha",
+                "Natasha", "Nataly", "Natalya", "Nastya", "Nina", "Oksana",
+                "Olesya", "Olga", "Olya", "Polina", "Sofia", "Sonya", "Sasha",
+                "Sveta", "Svetlana", "Tanya", "Tatyana", "Ulyana", "Vika",
+                "Viktoria", "Vera", "Valentina", "Valeria", "Viktoriya",
+                "Vasilisa", "Veronika", "Victoria", "Vlada", "Yana", "Yulia",
+                "Zhenya"
+            ],
+            "male": [
+                "Aymeric", "Aleksey", "Adam", "Andrei", "Andrew", "Andru",
+                "Artiom", "Artem", "Artyom", "Anatoly", "Anton",
+                "Alex/Aleksandr/Aleksei", "Arseniy", "Arthur", "Andrey",
+                "Arsenii", "Bekhan", "Bogdan", "Boris", "Dan/Danil/Danila",
+                "David", "Denis", "Dmitriy", "Dima", "Egor", "Eugene",
+                "Evgeny", "Fedor", "George", "German", "Gosha", "Gregory",
+                "Gleb", "Grisha", "Igor", "Ilya", "Ivan Konstantin", "Kirill",
+                "Kostya", "Kolya", "Leo", "Leonid", "Mansur", "Max/Maxim",
+                "Mark", "Matvey", "MIkhail", "Misha", "Nick", "Niko",
+                "Nikolai", "Nikita", "Oleg", "Pasha", "Pavel", "Paul",
+                "Petr", "Rafit", "Renat", "Roma", "Roman", "Ruslan", "Sasha",
+                "Sergey", "Serge", "Slava", "Sonya", "Stanislav", "Timur",
+                "Vadim", "Valentin", "Vasiliy", "Vitaliy", "Vlad",
+                "Vladislav", "Vladimir", "Vova", "Yaroslav", "Yegor", "Yura",
+                "Zahar", "Zhenya"
+            ]
+        }
+    },
+
     "PCs": {
         "Wade": {
             "shock": 0, 

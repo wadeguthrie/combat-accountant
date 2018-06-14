@@ -1509,6 +1509,7 @@ class MainHandler(ScreenHandler):
             ord('F'): {'name': 'Fight (build)', 'func': self.__build_fight},
             ord('f'): {'name': 'fight (run)', 'func': self.__run_fight},
             ord('H'): {'name': 'Heal',  'func': self.__fully_heal},
+            ord('n'): {'name': 'name',  'func': self.__get_a_name},
             ord('q'): {'name': 'quit',  'func': self.__quit}
         }
         self._window = MainGmWindow(self._window_manager)
@@ -1532,6 +1533,26 @@ class MainHandler(ScreenHandler):
             GurpsRuleset.heal_fighter(character)
         return True
 
+    def __get_a_name(self):
+        if 'Names' not in self.__world:
+            self._window_manager.error(['There are no "Names" in the database'])
+            return True
+
+        type_menu = [(x, x) for x in self.__world['Names'].keys()]
+        type_name = self._window_manager.menu('What kind of name', type_menu)
+
+        gender_menu = [(x, x) for x in self.__world['Names'][type_name].keys()]
+        gender_name = self._window_manager.menu('What Gender', gender_menu)
+
+        index = random.randint(0,
+            len(self.__world['Names'][type_name][gender_name]) - 1)
+
+        # This really isn't a menu but it works perfectly to accomplish my
+        # goal.
+        result = [(self.__world['Names'][type_name][gender_name][index],
+                   index)]
+        ignore = self._window_manager.menu('Your name is', result)
+        return True
 
     def __run_fight(self):
         fight_name_menu = [(name, name)
