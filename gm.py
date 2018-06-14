@@ -21,27 +21,31 @@ import sys
 
 class GmJson(object):
     '''
-    Context manager that opens and loads a JSON for combat accountant on entry
-    and saves and closes it on exit.
+    Context manager that opens and loads a JSON.  Does so in a context manager
+    and does all this in ASCII (for v2.7 Python).  Needs to know about
+    a window manager.
     '''
 
     def __init__(self,
-                 filename,      # file containing the JSON to be read
-                 window_manager # place to send the error messages
+                 filename,             # file containing the JSON to be read
+                 window_manager = None # send error messages here
                 ):
         self.__filename = filename
         self.__window_manager = window_manager
+        self.read_data = None
+        self.write_data = None
 
 
     def __enter__(self):
         try:
             with open(self.__filename, 'r') as f:
-              world = GmJson.__json_load_byteified(f)
+              self.read_data = GmJson.__json_load_byteified(f)
         except:
-            self.__window_manager.error(['Could not read JSON file "%s"' %
-                                            self.__filename])
-            world = None
-        return world
+            if self.__window_manager is not None:
+                self.__window_manager.error(['Could not read JSON file "%s"' %
+                                                self.__filename])
+            self.read_data = None
+        return self
 
 
     def __exit__ (self, exception_type, exception_value, exception_traceback):
@@ -54,8 +58,9 @@ class GmJson(object):
             print 'EXCEPTION val: %s' % exception_value
             print 'Traceback: %r' % exception_traceback
 
-        with open(self.__filename, 'w') as f:
-            json.dump(world, f, indent=2)
+        if self.write_data is not None:
+            with open(self.__filename, 'w') as f:
+                json.dump(self.write_data, f, indent=2)
         return True
 
     # Used to keep JSON load from automatically converting to Unicode.
@@ -1594,19 +1599,29 @@ class MyArgumentParser(argparse.ArgumentParser):
 if __name__ == '__main__':
     parser = MyArgumentParser()
     parser.add_argument('filename',
-             help='Input JSON file containing characters and monsters',
-             nargs='?')
+             nargs='?', # We get the filename elsewhere if you don't say here
+             help='Input JSON file containing characters and monsters')
     parser.add_argument('-v', '--verbose', help='verbose', action='store_true',
                         default=False)
 
-    # Parse the command-line parameters
     ARGS = parser.parse_args()
 
     # parser.print_help()
     # sys.exit(2)
 
+    PP = pprint.PrettyPrinter(indent=3, width=150)
+
     with GmWindowManager() as window_manager:
+        # Prefs
+        prefs = {}
+        with GmJson('gm.txt') as read_prefs:
+            prefs = read_prefs.read_data
+
+        # Get the Campaign's Name
         filename = ARGS.filename
+        if filename is None and 'campaign' in prefs:
+            filename = prefs['campaign']
+
         if filename is None:
             filename_menu = [(x, x)
                              for x in os.listdir('.') if x.endswith('.json')]
@@ -1616,25 +1631,28 @@ if __name__ == '__main__':
                 window_manager.error(['Need to specify a JSON file'])
                 sys.exit(2)
 
-        PP = pprint.PrettyPrinter(indent=3, width=150)
-
-        with GmJson(filename, window_manager) as world:
-            if world is None:
+        # Read the Campaign Data
+        with GmJson(filename, window_manager) as campaign:
+            if campaign.read_data is None:
                 window_manager.error(['JSON file "%s" did not parse right'
                                         % filename])
                 sys.exit(2)
 
-            # Error checking for JSON
-            if 'PCs' not in world:
+            # Error check the JSON
+            if 'PCs' not in campaign.read_data:
                 window_manager.error(['No "PCs" in %s' % filename])
                 sys.exit(2)
 
-            # Enter into the mainloop
-            main_handler = MainHandler(window_manager, world)
+            # Save the state of things when we leave since there wasn't a
+            # horrible crash while reading the data.
+            campaign.write_data = campaign.read_data
 
-            if world['current-fight']['saved']:
+            # Enter into the mainloop
+            main_handler = MainHandler(window_manager, campaign.read_data)
+
+            if campaign.read_data['current-fight']['saved']:
                 fight_handler = FightHandler(window_manager,
-                                             world,
+                                             campaign.read_data,
                                              None)
                 fight_handler.handle_user_input_until_done()
             main_handler.handle_user_input_until_done()
