@@ -1566,17 +1566,18 @@ class MainHandler(ScreenHandler):
         return True
 
     def __run_fight(self):
-        fight_name_menu = [(name, name)
-                           for name in self.__world['monsters'].keys()]
-        # PP.pprint(fight_name_menu)
-        monster_list_name = self._window_manager.menu('Fights', fight_name_menu)
-        if monster_list_name is None:
-            return True
-        # print "MENU RESULT=%s" % monster_list_name  # For debugging
-
-        if (monster_list_name not in self.__world['monsters']):
-            print "ERROR, monster list %s not found" % monster_list_name
-            return True
+        monster_list_name = None
+        if not self.__world['current-fight']['saved']:
+            fight_name_menu = [(name, name)
+                               for name in self.__world['monsters'].keys()]
+            # PP.pprint(fight_name_menu)
+            monster_list_name = self._window_manager.menu('Fights',
+                                                          fight_name_menu)
+            if monster_list_name is None:
+                return True
+            if (monster_list_name not in self.__world['monsters']):
+                print "ERROR, monster list %s not found" % monster_list_name
+                return True
 
         fight = FightHandler(self._window_manager,
                              self.__world,
