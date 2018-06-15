@@ -182,36 +182,42 @@ class GmWindow(object):
         Draws a list of commands across the bottom of the screen
         '''
 
-        left = 0
-        lines, cols = self._window.getmaxyx()
-        line = lines - 1
+        # Build the choice strings
 
-        self._window.addstr(line, left, '|', curses.A_NORMAL)
-        left += 2 # adds a space
-
-        for choice, body in sorted(choices.iteritems(), reverse=True):
-            if choice == ord(' '):
-                choice_string = '" "'
+        max_width = 0
+        choice_strings = []
+        for command, body in choices.iteritems():
+            if command == ord(' '):
+                command_string = '" "'
             else:
-                choice_string = '%c' % chr(choice)
+                command_string = '%c' % chr(command)
 
-            length = len(choice_string) + len(body['name']) + 4
-            if (left + length) >= (cols - 1):
-                left = 0
-                line -= 1
-                self._window.addstr(line, left, '|', curses.A_NORMAL)
-                left += 2 # adds a space
+            choice_string = '| %s %s ' % (command_string, body['name'])
+            choice_strings.append(choice_string)
+            if max_width < len(choice_string):
+                max_width = len(choice_string)
 
-            self._window.addstr(line, left, choice_string, curses.A_REVERSE)
-            left += len(choice_string) + 1 # add a space after the choice
+        # Calculate the number of rows needed for all the commands
 
-            self._window.addstr(line, left, body['name'], curses.A_BOLD)
+        lines, cols = self._window.getmaxyx()
+        choices_per_line = int((cols - 1)/max_width) # -1 for last '|'
+        # Adding 0.9999 so last partial line doesn't get truncated by 'int'
+        lines_for_choices = int((len(choices) / (choices_per_line + 0.0))
+                                                                + 0.9999999)
 
-            left += len(body['name']) + 1 # add a space after the choice
+        # Print stuff out
 
+        choice_strings.sort(reverse=True)
+        line = lines - 1 # -1 because last line is lines-1
+        for subline in reversed(range(lines_for_choices)):
+            line = lines - (subline + 1) # -1 because last line is lines-1
+            left = 0
+            for i in range(choices_per_line):
+                choice_string = ('|' if len(choice_strings) == 0
+                                     else choice_strings.pop())
+                self._window.addstr(line, left, choice_string, curses.A_NORMAL)
+                left += max_width
             self._window.addstr(line, left, '|', curses.A_NORMAL)
-            left += 2 # adds a space
-
         self.refresh()
 
 
