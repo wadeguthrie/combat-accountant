@@ -884,7 +884,38 @@ class GmWindowManager(object):
         return border_win, menu_win
 
 
-class GurpsRuleset(object):
+class Ruleset(object):
+    @staticmethod
+    def new_fight(fighter):
+        '''
+        Removes all the stuff from the old fight except injury.
+        '''
+        fighter['alive'] = True
+        fighter['timers'] = []
+        fighter['opponent'] = None
+
+    @staticmethod
+    def heal_fighter(fighter):
+        '''
+        Removes all injury (and their side-effects) from a fighter.
+        '''
+        for stat in fighter['permanent'].iterkeys():
+            fighter['current'][stat] = fighter['permanent'][stat]
+        fighter['alive'] = True
+
+    @staticmethod
+    def roll(number, # the number of dice
+             dice,   # the type of dice
+             plus=0  # a number to add to the total of the dice roll
+            ):
+        '''Simulates a roll of dice.'''
+        result = plus
+        for count in range(number):
+            result += random.randint(1, dice)
+        return result
+
+
+class GurpsRuleset(Ruleset):
     '''
     This is a place for all of the ruleset (e.g., GURPS, AD&D) specific
     stuff.
@@ -897,20 +928,16 @@ class GurpsRuleset(object):
         '''
         Removes all the stuff from the old fight except injury.
         '''
+        Ruleset.new_fight(fighter)
         fighter['shock'] = 0
-        fighter['alive'] = True
-        fighter['timers'] = []
-        fighter['opponent'] = None
 
     @staticmethod
     def heal_fighter(fighter):
         '''
         Removes all injury (and their side-effects) from a fighter.
         '''
-        for stat in fighter['permanent'].iterkeys():
-            fighter['current'][stat] = fighter['permanent'][stat]
+        Ruleset.heal_fighter(fighter)
         fighter['shock'] = 0
-        fighter['alive'] = True
         fighter['last_negative_hp'] = 0
         fighter['check_for_death'] = False
 
@@ -920,10 +947,7 @@ class GurpsRuleset(object):
              plus=0  # a number to add to the total of the dice roll
             ):
         '''Simulates a roll of dice.'''
-        result = plus
-        for count in range(number):
-            result += random.randint(1, dice)
-        return result
+        return Ruleset.roll(number, dice, plus)
 
 
     @staticmethod
