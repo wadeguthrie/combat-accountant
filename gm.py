@@ -1454,17 +1454,23 @@ class FightHandler(ScreenHandler):
         for fighter in self.__fight['fighters']:
             if fighter[0] != current_group:
                 opponent_group = fighter[0]
-                opponent_menu.append((fighter[1], fighter[1]))
+                if self.__is_alive(fighter[0], fighter[1]):
+                    opponent_menu.append((fighter[1], fighter[1]))
+        if len(opponent_menu) <= 0:
+            self._window_manager.error(['All the opponents are dead'])
+            return True # don't leave the fight
+
         opponent_name = self._window_manager.menu('Opponent', opponent_menu)
 
-        if opponent_name is not None:
-            current_fighter['opponent'] = [opponent_group, opponent_name]
+        if opponent_name is None:
+            return True # don't leave the fight
 
+        current_fighter['opponent'] = [opponent_group, opponent_name]
         opponent = self.__fighter(opponent_group, opponent_name)
 
         # Ask to have them fight each other
         if opponent is not None and opponent['opponent'] is None:
-            back_menu = [('Yes', True), ('No', False)]
+            back_menu = [('yes', True), ('no', False)]
             answer = self._window_manager.menu('Make Opponents Go Both Ways',
                                         back_menu)
             if answer == True:
