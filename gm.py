@@ -1335,6 +1335,13 @@ class FightHandler(ScreenHandler):
         return (self.__world['PCs'][name] if group == 'PCs' else
                 self.__world['monsters'][group][name])
 
+
+    def __is_alive(self, group, name):
+        fighter = self.__fighter(group, name)
+        if fighter['alive'] and (fighter['current']['hp'] > 0):
+            return True
+        return False
+
     def __modify_index(self,
                        adj      # 1 or -1, adjust the index by this
                       ):
@@ -1488,6 +1495,21 @@ class FightHandler(ScreenHandler):
 
 
     def __quit(self):
+        if not self.__fight['saved']:
+
+            # Check to see if all monsters are dead
+            ask_to_save = False
+            for fighter in self.__fight['fighters']:
+                if fighter[0] != 'PCs' and self.__is_alive(fighter[0],
+                                                           fighter[1]):
+                    ask_to_save = True
+
+            # Ask to save the fight if it's not saved and some monsters live.
+            save_menu = [('yes', True), ('no', False)]
+            if ask_to_save and self._window_manager.menu('Save Fight',
+                                                         save_menu):
+                self.__fight['saved'] = True
+                
         self._window.close()
         return False # Leave the fight
 
