@@ -1545,9 +1545,14 @@ class MainHandler(ScreenHandler):
 
         type_menu = [(x, x) for x in self.__world['Names'].keys()]
         type_name = self._window_manager.menu('What kind of name', type_menu)
+        if type_name is None:
+            type_name = random.choice(self.__world['Names'].keys())
+            gender_name = random.choice(self.__world['Names'][type_name].keys())
 
-        gender_menu = [(x, x) for x in self.__world['Names'][type_name].keys()]
-        gender_name = self._window_manager.menu('What Gender', gender_menu)
+        else:
+            gender_menu = [(x, x)
+                           for x in self.__world['Names'][type_name].keys()]
+            gender_name = self._window_manager.menu('What Gender', gender_menu)
 
         index = random.randint(0,
             len(self.__world['Names'][type_name][gender_name]) - 1)
@@ -1556,7 +1561,8 @@ class MainHandler(ScreenHandler):
         # goal.
         result = [(self.__world['Names'][type_name][gender_name][index],
                    index)]
-        ignore = self._window_manager.menu('Your name is', result)
+        ignore = self._window_manager.menu('Your %s %s name is' % (
+                                           type_name, gender_name), result)
         return True
 
     def __run_fight(self):
