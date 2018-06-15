@@ -164,7 +164,64 @@
         }
     }, 
     "Names": {
-        "Venezuelan": {
+        "australian": {
+            "female": [
+                "Olivia", "Charlotte", "Amelia", "Ava", "Mia", "Chloe",
+                "Zoe", "Evie", "Sophie", "Emily", "Ella", "Matilda", "Grace",
+                "Ruby", "Isabella", "Isla", "Ivy", "Harper", "Sienna", "Lily",
+                "Scarlett", "Emma", "Zara", "Evelyn", "Lucy", "Georgia",
+                "Willow", "Isabelle", "Sophia", "Alice", "Eva", "Audrey",
+                "Hannah", "Mila", "Jasmine", "Aria", "Maddison", "Abigail",
+                "Sarah", "Layla", "Poppy", "Maya", "Summer", "Stella",
+                "Annabelle", "Violet", "Imogen", "Ellie", "Mackenzie",
+                "Elizabeth", "Sofia", "Savannah", "Victoria", "Milla",
+                "Madison", "Holly", "Billie", "Hazel", "Eden", "Anna",
+                "Alyssa", "Harriet", "Alexis", "Sadie", "Eve", "Lola",
+                "Jessica", "Alexandra", "Indiana", "Frankie", "Chelsea",
+                "Phoebe", "Rose", "Eleanor", "Claire", "Molly", "Eliza",
+                "Addison", "Madeleine", "Penelope", "Eloise", "Ariana",
+                "Heidi", "Isabel", "Olive", "Charlie", "Emilia", "Aurora",
+                "Piper", "Madeline", "Elsie", "Daisy", "Aisha", "Natalie",
+                "Lexi", "Bella", "Ayla", "Kiara", "Samantha", "Paige"
+            ],
+            "male": [
+                "Oliver", "Jack", "William", "Noah", "Thomas", "James",
+                "Lucas", "Ethan", "Mason", "Lachlan", "Alexander", "Charlie",
+                "Oscar", "Liam", "Xavier", "Henry", "Max", "Joshua", "Samuel",
+                "Benjamin", "Isaac", "Harrison", "Harry", "Levi", "Jacob",
+                "Patrick", "Ryan", "Daniel", "Hunter", "Edward", "Cooper",
+                "Sebastian", "Hudson", "Archie", "Jackson", "Logan", "Leo",
+                "Flynn", "Elijah", "Archer", "Jayden", "Jaxon", "Aiden",
+                "Harvey", "Angus", "Riley", "George", "Blake", "Hugo",
+                "Jordan", "Zachary", "Ryder", "Nate", "Luca", "Jake",
+                "Michael", "Matthew", "Tyler", "Nicholas", "Dylan", "Kai",
+                "Spencer", "Luke", "Nathan", "Finn", "Marcus", "Louis",
+                "Lincoln", "Hamish", "Eli", "Austin", "Owen", "Adam",
+                "Caleb", "Aaron", "Mitchell", "Joseph", "Felix", "Ashton",
+                "Hayden", "Connor", "Christian", "Alex", "Muhammad",
+                "Jasper", "Chase", "Maxwell", "Toby", "Theodore", "Gabriel",
+                "Evan", "Charles", "Bailey", "Anthony", "Zac", "Fletcher",
+                "Nathaniel", "Ali", "Jude", "Lenny"
+            ]
+        },
+        "haitian": {
+            "female": [
+                "Angeline", "Anaica", "Chedeline", "Esther", "Esterline",
+                "Fabienne", "Fredeline", "Gaelle", "Guerlande", "Islande",
+                "Jenniflore", "Jesula", "Jessica", "Judeline", "Kimberly",
+                "Lourdes-Gina", "Lovelie", "Lovely Madeline", "Marie",
+                "Medjine", "Mirlande", "Myrlande", "Nadia", "Nephtalie",
+                "Rose", "Roseline", "Rose-Merline", "Samantha", "Widelene"
+            ],
+            "male": [
+                "Anel", "Daniel", "Davidson", "Emmanuel", "Evens", "James",
+                "Jameson", "Joseph", "Junior", "Kervens", "Mickenson",
+                "Peterson", "Ricardo", "Samuel", "Sandley", "Schneider",
+                "Simon", "Stanley", "Stevenson", "Watson", "Wesley",
+                "Wilguens", "Wilky", "Wilson"
+            ]
+        },
+        "venezuelan": {
             "female" : [
                 "Salome", "Luciana", "Isabella", "Mariana", "Gabriela",
                 "Valentina", "Valeria", "Sofia", "Sara", "Antonella"
@@ -191,7 +248,7 @@
                 "Juan Felipe", "Gonzalo"
             ]
         },
-        "Russian": {
+        "russian": {
             "female": [
                 "Anastasia", "Anna", "Alina", "Alexandra", "Arina", "Anya",
                 "Alena", "Alice", "Alisa", "Asya", "Albina", "Alyona",

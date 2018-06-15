@@ -1613,23 +1613,32 @@ if __name__ == '__main__':
 
     with GmWindowManager() as window_manager:
         # Prefs
+        # NOTE: When other things find their way into the prefs, the scope
+        # of the read_prefs GmJson will have to be larger
         prefs = {}
         with GmJson('gm.txt') as read_prefs:
             prefs = read_prefs.read_data
 
-        # Get the Campaign's Name
-        filename = ARGS.filename
-        if filename is None and 'campaign' in prefs:
-            filename = prefs['campaign']
+            # Get the Campaign's Name
+            filename = ARGS.filename
+            if filename is not None:
+                read_prefs.write_data = prefs
+                prefs['campaign'] = filename
 
-        if filename is None:
-            filename_menu = [(x, x)
-                             for x in os.listdir('.') if x.endswith('.json')]
+            elif 'campaign' in prefs:
+                filename = prefs['campaign']
 
-            filename = window_manager.menu('Which File', filename_menu)
             if filename is None:
-                window_manager.error(['Need to specify a JSON file'])
-                sys.exit(2)
+                filename_menu = [
+                    (x, x) for x in os.listdir('.') if x.endswith('.json')]
+
+                filename = window_manager.menu('Which File', filename_menu)
+                if filename is None:
+                    window_manager.error(['Need to specify a JSON file'])
+                    sys.exit(2)
+
+                read_prefs.write_data = prefs
+                prefs['campaign'] = filename
 
         # Read the Campaign Data
         with GmJson(filename, window_manager) as campaign:
