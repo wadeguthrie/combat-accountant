@@ -898,6 +898,8 @@ class Ruleset(object):
         '''
         fighter['alive'] = True
         fighter['timers'] = []
+        fighter['stuff'] = []
+        fighter['weapon'] = None # What's the form of this?
         fighter['opponent'] = None
 
     @staticmethod
