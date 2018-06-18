@@ -12,17 +12,16 @@ import sys
 
 # TODO:
 #   - guns w/shots and reload time (so equipment, equip, unequip, ...)
-#   - position w/plusses and minuses
-#   - history of actions in a fight
 #   - add 'attacker or defender' menu to all actions
 #   - summary chart
-#   - attack / active defense numbers on screen
-#   - orange (or other color) for damaged fighter
 #   - < 1/3 FP = 1/2 move, dodge, st
-#   - high pain threshold = no shock
 #   - truncate (don't wrap) long lines
 #   - HP/FP on second line
+#   - history of actions in a fight
 #   - remind to do action when going to next creature
+#   - attack / active defense numbers on screen
+#   - position w/plusses and minuses
+#   - high pain threshold = no shock
 #
 # TODO (eventually)
 #   - TESTS, for the love of God
@@ -218,7 +217,7 @@ class GmWindow(object):
 
         # Print stuff out
 
-        choice_strings.sort(reverse=True)
+        choice_strings.sort(reverse=True, key=lambda s: s.lower())
         line = lines - 1 # -1 because last line is lines-1
         for subline in reversed(range(lines_for_choices)):
             line = lines - (subline + 1) # -1 because last line is lines-1
@@ -807,14 +806,14 @@ class GmWindowManager(object):
         self.__window_stack.append(window)
 
 
-    def pop_gm_window(self, window):
+    def pop_gm_window(self, delete_this_window):
         top_window = self.__window_stack[-1]
-        if window is top_window:
-            del self.__window_stack[-1]
-        else:
-            print 'ERROR: trying to remove non-top window %r' % window
-            print 'Window stack looks like this:'
-            PP.pprint(self.__window_stack)
+        for index, window in enumerate(self.__window_stack):
+            if window is delete_this_window:
+                del self.__window_stack[index]
+                return
+
+        print 'ERROR: could not find window %r' % window
 
 
     def refresh_all(self):

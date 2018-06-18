@@ -164,641 +164,124 @@
     }
   }, 
   "PCs": {
-    "26 - Alan - Tank": {
+    "Wade": {
       "shock": 0, 
+      "last_negative_hp": 0, 
       "alive": true, 
       "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "timers": [], 
-      "check_for_death": false, 
-      "opponent": null
-    }, 
-    "25 - Spenser - Cleric": {
-      "shock": 0, 
-      "alive": true, 
-      "current": {
-        "fp": -4, 
-        "iq": 13, 
-        "hp": 6, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 11, 
-        "basic-speed": 5.5
-      }, 
-      "permanent": {
-        "fp": 12, 
-        "iq": 13, 
+        "fp": 10, 
+        "iq": 10, 
         "hp": 10, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 11, 
-        "basic-speed": 5.5
-      }, 
-      "timers": [], 
-      "check_for_death": false, 
-      "opponent": null
-    }, 
-    "21 - Chelsea - Bokor": {
-      "shock": 0, 
-      "alive": true, 
-      "current": {
-        "fp": 2, 
-        "iq": 12, 
-        "hp": 10, 
-        "ht": 11, 
+        "ht": 10, 
         "st": 10, 
         "dx": 10, 
-        "basic-speed": 5.25
+        "basic-speed": 6
       }, 
       "permanent": {
-        "fp": 11, 
-        "iq": 12, 
+        "fp": 10, 
+        "iq": 10, 
         "hp": 10, 
-        "ht": 11, 
+        "ht": 10, 
         "st": 10, 
         "dx": 10, 
-        "basic-speed": 5.25
+        "basic-speed": 6
       }, 
       "timers": [], 
       "check_for_death": false, 
       "opponent": null
     }, 
-    "24 - Erik - Thief": {
-      "shock": -1, 
+    "Bob": {
+      "shock": 0, 
+      "last_negative_hp": 0, 
       "alive": true, 
       "current": {
-        "fp": 1, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
         "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
+        "dx": 10, 
+        "basic-speed": 3
       }, 
       "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "ht": 11, 
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
         "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
+        "dx": 10, 
+        "basic-speed": 3
+      }, 
+      "timers": [], 
+      "check_for_death": false, 
+      "opponent": null
+    }, 
+    "Tom": {
+      "shock": 0, 
+      "last_negative_hp": 0, 
+      "alive": true, 
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "dx": 10, 
+        "basic-speed": 5
+      }, 
+      "permanent": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "dx": 10, 
+        "basic-speed": 5
       }, 
       "timers": [], 
       "check_for_death": false, 
       "opponent": [
-        "Arena Attack Monsters", 
-        "7-Tank-D"
+        "horsemen", 
+        "Death"
       ]
-    }, 
-    "22 - Karen - Bokor": {
-      "shock": 0, 
-      "alive": true, 
-      "current": {
-        "fp": 2, 
-        "iq": 12, 
-        "hp": 10, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 10, 
-        "basic-speed": 5.25
-      }, 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 10, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 10, 
-        "basic-speed": 5.25
-      }, 
-      "timers": [], 
-      "check_for_death": false, 
-      "opponent": null
     }
   }, 
-  "dead-monsters": {
-    "Arena Attack Characters": {
-      "5-Tank-B": {
-        "notes": "PASSED OUT \n", 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": -2, 
-          "iq": 12, 
-          "hp": 9, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": [
-          "PCs", 
-          "Erik - Tank"
-        ]
-      }, 
-      "4-Tank-C": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": [
-          "PCs", 
-          "Chelsea - Tank"
-        ]
-      }, 
-      "3-Tank-A": {
-        "notes": "", 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": [
-          "PCs", 
-          "Sara - Bokor"
-        ]
-      }, 
-      "1-Thief-A": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": -9, 
-          "iq": 12, 
-          "hp": 3, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": [
-          "PCs", 
-          "Spenser - Thief"
-        ]
-      }, 
-      "7-Bokor-A": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 10, 
-          "basic-speed": 5.25
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 10, 
-          "basic-speed": 5.25
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "8-Cleric-A": {
-        "notes": "DEAD \n", 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 12, 
-          "iq": 13, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 11, 
-          "basic-speed": 5.5
-        }, 
-        "permanent": {
-          "fp": 12, 
-          "iq": 13, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 11, 
-          "basic-speed": 5.5
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "6-Tank-D": {
-        "notes": "PASSED OUT \n", 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": -5, 
-          "iq": 12, 
-          "hp": 6, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": [
-          "PCs", 
-          "Alan - Thief"
-        ]
-      }, 
-      "2-Thief-B": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": [
-          "PCs", 
-          "Sara - Bokor"
-        ]
-      }
-    }, 
-    "Arena Capture the Flag": {
-      "5-Tank-C": {
-        "notes": "Dodge: 9 \n", 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": [
-          "PCs", 
-          "24 - Erik - Thief"
-        ]
-      }, 
-      "1-Cleric": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": -4, 
-          "iq": 13, 
-          "hp": 6, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 11, 
-          "basic-speed": 5.5
-        }, 
-        "permanent": {
-          "fp": 12, 
-          "iq": 13, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 11, 
-          "basic-speed": 5.5
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": [
-          "PCs", 
-          "22 - Karen - Bokor"
-        ]
-      }, 
-      "4-Tank-A": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": [
-          "PCs", 
-          "25 - Spenser - Cleric"
-        ]
-      }, 
-      "8-Thief-B": {
-        "notes": "DEAD \n", 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 8, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "3-Bokor": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 2, 
-          "iq": 12, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 10, 
-          "basic-speed": 5.25
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 10, 
-          "basic-speed": 5.25
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": [
-          "PCs", 
-          "26 - Alan - Tank"
-        ]
-      }, 
-      "7-Tank-D": {
-        "notes": "DEAD \n", 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "6-Tank-B": {
-        "notes": "DEAD \n", 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "2-Thief-A": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": -1, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": [
-          "PCs", 
-          "21 - Chelsea - Bokor"
-        ]
-      }
-    }
-  }, 
+  "dead-monsters": {}, 
   "current-fight": {
-    "index": 0, 
+    "index": 1, 
     "fighters": [
       [
-        "Arena Attack Monsters", 
-        "7-Tank-D"
-      ], 
-      [
-        "Arena Attack Monsters", 
-        "8-Tank-F"
-      ], 
-      [
-        "Arena Attack Monsters", 
-        "2-Thief-B"
+        "PCs", 
+        "Wade"
       ], 
       [
         "PCs", 
-        "26 - Alan - Tank"
+        "Tom"
       ], 
       [
-        "Arena Attack Monsters", 
-        "5-Tank-B"
+        "horsemen", 
+        "Death"
       ], 
       [
-        "Arena Attack Monsters", 
-        "4-Tank-C"
-      ], 
-      [
-        "PCs", 
-        "24 - Erik - Thief"
-      ], 
-      [
-        "Arena Attack Monsters", 
-        "3-Tank-A"
-      ], 
-      [
-        "Arena Attack Monsters", 
-        "1-Thief-A"
-      ], 
-      [
-        "Arena Attack Monsters", 
-        "6-Tank-E"
+        "horsemen", 
+        "War"
       ], 
       [
         "PCs", 
-        "25 - Spenser - Cleric"
+        "Bob"
       ], 
       [
-        "PCs", 
-        "21 - Chelsea - Bokor"
+        "horsemen", 
+        "Pestilence"
       ], 
       [
-        "PCs", 
-        "22 - Karen - Bokor"
+        "horsemen", 
+        "Famine"
       ]
     ], 
     "saved": false, 
-    "round": 0, 
-    "monsters": "Arena Attack Monsters"
+    "round": 2, 
+    "monsters": "horsemen"
   }, 
   "Names": {
     "russian": {
@@ -1474,10 +957,7 @@
         }, 
         "timers": [], 
         "check_for_death": false, 
-        "opponent": [
-          "PCs", 
-          "24 - Erik - Thief"
-        ]
+        "opponent": null
       }, 
       "8-Tank-F": {
         "shock": 0, 
@@ -1530,6 +1010,410 @@
         "opponent": null
       }, 
       "2-Thief-B": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }
+    }, 
+    "Arena Attack Characters": {
+      "5-Tank-B": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "4-Tank-C": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "3-Tank-A": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "1-Thief-A": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "7-Bokor-A": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 10, 
+          "basic-speed": 5.25
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 10, 
+          "basic-speed": 5.25
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "8-Cleric-A": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 12, 
+          "iq": 13, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 11, 
+          "basic-speed": 5.5
+        }, 
+        "permanent": {
+          "fp": 12, 
+          "iq": 13, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 11, 
+          "basic-speed": 5.5
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "6-Tank-D": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "2-Thief-B": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }
+    }, 
+    "Arena Capture the Flag": {
+      "5-Tank-C": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "1-Cleric": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 12, 
+          "iq": 13, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 11, 
+          "basic-speed": 5.5
+        }, 
+        "permanent": {
+          "fp": 12, 
+          "iq": 13, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 11, 
+          "basic-speed": 5.5
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "4-Tank-A": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "8-Thief-B": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "3-Bokor": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 10, 
+          "basic-speed": 5.25
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 10, 
+          "basic-speed": 5.25
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "7-Tank-D": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "6-Tank-B": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "2-Thief-A": {
         "shock": 0, 
         "alive": true, 
         "current": {
