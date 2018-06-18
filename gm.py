@@ -12,21 +12,19 @@ import sys
 
 # TODO:
 #   - make color work (again)
-#   - add 'attacker or defender' menu to all actions
-#   - < 1/3 FP = 1/2 move, dodge, st
-#   - truncate (don't wrap) long lines
-#   - Warning if window is smaller than expected
-#   - history of actions in a fight
-#   - remind to do action when going to next creature
 #   - attack / active defense numbers on screen
 #   - position w/plusses and minuses
 #   - high pain threshold = no shock
 #   - guns w/shots and reload time (so equipment, equip, unequip, ...)
+#   - < 1/3 FP = 1/2 move, dodge, st
+#   - history of actions in a fight (needs scrolling windows)
+#   - Warning if window is smaller than expected
 #
 # TODO (eventually)
 #   - TESTS, for the love of God
 #   - scrolling menus (et al.)
 #   - entering monsters and characters from the screen
+#   - truncate (don't wrap) long lines
 
 
 class GmJson(object):
@@ -704,13 +702,13 @@ class GmWindowManager(object):
         if width < len(title):
             width = len(title)
         width += 2 # Need some margin
-        border_win, error_win = self.__centered_boxed_window(len(strings),
+        border_win, error_win = self.__centered_boxed_window(len(strings)+2,
                                                              width,
                                                              title,
                                                              mode)
         for line, string in enumerate(strings):
             #print "line %r string %r (len=%d)" % (line, string, len(string))
-            error_win.addstr(line, 0, string, mode)
+            error_win.addstr(line+1, 1, string, mode)
         error_win.refresh()
 
         ignored = self.get_one_character()
@@ -1014,15 +1012,32 @@ class GurpsRuleset(Ruleset):
 
     def __init__(self):
         super(GurpsRuleset, self).__init__()
+        self.__action_performed_by_this_fighter = False
 
     # TODO: need a template for new characters
 
-    def new_fight(self, fighter_details):
-        '''
-        Removes all the stuff from the old fight except injury.
-        '''
-        super(GurpsRuleset, self).new_fight(fighter_details)
-        fighter_details['shock'] = 0
+    def adjust_hp(self,
+                  fighter_details,
+                  adj # the number of HP to gain or lose
+                 ):
+        if adj < 0 and fighter_details['current']['hp'] < 0:
+            before_hp = fighter_details['current']['hp']
+            before_hp_multiple = (before_hp /
+                                    fighter_details['permanent']['hp'])
+            after_hp = (fighter_details['current']['hp'] + adj) * 1.0 + 0.1
+            after_hp_multiple = (after_hp /
+                                    fighter_details['permanent']['hp'])
+            if int(before_hp_multiple) != int(after_hp_multiple):
+                fighter_details['check_for_death'] = True
+
+        shock_amount = -4 if adj <= -4 else adj
+        if fighter_details['shock'] > shock_amount:
+            fighter_details['shock'] = shock_amount
+
+        super(GurpsRuleset, self).adjust_hp(fighter_details, adj)
+
+    def do_action(self):
+        self.__action_performed_by_this_fighter = True
 
     def get_fighter_state(self, fighter_details):
         if (fighter_details['current']['fp'] <= 0 or
@@ -1054,25 +1069,24 @@ class GurpsRuleset(Ruleset):
                 Ruleset.roll(1, 6)
                 )
 
-    def adjust_hp(self,
-                  fighter_details,
-                  adj # the number of HP to gain or lose
-                 ):
-        if adj < 0 and fighter_details['current']['hp'] < 0:
-            before_hp = fighter_details['current']['hp']
-            before_hp_multiple = (before_hp /
-                                    fighter_details['permanent']['hp'])
-            after_hp = (fighter_details['current']['hp'] + adj) * 1.0 + 0.1
-            after_hp_multiple = (after_hp /
-                                    fighter_details['permanent']['hp'])
-            if int(before_hp_multiple) != int(after_hp_multiple):
-                fighter_details['check_for_death'] = True
 
-        shock_amount = -4 if adj <= -4 else adj
-        if fighter_details['shock'] > shock_amount:
-            fighter_details['shock'] = shock_amount
 
-        super(GurpsRuleset, self).adjust_hp(fighter_details, adj)
+    def new_fight(self, fighter_details):
+        '''
+        Removes all the stuff from the old fight except injury.
+        '''
+        super(GurpsRuleset, self).new_fight(fighter_details)
+        fighter_details['shock'] = 0
+        self.__action_performed_by_this_fighter = False
+
+
+    def next_fighter(self, prev_fighter_details):
+        prev_fighter_details['shock'] = 0 # remove expired shock entry
+        if not self.__action_performed_by_this_fighter:
+            return (False,
+                    'The fighter should perform some action before moving on.')
+        self.__action_performed_by_this_fighter = False
+        return True, None
 
 
 
@@ -1355,6 +1369,7 @@ class FightHandler(ScreenHandler):
     def __action(self):
         action = self._window_manager.menu('Action', self.__action_menu)
         if action is not None:
+            self.__ruleset.do_action()
             current_name, current_fighter_details = self.__current_fighter()
             current_fighter_details['timers'].append({'rounds': 1,
                                               'string': action})
@@ -1388,6 +1403,8 @@ class FightHandler(ScreenHandler):
             now_dead = self._window_manager.menu('Who is Dead',
                                                  now_dead_menu,
                                                  1) # assume it's the opponent
+        if now_dead is None:
+            return True # Keep fighting
 
         now_dead['alive'] = False
 
@@ -1400,11 +1417,20 @@ class FightHandler(ScreenHandler):
 
 
     def __damage_FP(self):
+        # Figure out who loses the FP points
         current_name, current_fighter_details = self.__current_fighter()
         opponent_name, opponent_details = self.__opponent_details(
                                                         current_fighter_details)
-        if opponent_details is None:
-            return True
+        if opponent_name is None or opponent_details is None:
+            fp_recipient = current_fighter_details
+        else:
+            fp_recipient_menu = [(current_name, current_fighter_details),
+                                    (opponent_name, opponent_details)]
+            fp_recipient = self._window_manager.menu('Who Loses FP',
+                                                     fp_recipient_menu,
+                                                     0)
+        if fp_recipient is None:
+            return True # Keep fighting
 
         title = 'Change FP By...'
         height = 1
@@ -1415,13 +1441,13 @@ class FightHandler(ScreenHandler):
 
         # If FP go below zero, you lose HP along with FP
         # TODO: all of FP belongs in Ruleset
-        if adj < 0  and -adj > opponent_details['current']['fp']:
+        if adj < 0  and -adj > fp_recipient['current']['fp']:
             hp_adj = adj
-            if opponent_details['current']['fp'] > 0:
-                hp_adj += opponent_details['current']['fp']
+            if fp_recipient['current']['fp'] > 0:
+                hp_adj += fp_recipient['current']['fp']
 
-        opponent_details['current']['hp'] += hp_adj # NOTE: belongs in Ruleset
-        opponent_details['current']['fp'] += adj # NOTE: belongs in Ruleset
+        fp_recipient['current']['hp'] += hp_adj # NOTE: belongs in Ruleset
+        fp_recipient['current']['fp'] += adj # NOTE: belongs in Ruleset
         next_PC_name = self.__next_PC_name()
         self._window.show_fighters(current_name, current_fighter_details,
                                    opponent_name, opponent_details,
@@ -1431,7 +1457,6 @@ class FightHandler(ScreenHandler):
 
 
     def __damage_HP(self):
-        # TODO: remember, this is negative
         # Figure out who loses the hit points
         current_name, current_fighter_details = self.__current_fighter()
         opponent_name, opponent_details = self.__opponent_details(
@@ -1444,6 +1469,8 @@ class FightHandler(ScreenHandler):
             hp_recipient = self._window_manager.menu('Who Loses HP',
                                                      hp_recipient_menu,
                                                      1) # assume the opponent
+        if hp_recipient is None:
+            return True # Keep fighting
 
         title = 'Change HP By...'
         height = 1
@@ -1518,9 +1545,13 @@ class FightHandler(ScreenHandler):
 
 
     def __next_fighter(self):
-        # NOTE: shock belongs in Ruleset
         prev_name, prev_fighter_details = self.__current_fighter()
-        prev_fighter_details['shock'] = 0 # remove expired shock entry
+        ok_to_continue, message = self.__ruleset.next_fighter(
+                                                    prev_fighter_details)
+        if not ok_to_continue:
+            self._window_manager.error([message])
+            return True # Keep fighting
+
 
         # remove any expired timers
         remove_these = []
@@ -1572,6 +1603,8 @@ class FightHandler(ScreenHandler):
                                     (opponent_name, opponent_details)]
             notes_recipient = self._window_manager.menu('Notes For Whom',
                                                         notes_recipient_menu)
+        if notes_recipient is None:
+            return True # Keep fighting
 
         # Now, get the notes for that person
         lines, cols = self._window.getmaxyx()
@@ -1702,6 +1735,21 @@ class FightHandler(ScreenHandler):
         '''
         Asks user for information for timer to add to fighter.
         '''
+        # Figure out who loses the hit points
+        current_name, current_fighter_details = self.__current_fighter()
+        opponent_name, opponent_details = self.__opponent_details(
+                                                        current_fighter_details)
+        if opponent_name is None or opponent_details is None:
+            timer_recipient = current_fighter_details
+        else:
+            timer_recipient_menu = [(current_name, current_fighter_details),
+                                    (opponent_name, opponent_details)]
+            timer_recipient = self._window_manager.menu('Who Gets Timer',
+                                                        timer_recipient_menu,
+                                                        0)
+        if timer_recipient is None:
+            return True # Keep fighting
+
         timer = {'rounds': 0, 'string': None}
 
         title = 'Rounds To Wait...'
@@ -1722,8 +1770,7 @@ class FightHandler(ScreenHandler):
                 title)
 
         if timer['string'] is not None and len(timer['string']) != 0:
-            current_name, current_fighter_details = self.__current_fighter()
-            current_fighter_details['timers'].append(timer)
+            timer_recipient['timers'].append(timer)
 
         return True # Keep fighting
 
