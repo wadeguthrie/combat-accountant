@@ -382,54 +382,34 @@ class FightGmWindow(GmWindow):
         if he has one.
         '''
 
-        print 'a' # TODO: remove
         if next_PC_name is not None:
-            print 'b' # TODO: remove
             self._window.move(self.__NEXT_LINE, self.__FIGHTER_COL)
             self._window.clrtoeol()
             self._window.addstr(self.__NEXT_LINE,
                                 self.__FIGHTER_COL,
                                 '(Next: %s)' % next_PC_name)
-            print 'c' # TODO: remove
 
 
-        print 'd' # TODO: remove
         self._window.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
-        print 'e' # TODO: remove
         self._window.clrtoeol()
-        print 'f' # TODO: remove
 
         if self.__show_fighter(current_name,
                                current_fighter_details,
                                self.__FIGHTER_COL):
-            print 'g' # TODO: remove
             self.__show_fighter_notes(self.__character_window,
                                       current_fighter_details)
-            print 'h' # TODO: remove
 
-        print 'i' # TODO: remove
         if opponent_details is None:
-            print 'j' # TODO: remove
             self.__opponent_window.clear()
-            print 'j' # TODO: remove
             self.__opponent_window.refresh()
-            print 'l' # TODO: remove
         else:
-            print 'm' # TODO: remove
-            print '  opp:name "%s"' % opponent_name # TODO: remove
-            PP.pprint(opponent_details)
             if self.__show_fighter(opponent_name,
                                    opponent_details,
                                    self.__OPPONENT_COL):
-                print 'n' # TODO: remove
                 self.__show_fighter_notes(self.__opponent_window,
                                           opponent_details)
-                print 'o' # TODO: remove
-        print 'p' # TODO: remove
         self.show_summary_window(fight)
-        print 'q' # TODO: remove
         self.refresh()
-        print 'r' # TODO: remove
 
 
     def round_ribbon(self,
@@ -989,23 +969,24 @@ class Ruleset(object):
     def __init__(self):
         pass
 
-    def new_fight(self, fighter):
+    def new_fight(self, fighter_details):
         '''
         Removes all the stuff from the old fight except injury.
         '''
-        fighter['alive'] = True
-        fighter['timers'] = []
-        fighter['stuff'] = []
-        fighter['weapon'] = None # What's the form of this?
-        fighter['opponent'] = None
+        fighter_details['alive'] = True
+        fighter_details['timers'] = []
+        fighter_details['stuff'] = []
+        fighter_details['weapon'] = None # What's the form of this?
+        fighter_details['opponent'] = None
 
-    def heal_fighter(self, fighter):
+    def heal_fighter(self, fighter_details):
         '''
         Removes all injury (and their side-effects) from a fighter.
         '''
-        for stat in fighter['permanent'].iterkeys():
-            fighter['current'][stat] = fighter['permanent'][stat]
-        fighter['alive'] = True
+        for stat in fighter_details['permanent'].iterkeys():
+            fighter_details['current'][stat] = (
+                                        fighter_details['permanent'][stat])
+        fighter_details['alive'] = True
 
     @staticmethod
     def roll(number, # the number of dice
@@ -1017,6 +998,12 @@ class Ruleset(object):
         for count in range(number):
             result += random.randint(1, dice)
         return result
+
+    def adjust_hp(self,
+                  fighter_details,
+                  adj # the number of HP to gain or lose
+                 ):
+        fighter_details['current']['hp'] += adj
 
 
 class GurpsRuleset(Ruleset):
@@ -1030,12 +1017,12 @@ class GurpsRuleset(Ruleset):
 
     # TODO: need a template for new characters
 
-    def new_fight(self, fighter):
+    def new_fight(self, fighter_details):
         '''
         Removes all the stuff from the old fight except injury.
         '''
-        super(GurpsRuleset, self).new_fight(fighter)
-        fighter['shock'] = 0
+        super(GurpsRuleset, self).new_fight(fighter_details)
+        fighter_details['shock'] = 0
 
     def get_fighter_state(self, fighter_details):
         if (fighter_details['current']['fp'] <= 0 or
@@ -1049,23 +1036,44 @@ class GurpsRuleset(Ruleset):
         return Ruleset.FIGHTER_STATE_HEALTHY
 
 
-    def heal_fighter(self, fighter):
+    def heal_fighter(self, fighter_details):
         '''
         Removes all injury (and their side-effects) from a fighter.
         '''
-        super(GurpsRuleset, self).heal_fighter(fighter)
-        fighter['shock'] = 0
-        fighter['last_negative_hp'] = 0
-        fighter['check_for_death'] = False
+        super(GurpsRuleset, self).heal_fighter(fighter_details)
+        fighter_details['shock'] = 0
+        fighter_details['last_negative_hp'] = 0
+        fighter_details['check_for_death'] = False
 
 
     def initiative(self,
-                   fighter # dict for the creature as in the json file
+                   fighter_details # dict for the creature as in the json file
                   ):
-        return (fighter['current']['basic-speed'],
-                fighter['current']['dx'],
+        return (fighter_details['current']['basic-speed'],
+                fighter_details['current']['dx'],
                 Ruleset.roll(1, 6)
                 )
+
+    def adjust_hp(self,
+                  fighter_details,
+                  adj # the number of HP to gain or lose
+                 ):
+        if adj < 0 and fighter_details['current']['hp'] < 0:
+            before_hp = fighter_details['current']['hp']
+            before_hp_multiple = (before_hp /
+                                    fighter_details['permanent']['hp'])
+            after_hp = (fighter_details['current']['hp'] + adj) * 1.0 + 0.1
+            after_hp_multiple = (after_hp /
+                                    fighter_details['permanent']['hp'])
+            if int(before_hp_multiple) != int(after_hp_multiple):
+                fighter_details['check_for_death'] = True
+
+        shock_amount = -4 if adj <= -4 else adj
+        if fighter_details['shock'] > shock_amount:
+            fighter_details['shock'] = shock_amount
+
+        super(GurpsRuleset, self).adjust_hp(fighter_details, adj)
+
 
 
 class ScreenHandler(object):
@@ -1237,7 +1245,7 @@ class FightHandler(ScreenHandler):
             ord('d'): {'name': 'dead', 'func': self.__dead},
             # NOTE: 'h' and 'f' belong in Ruleset
             ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
-            ord('h'): {'name': 'HP damage', 'func': self.__damage_HP},
+            ord('-'): {'name': 'HP damage', 'func': self.__damage_HP},
             ord('n'): {'name': 'notes', 'func': self.__notes},
             ord('o'): {'name': 'opponent', 'func': self.__pick_opponent},
             ord('q'): {'name': 'quit', 'func': self.__quit},
@@ -1381,17 +1389,13 @@ class FightHandler(ScreenHandler):
                                                  now_dead_menu,
                                                  1) # assume it's the opponent
 
-        print 'A' # TODO: remove
         now_dead['alive'] = False
 
-        print 'B' # TODO: remove
         next_PC_name = self.__next_PC_name()
-        print 'C' # TODO: remove
         self._window.show_fighters(current_name, current_fighter_details,
                                    opponent_name, opponent_details,
                                    next_PC_name,
                                    self.__fight)
-        print 'D' # TODO: remove
         return True # Keep going
 
 
@@ -1427,38 +1431,34 @@ class FightHandler(ScreenHandler):
 
 
     def __damage_HP(self):
+        # TODO: remember, this is negative
+        # Figure out who loses the hit points
         current_name, current_fighter_details = self.__current_fighter()
         opponent_name, opponent_details = self.__opponent_details(
                                                         current_fighter_details)
-        if opponent_details is not None:
-            title = 'Change HP By...'
-            height = 1
-            width = len(title)
-            adj_string = self._window_manager.input_box(height, width, title)
-            adj = int(adj_string)
+        if opponent_name is None or opponent_details is None:
+            hp_recipient = current_fighter_details
+        else:
+            hp_recipient_menu = [(current_name, current_fighter_details),
+                                    (opponent_name, opponent_details)]
+            hp_recipient = self._window_manager.menu('Who Loses HP',
+                                                     hp_recipient_menu,
+                                                     1) # assume the opponent
 
-            # NOTE: check for death belongs in Ruleset
-            if adj < 0 and opponent_details['current']['hp'] < 0:
-                before_hp = opponent_details['current']['hp']
-                before_hp_multiple = (before_hp /
-                                        opponent_details['permanent']['hp'])
-                after_hp = (opponent_details['current']['hp'] + adj) * 1.0 + 0.1
-                after_hp_multiple = (after_hp /
-                                        opponent_details['permanent']['hp'])
-                if int(before_hp_multiple) != int(after_hp_multiple):
-                    opponent_details['check_for_death'] = True
+        title = 'Change HP By...'
+        height = 1
+        width = len(title)
+        adj_string = self._window_manager.input_box(height, width, title)
+        adj = int(adj_string)
 
-            # NOTE: shock belongs in Ruleset
-            shock_amount = -4 if adj <= -4 else adj
-            if opponent_details['shock'] > shock_amount:
-                opponent_details['shock'] = shock_amount
+        # NOTE: SUBTRACTING the adjustment
+        self.__ruleset.adjust_hp(hp_recipient, -adj)
 
-            opponent_details['current']['hp'] += adj # NOTE: belongs in Ruleset
-            next_PC_name = self.__next_PC_name()
-            self._window.show_fighters(current_name, current_fighter_details,
-                                       opponent_name, opponent_details,
-                                       next_PC_name,
-                                       self.__fight)
+        next_PC_name = self.__next_PC_name()
+        self._window.show_fighters(current_name, current_fighter_details,
+                                   opponent_name, opponent_details,
+                                   next_PC_name,
+                                   self.__fight)
         return True # Keep going
 
 
