@@ -1,4 +1,3 @@
 {
-    "campaign": "test.json"
+  "campaign": "arena.json"
 }
-

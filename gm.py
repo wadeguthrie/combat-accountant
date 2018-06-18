@@ -12,6 +12,17 @@ import sys
 
 # TODO:
 #   - guns w/shots and reload time (so equipment, equip, unequip, ...)
+#   - position w/plusses and minuses
+#   - history of actions in a fight
+#   - add 'attacker or defender' menu to all actions
+#   - summary chart
+#   - attack / active defense numbers on screen
+#   - orange (or other color) for damaged fighter
+#   - < 1/3 FP = 1/2 move, dodge, st
+#   - high pain threshold = no shock
+#   - truncate (don't wrap) long lines
+#   - HP/FP on second line
+#   - remind to do action when going to next creature
 #
 # TODO (eventually)
 #   - TESTS, for the love of God
@@ -445,10 +456,13 @@ class FightGmWindow(GmWindow):
                 fighter['permanent']['hp'],
                 fighter['current']['fp'],
                 fighter['permanent']['fp'])
+
             if fighter['current']['fp'] <= 0 or fighter['current']['hp'] <= 0:
                 mode = curses.color_pair(GmWindowManager.RED_BLACK)
+            elif fighter['current']['hp'] < fighter['permanent']['hp']:
+                mode = curses.color_pair(GmWindowManager.YELLOW_BLACK)
             else:
-                mode = curses.A_NORMAL
+                mode = curses.color_pair(GmWindowManager.GREEN_BLACK)
 
         else:
             fighter_string = '(DEAD)'
@@ -537,7 +551,10 @@ class GmWindowManager(object):
     ESCAPE = 27 # ASCII value for the escape character
 
     # Foreground / background colors
-    (RED_BLACK, RED_WHITE) = range(1, 3) # red text over black
+    (GREEN_BLACK,   # green text over black background
+     YELLOW_BLACK,
+     RED_BLACK,
+     RED_WHITE) = range(1, 5)
 
     # NOTE: remember to call win.refresh()
     # win.addstr(y, x, "String", attrib)
@@ -565,6 +582,12 @@ class GmWindowManager(object):
             self.__stdscr.keypad(1) # special characters converted by curses
                                     # (e.g., curses.KEY_LEFT)
 
+            curses.init_pair(GmWindowManager.GREEN_BLACK,
+                             curses.COLOR_GREEN, # fg
+                             curses.COLOR_BLACK) # bg
+            curses.init_pair(GmWindowManager.YELLOW_BLACK,
+                             curses.COLOR_YELLOW, # fg
+                             curses.COLOR_BLACK) # bg
             curses.init_pair(GmWindowManager.RED_BLACK,
                              curses.COLOR_RED, # fg
                              curses.COLOR_BLACK) # bg
@@ -654,6 +677,9 @@ class GmWindowManager(object):
         del error_win
         self.hard_refresh_all()
         return string
+
+    def get_fight_gm_window(self):
+        return FightGmWindow(self)
 
     def input_box(self,
                   height,
@@ -1125,7 +1151,8 @@ class FightHandler(ScreenHandler):
                  monster_list_name
                 ):
         super(FightHandler, self).__init__(window_manager)
-        self._window = FightGmWindow(self._window_manager)
+        self._window = self._window_manager.get_fight_gm_window()
+        FightGmWindow(self._window_manager)
 
         self._choices = {
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
