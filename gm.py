@@ -11,17 +11,17 @@ import random
 import sys
 
 # TODO:
-#   - guns w/shots and reload time (so equipment, equip, unequip, ...)
+#   - make color work (again)
 #   - add 'attacker or defender' menu to all actions
-#   - summary chart
 #   - < 1/3 FP = 1/2 move, dodge, st
 #   - truncate (don't wrap) long lines
-#   - HP/FP on second line
+#   - Warning if window is smaller than expected
 #   - history of actions in a fight
 #   - remind to do action when going to next creature
 #   - attack / active defense numbers on screen
 #   - position w/plusses and minuses
 #   - high pain threshold = no shock
+#   - guns w/shots and reload time (so equipment, equip, unequip, ...)
 #
 # TODO (eventually)
 #   - TESTS, for the love of God
@@ -333,6 +333,8 @@ class FightGmWindow(GmWindow):
                 Ruleset.FIGHTER_STATE_CRITICAL : GmWindowManager.RED_BLACK,
                 Ruleset.FIGHTER_STATE_DEAD     : GmWindowManager.RED_BLACK}
 
+        PP.pprint(self.__state_color) # TODO: remove
+
     def close(self):
         # Kill my subwindows, first
         if self.__character_window is not None:
@@ -380,34 +382,54 @@ class FightGmWindow(GmWindow):
         if he has one.
         '''
 
+        print 'a' # TODO: remove
         if next_PC_name is not None:
+            print 'b' # TODO: remove
             self._window.move(self.__NEXT_LINE, self.__FIGHTER_COL)
             self._window.clrtoeol()
             self._window.addstr(self.__NEXT_LINE,
                                 self.__FIGHTER_COL,
                                 '(Next: %s)' % next_PC_name)
+            print 'c' # TODO: remove
 
 
+        print 'd' # TODO: remove
         self._window.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
+        print 'e' # TODO: remove
         self._window.clrtoeol()
+        print 'f' # TODO: remove
 
         if self.__show_fighter(current_name,
                                current_fighter_details,
                                self.__FIGHTER_COL):
+            print 'g' # TODO: remove
             self.__show_fighter_notes(self.__character_window,
                                       current_fighter_details)
+            print 'h' # TODO: remove
 
+        print 'i' # TODO: remove
         if opponent_details is None:
+            print 'j' # TODO: remove
             self.__opponent_window.clear()
+            print 'j' # TODO: remove
             self.__opponent_window.refresh()
+            print 'l' # TODO: remove
         else:
+            print 'm' # TODO: remove
+            print '  opp:name "%s"' % opponent_name # TODO: remove
+            PP.pprint(opponent_details)
             if self.__show_fighter(opponent_name,
                                    opponent_details,
-                                   self.__OPPONENT_COL+4):
+                                   self.__OPPONENT_COL):
+                print 'n' # TODO: remove
                 self.__show_fighter_notes(self.__opponent_window,
                                           opponent_details)
+                print 'o' # TODO: remove
+        print 'p' # TODO: remove
         self.show_summary_window(fight)
+        print 'q' # TODO: remove
         self.refresh()
+        print 'r' # TODO: remove
 
 
     def round_ribbon(self,
@@ -447,6 +469,8 @@ class FightGmWindow(GmWindow):
                 fighter['name'],
                 fighter['details']['current']['hp'],
                 fighter['details']['permanent']['hp'])
+            #print 'show_summary_window(%d): %s' % (fighter_state,
+                                                   #fighter_string) # TODO: remove
             self.__summary_window.addstr(line, 0, fighter_string, mode)
 
     def start_fight(self):
@@ -493,11 +517,18 @@ class FightGmWindow(GmWindow):
                 fighter_details['permanent']['fp'])
 
             fighter_state = self.__ruleset.get_fighter_state(fighter_details)
+            print '__show_fighter(%d): %s' % (fighter_state,
+                                              fighter_string) # TODO: remove
             mode = self.__state_color[fighter_state]
         else:
             fighter_string = '(DEAD)'
-            mode = self.__state_color(Ruleset.FIGHTER_STATE_DEAD)
+            mode = self.__state_color[Ruleset.FIGHTER_STATE_DEAD]
             is_alive = False
+
+        #GmWindowManager.GREEN_BLACK # TODO: remove
+        mode = GmWindowManager.YELLOW_BLACK # TODO: remove
+        #GmWindowManager.RED_BLACK # TODO: remove
+        #GmWindowManager.RED_BLACK # TODO: remove
 
         self._window.addstr(self.__FIGHTER_LINE, column, fighter_string, mode)
         return is_alive
@@ -627,7 +658,6 @@ class GmWindowManager(object):
             curses.init_pair(GmWindowManager.RED_WHITE,
                              curses.COLOR_RED, # fg
                              curses.COLOR_WHITE) # bg
-
             self.__stdscr.clear()
             self.__stdscr.refresh()
         except:
@@ -733,7 +763,8 @@ class GmWindowManager(object):
 
     def menu(self,
              title,
-             strings_results # array of tuples (string, return value)
+             strings_results, # array of tuples (string, return value)
+             starting_index = 0 # Who is selected when the menu starts
             ):
         '''
         Presents a menu to the user and returns the result.
@@ -755,7 +786,7 @@ class GmWindowManager(object):
         border_win, menu_win = self.__centered_boxed_window(height, width,
                                                             title)
 
-        index = 0
+        index = 0 if starting_index >= len(strings_results) else starting_index
         for line, string_result in enumerate(strings_results):
             # Maybe use A_BOLD instead of A_STANDOUT -- could also use
             # curses.color_pair(1) or whatever
@@ -1007,7 +1038,6 @@ class GurpsRuleset(Ruleset):
         fighter['shock'] = 0
 
     def get_fighter_state(self, fighter_details):
-
         if (fighter_details['current']['fp'] <= 0 or
                                     fighter_details['current']['hp'] <= 0):
             return Ruleset.FIGHTER_STATE_CRITICAL
@@ -1341,14 +1371,27 @@ class FightHandler(ScreenHandler):
         current_name, current_fighter_details = self.__current_fighter()
         opponent_name, opponent_details = self.__opponent_details(
                                                     current_fighter_details)
-        if opponent_details is not None:
-            opponent_details['alive'] = False
 
-            next_PC_name = self.__next_PC_name()
-            self._window.show_fighters(current_name, current_fighter_details,
-                                       opponent_name, opponent_details,
-                                       next_PC_name,
-                                       self.__fight)
+        if opponent_name is None or opponent_details is None:
+            now_dead = current_fighter_details
+        else:
+            now_dead_menu = [(current_name, current_fighter_details),
+                                    (opponent_name, opponent_details)]
+            now_dead = self._window_manager.menu('Who is Dead',
+                                                 now_dead_menu,
+                                                 1) # assume it's the opponent
+
+        print 'A' # TODO: remove
+        now_dead['alive'] = False
+
+        print 'B' # TODO: remove
+        next_PC_name = self.__next_PC_name()
+        print 'C' # TODO: remove
+        self._window.show_fighters(current_name, current_fighter_details,
+                                   opponent_name, opponent_details,
+                                   next_PC_name,
+                                   self.__fight)
+        print 'D' # TODO: remove
         return True # Keep going
 
 
@@ -1518,23 +1561,33 @@ class FightHandler(ScreenHandler):
         return next_PC_name
 
     def __notes(self):
+        # Figure out for whom these notes are...
         current_name, current_fighter_details = self.__current_fighter()
+        opponent_name, opponent_details = self.__opponent_details(
+                                                        current_fighter_details)
+        if opponent_name is None or opponent_details is None:
+            notes_recipient = current_fighter_details
+        else:
+            notes_recipient_menu = [(current_name, current_fighter_details),
+                                    (opponent_name, opponent_details)]
+            notes_recipient = self._window_manager.menu('Notes For Whom',
+                                                        notes_recipient_menu)
+
+        # Now, get the notes for that person
         lines, cols = self._window.getmaxyx()
 
-        notes = (None if 'notes' not in current_fighter_details else
-                                            current_fighter_details['notes'])
+        notes = (None if 'notes' not in notes_recipient else
+                                            notes_recipient['notes'])
         notes = self._window_manager.edit_window(
                     lines - 4,
                     self._window.fighter_win_width,
                     notes,  # initial string (w/ \n) for the window
-                    '%s Notes' % current_name,
+                    'Notes',
                     '^G to exit')
-        current_fighter_details['notes'] = notes
+        notes_recipient['notes'] = notes
 
         # Redraw the fighters
         next_PC_name = self.__next_PC_name()
-        opponent_name, opponent_details = self.__opponent_details(
-                                                        current_fighter_details)
         self._window.show_fighters(current_name, current_fighter_details,
                                    opponent_name, opponent_details,
                                    next_PC_name,
