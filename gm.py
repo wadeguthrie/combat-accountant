@@ -302,23 +302,36 @@ class BuildFightGmWindow(GmWindow):
 
 
 class FightGmWindow(GmWindow):
-    def __init__(self, window_manager):
+    def __init__(self, window_manager, ruleset):
         super(FightGmWindow, self).__init__(window_manager,
                                            curses.LINES,
                                            curses.COLS,
                                            0,
                                            0)
-        self.__FIGHTER_COL = 1
+        self.__ruleset = ruleset
+        self.__pane_width = curses.COLS / 3 # includes margin
+        self.__margin_width = 2
+
+        self.__FIGHTER_COL = 0
+        self.__OPPONENT_COL = self.__pane_width
+        self.__SUMMARY_COL = 2 * self.__pane_width
+
         self.__FIGHTER_LINE = 4
         self.__NEXT_LINE = 2
-        self.__OPPONENT_COL = (curses.COLS / 2)
+
         self.__character_window = None
         self.__opponent_window = None
+        self.__summary_window = None
         self.fighter_win_width = 0
         self.__round_count_string = '%d Rnds: '
         # assume rounds takes as much space as '%d' 
         self.len_timer_leader = len(self.__round_count_string)
 
+        self.__state_color = {
+                Ruleset.FIGHTER_STATE_HEALTHY  : GmWindowManager.GREEN_BLACK,
+                Ruleset.FIGHTER_STATE_INJURED  : GmWindowManager.YELLOW_BLACK,
+                Ruleset.FIGHTER_STATE_CRITICAL : GmWindowManager.RED_BLACK,
+                Ruleset.FIGHTER_STATE_DEAD     : GmWindowManager.RED_BLACK}
 
     def close(self):
         # Kill my subwindows, first
@@ -328,6 +341,9 @@ class FightGmWindow(GmWindow):
         if self.__opponent_window is not None:
             del self.__opponent_window
             self.__opponent_window = None
+        if self.__summary_window is not None:
+            del self.__summary_window
+            self.__summary_window = None
         super(FightGmWindow, self).close()
 
 
@@ -337,6 +353,8 @@ class FightGmWindow(GmWindow):
             self.__character_window.refresh()
         if self.__opponent_window is not None:
             self.__opponent_window.refresh()
+        if self.__summary_window is not None:
+            self.__summary_window.refresh()
 
 
     def touchwin(self):
@@ -345,48 +363,50 @@ class FightGmWindow(GmWindow):
             self.__character_window.touchwin()
         if self.__opponent_window is not None:
             self.__opponent_window.touchwin()
+        if self.__summary_window is not None:
+            self.__summary_window.touchwin()
 
 
     def show_fighters(self,
                       current_name,
-                      current_fighter,
+                      current_fighter_details,
                       opponent_name,
-                      opponent,
-                      next_name # name of next PC
+                      opponent_details,
+                      next_PC_name,
+                      fight
                      ):
         '''
         Displays the current state of the current fighter and his opponent,
         if he has one.
         '''
 
-        if next_name is not None:
+        if next_PC_name is not None:
             self._window.move(self.__NEXT_LINE, self.__FIGHTER_COL)
             self._window.clrtoeol()
             self._window.addstr(self.__NEXT_LINE,
                                 self.__FIGHTER_COL,
-                                '(Next: %s)' % next_name)
+                                '(Next: %s)' % next_PC_name)
 
 
         self._window.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
         self._window.clrtoeol()
 
         if self.__show_fighter(current_name,
-                               current_fighter,
+                               current_fighter_details,
                                self.__FIGHTER_COL):
             self.__show_fighter_notes(self.__character_window,
-                                      current_fighter)
+                                      current_fighter_details)
 
-        if opponent is None:
+        if opponent_details is None:
             self.__opponent_window.clear()
             self.__opponent_window.refresh()
         else:
-            self._window.addstr(self.__FIGHTER_LINE,
-                                self.__OPPONENT_COL, 'vs.')
             if self.__show_fighter(opponent_name,
-                                   opponent,
+                                   opponent_details,
                                    self.__OPPONENT_COL+4):
-                self.__show_fighter_notes(self.__opponent_window, opponent)
-
+                self.__show_fighter_notes(self.__opponent_window,
+                                          opponent_details)
+        self.show_summary_window(fight)
         self.refresh()
 
 
@@ -417,16 +437,25 @@ class FightGmWindow(GmWindow):
         self._window.refresh()
 
 
+    def show_summary_window(self, fight):
+        self.__summary_window.clear()
+        for line, fighter in enumerate(fight['fighters']):
+            fighter_state = self.__ruleset.get_fighter_state(fighter['details'])
+            mode = self.__state_color[fighter_state]
+            fighter_string = '%s%s HP:%d/%d' % (
+                ('> ' if line == fight['index'] else '  '),
+                fighter['name'],
+                fighter['details']['current']['hp'],
+                fighter['details']['permanent']['hp'])
+            self.__summary_window.addstr(line, 0, fighter_string, mode)
+
     def start_fight(self):
         lines, cols = self._window.getmaxyx()
         height = (lines                 # The whole window height, except...
             - (self.__FIGHTER_LINE+1)   # ...a block at the top, and...
             - 4)                        # ...a space for the command ribbon.
         
-        self.fighter_win_width = (
-            cols                        # The window width for...
-            - (self.__OPPONENT_COL+4)   # ...the opponent...
-            - 1)                        # ...minus a little margin
+        self.fighter_win_width = self.__pane_width - self.__margin_width
 
         top_line = self.__FIGHTER_LINE+1 # Start after the main fighter info
 
@@ -437,35 +466,37 @@ class FightGmWindow(GmWindow):
                                                 self.__FIGHTER_COL)
         self.__opponent_window  = self._window_manager.new_native_window(
                                                 height,
-                                                self.fighter_win_width,
+                                                self.__pane_width -
+                                                        self.__margin_width,
                                                 top_line,
-                                                self.__OPPONENT_COL+4)
+                                                self.__OPPONENT_COL)
+        self.__summary_window   = self._window_manager.new_native_window(
+                                                height,
+                                                self.__pane_width -
+                                                        self.__margin_width,
+                                                top_line,
+                                                self.__SUMMARY_COL)
 
 
     def __show_fighter(self,
-                       fighter_name,  # String holding name of fighter
-                       fighter,       # dict holding fighter information
+                       fighter_name,    # String holding name of fighter
+                       fighter_details, # dict holding fighter information
                        column
                       ):
         is_alive = True # alive
-        if fighter['alive']:
+        if fighter_details['alive']:
             fighter_string = '%s HP: %d/%d FP: %d/%d' % (
                 fighter_name,
-                fighter['current']['hp'],
-                fighter['permanent']['hp'],
-                fighter['current']['fp'],
-                fighter['permanent']['fp'])
+                fighter_details['current']['hp'],
+                fighter_details['permanent']['hp'],
+                fighter_details['current']['fp'],
+                fighter_details['permanent']['fp'])
 
-            if fighter['current']['fp'] <= 0 or fighter['current']['hp'] <= 0:
-                mode = curses.color_pair(GmWindowManager.RED_BLACK)
-            elif fighter['current']['hp'] < fighter['permanent']['hp']:
-                mode = curses.color_pair(GmWindowManager.YELLOW_BLACK)
-            else:
-                mode = curses.color_pair(GmWindowManager.GREEN_BLACK)
-
+            fighter_state = self.__ruleset.get_fighter_state(fighter_details)
+            mode = self.__state_color[fighter_state]
         else:
             fighter_string = '(DEAD)'
-            mode = curses.color_pair(GmWindowManager.RED_BLACK)
+            mode = self.__state_color(Ruleset.FIGHTER_STATE_DEAD)
             is_alive = False
 
         self._window.addstr(self.__FIGHTER_LINE, column, fighter_string, mode)
@@ -473,8 +504,9 @@ class FightGmWindow(GmWindow):
 
 
     def __show_fighter_notes(self,
-                             window,  # Curses window: shows the fighter's notes
-                             fighter, # The dict holding the fighter info
+                             window,            # Curses window for fighter's
+                                                #   notes
+                             fighter_details,   # The dict w/the fighter info
                             ):
         '''
         Displays ancillary information about the fighter
@@ -485,18 +517,20 @@ class FightGmWindow(GmWindow):
 
         # NOTE: { belongs in Ruleset
 
-        if fighter['shock'] != 0:
-            string = 'DX and IQ are at %d' % fighter['shock']
+        if fighter_details['shock'] != 0:
+            string = 'DX and IQ are at %d' % fighter_details['shock']
             window.addstr(line, 0, string, mode)
             line += 1
 
-        if fighter['current']['hp'] < fighter['permanent']['hp']/3.0:
+        if (fighter_details['current']['hp'] <
+                                    fighter_details['permanent']['hp']/3.0):
             window.addstr(line, 0, "Dodge/move are at 1/2", mode)
             line += 1
 
         # Each round you do something
 
-        if fighter['current']['fp'] <= -fighter['permanent']['fp']:
+        if (fighter_details['current']['fp'] <=
+                                        -fighter_details['permanent']['fp']):
             # TODO: have an 'unconscious' flag that allows creatures to
             # show up but doesn't allow them to do anything.  Maybe make
             # 'dead' act different between monsters and PCs
@@ -504,23 +538,23 @@ class FightGmWindow(GmWindow):
             line += 1
 
         else:
-            if fighter['current']['fp'] <= 0:
+            if fighter_details['current']['fp'] <= 0:
                 window.addstr(line, 0, "On action: Will roll or pass out", mode)
                 line += 1
 
-            if fighter['current']['hp'] <= 0:
+            if fighter_details['current']['hp'] <= 0:
                 window.addstr(line, 0, "On turn: 3d vs HT or pass out", mode)
                 line += 1
 
-        if fighter['check_for_death']:
+        if fighter_details['check_for_death']:
             window.addstr(line, 0, "3d vs HT or DIE", curses.A_REVERSE)
-            fighter['check_for_death'] = False  # Only show/roll once
+            fighter_details['check_for_death'] = False  # Only show/roll once
             line += 1
 
         # NOTE: end of Ruleset }
 
         # Timers
-        for timer in fighter['timers']:
+        for timer in fighter_details['timers']:
             round_count_string = self.__round_count_string % timer['rounds']
             if type(timer['string']) is list:
                 for i, substring in enumerate(timer['string']):
@@ -533,8 +567,8 @@ class FightGmWindow(GmWindow):
                 window.addstr(line, 0, string, mode)
                 line += 1
 
-        if 'notes' in fighter and fighter['notes'] is not None:
-            for note in fighter['notes'].split('\n'):
+        if 'notes' in fighter_details and fighter_details['notes'] is not None:
+            for note in fighter_details['notes'].split('\n'):
                 window.addstr(line, 0, note, mode)
                 line += 1
 
@@ -677,8 +711,8 @@ class GmWindowManager(object):
         self.hard_refresh_all()
         return string
 
-    def get_fight_gm_window(self):
-        return FightGmWindow(self)
+    def get_fight_gm_window(self, ruleset):
+        return FightGmWindow(self, ruleset)
 
     def input_box(self,
                   height,
@@ -916,8 +950,15 @@ class GmWindowManager(object):
 
 
 class Ruleset(object):
-    @staticmethod
-    def new_fight(fighter):
+    (FIGHTER_STATE_HEALTHY,
+     FIGHTER_STATE_INJURED,
+     FIGHTER_STATE_CRITICAL,
+     FIGHTER_STATE_DEAD) = range(4)
+
+    def __init__(self):
+        pass
+
+    def new_fight(self, fighter):
         '''
         Removes all the stuff from the old fight except injury.
         '''
@@ -927,8 +968,7 @@ class Ruleset(object):
         fighter['weapon'] = None # What's the form of this?
         fighter['opponent'] = None
 
-    @staticmethod
-    def heal_fighter(fighter):
+    def heal_fighter(self, fighter):
         '''
         Removes all injury (and their side-effects) from a fighter.
         '''
@@ -954,41 +994,47 @@ class GurpsRuleset(Ruleset):
     stuff.
     '''
 
-    # TODO: template for new characters
+    def __init__(self):
+        super(GurpsRuleset, self).__init__()
 
-    @staticmethod
-    def new_fight(fighter):
+    # TODO: need a template for new characters
+
+    def new_fight(self, fighter):
         '''
         Removes all the stuff from the old fight except injury.
         '''
-        Ruleset.new_fight(fighter)
+        super(GurpsRuleset, self).new_fight(fighter)
         fighter['shock'] = 0
 
-    @staticmethod
-    def heal_fighter(fighter):
+    def get_fighter_state(self, fighter_details):
+
+        if (fighter_details['current']['fp'] <= 0 or
+                                    fighter_details['current']['hp'] <= 0):
+            return Ruleset.FIGHTER_STATE_CRITICAL
+
+        if (fighter_details['current']['hp'] <
+                                    fighter_details['permanent']['hp']):
+            return Ruleset.FIGHTER_STATE_INJURED
+
+        return Ruleset.FIGHTER_STATE_HEALTHY
+
+
+    def heal_fighter(self, fighter):
         '''
         Removes all injury (and their side-effects) from a fighter.
         '''
-        Ruleset.heal_fighter(fighter)
+        super(GurpsRuleset, self).heal_fighter(fighter)
         fighter['shock'] = 0
         fighter['last_negative_hp'] = 0
         fighter['check_for_death'] = False
 
-    @staticmethod
-    def roll(number, # the number of dice
-             dice,   # the type of dice
-             plus=0  # a number to add to the total of the dice roll
-            ):
-        '''Simulates a roll of dice.'''
-        return Ruleset.roll(number, dice, plus)
 
-
-    @staticmethod
-    def initiative(fighter # dict for the creature as in the json file
+    def initiative(self,
+                   fighter # dict for the creature as in the json file
                   ):
         return (fighter['current']['basic-speed'],
                 fighter['current']['dx'],
-                GurpsRuleset.roll(1, 6)
+                Ruleset.roll(1, 6)
                 )
 
 
@@ -1147,11 +1193,12 @@ class FightHandler(ScreenHandler):
     def __init__(self,
                  window_manager,
                  world,
-                 monster_list_name
+                 monster_group,
+                 ruleset
                 ):
         super(FightHandler, self).__init__(window_manager)
-        self._window = self._window_manager.get_fight_gm_window()
-        FightGmWindow(self._window_manager)
+        self._window = self._window_manager.get_fight_gm_window(ruleset)
+        self.__ruleset = ruleset
 
         self._choices = {
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
@@ -1219,27 +1266,41 @@ class FightHandler(ScreenHandler):
         if not self.__fight['saved']:
             self.__fight['round'] = 0
             self.__fight['index'] = 0
-            self.__fight['monsters'] = monster_list_name
+            self.__fight['monsters'] = monster_group
 
-            self.__fight['fighters'] = [] # list of [list, name] in init order
-            self.__fight['fighters'].extend(['PCs', name] for name in
-                    world['PCs'].keys())
-            if monster_list_name is not None:
+            #self.__fight['fighters'].extend(['PCs', name] for name in
+            #        world['PCs'].keys())
+
+            self.__fight['fighters'] = [] # list of {'group': xxx,
+                                          #          'name': xxx,
+                                          #          'details' : xxx}
+                                          #  where 
+                                          #   'group' is 'PCs' or the monster
+                                          #      list, and
+                                          #   'details' is the complete
+                                          #      description of the fighter as
+                                          #      seen in the JSON.
+            self.__fight['fighters'].extend({'group': 'PCs',
+                                             'name': dude[0],
+                                             'details': dude[1]} for dude in
+                                                    world['PCs'].iteritems())
+            if monster_group is not None:
                 self.__fight['fighters'].extend(
-                        [monster_list_name, name] for name in
-                         self.__world['monsters'][monster_list_name].keys())
+                        ({'group': monster_group,
+                          'name': dude[0],
+                          'details': dude[1]}) for dude in
+                     self.__world['monsters'][monster_group].iteritems())
 
             # Sort by initiative = basic-speed followed by DEX followed by
             # random
-            self.__fight['fighters'].sort(key=lambda fighter: 
-                    GurpsRuleset.initiative(self.__fighter(fighter[0],
-                                                           fighter[1])),
+            self.__fight['fighters'].sort(
+                    key=lambda fighter:
+                        self.__ruleset.initiative(fighter['details']),
                     reverse=True)
 
             # Make sure this looks like a _NEW_ fight.
-            for fighter_info in self.__fight['fighters']:
-                fighter = self.__fighter(fighter_info[0], fighter_info[1])
-                GurpsRuleset.new_fight(fighter)
+            for fighter in self.__fight['fighters']:
+                self.__ruleset.new_fight(fighter['details'])
 
         self.__fight['saved'] = False
         self._window.start_fight()
@@ -1256,41 +1317,46 @@ class FightHandler(ScreenHandler):
     def __action(self):
         action = self._window_manager.menu('Action', self.__action_menu)
         if action is not None:
-            current_name, current_fighter = self.__current_fighter()
-            current_fighter['timers'].append({'rounds': 1,
+            current_name, current_fighter_details = self.__current_fighter()
+            current_fighter_details['timers'].append({'rounds': 1,
                                               'string': action})
 
-            next_PC = self.__next_PC()
-            opponent_name, opponent = self.__opponent(current_fighter)
-            self._window.show_fighters(current_name, current_fighter,
-                                        opponent_name, opponent,
-                                        next_PC)
+            opponent_name, opponent_details = self.__opponent_details(
+                                                        current_fighter_details)
+            next_PC_name = self.__next_PC_name()
+            self._window.show_fighters(current_name, current_fighter_details,
+                                       opponent_name, opponent_details,
+                                       next_PC_name,
+                                       self.__fight)
             return True # Keep going
 
     def __current_fighter(self):
         index = self.__fight['index']
-        return (self.__fight['fighters'][index][1],
-                self.__fighter(self.__fight['fighters'][index][0], # group
-                               self.__fight['fighters'][index][1])) # name
+        # returns the name and the dict
+        return (self.__fight['fighters'][index]['name'],
+                self.__fight['fighters'][index]['details'])
 
 
     def __dead(self):
-        current_name, current_fighter = self.__current_fighter()
-        next_PC = self.__next_PC()
-        opponent_name, opponent = self.__opponent(current_fighter)
-        if opponent is not None:
-            opponent['alive'] = False
-            self._window.show_fighters(current_name, current_fighter,
-                                        opponent_name, opponent,
-                                        next_PC)
+        current_name, current_fighter_details = self.__current_fighter()
+        opponent_name, opponent_details = self.__opponent_details(
+                                                    current_fighter_details)
+        if opponent_details is not None:
+            opponent_details['alive'] = False
+
+            next_PC_name = self.__next_PC_name()
+            self._window.show_fighters(current_name, current_fighter_details,
+                                       opponent_name, opponent_details,
+                                       next_PC_name,
+                                       self.__fight)
         return True # Keep going
 
 
     def __damage_FP(self):
-        current_name, current_fighter = self.__current_fighter()
-        next_PC = self.__next_PC()
-        opponent_name, opponent = self.__opponent(current_fighter)
-        if opponent is None:
+        current_name, current_fighter_details = self.__current_fighter()
+        opponent_name, opponent_details = self.__opponent_details(
+                                                        current_fighter_details)
+        if opponent_details is None:
             return True
 
         title = 'Change FP By...'
@@ -1302,24 +1368,26 @@ class FightHandler(ScreenHandler):
 
         # If FP go below zero, you lose HP along with FP
         # TODO: all of FP belongs in Ruleset
-        if adj < 0  and -adj > opponent['current']['fp']:
+        if adj < 0  and -adj > opponent_details['current']['fp']:
             hp_adj = adj
-            if opponent['current']['fp'] > 0:
-                hp_adj += opponent['current']['fp']
+            if opponent_details['current']['fp'] > 0:
+                hp_adj += opponent_details['current']['fp']
 
-        opponent['current']['hp'] += hp_adj # NOTE: belongs in Ruleset
-        opponent['current']['fp'] += adj # NOTE: belongs in Ruleset
-        self._window.show_fighters(current_name, current_fighter,
-                                    opponent_name, opponent,
-                                    next_PC)
+        opponent_details['current']['hp'] += hp_adj # NOTE: belongs in Ruleset
+        opponent_details['current']['fp'] += adj # NOTE: belongs in Ruleset
+        next_PC_name = self.__next_PC_name()
+        self._window.show_fighters(current_name, current_fighter_details,
+                                   opponent_name, opponent_details,
+                                   next_PC_name,
+                                   self.__fight)
         return True # Keep going
 
 
     def __damage_HP(self):
-        current_name, current_fighter = self.__current_fighter()
-        next_PC = self.__next_PC()
-        opponent_name, opponent = self.__opponent(current_fighter)
-        if opponent is not None:
+        current_name, current_fighter_details = self.__current_fighter()
+        opponent_name, opponent_details = self.__opponent_details(
+                                                        current_fighter_details)
+        if opponent_details is not None:
             title = 'Change HP By...'
             height = 1
             width = len(title)
@@ -1327,51 +1395,56 @@ class FightHandler(ScreenHandler):
             adj = int(adj_string)
 
             # NOTE: check for death belongs in Ruleset
-            if adj < 0 and opponent['current']['hp'] < 0:
-                before_hp = opponent['current']['hp']
-                before_hp_multiple = before_hp / opponent['permanent']['hp']
-                after_hp = (opponent['current']['hp'] + adj) * 1.0 + 0.1
-                after_hp_multiple = after_hp / opponent['permanent']['hp']
+            if adj < 0 and opponent_details['current']['hp'] < 0:
+                before_hp = opponent_details['current']['hp']
+                before_hp_multiple = (before_hp /
+                                        opponent_details['permanent']['hp'])
+                after_hp = (opponent_details['current']['hp'] + adj) * 1.0 + 0.1
+                after_hp_multiple = (after_hp /
+                                        opponent_details['permanent']['hp'])
                 if int(before_hp_multiple) != int(after_hp_multiple):
-                    opponent['check_for_death'] = True
+                    opponent_details['check_for_death'] = True
 
             # NOTE: shock belongs in Ruleset
             shock_amount = -4 if adj <= -4 else adj
-            if opponent['shock'] > shock_amount:
-                opponent['shock'] = shock_amount
+            if opponent_details['shock'] > shock_amount:
+                opponent_details['shock'] = shock_amount
 
-            opponent['current']['hp'] += adj # NOTE: belongs in Ruleset
-            self._window.show_fighters(current_name, current_fighter,
-                                        opponent_name, opponent,
-                                        next_PC)
+            opponent_details['current']['hp'] += adj # NOTE: belongs in Ruleset
+            next_PC_name = self.__next_PC_name()
+            self._window.show_fighters(current_name, current_fighter_details,
+                                       opponent_name, opponent_details,
+                                       next_PC_name,
+                                       self.__fight)
         return True # Keep going
 
 
     def _draw_screen(self):
         self._window.clear()
-        current_name, current_fighter = self.__current_fighter()
-        next_PC = self.__next_PC()
-        opponent_name, opponent = self.__opponent(current_fighter)
+        current_name, current_fighter_details = self.__current_fighter()
+        opponent_name, opponent_details = self.__opponent_details(
+                                                        current_fighter_details)
         self._window.round_ribbon(self.__fight['round'],
                                    self.__fight['saved'],
-                                   current_fighter, # up now
+                                   current_fighter_details, # up now
                                    None) #self.xxx) # next PC
-        self._window.show_fighters(current_name, current_fighter,
-                                    opponent_name, opponent,
-                                    next_PC)
+        next_PC_name = self.__next_PC_name()
+        self._window.show_fighters(current_name, current_fighter_details,
+                                   opponent_name, opponent_details,
+                                   next_PC_name,
+                                   self.__fight)
         self._window.command_ribbon(self._choices)
 
 
-    def __fighter(self,
-                  group, # 'PCs' or some group under world['monsters']
-                  name   # name of a fighter in the aforementioned group
-                 ):
+    def __fighter_details(self,
+                         group, # 'PCs' or some group under world['monsters']
+                         name   # name of a fighter in that group
+                        ):
         return (self.__world['PCs'][name] if group == 'PCs' else
                 self.__world['monsters'][group][name])
 
 
-    def __is_alive(self, group, name):
-        fighter = self.__fighter(group, name)
+    def __is_alive(self, fighter):
         if fighter['alive'] and (fighter['current']['hp'] > 0):
             return True
         return False
@@ -1395,24 +1468,24 @@ class FightHandler(ScreenHandler):
             elif self.__fight['index'] < 0:
                 self.__fight['index'] = len(self.__fight['fighters']) - 1
                 self.__fight['round'] += adj 
-            current_name, current_fighter = self.__current_fighter()
-            if (current_fighter['alive'] or
+            current_name, current_fighter_details = self.__current_fighter()
+            if (current_fighter_details['alive'] or
                     (self.__fight['index'] == first_index)):
                 keep_going = False
 
 
     def __next_fighter(self):
         # NOTE: shock belongs in Ruleset
-        prev_name, prev_fighter = self.__current_fighter()
-        prev_fighter['shock'] = 0 # remove expired shock entry
+        prev_name, prev_fighter_details = self.__current_fighter()
+        prev_fighter_details['shock'] = 0 # remove expired shock entry
 
         # remove any expired timers
         remove_these = []
-        for index, timer in enumerate(prev_fighter['timers']):
+        for index, timer in enumerate(prev_fighter_details['timers']):
             if timer['rounds'] <= 0:
                 remove_these.insert(0, index) # largest indexes last
         for index in remove_these:
-            del prev_fighter['timers'][index]
+            del prev_fighter_details['timers'][index]
 
         # get next fighter
         self.__modify_index(1)
@@ -1420,76 +1493,80 @@ class FightHandler(ScreenHandler):
                                    self.__fight['saved'],
                                    None, # current fighter
                                    None) # next PC
-        current_name, current_fighter = self.__current_fighter()
-        for timer in current_fighter['timers']:
+        current_name, current_fighter_details = self.__current_fighter()
+        for timer in current_fighter_details['timers']:
             timer['rounds'] -= 1
-        next_PC = self.__next_PC()
-        opponent_name, opponent = self.__opponent(current_fighter)
-        self._window.show_fighters(current_name, current_fighter,
-                                    opponent_name, opponent,
-                                    next_PC)
+        next_PC_name = self.__next_PC_name()
+        opponent_name, opponent_details = self.__opponent_details(
+                                                        current_fighter_details)
+        self._window.show_fighters(current_name, current_fighter_details,
+                                   opponent_name, opponent_details,
+                                   next_PC_name,
+                                   self.__fight)
         return True # Keep going
 
-    def __next_PC(self):
-        next_PC = None
+    def __next_PC_name(self):
+        next_PC_name = None
         next_index = self.__fight['index'] + 1
         for ignore in self.__fight['fighters']:
             if next_index >= len(self.__fight['fighters']):
                 next_index = 0
-            if self.__fight['fighters'][next_index][0] == 'PCs':
-                next_PC = self.__fight['fighters'][next_index][1]
+            if self.__fight['fighters'][next_index]['group'] == 'PCs':
+                next_PC_name = self.__fight['fighters'][next_index]['name']
                 break
             next_index += 1
-        return next_PC
+        return next_PC_name
 
     def __notes(self):
-        current_name, current_fighter = self.__current_fighter()
+        current_name, current_fighter_details = self.__current_fighter()
         lines, cols = self._window.getmaxyx()
 
-        notes = (None if 'notes' not in current_fighter else
-                                            current_fighter['notes'])
+        notes = (None if 'notes' not in current_fighter_details else
+                                            current_fighter_details['notes'])
         notes = self._window_manager.edit_window(
                     lines - 4,
                     self._window.fighter_win_width,
                     notes,  # initial string (w/ \n) for the window
                     '%s Notes' % current_name,
                     '^G to exit')
-        current_fighter['notes'] = notes
+        current_fighter_details['notes'] = notes
 
         # Redraw the fighters
-        next_PC = self.__next_PC()
-        opponent_name, opponent = self.__opponent(current_fighter)
-        self._window.show_fighters(current_name, current_fighter,
-                                    opponent_name, opponent,
-                                    next_PC)
+        next_PC_name = self.__next_PC_name()
+        opponent_name, opponent_details = self.__opponent_details(
+                                                        current_fighter_details)
+        self._window.show_fighters(current_name, current_fighter_details,
+                                   opponent_name, opponent_details,
+                                   next_PC_name,
+                                   self.__fight)
         return True # Keep going
 
-    def __opponent(self,
-                   fighter # dict for a fighter as in the JSON
-                  ):
-        opponent_name = None
-        opponent = None
-        if fighter is not None and fighter['opponent'] is not None:
-            opponent_name = fighter['opponent'][1]
-            opponent = self.__fighter(fighter['opponent'][0],
-                                      fighter['opponent'][1])
-        return opponent_name, opponent
+    def __opponent_details(self,
+                          fighter_details # dict for a fighter as in the JSON
+                         ):
+        if fighter_details is None or fighter_details['opponent'] is None:
+            return None, None
+
+        opponent_name = fighter_details['opponent']['name']
+        opponent_details = self.__fighter_details(
+                                        fighter_details['opponent']['group'],
+                                        fighter_details['opponent']['name'])
+        return opponent_name, opponent_details
 
 
     def __pick_opponent(self):
-        current_name, current_fighter = self.__current_fighter()
-        next_PC = self.__next_PC()
+        current_name, current_fighter_details = self.__current_fighter()
         current_index = self.__fight['index']
-        current_group = self.__fight['fighters'][current_index][0]
-        current_name  = self.__fight['fighters'][current_index][1]
+        current_group = self.__fight['fighters'][current_index]['group']
+        current_name  = self.__fight['fighters'][current_index]['name']
 
         opponent_group = None
         opponent_menu = []
         for fighter in self.__fight['fighters']:
-            if fighter[0] != current_group:
-                opponent_group = fighter[0]
-                if self.__is_alive(fighter[0], fighter[1]):
-                    opponent_menu.append((fighter[1], fighter[1]))
+            if fighter['group'] != current_group:
+                opponent_group = fighter['group']
+                if self.__is_alive(fighter['details']):
+                    opponent_menu.append((fighter['name'], fighter['name']))
         if len(opponent_menu) <= 0:
             self._window_manager.error(['All the opponents are dead'])
             return True # don't leave the fight
@@ -1499,20 +1576,25 @@ class FightHandler(ScreenHandler):
         if opponent_name is None:
             return True # don't leave the fight
 
-        current_fighter['opponent'] = [opponent_group, opponent_name]
-        opponent = self.__fighter(opponent_group, opponent_name)
+        current_fighter_details['opponent'] = {'group': opponent_group,
+                                       'name': opponent_name}
+        opponent_details = self.__fighter_details(opponent_group, opponent_name)
 
         # Ask to have them fight each other
-        if opponent is not None and opponent['opponent'] is None:
+        if (opponent_details is not None and
+                                        opponent_details['opponent'] is None):
             back_menu = [('yes', True), ('no', False)]
             answer = self._window_manager.menu('Make Opponents Go Both Ways',
                                         back_menu)
             if answer == True:
-                opponent['opponent'] = [current_group, current_name]
+                opponent_details['opponent'] = {'group': current_group,
+                                        'name': current_name}
 
-        self._window.show_fighters(current_name, current_fighter,
-                                    opponent_name, opponent,
-                                    next_PC)
+        next_PC_name = self.__next_PC_name()
+        self._window.show_fighters(current_name, current_fighter_details,
+                                   opponent_name, opponent_details,
+                                   next_PC_name,
+                                   self.__fight)
         return True # Keep going
 
 
@@ -1525,12 +1607,14 @@ class FightHandler(ScreenHandler):
                                    self.__fight['saved'],
                                    None, # current fighter
                                    None) # next PC
-        current_name, current_fighter = self.__current_fighter()
-        next_PC = self.__next_PC()
-        opponent_name, opponent = self.__opponent(current_fighter)
-        self._window.show_fighters(current_name, current_fighter,
-                                    opponent_name, opponent,
-                                    next_PC)
+        current_name, current_fighter_details = self.__current_fighter()
+        next_PC_name = self.__next_PC_name()
+        opponent_name, opponent_details = self.__opponent_details(
+                                                        current_fighter_details)
+        self._window.show_fighters(current_name, current_fighter_details,
+                                   opponent_name, opponent_details,
+                                   next_PC_name,
+                                   self.__fight)
         return True # Keep going
 
 
@@ -1540,8 +1624,8 @@ class FightHandler(ScreenHandler):
             # Check to see if all monsters are dead
             ask_to_save = False
             for fighter in self.__fight['fighters']:
-                if fighter[0] != 'PCs' and self.__is_alive(fighter[0],
-                                                           fighter[1]):
+                if fighter['group'] != 'PCs' and self.__is_alive(
+                                                        fighter['details']):
                     ask_to_save = True
 
             # Ask to save the fight if it's not saved and some monsters live.
@@ -1585,16 +1669,17 @@ class FightHandler(ScreenHandler):
                 title)
 
         if timer['string'] is not None and len(timer['string']) != 0:
-            current_name, current_fighter = self.__current_fighter()
-            current_fighter['timers'].append(timer)
+            current_name, current_fighter_details = self.__current_fighter()
+            current_fighter_details['timers'].append(timer)
 
         return True # Keep fighting
 
 
 class MainHandler(ScreenHandler):
-    def __init__(self, window_manager, world):
+    def __init__(self, window_manager, world, ruleset):
         super(MainHandler, self).__init__(window_manager)
         self.__world = world
+        self.__ruleset = ruleset
         self._choices = {
             # TODO: template - (build a template of monsters)
             ord('F'): {'name': 'Fight (build)', 'func': self.__build_fight},
@@ -1621,7 +1706,7 @@ class MainHandler(ScreenHandler):
 
     def __fully_heal(self):
         for character in self.__world['PCs'].itervalues():
-            GurpsRuleset.heal_fighter(character)
+            self.__ruleset.heal_fighter(character)
         return True
 
     def __get_a_name(self):
@@ -1652,22 +1737,23 @@ class MainHandler(ScreenHandler):
         return True
 
     def __run_fight(self):
-        monster_list_name = None
+        monster_group = None
         if not self.__world['current-fight']['saved']:
             fight_name_menu = [(name, name)
                                for name in self.__world['monsters'].keys()]
             # PP.pprint(fight_name_menu)
-            monster_list_name = self._window_manager.menu('Fights',
-                                                          fight_name_menu)
-            if monster_list_name is None:
+            monster_group = self._window_manager.menu('Fights',
+                                                      fight_name_menu)
+            if monster_group is None:
                 return True
-            if (monster_list_name not in self.__world['monsters']):
-                print "ERROR, monster list %s not found" % monster_list_name
+            if (monster_group not in self.__world['monsters']):
+                print "ERROR, monster list %s not found" % monster_group
                 return True
 
         fight = FightHandler(self._window_manager,
                              self.__world,
-                             monster_list_name)
+                             monster_group,
+                             self.__ruleset)
         fight.handle_user_input_until_done()
         self._draw_screen() # Redraw current screen when done with the fight.
 
@@ -1703,6 +1789,7 @@ if __name__ == '__main__':
     # sys.exit(2)
 
     PP = pprint.PrettyPrinter(indent=3, width=150)
+    ruleset = GurpsRuleset()
 
     with GmWindowManager() as window_manager:
         # Prefs
@@ -1750,12 +1837,15 @@ if __name__ == '__main__':
             campaign.write_data = campaign.read_data
 
             # Enter into the mainloop
-            main_handler = MainHandler(window_manager, campaign.read_data)
+            main_handler = MainHandler(window_manager,
+                                       campaign.read_data,
+                                       ruleset)
 
             if campaign.read_data['current-fight']['saved']:
                 fight_handler = FightHandler(window_manager,
                                              campaign.read_data,
-                                             None)
+                                             None,
+                                             ruleset)
                 fight_handler.handle_user_input_until_done()
             main_handler.handle_user_input_until_done()
 

@@ -165,13 +165,15 @@
   }, 
   "PCs": {
     "Wade": {
+      "stuff": [], 
+      "weapon": null, 
       "shock": 0, 
       "last_negative_hp": 0, 
       "alive": true, 
       "current": {
         "fp": 10, 
         "iq": 10, 
-        "hp": 10, 
+        "hp": 8, 
         "ht": 10, 
         "st": 10, 
         "dx": 10, 
@@ -188,9 +190,14 @@
       }, 
       "timers": [], 
       "check_for_death": false, 
-      "opponent": null
+      "opponent": {
+        "group": "Arena Attack Monsters", 
+        "name": "6-Tank-E"
+      }
     }, 
     "Bob": {
+      "stuff": [], 
+      "weapon": null, 
       "shock": 0, 
       "last_negative_hp": 0, 
       "alive": true, 
@@ -214,16 +221,21 @@
       }, 
       "timers": [], 
       "check_for_death": false, 
-      "opponent": null
+      "opponent": {
+        "group": "Arena Attack Monsters", 
+        "name": "2-Thief-B"
+      }
     }, 
     "Tom": {
+      "stuff": [], 
+      "weapon": null, 
       "shock": 0, 
       "last_negative_hp": 0, 
       "alive": true, 
       "current": {
         "fp": 10, 
         "iq": 10, 
-        "hp": 10, 
+        "hp": 8, 
         "ht": 10, 
         "st": 10, 
         "dx": 10, 
@@ -240,48 +252,604 @@
       }, 
       "timers": [], 
       "check_for_death": false, 
-      "opponent": [
-        "horsemen", 
-        "Death"
-      ]
+      "opponent": {
+        "group": "Arena Attack Monsters", 
+        "name": "2-Thief-B"
+      }
     }
   }, 
-  "dead-monsters": {}, 
+  "dead-monsters": {
+    "Arena Attack Monsters": {
+      "5-Tank-B": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "4-Tank-C": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "3-Tank-A": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "1-Thief-A": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "7-Tank-D": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "8-Tank-F": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "6-Tank-E": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": {
+          "group": "PCs", 
+          "name": "Wade"
+        }
+      }, 
+      "2-Thief-B": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": -4, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": -1, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": {
+          "group": "PCs", 
+          "name": "Bob"
+        }
+      }
+    }
+  }, 
   "current-fight": {
-    "index": 1, 
+    "index": 2, 
     "fighters": [
-      [
-        "PCs", 
-        "Wade"
-      ], 
-      [
-        "PCs", 
-        "Tom"
-      ], 
-      [
-        "horsemen", 
-        "Death"
-      ], 
-      [
-        "horsemen", 
-        "War"
-      ], 
-      [
-        "PCs", 
-        "Bob"
-      ], 
-      [
-        "horsemen", 
-        "Pestilence"
-      ], 
-      [
-        "horsemen", 
-        "Famine"
-      ]
+      {
+        "group": "PCs", 
+        "name": "Wade", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "last_negative_hp": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 10, 
+            "iq": 10, 
+            "hp": 8, 
+            "ht": 10, 
+            "st": 10, 
+            "dx": 10, 
+            "basic-speed": 6
+          }, 
+          "permanent": {
+            "fp": 10, 
+            "iq": 10, 
+            "hp": 10, 
+            "ht": 10, 
+            "st": 10, 
+            "dx": 10, 
+            "basic-speed": 6
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": {
+            "group": "Arena Attack Monsters", 
+            "name": "6-Tank-E"
+          }
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "6-Tank-E", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": {
+            "group": "PCs", 
+            "name": "Wade"
+          }
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "2-Thief-B", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": -4, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": -1, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 12, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": {
+            "group": "PCs", 
+            "name": "Bob"
+          }
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "8-Tank-F", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "3-Tank-A", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "1-Thief-A", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 12, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 12, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "7-Tank-D", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "5-Tank-B", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "4-Tank-C", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }, 
+      {
+        "group": "PCs", 
+        "name": "Tom", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "last_negative_hp": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 10, 
+            "iq": 10, 
+            "hp": 8, 
+            "ht": 10, 
+            "st": 10, 
+            "dx": 10, 
+            "basic-speed": 5
+          }, 
+          "permanent": {
+            "fp": 10, 
+            "iq": 10, 
+            "hp": 10, 
+            "ht": 10, 
+            "st": 10, 
+            "dx": 10, 
+            "basic-speed": 5
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": {
+            "group": "Arena Attack Monsters", 
+            "name": "2-Thief-B"
+          }
+        }
+      }, 
+      {
+        "group": "PCs", 
+        "name": "Bob", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "last_negative_hp": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 10, 
+            "iq": 10, 
+            "hp": 10, 
+            "ht": 10, 
+            "st": 10, 
+            "dx": 10, 
+            "basic-speed": 3
+          }, 
+          "permanent": {
+            "fp": 10, 
+            "iq": 10, 
+            "hp": 10, 
+            "ht": 10, 
+            "st": 10, 
+            "dx": 10, 
+            "basic-speed": 3
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": {
+            "group": "Arena Attack Monsters", 
+            "name": "2-Thief-B"
+          }
+        }
+      }
     ], 
     "saved": false, 
-    "round": 2, 
-    "monsters": "horsemen"
+    "round": 3, 
+    "monsters": "Arena Attack Monsters"
   }, 
   "Names": {
     "russian": {
@@ -833,208 +1401,6 @@
     }
   }, 
   "monsters": {
-    "Arena Attack Monsters": {
-      "5-Tank-B": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "4-Tank-C": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "3-Tank-A": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "1-Thief-A": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "7-Tank-D": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "8-Tank-F": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "6-Tank-E": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "2-Thief-B": {
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }
-    }, 
     "Arena Attack Characters": {
       "5-Tank-B": {
         "shock": 0, 
