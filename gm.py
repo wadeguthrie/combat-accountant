@@ -12,9 +12,7 @@ import random
 import sys
 
 # TODO:
-#   - write out debugging information
 #   - attack / active defense numbers on screen
-#
 #   - position w/plusses and minuses
 #   - high pain threshold = no shock
 #   - guns w/shots and reload time (so equipment, equip, unequip, ...)
@@ -1420,7 +1418,9 @@ class FightHandler(ScreenHandler):
             del(self.__world['monsters'][self.__fight['monsters']])
 
     def __action(self):
-        # TODO: the attack menu should be limited to what you can do
+        # TODO: the attack menu should be limited to what you can do in your
+        #   current configuration (e.g., can't attack if you don't have a
+        #   ready weapon).
         action = self._window_manager.menu('Action', self.__action_menu)
         if action is None:
             return True # Keep going
@@ -1478,6 +1478,7 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
 
+    # TODO: all of FP belongs in Ruleset
     def __damage_FP(self):
         # Figure out who loses the FP points
         current_name, current_fighter_details = self.__current_fighter()
@@ -1502,14 +1503,13 @@ class FightHandler(ScreenHandler):
         hp_adj = 0
 
         # If FP go below zero, you lose HP along with FP
-        # TODO: all of FP belongs in Ruleset
         if adj < 0  and -adj > fp_recipient['current']['fp']:
             hp_adj = adj
             if fp_recipient['current']['fp'] > 0:
                 hp_adj += fp_recipient['current']['fp']
 
-        fp_recipient['current']['hp'] += hp_adj # NOTE: belongs in Ruleset
-        fp_recipient['current']['fp'] += adj # NOTE: belongs in Ruleset
+        fp_recipient['current']['hp'] += hp_adj
+        fp_recipient['current']['fp'] += adj
         next_PC_name = self.__next_PC_name()
         self._window.show_fighters(current_name, current_fighter_details,
                                    opponent_name, opponent_details,
@@ -1981,7 +1981,7 @@ class MyArgumentParser(argparse.ArgumentParser):
         sys.exit(2) 
 
 
-def timeStamped(fname, fmt='%Y-%m-%d-%H-%M-%S_{fname}'):
+def timeStamped(fname, fmt='{fname}_%Y-%m-%d-%H-%M-%S'):
     return datetime.datetime.now().strftime(fmt).format(fname=fname)
 
 # Main
@@ -2038,6 +2038,7 @@ if __name__ == '__main__':
                 sys.exit(2)
 
             # Save the JSON for debugging, later
+            # TODO: put all debug files in the debug directory
             debug_directory = 'debug'
             if not os.path.exists(debug_directory):
                 os.makedirs(debug_directory)
