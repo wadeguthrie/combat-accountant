@@ -1,335 +1,1215 @@
 {
-    "Templates": {
-        "Arena Combat": {
-            "VodouCleric": {
-                "check_for_death": {
-                    "type": "value", 
-                    "value": false
-                }, 
-                "permanent": {
-                    "fp": {
-                        "type": "value", 
-                        "value": 12
-                    }, 
-                    "iq": {
-                        "type": "value", 
-                        "value": 13
-                    }, 
-                    "hp": {
-                        "type": "value", 
-                        "value": 10
-                    }, 
-                    "ht": {
-                        "type": "value", 
-                        "value": 11
-                    }, 
-                    "st": {
-                        "type": "value", 
-                        "value": 10
-                    }, 
-                    "dx": {
-                        "type": "value", 
-                        "value": 11
-                    }, 
-                    "basic-speed": {
-                        "type": "value", 
-                        "value": 5.5
-                    }
-                }, 
-                "shock": {
-                    "type": "value", 
-                    "value": 0
-                }
-            }, 
-            "Bokor": {
-                "check_for_death": {
-                    "type": "value", 
-                    "value": false
-                }, 
-                "permanent": {
-                    "fp": {
-                        "type": "value", 
-                        "value": 11
-                    }, 
-                    "iq": {
-                        "type": "value", 
-                        "value": 12
-                    }, 
-                    "hp": {
-                        "type": "value", 
-                        "value": 10
-                    }, 
-                    "ht": {
-                        "type": "value", 
-                        "value": 11
-                    }, 
-                    "st": {
-                        "type": "value", 
-                        "value": 10
-                    }, 
-                    "dx": {
-                        "type": "value", 
-                        "value": 10
-                    }, 
-                    "basic-speed": {
-                        "type": "value", 
-                        "value": 5.25
-                    }
-                }, 
-                "shock": {
-                    "type": "value", 
-                    "value": 0
-                }
-            }, 
-            "Tank": {
-                "check_for_death": {
-                    "type": "value", 
-                    "value": false
-                }, 
-                "permanent": {
-                    "fp": {
-                        "type": "value", 
-                        "value": 11
-                    }, 
-                    "iq": {
-                        "type": "value", 
-                        "value": 12
-                    }, 
-                    "hp": {
-                        "type": "value", 
-                        "value": 11
-                    }, 
-                    "ht": {
-                        "type": "value", 
-                        "value": 11
-                    }, 
-                    "st": {
-                        "type": "value", 
-                        "value": 10
-                    }, 
-                    "dx": {
-                        "type": "value", 
-                        "value": 12
-                    }, 
-                    "basic-speed": {
-                        "type": "value", 
-                        "value": 5.75
-                    }
-                }, 
-                "shock": {
-                    "type": "value", 
-                    "value": 0
-                }
-            }, 
-            "Thief": {
-                "check_for_death": {
-                    "type": "value", 
-                    "value": false
-                }, 
-                "permanent": {
-                    "fp": {
-                        "type": "value", 
-                        "value": 11
-                    }, 
-                    "iq": {
-                        "type": "value", 
-                        "value": 12
-                    }, 
-                    "hp": {
-                        "type": "value", 
-                        "value": 12
-                    }, 
-                    "ht": {
-                        "type": "value", 
-                        "value": 11
-                    }, 
-                    "st": {
-                        "type": "value", 
-                        "value": 10
-                    }, 
-                    "dx": {
-                        "type": "value", 
-                        "value": 12
-                    }, 
-                    "basic-speed": {
-                        "type": "value", 
-                        "value": 5.75
-                    }
-                }, 
-                "shock": {
-                    "type": "value", 
-                    "value": 0
-                }
-            }
-        }
-    }, 
-    "Names": {
-        "russian": {
-          "male": [
-            "Aymeric", 
-            "Aleksey", 
-            "Adam", 
-            "Andrei", 
-            "Andrew", 
-            "Andru", 
-            "Artiom", 
-            "Artem", 
-            "Artyom", 
-            "Anatoly", 
-            "Anton", 
-            "Alex/Aleksandr/Aleksei", 
-            "Arseniy", 
-            "Arthur", 
-            "Andrey", 
-            "Arsenii", 
-            "Bekhan", 
-            "Bogdan", 
-            "Boris", 
-            "Dan/Danil/Danila", 
-            "David", 
-            "Denis", 
-            "Dmitriy", 
-            "Dima", 
-            "Egor", 
-            "Eugene", 
-            "Evgeny", 
-            "Fedor", 
-            "George", 
-            "German", 
-            "Gosha", 
-            "Gregory", 
-            "Gleb", 
-            "Grisha", 
-            "Igor", 
-            "Ilya", 
-            "Ivan Konstantin", 
-            "Kirill", 
-            "Kostya", 
-            "Kolya", 
-            "Leo", 
-            "Leonid", 
-            "Mansur", 
-            "Max/Maxim", 
-            "Mark", 
-            "Matvey", 
-            "MIkhail", 
-            "Misha", 
-            "Nick", 
-            "Niko", 
-            "Nikolai", 
-            "Nikita", 
-            "Oleg", 
-            "Pasha", 
-            "Pavel", 
-            "Paul", 
-            "Petr", 
-            "Rafit", 
-            "Renat", 
-            "Roma", 
-            "Roman", 
-            "Ruslan", 
-            "Sasha", 
-            "Sergey", 
-            "Serge", 
-            "Slava", 
-            "Sonya", 
-            "Stanislav", 
-            "Timur", 
-            "Vadim", 
-            "Valentin", 
-            "Vasiliy", 
-            "Vitaliy", 
-            "Vlad", 
-            "Vladislav", 
-            "Vladimir", 
-            "Vova", 
-            "Yaroslav", 
-            "Yegor", 
-            "Yura", 
-            "Zahar", 
-            "Zhenya"
-          ], 
-          "female": [
-            "Anastasia", 
-            "Anna", 
-            "Alina", 
-            "Alexandra", 
-            "Arina", 
-            "Anya", 
-            "Alena", 
-            "Alice", 
-            "Alisa", 
-            "Asya", 
-            "Albina", 
-            "Alyona", 
-            "Christina", 
-            "Catherine", 
-            "Dasha", 
-            "Darya", 
-            "Diana", 
-            "Dina", 
-            "Elena", 
-            "Ekaterina", 
-            "Elizabeth", 
-            "Eva", 
-            "Evgeniya", 
-            "Galina", 
-            "Helena", 
-            "Inna", 
-            "Ira", 
-            "Irina", 
-            "Juliya", 
-            "Karina", 
-            "Katerina", 
-            "Katherine", 
-            "Katya", 
-            "Kira", 
-            "Kristina", 
-            "Ksenya", 
-            "Ksusha", 
-            "Lena", 
-            "Lera", 
-            "Liza", 
-            "Lyuba", 
-            "Madina", 
-            "Margarita", 
-            "Mariya", 
-            "Marina", 
-            "Marta", 
-            "Masha", 
-            "Natasha", 
-            "Nataly", 
-            "Natalya", 
-            "Nastya", 
-            "Nina", 
-            "Oksana", 
-            "Olesya", 
-            "Olga", 
-            "Olya", 
-            "Polina", 
-            "Sofia", 
-            "Sonya", 
-            "Sasha", 
-            "Sveta", 
-            "Svetlana", 
-            "Tanya", 
-            "Tatyana", 
-            "Ulyana", 
-            "Vika", 
-            "Viktoria", 
-            "Vera", 
-            "Valentina", 
-            "Valeria", 
-            "Viktoriya", 
-            "Vasilisa", 
-            "Veronika", 
-            "Victoria", 
-            "Vlada", 
-            "Yana", 
-            "Yulia", 
-            "Zhenya"
-          ]
+  "Templates": {
+    "Arena Combat": {
+      "VodouCleric": {
+        "check_for_death": {
+          "type": "value", 
+          "value": false
         }, 
+        "permanent": {
+          "fp": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "iq": {
+            "type": "value", 
+            "value": 13
+          }, 
+          "hp": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "ht": {
+            "type": "value", 
+            "value": 11
+          }, 
+          "st": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "dx": {
+            "type": "value", 
+            "value": 11
+          }, 
+          "basic-speed": {
+            "type": "value", 
+            "value": 5.5
+          }
+        }, 
+        "shock": {
+          "type": "value", 
+          "value": 0
+        }
+      }, 
+      "Bokor": {
+        "check_for_death": {
+          "type": "value", 
+          "value": false
+        }, 
+        "permanent": {
+          "fp": {
+            "type": "value", 
+            "value": 11
+          }, 
+          "iq": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "hp": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "ht": {
+            "type": "value", 
+            "value": 11
+          }, 
+          "st": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "dx": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "basic-speed": {
+            "type": "value", 
+            "value": 5.25
+          }
+        }, 
+        "shock": {
+          "type": "value", 
+          "value": 0
+        }
+      }, 
+      "Tank": {
+        "check_for_death": {
+          "type": "value", 
+          "value": false
+        }, 
+        "permanent": {
+          "fp": {
+            "type": "value", 
+            "value": 11
+          }, 
+          "iq": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "hp": {
+            "type": "value", 
+            "value": 11
+          }, 
+          "ht": {
+            "type": "value", 
+            "value": 11
+          }, 
+          "st": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "dx": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "basic-speed": {
+            "type": "value", 
+            "value": 5.75
+          }
+        }, 
+        "shock": {
+          "type": "value", 
+          "value": 0
+        }
+      }, 
+      "Thief": {
+        "check_for_death": {
+          "type": "value", 
+          "value": false
+        }, 
+        "permanent": {
+          "fp": {
+            "type": "value", 
+            "value": 11
+          }, 
+          "iq": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "hp": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "ht": {
+            "type": "value", 
+            "value": 11
+          }, 
+          "st": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "dx": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "basic-speed": {
+            "type": "value", 
+            "value": 5.75
+          }
+        }, 
+        "shock": {
+          "type": "value", 
+          "value": 0
+        }
+      }
+    }
+  }, 
+  "PCs": {
+    "Wade": {
+      "stuff": [], 
+      "weapon": null, 
+      "shock": 0, 
+      "last_negative_hp": 0, 
+      "alive": true, 
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "dx": 10, 
+        "basic-speed": 6
+      }, 
+      "permanent": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "dx": 10, 
+        "basic-speed": 6
+      }, 
+      "timers": [
+        {
+          "rounds": 0.9, 
+          "string": [
+            "Aim", 
+            " Defense: any loses aim", 
+            " Move: step"
+          ]
+        }
+      ], 
+      "check_for_death": false, 
+      "opponent": {
+        "group": "Arena Attack Monsters", 
+        "name": "7-Tank-D"
+      }
+    }, 
+    "Bob": {
+      "stuff": [], 
+      "weapon": null, 
+      "shock": 0, 
+      "last_negative_hp": 0, 
+      "alive": true, 
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "dx": 10, 
+        "basic-speed": 3
+      }, 
+      "permanent": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "dx": 10, 
+        "basic-speed": 3
+      }, 
+      "timers": [
+        {
+          "rounds": 0.9, 
+          "string": [
+            "Wait", 
+            " Defense: any, no AA attack ", 
+            " Move: none"
+          ]
+        }
+      ], 
+      "check_for_death": false, 
+      "opponent": null
+    }, 
+    "Tom": {
+      "stuff": [], 
+      "weapon": null, 
+      "shock": 0, 
+      "last_negative_hp": 0, 
+      "alive": true, 
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "dx": 10, 
+        "basic-speed": 5
+      }, 
+      "permanent": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "dx": 10, 
+        "basic-speed": 5
+      }, 
+      "timers": [
+        {
+          "rounds": 0.9, 
+          "string": [
+            "Attack", 
+            " Defense: any", 
+            " Move: step"
+          ]
+        }
+      ], 
+      "check_for_death": false, 
+      "opponent": {
+        "group": "Arena Attack Monsters", 
+        "name": "2-Thief-B"
+      }
+    }
+  }, 
+  "dead-monsters": {
+    "Arena Attack Monsters": {
+      "5-Tank-B": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Wait", 
+              " Defense: any, no AA attack ", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "4-Tank-C": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Wait", 
+              " Defense: any, no AA attack ", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "3-Tank-A": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Wait", 
+              " Defense: any, no AA attack ", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "1-Thief-A": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Wait", 
+              " Defense: any, no AA attack ", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "7-Tank-D": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 8, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "All out attack", 
+              " Defense: none", 
+              " Move: 1/2"
+            ]
+          }
+        ], 
+        "check_for_death": false, 
+        "opponent": {
+          "group": "PCs", 
+          "name": "Wade"
+        }
+      }, 
+      "8-Tank-F": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Wait", 
+              " Defense: any, no AA attack ", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "6-Tank-E": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Concentrate", 
+              " Defense: any w/will roll", 
+              " Move: step"
+            ]
+          }
+        ], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "2-Thief-B": {
+        "stuff": [], 
+        "weapon": null, 
+        "shock": -3, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 9, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "All out defense", 
+              " Defense: double", 
+              " Move: step"
+            ]
+          }
+        ], 
+        "check_for_death": false, 
+        "opponent": {
+          "group": "PCs", 
+          "name": "Tom"
+        }
+      }
+    }
+  }, 
+  "current-fight": {
+    "index": 1, 
+    "fighters": [
+      {
+        "group": "PCs", 
+        "name": "Wade", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "last_negative_hp": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 10, 
+            "iq": 10, 
+            "hp": 10, 
+            "ht": 10, 
+            "st": 10, 
+            "dx": 10, 
+            "basic-speed": 6
+          }, 
+          "permanent": {
+            "fp": 10, 
+            "iq": 10, 
+            "hp": 10, 
+            "ht": 10, 
+            "st": 10, 
+            "dx": 10, 
+            "basic-speed": 6
+          }, 
+          "timers": [
+            {
+              "rounds": 0.9, 
+              "string": [
+                "Aim", 
+                " Defense: any loses aim", 
+                " Move: step"
+              ]
+            }
+          ], 
+          "check_for_death": false, 
+          "opponent": {
+            "group": "Arena Attack Monsters", 
+            "name": "7-Tank-D"
+          }
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "6-Tank-E", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [
+            {
+              "rounds": 0.9, 
+              "string": [
+                "Concentrate", 
+                " Defense: any w/will roll", 
+                " Move: step"
+              ]
+            }
+          ], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "3-Tank-A", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [
+            {
+              "rounds": 0.9, 
+              "string": [
+                "Wait", 
+                " Defense: any, no AA attack ", 
+                " Move: none"
+              ]
+            }
+          ], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "8-Tank-F", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [
+            {
+              "rounds": 0.9, 
+              "string": [
+                "Wait", 
+                " Defense: any, no AA attack ", 
+                " Move: none"
+              ]
+            }
+          ], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "2-Thief-B", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": -3, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 9, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 12, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [
+            {
+              "rounds": 0.9, 
+              "string": [
+                "All out defense", 
+                " Defense: double", 
+                " Move: step"
+              ]
+            }
+          ], 
+          "check_for_death": false, 
+          "opponent": {
+            "group": "PCs", 
+            "name": "Tom"
+          }
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "4-Tank-C", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [
+            {
+              "rounds": 0.9, 
+              "string": [
+                "Wait", 
+                " Defense: any, no AA attack ", 
+                " Move: none"
+              ]
+            }
+          ], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "7-Tank-D", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 8, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [
+            {
+              "rounds": 0.9, 
+              "string": [
+                "All out attack", 
+                " Defense: none", 
+                " Move: 1/2"
+              ]
+            }
+          ], 
+          "check_for_death": false, 
+          "opponent": {
+            "group": "PCs", 
+            "name": "Wade"
+          }
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "5-Tank-B", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [
+            {
+              "rounds": 0.9, 
+              "string": [
+                "Wait", 
+                " Defense: any, no AA attack ", 
+                " Move: none"
+              ]
+            }
+          ], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "1-Thief-A", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 12, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 12, 
+            "ht": 11, 
+            "st": 10, 
+            "dx": 12, 
+            "basic-speed": 5.75
+          }, 
+          "timers": [
+            {
+              "rounds": 0.9, 
+              "string": [
+                "Wait", 
+                " Defense: any, no AA attack ", 
+                " Move: none"
+              ]
+            }
+          ], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }, 
+      {
+        "group": "PCs", 
+        "name": "Tom", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "last_negative_hp": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 10, 
+            "iq": 10, 
+            "hp": 10, 
+            "ht": 10, 
+            "st": 10, 
+            "dx": 10, 
+            "basic-speed": 5
+          }, 
+          "permanent": {
+            "fp": 10, 
+            "iq": 10, 
+            "hp": 10, 
+            "ht": 10, 
+            "st": 10, 
+            "dx": 10, 
+            "basic-speed": 5
+          }, 
+          "timers": [
+            {
+              "rounds": 0.9, 
+              "string": [
+                "Attack", 
+                " Defense: any", 
+                " Move: step"
+              ]
+            }
+          ], 
+          "check_for_death": false, 
+          "opponent": {
+            "group": "Arena Attack Monsters", 
+            "name": "2-Thief-B"
+          }
+        }
+      }, 
+      {
+        "group": "PCs", 
+        "name": "Bob", 
+        "details": {
+          "stuff": [], 
+          "weapon": null, 
+          "shock": 0, 
+          "last_negative_hp": 0, 
+          "alive": true, 
+          "current": {
+            "fp": 10, 
+            "iq": 10, 
+            "hp": 10, 
+            "ht": 10, 
+            "st": 10, 
+            "dx": 10, 
+            "basic-speed": 3
+          }, 
+          "permanent": {
+            "fp": 10, 
+            "iq": 10, 
+            "hp": 10, 
+            "ht": 10, 
+            "st": 10, 
+            "dx": 10, 
+            "basic-speed": 3
+          }, 
+          "timers": [
+            {
+              "rounds": 0.9, 
+              "string": [
+                "Wait", 
+                " Defense: any, no AA attack ", 
+                " Move: none"
+              ]
+            }
+          ], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }
+    ], 
+    "saved": false, 
+    "round": 1, 
+    "monsters": "Arena Attack Monsters"
+  }, 
+  "Names": {
+    "russian": {
+      "male": [
+        "Aymeric", 
+        "Aleksey", 
+        "Adam", 
+        "Andrei", 
+        "Andrew", 
+        "Andru", 
+        "Artiom", 
+        "Artem", 
+        "Artyom", 
+        "Anatoly", 
+        "Anton", 
+        "Alex/Aleksandr/Aleksei", 
+        "Arseniy", 
+        "Arthur", 
+        "Andrey", 
+        "Arsenii", 
+        "Bekhan", 
+        "Bogdan", 
+        "Boris", 
+        "Dan/Danil/Danila", 
+        "David", 
+        "Denis", 
+        "Dmitriy", 
+        "Dima", 
+        "Egor", 
+        "Eugene", 
+        "Evgeny", 
+        "Fedor", 
+        "George", 
+        "German", 
+        "Gosha", 
+        "Gregory", 
+        "Gleb", 
+        "Grisha", 
+        "Igor", 
+        "Ilya", 
+        "Ivan Konstantin", 
+        "Kirill", 
+        "Kostya", 
+        "Kolya", 
+        "Leo", 
+        "Leonid", 
+        "Mansur", 
+        "Max/Maxim", 
+        "Mark", 
+        "Matvey", 
+        "MIkhail", 
+        "Misha", 
+        "Nick", 
+        "Niko", 
+        "Nikolai", 
+        "Nikita", 
+        "Oleg", 
+        "Pasha", 
+        "Pavel", 
+        "Paul", 
+        "Petr", 
+        "Rafit", 
+        "Renat", 
+        "Roma", 
+        "Roman", 
+        "Ruslan", 
+        "Sasha", 
+        "Sergey", 
+        "Serge", 
+        "Slava", 
+        "Sonya", 
+        "Stanislav", 
+        "Timur", 
+        "Vadim", 
+        "Valentin", 
+        "Vasiliy", 
+        "Vitaliy", 
+        "Vlad", 
+        "Vladislav", 
+        "Vladimir", 
+        "Vova", 
+        "Yaroslav", 
+        "Yegor", 
+        "Yura", 
+        "Zahar", 
+        "Zhenya"
+      ], 
+      "female": [
+        "Anastasia", 
+        "Anna", 
+        "Alina", 
+        "Alexandra", 
+        "Arina", 
+        "Anya", 
+        "Alena", 
+        "Alice", 
+        "Alisa", 
+        "Asya", 
+        "Albina", 
+        "Alyona", 
+        "Christina", 
+        "Catherine", 
+        "Dasha", 
+        "Darya", 
+        "Diana", 
+        "Dina", 
+        "Elena", 
+        "Ekaterina", 
+        "Elizabeth", 
+        "Eva", 
+        "Evgeniya", 
+        "Galina", 
+        "Helena", 
+        "Inna", 
+        "Ira", 
+        "Irina", 
+        "Juliya", 
+        "Karina", 
+        "Katerina", 
+        "Katherine", 
+        "Katya", 
+        "Kira", 
+        "Kristina", 
+        "Ksenya", 
+        "Ksusha", 
+        "Lena", 
+        "Lera", 
+        "Liza", 
+        "Lyuba", 
+        "Madina", 
+        "Margarita", 
+        "Mariya", 
+        "Marina", 
+        "Marta", 
+        "Masha", 
+        "Natasha", 
+        "Nataly", 
+        "Natalya", 
+        "Nastya", 
+        "Nina", 
+        "Oksana", 
+        "Olesya", 
+        "Olga", 
+        "Olya", 
+        "Polina", 
+        "Sofia", 
+        "Sonya", 
+        "Sasha", 
+        "Sveta", 
+        "Svetlana", 
+        "Tanya", 
+        "Tatyana", 
+        "Ulyana", 
+        "Vika", 
+        "Viktoria", 
+        "Vera", 
+        "Valentina", 
+        "Valeria", 
+        "Viktoriya", 
+        "Vasilisa", 
+        "Veronika", 
+        "Victoria", 
+        "Vlada", 
+        "Yana", 
+        "Yulia", 
+        "Zhenya"
+      ]
+    }, 
     "australian": {
       "male": [
         "Oliver", 
@@ -711,733 +1591,411 @@
         "Widelene"
       ]
     }
+  }, 
+  "monsters": {
+    "Arena Attack Characters": {
+      "5-Tank-B": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "4-Tank-C": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "3-Tank-A": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "1-Thief-A": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "7-Bokor-A": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 10, 
+          "basic-speed": 5.25
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 10, 
+          "basic-speed": 5.25
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "8-Cleric-A": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 12, 
+          "iq": 13, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 11, 
+          "basic-speed": 5.5
+        }, 
+        "permanent": {
+          "fp": 12, 
+          "iq": 13, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 11, 
+          "basic-speed": 5.5
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "6-Tank-D": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "2-Thief-B": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }
     }, 
-    "PCs": {
-        "Wade": {
-            "shock": 0, 
-            "last_negative_hp": 0, 
-            "alive": true, 
-            "current": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
-                "st": 10, 
-                "dx": 10, 
-                "basic-speed": 6
-            }, 
-            "permanent": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
-                "st": 10, 
-                "dx": 10, 
-                "basic-speed": 6
-            }, 
-            "timers": [], 
-            "check_for_death": false, 
-            "opponent": null
+    "Arena Capture the Flag": {
+      "5-Tank-C": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
         }, 
-        "Bob": {
-            "shock": 0, 
-            "last_negative_hp": 0, 
-            "alive": true, 
-            "current": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
-                "st": 10, 
-                "dx": 10, 
-                "basic-speed": 3
-            }, 
-            "permanent": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
-                "st": 10, 
-                "dx": 10, 
-                "basic-speed": 3
-            }, 
-            "timers": [], 
-            "check_for_death": false, 
-            "opponent": null
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
         }, 
-        "Tom": {
-            "shock": 0, 
-            "last_negative_hp": 0, 
-            "alive": true, 
-            "current": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
-                "st": 10, 
-                "dx": 10, 
-                "basic-speed": 5
-            }, 
-            "permanent": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
-                "st": 10, 
-                "dx": 10, 
-                "basic-speed": 5
-            }, 
-            "timers": [], 
-            "check_for_death": false, 
-            "opponent": [
-                "horsemen", 
-                "Death"
-            ]
-        }
-    }, 
-    "dead-monsters": {}, 
-    "monsters": {
-        "Arena Attack Monsters": {
-            "1-Thief-A": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 12, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 12, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "2-Thief-B": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 12, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 12, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "3-Tank-A": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "4-Tank-C": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "5-Tank-B": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "6-Tank-E": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "7-Tank-D": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "8-Tank-F": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "1-Cleric": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 12, 
+          "iq": 13, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 11, 
+          "basic-speed": 5.5
         }, 
-        "Arena Attack Characters": {
-            "1-Thief-A": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 12, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 12, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "2-Thief-B": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 12, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 12, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "3-Tank-A": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "4-Tank-C": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "5-Tank-B": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "6-Tank-D": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "7-Bokor-A": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 10, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 10, 
-                    "basic-speed": 5.25
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 10, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 10, 
-                    "basic-speed": 5.25
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "8-Cleric-A": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 12, 
-                    "iq": 13, 
-                    "hp": 10, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 11, 
-                    "basic-speed": 5.5
-                }, 
-                "permanent": {
-                    "fp": 12, 
-                    "iq": 13, 
-                    "hp": 10, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 11, 
-                    "basic-speed": 5.5
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }
+        "permanent": {
+          "fp": 12, 
+          "iq": 13, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 11, 
+          "basic-speed": 5.5
         }, 
-        "Arena Capture the Flag": {
-            "1-Cleric": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 12, 
-                    "iq": 13, 
-                    "hp": 10, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 11, 
-                    "basic-speed": 5.5
-                }, 
-                "permanent": {
-                    "fp": 12, 
-                    "iq": 13, 
-                    "hp": 10, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 11, 
-                    "basic-speed": 5.5
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "2-Thief-A": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 12, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 12, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "3-Bokor": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 10, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 10, 
-                    "basic-speed": 5.25
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 10, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 10, 
-                    "basic-speed": 5.25
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "4-Tank-A": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "5-Tank-C": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "6-Tank-B": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "7-Tank-D": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }, 
-            "8-Thief-B": {
-                "shock": 0, 
-                "alive": true, 
-                "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 12, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "permanent": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 12, 
-                    "ht": 11, 
-                    "st": 10, 
-                    "dx": 12, 
-                    "basic-speed": 5.75
-                }, 
-                "timers": [], 
-                "check_for_death": false, 
-                "opponent": null
-            }
-        }
-    }, 
-    "current-fight": {
-        "index": 1, 
-        "fighters": [
-            [
-                "PCs", 
-                "Wade"
-            ], 
-            [
-                "PCs", 
-                "Tom"
-            ], 
-            [
-                "horsemen", 
-                "Death"
-            ], 
-            [
-                "horsemen", 
-                "War"
-            ], 
-            [
-                "PCs", 
-                "Bob"
-            ], 
-            [
-                "horsemen", 
-                "Pestilence"
-            ], 
-            [
-                "horsemen", 
-                "Famine"
-            ]
-        ], 
-        "saved": false, 
-        "round": 2, 
-        "monsters": "horsemen"
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "4-Tank-A": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "8-Thief-B": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "3-Bokor": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 10, 
+          "basic-speed": 5.25
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 10, 
+          "basic-speed": 5.25
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "7-Tank-D": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "6-Tank-B": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "2-Thief-A": {
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }
     }
+  }
 }

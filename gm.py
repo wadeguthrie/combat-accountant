@@ -11,7 +11,6 @@ import random
 import sys
 
 # TODO:
-#   - history of actions in a fight (needs scrolling windows)
 #   - attack / active defense numbers on screen
 #
 #   - position w/plusses and minuses
@@ -1250,6 +1249,7 @@ class FightHandler(ScreenHandler):
         super(FightHandler, self).__init__(window_manager)
         self._window = self._window_manager.get_fight_gm_window(ruleset)
         self.__ruleset = ruleset
+        self.__history = []
 
         self._choices = {
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
@@ -1258,6 +1258,7 @@ class FightHandler(ScreenHandler):
             ord('d'): {'name': 'dead', 'func': self.__dead},
             # NOTE: 'h' and 'f' belong in Ruleset
             ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
+            ord('h'): {'name': 'History', 'func': self.__show_history},
             ord('-'): {'name': 'HP damage', 'func': self.__damage_HP},
             ord('n'): {'name': 'notes', 'func': self.__notes},
             ord('o'): {'name': 'opponent', 'func': self.__pick_opponent},
@@ -1378,6 +1379,8 @@ class FightHandler(ScreenHandler):
         current_fighter_details['timers'].append({'rounds': 0.9,
                                                   'string': action})
 
+        self.__history.insert(0, ' %s did "%s" maneuver' % (current_name,
+                                                            action[0]))
         opponent_name, opponent_details = self.__opponent_details(
                                                     current_fighter_details)
         next_PC_name = self.__next_PC_name()
@@ -1411,6 +1414,9 @@ class FightHandler(ScreenHandler):
             return True # Keep fighting
 
         now_dead['alive'] = False
+        dead_name = (current_name if now_dead is current_fighter_details
+                                    else opponent_name)
+        self.__history.insert(0, ' %s was marked as DEAD' % dead_name)
 
         next_PC_name = self.__next_PC_name()
         self._window.show_fighters(current_name, current_fighter_details,
@@ -1485,6 +1491,23 @@ class FightHandler(ScreenHandler):
         # NOTE: SUBTRACTING the adjustment
         self.__ruleset.adjust_hp(hp_recipient, -adj)
 
+        # Record for posterity
+        if hp_recipient is opponent_details:
+            if adj > 0:
+                self.__history.insert(0, ' %s did %d HP to %s' % (current_name,
+                                                               adj,
+                                                               opponent_name))
+            else:
+                self.__history.insert(0, ' %s regained %d HP' % (current_name,
+                                                              -adj))
+        else:
+            if adj > 0:
+                self.__history.insert(0, ' %s lost %d HP' % (opponent_name,
+                                                             adj))
+            else:
+                self.__history.insert(0, ' %s regained %d HP' % (opponent_name,
+                                                              -adj))
+
         next_PC_name = self.__next_PC_name()
         self._window.show_fighters(current_name, current_fighter_details,
                                    opponent_name, opponent_details,
@@ -1532,8 +1555,8 @@ class FightHandler(ScreenHandler):
 
         first_index = self.__fight['index']
 
+        round_before = self.__fight['round']
         keep_going = True
-
         while keep_going:
             self.__fight['index'] += adj
             if self.__fight['index'] >= len(self.__fight['fighters']):
@@ -1546,6 +1569,9 @@ class FightHandler(ScreenHandler):
             if (current_fighter_details['alive'] or
                     (self.__fight['index'] == first_index)):
                 keep_going = False
+
+        if round_before != self.__fight['round']:
+            self.__history.insert(0, '--- Round %d ---' % self.__fight['round'])
 
 
     def __next_fighter(self):
@@ -1746,6 +1772,17 @@ class FightHandler(ScreenHandler):
                                    None, # up now
                                    None) #self.xxx) # next PC
         return True # Keep going
+
+    def __show_history(self):
+        max_lines = curses.LINES - 4
+        lines = (max_lines if len(self.__history) > max_lines
+                           else len(self.__history))
+
+        # It's not really a menu but the window for it works just fine
+        pseudo_menu = [(x,0) for x in self.__history]
+        ignore = self._window_manager.menu('Fight History (Newest On Top)',
+                                           pseudo_menu)
+        return True
 
     def __timer(self):
         '''
