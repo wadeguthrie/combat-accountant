@@ -518,43 +518,10 @@ class FightGmWindow(GmWindow):
         line = 0
         mode = curses.A_NORMAL
 
-        # NOTE: { belongs in Ruleset
-
-        if fighter_details['shock'] != 0:
-            string = 'DX and IQ are at %d' % fighter_details['shock']
-            window.addstr(line, 0, string, mode)
+        notes = self.__ruleset.get_fighter_notes(fighter_details)
+        for note in notes:
+            window.addstr(line, 0, note, mode)
             line += 1
-
-        if (fighter_details['current']['hp'] <
-                                    fighter_details['permanent']['hp']/3.0):
-            window.addstr(line, 0, "Dodge/move are at 1/2", mode)
-            line += 1
-
-        # Each round you do something
-
-        if (fighter_details['current']['fp'] <=
-                                        -fighter_details['permanent']['fp']):
-            # TODO: have an 'unconscious' flag that allows creatures to
-            # show up but doesn't allow them to do anything.  Maybe make
-            # 'dead' act different between monsters and PCs
-            window.addstr(line, 0, "*UNCONSCIOUS*", curses.A_REVERSE)
-            line += 1
-
-        else:
-            if fighter_details['current']['fp'] <= 0:
-                window.addstr(line, 0, "On action: Will roll or pass out", mode)
-                line += 1
-
-            if fighter_details['current']['hp'] <= 0:
-                window.addstr(line, 0, "On turn: 3d vs HT or pass out", mode)
-                line += 1
-
-        if fighter_details['check_for_death']:
-            window.addstr(line, 0, "3d vs HT or DIE", curses.A_REVERSE)
-            fighter_details['check_for_death'] = False  # Only show/roll once
-            line += 1
-
-        # NOTE: end of Ruleset }
 
         # Timers
         for timer in fighter_details['timers']:
@@ -621,6 +588,10 @@ class GmWindowManager(object):
 
             # Setup some defaults before I overwrite any
 
+            # An experiment showed that there are only 16 colors in the
+            # Windows console that I was running.  They are
+            # 0:black, 1:red, 2:green, 3:yellow, 4:blue, 5:magenta, 6:cyan,
+            # 7:white, and (I think) the dark versions of those.
             for i in range(0, curses.COLORS):
                 curses.init_pair(i+1,   # New ID for color pair
                                  i,     # Specified foreground color
@@ -1090,6 +1061,32 @@ class GurpsRuleset(Ruleset):
         self.__action_performed_by_this_fighter = False
         return True, None
 
+    def get_fighter_notes(self, fighter_details):
+        notes = []
+
+        if fighter_details['shock'] != 0:
+            notes.append('DX and IQ are at %d' % fighter_details['shock'])
+
+        if (fighter_details['current']['hp'] <
+                                    fighter_details['permanent']['hp']/3.0):
+            notes.append('Dodge/move are at 1/2')
+
+        if (fighter_details['current']['fp'] <=
+                                        -fighter_details['permanent']['fp']):
+            notes.append("*UNCONSCIOUS*")
+
+        else:
+            if fighter_details['current']['fp'] <= 0:
+                notes.append('On action: Will roll or pass out')
+
+            if fighter_details['current']['hp'] <= 0:
+                notes.append('On turn: 3d vs HT or pass out')
+
+        if fighter_details['check_for_death']:
+            notes.append('3d vs HT or DIE')
+            fighter_details['check_for_death'] = False  # Only show/roll once
+
+        return notes
 
 
 class ScreenHandler(object):
@@ -1271,13 +1268,13 @@ class FightHandler(ScreenHandler):
 
         # TODO: This should be in the ruleset
         self.__action_menu = [
-            ('aim',                    ['Aim',
+            ('Aim',                    ['Aim',
                                         ' Defense: any loses aim',
                                         ' Move: step']),
             ('attack',                 ['Attack',
                                         ' Defense: any',
                                         ' Move: step']),
-            ('Attack, all out',        ['All out attack',
+            ('attack, all out',        ['All out attack',
                                         ' Defense: none',
                                         ' Move: 1/2']),
             ('change posture',         ['Change posture',
@@ -1376,8 +1373,10 @@ class FightHandler(ScreenHandler):
             return True # Keep going
         self.__ruleset.do_action()
         current_name, current_fighter_details = self.__current_fighter()
-        current_fighter_details['timers'].append({'rounds': 1,
-                                          'string': action})
+        # a round count larger than 0 will get shown but less than 1 will
+        # get deleted before the next round
+        current_fighter_details['timers'].append({'rounds': 0.9,
+                                                  'string': action})
 
         opponent_name, opponent_details = self.__opponent_details(
                                                     current_fighter_details)
@@ -1575,6 +1574,18 @@ class FightHandler(ScreenHandler):
         current_name, current_fighter_details = self.__current_fighter()
         for timer in current_fighter_details['timers']:
             timer['rounds'] -= 1
+
+        # remove any newly expired timers - this is here for the 'action'
+        # timers (e.g., 'aim', 'all out attack') which are supposed to be
+        # displayed after an attacker's initiative up to but _not_ including
+        # the next time they have their initiative (i.e., during his defense).
+        remove_these = []
+        for index, timer in enumerate(current_fighter_details['timers']):
+            if timer['rounds'] < 0:
+                remove_these.insert(0, index) # largest indexes last
+        for index in remove_these:
+            del current_fighter_details['timers'][index]
+
         next_PC_name = self.__next_PC_name()
         opponent_name, opponent_details = self.__opponent_details(
                                                         current_fighter_details)
