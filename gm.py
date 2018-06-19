@@ -11,13 +11,13 @@ import random
 import sys
 
 # TODO:
-#   - make color work (again)
+#   - history of actions in a fight (needs scrolling windows)
 #   - attack / active defense numbers on screen
+#
 #   - position w/plusses and minuses
 #   - high pain threshold = no shock
 #   - guns w/shots and reload time (so equipment, equip, unequip, ...)
 #   - < 1/3 FP = 1/2 move, dodge, st
-#   - history of actions in a fight (needs scrolling windows)
 #   - Warning if window is smaller than expected
 #
 # TODO (eventually)
@@ -326,12 +326,15 @@ class FightGmWindow(GmWindow):
         self.len_timer_leader = len(self.__round_count_string)
 
         self.__state_color = {
-                Ruleset.FIGHTER_STATE_HEALTHY  : GmWindowManager.GREEN_BLACK,
-                Ruleset.FIGHTER_STATE_INJURED  : GmWindowManager.YELLOW_BLACK,
-                Ruleset.FIGHTER_STATE_CRITICAL : GmWindowManager.RED_BLACK,
-                Ruleset.FIGHTER_STATE_DEAD     : GmWindowManager.RED_BLACK}
+                Ruleset.FIGHTER_STATE_HEALTHY  :
+                    curses.color_pair(GmWindowManager.GREEN_BLACK),
+                Ruleset.FIGHTER_STATE_INJURED  :
+                    curses.color_pair(GmWindowManager.YELLOW_BLACK),
+                Ruleset.FIGHTER_STATE_CRITICAL :
+                    curses.color_pair(GmWindowManager.RED_BLACK),
+                Ruleset.FIGHTER_STATE_DEAD     :
+                    curses.color_pair(GmWindowManager.RED_BLACK)}
 
-        PP.pprint(self.__state_color) # TODO: remove
 
     def close(self):
         # Kill my subwindows, first
@@ -447,8 +450,6 @@ class FightGmWindow(GmWindow):
                 fighter['name'],
                 fighter['details']['current']['hp'],
                 fighter['details']['permanent']['hp'])
-            #print 'show_summary_window(%d): %s' % (fighter_state,
-                                                   #fighter_string) # TODO: remove
             self.__summary_window.addstr(line, 0, fighter_string, mode)
 
     def start_fight(self):
@@ -495,18 +496,11 @@ class FightGmWindow(GmWindow):
                 fighter_details['permanent']['fp'])
 
             fighter_state = self.__ruleset.get_fighter_state(fighter_details)
-            print '__show_fighter(%d): %s' % (fighter_state,
-                                              fighter_string) # TODO: remove
             mode = self.__state_color[fighter_state]
         else:
             fighter_string = '(DEAD)'
             mode = self.__state_color[Ruleset.FIGHTER_STATE_DEAD]
             is_alive = False
-
-        #GmWindowManager.GREEN_BLACK # TODO: remove
-        mode = GmWindowManager.YELLOW_BLACK # TODO: remove
-        #GmWindowManager.RED_BLACK # TODO: remove
-        #GmWindowManager.RED_BLACK # TODO: remove
 
         self._window.addstr(self.__FIGHTER_LINE, column, fighter_string, mode)
         return is_alive
@@ -619,10 +613,19 @@ class GmWindowManager(object):
         try:
             self.__stdscr = curses.initscr()
             curses.start_color()
+            curses.use_default_colors()
             curses.noecho()
             curses.cbreak() # respond instantly to keystrokes
             self.__stdscr.keypad(1) # special characters converted by curses
                                     # (e.g., curses.KEY_LEFT)
+
+            # Setup some defaults before I overwrite any
+
+            for i in range(0, curses.COLORS):
+                curses.init_pair(i+1,   # New ID for color pair
+                                 i,     # Specified foreground color
+                                 -1     # Default background
+                                )
 
             curses.init_pair(GmWindowManager.GREEN_BLACK,
                              curses.COLOR_GREEN, # fg
@@ -696,7 +699,6 @@ class GmWindowManager(object):
              ):
         '''Provides an error to the screen.'''
 
-        #mode = curses.A_NORMAL # curses.color_pair(GmWindowManager.RED_WHITE)
         mode = curses.color_pair(GmWindowManager.RED_WHITE)
         width = max(len(string) for string in strings)
         if width < len(title):
@@ -1267,15 +1269,31 @@ class FightHandler(ScreenHandler):
             ord('t'): {'name': 'timer', 'func': self.__timer}
         }
 
+        # TODO: This should be in the ruleset
         self.__action_menu = [
+            ('aim',                    ['Aim',
+                                        ' Defense: any loses aim',
+                                        ' Move: step']),
             ('attack',                 ['Attack',
                                         ' Defense: any',
                                         ' Move: step']),
             ('Attack, all out',        ['All out attack',
                                         ' Defense: none',
                                         ' Move: 1/2']),
-            ('ready',                  ['Ready',
+            ('change posture',         ['Change posture',
                                         ' Defense: any',
+                                        ' Move: none']),
+            ('Concentrate',            ['Concentrate',
+                                        ' Defense: any w/will roll',
+                                        ' Move: step']),
+            ('defense, all out',       ['All out defense',
+                                        ' Defense: double',
+                                        ' Move: step']),
+            ('evaluate',               ['Evaluate',
+                                        ' Defense: any',
+                                        ' Move: step']),
+            ('feint',                  ['Feint',
+                                        ' Defense: any, parry *',
                                         ' Move: step']),
             ('move',                   ['Move',
                                         ' Defense: any',
@@ -1283,33 +1301,18 @@ class FightHandler(ScreenHandler):
             ('Move and attack',        ['Move & Attack',
                                         ' Defense: Dodge,block',
                                         ' Move: full']),
-            ('Defense, all out',       ['All out defense',
-                                        ' Defense: double',
-                                        ' Move: step']),
-            ('change posture',         ['Change posture',
+            ('nothing',                ['Do nothing',
                                         ' Defense: any',
                                         ' Move: none']),
-            ('concentrate',            ['Concentrate',
-                                        ' Defense: any w/will roll',
-                                        ' Move: step']),
-            ('nothing: stun/surprise', ['Do nothing',
+            ('Nothing: stun/surprise', ['Do nothing',
                                         ' Defense: any @-4',
                                         ' Move: none']),
-            ('Nothing',                ['Do nothing',
+            ('ready',                  ['Ready',
                                         ' Defense: any',
-                                        ' Move: none']),
-            ('aim',                    ['Aim',
-                                        ' Defense: any loses aim',
-                                        ' Move: step']),
-            ('feint',                  ['Feint',
-                                        ' Defense: any, parry *',
                                         ' Move: step']),
             ('wait',                   ['Wait',
                                         ' Defense: any, no AA attack ',
                                         ' Move: none']),
-            ('evaluate',               ['Evaluate',
-                                        ' Defense: any',
-                                        ' Move: step']),
         ]
 
         self.__world = world
@@ -1367,21 +1370,23 @@ class FightHandler(ScreenHandler):
             del(self.__world['monsters'][self.__fight['monsters']])
 
     def __action(self):
+        # TODO: the attack menu should be limited to what you can do
         action = self._window_manager.menu('Action', self.__action_menu)
-        if action is not None:
-            self.__ruleset.do_action()
-            current_name, current_fighter_details = self.__current_fighter()
-            current_fighter_details['timers'].append({'rounds': 1,
-                                              'string': action})
-
-            opponent_name, opponent_details = self.__opponent_details(
-                                                        current_fighter_details)
-            next_PC_name = self.__next_PC_name()
-            self._window.show_fighters(current_name, current_fighter_details,
-                                       opponent_name, opponent_details,
-                                       next_PC_name,
-                                       self.__fight)
+        if action is None:
             return True # Keep going
+        self.__ruleset.do_action()
+        current_name, current_fighter_details = self.__current_fighter()
+        current_fighter_details['timers'].append({'rounds': 1,
+                                          'string': action})
+
+        opponent_name, opponent_details = self.__opponent_details(
+                                                    current_fighter_details)
+        next_PC_name = self.__next_PC_name()
+        self._window.show_fighters(current_name, current_fighter_details,
+                                   opponent_name, opponent_details,
+                                   next_PC_name,
+                                   self.__fight)
+        return True # Keep going
 
     def __current_fighter(self):
         index = self.__fight['index']
