@@ -4,6 +4,7 @@ import argparse
 import copy
 import curses
 import curses.textpad
+import datetime
 import json
 import os
 import pprint
@@ -11,6 +12,7 @@ import random
 import sys
 
 # TODO:
+#   - write out debugging information
 #   - attack / active defense numbers on screen
 #
 #   - position w/plusses and minuses
@@ -20,7 +22,13 @@ import sys
 #   - Warning if window is smaller than expected
 #
 # TODO (eventually)
+#   - Go for a transactional model -- will allow me to do better debugging,
+#       playback of debug stuff, and testing.  Instead of modifying 'world'
+#       directly, issue a transaction to an object that handles world.  Save
+#       the transaction to _history.
 #   - TESTS, for the love of God
+#       Having the xxxHandler getting the xxxGmWindow objects from the
+#       window_manager allows the window manager to be mocked more easily
 #   - scrolling menus (et al.)
 #   - entering monsters and characters from the screen
 #   - truncate (don't wrap) long lines
@@ -694,6 +702,9 @@ class GmWindowManager(object):
     def get_fight_gm_window(self, ruleset):
         return FightGmWindow(self, ruleset)
 
+    def getmaxyx(self):
+        return curses.LINES, curses.COLS
+
     def input_box(self,
                   height,
                   width,
@@ -1093,10 +1104,13 @@ class ScreenHandler(object):
     Base class for the "business logic" backing the user interface.
     '''
 
-    def __init__(self, window_manager):
+    def __init__(self, window_manager, campaign_debug_json):
+        self._campaign_debug_json = campaign_debug_json
         self._window_manager = window_manager
-        self._choices = { }
-
+        self._history = []
+        self._choices = {
+            ord('B'): {'name': 'Bug Report', 'func': self._make_bug_report},
+        }
 
     def handle_user_input_until_done(self):
         '''
@@ -1111,22 +1125,57 @@ class ScreenHandler(object):
                 keep_going = self._choices[string]['func']()
 
 
+    def _add_to_choice_dict(self, new_choices):
+        # Check for errors...
+        for key in self._choices.iterkeys():
+            if key in new_choices:
+                self._window_manager.error(
+                        ['Collision of _choices on key "%c"' % chr(key)])
+                return False # Found a problem
+
+        self._choices.update(new_choices)
+        return True # Everything's good
+
+
     def _draw_screen(self):
         pass
+
+    def _make_bug_report(self):
+        lines, cols = self._window_manager.getmaxyx()
+        report = self._window_manager.edit_window(
+                    lines - 4,
+                    cols - 4,
+                    '',  # initial string (w/ \n) for the window
+                    'Bug Report',
+                    '^G to exit')
+
+        bug_report = {
+            'world'   : self._campaign_debug_json,
+            'history' : self._history,
+            'report'  : report
+        }
+
+        bug_report_json = timeStamped('bug_report.txt')
+        with open(bug_report_json, 'w') as f:
+            json.dump(bug_report, f, indent=2)
+
+        return True # Keep doing whatever you were doing.
 
 
 class BuildFightHandler(ScreenHandler):
     def __init__(self,
                  window_manager,
-                 world
+                 world,
+                 campaign_debug_json
                 ):
-        super(BuildFightHandler, self).__init__(window_manager)
-        self._choices = {
+        super(BuildFightHandler, self).__init__(window_manager,
+                                                campaign_debug_json)
+        self._add_to_choice_dict({
             ord('a'): {'name': 'add monster', 'func': self.__add_monster},
             ord('d'): {'name': 'delete monster', 'func': self.__delete_monster},
             ord('q'): {'name': 'quit', 'func': self.__quit},
             # TODO: need a quit but don't save option
-        }
+        })
         self._window = BuildFightGmWindow(self._window_manager)
 
         self.__world = world
@@ -1163,7 +1212,7 @@ class BuildFightHandler(ScreenHandler):
     def __add_monster(self):
         # Based on which monster from the template
         monster_menu = [(from_monster_name, from_monster_name)
-                for from_monster_name in world["Templates"][self.__template_name]]
+            for from_monster_name in world["Templates"][self.__template_name]]
         from_monster_name = self._window_manager.menu('Monster', monster_menu)
         if from_monster_name is None:
             return True # Keep going
@@ -1244,14 +1293,16 @@ class FightHandler(ScreenHandler):
                  window_manager,
                  world,
                  monster_group,
-                 ruleset
+                 ruleset,
+                 campaign_debug_json
                 ):
-        super(FightHandler, self).__init__(window_manager)
+        super(FightHandler, self).__init__(window_manager, campaign_debug_json)
         self._window = self._window_manager.get_fight_gm_window(ruleset)
         self.__ruleset = ruleset
-        self.__history = []
+        # TODO: when the history is reset, the JSON should be rewritten
+        self._history = ['--- Round 0 ---']
 
-        self._choices = {
+        self._add_to_choice_dict({
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
             ord('<'): {'name': 'prev', 'func': self.__prev_fighter},
             ord('a'): {'name': 'action', 'func': self.__action},
@@ -1259,13 +1310,14 @@ class FightHandler(ScreenHandler):
             # NOTE: 'h' and 'f' belong in Ruleset
             ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
             ord('h'): {'name': 'History', 'func': self.__show_history},
+            # TODO: heal
             ord('-'): {'name': 'HP damage', 'func': self.__damage_HP},
             ord('n'): {'name': 'notes', 'func': self.__notes},
             ord('o'): {'name': 'opponent', 'func': self.__pick_opponent},
             ord('q'): {'name': 'quit', 'func': self.__quit},
             ord('s'): {'name': 'save', 'func': self.__save},
             ord('t'): {'name': 'timer', 'func': self.__timer}
-        }
+        })
 
         # TODO: This should be in the ruleset
         self.__action_menu = [
@@ -1379,8 +1431,8 @@ class FightHandler(ScreenHandler):
         current_fighter_details['timers'].append({'rounds': 0.9,
                                                   'string': action})
 
-        self.__history.insert(0, ' %s did "%s" maneuver' % (current_name,
-                                                            action[0]))
+        self._history.insert(0, ' %s did "%s" maneuver' % (current_name,
+                                                           action[0]))
         opponent_name, opponent_details = self.__opponent_details(
                                                     current_fighter_details)
         next_PC_name = self.__next_PC_name()
@@ -1416,7 +1468,7 @@ class FightHandler(ScreenHandler):
         now_dead['alive'] = False
         dead_name = (current_name if now_dead is current_fighter_details
                                     else opponent_name)
-        self.__history.insert(0, ' %s was marked as DEAD' % dead_name)
+        self._history.insert(0, ' %s was marked as DEAD' % dead_name)
 
         next_PC_name = self.__next_PC_name()
         self._window.show_fighters(current_name, current_fighter_details,
@@ -1494,19 +1546,19 @@ class FightHandler(ScreenHandler):
         # Record for posterity
         if hp_recipient is opponent_details:
             if adj > 0:
-                self.__history.insert(0, ' %s did %d HP to %s' % (current_name,
-                                                               adj,
-                                                               opponent_name))
+                self._history.insert(0, ' %s did %d HP to %s' % (current_name,
+                                                              adj,
+                                                              opponent_name))
             else:
-                self.__history.insert(0, ' %s regained %d HP' % (current_name,
-                                                              -adj))
+                self._history.insert(0, ' %s regained %d HP' % (current_name,
+                                                                -adj))
         else:
             if adj > 0:
-                self.__history.insert(0, ' %s lost %d HP' % (opponent_name,
-                                                             adj))
+                self._history.insert(0, ' %s lost %d HP' % (opponent_name,
+                                                            adj))
             else:
-                self.__history.insert(0, ' %s regained %d HP' % (opponent_name,
-                                                              -adj))
+                self._history.insert(0, ' %s regained %d HP' % (opponent_name,
+                                                                -adj))
 
         next_PC_name = self.__next_PC_name()
         self._window.show_fighters(current_name, current_fighter_details,
@@ -1571,7 +1623,7 @@ class FightHandler(ScreenHandler):
                 keep_going = False
 
         if round_before != self.__fight['round']:
-            self.__history.insert(0, '--- Round %d ---' % self.__fight['round'])
+            self._history.insert(0, '--- Round %d ---' % self.__fight['round'])
 
 
     def __next_fighter(self):
@@ -1775,11 +1827,11 @@ class FightHandler(ScreenHandler):
 
     def __show_history(self):
         max_lines = curses.LINES - 4
-        lines = (max_lines if len(self.__history) > max_lines
-                           else len(self.__history))
+        lines = (max_lines if len(self._history) > max_lines
+                           else len(self._history))
 
         # It's not really a menu but the window for it works just fine
-        pseudo_menu = [(x,0) for x in self.__history]
+        pseudo_menu = [(x,0) for x in self._history]
         ignore = self._window_manager.menu('Fight History (Newest On Top)',
                                            pseudo_menu)
         return True
@@ -1829,18 +1881,18 @@ class FightHandler(ScreenHandler):
 
 
 class MainHandler(ScreenHandler):
-    def __init__(self, window_manager, world, ruleset):
-        super(MainHandler, self).__init__(window_manager)
+    def __init__(self, window_manager, world, ruleset, campaign_debug_json):
+        super(MainHandler, self).__init__(window_manager, campaign_debug_json)
         self.__world = world
         self.__ruleset = ruleset
-        self._choices = {
+        self._add_to_choice_dict({
             # TODO: template - (build a template of monsters)
             ord('F'): {'name': 'Fight (build)', 'func': self.__build_fight},
             ord('f'): {'name': 'fight (run)', 'func': self.__run_fight},
             ord('H'): {'name': 'Heal',  'func': self.__fully_heal},
             ord('n'): {'name': 'name',  'func': self.__get_a_name},
             ord('q'): {'name': 'quit',  'func': self.__quit}
-        }
+        })
         self._window = MainGmWindow(self._window_manager)
 
     def _draw_screen(self):
@@ -1850,7 +1902,8 @@ class MainHandler(ScreenHandler):
 
     def __build_fight(self):
         build_fight = BuildFightHandler(self._window_manager,
-                                        self.__world)
+                                        self.__world,
+                                        campaign_debug_json)
         build_fight.handle_user_input_until_done()
         self._draw_screen() # Redraw current screen when done building fight.
 
@@ -1906,7 +1959,8 @@ class MainHandler(ScreenHandler):
         fight = FightHandler(self._window_manager,
                              self.__world,
                              monster_group,
-                             self.__ruleset)
+                             self.__ruleset,
+                             self._campaign_debug_json)
         fight.handle_user_input_until_done()
         self._draw_screen() # Redraw current screen when done with the fight.
 
@@ -1926,6 +1980,9 @@ class MyArgumentParser(argparse.ArgumentParser):
         self.print_help()
         sys.exit(2) 
 
+
+def timeStamped(fname, fmt='%Y-%m-%d-%H-%M-%S_{fname}'):
+    return datetime.datetime.now().strftime(fmt).format(fname=fname)
 
 # Main
 if __name__ == '__main__':
@@ -1980,6 +2037,14 @@ if __name__ == '__main__':
                                         % filename])
                 sys.exit(2)
 
+            # Save the JSON for debugging, later
+            debug_directory = 'debug'
+            if not os.path.exists(debug_directory):
+                os.makedirs(debug_directory)
+            campaign_debug_json = timeStamped('debug_json.txt')
+            with open(campaign_debug_json, 'w') as f:
+                json.dump(campaign.read_data, f, indent=2)
+
             # Error check the JSON
             if 'PCs' not in campaign.read_data:
                 window_manager.error(['No "PCs" in %s' % filename])
@@ -1992,13 +2057,15 @@ if __name__ == '__main__':
             # Enter into the mainloop
             main_handler = MainHandler(window_manager,
                                        campaign.read_data,
-                                       ruleset)
+                                       ruleset,
+                                       campaign_debug_json)
 
             if campaign.read_data['current-fight']['saved']:
                 fight_handler = FightHandler(window_manager,
                                              campaign.read_data,
                                              None,
-                                             ruleset)
+                                             ruleset,
+                                             campaign_debug_json)
                 fight_handler.handle_user_input_until_done()
             main_handler.handle_user_input_until_done()
 
