@@ -1153,7 +1153,7 @@ class ScreenHandler(object):
             'report'  : report
         }
 
-        bug_report_json = timeStamped('bug_report.txt')
+        bug_report_json = timeStamped('bug_report', 'txt')
         with open(bug_report_json, 'w') as f:
             json.dump(bug_report, f, indent=2)
 
@@ -1297,7 +1297,7 @@ class FightHandler(ScreenHandler):
         super(FightHandler, self).__init__(window_manager, campaign_debug_json)
         self._window = self._window_manager.get_fight_gm_window(ruleset)
         self.__ruleset = ruleset
-        # TODO: when the history is reset, the JSON should be rewritten
+        # TODO: when the history is reset (here), the JSON should be rewritten
         self._history = ['--- Round 0 ---']
 
         self._add_to_choice_dict({
@@ -1308,7 +1308,7 @@ class FightHandler(ScreenHandler):
             # NOTE: 'h' and 'f' belong in Ruleset
             ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
             ord('h'): {'name': 'History', 'func': self.__show_history},
-            # TODO: heal
+            # TODO: Heal
             ord('-'): {'name': 'HP damage', 'func': self.__damage_HP},
             ord('n'): {'name': 'notes', 'func': self.__notes},
             ord('o'): {'name': 'opponent', 'func': self.__pick_opponent},
@@ -1981,8 +1981,8 @@ class MyArgumentParser(argparse.ArgumentParser):
         sys.exit(2) 
 
 
-def timeStamped(fname, fmt='{fname}_%Y-%m-%d-%H-%M-%S'):
-    return datetime.datetime.now().strftime(fmt).format(fname=fname)
+def timeStamped(fname, ext, fmt='{fname}-%Y-%m-%d-%H-%M-%S.{ext}'):
+    return datetime.datetime.now().strftime(fmt).format(fname=fname, ext=ext)
 
 # Main
 if __name__ == '__main__':
@@ -2038,11 +2038,12 @@ if __name__ == '__main__':
                 sys.exit(2)
 
             # Save the JSON for debugging, later
-            # TODO: put all debug files in the debug directory
             debug_directory = 'debug'
             if not os.path.exists(debug_directory):
                 os.makedirs(debug_directory)
-            campaign_debug_json = timeStamped('debug_json.txt')
+            campaign_debug_json = os.path.join(debug_directory,
+                                               timeStamped('debug_json',
+                                                           'txt'))
             with open(campaign_debug_json, 'w') as f:
                 json.dump(campaign.read_data, f, indent=2)
 
