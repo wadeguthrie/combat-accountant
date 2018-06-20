@@ -492,20 +492,19 @@ class FightGmWindow(GmWindow):
                        column
                       ):
         is_alive = True # alive
-        if fighter_details['alive']:
+        fighter_state = self.__ruleset.get_fighter_state(fighter_details)
+        if fighter_state == Ruleset.FIGHTER_STATE_DEAD:
+            fighter_string = '(DEAD)'
+            mode = self.__state_color[Ruleset.FIGHTER_STATE_DEAD]
+            is_alive = False
+        else:
             fighter_string = '%s HP: %d/%d FP: %d/%d' % (
                 fighter_name,
                 fighter_details['current']['hp'],
                 fighter_details['permanent']['hp'],
                 fighter_details['current']['fp'],
                 fighter_details['permanent']['fp'])
-
-            fighter_state = self.__ruleset.get_fighter_state(fighter_details)
             mode = self.__state_color[fighter_state]
-        else:
-            fighter_string = '(DEAD)'
-            mode = self.__state_color[Ruleset.FIGHTER_STATE_DEAD]
-            is_alive = False
 
         self._window.addstr(self.__FIGHTER_LINE, column, fighter_string, mode)
         return is_alive
@@ -948,25 +947,6 @@ class Ruleset(object):
     def __init__(self):
         pass
 
-    def new_fight(self, fighter_details):
-        '''
-        Removes all the stuff from the old fight except injury.
-        '''
-        fighter_details['alive'] = True
-        fighter_details['timers'] = []
-        fighter_details['stuff'] = []
-        fighter_details['weapon'] = None # What's the form of this?
-        fighter_details['opponent'] = None
-
-    def heal_fighter(self, fighter_details):
-        '''
-        Removes all injury (and their side-effects) from a fighter.
-        '''
-        for stat in fighter_details['permanent'].iterkeys():
-            fighter_details['current'][stat] = (
-                                        fighter_details['permanent'][stat])
-        fighter_details['alive'] = True
-
     @staticmethod
     def roll(number, # the number of dice
              dice,   # the type of dice
@@ -983,6 +963,32 @@ class Ruleset(object):
                   adj # the number of HP to gain or lose
                  ):
         fighter_details['current']['hp'] += adj
+
+    def get_fighter_state(self, fighter_details):
+        if not fighter_details['alive']:
+            return Ruleset.FIGHTER_STATE_DEAD
+
+        return None # We don't have any further information
+
+
+    def heal_fighter(self, fighter_details):
+        '''
+        Removes all injury (and their side-effects) from a fighter.
+        '''
+        for stat in fighter_details['permanent'].iterkeys():
+            fighter_details['current'][stat] = (
+                                        fighter_details['permanent'][stat])
+        fighter_details['alive'] = True
+
+    def new_fight(self, fighter_details):
+        '''
+        Removes all the stuff from the old fight except injury.
+        '''
+        fighter_details['alive'] = True
+        fighter_details['timers'] = []
+        fighter_details['stuff'] = []
+        fighter_details['weapon'] = None # What's the form of this?
+        fighter_details['opponent'] = None
 
 
 class GurpsRuleset(Ruleset):
@@ -1020,7 +1026,14 @@ class GurpsRuleset(Ruleset):
     def do_action(self):
         self.__action_performed_by_this_fighter = True
 
+    def make_dead(self):
+        self.__action_performed_by_this_fighter = True
+
     def get_fighter_state(self, fighter_details):
+        state = super(GurpsRuleset, self).get_fighter_state(fighter_details)
+        if state is not None:
+            return state
+
         if (fighter_details['current']['fp'] <= 0 or
                                     fighter_details['current']['hp'] <= 0):
             return Ruleset.FIGHTER_STATE_CRITICAL
@@ -1464,6 +1477,10 @@ class FightHandler(ScreenHandler):
                                                  1) # assume it's the opponent
         if now_dead is None:
             return True # Keep fighting
+
+        if now_dead is current_fighter_details:
+            # Mark this guy as not having to do a maneuver this round.
+            self.__ruleset.make_dead()
 
         now_dead['alive'] = False
         dead_name = (current_name if now_dead is current_fighter_details

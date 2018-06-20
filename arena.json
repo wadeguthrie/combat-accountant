@@ -713,86 +713,155 @@
     }
     }, 
     "PCs": {
-        "Wade": {
+        "a-Thief": {
             "shock": 0, 
-            "last_negative_hp": 0, 
             "alive": true, 
             "current": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 12, 
+                "ht": 11, 
                 "st": 10, 
-                "dx": 10, 
-                "basic-speed": 6
+                "dx": 12, 
+                "basic-speed": 5.75
             }, 
             "permanent": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 12, 
+                "ht": 11, 
                 "st": 10, 
-                "dx": 10, 
-                "basic-speed": 6
+                "dx": 12, 
+                "basic-speed": 5.75
             }, 
             "timers": [], 
             "check_for_death": false, 
             "opponent": null
         }, 
-        "Bob": {
+        "c-Tank": {
             "shock": 0, 
-            "last_negative_hp": 0, 
             "alive": true, 
             "current": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 11, 
+                "ht": 11, 
                 "st": 10, 
-                "dx": 10, 
-                "basic-speed": 3
+                "dx": 12, 
+                "basic-speed": 5.75
             }, 
             "permanent": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 11, 
+                "ht": 11, 
                 "st": 10, 
-                "dx": 10, 
-                "basic-speed": 3
+                "dx": 12, 
+                "basic-speed": 5.75
             }, 
             "timers": [], 
             "check_for_death": false, 
             "opponent": null
         }, 
-        "Tom": {
+        "d-Tank": {
             "shock": 0, 
-            "last_negative_hp": 0, 
             "alive": true, 
             "current": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 11, 
+                "ht": 11, 
                 "st": 10, 
-                "dx": 10, 
-                "basic-speed": 5
+                "dx": 12, 
+                "basic-speed": 5.75
             }, 
             "permanent": {
-                "fp": 10, 
-                "iq": 10, 
-                "hp": 10, 
-                "ht": 10, 
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 11, 
+                "ht": 11, 
                 "st": 10, 
-                "dx": 10, 
-                "basic-speed": 5
+                "dx": 12, 
+                "basic-speed": 5.75
             }, 
             "timers": [], 
             "check_for_death": false, 
-            "opponent": [
-                "horsemen", 
-                "Death"
-            ]
+            "opponent": null
+        }, 
+        "f-Tank": {
+            "shock": 0, 
+            "alive": true, 
+            "current": {
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 11, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 12, 
+                "basic-speed": 5.75
+            }, 
+            "permanent": {
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 11, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 12, 
+                "basic-speed": 5.75
+            }, 
+            "timers": [], 
+            "check_for_death": false, 
+            "opponent": null
+        }, 
+        "g-Bokor": {
+            "shock": 0, 
+            "alive": true, 
+            "current": {
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 10, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 5.25
+            }, 
+            "permanent": {
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 10, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 5.25
+            }, 
+            "timers": [], 
+            "check_for_death": false, 
+            "opponent": null
+        }, 
+        "h-Cleric": {
+            "shock": 0, 
+            "alive": true, 
+            "current": {
+                "fp": 12, 
+                "iq": 13, 
+                "hp": 10, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 11, 
+                "basic-speed": 5.5
+            }, 
+            "permanent": {
+                "fp": 12, 
+                "iq": 13, 
+                "hp": 10, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 11, 
+                "basic-speed": 5.5
+            }, 
+            "timers": [], 
+            "check_for_death": false, 
+            "opponent": null
         }
     }, 
     "dead-monsters": {}, 
