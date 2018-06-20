@@ -2009,6 +2009,10 @@ if __name__ == '__main__':
              help='Input JSON file containing characters and monsters')
     parser.add_argument('-v', '--verbose', help='verbose', action='store_true',
                         default=False)
+    parser.add_argument('-m', '--maintainjson',
+             help='Don\'t overwrite the input JSON.  Only for debugging.',
+             action='store_true',
+             default=False)
 
     ARGS = parser.parse_args()
 
@@ -2071,7 +2075,8 @@ if __name__ == '__main__':
 
             # Save the state of things when we leave since there wasn't a
             # horrible crash while reading the data.
-            campaign.write_data = campaign.read_data
+            if not ARGS.maintainjson:
+                campaign.write_data = campaign.read_data
 
             # Enter into the mainloop
             main_handler = MainHandler(window_manager,
