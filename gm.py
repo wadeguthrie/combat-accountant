@@ -205,8 +205,14 @@ class GmWindow(object):
             else:
                 command_string = '%c' % chr(command)
 
-            choice_string = '| %s %s ' % (command_string, body['name'])
-            choice_strings.append(choice_string)
+            choice_text = {'bar': '| ',
+                           'command': ('%s' % command_string),
+                           'body': (' %s ' % body['name'])
+                          }
+            choice_strings.append(choice_text)
+            choice_string = '%s%s%s' % (choice_text['bar'],
+                                        choice_text['command'],
+                                        choice_text['body'])
             if max_width < len(choice_string):
                 max_width = len(choice_string)
 
@@ -220,15 +226,31 @@ class GmWindow(object):
 
         # Print stuff out
 
-        choice_strings.sort(reverse=True, key=lambda s: s.lower())
+        choice_strings.sort(reverse=True, key=lambda s: s['command'].lower())
         line = lines - 1 # -1 because last line is lines-1
         for subline in reversed(range(lines_for_choices)):
             line = lines - (subline + 1) # -1 because last line is lines-1
             left = 0
             for i in range(choices_per_line):
-                choice_string = ('|' if len(choice_strings) == 0
-                                     else choice_strings.pop())
-                self._window.addstr(line, left, choice_string, curses.A_NORMAL)
+                if len(choice_strings) == 0:
+                    self._window.addstr(line, left, '|', curses.A_NORMAL)
+                else:
+                    choice_text = choice_strings.pop()
+                    my_left = left
+                    self._window.addstr(line,
+                                        my_left,
+                                        choice_text['bar'],
+                                        curses.A_NORMAL)
+                    my_left += len(choice_text['bar'])
+                    self._window.addstr(line,
+                                        my_left,
+                                        choice_text['command'],
+                                        curses.A_REVERSE)
+                    my_left += len(choice_text['command'])
+                    self._window.addstr(line,
+                                        my_left,
+                                        choice_text['body'],
+                                        curses.A_BOLD)
                 left += max_width
             self._window.addstr(line, left, '|', curses.A_NORMAL)
         self.refresh()
@@ -455,6 +477,9 @@ class FightGmWindow(GmWindow):
                 fighter['name'],
                 fighter['details']['current']['hp'],
                 fighter['details']['permanent']['hp'])
+
+
+            mode = (mode | curses.A_BOLD) if fighter['group'] == 'PCs' else mode
             self.__summary_window.addstr(line, 0, fighter_string, mode)
 
     def start_fight(self):
@@ -1090,7 +1115,7 @@ class GurpsRuleset(Ruleset):
 
         if (fighter_details['current']['hp'] <
                                     fighter_details['permanent']['hp']/3.0):
-            notes.append('Dodge/move are at 1/2')
+            notes.append('Dodge/Move are at 1/2')
 
         if (fighter_details['current']['fp'] <=
                                         -fighter_details['permanent']['fp']):
@@ -1098,13 +1123,13 @@ class GurpsRuleset(Ruleset):
 
         else:
             if fighter_details['current']['fp'] <= 0:
-                notes.append('On action: Will roll or pass out')
+                notes.append('On action: Roll vs. Will or pass out')
 
             if fighter_details['current']['hp'] <= 0:
-                notes.append('On turn: 3d vs HT or pass out')
+                notes.append('On turn: 3d vs. HT or pass out')
 
         if fighter_details['check_for_death']:
-            notes.append('3d vs HT or DIE')
+            notes.append('3d vs. HT or DIE')
             fighter_details['check_for_death'] = False  # Only show/roll once
 
         return notes
