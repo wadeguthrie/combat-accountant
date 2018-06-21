@@ -467,7 +467,7 @@ class FightGmWindow(GmWindow):
         self._window.refresh()
 
 
-    def show_summary_window(self, fight):
+    def show_summary_window(self, fight, at_index=None):
         self.__summary_window.clear()
         for line, fighter in enumerate(fight['fighters']):
             fighter_state = self.__ruleset.get_fighter_state(fighter['details'])
@@ -479,7 +479,11 @@ class FightGmWindow(GmWindow):
                 fighter['details']['permanent']['hp'])
 
 
-            mode = (mode | curses.A_BOLD) if fighter['group'] == 'PCs' else mode
+            if at_index is not None and at_index == line:
+                mode = mode | curses.A_REVERSE
+            elif fighter['group'] == 'PCs':
+                mode = mode | curses.A_BOLD
+
             self.__summary_window.addstr(line, 0, fighter_string, mode)
 
     def start_fight(self):
@@ -1048,7 +1052,7 @@ class GurpsRuleset(Ruleset):
 
         super(GurpsRuleset, self).adjust_hp(fighter_details, adj)
 
-    def do_action(self):
+    def do_maneuver(self):
         self.__action_performed_by_this_fighter = True
 
     def make_dead(self):
@@ -1103,7 +1107,7 @@ class GurpsRuleset(Ruleset):
         prev_fighter_details['shock'] = 0 # remove expired shock entry
         if not self.__action_performed_by_this_fighter:
             return (False,
-                    'The fighter should perform some action before moving on.')
+                    'The fighter should do _some_ maneuver before moving on.')
         self.__action_performed_by_this_fighter = False
         return True, None
 
@@ -1341,13 +1345,13 @@ class FightHandler(ScreenHandler):
         self._add_to_choice_dict({
             ord(' '): {'name': 'next', 'func': self.__next_fighter},
             ord('<'): {'name': 'prev', 'func': self.__prev_fighter},
-            ord('a'): {'name': 'action', 'func': self.__action},
             ord('d'): {'name': 'dead', 'func': self.__dead},
             # NOTE: 'h' and 'f' belong in Ruleset
             ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
             ord('h'): {'name': 'History', 'func': self.__show_history},
             # TODO: Heal
             ord('-'): {'name': 'HP damage', 'func': self.__damage_HP},
+            ord('m'): {'name': 'maneuver', 'func': self.__maneuver},
             ord('n'): {'name': 'notes', 'func': self.__notes},
             ord('o'): {'name': 'opponent', 'func': self.__pick_opponent},
             ord('q'): {'name': 'quit', 'func': self.__quit},
@@ -1412,8 +1416,8 @@ class FightHandler(ScreenHandler):
             #self.__fight['fighters'].extend(['PCs', name] for name in
             #        world['PCs'].keys())
 
-            self.__fight['fighters'] = [] # list of {'group': xxx,
-                                          #          'name': xxx,
+            self.__fight['fighters'] = [] # list of {'group'   : xxx,
+                                          #          'name'    : xxx,
                                           #          'details' : xxx}
                                           #  where 
                                           #   'group' is 'PCs' or the monster
@@ -1455,22 +1459,22 @@ class FightHandler(ScreenHandler):
                     self.__world['monsters'][self.__fight['monsters']])
             del(self.__world['monsters'][self.__fight['monsters']])
 
-    def __action(self):
-        # TODO: the attack menu should be limited to what you can do in your
+    def __maneuver(self):
+        # TODO: the maneuver menu should be limited to what you can do in your
         #   current configuration (e.g., can't attack if you don't have a
         #   ready weapon).
-        action = self._window_manager.menu('Action', self.__action_menu)
-        if action is None:
+        maneuver = self._window_manager.menu('Maneuver', self.__action_menu)
+        if maneuver is None:
             return True # Keep going
-        self.__ruleset.do_action()
+        self.__ruleset.do_maneuver()
         current_name, current_fighter_details = self.__current_fighter()
         # a round count larger than 0 will get shown but less than 1 will
         # get deleted before the next round
         current_fighter_details['timers'].append({'rounds': 0.9,
-                                                  'string': action})
+                                                  'string': maneuver})
 
         self._history.insert(0, ' %s did "%s" maneuver' % (current_name,
-                                                           action[0]))
+                                                           maneuver[0]))
         opponent_name, opponent_details = self.__opponent_details(
                                                     current_fighter_details)
         next_PC_name = self.__next_PC_name()
@@ -1695,7 +1699,7 @@ class FightHandler(ScreenHandler):
         for timer in current_fighter_details['timers']:
             timer['rounds'] -= 1
 
-        # remove any newly expired timers - this is here for the 'action'
+        # remove any newly expired timers - this is here for the 'maneuver'
         # timers (e.g., 'aim', 'all out attack') which are supposed to be
         # displayed after an attacker's initiative up to but _not_ including
         # the next time they have their initiative (i.e., during his defense).
