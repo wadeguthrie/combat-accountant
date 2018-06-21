@@ -36,6 +36,10 @@
                         "value": 5.5
                     }
                 }, 
+                "dodge": {
+                    "type": "value", 
+                    "value": 9
+                }
                 "shock": {
                     "type": "value", 
                     "value": 0
@@ -76,6 +80,10 @@
                         "value": 5.25
                     }
                 }, 
+                "dodge": {
+                    "type": "value", 
+                    "value": 9
+                }
                 "shock": {
                     "type": "value", 
                     "value": 0
@@ -116,6 +124,10 @@
                         "value": 5.75
                     }
                 }, 
+                "dodge": {
+                    "type": "value", 
+                    "value": 9
+                }
                 "shock": {
                     "type": "value", 
                     "value": 0
@@ -156,6 +168,10 @@
                         "value": 5.75
                     }
                 }, 
+                "dodge": {
+                    "type": "value", 
+                    "value": 8
+                }
                 "shock": {
                     "type": "value", 
                     "value": 0
@@ -714,7 +730,9 @@
     }, 
     "PCs": {
         "a-Thief": {
+            "dodge": 8,
             "shock": 0, 
+            "stuff": [],
             "alive": true, 
             "current": {
                 "fp": 11, 
@@ -740,6 +758,8 @@
         }, 
         "c-Tank": {
             "shock": 0, 
+            "stuff": [],
+            "dodge": 9,
             "alive": true, 
             "current": {
                 "fp": 11, 
@@ -765,6 +785,8 @@
         }, 
         "d-Tank": {
             "shock": 0, 
+            "stuff": [],
+            "dodge": 9,
             "alive": true, 
             "current": {
                 "fp": 11, 
@@ -790,6 +812,8 @@
         }, 
         "f-Tank": {
             "shock": 0, 
+            "stuff": [],
+            "dodge": 9,
             "alive": true, 
             "current": {
                 "fp": 11, 
@@ -815,6 +839,8 @@
         }, 
         "g-Bokor": {
             "shock": 0, 
+            "stuff": [],
+            "dodge": 9,
             "alive": true, 
             "current": {
                 "fp": 11, 
@@ -840,6 +866,8 @@
         }, 
         "h-Cleric": {
             "shock": 0, 
+            "stuff": [],
+            "dodge": 9,
             "alive": true, 
             "current": {
                 "fp": 12, 
@@ -869,6 +897,8 @@
         "Arena Attack Monsters": {
             "1-Thief-A": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 8,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -894,6 +924,8 @@
             }, 
             "2-Thief-B": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 8,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -919,6 +951,8 @@
             }, 
             "3-Tank-A": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -944,6 +978,8 @@
             }, 
             "4-Tank-C": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -969,6 +1005,8 @@
             }, 
             "5-Tank-B": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -994,6 +1032,8 @@
             }, 
             "6-Tank-E": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1019,6 +1059,8 @@
             }, 
             "7-Tank-D": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1044,6 +1086,8 @@
             }, 
             "8-Tank-F": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1071,6 +1115,8 @@
         "Arena Attack Characters": {
             "1-Thief-A": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 8,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1096,6 +1142,8 @@
             }, 
             "2-Thief-B": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 8,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1121,6 +1169,8 @@
             }, 
             "3-Tank-A": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1146,6 +1196,8 @@
             }, 
             "4-Tank-C": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1171,6 +1223,8 @@
             }, 
             "5-Tank-B": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1196,6 +1250,8 @@
             }, 
             "6-Tank-D": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1221,6 +1277,8 @@
             }, 
             "7-Bokor-A": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1246,6 +1304,8 @@
             }, 
             "8-Cleric-A": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 12, 
@@ -1273,6 +1333,8 @@
         "Arena Capture the Flag": {
             "1-Cleric": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 12, 
@@ -1298,6 +1360,8 @@
             }, 
             "2-Thief-A": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 8,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1323,6 +1387,8 @@
             }, 
             "3-Bokor": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1348,6 +1414,8 @@
             }, 
             "4-Tank-A": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1373,6 +1441,8 @@
             }, 
             "5-Tank-C": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1398,6 +1468,8 @@
             }, 
             "6-Tank-B": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1423,6 +1495,8 @@
             }, 
             "7-Tank-D": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 9,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1448,6 +1522,8 @@
             }, 
             "8-Thief-B": {
                 "shock": 0, 
+                "stuff": [],
+                "dodge": 8,
                 "alive": true, 
                 "current": {
                     "fp": 11, 
