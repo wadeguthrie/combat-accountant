@@ -39,7 +39,7 @@
                 "dodge": {
                     "type": "value", 
                     "value": 9
-                }
+                },
                 "shock": {
                     "type": "value", 
                     "value": 0
@@ -83,7 +83,7 @@
                 "dodge": {
                     "type": "value", 
                     "value": 9
-                }
+                },
                 "shock": {
                     "type": "value", 
                     "value": 0
@@ -127,7 +127,7 @@
                 "dodge": {
                     "type": "value", 
                     "value": 9
-                }
+                },
                 "shock": {
                     "type": "value", 
                     "value": 0
@@ -171,7 +171,7 @@
                 "dodge": {
                     "type": "value", 
                     "value": 8
-                }
+                },
                 "shock": {
                     "type": "value", 
                     "value": 0
