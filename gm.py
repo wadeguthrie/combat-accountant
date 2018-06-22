@@ -483,7 +483,6 @@ class FightGmWindow(GmWindow):
                 mode = mode | curses.A_REVERSE
             elif fighter['group'] == 'PCs':
                 mode = mode | curses.A_BOLD
-
             self.__summary_window.addstr(line, 0, fighter_string, mode)
 
     def start_fight(self):
@@ -1073,6 +1072,58 @@ class GurpsRuleset(Ruleset):
 
         return Ruleset.FIGHTER_STATE_HEALTHY
 
+    def get_action_menu(self, fighter):
+        # TODO: only provide the actions available to the fighter
+        # TODO: add routines to be executed when something is seleted (e.g.,
+        #   attack would reduce 1 from the count of ammunition and, if zero,
+        #   would unready the weapon)
+        #   if fighter['weapon'] is None
+        return [
+            ('Aim',                    {'text': ['Aim',
+                                        ' Defense: any loses aim',
+                                        ' Move: step']}),
+            ('attack',                 {'text': ['Attack',
+                                        ' Defense: any',
+                                        ' Move: step']}),
+            ('attack, all out',        {'text': ['All out attack',
+                                        ' Defense: none',
+                                        ' Move: 1/2']}),
+            ('change posture',         {'text': ['Change posture',
+                                        ' Defense: any',
+                                        ' Move: none']}),
+            ('Concentrate',            {'text': ['Concentrate',
+                                        ' Defense: any w/will roll',
+                                        ' Move: step']}),
+            ('defense, all out',       {'text': ['All out defense',
+                                        ' Defense: double',
+                                        ' Move: step']}),
+            ('evaluate',               {'text': ['Evaluate',
+                                        ' Defense: any',
+                                        ' Move: step']}),
+            ('feint',                  {'text': ['Feint',
+                                        ' Defense: any, parry *',
+                                        ' Move: step']}),
+            ('move',                   {'text': ['Move',
+                                        ' Defense: any',
+                                        ' Move: full']}),
+            ('Move and attack',        {'text': ['Move & Attack',
+                                        ' Defense: Dodge,block',
+                                        ' Move: full']}),
+            ('nothing',                {'text': ['Do nothing',
+                                        ' Defense: any',
+                                        ' Move: none']}),
+            ('Nothing: stun/surprise', {'text': ['Do nothing',
+                                        ' Defense: any @-4',
+                                        ' Move: none']}),
+            # TODO: ready (draw) and ready (reload) should be different
+            ('ready',                  {'text': ['Ready',
+                                        ' Defense: any',
+                                        ' Move: step']}),
+            ('wait',                   {'text': ['Wait',
+                                        ' Defense: any, no All Out Attack ',
+                                        ' Move: none']}),
+        ]
+
 
     def heal_fighter(self, fighter_details):
         '''
@@ -1359,51 +1410,6 @@ class FightHandler(ScreenHandler):
             ord('t'): {'name': 'timer', 'func': self.__timer}
         })
 
-        # TODO: This should be in the ruleset
-        self.__action_menu = [
-            ('Aim',                    ['Aim',
-                                        ' Defense: any loses aim',
-                                        ' Move: step']),
-            ('attack',                 ['Attack',
-                                        ' Defense: any',
-                                        ' Move: step']),
-            ('attack, all out',        ['All out attack',
-                                        ' Defense: none',
-                                        ' Move: 1/2']),
-            ('change posture',         ['Change posture',
-                                        ' Defense: any',
-                                        ' Move: none']),
-            ('Concentrate',            ['Concentrate',
-                                        ' Defense: any w/will roll',
-                                        ' Move: step']),
-            ('defense, all out',       ['All out defense',
-                                        ' Defense: double',
-                                        ' Move: step']),
-            ('evaluate',               ['Evaluate',
-                                        ' Defense: any',
-                                        ' Move: step']),
-            ('feint',                  ['Feint',
-                                        ' Defense: any, parry *',
-                                        ' Move: step']),
-            ('move',                   ['Move',
-                                        ' Defense: any',
-                                        ' Move: full']),
-            ('Move and attack',        ['Move & Attack',
-                                        ' Defense: Dodge,block',
-                                        ' Move: full']),
-            ('nothing',                ['Do nothing',
-                                        ' Defense: any',
-                                        ' Move: none']),
-            ('Nothing: stun/surprise', ['Do nothing',
-                                        ' Defense: any @-4',
-                                        ' Move: none']),
-            ('ready',                  ['Ready',
-                                        ' Defense: any',
-                                        ' Move: step']),
-            ('wait',                   ['Wait',
-                                        ' Defense: any, no AA attack ',
-                                        ' Move: none']),
-        ]
 
         self.__world = world
         self.__fight = world["current-fight"]
@@ -1463,18 +1469,20 @@ class FightHandler(ScreenHandler):
         # TODO: the maneuver menu should be limited to what you can do in your
         #   current configuration (e.g., can't attack if you don't have a
         #   ready weapon).
-        maneuver = self._window_manager.menu('Maneuver', self.__action_menu)
+
+        current_name, current_fighter_details = self.__current_fighter()
+        action_menu = self.__ruleset.get_action_menu(current_fighter_details)
+        maneuver = self._window_manager.menu('Maneuver', action_menu)
         if maneuver is None:
             return True # Keep going
         self.__ruleset.do_maneuver()
-        current_name, current_fighter_details = self.__current_fighter()
         # a round count larger than 0 will get shown but less than 1 will
         # get deleted before the next round
         current_fighter_details['timers'].append({'rounds': 0.9,
-                                                  'string': maneuver})
+                                                  'string': maneuver['text']})
 
         self._history.insert(0, ' %s did "%s" maneuver' % (current_name,
-                                                           maneuver[0]))
+                                                           maneuver['text'][0]))
         opponent_name, opponent_details = self.__opponent_details(
                                                     current_fighter_details)
         next_PC_name = self.__next_PC_name()
