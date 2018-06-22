@@ -1078,10 +1078,17 @@ class GurpsRuleset(Ruleset):
         #   attack would reduce 1 from the count of ammunition and, if zero,
         #   would unready the weapon)
         #   if fighter['weapon'] is None
-        return [
-            ('Aim',                    {'text': ['Aim',
+
+        result = []
+
+        is_ranged = True if (fighter['weapon'] is not None and
+                     fighter['weapon']['type'] == 'ranged weapon') else False
+
+        if is_ranged:
+            result.append(('Aim',       {'text': ['Aim',
                                         ' Defense: any loses aim',
-                                        ' Move: step']}),
+                                        ' Move: step']}))
+        result.extend([
             ('attack',                 {'text': ['Attack',
                                         ' Defense: any',
                                         ' Move: step']}),
@@ -1115,14 +1122,22 @@ class GurpsRuleset(Ruleset):
             ('Nothing: stun/surprise', {'text': ['Do nothing',
                                         ' Defense: any @-4',
                                         ' Move: none']}),
-            # TODO: ready (draw) and ready (reload) should be different
-            ('ready',                  {'text': ['Ready',
+            ('ready (draw)',           {'text': ['Ready (draw, etc.)',
                                         ' Defense: any',
                                         ' Move: step']}),
-            ('wait',                   {'text': ['Wait',
+        ])
+
+        if is_ranged:
+            result.append(('ready (reload)',         
+                                       {'text': ['Ready (reload)',
+                                        ' Defense: any',
+                                        ' Move: step']}))
+
+        result.append(('wait',         {'text': ['Wait',
                                         ' Defense: any, no All Out Attack ',
-                                        ' Move: none']}),
-        ]
+                                        ' Move: none']}))
+
+        return result
 
 
     def heal_fighter(self, fighter_details):

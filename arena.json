@@ -1386,7 +1386,7 @@
                 "weapon" : null,
                 "stuff": [
                            {"name": "Makarov Pistol",
-                            "type": "weapon",
+                            "type": "ranged weapon",
                             "damage": {"dice": "1d+3"},
                             "acc": 2,
                             "ammo": {"name": "C Cell",
