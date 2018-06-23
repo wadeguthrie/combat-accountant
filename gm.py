@@ -972,8 +972,8 @@ class Ruleset(object):
      FIGHTER_STATE_CRITICAL,
      FIGHTER_STATE_DEAD) = range(4)
 
-    def __init__(self):
-        pass
+    def __init__(self, window_manager):
+        self._window_manager = window_manager
 
     @staticmethod
     def roll(number, # the number of dice
@@ -1014,8 +1014,7 @@ class Ruleset(object):
         '''
         fighter_details['alive'] = True
         fighter_details['timers'] = []
-        fighter_details['stuff'] = []
-        fighter_details['weapon'] = None # What's the form of this?
+        fighter_details['weapon-index'] = None
         fighter_details['opponent'] = None
 
 
@@ -1025,9 +1024,10 @@ class GurpsRuleset(Ruleset):
     stuff.
     '''
 
-    def __init__(self):
-        super(GurpsRuleset, self).__init__()
+    def __init__(self, window_manager):
+        super(GurpsRuleset, self).__init__(window_manager)
         self.__action_performed_by_this_fighter = False
+        self.__current_fighter = None
 
     # TODO: need a template for new characters
 
@@ -1073,69 +1073,130 @@ class GurpsRuleset(Ruleset):
         return Ruleset.FIGHTER_STATE_HEALTHY
 
     def get_action_menu(self, fighter):
-        # TODO: only provide the actions available to the fighter
-        # TODO: add routines to be executed when something is seleted (e.g.,
-        #   attack would reduce 1 from the count of ammunition and, if zero,
-        #   would unready the weapon)
-        #   if fighter['weapon'] is None
+        # TODO: complete all of the maneuvers
 
+        print 'get_action_menu' # TODO: remove
         result = []
+        self.__current_fighter = fighter
+        PP.pprint(self.__current_fighter) # TODO: remove
 
-        is_ranged = True if (fighter['weapon'] is not None and
-                     fighter['weapon']['type'] == 'ranged weapon') else False
+        holding_weapon = fighter['weapon-index']
+        if holding_weapon is not None:
+            weapon_index = self.__current_fighter['weapon-index']
+            weapon = self.__current_fighter['stuff'][weapon_index]
+            holding_ranged = True if (holding_weapon  is not None and
+                                weapon['type'] == 'ranged weapon') else False
+        else:
+            weapon_index = None
+            weapon = None
+            holding_ranged = False
 
-        if is_ranged:
-            result.append(('Aim',       {'text': ['Aim',
-                                        ' Defense: any loses aim',
-                                        ' Move: step']}))
+        print 'holding_weapon: %r, holding_ranged: %r' % (  # TODO: remove
+            holding_weapon, holding_ranged)                 # TODO: remove
+
+        if holding_ranged:
+            result.append(('Aim',      {'text': ['Aim',
+                                                 ' Defense: any loses aim',
+                                                 ' Move: step'],
+                                        'doit': None}))
         result.extend([
             ('attack',                 {'text': ['Attack',
-                                        ' Defense: any',
-                                        ' Move: step']}),
+                                                 ' Defense: any',
+                                                 ' Move: step'],
+                                        'doit': None}),
             ('attack, all out',        {'text': ['All out attack',
-                                        ' Defense: none',
-                                        ' Move: 1/2']}),
+                                                 ' Defense: none',
+                                                 ' Move: 1/2'],
+                                        'doit': None}),
             ('change posture',         {'text': ['Change posture',
-                                        ' Defense: any',
-                                        ' Move: none']}),
+                                                 ' Defense: any',
+                                                 ' Move: none'],
+                                        'doit': None}),
             ('Concentrate',            {'text': ['Concentrate',
-                                        ' Defense: any w/will roll',
-                                        ' Move: step']}),
+                                                 ' Defense: any w/will roll',
+                                                 ' Move: step'],
+                                        'doit': None}),
             ('defense, all out',       {'text': ['All out defense',
-                                        ' Defense: double',
-                                        ' Move: step']}),
+                                                 ' Defense: double',
+                                                 ' Move: step'],
+                                        'doit': None}),
             ('evaluate',               {'text': ['Evaluate',
-                                        ' Defense: any',
-                                        ' Move: step']}),
+                                                 ' Defense: any',
+                                                 ' Move: step'],
+                                        'doit': None}),
             ('feint',                  {'text': ['Feint',
-                                        ' Defense: any, parry *',
-                                        ' Move: step']}),
-            ('move',                   {'text': ['Move',
-                                        ' Defense: any',
-                                        ' Move: full']}),
-            ('Move and attack',        {'text': ['Move & Attack',
-                                        ' Defense: Dodge,block',
-                                        ' Move: full']}),
-            ('nothing',                {'text': ['Do nothing',
-                                        ' Defense: any',
-                                        ' Move: none']}),
-            ('Nothing: stun/surprise', {'text': ['Do nothing',
-                                        ' Defense: any @-4',
-                                        ' Move: none']}),
-            ('ready (draw)',           {'text': ['Ready (draw, etc.)',
-                                        ' Defense: any',
-                                        ' Move: step']}),
+                                                 ' Defense: any, parry *',
+                                                 ' Move: step'],
+                                        'doit': None}),
         ])
 
-        if is_ranged:
+        if holding_weapon is not None:
+            result.append(('holster/sheathe %s' % weapon['name'], 
+                                       {'text': ['Unready %s' % weapon['name'],
+                                                 ' Defense: any',
+                                                 ' Move: step'],
+                                        'doit': self.__draw_weapon,
+                                        'data': None}))
+
+        result.extend([
+            ('move',                   {'text': ['Move',
+                                                 ' Defense: any',
+                                                 ' Move: full'],
+                                        'doit': None}),
+            ('Move and attack',        {'text': ['Move & Attack',
+                                                 ' Defense: Dodge,block',
+                                                 ' Move: full'],
+                                        'doit': None}),
+            ('nothing',                {'text': ['Do nothing',
+                                                 ' Defense: any',
+                                                 ' Move: none'],
+                                        'doit': None}),
+        ])
+
+        # TODO: should only be able to ready an unready weapon.
+
+        draw_weapon_menu = []
+        for index, item in enumerate(self.__current_fighter['stuff']):
+            if (item['type'] == 'ranged weapon' or
+                    item['type'] == 'melee weapon'):
+                if holding_weapon is None or holding_weapon != index:
+                    draw_weapon_menu.append((item['name'],
+                                            {'text': ['draw %s' % item['name']],
+                                             'doit': self.__draw_weapon,
+                                             'data': index}))
+
+        if len(draw_weapon_menu) == 1:
+            result.append(('ready (draw) %s' % draw_weapon_menu[0][0],  
+                                {'text': ['Ready (draw, etc.)',
+                                          ' Defense: any',
+                                          ' Move: step'],
+                                 'doit': self.__draw_weapon,
+                                 'data': draw_weapon_menu[0][1]['data']}))
+
+        elif len(draw_weapon_menu) > 1:
+            result.append(('ready (draw)',  {'text': ['Ready (draw, etc.)',
+                                                      ' Defense: any',
+                                                      ' Move: step'],
+                                             'menu': draw_weapon_menu}))
+
+        if holding_ranged:
             result.append(('ready (reload)',         
                                        {'text': ['Ready (reload)',
-                                        ' Defense: any',
-                                        ' Move: step']}))
+                                                 ' Defense: any',
+                                                 ' Move: step'],
+                                        'doit': None}))
 
-        result.append(('wait',         {'text': ['Wait',
-                                        ' Defense: any, no All Out Attack ',
-                                        ' Move: none']}))
+        result.extend([
+            ('stun/surprise (do nothing)',
+                               {'text': ['Stun/Surprised',
+                                         ' Defense: any @-4',
+                                         ' Move: none'],
+                                'doit': None}),
+            ('wait',           {'text': ['Wait',
+                                         ' Defense: any, no All Out Attack',
+                                         ' Move: none'],
+                                'doit': None})
+        ])
 
         return result
 
@@ -1203,6 +1264,11 @@ class GurpsRuleset(Ruleset):
             fighter_details['check_for_death'] = False  # Only show/roll once
 
         return notes
+
+    def __draw_weapon(self, index):
+        self.__current_fighter['weapon-index'] = index
+        return True # Keep fighting
+            
 
 
 class ScreenHandler(object):
@@ -1481,15 +1547,21 @@ class FightHandler(ScreenHandler):
             del(self.__world['monsters'][self.__fight['monsters']])
 
     def __maneuver(self):
-        # TODO: the maneuver menu should be limited to what you can do in your
-        #   current configuration (e.g., can't attack if you don't have a
-        #   ready weapon).
-
         current_name, current_fighter_details = self.__current_fighter()
         action_menu = self.__ruleset.get_action_menu(current_fighter_details)
         maneuver = self._window_manager.menu('Maneuver', action_menu)
         if maneuver is None:
             return True # Keep going
+
+        while 'menu' in maneuver:
+            maneuver = self._window_manager.menu('Which', maneuver['menu'])
+            if maneuver is None:
+                return True # Keep going
+
+        if 'doit' in maneuver and maneuver['doit'] is not None:
+            param = None if 'data' not in maneuver else maneuver['data']
+            (maneuver['doit'])(param)
+
         self.__ruleset.do_maneuver()
         # a round count larger than 0 will get shown but less than 1 will
         # get deleted before the next round
@@ -2072,9 +2144,10 @@ if __name__ == '__main__':
     # sys.exit(2)
 
     PP = pprint.PrettyPrinter(indent=3, width=150)
-    ruleset = GurpsRuleset()
 
     with GmWindowManager() as window_manager:
+        ruleset = GurpsRuleset(window_manager)
+
         # Prefs
         # NOTE: When other things find their way into the prefs, the scope
         # of the read_prefs GmJson will have to be larger

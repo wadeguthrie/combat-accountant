@@ -731,8 +731,9 @@
     "PCs": {
         "a-Thief": {
             "dodge": 8,
+            "skills": [],
             "shock": 0, 
-            "weapon" : null,
+            "weapon-index" : null,
             "stuff": [],
             "alive": true, 
             "current": {
@@ -759,9 +760,10 @@
         }, 
         "c-Tank": {
             "shock": 0, 
-            "weapon" : null,
+            "weapon-index" : null,
             "stuff": [],
             "dodge": 9,
+            "skills": [],
             "alive": true, 
             "current": {
                 "fp": 11, 
@@ -787,9 +789,10 @@
         }, 
         "d-Tank": {
             "shock": 0, 
-            "weapon" : null,
+            "weapon-index" : null,
             "stuff": [],
             "dodge": 9,
+            "skills": [],
             "alive": true, 
             "current": {
                 "fp": 11, 
@@ -815,9 +818,10 @@
         }, 
         "f-Tank": {
             "shock": 0, 
-            "weapon" : null,
+            "weapon-index" : null,
             "stuff": [],
             "dodge": 9,
+            "skills": [],
             "alive": true, 
             "current": {
                 "fp": 11, 
@@ -843,9 +847,10 @@
         }, 
         "g-Bokor": {
             "shock": 0, 
-            "weapon" : null,
+            "weapon-index" : null,
             "stuff": [],
             "dodge": 9,
+            "skills": [],
             "alive": true, 
             "current": {
                 "fp": 11, 
@@ -871,9 +876,10 @@
         }, 
         "h-Cleric": {
             "shock": 0, 
-            "weapon" : null,
+            "weapon-index" : null,
             "stuff": [],
             "dodge": 9,
+            "skills": [],
             "alive": true, 
             "current": {
                 "fp": 12, 
@@ -903,9 +909,10 @@
         "Arena Attack Monsters": {
             "1-Thief-A": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 8,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -931,9 +938,10 @@
             }, 
             "2-Thief-B": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 8,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -959,9 +967,10 @@
             }, 
             "3-Tank-A": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -987,9 +996,10 @@
             }, 
             "4-Tank-C": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1015,9 +1025,10 @@
             }, 
             "5-Tank-B": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1043,9 +1054,10 @@
             }, 
             "6-Tank-E": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1071,9 +1083,10 @@
             }, 
             "7-Tank-D": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1099,9 +1112,10 @@
             }, 
             "8-Tank-F": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1129,9 +1143,10 @@
         "Arena Attack Characters": {
             "1-Thief-A": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 8,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1157,9 +1172,10 @@
             }, 
             "2-Thief-B": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 8,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1185,9 +1201,10 @@
             }, 
             "3-Tank-A": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1213,9 +1230,10 @@
             }, 
             "4-Tank-C": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1241,9 +1259,10 @@
             }, 
             "5-Tank-B": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1269,9 +1288,10 @@
             }, 
             "6-Tank-D": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1297,9 +1317,10 @@
             }, 
             "7-Bokor-A": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1325,9 +1346,10 @@
             }, 
             "8-Cleric-A": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 12, 
@@ -1355,9 +1377,10 @@
         "Arena Capture the Flag": {
             "1-Cleric": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 12, 
@@ -1383,7 +1406,7 @@
             }, 
             "2-Thief-A": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [
                            {"name": "Makarov Pistol",
                             "type": "ranged weapon",
@@ -1396,14 +1419,23 @@
                             "count": 1,
                             "notes": ""
                            },
+                           {"name": "Large Knife",
+                            "type": "melee weapon",
+                            "damage": {"dice": "1d-2",
+                                       "type": "imp"},
+                            "skill": "knife",
+                            "count": 1,
+                            "notes": ""
+                           },
                            {"name": "C Cell",
                             "type": "misc",
                             "count": 5,
                             "notes": ""
                            }
                           ],
-                "skills": [{"guns (pistol)": 12}],
                 "dodge": 8,
+                "skills": [{"guns (pistol)": 12},
+                           {"knife": 15}],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1429,9 +1461,10 @@
             }, 
             "3-Bokor": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1457,9 +1490,27 @@
             }, 
             "4-Tank-A": {
                 "shock": 0, 
-                "weapon" : null,
-                "stuff": [],
+                "weapon-index" : null,
+                "stuff": [
+                           {"name": "Makarov Pistol",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+3"},
+                            "acc": 2,
+                            "ammo": {"name": "C Cell",
+                                     "shots": 8},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "C Cell",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
                 "dodge": 9,
+                "skills": [{"guns (pistol)": 16}],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1485,9 +1536,10 @@
             }, 
             "5-Tank-C": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1513,9 +1565,10 @@
             }, 
             "6-Tank-B": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1541,11 +1594,11 @@
             }, 
             "7-Tank-D": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [
                          ],
-                "skills": [{"guns (pistol)": 10}],
                 "dodge": 9,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1571,9 +1624,10 @@
             }, 
             "8-Thief-B": {
                 "shock": 0, 
-                "weapon" : null,
+                "weapon-index" : null,
                 "stuff": [],
                 "dodge": 8,
+                "skills": [],
                 "alive": true, 
                 "current": {
                     "fp": 11, 
