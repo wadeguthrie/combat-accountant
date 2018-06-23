@@ -1072,6 +1072,47 @@ class GurpsRuleset(Ruleset):
                     'imp':  2.0, 'pi-': 0.5, 'pi':  1.0, 'pi+': 1.5,
                     'pi++': 2.0, 'tbb': 1.0, 'tox': 1.0
                   }
+    melee_damage = {1:  {'thr': {'num_dice': 1, 'plus': -6},
+                         'sw':  {'num_dice': 1, 'plus': -5}},
+                    2:  {'thr': {'num_dice': 1, 'plus': -6},
+                         'sw':  {'num_dice': 1, 'plus': -5}},
+                    3:  {'thr': {'num_dice': 1, 'plus': -5},
+                         'sw':  {'num_dice': 1, 'plus': -4}},
+                    4:  {'thr': {'num_dice': 1, 'plus': -5},
+                         'sw':  {'num_dice': 1, 'plus': -4}},
+                    5:  {'thr': {'num_dice': 1, 'plus': -4},
+                         'sw':  {'num_dice': 1, 'plus': -3}},
+                    6:  {'thr': {'num_dice': 1, 'plus': -4},
+                         'sw':  {'num_dice': 1, 'plus': -3}},
+                    7:  {'thr': {'num_dice': 1, 'plus': -3},
+                         'sw':  {'num_dice': 1, 'plus': -2}},
+                    8:  {'thr': {'num_dice': 1, 'plus': -3},
+                         'sw':  {'num_dice': 1, 'plus': -2}},
+                    9:  {'thr': {'num_dice': 1, 'plus': -2},
+                         'sw':  {'num_dice': 1, 'plus': -1}},
+                    10: {'thr': {'num_dice': 1, 'plus': -2},
+                         'sw':  {'num_dice': 1, 'plus': 0}},
+                    11: {'thr': {'num_dice': 1, 'plus': -1},
+                         'sw':  {'num_dice': 1, 'plus': +1}},
+                    12: {'thr': {'num_dice': 1, 'plus': -1},
+                         'sw':  {'num_dice': 1, 'plus': +2}},
+                    13: {'thr': {'num_dice': 1, 'plus': 0},
+                         'sw':  {'num_dice': 2, 'plus': -1}},
+                    14: {'thr': {'num_dice': 1, 'plus': 0},
+                         'sw':  {'num_dice': 2, 'plus': 0}},
+                    15: {'thr': {'num_dice': 1, 'plus': +1},
+                         'sw':  {'num_dice': 2, 'plus': +1}},
+                    16: {'thr': {'num_dice': 1, 'plus': +1},
+                         'sw':  {'num_dice': 2, 'plus': +2}},
+                    17: {'thr': {'num_dice': 1, 'plus': +2},
+                         'sw':  {'num_dice': 3, 'plus': -1}},
+                    18: {'thr': {'num_dice': 1, 'plus': +2},
+                         'sw':  {'num_dice': 3, 'plus': 0}},
+                    19: {'thr': {'num_dice': 2, 'plus': -1},
+                         'sw':  {'num_dice': 3, 'plus': +1}},
+                    20: {'thr': {'num_dice': 2, 'plus': -1},
+                         'sw':  {'num_dice': 3, 'plus': +2}}}
+
 
     def __init__(self, window_manager):
         super(GurpsRuleset, self).__init__(window_manager)
@@ -1293,6 +1334,16 @@ class GurpsRuleset(Ruleset):
         self.__action_performed_by_this_fighter = False
         return True, None
 
+    def __get_damage_type_str(self,
+                            damage_type
+                           ):
+        if damage_type in GurpsRuleset.damage_mult:
+            damage_type_str = '%s (x%.1f)' % (
+                    damage_type, GurpsRuleset.damage_mult[damage_type])
+        else:
+            damage_type_str = '%s' % damage_type
+        return damage_type_str
+
     def get_fighter_notes(self,
                           fighter_name,
                           fighter_details
@@ -1305,8 +1356,60 @@ class GurpsRuleset(Ruleset):
         weapon = None
         skill = None
         if holding_weapon is None:
-            pass
-            # TODO: hand-to-hand stuff
+            # boxing, brawling, karate, dx
+            punch_skill = fighter_details['current']['dx']
+            punch_string = 'Punch (B271, B370)'
+            kick_string = 'Kick (B271, B370)'
+            plus_per_die_of_thrust = 0
+            if 'brawling' in fighter_details['skills']:
+                if punch_skill < fighter_details['skills']['brawling']:
+                    punch_string = 'Brawling Punch (B182, B271, B370)'
+                    punch_skill = fighter_details['skills']['brawling']
+                    kick_string = 'Brawling Kick (B182, B271, B370)'
+                    # Brawling: @DX+2 = +1 per die of thrusting damage
+                    if punch_skill >= fighter_details['current']['dx']+2:
+                        plus_per_die_of_thrust = 1
+            if 'karate' in fighter_details['skills']:
+                if punch_skill < fighter_details['skills']['karate']:
+                    punch_string = 'Karate Punch (B203, B271, B370)'
+                    kick_string = 'Karate Kick (B203, B271, B370)'
+                    punch_skill = fighter_details['skills']['karate']
+                    # Karate: @DX = +1 per die of thrusting damage
+                    # Karate: @DX+1+ = +2 per die of thrusting damage
+                    if punch_skill >= fighter_details['current']['dx']+1:
+                        plus_per_die_of_thrust = 2
+                    elif punch_skill >= fighter_details['current']['dx']:
+                        plus_per_die_of_thrust = 1
+            kick_skill = punch_skill - 2 # (brawling, karate, dx) - 2
+            if 'boxing' in fighter_details['skills']:
+                if punch_skill < fighter_details['skills']['boxing']:
+                    punch_string = 'Boxing Punch (B182, B271, B370)'
+                    punch_skill = fighter_details['skills']['boxing']
+                    # Boxing: @DX+1 = +1 per die of thrusting damage
+                    # Boxing: @DX+2+ = +2 per die of thrusting damage
+                    if punch_skill >= fighter_details['current']['dx']+2:
+                        plus_per_die_of_thrust = 2
+                    elif punch_skill >= fighter_details['current']['dx']+1:
+                        plus_per_die_of_thrust = 1
+
+            st = fighter_details['current']['st']
+            damage = copy.deepcopy(GurpsRuleset.melee_damage[st]['thr'])
+            damage['plus'] += damage['num_dice'] * plus_per_die_of_thrust
+
+            notes.append(punch_string)
+            damage_type_str = self.__get_damage_type_str('cr')
+            notes.append('  to hit: %d, damage: %dd%+d, %s' % (
+                                                        punch_skill,
+                                                        damage['num_dice'],
+                                                        damage['plus'] - 1,
+                                                        damage_type_str))
+
+            notes.append('Kick (B271, B370)')
+            notes.append('  to hit: %d, damage: %dd%+d, %s' % (
+                                                        kick_skill,
+                                                        damage['num_dice'],
+                                                        damage['plus'],
+                                                        damage_type_str))
         else:
             weapon = fighter_details['stuff'][holding_weapon]
             notes.append('%s' % weapon['name'])
@@ -1314,11 +1417,7 @@ class GurpsRuleset(Ruleset):
                 skill = fighter_details['skills'][weapon['skill']]
                 damage_type = ('' if 'type' not in weapon['damage']
                                     else weapon['damage']['type'])
-                if damage_type in GurpsRuleset.damage_mult:
-                    damage_type_str = '%s x%f' % (
-                            damage_type, GurpsRuleset.damage_mult[damage_type])
-                else:
-                    damage_type_str = '%s' % damage_type
+                damage_type_str = self.__get_damage_type_str(damage_type)
 
                 if 'dice' in weapon['damage']:
                     notes.append('  to hit: %d, damage: %s, %s' %
@@ -1331,9 +1430,26 @@ class GurpsRuleset(Ruleset):
 
         notes.append('Dodge: %d' % fighter_details['dodge'])
 
-        if weapon is None:
-            pass
-            # TODO: unarmed parry
+        if weapon is None: # Unarmed Parry (B376)
+            parry_skill = fighter_details['current']['dx']
+            parry_string = 'Unarmed Parry (B376): %d'
+            if 'brawling' in fighter_details['skills']:
+                if parry_skill < fighter_details['skills']['brawling']:
+                    parry_skill = fighter_details['skills']['brawling']
+                    parry_string = 'Brawling Parry (B182, B376): %d'
+            if 'karate' in fighter_details['skills']:
+                if parry_skill < fighter_details['skills']['karate']:
+                    parry_skill = fighter_details['skills']['karate']
+                    parry_string = 'Karate Parry (B203, B376): %d'
+            if 'boxing' in fighter_details['skills']:
+                if parry_skill < fighter_details['skills']['boxing']:
+                    parry_skill = fighter_details['skills']['boxing']
+                    parry_string = 'Boxing Parry (B182, B376): %d'
+
+            # Brawling, Boxing, Karate, DX: Parry int(skill/2) + 3
+            parry_skill = 3 + int(parry_skill/2)
+            notes.append(parry_string % parry_skill)
+
         elif weapon['type'] == 'shield':
             block_skill = 3 + int(skill * 0.5)
             notes.append('Block: %d' % block_skill)
