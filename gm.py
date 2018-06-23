@@ -12,10 +12,9 @@ import random
 import sys
 
 # TODO:
-#   - attack / active defense numbers on screen
 #   - position w/plusses and minuses
 #   - high pain threshold = no shock
-#   - guns w/shots and reload time (so equipment, equip, unequip, ...)
+#   - guns w/shots and reload time
 #   - < 1/3 FP = 1/2 move, dodge, st
 #   - Warning if window is smaller than expected
 #
@@ -425,6 +424,7 @@ class FightGmWindow(GmWindow):
                                current_fighter_details,
                                self.__FIGHTER_COL):
             self.__show_fighter_notes(self.__character_window,
+                                      current_name,
                                       current_fighter_details)
 
         if opponent_details is None:
@@ -435,6 +435,7 @@ class FightGmWindow(GmWindow):
                                    opponent_details,
                                    self.__OPPONENT_COL):
                 self.__show_fighter_notes(self.__opponent_window,
+                                          opponent_name,
                                           opponent_details)
         self.show_summary_window(fight)
         self.refresh()
@@ -541,6 +542,7 @@ class FightGmWindow(GmWindow):
     def __show_fighter_notes(self,
                              window,            # Curses window for fighter's
                                                 #   notes
+                             fighter_name,      # Name of fighter
                              fighter_details,   # The dict w/the fighter info
                             ):
         '''
@@ -550,7 +552,7 @@ class FightGmWindow(GmWindow):
         line = 0
         mode = curses.A_NORMAL
 
-        notes = self.__ruleset.get_fighter_notes(fighter_details)
+        notes = self.__ruleset.get_fighter_notes(fighter_name, fighter_details)
         for note in notes:
             window.addstr(line, 0, note, mode)
             line += 1
@@ -967,6 +969,25 @@ class GmWindowManager(object):
 
 
 class Ruleset(object):
+    '''
+    Any ruleset's character's dict is expected to include the following:
+    {
+        'alive' : True | False,
+        'opponent': None | <index into current fight's monster list or, if
+                            this is for a monster, index into PC list>
+        'stuff' : [ <weapon, armor, items> ],
+            The format of 'stuff' contents is ruleset-specific
+        'timers': [ <list of timers> ],
+        'weapon-index': None | <index into 'stuff'>,
+    }
+
+    Timer looks like:
+    {
+        TBS
+    }
+    '''
+    # TODO: include the timer description, above
+
     (FIGHTER_STATE_HEALTHY,
      FIGHTER_STATE_INJURED,
      FIGHTER_STATE_CRITICAL,
@@ -1022,7 +1043,35 @@ class GurpsRuleset(Ruleset):
     '''
     This is a place for all of the ruleset (e.g., GURPS, AD&D) specific
     stuff.
+
+    In addition to what's required by 'Ruleset', each character's dict is
+    expected to look like this:
+    {
+        'shock': <number, 0 for 'None'>
+        'dodge' : <final dodge value (including things like 'Enhanced Dodge'>
+        'skills': { <skill name> : <final skill value>, ...}
+        'current': { <attribute name> : <final attribute value>, ... }
+            These are: 'fp', 'hp', 'iq', 'ht', 'st', 'dx', and 'basic-speed'
+        'permanent': { <same attributes as in 'current'> }
+        'check_for_death': True | False
+    }
+
+    Weapon looks like:
+    {
+        TBS
+        'type': <melee weapon> | <ranged weapon> | <shield>
+        'parry': <plus to parry>
+    }
+
+    'Final' values include any plusses due to advantages or skills or
+    whaterver.  This code doesn't calculate any of the derived values.  This
+    may change in the future, however.
     '''
+
+    damage_mult = { 'burn': 1.0, 'cor': 1.0, 'cr':  1.0, 'cut': 1.5,
+                    'imp':  2.0, 'pi-': 0.5, 'pi':  1.0, 'pi+': 1.5,
+                    'pi++': 2.0, 'tbb': 1.0, 'tox': 1.0
+                  }
 
     def __init__(self, window_manager):
         super(GurpsRuleset, self).__init__(window_manager)
@@ -1072,38 +1121,47 @@ class GurpsRuleset(Ruleset):
 
         return Ruleset.FIGHTER_STATE_HEALTHY
 
-    def get_action_menu(self, fighter):
-        # TODO: complete all of the maneuvers
-
-        print 'get_action_menu' # TODO: remove
-        result = []
+    def get_action_menu(self,
+                        fighter # dict describing the fighter in question
+                       ):
+        '''
+        Builds the menu of maneuvers allowed for the fighter.
+        '''
+        action_menu = []
         self.__current_fighter = fighter
-        PP.pprint(self.__current_fighter) # TODO: remove
 
         holding_weapon = fighter['weapon-index']
         if holding_weapon is not None:
-            weapon_index = self.__current_fighter['weapon-index']
-            weapon = self.__current_fighter['stuff'][weapon_index]
+            weapon = self.__current_fighter['stuff'][holding_weapon]
             holding_ranged = True if (holding_weapon  is not None and
                                 weapon['type'] == 'ranged weapon') else False
         else:
-            weapon_index = None
             weapon = None
             holding_ranged = False
 
-        print 'holding_weapon: %r, holding_ranged: %r' % (  # TODO: remove
-            holding_weapon, holding_ranged)                 # TODO: remove
+        draw_weapon_menu = []   # list of weapons that may be drawn this turn
+        for index, item in enumerate(self.__current_fighter['stuff']):
+            if (item['type'] == 'ranged weapon' or
+                    item['type'] == 'melee weapon' or
+                    item['type'] == 'shield'):
+                if holding_weapon is None or holding_weapon != index:
+                    draw_weapon_menu.append((item['name'],
+                                            {'text': ['draw %s' % item['name']],
+                                             'doit': self.__draw_weapon,
+                                             'data': index}))
 
         if holding_ranged:
-            result.append(('Aim',      {'text': ['Aim',
+            action_menu.append(('Aim', {'text': ['Aim',
                                                  ' Defense: any loses aim',
                                                  ' Move: step'],
                                         'doit': None}))
-        result.extend([
+        action_menu.extend([
+            # TODO: should remove 1 from shots left
             ('attack',                 {'text': ['Attack',
                                                  ' Defense: any',
                                                  ' Move: step'],
                                         'doit': None}),
+            # TODO: should remove 1 from shots left
             ('attack, all out',        {'text': ['All out attack',
                                                  ' Defense: none',
                                                  ' Move: 1/2'],
@@ -1120,25 +1178,47 @@ class GurpsRuleset(Ruleset):
                                                  ' Defense: double',
                                                  ' Move: step'],
                                         'doit': None}),
-            ('evaluate',               {'text': ['Evaluate',
-                                                 ' Defense: any',
-                                                 ' Move: step'],
-                                        'doit': None}),
-            ('feint',                  {'text': ['Feint',
-                                                 ' Defense: any, parry *',
-                                                 ' Move: step'],
-                                        'doit': None}),
         ])
 
+        # TODO: should only be able to ready an unready weapon.
+
+        if len(draw_weapon_menu) == 1:
+            action_menu.append(
+                    ('Draw (ready, etc.) %s' % draw_weapon_menu[0][0],  
+                     {'text': ['Ready (draw, etc.)',
+                               ' Defense: any',
+                               ' Move: step'],
+                      'doit': self.__draw_weapon,
+                      'data': draw_weapon_menu[0][1]['data']}))
+
+        elif len(draw_weapon_menu) > 1:
+            action_menu.append(('Draw (ready, etc.)',
+                                {'text': ['Ready (draw, etc.)',
+                                          ' Defense: any',
+                                          ' Move: step'],
+                                 'menu': draw_weapon_menu}))
+
+        action_menu.append(('evaluate', {'text': ['Evaluate',
+                                                  ' Defense: any',
+                                                  ' Move: step'],
+                                         'doit': None}))
+
+        # Can only feint with a melee weapon
+        if holding_weapon is not None and holding_ranged == False:
+            action_menu.append(('feint',   {'text': ['Feint',
+                                                     ' Defense: any, parry *',
+                                                     ' Move: step'],
+                                            'doit': None}))
+
         if holding_weapon is not None:
-            result.append(('holster/sheathe %s' % weapon['name'], 
+            action_menu.append(('holster/sheathe %s' % weapon['name'], 
                                        {'text': ['Unready %s' % weapon['name'],
                                                  ' Defense: any',
                                                  ' Move: step'],
                                         'doit': self.__draw_weapon,
                                         'data': None}))
 
-        result.extend([
+        action_menu.extend([
             ('move',                   {'text': ['Move',
                                                  ' Defense: any',
                                                  ' Move: full'],
@@ -1153,40 +1233,15 @@ class GurpsRuleset(Ruleset):
                                         'doit': None}),
         ])
 
-        # TODO: should only be able to ready an unready weapon.
-
-        draw_weapon_menu = []
-        for index, item in enumerate(self.__current_fighter['stuff']):
-            if (item['type'] == 'ranged weapon' or
-                    item['type'] == 'melee weapon'):
-                if holding_weapon is None or holding_weapon != index:
-                    draw_weapon_menu.append((item['name'],
-                                            {'text': ['draw %s' % item['name']],
-                                             'doit': self.__draw_weapon,
-                                             'data': index}))
-
-        if len(draw_weapon_menu) == 1:
-            result.append(('ready (draw) %s' % draw_weapon_menu[0][0],  
-                                {'text': ['Ready (draw, etc.)',
-                                          ' Defense: any',
-                                          ' Move: step'],
-                                 'doit': self.__draw_weapon,
-                                 'data': draw_weapon_menu[0][1]['data']}))
-
-        elif len(draw_weapon_menu) > 1:
-            result.append(('ready (draw)',  {'text': ['Ready (draw, etc.)',
-                                                      ' Defense: any',
-                                                      ' Move: step'],
-                                             'menu': draw_weapon_menu}))
-
+        # TODO: should restore shots left and remove 1 ammo from 'stuff'
         if holding_ranged:
-            result.append(('ready (reload)',         
+            action_menu.append(('ready (reload)',         
                                        {'text': ['Ready (reload)',
                                                  ' Defense: any',
                                                  ' Move: step'],
                                         'doit': None}))
 
-        result.extend([
+        action_menu.extend([
             ('stun/surprise (do nothing)',
                                {'text': ['Stun/Surprised',
                                          ' Defense: any @-4',
@@ -1198,7 +1253,7 @@ class GurpsRuleset(Ruleset):
                                 'doit': None})
         ])
 
-        return result
+        return action_menu
 
 
     def heal_fighter(self, fighter_details):
@@ -1238,8 +1293,59 @@ class GurpsRuleset(Ruleset):
         self.__action_performed_by_this_fighter = False
         return True, None
 
-    def get_fighter_notes(self, fighter_details):
+    def get_fighter_notes(self,
+                          fighter_name,
+                          fighter_details
+                         ):
         notes = []
+
+        # First thing: attack, damage, defense
+
+        holding_weapon = fighter_details['weapon-index']
+        weapon = None
+        skill = None
+        if holding_weapon is None:
+            pass
+            # TODO: hand-to-hand stuff
+        else:
+            weapon = fighter_details['stuff'][holding_weapon]
+            notes.append('%s' % weapon['name'])
+            if weapon['skill'] in fighter_details['skills']:
+                skill = fighter_details['skills'][weapon['skill']]
+                damage_type = ('' if 'type' not in weapon['damage']
+                                    else weapon['damage']['type'])
+                if damage_type in GurpsRuleset.damage_mult:
+                    damage_type_str = '%s x%f' % (
+                            damage_type, GurpsRuleset.damage_mult[damage_type])
+                else:
+                    damage_type_str = '%s' % damage_type
+
+                if 'dice' in weapon['damage']:
+                    notes.append('  to hit: %d, damage: %s, %s' %
+                            (skill, weapon['damage']['dice'], damage_type_str))
+                # TODO: handle damage other than 'dice' (e.g., st-based)
+            else:
+                self._window_manager.error(
+                    ['%s requires "%s" skill not had by "%s"' %
+                     (weapon['name'], weapon['skill'], fighter_name)])
+
+        notes.append('Dodge: %d' % fighter_details['dodge'])
+
+        if weapon is None:
+            pass
+            # TODO: unarmed parry
+        elif weapon['type'] == 'shield':
+            block_skill = 3 + int(skill * 0.5)
+            notes.append('Block: %d' % block_skill)
+
+        elif weapon['type'] == 'melee weapon':
+            if skill is not None:
+                parry_skill = 3 + int(skill * 0.5)
+                if 'parry' in weapon:
+                    parry_skill += weapon['parry']
+                notes.append('Parry: %d' % parry_skill)
+
+        # And, now, off to the regular stuff
 
         if fighter_details['shock'] != 0:
             notes.append('DX and IQ are at %d' % fighter_details['shock'])
