@@ -36,10 +36,6 @@
                         "value": 5.5
                     }
                 }, 
-                "dodge": {
-                    "type": "value", 
-                    "value": 9
-                },
                 "shock": {
                     "type": "value", 
                     "value": 0
@@ -80,10 +76,6 @@
                         "value": 5.25
                     }
                 }, 
-                "dodge": {
-                    "type": "value", 
-                    "value": 9
-                },
                 "shock": {
                     "type": "value", 
                     "value": 0
@@ -124,10 +116,6 @@
                         "value": 5.75
                     }
                 }, 
-                "dodge": {
-                    "type": "value", 
-                    "value": 9
-                },
                 "shock": {
                     "type": "value", 
                     "value": 0
@@ -168,10 +156,6 @@
                         "value": 5.75
                     }
                 }, 
-                "dodge": {
-                    "type": "value", 
-                    "value": 8
-                },
                 "shock": {
                     "type": "value", 
                     "value": 0
@@ -730,8 +714,8 @@
     }, 
     "PCs": {
         "a-Thief": {
-            "dodge": 8,
             "skills": {},
+            "advantages": {},
             "shock": 0, 
             "weapon-index" : null,
             "stuff": [],
@@ -762,8 +746,8 @@
             "shock": 0, 
             "weapon-index" : null,
             "stuff": [],
-            "dodge": 9,
             "skills": {},
+            "advantages": {},
             "alive": true, 
             "current": {
                 "fp": 11, 
@@ -791,8 +775,8 @@
             "shock": 0, 
             "weapon-index" : null,
             "stuff": [],
-            "dodge": 9,
             "skills": {},
+            "advantages": {},
             "alive": true, 
             "current": {
                 "fp": 11, 
@@ -820,8 +804,8 @@
             "shock": 0, 
             "weapon-index" : null,
             "stuff": [],
-            "dodge": 9,
             "skills": {},
+            "advantages": {},
             "alive": true, 
             "current": {
                 "fp": 11, 
@@ -849,8 +833,8 @@
             "shock": 0, 
             "weapon-index" : null,
             "stuff": [],
-            "dodge": 9,
             "skills": {},
+            "advantages": {},
             "alive": true, 
             "current": {
                 "fp": 11, 
@@ -878,8 +862,8 @@
             "shock": 0, 
             "weapon-index" : null,
             "stuff": [],
-            "dodge": 9,
             "skills": {},
+            "advantages": {},
             "alive": true, 
             "current": {
                 "fp": 12, 
@@ -911,8 +895,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 8,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -940,8 +924,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 8,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -969,8 +953,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 9,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -998,8 +982,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 9,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1027,8 +1011,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 9,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1056,8 +1040,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 9,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1085,8 +1069,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 9,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1114,8 +1098,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 9,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1145,8 +1129,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 8,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1174,8 +1158,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 8,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1203,8 +1187,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 9,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1232,8 +1216,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 9,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1261,8 +1245,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 9,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1290,8 +1274,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 9,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1319,8 +1303,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 9,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1348,8 +1332,8 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [],
-                "dodge": 9,
                 "skills": {},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 12, 
@@ -1378,9 +1362,27 @@
             "1-Cleric": {
                 "shock": 0, 
                 "weapon-index" : null,
-                "stuff": [],
-                "dodge": 9,
-                "skills": {},
+                "stuff": [
+                           {"name": "Colt 170D Blaster",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+4"},
+                            "acc": 3,
+                            "ammo": {"name": "C Cell",
+                                     "shots": 9},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "C Cell",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
+                "skills": {"guns (pistol)": 15,
+                           "brawling": 12},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 12, 
@@ -1408,9 +1410,9 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [
-                           {"name": "Makarov Pistol",
+                           {"name": "Baretta DX 192 Pistol",
                             "type": "ranged weapon",
-                            "damage": {"dice": "1d+3"},
+                            "damage": {"dice": "1d+4"},
                             "acc": 2,
                             "ammo": {"name": "C Cell",
                                      "shots": 8},
@@ -1433,9 +1435,10 @@
                             "notes": ""
                            }
                           ],
-                "dodge": 8,
                 "skills": {"guns (pistol)": 12,
+                           "brawling": 14,
                            "knife": 15},
+                "advantages": {},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1462,9 +1465,26 @@
             "3-Bokor": {
                 "shock": 0, 
                 "weapon-index" : null,
-                "stuff": [],
-                "dodge": 9,
-                "skills": {},
+                "stuff": [
+                           {"name": "Kalashnikov Makarov Pistol",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+3"},
+                            "acc": 2,
+                            "ammo": {"name": "C Cell",
+                                     "shots": 8},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "C Cell",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
+                "skills": {"guns (pistol)": 13},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
                     "fp": 11, 
@@ -1492,14 +1512,21 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [
-                           {"name": "Makarov Pistol",
+                           {"name": "Sig D65 Blaster",
                             "type": "ranged weapon",
-                            "damage": {"dice": "1d+3"},
-                            "acc": 2,
+                            "damage": {"dice": "1d+4"},
+                            "acc": 4,
                             "ammo": {"name": "C Cell",
-                                     "shots": 8},
+                                     "shots": 9},
                             "reload": 3,
                             "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "Sick Stick",
+                            "type": "melee weapon",
+                            "damage": {"dice": "1d+1 fat"},
+                            "skill": "axe/mace",
                             "count": 1,
                             "notes": ""
                            },
@@ -1509,16 +1536,19 @@
                             "notes": ""
                            }
                           ],
-                "dodge": 9,
-                "skills": {"guns (pistol)": 16},
+                "skills": {"guns (pistol)": 16,
+                           "brawling": 16,
+                           "axe/mace": 14},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
                     "st": 10, 
                     "dx": 12, 
+                    "iq": 12, 
+                    "ht": 11, 
+
+                    "fp": 11, 
+                    "hp": 11, 
                     "basic-speed": 5.75
                 }, 
                 "permanent": {
@@ -1537,17 +1567,44 @@
             "5-Tank-C": {
                 "shock": 0, 
                 "weapon-index" : null,
-                "stuff": [],
-                "dodge": 9,
-                "skills": {},
+                "stuff": [
+                           {"name": "Sig D65 Blaster",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+4"},
+                            "acc": 4,
+                            "ammo": {"name": "C Cell",
+                                     "shots": 9},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "Sick Stick",
+                            "type": "melee weapon",
+                            "damage": {"dice": "1d+1 fat"},
+                            "skill": "axe/mace",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "C Cell",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
+                "skills": {"guns (pistol)": 16,
+                           "brawling": 16,
+                           "axe/mace": 14},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
                     "st": 10, 
                     "dx": 12, 
+                    "iq": 12, 
+                    "ht": 11, 
+
+                    "fp": 11, 
+                    "hp": 11, 
                     "basic-speed": 5.75
                 }, 
                 "permanent": {
@@ -1566,17 +1623,44 @@
             "6-Tank-B": {
                 "shock": 0, 
                 "weapon-index" : null,
-                "stuff": [],
-                "dodge": 9,
-                "skills": {},
+                "stuff": [
+                           {"name": "Sig D65 Blaster",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+4"},
+                            "acc": 4,
+                            "ammo": {"name": "C Cell",
+                                     "shots": 9},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "Sick Stick",
+                            "type": "melee weapon",
+                            "damage": {"dice": "1d+1 fat"},
+                            "skill": "axe/mace",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "C Cell",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
+                "skills": {"guns (pistol)": 16,
+                           "brawling": 16,
+                           "axe/mace": 14},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
                     "st": 10, 
                     "dx": 12, 
+                    "iq": 12, 
+                    "ht": 11, 
+
+                    "fp": 11, 
+                    "hp": 11, 
                     "basic-speed": 5.75
                 }, 
                 "permanent": {
@@ -1596,17 +1680,43 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [
-                         ],
-                "dodge": 9,
-                "skills": {},
+                           {"name": "Sig D65 Blaster",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+4"},
+                            "acc": 4,
+                            "ammo": {"name": "C Cell",
+                                     "shots": 9},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "Sick Stick",
+                            "type": "melee weapon",
+                            "damage": {"dice": "1d+1 fat"},
+                            "skill": "axe/mace",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "C Cell",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
+                "skills": {"guns (pistol)": 16,
+                           "brawling": 16,
+                           "axe/mace": 14},
+                "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
-                    "fp": 11, 
-                    "iq": 12, 
-                    "hp": 11, 
-                    "ht": 11, 
                     "st": 10, 
                     "dx": 12, 
+                    "iq": 12, 
+                    "ht": 11, 
+
+                    "fp": 11, 
+                    "hp": 11, 
                     "basic-speed": 5.75
                 }, 
                 "permanent": {
@@ -1625,9 +1735,36 @@
             "8-Thief-B": {
                 "shock": 0, 
                 "weapon-index" : null,
-                "stuff": [],
-                "dodge": 8,
-                "skills": {},
+                "stuff": [
+                           {"name": "Baretta DX 192 Pistol",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+4"},
+                            "acc": 2,
+                            "ammo": {"name": "C Cell",
+                                     "shots": 8},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "Large Knife",
+                            "type": "melee weapon",
+                            "damage": {"dice": "1d-2",
+                                       "type": "imp"},
+                            "skill": "knife",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "C Cell",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
+                "skills": {"guns (pistol)": 12,
+                           "brawling": 14,
+                           "knife": 15},
+                "advantages": {},
                 "alive": true, 
                 "current": {
                     "fp": 11, 

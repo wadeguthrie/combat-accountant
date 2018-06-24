@@ -1187,7 +1187,9 @@ class GurpsRuleset(Ruleset):
                     item['type'] == 'shield'):
                 if holding_weapon is None or holding_weapon != index:
                     draw_weapon_menu.append((item['name'],
-                                            {'text': ['draw %s' % item['name']],
+                                            {'text': ['draw %s' % item['name'],
+                                                      ' Defense: any',
+                                                      ' Move: step'],
                                              'doit': self.__draw_weapon,
                                              'data': index}))
 
@@ -1215,7 +1217,7 @@ class GurpsRuleset(Ruleset):
                                                  ' Defense: any w/will roll',
                                                  ' Move: step'],
                                         'doit': None}),
-            ('defense, all out',       {'text': ['All out defense',
+            ('Defense, all out',       {'text': ['All out defense',
                                                  ' Defense: double',
                                                  ' Move: step'],
                                         'doit': None}),
@@ -1225,7 +1227,7 @@ class GurpsRuleset(Ruleset):
 
         if len(draw_weapon_menu) == 1:
             action_menu.append(
-                    ('Draw (ready, etc.) %s' % draw_weapon_menu[0][0],  
+                    ('draw (ready, etc.) %s' % draw_weapon_menu[0][0],  
                      {'text': ['Ready (draw, etc.)',
                                ' Defense: any',
                                ' Move: step'],
@@ -1233,7 +1235,7 @@ class GurpsRuleset(Ruleset):
                       'data': draw_weapon_menu[0][1]['data']}))
 
         elif len(draw_weapon_menu) > 1:
-            action_menu.append(('Draw (ready, etc.)',
+            action_menu.append(('draw (ready, etc.)',
                                 {'text': ['Ready (draw, etc.)',
                                           ' Defense: any',
                                           ' Move: step'],
@@ -1428,7 +1430,12 @@ class GurpsRuleset(Ruleset):
                     ['%s requires "%s" skill not had by "%s"' %
                      (weapon['name'], weapon['skill'], fighter_name)])
 
-        notes.append('Dodge: %d' % fighter_details['dodge'])
+        # Active Defenses
+
+        dodge_skill = 3 + int(fighter_details['current']['basic-speed'])
+        if 'combat reflexes' in fighter_details['advantages']:
+            dodge_skill += 1
+        notes.append('Dodge (B326): %d' % dodge_skill)
 
         if weapon is None: # Unarmed Parry (B376)
             parry_skill = fighter_details['current']['dx']
@@ -1448,10 +1455,14 @@ class GurpsRuleset(Ruleset):
 
             # Brawling, Boxing, Karate, DX: Parry int(skill/2) + 3
             parry_skill = 3 + int(parry_skill/2)
+            if 'combat reflexes' in fighter_details['advantages']:
+                parry_skill += 1
             notes.append(parry_string % parry_skill)
 
         elif weapon['type'] == 'shield':
             block_skill = 3 + int(skill * 0.5)
+            if 'combat reflexes' in fighter_details['advantages']:
+                block_skill += 1
             notes.append('Block: %d' % block_skill)
 
         elif weapon['type'] == 'melee weapon':
@@ -1459,6 +1470,8 @@ class GurpsRuleset(Ruleset):
                 parry_skill = 3 + int(skill * 0.5)
                 if 'parry' in weapon:
                     parry_skill += weapon['parry']
+                if 'combat reflexes' in fighter_details['advantages']:
+                    parry_skill += 1
                 notes.append('Parry: %d' % parry_skill)
 
         # And, now, off to the regular stuff
