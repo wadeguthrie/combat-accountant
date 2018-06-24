@@ -1553,7 +1553,7 @@ class GurpsRuleset(Ruleset):
                                         GurpsRuleset.melee_damage[st]['thr'])
         result['kick_damage']['plus'] += (result['kick_damage']['num_dice'] *
                                                         plus_per_die_of_thrust)
-        result['punch_damage'] = copy.deepcopy(result['punch_damage'])
+        result['punch_damage'] = copy.deepcopy(result['kick_damage'])
         result['punch_damage']['plus'] -= 1
 
         # Brawling, Boxing, Karate, DX: Parry int(skill/2) + 3

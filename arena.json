@@ -1487,7 +1487,8 @@
                             "notes": ""
                            }
                           ],
-                "skills": {"guns (pistol)": 13},
+                "skills": {"guns (pistol)": 13,
+                           "brawling": 12},
                 "advantages": {"combat reflexes": 15},
                 "alive": true, 
                 "current": {
@@ -1528,7 +1529,7 @@
                             "count": 1,
                             "notes": ""
                            },
-                           {"name": "Sick Stick",
+                           {"name": "sick stick",
                             "type": "melee weapon",
                             "damage": {"dice": "1d+1 fat"},
                             "skill": "axe/mace",
@@ -1585,7 +1586,7 @@
                             "count": 1,
                             "notes": ""
                            },
-                           {"name": "Sick Stick",
+                           {"name": "sick stick",
                             "type": "melee weapon",
                             "damage": {"dice": "1d+1 fat"},
                             "skill": "axe/mace",

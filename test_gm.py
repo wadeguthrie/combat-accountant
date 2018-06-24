@@ -2,6 +2,7 @@
 
 import copy
 import gm
+import pprint
 import unittest
 
 class MockWindowManager(object):
@@ -72,7 +73,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                         "notes": ""
                        }
                       ],
-            "skills": {"guns (pistol)": 13},
+            "skills": {"guns (pistol)": 13,
+                       "brawling": 12},
             "advantages": {"combat reflexes": 15},
             "alive": True, 
             "current": {
@@ -236,6 +238,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert dodge_skill == 8
 
     def test_get_block_skill(self):
+        # TODO: need non-trivial block tests
         vodou_priest_fighter = copy.deepcopy(self.__vodou_priest_fighter)
         block_skill = self.__ruleset.get_block_skill(vodou_priest_fighter,
                                                      None)
@@ -315,64 +318,57 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                      weapon)
         assert parry_skill == 9
 
-    # def get_hand_to_hand_info(self, fighter_details):
-    #def test_get_parry_skill(self):
-    #    weapon = None
-    #    vodou_priest_fighter = gm.Fighter(
-    #                                'Vodou Priest',
-    #                                copy.deepcopy(self.__vodou_priest_fighter),
-    #                                self.__ruleset)
-    #    parry_skill = self.__ruleset.get_parry_skill(
-    #                                vodou_priest_fighter.details,
-    #                                weapon)
-    #    print 'parry_skill(10): %r' % parry_skill
-    #    assert parry_skill == 10
-#
-#        weapon = None
-#        bokor_fighter = gm.Fighter(copy.deepcopy('Bokor',
-#                                                 self.__bokor_fighter,
-#                                                 self.__ruleset))
-#        parry_skill = self.__ruleset.get_parry_skill(bokor_fighter.details,
-#                                                     weapon)
-#        assert parry_skill == 10
-#
-#        # Unarmed
-#        weapon = None
-#        tank_fighter = gm.Fighter(copy.deepcopy('Tank',
-#                                                self.__tank_fighter,
-#                                                self.__ruleset))
-#        parry_skill = self.__ruleset.get_parry_skill(tank_fighter.details,
-#                                                     weapon)
-#        assert parry_skill == 12
-#
-#        # Armed (sick stick)
-#        tank_fighter = gm.Fighter(copy.deepcopy('Tank',
-#                                                self.__tank_fighter,
-#                                                self.__ruleset))
-#        weapon_index, weapon  = tank_fighter.get_weapon_by_name('sick stick')
-#        tank_fighter.draw_weapon_by_index(weapon_index)
-#        parry_skill = self.__ruleset.get_parry_skill(tank_fighter.details,
-#                                                     weapon)
-#        assert parry_skill == 11
-#
-#        # Unarmed
-#        weapon = None
-#        thief_fighter = gm.Fighter(copy.deepcopy('Thief',
-#                                                 self.__thief_fighter,
-#                                                 self.__ruleset))
-#        parry_skill = self.__ruleset.get_parry_skill(thief_fighter.details,
-#                                                     weapon)
-#        assert parry_skill == 10
-#
-#        # Armed (knife)
-#        thief_fighter = gm.Fighter(copy.deepcopy('Thief',
-#                                                 self.__thief_fighter,
-#                                                 self.__ruleset))
-#        weapon_index, weapon = thief_fighter.get_weapon_by_name('knife, large')
-#        thief_fighter.draw_weapon_by_index(weapon_index)
-#        parry_skill = self.__ruleset.get_parry_skill(thief_fighter.details,
-#                                                     weapon)
-#        assert parry_skill == 9
+    def test_get_hand_to_hand_info(self):
+        # Vodou Priest
+        PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
+        vodou_priest_fighter = gm.Fighter(
+                                    'Vodou Priest',
+                                    copy.deepcopy(self.__vodou_priest_fighter),
+                                    self.__ruleset)
+        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(
+                                                vodou_priest_fighter.details)
+        assert hand_to_hand_info['punch_skill'] == 12
+        #assert hand_to_hand_info['punch_damage'] == 
+        assert hand_to_hand_info['kick_skill'] == 10
+        #assert hand_to_hand_info['kick_damage'] == 
+        assert hand_to_hand_info['parry_skill'] == 10
+
+        # Bokor
+        bokor_fighter = gm.Fighter('Bokor',
+                                   copy.deepcopy(self.__bokor_fighter),
+                                   self.__ruleset)
+        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(
+                                                        bokor_fighter.details)
+        PP.pprint(hand_to_hand_info)
+        assert hand_to_hand_info['punch_skill'] == 12
+        #assert hand_to_hand_info['punch_damage'] == 
+        assert hand_to_hand_info['kick_skill'] == 10   # thr-1, st=10
+        #assert hand_to_hand_info['kick_damage'] == 
+        assert hand_to_hand_info['parry_skill'] == 10
+
+        # Tank
+        tank_fighter = gm.Fighter('Tank',
+                                  copy.deepcopy(self.__tank_fighter),
+                                  self.__ruleset)
+        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(
+                                                        tank_fighter.details)
+        assert hand_to_hand_info['punch_skill'] == 16
+        #assert hand_to_hand_info['punch_damage'] == 
+        assert hand_to_hand_info['kick_skill'] == 14
+        #assert hand_to_hand_info['kick_damage'] == 
+        assert hand_to_hand_info['parry_skill'] == 12
+
+        # Thief
+        thief_fighter = gm.Fighter('Thief',
+                                   copy.deepcopy(self.__thief_fighter),
+                                   self.__ruleset)
+        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(
+                                                        thief_fighter.details)
+        assert hand_to_hand_info['punch_skill'] == 14
+        #assert hand_to_hand_info['punch_damage'] == 
+        assert hand_to_hand_info['kick_skill'] == 12
+        #assert hand_to_hand_info['kick_damage'] == 
+        assert hand_to_hand_info['parry_skill'] == 10
 
 if __name__ == '__main__':
     unittest.main() # runs all tests in this file
