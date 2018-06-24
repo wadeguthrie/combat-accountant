@@ -320,7 +320,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
     def test_get_hand_to_hand_info(self):
         # Vodou Priest
-        PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
+        #PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
         vodou_priest_fighter = gm.Fighter(
                                     'Vodou Priest',
                                     copy.deepcopy(self.__vodou_priest_fighter),
@@ -328,9 +328,11 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(
                                                 vodou_priest_fighter.details)
         assert hand_to_hand_info['punch_skill'] == 12
-        #assert hand_to_hand_info['punch_damage'] == 
+        assert hand_to_hand_info['punch_damage']['num_dice'] == 1
+        assert hand_to_hand_info['punch_damage']['plus'] == -3
         assert hand_to_hand_info['kick_skill'] == 10
-        #assert hand_to_hand_info['kick_damage'] == 
+        assert hand_to_hand_info['kick_damage']['num_dice'] == 1
+        assert hand_to_hand_info['kick_damage']['plus'] == -2
         assert hand_to_hand_info['parry_skill'] == 10
 
         # Bokor
@@ -339,11 +341,13 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    self.__ruleset)
         hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(
                                                         bokor_fighter.details)
-        PP.pprint(hand_to_hand_info)
+        # PP.pprint(hand_to_hand_info)
         assert hand_to_hand_info['punch_skill'] == 12
-        #assert hand_to_hand_info['punch_damage'] == 
+        assert hand_to_hand_info['punch_damage']['num_dice'] == 1
+        assert hand_to_hand_info['punch_damage']['plus'] == -2
         assert hand_to_hand_info['kick_skill'] == 10   # thr-1, st=10
-        #assert hand_to_hand_info['kick_damage'] == 
+        assert hand_to_hand_info['kick_damage']['num_dice'] == 1
+        assert hand_to_hand_info['kick_damage']['plus'] == -1
         assert hand_to_hand_info['parry_skill'] == 10
 
         # Tank
@@ -353,9 +357,11 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(
                                                         tank_fighter.details)
         assert hand_to_hand_info['punch_skill'] == 16
-        #assert hand_to_hand_info['punch_damage'] == 
+        assert hand_to_hand_info['punch_damage']['num_dice'] == 1
+        assert hand_to_hand_info['punch_damage']['plus'] == -2
         assert hand_to_hand_info['kick_skill'] == 14
-        #assert hand_to_hand_info['kick_damage'] == 
+        assert hand_to_hand_info['kick_damage']['num_dice'] == 1
+        assert hand_to_hand_info['kick_damage']['plus'] == -1
         assert hand_to_hand_info['parry_skill'] == 12
 
         # Thief
@@ -365,9 +371,11 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(
                                                         thief_fighter.details)
         assert hand_to_hand_info['punch_skill'] == 14
-        #assert hand_to_hand_info['punch_damage'] == 
+        assert hand_to_hand_info['punch_damage']['num_dice'] == 1
+        assert hand_to_hand_info['punch_damage']['plus'] == -2
         assert hand_to_hand_info['kick_skill'] == 12
-        #assert hand_to_hand_info['kick_damage'] == 
+        assert hand_to_hand_info['kick_damage']['num_dice'] == 1
+        assert hand_to_hand_info['kick_damage']['plus'] == -1
         assert hand_to_hand_info['parry_skill'] == 10
 
 if __name__ == '__main__':
