@@ -1363,7 +1363,7 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [
-                           {"name": "Colt 170D Blaster",
+                           {"name": "pistol, Colt 170D",
                             "type": "ranged weapon",
                             "damage": {"dice": "1d+4"},
                             "acc": 3,
@@ -1410,7 +1410,7 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [
-                           {"name": "Baretta DX 192 Pistol",
+                           {"name": "pistol, Baretta DX 192",
                             "type": "ranged weapon",
                             "damage": {"dice": "1d+4"},
                             "acc": 2,
@@ -1421,12 +1421,13 @@
                             "count": 1,
                             "notes": ""
                            },
-                           {"name": "Large Knife",
+                           {"name": "knife, large",
                             "type": "melee weapon",
                             "damage": {"dice": "1d-2",
                                        "type": "imp"},
                             "skill": "knife",
                             "count": 1,
+                            "parry": -1,
                             "notes": ""
                            },
                            {"name": "C Cell",
@@ -1466,7 +1467,7 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [
-                           {"name": "Kalashnikov Makarov Pistol",
+                           {"name": "pistol, Kalashnikov Makarov",
                             "type": "ranged weapon",
                             "damage": {"dice": "1d+3"},
                             "acc": 2,
@@ -1512,7 +1513,7 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [
-                           {"name": "Sig D65 Blaster",
+                           {"name": "pistol, Sig D65",
                             "type": "ranged weapon",
                             "damage": {"dice": "1d+4"},
                             "acc": 4,
@@ -1568,7 +1569,7 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [
-                           {"name": "Sig D65 Blaster",
+                           {"name": "pistol, Sig D65",
                             "type": "ranged weapon",
                             "damage": {"dice": "1d+4"},
                             "acc": 4,
@@ -1624,7 +1625,7 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [
-                           {"name": "Sig D65 Blaster",
+                           {"name": "pistol, Sig D65",
                             "type": "ranged weapon",
                             "damage": {"dice": "1d+4"},
                             "acc": 4,
@@ -1635,7 +1636,7 @@
                             "count": 1,
                             "notes": ""
                            },
-                           {"name": "Sick Stick",
+                           {"name": "sick stick",
                             "type": "melee weapon",
                             "damage": {"dice": "1d+1 fat"},
                             "skill": "axe/mace",
@@ -1680,7 +1681,7 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [
-                           {"name": "Sig D65 Blaster",
+                           {"name": "pistol, Sig D65",
                             "type": "ranged weapon",
                             "damage": {"dice": "1d+4"},
                             "acc": 4,
@@ -1691,7 +1692,7 @@
                             "count": 1,
                             "notes": ""
                            },
-                           {"name": "Sick Stick",
+                           {"name": "sick stick",
                             "type": "melee weapon",
                             "damage": {"dice": "1d+1 fat"},
                             "skill": "axe/mace",
@@ -1736,7 +1737,7 @@
                 "shock": 0, 
                 "weapon-index" : null,
                 "stuff": [
-                           {"name": "Baretta DX 192 Pistol",
+                           {"name": "pistol, Baretta DX 192",
                             "type": "ranged weapon",
                             "damage": {"dice": "1d+4"},
                             "acc": 2,
@@ -1747,11 +1748,12 @@
                             "count": 1,
                             "notes": ""
                            },
-                           {"name": "Large Knife",
+                           {"name": "knife, large",
                             "type": "melee weapon",
                             "damage": {"dice": "1d-2",
                                        "type": "imp"},
                             "skill": "knife",
+                            "parry": -1,
                             "count": 1,
                             "notes": ""
                            },
