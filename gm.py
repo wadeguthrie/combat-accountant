@@ -983,11 +983,25 @@ class Fighter(object):
         self.details['timers'].append({'rounds': rounds, 'string': text})
 
 
-    def draw_weapon(self,
-                    index
-                   ):
+    def draw_weapon_by_index(self,
+                             index
+                            ):
         '''Remove weapon from sheath or holster.'''
         self.details['weapon-index'] = index
+
+    def get_weapon_by_name(self,
+                           name
+                          ):
+        '''
+        Remove weapon from sheath or holster.
+
+        Returns index, item
+        '''
+        for index, item in enumerate(self.details['stuff']):
+            if item['name'] == name:
+                self.details['weapon-index'] = index
+                return index, item
+        return None, None # didn't find one
 
 
     def get_current_weapon(self):
@@ -1322,6 +1336,33 @@ class GurpsRuleset(Ruleset):
         return action_menu
 
 
+    def get_block_skill(self,
+                        fighter_details,
+                        weapon
+                       ):
+        if weapon is None or weapon['skill'] not in fighter_details['skills']:
+            return None
+        skill = fighter_details['skills'][weapon['skill']]
+
+        block_skill = 3 + int(skill * 0.5)
+        if 'combat reflexes' in fighter_details['advantages']:
+            block_skill += 1
+
+        return block_skill
+
+
+    def get_dodge_skill(self, fighter_details): # B326
+        dodge_skill = 3 + int(fighter_details['current']['basic-speed'])
+        if 'combat reflexes' in fighter_details['advantages']: # B43
+            dodge_skill += 1
+
+        # B327
+        if (fighter_details['current']['hp'] <
+                                    fighter_details['permanent']['hp']/3.0):
+            dodge_skill = int(((dodge_skill)/2.0) + 0.5)
+        return dodge_skill
+
+
     def get_fighter_notes(self,
                           fighter_name,
                           fighter_details
@@ -1447,129 +1488,6 @@ class GurpsRuleset(Ruleset):
         return Ruleset.FIGHTER_STATE_HEALTHY
 
 
-    def heal_fighter(self, fighter_details):
-        '''
-        Removes all injury (and their side-effects) from a fighter.
-        '''
-        super(GurpsRuleset, self).heal_fighter(fighter_details)
-        fighter_details['shock'] = 0
-        fighter_details['last_negative_hp'] = 0
-        fighter_details['check_for_death'] = False
-
-
-    def initiative(self,
-                   fighter_details # dict for the creature as in the json file
-                  ):
-        return (fighter_details['current']['basic-speed'],
-                fighter_details['current']['dx'],
-                Ruleset.roll(1, 6)
-                )
-
-
-    def make_dead(self):
-        self.__action_performed_by_this_fighter = True
-
-
-    def new_fight(self, fighter_details):
-        '''
-        Removes all the stuff from the old fight except injury.
-        '''
-        super(GurpsRuleset, self).new_fight(fighter_details)
-        fighter_details['shock'] = 0
-        self.__action_performed_by_this_fighter = False
-
-
-    def next_fighter(self, prev_fighter_details):
-        prev_fighter_details['shock'] = 0 # remove expired shock entry
-        if not self.__action_performed_by_this_fighter:
-            return (False,
-                    'The fighter should do _some_ maneuver before moving on.')
-        self.__action_performed_by_this_fighter = False
-        return True, None
-
-    #
-    # Private Methods
-    #
-
-    def __do_attack(self, fighter_details):
-        # TODO: should use fighter_details
-        weapon, weapon_index = self.__fighter.get_current_weapon()
-        if weapon is None or 'ammo' not in weapon:
-            return
-
-        weapon['ammo']['shots_left'] -= 1
-
-
-    def __do_reload(self, fighter_details):
-        # TODO: should use fighter_details
-        weapon, weapon_index = self.__fighter.get_current_weapon()
-        if weapon is None or 'ammo' not in weapon:
-            return
-
-        clip_name = weapon['ammo']['name']
-        for item in self.__fighter.details['stuff']:
-            if item['name'] == clip_name and item['count'] > 0:
-                weapon['ammo']['shots_left'] = weapon['ammo']['shots']
-                item['count'] -= 1
-                self.__fighter.add_timer(weapon['reload'], 'RELOADING')
-                return
-
-        return
-
-    def __draw_weapon(self, index):
-        self.__fighter.draw_weapon(index)
-        return True # Keep fighting
-
-    def get_block_skill(self,
-                        fighter_details,
-                        weapon
-                       ):
-        if weapon['skill'] not in fighter_details['skills']:
-            return None
-        skill = fighter_details['skills'][weapon['skill']]
-
-        block_skill = 3 + int(skill * 0.5)
-        if 'combat reflexes' in fighter_details['advantages']:
-            block_skill += 1
-
-        return block_skill
-
-    def __get_damage_type_str(self,
-                              damage_type
-                             ):
-        if damage_type in GurpsRuleset.damage_mult:
-            damage_type_str = '%s (x%.1f)' % (
-                    damage_type, GurpsRuleset.damage_mult[damage_type])
-        else:
-            damage_type_str = '%s' % damage_type
-        return damage_type_str
-
-    def get_dodge_skill(self, fighter_details): # B326
-        dodge_skill = 3 + int(fighter_details['current']['basic-speed'])
-        if 'combat reflexes' in fighter_details['advantages']: # B43
-            dodge_skill += 1
-
-        # B327
-        if (fighter_details['current']['hp'] <
-                                    fighter_details['permanent']['hp']/3.0):
-            dodge_skill = int(((dodge_skill)/2.0) + 0.5)
-        return dodge_skill
-
-    def get_parry_skill(self,
-                        fighter_details,
-                        weapon):
-        if weapon['skill'] not in fighter_details['skills']:
-            return None
-        skill = fighter_details['skills'][weapon['skill']]
-
-        parry_skill = 3 + int(skill * 0.5)
-        if 'parry' in weapon:
-            parry_skill += weapon['parry']
-        if 'combat reflexes' in fighter_details['advantages']:
-            parry_skill += 1
-
-        return parry_skill
-
     def get_hand_to_hand_info(self, fighter_details):
         result = {
             'punch_skill': fighter_details['current']['dx'],
@@ -1645,6 +1563,106 @@ class GurpsRuleset(Ruleset):
 
         return result
 
+
+    def get_parry_skill(self,
+                        fighter_details,
+                        weapon
+                       ):
+        if weapon is None or weapon['skill'] not in fighter_details['skills']:
+            return None
+        skill = fighter_details['skills'][weapon['skill']]
+
+        parry_skill = 3 + int(skill * 0.5)
+        if 'parry' in weapon:
+            parry_skill += weapon['parry']
+        if 'combat reflexes' in fighter_details['advantages']:
+            parry_skill += 1
+
+        return parry_skill
+
+
+    def heal_fighter(self, fighter_details):
+        '''
+        Removes all injury (and their side-effects) from a fighter.
+        '''
+        super(GurpsRuleset, self).heal_fighter(fighter_details)
+        fighter_details['shock'] = 0
+        fighter_details['last_negative_hp'] = 0
+        fighter_details['check_for_death'] = False
+
+
+    def initiative(self,
+                   fighter_details # dict for the creature as in the json file
+                  ):
+        return (fighter_details['current']['basic-speed'],
+                fighter_details['current']['dx'],
+                Ruleset.roll(1, 6)
+                )
+
+
+    def make_dead(self):
+        self.__action_performed_by_this_fighter = True
+
+
+    def new_fight(self, fighter_details):
+        '''
+        Removes all the stuff from the old fight except injury.
+        '''
+        super(GurpsRuleset, self).new_fight(fighter_details)
+        fighter_details['shock'] = 0
+        self.__action_performed_by_this_fighter = False
+
+
+    def next_fighter(self, prev_fighter_details):
+        prev_fighter_details['shock'] = 0 # remove expired shock entry
+        if not self.__action_performed_by_this_fighter:
+            return (False,
+                    'The fighter should do _some_ maneuver before moving on.')
+        self.__action_performed_by_this_fighter = False
+        return True, None
+
+    #
+    # Private Methods
+    #
+
+    def __do_attack(self, fighter_details):
+        # TODO: should use fighter_details
+        weapon, weapon_index = self.__fighter.get_current_weapon()
+        if weapon is None or 'ammo' not in weapon:
+            return
+
+        weapon['ammo']['shots_left'] -= 1
+
+
+    def __do_reload(self, fighter_details):
+        # TODO: should use fighter_details
+        weapon, weapon_index = self.__fighter.get_current_weapon()
+        if weapon is None or 'ammo' not in weapon:
+            return
+
+        clip_name = weapon['ammo']['name']
+        for item in self.__fighter.details['stuff']:
+            if item['name'] == clip_name and item['count'] > 0:
+                weapon['ammo']['shots_left'] = weapon['ammo']['shots']
+                item['count'] -= 1
+                self.__fighter.add_timer(weapon['reload'], 'RELOADING')
+                return
+
+        return
+
+    def __draw_weapon(self, index):
+        self.__fighter.draw_weapon_by_index(index)
+        return True # Keep fighting
+
+    def __get_damage_type_str(self,
+                              damage_type
+                             ):
+        if damage_type in GurpsRuleset.damage_mult:
+            damage_type_str = '%s (x%.1f)' % (
+                    damage_type, GurpsRuleset.damage_mult[damage_type])
+        else:
+            damage_type_str = '%s' % damage_type
+        return damage_type_str
 
 class ScreenHandler(object):
     '''
