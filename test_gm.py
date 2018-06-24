@@ -10,7 +10,6 @@ class MockWindowManager(object):
         pass
 
 
-
 class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
     def setUp(self):
         self.__vodou_priest_fighter = {
@@ -185,17 +184,9 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         }
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
-        # self.__vodou_priest_fighter
-        # self.__bokor_fighter
-        # self.__tank_fighter
-        # self.__thief_fighter
     
     def tearDown(self):
         pass
-
-    #def test_makeevent(self): # ALL tests must start with 'test'
-    #    # Tests are checked with assert
-    #    assert event.DoWeFireAt(datetimemock.datetime_mockable.now()) == False
 
     #def test_adjust_hp(self,
     #              fighter_details,

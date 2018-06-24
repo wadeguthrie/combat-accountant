@@ -12,23 +12,22 @@ import random
 import sys
 
 # TODO:
-#   - position w/plusses and minuses
-#   - high pain threshold = no shock
-#   - guns w/shots and reload time
+#   - posture w/plusses and minuses
+#   - dodge and drop (B377)
+#   - add outfit characters and a store for weapons and other items
+#   - damage other than dice
 #   - < 1/3 FP = 1/2 move, dodge, st
 #   - Warning if window is smaller than expected
+#   - Update the Templates in the JSON to match the character data
 #
 # TODO (eventually)
+#   - scrolling menus (et al.)
+#   - entering monsters and characters from the screen
+#   - truncate (don't wrap) long lines
 #   - Go for a transactional model -- will allow me to do better debugging,
 #       playback of debug stuff, and testing.  Instead of modifying 'world'
 #       directly, issue a transaction to an object that handles world.  Save
 #       the transaction to _history.
-#   - TESTS, for the love of God
-#       Having the xxxHandler getting the xxxGmWindow objects from the
-#       window_manager allows the window manager to be mocked more easily
-#   - scrolling menus (et al.)
-#   - entering monsters and characters from the screen
-#   - truncate (don't wrap) long lines
 
 
 class GmJson(object):
@@ -982,6 +981,17 @@ class Fighter(object):
     def add_timer(self, rounds, text):
         self.details['timers'].append({'rounds': rounds, 'string': text})
 
+    def do_aim(self, braced):
+        rounds = self.details['aim']['rounds']
+        if rounds == 0:
+            self.details['aim']['braced'] = braced
+            self.details['aim']['rounds'] = 1
+        elif rounds < 3:
+            self.details['aim']['rounds'] += 1
+
+    def reset_aim(self):
+        self.details['aim']['rounds'] = 0
+        self.details['aim']['braced'] = False
 
     def draw_weapon_by_index(self,
                              index
@@ -1090,6 +1100,7 @@ class GurpsRuleset(Ruleset):
     In addition to what's required by 'Ruleset', each character's dict is
     expected to look like this:
     {
+        'aim': {'rounds': <number>, 'braced': True | False}
         'shock': <number, 0 for 'None'>
         'dodge' : <final dodge value (including things like 'Enhanced Dodge'>
         'skills': { <skill name> : <final skill value>, ...}
@@ -1178,11 +1189,17 @@ class GurpsRuleset(Ruleset):
             if int(before_hp_multiple) != int(after_hp_multiple):
                 fighter_details['check_for_death'] = True
 
-        shock_amount = -4 if adj <= -4 else adj
-        if fighter_details['shock'] > shock_amount:
-            fighter_details['shock'] = shock_amount
+        if 'high pain threshold' not in fighter_details['advantages']: # B59
+            shock_amount = -4 if adj <= -4 else adj
+            if fighter_details['shock'] > shock_amount:
+                fighter_details['shock'] = shock_amount
+
+        # TODO: will roll or lose aim
 
         super(GurpsRuleset, self).adjust_hp(fighter_details, adj)
+
+    def do_aim(self, braced):
+        self.__fighter.do_aim(braced)
 
     def do_maneuver(self):
         self.__action_performed_by_this_fighter = True
@@ -1220,11 +1237,39 @@ class GurpsRuleset(Ruleset):
 
         if holding_ranged:
             if weapon['ammo']['shots_left'] > 0:
-                action_menu.extend([
-                    ('Aim',             {'text': ['Aim',
+                # Ask if we're bracing if this is the first round of aiming
+                # B364 (NOTE: Combat Lite on B234 doesn't mention bracing).
+                if self.__fighter.details['aim']['rounds'] == 0:
+                    # TODO: any defense loses your aim
+                    brace_menu = [
+                        ('Bracing',     {'text': ['Aim with brace',
                                                   ' Defense: any loses aim',
                                                   ' Move: step'],
-                                         'doit': None}),
+                                         'doit': self.do_aim,
+                                         'data': True}),
+                        ('Not Bracing', {'text': ['Aim',
+                                                  ' Defense: any loses aim',
+                                                  ' Move: step'],
+                                         'doit': self.do_aim,
+                                         'data': False})
+                    ]
+                    action_menu.append(('Aim',  
+                                        {'text': ['Aim',
+                                                  ' Defense: any loses aim',
+                                                  ' Move: step'],
+                                         'doit': None,
+                                         'menu': brace_menu})
+                                      )
+                else:
+                    action_menu.append(('Aim',  
+                                        {'text': ['Aim',
+                                                  ' Defense: any loses aim',
+                                                  ' Move: step'],
+                                         'doit': self.do_aim,
+                                         'data': False})
+                                      )
+
+                action_menu.extend([
                     ('attack',          {'text': ['Attack',
                                                   ' Defense: any',
                                                   ' Move: step'],
@@ -1462,8 +1507,11 @@ class GurpsRuleset(Ruleset):
             if fighter_details['current']['fp'] <= 0:
                 notes.append('On action: Roll vs. Will or pass out')
 
-            if fighter_details['current']['hp'] <= 0:
-                notes.append('On turn: 3d vs. HT or pass out')
+            if fighter_details['current']['hp'] <= 0: # B327
+                if 'high pain threshold' in fighter_details['advantages']: # B59
+                    notes.append('On turn: 3d+3 vs. HT or pass out')
+                else:
+                    notes.append('On turn: 3d vs. HT or pass out')
 
         if fighter_details['check_for_death']:
             notes.append('3d vs. HT or DIE')
@@ -2125,8 +2173,8 @@ class FightHandler(ScreenHandler):
 
         while 'menu' in maneuver:
             maneuver = self._window_manager.menu('Which', maneuver['menu'])
-            if maneuver is None:
-                return True # Keep going
+            if maneuver is None:    # Can bail out regardless of nesting level
+                return True         # Keep going
 
         if 'doit' in maneuver and maneuver['doit'] is not None:
             param = None if 'data' not in maneuver else maneuver['data']
