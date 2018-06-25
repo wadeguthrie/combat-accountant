@@ -977,29 +977,22 @@ class Fighter(object):
         self.name = name
         self.details = fighter_details
         self.__ruleset = ruleset
-        print 'Fighter ctor' # TODO: remove
-        PP.pprint(self.details) # TODO: remove
 
 
     def add_timer(self, rounds, text):
         self.details['timers'].append({'rounds': rounds, 'string': text})
 
     def do_aim(self, braced):
-        print '< Fighter.do_aim' # TODO: remove
         rounds = self.details['aim']['rounds']
         if rounds == 0:
             self.details['aim']['braced'] = braced
             self.details['aim']['rounds'] = 1
         elif rounds < 3:
             self.details['aim']['rounds'] += 1
-        print 'Fighter.do_aim >' # TODO: remove
 
     def reset_aim(self):
-        print '< Fighter.reset_aim' # TODO: remove
-        PP.pprint(self.details) # TODO: remove
         self.details['aim']['rounds'] = 0
         self.details['aim']['braced'] = False
-        print 'Fighter.reset_aim >' # TODO: remove
 
     def draw_weapon_by_index(self,
                              index
@@ -1255,7 +1248,6 @@ class GurpsRuleset(Ruleset):
                 #
                 # Ask if we're bracing if this is the first round of aiming
                 # B364 (NOTE: Combat Lite on B234 doesn't mention bracing).
-                print '< GurpsRuleset.get_action_menu' # TODO: remove
                 if self.__fighter.details['aim']['rounds'] == 0:
                     # TODO: any defense loses your aim
                     brace_menu = [
@@ -1285,7 +1277,6 @@ class GurpsRuleset(Ruleset):
                                          'doit': self.do_aim,
                                          'data': False})
                                       )
-                print 'GurpsRuleset.get_action_menu >' # TODO: remove
 
                 # Can only attack with a ranged weapon if there are still
                 # shots in the gun.
@@ -1659,7 +1650,6 @@ class GurpsRuleset(Ruleset):
         if 'acc' not in weapon:
             return skill
 
-        print '< GurpsRuleset.get_to_hit' # TODO: remove
         if fighter_details['aim']['rounds'] > 0:
             skill += weapon['acc']
             if fighter_details['aim']['braced']:
@@ -1669,7 +1659,6 @@ class GurpsRuleset(Ruleset):
 
         if fighter_details['aim']['rounds'] > 2:
             skill += 1
-        print 'GurpsRuleset.get_to_hit >' # TODO: remove
 
         return skill
 
