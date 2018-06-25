@@ -12,6 +12,7 @@ import random
 import sys
 
 # TODO:
+#   - change __current_fighter & details for Fighter object
 #   - posture w/plusses and minuses
 #   - dodge and drop (B377)
 #   - add outfit characters and a store for weapons and other items
@@ -976,22 +977,29 @@ class Fighter(object):
         self.name = name
         self.details = fighter_details
         self.__ruleset = ruleset
+        print 'Fighter ctor' # TODO: remove
+        PP.pprint(self.details) # TODO: remove
 
 
     def add_timer(self, rounds, text):
         self.details['timers'].append({'rounds': rounds, 'string': text})
 
     def do_aim(self, braced):
+        print '< Fighter.do_aim' # TODO: remove
         rounds = self.details['aim']['rounds']
         if rounds == 0:
             self.details['aim']['braced'] = braced
             self.details['aim']['rounds'] = 1
         elif rounds < 3:
             self.details['aim']['rounds'] += 1
+        print 'Fighter.do_aim >' # TODO: remove
 
     def reset_aim(self):
+        print '< Fighter.reset_aim' # TODO: remove
+        PP.pprint(self.details) # TODO: remove
         self.details['aim']['rounds'] = 0
         self.details['aim']['braced'] = False
+        print 'Fighter.reset_aim >' # TODO: remove
 
     def draw_weapon_by_index(self,
                              index
@@ -1082,14 +1090,13 @@ class Ruleset(object):
                                         fighter_details['permanent'][stat])
         fighter_details['alive'] = True
 
-    def new_fight(self, fighter_details):
-        '''
-        Removes all the stuff from the old fight except injury.
-        '''
-        fighter_details['alive'] = True
-        fighter_details['timers'] = []
-        fighter_details['weapon-index'] = None
-        fighter_details['opponent'] = None
+    def new_fight(self, fighter):
+        '''Removes all the stuff from the old fight except injury.'''
+        # NOTE: we're allowing health to still be messed-up, here
+        fighter.details['alive'] = True
+        fighter.details['timers'] = []
+        fighter.details['weapon-index'] = None
+        fighter.details['opponent'] = None
 
 
 class GurpsRuleset(Ruleset):
@@ -1198,15 +1205,21 @@ class GurpsRuleset(Ruleset):
 
         super(GurpsRuleset, self).adjust_hp(fighter_details, adj)
 
+    def change_posture(self, ignore):
+        self.__fighter.reset_aim()
+
     def do_aim(self, braced):
         self.__fighter.do_aim(braced)
+
+    def do_defense(self, ignore):
+        self.__fighter.reset_aim()
 
     def do_maneuver(self):
         self.__action_performed_by_this_fighter = True
 
     def get_action_menu(self,
                         fighter_name,
-                        fighter # dict describing the fighter in question
+                        fighter_details # dict describing the fighter
                        ):
         ''' Builds the menu of maneuvers allowed for the fighter. '''
 
@@ -1214,7 +1227,7 @@ class GurpsRuleset(Ruleset):
 
         # Figure out who we are and what we're holding.
 
-        self.__fighter = Fighter(fighter_name, fighter, self)
+        self.__fighter = Fighter(fighter_name, fighter_details, self)
         weapon, weapon_index = self.__fighter.get_current_weapon()
         holding_ranged = (False if weapon is None else
                                 (weapon['type'] == 'ranged weapon'))
@@ -1237,8 +1250,12 @@ class GurpsRuleset(Ruleset):
 
         if holding_ranged:
             if weapon['ammo']['shots_left'] > 0:
+
+                # Aim
+                #
                 # Ask if we're bracing if this is the first round of aiming
                 # B364 (NOTE: Combat Lite on B234 doesn't mention bracing).
+                print '< GurpsRuleset.get_action_menu' # TODO: remove
                 if self.__fighter.details['aim']['rounds'] == 0:
                     # TODO: any defense loses your aim
                     brace_menu = [
@@ -1268,6 +1285,10 @@ class GurpsRuleset(Ruleset):
                                          'doit': self.do_aim,
                                          'data': False})
                                       )
+                print 'GurpsRuleset.get_action_menu >' # TODO: remove
+
+                # Can only attack with a ranged weapon if there are still
+                # shots in the gun.
 
                 action_menu.extend([
                     ('attack',          {'text': ['Attack',
@@ -1295,7 +1316,7 @@ class GurpsRuleset(Ruleset):
             ('change posture',         {'text': ['Change posture',
                                                  ' Defense: any',
                                                  ' Move: none'],
-                                        'doit': None}),
+                                        'doit': self.change_posture}),
             ('Concentrate',            {'text': ['Concentrate',
                                                  ' Defense: any w/will roll',
                                                  ' Move: step'],
@@ -1303,7 +1324,7 @@ class GurpsRuleset(Ruleset):
             ('Defense, all out',       {'text': ['All out defense',
                                                  ' Defense: double',
                                                  ' Move: step'],
-                                        'doit': None}),
+                                        'doit': self.do_defense}),
         ])
 
         # TODO: should only be able to ready an unready weapon.
@@ -1455,14 +1476,15 @@ class GurpsRuleset(Ruleset):
                                     (0 if clip is None else clip['count'])))
                 
             if weapon['skill'] in fighter_details['skills']:
-                skill = fighter_details['skills'][weapon['skill']]
+                to_hit = self.get_to_hit(fighter_details, weapon)
+
                 damage_type = ('' if 'type' not in weapon['damage']
                                     else weapon['damage']['type'])
                 damage_type_str = self.__get_damage_type_str(damage_type)
 
                 if 'dice' in weapon['damage']:
                     notes.append('  to hit: %d, damage: %s, %s' %
-                            (skill, weapon['damage']['dice'], damage_type_str))
+                            (to_hit, weapon['damage']['dice'], damage_type_str))
                 # TODO: handle damage other than 'dice' (e.g., st-based)
             else:
                 self._window_manager.error(
@@ -1629,6 +1651,29 @@ class GurpsRuleset(Ruleset):
         return parry_skill
 
 
+    def get_to_hit(self, fighter_details, weapon):
+        if weapon['skill'] not in fighter_details['skills']:
+            return None
+        skill = fighter_details['skills'][weapon['skill']]
+
+        if 'acc' not in weapon:
+            return skill
+
+        print '< GurpsRuleset.get_to_hit' # TODO: remove
+        if fighter_details['aim']['rounds'] > 0:
+            skill += weapon['acc']
+            if fighter_details['aim']['braced']:
+                skill += 1
+        if fighter_details['aim']['rounds'] > 1:
+            skill += 1
+
+        if fighter_details['aim']['rounds'] > 2:
+            skill += 1
+        print 'GurpsRuleset.get_to_hit >' # TODO: remove
+
+        return skill
+
+
     def heal_fighter(self, fighter_details):
         '''
         Removes all injury (and their side-effects) from a fighter.
@@ -1652,12 +1697,13 @@ class GurpsRuleset(Ruleset):
         self.__action_performed_by_this_fighter = True
 
 
-    def new_fight(self, fighter_details):
+    def new_fight(self, fighter):
         '''
         Removes all the stuff from the old fight except injury.
         '''
-        super(GurpsRuleset, self).new_fight(fighter_details)
-        fighter_details['shock'] = 0
+        super(GurpsRuleset, self).new_fight(fighter)
+        fighter.details['shock'] = 0
+        fighter.reset_aim()
         self.__action_performed_by_this_fighter = False
 
 
@@ -1680,6 +1726,7 @@ class GurpsRuleset(Ruleset):
             return
 
         weapon['ammo']['shots_left'] -= 1
+        self.__fighter.reset_aim()
 
 
     def __do_reload(self, fighter_details):
@@ -1694,12 +1741,14 @@ class GurpsRuleset(Ruleset):
                 weapon['ammo']['shots_left'] = weapon['ammo']['shots']
                 item['count'] -= 1
                 self.__fighter.add_timer(weapon['reload'], 'RELOADING')
+                self.__fighter.reset_aim()
                 return
 
         return
 
     def __draw_weapon(self, index):
         self.__fighter.draw_weapon_by_index(index)
+        self.__fighter.reset_aim()
         return True # Keep fighting
 
     def __get_damage_type_str(self,
@@ -1984,8 +2033,11 @@ class FightHandler(ScreenHandler):
                     reverse=True)
 
             # Make sure this looks like a _NEW_ fight.
-            for fighter in self.__fight['fighters']:
-                self.__ruleset.new_fight(fighter['details'])
+            for fighter_details in self.__fight['fighters']:
+                fighter = Fighter(fighter_details['name'],
+                                  fighter_details['details'],
+                                  self.__ruleset)
+                self.__ruleset.new_fight(fighter)
 
         self.__fight['saved'] = False
         self._window.start_fight()
@@ -2116,14 +2168,16 @@ class FightHandler(ScreenHandler):
         if now_dead is None:
             return True # Keep fighting
 
-        if now_dead is current_fighter_details:
-            # Mark this guy as not having to do a maneuver this round.
-            self.__ruleset.make_dead()
-
-        now_dead['alive'] = False
+        now_dead['alive'] = not now_dead['alive'] # Toggle
         dead_name = (current_name if now_dead is current_fighter_details
                                     else opponent_name)
-        self._history.insert(0, ' %s was marked as DEAD' % dead_name)
+        if now_dead['alive']:
+            self._history.insert(0, ' %s was marked as ALIVE' % dead_name)
+        else:
+            self._history.insert(0, ' %s was marked as DEAD' % dead_name)
+            if now_dead is current_fighter_details:
+                # Mark this guy as not having to do a maneuver this round.
+                self.__ruleset.make_dead()
 
         next_PC_name = self.__next_PC_name()
         self._window.show_fighters(current_name, current_fighter_details,
