@@ -9,6 +9,8 @@ class MockWindowManager(object):
     def error(string_array):
         pass
 
+# TODO: test to-hit with and without aiming
+# TODO: test initiative order (note: random.seed(9001))
 
 class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
     def setUp(self):

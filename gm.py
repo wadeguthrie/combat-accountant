@@ -2201,7 +2201,9 @@ class FightHandler(ScreenHandler):
         '''
         Returns the Fighter object of the current fighter.
         '''
-        return self.__fighters[ self.__saved_fight['index'] ]
+        result = self.__fighters[ self.__saved_fight['index'] ]
+        print ' FightHandler.__current_fighter>' # TODO: remove
+        return result
 
 
 
@@ -2286,17 +2288,17 @@ class FightHandler(ScreenHandler):
                 self._history.insert(0, ' %s did %d HP to %s' %
                 (current_fighter.name,
                                                               adj,
-                                                              opponent_name))
+                                                              opponent.name))
             else:
                 self._history.insert(0, ' %s regained %d HP' %
                 (current_fighter.name,
                                                                 -adj))
         else:
             if adj > 0:
-                self._history.insert(0, ' %s lost %d HP' % (opponent_name,
+                self._history.insert(0, ' %s lost %d HP' % (opponent.name,
                                                             adj))
             else:
-                self._history.insert(0, ' %s regained %d HP' % (opponent_name,
+                self._history.insert(0, ' %s regained %d HP' % (opponent.name,
                                                                 -adj))
 
         next_PC_name = self.__next_PC_name()
@@ -2326,12 +2328,13 @@ class FightHandler(ScreenHandler):
                                                  now_dead_menu,
                                                  1) # assume it's the opponent
         if now_dead is None:
+            print ' FightHandler.__dead (1)>' # TODO: remove
             return True # Keep fighting
 
-        now_dead['alive'] = not now_dead['alive'] # Toggle
+        now_dead.details['alive'] = not now_dead.details['alive'] # Toggle
         dead_name = (current_fighter.name if now_dead is current_fighter
                                     else opponent.name)
-        if now_dead['alive']:
+        if now_dead.details['alive']:
             self._history.insert(0, ' %s was marked as ALIVE' % dead_name)
         else:
             self._history.insert(0, ' %s was marked as DEAD' % dead_name)
@@ -2347,6 +2350,7 @@ class FightHandler(ScreenHandler):
                                    next_PC_name,
                                    self.__fighters,
                                    self.__saved_fight['index'])
+        print ' FightHandler.__dead (2)>' # TODO: remove
         return True # Keep going
 
 
@@ -2597,11 +2601,13 @@ class FightHandler(ScreenHandler):
         ''' Returns Fighter object for opponent of 'fighter'. '''
         print '<FightHandler.__get_opponent_for' # TODO: remove
         if fighter is None or fighter.details['opponent'] is None:
+            print ' FightHandler.__get_opponent_for (1)>' # TODO: remove
             return None
 
         opponent = self.__get_fighter_object(
                                         fighter.details['opponent']['name'],
                                         fighter.details['opponent']['group'])
+        print ' FightHandler.__get_opponent_for (2)>' # TODO: remove
         return opponent
 
 
@@ -2725,7 +2731,9 @@ class FightHandler(ScreenHandler):
                            else len(self._history))
 
         # It's not really a menu but the window for it works just fine
-        pseudo_menu = [(x,0) for x in self._history]
+        pseudo_menu = []
+        for line in range(lines):
+            pseudo_menu.append((self._history[line], 0))
         ignore = self._window_manager.menu('Fight History (Newest On Top)',
                                            pseudo_menu)
         return True
