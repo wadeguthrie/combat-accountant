@@ -1839,34 +1839,34 @@
     "current-fight": {
         "index": 1, 
         "fighters": [
-            [
-                "PCs", 
-                "Wade"
-            ], 
-            [
-                "PCs", 
-                "Tom"
-            ], 
-            [
-                "horsemen", 
-                "Death"
-            ], 
-            [
-                "horsemen", 
-                "War"
-            ], 
-            [
-                "PCs", 
-                "Bob"
-            ], 
-            [
-                "horsemen", 
-                "Pestilence"
-            ], 
-            [
-                "horsemen", 
-                "Famine"
-            ]
+            {
+                "group": "PCs", 
+                "name": "Wade"
+            }, 
+            {
+                "group": "PCs", 
+                "name": "Tom"
+            }, 
+            {
+                "group": "horsemen", 
+                "name": "Death"
+            }, 
+            {
+                "group": "horsemen", 
+                "name": "War"
+            }, 
+            {
+                "group": "PCs", 
+                "name": "Bob"
+            }, 
+            {
+                "group": "horsemen", 
+                "name": "Pestilence"
+            }, 
+            {
+                "group": "horsemen", 
+                "name": "Famine"
+            }
         ], 
         "saved": false, 
         "round": 2, 
