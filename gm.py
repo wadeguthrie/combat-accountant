@@ -351,15 +351,15 @@ class FightGmWindow(GmWindow):
         self.len_timer_leader = len(self.__round_count_string)
 
         self.__state_color = {
-                Ruleset.FIGHTER_STATE_HEALTHY  :
+                Fighter.ALIVE :
                     curses.color_pair(GmWindowManager.GREEN_BLACK),
-                Ruleset.FIGHTER_STATE_INJURED  :
+                Fighter.INJURED :
                     curses.color_pair(GmWindowManager.YELLOW_BLACK),
-                Ruleset.FIGHTER_STATE_CRITICAL :
+                Fighter.UNCONSCIOUS :
                     curses.color_pair(GmWindowManager.RED_BLACK),
-                Ruleset.FIGHTER_STATE_DEAD     :
-                    curses.color_pair(GmWindowManager.RED_BLACK)}
-
+                Fighter.DEAD :
+                    curses.color_pair(GmWindowManager.RED_BLACK),
+        }
 
     def close(self):
         # Kill my subwindows, first
@@ -457,8 +457,7 @@ class FightGmWindow(GmWindow):
                               selected_index=None):
         self.__summary_window.clear()
         for line, fighter in enumerate(fighters):
-            fighter_state = self.__ruleset.get_fighter_state(fighter)
-            mode = self.__state_color[fighter_state]
+            mode = self.__state_color[fighter.get_state()]
             fighter_string = '%s%s HP:%d/%d' % (
                 ('> ' if line == current_index else '  '),
                 fighter.name,
@@ -518,12 +517,14 @@ class FightGmWindow(GmWindow):
                        fighter, # Fighter object
                        column
                       ):
-        is_alive = True # alive
-        fighter_state = self.__ruleset.get_fighter_state(fighter)
-        if fighter_state == Ruleset.FIGHTER_STATE_DEAD:
+        show_more_info = True # conscious -- show all the fighter's info
+        fighter_state = fighter.get_state()
+        if fighter_state == Fighter.DEAD:
             fighter_string = '(DEAD)'
-            mode = self.__state_color[Ruleset.FIGHTER_STATE_DEAD]
-            is_alive = False
+            show_more_info = False
+        elif fighter_state == Fighter.UNCONSCIOUS:
+            fighter_string = '(UNCONSCIOUS)'
+            show_more_info = False
         else:
             fighter_string = '%s HP: %d/%d FP: %d/%d' % (
                 fighter.name,
@@ -531,11 +532,10 @@ class FightGmWindow(GmWindow):
                 fighter.details['permanent']['hp'],
                 fighter.details['current']['fp'],
                 fighter.details['permanent']['fp'])
-            mode = self.__state_color[fighter_state]
 
-        mode = mode | curses.A_BOLD
+        mode = self.__state_color[fighter_state] | curses.A_BOLD
         self._window.addstr(self.__FIGHTER_LINE, column, fighter_string, mode)
-        return is_alive
+        return show_more_info
 
 
     def __show_fighter_notes(self,
@@ -1012,6 +1012,20 @@ class GmWindowManager(object):
 
 
 class Fighter(object):
+    # Injured is separate since it's tracked by HP
+    (ALIVE,
+     UNCONSCIOUS,
+     DEAD,
+     STATES,
+     INJURED) = range(5)
+
+    # TODO: there are some rules-based things in here and they need to go
+    conscious_map = {
+        'alive': ALIVE,
+        'unconscious': UNCONSCIOUS,
+        'dead': DEAD
+    }
+
     def __init__(self,
                  name,              # string
                  group,             # string = 'PCs' or some monster group
@@ -1027,6 +1041,20 @@ class Fighter(object):
     def add_timer(self, rounds, text):
         self.details['timers'].append({'rounds': rounds, 'string': text})
 
+    def bump_consciousness(self):
+        '''
+        Increments (modulo size) the state of the fighter.
+        '''
+        conscious_number = Fighter.conscious_map[self.details['state']]
+        conscious_number += 1
+        if conscious_number >= Fighter.STATES:
+            conscious_number = 0
+
+        for state_name, state_num in Fighter.conscious_map.iteritems():
+            if state_num == conscious_number:
+                self.details['state'] = state_name
+                break
+
     def do_aim(self,
                braced   # True | False
               ):
@@ -1037,9 +1065,26 @@ class Fighter(object):
         elif rounds < 3:
             self.details['aim']['rounds'] += 1
 
+    def get_state(self):
+        conscious_number = Fighter.conscious_map[self.details['state']]
+        if (conscious_number == Fighter.ALIVE and 
+                self.details['current']['hp'] <
+                    self.details['permanent']['hp']):
+            return Fighter.INJURED
+        return conscious_number
+
+    def is_conscious(self):
+        # NOTE: 'injured' is not stored in self.details['state']
+        return True if self.details['state'] == 'alive' else False
+
+    def is_dead(self):
+        return True if self.details['state'] == 'dead' else False
+
+
     def reset_aim(self):
         self.details['aim']['rounds'] = 0
         self.details['aim']['braced'] = False
+
 
     def draw_weapon_by_index(self,
                              index  # Index of weapon in fighter's 'stuff'
@@ -1047,6 +1092,7 @@ class Fighter(object):
                             ):
         '''Draws or removes weapon from sheath or holster.'''
         self.details['weapon-index'] = index
+
 
     def get_weapon_by_name(self,
                            name
@@ -1074,7 +1120,7 @@ class Ruleset(object):
     '''
     Any ruleset's character's dict is expected to include the following:
     {
-        'alive' : True | False,
+        'state' : 'alive' | 'unconscious' | 'dead'
         'opponent': None | <index into current fight's monster list or, if
                             this is for a monster, index into PC list>
         'stuff' : [ <weapon, armor, items> ],
@@ -1089,11 +1135,6 @@ class Ruleset(object):
         'string': text
     }
     '''
-
-    (FIGHTER_STATE_HEALTHY,
-     FIGHTER_STATE_INJURED,
-     FIGHTER_STATE_CRITICAL,
-     FIGHTER_STATE_DEAD) = range(4)
 
     def __init__(self, window_manager):
         self._window_manager = window_manager
@@ -1115,12 +1156,6 @@ class Ruleset(object):
                  ):
         fighter.details['current']['hp'] += adj
 
-    def get_fighter_state(self, fighter):
-        if not fighter.details['alive']:
-            return Ruleset.FIGHTER_STATE_DEAD
-
-        return None # We don't have any further information
-
 
     def heal_fighter(self,
                      fighter_details    # 'details' is OK, here
@@ -1131,7 +1166,7 @@ class Ruleset(object):
         for stat in fighter_details['permanent'].iterkeys():
             fighter_details['current'][stat] = (
                                         fighter_details['permanent'][stat])
-        fighter_details['alive'] = True
+        fighter_details['state'] = 'alive'
 
     def new_fight(self, fighter):
         '''Removes all the stuff from the old fight except injury.'''
@@ -1217,6 +1252,7 @@ class GurpsRuleset(Ruleset):
                     20: {'thr': {'num_dice': 2, 'plus': -1},
                          'sw':  {'num_dice': 3, 'plus': +2}}}
 
+    # Posture: B551
     posture = {
         'standing':  {'attack':  0, 'defense':  0, 'target':  0},
         'crouching': {'attack': -2, 'defense':  0, 'target': -2},
@@ -1633,6 +1669,7 @@ class GurpsRuleset(Ruleset):
 
         if (fighter.details['current']['fp'] <=
                                         -fighter.details['permanent']['fp']):
+            fighter.details['state'] = 'unconscious'
             notes.append('*UNCONSCIOUS*')
 
         else:
@@ -1650,24 +1687,6 @@ class GurpsRuleset(Ruleset):
             fighter.details['check_for_death'] = False  # Only show/roll once
 
         return notes
-
-
-    def get_fighter_state(self,
-                          fighter   # Fighter object
-                         ):
-        state = super(GurpsRuleset, self).get_fighter_state(fighter)
-        if state is not None:
-            return state
-
-        if (fighter.details['current']['fp'] <= 0 or
-                                    fighter.details['current']['hp'] <= 0):
-            return Ruleset.FIGHTER_STATE_CRITICAL
-
-        if (fighter.details['current']['hp'] <
-                                    fighter.details['permanent']['hp']):
-            return Ruleset.FIGHTER_STATE_INJURED
-
-        return Ruleset.FIGHTER_STATE_HEALTHY
 
 
     def get_hand_to_hand_info(self,
@@ -1824,10 +1843,14 @@ class GurpsRuleset(Ruleset):
         self.__action_performed_by_this_fighter = False
 
 
-    def next_fighter(self,
-                     prev_fighter   # Fighter object of current (before moving
-                                    # on) fighter
-                    ):
+    def can_move_on_to_next_fighter(self,
+                                    prev_fighter   # Fighter object of current
+                                                   #  (before moving on) fighter
+                                   ):
+        # If he's unconscious or dead, we can ignore him and move on
+        if not prev_fighter.is_conscious():
+            return True, None
+
         # Force some maneuver for the current fighter before moving on.  That
         # way, we can look at the defense and movement restrictions (as well
         # as a bunch of other stuff, like dealing with 'aim').
@@ -2061,7 +2084,7 @@ class BuildFightHandler(ScreenHandler):
             world['Templates'][self.__template_name][from_monster_name])
         # TODO: what's in a Template vs. what's supplied, here, should be
         # documeted somewhere
-        to_monster = {'alive': True,
+        to_monster = {'state': 'alive',
                       'timers': [],
                       'opponent': None,
                       'permanent': {},
@@ -2331,7 +2354,6 @@ class FightHandler(ScreenHandler):
                                    self.__saved_fight['index'])
         return True # Keep going
 
-    # TODO: should be alive, unconscious, dead
     def __dead(self):
         '''
         Command ribbon method.
@@ -2351,18 +2373,20 @@ class FightHandler(ScreenHandler):
         if now_dead is None:
             return True # Keep fighting
 
-        now_dead.details['alive'] = not now_dead.details['alive'] # Toggle
+        now_dead.bump_consciousness()
+        if now_dead.is_conscious():
+            now_dead.details['opponent'] = None # dead men fight nobody
         dead_name = (current_fighter.name if now_dead is current_fighter
                                     else opponent.name)
-        if now_dead.details['alive']:
-            self._history.insert(0, ' %s was marked as ALIVE' % dead_name)
-        else:
-            self._history.insert(0, ' %s was marked as DEAD' % dead_name)
-            if now_dead is current_fighter:
-                # Mark this guy as not having to do a maneuver this round.
-                # TODO: this seems like it could look at the current fighter
-                # instead of having a global flag
-                self.__ruleset.make_dead()
+
+        self._history.insert(0, ' %s was marked as %s' % (
+                                    dead_name, now_dead.details['state']))
+
+        if now_dead is current_fighter and not now_dead.is_conscious():
+            # Mark this guy as not having to do a maneuver this round.
+            # TODO: this seems like it could look at the current fighter
+            # instead of having a global flag
+            self.__ruleset.make_dead()
 
         self._window.show_fighters(current_fighter,
                                    opponent,
@@ -2412,15 +2436,6 @@ class FightHandler(ScreenHandler):
         return None
 
 
-    # TODO: have to have conscious, unconscious, and dead
-    def __is_alive(self,
-                   fighter  # Fighter object
-                  ):
-        if fighter.details['alive'] and (fighter.details['current']['hp'] > 0):
-            return True
-        return False
-
-
     def __maneuver(self):
         '''
         Command ribbon method.
@@ -2467,6 +2482,7 @@ class FightHandler(ScreenHandler):
 
         round_before = self.__saved_fight['round']
         keep_going = True
+        print '__modify_index(%d)' % adj
         while keep_going:
             self.__saved_fight['index'] += adj
             if self.__saved_fight['index'] >= len(
@@ -2478,9 +2494,12 @@ class FightHandler(ScreenHandler):
                                             self.__saved_fight['fighters']) - 1
                 self.__saved_fight['round'] += adj 
             current_fighter = self.__current_fighter()
-            # TODO: Fighter.is_alive()
-            if (current_fighter.details['alive'] or
-                    (self.__saved_fight['index'] == first_index)):
+            if current_fighter.is_dead():
+                self._history.insert(0, '%s did nothing (dead)' %
+                                                        current_fighter.name)
+            else:
+                keep_going = False
+            if self.__saved_fight['index'] == first_index:
                 keep_going = False
 
         if round_before != self.__saved_fight['round']:
@@ -2494,7 +2513,8 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         prev_fighter = self.__current_fighter()
-        ok_to_continue, message = self.__ruleset.next_fighter(prev_fighter)
+        ok_to_continue, message = self.__ruleset.can_move_on_to_next_fighter(
+                                                                  prev_fighter)
         if not ok_to_continue:
             self._window_manager.error([message])
             return True # Keep fighting
@@ -2619,7 +2639,7 @@ class FightHandler(ScreenHandler):
         for fighter in self.__fighters:
             if fighter.group != current_fighter.group:
                 opponent_group = fighter.group
-                if self.__is_alive(fighter):
+                if fighter.is_conscious():
                     opponent_menu.append((fighter.name, fighter.name))
         if len(opponent_menu) <= 0:
             self._window_manager.error(['All the opponents are dead'])
@@ -2684,8 +2704,9 @@ class FightHandler(ScreenHandler):
             ask_to_save = False
 
             for fighter in self.__fighters:
-                if fighter.group != 'PCs' and self.__is_alive(fighter):
+                if fighter.group != 'PCs' and fighter.is_conscious():
                     ask_to_save = True
+                    break
 
             # Ask to save the fight if it's not saved and some monsters live.
             save_menu = [('yes', True), ('no', False)]

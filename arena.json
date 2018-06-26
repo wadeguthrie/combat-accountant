@@ -720,7 +720,7 @@
             "shock": 0, 
             "weapon-index" : null,
             "stuff": [],
-            "alive": true, 
+            "state": "alive",
             "current": {
                 "fp": 11, 
                 "iq": 12, 
@@ -750,7 +750,7 @@
             "stuff": [],
             "skills": {},
             "advantages": {},
-            "alive": true, 
+            "state": "alive",
             "current": {
                 "fp": 11, 
                 "iq": 12, 
@@ -780,7 +780,7 @@
             "stuff": [],
             "skills": {},
             "advantages": {},
-            "alive": true, 
+            "state": "alive",
             "current": {
                 "fp": 11, 
                 "iq": 12, 
@@ -810,7 +810,7 @@
             "stuff": [],
             "skills": {},
             "advantages": {},
-            "alive": true, 
+            "state": "alive",
             "current": {
                 "fp": 11, 
                 "iq": 12, 
@@ -840,7 +840,7 @@
             "stuff": [],
             "skills": {},
             "advantages": {},
-            "alive": true, 
+            "state": "alive",
             "current": {
                 "fp": 11, 
                 "iq": 12, 
@@ -870,7 +870,7 @@
             "stuff": [],
             "skills": {},
             "advantages": {},
-            "alive": true, 
+            "state": "alive",
             "current": {
                 "fp": 12, 
                 "iq": 13, 
@@ -905,7 +905,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15,
                                "high pain threshold": 10},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -936,7 +936,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15,
                                "high pain threshold": 10},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -966,7 +966,7 @@
                 "stuff": [],
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -996,7 +996,7 @@
                 "stuff": [],
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1026,7 +1026,7 @@
                 "stuff": [],
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1056,7 +1056,7 @@
                 "stuff": [],
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1086,7 +1086,7 @@
                 "stuff": [],
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1116,7 +1116,7 @@
                 "stuff": [],
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1149,7 +1149,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15,
                                "high pain threshold": 10},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1180,7 +1180,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15,
                                "high pain threshold": 10},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1210,7 +1210,7 @@
                 "stuff": [],
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1240,7 +1240,7 @@
                 "stuff": [],
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1270,7 +1270,7 @@
                 "stuff": [],
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1300,7 +1300,7 @@
                 "stuff": [],
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1330,7 +1330,7 @@
                 "stuff": [],
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1360,7 +1360,7 @@
                 "stuff": [],
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 12, 
                     "iq": 13, 
@@ -1411,7 +1411,7 @@
                 "skills": {"guns (pistol)": 15,
                            "brawling": 12},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 12, 
                     "iq": 13, 
@@ -1470,7 +1470,7 @@
                            "brawling": 14,
                            "knife": 15},
                 "advantages": {"high pain threshold": 10},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1520,7 +1520,7 @@
                            "brawling": 12},
                 "advantages": {"combat reflexes": 15,
                                "high pain threshold": 10},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1577,7 +1577,7 @@
                            "brawling": 16,
                            "axe/mace": 14},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "st": 10, 
                     "dx": 12, 
@@ -1635,7 +1635,7 @@
                            "brawling": 16,
                            "axe/mace": 14},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "st": 10, 
                     "dx": 12, 
@@ -1693,7 +1693,7 @@
                            "brawling": 16,
                            "axe/mace": 14},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "st": 10, 
                     "dx": 12, 
@@ -1751,7 +1751,7 @@
                            "brawling": 16,
                            "axe/mace": 14},
                 "advantages": {"combat reflexes": 15},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "st": 10, 
                     "dx": 12, 
@@ -1811,7 +1811,7 @@
                            "brawling": 14,
                            "knife": 15},
                 "advantages": {"high pain threshold": 10},
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
