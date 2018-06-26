@@ -10,6 +10,7 @@ class MockWindowManager(object):
         pass
 
 # TODO: test to-hit with and without aiming
+# TODO: posture mods testing
 # TODO: test initiative order (note: random.seed(9001))
 
 class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
@@ -39,7 +40,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "skills": {"guns (pistol)": 15,
                        "brawling": 12},
             "advantages": {"combat reflexes": 15},
-            "alive": True, 
+            "state" : "alive",
+            "posture" : "standing",
             "current": {
                 "fp": 12, "iq": 13, "hp": 10, "ht": 11, "st": 10, "dx": 11, 
                 "basic-speed": 5.5
@@ -77,7 +79,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "skills": {"guns (pistol)": 13,
                        "brawling": 12},
             "advantages": {"combat reflexes": 15},
-            "alive": True, 
+            "state" : "alive",
+            "posture" : "standing",
             "current": {
                 "fp": 11, "iq": 12, "hp": 10, "ht": 11, "st": 10, "dx": 10, 
                 "basic-speed": 5.25
@@ -123,7 +126,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                        "brawling": 16,
                        "axe/mace": 14},
             "advantages": {"combat reflexes": 15},
-            "alive": True, 
+            "state" : "alive",
+            "posture" : "standing",
             "current": {
                 "st": 10, "dx": 12, "iq": 12, "ht": 11, "fp": 11, "hp": 11, 
                 "basic-speed": 5.75
@@ -171,7 +175,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                        "brawling": 14,
                        "knife": 15},
             "advantages": {},
-            "alive": True, 
+            "state" : "alive",
+            "posture" : "standing",
             "current": {
                 "fp": 11, "iq": 12, "hp": 12, "ht": 11, "st": 10, "dx": 12, 
                 "basic-speed": 5.75

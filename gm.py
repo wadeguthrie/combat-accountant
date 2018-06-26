@@ -12,7 +12,6 @@ import random
 import sys
 
 # TODO:
-#   - posture w/plusses and minuses
 #   - dodge and drop (B377)
 #   - add outfit characters and a store for weapons and other items
 #   - damage other than dice
@@ -1303,7 +1302,7 @@ class GurpsRuleset(Ruleset):
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        # TODO
+        param['fighter'].details['posture'] = param['posture']
         param['fighter'].reset_aim()
 
     def do_aim(self,
@@ -1355,6 +1354,19 @@ class GurpsRuleset(Ruleset):
                                              'doit': self.__draw_weapon,
                                              'param': {'weapon': index,
                                                        'fighter': fighter}}))
+
+        # Posture menu
+
+        posture_menu = []
+        for posture in GurpsRuleset.posture.iterkeys():
+            if posture != fighter.details['posture']:
+                posture_menu.append(
+                    (posture,   {'text': ['Change posture',
+                                          ' Defense: any',
+                                          ' Move: none'],
+                                 'doit': self.change_posture,
+                                 'param': {'fighter': fighter,
+                                           'posture': posture}}))
 
         # Build the action_menu.  Alphabetical order.  Only allow the things
         # the fighter can do based on zis current situation.
@@ -1428,14 +1440,10 @@ class GurpsRuleset(Ruleset):
             ])
 
         action_menu.extend([
-            # TODO: will need a menu of postures not including the fighter's
-            # current posture.
-            ('change posture',         {'text': ['Change posture',
+            ('posture (change)',       {'text': ['Change posture',
                                                  ' Defense: any',
                                                  ' Move: none'],
-                                        'doit': self.change_posture,
-                                        'param': {'fighter': fighter,
-                                                  'posture': None}}),
+                                        'menu': posture_menu}),
             ('Concentrate',            {'text': ['Concentrate',
                                                  ' Defense: any w/will roll',
                                                  ' Move: step'],
@@ -1537,6 +1545,9 @@ class GurpsRuleset(Ruleset):
         if 'combat reflexes' in fighter.details['advantages']:
             block_skill += 1
 
+        posture_mods = self.get_posture_mods(fighter.details['posture'])
+        block_skill += 0 if posture_mods is None else posture_mods['defense']
+
         return block_skill
 
 
@@ -1546,6 +1557,9 @@ class GurpsRuleset(Ruleset):
         dodge_skill = 3 + int(fighter.details['current']['basic-speed'])
         if 'combat reflexes' in fighter.details['advantages']: # B43
             dodge_skill += 1
+
+        posture_mods = self.get_posture_mods(fighter.details['posture'])
+        dodge_skill += 0 if posture_mods is None else posture_mods['defense']
 
         # B327
         if (fighter.details['current']['hp'] <
@@ -1659,6 +1673,8 @@ class GurpsRuleset(Ruleset):
 
         # And, now, off to the regular stuff
 
+        if fighter.details['posture'] != 'standing':
+            notes.append('Posture: %s' % fighter.details['posture'])
         if fighter.details['shock'] != 0:
             notes.append('DX and IQ are at %d' % fighter.details['shock'])
 
@@ -1759,6 +1775,23 @@ class GurpsRuleset(Ruleset):
         result['punch_damage'] = copy.deepcopy(result['kick_damage'])
         result['punch_damage']['plus'] -= 1
 
+        # Posture
+
+        posture_mods = self.get_posture_mods(fighter.details['posture'])
+        if posture_mods is not None:
+            result['punch_skill'] += posture_mods['attack']
+            result['kick_skill'] += posture_mods['attack']
+
+        # Opponent's posture
+
+        #opponent = self.get_opponent_for(fighter) # TODO: part of fight handler
+        #if opponent is not None:
+        #    opponent_posture_mods = self.get_posture_mods(
+        #                                        opponent.details['posture'])
+        #    if opponent_posture_mods is not None:
+        #        result['punch_skill'] += opponent_posture_mods['target']
+        #        result['kick_skill'] += opponent_posture_mods['target']
+
         # Brawling, Boxing, Karate, DX: Parry int(skill/2) + 3
         result['parry_skill'] = 3 + int(result['parry_skill']/2)
         if 'combat reflexes' in fighter.details['advantages']:
@@ -1781,8 +1814,16 @@ class GurpsRuleset(Ruleset):
         if 'combat reflexes' in fighter.details['advantages']:
             parry_skill += 1
 
+        posture_mods = self.get_posture_mods(fighter.details['posture'])
+        parry_skill += 0 if posture_mods is None else posture_mods['defense']
+
         return parry_skill
 
+    def get_posture_mods(self,
+                         posture    # string: 'standing' | ...
+                        ):
+        return (None if posture not in GurpsRuleset.posture else
+                                            GurpsRuleset.posture[posture])
 
     def get_to_hit(self,
                    fighter, # Fighter object
@@ -1804,6 +1845,20 @@ class GurpsRuleset(Ruleset):
 
         if fighter.details['aim']['rounds'] > 2:
             skill += 1
+
+        # Posture
+
+        posture_mods = self.get_posture_mods(fighter.details['posture'])
+        skill += 0 if posture_mods is None else posture_mods['attack']
+
+        # Opponent's posture
+
+        #opponent = self.get_opponent_for(fighter) # TODO: part of fight handler
+        #if opponent is not None:
+        #    opponent_posture_mods = self.get_posture_mods(
+        #                                        opponent.details['posture'])
+        #    if opponent_posture_mods is not None:
+        #        skill += opponent_posture_mods['target']
 
         return skill
 
@@ -2264,7 +2319,7 @@ class FightHandler(ScreenHandler):
         '''
         # Figure out who loses the FP points
         current_fighter = self.__current_fighter()
-        opponent = self.__get_opponent_for(current_fighter)
+        opponent = self.get_opponent_for(current_fighter)
         if opponent is None:
             fp_recipient = current_fighter
         else:
@@ -2307,7 +2362,7 @@ class FightHandler(ScreenHandler):
 
         # Figure out who loses the hit points
         current_fighter = self.__current_fighter()
-        opponent = self.__get_opponent_for(current_fighter)
+        opponent = self.get_opponent_for(current_fighter)
         if opponent is None:
             hp_recipient = current_fighter
         else:
@@ -2360,7 +2415,7 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         current_fighter = self.__current_fighter()
-        opponent = self.__get_opponent_for(current_fighter)
+        opponent = self.get_opponent_for(current_fighter)
 
         if opponent is None:
             now_dead = current_fighter
@@ -2398,7 +2453,7 @@ class FightHandler(ScreenHandler):
     def _draw_screen(self):
         self._window.clear()
         current_fighter = self.__current_fighter()
-        opponent = self.__get_opponent_for(current_fighter)
+        opponent = self.get_opponent_for(current_fighter)
         next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self.__saved_fight['round'],
                                   self.__saved_fight['saved'],
@@ -2463,7 +2518,7 @@ class FightHandler(ScreenHandler):
 
         self._history.insert(0, ' %s did "%s" maneuver' % (current_fighter.name,
                                                            maneuver['text'][0]))
-        opponent = self.__get_opponent_for(current_fighter)
+        opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
@@ -2482,7 +2537,6 @@ class FightHandler(ScreenHandler):
 
         round_before = self.__saved_fight['round']
         keep_going = True
-        print '__modify_index(%d)' % adj
         while keep_going:
             self.__saved_fight['index'] += adj
             if self.__saved_fight['index'] >= len(
@@ -2551,7 +2605,7 @@ class FightHandler(ScreenHandler):
         for index in remove_these:
             del current_fighter.details['timers'][index]
 
-        opponent = self.__get_opponent_for(current_fighter)
+        opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
@@ -2583,7 +2637,7 @@ class FightHandler(ScreenHandler):
         '''
         # Figure out for whom these notes are...
         current_fighter = self.__current_fighter()
-        opponent = self.__get_opponent_for(current_fighter)
+        opponent = self.get_opponent_for(current_fighter)
         if opponent is None:
             notes_recipient = current_fighter
         else:
@@ -2615,9 +2669,10 @@ class FightHandler(ScreenHandler):
                                    self.__saved_fight['index'])
         return True # Keep going
 
-    def __get_opponent_for(self,
-                           fighter # Fighter object
-                          ):
+    # TODO: move this to the public method area
+    def get_opponent_for(self,
+                         fighter # Fighter object
+                        ):
         ''' Returns Fighter object for opponent of 'fighter'. '''
         if fighter is None or fighter.details['opponent'] is None:
             return None
@@ -2685,7 +2740,7 @@ class FightHandler(ScreenHandler):
                                   self.__saved_fight['saved'],
                                   next_PC_name) # next PC
         current_fighter = self.__current_fighter()
-        opponent = self.__get_opponent_for(current_fighter)
+        opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
@@ -2759,7 +2814,7 @@ class FightHandler(ScreenHandler):
         # Who gets the timer?
 
         current_fighter = self.__current_fighter()
-        opponent = self.__get_opponent_for(current_fighter)
+        opponent = self.get_opponent_for(current_fighter)
         if opponent is None:
             timer_recipient = current_fighter
         else:

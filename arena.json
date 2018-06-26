@@ -721,6 +721,7 @@
             "weapon-index" : null,
             "stuff": [],
             "state": "alive",
+            "posture": "standing",
             "current": {
                 "fp": 11, 
                 "iq": 12, 
@@ -751,6 +752,7 @@
             "skills": {},
             "advantages": {},
             "state": "alive",
+            "posture": "standing",
             "current": {
                 "fp": 11, 
                 "iq": 12, 
@@ -781,6 +783,7 @@
             "skills": {},
             "advantages": {},
             "state": "alive",
+            "posture": "standing",
             "current": {
                 "fp": 11, 
                 "iq": 12, 
@@ -811,6 +814,7 @@
             "skills": {},
             "advantages": {},
             "state": "alive",
+            "posture": "standing",
             "current": {
                 "fp": 11, 
                 "iq": 12, 
@@ -841,6 +845,7 @@
             "skills": {},
             "advantages": {},
             "state": "alive",
+            "posture": "standing",
             "current": {
                 "fp": 11, 
                 "iq": 12, 
@@ -871,6 +876,7 @@
             "skills": {},
             "advantages": {},
             "state": "alive",
+            "posture": "standing",
             "current": {
                 "fp": 12, 
                 "iq": 13, 
@@ -906,6 +912,7 @@
                 "advantages": {"combat reflexes": 15,
                                "high pain threshold": 10},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -937,6 +944,7 @@
                 "advantages": {"combat reflexes": 15,
                                "high pain threshold": 10},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -967,6 +975,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -997,6 +1006,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1027,6 +1037,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1057,6 +1068,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1087,6 +1099,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1117,6 +1130,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1150,6 +1164,7 @@
                 "advantages": {"combat reflexes": 15,
                                "high pain threshold": 10},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1181,6 +1196,7 @@
                 "advantages": {"combat reflexes": 15,
                                "high pain threshold": 10},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1211,6 +1227,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1241,6 +1258,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1271,6 +1289,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1301,6 +1320,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1331,6 +1351,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1361,6 +1382,7 @@
                 "skills": {},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 12, 
                     "iq": 13, 
@@ -1412,6 +1434,7 @@
                            "brawling": 12},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 12, 
                     "iq": 13, 
@@ -1471,6 +1494,7 @@
                            "knife": 15},
                 "advantages": {"high pain threshold": 10},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1521,6 +1545,7 @@
                 "advantages": {"combat reflexes": 15,
                                "high pain threshold": 10},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -1578,6 +1603,7 @@
                            "axe/mace": 14},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "st": 10, 
                     "dx": 12, 
@@ -1636,6 +1662,7 @@
                            "axe/mace": 14},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "st": 10, 
                     "dx": 12, 
@@ -1694,6 +1721,7 @@
                            "axe/mace": 14},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "st": 10, 
                     "dx": 12, 
@@ -1752,6 +1780,7 @@
                            "axe/mace": 14},
                 "advantages": {"combat reflexes": 15},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "st": 10, 
                     "dx": 12, 
@@ -1812,6 +1841,7 @@
                            "knife": 15},
                 "advantages": {"high pain threshold": 10},
                 "state": "alive",
+                "posture": "standing",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
