@@ -12,6 +12,7 @@ import random
 import sys
 
 # TODO:
+#   - add explanation for to-hit, damage, and active defense rolls
 #   - dodge and drop (B377)
 #   - add outfit characters and a store for weapons and other items
 #   - damage other than dice
@@ -2570,8 +2571,13 @@ class FightHandler(ScreenHandler):
         ok_to_continue, message = self.__ruleset.can_move_on_to_next_fighter(
                                                                   prev_fighter)
         if not ok_to_continue:
-            self._window_manager.error([message])
-            return True # Keep fighting
+            # NOTE: This should _so_ be in the ruleset but I'm not sure how to
+            # achieve that.  It also makes the assumption that you can't move
+            # on to the next fighter _because_ no maneuver/action has been
+            # performed.
+            return self.__maneuver()
+            #self._window_manager.error([message])
+            #return True # Keep fighting
 
         # remove any expired timers
         # TODO: Fighter.remove_expired_timers()
