@@ -339,8 +339,8 @@ class FightGmWindow(GmWindow):
         self.__OPPONENT_COL = self.__pane_width
         self.__SUMMARY_COL = 2 * self.__pane_width
 
-        self.__FIGHTER_LINE = 4
-        self.__NEXT_LINE = 2
+        self.__FIGHTER_LINE = 3
+        self.__NEXT_LINE = 1
 
         self.__character_window = None
         self.__opponent_window = None
@@ -388,34 +388,41 @@ class FightGmWindow(GmWindow):
     def round_ribbon(self,
                      round_no,
                      saved,
-                     current_fighter, # use in future
-                     next_fighter # use in future
+                     next_PC_name
                     ):
         '''Prints the fight round information at the top of the screen.'''
 
         self._window.move(0, 0)
         self._window.clrtoeol()
+        lines, cols = self._window.getmaxyx()
 
         round_string = 'Round %d' % round_no
         self._window.addstr(0, # y
                             0, # x
                             round_string,
                             curses.A_NORMAL)
+
         if saved:
             string = 'SAVED'
             length = len(string)
-            lines, cols = self._window.getmaxyx()
             self._window.addstr(0, # y
                                 cols - (length + 1), # x
                                 string,
                                 curses.A_BOLD)
+
+        if next_PC_name is not None:
+            self._window.move(self.__NEXT_LINE, 0)
+            self._window.clrtoeol()
+            mode = curses.color_pair(GmWindowManager.MAGENTA_BLACK)
+            mode = mode | curses.A_BOLD
+            self._window.addstr(self.__NEXT_LINE, 0, 'Next PC: %s' % next_PC_name, mode)
+
         self._window.refresh()
 
 
     def show_fighters(self,
                       current_fighter,  # Fighter object
                       opponent,         # Fighter object
-                      next_PC_name,
                       fighters,
                       current_index
                      ):
@@ -424,26 +431,22 @@ class FightGmWindow(GmWindow):
         if he has one.
         '''
 
-        if next_PC_name is not None:
-            self._window.move(self.__NEXT_LINE, self.__FIGHTER_COL)
-            self._window.clrtoeol()
-            self._window.addstr(self.__NEXT_LINE,
-                                self.__FIGHTER_COL,
-                                '(Next: %s)' % next_PC_name)
-
-
         self._window.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
         self._window.clrtoeol()
 
         if self.__show_fighter(current_fighter, self.__FIGHTER_COL):
-            self.__show_fighter_notes(current_fighter, self.__character_window)
+            self.__show_fighter_notes(current_fighter,
+                                      is_attacker=True,
+                                      window=self.__character_window)
 
         if opponent is None:
             self.__opponent_window.clear()
             self.__opponent_window.refresh()
         else:
             if self.__show_fighter(opponent, self.__OPPONENT_COL):
-                self.__show_fighter_notes(opponent, self.__opponent_window)
+                self.__show_fighter_notes(opponent,
+                                          is_attacker=False,
+                                          window=self.__opponent_window)
         self.__show_summary_window(fighters, current_index)
         self.refresh()
 
@@ -533,12 +536,14 @@ class FightGmWindow(GmWindow):
                 fighter.details['permanent']['fp'])
             mode = self.__state_color[fighter_state]
 
+        mode = mode | curses.A_BOLD
         self._window.addstr(self.__FIGHTER_LINE, column, fighter_string, mode)
         return is_alive
 
 
     def __show_fighter_notes(self,
                              fighter,           # Fighter object
+                             is_attacker,       # True | False
                              window             # Curses window for fighter's
                                                 #   notes
                             ):
@@ -547,8 +552,34 @@ class FightGmWindow(GmWindow):
         '''
         window.clear()
         line = 0
-        mode = curses.A_NORMAL
 
+        # Defender
+
+        if is_attacker:
+            mode = curses.A_NORMAL 
+        else:
+            mode = curses.color_pair(GmWindowManager.CYAN_BLACK)
+            mode = mode | curses.A_BOLD
+
+        notes = self.__ruleset.get_fighter_defenses_notes(fighter)
+        for note in notes:
+            window.addstr(line, 0, note, mode)
+            line += 1
+
+        # Attacker
+
+        if is_attacker:
+            mode = curses.color_pair(GmWindowManager.CYAN_BLACK)
+            mode = mode | curses.A_BOLD
+        else:
+            mode = curses.A_NORMAL 
+        notes = self.__ruleset.get_fighter_to_hit_damage_notes(fighter)
+        for note in notes:
+            window.addstr(line, 0, note, mode)
+            line += 1
+
+        # now, back to normal
+        mode = curses.A_NORMAL
         notes = self.__ruleset.get_fighter_notes(fighter)
         for note in notes:
             window.addstr(line, 0, note, mode)
@@ -585,10 +616,15 @@ class GmWindowManager(object):
     ESCAPE = 27 # ASCII value for the escape character
 
     # Foreground / background colors
-    (GREEN_BLACK,   # green text over black background
+    (RED_BLACK,
+     GREEN_BLACK,   # green text over black background
      YELLOW_BLACK,
-     RED_BLACK,
-     RED_WHITE) = range(1, 5)
+     BLUE_BLACK,
+     MAGENTA_BLACK,
+     CYAN_BLACK,
+     WHITE_BLACK,
+     
+     RED_WHITE) = range(1, 9)
 
     # NOTE: remember to call win.refresh()
     # win.addstr(y, x, 'String', attrib)
@@ -629,18 +665,28 @@ class GmWindowManager(object):
                                  -1     # Default background
                                 )
 
+            curses.init_pair(GmWindowManager.RED_BLACK,
+                             curses.COLOR_RED, # fg
+                             curses.COLOR_BLACK) # bg
             curses.init_pair(GmWindowManager.GREEN_BLACK,
                              curses.COLOR_GREEN, # fg
                              curses.COLOR_BLACK) # bg
             curses.init_pair(GmWindowManager.YELLOW_BLACK,
                              curses.COLOR_YELLOW, # fg
                              curses.COLOR_BLACK) # bg
-            curses.init_pair(GmWindowManager.RED_BLACK,
-                             curses.COLOR_RED, # fg
+            curses.init_pair(GmWindowManager.BLUE_BLACK,
+                             curses.COLOR_BLUE, # fg
                              curses.COLOR_BLACK) # bg
-            curses.init_pair(GmWindowManager.RED_WHITE,
-                             curses.COLOR_RED, # fg
-                             curses.COLOR_WHITE) # bg
+            curses.init_pair(GmWindowManager.MAGENTA_BLACK,
+                             curses.COLOR_MAGENTA, # fg
+                             curses.COLOR_BLACK) # bg
+            curses.init_pair(GmWindowManager.CYAN_BLACK,
+                             curses.COLOR_CYAN, # fg
+                             curses.COLOR_BLACK) # bg
+            curses.init_pair(GmWindowManager.WHITE_BLACK,
+                             curses.COLOR_WHITE, # fg
+                             curses.COLOR_BLACK) # bg
+
             self.__stdscr.clear()
             self.__stdscr.refresh()
         except:
@@ -1210,6 +1256,9 @@ class GurpsRuleset(Ruleset):
             if fighter.details['shock'] > shock_amount:
                 fighter.details['shock'] = shock_amount
 
+        # TODO: MAJOR WOUND: if adj > HP/2, -4 to active defenses until
+        # HT roll made
+
         # TODO: WILL roll or lose aim
 
         super(GurpsRuleset, self).adjust_hp(fighter, adj)
@@ -1483,19 +1532,11 @@ class GurpsRuleset(Ruleset):
         print ' GurpsRuleset.get_dodge_skill>' # TODO: remove
         return dodge_skill
 
-
-    def get_fighter_notes(self,
-                          fighter   # Fighter object
-                         ):
-        print '<GurpsRuleset.get_fighter_notes' # TODO: remove
+    def get_fighter_to_hit_damage_notes(self,
+                                        fighter   # Fighter object
+                                       ):
         notes = []
-
-        # First thing: attack, damage, defense
-
         holding_weapon_index = fighter.details['weapon-index']
-        weapon = None
-        skill = None
-        hand_to_hand_info = None
         if holding_weapon_index is None:
             hand_to_hand_info = self.get_hand_to_hand_info(fighter)
             damage_type_str = self.__get_damage_type_str('cr')
@@ -1517,19 +1558,6 @@ class GurpsRuleset(Ruleset):
             weapon = fighter.details['stuff'][holding_weapon_index]
             notes.append('%s' % weapon['name'])
 
-            if weapon['type'] == 'ranged weapon':
-                clip_name = weapon['ammo']['name']
-                clip = None
-                for item in fighter.details['stuff']:
-                    if item['name'] == clip_name:
-                        clip = item
-                        break
-
-                notes.append('  %d/%d shots, %d reloads' % (
-                                    weapon['ammo']['shots_left'],
-                                    weapon['ammo']['shots'],
-                                    (0 if clip is None else clip['count'])))
-                
             if weapon['skill'] in fighter.details['skills']:
                 to_hit = self.get_to_hit(fighter, weapon)
 
@@ -1546,7 +1574,20 @@ class GurpsRuleset(Ruleset):
                     ['%s requires "%s" skill not had by "%s"' %
                      (weapon['name'], weapon['skill'], fighter.name)])
 
-        # Active Defenses
+        return notes
+
+    def get_fighter_defenses_notes(self,
+                                   fighter   # Fighter object
+                                  ):
+        notes = []
+        holding_weapon_index = fighter.details['weapon-index']
+        hand_to_hand_info = None
+        weapon = None
+        if holding_weapon_index is None:
+            hand_to_hand_info = self.get_hand_to_hand_info(fighter)
+        else:
+            weapon = fighter.details['stuff'][holding_weapon_index]
+
 
         dodge_skill = self.get_dodge_skill(fighter)
         if dodge_skill is not None:
@@ -1565,6 +1606,36 @@ class GurpsRuleset(Ruleset):
             parry_skill = self.get_parry_skill(fighter, weapon)
             if parry_skill is not None:
                 notes.append('Parry (B327, B376): %d' % parry_skill)
+
+        return notes
+
+    def get_fighter_notes(self,
+                          fighter   # Fighter object
+                         ):
+        print '<GurpsRuleset.get_fighter_notes' # TODO: remove
+        notes = []
+
+        # First thing: attack, damage, defense
+
+        holding_weapon_index = fighter.details['weapon-index']
+        weapon = None
+        hand_to_hand_info = None
+
+        if holding_weapon_index is not None:
+            weapon = fighter.details['stuff'][holding_weapon_index]
+            if weapon['type'] == 'ranged weapon':
+                clip_name = weapon['ammo']['name']
+                clip = None
+                for item in fighter.details['stuff']:
+                    if item['name'] == clip_name:
+                        clip = item
+                        break
+
+                notes.append('  %d/%d shots, %d reloads' % (
+                                    weapon['ammo']['shots_left'],
+                                    weapon['ammo']['shots'],
+                                    (0 if clip is None else clip['count'])))
+                
 
         # And, now, off to the regular stuff
 
@@ -2232,33 +2303,32 @@ class FightHandler(ScreenHandler):
         height = 1
         width = len(title)
         adj_string = self._window_manager.input_box(height, width, title)
-        adj = int(adj_string)
+        adj = -int(adj_string)  # NOTE: SUBTRACTING the adjustment
         hp_adj = 0
 
         # If FP go below zero, you lose HP along with FP
         # TODO: this -- especially -- should be in Ruleset
-        if adj < 0  and -adj > fp_recipient['current']['fp']:
+        if adj < 0  and -adj > fp_recipient.details['current']['fp']:
             hp_adj = adj
-            if fp_recipient['current']['fp'] > 0:
-                hp_adj += fp_recipient['current']['fp']
+            if fp_recipient.details['current']['fp'] > 0:
+                hp_adj += fp_recipient.details['current']['fp']
 
-        fp_recipient['current']['hp'] += hp_adj
-        fp_recipient['current']['fp'] += adj
-        next_PC_name = self.__next_PC_name()
+        fp_recipient.details['current']['hp'] += hp_adj
+        fp_recipient.details['current']['fp'] += adj
         self._window.show_fighters(current_fighter,
                                    opponent,
-                                   next_PC_name,
                                    self.__fighters,
                                    self.__saved_fight['index'])
         return True # Keep going
 
 
     def __damage_HP(self):
-        print '<FightHandler.__damage_HP' # TODO: remove
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+        print '<FightHandler.__damage_HP' # TODO: remove
+
         # Figure out who loses the hit points
         current_fighter = self.__current_fighter()
         opponent = self.__get_opponent_for(current_fighter)
@@ -2277,34 +2347,33 @@ class FightHandler(ScreenHandler):
         height = 1
         width = len(title)
         adj_string = self._window_manager.input_box(height, width, title)
-        adj = int(adj_string)
+        adj = -int(adj_string) # NOTE: SUBTRACTING the adjustment
+        if adj == 0:
+            return True # Keep fighting
 
-        # NOTE: SUBTRACTING the adjustment
-        self.__ruleset.adjust_hp(hp_recipient, -adj)
+        self.__ruleset.adjust_hp(hp_recipient, adj)
 
         # Record for posterity
         if hp_recipient is opponent:
-            if adj > 0:
+            if adj < 0:
                 self._history.insert(0, ' %s did %d HP to %s' %
                 (current_fighter.name,
-                                                              adj,
+                                                              -adj,
                                                               opponent.name))
             else:
                 self._history.insert(0, ' %s regained %d HP' %
                 (current_fighter.name,
-                                                                -adj))
+                                                                adj))
         else:
-            if adj > 0:
-                self._history.insert(0, ' %s lost %d HP' % (opponent.name,
-                                                            adj))
+            if adj < 0:
+                self._history.insert(0,
+                        ' %s lost %d HP' % (current_fighter.name, -adj))
             else:
-                self._history.insert(0, ' %s regained %d HP' % (opponent.name,
-                                                                -adj))
+                self._history.insert(0,
+                        ' %s regained %d HP' % (current_fighter.name, adj))
 
-        next_PC_name = self.__next_PC_name()
         self._window.show_fighters(current_fighter,
                                    opponent,
-                                   next_PC_name,
                                    self.__fighters,
                                    self.__saved_fight['index'])
         return True # Keep going
@@ -2344,10 +2413,8 @@ class FightHandler(ScreenHandler):
                 # instead of having a global flag
                 self.__ruleset.make_dead()
 
-        next_PC_name = self.__next_PC_name()
         self._window.show_fighters(current_fighter,
                                    opponent,
-                                   next_PC_name,
                                    self.__fighters,
                                    self.__saved_fight['index'])
         print ' FightHandler.__dead (2)>' # TODO: remove
@@ -2359,14 +2426,12 @@ class FightHandler(ScreenHandler):
         self._window.clear()
         current_fighter = self.__current_fighter()
         opponent = self.__get_opponent_for(current_fighter)
+        next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self.__saved_fight['round'],
                                   self.__saved_fight['saved'],
-                                  current_fighter, # up now
-                                  None) #self.xxx) # next PC
-        next_PC_name = self.__next_PC_name()
+                                  next_PC_name)
         self._window.show_fighters(current_fighter,
                                    opponent,
-                                   next_PC_name,
                                    self.__fighters,
                                    self.__saved_fight['index'])
         self._window.command_ribbon(self._choices)
@@ -2439,10 +2504,8 @@ class FightHandler(ScreenHandler):
         self._history.insert(0, ' %s did "%s" maneuver' % (current_fighter.name,
                                                            maneuver['text'][0]))
         opponent = self.__get_opponent_for(current_fighter)
-        next_PC_name = self.__next_PC_name()
         self._window.show_fighters(current_fighter,
                                    opponent,
-                                   next_PC_name,
                                    self.__fighters,
                                    self.__saved_fight['index'])
         return True # Keep going
@@ -2504,10 +2567,10 @@ class FightHandler(ScreenHandler):
 
         # get next fighter
         self.__modify_index(1)
+        next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self.__saved_fight['round'],
                                   self.__saved_fight['saved'],
-                                  None, # current fighter
-                                  None) # next PC
+                                  next_PC_name) # next PC
         # TODO: Fighter.decrement_timers()
         current_fighter = self.__current_fighter()
         for timer in current_fighter.details['timers']:
@@ -2525,11 +2588,9 @@ class FightHandler(ScreenHandler):
         for index in remove_these:
             del current_fighter.details['timers'][index]
 
-        next_PC_name = self.__next_PC_name()
         opponent = self.__get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
                                    opponent,
-                                   next_PC_name,
                                    self.__fighters,
                                    self.__saved_fight['index'])
         return True # Keep going
@@ -2590,7 +2651,6 @@ class FightHandler(ScreenHandler):
         next_PC_name = self.__next_PC_name()
         self._window.show_fighters(current_fighter,
                                    opponent,
-                                   next_PC_name,
                                    self.__fighters,
                                    self.__saved_fight['index'])
         return True # Keep going
@@ -2647,10 +2707,8 @@ class FightHandler(ScreenHandler):
                 opponent.details['opponent'] = {'group': current_fighter.group,
                                                 'name': current_fighter.name}
 
-        next_PC_name = self.__next_PC_name()
         self._window.show_fighters(current_fighter,
                                    opponent,
-                                   next_PC_name,
                                    self.__fighters,
                                    self.__saved_fight['index'])
         return True # Keep going
@@ -2667,16 +2725,14 @@ class FightHandler(ScreenHandler):
             return True # Not going backwards from the origin
 
         self.__modify_index(-1)
+        next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self.__saved_fight['round'],
                                   self.__saved_fight['saved'],
-                                  None, # current fighter
-                                  None) # next PC
+                                  next_PC_name) # next PC
         current_fighter = self.__current_fighter()
-        next_PC_name = self.__next_PC_name()
         opponent = self.__get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
                                    opponent,
-                                   next_PC_name,
                                    self.__fighters,
                                    self.__saved_fight['index'])
         return True # Keep going
@@ -2708,24 +2764,24 @@ class FightHandler(ScreenHandler):
 
 
     def __save(self):
-        print '<FightHandler.__save' # TODO: remove
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+        print '<FightHandler.__save' # TODO: remove
         self.__saved_fight['saved'] = True
+        next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self.__saved_fight['round'],
                                   self.__saved_fight['saved'],
-                                  None, # up now
-                                  None) # next PC
+                                  next_PC_name) # next PC
         return True # Keep going
 
     def __show_history(self):
-        print '<FightHandler.__show_history' # TODO: remove
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+        print '<FightHandler.__show_history' # TODO: remove
         max_lines = curses.LINES - 4
         lines = (max_lines if len(self._history) > max_lines
                            else len(self._history))
@@ -2740,13 +2796,13 @@ class FightHandler(ScreenHandler):
 
 
     def __timer(self):
-        print '<FightHandler.__timer' # TODO: remove
         '''
         Command ribbon method.
         Asks user for information for timer to add to a fighter.
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+        print '<FightHandler.__timer' # TODO: remove
 
         # Who gets the timer?
 
