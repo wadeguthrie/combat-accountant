@@ -455,10 +455,8 @@ class FightGmWindow(GmWindow):
                               fighters,  # array of <Fighter object>
                               current_index,
                               selected_index=None):
-        print '<FightGmWindow.__show_summary_window' # TODO: remove
         self.__summary_window.clear()
         for line, fighter in enumerate(fighters):
-            print '  %r, %r' % (fighter.name, fighter.group) # TODO: remove
             fighter_state = self.__ruleset.get_fighter_state(fighter)
             mode = self.__state_color[fighter_state]
             fighter_string = '%s%s HP:%d/%d' % (
@@ -473,7 +471,6 @@ class FightGmWindow(GmWindow):
             elif fighter.group == 'PCs':
                 mode = mode | curses.A_BOLD
             self.__summary_window.addstr(line, 0, fighter_string, mode)
-        print ' FightGmWindow.__show_summary_window>' # TODO: remove
 
     def start_fight(self):
         lines, cols = self._window.getmaxyx()
@@ -1021,7 +1018,6 @@ class Fighter(object):
                  fighter_details,   # dict as in the JSON
                  ruleset            # a Ruleset object
                 ):
-        print '<Fighter.__init__' # TODO: remove
         self.name = name
         self.group = group
         self.details = fighter_details
@@ -1029,13 +1025,11 @@ class Fighter(object):
 
 
     def add_timer(self, rounds, text):
-        print '<Fighter.add_timer' # TODO: remove
         self.details['timers'].append({'rounds': rounds, 'string': text})
 
     def do_aim(self,
                braced   # True | False
               ):
-        print '<Fighter.do_aim' # TODO: remove
         rounds = self.details['aim']['rounds']
         if rounds == 0:
             self.details['aim']['braced'] = braced
@@ -1044,7 +1038,6 @@ class Fighter(object):
             self.details['aim']['rounds'] += 1
 
     def reset_aim(self):
-        print '<Fighter.reset_aim' # TODO: remove
         self.details['aim']['rounds'] = 0
         self.details['aim']['braced'] = False
 
@@ -1052,7 +1045,6 @@ class Fighter(object):
                              index  # Index of weapon in fighter's 'stuff'
                                     # list.  'None' removes current weapon.
                             ):
-        print '<Fighter.draw_weapon_by_index' # TODO: remove
         '''Draws or removes weapon from sheath or holster.'''
         self.details['weapon-index'] = index
 
@@ -1064,7 +1056,6 @@ class Fighter(object):
 
         Returns index, item
         '''
-        print '<Fighter.get_weapon_by_name' # TODO: remove
         for index, item in enumerate(self.details['stuff']):
             if item['name'] == name:
                 self.details['weapon-index'] = index
@@ -1073,10 +1064,8 @@ class Fighter(object):
 
 
     def get_current_weapon(self):
-        print '<Fighter.get_current_weapon' # TODO: remove
         weapon_index = self.details['weapon-index']
         if weapon_index is None:
-            print ' Fighter.get_current_weapon (1)>' # TODO: remove
             return None, None
         return self.details['stuff'][weapon_index], weapon_index
 
@@ -1228,9 +1217,17 @@ class GurpsRuleset(Ruleset):
                     20: {'thr': {'num_dice': 2, 'plus': -1},
                          'sw':  {'num_dice': 3, 'plus': +2}}}
 
+    posture = {
+        'standing':  {'attack':  0, 'defense':  0, 'target':  0},
+        'crouching': {'attack': -2, 'defense':  0, 'target': -2},
+        'kneeling':  {'attack': -2, 'defense': -2, 'target': -2},
+        'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
+        'sitting':   {'attack': -2, 'defense': -2, 'target': -2},
+        'lying':     {'attack': -4, 'defense': -3, 'target': -2},
+    }
+
 
     def __init__(self, window_manager):
-        print '<GurpsRuleset.__init__' # TODO: remove
         super(GurpsRuleset, self).__init__(window_manager)
         self.__action_performed_by_this_fighter = False
 
@@ -1240,7 +1237,6 @@ class GurpsRuleset(Ruleset):
                   fighter,  # Fighter object
                   adj # the number of HP to gain or lose
                  ):
-        print '<GurpsRuleset.adjust_hp' # TODO: remove
         if adj < 0 and fighter.details['current']['hp'] < 0:
             before_hp = fighter.details['current']['hp']
             before_hp_multiple = (before_hp /
@@ -1267,7 +1263,6 @@ class GurpsRuleset(Ruleset):
                        param, # dict {'fighter': <Fighter object>,
                               #       'posture': <string=new posture>}
                       ):
-        print '<GurpsRuleset.change_posture' # TODO: remove
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -1279,7 +1274,6 @@ class GurpsRuleset(Ruleset):
                param, # dict {'fighter': <Fighter object>,
                       #       'braced': True | False}
               ):
-        print '<GurpsRuleset.do_aim' # TODO: remove
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -1289,7 +1283,6 @@ class GurpsRuleset(Ruleset):
     def do_defense(self,
                    fighter  # Fighter object
                   ):
-        print '<GurpsRuleset.do_defense' # TODO: remove
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -1298,14 +1291,12 @@ class GurpsRuleset(Ruleset):
 
     def do_maneuver(self):
         # TODO: this should be part of a Fighter object rather than here
-        print '<GurpsRuleset.do_maneuver' # TODO: remove
         self.__action_performed_by_this_fighter = True
 
     def get_action_menu(self,
                         fighter # Fighter object
                        ):
         ''' Builds the menu of maneuvers allowed for the fighter. '''
-        print '<GurpsRuleset.get_action_menu' # TODO: remove
 
         action_menu = []
 
@@ -1495,7 +1486,6 @@ class GurpsRuleset(Ruleset):
                                 'doit': None})
         ])
 
-        print ' GurpsRuleset.get_action_menu>' # TODO: remove
         return action_menu
 
 
@@ -1503,9 +1493,7 @@ class GurpsRuleset(Ruleset):
                         fighter,    # Fighter object
                         weapon      # dict
                        ):
-        print '<GurpsRuleset.get_block_skill' # TODO: remove
         if weapon is None or weapon['skill'] not in fighter.details['skills']:
-            print ' GurpsRuleset.get_block_skill (1)>' # TODO: remove
             return None
         skill = fighter.details['skills'][weapon['skill']]
 
@@ -1513,14 +1501,12 @@ class GurpsRuleset(Ruleset):
         if 'combat reflexes' in fighter.details['advantages']:
             block_skill += 1
 
-        print ' GurpsRuleset.get_block_skill (2)>' # TODO: remove
         return block_skill
 
 
     def get_dodge_skill(self,
                         fighter # Fighter object
                        ): # B326
-        print '<GurpsRuleset.get_dodge_skill' # TODO: remove
         dodge_skill = 3 + int(fighter.details['current']['basic-speed'])
         if 'combat reflexes' in fighter.details['advantages']: # B43
             dodge_skill += 1
@@ -1529,7 +1515,6 @@ class GurpsRuleset(Ruleset):
         if (fighter.details['current']['hp'] <
                                     fighter.details['permanent']['hp']/3.0):
             dodge_skill = int(((dodge_skill)/2.0) + 0.5)
-        print ' GurpsRuleset.get_dodge_skill>' # TODO: remove
         return dodge_skill
 
     def get_fighter_to_hit_damage_notes(self,
@@ -1612,7 +1597,6 @@ class GurpsRuleset(Ruleset):
     def get_fighter_notes(self,
                           fighter   # Fighter object
                          ):
-        print '<GurpsRuleset.get_fighter_notes' # TODO: remove
         notes = []
 
         # First thing: attack, damage, defense
@@ -1665,37 +1649,30 @@ class GurpsRuleset(Ruleset):
             notes.append('3d vs. HT or DIE')
             fighter.details['check_for_death'] = False  # Only show/roll once
 
-        print ' GurpsRuleset.get_fighter_notes>' # TODO: remove
         return notes
 
 
     def get_fighter_state(self,
                           fighter   # Fighter object
                          ):
-        print '<GurpsRuleset.get_fighter_state' # TODO: remove
         state = super(GurpsRuleset, self).get_fighter_state(fighter)
         if state is not None:
-            print ' GurpsRuleset.get_fighter_state (1)>' # TODO: remove
             return state
 
         if (fighter.details['current']['fp'] <= 0 or
                                     fighter.details['current']['hp'] <= 0):
-            print ' GurpsRuleset.get_fighter_state (2)>' # TODO: remove
             return Ruleset.FIGHTER_STATE_CRITICAL
 
         if (fighter.details['current']['hp'] <
                                     fighter.details['permanent']['hp']):
-            print ' GurpsRuleset.get_fighter_state (3)>' # TODO: remove
             return Ruleset.FIGHTER_STATE_INJURED
 
-        print ' GurpsRuleset.get_fighter_state (4)>' # TODO: remove
         return Ruleset.FIGHTER_STATE_HEALTHY
 
 
     def get_hand_to_hand_info(self,
                               fighter   # Fighter object
                              ):
-        print '<GurpsRuleset.get_hand_to_hand_info' # TODO: remove
         result = {
             'punch_skill': fighter.details['current']['dx'],
             'punch_string': 'Punch (B271, B370)',
@@ -1768,7 +1745,6 @@ class GurpsRuleset(Ruleset):
         if 'combat reflexes' in fighter.details['advantages']:
             result['parry_skill'] += 1
 
-        print ' GurpsRuleset.get_hand_to_hand_info>' # TODO: remove
         return result
 
 
@@ -1776,9 +1752,7 @@ class GurpsRuleset(Ruleset):
                         fighter,    # Fighter object
                         weapon      # dict
                        ):
-        print '<GurpsRuleset.get_parry_skill' # TODO: remove
         if weapon is None or weapon['skill'] not in fighter.details['skills']:
-            print ' GurpsRuleset.get_parry_skill (1)>' # TODO: remove
             return None
         skill = fighter.details['skills'][weapon['skill']]
 
@@ -1788,7 +1762,6 @@ class GurpsRuleset(Ruleset):
         if 'combat reflexes' in fighter.details['advantages']:
             parry_skill += 1
 
-        print ' GurpsRuleset.get_parry_skill (2)>' # TODO: remove
         return parry_skill
 
 
@@ -1796,14 +1769,11 @@ class GurpsRuleset(Ruleset):
                    fighter, # Fighter object
                    weapon
                   ):
-        print '<GurpsRuleset.get_to_hit' # TODO: remove
         if weapon['skill'] not in fighter.details['skills']:
-            print ' GurpsRuleset.get_to_hit (1)>' # TODO: remove
             return None
         skill = fighter.details['skills'][weapon['skill']]
 
         if 'acc' not in weapon:
-            print ' GurpsRuleset.get_to_hit (2)>' # TODO: remove
             return skill
 
         if fighter.details['aim']['rounds'] > 0:
@@ -1816,7 +1786,6 @@ class GurpsRuleset(Ruleset):
         if fighter.details['aim']['rounds'] > 2:
             skill += 1
 
-        print ' GurpsRuleset.get_to_hit (3)>' # TODO: remove
         return skill
 
 
@@ -1826,7 +1795,6 @@ class GurpsRuleset(Ruleset):
         '''
         Removes all injury (and their side-effects) from a fighter.
         '''
-        print '<GurpsRuleset.heal_fighter' # TODO: remove
         super(GurpsRuleset, self).heal_fighter(fighter_details)
         fighter_details['shock'] = 0
         fighter_details['last_negative_hp'] = 0
@@ -1836,7 +1804,6 @@ class GurpsRuleset(Ruleset):
     def initiative(self,
                    fighter # Fighter object
                   ):
-        print '<GurpsRuleset.initiative' # TODO: remove
         return (fighter.details['current']['basic-speed'],
                 fighter.details['current']['dx'],
                 Ruleset.roll(1, 6)
@@ -1844,12 +1811,10 @@ class GurpsRuleset(Ruleset):
 
 
     def make_dead(self):
-        print '<GurpsRuleset.make_dead' # TODO: remove
         self.__action_performed_by_this_fighter = True
 
 
     def new_fight(self, fighter):
-        print '<GurpsRuleset.new_fight' # TODO: remove
         '''
         Removes all the stuff from the old fight except injury.
         '''
@@ -1863,7 +1828,6 @@ class GurpsRuleset(Ruleset):
                      prev_fighter   # Fighter object of current (before moving
                                     # on) fighter
                     ):
-        print '<GurpsRuleset.next_fighter' # TODO: remove
         # Force some maneuver for the current fighter before moving on.  That
         # way, we can look at the defense and movement restrictions (as well
         # as a bunch of other stuff, like dealing with 'aim').
@@ -1881,7 +1845,6 @@ class GurpsRuleset(Ruleset):
     def __do_attack(self,
                     fighter # Fighter object for attacker
                    ):
-        print '<GurpsRuleset.__do_attack' # TODO: remove
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -1897,7 +1860,6 @@ class GurpsRuleset(Ruleset):
     def __do_reload(self,
                     fighter # Fighter object for attacker
                    ):
-        print '<GurpsRuleset.__do_reload' # TODO: remove
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -1920,7 +1882,6 @@ class GurpsRuleset(Ruleset):
     def __draw_weapon(self,
                       param # dict: {'weapon': index, 'fighter': Fighter obj}
                      ):
-        print '<GurpsRuleset.__draw_weapon' # TODO: remove
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -1931,13 +1892,11 @@ class GurpsRuleset(Ruleset):
     def __get_damage_type_str(self,
                               damage_type
                              ):
-        print '<GurpsRuleset.__get_damage_type_str' # TODO: remove
         if damage_type in GurpsRuleset.damage_mult:
             damage_type_str = '%s (x%.1f)' % (
                     damage_type, GurpsRuleset.damage_mult[damage_type])
         else:
             damage_type_str = '%s' % damage_type
-        print ' GurpsRuleset.__get_damage_type_str>' # TODO: remove
         return damage_type_str
 
 class ScreenHandler(object):
@@ -2167,7 +2126,6 @@ class FightHandler(ScreenHandler):
                  ruleset,
                  campaign_debug_json
                 ):
-        print '<FightHandler.__init__' # TODO: remove
         super(FightHandler, self).__init__(window_manager, campaign_debug_json)
         self._window = self._window_manager.get_fight_gm_window(ruleset)
         self.__ruleset = ruleset
@@ -2254,7 +2212,6 @@ class FightHandler(ScreenHandler):
         self._window.start_fight()
 
     def handle_user_input_until_done(self):
-        print '<FightHandler.handle_user_input_until_done' # TODO: remove
         super(FightHandler, self).handle_user_input_until_done()
 
         # When done, move current fight to 'dead-monsters'
@@ -2268,19 +2225,16 @@ class FightHandler(ScreenHandler):
     #
 
     def __current_fighter(self):
-        print '<FightHandler.__current_fighter' # TODO: remove
         '''
         Returns the Fighter object of the current fighter.
         '''
         result = self.__fighters[ self.__saved_fight['index'] ]
-        print ' FightHandler.__current_fighter>' # TODO: remove
         return result
 
 
 
     # TODO: all of FP belongs in Ruleset
     def __damage_FP(self):
-        print '<FightHandler.__damage_FP' # TODO: remove
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -2327,7 +2281,6 @@ class FightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        print '<FightHandler.__damage_HP' # TODO: remove
 
         # Figure out who loses the hit points
         current_fighter = self.__current_fighter()
@@ -2380,7 +2333,6 @@ class FightHandler(ScreenHandler):
 
     # TODO: should be alive, unconscious, dead
     def __dead(self):
-        print '<FightHandler.__dead' # TODO: remove
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -2397,7 +2349,6 @@ class FightHandler(ScreenHandler):
                                                  now_dead_menu,
                                                  1) # assume it's the opponent
         if now_dead is None:
-            print ' FightHandler.__dead (1)>' # TODO: remove
             return True # Keep fighting
 
         now_dead.details['alive'] = not now_dead.details['alive'] # Toggle
@@ -2417,12 +2368,10 @@ class FightHandler(ScreenHandler):
                                    opponent,
                                    self.__fighters,
                                    self.__saved_fight['index'])
-        print ' FightHandler.__dead (2)>' # TODO: remove
         return True # Keep going
 
 
     def _draw_screen(self):
-        print '<FightHandler._draw_screen' # TODO: remove
         self._window.clear()
         current_fighter = self.__current_fighter()
         opponent = self.__get_opponent_for(current_fighter)
@@ -2441,7 +2390,6 @@ class FightHandler(ScreenHandler):
                               name,     # string
                               group     # string
                              ):
-        print '<FightHandler.__get_fighter_details' # TODO: remove
         ''' Used for constructing a Fighter from the JSON information. '''
         if group in self.__world['monsters']:
             creatures = self.__world['monsters'][group]
@@ -2457,7 +2405,6 @@ class FightHandler(ScreenHandler):
                              name,  # name of a fighter in that group
                              group  # 'PCs' or group under world['monsters']
                             ):
-        print '<FightHandler.__get_fighter_object' # TODO: remove
         for fighter in self.__fighters:
             if fighter.group == group and fighter.name == name:
                 return fighter
@@ -2469,14 +2416,12 @@ class FightHandler(ScreenHandler):
     def __is_alive(self,
                    fighter  # Fighter object
                   ):
-        print '<FightHandler.__is_alive' # TODO: remove
         if fighter.details['alive'] and (fighter.details['current']['hp'] > 0):
             return True
         return False
 
 
     def __maneuver(self):
-        print '<FightHandler.__maneuver' # TODO: remove
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -2514,7 +2459,6 @@ class FightHandler(ScreenHandler):
     def __modify_index(self,
                        adj      # 1 or -1, adjust the index by this
                       ):
-        print '<FightHandler.__modify_index' # TODO: remove
         '''
         Increment or decrement the index.  Only stop on living creatures.
         '''
@@ -2545,7 +2489,6 @@ class FightHandler(ScreenHandler):
 
 
     def __next_fighter(self):
-        print '<FightHandler.__next_fighter' # TODO: remove
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -2596,7 +2539,6 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
     def __next_PC_name(self):
-        print '<FightHandler.__next_PC_name' # TODO: remove
         '''
         Finds the name of the next PC to fight _after_ the current index.
         '''
@@ -2611,12 +2553,10 @@ class FightHandler(ScreenHandler):
                         self.__saved_fight['fighters'][next_index]['name'])
                 break
             next_index += 1
-        print ' FightHandler.__next_PC_name>' # TODO: remove
         return next_PC_name
 
 
     def __notes(self):
-        print '<FightHandler.__notes' # TODO: remove
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -2659,20 +2599,16 @@ class FightHandler(ScreenHandler):
                            fighter # Fighter object
                           ):
         ''' Returns Fighter object for opponent of 'fighter'. '''
-        print '<FightHandler.__get_opponent_for' # TODO: remove
         if fighter is None or fighter.details['opponent'] is None:
-            print ' FightHandler.__get_opponent_for (1)>' # TODO: remove
             return None
 
         opponent = self.__get_fighter_object(
                                         fighter.details['opponent']['name'],
                                         fighter.details['opponent']['group'])
-        print ' FightHandler.__get_opponent_for (2)>' # TODO: remove
         return opponent
 
 
     def __pick_opponent(self):
-        print '<FightHandler.__pick_opponent' # TODO: remove
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -2715,7 +2651,6 @@ class FightHandler(ScreenHandler):
 
 
     def __prev_fighter(self):
-        print '<FightHandler.__prev_fighter' # TODO: remove
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -2739,7 +2674,6 @@ class FightHandler(ScreenHandler):
 
 
     def __quit(self):
-        print '<FightHandler.__quit' # TODO: remove
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -2768,7 +2702,6 @@ class FightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        print '<FightHandler.__save' # TODO: remove
         self.__saved_fight['saved'] = True
         next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self.__saved_fight['round'],
@@ -2781,7 +2714,6 @@ class FightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        print '<FightHandler.__show_history' # TODO: remove
         max_lines = curses.LINES - 4
         lines = (max_lines if len(self._history) > max_lines
                            else len(self._history))
@@ -2802,7 +2734,6 @@ class FightHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        print '<FightHandler.__timer' # TODO: remove
 
         # Who gets the timer?
 
