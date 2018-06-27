@@ -12,7 +12,6 @@ import random
 import sys
 
 # TODO:
-#   - add explanation for to-hit, damage, and active defense rolls
 #   - dodge and drop (B377)
 #   - add outfit characters and a store for weapons and other items
 #   - damage other than dice
@@ -1778,9 +1777,12 @@ class GurpsRuleset(Ruleset):
             'why': []
         }
 
+        # Using separate arrays so that I can print them out in a different
+        # order than I calculate them.
         punch_why = []
+        punch_damage_why = []
         kick_why = []
-        damage_why = []
+        kick_damage_why = []
         parry_why = []
 
         plus_per_die_of_thrust = 0
@@ -1910,13 +1912,13 @@ class GurpsRuleset(Ruleset):
 
         st = fighter.details['current']['st']
 
-        damage_why.append(
+        kick_damage_why.append(
             'Kick damage(B271)=thr -- plug ST(%d) into table on B16' % st)
 
         result['kick_damage'] = copy.deepcopy(
                                         GurpsRuleset.melee_damage[st]['thr'])
         kick_damage_modified = False
-        damage_why.append('  damage: %dd%+d' % (
+        kick_damage_why.append('  damage: %dd%+d' % (
                                             result['kick_damage']['num_dice'],
                                             result['kick_damage']['plus']))
 
@@ -1925,29 +1927,32 @@ class GurpsRuleset(Ruleset):
             result['kick_damage']['plus'] += (
                                         result['kick_damage']['num_dice'] *
                                         plus_per_die_of_thrust)
-            damage_why.append('  %+d/die due to %s' % (
+            kick_damage_why.append('  %+d/die due to %s' % (
                                                 plus_per_die_of_thrust,
                                                 plus_per_die_of_thrust_string))
 
         if kick_damage_modified:
-            damage_why.append('  ...for a kick damage total = %dd%+d' % (
+            kick_damage_why.append('  ...for a kick damage total = %dd%+d' % (
                                             result['kick_damage']['num_dice'],
                                             result['kick_damage']['plus']))
 
         result['punch_damage'] = copy.deepcopy(result['kick_damage'])
         result['punch_damage']['plus'] -= 1
-        damage_why.append('Punch damage(B271) = thr-1 = "kick" - 1')
-        damage_why.append('  ...for a punch damage total = %dd%+d' % (
+        punch_damage_why.append('Punch damage(B271) = thr-1 = "kick" - 1')
+        punch_damage_why.append('  ...for a punch damage total = %dd%+d' % (
                                         result['punch_damage']['num_dice'],
                                         result['punch_damage']['plus']))
 
 
         # Assemble the 'why'
 
+        # Using this order because that's the order the data is shown in the
+        # regular window.
         result['why'].extend(parry_why)
         result['why'].extend(punch_why)
+        result['why'].extend(punch_damage_why)
         result['why'].extend(kick_why)
-        result['why'].extend(damage_why)
+        result['why'].extend(kick_damage_why)
 
         return result
 
@@ -3021,10 +3026,10 @@ class FightHandler(ScreenHandler):
             hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(why_target)
             pseudo_menu = [(x, 0) for x in hand_to_hand_info['why']]
         else:
-            weapon = current_fighter.details['stuff'][holding_weapon_index]
+            weapon = why_target.details['stuff'][holding_weapon_index]
 
-            if weapon['skill'] in current_fighter.details['skills']:
-                ignore, to_hit_why = self.__ruleset.get_to_hit(current_fighter,
+            if weapon['skill'] in why_target.details['skills']:
+                ignore, to_hit_why = self.__ruleset.get_to_hit(why_target,
                                                                weapon)
                 pseudo_menu = [(x, 0) for x in to_hit_why]
 
@@ -3032,8 +3037,9 @@ class FightHandler(ScreenHandler):
                 # there're no mods to damage
 
         ignore, defense_why = self.__ruleset.get_fighter_defenses_notes(
-                                                            current_fighter)
-        pseudo_menu.extend([(x, 0) for x in defense_why])
+                                                            why_target)
+        #pseudo_menu.extend([(x, 0) for x in defense_why])
+        pseudo_menu = [(x, 0) for x in defense_why] + pseudo_menu
 
         ignore = self._window_manager.menu(
                     'How the Numbers Were Calculated', pseudo_menu)

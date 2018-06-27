@@ -224,28 +224,29 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset)
-        dodge_skill = self.__ruleset.get_dodge_skill(vodou_priest_fighter)
+        dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(
+                                                        vodou_priest_fighter)
         assert dodge_skill == 9
 
         bokor_fighter = gm.Fighter('Bokor',
                                    'group',
                                    copy.deepcopy(self.__bokor_fighter),
                                    self.__ruleset)
-        dodge_skill = self.__ruleset.get_dodge_skill(bokor_fighter)
+        dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(bokor_fighter)
         assert dodge_skill == 9
 
         tank_fighter = gm.Fighter('Tank',
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset)
-        dodge_skill = self.__ruleset.get_dodge_skill(tank_fighter)
+        dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(tank_fighter)
         assert dodge_skill == 9
 
         thief_fighter = gm.Fighter('Thief',
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset)
-        dodge_skill = self.__ruleset.get_dodge_skill(thief_fighter)
+        dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(thief_fighter)
         assert dodge_skill == 8
 
     def test_get_block_skill(self):
@@ -255,32 +256,33 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset)
-        block_skill = self.__ruleset.get_block_skill(vodou_priest_fighter,
-                                                     None)
+        block_skill, block_why = self.__ruleset.get_block_skill(
+                                                        vodou_priest_fighter,
+                                                        None)
         assert block_skill == None
 
         bokor_fighter = gm.Fighter('Bokor',
                                    'group',
                                    copy.deepcopy(self.__bokor_fighter),
                                    self.__ruleset)
-        block_skill = self.__ruleset.get_block_skill(bokor_fighter,
-                                                     None)
+        block_skill, block_why = self.__ruleset.get_block_skill(bokor_fighter,
+                                                                None)
         assert block_skill == None
 
         tank_fighter = gm.Fighter('Tank',
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset)
-        block_skill = self.__ruleset.get_block_skill(tank_fighter,
-                                                     None)
+        block_skill, block_why = self.__ruleset.get_block_skill(tank_fighter,
+                                                                None)
         assert block_skill == None
 
         thief_fighter = gm.Fighter('Thief',
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset)
-        block_skill = self.__ruleset.get_block_skill(thief_fighter,
-                                                     None)
+        block_skill, block_why = self.__ruleset.get_block_skill(thief_fighter,
+                                                                None)
         assert block_skill == None
 
     def test_get_parry_skill(self):
@@ -291,9 +293,9 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                     'group',
                                     copy.deepcopy(self.__vodou_priest_fighter),
                                     self.__ruleset)
-        parry_skill = self.__ruleset.get_parry_skill(
-                                    vodou_priest_fighter,
-                                    weapon)
+        parry_skill, parry_why = self.__ruleset.get_parry_skill(
+                                                    vodou_priest_fighter,
+                                                    weapon)
         assert parry_skill is None
 
         # Unarmed
@@ -302,7 +304,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__bokor_fighter),
                                    self.__ruleset)
-        parry_skill = self.__ruleset.get_parry_skill(bokor_fighter, weapon)
+        parry_skill, parry_why = self.__ruleset.get_parry_skill(bokor_fighter,
+                                                                weapon)
         assert parry_skill is None
 
         # Unarmed
@@ -311,7 +314,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset)
-        parry_skill = self.__ruleset.get_parry_skill(tank_fighter, weapon)
+        parry_skill, parry_why = self.__ruleset.get_parry_skill(tank_fighter,
+                                                                weapon)
         assert parry_skill is None
 
         # Armed (sick stick)
@@ -321,7 +325,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   self.__ruleset)
         weapon_index, weapon  = tank_fighter.get_weapon_by_name('sick stick')
         tank_fighter.draw_weapon_by_index(weapon_index)
-        parry_skill = self.__ruleset.get_parry_skill(tank_fighter, weapon)
+        parry_skill, parry_why = self.__ruleset.get_parry_skill(tank_fighter,
+                                                                weapon)
         assert parry_skill == 11
 
         # Unarmed
@@ -330,7 +335,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset)
-        parry_skill = self.__ruleset.get_parry_skill(thief_fighter, weapon)
+        parry_skill, parry_why = self.__ruleset.get_parry_skill(thief_fighter,
+                                                                weapon)
         assert parry_skill is None
 
         # Armed (knife)
@@ -340,7 +346,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    self.__ruleset)
         weapon_index, weapon = thief_fighter.get_weapon_by_name('knife, large')
         thief_fighter.draw_weapon_by_index(weapon_index)
-        parry_skill = self.__ruleset.get_parry_skill(thief_fighter, weapon)
+        parry_skill, parry_why = self.__ruleset.get_parry_skill(thief_fighter,
+                                                                weapon)
         assert parry_skill == 9
 
     def test_get_hand_to_hand_info(self):
