@@ -562,7 +562,7 @@ class FightGmWindow(GmWindow):
             mode = curses.color_pair(GmWindowManager.CYAN_BLACK)
             mode = mode | curses.A_BOLD
 
-        notes = self.__ruleset.get_fighter_defenses_notes(fighter)
+        notes, why = self.__ruleset.get_fighter_defenses_notes(fighter)
         for note in notes:
             window.addstr(line, 0, note, mode)
             line += 1
@@ -1544,34 +1544,75 @@ class GurpsRuleset(Ruleset):
                         weapon      # dict
                        ):
         if weapon is None or weapon['skill'] not in fighter.details['skills']:
-            return None
+            return None, None
         skill = fighter.details['skills'][weapon['skill']]
+        block_why = []
+        block_skill_modified = False
 
         block_skill = 3 + int(skill * 0.5)
+        block_why.append('Block (B327, B375) w/%s @ (skill(%d)/2)+3 = %d' % (
+                                                                weapon['name'],
+                                                                skill,
+                                                                block_skill))
+
         if 'combat reflexes' in fighter.details['advantages']:
+            block_skill_modified = True
+            block_why.append('  +1 due to combat reflexes (B43)')
             block_skill += 1
 
         posture_mods = self.get_posture_mods(fighter.details['posture'])
-        block_skill += 0 if posture_mods is None else posture_mods['defense']
+        if posture_mods is not None and posture_mods['defense'] != 0:
+            block_skill_modified = True
+            block_skill += posture_mods['defense']
+            block_why.append('  %+d due to %s posture' % 
+                                                (posture_mods['defense'],
+                                                 fighter.details['posture']))
 
-        return block_skill
+        if block_skill_modified:
+            block_why.append('  ...for a block skill total = %d' % block_skill)
+
+        return block_skill, block_why
 
 
     def get_dodge_skill(self,
                         fighter # Fighter object
                        ): # B326
+        dodge_why = []
+        dodge_skill_modified = False
+
         dodge_skill = 3 + int(fighter.details['current']['basic-speed'])
+        dodge_why.append('Dodge (B326) @ int(basic-speed(%f))+3 = %d' % (
+                                fighter.details['current']['basic-speed'],
+                                dodge_skill))
+
         if 'combat reflexes' in fighter.details['advantages']: # B43
+            dodge_skill_modified = True
+            dodge_why.append('  +1 due to combat reflexes (B43)')
             dodge_skill += 1
 
         posture_mods = self.get_posture_mods(fighter.details['posture'])
-        dodge_skill += 0 if posture_mods is None else posture_mods['defense']
+        if posture_mods is not None and posture_mods['defense'] != 0:
+            dodge_skill_modified = True
+            dodge_skill += posture_mods['defense']
+            dodge_why.append('  %+d due to %s posture' % 
+                                                (posture_mods['defense'],
+                                                 fighter.details['posture']))
 
         # B327
         if (fighter.details['current']['hp'] <
                                     fighter.details['permanent']['hp']/3.0):
+            dodge_skill_modified = True
+            dodge_why.append(
+                '  skill(%d)/2 (round up) due to hp(%d) < perm-hp(%d)/3' %
+                                        (dodge_skill,
+                                         fighter.details['current']['hp'],
+                                         fighter.details['permanent']['hp']))
             dodge_skill = int(((dodge_skill)/2.0) + 0.5)
-        return dodge_skill
+
+        if dodge_skill_modified:
+            dodge_why.append('  ...for a dodge skill total = %d' % dodge_skill)
+
+        return dodge_skill, dodge_why
 
     def get_fighter_to_hit_damage_notes(self,
                                         fighter   # Fighter object
@@ -1625,6 +1666,7 @@ class GurpsRuleset(Ruleset):
                                    fighter   # Fighter object
                                   ):
         notes = []
+        why = []
         holding_weapon_index = fighter.details['weapon-index']
         hand_to_hand_info = None
         weapon = None
@@ -1634,25 +1676,29 @@ class GurpsRuleset(Ruleset):
             weapon = fighter.details['stuff'][holding_weapon_index]
 
 
-        dodge_skill = self.get_dodge_skill(fighter)
+        dodge_skill, dodge_why = self.get_dodge_skill(fighter)
         if dodge_skill is not None:
-            notes.append('Dodge (B326): %d' % dodge_skill)
+            dodge_string = 'Dodge (B326): %d' % dodge_skill
+            why.extend(dodge_why)
+            notes.append(dodge_string)
 
         if weapon is None: # Unarmed Parry
             notes.append('%s: %d' % (hand_to_hand_info['parry_string'],
                                      hand_to_hand_info['parry_skill']))
 
         elif weapon['type'] == 'shield': # NOTE: cloaks also have this 'type'
-            block_skill = self.get_block_skill(fighter, weapon)
+            block_skill, block_why = self.get_block_skill(fighter, weapon)
             if block_skill is not None:
+                why.extend(block_why)
                 notes.append('Block (B327, B375): %d' % block_skill)
 
         elif weapon['type'] == 'melee weapon':
-            parry_skill = self.get_parry_skill(fighter, weapon)
+            parry_skill, parry_why = self.get_parry_skill(fighter, weapon)
             if parry_skill is not None:
+                why.extend(parry_why)
                 notes.append('Parry (B327, B376): %d' % parry_skill)
 
-        return notes
+        return notes, why
 
     def get_fighter_notes(self,
                           fighter   # Fighter object
@@ -1911,19 +1957,38 @@ class GurpsRuleset(Ruleset):
                         weapon      # dict
                        ):
         if weapon is None or weapon['skill'] not in fighter.details['skills']:
-            return None
+            return None, None
         skill = fighter.details['skills'][weapon['skill']]
+        parry_why = []
+        parry_skill_modified = False
 
         parry_skill = 3 + int(skill * 0.5)
+        parry_why.append('Parry (B327, B376) w/%s @ (skill(%d)/2)+3 = %d' % (
+                                                                weapon['name'],
+                                                                skill,
+                                                                parry_skill))
+
         if 'parry' in weapon:
             parry_skill += weapon['parry']
+            parry_skill_modified = True
+            parry_why.append('  %+d due to weapon modifiers' % weapon['parry'])
+
         if 'combat reflexes' in fighter.details['advantages']:
+            parry_skill_modified = True
+            parry_why.append('  +1 due to combat reflexes (B43)')
             parry_skill += 1
 
         posture_mods = self.get_posture_mods(fighter.details['posture'])
-        parry_skill += 0 if posture_mods is None else posture_mods['defense']
+        if posture_mods is not None and posture_mods['defense'] != 0:
+            parry_skill_modified = True
+            parry_skill += posture_mods['defense']
+            parry_why.append('  %+d due to %s posture' % 
+                                                (posture_mods['defense'],
+                                                 fighter.details['posture']))
+        if parry_skill_modified:
+            parry_why.append('  ...for a parry skill total = %d' % parry_skill)
 
-        return parry_skill
+        return parry_skill, parry_why
 
     def get_posture_mods(self,
                          posture    # string: 'standing' | ...
@@ -2955,20 +3020,20 @@ class FightHandler(ScreenHandler):
         if holding_weapon_index is None:
             hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(why_target)
             pseudo_menu = [(x, 0) for x in hand_to_hand_info['why']]
-            ignore = self._window_manager.menu(
-                        'How the Numbers Were Calculated', pseudo_menu)
-        # TODO: else
         else:
             weapon = current_fighter.details['stuff'][holding_weapon_index]
 
             if weapon['skill'] in current_fighter.details['skills']:
-                to_hit, to_hit_why = self.__ruleset.get_to_hit(current_fighter,
+                ignore, to_hit_why = self.__ruleset.get_to_hit(current_fighter,
                                                                weapon)
                 pseudo_menu = [(x, 0) for x in to_hit_why]
 
-                # NOTE: Won't do damage at this point since there're no mods
+                # NOTE: Won't include damage in 'why' at this point since
+                # there're no mods to damage
 
-            # TODO: def get_fighter_defenses_notes(self,
+        ignore, defense_why = self.__ruleset.get_fighter_defenses_notes(
+                                                            current_fighter)
+        pseudo_menu.extend([(x, 0) for x in defense_why])
 
         ignore = self._window_manager.menu(
                     'How the Numbers Were Calculated', pseudo_menu)
