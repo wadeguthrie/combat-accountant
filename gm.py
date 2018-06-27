@@ -1600,7 +1600,7 @@ class GurpsRuleset(Ruleset):
             notes.append('%s' % weapon['name'])
 
             if weapon['skill'] in fighter.details['skills']:
-                to_hit = self.get_to_hit(fighter, weapon)
+                to_hit, why = self.get_to_hit(fighter, weapon)
 
                 damage_type = ('' if 'type' not in weapon['damage']
                                     else weapon['damage']['type'])
@@ -1826,10 +1826,10 @@ class GurpsRuleset(Ruleset):
             result['punch_skill'] += posture_mods['attack']
             result['kick_skill'] += posture_mods['attack']
 
-            punch_why.append(' %+d due to %s posture' % 
+            punch_why.append('  %+d due to %s posture' % 
                                                 (posture_mods['attack'],
                                                  fighter.details['posture']))
-            kick_why.append(' %+d due to %s posture' % 
+            kick_why.append('  %+d due to %s posture' % 
                                                 (posture_mods['attack'],
                                                  fighter.details['posture']))
 
@@ -1854,10 +1854,10 @@ class GurpsRuleset(Ruleset):
         if 'combat reflexes' in fighter.details['advantages']:
             parry_damage_modified = True
             result['parry_skill'] += 1
-            parry_why.append(' +1 due to combat reflexes (B43)')
+            parry_why.append('  +1 due to combat reflexes (B43)')
 
         if parry_damage_modified:
-            parry_why.append(' ...for a parry total = %d' %
+            parry_why.append('  ...for a parry total = %d' %
                                                         result['parry_skill'])
 
         # Damage
@@ -1870,7 +1870,7 @@ class GurpsRuleset(Ruleset):
         result['kick_damage'] = copy.deepcopy(
                                         GurpsRuleset.melee_damage[st]['thr'])
         kick_damage_modified = False
-        damage_why.append(' damage: %dd%+d' % (
+        damage_why.append('  damage: %dd%+d' % (
                                             result['kick_damage']['num_dice'],
                                             result['kick_damage']['plus']))
 
@@ -1879,19 +1879,19 @@ class GurpsRuleset(Ruleset):
             result['kick_damage']['plus'] += (
                                         result['kick_damage']['num_dice'] *
                                         plus_per_die_of_thrust)
-            damage_why.append(' %+d/die due to %s' % (
+            damage_why.append('  %+d/die due to %s' % (
                                                 plus_per_die_of_thrust,
                                                 plus_per_die_of_thrust_string))
 
         if kick_damage_modified:
-            damage_why.append(' ...for a kick damage total = %dd%+d' % (
+            damage_why.append('  ...for a kick damage total = %dd%+d' % (
                                             result['kick_damage']['num_dice'],
                                             result['kick_damage']['plus']))
 
         result['punch_damage'] = copy.deepcopy(result['kick_damage'])
         result['punch_damage']['plus'] -= 1
         damage_why.append('Punch damage(B271) = thr-1 = "kick" - 1')
-        damage_why.append(' ...for a punch damage total = %dd%+d' % (
+        damage_why.append('  ...for a punch damage total = %dd%+d' % (
                                         result['punch_damage']['num_dice'],
                                         result['punch_damage']['plus']))
 
@@ -1935,27 +1935,42 @@ class GurpsRuleset(Ruleset):
                    fighter, # Fighter object
                    weapon
                   ):
+        '''
+        Returns tuple (skill, why) where:
+            'skill' (number) is the value the attacker needs to roll to hit
+                    the target.
+            'why'   is an array of strings describing why the to-hit numbers
+                    are what they are.
+        '''
         if weapon['skill'] not in fighter.details['skills']:
             return None
+
+        why = []
         skill = fighter.details['skills'][weapon['skill']]
+        why.append('Weapon %s w/skill = %d' % (weapon['name'], skill))
 
-        if 'acc' not in weapon:
-            return skill
-
-        if fighter.details['aim']['rounds'] > 0:
-            skill += weapon['acc']
-            if fighter.details['aim']['braced']:
+        if 'acc' in weapon:
+            if fighter.details['aim']['rounds'] > 0:
+                why.append('  +%d due to aiming for 1' % weapon['acc'])
+                skill += weapon['acc']
+                if fighter.details['aim']['braced']:
+                    why.append('  +1 due to bracing')
+                    skill += 1
+            if fighter.details['aim']['rounds'] == 2:
+                why.append('  +1 due to one more round of aiming')
                 skill += 1
-        if fighter.details['aim']['rounds'] > 1:
-            skill += 1
 
-        if fighter.details['aim']['rounds'] > 2:
-            skill += 1
+            elif fighter.details['aim']['rounds'] > 2:
+                why.append('  +2 due to 2 or more additional rounds of aiming')
+                skill += 2
 
         # Posture
 
         posture_mods = self.get_posture_mods(fighter.details['posture'])
-        skill += 0 if posture_mods is None else posture_mods['attack']
+        if posture_mods is not None and posture_mods['attack'] != 0:
+            why.append('  %+d due %s posture' % (posture_mods['attack'],
+                                                 fighter.details['posture']))
+            skill += posture_mods['attack']
 
         # Opponent's posture
 
@@ -1966,7 +1981,8 @@ class GurpsRuleset(Ruleset):
         #    if opponent_posture_mods is not None:
         #        skill += opponent_posture_mods['target']
 
-        return skill
+        why.append('  ...for a to hit total of %d' % skill)
+        return skill, why
 
 
     def heal_fighter(self,
@@ -2934,14 +2950,28 @@ class FightHandler(ScreenHandler):
         if why_target is None:
             return True # Keep fighting
 
+        pseudo_menu = [] # TODO: make a special window -- don't use a menu
         holding_weapon_index = why_target.details['weapon-index']
         if holding_weapon_index is None:
             hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(why_target)
-            # TODO: make a special window
             pseudo_menu = [(x, 0) for x in hand_to_hand_info['why']]
             ignore = self._window_manager.menu(
                         'How the Numbers Were Calculated', pseudo_menu)
         # TODO: else
+        else:
+            weapon = current_fighter.details['stuff'][holding_weapon_index]
+
+            if weapon['skill'] in current_fighter.details['skills']:
+                to_hit, to_hit_why = self.__ruleset.get_to_hit(current_fighter,
+                                                               weapon)
+                pseudo_menu = [(x, 0) for x in to_hit_why]
+
+                # NOTE: Won't do damage at this point since there're no mods
+
+            # TODO: def get_fighter_defenses_notes(self,
+
+        ignore = self._window_manager.menu(
+                    'How the Numbers Were Calculated', pseudo_menu)
 
         return True
 
