@@ -1306,6 +1306,7 @@ class GurpsRuleset(Ruleset):
         param['fighter'].details['posture'] = param['posture']
         param['fighter'].reset_aim()
 
+
     def do_aim(self,
                param, # dict {'fighter': <Fighter object>,
                       #       'braced': True | False}
@@ -1711,17 +1712,26 @@ class GurpsRuleset(Ruleset):
                              ):
         result = {
             'punch_skill': fighter.details['current']['dx'],
-            'punch_string': 'Punch (B271, B370)',
+            'punch_string': 'Punch (DX) (B271, B370)',
             'punch_damage': None,
 
             'kick_skill': 0,
-            'kick_string': 'Kick (B271, B370)',
+            'kick_string': 'Kick (DX-2) (B271, B370)',
             'kick_damage': None,
 
             'parry_skill': fighter.details['current']['dx'],
-            'parry_string': 'Unarmed Parry (B376)'
+            'parry_string': 'Unarmed Parry (B376)',
+
+            'why': []
         }
+
+        punch_why = []
+        kick_why = []
+        damage_why = []
+        parry_why = []
+
         plus_per_die_of_thrust = 0
+        plus_per_die_of_thrust_string = None
 
         # boxing, brawling, karate, dx
         if 'brawling' in fighter.details['skills']:
@@ -1732,6 +1742,10 @@ class GurpsRuleset(Ruleset):
                 # Brawling: @DX+2 = +1 per die of thrusting damage
                 if result['punch_skill'] >= fighter.details['current']['dx']+2:
                     plus_per_die_of_thrust = 1
+                    plus_per_die_of_thrust_string = (
+                        'Brawling(%d) @DX(%d)+2 = +1/die of thrusting damage' %
+                            result['punch_skill'],
+                            fighter.details['current']['dx'])
             if result['parry_skill'] < fighter.details['skills']['brawling']:
                 result['parry_skill'] = fighter.details['skills']['brawling']
                 result['parry_string'] = 'Brawling Parry (B182, B376)'
@@ -1740,12 +1754,23 @@ class GurpsRuleset(Ruleset):
                 result['punch_string'] = 'Karate Punch (B203, B271, B370)'
                 result['kick_string'] = 'Karate Kick (B203, B271, B370)'
                 result['punch_skill'] = fighter.details['skills']['karate']
-                # Karate: @DX = +1 per die of thrusting damage
                 # Karate: @DX+1+ = +2 per die of thrusting damage
+                # Karate: @DX = +1 per die of thrusting damage
                 if result['punch_skill'] >= fighter.details['current']['dx']+1:
                     plus_per_die_of_thrust = 2
+                    plus_per_die_of_thrust_string = (
+                        'Karate(%d) @DX(%d)+1 = +2/die of thrusting damage' %
+                            result['punch_skill'],
+                            fighter.details['current']['dx'])
                 elif result['punch_skill'] >= fighter.details['current']['dx']:
                     plus_per_die_of_thrust = 1
+                    plus_per_die_of_thrust_string = (
+                        'Karate(%d) @DX(%d) = +1/die of thrusting damage' %
+                            result['punch_skill'],
+                            fighter.details['current']['dx'])
+                else:
+                    plus_per_die_of_thrust = 0
+                    plus_per_die_of_thrust_string = None
             if result['parry_skill'] < fighter.details['skills']['karate']:
                 result['parry_skill'] = fighter.details['skills']['karate']
                 result['parry_string'] = 'Karate Parry (B203, B376)'
@@ -1757,31 +1782,44 @@ class GurpsRuleset(Ruleset):
             if result['punch_skill'] < fighter.details['skills']['boxing']:
                 result['punch_string'] = 'Boxing Punch (B182, B271, B370)'
                 result['punch_skill'] = fighter.details['skills']['boxing']
-                # Boxing: @DX+1 = +1 per die of thrusting damage
                 # Boxing: @DX+2+ = +2 per die of thrusting damage
+                # Boxing: @DX+1 = +1 per die of thrusting damage
                 if result['punch_skill'] >= fighter.details['current']['dx']+2:
                     plus_per_die_of_thrust = 2
+                    plus_per_die_of_thrust_string = (
+                        'Boxing(%d) @DX(%d)+2 = +2/die of thrusting damage' %
+                            result['punch_skill'],
+                            fighter.details['current']['dx'])
                 elif (result['punch_skill'] >= 
                                         fighter.details['current']['dx']+1):
                     plus_per_die_of_thrust = 1
+                    plus_per_die_of_thrust_string = (
+                        'Boxing(%d) @DX(%d)+1 = +1/die of thrusting damage' %
+                            result['punch_skill'],
+                            fighter.details['current']['dx'])
+                else:
+                    plus_per_die_of_thrust = 0
+                    plus_per_die_of_thrust_string = None
             if result['parry_skill'] < fighter.details['skills']['boxing']:
                 result['parry_skill'] = fighter.details['skills']['boxing']
                 result['parry_string'] = 'Boxing Parry (B182, B376)'
 
-        st = fighter.details['current']['st']
-        result['kick_damage'] = copy.deepcopy(
-                                        GurpsRuleset.melee_damage[st]['thr'])
-        result['kick_damage']['plus'] += (result['kick_damage']['num_dice'] *
-                                                        plus_per_die_of_thrust)
-        result['punch_damage'] = copy.deepcopy(result['kick_damage'])
-        result['punch_damage']['plus'] -= 1
+        punch_why.append('%s @ %d' % (result['punch_string'],
+                                      result['punch_skill']))
+        kick_why.append('%s @ %d' % (result['kick_string'],
+                                     result['kick_skill']))
 
         # Posture
 
         posture_mods = self.get_posture_mods(fighter.details['posture'])
-        if posture_mods is not None:
+        if posture_mods is not None and posture_mods['attack'] != 0:
             result['punch_skill'] += posture_mods['attack']
             result['kick_skill'] += posture_mods['attack']
+
+            punch_why.append(' plus %d due to %s posture' % 
+                    (posture_mods['attack'], fighter.details['posture']))
+            kick_why.append(' plus %d due to %s posture' % 
+                    (posture_mods['attack'], fighter.details['posture']))
 
         # Opponent's posture
 
@@ -1793,10 +1831,42 @@ class GurpsRuleset(Ruleset):
         #        result['punch_skill'] += opponent_posture_mods['target']
         #        result['kick_skill'] += opponent_posture_mods['target']
 
+        parry_raw = result['parry_skill']
+
         # Brawling, Boxing, Karate, DX: Parry int(skill/2) + 3
         result['parry_skill'] = 3 + int(result['parry_skill']/2)
+        parry_why.append('%s @ (punch(%d)/2)+3 = %d' % (result['parry_string'],
+                                                        parry_raw,
+                                                        result['parry_skill']))
         if 'combat reflexes' in fighter.details['advantages']:
             result['parry_skill'] += 1
+            parry_why.append(' plus 1 due to combat reflexes (B43)')
+
+        # Damage
+
+        st = fighter.details['current']['st']
+
+        damage_why.append(
+            'Kick damage(B271)=thr: plug ST(%d) into table on B16' % st)
+
+        result['kick_damage'] = copy.deepcopy(
+                                        GurpsRuleset.melee_damage[st]['thr'])
+        # TODO: show xd+y
+        result['kick_damage']['plus'] += (result['kick_damage']['num_dice'] *
+                                                        plus_per_die_of_thrust)
+        # TODO: show plus per die
+        result['punch_damage'] = copy.deepcopy(result['kick_damage'])
+
+        damage_why.append(
+            'Punch damage(B271): thr-1 becomes "kick" - 1')
+        result['punch_damage']['plus'] -= 1
+
+        # Assemble the 'why'
+
+        result['why'].extend(punch_why)
+        result['why'].extend(kick_why)
+        result['why'].extend(damage_why)
+        result['why'].extend(parry_why)
 
         return result
 
@@ -2216,6 +2286,7 @@ class FightHandler(ScreenHandler):
         self._add_to_choice_dict({
             ord(' '): {'name': 'next',      'func': self.__next_fighter},
             ord('<'): {'name': 'prev',      'func': self.__prev_fighter},
+            ord('?'): {'name': 'explain',   'func': self.__show_why},
             ord('d'): {'name': 'dead',      'func': self.__dead},
             ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
             ord('h'): {'name': 'History',   'func': self.__show_history},
@@ -2806,6 +2877,35 @@ class FightHandler(ScreenHandler):
             pseudo_menu.append((self._history[line], 0))
         ignore = self._window_manager.menu('Fight History (Newest On Top)',
                                            pseudo_menu)
+        return True
+
+    def __show_why(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        # Figure out for whom these notes are...
+        current_fighter = self.__current_fighter()
+        opponent = self.get_opponent_for(current_fighter)
+        if opponent is None:
+            why_target = current_fighter
+        else:
+            notes_recipient_menu = [(current_fighter.name, current_fighter),
+                                    (opponent.name, opponent)]
+            why_target = self._window_manager.menu('Notes For Whom',
+                                                        notes_recipient_menu)
+        if why_target is None:
+            return True # Keep fighting
+
+        holding_weapon_index = why_target.details['weapon-index']
+        if holding_weapon_index is None:
+            hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(why_target)
+            # TODO: make a special window
+            pseudo_menu = [(x, 0) for x in hand_to_hand_info['why']]
+            ignore = self._window_manager.menu(
+                        'How the Numbers Were Calculated', pseudo_menu)
+        # TODO: else
+
         return True
 
 
