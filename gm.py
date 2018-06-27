@@ -14,7 +14,7 @@ import sys
 # TODO:
 #   - dodge and drop (B377)
 #   - add outfit characters and a store for weapons and other items
-#   - damage other than dice
+#   - damage other than dice (swords and stuff)
 #   - < 1/3 FP = 1/2 move, dodge, st
 #   - Warning if window is smaller than expected
 #   - Update the Templates in the JSON to match the character data
@@ -1386,7 +1386,8 @@ class GurpsRuleset(Ruleset):
                 if fighter.details['aim']['rounds'] == 0:
                     # TODO: any defense loses your aim
                     brace_menu = [
-                        ('Bracing',     {'text': ['Aim with brace',
+                        ('Bracing (B364)',
+                                        {'text': ['Aim with brace',
                                                   ' Defense: any loses aim',
                                                   ' Move: step'],
                                          'doit': self.do_aim,
@@ -1399,14 +1400,14 @@ class GurpsRuleset(Ruleset):
                                          'param': {'fighter': fighter,
                                                    'braced': False}})
                     ]
-                    action_menu.append(('Aim',  
+                    action_menu.append(('Aim (B324, B364)',
                                         {'text': ['Aim',
                                                   ' Defense: any loses aim',
                                                   ' Move: step'],
                                          'menu': brace_menu})
                                       )
                 else:
-                    action_menu.append(('Aim',  
+                    action_menu.append(('Aim (B324, B364)',  
                                         {'text': ['Aim',
                                                   ' Defense: any loses aim',
                                                   ' Move: step'],
@@ -1445,11 +1446,11 @@ class GurpsRuleset(Ruleset):
             ])
 
         action_menu.extend([
-            ('posture (change)',       {'text': ['Change posture',
+            ('posture (B551)',         {'text': ['Change posture',
                                                  ' Defense: any',
                                                  ' Move: none'],
                                         'menu': posture_menu}),
-            ('Concentrate',            {'text': ['Concentrate',
+            ('Concentrate (B366)',     {'text': ['Concentrate',
                                                  ' Defense: any w/will roll',
                                                  ' Move: step'],
                                         'doit': None}),
@@ -1464,7 +1465,8 @@ class GurpsRuleset(Ruleset):
 
         if len(draw_weapon_menu) == 1:
             action_menu.append(
-                    (('draw (ready, etc.) %s' % draw_weapon_menu[0][0]),
+                    (('draw (ready, etc.; B325, B366, B382) %s' %
+                                                    draw_weapon_menu[0][0]),
                      {'text': ['Ready (draw, etc.)',
                                ' Defense: any',
                                ' Move: step'],
@@ -1473,20 +1475,21 @@ class GurpsRuleset(Ruleset):
                                 'fighter': fighter}}))
 
         elif len(draw_weapon_menu) > 1:
-            action_menu.append(('draw (ready, etc.)',
+            action_menu.append(('draw (ready, etc.; B325, B366, B382)',
                                 {'text': ['Ready (draw, etc.)',
                                           ' Defense: any',
                                           ' Move: step'],
                                  'menu': draw_weapon_menu}))
 
-        action_menu.append(('evaluate', {'text': ['Evaluate',
-                                                  ' Defense: any',
-                                                  ' Move: step'],
-                                         'doit': None}))
+        action_menu.append(('evaluate (B364)', {'text': ['Evaluate',
+                                                         ' Defense: any',
+                                                         ' Move: step'],
+                                                'doit': None}))
 
         # Can only feint with a melee weapon
         if weapon is not None and holding_ranged == False:
-            action_menu.append(('feint',   {'text': ['Feint',
+            action_menu.append(('feint (B365)',
+                                           {'text': ['Feint',
                                                      ' Defense: any, parry *',
                                                      ' Move: step'],
                                             'doit': None}))
@@ -1501,11 +1504,11 @@ class GurpsRuleset(Ruleset):
                                               'fighter': fighter}}))
 
         action_menu.extend([
-            ('move',                   {'text': ['Move',
+            ('move (B364)',            {'text': ['Move',
                                                  ' Defense: any',
                                                  ' Move: full'],
                                         'doit': None}),
-            ('Move and attack',        {'text': ['Move & Attack',
+            ('Move and attack (B365)', {'text': ['Move & Attack',
                                                  ' Defense: Dodge,block',
                                                  ' Move: full'],
                                         'doit': None}),
@@ -1529,7 +1532,7 @@ class GurpsRuleset(Ruleset):
                                          ' Defense: any @-4',
                                          ' Move: none'],
                                 'doit': None}),
-            ('wait',           {'text': ['Wait',
+            ('wait (B366)',    {'text': ['Wait',
                                          ' Defense: any, no All Out Attack',
                                          ' Move: none'],
                                 'doit': None})
