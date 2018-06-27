@@ -12,7 +12,6 @@ import random
 import sys
 
 # TODO:
-#   - dodge and drop (B377)
 #   - add outfit characters and a store for weapons and other items
 #   - damage other than dice (swords and stuff)
 #   - < 1/3 FP = 1/2 move, dodge, st
@@ -22,6 +21,8 @@ import sys
 #
 # TODO (eventually)
 #   - scrolling menus (et al.)
+#   - reloading where the number of shots is in the 'clip' (like with a gun or
+#     a quiver) rather than in the weapon (like in disruptors or lasers)
 #   - entering monsters and characters from the screen
 #   - truncate (don't wrap) long lines
 #   - Go for a transactional model -- will allow me to do better debugging,
@@ -1707,7 +1708,7 @@ class GurpsRuleset(Ruleset):
                          ):
         notes = []
 
-        # First thing: attack, damage, defense
+        # Ranged weapon status
 
         holding_weapon_index = fighter.details['weapon-index']
         weapon = None
@@ -1727,6 +1728,12 @@ class GurpsRuleset(Ruleset):
                                     weapon['ammo']['shots'],
                                     (0 if clip is None else clip['count'])))
                 
+
+        # Active aim
+
+        if (fighter.details['aim'] is not None and
+                                    fighter.details['aim']['rounds'] != 0):
+            notes.append('Aiming')
 
         # And, now, off to the regular stuff
 
