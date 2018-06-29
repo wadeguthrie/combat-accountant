@@ -608,6 +608,55 @@ class FightGmWindow(GmWindow):
         window.refresh()
 
 
+
+class OutfitCharactersGmWindow(GmWindow):
+    def __init__(self, window_manager):
+        super(OutfitCharactersGmWindow, self).__init__(window_manager,
+                                                 curses.LINES,
+                                                 curses.COLS,
+                                                 0,
+                                                 0)
+        lines, cols = self._window.getmaxyx()
+        self.__monster_window = self._window_manager.new_native_window(
+                                                                    lines - 4,
+                                                                    cols / 2,
+                                                                    1,
+                                                                    1)
+
+    def close(self):
+        # Kill my subwindows, first
+        if self.__monster_window is not None:
+            del self.__monster_window
+            self.__monster_window = None
+        super(OutfitCharactersGmWindow, self).close()
+
+
+    def refresh(self):
+        super(OutfitCharactersGmWindow, self).refresh()
+        if self.__monster_window is not None:
+            self.__monster_window.refresh()
+
+
+    #def show_monsters(self, name, monsters):
+    #    if self.__monster_window is not None:
+    #        self.__monster_window.clear()
+    #        mode = curses.A_NORMAL
+    #        for line, monster_name in enumerate(monsters):
+    #            self.__monster_window.addstr(line, 0, monster_name, mode)
+    #
+    #    self.refresh()
+
+    #
+    # Private methods
+    #
+
+    def __quit(self):
+        self._window.close()
+        del self._window
+        self._window = None
+        return False # Leave
+
+
 class GmWindowManager(object):
     '''
     GmWindowManager addresses the graphical part of the user interface for
@@ -1466,14 +1515,14 @@ class GurpsRuleset(Ruleset):
 
         if len(draw_weapon_menu) == 1:
             action_menu.append(
-                    (('draw (ready, etc.; B325, B366, B382) %s' %
-                                                    draw_weapon_menu[0][0]),
-                     {'text': ['Ready (draw, etc.)',
-                               ' Defense: any',
-                               ' Move: step'],
-                      'doit': self.__draw_weapon,
-                      'param': {'weapon': draw_weapon_menu[0][1]['param'],
-                                'fighter': fighter}}))
+                (('draw (ready, etc.; B325, B366, B382) %s' %
+                                                draw_weapon_menu[0][0]),
+                 {'text': ['Ready (draw, etc.)',
+                           ' Defense: any',
+                           ' Move: step'],
+                  'doit': self.__draw_weapon,
+                  'param': {'weapon': draw_weapon_menu[0][1]['param']['weapon'],
+                            'fighter': fighter}}))
 
         elif len(draw_weapon_menu) > 1:
             action_menu.append(('draw (ready, etc.; B325, B366, B382)',
@@ -1645,17 +1694,23 @@ class GurpsRuleset(Ruleset):
 
             if weapon['skill'] in fighter.details['skills']:
                 to_hit, why = self.get_to_hit(fighter, weapon)
+                if to_hit is None:
+                    self._window_manager.error(
+                        ['%s requires "%s" skill not had by "%s"' %
+                                                             (weapon['name'],
+                                                              weapon['skill'],
+                                                              fighter.name)])
+                else:
+                    damage_type = ('' if 'type' not in weapon['damage']
+                                        else weapon['damage']['type'])
+                    damage_type_str = self.__get_damage_type_str(damage_type)
 
-                damage_type = ('' if 'type' not in weapon['damage']
-                                    else weapon['damage']['type'])
-                damage_type_str = self.__get_damage_type_str(damage_type)
-
-                if 'dice' in weapon['damage']:
-                    notes.append('  to hit: %d, damage: %s, %s' %
+                    if 'dice' in weapon['damage']:
+                        notes.append('  to hit: %d, damage: %s, %s' %
                                                     (to_hit,
                                                      weapon['damage']['dice'],
                                                      damage_type_str))
-                # TODO: handle damage other than 'dice' (e.g., st-based)
+                    # TODO: handle damage other than 'dice' (e.g., st-based)
             else:
                 self._window_manager.error(
                     ['%s requires "%s" skill not had by "%s"' %
@@ -2022,6 +2077,7 @@ class GurpsRuleset(Ruleset):
             'why'   is an array of strings describing why the to-hit numbers
                     are what they are.
         '''
+        # TODO: need convenient defaults
         if weapon['skill'] not in fighter.details['skills']:
             return None
 
@@ -3117,11 +3173,12 @@ class MainHandler(ScreenHandler):
         self.__ruleset = ruleset
         self._add_to_choice_dict({
             # TODO: template - (build a template of monsters)
-            ord('F'): {'name': 'Fight (build)', 'func': self.__build_fight},
-            ord('f'): {'name': 'fight (run)',   'func': self.__run_fight},
-            ord('H'): {'name': 'Heal',          'func': self.__fully_heal},
-            ord('n'): {'name': 'name',          'func': self.__get_a_name},
-            ord('q'): {'name': 'quit',          'func': self.__quit}
+            ord('o'): {'name': 'outfit characters', 'func': self.__outfit},
+            ord('F'): {'name': 'Fight (build)',     'func': self.__build_fight},
+            ord('f'): {'name': 'fight (run)',       'func': self.__run_fight},
+            ord('H'): {'name': 'Heal',              'func': self.__fully_heal},
+            ord('n'): {'name': 'name',              'func': self.__get_a_name},
+            ord('q'): {'name': 'quit',              'func': self.__quit}
         })
         self._window = MainGmWindow(self._window_manager)
 
@@ -3150,6 +3207,18 @@ class MainHandler(ScreenHandler):
         self._draw_screen() # Redraw current screen when done building fight.
         return True # Keep going
 
+    def __outfit(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        outfit = OutfitCharactersHandler(self._window_manager,
+                                         self.__world,
+                                         campaign_debug_json)
+        outfit.handle_user_input_until_done()
+        self._draw_screen() # Redraw current screen when done building fight.
+        return True # Keep going
 
     def __fully_heal(self):
         '''
@@ -3230,6 +3299,163 @@ class MainHandler(ScreenHandler):
         self._draw_screen() # Redraw current screen when done with the fight.
 
         return True # Keep going
+
+
+class OutfitCharactersHandler(ScreenHandler):
+    def __init__(self,
+                 window_manager,
+                 world,
+                 campaign_debug_json
+                ):
+        super(OutfitCharactersHandler, self).__init__(window_manager,
+                                                      campaign_debug_json)
+        # TODO: should be:
+        #   1) an equipment window in a pane on the right, and
+        #   2) a character display (including name & group) in pane on the left
+
+        self._add_to_choice_dict({
+            ord('a'): {'name': 'add equipment', 'func': self.__add_equipment},
+            ord('A'): {'name': 'add to everyone', 'func': self.__add_everyone},
+            ord('r'): {'name': 'remove equipment', 'func':
+                                                      self.__remove_equipment},
+            ord('s'): {'name': 'select character', 'func':
+                                                      self.__select_character},
+            ord('q'): {'name': 'quit', 'func': self.__quit},
+        })
+        self._window = OutfitCharactersGmWindow(self._window_manager)
+        self.__world = world
+
+        lines, cols = self._window.getmaxyx()
+        group_menu = [('PCs', 'PCs')]
+        group_menu.extend([(group, group)
+                for group in self.__world['monsters']])
+        self.__group_name = self._window_manager.menu('Outfit Which Group',
+                                                                 group_menu)
+
+        # TODO: need to exit if a group isn't chosen
+
+        self.__character = {'name': None, 'details': None}
+
+        # TODO: warn if called with -m
+        #if XXX:
+        #    self._window_manager.error(
+        #                ['Called with XXX, these changes won\'t be saved'])
+
+    #
+    # Protected Methods
+    #
+
+    def _draw_screen(self):
+        self._window.clear()
+        self._window.command_ribbon(self._choices)
+
+    #
+    # Private Methods
+    #
+
+    def __add_equipment(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        if self.__character['details'] is None:
+            # TODO: just bring-up the character selection screen
+            self._window_manager.error(
+                                ['You need to select a character, first'])
+            return True
+
+        # Pick an item off the shelf
+
+        item_menu = [(item['name'], item) for item in self.__world['Equipment']]
+        item = self._window_manager.menu('Item to Add', item_menu)
+        if item is None:
+            return True # Keep going
+
+        # TODO: ask how many to add
+
+        self.__character['details']['stuff'].append(copy.deepcopy(item))
+        # TODO: show the character's item list on the screen
+
+        return True # Keep going
+
+
+    def __add_everyone(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        # TODO: do this whole thing
+        if self.__character['details'] is None:
+            # TODO: just bring-up the character selection screen
+            self._window_manager.error(
+                                ['You need to select a character, first'])
+            return True
+
+        # Pick an item off the shelf
+
+        item_menu = [(item['name'], item) for item in self.__world['Equipment']]
+        item = self._window_manager.menu('Item to Add', item_menu)
+        if item is None:
+            return True # Keep going
+
+        # TODO: ask how many to add
+
+        self.__character['details']['stuff'].append(item)
+        # TODO: show the character's item list on the screen
+
+        return True # Keep going
+
+
+    def __remove_equipment(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        if self.__character['details'] is None:
+            # TODO: just bring-up the character selection screen
+            self._window_manager.error(
+                                ['You need to select a character, first'])
+            return True
+
+
+        # Pick an item off the shelf
+
+        item_menu = [(item['name'], index)
+            for index, item in enumerate(self.__character['details']['stuff'])]
+        item_index = self._window_manager.menu('Item to Remove', item_menu)
+        if item is None:
+            return True # Keep going
+
+        del(self.__character['details']['stuff'][item_index])
+        return True # Keep going
+
+
+    def __select_character(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        character_list = (self.__world['PCs']
+                    if self.__group_name == 'PCs' else 
+                        self.__world['monsters'][self.__group_name])
+                    
+        character_menu = [(dude, dude) for dude in character_list.iterkeys()]
+        character_name = self._window_manager.menu('Character', character_menu)
+        if character_name is None:
+            return True # Keep going
+        self.__character = {'name': character_name,
+                            'details': character_list[character_name]}
+        return True # Keep going
+
+
+    def __quit(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        self._window.close()
+        return False # Stop building this fight
 
 
 class MyArgumentParser(argparse.ArgumentParser):
