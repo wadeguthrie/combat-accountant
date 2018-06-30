@@ -1155,6 +1155,12 @@ class Fighter(object):
                 self.details['state'] = state_name
                 break
 
+
+    def decrement_timers(self):
+        for timer in self.details['timers']:
+            timer['rounds'] -= 1
+
+
     def do_aim(self,
                braced   # True | False
               ):
@@ -1165,6 +1171,48 @@ class Fighter(object):
         elif rounds < 3:
             self.details['aim']['rounds'] += 1
 
+
+    def draw_weapon_by_index(self,
+                             index  # Index of weapon in fighter's 'stuff'
+                                    # list.  'None' removes current weapon.
+                            ):
+        '''Draws or removes weapon from sheath or holster.'''
+        self.details['weapon-index'] = index
+
+
+    def end_turn(self):
+        self.__ruleset.end_turn(self)
+        self.remove_expired_kill_dying_timers()
+
+    def remove_expired_kill_dying_timers(self):
+        '''
+        Removes timers and kills the timers that are dying this round.  Call
+        this at the end of the round to scrape off the timers that expire this
+        round.
+        '''
+        # Remove any expired timers
+        remove_these = []
+        for index, timer in enumerate(self.details['timers']):
+            if timer['rounds'] <= 0:    # <= kills the timers dying this round
+                remove_these.insert(0, index) # largest indexes last
+        for index in remove_these:
+            del self.details['timers'][index]
+
+    def remove_expired_keep_dying_timers(self):
+        '''
+        Removes timers but keep the timers that are dying this round.  Call
+        this at the beginning of the round.  Standard timers that die this
+        round are kept so that they're shown.
+        '''
+
+        remove_these = []
+        for index, timer in enumerate(self.details['timers']):
+            if timer['rounds'] < 0:     # < keeps the timers dying this round
+                remove_these.insert(0, index) # largest indexes last
+        for index in remove_these:
+            del self.details['timers'][index]
+
+
     def get_state(self):
         conscious_number = Fighter.conscious_map[self.details['state']]
         if (conscious_number == Fighter.ALIVE and 
@@ -1173,25 +1221,12 @@ class Fighter(object):
             return Fighter.INJURED
         return conscious_number
 
-    def is_conscious(self):
-        # NOTE: 'injured' is not stored in self.details['state']
-        return True if self.details['state'] == 'alive' else False
 
-    def is_dead(self):
-        return True if self.details['state'] == 'dead' else False
-
-
-    def reset_aim(self):
-        self.details['aim']['rounds'] = 0
-        self.details['aim']['braced'] = False
-
-
-    def draw_weapon_by_index(self,
-                             index  # Index of weapon in fighter's 'stuff'
-                                    # list.  'None' removes current weapon.
-                            ):
-        '''Draws or removes weapon from sheath or holster.'''
-        self.details['weapon-index'] = index
+    def get_current_weapon(self):
+        weapon_index = self.details['weapon-index']
+        if weapon_index is None:
+            return None, None
+        return self.details['stuff'][weapon_index], weapon_index
 
 
     def get_weapon_by_name(self,
@@ -1209,11 +1244,47 @@ class Fighter(object):
         return None, None # didn't find one
 
 
-    def get_current_weapon(self):
-        weapon_index = self.details['weapon-index']
-        if weapon_index is None:
-            return None, None
-        return self.details['stuff'][weapon_index], weapon_index
+    def is_conscious(self):
+        # NOTE: 'injured' is not stored in self.details['state']
+        return True if self.details['state'] == 'alive' else False
+
+
+    def is_dead(self):
+        return True if self.details['state'] == 'dead' else False
+
+
+    def reset_aim(self):
+        # TODO: This is ruleset-related.  Not sure how but we need to move the
+        # aim stuff into the ruleset.
+        self.details['aim']['rounds'] = 0
+        self.details['aim']['braced'] = False
+
+
+    def start_fight(self):
+        # NOTE: we're allowing health to still be messed-up, here
+        self.details['state'] = 'alive'
+        self.details['timers'] = []
+        self.details['weapon-index'] = None
+        self.details['opponent'] = None
+        self.start_turn()
+        self.__ruleset.start_fight(self)
+
+
+    def start_turn(self):
+        self.__ruleset.start_turn(self)
+        self.decrement_timers()
+        self.remove_expired_keep_dying_timers()
+
+
+    def perform_action_this_turn(self):
+        # TODO: there's probably a better way to call this -- this is sort-of
+        # ruleset based.
+        self.details['did_action_this_turn'] = True
+
+    def can_finish_turn(self):
+        if self.details['did_action_this_turn'] or not self.is_conscious():
+            return True
+        return False
 
 
 class Ruleset(object):
@@ -1267,14 +1338,6 @@ class Ruleset(object):
             fighter_details['current'][stat] = (
                                         fighter_details['permanent'][stat])
         fighter_details['state'] = 'alive'
-
-    def new_fight(self, fighter):
-        '''Removes all the stuff from the old fight except injury.'''
-        # NOTE: we're allowing health to still be messed-up, here
-        fighter.details['state'] = 'alive'
-        fighter.details['timers'] = []
-        fighter.details['weapon-index'] = None
-        fighter.details['opponent'] = None
 
 
 class GurpsRuleset(Ruleset):
@@ -1365,7 +1428,6 @@ class GurpsRuleset(Ruleset):
 
     def __init__(self, window_manager):
         super(GurpsRuleset, self).__init__(window_manager)
-        self.__action_performed_by_this_fighter = False
 
     # TODO: need a template for new characters
 
@@ -1426,9 +1488,11 @@ class GurpsRuleset(Ruleset):
         '''
         fighter.reset_aim()
 
-    def do_maneuver(self):
-        # TODO: this should be part of a Fighter object rather than here
-        self.__action_performed_by_this_fighter = True
+    def do_maneuver(self, fighter):
+        fighter.perform_action_this_turn()
+
+    def end_turn(self, fighter):
+        fighter.details['shock'] = 0
 
     def get_action_menu(self,
                         fighter # Fighter object
@@ -2188,37 +2252,18 @@ class GurpsRuleset(Ruleset):
                 )
 
 
-    def make_dead(self):
-        self.__action_performed_by_this_fighter = True
-
-
-    def new_fight(self, fighter):
+    def start_fight(self, fighter):
         '''
-        Removes all the stuff from the old fight except injury.
+        Removes all the ruleset-related stuff from the old fight except injury.
         '''
-        super(GurpsRuleset, self).new_fight(fighter)
         fighter.details['shock'] = 0
+        fighter.details['check_for_death'] = False
+        fighter.details['posture'] = 'standing'
         fighter.reset_aim()
-        self.__action_performed_by_this_fighter = False
 
 
-    def can_move_on_to_next_fighter(self,
-                                    prev_fighter   # Fighter object of current
-                                                   #  (before moving on) fighter
-                                   ):
-        # If he's unconscious or dead, we can ignore him and move on
-        if not prev_fighter.is_conscious():
-            return True, None
-
-        # Force some maneuver for the current fighter before moving on.  That
-        # way, we can look at the defense and movement restrictions (as well
-        # as a bunch of other stuff, like dealing with 'aim').
-        if not self.__action_performed_by_this_fighter:
-            return (False,
-                    'The fighter should do _some_ maneuver before moving on.')
-        prev_fighter.details['shock'] = 0 # remove expired shock entry
-        self.__action_performed_by_this_fighter = False
-        return True, None
+    def start_turn(self, fighter):
+        fighter.details['did_action_this_turn'] = False
 
     #
     # Private Methods
@@ -2591,7 +2636,7 @@ class FightHandler(ScreenHandler):
             # sure this looks like a _NEW_ fight.
             self.__saved_fight['fighters'] = []
             for fighter in self.__fighters:
-                self.__ruleset.new_fight(fighter)
+                fighter.start_fight()
                 self.__saved_fight['fighters'].append({'group': fighter.group,
                                                        'name': fighter.name})
 
@@ -2747,12 +2792,6 @@ class FightHandler(ScreenHandler):
                                                     dead_name,
                                                     now_dead.details['state']))
 
-        if now_dead is current_fighter and not now_dead.is_conscious():
-            # Mark this guy as not having to do a maneuver this round.
-            # TODO: this seems like it could look at the current fighter
-            # instead of having a global flag
-            self.__ruleset.make_dead()
-
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
@@ -2860,7 +2899,7 @@ class FightHandler(ScreenHandler):
             param = None if 'param' not in maneuver else maneuver['param']
             (maneuver['doit'])(param)
 
-        self.__ruleset.do_maneuver()
+        self.__ruleset.do_maneuver(current_fighter)
         # a round count larger than 0 will get shown but less than 1 will
         # get deleted before the next round
         current_fighter.add_timer(0.9, maneuver['text'])
@@ -2915,49 +2954,26 @@ class FightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+        # Finish off previous guy
         prev_fighter = self.__current_fighter()
-        ok_to_continue, message = self.__ruleset.can_move_on_to_next_fighter(
-                                                                  prev_fighter)
-        if not ok_to_continue:
-            # NOTE: This should _so_ be in the ruleset but I'm not sure how to
+        if not prev_fighter.can_finish_turn():
+            # TODO: This should _so_ be in the ruleset but I'm not sure how to
             # achieve that.  It also makes the assumption that you can't move
             # on to the next fighter _because_ no maneuver/action has been
             # performed.
             return self.__maneuver()
-            #self._window_manager.error([message])
-            #return True # Keep fighting
+        prev_fighter.end_turn()
 
-        # remove any expired timers
-        # TODO: Fighter.remove_expired_timers()
-        remove_these = []
-        for index, timer in enumerate(prev_fighter.details['timers']):
-            if timer['rounds'] <= 0:
-                remove_these.insert(0, index) # largest indexes last
-        for index in remove_these:
-            del prev_fighter.details['timers'][index]
-
-        # get next fighter
+        # Start the new guy
         self.__modify_index(1)
+        current_fighter = self.__current_fighter()
+        current_fighter.start_turn()
+
+        # Show all the displays
         next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self.__saved_fight['round'],
                                   self.__saved_fight['saved'],
                                   next_PC_name) # next PC
-        # TODO: Fighter.decrement_timers()
-        current_fighter = self.__current_fighter()
-        for timer in current_fighter.details['timers']:
-            timer['rounds'] -= 1
-
-        # remove any newly expired timers - this is here for the 'maneuver'
-        # timers (e.g., 'aim', 'all out attack') which are supposed to be
-        # displayed after an attacker's initiative up to but _not_ including
-        # the next time they have their initiative (i.e., during his defense).
-        remove_these = []
-        # TODO: Fighter.remove_expired_timers()
-        for index, timer in enumerate(current_fighter.details['timers']):
-            if timer['rounds'] < 0:
-                remove_these.insert(0, index) # largest indexes last
-        for index in remove_these:
-            del current_fighter.details['timers'][index]
 
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
@@ -3265,6 +3281,11 @@ class FightHandler(ScreenHandler):
         if timer['string'] is not None and len(timer['string']) != 0:
             timer_recipient.add_timer(timer['rounds'], timer['string'])
 
+        # Show stuff
+        self._window.show_fighters(current_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self.__saved_fight['index'])
         return True # Keep fighting
 
 

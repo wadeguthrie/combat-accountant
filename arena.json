@@ -789,6 +789,7 @@
             "skills": {},
             "advantages": {},
             "shock": 0, 
+            "did_action_this_turn": False,
             "weapon-index" : null,
             "stuff": [],
             "state": "alive",
@@ -818,6 +819,7 @@
         "c-Tank": {
             "aim": {"rounds": 0, "braced": false},
             "shock": 0, 
+            "did_action_this_turn": False,
             "weapon-index" : null,
             "stuff": [],
             "skills": {},
@@ -849,6 +851,7 @@
         "d-Tank": {
             "aim": {"rounds": 0, "braced": false},
             "shock": 0, 
+            "did_action_this_turn": False,
             "weapon-index" : null,
             "stuff": [],
             "skills": {},
@@ -880,6 +883,7 @@
         "f-Tank": {
             "aim": {"rounds": 0, "braced": false},
             "shock": 0, 
+            "did_action_this_turn": False,
             "weapon-index" : null,
             "stuff": [],
             "skills": {},
@@ -911,6 +915,7 @@
         "g-Bokor": {
             "aim": {"rounds": 0, "braced": false},
             "shock": 0, 
+            "did_action_this_turn": False,
             "weapon-index" : null,
             "stuff": [],
             "skills": {},
@@ -942,6 +947,7 @@
         "h-Cleric": {
             "aim": {"rounds": 0, "braced": false},
             "shock": 0, 
+            "did_action_this_turn": False,
             "weapon-index" : null,
             "stuff": [],
             "skills": {},
@@ -977,6 +983,7 @@
             "1-Thief-A": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1009,6 +1016,7 @@
             "2-Thief-B": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1041,6 +1049,7 @@
             "3-Tank-A": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1072,6 +1081,7 @@
             "4-Tank-C": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1103,6 +1113,7 @@
             "5-Tank-B": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1134,6 +1145,7 @@
             "6-Tank-E": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1165,6 +1177,7 @@
             "7-Tank-D": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1196,6 +1209,7 @@
             "8-Tank-F": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1229,6 +1243,7 @@
             "1-Thief-A": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1261,6 +1276,7 @@
             "2-Thief-B": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1293,6 +1309,7 @@
             "3-Tank-A": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1324,6 +1341,7 @@
             "4-Tank-C": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1355,6 +1373,7 @@
             "5-Tank-B": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1386,6 +1405,7 @@
             "6-Tank-D": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1417,6 +1437,7 @@
             "7-Bokor-A": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1448,6 +1469,7 @@
             "8-Cleric-A": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [],
                 "skills": {},
@@ -1481,6 +1503,7 @@
             "1-Cleric": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [
                            {"name": "pistol, Colt 170D",
@@ -1531,6 +1554,7 @@
             "2-Thief-A": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [
                            {"name": "pistol, Baretta DX 192",
@@ -1591,6 +1615,7 @@
             "3-Bokor": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [
                            {"name": "pistol, Kalashnikov Makarov",
@@ -1642,6 +1667,7 @@
             "4-Tank-A": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [
                            {"name": "pistol, Sig D65",
@@ -1701,6 +1727,7 @@
             "5-Tank-C": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [
                            {"name": "pistol, Sig D65",
@@ -1760,6 +1787,7 @@
             "6-Tank-B": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [
                            {"name": "pistol, Sig D65",
@@ -1819,6 +1847,7 @@
             "7-Tank-D": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [
                            {"name": "pistol, Sig D65",
@@ -1878,6 +1907,7 @@
             "8-Thief-B": {
                 "aim": {"rounds": 0, "braced": false},
                 "shock": 0, 
+                "did_action_this_turn": False,
                 "weapon-index" : null,
                 "stuff": [
                            {"name": "pistol, Baretta DX 192",
