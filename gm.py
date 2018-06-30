@@ -12,14 +12,15 @@ import random
 import sys
 
 # TODO:
-#   - add outfit characters and a store for weapons and other items
-#   - damage other than dice (swords and stuff)
 #   - < 1/3 FP = 1/2 move, dodge, st
 #   - Warning if window is smaller than expected
 #   - Update the Templates in the JSON to match the character data
 #   - Add book references in more places
+#   - round ribbon should include 'json will not be overwritten' if so
+#   - round ribbon should include name of JSON
 #
 # TODO (eventually)
+#   - damage other than dice (swords and stuff -- add this as needed)
 #   - scrolling menus (et al.)
 #   - reloading where the number of shots is in the 'clip' (like with a gun or
 #     a quiver) rather than in the weapon (like in disruptors or lasers)
@@ -907,8 +908,6 @@ class GmWindowManager(object):
         Presents a menu to the user and returns the result.
         '''
 
-        # TODO: doesn't handle more entries that would fit on screen
-
         # height and width of text box (not border)
         height = len(strings_results)
         max_height = curses.LINES - 2 # 2 for the box
@@ -1722,7 +1721,6 @@ class GurpsRuleset(Ruleset):
                                                     (to_hit,
                                                      weapon['damage']['dice'],
                                                      damage_type_str))
-                    # TODO: handle damage other than 'dice' (e.g., st-based)
             else:
                 self._window_manager.error(
                     ['%s requires "%s" skill not had by "%s"' %
@@ -2478,6 +2476,8 @@ class FightHandler(ScreenHandler):
         super(FightHandler, self).__init__(window_manager, campaign_debug_json)
         self._window = self._window_manager.get_fight_gm_window(ruleset)
         self.__ruleset = ruleset
+        self.__bodies_looted = False
+
         # TODO: when the history is reset (here), the JSON should be rewritten
         self._history = ['--- Round 0 ---']
 
@@ -2771,30 +2771,19 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
-        print '\n\n ####### __loot_bodies #######\n'
+        self.__bodies_looted = True
 
         # Go through bad buys and distribute their items
         for bad_guy in self.__fighters:
-            print '\n==== bad guy loop: %s ====' % bad_guy.name # TODO: remove
-            print '  group: %s, state: %s' % (bad_guy.group, # TODO: remove
-                                              bad_guy.details['state']) # TODO: remove
             # Only transfer stuff from dead or unconscious bad guys
             if bad_guy.group == 'PCs':
-                print '  PC, skipping' # TODO: remove
                 continue
             if bad_guy.is_conscious():
-                print '  is conscious, skipping' # TODO: remove
                 continue
 
-            print '\n--Bad guy (%s)--' % bad_guy.name # TODO:remove
-            PP.pprint(bad_guy.details) # TODO: remove
             # Reversed so removing items doesn't change the index of others
             for index, item in reversed(list(enumerate(
                                                 bad_guy.details['stuff']))):
-                print '\n---- item loop: %d "%s" ----' % ( # TODO: remove
-                                        index, item['name'])  # TODO: remove
-                                            
-                PP.pprint(item) # TODO: remove
                 xfer_menu = [(good_guy.name, {'guy': good_guy})
                                  for good_guy in self.__fighters
                                             if good_guy.group == 'PCs']
@@ -2804,33 +2793,14 @@ class FightHandler(ScreenHandler):
                                                item['name']),
                         xfer_menu)
 
-                if xfer is None: # TODO: remove
-                    print 'recipient: None (skip)' # TODO: remove
-                elif 'quit' in xfer: # TODO: remove
-                    print 'recipient: *QUIT*' # TODO: remove
-                else: # TODO: remove
-                    print 'recipient: %s' % xfer['guy'].name # TODO: remove
-
                 if xfer is None:
                     continue
 
                 if 'quit' in xfer:
                     return True
 
-                print '\nbad guy\'s (%s) stuff, before' % bad_guy.name # TODO: remove
-                PP.pprint(bad_guy.details['stuff']) # TODO: remove
-                print 'good guy (%s)\'s stuff, before' % xfer['guy'].name # TODO: remove
-                PP.pprint(xfer['guy'].details['stuff']) # TODO: remove
-
                 new_item = bad_guy.details['stuff'].pop(index)
                 xfer['guy'].details['stuff'].append(new_item)
-
-                print '\nbad guy\'s (%s) stuff, after' % bad_guy.name # TODO: remove
-                PP.pprint(bad_guy.details['stuff']) # TODO: remove
-                print 'good guy (%s)\'s stuff, after' % xfer['guy'].name # TODO: remove
-                PP.pprint(xfer['guy'].details['stuff']) # TODO: remove
-
-
         return True # Keep fighting
 
 
@@ -3101,25 +3071,53 @@ class FightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        if not self.__saved_fight['saved']:
 
-            # Check to see if all monsters are dead
-            ask_to_save = False
+        print 'A' # TODO: remove
+        quit_menu = [('Just Quit', {'doit': None})]
 
-            for fighter in self.__fighters:
-                if fighter.group != 'PCs' and fighter.is_conscious():
+        print 'B' # TODO: remove
+        ask_to_save = False # Ask to save if some monster is conscious
+        ask_to_loot = False # Ask to loot if some monster is unconscious
+        print 'C' # TODO: remove
+        for fighter in self.__fighters:
+            print 'D' # TODO: remove
+            if fighter.group != 'PCs':
+                if fighter.is_conscious():
                     ask_to_save = True
-                    break
+                else:
+                    ask_to_loot = True
+            print 'E' # TODO: remove
 
-            # Ask to save the fight if it's not saved and some monsters live.
-            save_menu = [('yes', True), ('no', False)]
-            if ask_to_save and self._window_manager.menu('Save Fight',
-                                                         save_menu):
-                self.__saved_fight['saved'] = True
-                
+        print 'F' # TODO: remove
+        while ask_to_save or ask_to_loot:
+            print 'G' # TODO: remove
+            if not self.__bodies_looted and ask_to_loot:
+                print 'H' # TODO: remove
+                quit_menu.append(('Loot the Bodies',
+                                 {'doit': self.__loot_bodies}))
+                print 'I' # TODO: remove
+
+            print 'J' # TODO: remove
+            if not self.__saved_fight['saved'] and ask_to_save:
+                print 'K' # TODO: remove
+                quit_menu.append(('Save the Fight',
+                                 {'doit': self.__simply_save}))
+                print 'L' # TODO: remove
+
+            print 'M' # TODO: remove
+            result = self._window_manager.menu('Leaving Fight', quit_menu)
+            print 'N' # TODO: remove
+            if result['doit'] is None:
+                ask_to_save = False
+                ask_to_loot = False
+            else:
+                (result['doit'])()
+
         self._window.close()
         return False # Leave the fight
 
+    def __simply_save(self):
+        self.__saved_fight['saved'] = True
 
     def __save(self):
         '''
@@ -3168,7 +3166,7 @@ class FightHandler(ScreenHandler):
         if why_target is None:
             return True # Keep fighting
 
-        pseudo_menu = [] # TODO: make a special window -- don't use a menu
+        pseudo_menu = [] # TODO: make a special window type -- don't use a menu
         holding_weapon_index = why_target.details['weapon-index']
         if holding_weapon_index is None:
             hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(why_target)

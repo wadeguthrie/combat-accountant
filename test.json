@@ -1,1345 +1,406 @@
 {
-  "Templates": {
-    "Arena Combat": {
-      "VodouCleric": {
-        "check_for_death": {
-          "type": "value", 
-          "value": false
-        }, 
-        "permanent": {
-          "fp": {
-            "type": "value", 
-            "value": 12
-          }, 
-          "iq": {
-            "type": "value", 
-            "value": 13
-          }, 
-          "hp": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "ht": {
-            "type": "value", 
-            "value": 11
-          }, 
-          "st": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "dx": {
-            "type": "value", 
-            "value": 11
-          }, 
-          "basic-speed": {
-            "type": "value", 
-            "value": 5.5
-          }
-        }, 
-        "shock": {
-          "type": "value", 
-          "value": 0
+    "Equipment": [
+       {"name": "pistol, Baretta DX 192",
+        "type": "ranged weapon",
+        "damage": {"dice": "1d+4"},
+        "acc": 2,
+        "ammo": {"name": "C Cell",
+                 "shots_left": 8,
+                 "shots": 8},
+        "reload": 3,
+        "skill": "guns (pistol)",
+        "count": 1,
+        "notes": ""
+       },
+       {"name": "pistol, Sig D65",
+        "type": "ranged weapon",
+        "damage": {"dice": "1d+4"},
+        "acc": 4,
+        "ammo": {"name": "C Cell",
+                 "shots_left": 9,
+                 "shots": 9},
+        "reload": 3,
+        "skill": "guns (pistol)",
+        "count": 1,
+        "notes": ""
+       },
+       {"name": "pistol, Kalashnikov Makarov",
+        "type": "ranged weapon",
+        "damage": {"dice": "1d+3"},
+        "acc": 2,
+        "ammo": {"name": "C Cell",
+                 "shots_left": 8,
+                 "shots": 8},
+        "reload": 3,
+        "skill": "guns (pistol)",
+        "count": 1,
+        "notes": ""
+       },
+       {"name": "pistol, Colt 170D",
+        "type": "ranged weapon",
+        "damage": {"dice": "1d+4"},
+        "acc": 3,
+        "ammo": {"name": "C Cell",
+                 "shots_left": 9,
+                 "shots": 9},
+        "reload": 3,
+        "skill": "guns (pistol)",
+        "count": 1,
+        "notes": ""
+       },
+       {"name": "knife, large",
+        "type": "melee weapon",
+        "damage": {"dice": "1d-2",
+                   "type": "imp"},
+        "skill": "knife",
+        "parry": -1,
+        "count": 1,
+        "notes": ""
+       },
+       {"name": "sick stick",
+        "type": "melee weapon",
+        "damage": {"dice": "1d+1 fat"},
+        "skill": "axe/mace",
+        "count": 1,
+        "notes": ""
+       },
+       {"name": "C Cell",
+        "type": "misc",
+        "count": 1000000,
+        "notes": ""
+       }
+    ],
+    "Templates": {
+        "Arena Combat": {
+            "VodouCleric": {
+                "check_for_death": {
+                    "type": "value", 
+                    "value": false
+                }, 
+                "permanent": {
+                    "fp": {
+                        "type": "value", 
+                        "value": 12
+                    }, 
+                    "iq": {
+                        "type": "value", 
+                        "value": 13
+                    }, 
+                    "hp": {
+                        "type": "value", 
+                        "value": 10
+                    }, 
+                    "ht": {
+                        "type": "value", 
+                        "value": 11
+                    }, 
+                    "st": {
+                        "type": "value", 
+                        "value": 10
+                    }, 
+                    "dx": {
+                        "type": "value", 
+                        "value": 11
+                    }, 
+                    "basic-speed": {
+                        "type": "value", 
+                        "value": 5.5
+                    }
+                }, 
+                "shock": {
+                    "type": "value", 
+                    "value": 0
+                }
+            }, 
+            "Bokor": {
+                "check_for_death": {
+                    "type": "value", 
+                    "value": false
+                }, 
+                "permanent": {
+                    "fp": {
+                        "type": "value", 
+                        "value": 11
+                    }, 
+                    "iq": {
+                        "type": "value", 
+                        "value": 12
+                    }, 
+                    "hp": {
+                        "type": "value", 
+                        "value": 10
+                    }, 
+                    "ht": {
+                        "type": "value", 
+                        "value": 11
+                    }, 
+                    "st": {
+                        "type": "value", 
+                        "value": 10
+                    }, 
+                    "dx": {
+                        "type": "value", 
+                        "value": 10
+                    }, 
+                    "basic-speed": {
+                        "type": "value", 
+                        "value": 5.25
+                    }
+                }, 
+                "shock": {
+                    "type": "value", 
+                    "value": 0
+                }
+            }, 
+            "Tank": {
+                "check_for_death": {
+                    "type": "value", 
+                    "value": false
+                }, 
+                "permanent": {
+                    "fp": {
+                        "type": "value", 
+                        "value": 11
+                    }, 
+                    "iq": {
+                        "type": "value", 
+                        "value": 12
+                    }, 
+                    "hp": {
+                        "type": "value", 
+                        "value": 11
+                    }, 
+                    "ht": {
+                        "type": "value", 
+                        "value": 11
+                    }, 
+                    "st": {
+                        "type": "value", 
+                        "value": 10
+                    }, 
+                    "dx": {
+                        "type": "value", 
+                        "value": 12
+                    }, 
+                    "basic-speed": {
+                        "type": "value", 
+                        "value": 5.75
+                    }
+                }, 
+                "shock": {
+                    "type": "value", 
+                    "value": 0
+                }
+            }, 
+            "Thief": {
+                "check_for_death": {
+                    "type": "value", 
+                    "value": false
+                }, 
+                "permanent": {
+                    "fp": {
+                        "type": "value", 
+                        "value": 11
+                    }, 
+                    "iq": {
+                        "type": "value", 
+                        "value": 12
+                    }, 
+                    "hp": {
+                        "type": "value", 
+                        "value": 12
+                    }, 
+                    "ht": {
+                        "type": "value", 
+                        "value": 11
+                    }, 
+                    "st": {
+                        "type": "value", 
+                        "value": 10
+                    }, 
+                    "dx": {
+                        "type": "value", 
+                        "value": 12
+                    }, 
+                    "basic-speed": {
+                        "type": "value", 
+                        "value": 5.75
+                    }
+                }, 
+                "shock": {
+                    "type": "value", 
+                    "value": 0
+                }
+            }
         }
-      }, 
-      "Bokor": {
-        "check_for_death": {
-          "type": "value", 
-          "value": false
-        }, 
-        "permanent": {
-          "fp": {
-            "type": "value", 
-            "value": 11
-          }, 
-          "iq": {
-            "type": "value", 
-            "value": 12
-          }, 
-          "hp": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "ht": {
-            "type": "value", 
-            "value": 11
-          }, 
-          "st": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "dx": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "basic-speed": {
-            "type": "value", 
-            "value": 5.25
-          }
-        }, 
-        "shock": {
-          "type": "value", 
-          "value": 0
-        }
-      }, 
-      "Tank": {
-        "check_for_death": {
-          "type": "value", 
-          "value": false
-        }, 
-        "permanent": {
-          "fp": {
-            "type": "value", 
-            "value": 11
-          }, 
-          "iq": {
-            "type": "value", 
-            "value": 12
-          }, 
-          "hp": {
-            "type": "value", 
-            "value": 11
-          }, 
-          "ht": {
-            "type": "value", 
-            "value": 11
-          }, 
-          "st": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "dx": {
-            "type": "value", 
-            "value": 12
-          }, 
-          "basic-speed": {
-            "type": "value", 
-            "value": 5.75
-          }
-        }, 
-        "shock": {
-          "type": "value", 
-          "value": 0
-        }
-      }, 
-      "Thief": {
-        "check_for_death": {
-          "type": "value", 
-          "value": false
-        }, 
-        "permanent": {
-          "fp": {
-            "type": "value", 
-            "value": 11
-          }, 
-          "iq": {
-            "type": "value", 
-            "value": 12
-          }, 
-          "hp": {
-            "type": "value", 
-            "value": 12
-          }, 
-          "ht": {
-            "type": "value", 
-            "value": 11
-          }, 
-          "st": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "dx": {
-            "type": "value", 
-            "value": 12
-          }, 
-          "basic-speed": {
-            "type": "value", 
-            "value": 5.75
-          }
-        }, 
-        "shock": {
-          "type": "value", 
-          "value": 0
-        }
-      }
-    }
-  }, 
-  "PCs": {
-    "g-Bokor": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-        {
-          "count": 5, 
-          "notes": "", 
-          "type": "misc", 
-          "name": "0010 -- g Bokor"
-        }
-      ], 
-      "skills": {}, 
-      "shock": 0, 
-      "alive": true, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 10, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 10, 
-        "basic-speed": 5.25
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 10, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 10, 
-        "basic-speed": 5.25
-      }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
     }, 
-    "a-Thief": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-        {
-          "acc": 2, 
-          "count": 1, 
-          "name": "0020 -- a-Thief", 
-          "notes": "", 
-          "damage": {
-            "dice": "1d+4"
-          }, 
-          "reload": 3, 
-          "skill": "guns (pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 8, 
-            "shots_left": 8
-          }
-        }
-      ], 
-      "skills": {}, 
-      "shock": 0, 
-      "alive": true, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [
-        {
-          "rounds": 0.9, 
-          "string": [
-            "Do nothing", 
-            " Defense: any", 
-            " Move: none"
+    "Names": {
+        "russian": {
+          "male": [
+            "Aymeric", 
+            "Aleksey", 
+            "Adam", 
+            "Andrei", 
+            "Andrew", 
+            "Andru", 
+            "Artiom", 
+            "Artem", 
+            "Artyom", 
+            "Anatoly", 
+            "Anton", 
+            "Alex/Aleksandr/Aleksei", 
+            "Arseniy", 
+            "Arthur", 
+            "Andrey", 
+            "Arsenii", 
+            "Bekhan", 
+            "Bogdan", 
+            "Boris", 
+            "Dan/Danil/Danila", 
+            "David", 
+            "Denis", 
+            "Dmitriy", 
+            "Dima", 
+            "Egor", 
+            "Eugene", 
+            "Evgeny", 
+            "Fedor", 
+            "George", 
+            "German", 
+            "Gosha", 
+            "Gregory", 
+            "Gleb", 
+            "Grisha", 
+            "Igor", 
+            "Ilya", 
+            "Ivan Konstantin", 
+            "Kirill", 
+            "Kostya", 
+            "Kolya", 
+            "Leo", 
+            "Leonid", 
+            "Mansur", 
+            "Max/Maxim", 
+            "Mark", 
+            "Matvey", 
+            "MIkhail", 
+            "Misha", 
+            "Nick", 
+            "Niko", 
+            "Nikolai", 
+            "Nikita", 
+            "Oleg", 
+            "Pasha", 
+            "Pavel", 
+            "Paul", 
+            "Petr", 
+            "Rafit", 
+            "Renat", 
+            "Roma", 
+            "Roman", 
+            "Ruslan", 
+            "Sasha", 
+            "Sergey", 
+            "Serge", 
+            "Slava", 
+            "Sonya", 
+            "Stanislav", 
+            "Timur", 
+            "Vadim", 
+            "Valentin", 
+            "Vasiliy", 
+            "Vitaliy", 
+            "Vlad", 
+            "Vladislav", 
+            "Vladimir", 
+            "Vova", 
+            "Yaroslav", 
+            "Yegor", 
+            "Yura", 
+            "Zahar", 
+            "Zhenya"
+          ], 
+          "female": [
+            "Anastasia", 
+            "Anna", 
+            "Alina", 
+            "Alexandra", 
+            "Arina", 
+            "Anya", 
+            "Alena", 
+            "Alice", 
+            "Alisa", 
+            "Asya", 
+            "Albina", 
+            "Alyona", 
+            "Christina", 
+            "Catherine", 
+            "Dasha", 
+            "Darya", 
+            "Diana", 
+            "Dina", 
+            "Elena", 
+            "Ekaterina", 
+            "Elizabeth", 
+            "Eva", 
+            "Evgeniya", 
+            "Galina", 
+            "Helena", 
+            "Inna", 
+            "Ira", 
+            "Irina", 
+            "Juliya", 
+            "Karina", 
+            "Katerina", 
+            "Katherine", 
+            "Katya", 
+            "Kira", 
+            "Kristina", 
+            "Ksenya", 
+            "Ksusha", 
+            "Lena", 
+            "Lera", 
+            "Liza", 
+            "Lyuba", 
+            "Madina", 
+            "Margarita", 
+            "Mariya", 
+            "Marina", 
+            "Marta", 
+            "Masha", 
+            "Natasha", 
+            "Nataly", 
+            "Natalya", 
+            "Nastya", 
+            "Nina", 
+            "Oksana", 
+            "Olesya", 
+            "Olga", 
+            "Olya", 
+            "Polina", 
+            "Sofia", 
+            "Sonya", 
+            "Sasha", 
+            "Sveta", 
+            "Svetlana", 
+            "Tanya", 
+            "Tatyana", 
+            "Ulyana", 
+            "Vika", 
+            "Viktoria", 
+            "Vera", 
+            "Valentina", 
+            "Valeria", 
+            "Viktoriya", 
+            "Vasilisa", 
+            "Veronika", 
+            "Victoria", 
+            "Vlada", 
+            "Yana", 
+            "Yulia", 
+            "Zhenya"
           ]
-        }
-      ], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "d-Tank": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-        {
-          "count": 5, 
-          "notes": "", 
-          "type": "misc", 
-          "name": "0005 - d-Tank"
         }, 
-        {
-          "acc": 2, 
-          "count": 1, 
-          "name": "0003 - d Tank", 
-          "notes": "", 
-          "damage": {
-            "dice": "1d+4"
-          }, 
-          "reload": 3, 
-          "skill": "guns (pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 8, 
-            "shots_left": 8
-          }
-        }, 
-        {
-          "count": 5, 
-          "notes": "", 
-          "type": "misc", 
-          "name": "0022 -- d-Tank"
-        }, 
-        {
-          "count": 1, 
-          "name": "0015 -- d Tank", 
-          "notes": "", 
-          "damage": {
-            "dice": "1d+1 fat"
-          }, 
-          "skill": "axe/mace", 
-          "type": "melee weapon"
-        }
-      ], 
-      "skills": {}, 
-      "shock": 0, 
-      "alive": true, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [
-        {
-          "rounds": 0.9, 
-          "string": [
-            "Do nothing", 
-            " Defense: any", 
-            " Move: none"
-          ]
-        }
-      ], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "f-Tank": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-        {
-          "count": 5, 
-          "notes": "", 
-          "type": "misc", 
-          "name": "0016 -- f Tank"
-        }
-      ], 
-      "skills": {}, 
-      "shock": 0, 
-      "alive": true, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "c-Tank": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-        {
-          "count": 1, 
-          "name": "0021 -- c-Tanks", 
-          "notes": "", 
-          "damage": {
-            "type": "imp", 
-            "dice": "1d-2"
-          }, 
-          "parry": -1, 
-          "skill": "knife", 
-          "type": "melee weapon"
-        }, 
-        {
-          "acc": 4, 
-          "count": 1, 
-          "name": "0014 -- c Tank", 
-          "notes": "", 
-          "damage": {
-            "dice": "1d+4"
-          }, 
-          "reload": 3, 
-          "skill": "guns (pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 9, 
-            "shots_left": 9
-          }
-        }
-      ], 
-      "skills": {}, 
-      "shock": 0, 
-      "alive": true, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [
-        {
-          "rounds": 0.9, 
-          "string": [
-            "Do nothing", 
-            " Defense: any", 
-            " Move: none"
-          ]
-        }
-      ], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "h-Cleric": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-        {
-          "count": 1, 
-          "name": "0009 -- h Cleric", 
-          "notes": "", 
-          "damage": {
-            "dice": "1d+1 fat"
-          }, 
-          "skill": "axe/mace", 
-          "type": "melee weapon"
-        }
-      ], 
-      "skills": {}, 
-      "shock": 0, 
-      "alive": true, 
-      "current": {
-        "fp": 12, 
-        "iq": 13, 
-        "hp": 10, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 11, 
-        "basic-speed": 5.5
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 12, 
-        "iq": 13, 
-        "hp": 10, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 11, 
-        "basic-speed": 5.5
-      }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }
-  }, 
-  "dead-monsters": {
-    "Arena Capture the Flag": {
-      "5-Tank-C": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "acc": 4, 
-            "count": 1, 
-            "name": "0011 -- skip", 
-            "notes": "", 
-            "damage": {
-              "dice": "1d+4"
-            }, 
-            "reload": 3, 
-            "skill": "guns (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "0012 -- a Thief", 
-            "notes": "", 
-            "damage": {
-              "dice": "1d+1 fat"
-            }, 
-            "skill": "axe/mace", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "0013 -- a Thief"
-          }
-        ], 
-        "skills": {
-          "guns (pistol)": 16, 
-          "axe/mace": 14, 
-          "brawling": 16
-        }, 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [
-          {
-            "rounds": 0.9, 
-            "string": [
-              "Do nothing", 
-              " Defense: any", 
-              " Move: none"
-            ]
-          }
-        ], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "1-Cleric": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "acc": 3, 
-            "count": 1, 
-            "name": "0001 - a Tank", 
-            "notes": "", 
-            "damage": {
-              "dice": "1d+4"
-            }, 
-            "reload": 3, 
-            "skill": "guns (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "0002 - c Tank"
-          }
-        ], 
-        "skills": {
-          "guns (pistol)": 15, 
-          "brawling": 12
-        }, 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 12, 
-          "iq": 13, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 11, 
-          "basic-speed": 5.5
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 12, 
-          "iq": 13, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 11, 
-          "basic-speed": 5.5
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "4-Tank-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "acc": 4, 
-            "count": 1, 
-            "name": "0008 -- skip", 
-            "notes": "", 
-            "damage": {
-              "dice": "1d+4"
-            }, 
-            "reload": 3, 
-            "skill": "guns (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          }
-        ], 
-        "skills": {
-          "guns (pistol)": 16, 
-          "axe/mace": 14, 
-          "brawling": 16
-        }, 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "unconscious", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "8-Thief-B": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {
-          "guns (pistol)": 12, 
-          "brawling": 14, 
-          "knife": 15
-        }, 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "unconscious", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "high pain threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "3-Bokor": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "acc": 2, 
-            "count": 1, 
-            "name": "0006 - f Tank", 
-            "notes": "", 
-            "damage": {
-              "dice": "1d+3"
-            }, 
-            "reload": 3, 
-            "skill": "guns (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
-            }
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "0007 - g Tank"
-          }
-        ], 
-        "skills": {
-          "guns (pistol)": 13, 
-          "brawling": 12
-        }, 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 10, 
-          "basic-speed": 5.25
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 10, 
-          "basic-speed": 5.25
-        }, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "7-Tank-D": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "acc": 4, 
-            "count": 1, 
-            "name": "0017 -- g Bokor", 
-            "notes": "", 
-            "damage": {
-              "dice": "1d+4"
-            }, 
-            "reload": 3, 
-            "skill": "guns (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "0018 -- h Cleric", 
-            "notes": "", 
-            "damage": {
-              "dice": "1d+1 fat"
-            }, 
-            "skill": "axe/mace", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "0019 -- skip"
-          }
-        ], 
-        "skills": {
-          "guns (pistol)": 16, 
-          "axe/mace": 14, 
-          "brawling": 16
-        }, 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [
-          {
-            "rounds": 0.9, 
-            "string": [
-              "Do nothing", 
-              " Defense: any", 
-              " Move: none"
-            ]
-          }
-        ], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "6-Tank-B": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {
-          "guns (pistol)": 16, 
-          "axe/mace": 14, 
-          "brawling": 16
-        }, 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "dead", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "2-Thief-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "name": "0004 - skip", 
-            "notes": "", 
-            "damage": {
-              "type": "imp", 
-              "dice": "1d-2"
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "skills": {
-          "guns (pistol)": 12, 
-          "brawling": 14, 
-          "knife": 15
-        }, 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "dead", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "high pain threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }
-    }
-  }, 
-  "current-fight": {
-    "index": 9, 
-    "fighters": [
-      {
-        "group": "PCs", 
-        "name": "d-Tank"
-      }, 
-      {
-        "group": "PCs", 
-        "name": "c-Tank"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "2-Thief-A"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "8-Thief-B"
-      }, 
-      {
-        "group": "PCs", 
-        "name": "f-Tank"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "7-Tank-D"
-      }, 
-      {
-        "group": "PCs", 
-        "name": "a-Thief"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "5-Tank-C"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "4-Tank-A"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "6-Tank-B"
-      }, 
-      {
-        "group": "PCs", 
-        "name": "h-Cleric"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "1-Cleric"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "3-Bokor"
-      }, 
-      {
-        "group": "PCs", 
-        "name": "g-Bokor"
-      }
-    ], 
-    "saved": false, 
-    "round": 0, 
-    "monsters": "Arena Capture the Flag"
-  }, 
-  "Equipment": [
-    {
-      "acc": 2, 
-      "count": 1, 
-      "name": "pistol, Baretta DX 192", 
-      "notes": "", 
-      "damage": {
-        "dice": "1d+4"
-      }, 
-      "reload": 3, 
-      "skill": "guns (pistol)", 
-      "type": "ranged weapon", 
-      "ammo": {
-        "name": "C Cell", 
-        "shots": 8, 
-        "shots_left": 8
-      }
-    }, 
-    {
-      "acc": 4, 
-      "count": 1, 
-      "name": "pistol, Sig D65", 
-      "notes": "", 
-      "damage": {
-        "dice": "1d+4"
-      }, 
-      "reload": 3, 
-      "skill": "guns (pistol)", 
-      "type": "ranged weapon", 
-      "ammo": {
-        "name": "C Cell", 
-        "shots": 9, 
-        "shots_left": 9
-      }
-    }, 
-    {
-      "acc": 2, 
-      "count": 1, 
-      "name": "pistol, Kalashnikov Makarov", 
-      "notes": "", 
-      "damage": {
-        "dice": "1d+3"
-      }, 
-      "reload": 3, 
-      "skill": "guns (pistol)", 
-      "type": "ranged weapon", 
-      "ammo": {
-        "name": "C Cell", 
-        "shots": 8, 
-        "shots_left": 8
-      }
-    }, 
-    {
-      "acc": 3, 
-      "count": 1, 
-      "name": "pistol, Colt 170D", 
-      "notes": "", 
-      "damage": {
-        "dice": "1d+4"
-      }, 
-      "reload": 3, 
-      "skill": "guns (pistol)", 
-      "type": "ranged weapon", 
-      "ammo": {
-        "name": "C Cell", 
-        "shots": 9, 
-        "shots_left": 9
-      }
-    }, 
-    {
-      "count": 1, 
-      "name": "knife, large", 
-      "notes": "", 
-      "damage": {
-        "type": "imp", 
-        "dice": "1d-2"
-      }, 
-      "parry": -1, 
-      "skill": "knife", 
-      "type": "melee weapon"
-    }, 
-    {
-      "count": 1, 
-      "name": "sick stick", 
-      "notes": "", 
-      "damage": {
-        "dice": "1d+1 fat"
-      }, 
-      "skill": "axe/mace", 
-      "type": "melee weapon"
-    }, 
-    {
-      "count": 1000000, 
-      "notes": "", 
-      "type": "misc", 
-      "name": "C Cell"
-    }
-  ], 
-  "Names": {
-    "russian": {
-      "male": [
-        "Aymeric", 
-        "Aleksey", 
-        "Adam", 
-        "Andrei", 
-        "Andrew", 
-        "Andru", 
-        "Artiom", 
-        "Artem", 
-        "Artyom", 
-        "Anatoly", 
-        "Anton", 
-        "Alex/Aleksandr/Aleksei", 
-        "Arseniy", 
-        "Arthur", 
-        "Andrey", 
-        "Arsenii", 
-        "Bekhan", 
-        "Bogdan", 
-        "Boris", 
-        "Dan/Danil/Danila", 
-        "David", 
-        "Denis", 
-        "Dmitriy", 
-        "Dima", 
-        "Egor", 
-        "Eugene", 
-        "Evgeny", 
-        "Fedor", 
-        "George", 
-        "German", 
-        "Gosha", 
-        "Gregory", 
-        "Gleb", 
-        "Grisha", 
-        "Igor", 
-        "Ilya", 
-        "Ivan Konstantin", 
-        "Kirill", 
-        "Kostya", 
-        "Kolya", 
-        "Leo", 
-        "Leonid", 
-        "Mansur", 
-        "Max/Maxim", 
-        "Mark", 
-        "Matvey", 
-        "MIkhail", 
-        "Misha", 
-        "Nick", 
-        "Niko", 
-        "Nikolai", 
-        "Nikita", 
-        "Oleg", 
-        "Pasha", 
-        "Pavel", 
-        "Paul", 
-        "Petr", 
-        "Rafit", 
-        "Renat", 
-        "Roma", 
-        "Roman", 
-        "Ruslan", 
-        "Sasha", 
-        "Sergey", 
-        "Serge", 
-        "Slava", 
-        "Sonya", 
-        "Stanislav", 
-        "Timur", 
-        "Vadim", 
-        "Valentin", 
-        "Vasiliy", 
-        "Vitaliy", 
-        "Vlad", 
-        "Vladislav", 
-        "Vladimir", 
-        "Vova", 
-        "Yaroslav", 
-        "Yegor", 
-        "Yura", 
-        "Zahar", 
-        "Zhenya"
-      ], 
-      "female": [
-        "Anastasia", 
-        "Anna", 
-        "Alina", 
-        "Alexandra", 
-        "Arina", 
-        "Anya", 
-        "Alena", 
-        "Alice", 
-        "Alisa", 
-        "Asya", 
-        "Albina", 
-        "Alyona", 
-        "Christina", 
-        "Catherine", 
-        "Dasha", 
-        "Darya", 
-        "Diana", 
-        "Dina", 
-        "Elena", 
-        "Ekaterina", 
-        "Elizabeth", 
-        "Eva", 
-        "Evgeniya", 
-        "Galina", 
-        "Helena", 
-        "Inna", 
-        "Ira", 
-        "Irina", 
-        "Juliya", 
-        "Karina", 
-        "Katerina", 
-        "Katherine", 
-        "Katya", 
-        "Kira", 
-        "Kristina", 
-        "Ksenya", 
-        "Ksusha", 
-        "Lena", 
-        "Lera", 
-        "Liza", 
-        "Lyuba", 
-        "Madina", 
-        "Margarita", 
-        "Mariya", 
-        "Marina", 
-        "Marta", 
-        "Masha", 
-        "Natasha", 
-        "Nataly", 
-        "Natalya", 
-        "Nastya", 
-        "Nina", 
-        "Oksana", 
-        "Olesya", 
-        "Olga", 
-        "Olya", 
-        "Polina", 
-        "Sofia", 
-        "Sonya", 
-        "Sasha", 
-        "Sveta", 
-        "Svetlana", 
-        "Tanya", 
-        "Tatyana", 
-        "Ulyana", 
-        "Vika", 
-        "Viktoria", 
-        "Vera", 
-        "Valentina", 
-        "Valeria", 
-        "Viktoriya", 
-        "Vasilisa", 
-        "Veronika", 
-        "Victoria", 
-        "Vlada", 
-        "Yana", 
-        "Yulia", 
-        "Zhenya"
-      ]
-    }, 
     "australian": {
       "male": [
         "Oliver", 
@@ -1721,591 +782,1195 @@
         "Widelene"
       ]
     }
-  }, 
-  "monsters": {
-    "Arena Attack Monsters": {
-      "5-Tank-B": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "4-Tank-C": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "3-Tank-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "1-Thief-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "7-Tank-D": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "8-Tank-F": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "6-Tank-E": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "2-Thief-B": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }
     }, 
-    "Arena Attack Characters": {
-      "5-Tank-B": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
+    "PCs": {
+        "a-Thief": {
+            "aim": {"rounds": 0, "braced": false},
+            "skills": {},
+            "advantages": {},
+            "shock": 0, 
+            "weapon-index" : null,
+            "stuff": [],
+            "state": "alive",
+            "posture": "standing",
+            "current": {
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 12, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 12, 
+                "basic-speed": 5.75
+            }, 
+            "permanent": {
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 12, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 12, 
+                "basic-speed": 5.75
+            }, 
+            "timers": [], 
+            "check_for_death": false, 
+            "opponent": null
         }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
+        "c-Tank": {
+            "aim": {"rounds": 0, "braced": false},
+            "shock": 0, 
+            "weapon-index" : null,
+            "stuff": [],
+            "skills": {},
+            "advantages": {},
+            "state": "alive",
+            "posture": "standing",
+            "current": {
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 11, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 12, 
+                "basic-speed": 5.75
+            }, 
+            "permanent": {
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 11, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 12, 
+                "basic-speed": 5.75
+            }, 
+            "timers": [], 
+            "check_for_death": false, 
+            "opponent": null
         }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
+        "d-Tank": {
+            "aim": {"rounds": 0, "braced": false},
+            "shock": 0, 
+            "weapon-index" : null,
+            "stuff": [],
+            "skills": {},
+            "advantages": {},
+            "state": "alive",
+            "posture": "standing",
+            "current": {
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 11, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 12, 
+                "basic-speed": 5.75
+            }, 
+            "permanent": {
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 11, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 12, 
+                "basic-speed": 5.75
+            }, 
+            "timers": [], 
+            "check_for_death": false, 
+            "opponent": null
         }, 
-        "advantages": {
-          "combat reflexes": 15
+        "f-Tank": {
+            "aim": {"rounds": 0, "braced": false},
+            "shock": 0, 
+            "weapon-index" : null,
+            "stuff": [],
+            "skills": {},
+            "advantages": {},
+            "state": "alive",
+            "posture": "standing",
+            "current": {
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 11, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 12, 
+                "basic-speed": 5.75
+            }, 
+            "permanent": {
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 11, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 12, 
+                "basic-speed": 5.75
+            }, 
+            "timers": [], 
+            "check_for_death": false, 
+            "opponent": null
         }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "4-Tank-C": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
+        "g-Bokor": {
+            "aim": {"rounds": 0, "braced": false},
+            "shock": 0, 
+            "weapon-index" : null,
+            "stuff": [],
+            "skills": {},
+            "advantages": {},
+            "state": "alive",
+            "posture": "standing",
+            "current": {
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 10, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 5.25
+            }, 
+            "permanent": {
+                "fp": 11, 
+                "iq": 12, 
+                "hp": 10, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 10, 
+                "basic-speed": 5.25
+            }, 
+            "timers": [], 
+            "check_for_death": false, 
+            "opponent": null
         }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
+        "h-Cleric": {
+            "aim": {"rounds": 0, "braced": false},
+            "shock": 0, 
+            "weapon-index" : null,
+            "stuff": [],
+            "skills": {},
+            "advantages": {},
+            "state": "alive",
+            "posture": "standing",
+            "current": {
+                "fp": 12, 
+                "iq": 13, 
+                "hp": 10, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 11, 
+                "basic-speed": 5.5
+            }, 
+            "permanent": {
+                "fp": 12, 
+                "iq": 13, 
+                "hp": 10, 
+                "ht": 11, 
+                "st": 10, 
+                "dx": 11, 
+                "basic-speed": 5.5
+            }, 
+            "timers": [], 
+            "check_for_death": false, 
+            "opponent": null
+        }
+    }, 
+    "dead-monsters": {}, 
+    "monsters": {
+        "Arena Attack Monsters": {
+            "1-Thief-A": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15,
+                               "high pain threshold": 10},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 12, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 12, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "2-Thief-B": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15,
+                               "high pain threshold": 10},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 12, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 12, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "3-Tank-A": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "4-Tank-C": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "5-Tank-B": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "6-Tank-E": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "7-Tank-D": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "8-Tank-F": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }
         }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
+        "Arena Attack Characters": {
+            "1-Thief-A": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15,
+                               "high pain threshold": 10},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 12, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 12, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "2-Thief-B": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15,
+                               "high pain threshold": 10},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 12, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 12, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "3-Tank-A": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "4-Tank-C": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "5-Tank-B": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "6-Tank-D": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "7-Bokor-A": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 10, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5.25
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 10, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5.25
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "8-Cleric-A": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [],
+                "skills": {},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 12, 
+                    "iq": 13, 
+                    "hp": 10, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 11, 
+                    "basic-speed": 5.5
+                }, 
+                "permanent": {
+                    "fp": 12, 
+                    "iq": 13, 
+                    "hp": 10, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 11, 
+                    "basic-speed": 5.5
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }
         }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "3-Tank-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "1-Thief-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "7-Bokor-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 10, 
-          "basic-speed": 5.25
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 10, 
-          "basic-speed": 5.25
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "8-Cleric-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 12, 
-          "iq": 13, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 11, 
-          "basic-speed": 5.5
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 12, 
-          "iq": 13, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 11, 
-          "basic-speed": 5.5
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "6-Tank-D": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "2-Thief-B": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }
+        "Arena Capture the Flag": {
+            "1-Cleric": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [
+                           {"name": "0001 - a Tank",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+4"},
+                            "acc": 3,
+                            "ammo": {"name": "C Cell",
+                                     "shots_left": 9,
+                                     "shots": 9},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "0002 - c Tank",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
+                "skills": {"guns (pistol)": 15,
+                           "brawling": 12},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 12, 
+                    "iq": 13, 
+                    "hp": 10, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 11, 
+                    "basic-speed": 5.5
+                }, 
+                "permanent": {
+                    "fp": 12, 
+                    "iq": 13, 
+                    "hp": 10, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 11, 
+                    "basic-speed": 5.5
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "2-Thief-A": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [
+                           {"name": "0003 - d Tank",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+4"},
+                            "acc": 2,
+                            "ammo": {"name": "C Cell",
+                                     "shots_left": 8,
+                                     "shots": 8},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "0004 - skip",
+                            "type": "melee weapon",
+                            "damage": {"dice": "1d-2",
+                                       "type": "imp"},
+                            "skill": "knife",
+                            "count": 1,
+                            "parry": -1,
+                            "notes": ""
+                           },
+                           {"name": "0005 - d-Tank",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
+                "skills": {"guns (pistol)": 12,
+                           "brawling": 14,
+                           "knife": 15},
+                "advantages": {"high pain threshold": 10},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 12, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 12, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "3-Bokor": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [
+                           {"name": "0006 - f Tank",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+3"},
+                            "acc": 2,
+                            "ammo": {"name": "C Cell",
+                                     "shots_left": 8,
+                                     "shots": 8},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "0007 - g Tank",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
+                "skills": {"guns (pistol)": 13,
+                           "brawling": 12},
+                "advantages": {"combat reflexes": 15,
+                               "high pain threshold": 10},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 10, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5.25
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 10, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 10, 
+                    "basic-speed": 5.25
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "4-Tank-A": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [
+                           {"name": "0008 -- skip",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+4"},
+                            "acc": 4,
+                            "ammo": {"name": "C Cell",
+                                     "shots_left": 9,
+                                     "shots": 9},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "0009 -- h Cleric",
+                            "type": "melee weapon",
+                            "damage": {"dice": "1d+1 fat"},
+                            "skill": "axe/mace",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "0010 -- g Bokor",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
+                "skills": {"guns (pistol)": 16,
+                           "brawling": 16,
+                           "axe/mace": 14},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "st": 10, 
+                    "dx": 12, 
+                    "iq": 12, 
+                    "ht": 11, 
+
+                    "fp": 11, 
+                    "hp": 11, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "5-Tank-C": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [
+                           {"name": "0011 -- skip",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+4"},
+                            "acc": 4,
+                            "ammo": {"name": "C Cell",
+                                     "shots_left": 9,
+                                     "shots": 9},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "0012 -- a Thief",
+                            "type": "melee weapon",
+                            "damage": {"dice": "1d+1 fat"},
+                            "skill": "axe/mace",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "0013 -- a Thief",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
+                "skills": {"guns (pistol)": 16,
+                           "brawling": 16,
+                           "axe/mace": 14},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "st": 10, 
+                    "dx": 12, 
+                    "iq": 12, 
+                    "ht": 11, 
+
+                    "fp": 11, 
+                    "hp": 11, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "6-Tank-B": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [
+                           {"name": "0014 -- c Tank",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+4"},
+                            "acc": 4,
+                            "ammo": {"name": "C Cell",
+                                     "shots_left": 9,
+                                     "shots": 9},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "0015 -- d Tank",
+                            "type": "melee weapon",
+                            "damage": {"dice": "1d+1 fat"},
+                            "skill": "axe/mace",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "0016 -- f Tank",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
+                "skills": {"guns (pistol)": 16,
+                           "brawling": 16,
+                           "axe/mace": 14},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "st": 10, 
+                    "dx": 12, 
+                    "iq": 12, 
+                    "ht": 11, 
+
+                    "fp": 11, 
+                    "hp": 11, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "7-Tank-D": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [
+                           {"name": "0017 -- g Bokor",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+4"},
+                            "acc": 4,
+                            "ammo": {"name": "C Cell",
+                                     "shots_left": 9,
+                                     "shots": 9},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "0018 -- h Cleric",
+                            "type": "melee weapon",
+                            "damage": {"dice": "1d+1 fat"},
+                            "skill": "axe/mace",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "0019 -- skip",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
+                "skills": {"guns (pistol)": 16,
+                           "brawling": 16,
+                           "axe/mace": 14},
+                "advantages": {"combat reflexes": 15},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "st": 10, 
+                    "dx": 12, 
+                    "iq": 12, 
+                    "ht": 11, 
+
+                    "fp": 11, 
+                    "hp": 11, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 11, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }, 
+            "8-Thief-B": {
+                "aim": {"rounds": 0, "braced": false},
+                "shock": 0, 
+                "weapon-index" : null,
+                "stuff": [
+                           {"name": "0020 -- a-Thief",
+                            "type": "ranged weapon",
+                            "damage": {"dice": "1d+4"},
+                            "acc": 2,
+                            "ammo": {"name": "C Cell",
+                                     "shots_left": 8,
+                                     "shots": 8},
+                            "reload": 3,
+                            "skill": "guns (pistol)",
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "0021 -- c-Tanks",
+                            "type": "melee weapon",
+                            "damage": {"dice": "1d-2",
+                                       "type": "imp"},
+                            "skill": "knife",
+                            "parry": -1,
+                            "count": 1,
+                            "notes": ""
+                           },
+                           {"name": "0022 -- d-Tank",
+                            "type": "misc",
+                            "count": 5,
+                            "notes": ""
+                           }
+                          ],
+                "skills": {"guns (pistol)": 12,
+                           "brawling": 14,
+                           "knife": 15},
+                "advantages": {"high pain threshold": 10},
+                "state": "alive",
+                "posture": "standing",
+                "current": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 12, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "permanent": {
+                    "fp": 11, 
+                    "iq": 12, 
+                    "hp": 12, 
+                    "ht": 11, 
+                    "st": 10, 
+                    "dx": 12, 
+                    "basic-speed": 5.75
+                }, 
+                "timers": [], 
+                "check_for_death": false, 
+                "opponent": null
+            }
+        }
+    }, 
+    "current-fight": {
+        "index": 1, 
+        "fighters": [
+            {
+                "group": "PCs", 
+                "name": "Wade"
+            }, 
+            {
+                "group": "PCs", 
+                "name": "Tom"
+            }, 
+            {
+                "group": "horsemen", 
+                "name": "Death"
+            }, 
+            {
+                "group": "horsemen", 
+                "name": "War"
+            }, 
+            {
+                "group": "PCs", 
+                "name": "Bob"
+            }, 
+            {
+                "group": "horsemen", 
+                "name": "Pestilence"
+            }, 
+            {
+                "group": "horsemen", 
+                "name": "Famine"
+            }
+        ], 
+        "saved": false, 
+        "round": 2, 
+        "monsters": "horsemen"
     }
-  }
 }
