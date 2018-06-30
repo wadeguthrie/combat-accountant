@@ -617,7 +617,7 @@ class OutfitCharactersGmWindow(GmWindow):
                                                  0,
                                                  0)
         lines, cols = self._window.getmaxyx()
-        self.__monster_window = self._window_manager.new_native_window(
+        self.__outfit_window = self._window_manager.new_native_window(
                                                                     lines - 4,
                                                                     cols / 2,
                                                                     1,
@@ -625,26 +625,35 @@ class OutfitCharactersGmWindow(GmWindow):
 
     def close(self):
         # Kill my subwindows, first
-        if self.__monster_window is not None:
-            del self.__monster_window
-            self.__monster_window = None
+        if self.__outfit_window is not None:
+            del self.__outfit_window
+            self.__outfit_window = None
         super(OutfitCharactersGmWindow, self).close()
 
 
     def refresh(self):
         super(OutfitCharactersGmWindow, self).refresh()
-        if self.__monster_window is not None:
-            self.__monster_window.refresh()
+        if self.__outfit_window is not None:
+            self.__outfit_window.refresh()
 
+    def show_character(self, character):
+        if character['name'] is None:
+            return
 
-    #def show_monsters(self, name, monsters):
-    #    if self.__monster_window is not None:
-    #        self.__monster_window.clear()
-    #        mode = curses.A_NORMAL
-    #        for line, monster_name in enumerate(monsters):
-    #            self.__monster_window.addstr(line, 0, monster_name, mode)
-    #
-    #    self.refresh()
+        line = 0
+        mode = curses.color_pair(GmWindowManager.GREEN_BLACK) | curses.A_BOLD
+        self.__outfit_window.addstr(line, 0, '%s' % character['name'], mode)
+        line += 1
+
+        if character['details'] is None:
+            return
+
+        mode = curses.A_NORMAL 
+        self.__outfit_window.addstr(line, 0, 'Equipment', mode | curses.A_BOLD)
+        line += 1
+        for item in character['details']['stuff']:
+            self.__outfit_window.addstr(line, 0, '  %s' % item['name'], mode)
+            line += 1
 
     #
     # Private methods
@@ -821,6 +830,9 @@ class GmWindowManager(object):
 
     def get_fight_gm_window(self, ruleset):
         return FightGmWindow(self, ruleset)
+
+    def get_outfit_gm_window(self):
+        return OutfitCharactersGmWindow(self)
 
     def getmaxyx(self):
         return curses.LINES, curses.COLS
@@ -2472,19 +2484,20 @@ class FightHandler(ScreenHandler):
         # NOTE: 'h' and 'f' belong in Ruleset
         # TODO: Heal
         self._add_to_choice_dict({
-            ord(' '): {'name': 'next',      'func': self.__next_fighter},
-            ord('<'): {'name': 'prev',      'func': self.__prev_fighter},
-            ord('?'): {'name': 'explain',   'func': self.__show_why},
-            ord('d'): {'name': 'dead',      'func': self.__dead},
-            ord('f'): {'name': 'FP damage', 'func': self.__damage_FP},
-            ord('h'): {'name': 'History',   'func': self.__show_history},
-            ord('-'): {'name': 'HP damage', 'func': self.__damage_HP},
-            ord('m'): {'name': 'maneuver',  'func': self.__maneuver},
-            ord('n'): {'name': 'notes',     'func': self.__notes},
-            ord('o'): {'name': 'opponent',  'func': self.__pick_opponent},
-            ord('q'): {'name': 'quit',      'func': self.__quit},
-            ord('s'): {'name': 'save',      'func': self.__save},
-            ord('t'): {'name': 'timer',     'func': self.__timer}
+            ord(' '): {'name': 'next',        'func': self.__next_fighter},
+            ord('<'): {'name': 'prev',        'func': self.__prev_fighter},
+            ord('?'): {'name': 'explain',     'func': self.__show_why},
+            ord('d'): {'name': 'dead',        'func': self.__dead},
+            ord('f'): {'name': 'FP damage',   'func': self.__damage_FP},
+            ord('h'): {'name': 'History',     'func': self.__show_history},
+            ord('-'): {'name': 'HP damage',   'func': self.__damage_HP},
+            ord('L'): {'name': 'Loot bodies', 'func': self.__loot_bodies},
+            ord('m'): {'name': 'maneuver',    'func': self.__maneuver},
+            ord('n'): {'name': 'notes',       'func': self.__notes},
+            ord('o'): {'name': 'opponent',    'func': self.__pick_opponent},
+            ord('q'): {'name': 'quit',        'func': self.__quit},
+            ord('s'): {'name': 'save',        'func': self.__save},
+            ord('t'): {'name': 'timer',       'func': self.__timer}
         })
 
         self.__world = world
@@ -2750,6 +2763,82 @@ class FightHandler(ScreenHandler):
                 return fighter
 
         return None
+
+
+    def __loot_bodies(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        print '\n\n ####### __loot_bodies #######\n'
+
+        '''
+        for bad_guy in self.__fighters:
+            print '\n==== TRIP 1 bad guy loop: %s ====' % bad_guy.name # TODO: remove
+            print '  group: %s, state: %s' % (bad_guy.group, # TODO: remove
+                                              bad_guy.details['state']) # TODO: remove
+            for index, item in reversed(list(enumerate(
+                                                bad_guy.details['stuff']))):
+                print '\n---- item loop: %d ----' % index  # TODO: remove
+                PP.pprint(item) # TODO: remove
+
+        '''
+
+        # Go through bad buys and distribute their items
+        for bad_guy in self.__fighters:
+            print '\n==== bad guy loop: %s ====' % bad_guy.name # TODO: remove
+            print '  group: %s, state: %s' % (bad_guy.group, # TODO: remove
+                                              bad_guy.details['state']) # TODO: remove
+            # Only transfer stuff from dead or unconscious bad guys
+            if bad_guy.group == 'PCs':
+                print '  PC, skipping' # TODO: remove
+                continue
+            if bad_guy.is_conscious():
+                print '  is conscious, skipping' # TODO: remove
+                continue
+
+            PP.pprint(bad_guy.details) # TODO: remove
+            # Reversed so removing items doesn't change the index of others
+            for index, item in reversed(list(enumerate(
+                                                bad_guy.details['stuff']))):
+                print '\n---- item loop: %d ----' % index  # TODO: remove
+                PP.pprint(item) # TODO: remove
+                xfer_menu = [(good_guy.name, {'guy': good_guy})
+                                 for good_guy in self.__fighters
+                                            if good_guy.group == 'PCs']
+                xfer_menu.append(('QUIT', {'quit': None}))
+                print 'menu' # TODO:remove
+                PP.pprint(xfer_menu) # TODO: remove
+                xfer = self._window_manager.menu(
+                        'Who gets %s\'s %s' % (bad_guy.name,
+                                               item['name']),
+                        xfer_menu)
+
+                print 'result' # TODO: remove
+                PP.pprint(xfer)
+
+                if xfer is None:
+                    continue
+
+                if 'quit' in xfer:
+                    return True
+
+                print '\nbad guy\'s stuff, before' # TODO: remove
+                PP.pprint(bad_guy.details['stuff']) # TODO: remove
+                print 'good guy, before' # TODO: remove
+                PP.pprint(xfer['guy'].details) # TODO: remove
+
+                new_item = bad_guy.details['stuff'].pop(index)
+                xfer['guy'].details['stuff'].append(new_item)
+
+                print '\nbad guy\'s stuff, after' # TODO: remove
+                PP.pprint(bad_guy.details['stuff']) # TODO: remove
+                print 'good guy, after' # TODO: remove
+                PP.pprint(xfer['guy'].details) # TODO: remove
+
+
+        return True # Keep fighting
 
 
     def __maneuver(self):
@@ -3315,14 +3404,13 @@ class OutfitCharactersHandler(ScreenHandler):
 
         self._add_to_choice_dict({
             ord('a'): {'name': 'add equipment', 'func': self.__add_equipment},
-            ord('A'): {'name': 'add to everyone', 'func': self.__add_everyone},
             ord('r'): {'name': 'remove equipment', 'func':
                                                       self.__remove_equipment},
             ord('s'): {'name': 'select character', 'func':
                                                       self.__select_character},
             ord('q'): {'name': 'quit', 'func': self.__quit},
         })
-        self._window = OutfitCharactersGmWindow(self._window_manager)
+        self._window = self._window_manager.get_outfit_gm_window()
         self.__world = world
 
         lines, cols = self._window.getmaxyx()
@@ -3335,11 +3423,14 @@ class OutfitCharactersHandler(ScreenHandler):
         # TODO: need to exit if a group isn't chosen
 
         self.__character = {'name': None, 'details': None}
+        self.__select_character()
+        self._window.show_character(self.__character)
 
         # TODO: warn if called with -m
         #if XXX:
         #    self._window_manager.error(
         #                ['Called with XXX, these changes won\'t be saved'])
+
 
     #
     # Protected Methods
@@ -3347,6 +3438,7 @@ class OutfitCharactersHandler(ScreenHandler):
 
     def _draw_screen(self):
         self._window.clear()
+        self._window.show_character(self.__character)
         self._window.command_ribbon(self._choices)
 
     #
@@ -3359,9 +3451,7 @@ class OutfitCharactersHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         if self.__character['details'] is None:
-            # TODO: just bring-up the character selection screen
-            self._window_manager.error(
-                                ['You need to select a character, first'])
+            self.__select_character()
             return True
 
         # Pick an item off the shelf
@@ -3374,34 +3464,7 @@ class OutfitCharactersHandler(ScreenHandler):
         # TODO: ask how many to add
 
         self.__character['details']['stuff'].append(copy.deepcopy(item))
-        # TODO: show the character's item list on the screen
-
-        return True # Keep going
-
-
-    def __add_everyone(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        # TODO: do this whole thing
-        if self.__character['details'] is None:
-            # TODO: just bring-up the character selection screen
-            self._window_manager.error(
-                                ['You need to select a character, first'])
-            return True
-
-        # Pick an item off the shelf
-
-        item_menu = [(item['name'], item) for item in self.__world['Equipment']]
-        item = self._window_manager.menu('Item to Add', item_menu)
-        if item is None:
-            return True # Keep going
-
-        # TODO: ask how many to add
-
-        self.__character['details']['stuff'].append(item)
-        # TODO: show the character's item list on the screen
+        self._window.show_character(self.__character)
 
         return True # Keep going
 
@@ -3428,6 +3491,7 @@ class OutfitCharactersHandler(ScreenHandler):
             return True # Keep going
 
         del(self.__character['details']['stuff'][item_index])
+        self._window.show_character(self.__character)
         return True # Keep going
 
 
@@ -3446,6 +3510,7 @@ class OutfitCharactersHandler(ScreenHandler):
             return True # Keep going
         self.__character = {'name': character_name,
                             'details': character_list[character_name]}
+        self._window.show_character(self.__character)
         return True # Keep going
 
 
