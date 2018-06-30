@@ -12,6 +12,8 @@ import random
 import sys
 
 # TODO:
+#   - saved game, active character should save whether they did an action or
+#     not
 #   - < 1/3 FP = 1/2 move, dodge, st
 #   - Warning if window is smaller than expected
 #   - Update the Templates in the JSON to match the character data
@@ -1235,7 +1237,7 @@ class Ruleset(object):
     def new_fight(self, fighter):
         '''Removes all the stuff from the old fight except injury.'''
         # NOTE: we're allowing health to still be messed-up, here
-        fighter.details['alive'] = True
+        fighter.details['state'] = 'alive'
         fighter.details['timers'] = []
         fighter.details['weapon-index'] = None
         fighter.details['opponent'] = None
@@ -3072,41 +3074,27 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
-        print 'A' # TODO: remove
-        quit_menu = [('Just Quit', {'doit': None})]
-
-        print 'B' # TODO: remove
         ask_to_save = False # Ask to save if some monster is conscious
         ask_to_loot = False # Ask to loot if some monster is unconscious
-        print 'C' # TODO: remove
         for fighter in self.__fighters:
-            print 'D' # TODO: remove
             if fighter.group != 'PCs':
                 if fighter.is_conscious():
                     ask_to_save = True
                 else:
                     ask_to_loot = True
-            print 'E' # TODO: remove
 
-        print 'F' # TODO: remove
         while ask_to_save or ask_to_loot:
-            print 'G' # TODO: remove
+            quit_menu = [('Just Quit', {'doit': None})]
+
             if not self.__bodies_looted and ask_to_loot:
-                print 'H' # TODO: remove
                 quit_menu.append(('Loot the Bodies',
                                  {'doit': self.__loot_bodies}))
-                print 'I' # TODO: remove
 
-            print 'J' # TODO: remove
             if not self.__saved_fight['saved'] and ask_to_save:
-                print 'K' # TODO: remove
                 quit_menu.append(('Save the Fight',
                                  {'doit': self.__simply_save}))
-                print 'L' # TODO: remove
 
-            print 'M' # TODO: remove
             result = self._window_manager.menu('Leaving Fight', quit_menu)
-            print 'N' # TODO: remove
             if result['doit'] is None:
                 ask_to_save = False
                 ask_to_loot = False
