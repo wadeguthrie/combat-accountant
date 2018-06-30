@@ -639,8 +639,12 @@ class OutfitCharactersGmWindow(GmWindow):
         if self.__outfit_window is not None:
             self.__outfit_window.refresh()
 
-    def show_character(self, character):
+    def show_character(self,
+                       character # dict: {'name': None, 'details': None}
+                      ):
+        self.__outfit_window.clear()
         if character['name'] is None:
+            self.refresh()
             return
 
         line = 0
@@ -649,14 +653,44 @@ class OutfitCharactersGmWindow(GmWindow):
         line += 1
 
         if character['details'] is None:
+            self.refresh()
             return
 
         mode = curses.A_NORMAL 
         self.__outfit_window.addstr(line, 0, 'Equipment', mode | curses.A_BOLD)
         line += 1
+        found_stuff = False
         for item in character['details']['stuff']:
+            found_stuff = True
             self.__outfit_window.addstr(line, 0, '  %s' % item['name'], mode)
             line += 1
+
+        if not found_stuff:
+            self.__outfit_window.addstr(line, 0, '  (Nothing)', mode)
+            line += 1
+
+        mode = curses.A_NORMAL 
+        self.__outfit_window.addstr(line, 0, 'Skills', mode | curses.A_BOLD)
+        line += 1
+        found_skill = False
+        for skill, value in character['details']['skills'].iteritems():
+            found_skill = True
+            self.__outfit_window.addstr(line,
+                                        0,
+                                        '  %s: %d' % (skill, value),
+                                        mode)
+            line += 1
+
+        if not found_skill:
+            self.__outfit_window.addstr(line, 0, '  (Nothing)', mode)
+            line += 1
+
+        self.refresh()
+
+    def touchwin(self):
+        super(OutfitCharactersGmWindow, self).touchwin()
+        if self.__outfit_window is not None:
+            self.__outfit_window.touchwin()
 
     #
     # Private methods
@@ -3470,6 +3504,9 @@ class OutfitCharactersHandler(ScreenHandler):
             return True # Keep going
 
         del(self.__character['details']['stuff'][item_index])
+        # Now, we're potentially messing with the order of things in the
+        # 'stuff' array.  Best not to depend on the weapon-index.
+        self.__character['details']['weapon-index'] = None
         self._window.show_character(self.__character)
         return True # Keep going
 

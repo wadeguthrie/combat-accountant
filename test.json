@@ -1060,7 +1060,25 @@
           "braced": false, 
           "rounds": 0
         }, 
-        "stuff": [], 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": "1d+4"
+            }, 
+            "reload": 3, 
+            "skill": "guns (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }
+        ], 
         "skills": {}, 
         "shock": 0, 
         "current": {
