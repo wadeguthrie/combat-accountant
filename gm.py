@@ -2773,18 +2773,6 @@ class FightHandler(ScreenHandler):
 
         print '\n\n ####### __loot_bodies #######\n'
 
-        '''
-        for bad_guy in self.__fighters:
-            print '\n==== TRIP 1 bad guy loop: %s ====' % bad_guy.name # TODO: remove
-            print '  group: %s, state: %s' % (bad_guy.group, # TODO: remove
-                                              bad_guy.details['state']) # TODO: remove
-            for index, item in reversed(list(enumerate(
-                                                bad_guy.details['stuff']))):
-                print '\n---- item loop: %d ----' % index  # TODO: remove
-                PP.pprint(item) # TODO: remove
-
-        '''
-
         # Go through bad buys and distribute their items
         for bad_guy in self.__fighters:
             print '\n==== bad guy loop: %s ====' % bad_guy.name # TODO: remove
@@ -2798,25 +2786,30 @@ class FightHandler(ScreenHandler):
                 print '  is conscious, skipping' # TODO: remove
                 continue
 
+            print '\n--Bad guy (%s)--' % bad_guy.name # TODO:remove
             PP.pprint(bad_guy.details) # TODO: remove
             # Reversed so removing items doesn't change the index of others
             for index, item in reversed(list(enumerate(
                                                 bad_guy.details['stuff']))):
-                print '\n---- item loop: %d ----' % index  # TODO: remove
+                print '\n---- item loop: %d "%s" ----' % ( # TODO: remove
+                                        index, item['name'])  # TODO: remove
+                                            
                 PP.pprint(item) # TODO: remove
                 xfer_menu = [(good_guy.name, {'guy': good_guy})
                                  for good_guy in self.__fighters
                                             if good_guy.group == 'PCs']
                 xfer_menu.append(('QUIT', {'quit': None}))
-                print 'menu' # TODO:remove
-                PP.pprint(xfer_menu) # TODO: remove
                 xfer = self._window_manager.menu(
                         'Who gets %s\'s %s' % (bad_guy.name,
                                                item['name']),
                         xfer_menu)
 
-                print 'result' # TODO: remove
-                PP.pprint(xfer)
+                if xfer is None: # TODO: remove
+                    print 'recipient: None (skip)' # TODO: remove
+                elif 'quit' in xfer: # TODO: remove
+                    print 'recipient: *QUIT*' # TODO: remove
+                else: # TODO: remove
+                    print 'recipient: %s' % xfer['guy'].name # TODO: remove
 
                 if xfer is None:
                     continue
@@ -2824,18 +2817,18 @@ class FightHandler(ScreenHandler):
                 if 'quit' in xfer:
                     return True
 
-                print '\nbad guy\'s stuff, before' # TODO: remove
+                print '\nbad guy\'s (%s) stuff, before' % bad_guy.name # TODO: remove
                 PP.pprint(bad_guy.details['stuff']) # TODO: remove
-                print 'good guy, before' # TODO: remove
-                PP.pprint(xfer['guy'].details) # TODO: remove
+                print 'good guy (%s)\'s stuff, before' % xfer['guy'].name # TODO: remove
+                PP.pprint(xfer['guy'].details['stuff']) # TODO: remove
 
                 new_item = bad_guy.details['stuff'].pop(index)
                 xfer['guy'].details['stuff'].append(new_item)
 
-                print '\nbad guy\'s stuff, after' # TODO: remove
+                print '\nbad guy\'s (%s) stuff, after' % bad_guy.name # TODO: remove
                 PP.pprint(bad_guy.details['stuff']) # TODO: remove
-                print 'good guy, after' # TODO: remove
-                PP.pprint(xfer['guy'].details) # TODO: remove
+                print 'good guy (%s)\'s stuff, after' % xfer['guy'].name # TODO: remove
+                PP.pprint(xfer['guy'].details['stuff']) # TODO: remove
 
 
         return True # Keep fighting

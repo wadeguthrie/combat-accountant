@@ -171,27 +171,10 @@
       }, 
       "stuff": [
         {
-          "acc": 4, 
-          "count": 1, 
-          "name": "7-Tank-D -- g Bokor", 
-          "notes": "", 
-          "damage": {
-            "dice": "1d+4"
-          }, 
-          "reload": 3, 
-          "skill": "guns (pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 9, 
-            "shots_left": 9
-          }
-        }, 
-        {
           "count": 5, 
           "notes": "", 
           "type": "misc", 
-          "name": "3-Bokor - g Tank"
+          "name": "0010 -- g Bokor"
         }
       ], 
       "skills": {}, 
@@ -230,25 +213,9 @@
       }, 
       "stuff": [
         {
-          "count": 5, 
-          "notes": "", 
-          "type": "misc", 
-          "name": "5-Tank-C -- a Thief"
-        }, 
-        {
+          "acc": 2, 
           "count": 1, 
-          "name": "5-Tank-C -- a Thief", 
-          "notes": "", 
-          "damage": {
-            "dice": "1d+1 fat"
-          }, 
-          "skill": "axe/mace", 
-          "type": "melee weapon"
-        }, 
-        {
-          "acc": 3, 
-          "count": 1, 
-          "name": "1-Cleric - a Tank", 
+          "name": "0020 -- a-Thief", 
           "notes": "", 
           "damage": {
             "dice": "1d+4"
@@ -258,8 +225,8 @@
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
-            "shots": 9, 
-            "shots_left": 9
+            "shots": 8, 
+            "shots_left": 8
           }
         }
       ], 
@@ -306,7 +273,47 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
+      "stuff": [
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "0005 - d-Tank"
+        }, 
+        {
+          "acc": 2, 
+          "count": 1, 
+          "name": "0003 - d Tank", 
+          "notes": "", 
+          "damage": {
+            "dice": "1d+4"
+          }, 
+          "reload": 3, 
+          "skill": "guns (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 8, 
+            "shots_left": 8
+          }
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "0022 -- d-Tank"
+        }, 
+        {
+          "count": 1, 
+          "name": "0015 -- d Tank", 
+          "notes": "", 
+          "damage": {
+            "dice": "1d+1 fat"
+          }, 
+          "skill": "axe/mace", 
+          "type": "melee weapon"
+        }
+      ], 
       "skills": {}, 
       "shock": 0, 
       "alive": true, 
@@ -352,21 +359,10 @@
       }, 
       "stuff": [
         {
-          "acc": 2, 
-          "count": 1, 
-          "name": "3-Bokor - f Tank", 
+          "count": 5, 
           "notes": "", 
-          "damage": {
-            "dice": "1d+3"
-          }, 
-          "reload": 3, 
-          "skill": "guns (pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 8, 
-            "shots_left": 8
-          }
+          "type": "misc", 
+          "name": "0016 -- f Tank"
         }
       ], 
       "skills": {}, 
@@ -394,16 +390,7 @@
       "advantages": {}, 
       "weapon-index": null, 
       "check_for_death": false, 
-      "timers": [
-        {
-          "rounds": 0.9, 
-          "string": [
-            "Do nothing", 
-            " Defense: any", 
-            " Move: none"
-          ]
-        }
-      ], 
+      "timers": [], 
       "posture": "standing", 
       "opponent": null
     }, 
@@ -414,10 +401,33 @@
       }, 
       "stuff": [
         {
-          "count": 5, 
+          "count": 1, 
+          "name": "0021 -- c-Tanks", 
           "notes": "", 
-          "type": "misc", 
-          "name": "1-Cleric - c Tank"
+          "damage": {
+            "type": "imp", 
+            "dice": "1d-2"
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "acc": 4, 
+          "count": 1, 
+          "name": "0014 -- c Tank", 
+          "notes": "", 
+          "damage": {
+            "dice": "1d+4"
+          }, 
+          "reload": 3, 
+          "skill": "guns (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 9
+          }
         }
       ], 
       "skills": {}, 
@@ -466,7 +476,7 @@
       "stuff": [
         {
           "count": 1, 
-          "name": "7-Tank-D -- h Cleric", 
+          "name": "0009 -- h Cleric", 
           "notes": "", 
           "damage": {
             "dice": "1d+1 fat"
@@ -476,7 +486,6 @@
         }
       ], 
       "skills": {}, 
-      "notes": "", 
       "shock": 0, 
       "alive": true, 
       "current": {
@@ -517,7 +526,7 @@
           {
             "acc": 4, 
             "count": 1, 
-            "name": "5-Tank-C -- skip", 
+            "name": "0011 -- skip", 
             "notes": "", 
             "damage": {
               "dice": "1d+4"
@@ -530,6 +539,22 @@
               "shots": 9, 
               "shots_left": 9
             }
+          }, 
+          {
+            "count": 1, 
+            "name": "0012 -- a Thief", 
+            "notes": "", 
+            "damage": {
+              "dice": "1d+1 fat"
+            }, 
+            "skill": "axe/mace", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "0013 -- a Thief"
           }
         ], 
         "skills": {
@@ -548,7 +573,7 @@
           "dx": 12, 
           "basic-speed": 5.75
         }, 
-        "state": "dead", 
+        "state": "alive", 
         "permanent": {
           "fp": 11, 
           "iq": 12, 
@@ -563,7 +588,16 @@
         }, 
         "weapon-index": null, 
         "check_for_death": false, 
-        "timers": [], 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
         "posture": "standing", 
         "opponent": null
       }, 
@@ -572,7 +606,31 @@
           "braced": false, 
           "rounds": 0
         }, 
-        "stuff": [], 
+        "stuff": [
+          {
+            "acc": 3, 
+            "count": 1, 
+            "name": "0001 - a Tank", 
+            "notes": "", 
+            "damage": {
+              "dice": "1d+4"
+            }, 
+            "reload": 3, 
+            "skill": "guns (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 9, 
+              "shots_left": 9
+            }
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "0002 - c Tank"
+          }
+        ], 
         "skills": {
           "guns (pistol)": 15, 
           "brawling": 12
@@ -588,7 +646,7 @@
           "dx": 11, 
           "basic-speed": 5.5
         }, 
-        "state": "dead", 
+        "state": "alive", 
         "permanent": {
           "fp": 12, 
           "iq": 13, 
@@ -616,7 +674,7 @@
           {
             "acc": 4, 
             "count": 1, 
-            "name": "4-Tank-A -- skip", 
+            "name": "0008 -- skip", 
             "notes": "", 
             "damage": {
               "dice": "1d+4"
@@ -629,22 +687,6 @@
               "shots": 9, 
               "shots_left": 9
             }
-          }, 
-          {
-            "count": 1, 
-            "name": "4-Tank-A -- h Cleric", 
-            "notes": "", 
-            "damage": {
-              "dice": "1d+1 fat"
-            }, 
-            "skill": "axe/mace", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "4-Tank-A -- g Bokor"
           }
         ], 
         "skills": {
@@ -663,7 +705,7 @@
           "dx": 12, 
           "basic-speed": 5.75
         }, 
-        "state": "alive", 
+        "state": "unconscious", 
         "permanent": {
           "fp": 11, 
           "iq": 12, 
@@ -678,16 +720,7 @@
         }, 
         "weapon-index": null, 
         "check_for_death": false, 
-        "timers": [
-          {
-            "rounds": 0.9, 
-            "string": [
-              "Do nothing", 
-              " Defense: any", 
-              " Move: none"
-            ]
-          }
-        ], 
+        "timers": [], 
         "posture": "standing", 
         "opponent": null
       }, 
@@ -696,43 +729,7 @@
           "braced": false, 
           "rounds": 0
         }, 
-        "stuff": [
-          {
-            "acc": 2, 
-            "count": 1, 
-            "name": "8-Thief-B -- FOO", 
-            "notes": "", 
-            "damage": {
-              "dice": "1d+4"
-            }, 
-            "reload": 3, 
-            "skill": "guns (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "8-Thief-B -- BAR", 
-            "notes": "", 
-            "damage": {
-              "type": "imp", 
-              "dice": "1d-2"
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "8-Thief-B -- BAZ"
-          }
-        ], 
+        "stuff": [], 
         "skills": {
           "guns (pistol)": 12, 
           "brawling": 14, 
@@ -749,7 +746,7 @@
           "dx": 12, 
           "basic-speed": 5.75
         }, 
-        "state": "alive", 
+        "state": "unconscious", 
         "permanent": {
           "fp": 11, 
           "iq": 12, 
@@ -773,7 +770,31 @@
           "braced": false, 
           "rounds": 0
         }, 
-        "stuff": [], 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "0006 - f Tank", 
+            "notes": "", 
+            "damage": {
+              "dice": "1d+3"
+            }, 
+            "reload": 3, 
+            "skill": "guns (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "0007 - g Tank"
+          }
+        ], 
         "skills": {
           "guns (pistol)": 13, 
           "brawling": 12
@@ -789,7 +810,7 @@
           "dx": 10, 
           "basic-speed": 5.25
         }, 
-        "state": "dead", 
+        "state": "alive", 
         "permanent": {
           "fp": 11, 
           "iq": 12, 
@@ -816,12 +837,89 @@
         }, 
         "stuff": [
           {
+            "acc": 4, 
+            "count": 1, 
+            "name": "0017 -- g Bokor", 
+            "notes": "", 
+            "damage": {
+              "dice": "1d+4"
+            }, 
+            "reload": 3, 
+            "skill": "guns (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 9, 
+              "shots_left": 9
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "0018 -- h Cleric", 
+            "notes": "", 
+            "damage": {
+              "dice": "1d+1 fat"
+            }, 
+            "skill": "axe/mace", 
+            "type": "melee weapon"
+          }, 
+          {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "name": "7-Tank-D -- skip"
+            "name": "0019 -- skip"
           }
         ], 
+        "skills": {
+          "guns (pistol)": 16, 
+          "axe/mace": 14, 
+          "brawling": 16
+        }, 
+        "shock": 0, 
+        "alive": true, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "6-Tank-B": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
         "skills": {
           "guns (pistol)": 16, 
           "axe/mace": 14, 
@@ -857,81 +955,6 @@
         "posture": "standing", 
         "opponent": null
       }, 
-      "6-Tank-B": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "acc": 4, 
-            "count": 1, 
-            "name": "6-Tank-B -- c Tank", 
-            "notes": "", 
-            "damage": {
-              "dice": "1d+4"
-            }, 
-            "reload": 3, 
-            "skill": "guns (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "6-Tank-B -- d Tank", 
-            "notes": "", 
-            "damage": {
-              "dice": "1d+1 fat"
-            }, 
-            "skill": "axe/mace", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "6-Tank-B -- f Tank"
-          }
-        ], 
-        "skills": {
-          "guns (pistol)": 16, 
-          "axe/mace": 14, 
-          "brawling": 16
-        }, 
-        "shock": 0, 
-        "alive": true, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
       "2-Thief-A": {
         "aim": {
           "braced": false, 
@@ -939,25 +962,8 @@
         }, 
         "stuff": [
           {
-            "acc": 2, 
             "count": 1, 
-            "name": "2-Thief-A - d Tank", 
-            "notes": "", 
-            "damage": {
-              "dice": "1d+4"
-            }, 
-            "reload": 3, 
-            "skill": "guns (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "2-Thief-A - skip", 
+            "name": "0004 - skip", 
             "notes": "", 
             "damage": {
               "type": "imp", 
@@ -966,12 +972,6 @@
             "parry": -1, 
             "skill": "knife", 
             "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "2-Thief-A - BAZ"
           }
         ], 
         "skills": {
@@ -990,7 +990,7 @@
           "dx": 12, 
           "basic-speed": 5.75
         }, 
-        "state": "alive", 
+        "state": "dead", 
         "permanent": {
           "fp": 11, 
           "iq": 12, 
@@ -1005,55 +1005,22 @@
         }, 
         "weapon-index": null, 
         "check_for_death": false, 
-        "timers": [
-          {
-            "rounds": 0.9, 
-            "string": [
-              "Do nothing", 
-              " Defense: any", 
-              " Move: none"
-            ]
-          }
-        ], 
+        "timers": [], 
         "posture": "standing", 
         "opponent": null
       }
     }
   }, 
   "current-fight": {
-    "index": 12, 
+    "index": 9, 
     "fighters": [
-      {
-        "group": "PCs", 
-        "name": "c-Tank"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "7-Tank-D"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "8-Thief-B"
-      }, 
       {
         "group": "PCs", 
         "name": "d-Tank"
       }, 
       {
         "group": "PCs", 
-        "name": "f-Tank"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "5-Tank-C"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "6-Tank-B"
-      }, 
-      {
-        "group": "PCs", 
-        "name": "a-Thief"
+        "name": "c-Tank"
       }, 
       {
         "group": "Arena Capture the Flag", 
@@ -1061,15 +1028,39 @@
       }, 
       {
         "group": "Arena Capture the Flag", 
+        "name": "8-Thief-B"
+      }, 
+      {
+        "group": "PCs", 
+        "name": "f-Tank"
+      }, 
+      {
+        "group": "Arena Capture the Flag", 
+        "name": "7-Tank-D"
+      }, 
+      {
+        "group": "PCs", 
+        "name": "a-Thief"
+      }, 
+      {
+        "group": "Arena Capture the Flag", 
+        "name": "5-Tank-C"
+      }, 
+      {
+        "group": "Arena Capture the Flag", 
         "name": "4-Tank-A"
       }, 
       {
         "group": "Arena Capture the Flag", 
-        "name": "1-Cleric"
+        "name": "6-Tank-B"
       }, 
       {
         "group": "PCs", 
         "name": "h-Cleric"
+      }, 
+      {
+        "group": "Arena Capture the Flag", 
+        "name": "1-Cleric"
       }, 
       {
         "group": "Arena Capture the Flag", 
