@@ -34,6 +34,49 @@ import sys
 #     redrawing everything way more often than I should.  Turns out, it's not
 #     costing me much but it's ugly, none-the-less
 
+'''
+      "2-Thief-A": {
+
+        -- RULESET BASED --
+
+        "aim": { "braced": false, "rounds": 0 }, 
+        "skills": {
+          "guns (pistol)": 12, 
+          "knife": 15
+        }, 
+        "advantages": {
+          "high pain threshold": 10
+        }, 
+ x      "shock": 0, 
+        "did_action_this_turn": false,
+ x      "check_for_death": false, 
+        "posture": "standing", 
+
+        -- GENERIC --
+
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "0003 - d Tank", 
+            "notes": "", 
+            "damage": { "dice": "1d+4" }, 
+            "reload": 3, 
+            "skill": "guns (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": { "name": "C Cell", "shots": 8, "shots_left": 8 }
+          } 
+        ], 
+ x      "current": {"fp": 11, "iq": 12, "hp": 12, "ht": 11, "st": 10, "dx": 12, 
+ x                  "basic-speed": 5.75}, 
+ x      "state": "alive", 
+ x      "permanent":{"fp": 11, "iq": 12, "hp": 12, "ht": 11, "st": 10, "dx": 12,
+ x                   "basic-speed": 5.75 }, 
+        "weapon-index": null, 
+ x      "timers": [], 
+ x      "opponent": null
+      }
+'''
 
 class GmJson(object):
     '''
@@ -2269,7 +2312,6 @@ class GurpsRuleset(Ruleset):
         '''
         super(GurpsRuleset, self).heal_fighter(fighter_details)
         fighter_details['shock'] = 0
-        fighter_details['last_negative_hp'] = 0
         fighter_details['check_for_death'] = False
 
 

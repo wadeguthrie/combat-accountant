@@ -166,8 +166,7 @@
     "PCs": {
         "Wade": {
             "shock": 0, 
-            "last_negative_hp": 0, 
-            "alive": true, 
+            "state": "alive",
             "current": {
                 "fp": 10, 
                 "iq": 10, 
@@ -192,8 +191,7 @@
         }, 
         "Bob": {
             "shock": 0, 
-            "last_negative_hp": 0, 
-            "alive": true, 
+            "state": "alive",
             "current": {
                 "fp": 10, 
                 "iq": 10, 
@@ -218,8 +216,7 @@
         }, 
         "Tom": {
             "shock": 0, 
-            "last_negative_hp": 0, 
-            "alive": true, 
+            "state": "alive",
             "current": {
                 "fp": 10, 
                 "iq": 10, 
@@ -251,7 +248,7 @@
         "Arena Attack Monsters": {
             "Thief-1": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -276,7 +273,7 @@
             }, 
             "Thief-2": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -301,7 +298,7 @@
             }, 
             "Tank-1": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -326,7 +323,7 @@
             }, 
             "Tank-3": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -351,7 +348,7 @@
             }, 
             "Tank-2": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -376,7 +373,7 @@
             }, 
             "Tank-5": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -401,7 +398,7 @@
             }, 
             "Tank-4": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -426,7 +423,7 @@
             }, 
             "Tank-6": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -453,7 +450,7 @@
         "Arena Attack Characters": {
             "Thief-1": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -478,7 +475,7 @@
             }, 
             "Thief-2": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -503,7 +500,7 @@
             }, 
             "Tank-1": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -528,7 +525,7 @@
             }, 
             "Tank-3": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -553,7 +550,7 @@
             }, 
             "Tank-2": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -578,7 +575,7 @@
             }, 
             "Tank-4": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -603,7 +600,7 @@
             }, 
             "Bokor-1": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -628,7 +625,7 @@
             }, 
             "Cleric-1": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 12, 
                     "iq": 13, 
@@ -655,7 +652,7 @@
         "Arena Capture the Flag": {
             "Cleric": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 12, 
                     "iq": 13, 
@@ -680,7 +677,7 @@
             }, 
             "Thief-1": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -705,7 +702,7 @@
             }, 
             "Bokor": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -730,7 +727,7 @@
             }, 
             "Tank-1": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -755,7 +752,7 @@
             }, 
             "Tank-3": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -780,7 +777,7 @@
             }, 
             "Tank-2": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -805,7 +802,7 @@
             }, 
             "Tank-4": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
@@ -830,7 +827,7 @@
             }, 
             "Thief-2": {
                 "shock": 0, 
-                "alive": true, 
+                "state": "alive",
                 "current": {
                     "fp": 11, 
                     "iq": 12, 
