@@ -2593,37 +2593,21 @@ class BuildFightHandler(ScreenHandler):
 
         # Generate the Monster
 
-        print 'A' # TODO: remove
         from_monster = (
             self.__world['Templates'][self.__template_name][from_monster_name])
-        print 'B' # TODO: remove
         to_monster = self.__ruleset.make_empty_creature()
-        print 'C' # TODO: remove
 
         for key, value in from_monster.iteritems():
-            print 'D' # TODO: remove
             if key == 'permanent':
-                print 'E' # TODO: remove
                 for ikey, ivalue in value.iteritems():
-                    print 'Fa ikey:%r, ivalue:%r' % (ikey, ivalue)# TODO: remove
-                    print 'Fb -- to_monster' # TODO: remove
-                    PP.pprint(to_monster) # TODO: remove
-                    print 'Fc -- from_monster' # TODO: remove
-                    PP.pprint(from_monster) # TODO: remove
                     to_monster['permanent'][ikey] = (
                         self.__get_value_from_template(ivalue, from_monster))
-                    print 'G' # TODO: remove
                     to_monster['current'][ikey] = to_monster['permanent'][ikey]
-                    print 'H' # TODO: remove
             else:
-                print 'I' # TODO: remove
                 to_monster[key] = self.__get_value_from_template(value,
                                                                   from_monster)
-        print 'J' # TODO: remove
         self.__monsters[to_monster_name] = to_monster
-        print 'K' # TODO: remove
         self._window.show_monsters(self.__monsters_name, self.__monsters)
-        print 'L' # TODO: remove
         return True # Keep going
 
     def __delete_monster(self):
@@ -2638,10 +2622,7 @@ class BuildFightHandler(ScreenHandler):
                                   template_value,
                                   template
                                  ):
-        print 'Fd - template_value' # TODO: remove
-        PP.pprint(template_value) # TODO: remove
         if template_value['type'] == 'value':
-            print 'Fe' # TODO: remove
             return template_value['value']
 
         # TODO(eventually):
