@@ -47,7 +47,7 @@ import sys
         "advantages": {
           "high pain threshold": 10
         }, 
- x      "shock": 0, 
+ x l    "shock": 0, 
         "did_action_this_turn": false,
  x      "check_for_death": false, 
         "posture": "standing", 
@@ -67,14 +67,14 @@ import sys
             "ammo": { "name": "C Cell", "shots": 8, "shots_left": 8 }
           } 
         ], 
- x      "current": {"fp": 11, "iq": 12, "hp": 12, "ht": 11, "st": 10, "dx": 12, 
- x                  "basic-speed": 5.75}, 
- x      "state": "alive", 
+ d      "current": {"fp": 11, "iq": 12, "hp": 12, "ht": 11, "st": 10, "dx": 12, 
+                    "basic-speed": 5.75}, 
+        "state": "alive", 
  x      "permanent":{"fp": 11, "iq": 12, "hp": 12, "ht": 11, "st": 10, "dx": 12,
- x                   "basic-speed": 5.75 }, 
+                     "basic-speed": 5.75 }, 
         "weapon-index": null, 
- x      "timers": [], 
- x      "opponent": null
+        "timers": [], 
+        "opponent": null
       }
 '''
 
@@ -1412,6 +1412,15 @@ class Ruleset(object):
                                         fighter_details['permanent'][stat])
         fighter_details['state'] = 'alive'
 
+    def make_empty_creature(self):
+        return {'stuff': [], 
+                'state': 'alive', 
+                'weapon-index': None,
+                'timers': [], 
+                'opponent': None,
+                'permanent': {},
+                'current': {} }
+
 
 class GurpsRuleset(Ruleset):
     '''
@@ -2324,6 +2333,18 @@ class GurpsRuleset(Ruleset):
                 )
 
 
+    def make_empty_creature(self):
+        to_monster = super(GurpsRuleset, self).make_empty_creature()
+        to_monster.update({'aim': { 'braced': False, 'rounds': 0 }, 
+                           'skills': { }, 
+                           'advantages': { }, 
+                           'shock': 0, 
+                           'did_action_this_turn': False,
+                           'check_for_death': False, 
+                           'posture': 'standing'})
+        return to_monster
+
+
     def start_fight(self, fighter):
         '''
         Removes all the ruleset-related stuff from the old fight except injury.
@@ -2480,6 +2501,7 @@ class BuildFightHandler(ScreenHandler):
     def __init__(self,
                  window_manager,
                  world,
+                 ruleset,
                  campaign_debug_json,
                  filename, # JSON file containing the world
                  maintain_json
@@ -2497,6 +2519,7 @@ class BuildFightHandler(ScreenHandler):
         self._window = BuildFightGmWindow(self._window_manager)
 
         self.__world = world
+        self.__ruleset = ruleset
 
         lines, cols = self._window.getmaxyx()
         template_menu = [(template_name, template_name)
@@ -2544,7 +2567,8 @@ class BuildFightHandler(ScreenHandler):
         '''
         # Based on which monster from the template
         monster_menu = [(from_monster_name, from_monster_name)
-            for from_monster_name in world['Templates'][self.__template_name]]
+            for from_monster_name in
+                            self.__world['Templates'][self.__template_name]]
         from_monster_name = self._window_manager.menu('Monster', monster_menu)
         if from_monster_name is None:
             return True # Keep going
@@ -2569,27 +2593,37 @@ class BuildFightHandler(ScreenHandler):
 
         # Generate the Monster
 
+        print 'A' # TODO: remove
         from_monster = (
-            world['Templates'][self.__template_name][from_monster_name])
-        # TODO: what's in a Template vs. what's supplied, here, should be
-        # documeted somewhere
-        to_monster = {'state': 'alive',
-                      'timers': [],
-                      'opponent': None,
-                      'permanent': {},
-                      'current': {}}
+            self.__world['Templates'][self.__template_name][from_monster_name])
+        print 'B' # TODO: remove
+        to_monster = self.__ruleset.make_empty_creature()
+        print 'C' # TODO: remove
 
         for key, value in from_monster.iteritems():
+            print 'D' # TODO: remove
             if key == 'permanent':
+                print 'E' # TODO: remove
                 for ikey, ivalue in value.iteritems():
+                    print 'Fa ikey:%r, ivalue:%r' % (ikey, ivalue)# TODO: remove
+                    print 'Fb -- to_monster' # TODO: remove
+                    PP.pprint(to_monster) # TODO: remove
+                    print 'Fc -- from_monster' # TODO: remove
+                    PP.pprint(from_monster) # TODO: remove
                     to_monster['permanent'][ikey] = (
                         self.__get_value_from_template(ivalue, from_monster))
+                    print 'G' # TODO: remove
                     to_monster['current'][ikey] = to_monster['permanent'][ikey]
+                    print 'H' # TODO: remove
             else:
+                print 'I' # TODO: remove
                 to_monster[key] = self.__get_value_from_template(value,
                                                                   from_monster)
+        print 'J' # TODO: remove
         self.__monsters[to_monster_name] = to_monster
+        print 'K' # TODO: remove
         self._window.show_monsters(self.__monsters_name, self.__monsters)
+        print 'L' # TODO: remove
         return True # Keep going
 
     def __delete_monster(self):
@@ -2604,7 +2638,10 @@ class BuildFightHandler(ScreenHandler):
                                   template_value,
                                   template
                                  ):
+        print 'Fd - template_value' # TODO: remove
+        PP.pprint(template_value) # TODO: remove
         if template_value['type'] == 'value':
+            print 'Fe' # TODO: remove
             return template_value['value']
 
         # TODO(eventually):
@@ -3436,6 +3473,7 @@ class MainHandler(ScreenHandler):
 
         build_fight = BuildFightHandler(self._window_manager,
                                         self.__world,
+                                        self.__ruleset,
                                         campaign_debug_json,
                                         self._input_filename,
                                         self._maintain_json)
