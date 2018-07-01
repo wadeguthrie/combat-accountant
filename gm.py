@@ -12,13 +12,15 @@ import random
 import sys
 
 # TODO:
+#   - History should get saved for saved fights
+#   - Add version number
+#   - any defense loses your aim
+#   - MAJOR WOUND: if adj > HP/2, -4 to active defenses until HT roll made
+#   - WILL roll or lose aim
+#   - should only be able to ready an unready weapon.
 #   - < 1/3 FP = 1/2 move, dodge, st
 #   - Warning if window is smaller than expected
-#   - Update the Templates in the JSON to match the character data
 #   - Add book references in more places
-#
-# TODO (medium-term):
-#   - entering monsters and characters from the screen
 #
 # TODO (eventually):
 #   - damage other than dice (swords and stuff -- add this as needed)
@@ -33,50 +35,6 @@ import sys
 #   - Optimize the way I'm using curses.  I'm willy-nilly touching and
 #     redrawing everything way more often than I should.  Turns out, it's not
 #     costing me much but it's ugly, none-the-less
-
-'''
-      "2-Thief-A": {
-
-        -- RULESET BASED --
-
-        "aim": { "braced": false, "rounds": 0 }, 
-        "skills": {
-          "guns (pistol)": 12, 
-          "knife": 15
-        }, 
-        "advantages": {
-          "high pain threshold": 10
-        }, 
- x l    "shock": 0, 
-        "did_action_this_turn": false,
- x      "check_for_death": false, 
-        "posture": "standing", 
-
-        -- GENERIC --
-
-        "stuff": [
-          {
-            "acc": 2, 
-            "count": 1, 
-            "name": "0003 - d Tank", 
-            "notes": "", 
-            "damage": { "dice": "1d+4" }, 
-            "reload": 3, 
-            "skill": "guns (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": { "name": "C Cell", "shots": 8, "shots_left": 8 }
-          } 
-        ], 
- d      "current": {"fp": 11, "iq": 12, "hp": 12, "ht": 11, "st": 10, "dx": 12, 
-                    "basic-speed": 5.75}, 
-        "state": "alive", 
- x      "permanent":{"fp": 11, "iq": 12, "hp": 12, "ht": 11, "st": 10, "dx": 12,
-                     "basic-speed": 5.75 }, 
-        "weapon-index": null, 
-        "timers": [], 
-        "opponent": null
-      }
-'''
 
 class GmJson(object):
     '''
@@ -374,8 +332,28 @@ class BuildFightGmWindow(GmWindow):
         if self.__monster_window is not None:
             self.__monster_window.refresh()
 
+    def status_ribbon(self,
+                      group,            # name of group being modified,
+                      template,         # name of template 
+                      input_filename,   # passthru to base class
+                      maintain_json     # passthru to base class
+                     ):
+        '''Prints the fight round information at the top of the screen.'''
 
-    def show_monsters(self, name, monsters):
+        group = '(No Group)' if group is None else group
+        template = '(No Template)' if template is None else template
+        self._window.move(0, 0)
+        self._window.clrtoeol()
+
+        self._window.addstr(0, 0,
+                            '"%s" from "%s" template' % (group, template),
+                            curses.A_NORMAL)
+
+        super(BuildFightGmWindow, self).status_ribbon(input_filename,
+                                                      maintain_json)
+        self._window.refresh()
+
+    def show_creatures(self, monsters):
         if self.__monster_window is not None:
             self.__monster_window.clear()
             mode = curses.A_NORMAL
@@ -1232,7 +1210,7 @@ class Fighter(object):
             timer['rounds'] -= 1
 
 
-    # TODO: do_aim is ruleset-based.  need to move into ruleset.
+    # TODO (move to ruleset): do_aim is ruleset-based.
     def do_aim(self,
                braced   # True | False
               ):
@@ -1328,7 +1306,7 @@ class Fighter(object):
 
 
     def reset_aim(self):
-        # TODO: do_aim is ruleset-based.  need to move into ruleset.
+        # TODO (move to ruleset): do_aim is ruleset-based.
         self.details['aim']['rounds'] = 0
         self.details['aim']['braced'] = False
 
@@ -1350,11 +1328,11 @@ class Fighter(object):
 
 
     def perform_action_this_turn(self):
-        # TODO: actions are ruleset-based.  need to move into ruleset.
+        # TODO (move to ruleset): actions are ruleset-based.
         self.details['did_action_this_turn'] = True
 
     def can_finish_turn(self):
-        # TODO: actions are ruleset-based.  need to move into ruleset.
+        # TODO (move to ruleset): actions are ruleset-based.
         if self.details['did_action_this_turn'] or not self.is_conscious():
             return True
         return False
@@ -1511,7 +1489,6 @@ class GurpsRuleset(Ruleset):
     def __init__(self, window_manager):
         super(GurpsRuleset, self).__init__(window_manager)
 
-    # TODO: need a template for new characters
 
     def adjust_hp(self,
                   fighter,  # Fighter object
@@ -2511,47 +2488,56 @@ class BuildFightHandler(ScreenHandler):
                                                 filename,
                                                 maintain_json)
         self._add_to_choice_dict({
-            ord('a'): {'name': 'add monster', 'func': self.__add_monster},
-            ord('d'): {'name': 'delete monster', 'func': self.__delete_monster},
+            ord('a'): {'name': 'add creature', 'func': self.__add_creature},
+            ord('d'): {'name': 'delete creature', 'func':
+                                                    self.__delete_creature},
+            ord('e'): {'name': 'existing group', 'func': self.__existing_group},
+            ord('n'): {'name': 'new group', 'func': self.__new_group},
+            ord('t'): {'name': 'new template', 'func': self.__new_template},
             ord('q'): {'name': 'quit', 'func': self.__quit},
-            # TODO: need a quit but don't save option
         })
+        # TODO: get from window manager
         self._window = BuildFightGmWindow(self._window_manager)
 
         self.__world = world
         self.__ruleset = ruleset
 
-        lines, cols = self._window.getmaxyx()
-        template_menu = [(template_name, template_name)
-                for template_name in self.__world['Templates']]
-        self.__template_name = self._window_manager.menu('From Which Template',
-                                                         template_menu)
-        keep_asking = True
-        while keep_asking:
-            self.__monsters_name = self._window_manager.input_box(
-                                                            1,      # height
-                                                            cols-4, # width
-                                                            'New Fight Name')
-            if self.__monsters_name is None:
-                self._window_manager.error(['You have to name your fight'])
-                keep_asking = True
-            elif self.__monsters_name in self.__world['monsters']:
-                self._window_manager.error(
-                    ['Fight name "%s" alread exists' % self.__monsters_name])
-                keep_asking = True
-            else:
-                keep_asking = False
+        self.__is_new = None    # If we're creating a new group (i.e., a new
+                                # group of monsters), we'll have to add the
+                                # group when we save it.  We won't add the
+                                # group if we don't save it so that we don't
+                                # have a bunch of empty monster groups hanging
+                                # around.  If we're NOT creating a new group,
+                                # we'll just add our monsters to the existing
+                                # one when we save.
 
-        self.__monsters = {}
+        self.__new_home = None  # This is a pointer to the existing group
+                                # (either a group of monsters or the PCs) or a
+                                # pointer to a monster group (if it's a new
+                                # group).
+
+        self.__new_creatures = {}   # This is the recepticle for the new
+                                    # creatures while they're being built.
+                                    # In the event that they're saved,
+                                    # they'll be transferred to their new
+                                    # home.
+
+        self.__group_name = None    # The name of the monsters or 'PCs'
+                                    # that will ultimately take these
+                                    # creatures.
+
+        self.__template_name = None # Name of templates we'll use to create
+                                    # new creatures.
 
     #
     # Protected Methods
     #
 
-
     def _draw_screen(self):
         self._window.clear()
-        self._window.status_ribbon(self._input_filename,
+        self._window.status_ribbon(self.__group_name,
+                                   self.__template_name,
+                                   self._input_filename,
                                    self._maintain_json)
         self._window.command_ribbon(self._choices)
 
@@ -2559,12 +2545,20 @@ class BuildFightHandler(ScreenHandler):
     # Private Methods
     #
 
-
-    def __add_monster(self):
+    def __add_creature(self):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+        if self.__new_home is None or self.__group_name is None:
+            self._window_manager.error(
+                ['You must select a new or existing group to which to',
+                 'add this creature.'])
+            return True # Keep going
+
+        if self.__template_name is None:
+            self.__new_template()
+
         # Based on which monster from the template
         monster_menu = [(from_monster_name, from_monster_name)
             for from_monster_name in
@@ -2584,7 +2578,7 @@ class BuildFightHandler(ScreenHandler):
             if to_monster_name is None:
                 self._window_manager.error(['You have to name your monster'])
                 keep_asking = True
-            elif to_monster_name in self.__monsters:
+            elif to_monster_name in self.__new_creatures:
                 self._window_manager.error(
                     ['Monster "%s" alread exists' % to_monster_name])
                 keep_asking = True
@@ -2606,17 +2600,178 @@ class BuildFightHandler(ScreenHandler):
             else:
                 to_monster[key] = self.__get_value_from_template(value,
                                                                   from_monster)
-        self.__monsters[to_monster_name] = to_monster
-        self._window.show_monsters(self.__monsters_name, self.__monsters)
+        self.__new_creatures[to_monster_name] = to_monster
+        self._window.show_creatures(self.__new_creatures)
         return True # Keep going
 
-    def __delete_monster(self):
+    def __delete_creature(self):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        # TODO
+        if len(self.__new_creatures) == 0:
+            return True
+
+        critter_menu = [(name, name)
+                                for name in self.__new_creatures.iterkeys()]
+        critter_name = self._window_manager.menu('Delete Which Creature',
+                                                                critter_menu)
+        if critter_name is not None:
+            del(self.__new_creatures[critter_name])
+
+        self._window.show_creatures(self.__new_creatures)
+
         return True # Keep going
+
+    def __existing_group(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        # Get the template name
+
+        lines, cols = self._window.getmaxyx()
+        template_menu = [(template_name, template_name)
+                for template_name in self.__world['Templates']]
+        template_name = self._window_manager.menu('From Which Template',
+                                                         template_menu)
+        if template_name is None:
+            return True  # Keep going
+        self.__template_name = template_name
+
+        # Get the group information
+
+        group_menu = [(group_name,
+                       {'name': group_name,
+                        'group': self.__world['monsters'][group_name]})
+                for group_name in self.__world['monsters'].iterkeys()]
+        group_menu.insert(0, ('PCs',
+                              {'name': 'PCs', 'group': self.__world['PCs']}))
+        group_answer = self._window_manager.menu('To Which Group', group_menu)
+        if group_answer is None:
+            return True # Keep going
+
+        # Save the existing group (if there is one)
+
+        if self.__group_name is not None and self.__new_creatures is not None:
+            self.__maybe_save_group()
+
+        # Set the name and group of the new group
+
+        self.__is_new = False
+        self.__group_name = group_answer['name']
+        self.__new_home = group_answer['group']
+        self.__new_creatures = {}
+
+        # Display our new state
+
+        self._draw_screen()
+        self._window.show_creatures(self.__new_creatures)
+
+        return True # Keep going
+
+    def __maybe_save_group(self):
+        keep_asking = True
+        while keep_asking:
+            save_menu = [('save', 'save'), ('don\'t save', 'don\'t')]
+            save = self._window_manager.menu(
+                                'Save %s' % self.__group_name, save_menu)
+            if save is not None:
+                keep_asking = False
+                if save == 'save':
+                    if self.__is_new:
+                        self.__new_home[self.__group_name] = (
+                                                        self.__new_creatures)
+                    else:
+                        self.__new_home.update(self.__new_creatures)
+
+            # Throw the old ones away
+            self.__new_creatures = {}
+
+
+    def __new_group(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        # Get the template info.
+
+        lines, cols = self._window.getmaxyx()
+        template_menu = [(template_name, template_name)
+                for template_name in self.__world['Templates']]
+        template_name = self._window_manager.menu('From Which Template',
+                                                         template_menu)
+        if template_name is None:
+            return True  # Keep going
+        self.__template_name = template_name
+
+        # Get the new group info.
+
+        keep_asking = True
+        group_name = None
+        while keep_asking:
+            group_name = self._window_manager.input_box(1,      # height
+                                                        cols-4, # width
+                                                        'New Fight Name')
+            if group_name is None:
+                self._window_manager.error(['You have to name your fight'])
+                keep_asking = True
+            elif group_name in self.__world['monsters']:
+                self._window_manager.error(
+                    ['Fight name "%s" alread exists' % group_name])
+                keep_asking = True
+            else:
+                keep_asking = False
+
+
+        # Save the existing group (if there is one)
+
+        if self.__group_name is not None and self.__new_creatures is not None:
+            self.__maybe_save_group()
+
+        # Set the name and group of the new group
+
+        self.__is_new = True
+        self.__group_name = group_name
+        self.__new_home = self.__world['monsters'] # New groups can only be
+                                                   # monsters.
+        self.__new_creatures = {}
+
+        # Display our new state
+
+        self._draw_screen()
+        self._window.show_creatures(self.__new_creatures)
+
+        return True # Keep going
+
+
+    def __new_template(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        # Get the new group info.
+
+        # Get the template
+        lines, cols = self._window.getmaxyx()
+        template_menu = [(template_name, template_name)
+                for template_name in self.__world['Templates']]
+        template_name = self._window_manager.menu('From Which Template',
+                                                         template_menu)
+        if template_name is None:
+            return True  # Keep going
+        self.__template_name = template_name
+
+        # Display our new state
+
+        self._draw_screen()
+        self._window.show_creatures(self.__new_creatures)
+
+        return True # Keep going
+
 
     def __get_value_from_template(self,
                                   template_value,
@@ -2625,7 +2780,7 @@ class BuildFightHandler(ScreenHandler):
         if template_value['type'] == 'value':
             return template_value['value']
 
-        # TODO(eventually):
+        # TODO(eventually, maybe):
         #   {'type': 'ask-string', 'value': x}
         #   {'type': 'ask-numeric', 'value': x}
         #   {'type': 'ask-logical', 'value': x}
@@ -2639,13 +2794,10 @@ class BuildFightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        # TODO: need a way to exit without saving
-        #if ARGS.verbose:
-        #    print 'monsters:'
-        #    PP.pprint(self.__monsters)
-        self.__world['monsters'][self.__monsters_name] = self.__monsters
+        self.__maybe_save_group()
         self._window.close()
         return False # Stop building this fight
+
 
 
 class FightHandler(ScreenHandler):
@@ -2786,7 +2938,7 @@ class FightHandler(ScreenHandler):
 
 
 
-    # TODO: all of FP belongs in Ruleset
+    # TODO (move to ruleset): all of FP belongs in Ruleset
     def __damage_FP(self):
         '''
         Command ribbon method.
@@ -2814,7 +2966,7 @@ class FightHandler(ScreenHandler):
         hp_adj = 0
 
         # If FP go below zero, you lose HP along with FP
-        # TODO: this -- especially -- should be in Ruleset
+        # TODO (move to ruleset): this -- especially -- should be in Ruleset
         if adj < 0  and -adj > fp_recipient.details['current']['fp']:
             hp_adj = adj
             if fp_recipient.details['current']['fp'] > 0:
@@ -3082,10 +3234,10 @@ class FightHandler(ScreenHandler):
         # Finish off previous guy
         prev_fighter = self.__current_fighter()
         if not prev_fighter.can_finish_turn():
-            # TODO: This should _so_ be in the ruleset but I'm not sure how to
-            # achieve that.  It also makes the assumption that you can't move
-            # on to the next fighter _because_ no maneuver/action has been
-            # performed.
+            # TODO (move to ruleset): This should _so_ be in the ruleset but
+            # I'm not sure how to achieve that.  It also makes the assumption
+            # that you can't move on to the next fighter _because_ no
+            # maneuver/action has been performed.
             return self.__maneuver()
         prev_fighter.end_turn()
 
@@ -3422,13 +3574,15 @@ class MainHandler(ScreenHandler):
         self.__world = world
         self.__ruleset = ruleset
         self._add_to_choice_dict({
-            # TODO: template - (build a template of monsters)
-            ord('o'): {'name': 'outfit characters', 'func': self.__outfit},
-            ord('F'): {'name': 'Fight (build)',     'func': self.__build_fight},
-            ord('f'): {'name': 'fight (run)',       'func': self.__run_fight},
-            ord('H'): {'name': 'Heal',              'func': self.__fully_heal},
-            ord('n'): {'name': 'name',              'func': self.__get_a_name},
-            ord('q'): {'name': 'quit',              'func': self.__quit}
+            ord('o'): {'name': 'outfit characters',   'func': self.__outfit},
+            ord('t'): {'name': 'build from template', 'func':
+                                                            self.__build_fight},
+            ord('f'): {'name': 'fight (run)',         'func': self.__run_fight},
+            ord('H'): {'name': 'Heal',                'func':
+                                                            self.__fully_heal},
+            ord('n'): {'name': 'name',                'func':
+                                                            self.__get_a_name},
+            ord('q'): {'name': 'quit',                'func': self.__quit}
         })
         self._window = MainGmWindow(self._window_manager)
 
@@ -3633,8 +3787,6 @@ class OutfitCharactersHandler(ScreenHandler):
         item = self._window_manager.menu('Item to Add', item_menu)
         if item is None:
             return True # Keep going
-
-        # TODO: ask how many to add
 
         self.__character['details']['stuff'].append(copy.deepcopy(item))
         self._window.show_character(self.__character)
