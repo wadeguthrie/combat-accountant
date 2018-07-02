@@ -20,10 +20,6 @@ class MockWindowManager(object):
     def get_fight_gm_window(self, ruleset):
         return MockFightGmWindow(ruleset)
 
-# TODO: test that modify index wraps
-# TODO: test that cycling a whole round goes to each fighter in order
-# TODO: test that an unconscious fighter is not skipped but a dead one is
-
 # TODO: test that doing damage to one fighter and cycling a round only affects
 #       the one fighter
 # TODO: test that changing opponents from one that's damaged doesn't affect
@@ -71,6 +67,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__vodou_priest_fighter_pistol_skill = 15
         self.__vodou_priest_fighter = {
             "shock": 0, 
+            "did_action_this_turn": False,
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
@@ -116,6 +113,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # basic speed wrong but that's not really the point of this exercise
         self.__one_more_guy = {
             "shock": 0, 
+            "did_action_this_turn": False,
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
@@ -156,6 +154,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         } 
         self.__bokor_fighter = {
             "shock": 0, 
+            "did_action_this_turn": False,
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
@@ -196,6 +195,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         } 
         self.__tank_fighter = {
             "shock": 0, 
+            "did_action_this_turn": False,
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
@@ -247,6 +247,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         self.__thief_fighter = {
             "shock": 0, 
+            "did_action_this_turn": False,
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
@@ -624,6 +625,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert world['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         injured_fighter = current_fighter
+        injured_index = expected_index
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
 
@@ -632,6 +634,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert world['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         unconscious_fighter = current_fighter
+        unconscious_index = expected_index
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
 
@@ -640,6 +643,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert world['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         dead_fighter = current_fighter
+        dead_index = expected_index
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
 
@@ -659,7 +663,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # test that an unconscious fighter is not skipped but a dead one is
 
-        injured_fighter.details['current']['hp'] -= 3 # arbitrary amount
+        injured_hp = 3 # arbitrary amount
+        injured_fighter.details['current']['hp'] -= injured_hp
         unconscious_fighter.bump_consciousness()
         dead_fighter.bump_consciousness()   # once to unconscious
         dead_fighter.bump_consciousness()   # twice to dead
@@ -706,6 +711,114 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
 
+        # verify that the only thing that's changed among the fighters is that
+        # one is injured, one is unconscious, and one is dead.
+
+        expected_fighters = [
+            copy.deepcopy(self.__thief_fighter),
+            copy.deepcopy(self.__tank_fighter),
+            copy.deepcopy(self.__one_more_guy),
+            copy.deepcopy(self.__vodou_priest_fighter),
+            copy.deepcopy(self.__bokor_fighter)]
+
+        expected_fighters[injured_index]['current']['hp'] -= injured_hp
+        expected_fighters[unconscious_index]['state'] = "unconscious"
+        expected_fighters[dead_index]['state'] = "dead"
+
+        fighters = fight_handler.get_fighters()
+        assert len(expected_fighters) == len(fighters)
+
+        #for index in range(len(expected_fighters)):
+        #    assert expected_fighters[index] == fighters[index]['details']
+
+        #PP = pprint.PrettyPrinter(indent=3, width=150)
+        #print '\nExpected'
+        #PP.pprint(expected_fighters[0])
+        #print '\nActual'
+        #PP.pprint(fighters[0]['details'])
+        #print ('ARE equal' if
+        #    self.__are_equal(fighters[2]['details'], expected_fighters[2])
+        #    else 'are NOT equal')
+
+        assert expected_fighters[0] == fighters[0]['details']
+        assert expected_fighters[1] == fighters[1]['details']
+        assert expected_fighters[2] == fighters[2]['details']
+        assert expected_fighters[3] == fighters[3]['details']
+        assert expected_fighters[4] == fighters[4]['details']
+
+    def __are_equal(self, lhs, rhs):
+        PP = pprint.PrettyPrinter(indent=3, width=150)
+        if isinstance(lhs, dict):
+            if not isinstance(rhs, dict):
+                print '** lhs is a dict but rhs is not'
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
+                return False
+            for key in rhs.iterkeys():
+                if key not in rhs:
+                    print '** KEY "%s" not in lhs' % key
+                    print '\nlhs'
+                    PP.pprint(lhs)
+                    print '\nrhs'
+                    PP.pprint(rhs)
+                    return False
+            are_equal = True
+            for key in lhs.iterkeys():
+                if key not in rhs:
+                    print '** KEY "%s" not in rhs' % key
+                    print '\nlhs'
+                    PP.pprint(lhs)
+                    print '\nrhs'
+                    PP.pprint(rhs)
+                    return False
+                if not self.__are_equal(lhs[key], rhs[key]):
+                    print 'lhs[%r] != rhs[%r]' % (key, key)
+                    print '\nlhs'
+                    PP.pprint(lhs)
+                    print '\nrhs'
+                    PP.pprint(rhs)
+                    are_equal = False
+            return are_equal
+                
+        elif isinstance(lhs, list):
+            if not isinstance(rhs, list):
+                print '** lhs is a list but rhs is not'
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
+                return
+            if len(lhs) != len(rhs):
+                print '** length lhs=%d != len rhs=%d' % (len(lhs), len(rhs))
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
+                return
+            are_equal = True
+            for i in range(len(lhs)):
+                print '--[%d]--' % i
+                if not self.__are_equal(lhs[i], rhs[i]):
+                    print 'lhs[%d] != rhs[%d]' % (i, i)
+                    print '\nlhs'
+                    PP.pprint(lhs)
+                    print '\nrhs'
+                    PP.pprint(rhs)
+                    are_equal = False
+            return are_equal
+
+        else:
+            if lhs != rhs:
+                print '** lhs=%r != rhs=%r' % (lhs, rhs)
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
+                return False
+            else:
+                return True
 
     def test_initiative_order_again(self):
         '''
