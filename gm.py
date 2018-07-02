@@ -12,7 +12,6 @@ import random
 import sys
 
 # TODO:
-#   - History should get saved for saved fights
 #   - Add version number
 #   - any defense loses your aim
 #   - MAJOR WOUND: if adj > HP/2, -4 to active defenses until HT roll made
@@ -913,6 +912,9 @@ class GmWindowManager(object):
         del error_win
         self.hard_refresh_all()
         return string
+
+    def get_build_fight_gm_window(self):
+        return BuildFightGmWindow(self)
 
     def get_fight_gm_window(self, ruleset):
         return FightGmWindow(self, ruleset)
@@ -2406,15 +2408,23 @@ class ScreenHandler(object):
                  window_manager,
                  campaign_debug_json,
                  filename,
+                 saved_fight,
                  maintain_json):
         self._window_manager = window_manager
         self._campaign_debug_json = campaign_debug_json
         self._input_filename = filename
+        self._saved_fight = saved_fight
         self._maintain_json = maintain_json
-        self._history = []
+
         self._choices = {
             ord('B'): {'name': 'Bug Report', 'func': self._make_bug_report},
         }
+
+    def add_to_history(self, string):
+        self._saved_fight['history'].insert(0, string)
+
+    def clear_history(self):
+        self._saved_fight['history'] = []
 
     def handle_user_input_until_done(self):
         '''
@@ -2463,7 +2473,7 @@ class ScreenHandler(object):
 
         bug_report = {
             'world'   : self._campaign_debug_json,
-            'history' : self._history,
+            'history' : self._saved_fight['history'],
             'report'  : report
         }
 
@@ -2486,18 +2496,20 @@ class BuildFightHandler(ScreenHandler):
         super(BuildFightHandler, self).__init__(window_manager,
                                                 campaign_debug_json,
                                                 filename,
+                                                world['current-fight'],
                                                 maintain_json)
         self._add_to_choice_dict({
-            ord('a'): {'name': 'add creature', 'func': self.__add_creature},
+            ord('a'): {'name': 'add creature',    'func': self.__add_creature},
             ord('d'): {'name': 'delete creature', 'func':
                                                     self.__delete_creature},
-            ord('e'): {'name': 'existing group', 'func': self.__existing_group},
-            ord('n'): {'name': 'new group', 'func': self.__new_group},
-            ord('t'): {'name': 'new template', 'func': self.__new_template},
-            ord('q'): {'name': 'quit', 'func': self.__quit},
+            ord('e'): {'name': 'existing group',  'func':
+                                                    self.__existing_group},
+            ord('n'): {'name': 'new group',       'func': self.__new_group},
+            ord('t'): {'name': 'new template',    'func': self.__new_template},
+            ord('q'): {'name': 'quit',            'func': self.__quit},
         })
-        # TODO: get from window manager
-        self._window = BuildFightGmWindow(self._window_manager)
+
+        self._window = self_window_manager.get_build_fight_gm_window()
 
         self.__world = world
         self.__ruleset = ruleset
@@ -2813,13 +2825,11 @@ class FightHandler(ScreenHandler):
         super(FightHandler, self).__init__(window_manager,
                                            campaign_debug_json,
                                            filename,
+                                           world['current-fight'],
                                            maintain_json)
         self._window = self._window_manager.get_fight_gm_window(ruleset)
         self.__ruleset = ruleset
         self.__bodies_looted = False
-
-        # TODO: when the history is reset (here), the JSON should be rewritten
-        self._history = ['--- Round 0 ---']
 
         # NOTE: 'h' and 'f' belong in Ruleset
         # TODO: Heal
@@ -2841,7 +2851,7 @@ class FightHandler(ScreenHandler):
         })
 
         self.__world = world
-        # self.__saved_fight takes the form:
+        # self._saved_fight takes the form:
         # {
         #   'index': <number>  # current fighter that has the initiative
         #   'fighters': [ {'group': <group>,
@@ -2850,14 +2860,13 @@ class FightHandler(ScreenHandler):
         #   'round': <number>  # round of the fight
         #   'monsters': <name> # group name of the monsters in the fight
         # }
-        self.__saved_fight = world['current-fight']
         self.__fighters = [] # This is a parallel array to
-                             # self.__saved_fight['fighters'] but the contents
+                             # self._saved_fight['fighters'] but the contents
                              # are: {'group': <groupname>,
                              #       'info': <Fighter object>}
 
-        if self.__saved_fight['saved']:
-            for saved_fighter in self.__saved_fight['fighters']:
+        if self._saved_fight['saved']:
+            for saved_fighter in self._saved_fight['fighters']:
                 fighter = Fighter(saved_fighter['name'],
                                   saved_fighter['group'],
                                   self.__get_fighter_details(
@@ -2866,9 +2875,14 @@ class FightHandler(ScreenHandler):
                                   self.__ruleset)
                 self.__fighters.append(fighter)
         else:
-            self.__saved_fight['round'] = 0
-            self.__saved_fight['index'] = 0
-            self.__saved_fight['monsters'] = monster_group
+            # TODO: when the history is reset (here), the JSON should be
+            # rewritten
+            self.clear_history()
+            self.add_to_history('--- Round 0 ---')
+
+            self._saved_fight['round'] = 0
+            self._saved_fight['index'] = 0
+            self._saved_fight['monsters'] = monster_group
 
             self.__fighters = []    # contains objects
 
@@ -2893,13 +2907,13 @@ class FightHandler(ScreenHandler):
 
             # Copy the fighter information into the saved_fight.  Also, make
             # sure this looks like a _NEW_ fight.
-            self.__saved_fight['fighters'] = []
+            self._saved_fight['fighters'] = []
             for fighter in self.__fighters:
                 fighter.start_fight()
-                self.__saved_fight['fighters'].append({'group': fighter.group,
+                self._saved_fight['fighters'].append({'group': fighter.group,
                                                        'name': fighter.name})
 
-        self.__saved_fight['saved'] = False
+        self._saved_fight['saved'] = False
         self._window.start_fight()
 
 
@@ -2920,10 +2934,10 @@ class FightHandler(ScreenHandler):
         super(FightHandler, self).handle_user_input_until_done()
 
         # When done, move current fight to 'dead-monsters'
-        if not self.__saved_fight['saved']:
-            self.__world['dead-monsters'][self.__saved_fight['monsters']] = (
-                    self.__world['monsters'][self.__saved_fight['monsters']])
-            del(self.__world['monsters'][self.__saved_fight['monsters']])
+        if not self._saved_fight['saved']:
+            self.__world['dead-monsters'][self._saved_fight['monsters']] = (
+                    self.__world['monsters'][self._saved_fight['monsters']])
+            del(self.__world['monsters'][self._saved_fight['monsters']])
 
     #
     # Private Methods
@@ -2933,7 +2947,7 @@ class FightHandler(ScreenHandler):
         '''
         Returns the Fighter object of the current fighter.
         '''
-        result = self.__fighters[ self.__saved_fight['index'] ]
+        result = self.__fighters[ self._saved_fight['index'] ]
         return result
 
 
@@ -2977,7 +2991,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self.__saved_fight['index'])
+                                   self._saved_fight['index'])
         return True # Keep going
 
 
@@ -3014,26 +3028,26 @@ class FightHandler(ScreenHandler):
         # Record for posterity
         if hp_recipient is opponent:
             if adj < 0:
-                self._history.insert(0, ' %s did %d HP to %s' %
+                self.add_to_history(' %s did %d HP to %s' %
                                                         (current_fighter.name,
                                                          -adj,
                                                          opponent.name))
             else:
-                self._history.insert(0, ' %s regained %d HP' %
+                self.add_to_history(' %s regained %d HP' %
                                                         (current_fighter.name,
                                                          adj))
         else:
             if adj < 0:
-                self._history.insert(0,
+                self.add_to_history(
                         ' %s lost %d HP' % (current_fighter.name, -adj))
             else:
-                self._history.insert(0,
+                self.add_to_history(
                         ' %s regained %d HP' % (current_fighter.name, adj))
 
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self.__saved_fight['index'])
+                                   self._saved_fight['index'])
         return True # Keep going
 
     def __dead(self):
@@ -3061,14 +3075,14 @@ class FightHandler(ScreenHandler):
         dead_name = (current_fighter.name if now_dead is current_fighter
                                     else opponent.name)
 
-        self._history.insert(0, ' %s was marked as %s' % (
+        self.add_to_history(' %s was marked as %s' % (
                                                     dead_name,
                                                     now_dead.details['state']))
 
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self.__saved_fight['index'])
+                                   self._saved_fight['index'])
         return True # Keep going
 
 
@@ -3077,15 +3091,15 @@ class FightHandler(ScreenHandler):
         current_fighter = self.__current_fighter()
         opponent = self.get_opponent_for(current_fighter)
         next_PC_name = self.__next_PC_name()
-        self._window.round_ribbon(self.__saved_fight['round'],
-                                  self.__saved_fight['saved'],
+        self._window.round_ribbon(self._saved_fight['round'],
+                                  self._saved_fight['saved'],
                                   next_PC_name,
                                   self._input_filename,
                                   self._maintain_json)
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self.__saved_fight['index'])
+                                   self._saved_fight['index'])
         self._window.status_ribbon(self._input_filename,
                                    self._maintain_json)
         self._window.command_ribbon(self._choices)
@@ -3181,13 +3195,13 @@ class FightHandler(ScreenHandler):
         # get deleted before the next round
         current_fighter.add_timer(0.9, maneuver['text'])
 
-        self._history.insert(0, ' %s did "%s" maneuver' % (current_fighter.name,
-                                                           maneuver['text'][0]))
+        self.add_to_history(' %s did "%s" maneuver' % (current_fighter.name,
+                                                       maneuver['text'][0]))
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self.__saved_fight['index'])
+                                   self._saved_fight['index'])
         return True # Keep going
 
 
@@ -3198,32 +3212,32 @@ class FightHandler(ScreenHandler):
         Increment or decrement the index.  Only stop on living creatures.
         '''
 
-        first_index = self.__saved_fight['index']
+        first_index = self._saved_fight['index']
 
-        round_before = self.__saved_fight['round']
+        round_before = self._saved_fight['round']
         keep_going = True
         while keep_going:
-            self.__saved_fight['index'] += adj
-            if self.__saved_fight['index'] >= len(
-                                            self.__saved_fight['fighters']):
-                self.__saved_fight['index'] = 0
-                self.__saved_fight['round'] += adj 
-            elif self.__saved_fight['index'] < 0:
-                self.__saved_fight['index'] = len(
-                                            self.__saved_fight['fighters']) - 1
-                self.__saved_fight['round'] += adj 
+            self._saved_fight['index'] += adj
+            if self._saved_fight['index'] >= len(
+                                            self._saved_fight['fighters']):
+                self._saved_fight['index'] = 0
+                self._saved_fight['round'] += adj 
+            elif self._saved_fight['index'] < 0:
+                self._saved_fight['index'] = len(
+                                            self._saved_fight['fighters']) - 1
+                self._saved_fight['round'] += adj 
             current_fighter = self.__current_fighter()
             if current_fighter.is_dead():
-                self._history.insert(0, '%s did nothing (dead)' %
+                self.add_to_history('%s did nothing (dead)' %
                                                         current_fighter.name)
             else:
                 keep_going = False
-            if self.__saved_fight['index'] == first_index:
+            if self._saved_fight['index'] == first_index:
                 keep_going = False
 
-        if round_before != self.__saved_fight['round']:
-            self._history.insert(0, '--- Round %d ---' %
-                                                self.__saved_fight['round'])
+        if round_before != self._saved_fight['round']:
+            self.add_to_history('--- Round %d ---' %
+                                                self._saved_fight['round'])
 
 
     def __next_fighter(self):
@@ -3248,8 +3262,8 @@ class FightHandler(ScreenHandler):
 
         # Show all the displays
         next_PC_name = self.__next_PC_name()
-        self._window.round_ribbon(self.__saved_fight['round'],
-                                  self.__saved_fight['saved'],
+        self._window.round_ribbon(self._saved_fight['round'],
+                                  self._saved_fight['saved'],
                                   next_PC_name,
                                   self._input_filename,
                                   self._maintain_json)
@@ -3258,7 +3272,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self.__saved_fight['index'])
+                                   self._saved_fight['index'])
         return True # Keep going
 
     def __next_PC_name(self):
@@ -3267,13 +3281,13 @@ class FightHandler(ScreenHandler):
         '''
 
         next_PC_name = None
-        next_index = self.__saved_fight['index'] + 1
-        for ignore in self.__saved_fight['fighters']:
-            if next_index >= len(self.__saved_fight['fighters']):
+        next_index = self._saved_fight['index'] + 1
+        for ignore in self._saved_fight['fighters']:
+            if next_index >= len(self._saved_fight['fighters']):
                 next_index = 0
-            if self.__saved_fight['fighters'][next_index]['group'] == 'PCs':
+            if self._saved_fight['fighters'][next_index]['group'] == 'PCs':
                 next_PC_name = (
-                        self.__saved_fight['fighters'][next_index]['name'])
+                        self._saved_fight['fighters'][next_index]['name'])
                 break
             next_index += 1
         return next_PC_name
@@ -3315,7 +3329,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self.__saved_fight['index'])
+                                   self._saved_fight['index'])
         return True # Keep going
 
     def __pick_opponent(self):
@@ -3356,7 +3370,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self.__saved_fight['index'])
+                                   self._saved_fight['index'])
         return True # Keep going
 
 
@@ -3365,14 +3379,14 @@ class FightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        if (self.__saved_fight['index'] == 0 and 
-                self.__saved_fight['round'] == 0):
+        if (self._saved_fight['index'] == 0 and 
+                self._saved_fight['round'] == 0):
             return True # Not going backwards from the origin
 
         self.__modify_index(-1)
         next_PC_name = self.__next_PC_name()
-        self._window.round_ribbon(self.__saved_fight['round'],
-                                  self.__saved_fight['saved'],
+        self._window.round_ribbon(self._saved_fight['round'],
+                                  self._saved_fight['saved'],
                                   next_PC_name,
                                   self._input_filename,
                                   self._maintain_json)
@@ -3381,7 +3395,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self.__saved_fight['index'])
+                                   self._saved_fight['index'])
         return True # Keep going
 
 
@@ -3401,14 +3415,14 @@ class FightHandler(ScreenHandler):
                     ask_to_loot = True
 
         while ask_to_save or ask_to_loot:
-            quit_menu = [('Just Quit', {'doit': None})]
+            quit_menu = [('just quit', {'doit': None})]
 
             if not self.__bodies_looted and ask_to_loot:
-                quit_menu.append(('Loot the Bodies',
+                quit_menu.append(('loot the bodies',
                                  {'doit': self.__loot_bodies}))
 
-            if not self.__saved_fight['saved'] and ask_to_save:
-                quit_menu.append(('Save the Fight',
+            if not self._saved_fight['saved'] and ask_to_save:
+                quit_menu.append(('save the fight',
                                  {'doit': self.__simply_save}))
 
             result = self._window_manager.menu('Leaving Fight', quit_menu)
@@ -3422,17 +3436,17 @@ class FightHandler(ScreenHandler):
         return False # Leave the fight
 
     def __simply_save(self):
-        self.__saved_fight['saved'] = True
+        self._saved_fight['saved'] = True
 
     def __save(self):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        self.__saved_fight['saved'] = True
+        self._saved_fight['saved'] = True
         next_PC_name = self.__next_PC_name()
-        self._window.round_ribbon(self.__saved_fight['round'],
-                                  self.__saved_fight['saved'],
+        self._window.round_ribbon(self._saved_fight['round'],
+                                  self._saved_fight['saved'],
                                   next_PC_name,
                                   self._input_filename,
                                   self._maintain_json)
@@ -3444,13 +3458,13 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         max_lines = curses.LINES - 4
-        lines = (max_lines if len(self._history) > max_lines
-                           else len(self._history))
+        lines = (max_lines if len(self._saved_fight['history']) > max_lines
+                           else len(self._saved_fight['history']))
 
         # It's not really a menu but the window for it works just fine
         pseudo_menu = []
         for line in range(lines):
-            pseudo_menu.append((self._history[line], 0))
+            pseudo_menu.append((self._saved_fight['history'][line], 0))
         ignore = self._window_manager.menu('Fight History (Newest On Top)',
                                            pseudo_menu)
         return True
@@ -3554,7 +3568,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self.__saved_fight['index'])
+                                   self._saved_fight['index'])
         return True # Keep fighting
 
 
@@ -3570,19 +3584,23 @@ class MainHandler(ScreenHandler):
         super(MainHandler, self).__init__(window_manager,
                                           campaign_debug_json,
                                           filename,
+                                          world['current-fight'],
                                           maintain_json)
         self.__world = world
         self.__ruleset = ruleset
         self._add_to_choice_dict({
-            ord('o'): {'name': 'outfit characters',   'func': self.__outfit},
+            ord('o'): {'name': 'outfit characters',   'func':
+                                                            self.__outfit},
             ord('t'): {'name': 'build from template', 'func':
                                                             self.__build_fight},
-            ord('f'): {'name': 'fight (run)',         'func': self.__run_fight},
+            ord('f'): {'name': 'fight (run)',         'func':
+                                                            self.__run_fight},
             ord('H'): {'name': 'Heal',                'func':
                                                             self.__fully_heal},
             ord('n'): {'name': 'name',                'func':
                                                             self.__get_a_name},
-            ord('q'): {'name': 'quit',                'func': self.__quit}
+            ord('q'): {'name': 'quit',                'func':
+                                                            self.__quit}
         })
         self._window = MainGmWindow(self._window_manager)
 
@@ -3689,7 +3707,7 @@ class MainHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         monster_group = None
-        if not self.__world['current-fight']['saved']:
+        if not self._saved_fight['saved']:
             fight_name_menu = [(name, name)
                                for name in self.__world['monsters'].keys()]
             # PP.pprint(fight_name_menu)
@@ -3725,6 +3743,7 @@ class OutfitCharactersHandler(ScreenHandler):
         super(OutfitCharactersHandler, self).__init__(window_manager,
                                                       campaign_debug_json,
                                                       filename,
+                                                      world['current-fight'],
                                                       maintain_json)
 
         self._add_to_choice_dict({
@@ -3750,12 +3769,6 @@ class OutfitCharactersHandler(ScreenHandler):
         self.__character = {'name': None, 'details': None}
         self.__select_character()
         self._window.show_character(self.__character)
-
-        # TODO: warn if called with -m
-        #if XXX:
-        #    self._window_manager.error(
-        #                ['Called with XXX, these changes won\'t be saved'])
-
 
     #
     # Protected Methods
