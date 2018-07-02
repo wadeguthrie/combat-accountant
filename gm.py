@@ -20,6 +20,7 @@ import sys
 #   - < 1/3 FP = 1/2 move, dodge, st
 #   - Warning if window is smaller than expected
 #   - Add book references in more places
+#   - Add 2 weapon (or weapon & shield)
 #
 # TODO (eventually):
 #   - damage other than dice (swords and stuff -- add this as needed)

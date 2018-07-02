@@ -20,9 +20,6 @@ class MockWindowManager(object):
     def get_fight_gm_window(self, ruleset):
         return MockFightGmWindow(ruleset)
 
-# TODO: test to-hit with and without aiming
-# TODO: posture mods testing
-
 # TODO: test that modify index wraps
 # TODO: test that cycling a whole round goes to each fighter in order
 # TODO: test that an unconscious fighter is not skipped but a dead one is
@@ -66,6 +63,10 @@ class MockWindowManager(object):
 
 class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
     def setUp(self):
+        # 'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
+        self.__crawling_attack_mod = -4
+        self.__crawling_defense_mod = -3
+
         self.__colt_pistol_acc = 3
         self.__vodou_priest_fighter_pistol_skill = 15
         self.__vodou_priest_fighter = {
@@ -297,45 +298,39 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
     def tearDown(self):
         pass
 
-    #def test_adjust_hp(self,
-    #              fighter_details,
-    #              adj # the number of HP to gain or lose
-    #             ):
-    #def test_do_maneuver(self):
-    #def test_get_action_menu(self,
-    #                    fighter_name,
-    #                    fighter # dict describing the fighter in question
-    #                   ):
-    #def test_get_fighter_notes(self,
-    #                      fighter_name,
-    #                      fighter_details
-    #                     ):
-    #def test_get_fighter_state(self, fighter_details):
-    #def test_heal_fighter(self, fighter_details):
-    #def test_initiative(self,
-    #               fighter_details # dict for the creature as in the json file
-    #              ):
-    #def test_make_dead(self):
-    #def test_new_fight(self, fighter_details):
-    #def test_next_fighter(self, prev_fighter_details):
-
     def test_get_dodge_skill(self):
         # Deepcopy so that we don't taint the original
-        vodou_priest_fighter = gm.Fighter(
-                                  'Priest',
+        vodou_priest = gm.Fighter('Priest',
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset)
-        dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(
-                                                        vodou_priest_fighter)
+
+        self.__ruleset.change_posture({'fighter': vodou_priest,
+                                       'posture': 'standing'})
+        dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(vodou_priest)
         assert dodge_skill == 9
+
+        self.__ruleset.change_posture({'fighter': vodou_priest,
+                                       'posture': 'crawling'})
+        dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(vodou_priest)
+        assert dodge_skill == (9 + self.__crawling_defense_mod)
+
+        # Next guy
 
         bokor_fighter = gm.Fighter('Bokor',
                                    'group',
                                    copy.deepcopy(self.__bokor_fighter),
                                    self.__ruleset)
+
+        self.__ruleset.change_posture({'fighter': bokor_fighter,
+                                       'posture': 'standing'})
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(bokor_fighter)
         assert dodge_skill == 9
+
+        self.__ruleset.change_posture({'fighter': bokor_fighter,
+                                       'posture': 'crawling'})
+        dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(bokor_fighter)
+        assert dodge_skill == (9 + self.__crawling_defense_mod)
 
         tank_fighter = gm.Fighter('Tank',
                                   'group',
@@ -398,7 +393,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         parry_skill, parry_why = self.__ruleset.get_parry_skill(
                                                     vodou_priest_fighter,
                                                     weapon)
-        assert parry_skill is None
+        assert parry_skill is None # None w/weapon; still OK hand-to-hand
 
         # Unarmed
         weapon = None
@@ -408,7 +403,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    self.__ruleset)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(bokor_fighter,
                                                                 weapon)
-        assert parry_skill is None
+        assert parry_skill is None # None w/weapon; still OK hand-to-hand
 
         # Unarmed
         weapon = None
@@ -418,7 +413,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   self.__ruleset)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(tank_fighter,
                                                                 weapon)
-        assert parry_skill is None
+        assert parry_skill is None # None w/weapon; still OK hand-to-hand
 
         # Armed (sick stick)
         tank_fighter = gm.Fighter('Tank',
@@ -427,9 +422,18 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   self.__ruleset)
         weapon_index, weapon  = tank_fighter.get_weapon_by_name('sick stick')
         tank_fighter.draw_weapon_by_index(weapon_index)
+
+        self.__ruleset.change_posture({'fighter': tank_fighter,
+                                       'posture': 'standing'})
         parry_skill, parry_why = self.__ruleset.get_parry_skill(tank_fighter,
                                                                 weapon)
         assert parry_skill == 11
+
+        self.__ruleset.change_posture({'fighter': tank_fighter,
+                                       'posture': 'crawling'})
+        parry_skill, parry_why = self.__ruleset.get_parry_skill(tank_fighter,
+                                                                weapon)
+        assert parry_skill == (11 + self.__crawling_defense_mod)
 
         # Unarmed
         weapon = None
@@ -439,7 +443,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    self.__ruleset)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(thief_fighter,
                                                                 weapon)
-        assert parry_skill is None
+        assert parry_skill is None # None w/weapon; still OK hand-to-hand
 
         # Armed (knife)
         thief_fighter = gm.Fighter('Thief',
@@ -448,9 +452,18 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    self.__ruleset)
         weapon_index, weapon = thief_fighter.get_weapon_by_name('knife, large')
         thief_fighter.draw_weapon_by_index(weapon_index)
+
+        self.__ruleset.change_posture({'fighter': thief_fighter,
+                                       'posture': 'standing'})
         parry_skill, parry_why = self.__ruleset.get_parry_skill(thief_fighter,
                                                                 weapon)
         assert parry_skill == 9
+
+        self.__ruleset.change_posture({'fighter': thief_fighter,
+                                       'posture': 'crawling'})
+        parry_skill, parry_why = self.__ruleset.get_parry_skill(thief_fighter,
+                                                                weapon)
+        assert parry_skill == (9 + self.__crawling_defense_mod)
 
     def test_get_hand_to_hand_info(self):
         # Vodou Priest
@@ -749,7 +762,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # 'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
 
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
-            -4) # crawling
+            + self.__crawling_attack_mod)
         self.__ruleset.change_posture({'fighter': vodou_priest,
                                        'posture': 'crawling'})
         vodou_priest.reset_aim()
@@ -763,8 +776,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
             + self.__colt_pistol_acc # aim
             +1 # braced
-            -4 # crawling
-            )
+            + self.__crawling_attack_mod)
         self.__ruleset.change_posture({'fighter': vodou_priest,
                                        'posture': 'crawling'})
         vodou_priest.do_aim(braced=True)
@@ -796,8 +808,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
             + self.__colt_pistol_acc # aim
-            -4 # crawling
-            )
+            + self.__crawling_attack_mod)
         self.__ruleset.change_posture({'fighter': vodou_priest,
                                        'posture': 'crawling'})
         vodou_priest.do_aim(braced=False)
