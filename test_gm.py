@@ -23,8 +23,51 @@ class MockWindowManager(object):
 # TODO: test to-hit with and without aiming
 # TODO: posture mods testing
 
+# TODO: test that modify index wraps
+# TODO: test that cycling a whole round goes to each fighter in order
+# TODO: test that an unconscious fighter is not skipped but a dead one is
+
+# TODO: test that doing damage to one fighter and cycling a round only affects
+#       the one fighter
+# TODO: test that changing opponents from one that's damaged doesn't affect
+#       any of the fighters (except that the opponent was changed)
+# TODO: test that saving a fight and starting up again doesn't change the
+#       fight (pending actions, injuries, fight order)
+
+# TODO: test that pick opponent gives you all of the other side and none of
+#       the current side
+# TODO: test that pick opponent actually selects the opponent that you want
+# TODO: test that a non-engaged opponent asks for a two-way and that an
+#       engaged one does not
+
+# TODO: test that looting bodies works:
+#           * moving something from one body to another works properly
+#           * only loot unconscious and dead monsters
+# TODO: test that notes are saved properly
+# TODO: test that quitting a fight offers to loot and save when appropriate
+#       and not when not:
+#       (4 tests: loot, save; loot, no save; no loot, save; no loot, no save)
+# TODO: test that a timer works
+# TODO: test that a 0.9 timer works as expected
+
+# -- BuildFightHandler --
+# TODO: test that adding a creature works
+# TODO: test that deleting a creature works
+# TODO: test that you can add to the PCs
+# TODO: test that you can add to a monster group
+# TODO: test that you can create a new monster group
+# TODO: make sure that the templates work as expected (try a blank one, try
+#       two others with two different data sets)
+
+# -- OutfitCharactersHandler --
+# TODO: test that adding something actually adds the right thing and that it's
+#       permenant
+# TODO: test that removing something works
+
 class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
     def setUp(self):
+        self.__colt_pistol_acc = 3
+        self.__vodou_priest_fighter_pistol_skill = 15
         self.__vodou_priest_fighter = {
             "shock": 0, 
             "aim": {"rounds": 0, "braced": False},
@@ -33,7 +76,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                        {"name": "pistol, Colt 170D",
                         "type": "ranged weapon",
                         "damage": {"dice": "1d+4"},
-                        "acc": 3,
+                        "acc": self.__colt_pistol_acc,
                         "ammo": {"name": "C Cell",
                                  "shots_left": 9,
                                  "shots": 9},
@@ -48,7 +91,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                         "notes": ""
                        }
                       ],
-            "skills": {"guns (pistol)": 15,
+            "skills": {"guns (pistol)":
+                                    self.__vodou_priest_fighter_pistol_skill,
                        "brawling": 12},
             "advantages": {"combat reflexes": 15},
             "state" : "alive",
@@ -470,7 +514,6 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert hand_to_hand_info['parry_skill'] == 10
 
     def test_initiative_order(self):
-
         random_debug_filename = 'foo'
 
         world = {
@@ -618,6 +661,193 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
     #            for k in range(5):
     #                print random.randint(1, 6),
     #            print ''
+
+    def test_ranged_to_hit(self):
+        self.__window_manager = MockWindowManager()
+        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+
+        vodou_priest = gm.Fighter('Priest',
+                                  'group',
+                                  copy.deepcopy(self.__vodou_priest_fighter),
+                                  self.__ruleset)
+        requested_weapon_index = 0
+        vodou_priest.draw_weapon_by_index(requested_weapon_index)
+        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        assert actual_weapon_index == requested_weapon_index
+
+        # ranged to-hit should be skill + acc (if aimed) + 1 (if braced)
+        #   + size modifier + range/speed modifier + special conditions
+
+        # aim for 1 turn += acc, 2 turns += 1, 3+ turns += 1
+        # brace += 1
+
+        # 'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
+
+        # no aim, no posture
+
+        expected_to_hit = self.__vodou_priest_fighter_pistol_skill
+        vodou_priest.reset_aim()
+        self.__ruleset.change_posture({'fighter': vodou_priest,
+                                       'posture': 'standing'})
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit
+
+        # aim / braced, no posture
+
+        # 1 round
+        expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
+            + self.__colt_pistol_acc
+            + 1) # braced
+        self.__ruleset.change_posture({'fighter': vodou_priest,
+                                       'posture': 'standing'})
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit
+
+        # 2 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
+
+        # 3 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
+
+        # 4 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit + 2 # no further benefit
+
+        # aim / not braced, no posture
+
+        # 1 round
+        expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
+            + self.__colt_pistol_acc)
+        self.__ruleset.change_posture({'fighter': vodou_priest,
+                                       'posture': 'standing'})
+        vodou_priest.do_aim(braced=False)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit
+
+        # 2 rounds
+        vodou_priest.do_aim(braced=False)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
+
+        # 3 rounds
+        vodou_priest.do_aim(braced=False)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
+
+        # 4 rounds
+        vodou_priest.do_aim(braced=False)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit + 2 # no further benefit
+
+        # no aim, posture
+        # 'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
+
+        expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
+            -4) # crawling
+        self.__ruleset.change_posture({'fighter': vodou_priest,
+                                       'posture': 'crawling'})
+        vodou_priest.reset_aim()
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit
+
+        # aim / braced, posture
+        # 'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
+
+        # 1 round
+        expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
+            + self.__colt_pistol_acc # aim
+            +1 # braced
+            -4 # crawling
+            )
+        self.__ruleset.change_posture({'fighter': vodou_priest,
+                                       'posture': 'crawling'})
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit
+
+        # 2 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
+
+        # 3 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
+
+        # 4 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit + 2 # no further benefit
+
+
+        # TODO: aim / not braced, posture
+        # 'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
+        # TODO: 1 round, 2 rounds, 3 rounds, 4 rounds
+
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+
+        # 1 round
+        expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
+            + self.__colt_pistol_acc # aim
+            -4 # crawling
+            )
+        self.__ruleset.change_posture({'fighter': vodou_priest,
+                                       'posture': 'crawling'})
+        vodou_priest.do_aim(braced=False)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit
+
+        # 2 rounds
+        vodou_priest.do_aim(braced=False)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
+
+        # 3 rounds
+        vodou_priest.do_aim(braced=False)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
+
+        # 4 rounds
+        vodou_priest.do_aim(braced=False)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        assert to_hit == expected_to_hit + 2 # no further benefit
+
+
+    def test_melee_to_hit(self):
+        self.__window_manager = MockWindowManager()
+        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+
+        bokor_fighter = gm.Fighter('Bokor',
+                                   'group',
+                                   copy.deepcopy(self.__bokor_fighter),
+                                   self.__ruleset)
+
+        # melee to-hit should be skill + special conditions
+
+        # 'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
+
+        # no posture
+        expected_to_hit = self.__vodou_priest_fighter_pistol_skill
+        self.__ruleset.change_posture({'fighter': bokor_fighter,
+                                       'posture': 'standing'})
+        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(bokor_fighter)
+
+        # posture
+        expected_to_hit = self.__vodou_priest_fighter_pistol_skill
+        self.__ruleset.change_posture({'fighter': bokor_fighter,
+                                       'posture': 'crawling'})
+        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(bokor_fighter)
+
+        # TODO: assert to_hit == expected_to_hit
+
+
 
 if __name__ == '__main__':
     unittest.main() # runs all tests in this file
