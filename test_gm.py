@@ -611,7 +611,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 assert fighters[index]['group'] == expected[index]['group']
 
         # test that modify index wraps
-        # TODO: test that cycling a whole round goes to each fighter in order
+        # test that cycling a whole round goes to each fighter in order
 
         expected_index = 0
         assert world['current-fight']['index'] == expected_index
@@ -623,6 +623,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_index = 1
         assert world['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
+        injured_fighter = current_fighter
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
 
@@ -630,6 +631,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_index = 2
         assert world['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
+        unconscious_fighter = current_fighter
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
 
@@ -637,6 +639,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_index = 3
         assert world['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
+        dead_fighter = current_fighter
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
 
@@ -654,7 +657,55 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
 
-# TODO: test that an unconscious fighter is not skipped but a dead one is
+        # test that an unconscious fighter is not skipped but a dead one is
+
+        injured_fighter.details['current']['hp'] -= 3 # arbitrary amount
+        unconscious_fighter.bump_consciousness()
+        dead_fighter.bump_consciousness()   # once to unconscious
+        dead_fighter.bump_consciousness()   # twice to dead
+
+        assert injured_fighter.get_state() == gm.Fighter.INJURED
+        assert unconscious_fighter.get_state() == gm.Fighter.UNCONSCIOUS
+        assert dead_fighter.get_state() == gm.Fighter.DEAD
+
+        expected_index = 0
+        assert world['current-fight']['index'] == expected_index
+        current_fighter = fight_handler.get_current_fighter()
+        assert current_fighter.name == expected[expected_index]['name']
+        assert current_fighter.group == expected[expected_index]['group']
+
+        # This is the injured fighter -- should still see this one
+        fight_handler.modify_index(1)
+        expected_index = 1
+        assert world['current-fight']['index'] == expected_index
+        current_fighter = fight_handler.get_current_fighter()
+        assert current_fighter.name == expected[expected_index]['name']
+        assert current_fighter.group == expected[expected_index]['group']
+
+        # This is the unconscious fighter -- should still see this one
+        fight_handler.modify_index(1)
+        expected_index = 2
+        assert world['current-fight']['index'] == expected_index
+        current_fighter = fight_handler.get_current_fighter()
+        assert current_fighter.name == expected[expected_index]['name']
+        assert current_fighter.group == expected[expected_index]['group']
+
+        # Should skip the dead fighter
+
+        fight_handler.modify_index(1)
+        expected_index = 4
+        assert world['current-fight']['index'] == expected_index
+        current_fighter = fight_handler.get_current_fighter()
+        assert current_fighter.name == expected[expected_index]['name']
+        assert current_fighter.group == expected[expected_index]['group']
+
+        fight_handler.modify_index(1)
+        expected_index = 0 # wraps
+        assert world['current-fight']['index'] == expected_index
+        current_fighter = fight_handler.get_current_fighter()
+        assert current_fighter.name == expected[expected_index]['name']
+        assert current_fighter.group == expected[expected_index]['group']
+
 
     def test_initiative_order_again(self):
         '''
