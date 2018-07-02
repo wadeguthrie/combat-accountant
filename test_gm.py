@@ -852,13 +852,6 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                     {'name': 'Pestilence', 'group': 'horsemen'}, # 5.5,  11, 4
                     {'name': 'Manny',      'group': 'PCs'}]      # 5.25, 10, 1
 
-        expected_fighters = [
-            copy.deepcopy(self.__thief_fighter),
-            copy.deepcopy(self.__tank_fighter),
-            copy.deepcopy(self.__one_more_guy),
-            copy.deepcopy(self.__vodou_priest_fighter),
-            copy.deepcopy(self.__bokor_fighter)]
-
         injured_hp = 3 # This is arbitrary
         injured_index = 2
 
@@ -878,7 +871,6 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         current_fighter = fight_handler.get_current_fighter()
         # Make fighter 0 fight figher 2
         current_fighter.details['opponent'] = {'group': 'PCs', 'name': 'Moe'}
-        expected_fighters[0]['opponent']    = {'group': 'PCs', 'name': 'Moe'}
 
         # Move ahead to fighter 1
         fight_handler.modify_index(1)
@@ -886,8 +878,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert world['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         # Wound fighter 2
-        fighters[2]['details']['current']['hp'] -= injured_hp
-        expected_fighters[injured_index]['current']['hp'] -= injured_hp
+        fighters[injured_index]['details']['current']['hp'] -= injured_hp
 
         # Cycle around to fighter 0
 
@@ -920,7 +911,6 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # fighter 1/Jack) caused the damage to be transferred to the new
         # opponent.
         current_fighter.details['opponent'] = {'group': 'PCs', 'name': 'Jack'}
-        expected_fighters[0]['opponent']    = {'group': 'PCs', 'name': 'Jack'}
 
         # cycle completely around to fighter 1
         fight_handler.modify_index(1) # index 1
@@ -931,6 +921,16 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fight_handler.modify_index(1) # index 1
         expected_index = 1
         assert world['current-fight']['index'] == expected_index
+
+        expected_fighters = [
+            copy.deepcopy(self.__thief_fighter),
+            copy.deepcopy(self.__tank_fighter),
+            copy.deepcopy(self.__one_more_guy),
+            copy.deepcopy(self.__vodou_priest_fighter),
+            copy.deepcopy(self.__bokor_fighter)]
+
+        expected_fighters[0]['opponent']    = {'group': 'PCs', 'name': 'Jack'}
+        expected_fighters[injured_index]['current']['hp'] -= injured_hp
 
         # Check that everything is as it should be
 
