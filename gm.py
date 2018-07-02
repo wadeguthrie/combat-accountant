@@ -2956,7 +2956,9 @@ class FightHandler(ScreenHandler):
     # Private Methods
     #
 
-    def __current_fighter(self):
+    # Public to aid in testing
+    # TODO: move to public methods
+    def get_current_fighter(self):
         '''
         Returns the Fighter object of the current fighter.
         '''
@@ -2972,7 +2974,7 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         # Figure out who loses the FP points
-        current_fighter = self.__current_fighter()
+        current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
         if opponent is None:
             fp_recipient = current_fighter
@@ -3015,7 +3017,7 @@ class FightHandler(ScreenHandler):
         '''
 
         # Figure out who loses the hit points
-        current_fighter = self.__current_fighter()
+        current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
         if opponent is None:
             hp_recipient = current_fighter
@@ -3068,7 +3070,7 @@ class FightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        current_fighter = self.__current_fighter()
+        current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
 
         if opponent is None:
@@ -3101,7 +3103,7 @@ class FightHandler(ScreenHandler):
 
     def _draw_screen(self):
         self._window.clear()
-        current_fighter = self.__current_fighter()
+        current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
         next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self._saved_fight['round'],
@@ -3188,7 +3190,7 @@ class FightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        current_fighter = self.__current_fighter()
+        current_fighter = self.get_current_fighter()
         action_menu = self.__ruleset.get_action_menu(current_fighter)
         maneuver = self._window_manager.menu('Maneuver', action_menu)
         if maneuver is None:
@@ -3218,9 +3220,11 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
 
-    def __modify_index(self,
-                       adj      # 1 or -1, adjust the index by this
-                      ):
+    # Public to assist testing
+    # TODO: move to public area
+    def modify_index(self,
+                     adj      # 1 or -1, adjust the index by this
+                    ):
         '''
         Increment or decrement the index.  Only stop on living creatures.
         '''
@@ -3239,7 +3243,7 @@ class FightHandler(ScreenHandler):
                 self._saved_fight['index'] = len(
                                             self._saved_fight['fighters']) - 1
                 self._saved_fight['round'] += adj 
-            current_fighter = self.__current_fighter()
+            current_fighter = self.get_current_fighter()
             if current_fighter.is_dead():
                 self.add_to_history('%s did nothing (dead)' %
                                                         current_fighter.name)
@@ -3259,7 +3263,7 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         # Finish off previous guy
-        prev_fighter = self.__current_fighter()
+        prev_fighter = self.get_current_fighter()
         if not prev_fighter.can_finish_turn():
             # TODO (move to ruleset): This should _so_ be in the ruleset but
             # I'm not sure how to achieve that.  It also makes the assumption
@@ -3269,8 +3273,8 @@ class FightHandler(ScreenHandler):
         prev_fighter.end_turn()
 
         # Start the new guy
-        self.__modify_index(1)
-        current_fighter = self.__current_fighter()
+        self.modify_index(1)
+        current_fighter = self.get_current_fighter()
         current_fighter.start_turn()
 
         # Show all the displays
@@ -3312,7 +3316,7 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         # Figure out for whom these notes are...
-        current_fighter = self.__current_fighter()
+        current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
         if opponent is None:
             notes_recipient = current_fighter
@@ -3350,7 +3354,7 @@ class FightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        current_fighter = self.__current_fighter()
+        current_fighter = self.get_current_fighter()
         opponent_group = None
         opponent_menu = []
         for fighter in self.__fighters:
@@ -3396,14 +3400,14 @@ class FightHandler(ScreenHandler):
                 self._saved_fight['round'] == 0):
             return True # Not going backwards from the origin
 
-        self.__modify_index(-1)
+        self.modify_index(-1)
         next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self._saved_fight['round'],
                                   self._saved_fight['saved'],
                                   next_PC_name,
                                   self._input_filename,
                                   self._maintain_json)
-        current_fighter = self.__current_fighter()
+        current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
                                    opponent,
@@ -3488,7 +3492,7 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         # Figure out for whom these notes are...
-        current_fighter = self.__current_fighter()
+        current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
         if opponent is None:
             why_target = current_fighter
@@ -3537,7 +3541,7 @@ class FightHandler(ScreenHandler):
 
         # Who gets the timer?
 
-        current_fighter = self.__current_fighter()
+        current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
         if opponent is None:
             timer_recipient = current_fighter
