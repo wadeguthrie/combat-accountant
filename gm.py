@@ -2886,7 +2886,7 @@ class FightHandler(ScreenHandler):
 
             self.__fighters = []    # contains objects
 
-            for name, details in world['PCs'].iteritems():
+            for name, details in self.__world['PCs'].iteritems():
                 fighter = Fighter(name, 'PCs', details, self.__ruleset)
                 self.__fighters.append(fighter)
 
@@ -2916,6 +2916,11 @@ class FightHandler(ScreenHandler):
         self._saved_fight['saved'] = False
         self._window.start_fight()
 
+    def get_fighters(self):
+        ''' Visibility for testing. '''
+        return [{'name': fighter.name,
+                 'group': fighter.group,
+                 'details': fighter.details} for fighter in self.__fighters]
 
     def get_opponent_for(self,
                          fighter # Fighter object
@@ -3415,7 +3420,7 @@ class FightHandler(ScreenHandler):
                     ask_to_loot = True
 
         while ask_to_save or ask_to_loot:
-            quit_menu = [('just quit', {'doit': None})]
+            quit_menu = [('quit -- really', {'doit': None})]
 
             if not self.__bodies_looted and ask_to_loot:
                 quit_menu.append(('loot the bodies',

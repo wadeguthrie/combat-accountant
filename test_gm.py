@@ -3,20 +3,31 @@
 import copy
 import gm
 import pprint
+import random
 import unittest
+
+class MockFightGmWindow(object):
+    def __init__(self, ruleset):
+        pass
+
+    def start_fight(self):
+        pass
 
 class MockWindowManager(object):
     def error(string_array):
         pass
 
+    def get_fight_gm_window(self, ruleset):
+        return MockFightGmWindow(ruleset)
+
 # TODO: test to-hit with and without aiming
 # TODO: posture mods testing
-# TODO: test initiative order (note: random.seed(9001))
 
 class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
     def setUp(self):
         self.__vodou_priest_fighter = {
             "shock": 0, 
+            "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
                        {"name": "pistol, Colt 170D",
@@ -54,8 +65,53 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "check_for_death": False, 
             "opponent": None
         } 
+
+        # self.__one_more_guy is identical to the Vodou Priest Fighter except
+        # that his dex is different.  I know that makes the calculation for
+        # basic speed wrong but that's not really the point of this exercise
+        self.__one_more_guy = {
+            "shock": 0, 
+            "aim": {"rounds": 0, "braced": False},
+            "weapon-index" : None,
+            "stuff": [
+                       {"name": "pistol, Colt 170D",
+                        "type": "ranged weapon",
+                        "damage": {"dice": "1d+4"},
+                        "acc": 3,
+                        "ammo": {"name": "C Cell",
+                                 "shots_left": 9,
+                                 "shots": 9},
+                        "reload": 3,
+                        "skill": "guns (pistol)",
+                        "count": 1,
+                        "notes": ""
+                       },
+                       {"name": "C Cell",
+                        "type": "misc",
+                        "count": 5,
+                        "notes": ""
+                       }
+                      ],
+            "skills": {"guns (pistol)": 15,
+                       "brawling": 12},
+            "advantages": {"combat reflexes": 15},
+            "state" : "alive",
+            "posture" : "standing",
+            "current": {
+                "fp": 12, "iq": 13, "hp": 10, "ht": 11, "st": 10, "dx": 12, 
+                "basic-speed": 5.5
+            }, 
+            "permanent": {
+                "fp": 12, "iq": 13, "hp": 10, "ht": 11, "st": 10, "dx": 12, 
+                "basic-speed": 5.5
+            }, 
+            "timers": [], 
+            "check_for_death": False, 
+            "opponent": None
+        } 
         self.__bokor_fighter = {
             "shock": 0, 
+            "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
                        {"name": "pistol, Kalashnikov Makarov",
@@ -95,6 +151,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         } 
         self.__tank_fighter = {
             "shock": 0, 
+            "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
                        {"name": "pistol, Sig D65",
@@ -142,6 +199,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         } 
         self.__thief_fighter = {
             "shock": 0, 
+            "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
                        {"name": "pistol, Baretta DX 192",
@@ -410,6 +468,71 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert hand_to_hand_info['kick_damage']['num_dice'] == 1
         assert hand_to_hand_info['kick_damage']['plus'] == -1
         assert hand_to_hand_info['parry_skill'] == 10
+
+    def test_initiative_order(self):
+        # random.randint(1, 6) should generate: 1 2 4 4 4 4 5 6 4 4
+        random.seed(9001) # 9001 is an arbitrary number
+
+        random_debug_filename = 'foo'
+
+        world = {
+            # Don't need templates, dead-monsters, equipment, names
+            'PCs': {
+                # 5.25, 10, rand=1
+                'Manny' : copy.deepcopy(self.__bokor_fighter),
+
+                # 5.75, 12, rand=2
+                'Jack' : copy.deepcopy(self.__tank_fighter),
+
+                # 5.5, 12, rand=4
+                'Moe' : copy.deepcopy(self.__one_more_guy),
+            },
+            'monsters': {
+                'horsemen' : {
+                    # 5.75, 12, rand=4
+                    'Famine' : copy.deepcopy(self.__thief_fighter),
+
+                    # 5.5, 11, rand=4
+                    'Pestilence' : copy.deepcopy(self.__vodou_priest_fighter),
+                }
+            },
+            'current-fight': {
+                # Needed
+                'saved': False,
+                'history': [], # Needed (maybe)
+
+                # Not needed if not saved
+                'index': 1,
+                'fighters': [],
+                'round': 2,
+                'monsters': 'horsemen',
+            },
+        }
+
+        # Famine and Jack have the same basic speed and dx -- it's up to rand
+        # Pestilence and Moe have same basic speed but different dx
+        expected = [{'name': 'Famine',     'group': 'horsemen'}, # 5.75, 12, 4
+                    {'name': 'Jack',       'group': 'PCs'},      # 5.75, 12, 2
+                    {'name': 'Moe',        'group': 'PCs'},      # 5.5,  12, 4
+                    {'name': 'Pestilence', 'group': 'horsemen'}, # 5.5,  11, 4
+                    {'name': 'Manny',      'group': 'PCs'}]      # 5.25, 10, 1
+
+        fight_handler = gm.FightHandler(self.__window_manager,
+                                        world,
+                                        'horsemen',
+                                        self.__ruleset,
+                                        random_debug_filename,
+                                        filename='*INTERNAL*',
+                                        maintain_json=False
+                                       )
+        fighters = fight_handler.get_fighters()
+
+        # Check the order against the one that I expect
+
+        for index, ignore in enumerate(fighters):
+            assert fighters[index]['name'] == expected[index]['name']
+            assert fighters[index]['group'] == expected[index]['group']
+
 
 if __name__ == '__main__':
     unittest.main() # runs all tests in this file
