@@ -20,8 +20,6 @@ class MockWindowManager(object):
     def get_fight_gm_window(self, ruleset):
         return MockFightGmWindow(ruleset)
 
-# TODO: test that doing damage to one fighter and cycling a round only affects
-#       the one fighter
 # TODO: test that changing opponents from one that's damaged doesn't affect
 #       any of the fighters (except that the opponent was changed)
 # TODO: test that saving a fight and starting up again doesn't change the
@@ -33,6 +31,8 @@ class MockWindowManager(object):
 # TODO: test that a non-engaged opponent asks for a two-way and that an
 #       engaged one does not
 
+# TODO: test that a timer works
+# TODO: test that a 0.9 timer works as expected
 # TODO: test that looting bodies works:
 #           * moving something from one body to another works properly
 #           * only loot unconscious and dead monsters
@@ -40,8 +40,6 @@ class MockWindowManager(object):
 # TODO: test that quitting a fight offers to loot and save when appropriate
 #       and not when not:
 #       (4 tests: loot, save; loot, no save; no loot, save; no loot, no save)
-# TODO: test that a timer works
-# TODO: test that a 0.9 timer works as expected
 
 # -- BuildFightHandler --
 # TODO: test that adding a creature works
@@ -727,98 +725,11 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fighters = fight_handler.get_fighters()
         assert len(expected_fighters) == len(fighters)
-
-        #for index in range(len(expected_fighters)):
-        #    assert expected_fighters[index] == fighters[index]['details']
-
-        #PP = pprint.PrettyPrinter(indent=3, width=150)
-        #print '\nExpected'
-        #PP.pprint(expected_fighters[0])
-        #print '\nActual'
-        #PP.pprint(fighters[0]['details'])
-        #print ('ARE equal' if
-        #    self.__are_equal(fighters[2]['details'], expected_fighters[2])
-        #    else 'are NOT equal')
-
         assert expected_fighters[0] == fighters[0]['details']
         assert expected_fighters[1] == fighters[1]['details']
         assert expected_fighters[2] == fighters[2]['details']
         assert expected_fighters[3] == fighters[3]['details']
         assert expected_fighters[4] == fighters[4]['details']
-
-    def __are_equal(self, lhs, rhs):
-        PP = pprint.PrettyPrinter(indent=3, width=150)
-        if isinstance(lhs, dict):
-            if not isinstance(rhs, dict):
-                print '** lhs is a dict but rhs is not'
-                print '\nlhs'
-                PP.pprint(lhs)
-                print '\nrhs'
-                PP.pprint(rhs)
-                return False
-            for key in rhs.iterkeys():
-                if key not in rhs:
-                    print '** KEY "%s" not in lhs' % key
-                    print '\nlhs'
-                    PP.pprint(lhs)
-                    print '\nrhs'
-                    PP.pprint(rhs)
-                    return False
-            are_equal = True
-            for key in lhs.iterkeys():
-                if key not in rhs:
-                    print '** KEY "%s" not in rhs' % key
-                    print '\nlhs'
-                    PP.pprint(lhs)
-                    print '\nrhs'
-                    PP.pprint(rhs)
-                    return False
-                if not self.__are_equal(lhs[key], rhs[key]):
-                    print 'lhs[%r] != rhs[%r]' % (key, key)
-                    print '\nlhs'
-                    PP.pprint(lhs)
-                    print '\nrhs'
-                    PP.pprint(rhs)
-                    are_equal = False
-            return are_equal
-                
-        elif isinstance(lhs, list):
-            if not isinstance(rhs, list):
-                print '** lhs is a list but rhs is not'
-                print '\nlhs'
-                PP.pprint(lhs)
-                print '\nrhs'
-                PP.pprint(rhs)
-                return
-            if len(lhs) != len(rhs):
-                print '** length lhs=%d != len rhs=%d' % (len(lhs), len(rhs))
-                print '\nlhs'
-                PP.pprint(lhs)
-                print '\nrhs'
-                PP.pprint(rhs)
-                return
-            are_equal = True
-            for i in range(len(lhs)):
-                print '--[%d]--' % i
-                if not self.__are_equal(lhs[i], rhs[i]):
-                    print 'lhs[%d] != rhs[%d]' % (i, i)
-                    print '\nlhs'
-                    PP.pprint(lhs)
-                    print '\nrhs'
-                    PP.pprint(rhs)
-                    are_equal = False
-            return are_equal
-
-        else:
-            if lhs != rhs:
-                print '** lhs=%r != rhs=%r' % (lhs, rhs)
-                print '\nlhs'
-                PP.pprint(lhs)
-                print '\nrhs'
-                PP.pprint(rhs)
-                return False
-            else:
-                return True
 
     def test_initiative_order_again(self):
         '''
@@ -892,17 +803,148 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 assert fighters[index]['name'] == expected[index]['name']
                 assert fighters[index]['group'] == expected[index]['group']
 
-    #def test_random_seed(self):
-    #    for i in range(10):
-    #        random.seed() # randomize
-    #        new_seed = random.randint(1, 10000)
-    #
-    #        print '\nseed: %d' % new_seed
-    #        for j in range(10):
-    #            random.seed(new_seed)
-    #            for k in range(5):
-    #                print random.randint(1, 6),
-    #            print ''
+    def test_change_opponents(self):
+        '''
+        Test that changing opponents from one that's damaged doesn't affect
+        any of the fighters (except that the opponent was changed).  This
+        mirrors a bug that I thought I saw a while ago.
+        '''
+
+        random_debug_filename = 'foo'
+        world = {
+            # Don't need templates, dead-monsters, equipment, names
+            'PCs': {
+                # 5.25, 10, rand=1
+                'Manny' : copy.deepcopy(self.__bokor_fighter),
+
+                # 5.75, 12, rand=2
+                'Jack' : copy.deepcopy(self.__tank_fighter),
+
+                # 5.5, 12, rand=4
+                'Moe' : copy.deepcopy(self.__one_more_guy),
+            },
+            'monsters': {
+                'horsemen' : {
+                    # 5.75, 12, rand=4
+                    'Famine' : copy.deepcopy(self.__thief_fighter),
+
+                    # 5.5, 11, rand=4
+                    'Pestilence' : copy.deepcopy(self.__vodou_priest_fighter),
+                }
+            },
+            'current-fight': {
+                # Needed
+                'saved': False,
+                'history': [], # Needed (maybe)
+
+                'index': 1,
+                'fighters': [],
+                'round': 2,
+                'monsters': 'horsemen',
+            },
+        }
+
+        # Famine and Jack have the same basic speed and dx -- it's up to rand
+        # Pestilence and Moe have same basic speed but different dx
+        expected = [{'name': 'Famine',     'group': 'horsemen'}, # 5.75, 12, 4
+                    {'name': 'Jack',       'group': 'PCs'},      # 5.75, 12, 2
+                    {'name': 'Moe',        'group': 'PCs'},      # 5.5,  12, 4
+                    {'name': 'Pestilence', 'group': 'horsemen'}, # 5.5,  11, 4
+                    {'name': 'Manny',      'group': 'PCs'}]      # 5.25, 10, 1
+
+        expected_fighters = [
+            copy.deepcopy(self.__thief_fighter),
+            copy.deepcopy(self.__tank_fighter),
+            copy.deepcopy(self.__one_more_guy),
+            copy.deepcopy(self.__vodou_priest_fighter),
+            copy.deepcopy(self.__bokor_fighter)]
+
+        injured_hp = 3 # This is arbitrary
+        injured_index = 2
+
+        random.seed(9001) # 9001 is an arbitrary number
+        fight_handler = gm.FightHandler(self.__window_manager,
+                                        world,
+                                        'horsemen',
+                                        self.__ruleset,
+                                        random_debug_filename,
+                                        filename='*INTERNAL*',
+                                        maintain_json=False
+                                       )
+        fighters = fight_handler.get_fighters()
+
+        expected_index = 0
+        assert world['current-fight']['index'] == expected_index
+        current_fighter = fight_handler.get_current_fighter()
+        # Make fighter 0 fight figher 2
+        current_fighter.details['opponent'] = {'group': 'PCs', 'name': 'Moe'}
+        expected_fighters[0]['opponent']    = {'group': 'PCs', 'name': 'Moe'}
+
+        # Move ahead to fighter 1
+        fight_handler.modify_index(1)
+        expected_index = 1
+        assert world['current-fight']['index'] == expected_index
+        current_fighter = fight_handler.get_current_fighter()
+        # Wound fighter 2
+        fighters[2]['details']['current']['hp'] -= injured_hp
+        expected_fighters[injured_index]['current']['hp'] -= injured_hp
+
+        # Cycle around to fighter 0
+
+        fight_handler.modify_index(1)
+        expected_index = 2
+        assert world['current-fight']['index'] == expected_index
+        current_fighter = fight_handler.get_current_fighter()
+        unconscious_fighter = current_fighter
+        unconscious_index = expected_index
+
+        fight_handler.modify_index(1)
+        expected_index = 3
+        assert world['current-fight']['index'] == expected_index
+        current_fighter = fight_handler.get_current_fighter()
+        dead_fighter = current_fighter
+        dead_index = expected_index
+
+        fight_handler.modify_index(1)
+        expected_index = 4
+        assert world['current-fight']['index'] == expected_index
+        current_fighter = fight_handler.get_current_fighter()
+
+        fight_handler.modify_index(1)
+        expected_index = 0 # wraps
+        assert world['current-fight']['index'] == expected_index
+        current_fighter = fight_handler.get_current_fighter()
+        # Change opponent of fighter 0 to fighter 1 -- At one time, I saw a
+        # bug where it appeared that changing an opponent from an injured one
+        # (in this case, fighter 2/Moe) to a different fighter (in this case,
+        # fighter 1/Jack) caused the damage to be transferred to the new
+        # opponent.
+        current_fighter.details['opponent'] = {'group': 'PCs', 'name': 'Jack'}
+        expected_fighters[0]['opponent']    = {'group': 'PCs', 'name': 'Jack'}
+
+        # cycle completely around to fighter 1
+        fight_handler.modify_index(1) # index 1
+        fight_handler.modify_index(1) # index 2
+        fight_handler.modify_index(1) # index 3
+        fight_handler.modify_index(1) # index 4
+        fight_handler.modify_index(1) # index 0
+        fight_handler.modify_index(1) # index 1
+        expected_index = 1
+        assert world['current-fight']['index'] == expected_index
+
+        # Check that everything is as it should be
+
+        assert len(expected_fighters) == len(fighters)
+        assert expected_fighters[0] == fighters[0]['details']
+
+        self.__are_equal(expected_fighters[1], fighters[1]['details'])
+
+        assert expected_fighters[1] == fighters[1]['details']
+
+        assert expected_fighters[2] == fighters[2]['details']
+        assert expected_fighters[3] == fighters[3]['details']
+        assert expected_fighters[4] == fighters[4]['details']
+
 
     def test_ranged_to_hit(self):
         self.__window_manager = MockWindowManager()
@@ -1083,6 +1125,91 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                        'posture': 'crawling'})
         to_hit, why = self.__ruleset.get_to_hit(thief, weapon)
         assert to_hit == expected_to_hit
+
+    #def test_random_seed(self):
+    #    for i in range(10):
+    #        random.seed() # randomize
+    #        new_seed = random.randint(1, 10000)
+    #
+    #        print '\nseed: %d' % new_seed
+    #        for j in range(10):
+    #            random.seed(new_seed)
+    #            for k in range(5):
+    #                print random.randint(1, 6),
+    #            print ''
+
+    def __are_equal(self, lhs, rhs):
+        PP = pprint.PrettyPrinter(indent=3, width=150)
+        if isinstance(lhs, dict):
+            if not isinstance(rhs, dict):
+                print '** lhs is a dict but rhs is not'
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
+                return False
+            for key in rhs.iterkeys():
+                if key not in rhs:
+                    print '** KEY "%s" not in lhs' % key
+                    print '\nlhs'
+                    PP.pprint(lhs)
+                    print '\nrhs'
+                    PP.pprint(rhs)
+                    return False
+            are_equal = True
+            for key in lhs.iterkeys():
+                if key not in rhs:
+                    print '** KEY "%s" not in rhs' % key
+                    print '\nlhs'
+                    PP.pprint(lhs)
+                    print '\nrhs'
+                    PP.pprint(rhs)
+                    are_equal = False
+                elif not self.__are_equal(lhs[key], rhs[key]):
+                    print 'lhs[%r] != rhs[%r]' % (key, key)
+                    print '\nlhs'
+                    PP.pprint(lhs)
+                    print '\nrhs'
+                    PP.pprint(rhs)
+                    are_equal = False
+            return are_equal
+                
+        elif isinstance(lhs, list):
+            if not isinstance(rhs, list):
+                print '** lhs is a list but rhs is not'
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
+                return False
+            if len(lhs) != len(rhs):
+                print '** length lhs=%d != len rhs=%d' % (len(lhs), len(rhs))
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
+                return False
+            are_equal = True
+            for i in range(len(lhs)):
+                if not self.__are_equal(lhs[i], rhs[i]):
+                    print '** lhs[%d] != rhs[%d]' % (i, i)
+                    print '\nlhs'
+                    PP.pprint(lhs)
+                    print '\nrhs'
+                    PP.pprint(rhs)
+                    are_equal = False
+            return are_equal
+
+        else:
+            if lhs != rhs:
+                print '** lhs=%r != rhs=%r' % (lhs, rhs)
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
+                return False
+            else:
+                return True
 
 
 
