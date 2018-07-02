@@ -2141,6 +2141,13 @@ class GurpsRuleset(Ruleset):
             result['parry_skill'] += 1
             parry_why.append('  +1 due to combat reflexes (B43)')
 
+        if posture_mods is not None and posture_mods['defense'] != 0:
+            result['parry_skill'] += posture_mods['defense']
+
+            punch_why.append('  %+d due to %s posture' % 
+                                                (posture_mods['defense'],
+                                                 fighter.details['posture']))
+
         if parry_damage_modified:
             parry_why.append('  ...for a parry total = %d' %
                                                         result['parry_skill'])

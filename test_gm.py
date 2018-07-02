@@ -242,6 +242,9 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "check_for_death": False, 
             "opponent": None
         } 
+
+        self.__thief_knife_skill = 14
+
         self.__thief_fighter = {
             "shock": 0, 
             "aim": {"rounds": 0, "braced": False},
@@ -276,7 +279,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                       ],
             "skills": {"guns (pistol)": 12,
                        "brawling": 14,
-                       "knife": 15},
+                       "knife": self.__thief_knife_skill},
             "advantages": {},
             "state" : "alive",
             "posture" : "standing",
@@ -526,6 +529,23 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert hand_to_hand_info['kick_damage']['plus'] == -1
         assert hand_to_hand_info['parry_skill'] == 10
 
+        # Thief with posture additions
+
+        self.__ruleset.change_posture({'fighter': thief_fighter,
+                                       'posture': 'crawling'})
+        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(thief_fighter)
+        assert hand_to_hand_info['punch_skill'] == (14
+                                                + self.__crawling_attack_mod)
+        assert hand_to_hand_info['punch_damage']['num_dice'] == 1
+        assert hand_to_hand_info['punch_damage']['plus'] == -2
+        assert hand_to_hand_info['kick_skill'] == (12
+                                                + self.__crawling_attack_mod)
+        assert hand_to_hand_info['kick_damage']['num_dice'] == 1
+        assert hand_to_hand_info['kick_damage']['plus'] == -1
+        assert hand_to_hand_info['parry_skill'] == (10
+                                                + self.__crawling_defense_mod)
+
+
     def test_initiative_order(self):
         random_debug_filename = 'foo'
 
@@ -694,8 +714,6 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # aim for 1 turn += acc, 2 turns += 1, 3+ turns += 1
         # brace += 1
 
-        # 'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
-
         # no aim, no posture
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
@@ -759,10 +777,9 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit + 2 # no further benefit
 
         # no aim, posture
-        # 'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
 
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
-            + self.__crawling_attack_mod)
+                                                + self.__crawling_attack_mod)
         self.__ruleset.change_posture({'fighter': vodou_priest,
                                        'posture': 'crawling'})
         vodou_priest.reset_aim()
@@ -770,13 +787,12 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit
 
         # aim / braced, posture
-        # 'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
 
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
-            + self.__colt_pistol_acc # aim
-            +1 # braced
-            + self.__crawling_attack_mod)
+                                                + self.__colt_pistol_acc # aim
+                                                +1 # braced
+                                                + self.__crawling_attack_mod)
         self.__ruleset.change_posture({'fighter': vodou_priest,
                                        'posture': 'crawling'})
         vodou_priest.do_aim(braced=True)
@@ -799,9 +815,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit + 2 # no further benefit
 
 
-        # TODO: aim / not braced, posture
-        # 'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
-        # TODO: 1 round, 2 rounds, 3 rounds, 4 rounds
+        # aim / not braced, posture
 
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
 
@@ -835,28 +849,31 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
 
-        bokor_fighter = gm.Fighter('Bokor',
-                                   'group',
-                                   copy.deepcopy(self.__bokor_fighter),
-                                   self.__ruleset)
+        thief = gm.Fighter('Thief',
+                           'group',
+                           copy.deepcopy(self.__thief_fighter),
+                           self.__ruleset)
+        requested_weapon_index = 1 # Knife
+        thief.draw_weapon_by_index(requested_weapon_index)
+        weapon, actual_weapon_index = thief.get_current_weapon()
+        assert actual_weapon_index == requested_weapon_index
 
         # melee to-hit should be skill + special conditions
 
-        # 'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
-
         # no posture
-        expected_to_hit = self.__vodou_priest_fighter_pistol_skill
-        self.__ruleset.change_posture({'fighter': bokor_fighter,
+        expected_to_hit = self.__thief_knife_skill
+        self.__ruleset.change_posture({'fighter': thief,
                                        'posture': 'standing'})
-        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(bokor_fighter)
+        to_hit, why = self.__ruleset.get_to_hit(thief, weapon)
+        assert to_hit == expected_to_hit
 
         # posture
-        expected_to_hit = self.__vodou_priest_fighter_pistol_skill
-        self.__ruleset.change_posture({'fighter': bokor_fighter,
+        expected_to_hit = (self.__thief_knife_skill
+                                                + self.__crawling_attack_mod)
+        self.__ruleset.change_posture({'fighter': thief,
                                        'posture': 'crawling'})
-        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(bokor_fighter)
-
-        # TODO: assert to_hit == expected_to_hit
+        to_hit, why = self.__ruleset.get_to_hit(thief, weapon)
+        assert to_hit == expected_to_hit
 
 
 
