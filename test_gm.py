@@ -20,17 +20,6 @@ class MockWindowManager(object):
     def get_fight_gm_window(self, ruleset):
         return MockFightGmWindow(ruleset)
 
-# TODO: test that changing opponents from one that's damaged doesn't affect
-#       any of the fighters (except that the opponent was changed)
-# TODO: test that saving a fight and starting up again doesn't change the
-#       fight (pending actions, injuries, fight order)
-
-# TODO: test that pick opponent gives you all of the other side and none of
-#       the current side
-# TODO: test that pick opponent actually selects the opponent that you want
-# TODO: test that a non-engaged opponent asks for a two-way and that an
-#       engaged one does not
-
 # TODO: test that a timer works
 # TODO: test that a 0.9 timer works as expected
 # TODO: test that looting bodies works:
@@ -40,6 +29,15 @@ class MockWindowManager(object):
 # TODO: test that quitting a fight offers to loot and save when appropriate
 #       and not when not:
 #       (4 tests: loot, save; loot, no save; no loot, save; no loot, no save)
+
+# TODO: test that saving a fight and starting up again doesn't change the
+#       fight (pending actions, injuries, fight order)
+
+# TODO: test that pick opponent gives you all of the other side and none of
+#       the current side
+# TODO: test that pick opponent actually selects the opponent that you want
+# TODO: test that a non-engaged opponent asks for a two-way and that an
+#       engaged one does not
 
 # -- BuildFightHandler --
 # TODO: test that adding a creature works
@@ -922,13 +920,14 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_index = 1
         assert world['current-fight']['index'] == expected_index
 
+        # Set expectations to the final configuration.
+
         expected_fighters = [
             copy.deepcopy(self.__thief_fighter),
             copy.deepcopy(self.__tank_fighter),
             copy.deepcopy(self.__one_more_guy),
             copy.deepcopy(self.__vodou_priest_fighter),
             copy.deepcopy(self.__bokor_fighter)]
-
         expected_fighters[0]['opponent']    = {'group': 'PCs', 'name': 'Jack'}
         expected_fighters[injured_index]['current']['hp'] -= injured_hp
 

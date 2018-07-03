@@ -1207,6 +1207,12 @@ class Fighter(object):
                 self.details['state'] = state_name
                 break
 
+    def can_finish_turn(self):
+        # TODO (move to ruleset): actions are ruleset-based.
+        if self.details['did_action_this_turn'] or not self.is_conscious():
+            return True
+        return False
+
 
     def decrement_timers(self):
         for timer in self.details['timers']:
@@ -1238,34 +1244,11 @@ class Fighter(object):
         self.remove_expired_kill_dying_timers()
 
 
-    def remove_expired_kill_dying_timers(self):
-        '''
-        Removes timers and kills the timers that are dying this round.  Call
-        this at the end of the round to scrape off the timers that expire this
-        round.
-        '''
-        # Remove any expired timers
-        remove_these = []
-        for index, timer in enumerate(self.details['timers']):
-            if timer['rounds'] <= 0:    # <= kills the timers dying this round
-                remove_these.insert(0, index) # largest indexes last
-        for index in remove_these:
-            del self.details['timers'][index]
-
-
-    def remove_expired_keep_dying_timers(self):
-        '''
-        Removes timers but keep the timers that are dying this round.  Call
-        this at the beginning of the round.  Standard timers that die this
-        round are kept so that they're shown.
-        '''
-
-        remove_these = []
-        for index, timer in enumerate(self.details['timers']):
-            if timer['rounds'] < 0:     # < keeps the timers dying this round
-                remove_these.insert(0, index) # largest indexes last
-        for index in remove_these:
-            del self.details['timers'][index]
+    def get_current_weapon(self):
+        weapon_index = self.details['weapon-index']
+        if weapon_index is None:
+            return None, None
+        return self.details['stuff'][weapon_index], weapon_index
 
 
     def get_state(self):
@@ -1275,13 +1258,6 @@ class Fighter(object):
                                             self.details['permanent']['hp']):
             return Fighter.INJURED
         return conscious_number
-
-
-    def get_current_weapon(self):
-        weapon_index = self.details['weapon-index']
-        if weapon_index is None:
-            return None, None
-        return self.details['stuff'][weapon_index], weapon_index
 
 
     def get_weapon_by_name(self,
@@ -1308,6 +1284,40 @@ class Fighter(object):
         return True if self.details['state'] == 'dead' else False
 
 
+    def perform_action_this_turn(self):
+        # TODO (move to ruleset): actions are ruleset-based.
+        self.details['did_action_this_turn'] = True
+
+
+    def remove_expired_keep_dying_timers(self):
+        '''
+        Removes timers but keep the timers that are dying this round.  Call
+        this at the beginning of the round.  Standard timers that die this
+        round are kept so that they're shown.
+        '''
+
+        remove_these = []
+        for index, timer in enumerate(self.details['timers']):
+            if timer['rounds'] < 0:     # < keeps the timers dying this round
+                remove_these.insert(0, index) # largest indexes last
+        for index in remove_these:
+            del self.details['timers'][index]
+
+
+    def remove_expired_kill_dying_timers(self):
+        '''
+        Removes timers and kills the timers that are dying this round.  Call
+        this at the end of the round to scrape off the timers that expire this
+        round.
+        '''
+        # Remove any expired timers
+        remove_these = []
+        for index, timer in enumerate(self.details['timers']):
+            if timer['rounds'] <= 0:    # <= kills the timers dying this round
+                remove_these.insert(0, index) # largest indexes last
+        for index in remove_these:
+            del self.details['timers'][index]
+
     def reset_aim(self):
         # TODO (move to ruleset): do_aim is ruleset-based.
         self.details['aim']['rounds'] = 0
@@ -1329,16 +1339,6 @@ class Fighter(object):
         self.decrement_timers()
         self.remove_expired_keep_dying_timers()
 
-
-    def perform_action_this_turn(self):
-        # TODO (move to ruleset): actions are ruleset-based.
-        self.details['did_action_this_turn'] = True
-
-    def can_finish_turn(self):
-        # TODO (move to ruleset): actions are ruleset-based.
-        if self.details['did_action_this_turn'] or not self.is_conscious():
-            return True
-        return False
 
 
 class Ruleset(object):
