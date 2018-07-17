@@ -14,11 +14,51 @@ class MockFightGmWindow(object):
         pass
 
 class MockWindowManager(object):
-    def error(string_array):
+    def __init__(self):
+        self.__menu_responses = {} # {menu_title: [selection, selection...]
+
+    def error(self, string_array):
         pass
+
+    def set_menu_response(self,
+                          title,
+                          selection # first part of string_results tuple
+                         ):
+        if title not in self.__menu_responses:
+            self.__menu_responses[title] = []
+        self.__menu_responses[title].append(selection)
+
+    def menu(self,
+             title,
+             strings_results, # array of tuples (string, return value)
+             starting_index = 0 # Who is selected when the menu starts
+            ):
+        if title not in self.__menu_responses:
+            print '** didn\'t find menu title "%s" in stored responses'
+            assert False
+        if len(self.__menu_responses['title']) == 0:
+            print '** responses["%s"] is empty, can\'t respond'
+            assert False
+        selection = self.__menu_responses['title'].pop()
+        for string, result in strings_results:
+            if string == selection:
+                return result
+        print '** selection "%s" not found in menu "%s"' % (selection, title)
+        assert False
+        
 
     def get_fight_gm_window(self, ruleset):
         return MockFightGmWindow(ruleset)
+
+# Do these first because it seems like an easy way to get the menu mock
+# working.  The timer stuff requires an action via a menu so that'll be a
+# little more work.
+
+# TODO: test that pick opponent gives you all of the other side and none of
+#       the current side
+# TODO: test that pick opponent actually selects the opponent that you want
+# TODO: test that a non-engaged opponent asks for a two-way and that an
+#       engaged one does not
 
 # TODO: test that a timer works
 # TODO: test that a 0.9 timer works as expected
@@ -32,12 +72,6 @@ class MockWindowManager(object):
 
 # TODO: test that saving a fight and starting up again doesn't change the
 #       fight (pending actions, injuries, fight order)
-
-# TODO: test that pick opponent gives you all of the other side and none of
-#       the current side
-# TODO: test that pick opponent actually selects the opponent that you want
-# TODO: test that a non-engaged opponent asks for a two-way and that an
-#       engaged one does not
 
 # -- BuildFightHandler --
 # TODO: test that adding a creature works

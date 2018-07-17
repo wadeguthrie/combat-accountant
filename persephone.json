@@ -187,49 +187,298 @@
     }
   }, 
   "PCs": {
-    "g-Bokor": {
+    "vasilis - Alan": {
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
+      "stuff": [
+          {
+            "acc": 3, 
+            "count": 1, 
+            "name": "pistol, Colt 170D", 
+            "notes": "", 
+            "damage": {
+              "dice": "1d+4"
+            }, 
+            "reload": 3, 
+            "skill": "guns (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 9, 
+              "shots_left": 9
+            }
+          }, 
+          {
+            "count": 100000, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          },
+          {
+            "count": 1, 
+            "name": "sick stick", 
+            "notes": "", 
+            "damage": {
+              "dice": "1d+1 fat"
+            }, 
+            "skill": "axe/mace", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 1, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "Hacking Equipment +1"
+          }
+      ], 
       "weapon-index": null, 
-      "skills": {}, 
+      "skills": {
+        "brawling": 12,
+        "beam weapons (pistol)": 15,
+        "beam weapons (rifle)": 12,
+        "axe/mace": 11,
+        "cryptography": 13,
+        "electronics operation": 13,
+        "computer security": 12,
+        "piloting": 13,
+        "engineer (electronics)": 12,
+        "engineer (starships)": 12,
+        "computer hacking": 15,
+        "mathematics (applied)": 12,
+        "computer programming": 12,
+        "armoury (small arms)": 13,
+        "first aid": 14,
+        "physics": 12,
+        "observation": 15
+      }, 
       "shock": 0, 
       "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 10, 
-        "ht": 11, 
+        "fp": 10, 
+        "iq": 14, 
+        "hp": 12, 
+        "ht": 9, 
         "st": 10, 
-        "dx": 10, 
+        "dx": 12, 
         "basic-speed": 5.25
       }, 
       "state": "alive", 
       "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 10, 
-        "ht": 11, 
+        "fp": 10, 
+        "iq": 14, 
+        "hp": 12, 
+        "ht": 9, 
         "st": 10, 
-        "dx": 10, 
+        "dx": 12, 
         "basic-speed": 5.25
       }, 
-      "advantages": {}, 
+      "advantages": {
+        "cannot speak/synthesizer": -10,
+        "humble": -1,
+        "secret (turned in evidence on brutal Bratva hit)": -30,
+        "squeamish", -10,
+        "eidetic memory", 5,
+        "acute vision 1", 2,
+        "fit", 5
+      }, 
       "did_action_this_turn": false, 
       "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
     }, 
-    "a-Thief": {
+    "samuel - Erik": {
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
+      "stuff": [
+          {
+              "acc": 4, 
+              "count": 1, 
+              "name": "pistol, Sig D65", 
+              "notes": "", 
+              "damage": {
+                "dice": "1d+4"
+              }, 
+              "reload": 3, 
+              "skill": "guns (pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 9, 
+                "shots_left": 9
+              }
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          },
+          {
+              "count": 1, 
+              "name": "knife, small", 
+              "notes": "B272 **** NEEDS ATTENTION ****", 
+              "damage": {
+                "type": "imp", 
+                "dice": "1d-2"
+              }, 
+              "parry": -1, 
+              "skill": "knife", 
+              "type": "melee weapon"
+          },
+          {
+              "count": 1, 
+              "name": "sick stick", 
+              "notes": "", 
+              "damage": {
+                "dice": "1d+1 fat"
+              }, 
+              "skill": "axe/mace", 
+              "type": "melee weapon"
+          },
+          {
+              "count": 1, 
+              "name": "brass knuckles", 
+              "notes": "B271 **** NEEDS ATTENTION ****", 
+              "damage": {
+                "type": "imp", 
+                "dice": "1d-2"
+              }, 
+              "parry": -1, 
+              "skill": "knife", 
+              "type": "melee weapon"
+          }
+      ],
       "weapon-index": null, 
-      "skills": {}, 
+      "skills": {
+        "armoury (small arms)": 10,
+        "axe/mace": 13,
+        "beam weapons (pistol)": 15,
+        "beam weapons (rifle)": 13,
+        "brawling": 15,
+        "camouflage": 11,
+        "climbing": 12,
+        "fast-draw (knife)": 14,
+        "fast-draw (pistol)": 14,
+        "filch": 12,
+        "first aid": 12,
+        "gesture": 11,
+        "intimidation": 11,
+        "knife": 13,
+        "lifting": 10,
+        "lockpicking": 11,
+        "pickpocket": 11,
+        "running": 10,
+        "scrounging": 12,
+        "stealth": 12,
+        "streetwise": 11,
+        "theology (Vodou)": 10,
+        "throwing": 13,
+        "urban survival": 11
+      }, 
+      "shock": 0, 
+      "current": {
+        "fp": 13, 
+        "iq": 11, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 12, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 13, 
+        "iq": 11, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 12, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {
+        "combat reflexes": 15,
+        "fit": 5,
+        "rapid healing": 5,
+        "vodou practitioner": 5,
+        "enemy (Gregory Occeant)": -20,
+        "flashbacks, mild": -5,
+        "guilt complex (loss of sister)": -5,
+        "light sleeper": -5,
+        "vow (return to earth for sister)": -5,
+        "wealth (struggling)": -10
+      }, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "lawerence - Spenser": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+          {
+              "count": 1, 
+              "name": "knife, large", 
+              "notes": "", 
+              "damage": {
+                "type": "imp", 
+                "dice": "1d-2"
+              }, 
+              "parry": -1, 
+              "skill": "knife", 
+              "type": "melee weapon"
+          },
+          {
+              "acc": 4, 
+              "count": 1, 
+              "name": "pistol, Sig D65", 
+              "notes": "", 
+              "damage": {
+                "dice": "1d+4"
+              }, 
+              "reload": 3, 
+              "skill": "guns (pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 9, 
+                "shots_left": 9
+              }
+          },
+          {
+            "count": 100000, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+      ], 
+      "weapon-index": null, 
+      "skills": {
+        "beam weapons (pistol)": 15,
+        "beam weapons (rifle)": 14,
+        "guns (grenade launcher)": 9,
+        "throwing": 10,
+        "axe/mace": 12,
+        "fast-draw (ammo)": 14,
+        "first aid": 13,
+        "holdout": 11,
+        "knife": 15,
+        "lockpicking": 11,
+        "observation": 12,
+        "stealth": 14,
+        "streetwise": 11,
+        "armoury": 11,
+        "tactics": 10,
+        "karate": 13,
+        "brawling": 13
+      }, 
       "shock": 0, 
       "current": {
         "fp": 11, 
@@ -237,8 +486,8 @@
         "hp": 12, 
         "ht": 11, 
         "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
+        "dx": 13, 
+        "basic-speed": 6
       }, 
       "state": "alive", 
       "permanent": {
@@ -247,17 +496,29 @@
         "hp": 12, 
         "ht": 11, 
         "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
+        "dx": 13, 
+        "basic-speed": 6
       }, 
-      "advantages": {}, 
+      "advantages": {
+        "combat reflexes": 15,
+        "high pain threshold": 10,
+        "g-experience": 3,
+        "night vision": 4,
+        "no sense of humor": -10,
+        "dyslexia": -10,
+        "pyromania": -10,
+        "code of honor (professioal)": -5,
+        "weirdness magnet": -15,
+        "nosy": -1,
+        "alcohol intolerance": -1
+      }, 
       "did_action_this_turn": false, 
       "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
     }, 
-    "d-Tank": {
+    "v - Karen": {
       "aim": {
         "braced": false, 
         "rounds": 0
@@ -267,128 +528,58 @@
       "skills": {}, 
       "shock": 0, 
       "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "advantages": {}, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "f-Tank": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "weapon-index": null, 
-      "skills": {}, 
-      "shock": 0, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "advantages": {}, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "c-Tank": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "weapon-index": null, 
-      "skills": {}, 
-      "shock": 0, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.75
-      }, 
-      "advantages": {}, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "h-Cleric": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "weapon-index": null, 
-      "skills": {}, 
-      "shock": 0, 
-      "current": {
-        "fp": 12, 
-        "iq": 13, 
+        "fp": 10, 
+        "iq": 10, 
         "hp": 10, 
-        "ht": 11, 
+        "ht": 10, 
         "st": 10, 
-        "dx": 11, 
-        "basic-speed": 5.5
+        "dx": 10, 
+        "basic-speed": 5
       }, 
       "state": "alive", 
       "permanent": {
-        "fp": 12, 
-        "iq": 13, 
+        "fp": 10, 
+        "iq": 10, 
         "hp": 10, 
-        "ht": 11, 
+        "ht": 10, 
         "st": 10, 
-        "dx": 11, 
-        "basic-speed": 5.5
+        "dx": 10, 
+        "basic-speed": 5
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "deri - Chelsea": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "shock": 0, 
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "dx": 10, 
+        "basic-speed": 5
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "dx": 10, 
+        "basic-speed": 5
       }, 
       "advantages": {}, 
       "did_action_this_turn": false, 

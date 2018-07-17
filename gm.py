@@ -115,10 +115,8 @@ class GmJson(object):
 
     @staticmethod
     def __json_load_byteified(file_handle):
-        return GmJson.__byteify(
-            json.load(file_handle, object_hook=GmJson.__byteify),
-            ignore_dicts=True
-        )
+        my_dict = json.load(file_handle, object_hook=GmJson.__byteify)
+        return GmJson.__byteify(my_dict, ignore_dicts=True)
 
 '''
 How to use this GUI.
