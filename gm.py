@@ -115,7 +115,11 @@ class GmJson(object):
 
     @staticmethod
     def __json_load_byteified(file_handle):
-        my_dict = json.load(file_handle, object_hook=GmJson.__byteify)
+        try:
+            my_dict = json.load(file_handle, object_hook=GmJson.__byteify)
+        except Exception as e:
+            print '\n** Couldn\'t read JSON: "%s"\n' % str(e)
+
         return GmJson.__byteify(my_dict, ignore_dicts=True)
 
 '''

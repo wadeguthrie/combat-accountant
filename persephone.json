@@ -277,9 +277,9 @@
         "cannot speak/synthesizer": -10,
         "humble": -1,
         "secret (turned in evidence on brutal Bratva hit)": -30,
-        "squeamish", -10,
-        "eidetic memory", 5,
-        "acute vision 1", 2,
+        "squeamish": -10,
+        "eidetic memory": 5,
+        "acute vision 1": 2,
         "fit", 5
       }, 
       "did_action_this_turn": false, 
