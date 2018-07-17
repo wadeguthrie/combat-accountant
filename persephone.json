@@ -280,7 +280,7 @@
         "squeamish": -10,
         "eidetic memory": 5,
         "acute vision 1": 2,
-        "fit", 5
+        "fit": 5
       }, 
       "did_action_this_turn": false, 
       "check_for_death": false, 
@@ -518,7 +518,7 @@
       "posture": "standing", 
       "opponent": null
     }, 
-    "v - Karen": {
+    "mama V - Karen": {
       "aim": {
         "braced": false, 
         "rounds": 0

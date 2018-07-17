@@ -56,10 +56,23 @@ class GmJson(object):
     def __enter__(self):
         try:
             with open(self.__filename, 'r') as f:
-              self.read_data = GmJson.__json_load_byteified(f)
+              self.read_data, error_msg = GmJson.__json_load_byteified(f)
+              if self.read_data is None:
+                    error_array = ['Could not read JSON file "%s"' %
+                                                            self.__filename]
+                    if error_msg is not None:
+                        error_array.append(error_msg)
+
+                    if self.__window_manager is None:
+                        print ''
+                        for message in error_array:
+                            print '%s' % message
+                        print ''
+                    else:
+                        self.__window_manager.error(error_array)
+
         except:
             if self.__window_manager is not None:
-                        
                 self.__window_manager.error(['Could not read JSON file "%s"' %
                                                 self.__filename])
             self.read_data = None
@@ -115,12 +128,13 @@ class GmJson(object):
 
     @staticmethod
     def __json_load_byteified(file_handle):
+        error_message = None
         try:
             my_dict = json.load(file_handle, object_hook=GmJson.__byteify)
         except Exception as e:
-            print '\n** Couldn\'t read JSON: "%s"\n' % str(e)
+            return None, 'Couldn\'t read JSON: "%s"' % str(e)
 
-        return GmJson.__byteify(my_dict, ignore_dicts=True)
+        return GmJson.__byteify(my_dict, ignore_dicts=True), None
 
 '''
 How to use this GUI.
