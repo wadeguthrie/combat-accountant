@@ -3908,6 +3908,7 @@ class MainHandler(ScreenHandler):
             self.__char_index += 1
             if self.__char_index >= len(self.__char_names):
                 self.__char_index = 0
+        self._draw_screen()
         return True
 
 
@@ -3918,6 +3919,7 @@ class MainHandler(ScreenHandler):
             self.__char_index -= 1
             if self.__char_index < 0:
                 self.__char_index = len(self.__char_names) - 2
+        self._draw_screen()
         return True
 
 
