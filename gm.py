@@ -15,7 +15,6 @@ import sys
 #   - Add version number
 #   - any defense loses your aim
 #   - MAJOR WOUND: if adj > HP/2, -4 to active defenses until HT roll made
-#   - WILL roll or lose aim
 #   - should only be able to ready an unready weapon.
 #   - < 1/3 FP = 1/2 move, dodge, st
 #   - Warning if window is smaller than expected
@@ -1707,7 +1706,14 @@ class GurpsRuleset(Ruleset):
         # TODO: MAJOR WOUND: if adj > HP/2, -4 to active defenses until
         # HT roll made
 
-        # TODO: WILL roll or lose aim
+        # WILL roll or lose aim
+        if fighter.details['aim']['rounds'] > 0:
+            aim_menu = [('made WILL roll', True),
+                        ('did NOT make WILL roll', False)]
+            made_will_roll = self._window_manager.menu('WILL roll or lose aim',
+                                                       aim_menu)
+            if not made_will_roll:
+                fighter.details['aim']['rounds'] = 0
 
         super(GurpsRuleset, self).adjust_hp(fighter, adj)
 

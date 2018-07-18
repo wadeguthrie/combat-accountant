@@ -54,6 +54,8 @@ class MockWindowManager(object):
 # working.  The timer stuff requires an action via a menu so that'll be a
 # little more work.
 
+# TODO: test that aiming may be disrupted (if will roll is not made) when
+#       aimer is injured.
 # TODO: test that pick opponent gives you all of the other side and none of
 #       the current side
 # TODO: test that pick opponent actually selects the opponent that you want
