@@ -13,11 +13,6 @@ import sys
 
 # TODO:
 #   - Add version number
-#   - On startup, check each of the characters
-#       o characters should have skills for all items
-#       o eventually, there needs to be a list of approved skills &
-#         advantages; characters' data should only match the approved list
-#         (this is really to make sure that stuff wasn't mis-typed).
 #   - any defense loses your aim
 #   - MAJOR WOUND: if adj > HP/2, -4 to active defenses until HT roll made
 #   - WILL roll or lose aim
@@ -28,6 +23,10 @@ import sys
 #   - Add 2 weapon (or weapon & shield)
 #
 # TODO (eventually):
+#   - On startup, check each of the characters
+#       o eventually, there needs to be a list of approved skills &
+#         advantages; characters' data should only match the approved list
+#         (this is really to make sure that stuff wasn't mis-typed).
 #   - damage other than dice (swords and stuff -- add this as needed)
 #   - scrolling menus (et al.)
 #   - reloading where the number of shots is in the 'clip' (like with a gun or
@@ -1723,6 +1722,20 @@ class GurpsRuleset(Ruleset):
         param['fighter'].details['posture'] = param['posture']
         param['fighter'].reset_aim()
 
+    def is_creature_consistent(self,
+                               name,    # string: creature's name
+                               creature # dict from JSON
+                              ):
+        result = True
+        for item in creature['stuff']:
+            if 'skill' in item and item['skill'] not in creature['skills']:
+                self._window_manager.error([
+                    'Creature "%s"' % name,
+                    '  has item "%s"' % item['name'],
+                    '  that requires skill "%s"' % item['skill'],
+                    '  but not the skill to use it'])
+                result = False
+        return result
 
     def do_aim(self,
                param, # dict {'fighter': <Fighter object>,
@@ -3118,6 +3131,10 @@ class FightHandler(ScreenHandler):
                 self._saved_fight['fighters'].append({'group': fighter.group,
                                                        'name': fighter.name})
 
+        for name, creature in (
+                self.__world['monsters'][monster_group].iteritems()):
+            self.__ruleset.is_creature_consistent(name, creature)
+
         self._saved_fight['saved'] = False
         self._window.start_fight()
 
@@ -3839,6 +3856,11 @@ class MainHandler(ScreenHandler):
 
         # TODO: get this from the window manager
         self._window = MainGmWindow(self._window_manager)
+
+        # Check characters for consistency.
+        for name, creature in self.__world['PCs'].iteritems():
+            self.__ruleset.is_creature_consistent(name, creature)
+
 
     #
     # Protected Methods
