@@ -385,11 +385,11 @@ class MainGmWindow(GmWindow):
         column = 2 # indent by 2
         for item_key in character['permanent'].iterkeys():
             found_one = True
-            text = ' %s:%d/%d' % (item_key,
-                                  character['current'][item_key],
-                                  character['permanent'][item_key])
+            text = '%s:%d/%d' % (item_key,
+                                 character['current'][item_key],
+                                 character['permanent'][item_key])
             self.__char_detail_window.addstr(line, column, '%s' % text, mode)
-            column += len(text)
+            column += (len(text) + 1) # +1 for space between attribs
 
         if not found_one:
             self.__char_detail_window.addstr(line, 0, '  (None)', mode)
@@ -468,11 +468,15 @@ class MainGmWindow(GmWindow):
             self.refresh()
             return
 
+        #print '\nnames[%r]' % self.__char_index # TODO: remove
+        #PP.pprint(self.__char_names) # TODO: remove
+
         for line, character_name in enumerate(char_list):
             mode = (curses.A_NORMAL if current_index is None or
-                                       current_index == line
+                                       current_index != line
                                     else curses.A_STANDOUT)
-            self.__char_detail_window.addstr(line, 0, character_name, mode)
+            self.__char_list_window.addstr(line, 0, character_name, mode)
+        self.refresh()
 
 
     def touchwin(self):
