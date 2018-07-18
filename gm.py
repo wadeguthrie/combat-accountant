@@ -394,6 +394,9 @@ class MainGmWindow(GmWindow):
         column = 2 # indent by 2
         for item_key in character['permanent'].iterkeys():
             found_one = True
+            mode = (curses.A_NORMAL if character['current'][item_key] ==
+                                            character['permanent'][item_key]
+                     else curses.color_pair(GmWindowManager.YELLOW_BLACK))
             text = '%s:%d/%d' % (item_key,
                                  character['current'][item_key],
                                  character['permanent'][item_key])
@@ -2707,11 +2710,11 @@ class BuildFightHandler(ScreenHandler):
             ord('e'): {'name': 'existing group',  'func':
                                                     self.__existing_group},
             ord('n'): {'name': 'new group',       'func': self.__new_group},
-            ord('t'): {'name': 'new template',    'func': self.__new_template},
+            ord('t'): {'name': 'change template', 'func': self.__new_template},
             ord('q'): {'name': 'quit',            'func': self.__quit},
         })
 
-        self._window = self_window_manager.get_build_fight_gm_window()
+        self._window = self._window_manager.get_build_fight_gm_window()
 
         self.__world = world
         self.__ruleset = ruleset
@@ -3812,8 +3815,6 @@ class MainHandler(ScreenHandler):
                                           maintain_json)
         self.__world = world
         self.__ruleset = ruleset
-        self.__char_names = sorted(self.__world['PCs'].iterkeys())
-        self.__char_index = None
         self._add_to_choice_dict({
             curses.KEY_UP:
                       {'name': 'previous character',  'func':
@@ -3834,6 +3835,8 @@ class MainHandler(ScreenHandler):
             ord('q'): {'name': 'quit',                'func':
                                                             self.__quit}
         })
+        self.__setup_PC_list()
+
         # TODO: get this from the window manager
         self._window = MainGmWindow(self._window_manager)
 
@@ -3872,6 +3875,7 @@ class MainHandler(ScreenHandler):
                                         self._input_filename,
                                         self._maintain_json)
         build_fight.handle_user_input_until_done()
+        self.__setup_PC_list() # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
         return True # Keep going
 
@@ -3897,6 +3901,7 @@ class MainHandler(ScreenHandler):
         '''
         for character_details in self.__world['PCs'].itervalues():
             self.__ruleset.heal_fighter(character_details)
+        self._draw_screen()
         return True
 
     def __get_a_name(self):
@@ -3943,11 +3948,11 @@ class MainHandler(ScreenHandler):
 
     def __previous(self):
         if self.__char_index is None:
-            self.__char_index = len(self.__char_names) - 2
+            self.__char_index = len(self.__char_names) - 1
         else:
             self.__char_index -= 1
             if self.__char_index < 0:
-                self.__char_index = len(self.__char_names) - 2
+                self.__char_index = len(self.__char_names) - 1
         self._draw_screen()
         return True
 
@@ -3992,6 +3997,10 @@ class MainHandler(ScreenHandler):
         self._draw_screen() # Redraw current screen when done with the fight.
 
         return True # Keep going
+
+    def __setup_PC_list(self):
+        self.__char_names = sorted(self.__world['PCs'].iterkeys())
+        self.__char_index = 0
 
 
 class OutfitCharactersHandler(ScreenHandler):
