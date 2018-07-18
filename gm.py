@@ -13,8 +13,6 @@ import sys
 
 # TODO:
 #   - Add version number
-#   - add main page that has 2 windows: 1) PCs, 2) stuff, advantages, skills,
-#     and attributes (check out 'Outfit' window for font details).
 #   - any defense loses your aim
 #   - MAJOR WOUND: if adj > HP/2, -4 to active defenses until HT roll made
 #   - WILL roll or lose aim
@@ -223,6 +221,12 @@ class GmWindow(object):
         for command, body in choices.iteritems():
             if command == ord(' '):
                 command_string = '" "'
+            elif command == curses.KEY_HOME:
+                command_string = '<HOME>'
+            elif command == curses.KEY_UP:
+                command_string = '<UP>'
+            elif command == curses.KEY_DOWN:
+                command_string = '<DN>'
             else:
                 command_string = '%c' % chr(command)
 
@@ -467,9 +471,6 @@ class MainGmWindow(GmWindow):
         if char_list is None:
             self.refresh()
             return
-
-        #print '\nnames[%r]' % self.__char_index # TODO: remove
-        #PP.pprint(self.__char_names) # TODO: remove
 
         for line, character_name in enumerate(char_list):
             mode = (curses.A_NORMAL if current_index is None or
@@ -3792,9 +3793,11 @@ class MainHandler(ScreenHandler):
         self.__char_names = sorted(self.__world['PCs'].iterkeys())
         self.__char_index = None
         self._add_to_choice_dict({
-            ord('<'): {'name': 'previous character',  'func':
+            curses.KEY_UP:
+                      {'name': 'previous character',  'func':
                                                             self.__previous},
-            ord('>'): {'name': 'next character',      'func':
+            curses.KEY_DOWN:
+                      {'name': 'next character',      'func':
                                                             self.__next},
             ord('o'): {'name': 'outfit characters',   'func':
                                                             self.__outfit},
