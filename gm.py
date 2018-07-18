@@ -13,6 +13,8 @@ import sys
 
 # TODO:
 #   - Add version number
+#   - add main page that has 2 windows: 1) PCs, 2) stuff, advantages, skills,
+#     and attributes (check out 'Outfit' window for font details).
 #   - any defense loses your aim
 #   - MAJOR WOUND: if adj > HP/2, -4 to active defenses until HT roll made
 #   - WILL roll or lose aim
@@ -319,6 +321,167 @@ class MainGmWindow(GmWindow):
                                            curses.COLS,
                                            0,
                                            0)
+
+        lines, cols = self._window.getmaxyx()
+        top_line = 1
+        height = (lines                 # The whole window height, except...
+            - top_line                  # ...a block at the top, and...
+            - 4)                        # ...a space for the command ribbon.
+        
+        width = (cols / 2) - 1 # -1 for margin
+        self.__char_list_window = self._window_manager.new_native_window(
+                                                height,
+                                                width,
+                                                top_line,
+                                                1)
+        self.__char_detail_window  = self._window_manager.new_native_window(
+                                                height,
+                                                width,
+                                                top_line,
+                                                width+1)
+
+    # TODO: up, down goes up and down the character list
+    # TODO: when a character is selected, his stuff (attribs, advantages,
+    #       skills, equipment) is on the right
+
+    def close(self):
+        # Kill my subwindows, first
+        if self.__char_list_window is not None:
+            del self.__char_list_window
+            self.__char_list_window = None
+        if self.__char_detail_window is not None:
+            del self.__char_detail_window
+            self.__char_detail_window = None
+        super(MainGmWindow, self).close()
+
+
+    def refresh(self):
+        super(MainGmWindow, self).refresh()
+        if self.__char_list_window is not None:
+            self.__char_list_window.refresh()
+        if self.__char_detail_window is not None:
+            self.__char_detail_window.refresh()
+
+    def show_character_detail(self,
+                              character # dict as found in the JSON
+                             ):
+        self.__char_detail_window.clear()
+        if character is None:
+            self.refresh()
+            return
+
+        line = 0
+
+        # TODO: the headings are ruleset specific
+
+        # attributes
+
+        mode = curses.A_NORMAL 
+        self.__char_detail_window.addstr(line, 0,
+                                         'Attributes',
+                                         mode | curses.A_BOLD)
+        line += 1
+        found_one = False
+        column = 2 # indent by 2
+        for item_key in character['permanent'].iterkeys():
+            found_one = True
+            text = ' %s:%d/%d' % (item_key,
+                                  character['current'][item_key],
+                                  character['permanent'][item_key])
+            self.__char_detail_window.addstr(line, column, '%s' % text, mode)
+            column += len(text)
+
+        if not found_one:
+            self.__char_detail_window.addstr(line, 0, '  (None)', mode)
+
+        line += 1
+
+        # stuff
+
+        mode = curses.A_NORMAL 
+        self.__char_detail_window.addstr(line, 0,
+                                         'Equipment',
+                                         mode | curses.A_BOLD)
+        line += 1
+        found_one = False
+        for item in character['stuff']:
+            found_one = True
+            self.__char_detail_window.addstr(line, 0,
+                                             '  %s' % item['name'],
+                                             mode)
+            line += 1
+
+        if not found_one:
+            self.__char_detail_window.addstr(line, 0, '  (None)', mode)
+            line += 1
+
+        # advantages
+
+        mode = curses.A_NORMAL 
+        self.__char_detail_window.addstr(line, 0,
+                                         'Advantages',
+                                         mode | curses.A_BOLD)
+        line += 1
+        found_one = False
+        for advantage, value in sorted(character['advantages'].iteritems(),
+                                       key=lambda (k,v): (k, v)):
+            found_one = True
+            self.__char_detail_window.addstr(line,
+                                             0,
+                                             '  %s: %d' % (advantage, value),
+                                             mode)
+            line += 1
+
+        if not found_one:
+            self.__char_detail_window.addstr(line, 0, '  (None)', mode)
+            line += 1
+
+        # skills
+
+        mode = curses.A_NORMAL 
+        self.__char_detail_window.addstr(line, 0,
+                                         'Skills',
+                                         mode | curses.A_BOLD)
+        line += 1
+        found_one = False
+        for skill, value in sorted(character['skills'].iteritems(),
+                                   key=lambda (k,v): (k,v)):
+            found_one = True
+            self.__char_detail_window.addstr(line,
+                                             0,
+                                             '  %s: %d' % (skill, value),
+                                             mode)
+            line += 1
+
+        if not found_one:
+            self.__char_detail_window.addstr(line, 0, '  (None)', mode)
+            line += 1
+
+        self.refresh()
+
+    def show_character_list(self,
+                            char_list,
+                            current_index
+                           ):
+        self.__char_list_window.clear()
+        if char_list is None:
+            self.refresh()
+            return
+
+        for line, character_name in enumerate(char_list):
+            mode = (curses.A_NORMAL if current_index is None or
+                                       current_index == line
+                                    else curses.A_STANDOUT)
+            self.__char_detail_window.addstr(line, 0, character_name, mode)
+
+
+    def touchwin(self):
+        super(MainGmWindow, self).touchwin()
+        if self.__char_list_window is not None:
+            self.__char_list_window.touchwin()
+        if self.__char_detail_window is not None:
+            self.__char_detail_window.touchwin()
+
 
 
 class BuildFightGmWindow(GmWindow):
@@ -706,6 +869,7 @@ class OutfitCharactersGmWindow(GmWindow):
     def show_character(self,
                        character # dict: {'name': None, 'details': None}
                       ):
+        # TODO: this is ruleset specific
         self.__outfit_window.clear()
         if character['name'] is None:
             self.refresh()
@@ -3621,7 +3785,13 @@ class MainHandler(ScreenHandler):
                                           maintain_json)
         self.__world = world
         self.__ruleset = ruleset
+        self.__char_names = sorted(self.__world['PCs'].iterkeys())
+        self.__char_index = None
         self._add_to_choice_dict({
+            ord('<'): {'name': 'previous character',  'func':
+                                                            self.__previous},
+            ord('>'): {'name': 'next character',      'func':
+                                                            self.__next},
             ord('o'): {'name': 'outfit characters',   'func':
                                                             self.__outfit},
             ord('t'): {'name': 'build from template', 'func':
@@ -3635,6 +3805,7 @@ class MainHandler(ScreenHandler):
             ord('q'): {'name': 'quit',                'func':
                                                             self.__quit}
         })
+        # TODO: get this from the window manager
         self._window = MainGmWindow(self._window_manager)
 
     #
@@ -3645,6 +3816,14 @@ class MainHandler(ScreenHandler):
         self._window.clear()
         self._window.status_ribbon(self._input_filename,
                                    self._maintain_json)
+
+        name = (None if self.__char_index is None
+                else self.__char_names[self.__char_index])
+        character = None if name is None else self.__world['PCs'][name]
+
+        self._window.show_character_list(self.__char_names, self.__char_index)
+        self._window.show_character_detail(character)
+
         self._window.command_ribbon(self._choices)
 
     #
@@ -3720,6 +3899,25 @@ class MainHandler(ScreenHandler):
                    index)]
         ignore = self._window_manager.menu('Your %s %s name is' % (
                                            type_name, gender_name), result)
+        return True
+
+    def __next(self):
+        if self.__char_index is None:
+            self.__char_index = 0
+        else:
+            self.__char_index += 1
+            if self.__char_index >= len(self.__char_names):
+                self.__char_index = 0
+        return True
+
+
+    def __previous(self):
+        if self.__char_index is None:
+            self.__char_index = len(self.__char_names) - 2
+        else:
+            self.__char_index -= 1
+            if self.__char_index < 0:
+                self.__char_index = len(self.__char_names) - 2
         return True
 
 
