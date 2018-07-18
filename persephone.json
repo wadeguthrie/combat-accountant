@@ -69,7 +69,7 @@
         "skills": {
           "type": "value", 
           "value": {
-            "guns (pistol)": 12, 
+            "beam weapons (pistol)": 12, 
             "brawling": 14, 
             "knife": 15
           }
@@ -123,7 +123,7 @@
                 "dice": "1d+4"
               }, 
               "reload": 3, 
-              "skill": "guns (pistol)", 
+              "skill": "beam weapons (pistol)", 
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -202,7 +202,7 @@
               "dice": "1d+4"
             }, 
             "reload": 3, 
-            "skill": "guns (pistol)", 
+            "skill": "beam weapons (pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -303,7 +303,7 @@
                 "dice": "1d+4"
               }, 
               "reload": 3, 
-              "skill": "guns (pistol)", 
+              "skill": "beam weapons (pistol)", 
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -444,7 +444,7 @@
                 "dice": "1d+4"
               }, 
               "reload": 3, 
-              "skill": "guns (pistol)", 
+              "skill": "beam weapons (pistol)", 
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -636,7 +636,7 @@
         "dice": "1d+4"
       }, 
       "reload": 3, 
-      "skill": "guns (pistol)", 
+      "skill": "beam weapons (pistol)", 
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -653,7 +653,7 @@
         "dice": "1d+4"
       }, 
       "reload": 3, 
-      "skill": "guns (pistol)", 
+      "skill": "beam weapons (pistol)", 
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -670,7 +670,7 @@
         "dice": "1d+3"
       }, 
       "reload": 3, 
-      "skill": "guns (pistol)", 
+      "skill": "beam weapons (pistol)", 
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -687,7 +687,7 @@
         "dice": "1d+4"
       }, 
       "reload": 3, 
-      "skill": "guns (pistol)", 
+      "skill": "beam weapons (pistol)", 
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -1890,7 +1890,7 @@
               "dice": "1d+4"
             }, 
             "reload": 3, 
-            "skill": "guns (pistol)", 
+            "skill": "beam weapons (pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -1917,7 +1917,7 @@
         ], 
         "weapon-index": null, 
         "skills": {
-          "guns (pistol)": 16, 
+          "beam weapons (pistol)": 16, 
           "axe/mace": 14, 
           "brawling": 16
         }, 
@@ -1965,7 +1965,7 @@
               "dice": "1d+4"
             }, 
             "reload": 3, 
-            "skill": "guns (pistol)", 
+            "skill": "beam weapons (pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -1982,7 +1982,7 @@
         ], 
         "weapon-index": null, 
         "skills": {
-          "guns (pistol)": 15, 
+          "beam weapons (pistol)": 15, 
           "brawling": 12
         }, 
         "shock": 0, 
@@ -2029,7 +2029,7 @@
               "dice": "1d+4"
             }, 
             "reload": 3, 
-            "skill": "guns (pistol)", 
+            "skill": "beam weapons (pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -2056,7 +2056,7 @@
         ], 
         "weapon-index": null, 
         "skills": {
-          "guns (pistol)": 16, 
+          "beam weapons (pistol)": 16, 
           "axe/mace": 14, 
           "brawling": 16
         }, 
@@ -2104,7 +2104,7 @@
               "dice": "1d+4"
             }, 
             "reload": 3, 
-            "skill": "guns (pistol)", 
+            "skill": "beam weapons (pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -2133,7 +2133,7 @@
         ], 
         "weapon-index": null, 
         "skills": {
-          "guns (pistol)": 12, 
+          "beam weapons (pistol)": 12, 
           "brawling": 14, 
           "knife": 15
         }, 
@@ -2181,7 +2181,7 @@
               "dice": "1d+3"
             }, 
             "reload": 3, 
-            "skill": "guns (pistol)", 
+            "skill": "beam weapons (pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -2198,7 +2198,7 @@
         ], 
         "weapon-index": null, 
         "skills": {
-          "guns (pistol)": 13, 
+          "beam weapons (pistol)": 13, 
           "brawling": 12
         }, 
         "shock": 0, 
@@ -2246,7 +2246,7 @@
               "dice": "1d+4"
             }, 
             "reload": 3, 
-            "skill": "guns (pistol)", 
+            "skill": "beam weapons (pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -2273,7 +2273,7 @@
         ], 
         "weapon-index": null, 
         "skills": {
-          "guns (pistol)": 16, 
+          "beam weapons (pistol)": 16, 
           "axe/mace": 14, 
           "brawling": 16
         }, 
@@ -2321,7 +2321,7 @@
               "dice": "1d+4"
             }, 
             "reload": 3, 
-            "skill": "guns (pistol)", 
+            "skill": "beam weapons (pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -2348,7 +2348,7 @@
         ], 
         "weapon-index": null, 
         "skills": {
-          "guns (pistol)": 16, 
+          "beam weapons (pistol)": 16, 
           "axe/mace": 14, 
           "brawling": 16
         }, 
@@ -2396,7 +2396,7 @@
               "dice": "1d+4"
             }, 
             "reload": 3, 
-            "skill": "guns (pistol)", 
+            "skill": "beam weapons (pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -2425,7 +2425,7 @@
         ], 
         "weapon-index": null, 
         "skills": {
-          "guns (pistol)": 12, 
+          "beam weapons (pistol)": 12, 
           "brawling": 14, 
           "knife": 15
         }, 
@@ -2501,7 +2501,7 @@
           "rounds": 0
         }, 
         "skills": {
-          "guns (pistol)": 12, 
+          "beam weapons (pistol)": 12, 
           "brawling": 14, 
           "knife": 15
         }, 
@@ -2536,7 +2536,7 @@
               "dice": "1d+4"
             }, 
             "reload": 3, 
-            "skill": "guns (pistol)", 
+            "skill": "beam weapons (pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 

@@ -13,6 +13,11 @@ import sys
 
 # TODO:
 #   - Add version number
+#   - On startup, check each of the characters
+#       o characters should have skills for all items
+#       o eventually, there needs to be a list of approved skills &
+#         advantages; characters' data should only match the approved list
+#         (this is really to make sure that stuff wasn't mis-typed).
 #   - any defense loses your aim
 #   - MAJOR WOUND: if adj > HP/2, -4 to active defenses until HT roll made
 #   - WILL roll or lose aim
@@ -1824,34 +1829,38 @@ class GurpsRuleset(Ruleset):
                                                    'braced': False}})
                                       )
 
-                # Can only attack with a ranged weapon if there are still
+                # NOTE: Can only attack with a ranged weapon if there are still
                 # shots in the gun.
 
-                action_menu.extend([
-                    ('attack',          {'text': ['Attack',
-                                                  ' Defense: any',
-                                                  ' Move: step'],
-                                         'doit': self.__do_attack,
-                                         'param': fighter}),
-                    ('attack, all out', {'text': ['All out attack',
-                                                  ' Defense: none',
-                                                  ' Move: 1/2'],
-                                         'doit': self.__do_attack,
-                                         'param': fighter})
-                ])
+                # Can only attack if there's someone to attack
+                if fighter.details['opponent'] is not None:
+                    action_menu.extend([
+                        ('attack',          {'text': ['Attack',
+                                                      ' Defense: any',
+                                                      ' Move: step'],
+                                             'doit': self.__do_attack,
+                                             'param': fighter}),
+                        ('attack, all out', {'text': ['All out attack',
+                                                      ' Defense: none',
+                                                      ' Move: 1/2'],
+                                             'doit': self.__do_attack,
+                                             'param': fighter})
+                    ])
         else:
-            action_menu.extend([
-                    ('attack',          {'text': ['Attack',
-                                                    ' Defense: any',
-                                                    ' Move: step'],
-                                         'doit': self.__do_attack,
-                                         'param': fighter}),
-                    ('attack, all out', {'text': ['All out attack',
-                                                 ' Defense: none',
-                                                 ' Move: 1/2'],
-                                         'doit': self.__do_attack,
-                                         'param': fighter})
-            ])
+            # Can only attack if there's someone to attack
+            if fighter.details['opponent'] is not None:
+                action_menu.extend([
+                        ('attack',          {'text': ['Attack',
+                                                        ' Defense: any',
+                                                        ' Move: step'],
+                                             'doit': self.__do_attack,
+                                             'param': fighter}),
+                        ('attack, all out', {'text': ['All out attack',
+                                                     ' Defense: none',
+                                                     ' Move: 1/2'],
+                                             'doit': self.__do_attack,
+                                             'param': fighter})
+                ])
 
         action_menu.extend([
             ('posture (B551)',         {'text': ['Change posture',
@@ -3338,18 +3347,21 @@ class FightHandler(ScreenHandler):
         '''
 
         self.__bodies_looted = True
+        found_dead_bad_guy = False
+        found_something_on_dead_bad_guy = False
 
         # Go through bad buys and distribute their items
         for bad_guy in self.__fighters:
-            # Only transfer stuff from dead or unconscious bad guys
-            if bad_guy.group == 'PCs':
+            if bad_guy.group == 'PCs': # only steal from bad guys
                 continue
-            if bad_guy.is_conscious():
+            if bad_guy.is_conscious(): # only steal from the dead/unconscious
                 continue
+            found_dead_bad_guy = True
 
             # Reversed so removing items doesn't change the index of others
             for index, item in reversed(list(enumerate(
                                                 bad_guy.details['stuff']))):
+                found_something_on_dead_bad_guy = True
                 xfer_menu = [(good_guy.name, {'guy': good_guy})
                                  for good_guy in self.__fighters
                                             if good_guy.group == 'PCs']
@@ -3367,6 +3379,14 @@ class FightHandler(ScreenHandler):
 
                 new_item = bad_guy.details['stuff'].pop(index)
                 xfer['guy'].details['stuff'].append(new_item)
+
+        if not found_dead_bad_guy:
+            self._window_manager.error(
+                ['Can\'t loot from the living -- there are no dead bad guys.'])
+        elif not found_something_on_dead_bad_guy:
+            self._window_manager.error(
+                ['Bad guys didn\'t have anything worth looting.'])
+
         return True # Keep fighting
 
 
@@ -3628,7 +3648,9 @@ class FightHandler(ScreenHandler):
                                  {'doit': self.__simply_save}))
 
             result = self._window_manager.menu('Leaving Fight', quit_menu)
-            if result['doit'] is None:
+            if result is None:
+                return True # I guess we're not quitting after all
+            elif result['doit'] is None:
                 ask_to_save = False
                 ask_to_loot = False
             else:
