@@ -2083,11 +2083,11 @@ class GurpsRuleset(Ruleset):
                                         else weapon['damage']['type'])
                     damage_type_str = self.__get_damage_type_str(damage_type)
 
-                    if 'dice' in weapon['damage']:
-                        notes.append('  to hit: %d, damage: %s, %s' %
-                                                    (to_hit,
-                                                     weapon['damage']['dice'],
-                                                     damage_type_str))
+                    # TODO: damage type
+                    # TODO: damage types for each thr vs sw
+                    notes.append('  to hit: %d, damage: %s' % 
+                        (to_hit,
+                         self.__get_to_hit_str(fighter, weapon['damage'])))
             else:
                 self._window_manager.error(
                     ['%s requires "%s" skill not had by "%s"' %
@@ -2617,6 +2617,29 @@ class GurpsRuleset(Ruleset):
         else:
             damage_type_str = '%s' % damage_type
         return damage_type_str
+
+    def __get_to_hit_str(self,
+                         fighter,   # Fighter object
+                         damage     # dict {'type': 'imp', 'thr': +1, ...}
+                        ):
+        st = fighter.details['current']['st']
+        results = []
+
+        if 'dice' in damage:
+            results.append('%s' % damage['dice'])
+        if 'sw' in damage:
+            results.append('sw%+d=%dd%+d' %
+                (damage['sw'],
+                 GurpsRuleset.melee_damage[st]['sw']['num_dice'],
+                 GurpsRuleset.melee_damage[st]['sw']['plus'] + damage['sw']))
+        if 'thr' in damage:
+            results.append('thr%+d=%dd%+d' %
+                (damage['thr'],
+                 GurpsRuleset.melee_damage[st]['thr']['num_dice'],
+                 GurpsRuleset.melee_damage[st]['thr']['plus'] + damage['thr']))
+
+        return '(None)' if len(results) == 0 else ', '.join(results)
+
 
 class ScreenHandler(object):
     '''

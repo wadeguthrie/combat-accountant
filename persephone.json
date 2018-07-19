@@ -137,7 +137,8 @@
               "notes": "", 
               "damage": {
                 "type": "imp", 
-                "dice": "1d-2"
+                "thr": 0,
+                "sw": -2
               }, 
               "parry": -1, 
               "skill": "knife", 
@@ -320,10 +321,11 @@
           {
               "count": 1, 
               "name": "knife, small", 
-              "notes": "B272 **** NEEDS ATTENTION ****", 
+              "notes": "B272", 
               "damage": {
                 "type": "imp", 
-                "dice": "1d-2"
+                "thr": -1,
+                "sw": -3
               }, 
               "parry": -1, 
               "skill": "knife", 
@@ -342,10 +344,10 @@
           {
               "count": 1, 
               "name": "brass knuckles", 
-              "notes": "B271 **** NEEDS ATTENTION ****", 
+              "notes": "B271", 
               "damage": {
-                "type": "imp", 
-                "dice": "1d-2"
+                "type": "cr", 
+                "thr": 0
               }, 
               "parry": -1, 
               "skill": "knife", 
@@ -429,7 +431,8 @@
               "notes": "", 
               "damage": {
                 "type": "imp", 
-                "dice": "1d-2"
+                "thr": 0,
+                "sw": -2
               }, 
               "parry": -1, 
               "skill": "knife", 
@@ -701,7 +704,8 @@
       "notes": "", 
       "damage": {
         "type": "imp", 
-        "dice": "1d-2"
+        "thr": 0,
+        "sw": -2
       }, 
       "parry": -1, 
       "skill": "knife", 
@@ -2117,8 +2121,9 @@
             "name": "knife, large", 
             "notes": "", 
             "damage": {
-              "type": "imp", 
-              "dice": "1d-2"
+                "type": "imp", 
+                "thr": 0,
+                "sw": -2
             }, 
             "parry": -1, 
             "skill": "knife", 
@@ -2409,8 +2414,9 @@
             "name": "knife, large", 
             "notes": "", 
             "damage": {
-              "type": "imp", 
-              "dice": "1d-2"
+                "type": "imp", 
+                "thr": 0,
+                "sw": -2
             }, 
             "parry": -1, 
             "skill": "knife", 
@@ -2549,8 +2555,9 @@
             "name": "knife, large", 
             "notes": "", 
             "damage": {
-              "type": "imp", 
-              "dice": "1d-2"
+                "type": "imp", 
+                "thr": 0,
+                "sw": -2
             }, 
             "parry": -1, 
             "skill": "knife", 
