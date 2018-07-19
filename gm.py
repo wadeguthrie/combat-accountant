@@ -2586,9 +2586,12 @@ class GurpsRuleset(Ruleset):
         clip_name = weapon['ammo']['name']
         for item in fighter.details['stuff']:
             if item['name'] == clip_name and item['count'] > 0:
+                reload_time = weapon['reload']
+                if 'fast-draw (ammo)' in fighter.details['skills']:
+                    reload_time -= 1
                 weapon['ammo']['shots_left'] = weapon['ammo']['shots']
                 item['count'] -= 1
-                fighter.add_timer(weapon['reload'], 'RELOADING')
+                fighter.add_timer(reload_time, 'RELOADING')
                 fighter.reset_aim()
                 return
 
