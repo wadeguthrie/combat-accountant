@@ -12,6 +12,7 @@ import random
 import sys
 
 # TODO:
+#   - brass knuckles shouldn't require a skill (use as unarmed)
 #   - should only be able to ready an unready weapon.
 #   - < 1/3 FP = 1/2 move, dodge, st
 #   - Warning if window is smaller than expected
@@ -2011,7 +2012,7 @@ class GurpsRuleset(Ruleset):
         dodge_skill_modified = False
 
         dodge_skill = 3 + int(fighter.details['current']['basic-speed'])
-        dodge_why.append('Dodge (B326) @ int(basic-speed(%f))+3 = %d' % (
+        dodge_why.append('Dodge (B326) @ int(basic-speed(%.1f))+3 = %d' % (
                                 fighter.details['current']['basic-speed'],
                                 dodge_skill))
 
@@ -2054,14 +2055,14 @@ class GurpsRuleset(Ruleset):
             damage_type_str = self.__get_damage_type_str('cr')
 
             notes.append(hand_to_hand_info['punch_string'])
-            notes.append('  to hit: %d, damage: %dd%+d, %s' % (
+            notes.append('  to-hit: %d, damage: %dd%+d, %s' % (
                                 hand_to_hand_info['punch_skill'],
                                 hand_to_hand_info['punch_damage']['num_dice'],
                                 hand_to_hand_info['punch_damage']['plus'],
                                 damage_type_str))
 
             notes.append(hand_to_hand_info['kick_string'])
-            notes.append('  to hit: %d, damage: %dd%+d, %s' % (
+            notes.append('  to-hit: %d, damage: %dd%+d, %s' % (
                                 hand_to_hand_info['kick_skill'],
                                 hand_to_hand_info['kick_damage']['num_dice'],
                                 hand_to_hand_info['kick_damage']['plus'],
@@ -2071,7 +2072,7 @@ class GurpsRuleset(Ruleset):
             notes.append('%s' % weapon['name'])
 
             if weapon['skill'] in fighter.details['skills']:
-                to_hit, why = self.get_to_hit(fighter, weapon)
+                to_hit, ignore_why = self.get_to_hit(fighter, weapon)
                 if to_hit is None:
                     self._window_manager.error(
                         ['%s requires "%s" skill not had by "%s"' %
@@ -2079,15 +2080,9 @@ class GurpsRuleset(Ruleset):
                                                               weapon['skill'],
                                                               fighter.name)])
                 else:
-                    damage_type = ('' if 'type' not in weapon['damage']
-                                        else weapon['damage']['type'])
-                    damage_type_str = self.__get_damage_type_str(damage_type)
-
-                    # TODO: damage type
-                    # TODO: damage types for each thr vs sw
-                    notes.append('  to hit: %d, damage: %s' % 
-                        (to_hit,
-                         self.__get_to_hit_str(fighter, weapon['damage'])))
+                    damage, ignore_why = self.get_damage(fighter, weapon)
+                    notes.append('  to-hit: %d' % to_hit)
+                    notes.append('  damage: %s' % damage)
             else:
                 self._window_manager.error(
                     ['%s requires "%s" skill not had by "%s"' %
@@ -2364,22 +2359,22 @@ class GurpsRuleset(Ruleset):
 
         st = fighter.details['current']['st']
 
-        kick_damage_why.append(
-            'Kick damage(B271)=thr -- plug ST(%d) into table on B16' % st)
+        kick_damage_why.append('Kick damage(B271)=thr')
 
         result['kick_damage'] = copy.deepcopy(
                                         GurpsRuleset.melee_damage[st]['thr'])
         kick_damage_modified = False
-        kick_damage_why.append('  damage: %dd%+d' % (
-                                            result['kick_damage']['num_dice'],
-                                            result['kick_damage']['plus']))
+        kick_damage_why.append('  plug ST(%d) into table on B16 = %dd%+d' %
+                                            (st,
+                                             result['kick_damage']['num_dice'],
+                                             result['kick_damage']['plus']))
 
         if plus_per_die_of_thrust != 0:
             kick_damage_modified = True
             result['kick_damage']['plus'] += (
                                         result['kick_damage']['num_dice'] *
                                         plus_per_die_of_thrust)
-            kick_damage_why.append('  %+d/die due to %s' % (
+            kick_damage_why.append('  ...%+d/die due to %s' % (
                                                 plus_per_die_of_thrust,
                                                 plus_per_die_of_thrust_string))
 
@@ -2459,7 +2454,7 @@ class GurpsRuleset(Ruleset):
                   ):
         '''
         Returns tuple (skill, why) where:
-            'skill' (number) is the value the attacker needs to roll to hit
+            'skill' (number) is the value the attacker needs to roll to-hit
                     the target.
             'why'   is an array of strings describing why the to-hit numbers
                     are what they are.
@@ -2504,7 +2499,7 @@ class GurpsRuleset(Ruleset):
         #    if opponent_posture_mods is not None:
         #        skill += opponent_posture_mods['target']
 
-        why.append('  ...for a to hit total of %d' % skill)
+        why.append('  ...for a to-hit total of %d' % skill)
         return skill, why
 
 
@@ -2611,34 +2606,81 @@ class GurpsRuleset(Ruleset):
                               damage_type
                              ):
         if damage_type in GurpsRuleset.damage_mult:
-            damage_type_str = '%s (x%.1f)' % (
+            damage_type_str = '%s=x%.1f' % (
                                         damage_type,
                                         GurpsRuleset.damage_mult[damage_type])
         else:
             damage_type_str = '%s' % damage_type
         return damage_type_str
 
-    def __get_to_hit_str(self,
-                         fighter,   # Fighter object
-                         damage     # dict {'type': 'imp', 'thr': +1, ...}
-                        ):
+    def get_damage(self,
+                   fighter,   # Fighter object
+                   weapon     # dict {'type': 'imp', 'thr': +1, ...}
+                  ):
         st = fighter.details['current']['st']
         results = []
+        why = []
 
-        if 'dice' in damage:
-            results.append('%s' % damage['dice'])
-        if 'sw' in damage:
-            results.append('sw%+d=%dd%+d' %
-                (damage['sw'],
-                 GurpsRuleset.melee_damage[st]['sw']['num_dice'],
-                 GurpsRuleset.melee_damage[st]['sw']['plus'] + damage['sw']))
-        if 'thr' in damage:
-            results.append('thr%+d=%dd%+d' %
-                (damage['thr'],
-                 GurpsRuleset.melee_damage[st]['thr']['num_dice'],
-                 GurpsRuleset.melee_damage[st]['thr']['plus'] + damage['thr']))
+        if 'dice' in weapon['damage']:
+            damage_type_str = self.__get_damage_type_str(
+                                            weapon['damage']['dice']['type'])
+            results.append('%s (%s)' % (weapon['damage']['dice']['amount'],
+                                        damage_type_str))
+            why.append('Weapon %s Damage: %s' % (
+                                          weapon['name'],
+                                          weapon['damage']['dice']['amount']))
+        if 'sw' in weapon['damage']:
+            damage_type_str = self.__get_damage_type_str(
+                                            weapon['damage']['sw']['type'])
+            results.append('sw: %dd%+d (%s)' %
+                (GurpsRuleset.melee_damage[st]['sw']['num_dice'],
+                 GurpsRuleset.melee_damage[st]['sw']['plus'] +
+                                            weapon['damage']['sw']['amount'],
+                 damage_type_str))
 
-        return '(None)' if len(results) == 0 else ', '.join(results)
+            why.append('Weapon %s Damage: sw%+d' % (
+                                             weapon['name'],
+                                             weapon['damage']['sw']['amount']))
+            why.append('  plug ST(%d) into table on B16 = %dd%+d' %
+                       (st,
+                        GurpsRuleset.melee_damage[st]['sw']['num_dice'],
+                        GurpsRuleset.melee_damage[st]['sw']['plus']))
+            if weapon['damage']['sw']['amount'] != 0:
+                why.append('  ...%+d for the weapon' % 
+                                            weapon['damage']['sw']['amount'])
+            why.append('  ...damage: %dd%+d' % 
+                (GurpsRuleset.melee_damage[st]['sw']['num_dice'],
+                 GurpsRuleset.melee_damage[st]['sw']['plus'] +
+                                            weapon['damage']['sw']['amount']))
+
+        if 'thr' in weapon['damage']:
+            damage_type_str = self.__get_damage_type_str(
+                                            weapon['damage']['thr']['type'])
+            results.append('thr: %dd%+d (%s)' %
+                (GurpsRuleset.melee_damage[st]['thr']['num_dice'],
+                 GurpsRuleset.melee_damage[st]['thr']['plus'] +
+                                            weapon['damage']['thr']['amount'],
+                 damage_type_str))
+
+            why.append('Weapon %s Damage: thr%+d' % (
+                                            weapon['name'],
+                                            weapon['damage']['thr']['amount']))
+            why.append('  plug ST(%d) into table on B16 = %dd%+d' %
+                            (st,
+                             GurpsRuleset.melee_damage[st]['thr']['num_dice'],
+                             GurpsRuleset.melee_damage[st]['thr']['plus']))
+            if weapon['damage']['thr']['amount'] != 0:
+                why.append('  ...%+d for the weapon' % 
+                                            weapon['damage']['thr']['amount'])
+            why.append('  ...damage: %dd%+d' % 
+                (GurpsRuleset.melee_damage[st]['thr']['num_dice'],
+                 GurpsRuleset.melee_damage[st]['thr']['plus'] +
+                                            weapon['damage']['thr']['amount']))
+
+        if len(results) == 0:
+            return '(None)', why
+
+        return ', '.join(results), why
 
 
 class ScreenHandler(object):
@@ -3798,8 +3840,11 @@ class FightHandler(ScreenHandler):
                                                                weapon)
                 pseudo_menu = [(x, 0) for x in to_hit_why]
 
-                # NOTE: Won't include damage in 'why' at this point since
-                # there're no mods to damage
+                # Damage
+
+                ignore, damage_why = self.__ruleset.get_damage(why_target,
+                                                               weapon)
+                pseudo_menu.extend([(x, 0) for x in damage_why])
 
         ignore, defense_why = self.__ruleset.get_fighter_defenses_notes(
                                                             why_target)
