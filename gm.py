@@ -12,9 +12,6 @@ import random
 import sys
 
 # TODO:
-#   - Add version number
-#   - any defense loses your aim
-#   - MAJOR WOUND: if adj > HP/2, -4 to active defenses until HT roll made
 #   - should only be able to ready an unready weapon.
 #   - < 1/3 FP = 1/2 move, dodge, st
 #   - Warning if window is smaller than expected
@@ -347,10 +344,6 @@ class MainGmWindow(GmWindow):
                                                 top_line,
                                                 width+1)
 
-    # TODO: up, down goes up and down the character list
-    # TODO: when a character is selected, his stuff (attribs, advantages,
-    #       skills, equipment) is on the right
-
     def close(self):
         # Kill my subwindows, first
         if self.__char_list_window is not None:
@@ -379,7 +372,7 @@ class MainGmWindow(GmWindow):
 
         line = 0
 
-        # TODO: the headings are ruleset specific
+        # TODO (move to ruleset): the headings are ruleset specific
 
         # attributes
 
@@ -880,7 +873,7 @@ class OutfitCharactersGmWindow(GmWindow):
     def show_character(self,
                        character # dict: {'name': None, 'details': None}
                       ):
-        # TODO: this is ruleset specific
+        # TODO (move to ruleset): this is ruleset specific
         self.__outfit_window.clear()
         if character['name'] is None:
             self.refresh()
@@ -1703,9 +1696,6 @@ class GurpsRuleset(Ruleset):
             if fighter.details['shock'] > shock_amount:
                 fighter.details['shock'] = shock_amount
 
-        # TODO: MAJOR WOUND: if adj > HP/2, -4 to active defenses until
-        # HT roll made
-
         # WILL roll or lose aim
         if fighter.details['aim']['rounds'] > 0:
             aim_menu = [('made WILL roll', True),
@@ -1819,7 +1809,6 @@ class GurpsRuleset(Ruleset):
                 # Ask if we're bracing if this is the first round of aiming
                 # B364 (NOTE: Combat Lite on B234 doesn't mention bracing).
                 if fighter.details['aim']['rounds'] == 0:
-                    # TODO: any defense loses your aim
                     brace_menu = [
                         ('Bracing (B364)',
                                         {'text': ['Aim with brace',
@@ -2243,7 +2232,7 @@ class GurpsRuleset(Ruleset):
 
         # boxing, brawling, karate, dx
         if 'brawling' in fighter.details['skills']:
-            if result['punch_skill'] < fighter.details['skills']['brawling']:
+            if result['punch_skill'] <= fighter.details['skills']['brawling']:
                 result['punch_string'] = 'Brawling Punch (B182, B271, B370)'
                 result['punch_skill'] = fighter.details['skills']['brawling']
                 result['kick_string'] = 'Brawling Kick (B182, B271, B370)'
@@ -2254,11 +2243,11 @@ class GurpsRuleset(Ruleset):
                         'Brawling(%d) @DX(%d)+2 = +1/die of thrusting damage' %
                             (result['punch_skill'],
                              fighter.details['current']['dx']))
-            if result['parry_skill'] < fighter.details['skills']['brawling']:
+            if result['parry_skill'] <= fighter.details['skills']['brawling']:
                 result['parry_skill'] = fighter.details['skills']['brawling']
                 result['parry_string'] = 'Brawling Parry (B182, B376)'
         if 'karate' in fighter.details['skills']:
-            if result['punch_skill'] < fighter.details['skills']['karate']:
+            if result['punch_skill'] <= fighter.details['skills']['karate']:
                 result['punch_string'] = 'Karate Punch (B203, B271, B370)'
                 result['kick_string'] = 'Karate Kick (B203, B271, B370)'
                 result['punch_skill'] = fighter.details['skills']['karate']
@@ -2279,7 +2268,7 @@ class GurpsRuleset(Ruleset):
                 else:
                     plus_per_die_of_thrust = 0
                     plus_per_die_of_thrust_string = None
-            if result['parry_skill'] < fighter.details['skills']['karate']:
+            if result['parry_skill'] <= fighter.details['skills']['karate']:
                 result['parry_skill'] = fighter.details['skills']['karate']
                 result['parry_string'] = 'Karate Parry (B203, B376)'
 
@@ -2292,6 +2281,9 @@ class GurpsRuleset(Ruleset):
                                                     result['kick_skill']))
 
         if 'boxing' in fighter.details['skills']:
+            # TODO: if skills are equal, boxing should be used in favor of
+            # brawling or DX but NOT in favor of karate.  It's placed here
+            # because the kick skill isn't improved by boxing.
             if result['punch_skill'] < fighter.details['skills']['boxing']:
                 result['punch_string'] = 'Boxing Punch (B182, B271, B370)'
                 result['punch_skill'] = fighter.details['skills']['boxing']
@@ -3056,12 +3048,12 @@ class FightHandler(ScreenHandler):
         self.__bodies_looted = False
 
         # NOTE: 'h' and 'f' belong in Ruleset
-        # TODO: Heal
         self._add_to_choice_dict({
             ord(' '): {'name': 'next',        'func': self.__next_fighter},
             ord('<'): {'name': 'prev',        'func': self.__prev_fighter},
             ord('?'): {'name': 'explain',     'func': self.__show_why},
-            ord('d'): {'name': 'dead',        'func': self.__dead},
+            ord('d'): {'name': 'defend',      'func': self.__defend},
+            ord('D'): {'name': 'dead',        'func': self.__dead},
             ord('f'): {'name': 'FP damage',   'func': self.__damage_FP},
             ord('h'): {'name': 'History',     'func': self.__show_history},
             ord('-'): {'name': 'HP damage',   'func': self.__damage_HP},
@@ -3144,11 +3136,22 @@ class FightHandler(ScreenHandler):
         self._saved_fight['saved'] = False
         self._window.start_fight()
 
+
+    # Public to aid in testing
+    def get_current_fighter(self):
+        '''
+        Returns the Fighter object of the current fighter.
+        '''
+        result = self.__fighters[ self._saved_fight['index'] ]
+        return result
+
+
     def get_fighters(self):
         ''' Visibility for testing. '''
         return [{'name': fighter.name,
                  'group': fighter.group,
                  'details': fighter.details} for fighter in self.__fighters]
+
 
     def get_opponent_for(self,
                          fighter # Fighter object
@@ -3172,20 +3175,46 @@ class FightHandler(ScreenHandler):
                     self.__world['monsters'][self._saved_fight['monsters']])
             del(self.__world['monsters'][self._saved_fight['monsters']])
 
+
+    # Public to assist testing
+    def modify_index(self,
+                     adj      # 1 or -1, adjust the index by this
+                    ):
+        '''
+        Increment or decrement the index.  Only stop on living creatures.
+        '''
+
+        first_index = self._saved_fight['index']
+
+        round_before = self._saved_fight['round']
+        keep_going = True
+        while keep_going:
+            self._saved_fight['index'] += adj
+            if self._saved_fight['index'] >= len(
+                                            self._saved_fight['fighters']):
+                self._saved_fight['index'] = 0
+                self._saved_fight['round'] += adj 
+            elif self._saved_fight['index'] < 0:
+                self._saved_fight['index'] = len(
+                                            self._saved_fight['fighters']) - 1
+                self._saved_fight['round'] += adj 
+            current_fighter = self.get_current_fighter()
+            if current_fighter.is_dead():
+                self.add_to_history(' %s did nothing (dead)' %
+                                                        current_fighter.name)
+            else:
+                keep_going = False
+            if self._saved_fight['index'] == first_index:
+                keep_going = False
+
+        if round_before != self._saved_fight['round']:
+            self.add_to_history('--- Round %d ---' %
+                                                self._saved_fight['round'])
+
+
     #
     # Private Methods
     #
-
-    # Public to aid in testing
-    # TODO: move to public methods
-    def get_current_fighter(self):
-        '''
-        Returns the Fighter object of the current fighter.
-        '''
-        result = self.__fighters[ self._saved_fight['index'] ]
-        return result
-
-
 
     # TODO (move to ruleset): all of FP belongs in Ruleset
     def __damage_FP(self):
@@ -3320,6 +3349,36 @@ class FightHandler(ScreenHandler):
                                    self._saved_fight['index'])
         return True # Keep going
 
+    def __defend(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        # Figure out who is defending
+        current_fighter = self.get_current_fighter()
+        opponent = self.get_opponent_for(current_fighter)
+        if opponent is None:
+            defender = current_fighter
+        else:
+            defender_menu = [(current_fighter.name, current_fighter),
+                                 (opponent.name, opponent)]
+            defender = self._window_manager.menu('Who is defending',
+                                                 defender_menu,
+                                                 1) # assume the opponent
+        if defender is None:
+            return True # Keep fighting
+
+        # Defending costs you aim
+        defender.details['aim']['rounds'] = 0
+
+        self.add_to_history(' %s defended (and lost aim)' % defender.name)
+
+        self._window.show_fighters(current_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'])
+        return True # Keep going
 
     def _draw_screen(self):
         self._window.clear()
@@ -3449,43 +3508,6 @@ class FightHandler(ScreenHandler):
                                    self.__fighters,
                                    self._saved_fight['index'])
         return True # Keep going
-
-
-    # Public to assist testing
-    # TODO: move to public area
-    def modify_index(self,
-                     adj      # 1 or -1, adjust the index by this
-                    ):
-        '''
-        Increment or decrement the index.  Only stop on living creatures.
-        '''
-
-        first_index = self._saved_fight['index']
-
-        round_before = self._saved_fight['round']
-        keep_going = True
-        while keep_going:
-            self._saved_fight['index'] += adj
-            if self._saved_fight['index'] >= len(
-                                            self._saved_fight['fighters']):
-                self._saved_fight['index'] = 0
-                self._saved_fight['round'] += adj 
-            elif self._saved_fight['index'] < 0:
-                self._saved_fight['index'] = len(
-                                            self._saved_fight['fighters']) - 1
-                self._saved_fight['round'] += adj 
-            current_fighter = self.get_current_fighter()
-            if current_fighter.is_dead():
-                self.add_to_history('%s did nothing (dead)' %
-                                                        current_fighter.name)
-            else:
-                keep_going = False
-            if self._saved_fight['index'] == first_index:
-                keep_going = False
-
-        if round_before != self._saved_fight['round']:
-            self.add_to_history('--- Round %d ---' %
-                                                self._saved_fight['round'])
 
 
     def __next_fighter(self):
