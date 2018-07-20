@@ -12,6 +12,7 @@ import random
 import sys
 
 # TODO:
+#   - should warn when trying to do a second action (take note of fastdraw)
 #   - brass knuckles shouldn't require a skill (use as unarmed)
 #   - should only be able to ready an unready weapon.
 #   - < 1/3 FP = 1/2 move, dodge, st
@@ -2307,6 +2308,15 @@ class GurpsRuleset(Ruleset):
         punch_why.append('%s, to-hit: %d' % (result['punch_string'],
                                              result['punch_skill']))
 
+        # Shock
+
+        if fighter.details['shock'] != 0:
+            result['punch_skill'] += fighter.details['shock']
+            result['kick_skill'] += fighter.details['shock']
+
+            punch_why.append('  %+d due to shock' % fighter.details['shock'])
+            kick_why.append('  %+d due to shock' % fighter.details['shock'])
+
         # Posture
 
         posture_mods = self.get_posture_mods(fighter.details['posture'])
@@ -2347,13 +2357,17 @@ class GurpsRuleset(Ruleset):
         if posture_mods is not None and posture_mods['defense'] != 0:
             result['parry_skill'] += posture_mods['defense']
 
-            punch_why.append('  %+d due to %s posture' % 
+            parry_why.append('  %+d due to %s posture' % 
                                                 (posture_mods['defense'],
                                                  fighter.details['posture']))
+
+        # Final 'why' results
 
         if parry_damage_modified:
             parry_why.append('  ...for a parry total = %d' %
                                                         result['parry_skill'])
+        punch_why.append('  ...for a punch total = %d' % result['punch_skill'])
+        kick_why.append('  ...for a kick total = %d' % result['kick_skill'])
 
         # Damage
 
@@ -2481,6 +2495,12 @@ class GurpsRuleset(Ruleset):
             elif fighter.details['aim']['rounds'] > 2:
                 why.append('  +2 due to 2 or more additional rounds of aiming')
                 skill += 2
+
+        # Shock
+
+        if fighter.details['shock'] != 0:
+            why.append('  %+d due to shock' % fighter.details['shock'])
+            skill += fighter.details['shock']
 
         # Posture
 
