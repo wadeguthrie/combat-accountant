@@ -288,6 +288,232 @@
       "posture": "standing", 
       "opponent": null
     }, 
+    "deri - Chelsea": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+          {
+              "acc": 4, 
+              "count": 1, 
+              "name": "pistol, Sig D65", 
+              "notes": "", 
+              "damage": {
+                "dice": {"amount": "1d+4", "type": "pi"}
+              }, 
+              "reload": 3, 
+              "skill": "beam weapons (pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 9, 
+                "shots_left": 9
+              }
+          }, 
+          {
+            "count": 100000, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          },
+          {
+            "count": 1, 
+            "name": "sick stick", 
+            "notes": "", 
+            "damage": {
+              "dice": {"amount": "1d+1", "type": "fat"}
+            }, 
+            "skill": "axe/mace", 
+            "type": "melee weapon"
+          }, 
+          {
+              "count": 1, 
+              "name": "knife, large", 
+              "notes": "", 
+              "damage": {
+                "thr": {"amount": 0, "type": "imp"},
+                "sw": {"amount": -2, "type": "cut"}
+              }, 
+              "parry": -1, 
+              "skill": "knife", 
+              "type": "melee weapon"
+          },
+          {
+              "count": 1, 
+              "name": "knife, small", 
+              "notes": "B272", 
+              "damage": {
+                "thr": {"amount": -1, "type": "imp"},
+                "sw": {"amount": -3, "type": "cut"}
+              }, 
+              "parry": -1, 
+              "skill": "knife", 
+              "type": "melee weapon"
+          }
+      ], 
+      "weapon-index": null, 
+      "skills": {
+        "area knowledge (space station)": 16,
+        "brawling": 11,
+        "computer hacking": 13,
+        "electronics repair (security)": 15,
+        "escape": 9,
+        "fast talk": 15,
+        "mechanic (spacecraft)": 15,
+        "streetwise": 15,
+        "beam weapons (pistol)": 11,
+        "electronics operation (security)": 14,
+        "lip reading": 14,
+        "thrown weapon (knife)": 10,
+        "detect lies": 14,
+        "current affairs (terraforming)": 14,
+        "axe/mace": 8,
+        "computer operation": 14,
+        "climbing": 8,
+        "computer programming": 12,
+        "electronics operation (terraforming)": 13,
+        "electronics repair (terraforming)": 13,
+        "piloting (low-performance spacecraft)": 9,
+        "hazardous materials (chemical)": 13,
+        "connoisseur (visual arts)": 13,
+        "forgery": 12
+      }, 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 14, 
+        "hp": 10, 
+        "ht": 11, 
+        "st": 9, 
+        "dx": 9, 
+        "basic-speed": 5
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 14, 
+        "hp": 10, 
+        "ht": 11, 
+        "st": 9, 
+        "dx": 9, 
+        "basic-speed": 5
+      }, 
+      "advantages": {
+        "impulsiveness": -15,
+        "short attention span": -15,
+        "wealth (struggling)": -10,
+        "curious": -10,
+        "bad tember": -10,
+        "alcohol intolerance": -1,
+        "dreamer": -1,
+        "likes knick knacks": -1,
+        "nosy": -1,
+        "habit (fidget)": -1,
+        "deep sleeper": 1,
+        "honest face": 1,
+        "cultural familiarity (terraformers)": 1,
+        "empathy (sensitive)": 5,
+        "versatile": 5,
+        "combat reflexes": 15,
+        "vodou practitioner (Mambo 1)": 15
+      }, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    },
+    "mama V - Karen": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+          {
+            "count": 1, 
+            "name": "sick stick", 
+            "notes": "", 
+            "damage": {
+              "dice": {"amount": "1d+1", "type": "fat"}
+            }, 
+            "skill": "axe/mace", 
+            "type": "melee weapon"
+          }, 
+          {
+              "acc": 4, 
+              "count": 1, 
+              "name": "pistol, Sig D65", 
+              "notes": "", 
+              "damage": {
+                "dice": {"amount": "1d+4", "type": "pi"}
+              }, 
+              "reload": 3, 
+              "skill": "beam weapons (pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 9, 
+                "shots_left": 9
+              }
+          }, 
+          {
+            "count": 100000, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+      ], 
+      "weapon-index": null, 
+      "skills": {
+        "axe/mace": 7,
+        "beam weapons (pistol)": 14,
+        "brawling": 8,
+        "fast-draw (pistol)": 9,
+        "first aid": 17,
+        "physician": 14
+      }, 
+      "shock": 0, 
+      "current": {
+        "fp": 18, 
+        "iq": 16, 
+        "hp": 19, 
+        "ht": 8, 
+        "st": 9, 
+        "dx": 8, 
+        "basic-speed": 4
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 18, 
+        "iq": 16, 
+        "hp": 19, 
+        "ht": 8, 
+        "st": 9, 
+        "dx": 8, 
+        "basic-speed": 4
+      }, 
+      "advantages": {
+        "vodou practitioner (Bokor 2)": 45,
+        "lwa (Bokor, Papa Ghede)": 8,
+        "agoraphobia (open spaces)": -10,
+        "ailurophobia (cats)": -5,
+        "bad sight (farsighted)": -25,
+        "compulsive vowing": -5,
+        "curious": -5,
+        "delusions (Papa Ghede is g-grandfather)": -1,
+        "distractible": -1,
+        "impulsiveness": -10,
+        "likes shiny objects": -1,
+        "personality change": -1,
+        "responsive": -1
+      }, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
     "samuel - Erik": {
       "aim": {
         "braced": false, 
@@ -460,23 +686,24 @@
       ], 
       "weapon-index": null, 
       "skills": {
+        "armoury (small arms)": 11,
+        "axe/mace": 12,
         "beam weapons (pistol)": 15,
         "beam weapons (rifle)": 14,
-        "guns (grenade launcher)": 9,
-        "throwing": 10,
-        "axe/mace": 12,
+        "brawling": 13,
         "fast-draw (ammo)": 14,
         "first aid": 13,
+        "guns (grenade launcher)": 9,
         "holdout": 11,
+        "interrogation": 12,
+        "karate": 13,
         "knife": 15,
-        "lockpicking": 11,
+        "lockpicking": 12,
         "observation": 12,
         "stealth": 14,
-        "streetwise": 11,
-        "armoury": 11,
-        "tactics": 10,
-        "karate": 13,
-        "brawling": 13
+        "streetwise": 12,
+        "throwing": 10,
+        "traps": 12
       }, 
       "shock": 0, 
       "current": {
@@ -516,77 +743,7 @@
       "timers": [], 
       "posture": "standing", 
       "opponent": null
-    }, 
-    "mama V - Karen": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "weapon-index": null, 
-      "skills": {}, 
-      "shock": 0, 
-      "current": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "ht": 10, 
-        "st": 10, 
-        "dx": 10, 
-        "basic-speed": 5
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "ht": 10, 
-        "st": 10, 
-        "dx": 10, 
-        "basic-speed": 5
-      }, 
-      "advantages": {}, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "deri - Chelsea": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "weapon-index": null, 
-      "skills": {}, 
-      "shock": 0, 
-      "current": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "ht": 10, 
-        "st": 10, 
-        "dx": 10, 
-        "basic-speed": 5
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "ht": 10, 
-        "st": 10, 
-        "dx": 10, 
-        "basic-speed": 5
-      }, 
-      "advantages": {}, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }
+    } 
   }, 
   "dead-monsters": {}, 
   "current-fight": {
