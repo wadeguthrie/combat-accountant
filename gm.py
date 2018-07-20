@@ -676,6 +676,7 @@ class FightGmWindow(GmWindow):
 
         if self.__show_fighter(current_fighter, self.__FIGHTER_COL):
             self.__show_fighter_notes(current_fighter,
+                                      opponent,
                                       is_attacker=True,
                                       window=self.__character_window)
 
@@ -685,6 +686,7 @@ class FightGmWindow(GmWindow):
         else:
             if self.__show_fighter(opponent, self.__OPPONENT_COL):
                 self.__show_fighter_notes(opponent,
+                                          current_fighter,
                                           is_attacker=False,
                                           window=self.__opponent_window)
         self.__show_summary_window(fighters, current_index)
@@ -780,6 +782,7 @@ class FightGmWindow(GmWindow):
 
     def __show_fighter_notes(self,
                              fighter,           # Fighter object
+                             opponent,          # Fighter object
                              is_attacker,       # True | False
                              window             # Curses window for fighter's
                                                 #   notes
@@ -798,7 +801,8 @@ class FightGmWindow(GmWindow):
             mode = curses.color_pair(GmWindowManager.CYAN_BLACK)
             mode = mode | curses.A_BOLD
 
-        notes, why = self.__ruleset.get_fighter_defenses_notes(fighter)
+        notes, why = self.__ruleset.get_fighter_defenses_notes(fighter,
+                                                               opponent)
         for note in notes:
             window.addstr(line, 0, note, mode)
             line += 1
@@ -810,7 +814,8 @@ class FightGmWindow(GmWindow):
             mode = mode | curses.A_BOLD
         else:
             mode = curses.A_NORMAL 
-        notes = self.__ruleset.get_fighter_to_hit_damage_notes(fighter)
+        notes = self.__ruleset.get_fighter_to_hit_damage_notes(fighter,
+                                                               opponent)
         for note in notes:
             window.addstr(line, 0, note, mode)
             line += 1
@@ -2047,12 +2052,13 @@ class GurpsRuleset(Ruleset):
         return dodge_skill, dodge_why
 
     def get_fighter_to_hit_damage_notes(self,
-                                        fighter   # Fighter object
+                                        fighter,    # Fighter object
+                                        opponent    # Fighter object
                                        ):
         notes = []
         holding_weapon_index = fighter.details['weapon-index']
         if holding_weapon_index is None:
-            hand_to_hand_info = self.get_hand_to_hand_info(fighter)
+            hand_to_hand_info = self.get_hand_to_hand_info(fighter, opponent)
             damage_type_str = self.__get_damage_type_str('cr')
 
             notes.append(hand_to_hand_info['punch_string'])
@@ -2073,7 +2079,7 @@ class GurpsRuleset(Ruleset):
             notes.append('%s' % weapon['name'])
 
             if weapon['skill'] in fighter.details['skills']:
-                to_hit, ignore_why = self.get_to_hit(fighter, weapon)
+                to_hit, ignore_why = self.get_to_hit(fighter, opponent, weapon)
                 if to_hit is None:
                     self._window_manager.error(
                         ['%s requires "%s" skill not had by "%s"' %
@@ -2094,7 +2100,8 @@ class GurpsRuleset(Ruleset):
         return notes
 
     def get_fighter_defenses_notes(self,
-                                   fighter   # Fighter object
+                                   fighter,  # Fighter object
+                                   opponent
                                   ):
         notes = []
         why = []
@@ -2102,7 +2109,7 @@ class GurpsRuleset(Ruleset):
         hand_to_hand_info = None
         weapon = None
         if holding_weapon_index is None:
-            hand_to_hand_info = self.get_hand_to_hand_info(fighter)
+            hand_to_hand_info = self.get_hand_to_hand_info(fighter, opponent)
         else:
             weapon = fighter.details['stuff'][holding_weapon_index]
 
@@ -2198,7 +2205,8 @@ class GurpsRuleset(Ruleset):
 
 
     def get_hand_to_hand_info(self,
-                              fighter   # Fighter object
+                              fighter,  # Fighter object
+                              opponent  # Fighter object
                              ):
         result = {
             'punch_skill': fighter.details['current']['dx'],
@@ -2333,13 +2341,19 @@ class GurpsRuleset(Ruleset):
 
         # Opponent's posture
 
-        #opponent = self.get_opponent_for(fighter) # TODO: part of fight handler
-        #if opponent is not None:
-        #    opponent_posture_mods = self.get_posture_mods(
-        #                                        opponent.details['posture'])
-        #    if opponent_posture_mods is not None:
-        #        result['punch_skill'] += opponent_posture_mods['target']
-        #        result['kick_skill'] += opponent_posture_mods['target']
+        if opponent is not None:
+            opponent_posture_mods = self.get_posture_mods(
+                                                opponent.details['posture'])
+            if opponent_posture_mods is not None:
+                result['punch_skill'] += opponent_posture_mods['target']
+                punch_why.append('  %+d for opponent\'s %s posture' %
+                                    (opponent_posture_mods['target'],
+                                     opponent.details['posture']))
+
+                result['kick_skill'] += opponent_posture_mods['target']
+                kick_why.append('  %+d for opponent\'s %s posture' %
+                                    (opponent_posture_mods['target'],
+                                     opponent.details['posture']))
 
         parry_raw = result['parry_skill']
         parry_damage_modified = False
@@ -2463,7 +2477,8 @@ class GurpsRuleset(Ruleset):
                                             GurpsRuleset.posture[posture])
 
     def get_to_hit(self,
-                   fighter, # Fighter object
+                   fighter,     # Fighter object
+                   opponent,    # Fighter object
                    weapon
                   ):
         '''
@@ -2512,12 +2527,15 @@ class GurpsRuleset(Ruleset):
 
         # Opponent's posture
 
-        #opponent = self.get_opponent_for(fighter) # TODO: part of fight handler
-        #if opponent is not None:
-        #    opponent_posture_mods = self.get_posture_mods(
-        #                                        opponent.details['posture'])
-        #    if opponent_posture_mods is not None:
-        #        skill += opponent_posture_mods['target']
+        if opponent is not None:
+            opponent_posture_mods = self.get_posture_mods(
+                                                opponent.details['posture'])
+            if opponent_posture_mods is not None:
+                skill += opponent_posture_mods['target']
+                why.append('  %+d for opponent\'s %s posture' %
+                                    (opponent_posture_mods['target'],
+                                     opponent.details['posture']))
+
 
         why.append('  ...for a to-hit total of %d' % skill)
         return skill, why
@@ -3849,14 +3867,18 @@ class FightHandler(ScreenHandler):
 
         pseudo_menu = [] # TODO: make a special window type -- don't use a menu
         holding_weapon_index = why_target.details['weapon-index']
+        why_opponent = self.get_opponent_for(why_target)
         if holding_weapon_index is None:
-            hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(why_target)
+            hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(
+                                                                why_target,
+                                                                why_opponent)
             pseudo_menu = [(x, 0) for x in hand_to_hand_info['why']]
         else:
             weapon = why_target.details['stuff'][holding_weapon_index]
 
             if weapon['skill'] in why_target.details['skills']:
                 ignore, to_hit_why = self.__ruleset.get_to_hit(why_target,
+                                                               why_opponent,
                                                                weapon)
                 pseudo_menu = [(x, 0) for x in to_hit_why]
 
@@ -3867,7 +3889,8 @@ class FightHandler(ScreenHandler):
                 pseudo_menu.extend([(x, 0) for x in damage_why])
 
         ignore, defense_why = self.__ruleset.get_fighter_defenses_notes(
-                                                            why_target)
+                                                            why_target,
+                                                            why_opponent)
         #pseudo_menu.extend([(x, 0) for x in defense_why])
         pseudo_menu = [(x, 0) for x in defense_why] + pseudo_menu
 

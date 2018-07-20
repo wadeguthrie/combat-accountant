@@ -54,6 +54,8 @@ class MockWindowManager(object):
 # working.  The timer stuff requires an action via a menu so that'll be a
 # little more work.
 
+# TODO: need to add opponent & opponent's posture to get_hand_to_hand_info and
+#       get_to_hit tests.
 # TODO: test that aiming may be disrupted (if will roll is not made) when
 #       aimer is injured.
 # TODO: test that pick opponent gives you all of the other side and none of
@@ -510,7 +512,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                     copy.deepcopy(self.__vodou_priest_fighter),
                                     self.__ruleset)
         hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(
-                                                vodou_priest_fighter)
+                                                vodou_priest_fighter,
+                                                None)
         assert hand_to_hand_info['punch_skill'] == 12
         assert hand_to_hand_info['punch_damage']['num_dice'] == 1
         assert hand_to_hand_info['punch_damage']['plus'] == -3
@@ -524,7 +527,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__bokor_fighter),
                                    self.__ruleset)
-        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(bokor_fighter)
+        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(bokor_fighter,
+                                                                 None)
         # PP.pprint(hand_to_hand_info)
         assert hand_to_hand_info['punch_skill'] == 12
         assert hand_to_hand_info['punch_damage']['num_dice'] == 1
@@ -539,7 +543,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset)
-        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(tank_fighter)
+        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(tank_fighter,
+                                                                 None)
         assert hand_to_hand_info['punch_skill'] == 16
         assert hand_to_hand_info['punch_damage']['num_dice'] == 1
         assert hand_to_hand_info['punch_damage']['plus'] == -2
@@ -553,7 +558,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset)
-        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(thief_fighter)
+        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(thief_fighter,
+                                                                 None)
         assert hand_to_hand_info['punch_skill'] == 14
         assert hand_to_hand_info['punch_damage']['num_dice'] == 1
         assert hand_to_hand_info['punch_damage']['plus'] == -2
@@ -566,7 +572,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         self.__ruleset.change_posture({'fighter': thief_fighter,
                                        'posture': 'crawling'})
-        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(thief_fighter)
+        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(thief_fighter,
+                                                                 None)
         assert hand_to_hand_info['punch_skill'] == (14
                                                 + self.__crawling_attack_mod)
         assert hand_to_hand_info['punch_damage']['num_dice'] == 1
@@ -1006,7 +1013,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         vodou_priest.reset_aim()
         self.__ruleset.change_posture({'fighter': vodou_priest,
                                        'posture': 'standing'})
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # aim / braced, no posture
@@ -1018,22 +1025,22 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__ruleset.change_posture({'fighter': vodou_priest,
                                        'posture': 'standing'})
         vodou_priest.do_aim(braced=True)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         vodou_priest.do_aim(braced=True)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # 3 rounds
         vodou_priest.do_aim(braced=True)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
 
         # 4 rounds
         vodou_priest.do_aim(braced=True)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # no further benefit
 
         # aim / not braced, no posture
@@ -1044,22 +1051,22 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__ruleset.change_posture({'fighter': vodou_priest,
                                        'posture': 'standing'})
         vodou_priest.do_aim(braced=False)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         vodou_priest.do_aim(braced=False)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # 3 rounds
         vodou_priest.do_aim(braced=False)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
 
         # 4 rounds
         vodou_priest.do_aim(braced=False)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # no further benefit
 
         # no aim, posture
@@ -1069,7 +1076,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__ruleset.change_posture({'fighter': vodou_priest,
                                        'posture': 'crawling'})
         vodou_priest.reset_aim()
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # aim / braced, posture
@@ -1082,28 +1089,28 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__ruleset.change_posture({'fighter': vodou_priest,
                                        'posture': 'crawling'})
         vodou_priest.do_aim(braced=True)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         vodou_priest.do_aim(braced=True)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # 3 rounds
         vodou_priest.do_aim(braced=True)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
 
         # 4 rounds
         vodou_priest.do_aim(braced=True)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # no further benefit
 
 
         # aim / not braced, posture
 
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
 
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
@@ -1112,22 +1119,22 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__ruleset.change_posture({'fighter': vodou_priest,
                                        'posture': 'crawling'})
         vodou_priest.do_aim(braced=False)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         vodou_priest.do_aim(braced=False)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # 3 rounds
         vodou_priest.do_aim(braced=False)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
 
         # 4 rounds
         vodou_priest.do_aim(braced=False)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # no further benefit
 
 
@@ -1150,7 +1157,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_to_hit = self.__thief_knife_skill
         self.__ruleset.change_posture({'fighter': thief,
                                        'posture': 'standing'})
-        to_hit, why = self.__ruleset.get_to_hit(thief, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
         assert to_hit == expected_to_hit
 
         # posture
@@ -1158,7 +1165,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                 + self.__crawling_attack_mod)
         self.__ruleset.change_posture({'fighter': thief,
                                        'posture': 'crawling'})
-        to_hit, why = self.__ruleset.get_to_hit(thief, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
         assert to_hit == expected_to_hit
 
     #def test_random_seed(self):
