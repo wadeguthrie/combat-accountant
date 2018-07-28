@@ -3235,9 +3235,10 @@ class FightHandler(ScreenHandler):
                 self._saved_fight['fighters'].append({'group': fighter.group,
                                                        'name': fighter.name})
 
-        for name, creature in (
-                self.__world['monsters'][monster_group].iteritems()):
-            self.__ruleset.is_creature_consistent(name, creature)
+        if monster_group is not None:
+            for name, creature in (
+                    self.__world['monsters'][monster_group].iteritems()):
+                self.__ruleset.is_creature_consistent(name, creature)
 
         self._saved_fight['saved'] = False
         self._window.start_fight()
@@ -3276,7 +3277,8 @@ class FightHandler(ScreenHandler):
         super(FightHandler, self).handle_user_input_until_done()
 
         # When done, move current fight to 'dead-monsters'
-        if not self._saved_fight['saved']:
+        if (not self._saved_fight['saved'] and
+                                    self._saved_fight['monsters'] is not None):
             self.__world['dead-monsters'][self._saved_fight['monsters']] = (
                     self.__world['monsters'][self._saved_fight['monsters']])
             del(self.__world['monsters'][self._saved_fight['monsters']])
@@ -3510,7 +3512,8 @@ class FightHandler(ScreenHandler):
                               group     # string
                              ):
         ''' Used for constructing a Fighter from the JSON information. '''
-        if group in self.__world['monsters']:
+        if (self.__world['monsters'] is not None and
+                                            group in self.__world['monsters']):
             creatures = self.__world['monsters'][group]
         elif group == 'PCs':
             creatures = self.__world['PCs']
@@ -4144,9 +4147,8 @@ class MainHandler(ScreenHandler):
             # PP.pprint(fight_name_menu)
             monster_group = self._window_manager.menu('Fights',
                                                       fight_name_menu)
-            if monster_group is None:
-                return True
-            if (monster_group not in self.__world['monsters']):
+            if (monster_group is not None and
+                                monster_group not in self.__world['monsters']):
                 print 'ERROR, monster list %s not found' % monster_group
                 return True
 
