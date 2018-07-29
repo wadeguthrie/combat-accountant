@@ -573,7 +573,7 @@
                 "thr": {"amount": 0, "type": "cr"}
               }, 
               "parry": 0, 
-              "skill": "brawling", 
+              "skill": "karate", 
               "type": "melee weapon"
           }
       ],
@@ -782,6 +782,17 @@
     "monsters": "horsemen"
   }, 
   "Equipment": [
+    {
+      "count": 1, 
+      "name": "brass knuckles", 
+      "notes": "B271", 
+      "damage": {
+        "thr": {"amount": 0, "type": "cr"}
+      }, 
+      "parry": 0, 
+      "skill": "karate", 
+      "type": "melee weapon"
+    },
     {
       "acc": 2, 
       "count": 1, 

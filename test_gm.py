@@ -54,6 +54,7 @@ class MockWindowManager(object):
 # working.  The timer stuff requires an action via a menu so that'll be a
 # little more work.
 
+# TODO: test brass knuckles and sap in test_get_unarmed_info
 # TODO: need to add opponent & opponent's posture to get_hand_to_hand_info and
 #       get_to_hit tests.
 # TODO: test that aiming may be disrupted (if will roll is not made) when
@@ -503,23 +504,24 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                                 weapon)
         assert parry_skill == (9 + self.__crawling_defense_mod)
 
-    def test_get_hand_to_hand_info(self):
+    def test_get_unarmed_info(self):
         # Vodou Priest
         #PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
+        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
         vodou_priest_fighter = gm.Fighter(
                                     'Vodou Priest',
                                     'group',
                                     copy.deepcopy(self.__vodou_priest_fighter),
                                     self.__ruleset)
-        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(
                                                 vodou_priest_fighter,
-                                                None)
+                                                None,
+                                                None,
+                                                unarmed_skills)
         assert hand_to_hand_info['punch_skill'] == 12
-        assert hand_to_hand_info['punch_damage']['num_dice'] == 1
-        assert hand_to_hand_info['punch_damage']['plus'] == -3
+        assert hand_to_hand_info['punch_damage'] == '1d-3'
         assert hand_to_hand_info['kick_skill'] == 10
-        assert hand_to_hand_info['kick_damage']['num_dice'] == 1
-        assert hand_to_hand_info['kick_damage']['plus'] == -2
+        assert hand_to_hand_info['kick_damage'] == '1d-2'
         assert hand_to_hand_info['parry_skill'] == 10
 
         # Bokor
@@ -527,15 +529,15 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__bokor_fighter),
                                    self.__ruleset)
-        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(bokor_fighter,
-                                                                 None)
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(bokor_fighter,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
         # PP.pprint(hand_to_hand_info)
         assert hand_to_hand_info['punch_skill'] == 12
-        assert hand_to_hand_info['punch_damage']['num_dice'] == 1
-        assert hand_to_hand_info['punch_damage']['plus'] == -2
+        assert hand_to_hand_info['punch_damage'] == '1d-2'
         assert hand_to_hand_info['kick_skill'] == 10   # thr-1, st=10
-        assert hand_to_hand_info['kick_damage']['num_dice'] == 1
-        assert hand_to_hand_info['kick_damage']['plus'] == -1
+        assert hand_to_hand_info['kick_damage'] == '1d-1'
         assert hand_to_hand_info['parry_skill'] == 10
 
         # Tank
@@ -543,14 +545,14 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset)
-        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(tank_fighter,
-                                                                 None)
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
         assert hand_to_hand_info['punch_skill'] == 16
-        assert hand_to_hand_info['punch_damage']['num_dice'] == 1
-        assert hand_to_hand_info['punch_damage']['plus'] == -2
+        assert hand_to_hand_info['punch_damage'] == '1d-2'
         assert hand_to_hand_info['kick_skill'] == 14
-        assert hand_to_hand_info['kick_damage']['num_dice'] == 1
-        assert hand_to_hand_info['kick_damage']['plus'] == -1
+        assert hand_to_hand_info['kick_damage'] == '1d-1'
         assert hand_to_hand_info['parry_skill'] == 12
 
         # Thief
@@ -558,30 +560,30 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset)
-        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(thief_fighter,
-                                                                 None)
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
         assert hand_to_hand_info['punch_skill'] == 14
-        assert hand_to_hand_info['punch_damage']['num_dice'] == 1
-        assert hand_to_hand_info['punch_damage']['plus'] == -2
+        assert hand_to_hand_info['punch_damage'] == '1d-2'
         assert hand_to_hand_info['kick_skill'] == 12
-        assert hand_to_hand_info['kick_damage']['num_dice'] == 1
-        assert hand_to_hand_info['kick_damage']['plus'] == -1
+        assert hand_to_hand_info['kick_damage'] == '1d-1'
         assert hand_to_hand_info['parry_skill'] == 10
 
         # Thief with posture additions
 
         self.__ruleset.change_posture({'fighter': thief_fighter,
                                        'posture': 'crawling'})
-        hand_to_hand_info = self.__ruleset.get_hand_to_hand_info(thief_fighter,
-                                                                 None)
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
         assert hand_to_hand_info['punch_skill'] == (14
                                                 + self.__crawling_attack_mod)
-        assert hand_to_hand_info['punch_damage']['num_dice'] == 1
-        assert hand_to_hand_info['punch_damage']['plus'] == -2
+        assert hand_to_hand_info['punch_damage'] == '1d-2'
         assert hand_to_hand_info['kick_skill'] == (12
                                                 + self.__crawling_attack_mod)
-        assert hand_to_hand_info['kick_damage']['num_dice'] == 1
-        assert hand_to_hand_info['kick_damage']['plus'] == -1
+        assert hand_to_hand_info['kick_damage'] == '1d-1'
         assert hand_to_hand_info['parry_skill'] == (10
                                                 + self.__crawling_defense_mod)
 
