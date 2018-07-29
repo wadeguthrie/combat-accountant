@@ -13,7 +13,6 @@ import sys
 
 # TODO:
 #   - should warn when trying to do a second action (take note of fastdraw)
-#   - brass knuckles shouldn't require a skill (use as unarmed)
 #   - should only be able to ready an unready weapon.
 #   - < 1/3 FP = 1/2 move, dodge, st
 #   - Warning if window is smaller than expected
@@ -27,11 +26,10 @@ import sys
 #       o eventually, there needs to be a list of approved skills &
 #         advantages; characters' data should only match the approved list
 #         (this is really to make sure that stuff wasn't mis-typed).
-#   - damage other than dice (swords and stuff -- add this as needed)
 #   - scrolling menus (et al.)
 #   - reloading where the number of shots is in the 'clip' (like with a gun or
 #     a quiver) rather than in the weapon (like in disruptors or lasers)
-#   - truncate (don't wrap) long lines
+#   - plusses on range-based ammo (a bullet with a spell on it, for instance)
 #   - Go for a transactional model -- will allow me to do better debugging,
 #       playback of debug stuff, and testing.  Instead of modifying 'world'
 #       directly, issue a transaction to an object that handles world.  Save
