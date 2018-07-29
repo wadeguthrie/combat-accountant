@@ -519,9 +519,9 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                 None,
                                                 unarmed_skills)
         assert hand_to_hand_info['punch_skill'] == 12
-        assert hand_to_hand_info['punch_damage'] == '1d-3'
+        assert hand_to_hand_info['punch_damage'] == '1d-3 (cr=x1.0)'
         assert hand_to_hand_info['kick_skill'] == 10
-        assert hand_to_hand_info['kick_damage'] == '1d-2'
+        assert hand_to_hand_info['kick_damage'] == '1d-2 (cr=x1.0)'
         assert hand_to_hand_info['parry_skill'] == 10
 
         # Bokor
@@ -535,9 +535,9 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                             unarmed_skills)
         # PP.pprint(hand_to_hand_info)
         assert hand_to_hand_info['punch_skill'] == 12
-        assert hand_to_hand_info['punch_damage'] == '1d-2'
+        assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
         assert hand_to_hand_info['kick_skill'] == 10   # thr-1, st=10
-        assert hand_to_hand_info['kick_damage'] == '1d-1'
+        assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
         assert hand_to_hand_info['parry_skill'] == 10
 
         # Tank
@@ -550,9 +550,9 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                             None,
                                                             unarmed_skills)
         assert hand_to_hand_info['punch_skill'] == 16
-        assert hand_to_hand_info['punch_damage'] == '1d-2'
+        assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
         assert hand_to_hand_info['kick_skill'] == 14
-        assert hand_to_hand_info['kick_damage'] == '1d-1'
+        assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
         assert hand_to_hand_info['parry_skill'] == 12
 
         # Thief
@@ -565,9 +565,9 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                             None,
                                                             unarmed_skills)
         assert hand_to_hand_info['punch_skill'] == 14
-        assert hand_to_hand_info['punch_damage'] == '1d-2'
+        assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
         assert hand_to_hand_info['kick_skill'] == 12
-        assert hand_to_hand_info['kick_damage'] == '1d-1'
+        assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
         assert hand_to_hand_info['parry_skill'] == 10
 
         # Thief with posture additions
@@ -580,10 +580,10 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                             unarmed_skills)
         assert hand_to_hand_info['punch_skill'] == (14
                                                 + self.__crawling_attack_mod)
-        assert hand_to_hand_info['punch_damage'] == '1d-2'
+        assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
         assert hand_to_hand_info['kick_skill'] == (12
                                                 + self.__crawling_attack_mod)
-        assert hand_to_hand_info['kick_damage'] == '1d-1'
+        assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
         assert hand_to_hand_info['parry_skill'] == (10
                                                 + self.__crawling_defense_mod)
 

@@ -1760,10 +1760,12 @@ class GurpsRuleset(Ruleset):
         '''
         results = []
         for damage in damages:
+            string = []
             if damage['attack_type'] is not None:
-                results.append('%s: ' % damage['attack_type'])
-            results.append('%dd%+d ' % (damage['num_dice'], damage['plus']))
-            results.append('(%s)' % damage['damage_type'])
+                string.append('%s: ' % damage['attack_type'])
+            string.append('%dd%+d ' % (damage['num_dice'], damage['plus']))
+            string.append('(%s)' % damage['damage_type'])
+            results.append(''.join(string))
 
         return ', '.join(results)
 
@@ -2193,21 +2195,15 @@ class GurpsRuleset(Ruleset):
                                                  weapon,
                                                  unarmed_skills)
 
-            # NOTE: doesn't handle fangs and such which have a damage type of
-            # impaling, etc.
-            damage_type_str = self.__get_damage_type_str('cr')
-
             notes.append(unarmed_info['punch_string'])
-            notes.append('  to-hit: %d, damage: %s, %s' % (
+            notes.append('  to-hit: %d, damage: %s' % (
                                                 unarmed_info['punch_skill'],
-                                                unarmed_info['punch_damage'],
-                                                damage_type_str))
+                                                unarmed_info['punch_damage']))
 
             notes.append(unarmed_info['kick_string'])
-            notes.append('  to-hit: %d, damage: %s, %s' % (
+            notes.append('  to-hit: %d, damage: %s' % (
                                                 unarmed_info['kick_skill'],
-                                                unarmed_info['kick_damage'],
-                                                damage_type_str))
+                                                unarmed_info['kick_damage']))
 
         return notes
 
@@ -2326,6 +2322,10 @@ class GurpsRuleset(Ruleset):
                          weapon,        # None or dict.  May be brass knuckles.
                          unarmed_skills # [string, string, ...]
                         ):
+        '''
+        Makes sense of the cascade of unarmed skills (brawling, boxing,
+        karate).
+        '''
         # Assumes 'dx' is in unarmed_skills
         result = {
             'punch_skill': fighter.details['current']['dx'],
@@ -2509,7 +2509,6 @@ class GurpsRuleset(Ruleset):
 
         punch_damage = None # Expressed as dice
         kick_damage = None  # Expressed as dice
-
         st = fighter.details['current']['st']
 
         # Base damage
@@ -2523,6 +2522,8 @@ class GurpsRuleset(Ruleset):
                                              kick_damage['num_dice'],
                                              kick_damage['plus']))
 
+        # TODO: maybe I want to make everything use damage_array instead of
+        # making it a special case for brass knuckles.
         damage_array = None
         if weapon is None:
             punch_damage = copy.deepcopy(GurpsRuleset.melee_damage[st]['thr'])
@@ -2561,6 +2562,7 @@ class GurpsRuleset(Ruleset):
                                                 plus_per_die_of_thrust,
                                                 plus_per_die_of_thrust_string))
 
+        # Show the 'why'
         if damage_modified:
             kick_damage_why.append('  ...for a kick damage total = %dd%+d' % (
                                             kick_damage['num_dice'],
@@ -2578,15 +2580,27 @@ class GurpsRuleset(Ruleset):
 
         # Assemble final damage and 'why'
 
-        if damage_array is not None:
-            damage_str = self.damage_to_string(damage_array)
-            result['punch_damage'] = damage_str
-        else:
-            result['punch_damage'] = '%dd%+d' % (punch_damage['num_dice'],
-                                                 punch_damage['plus'])
+        # NOTE: doesn't handle fangs and such which have a damage type of
+        # impaling, etc.
+        damage_type_str = self.__get_damage_type_str('cr')
+
+        if damage_array is None:
+            damage_array = [{
+                'attack_type': None,
+                'num_dice': punch_damage['num_dice'],
+                'plus': punch_damage['plus'],
+                'damage_type': damage_type_str
+            }]
+        result['punch_damage'] = self.damage_to_string(damage_array)
+
         if kick_damage is not None:
-            result['kick_damage'] = '%dd%+d' % (kick_damage['num_dice'],
-                                                kick_damage['plus'])
+            damage_array = [{
+                'attack_type': None,
+                'num_dice': kick_damage['num_dice'],
+                'plus': kick_damage['plus'],
+                'damage_type': damage_type_str
+            }]
+            result['kick_damage'] = self.damage_to_string(damage_array)
 
         # Using this order because that's the order the data is shown in the
         # regular window.
