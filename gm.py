@@ -1759,15 +1759,13 @@ class GurpsRuleset(Ruleset):
         Converts array of dicts returned by get_damage into a string.
         '''
         results = []
-        for i, damage in enumerate(damages):
-            if i > 0:
-                results.append(', ')
+        for damage in damages:
             if damage['attack_type'] is not None:
                 results.append('%s: ' % damage['attack_type'])
             results.append('%dd%+d ' % (damage['num_dice'], damage['plus']))
             results.append('(%s)' % damage['damage_type'])
 
-        return ''.join(results)
+        return ', '.join(results)
 
     def do_aim(self,
                param, # dict {'fighter': <Fighter object>,
@@ -2525,6 +2523,7 @@ class GurpsRuleset(Ruleset):
                                              kick_damage['num_dice'],
                                              kick_damage['plus']))
 
+        damage_array = None
         if weapon is None:
             punch_damage = copy.deepcopy(GurpsRuleset.melee_damage[st]['thr'])
             punch_damage_why.append('Punch damage(B271) = thr-1')
@@ -2537,12 +2536,7 @@ class GurpsRuleset(Ruleset):
                                                 (punch_damage['num_dice'],
                                                  punch_damage['plus']))
         else:
-            # TODO: damage needs to be in dice, not as a string
-            damage, why = self.get_damage(fighter, weapon)
-            damage_str = self.damage_to_string(damage)
-
-            result['punch_damage'] = damage_str
-            punch_damage = None
+            damage_array, why = self.get_damage(fighter, weapon)
             punch_damage_why.extend(why)
 
         # Plusses to damage
@@ -2554,9 +2548,16 @@ class GurpsRuleset(Ruleset):
             kick_damage_why.append('  %+d/die due to %s' % (
                                                 plus_per_die_of_thrust,
                                                 plus_per_die_of_thrust_string))
-            punch_damage['plus'] += (punch_damage['num_dice'] *
-                                     plus_per_die_of_thrust)
-            punch_damage_why.append('  %+d/die due to %s' % (
+            if damage_array is not None:
+                for damage in damage_array:
+                    if damage['attack_type'] == 'thr':
+                        damage['plus'] += (damage['num_dice'] *
+                                                 plus_per_die_of_thrust)
+            else:
+                punch_damage['plus'] += (punch_damage['num_dice'] *
+                                         plus_per_die_of_thrust)
+
+            punch_damage_why.append('  %+d/die of thrust due to %s' % (
                                                 plus_per_die_of_thrust,
                                                 plus_per_die_of_thrust_string))
 
@@ -2564,14 +2565,23 @@ class GurpsRuleset(Ruleset):
             kick_damage_why.append('  ...for a kick damage total = %dd%+d' % (
                                             kick_damage['num_dice'],
                                             kick_damage['plus']))
-            punch_damage_why.append('  ...for a punch damage total = %dd%+d' % (
-                                            punch_damage['num_dice'],
-                                            punch_damage['plus']))
+            if damage_array is not None:
+                damage_str = self.damage_to_string(damage_array)
+                punch_damage_why.append('  ...for a punch damage total = %s' % 
+                                        damage_str)
+            else:
+                punch_damage_why.append(
+                                '  ...for a punch damage total = %dd%+d' % (
+                                                punch_damage['num_dice'],
+                                                punch_damage['plus']))
 
 
         # Assemble final damage and 'why'
 
-        if punch_damage is not None:
+        if damage_array is not None:
+            damage_str = self.damage_to_string(damage_array)
+            result['punch_damage'] = damage_str
+        else:
             result['punch_damage'] = '%dd%+d' % (punch_damage['num_dice'],
                                                  punch_damage['plus'])
         if kick_damage is not None:
