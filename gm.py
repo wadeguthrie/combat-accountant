@@ -1727,6 +1727,8 @@ class GurpsRuleset(Ruleset):
         param['fighter'].details['posture'] = param['posture']
         param['fighter'].reset_aim()
 
+
+    # TODO: alphabetize
     def is_creature_consistent(self,
                                name,    # string: creature's name
                                creature # dict from JSON
@@ -1748,6 +1750,24 @@ class GurpsRuleset(Ruleset):
                     '  but not the skill to use it'])
                 result = False
         return result
+
+
+    def damage_to_string(self,
+                         damages # list of dict -- returned by 'get_damage'
+                        ):
+        '''
+        Converts array of dicts returned by get_damage into a string.
+        '''
+        results = []
+        for i, damage in enumerate(damages):
+            if i > 0:
+                results.append(', ')
+            if damage['attack_type'] is not None:
+                results.append('%s: ' % damage['attack_type'])
+            results.append('%dd%+d ' % (damage['num_dice'], damage['plus']))
+            results.append('(%s)' % damage['damage_type'])
+
+        return ''.join(results)
 
     def do_aim(self,
                param, # dict {'fighter': <Fighter object>,
@@ -2031,63 +2051,69 @@ class GurpsRuleset(Ruleset):
         if 'dice' in weapon['damage']:
             damage_type_str = self.__get_damage_type_str(
                                             weapon['damage']['dice']['type'])
-            results.append('%s (%s)' % (weapon['damage']['dice']['amount'],
-                                        damage_type_str))
-            why.append('Weapon %s Damage: %s' % (
+            results.append(
+                {'attack_type': None,
+                 'num_dice': weapon['damage']['dice']['num_dice'],
+                 'plus': weapon['damage']['dice']['plus'],
+                 'damage_type': damage_type_str})
+            why.append('Weapon %s Damage: %dd%+d' % (
                                           weapon['name'],
-                                          weapon['damage']['dice']['amount']))
+                                          weapon['damage']['dice']['num_dice'],
+                                          weapon['damage']['dice']['plus']))
         if 'sw' in weapon['damage']:
             damage_type_str = self.__get_damage_type_str(
                                             weapon['damage']['sw']['type'])
-            results.append('sw: %dd%+d (%s)' %
-                (GurpsRuleset.melee_damage[st]['sw']['num_dice'],
-                 GurpsRuleset.melee_damage[st]['sw']['plus'] +
-                                            weapon['damage']['sw']['amount'],
-                 damage_type_str))
+            results.append(
+                {'attack_type': 'sw',
+                 'num_dice': GurpsRuleset.melee_damage[st]['sw']['num_dice'],
+                 'plus': GurpsRuleset.melee_damage[st]['sw']['plus'] +
+                                            weapon['damage']['sw']['plus'],
+                 'damage_type': damage_type_str})
 
             why.append('Weapon %s Damage: sw%+d' % (
                                              weapon['name'],
-                                             weapon['damage']['sw']['amount']))
+                                             weapon['damage']['sw']['plus']))
             why.append('  plug ST(%d) into table on B16 = %dd%+d' %
                        (st,
                         GurpsRuleset.melee_damage[st]['sw']['num_dice'],
                         GurpsRuleset.melee_damage[st]['sw']['plus']))
-            if weapon['damage']['sw']['amount'] != 0:
+            if weapon['damage']['sw']['plus'] != 0:
                 why.append('  ...%+d for the weapon' % 
-                                            weapon['damage']['sw']['amount'])
+                                            weapon['damage']['sw']['plus'])
             why.append('  ...damage: %dd%+d' % 
                 (GurpsRuleset.melee_damage[st]['sw']['num_dice'],
                  GurpsRuleset.melee_damage[st]['sw']['plus'] +
-                                            weapon['damage']['sw']['amount']))
+                                            weapon['damage']['sw']['plus']))
 
         if 'thr' in weapon['damage']:
             damage_type_str = self.__get_damage_type_str(
                                             weapon['damage']['thr']['type'])
-            results.append('thr: %dd%+d (%s)' %
-                (GurpsRuleset.melee_damage[st]['thr']['num_dice'],
-                 GurpsRuleset.melee_damage[st]['thr']['plus'] +
-                                            weapon['damage']['thr']['amount'],
-                 damage_type_str))
+            results.append(
+                {'attack_type': 'thr',
+                 'num_dice': GurpsRuleset.melee_damage[st]['thr']['num_dice'],
+                 'plus': GurpsRuleset.melee_damage[st]['thr']['plus'] +
+                                            weapon['damage']['thr']['plus'],
+                 'damage_type': damage_type_str})
 
             why.append('Weapon %s Damage: thr%+d' % (
                                             weapon['name'],
-                                            weapon['damage']['thr']['amount']))
+                                            weapon['damage']['thr']['plus']))
             why.append('  plug ST(%d) into table on B16 = %dd%+d' %
                             (st,
                              GurpsRuleset.melee_damage[st]['thr']['num_dice'],
                              GurpsRuleset.melee_damage[st]['thr']['plus']))
-            if weapon['damage']['thr']['amount'] != 0:
+            if weapon['damage']['thr']['plus'] != 0:
                 why.append('  ...%+d for the weapon' % 
-                                            weapon['damage']['thr']['amount'])
+                                            weapon['damage']['thr']['plus'])
             why.append('  ...damage: %dd%+d' % 
                 (GurpsRuleset.melee_damage[st]['thr']['num_dice'],
                  GurpsRuleset.melee_damage[st]['thr']['plus'] +
-                                            weapon['damage']['thr']['amount']))
+                                            weapon['damage']['thr']['plus']))
 
         if len(results) == 0:
             return '(None)', why
 
-        return ', '.join(results), why
+        return results, why
 
 
     def get_dodge_skill(self,
@@ -2154,8 +2180,9 @@ class GurpsRuleset(Ruleset):
                                                               fighter.name)])
                 else:
                     damage, ignore_why = self.get_damage(fighter, weapon)
+                    damage_str = self.damage_to_string(damage)
                     notes.append('  to-hit: %d' % to_hit)
-                    notes.append('  damage: %s' % damage)
+                    notes.append('  damage: %s' % damage_str)
             else:
                 self._window_manager.error(
                     ['%s requires "%s" skill not had by "%s"' %
@@ -2316,8 +2343,6 @@ class GurpsRuleset(Ruleset):
 
             'why': []
         }
-        punch_damage = None # Expressed as dice
-        kick_damage = None  # Expressed as dice
 
         # Using separate arrays so that I can print them out in a different
         # order than I calculate them.
@@ -2329,11 +2354,6 @@ class GurpsRuleset(Ruleset):
 
         plus_per_die_of_thrust = 0
         plus_per_die_of_thrust_string = None
-
-        # TODO: add the plusses to all the options.  Currently, we're adding
-        # stuff to the kick and then calculating punch in terms of kick.
-        # The problem is that the brass knuckles approach doesn't get the
-        # benefit of the plusses.  Instead, add stuff to kick and to punch.
 
         # boxing, brawling, karate, dx
         if ('brawling' in fighter.details['skills'] and
@@ -2489,43 +2509,65 @@ class GurpsRuleset(Ruleset):
 
         # Damage
 
+        punch_damage = None # Expressed as dice
+        kick_damage = None  # Expressed as dice
+
         st = fighter.details['current']['st']
+
+        # Base damage
 
         kick_damage_why.append('Kick damage(B271)=thr')
 
+        damage_modified = False
         kick_damage = copy.deepcopy(GurpsRuleset.melee_damage[st]['thr'])
-        kick_damage_modified = False
         kick_damage_why.append('  plug ST(%d) into table on B16 = %dd%+d' %
                                             (st,
                                              kick_damage['num_dice'],
                                              kick_damage['plus']))
 
+        if weapon is None:
+            punch_damage = copy.deepcopy(GurpsRuleset.melee_damage[st]['thr'])
+            punch_damage_why.append('Punch damage(B271) = thr-1')
+            punch_damage_why.append('  plug ST(%d) into table on B16 = %dd%+d' %
+                                                (st,
+                                                 punch_damage['num_dice'],
+                                                 punch_damage['plus']))
+            punch_damage['plus'] -= 1
+            punch_damage_why.append('  -1 (damage is thr-1) = %dd%+d' %
+                                                (punch_damage['num_dice'],
+                                                 punch_damage['plus']))
+        else:
+            # TODO: damage needs to be in dice, not as a string
+            damage, why = self.get_damage(fighter, weapon)
+            damage_str = self.damage_to_string(damage)
+
+            result['punch_damage'] = damage_str
+            punch_damage = None
+            punch_damage_why.extend(why)
+
+        # Plusses to damage
+
         if plus_per_die_of_thrust != 0:
-            kick_damage_modified = True
+            damage_modified = True
             kick_damage['plus'] += (kick_damage['num_dice'] *
                                     plus_per_die_of_thrust)
-            kick_damage_why.append('  ...%+d/die due to %s' % (
+            kick_damage_why.append('  %+d/die due to %s' % (
+                                                plus_per_die_of_thrust,
+                                                plus_per_die_of_thrust_string))
+            punch_damage['plus'] += (punch_damage['num_dice'] *
+                                     plus_per_die_of_thrust)
+            punch_damage_why.append('  %+d/die due to %s' % (
                                                 plus_per_die_of_thrust,
                                                 plus_per_die_of_thrust_string))
 
-        if kick_damage_modified:
+        if damage_modified:
             kick_damage_why.append('  ...for a kick damage total = %dd%+d' % (
                                             kick_damage['num_dice'],
                                             kick_damage['plus']))
-
-        if weapon is None:
-            punch_damage = copy.deepcopy(kick_damage)
-            punch_damage['plus'] -= 1
-            punch_damage_why.append('Punch damage(B271) = thr-1 = "kick" - 1')
             punch_damage_why.append('  ...for a punch damage total = %dd%+d' % (
                                             punch_damage['num_dice'],
                                             punch_damage['plus']))
-        else:
-            damage, why = self.get_damage(fighter, weapon)
 
-            result['punch_damage'] = damage
-            punch_damage = None
-            punch_damage_why.extend(why)
 
         # Assemble final damage and 'why'
 

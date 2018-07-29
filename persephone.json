@@ -120,7 +120,7 @@
               "name": "pistol, Baretta DX 192", 
               "notes": "", 
               "damage": {
-                "dice": {"amount": "1d+4", "type": "pi"}
+                "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
               }, 
               "reload": 3, 
               "skill": "beam weapons (pistol)", 
@@ -136,8 +136,8 @@
               "name": "knife, large", 
               "notes": "", 
               "damage": {
-                "thr": {"amount": 0, "type": "imp"},
-                "sw": {"amount": -2, "type": "cut"}
+                "thr": {"plus": 0, "type": "imp"},
+                "sw": {"plus": -2, "type": "cut"}
               }, 
               "parry": -1, 
               "skill": "knife", 
@@ -199,7 +199,7 @@
             "name": "pistol, Colt 170D", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+4", "type": "pi"}
+              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -221,7 +221,7 @@
             "name": "sick stick", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+1", "type": "fat"}
+              "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
             }, 
             "skill": "axe/mace", 
             "type": "melee weapon"
@@ -300,7 +300,7 @@
               "name": "pistol, Sig D65", 
               "notes": "", 
               "damage": {
-                "dice": {"amount": "1d+4", "type": "pi"}
+                "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
               }, 
               "reload": 3, 
               "skill": "beam weapons (pistol)", 
@@ -322,7 +322,7 @@
             "name": "sick stick", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+1", "type": "fat"}
+              "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
             }, 
             "skill": "axe/mace", 
             "type": "melee weapon"
@@ -332,8 +332,8 @@
               "name": "knife, large", 
               "notes": "", 
               "damage": {
-                "thr": {"amount": 0, "type": "imp"},
-                "sw": {"amount": -2, "type": "cut"}
+                "thr": {"plus": 0, "type": "imp"},
+                "sw": {"plus": -2, "type": "cut"}
               }, 
               "parry": -1, 
               "skill": "knife", 
@@ -344,8 +344,8 @@
               "name": "knife, small", 
               "notes": "B272", 
               "damage": {
-                "thr": {"amount": -1, "type": "imp"},
-                "sw": {"amount": -3, "type": "cut"}
+                "thr": {"plus": -1, "type": "imp"},
+                "sw": {"plus": -3, "type": "cut"}
               }, 
               "parry": -1, 
               "skill": "knife", 
@@ -435,7 +435,7 @@
             "name": "sick stick", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+1", "type": "fat"}
+              "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
             }, 
             "skill": "axe/mace", 
             "type": "melee weapon"
@@ -446,7 +446,7 @@
               "name": "pistol, Sig D65", 
               "notes": "", 
               "damage": {
-                "dice": {"amount": "1d+4", "type": "pi"}
+                "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
               }, 
               "reload": 3, 
               "skill": "beam weapons (pistol)", 
@@ -526,7 +526,7 @@
               "name": "pistol, Sig D65", 
               "notes": "", 
               "damage": {
-                "dice": {"amount": "1d+4", "type": "pi"}
+                "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
               }, 
               "reload": 3, 
               "skill": "beam weapons (pistol)", 
@@ -548,8 +548,8 @@
               "name": "knife, small", 
               "notes": "B272", 
               "damage": {
-                "thr": {"amount": -1, "type": "imp"},
-                "sw": {"amount": -3, "type": "cut"}
+                "thr": {"plus": -1, "type": "imp"},
+                "sw": {"plus": -3, "type": "cut"}
               }, 
               "parry": -1, 
               "skill": "knife", 
@@ -560,7 +560,7 @@
               "name": "sick stick", 
               "notes": "", 
               "damage": {
-                "dice": {"amount": "1d+1", "type": "fat"}
+                "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
               }, 
               "skill": "axe/mace", 
               "type": "melee weapon"
@@ -570,7 +570,7 @@
               "name": "brass knuckles", 
               "notes": "B271", 
               "damage": {
-                "thr": {"amount": 0, "type": "cr"}
+                "thr": {"plus": 0, "type": "cr"}
               }, 
               "parry": 0, 
               "skill": "karate", 
@@ -652,8 +652,8 @@
               "name": "knife, large", 
               "notes": "", 
               "damage": {
-                "thr": {"amount": 0, "type": "imp"},
-                "sw": {"amount": -2, "type": "cut"}
+                "thr": {"plus": 0, "type": "imp"},
+                "sw": {"plus": -2, "type": "cut"}
               }, 
               "parry": -1, 
               "skill": "knife", 
@@ -665,7 +665,7 @@
               "name": "pistol, Sig D65", 
               "notes": "", 
               "damage": {
-                "dice": {"amount": "1d+4", "type": "pi"}
+                "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
               }, 
               "reload": 3, 
               "skill": "beam weapons (pistol)", 
@@ -787,7 +787,7 @@
       "name": "brass knuckles", 
       "notes": "B271", 
       "damage": {
-        "thr": {"amount": 0, "type": "cr"}
+        "thr": {"plus": 0, "type": "cr"}
       }, 
       "parry": 0, 
       "skill": "karate", 
@@ -799,7 +799,7 @@
       "name": "pistol, Baretta DX 192", 
       "notes": "", 
       "damage": {
-        "dice": {"amount": "1d+4", "type": "pi"}
+        "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
@@ -816,7 +816,7 @@
       "name": "pistol, Sig D65", 
       "notes": "", 
       "damage": {
-        "dice": {"amount": "1d+4", "type": "pi"}
+        "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
@@ -833,7 +833,7 @@
       "name": "pistol, Kalashnikov Makarov", 
       "notes": "", 
       "damage": {
-        "dice": {"amount": "1d+3", "type": "pi"}
+        "dice": {"num_dice": 1, "plus": 3, "type": "pi"}
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
@@ -850,7 +850,7 @@
       "name": "pistol, Colt 170D", 
       "notes": "", 
       "damage": {
-        "dice": {"amount": "1d+4", "type": "pi"}
+        "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
@@ -866,8 +866,8 @@
       "name": "knife, large", 
       "notes": "", 
       "damage": {
-        "thr": {"amount": 0, "type": "imp"},
-        "sw": {"amount": -2, "type": "cut"}
+        "thr": {"plus": 0, "type": "imp"},
+        "sw": {"plus": -2, "type": "cut"}
       }, 
       "parry": -1, 
       "skill": "knife", 
@@ -878,7 +878,7 @@
       "name": "sick stick", 
       "notes": "", 
       "damage": {
-        "dice": {"amount": "1d+1", "type": "fat"}
+        "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
       }, 
       "skill": "axe/mace", 
       "type": "melee weapon"
@@ -2053,7 +2053,7 @@
             "name": "pistol, Sig D65", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+4", "type": "pi"}
+              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2069,7 +2069,7 @@
             "name": "sick stick", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+1", "type": "fat"}
+              "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
             }, 
             "skill": "axe/mace", 
             "type": "melee weapon"
@@ -2128,7 +2128,7 @@
             "name": "pistol, Colt 170D", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+4", "type": "pi"}
+              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2192,7 +2192,7 @@
             "name": "pistol, Sig D65", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+4", "type": "pi"}
+              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2208,7 +2208,7 @@
             "name": "sick stick", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+1", "type": "fat"}
+              "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
             }, 
             "skill": "axe/mace", 
             "type": "melee weapon"
@@ -2267,7 +2267,7 @@
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+4", "type": "pi"}
+              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2283,8 +2283,8 @@
             "name": "knife, large", 
             "notes": "", 
             "damage": {
-                "thr": {"amount": 0, "type": "imp"},
-                "sw": {"amount": -2, "type": "cut"}
+                "thr": {"plus": 0, "type": "imp"},
+                "sw": {"plus": -2, "type": "cut"}
             }, 
             "parry": -1, 
             "skill": "knife", 
@@ -2344,7 +2344,7 @@
             "name": "pistol, Kalashnikov Makarov", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+3", "type": "pi"}
+              "dice": {"num_dice": 1, "plus": 3, "type": "pi"}
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2409,7 +2409,7 @@
             "name": "pistol, Sig D65", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+4", "type": "pi"}
+              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2425,7 +2425,7 @@
             "name": "sick stick", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+1", "type": "fat"}
+              "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
             }, 
             "skill": "axe/mace", 
             "type": "melee weapon"
@@ -2484,7 +2484,7 @@
             "name": "pistol, Sig D65", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+4", "type": "pi"}
+              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2500,7 +2500,7 @@
             "name": "sick stick", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+1", "type": "fat"}
+              "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
             }, 
             "skill": "axe/mace", 
             "type": "melee weapon"
@@ -2559,7 +2559,7 @@
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+4", "type": "pi"}
+              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2575,8 +2575,8 @@
             "name": "knife, large", 
             "notes": "", 
             "damage": {
-                "thr": {"amount": 0, "type": "imp"},
-                "sw": {"amount": -2, "type": "cut"}
+                "thr": {"plus": 0, "type": "imp"},
+                "sw": {"plus": -2, "type": "cut"}
             }, 
             "parry": -1, 
             "skill": "knife", 
@@ -2699,7 +2699,7 @@
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
-              "dice": {"amount": "1d+4", "type": "pi"}
+              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2715,8 +2715,8 @@
             "name": "knife, large", 
             "notes": "", 
             "damage": {
-                "thr": {"amount": 0, "type": "imp"},
-                "sw": {"amount": -2, "type": "cut"}
+                "thr": {"plus": 0, "type": "imp"},
+                "sw": {"plus": -2, "type": "cut"}
             }, 
             "parry": -1, 
             "skill": "knife", 
