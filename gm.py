@@ -11,14 +11,11 @@ import pprint
 import random
 import sys
 
-# TODO: make sure that changing weapons discards an ongoing aim
-
 # TODO:
 #   - should warn when trying to do a second action (take note of fastdraw)
 #   - should only be able to ready an unready weapon.
 #   - < 1/3 FP = 1/2 move, dodge, st
 #   - Warning if window is smaller than expected
-#   - Add book references in more places
 #   - Add 2 weapon (or weapon & shield)
 #
 # TODO: More tests!
@@ -1430,6 +1427,7 @@ class Fighter(object):
                             ):
         '''Draws or removes weapon from sheath or holster.'''
         self.details['weapon-index'] = index
+        self.reset_aim()  # TODO (move to ruleset)
 
 
     def end_turn(self):
@@ -1712,7 +1710,7 @@ class GurpsRuleset(Ruleset):
             made_will_roll = self._window_manager.menu('WILL roll or lose aim',
                                                        aim_menu)
             if not made_will_roll:
-                fighter.details['aim']['rounds'] = 0
+                fighter.reset_aim()
 
         super(GurpsRuleset, self).adjust_hp(fighter, adj)
 
@@ -1726,30 +1724,6 @@ class GurpsRuleset(Ruleset):
         '''
         param['fighter'].details['posture'] = param['posture']
         param['fighter'].reset_aim()
-
-
-    # TODO: alphabetize
-    def is_creature_consistent(self,
-                               name,    # string: creature's name
-                               creature # dict from JSON
-                              ):
-        result = True
-        unarmed_skills = self.get_weapons_unarmed_skills(None)
-
-        for item in creature['stuff']:
-            # NOTE: if the skill is one of the unarmed skills, then the skill
-            # defaults to DX and that's OK -- we don't have to tell the user
-            # about this.
-            if ('skill' in item and
-                                item['skill'] not in creature['skills'] and
-                                item['skill'] not in unarmed_skills):
-                self._window_manager.error([
-                    'Creature "%s"' % name,
-                    '  has item "%s"' % item['name'],
-                    '  that requires skill "%s"' % item['skill'],
-                    '  but not the skill to use it'])
-                result = False
-        return result
 
 
     def damage_to_string(self,
@@ -2747,6 +2721,33 @@ class GurpsRuleset(Ruleset):
                 )
 
 
+    def is_creature_consistent(self,
+                               name,    # string: creature's name
+                               creature # dict from JSON
+                              ):
+        '''
+        Make sure creature has skills for all their stuff.  Trying to make
+        sure that one or the other of the skills wasn't entered incorrectly.
+        '''
+        result = True
+        unarmed_skills = self.get_weapons_unarmed_skills(None)
+
+        for item in creature['stuff']:
+            # NOTE: if the skill is one of the unarmed skills, then the skill
+            # defaults to DX and that's OK -- we don't have to tell the user
+            # about this.
+            if ('skill' in item and
+                                item['skill'] not in creature['skills'] and
+                                item['skill'] not in unarmed_skills):
+                self._window_manager.error([
+                    'Creature "%s"' % name,
+                    '  has item "%s"' % item['name'],
+                    '  that requires skill "%s"' % item['skill'],
+                    '  but not the skill to use it'])
+                result = False
+        return result
+
+
     def make_empty_creature(self):
         to_monster = super(GurpsRuleset, self).make_empty_creature()
         to_monster.update({'aim': { 'braced': False, 'rounds': 0 }, 
@@ -3623,7 +3624,7 @@ class FightHandler(ScreenHandler):
             return True # Keep fighting
 
         # Defending costs you aim
-        defender.details['aim']['rounds'] = 0
+        defender.reset_aim()
 
         self.add_to_history(' %s defended (and lost aim)' % defender.name)
 
