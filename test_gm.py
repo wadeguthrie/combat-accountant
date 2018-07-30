@@ -552,11 +552,9 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert hand_to_hand_info['parry_skill'] == (10
                                                 + self.__crawling_defense_mod)
 
-        # --- Opponents ---
+        # --- Opponents w/ posture ---
         # TODO: opponents for melee and ranged attacks, too
 
-        #tank_fighter.details['opponent'] = {'group': thief_fighter.group,
-        #                                    'name': thief_fighter.name}
         self.__ruleset.change_posture({'fighter': thief_fighter,
                                        'posture': 'standing'})
 
@@ -1179,6 +1177,35 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__ruleset.change_posture({'fighter': thief,
                                        'posture': 'crawling'})
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
+        assert to_hit == expected_to_hit
+
+        # --- Opponents w/ posture ---
+        # TODO: opponents for ranged attacks, too
+        tank_fighter = gm.Fighter('Tank',
+                                  'group',
+                                  copy.deepcopy(self.__tank_fighter),
+                                  self.__ruleset)
+
+        self.__ruleset.change_posture({'fighter': thief,
+                                       'posture': 'standing'})
+
+        # Picking opponent doesn't change things
+        expected_to_hit = self.__thief_knife_skill
+        self.__ruleset.change_posture({'fighter': tank_fighter,
+                                       'posture': 'standing'})
+        to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
+        assert to_hit == expected_to_hit
+
+        # change posture of thief (-2)
+        self.__ruleset.change_posture({'fighter': tank_fighter,
+                                       'posture': 'crawling'}) # -2
+        to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
+        assert to_hit == (expected_to_hit - 2)
+
+        # change posture of thief (back to standing)
+        self.__ruleset.change_posture({'fighter': tank_fighter,
+                                       'posture': 'standing'})
+        to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
         assert to_hit == expected_to_hit
 
     #def test_random_seed(self):
