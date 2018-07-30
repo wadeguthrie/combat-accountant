@@ -11,8 +11,6 @@ import unittest
 # little more work.
 
 # TODO: test brass knuckles and sap in test_get_unarmed_info
-# TODO: need to add opponent & opponent's posture to get_unarmed_info and
-#       get_to_hit tests.
 # TODO: test that pick opponent gives you all of the other side and none of
 #       the current side
 # TODO: test that pick opponent actually selects the opponent that you want
@@ -471,7 +469,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
     def test_get_unarmed_info(self):
         # Vodou Priest
-        PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
+        #PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
         unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
         vodou_priest_fighter = gm.Fighter(
                                     'Vodou Priest',
@@ -553,7 +551,6 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                 + self.__crawling_defense_mod)
 
         # --- Opponents w/ posture ---
-        # TODO: opponents for melee and ranged attacks, too
 
         self.__ruleset.change_posture({'fighter': thief_fighter,
                                        'posture': 'standing'})
@@ -1120,6 +1117,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # aim / not braced, posture
 
+        vodou_priest.reset_aim()
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
 
         # 1 round
@@ -1149,6 +1147,8 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # --- Opponents w/ posture ---
         # TODO: there's no effect of attacker's posture on RANGED attacks
+        #       mention this (and B551) in the 'why' of ranged attacks when
+        #       the attacker has a non-standing posture
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
         vodou_priest.reset_aim()
@@ -1180,7 +1180,6 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
     def test_melee_to_hit(self):
-        # TODO: show that aiming does not help
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
 
@@ -1238,6 +1237,23 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                        'posture': 'standing'})
         to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
         assert to_hit == expected_to_hit
+
+        # --- Aiming does not help ---
+
+        thief.reset_aim()
+        expected_to_hit = self.__thief_knife_skill
+        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
+
+        # 1 round
+        thief.do_aim(braced=False)
+        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
+        assert to_hit == expected_to_hit
+
+        # 2 rounds
+        thief.do_aim(braced=False)
+        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
+        assert to_hit == expected_to_hit
+
 
     #def test_random_seed(self):
     #    for i in range(10):
