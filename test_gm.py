@@ -1147,6 +1147,37 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # no further benefit
 
+        # --- Opponents w/ posture ---
+        # TODO: there's no effect of attacker's posture on RANGED attacks
+
+        expected_to_hit = self.__vodou_priest_fighter_pistol_skill
+        vodou_priest.reset_aim()
+        tank = gm.Fighter('Tank',
+                          'group',
+                          copy.deepcopy(self.__tank_fighter),
+                          self.__ruleset)
+
+        self.__ruleset.change_posture({'fighter': vodou_priest,
+                                       'posture': 'standing'})
+
+        # Picking opponent doesn't change things
+        self.__ruleset.change_posture({'fighter': tank,
+                                       'posture': 'standing'})
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon)
+        assert to_hit == expected_to_hit
+
+        # change posture of thief (-2)
+        self.__ruleset.change_posture({'fighter': tank,
+                                       'posture': 'crawling'}) # -2
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon)
+        assert to_hit == (expected_to_hit - 2)
+
+        # change posture of thief (back to standing)
+        self.__ruleset.change_posture({'fighter': tank,
+                                       'posture': 'standing'})
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon)
+        assert to_hit == expected_to_hit
+
 
     def test_melee_to_hit(self):
         # TODO: show that aiming does not help
@@ -1180,7 +1211,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit
 
         # --- Opponents w/ posture ---
-        # TODO: opponents for ranged attacks, too
+
         tank_fighter = gm.Fighter('Tank',
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
