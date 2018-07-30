@@ -6,6 +6,48 @@ import pprint
 import random
 import unittest
 
+# Do these first because it seems like an easy way to get the menu mock
+# working.  The timer stuff requires an action via a menu so that'll be a
+# little more work.
+
+# TODO: test brass knuckles and sap in test_get_unarmed_info
+# TODO: need to add opponent & opponent's posture to get_unarmed_info and
+#       get_to_hit tests.
+# TODO: test that pick opponent gives you all of the other side and none of
+#       the current side
+# TODO: test that pick opponent actually selects the opponent that you want
+# TODO: test that a non-engaged opponent asks for a two-way and that an
+#       engaged one does not
+
+# TODO: test that a timer works
+# TODO: test that a 0.9 timer works as expected
+# TODO: test that looting bodies works:
+#           * moving something from one body to another works properly
+#           * only loot unconscious and dead monsters
+# TODO: test that notes are saved properly
+# TODO: test that quitting a fight offers to loot and save when appropriate
+#       and not when not:
+#       (4 tests: loot, save; loot, no save; no loot, save; no loot, no save)
+# TODO: test that aiming may be disrupted (if will roll is not made) when
+#       aimer is injured.
+
+# TODO: test that saving a fight and starting up again doesn't change the
+#       fight (pending actions, injuries, fight order)
+
+# -- BuildFightHandler --
+# TODO: test that adding a creature works
+# TODO: test that deleting a creature works
+# TODO: test that you can add to the PCs
+# TODO: test that you can add to a monster group
+# TODO: test that you can create a new monster group
+# TODO: make sure that the templates work as expected (try a blank one, try
+#       two others with two different data sets)
+
+# -- OutfitCharactersHandler --
+# TODO: test that adding something actually adds the right thing and that it's
+#       permenant
+# TODO: test that removing something works
+
 class MockFightGmWindow(object):
     def __init__(self, ruleset):
         pass
@@ -50,48 +92,6 @@ class MockWindowManager(object):
     def get_fight_gm_window(self, ruleset):
         return MockFightGmWindow(ruleset)
 
-# Do these first because it seems like an easy way to get the menu mock
-# working.  The timer stuff requires an action via a menu so that'll be a
-# little more work.
-
-# TODO: test brass knuckles and sap in test_get_unarmed_info
-# TODO: need to add opponent & opponent's posture to get_hand_to_hand_info and
-#       get_to_hit tests.
-# TODO: test that aiming may be disrupted (if will roll is not made) when
-#       aimer is injured.
-# TODO: test that pick opponent gives you all of the other side and none of
-#       the current side
-# TODO: test that pick opponent actually selects the opponent that you want
-# TODO: test that a non-engaged opponent asks for a two-way and that an
-#       engaged one does not
-
-# TODO: test that a timer works
-# TODO: test that a 0.9 timer works as expected
-# TODO: test that looting bodies works:
-#           * moving something from one body to another works properly
-#           * only loot unconscious and dead monsters
-# TODO: test that notes are saved properly
-# TODO: test that quitting a fight offers to loot and save when appropriate
-#       and not when not:
-#       (4 tests: loot, save; loot, no save; no loot, save; no loot, no save)
-
-# TODO: test that saving a fight and starting up again doesn't change the
-#       fight (pending actions, injuries, fight order)
-
-# -- BuildFightHandler --
-# TODO: test that adding a creature works
-# TODO: test that deleting a creature works
-# TODO: test that you can add to the PCs
-# TODO: test that you can add to a monster group
-# TODO: test that you can create a new monster group
-# TODO: make sure that the templates work as expected (try a blank one, try
-#       two others with two different data sets)
-
-# -- OutfitCharactersHandler --
-# TODO: test that adding something actually adds the right thing and that it's
-#       permenant
-# TODO: test that removing something works
-
 class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
     def setUp(self):
         # 'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
@@ -106,24 +106,18 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
-                       {"name": "pistol, Colt 170D",
-                        "type": "ranged weapon",
-                        "damage": {"dice": "1d+4"},
-                        "acc": self.__colt_pistol_acc,
-                        "ammo": {"name": "C Cell",
-                                 "shots_left": 9,
-                                 "shots": 9},
-                        "reload": 3,
-                        "skill": "guns (pistol)",
-                        "count": 1,
-                        "notes": ""
-                       },
-                       {"name": "C Cell",
-                        "type": "misc",
-                        "count": 5,
-                        "notes": ""
-                       }
-                      ],
+                 {"name": "pistol, Colt 170D",
+                  "type": "ranged weapon",
+                  "damage": {"dice": "1d+4"},
+                  "acc": self.__colt_pistol_acc,
+                  "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
+                  "reload": 3,
+                  "skill": "guns (pistol)",
+                  "count": 1,
+                  "notes": ""
+                 },
+                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "" }
+            ],
             "skills": {"guns (pistol)":
                                     self.__vodou_priest_fighter_pistol_skill,
                        "brawling": 12},
@@ -152,26 +146,19 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
-                       {"name": "pistol, Colt 170D",
-                        "type": "ranged weapon",
-                        "damage": {"dice": "1d+4"},
-                        "acc": 3,
-                        "ammo": {"name": "C Cell",
-                                 "shots_left": 9,
-                                 "shots": 9},
-                        "reload": 3,
-                        "skill": "guns (pistol)",
-                        "count": 1,
-                        "notes": ""
-                       },
-                       {"name": "C Cell",
-                        "type": "misc",
-                        "count": 5,
-                        "notes": ""
-                       }
-                      ],
-            "skills": {"guns (pistol)": 15,
-                       "brawling": 12},
+                 {"name": "pistol, Colt 170D",
+                  "type": "ranged weapon",
+                  "damage": {"dice": "1d+4"},
+                  "acc": 3,
+                  "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
+                  "reload": 3,
+                  "skill": "guns (pistol)",
+                  "count": 1,
+                  "notes": ""
+                 },
+                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "" }
+            ],
+            "skills": {"guns (pistol)": 15, "brawling": 12},
             "advantages": {"combat reflexes": 15},
             "state" : "alive",
             "posture" : "standing",
@@ -193,26 +180,19 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
-                       {"name": "pistol, Kalashnikov Makarov",
-                        "type": "ranged weapon",
-                        "damage": {"dice": "1d+3"},
-                        "acc": 2,
-                        "ammo": {"name": "C Cell",
-                                 "shots_left": 8,
-                                 "shots": 8},
-                        "reload": 3,
-                        "skill": "guns (pistol)",
-                        "count": 1,
-                        "notes": ""
-                       },
-                       {"name": "C Cell",
-                        "type": "misc",
-                        "count": 5,
-                        "notes": ""
-                       }
-                      ],
-            "skills": {"guns (pistol)": 13,
-                       "brawling": 12},
+                 {"name": "pistol, Kalashnikov Makarov",
+                  "type": "ranged weapon",
+                  "damage": {"dice": "1d+3"},
+                  "acc": 2,
+                  "ammo": {"name": "C Cell", "shots_left": 8, "shots": 8},
+                  "reload": 3,
+                  "skill": "guns (pistol)",
+                  "count": 1,
+                  "notes": ""
+                 },
+                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "" }
+            ],
+            "skills": {"guns (pistol)": 13, "brawling": 12},
             "advantages": {"combat reflexes": 15},
             "state" : "alive",
             "posture" : "standing",
@@ -234,34 +214,26 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
-                       {"name": "pistol, Sig D65",
-                        "type": "ranged weapon",
-                        "damage": {"dice": "1d+4"},
-                        "acc": 4,
-                        "ammo": {"name": "C Cell",
-                                 "shots_left": 9,
-                                 "shots": 9},
-                        "reload": 3,
-                        "skill": "guns (pistol)",
-                        "count": 1,
-                        "notes": ""
-                       },
-                       {"name": "sick stick",
-                        "type": "melee weapon",
-                        "damage": {"dice": "1d+1 fat"},
-                        "skill": "axe/mace",
-                        "count": 1,
-                        "notes": ""
-                       },
-                       {"name": "C Cell",
-                        "type": "misc",
-                        "count": 5,
-                        "notes": ""
-                       }
-                      ],
-            "skills": {"guns (pistol)": 16,
-                       "brawling": 16,
-                       "axe/mace": 14},
+                 {"name": "pistol, Sig D65",
+                  "type": "ranged weapon",
+                  "damage": {"dice": "1d+4"},
+                  "acc": 4,
+                  "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
+                  "reload": 3,
+                  "skill": "guns (pistol)",
+                  "count": 1,
+                  "notes": ""
+                 },
+                 {"name": "sick stick",
+                  "type": "melee weapon",
+                  "damage": {"dice": "1d+1 fat"},
+                  "skill": "axe/mace",
+                  "count": 1,
+                  "notes": ""
+                 },
+                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "" }
+            ],
+            "skills": {"guns (pistol)": 16, "brawling": 16, "axe/mace": 14},
             "advantages": {"combat reflexes": 15},
             "state" : "alive",
             "posture" : "standing",
@@ -286,33 +258,26 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
-                       {"name": "pistol, Baretta DX 192",
-                        "type": "ranged weapon",
-                        "damage": {"dice": "1d+4"},
-                        "acc": 2,
-                        "ammo": {"name": "C Cell",
-                                 "shots_left": 8,
-                                 "shots": 8},
-                        "reload": 3,
-                        "skill": "guns (pistol)",
-                        "count": 1,
-                        "notes": ""
-                       },
-                       {"name": "knife, large",
-                        "type": "melee weapon",
-                        "damage": {"dice": "1d-2",
-                                   "type": "imp"},
-                        "skill": "knife",
-                        "parry": -1,
-                        "count": 1,
-                        "notes": ""
-                       },
-                       {"name": "C Cell",
-                        "type": "misc",
-                        "count": 5,
-                        "notes": ""
-                       }
-                      ],
+                 {"name": "pistol, Baretta DX 192",
+                  "type": "ranged weapon",
+                  "damage": {"dice": "1d+4"},
+                  "acc": 2,
+                  "ammo": {"name": "C Cell", "shots_left": 8, "shots": 8},
+                  "reload": 3,
+                  "skill": "guns (pistol)",
+                  "count": 1,
+                  "notes": ""
+                 },
+                 {"name": "knife, large",
+                  "type": "melee weapon",
+                  "damage": {"dice": "1d-2", "type": "imp"},
+                  "skill": "knife",
+                  "parry": -1,
+                  "count": 1,
+                  "notes": ""
+                 },
+                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "" }
+            ],
             "skills": {"guns (pistol)": 12,
                        "brawling": 14,
                        "knife": self.__thief_knife_skill},
@@ -506,7 +471,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
     def test_get_unarmed_info(self):
         # Vodou Priest
-        #PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
+        PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
         unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
         vodou_priest_fighter = gm.Fighter(
                                     'Vodou Priest',
@@ -586,6 +551,51 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
         assert hand_to_hand_info['parry_skill'] == (10
                                                 + self.__crawling_defense_mod)
+
+        # --- Opponents ---
+        # TODO: opponents for melee and ranged attacks, too
+
+        #tank_fighter.details['opponent'] = {'group': thief_fighter.group,
+        #                                    'name': thief_fighter.name}
+        self.__ruleset.change_posture({'fighter': thief_fighter,
+                                       'posture': 'standing'})
+
+        # Picking opponent doesn't change things
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
+                                                            thief_fighter,
+                                                            None,
+                                                            unarmed_skills)
+        assert hand_to_hand_info['punch_skill'] == 16
+        assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
+        assert hand_to_hand_info['kick_skill'] == 14
+        assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
+        assert hand_to_hand_info['parry_skill'] == 12
+
+        # change posture of thief
+        self.__ruleset.change_posture({'fighter': thief_fighter,
+                                       'posture': 'crawling'}) # -2
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
+                                                            thief_fighter,
+                                                            None,
+                                                            unarmed_skills)
+        assert hand_to_hand_info['punch_skill'] == (16 - 2)
+        assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
+        assert hand_to_hand_info['kick_skill'] == (14 - 2)
+        assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
+        assert hand_to_hand_info['parry_skill'] == 12 # no change to parry
+
+        # change posture of thief (back to standing)
+        self.__ruleset.change_posture({'fighter': thief_fighter,
+                                       'posture': 'standing'})
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
+                                                            thief_fighter,
+                                                            None,
+                                                            unarmed_skills)
+        assert hand_to_hand_info['punch_skill'] == 16
+        assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
+        assert hand_to_hand_info['kick_skill'] == 14
+        assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
+        assert hand_to_hand_info['parry_skill'] == 12
 
 
     def test_initiative_order(self):
@@ -1141,6 +1151,7 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
     def test_melee_to_hit(self):
+        # TODO: show that aiming does not help
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
 
