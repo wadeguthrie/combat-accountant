@@ -1076,23 +1076,21 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # no further benefit
 
-        # no aim, posture
+        # no aim, posture (posture doesn't matter for ranged attacks: B551)
 
-        expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
-                                                + self.__crawling_attack_mod)
+        expected_to_hit = self.__vodou_priest_fighter_pistol_skill
         self.__ruleset.change_posture({'fighter': vodou_priest,
                                        'posture': 'crawling'})
         vodou_priest.reset_aim()
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
-        # aim / braced, posture
+        # aim / braced, posture (posture not counted for ranged attacks: B551)
 
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
                                                 + self.__colt_pistol_acc # aim
-                                                +1 # braced
-                                                + self.__crawling_attack_mod)
+                                                +1) # braced
         self.__ruleset.change_posture({'fighter': vodou_priest,
                                        'posture': 'crawling'})
         vodou_priest.do_aim(braced=True)
@@ -1115,15 +1113,14 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit + 2 # no further benefit
 
 
-        # aim / not braced, posture
+        # aim / not braced, posture (no posture minus for ranged attacks: B551)
 
         vodou_priest.reset_aim()
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
 
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
-            + self.__colt_pistol_acc # aim
-            + self.__crawling_attack_mod)
+            + self.__colt_pistol_acc) # aim
         self.__ruleset.change_posture({'fighter': vodou_priest,
                                        'posture': 'crawling'})
         vodou_priest.do_aim(braced=False)
@@ -1146,9 +1143,6 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit + 2 # no further benefit
 
         # --- Opponents w/ posture ---
-        # TODO: there's no effect of attacker's posture on RANGED attacks
-        #       mention this (and B551) in the 'why' of ranged attacks when
-        #       the attacker has a non-standing posture
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
         vodou_priest.reset_aim()

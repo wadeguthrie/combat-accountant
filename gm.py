@@ -11,6 +11,8 @@ import pprint
 import random
 import sys
 
+# TODO: make sure that changing weapons discards an ongoing aim
+
 # TODO:
 #   - should warn when trying to do a second action (take note of fastdraw)
 #   - should only be able to ready an unready weapon.
@@ -2700,9 +2702,14 @@ class GurpsRuleset(Ruleset):
 
         posture_mods = self.get_posture_mods(fighter.details['posture'])
         if posture_mods is not None and posture_mods['attack'] != 0:
-            why.append('  %+d due %s posture' % (posture_mods['attack'],
-                                                 fighter.details['posture']))
-            skill += posture_mods['attack']
+            if weapon['type'] == 'melee weapon':
+                why.append('  %+d due %s posture' % (
+                        posture_mods['attack'], fighter.details['posture']))
+                skill += posture_mods['attack']
+            else:
+                why.append('  NOTE: %s posture doesn\'t matter for ranged' % 
+                                                    fighter.details['posture'])
+                why.append('    attacks (B551).')
 
         # Opponent's posture
 
