@@ -1326,13 +1326,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # TODO: timers should get their own class separated from the Fighter
         #       class.
 
-        # Test a standard timer
-
-        timer_id = 0
         fighter = gm.Fighter('Tank',
                              'group',
                              copy.deepcopy(self.__tank_fighter),
                              self.__ruleset)
+
+        # Test a standard timer
+
+        timer_id = 0
         round_count = 3
         timer_text = '%d' % timer_id
         fighter.add_timer(round_count, timer_text)
@@ -1348,7 +1349,48 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fighter.remove_expired_kill_dying_timers()
         assert len(fighter.details['timers']) == 0
 
-        # TODO: Test 3 timers simultaneously
+        # Test 3 timers simultaneously
+
+        timer_id = 0
+        round_count = [1, 2, 3]
+        timer_count = 3
+
+        for i in range(timer_count):
+            timer_text = '%d' % timer_id
+            timer_id += 1
+            fighter.add_timer(round_count[i], timer_text)
+
+        # round 0
+        fighter.remove_expired_kill_dying_timers()
+        fighter.decrement_timers()
+        assert len(fighter.details['timers']) == 3
+        expected = ['0', '1', '2']
+        for timer in fighter.details['timers']:
+            assert timer['string'] in expected
+            expected.remove(timer['string'])
+
+        # round 1
+        fighter.remove_expired_kill_dying_timers()
+        fighter.decrement_timers()
+        assert len(fighter.details['timers']) == 2
+        expected = ['1', '2']
+        for timer in fighter.details['timers']:
+            assert timer['string'] in expected
+            expected.remove(timer['string'])
+
+        # round 2
+        fighter.remove_expired_kill_dying_timers()
+        fighter.decrement_timers()
+        assert len(fighter.details['timers']) == 1
+        expected = ['2']
+        for timer in fighter.details['timers']:
+            assert timer['string'] in expected
+            expected.remove(timer['string'])
+
+        fighter.remove_expired_kill_dying_timers()
+        assert len(fighter.details['timers']) == 0
+
+
         # TODO: Test a 0.9 timer
 
 
