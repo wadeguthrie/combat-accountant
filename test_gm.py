@@ -6,28 +6,29 @@ import pprint
 import random
 import unittest
 
-# Do these first because it seems like an easy way to get the menu mock
-# working.  The timer stuff requires an action via a menu so that'll be a
-# little more work.
+# Combat
+# TODO: test that aiming may be disrupted (if will roll is not made) when
+#       aimer is injured.
 
+# Opponents
 # TODO: test that pick opponent gives you all of the other side and none of
 #       the current side
 # TODO: test that pick opponent actually selects the opponent that you want
 # TODO: test that a non-engaged opponent asks for a two-way and that an
 #       engaged one does not
 
-# TODO: test that a timer works
-# TODO: test that a 0.9 timer works as expected
+# Looting bodies
 # TODO: test that looting bodies works:
 #           * moving something from one body to another works properly
 #           * only loot unconscious and dead monsters
-# TODO: test that notes are saved properly
 # TODO: test that quitting a fight offers to loot and save when appropriate
 #       and not when not:
 #       (4 tests: loot, save; loot, no save; no loot, save; no loot, no save)
-# TODO: test that aiming may be disrupted (if will roll is not made) when
-#       aimer is injured.
 
+# Notes
+# TODO: test that notes are saved properly
+
+# Save a fight
 # TODO: test that saving a fight and starting up again doesn't change the
 #       fight (pending actions, injuries, fight order)
 
@@ -44,6 +45,10 @@ import unittest
 # TODO: test that adding something actually adds the right thing and that it's
 #       permenant
 # TODO: test that removing something works
+
+# Do these first because it seems like an easy way to get the menu mock
+# working.  The timer stuff requires an action via a menu so that'll be a
+# little more work.
 
 class MockFightGmWindow(object):
     def __init__(self, ruleset):
@@ -89,7 +94,7 @@ class MockWindowManager(object):
     def get_fight_gm_window(self, ruleset):
         return MockFightGmWindow(ruleset)
 
-class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
+class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
     def setUp(self):
         # 'crawling':  {'attack': -4, 'defense': -3, 'target': -2},
         self.__crawling_attack_mod = -4
@@ -1293,6 +1298,59 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
         assert to_hit == expected_to_hit
 
+    def test_timers(self):
+        # TODO: test that a timer works
+        # TODO: test that a 0.9 timer works as expected
+        '''
+        timer_id = 0
+        fighter = gm.Fighter('Tank',
+                             'group',
+                             copy.deepcopy(self.__tank_fighter),
+                             self.__ruleset)
+        fighter.add_timer(1, #rounds,
+                          '%d' % timer_id #text
+                         )
+
+        # end_turn -- called on previous fighter
+        figher.remove_expired_kill_dying_timers()
+
+        # start_turn
+        figher.decrement_timers()
+        figher.remove_expired_keep_dying_timers()
+
+        # Next Fighter
+        prev_fighter.end_turn()
+        current_fighter.start_turn()
+        '''
+
+        # TODO: timers should get their own class separated from the Fighter
+        #       class.
+
+        # Test a standard timer
+
+        timer_id = 0
+        fighter = gm.Fighter('Tank',
+                             'group',
+                             copy.deepcopy(self.__tank_fighter),
+                             self.__ruleset)
+        round_count = 3
+        timer_text = '%d' % timer_id
+        fighter.add_timer(round_count, timer_text)
+
+        for i in range(round_count):
+            assert len(fighter.details['timers']) == 1
+            assert fighter.details['timers'][0]['string'] == timer_text
+            # At the _end_ of a fighter's turn, we remove all his expired
+            # timers.  That causes the timer expiring this round to be shown.
+            fighter.remove_expired_kill_dying_timers()
+            fighter.decrement_timers()
+
+        fighter.remove_expired_kill_dying_timers()
+        assert len(fighter.details['timers']) == 0
+
+        # TODO: Test 3 timers simultaneously
+        # TODO: Test a 0.9 timer
+
 
     #def test_random_seed(self):
     #    for i in range(10):
@@ -1378,7 +1436,6 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 return False
             else:
                 return True
-
 
 
 if __name__ == '__main__':
