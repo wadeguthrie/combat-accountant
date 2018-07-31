@@ -321,6 +321,14 @@ class GmWindow(object):
     def touchwin(self):
         self._window.touchwin()
 
+    def uses_whole_screen(self):
+        lines, cols = self.getmaxyx()
+        if lines < curses.LINES or cols < curses.COLS:
+            return False
+        # No need to check top and left since there'd be an error if they were
+        # non-zero given the height and width of the window.
+        return True
+
 
 class MainGmWindow(GmWindow):
     def __init__(self, window_manager):
@@ -1156,11 +1164,20 @@ class GmWindowManager(object):
         '''
         Touches and refreshes all of the windows, from back to front
         '''
-        for window in self.__window_stack:
-            window.touchwin()
+        # First, find the top-most window that is a whole-screen window --
+        # only touch and refresh from there, above.  Look from bottom up since
+        # the stack should not be too deep.  Slightly faster would be to look
+        # from the top down.
+        top_index = 0
+        for index, window in enumerate(self.__window_stack):
+            if window.uses_whole_screen():
+                top_index = index
 
-        for window in self.__window_stack:
-            window.refresh()
+        for i in range(top_index, len(self.__window_stack)):
+            self.__window_stack[i].touchwin()
+
+        for i in range(top_index, len(self.__window_stack)):
+            self.__window_stack[i].refresh()
 
 
     def input_box(self,

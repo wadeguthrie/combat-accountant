@@ -6,6 +6,10 @@ import pprint
 import random
 import unittest
 
+# Save a fight
+# TODO: test that saving a fight and starting up again doesn't change the
+#       fight (pending actions, injuries, fight order)
+
 # Opponents
 # TODO: test that pick opponent gives you all of the other side and none of
 #       the current side
@@ -24,10 +28,6 @@ import unittest
 # Notes
 # TODO: test that notes are saved properly
 
-# Save a fight
-# TODO: test that saving a fight and starting up again doesn't change the
-#       fight (pending actions, injuries, fight order)
-
 # -- BuildFightHandler --
 # TODO: test that adding a creature works
 # TODO: test that deleting a creature works
@@ -42,9 +42,6 @@ import unittest
 #       permenant
 # TODO: test that removing something works
 
-# Do these first because it seems like an easy way to get the menu mock
-# working.  The timer stuff requires an action via a menu so that'll be a
-# little more work.
 
 class MockFightGmWindow(object):
     def __init__(self, ruleset):
