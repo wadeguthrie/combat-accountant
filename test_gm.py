@@ -6,10 +6,6 @@ import pprint
 import random
 import unittest
 
-# Combat
-# TODO: test that aiming may be disrupted (if will roll is not made) when
-#       aimer is injured.
-
 # Opponents
 # TODO: test that pick opponent gives you all of the other side and none of
 #       the current side
@@ -80,15 +76,10 @@ class MockWindowManager(object):
         if title not in self.__menu_responses:
             print '** didn\'t find menu title "%s" in stored responses'
             assert False
-        if len(self.__menu_responses['title']) == 0:
+        if len(self.__menu_responses[title]) == 0:
             print '** responses["%s"] is empty, can\'t respond'
             assert False
-        selection = self.__menu_responses['title'].pop()
-        for string, result in strings_results:
-            if string == selection:
-                return result
-        print '** selection "%s" not found in menu "%s"' % (selection, title)
-        assert False
+        return self.__menu_responses[title].pop()
         
 
     def get_fight_gm_window(self, ruleset):
@@ -1220,6 +1211,176 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__ruleset.change_posture({'fighter': tank,
                                        'posture': 'standing'})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon)
+        assert to_hit == expected_to_hit
+
+
+    def test_messed_up_aim(self):
+        self.__window_manager = MockWindowManager()
+        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+
+        vodou_priest = gm.Fighter('Priest',
+                                  'group',
+                                  copy.deepcopy(self.__vodou_priest_fighter),
+                                  self.__ruleset)
+        requested_weapon_index = 0
+        vodou_priest.draw_weapon_by_index(requested_weapon_index)
+        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        assert actual_weapon_index == requested_weapon_index
+
+        # Regular, no aim - for a baseline
+
+        expected_to_hit = self.__vodou_priest_fighter_pistol_skill
+        vodou_priest.reset_aim()
+        self.__ruleset.change_posture({'fighter': vodou_priest,
+                                       'posture': 'standing'})
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit
+
+        # Damage _would_ ruin aim except for successful Will roll
+
+        vodou_priest.reset_aim()
+
+        # 1 round
+        expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
+            + self.__colt_pistol_acc
+            + 1) # braced
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit
+
+        # 2 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
+
+        # adjust_hp but MADE Will roll
+        damage = -1
+        self.__window_manager.set_menu_response('WILL roll or lose aim', True)
+        self.__ruleset.adjust_hp(vodou_priest, damage)
+
+        # 3 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        # aiming for 3 rounds + shock
+        assert to_hit == expected_to_hit + 2 + damage
+
+        self.__ruleset.end_turn(vodou_priest) # to clear out shock
+
+        # Damage ruins aim -- miss will roll
+
+        #PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
+        vodou_priest.reset_aim()
+
+        # 1 round
+        expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
+            + self.__colt_pistol_acc
+            + 1) # braced
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit
+
+        # 2 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
+
+        # adjust_hp and MISSES Will roll
+        self.__window_manager.set_menu_response('WILL roll or lose aim', False)
+        damage = -1
+        self.__ruleset.adjust_hp(vodou_priest, damage)
+
+        # 3 rounds (well, 1 round)
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit + damage # aiming for 1 round + shock
+
+        self.__ruleset.end_turn(vodou_priest) # to clear out shock
+
+        # Draw weapon ruins aim
+
+        vodou_priest.reset_aim()
+
+        # 1 round
+        expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
+            + self.__colt_pistol_acc
+            + 1) # braced
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit
+
+        # 2 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
+
+        # Draw weapon
+        self.__ruleset.draw_weapon({'fighter': vodou_priest,
+                                    'weapon':  requested_weapon_index})
+
+        # 3 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit # aiming for 1 round
+
+        # Posture ruins aim
+
+        # 1 round
+        expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
+            + self.__colt_pistol_acc
+            + 1) # braced
+        vodou_priest.reset_aim()
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit
+
+        # 2 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
+
+        # Change posture
+        self.__ruleset.change_posture({'fighter': vodou_priest,
+                                       'posture': 'lying'})
+
+        # 3 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit # aiming for 1 round
+
+        # Defense ruins aim
+
+        vodou_priest.reset_aim()
+        self.__ruleset.change_posture({'fighter': vodou_priest,
+                                       'posture': 'standing'})
+
+        # 1 round
+        expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
+            + self.__colt_pistol_acc
+            + 1) # braced
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit
+
+        # 2 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
+
+        # Defend
+        self.__ruleset.do_defense(vodou_priest)
+
+        # 3 rounds
+        vodou_priest.do_aim(braced=True)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit # aiming for 3 rounds
+
+        # Last One is Regular - shows nothing carries over
+
+        expected_to_hit = self.__vodou_priest_fighter_pistol_skill
+        vodou_priest.reset_aim()
+        self.__ruleset.change_posture({'fighter': vodou_priest,
+                                       'posture': 'standing'})
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
 

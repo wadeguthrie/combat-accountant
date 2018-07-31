@@ -18,6 +18,9 @@ import sys
 #   - Warning if window is smaller than expected
 #   - Add 2 weapon (or weapon & shield)
 #
+# TODO: when touching/refreshing windows, look from top-down until you find a
+#       whole-screen window -- touch/refresh up from there
+#
 # TODO: More tests!
 #
 # TODO (eventually):
@@ -1426,8 +1429,9 @@ class Fighter(object):
                                     # list.  'None' removes current weapon.
                             ):
         '''Draws or removes weapon from sheath or holster.'''
+        # NOTE: call this from the ruleset if you want the ruleset to do its
+        # due dilligence (i.e., stop the aim).
         self.details['weapon-index'] = index
-        self.reset_aim()  # TODO (move to ruleset)
 
 
     def end_turn(self):
@@ -1791,7 +1795,7 @@ class GurpsRuleset(Ruleset):
                                         {'text': [('draw %s' % item['name']),
                                                   ' Defense: any',
                                                   ' Move: step'],
-                                         'doit': self.__draw_weapon,
+                                         'doit': self.draw_weapon,
                                          'param': {'weapon': index,
                                                    'fighter': fighter}}))
 
@@ -1908,7 +1912,7 @@ class GurpsRuleset(Ruleset):
                  {'text': ['Ready (draw, etc.)',
                            ' Defense: any',
                            ' Move: step'],
-                  'doit': self.__draw_weapon,
+                  'doit': self.draw_weapon,
                   'param': {'weapon': draw_weapon_menu[0][1]['param']['weapon'],
                             'fighter': fighter}}))
 
@@ -1937,7 +1941,7 @@ class GurpsRuleset(Ruleset):
                                    {'text': [('Unready %s' % weapon['name']),
                                              ' Defense: any',
                                              ' Move: step'],
-                                    'doit': self.__draw_weapon,
+                                    'doit': self.draw_weapon,
                                     'param': {'weapon': None,
                                               'fighter': fighter}}))
 
@@ -2817,9 +2821,9 @@ class GurpsRuleset(Ruleset):
 
         return
 
-    def __draw_weapon(self,
-                      param # dict: {'weapon': index, 'fighter': Fighter obj}
-                     ):
+    def draw_weapon(self,
+                    param # dict: {'weapon': index, 'fighter': Fighter obj}
+                   ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
