@@ -10,7 +10,6 @@ import unittest
 # working.  The timer stuff requires an action via a menu so that'll be a
 # little more work.
 
-# TODO: test brass knuckles and sap in test_get_unarmed_info
 # TODO: test that pick opponent gives you all of the other side and none of
 #       the current side
 # TODO: test that pick opponent actually selects the opponent that you want
@@ -273,6 +272,14 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "parry": -1,
                   "count": 1,
                   "notes": ""
+                 },
+                 {"count": 1, 
+                  "name": "brass knuckles", 
+                  "notes": "B271", 
+                  "damage": { "thr": {"plus": 0, "type": "cr"} }, 
+                  "parry": 0, 
+                  "skill": "karate", 
+                  "type": "melee weapon"
                  },
                  {"name": "C Cell", "type": "misc", "count": 5, "notes": "" }
             ],
@@ -549,6 +556,44 @@ class EventTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
         assert hand_to_hand_info['parry_skill'] == (10
                                                 + self.__crawling_defense_mod)
+
+        # Thief w/o brass knuckles
+        thief_fighter = gm.Fighter('Thief',
+                                   'group',
+                                   copy.deepcopy(self.__thief_fighter),
+                                   self.__ruleset)
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
+        assert hand_to_hand_info['punch_skill'] == 14
+        assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
+        assert hand_to_hand_info['kick_skill'] == 12
+        assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
+        assert hand_to_hand_info['parry_skill'] == 10
+
+        # w/brass knuckles -- Note: that the punch damage is +1
+        ignore, weapon = thief_fighter.get_weapon_by_name('brass knuckles')
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
+                                                            None,
+                                                            weapon,
+                                                            unarmed_skills)
+        assert hand_to_hand_info['punch_skill'] == 14
+        assert hand_to_hand_info['punch_damage'] == 'thr: 1d-1 (cr=x1.0)'
+        assert hand_to_hand_info['kick_skill'] == 12
+        assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
+        assert hand_to_hand_info['parry_skill'] == 10
+
+        # back to unarmed
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
+        assert hand_to_hand_info['punch_skill'] == 14
+        assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
+        assert hand_to_hand_info['kick_skill'] == 12
+        assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
+        assert hand_to_hand_info['parry_skill'] == 10
 
         # --- Opponents w/ posture ---
 
