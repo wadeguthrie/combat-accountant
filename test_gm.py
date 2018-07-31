@@ -1299,30 +1299,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit
 
     def test_timers(self):
-        # TODO: test that a timer works
-        # TODO: test that a 0.9 timer works as expected
-        '''
-        timer_id = 0
-        fighter = gm.Fighter('Tank',
-                             'group',
-                             copy.deepcopy(self.__tank_fighter),
-                             self.__ruleset)
-        fighter.add_timer(1, #rounds,
-                          '%d' % timer_id #text
-                         )
-
-        # end_turn -- called on previous fighter
-        figher.remove_expired_kill_dying_timers()
-
-        # start_turn
-        figher.decrement_timers()
-        figher.remove_expired_keep_dying_timers()
-
-        # Next Fighter
-        prev_fighter.end_turn()
-        current_fighter.start_turn()
-        '''
-
         # TODO: timers should get their own class separated from the Fighter
         #       class.
 
@@ -1391,8 +1367,54 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert len(fighter.details['timers']) == 0
 
 
-        # TODO: Test a 0.9 timer
+        # Test a 0.9 timer.  The 0.9 round timer is supposed to show during
+        # the current round but not the beginning of the next round.  The
+        # normal way this works is:
+        #   - start turn
+        #   - set 0.9 timer (shows through the end of this round)
+        #   - end turn # kills regular timers that showed this turn
+        #   - start turn # kills 0.9 timer before stuff is shown this turn
 
+        # add 1 turn timer -- a regular timer are show through the next turn
+        timer_id = 0
+        round_count = 1
+        timer0_text = '%d' % timer_id
+        fighter.add_timer(round_count, timer0_text)
+
+        # start turn -- decrement 1-turn timer, timer = 0, keep it this turn
+        fighter.decrement_timers()
+        fighter.remove_expired_keep_dying_timers()
+
+        # assert 1 timer -- didn't kill the 1-turn timer
+        assert len(fighter.details['timers']) == 1
+        assert fighter.details['timers'][0]['string'] == timer0_text
+
+        # add 0.9 timer -- shown through this turn, killed before next turn
+        timer_id = 1
+        round_count = 0.9
+        timer1_text = '%d' % timer_id
+        fighter.add_timer(round_count, timer1_text)
+
+        # assert 2 timers -- right: both timers are there
+        assert len(fighter.details['timers']) == 2
+        expected = ['0', '1']
+        for timer in fighter.details['timers']:
+            assert timer['string'] in expected
+            expected.remove(timer['string'])
+
+        # end turn -- kills 1 turn timer
+        fighter.remove_expired_kill_dying_timers()
+
+        # assert 1 timer -- show that the 1-turn timer was killed
+        assert len(fighter.details['timers']) == 1
+        assert fighter.details['timers'][0]['string'] == timer1_text
+
+        # start turn - kills 0.9 timer before the next turn's stuff is shown
+        fighter.decrement_timers()
+        fighter.remove_expired_keep_dying_timers()
+
+        # assert 0 timers -- yup, 0.9 timer is now gone
+        assert len(fighter.details['timers']) == 0
 
     #def test_random_seed(self):
     #    for i in range(10):
