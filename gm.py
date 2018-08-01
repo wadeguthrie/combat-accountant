@@ -398,9 +398,9 @@ class MainGmWindow(GmWindow):
             self.refresh()
             return
 
-        line = 0
-
         # TODO (move to ruleset): the headings are ruleset specific
+
+        del self.__char_detail[:]
 
         # attributes
 
@@ -409,7 +409,7 @@ class MainGmWindow(GmWindow):
                                    'mode': mode | curses.A_BOLD})
         found_one = False
         damaged = False
-        pieces = ['  ']
+        pieces = [' ']
         for item_key in character['permanent'].iterkeys():
             found_one = True
             text = '%s:%d/%d' % (item_key,
@@ -1423,6 +1423,13 @@ class GmScrollableWindow(object):
     def scroll_down(self, line_cnt=None):
         if line_cnt is None:
             line_cnt = self.__default_scroll_lines
+        win_line_cnt, win_col_cnt = self.__window.getmaxyx()
+
+        # If we're at the end of the page and we're scrolling down, don't
+        # bother.
+        if len(self.__lines) - self.top_line < win_line_cnt:
+            return
+
         self.top_line += line_cnt
         if self.top_line > len(self.__lines):
             win_line_cnt, win_col_cnt = self.__window.getmaxyx()
@@ -4226,10 +4233,10 @@ class MainHandler(ScreenHandler):
         self._add_to_choice_dict({
             curses.KEY_UP:
                       {'name': 'previous character',  'func':
-                                                            self.__previous},
+                                                            self.__prev_char},
             curses.KEY_DOWN:
                       {'name': 'next character',      'func':
-                                                            self.__next},
+                                                            self.__next_char},
             curses.KEY_NPAGE:
                       {'name': 'char details pgdown', 'func':
                                                             self.__next_page},
@@ -4354,7 +4361,7 @@ class MainHandler(ScreenHandler):
                                            type_name, gender_name), result)
         return True
 
-    def __next(self):
+    def __next_char(self):
         if self.__char_index is None:
             self.__char_index = 0
         else:
@@ -4368,7 +4375,7 @@ class MainHandler(ScreenHandler):
         self._window.scroll_char_detail_down()
         return True
 
-    def __previous(self):
+    def __prev_char(self):
         if self.__char_index is None:
             self.__char_index = len(self.__char_names) - 1
         else:
@@ -4379,7 +4386,7 @@ class MainHandler(ScreenHandler):
         return True
 
     def __prev_page(self):
-        self._window.scroll_char_detail_down()
+        self._window.scroll_char_detail_up()
         return True
 
 
