@@ -1223,15 +1223,16 @@ class GmWindowManager(object):
                 width = len(string)
         width += 1 # Seems to need one more space (or Curses freaks out)
 
-        border_win, menu_win = self.__centered_boxed_window(height, width,
-                                                            title)
-
+        data_for_scrolling = []
+        for entry in strings_results:
+            data_for_scrolling.append({'text': entry[0],
+                                       'mode': curses.A_NORMAL})
         index = 0 if starting_index >= len(strings_results) else starting_index
-        for line, string_result in enumerate(strings_results):
-            # Maybe use A_BOLD instead of A_STANDOUT -- could also use
-            # curses.color_pair(1) or whatever
-            mode = curses.A_STANDOUT if line == index else curses.A_NORMAL
-            menu_win.addstr(line, 0, string_result[0], mode)
+        data_for_scrolling[index]['mode'] = curses.A_STANDOUT
+        border_win, menu_win = self.__centered_boxed_window(
+                                        height, width,
+                                        title,
+                                        data_for_scrolling=data_for_scrolling)
         menu_win.refresh()
 
         keep_going = True
@@ -1244,7 +1245,14 @@ class GmWindowManager(object):
                 new_index -= 1
             elif user_input == curses.KEY_DOWN:
                 new_index += 1
-            # TODO: KEY_NPAGE, KEY_PPAGE
+            elif user_input == curses.KEY_NPAGE:
+                menu_win.scroll_down()
+                menu_win.draw_window()
+                menu_win.refresh()
+            elif user_input == curses.KEY_PPAGE:
+                menu_win.scroll_up()
+                menu_win.draw_window()
+                menu_win.refresh()
             elif user_input == ord('\n'):
                 del border_win
                 del menu_win
@@ -1278,14 +1286,12 @@ class GmWindowManager(object):
                 #                                            new_index,
                 #                                            index)
 
-                menu_win.addstr(old_index,
-                                0,
-                                strings_results[old_index][0],
-                                curses.A_NORMAL)
-                menu_win.addstr(index,
-                                0,
-                                strings_results[index][0],
-                                curses.A_STANDOUT)
+                data_for_scrolling[old_index]['mode'] = curses.A_NORMAL
+                data_for_scrolling[index]['mode'] = curses.A_STANDOUT
+
+                # TODO: deal with scrolling off the end of the page
+
+                menu_win.draw_window()
                 menu_win.refresh()
 
 
@@ -1351,7 +1357,8 @@ class GmWindowManager(object):
                                 height, # height of INSIDE window
                                 width, # width of INSIDE window
                                 title,
-                                mode=curses.A_NORMAL
+                                mode=curses.A_NORMAL,
+                                data_for_scrolling=None
                                ):
         '''
         Creates a temporary window, on top of the current one, that is
@@ -1373,8 +1380,18 @@ class GmWindowManager(object):
             border_win.addstr(0, title_start, title)
         border_win.refresh()
 
-        menu_win = curses.newwin(height, width, begin_y, begin_x)
-        menu_win.bkgd(' ', mode)
+        if data_for_scrolling is not None:
+            menu_win  = GmScrollableWindow(data_for_scrolling,
+                                           self,
+                                           height,
+                                           width,
+                                           begin_y,
+                                           begin_x)
+            #menu_win.bkgd(' ', mode)
+
+        else:
+            menu_win = curses.newwin(height, width, begin_y, begin_x)
+            menu_win.bkgd(' ', mode)
 
         return border_win, menu_win
 
