@@ -1247,12 +1247,13 @@ class GmWindowManager(object):
                 new_index += 1
             elif user_input == curses.KEY_NPAGE:
                 menu_win.scroll_down()
-                menu_win.draw_window()
-                menu_win.refresh()
+                showable = menu_win.get_showable_menu_lines()
+                if index < showable['top_line']:
+                    new_index = showable['top_line']
             elif user_input == curses.KEY_PPAGE:
                 menu_win.scroll_up()
-                menu_win.draw_window()
-                menu_win.refresh()
+                if index > showable['bottom_line']:
+                    new_index = showable['bottom_line']
             elif user_input == ord('\n'):
                 del border_win
                 del menu_win
@@ -1289,7 +1290,14 @@ class GmWindowManager(object):
                 data_for_scrolling[old_index]['mode'] = curses.A_NORMAL
                 data_for_scrolling[index]['mode'] = curses.A_STANDOUT
 
-                # TODO: deal with scrolling off the end of the page
+                # NOTE: assumes we're only changing by one line at a time so
+                # we don't have to worry about scrolling more than once to get
+                # to the current index.
+                showable = menu_win.get_showable_menu_lines()
+                if index > showable['bottom_line']:
+                    menu_win.scroll_down()
+                elif index < showable['top_line']:
+                    menu_win.scroll_up()
 
                 menu_win.draw_window()
                 menu_win.refresh()
@@ -1434,6 +1442,11 @@ class GmScrollableWindow(object):
                                  self.__lines[i+self.top_line]['text'],
                                  self.__lines[i+self.top_line]['mode'])
 
+    def get_showable_menu_lines(self):
+        win_line_cnt, win_col_cnt = self.__window.getmaxyx()
+        return {'top_line': self.top_line,
+                'bottom_line': self.top_line + win_line_cnt}
+
     def refresh(self):
         self.__window.refresh()
 
@@ -1466,6 +1479,13 @@ class GmScrollableWindow(object):
         self.draw_window()
         # NOTE: refresh the window yourself.  That way, you can modify the
         # lines before the refresh happens.
+
+    def scroll_to_end(self):
+        win_line_cnt, win_col_cnt = self.__window.getmaxyx()
+
+        self.top_line = len(self.__lines) - win_line_cnt
+        if self.top_line < 0:
+            self.top_line = 0
 
     def touchwin(self):
         self.__window.touchwin()
@@ -3009,7 +3029,7 @@ class ScreenHandler(object):
         }
 
     def add_to_history(self, string):
-        self._saved_fight['history'].insert(0, string)
+        self._saved_fight['history'].append(string)
 
     def clear_history(self):
         self._saved_fight['history'] = []
@@ -4110,10 +4130,16 @@ class FightHandler(ScreenHandler):
 
         # It's not really a menu but the window for it works just fine
         pseudo_menu = []
-        for line in range(lines):
-            pseudo_menu.append((self._saved_fight['history'][line], 0))
-        ignore = self._window_manager.menu('Fight History (Newest On Top)',
-                                           pseudo_menu)
+        for line in self._saved_fight['history']:
+            pseudo_menu.append((line, 0))
+        
+        #for line in self._saved_fight['history']:
+        #    mode = (curses.A_STANDOUT if line.startswith('---')
+        #            else curses.A_NORMAL)
+        #    pseudo_menu.append({'text': line,
+        #                        'mode': mode})
+
+        ignore = self._window_manager.menu('Fight History', pseudo_menu)
         return True
 
     def __show_why(self):
