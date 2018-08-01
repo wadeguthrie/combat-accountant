@@ -21,8 +21,6 @@ import sys
 # TODO: when touching/refreshing windows, look from top-down until you find a
 #       whole-screen window -- touch/refresh up from there
 #
-# TODO: More tests!
-#
 # TODO (eventually):
 #   - On startup, check each of the characters
 #       o eventually, there needs to be a list of approved skills &
@@ -231,6 +229,10 @@ class GmWindow(object):
                 command_string = '<UP>'
             elif command == curses.KEY_DOWN:
                 command_string = '<DN>'
+            elif command == curses.KEY_PPAGE:
+                command_string = '<PGUP>'
+            elif command == curses.KEY_NPAGE:
+                command_string = '<PGDN>'
             else:
                 command_string = '%c' % chr(command)
 
@@ -339,6 +341,8 @@ class MainGmWindow(GmWindow):
                                            0)
 
         lines, cols = self._window.getmaxyx()
+        self.__char_detail = [] # [{'text', 'mode'}, ...]
+
         top_line = 1
         height = (lines                 # The whole window height, except...
             - top_line                  # ...a block at the top, and...
@@ -346,15 +350,17 @@ class MainGmWindow(GmWindow):
         
         width = (cols / 2) - 1 # -1 for margin
         self.__char_list_window = self._window_manager.new_native_window(
-                                                height,
-                                                width,
-                                                top_line,
-                                                1)
-        self.__char_detail_window  = self._window_manager.new_native_window(
-                                                height,
-                                                width,
-                                                top_line,
-                                                width+1)
+                                                 height,
+                                                 width,
+                                                 top_line,
+                                                 1)
+        self.__char_detail_window  = GmScrollableWindow(
+                                                 self.__char_detail,
+                                                 self._window_manager,
+                                                 height,
+                                                 width,
+                                                 top_line,
+                                                 width)
 
     def close(self):
         # Kill my subwindows, first
@@ -374,6 +380,16 @@ class MainGmWindow(GmWindow):
         if self.__char_detail_window is not None:
             self.__char_detail_window.refresh()
 
+    def scroll_char_detail_down(self):
+        self.__char_detail_window.scroll_down()
+        self.__char_detail_window.draw_window()
+        self.__char_detail_window.refresh()
+
+    def scroll_char_detail_up(self):
+        self.__char_detail_window.scroll_up()
+        self.__char_detail_window.draw_window()
+        self.__char_detail_window.refresh()
+
     def show_character_detail(self,
                               character # dict as found in the JSON
                              ):
@@ -389,90 +405,80 @@ class MainGmWindow(GmWindow):
         # attributes
 
         mode = curses.A_NORMAL 
-        self.__char_detail_window.addstr(line, 0,
-                                         'Attributes',
-                                         mode | curses.A_BOLD)
-        line += 1
+        self.__char_detail.append({'text': 'Attributes',
+                                   'mode': mode | curses.A_BOLD})
         found_one = False
-        column = 2 # indent by 2
+        damaged = False
+        pieces = ['  ']
         for item_key in character['permanent'].iterkeys():
             found_one = True
-            mode = (curses.A_NORMAL if character['current'][item_key] ==
-                                            character['permanent'][item_key]
-                     else curses.color_pair(GmWindowManager.YELLOW_BLACK))
             text = '%s:%d/%d' % (item_key,
                                  character['current'][item_key],
                                  character['permanent'][item_key])
-            self.__char_detail_window.addstr(line, column, '%s' % text, mode)
-            column += (len(text) + 1) # +1 for space between attribs
+            pieces.append(text)
 
-        if not found_one:
-            self.__char_detail_window.addstr(line, 0, '  (None)', mode)
-
-        line += 1
+        if found_one:
+            if damaged:
+                mode = curses.color_pair(GmWindowManager.YELLOW_BLACK)
+            self.__char_detail.append({'text': ' '.join(pieces),
+                                       'mode': mode})
+        else:
+            self.__char_detail.append({'text': '  (None)',
+                                       'mode': mode})
 
         # stuff
 
         mode = curses.A_NORMAL 
-        self.__char_detail_window.addstr(line, 0,
-                                         'Equipment',
-                                         mode | curses.A_BOLD)
-        line += 1
+        self.__char_detail.append({'text': 'Equipment',
+                                   'mode': mode | curses.A_BOLD})
+
         found_one = False
         for item in character['stuff']:
             found_one = True
-            self.__char_detail_window.addstr(line, 0,
-                                             '  %s' % item['name'],
-                                             mode)
-            line += 1
+            self.__char_detail.append({'text': '  %s' % item['name'],
+                                       'mode': mode})
 
         if not found_one:
-            self.__char_detail_window.addstr(line, 0, '  (None)', mode)
-            line += 1
+            self.__char_detail.append({'text': '  (None)',
+                                       'mode': mode})
 
         # advantages
 
         mode = curses.A_NORMAL 
-        self.__char_detail_window.addstr(line, 0,
-                                         'Advantages',
-                                         mode | curses.A_BOLD)
-        line += 1
+        self.__char_detail.append({'text': 'Advantages',
+                                   'mode': mode | curses.A_BOLD})
+
         found_one = False
         for advantage, value in sorted(character['advantages'].iteritems(),
                                        key=lambda (k,v): (k, v)):
             found_one = True
-            self.__char_detail_window.addstr(line,
-                                             0,
-                                             '  %s: %d' % (advantage, value),
-                                             mode)
-            line += 1
+            self.__char_detail.append({'text': '  %s: %d' % (advantage, value),
+                                       'mode': mode})
 
         if not found_one:
-            self.__char_detail_window.addstr(line, 0, '  (None)', mode)
-            line += 1
+            self.__char_detail.append({'text': '  (None)',
+                                       'mode': mode})
 
         # skills
 
         mode = curses.A_NORMAL 
-        self.__char_detail_window.addstr(line, 0,
-                                         'Skills',
-                                         mode | curses.A_BOLD)
-        line += 1
+        self.__char_detail.append({'text': 'Skills',
+                                   'mode': mode | curses.A_BOLD})
+
         found_one = False
         for skill, value in sorted(character['skills'].iteritems(),
                                    key=lambda (k,v): (k,v)):
             found_one = True
-            self.__char_detail_window.addstr(line,
-                                             0,
-                                             '  %s: %d' % (skill, value),
-                                             mode)
-            line += 1
+            self.__char_detail.append({'text': '  %s: %d' % (skill, value),
+                                       'mode': mode})
 
         if not found_one:
-            self.__char_detail_window.addstr(line, 0, '  (None)', mode)
-            line += 1
+            self.__char_detail.append({'text': '  (None)',
+                                       'mode': mode})
 
-        self.refresh()
+        self.__char_detail_window.draw_window()
+        self.__char_detail_window.refresh()
+
 
     def show_character_list(self,
                             char_list,
@@ -1238,6 +1244,7 @@ class GmWindowManager(object):
                 new_index -= 1
             elif user_input == curses.KEY_DOWN:
                 new_index += 1
+            # TODO: KEY_NPAGE, KEY_PPAGE
             elif user_input == ord('\n'):
                 del border_win
                 del menu_win
@@ -1370,6 +1377,74 @@ class GmWindowManager(object):
         menu_win.bkgd(' ', mode)
 
         return border_win, menu_win
+
+
+class GmScrollableWindow(object):
+    def __init__(self,
+                 lines, # [{'text', 'mode'}, ...]
+                 window_manager,
+                 height=None,
+                 width=None, # window size
+                 top_line=0,
+                 left_column=0 # window placement
+                ):
+        self.__window_manager = window_manager
+        self.__lines = lines
+        self.__window = self.__window_manager.new_native_window(height,
+                                                                width,
+                                                                top_line,
+                                                                left_column)
+        self.top_line = 0
+        self.draw_window()
+        self.refresh()
+
+        win_line_cnt, win_col_cnt = self.__window.getmaxyx()
+        self.__default_scroll_lines = win_line_cnt / 2
+
+    def clear(self):
+        self.__window.clear()
+
+    def draw_window(self):
+        '''
+        Fills the window with the data that's supposed to be in it.
+        '''
+        self.clear()
+        line_cnt = len(self.__lines) - self.top_line
+        win_line_cnt, win_col_cnt = self.__window.getmaxyx()
+        line_cnt = line_cnt if line_cnt < win_line_cnt else win_line_cnt
+        for i in range(0, line_cnt):
+            self.__window.addstr(i, 0,
+                                 self.__lines[i+self.top_line]['text'],
+                                 self.__lines[i+self.top_line]['mode'])
+
+    def refresh(self):
+        self.__window.refresh()
+
+    def scroll_down(self, line_cnt=None):
+        if line_cnt is None:
+            line_cnt = self.__default_scroll_lines
+        self.top_line += line_cnt
+        if self.top_line > len(self.__lines):
+            win_line_cnt, win_col_cnt = self.__window.getmaxyx()
+            self.top_line = len(self.__lines) - win_line_cnt
+            if self.top_line < 0:
+                self.top_line = 0
+
+        self.draw_window()
+        # NOTE: refresh the window yourself.  That way, you can modify the
+        # lines before the refresh happens.
+
+    def scroll_up(self, line_cnt=None):
+        if line_cnt is None:
+            line_cnt = self.__default_scroll_lines
+        self.top_line = (0 if self.top_line <= line_cnt else
+                           self.top_line - line_cnt)
+        self.draw_window()
+        # NOTE: refresh the window yourself.  That way, you can modify the
+        # lines before the refresh happens.
+
+    def touchwin(self):
+        self.__window.touchwin()
 
 
 
@@ -4155,6 +4230,12 @@ class MainHandler(ScreenHandler):
             curses.KEY_DOWN:
                       {'name': 'next character',      'func':
                                                             self.__next},
+            curses.KEY_NPAGE:
+                      {'name': 'char details pgdown', 'func':
+                                                            self.__next_page},
+            curses.KEY_PPAGE:
+                      {'name': 'char details pgup',   'func':
+                                                            self.__prev_page},
             ord('o'): {'name': 'outfit characters',   'func':
                                                             self.__outfit},
             ord('t'): {'name': 'build from template', 'func':
@@ -4283,6 +4364,9 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True
 
+    def __next_page(self):
+        self._window.scroll_char_detail_down()
+        return True
 
     def __previous(self):
         if self.__char_index is None:
@@ -4292,6 +4376,10 @@ class MainHandler(ScreenHandler):
             if self.__char_index < 0:
                 self.__char_index = len(self.__char_names) - 1
         self._draw_screen()
+        return True
+
+    def __prev_page(self):
+        self._window.scroll_char_detail_down()
         return True
 
 
