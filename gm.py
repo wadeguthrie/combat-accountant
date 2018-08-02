@@ -2143,7 +2143,8 @@ class GurpsRuleset(Ruleset):
                 (fighter.details['permanent']['fp'] / 3) else 'full')
 
         action_menu.extend([
-            ('move (B364)',            {'text': ['Move',
+            ('move (B364) %s' % move_string,
+                                       {'text': ['Move',
                                                  ' Defense: any',
                                                  ' Move: %s' % move_string],
                                         'doit': None}),
@@ -3703,7 +3704,7 @@ class FightHandler(ScreenHandler):
         if fp_recipient is None:
             return True # Keep fighting
 
-        title = 'Change FP By...'
+        title = 'Reduce FP By...'
         height = 1
         width = len(title)
         adj_string = self._window_manager.input_box(height, width, title)
@@ -3746,7 +3747,7 @@ class FightHandler(ScreenHandler):
         if hp_recipient is None:
             return True # Keep fighting
 
-        title = 'Change HP By...'
+        title = 'Reduce HP By...'
         height = 1
         width = len(title)
         adj_string = self._window_manager.input_box(height, width, title)
