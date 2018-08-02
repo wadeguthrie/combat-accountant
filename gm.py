@@ -15,18 +15,13 @@ import sys
 #   - should warn when trying to do a second action (take note of fastdraw)
 #   - should only be able to ready an unready weapon.
 #   - < 1/3 FP = 1/2 move, dodge, st
-#   - Warning if window is smaller than expected
 #   - Add 2 weapon (or weapon & shield)
-#
-# TODO: when touching/refreshing windows, look from top-down until you find a
-#       whole-screen window -- touch/refresh up from there
 #
 # TODO (eventually):
 #   - On startup, check each of the characters
 #       o eventually, there needs to be a list of approved skills &
 #         advantages; characters' data should only match the approved list
 #         (this is really to make sure that stuff wasn't mis-typed).
-#   - scrolling menus (et al.)
 #   - reloading where the number of shots is in the 'clip' (like with a gun or
 #     a quiver) rather than in the weapon (like in disruptors or lasers)
 #   - plusses on range-based ammo (a bullet with a spell on it, for instance)
@@ -4223,7 +4218,7 @@ class FightHandler(ScreenHandler):
         if why_target is None:
             return True # Keep fighting
 
-        pseudo_menu = [] # TODO: make a special window type -- don't use a menu
+        lines = []
 
         why_opponent = self.get_opponent_for(why_target)
 
@@ -4237,28 +4232,32 @@ class FightHandler(ScreenHandler):
                                                            why_opponent,
                                                            weapon,
                                                            unarmed_skills)
-            pseudo_menu = [(x, 0) for x in unarmed_info['why']]
+            lines = [{'text': x,
+                      'mode': curses.A_NORMAL} for x in unarmed_info['why']]
         else:
             if weapon['skill'] in why_target.details['skills']:
                 ignore, to_hit_why = self.__ruleset.get_to_hit(why_target,
                                                                why_opponent,
                                                                weapon)
-                pseudo_menu = [(x, 0) for x in to_hit_why]
+                lines = [{'text': x,
+                          'mode': curses.A_NORMAL} for x in to_hit_why]
 
                 # Damage
 
                 ignore, damage_why = self.__ruleset.get_damage(why_target,
                                                                weapon)
-                pseudo_menu.extend([(x, 0) for x in damage_why])
+                lines.extend([{'text': x,
+                               'mode': curses.A_NORMAL} for x in damage_why])
 
         ignore, defense_why = self.__ruleset.get_fighter_defenses_notes(
                                                             why_target,
                                                             why_opponent)
-        #pseudo_menu.extend([(x, 0) for x in defense_why])
-        pseudo_menu = [(x, 0) for x in defense_why] + pseudo_menu
+        #lines.extend([(x, 0) for x in defense_why])
+        lines = [{'text': x,
+                  'mode': curses.A_NORMAL} for x in defense_why] + lines
 
-        ignore = self._window_manager.menu(
-                    'How the Numbers Were Calculated', pseudo_menu)
+        ignore = self._window_manager.display_window(
+                    'How the Numbers Were Calculated', lines)
         return True
 
 
