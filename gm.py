@@ -1034,6 +1034,10 @@ class GmWindowManager(object):
                              curses.COLOR_WHITE, # fg
                              curses.COLOR_BLACK) # bg
 
+            curses.init_pair(GmWindowManager.RED_WHITE,
+                             curses.COLOR_RED,   # fg
+                             curses.COLOR_WHITE) # bg
+
             self.__stdscr.clear()
             self.__stdscr.refresh()
         except:
@@ -3434,7 +3438,7 @@ class BuildFightHandler(ScreenHandler):
         template_menu = [(template_name, template_name)
                 for template_name in self.__world['Templates']]
         template_name = self._window_manager.menu('From Which Template',
-                                                         template_menu)
+                                                  template_menu)
         if template_name is None:
             return True  # Keep going
         self.__template_name = template_name
@@ -3509,7 +3513,6 @@ class FightHandler(ScreenHandler):
             ord('o'): {'name': 'opponent',    'func': self.__pick_opponent},
             ord('q'): {'name': 'quit',        'func': self.__quit},
             ord('s'): {'name': 'save',        'func': self.__save},
-            ord('Z'): {'name': 'fill history','func': self.__fill_history}, # TODO: remove
             ord('t'): {'name': 'timer',       'func': self.__timer}
         })
 
@@ -3586,10 +3589,6 @@ class FightHandler(ScreenHandler):
 
 
     # Public to aid in testing
-    def __fill_history(self):   # TODO: remove whole method
-        for i in range(1,150):
-            self._saved_fight['history'].append('%d -- history' % i)
-        return True
 
     def get_current_fighter(self):
         '''
@@ -4214,7 +4213,7 @@ class FightHandler(ScreenHandler):
             notes_recipient_menu = [(current_fighter.name, current_fighter),
                                     (opponent.name, opponent)]
             why_target = self._window_manager.menu('Details For Whom',
-                                                        notes_recipient_menu)
+                                                   notes_recipient_menu)
         if why_target is None:
             return True # Keep fighting
 
