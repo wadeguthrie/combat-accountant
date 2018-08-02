@@ -1239,7 +1239,6 @@ class GmWindowManager(object):
         while keep_going:
             user_input = self.get_one_character()
             new_index = index
-            print '\nstarting index: %d' % new_index # TODO: remove
             if user_input == curses.KEY_HOME:
                 new_index = 0
             elif user_input == curses.KEY_UP:
@@ -1251,13 +1250,11 @@ class GmWindowManager(object):
                 showable = menu_win.get_showable_menu_lines()
                 if index < showable['top_line']:
                     new_index = showable['top_line']
-                print 'new_index: %d' % new_index # TODO: remove
             elif user_input == curses.KEY_PPAGE:
                 menu_win.scroll_up()
                 showable = menu_win.get_showable_menu_lines()
                 if index > showable['bottom_line']:
                     new_index = showable['bottom_line']
-                print 'new_index: %d' % new_index # TODO: remove
             elif user_input == ord('\n'):
                 del border_win
                 del menu_win
@@ -1303,9 +1300,6 @@ class GmWindowManager(object):
                                                 index < showable['top_line']):
                     menu_win.scroll_to(index)
 
-            showable = menu_win.get_showable_menu_lines() # TODO: remove
-            print 'showable top: %d, bottom: %d' % ( # TODO: remove
-                showable['top_line'], showable['bottom_line']) # TODO: remove
             menu_win.draw_window()
             menu_win.refresh()
 
@@ -1458,16 +1452,13 @@ class GmScrollableWindow(object):
         self.__window.refresh()
 
     def scroll_down(self, line_cnt=None):
-        print '--- SCROLL DOWN ---' # TODO: remove
         if line_cnt is None:
             line_cnt = self.__default_scroll_lines
-        print 'top_line: %d, line_cnt: %d' % (self.top_line, line_cnt) # TODO: remove
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
 
         # If we're at the end of the page and we're scrolling down, don't
         # bother.
         if len(self.__lines) - self.top_line < win_line_cnt:
-            print 'len(lines)=%d - top=%d < count= %d -- returning' % (len(self.__lines), self.top_line, win_line_cnt) # TODO: remove
             return
 
         self.top_line += line_cnt
@@ -1476,23 +1467,18 @@ class GmScrollableWindow(object):
             self.top_line = len(self.__lines) - win_line_cnt
             if self.top_line < 0:
                 self.top_line = 0
-        print 'new top line: %d' % self.top_line # TODO: remove
 
         self.draw_window()
         # NOTE: refresh the window yourself.  That way, you can modify the
         # lines before the refresh happens.
 
     def scroll_up(self, line_cnt=None):
-        print '--- SCROLL UP ---' # TODO: remove
         if line_cnt is None:
             line_cnt = self.__default_scroll_lines
-        print 'top_line: %d, line_cnt: %d' % (self.top_line, line_cnt) # TODO: remove
         if self.top_line == 0:
-            print 'top line == 0, returning' # TODO: remove
             return
         self.top_line = (0 if self.top_line <= line_cnt else
                            self.top_line - line_cnt)
-        print 'new top line: %d' % self.top_line # TODO: remove
         self.draw_window()
         # NOTE: refresh the window yourself.  That way, you can modify the
         # lines before the refresh happens.
@@ -4172,7 +4158,6 @@ class FightHandler(ScreenHandler):
         #                        'mode': mode})
 
         ignore = self._window_manager.menu('Fight History', pseudo_menu)
-        print 'history returned %r' % ignore # TODO: remove
         return True
 
     def __show_why(self):
