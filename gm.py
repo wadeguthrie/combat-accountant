@@ -1067,6 +1067,53 @@ class GmWindowManager(object):
     # Public Methods
     #
 
+    def display_window(self,
+                       title,
+                       lines  # [{'text', 'mode'}, ...]
+                      ):
+        '''
+        Presents a display of |lines| to the user.
+        '''
+
+        # height and width of text box (not border)
+        height = len(lines)
+        max_height = curses.LINES - 2 # 2 for the box
+        if height > max_height:
+            height = max_height
+        width = 0 if title is None else len(title)
+        for line in lines:
+            if len(line['text']) > width:
+                width = len(line['text'])
+        width += 1 # Seems to need one more space (or Curses freaks out)
+
+        border_win, display_win = self.__centered_boxed_window(
+                                                    height, width,
+                                                    title,
+                                                    data_for_scrolling=lines)
+        display_win.refresh()
+
+        keep_going = True
+        while keep_going:
+            user_input = self.get_one_character()
+            if user_input == curses.KEY_HOME:
+                display_win.scroll_to(0)
+            elif user_input == curses.KEY_END:
+                display_win.scroll_to(len(lines)-1)
+            elif user_input == curses.KEY_NPAGE:
+                display_win.scroll_down()
+            elif user_input == curses.KEY_PPAGE:
+                display_win.scroll_up()
+            else:
+                del border_win
+                del display_win
+                self.hard_refresh_all()
+                return
+
+            display_win.draw_window()
+            display_win.refresh()
+
+
+
     def edit_window(self,
                     height, width,
                     contents,  # initial string (w/ \n) for the window
@@ -4142,22 +4189,20 @@ class FightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        max_lines = curses.LINES - 4
-        lines = (max_lines if len(self._saved_fight['history']) > max_lines
-                           else len(self._saved_fight['history']))
+        lines = []
+        for line in self._saved_fight['history']:
+            mode = (curses.A_STANDOUT if line.startswith('---')
+                    else curses.A_NORMAL)
+            lines.append({'text': line, 'mode': mode})
 
-        # It's not really a menu but the window for it works just fine
-        pseudo_menu = []
-        for i, line in enumerate(self._saved_fight['history']):
-            pseudo_menu.append((line, i))
-        
-        #for line in self._saved_fight['history']:
-        #    mode = (curses.A_STANDOUT if line.startswith('---')
-        #            else curses.A_NORMAL)
-        #    pseudo_menu.append({'text': line,
-        #                        'mode': mode})
+        self._window_manager.display_window('Fight History', lines)
+        return True
 
-        ignore = self._window_manager.menu('Fight History', pseudo_menu)
+    def display_window(self,
+                       title,
+                       lines  # [{'text', 'mode'}, ...]
+                      ):
+
         return True
 
     def __show_why(self):
