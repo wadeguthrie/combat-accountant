@@ -14,7 +14,6 @@ import sys
 # TODO:
 #   - should warn when trying to do a second action (take note of fastdraw)
 #   - should only be able to ready an unready weapon.
-#   - < 1/3 FP = 1/2 move, dodge, st
 #   - Add 2 weapon (or weapon & shield)
 #
 # TODO (eventually):
@@ -2139,14 +2138,18 @@ class GurpsRuleset(Ruleset):
                                     'param': {'weapon': None,
                                               'fighter': fighter}}))
 
+        move_string = ('half (FP:B426)' if
+            fighter.details['current']['fp'] <
+                (fighter.details['permanent']['fp'] / 3) else 'full')
+
         action_menu.extend([
             ('move (B364)',            {'text': ['Move',
                                                  ' Defense: any',
-                                                 ' Move: full'],
+                                                 ' Move: %s' % move_string],
                                         'doit': None}),
             ('Move and attack (B365)', {'text': ['Move & Attack',
                                                  ' Defense: Dodge,block',
-                                                 ' Move: full'],
+                                                 ' Move: %s' % move_string],
                                         'doit': None}),
             ('nothing',                {'text': ['Do nothing',
                                                  ' Defense: any',
@@ -2317,10 +2320,21 @@ class GurpsRuleset(Ruleset):
                                     fighter.details['permanent']['hp']/3.0):
             dodge_skill_modified = True
             dodge_why.append(
-                '  skill(%d)/2 (round up) due to hp(%d) < perm-hp(%d)/3' %
-                                        (dodge_skill,
-                                         fighter.details['current']['hp'],
-                                         fighter.details['permanent']['hp']))
+                '  dodge(%d)/2 (round up) due to hp(%d) < perm-hp(%d)/3 (B327)'
+                                    % (dodge_skill,
+                                       fighter.details['current']['hp'],
+                                       fighter.details['permanent']['hp']))
+            dodge_skill = int(((dodge_skill)/2.0) + 0.5)
+
+        # B426
+        if (fighter.details['current']['fp'] <
+                                    fighter.details['permanent']['fp']/3.0):
+            dodge_skill_modified = True
+            dodge_why.append(
+                '  dodge(%d)/2 (round up) due to fp(%d) < perm-fp(%d)/3 (B426)'
+                                    % (dodge_skill,
+                                       fighter.details['current']['fp'],
+                                       fighter.details['permanent']['fp']))
             dodge_skill = int(((dodge_skill)/2.0) + 0.5)
 
         if dodge_skill_modified:
