@@ -120,7 +120,11 @@
               "name": "pistol, Baretta DX 192", 
               "notes": "", 
               "damage": {
-                "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
+                "dice": {
+                  "plus": 4, 
+                  "num_dice": 1, 
+                  "type": "pi"
+                }
               }, 
               "reload": 3, 
               "skill": "beam weapons (pistol)", 
@@ -136,8 +140,14 @@
               "name": "knife, large", 
               "notes": "", 
               "damage": {
-                "thr": {"plus": 0, "type": "imp"},
-                "sw": {"plus": -2, "type": "cut"}
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
               }, 
               "parry": -1, 
               "skill": "knife", 
@@ -187,521 +197,77 @@
     }
   }, 
   "PCs": {
-    "vasilis - Alan": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-          {
-            "acc": 3, 
-            "count": 1, 
-            "name": "pistol, Colt 170D", 
-            "notes": "", 
-            "damage": {
-              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          }, 
-          {
-            "count": 100000, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          },
-          {
-            "count": 1, 
-            "name": "sick stick", 
-            "notes": "", 
-            "damage": {
-              "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
-            }, 
-            "skill": "axe/mace", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 1, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "Hacking Equipment +1"
-          }
-      ], 
-      "weapon-index": null, 
-      "skills": {
-        "brawling": 12,
-        "beam weapons (pistol)": 15,
-        "beam weapons (rifle)": 12,
-        "axe/mace": 11,
-        "cryptography": 13,
-        "electronics operation": 13,
-        "computer security": 12,
-        "piloting": 13,
-        "engineer (electronics)": 12,
-        "engineer (starships)": 12,
-        "computer hacking": 15,
-        "mathematics (applied)": 12,
-        "computer programming": 12,
-        "armoury (small arms)": 13,
-        "first aid": 14,
-        "physics": 12,
-        "observation": 15
-      }, 
-      "shock": 0, 
-      "current": {
-        "fp": 10, 
-        "iq": 14, 
-        "hp": 12, 
-        "ht": 9, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.25
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 10, 
-        "iq": 14, 
-        "hp": 12, 
-        "ht": 9, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.25
-      }, 
-      "advantages": {
-        "cannot speak/synthesizer": -10,
-        "humble": -1,
-        "secret (turned in evidence on brutal Bratva hit)": -30,
-        "squeamish": -10,
-        "eidetic memory": 5,
-        "acute vision 1": 2,
-        "fit": 5
-      }, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "deri - Chelsea": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-          {
-              "acc": 4, 
-              "count": 1, 
-              "name": "pistol, Sig D65", 
-              "notes": "", 
-              "damage": {
-                "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
-              }, 
-              "reload": 3, 
-              "skill": "beam weapons (pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 9, 
-                "shots_left": 9
-              }
-          }, 
-          {
-            "count": 100000, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          },
-          {
-            "count": 1, 
-            "name": "sick stick", 
-            "notes": "", 
-            "damage": {
-              "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
-            }, 
-            "skill": "axe/mace", 
-            "type": "melee weapon"
-          }, 
-          {
-              "count": 1, 
-              "name": "knife, large", 
-              "notes": "", 
-              "damage": {
-                "thr": {"plus": 0, "type": "imp"},
-                "sw": {"plus": -2, "type": "cut"}
-              }, 
-              "parry": -1, 
-              "skill": "knife", 
-              "type": "melee weapon"
-          },
-          {
-              "count": 1, 
-              "name": "knife, small", 
-              "notes": "B272", 
-              "damage": {
-                "thr": {"plus": -1, "type": "imp"},
-                "sw": {"plus": -3, "type": "cut"}
-              }, 
-              "parry": -1, 
-              "skill": "knife", 
-              "type": "melee weapon"
-          }
-      ], 
-      "weapon-index": null, 
-      "skills": {
-        "area knowledge (space station)": 16,
-        "brawling": 11,
-        "computer hacking": 13,
-        "electronics repair (security)": 15,
-        "escape": 9,
-        "fast talk": 15,
-        "mechanic (spacecraft)": 15,
-        "streetwise": 15,
-        "beam weapons (pistol)": 11,
-        "electronics operation (security)": 14,
-        "lip reading": 14,
-        "thrown weapon (knife)": 10,
-        "detect lies": 14,
-        "current affairs (terraforming)": 14,
-        "axe/mace": 8,
-        "computer operation": 14,
-        "climbing": 8,
-        "computer programming": 12,
-        "electronics operation (terraforming)": 13,
-        "electronics repair (terraforming)": 13,
-        "piloting (low-performance spacecraft)": 9,
-        "hazardous materials (chemical)": 13,
-        "connoisseur (visual arts)": 13,
-        "forgery": 12
-      }, 
-      "shock": 0, 
-      "current": {
-        "fp": 11, 
-        "iq": 14, 
-        "hp": 10, 
-        "ht": 11, 
-        "st": 9, 
-        "dx": 9, 
-        "basic-speed": 5
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 14, 
-        "hp": 10, 
-        "ht": 11, 
-        "st": 9, 
-        "dx": 9, 
-        "basic-speed": 5
-      }, 
-      "advantages": {
-        "impulsiveness": -15,
-        "short attention span": -15,
-        "wealth (struggling)": -10,
-        "curious": -10,
-        "bad tember": -10,
-        "alcohol intolerance": -1,
-        "dreamer": -1,
-        "likes knick knacks": -1,
-        "nosy": -1,
-        "habit (fidget)": -1,
-        "deep sleeper": 1,
-        "honest face": 1,
-        "cultural familiarity (terraformers)": 1,
-        "empathy (sensitive)": 5,
-        "versatile": 5,
-        "combat reflexes": 15,
-        "vodou practitioner (Mambo 1)": 15
-      }, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    },
-    "mama V - Karen": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-          {
-            "count": 1, 
-            "name": "sick stick", 
-            "notes": "", 
-            "damage": {
-              "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
-            }, 
-            "skill": "axe/mace", 
-            "type": "melee weapon"
-          }, 
-          {
-              "acc": 4, 
-              "count": 1, 
-              "name": "pistol, Sig D65", 
-              "notes": "", 
-              "damage": {
-                "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
-              }, 
-              "reload": 3, 
-              "skill": "beam weapons (pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 9, 
-                "shots_left": 9
-              }
-          }, 
-          {
-            "count": 100000, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-      ], 
-      "weapon-index": null, 
-      "skills": {
-        "axe/mace": 7,
-        "beam weapons (pistol)": 14,
-        "brawling": 8,
-        "fast-draw (pistol)": 9,
-        "first aid": 17,
-        "physician": 14
-      }, 
-      "shock": 0, 
-      "current": {
-        "fp": 18, 
-        "iq": 16, 
-        "hp": 19, 
-        "ht": 8, 
-        "st": 9, 
-        "dx": 8, 
-        "basic-speed": 4
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 18, 
-        "iq": 16, 
-        "hp": 19, 
-        "ht": 8, 
-        "st": 9, 
-        "dx": 8, 
-        "basic-speed": 4
-      }, 
-      "advantages": {
-        "vodou practitioner (Bokor 2)": 45,
-        "lwa (Bokor, Papa Ghede)": 8,
-        "agoraphobia (open spaces)": -10,
-        "ailurophobia (cats)": -5,
-        "bad sight (farsighted)": -25,
-        "compulsive vowing": -5,
-        "curious": -5,
-        "delusions (Papa Ghede is g-grandfather)": -1,
-        "distractible": -1,
-        "impulsiveness": -10,
-        "likes shiny objects": -1,
-        "personality change": -1,
-        "responsive": -1
-      }, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "samuel - Erik": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-          {
-              "acc": 4, 
-              "count": 1, 
-              "name": "pistol, Sig D65", 
-              "notes": "", 
-              "damage": {
-                "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
-              }, 
-              "reload": 3, 
-              "skill": "beam weapons (pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 9, 
-                "shots_left": 9
-              }
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          },
-          {
-              "count": 1, 
-              "name": "knife, small", 
-              "notes": "B272", 
-              "damage": {
-                "thr": {"plus": -1, "type": "imp"},
-                "sw": {"plus": -3, "type": "cut"}
-              }, 
-              "parry": -1, 
-              "skill": "knife", 
-              "type": "melee weapon"
-          },
-          {
-              "count": 1, 
-              "name": "sick stick", 
-              "notes": "", 
-              "damage": {
-                "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
-              }, 
-              "skill": "axe/mace", 
-              "type": "melee weapon"
-          },
-          {
-              "count": 1, 
-              "name": "brass knuckles", 
-              "notes": "B271", 
-              "damage": {
-                "thr": {"plus": 0, "type": "cr"}
-              }, 
-              "parry": 0, 
-              "skill": "karate", 
-              "type": "melee weapon"
-          }
-      ],
-      "weapon-index": null, 
-      "skills": {
-        "armoury (small arms)": 10,
-        "axe/mace": 13,
-        "beam weapons (pistol)": 15,
-        "beam weapons (rifle)": 13,
-        "brawling": 15,
-        "camouflage": 11,
-        "climbing": 12,
-        "fast-draw (knife)": 14,
-        "fast-draw (pistol)": 14,
-        "filch": 12,
-        "first aid": 12,
-        "gesture": 11,
-        "intimidation": 11,
-        "knife": 13,
-        "lockpicking": 10,
-        "pickpocket": 11,
-        "running": 10,
-        "scrounging": 12,
-        "stealth": 12,
-        "streetwise": 11,
-        "theology (Vodou)": 10,
-        "throwing": 13,
-        "urban survival": 11
-      }, 
-      "shock": 0, 
-      "current": {
-        "fp": 13, 
-        "iq": 11, 
-        "hp": 12, 
-        "ht": 11, 
-        "st": 12, 
-        "dx": 13, 
-        "basic-speed": 6
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 13, 
-        "iq": 11, 
-        "hp": 12, 
-        "ht": 11, 
-        "st": 12, 
-        "dx": 13, 
-        "basic-speed": 6
-      }, 
-      "advantages": {
-        "combat reflexes": 15,
-        "fit": 5,
-        "rapid healing": 5,
-        "vodou practitioner": 5,
-        "enemy (Gregory Occeant)": -20,
-        "flashbacks, mild": -5,
-        "guilt complex (loss of sister)": -5,
-        "light sleeper": -5,
-        "vow (return to earth for sister)": -5,
-        "wealth (struggling)": -10
-      }, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
     "lawerence - Spenser": {
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
       "stuff": [
-          {
-              "count": 1, 
-              "name": "knife, large", 
-              "notes": "", 
-              "damage": {
-                "thr": {"plus": 0, "type": "imp"},
-                "sw": {"plus": -2, "type": "cut"}
-              }, 
-              "parry": -1, 
-              "skill": "knife", 
-              "type": "melee weapon"
-          },
-          {
-              "acc": 4, 
-              "count": 1, 
-              "name": "pistol, Sig D65", 
-              "notes": "", 
-              "damage": {
-                "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
-              }, 
-              "reload": 3, 
-              "skill": "beam weapons (pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 9, 
-                "shots_left": 9
-              }
-          },
-          {
-            "count": 100000, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
+        {
+          "count": 1, 
+          "name": "knife, large", 
+          "notes": "", 
+          "damage": {
+            "sw": {
+              "plus": -2, 
+              "type": "cut"
+            }, 
+            "thr": {
+              "plus": 0, 
+              "type": "imp"
+            }
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "acc": 4, 
+          "count": 1, 
+          "name": "pistol, Sig D65", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 9
           }
+        }, 
+        {
+          "count": 100000, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "C Cell"
+        }
       ], 
       "weapon-index": null, 
       "skills": {
-        "armoury (small arms)": 11,
-        "axe/mace": 12,
-        "beam weapons (pistol)": 15,
-        "beam weapons (rifle)": 14,
-        "brawling": 13,
-        "fast-draw (ammo)": 14,
-        "first aid": 13,
-        "guns (grenade launcher)": 9,
-        "holdout": 11,
-        "interrogation": 12,
-        "karate": 13,
-        "knife": 15,
-        "lockpicking": 12,
-        "observation": 12,
-        "stealth": 14,
-        "streetwise": 12,
-        "throwing": 10,
+        "interrogation": 12, 
+        "guns (grenade launcher)": 9, 
+        "fast-draw (ammo)": 14, 
+        "observation": 12, 
+        "throwing": 10, 
+        "lockpicking": 12, 
+        "beam weapons (rifle)": 14, 
+        "streetwise": 12, 
+        "karate": 13, 
+        "axe/mace": 12, 
+        "stealth": 14, 
+        "brawling": 13, 
+        "first aid": 13, 
+        "armoury (small arms)": 11, 
+        "beam weapons (pistol)": 15, 
+        "holdout": 11, 
+        "knife": 15, 
         "traps": 12
       }, 
       "shock": 0, 
@@ -725,61 +291,1286 @@
         "basic-speed": 6
       }, 
       "advantages": {
-        "combat reflexes": 15,
-        "high pain threshold": 10,
-        "g-experience": 3,
-        "night vision": 4,
-        "no sense of humor": -10,
-        "dyslexia": -10,
-        "pyromania": -10,
-        "code of honor (professioal)": -5,
-        "weirdness magnet": -15,
-        "nosy": -1,
-        "alcohol intolerance": -1
+        "g-experience": 3, 
+        "code of honor (professioal)": -5, 
+        "no sense of humor": -10, 
+        "dyslexia": -10, 
+        "weirdness magnet": -15, 
+        "nosy": -1, 
+        "pyromania": -10, 
+        "high pain threshold": 10, 
+        "alcohol intolerance": -1, 
+        "night vision": 4, 
+        "combat reflexes": 15
       }, 
       "did_action_this_turn": false, 
       "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
-    } 
+    }, 
+    "vasilis - Alan": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+        {
+          "acc": 3, 
+          "count": 1, 
+          "name": "pistol, Colt 170D", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 9
+          }
+        }, 
+        {
+          "count": 100000, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "C Cell"
+        }, 
+        {
+          "count": 1, 
+          "name": "sick stick", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 1, 
+              "num_dice": 1, 
+              "type": "fat"
+            }
+          }, 
+          "skill": "axe/mace", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "Hacking Equipment +1"
+        }
+      ], 
+      "weapon-index": null, 
+      "skills": {
+        "engineer (electronics)": 12, 
+        "engineer (starships)": 12, 
+        "cryptography": 13, 
+        "electronics operation": 13, 
+        "beam weapons (rifle)": 12, 
+        "computer hacking": 15, 
+        "axe/mace": 11, 
+        "computer programming": 12, 
+        "piloting": 13, 
+        "computer security": 12, 
+        "beam weapons (pistol)": 15, 
+        "armoury (small arms)": 13, 
+        "brawling": 12, 
+        "first aid": 14, 
+        "physics": 12, 
+        "mathematics (applied)": 12, 
+        "observation": 15
+      }, 
+      "shock": 0, 
+      "current": {
+        "fp": 10, 
+        "iq": 14, 
+        "hp": 12, 
+        "ht": 9, 
+        "st": 10, 
+        "dx": 12, 
+        "basic-speed": 5.25
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 10, 
+        "iq": 14, 
+        "hp": 12, 
+        "ht": 9, 
+        "st": 10, 
+        "dx": 12, 
+        "basic-speed": 5.25
+      }, 
+      "advantages": {
+        "acute vision 1": 2, 
+        "eidetic memory": 5, 
+        "fit": 5, 
+        "humble": -1, 
+        "squeamish": -10, 
+        "secret (turned in evidence on brutal Bratva hit)": -30, 
+        "cannot speak/synthesizer": -10
+      }, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "deri - Chelsea": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+        {
+          "acc": 4, 
+          "count": 1, 
+          "name": "pistol, Sig D65", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 9
+          }
+        }, 
+        {
+          "count": 100000, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "C Cell"
+        }, 
+        {
+          "count": 1, 
+          "name": "sick stick", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 1, 
+              "num_dice": 1, 
+              "type": "fat"
+            }
+          }, 
+          "skill": "axe/mace", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "name": "knife, large", 
+          "notes": "", 
+          "damage": {
+            "sw": {
+              "plus": -2, 
+              "type": "cut"
+            }, 
+            "thr": {
+              "plus": 0, 
+              "type": "imp"
+            }
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "name": "knife, small", 
+          "notes": "B272", 
+          "damage": {
+            "sw": {
+              "plus": -3, 
+              "type": "cut"
+            }, 
+            "thr": {
+              "plus": -1, 
+              "type": "imp"
+            }
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }
+      ], 
+      "weapon-index": null, 
+      "skills": {
+        "electronics repair (terraforming)": 13, 
+        "thrown weapon (knife)": 10, 
+        "connoisseur (visual arts)": 13, 
+        "escape": 9, 
+        "mechanic (spacecraft)": 15, 
+        "electronics operation (terraforming)": 13, 
+        "fast talk": 15, 
+        "piloting (low-performance spacecraft)": 9, 
+        "forgery": 12, 
+        "brawling": 11, 
+        "hazardous materials (chemical)": 13, 
+        "beam weapons (pistol)": 11, 
+        "lip reading": 14, 
+        "area knowledge (space station)": 16, 
+        "streetwise": 15, 
+        "axe/mace": 8, 
+        "current affairs (terraforming)": 14, 
+        "climbing": 8, 
+        "detect lies": 14, 
+        "electronics repair (security)": 15, 
+        "computer hacking": 13, 
+        "computer operation": 14, 
+        "computer programming": 12, 
+        "electronics operation (security)": 14
+      }, 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 14, 
+        "hp": 10, 
+        "ht": 11, 
+        "st": 9, 
+        "dx": 9, 
+        "basic-speed": 5
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 14, 
+        "hp": 10, 
+        "ht": 11, 
+        "st": 9, 
+        "dx": 9, 
+        "basic-speed": 5
+      }, 
+      "advantages": {
+        "honest face": 1, 
+        "likes knick knacks": -1, 
+        "nosy": -1, 
+        "wealth (struggling)": -10, 
+        "deep sleeper": 1, 
+        "cultural familiarity (terraformers)": 1, 
+        "habit (fidget)": -1, 
+        "alcohol intolerance": -1, 
+        "impulsiveness": -15, 
+        "empathy (sensitive)": 5, 
+        "short attention span": -15, 
+        "curious": -10, 
+        "dreamer": -1, 
+        "bad tember": -10, 
+        "combat reflexes": 15, 
+        "versatile": 5, 
+        "vodou practitioner (Mambo 1)": 15
+      }, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "samuel - Erik": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+        {
+          "acc": 4, 
+          "count": 1, 
+          "name": "pistol, Sig D65", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 9
+          }
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "C Cell"
+        }, 
+        {
+          "count": 1, 
+          "name": "knife, small", 
+          "notes": "B272", 
+          "damage": {
+            "sw": {
+              "plus": -3, 
+              "type": "cut"
+            }, 
+            "thr": {
+              "plus": -1, 
+              "type": "imp"
+            }
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "name": "sick stick", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 1, 
+              "num_dice": 1, 
+              "type": "fat"
+            }
+          }, 
+          "skill": "axe/mace", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "name": "brass knuckles", 
+          "notes": "B271", 
+          "damage": {
+            "thr": {
+              "plus": 0, 
+              "type": "cr"
+            }
+          }, 
+          "parry": 0, 
+          "skill": "karate", 
+          "type": "melee weapon"
+        }
+      ], 
+      "weapon-index": null, 
+      "skills": {
+        "throwing": 13, 
+        "armoury (small arms)": 10, 
+        "scrounging": 12, 
+        "camouflage": 11, 
+        "stealth": 12, 
+        "brawling": 15, 
+        "beam weapons (pistol)": 15, 
+        "knife": 13, 
+        "urban survival": 11, 
+        "lockpicking": 10, 
+        "intimidation": 11, 
+        "streetwise": 11, 
+        "axe/mace": 13, 
+        "running": 10, 
+        "fast-draw (pistol)": 14, 
+        "climbing": 12, 
+        "theology (Vodou)": 10, 
+        "filch": 12, 
+        "pickpocket": 11, 
+        "beam weapons (rifle)": 13, 
+        "first aid": 12, 
+        "fast-draw (knife)": 14, 
+        "gesture": 11
+      }, 
+      "notes": [
+        "Born November 1st 2099 (Fet Gede - All Souls Day) - 24 years old.",
+        "",
+        "Samuel grew up in the impoverished Port Au Prince commune of Cite",
+        "Soleil. This former shantytown grew to house well over one and a",
+        "half million souls by 2099. With the deaths of most of his family by",
+        "the time he turned 15, Samuel fled with Esther, his younger sister,",
+        "to the larger, and wealthier urban center of Port au Prince. To find",
+        "his fortune, as they say.",
+        "",
+        "He lived hand to mouth doing any kind of work, legal or otherwise,",
+        "to support himself and his sister for several years. Befriending a",
+        "few of the other homeless they eked out a rough, uneducated",
+        "existence. Around his 17th birthday, he met Beatrice Hyppolite, also",
+        "known as Missus H. Missus H took the children to her \"home\" in an",
+        "abandoned warehouse, where she acted as a mother figure for her",
+        "\"Lost Bays (babies)\" and began to teach Samuel to read and the",
+        "basics of history and arithmetic.",
+        "",
+        "Missus H was also a Vodouisant and head of her small Sosyete. She",
+        "encouraged Samuel to join her Sosyete and he picked up a rudimentary",
+        "understanding of Vodou. The power of Vodouisants disturbed Samuel",
+        "and he began to refuse to join in the Fets. But Missus H insisted",
+        "that Samuel had the touch. All the signs were present for him to be",
+        "a great Houngan. Missus H told Samuel that his birthday made him a",
+        "vessel for a reborn soul and he will forever be connected to the",
+        "spirit world. ",
+        "",
+        "By 2118, when he was 19, Samuel moved Esther and himself out of",
+        "Missus H's home and was able to find a steady, semi-legitimate job",
+        "as a night security guard for Professional Security Services (PSS),",
+        "a well known and long standing security company with roots in the",
+        "20th century. He worked his way through the ranks eventually being",
+        "trained in weapons and served as an armed security guard.",
+        "",
+        "Esther took work as a waitress in a nightclub/bar, the Cafe Trio,",
+        "and Samuel began to work part-time as a bouncer there. The Trio was",
+        "host to several members of Haiti's underground drug traffickers,",
+        "most notably Gregory Occeant. Occeant was a regular and a Hounsi.",
+        "His wealth and political power derived from the wealth have allowed",
+        "him to hire the services of Loveson Jabouin, a powerful Bokor.",
+        "",
+        "A year ago, while Samuel was working a night shift for PSS, Esther",
+        "went missing. She was last seen at the Trio speaking with Occeant",
+        "and Jabouin. Samuel suspects Occeant and/or Jabouin to be behind",
+        "her disappearance but he can't prove it. While trailing Jabouin,",
+        "Samuel followed him to his home. After the Bokor had left Samuel",
+        "broke in looking for proof or evidence of his sister's whereabouts.",
+        "He discovered an awful truth. Jabouin was head of a secret police",
+        "force under Occeant and his drug cartel. This group was tasked,",
+        "among other duties, with collecting slave labor for the cartel's",
+        "production facilities.",
+        "",
+        "Before Samuel could learn more Jabouin returned home. Samuel grabbed",
+        "a small leather pouch with an animal skull stitched to the flap. He",
+        "recognized this as part of the Bokor's ceremonial paraphernalia,",
+        "but Samuel has been too afraid of both the contents of the pouch and",
+        "the Bokor to ever open the pouch.",
+        "",
+        "With Jabouin now an enemy Samuel needed to escape Haiti, at the",
+        "very least. It was soon after that he came across an ad for security",
+        "on the space station Persephone. He sold what possessions he had,",
+        "collected his last paycheck and found the nearest recruitment office.",
+        "",
+        "The small pouch with the animal skull was packed in the bottom of",
+        "his suitcase and the haunting words of Missus H echo in his mind",
+        "whenever he thinks about the bag. \"In Haiti, there are secrets we",
+        "keep, even from ourselves.\"",
+        ""
+      ],
+      "shock": 0, 
+      "current": {
+        "fp": 13, 
+        "iq": 11, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 12, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 13, 
+        "iq": 11, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 12, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {
+        "guilt complex (loss of sister)": -5, 
+        "light sleeper": -5, 
+        "fit": 5, 
+        "enemy (Gregory Occeant)": -20, 
+        "wealth (struggling)": -10, 
+        "rapid healing": 5, 
+        "vodou practitioner": 5, 
+        "vow (return to earth for sister)": -5, 
+        "flashbacks, mild": -5, 
+        "combat reflexes": 15
+      }, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "mama V - Karen": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+        {
+          "count": 1, 
+          "name": "sick stick", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 1, 
+              "num_dice": 1, 
+              "type": "fat"
+            }
+          }, 
+          "skill": "axe/mace", 
+          "type": "melee weapon"
+        }, 
+        {
+          "acc": 4, 
+          "count": 1, 
+          "name": "pistol, Sig D65", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 9
+          }
+        }, 
+        {
+          "count": 100000, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "C Cell"
+        }
+      ], 
+      "weapon-index": null, 
+      "skills": {
+        "physician": 14, 
+        "axe/mace": 7, 
+        "fast-draw (pistol)": 9, 
+        "brawling": 8, 
+        "first aid": 17, 
+        "beam weapons (pistol)": 14
+      }, 
+      "shock": 0, 
+      "current": {
+        "fp": 18, 
+        "iq": 16, 
+        "hp": 19, 
+        "ht": 8, 
+        "st": 9, 
+        "dx": 8, 
+        "basic-speed": 4
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 18, 
+        "iq": 16, 
+        "hp": 19, 
+        "ht": 8, 
+        "st": 9, 
+        "dx": 8, 
+        "basic-speed": 4
+      }, 
+      "advantages": {
+        "ailurophobia (cats)": -5, 
+        "compulsive vowing": -5, 
+        "lwa (Bokor, Papa Ghede)": 8, 
+        "vodou practitioner (Bokor 2)": 45, 
+        "agoraphobia (open spaces)": -10, 
+        "delusions (Papa Ghede is g-grandfather)": -1, 
+        "impulsiveness": -10, 
+        "distractible": -1, 
+        "responsive": -1, 
+        "curious": -5, 
+        "bad sight (farsighted)": -25, 
+        "likes shiny objects": -1, 
+        "personality change": -1
+      }, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }
   }, 
   "dead-monsters": {}, 
   "current-fight": {
-    "index": 1, 
+    "index": 0, 
+    "monsters": "Arena Attack Monsters", 
     "fighters": [
       {
         "group": "PCs", 
-        "name": "Wade"
+        "name": "samuel - Erik"
       }, 
       {
         "group": "PCs", 
-        "name": "Tom"
+        "name": "lawerence - Spenser"
       }, 
       {
-        "group": "horsemen", 
-        "name": "Death"
+        "group": "Arena Attack Monsters", 
+        "name": "3-Tank-A"
       }, 
       {
-        "group": "horsemen", 
-        "name": "War"
+        "group": "Arena Attack Monsters", 
+        "name": "1-Thief-A"
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "7-Tank-D"
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "6-Tank-E"
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "8-Tank-F"
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "5-Tank-B"
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "2-Thief-B"
+      }, 
+      {
+        "group": "Arena Attack Monsters", 
+        "name": "4-Tank-C"
       }, 
       {
         "group": "PCs", 
-        "name": "Bob"
+        "name": "vasilis - Alan"
       }, 
       {
-        "group": "horsemen", 
-        "name": "Pestilence"
+        "group": "PCs", 
+        "name": "deri - Chelsea"
       }, 
       {
-        "group": "horsemen", 
-        "name": "Famine"
+        "group": "PCs", 
+        "name": "mama V - Karen"
       }
     ], 
     "saved": false, 
-    "round": 2, 
-    "monsters": "horsemen"
+    "round": 0, 
+    "history": [
+      "--- Round 0 ---"
+    ]
+  }, 
+  "NPCs": {
+    "lawerence - Spenser": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+        {
+          "count": 1, 
+          "name": "knife, large", 
+          "notes": "", 
+          "damage": {
+            "sw": {
+              "plus": -2, 
+              "type": "cut"
+            }, 
+            "thr": {
+              "plus": 0, 
+              "type": "imp"
+            }
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "acc": 4, 
+          "count": 1, 
+          "name": "pistol, Sig D65", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 9
+          }
+        }, 
+        {
+          "count": 100000, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "C Cell"
+        }
+      ], 
+      "weapon-index": null, 
+      "skills": {
+        "interrogation": 12, 
+        "guns (grenade launcher)": 9, 
+        "fast-draw (ammo)": 14, 
+        "observation": 12, 
+        "throwing": 10, 
+        "lockpicking": 12, 
+        "beam weapons (rifle)": 14, 
+        "streetwise": 12, 
+        "karate": 13, 
+        "axe/mace": 12, 
+        "stealth": 14, 
+        "brawling": 13, 
+        "first aid": 13, 
+        "armoury (small arms)": 11, 
+        "beam weapons (pistol)": 15, 
+        "holdout": 11, 
+        "knife": 15, 
+        "traps": 12
+      }, 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {
+        "g-experience": 3, 
+        "code of honor (professioal)": -5, 
+        "no sense of humor": -10, 
+        "dyslexia": -10, 
+        "weirdness magnet": -15, 
+        "nosy": -1, 
+        "pyromania": -10, 
+        "high pain threshold": 10, 
+        "alcohol intolerance": -1, 
+        "night vision": 4, 
+        "combat reflexes": 15
+      }, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "vasilis - Alan": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+        {
+          "acc": 3, 
+          "count": 1, 
+          "name": "pistol, Colt 170D", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 9
+          }
+        }, 
+        {
+          "count": 100000, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "C Cell"
+        }, 
+        {
+          "count": 1, 
+          "name": "sick stick", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 1, 
+              "num_dice": 1, 
+              "type": "fat"
+            }
+          }, 
+          "skill": "axe/mace", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "Hacking Equipment +1"
+        }
+      ], 
+      "weapon-index": null, 
+      "skills": {
+        "engineer (electronics)": 12, 
+        "engineer (starships)": 12, 
+        "cryptography": 13, 
+        "electronics operation": 13, 
+        "beam weapons (rifle)": 12, 
+        "computer hacking": 15, 
+        "axe/mace": 11, 
+        "computer programming": 12, 
+        "piloting": 13, 
+        "computer security": 12, 
+        "beam weapons (pistol)": 15, 
+        "armoury (small arms)": 13, 
+        "brawling": 12, 
+        "first aid": 14, 
+        "physics": 12, 
+        "mathematics (applied)": 12, 
+        "observation": 15
+      }, 
+      "shock": 0, 
+      "current": {
+        "fp": 10, 
+        "iq": 14, 
+        "hp": 12, 
+        "ht": 9, 
+        "st": 10, 
+        "dx": 12, 
+        "basic-speed": 5.25
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 10, 
+        "iq": 14, 
+        "hp": 12, 
+        "ht": 9, 
+        "st": 10, 
+        "dx": 12, 
+        "basic-speed": 5.25
+      }, 
+      "advantages": {
+        "acute vision 1": 2, 
+        "eidetic memory": 5, 
+        "fit": 5, 
+        "humble": -1, 
+        "squeamish": -10, 
+        "secret (turned in evidence on brutal Bratva hit)": -30, 
+        "cannot speak/synthesizer": -10
+      }, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "deri - Chelsea": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+        {
+          "acc": 4, 
+          "count": 1, 
+          "name": "pistol, Sig D65", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 9
+          }
+        }, 
+        {
+          "count": 100000, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "C Cell"
+        }, 
+        {
+          "count": 1, 
+          "name": "sick stick", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 1, 
+              "num_dice": 1, 
+              "type": "fat"
+            }
+          }, 
+          "skill": "axe/mace", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "name": "knife, large", 
+          "notes": "", 
+          "damage": {
+            "sw": {
+              "plus": -2, 
+              "type": "cut"
+            }, 
+            "thr": {
+              "plus": 0, 
+              "type": "imp"
+            }
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "name": "knife, small", 
+          "notes": "B272", 
+          "damage": {
+            "sw": {
+              "plus": -3, 
+              "type": "cut"
+            }, 
+            "thr": {
+              "plus": -1, 
+              "type": "imp"
+            }
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }
+      ], 
+      "weapon-index": null, 
+      "skills": {
+        "electronics repair (terraforming)": 13, 
+        "thrown weapon (knife)": 10, 
+        "connoisseur (visual arts)": 13, 
+        "escape": 9, 
+        "mechanic (spacecraft)": 15, 
+        "electronics operation (terraforming)": 13, 
+        "fast talk": 15, 
+        "piloting (low-performance spacecraft)": 9, 
+        "forgery": 12, 
+        "brawling": 11, 
+        "hazardous materials (chemical)": 13, 
+        "beam weapons (pistol)": 11, 
+        "lip reading": 14, 
+        "area knowledge (space station)": 16, 
+        "streetwise": 15, 
+        "axe/mace": 8, 
+        "current affairs (terraforming)": 14, 
+        "climbing": 8, 
+        "detect lies": 14, 
+        "electronics repair (security)": 15, 
+        "computer hacking": 13, 
+        "computer operation": 14, 
+        "computer programming": 12, 
+        "electronics operation (security)": 14
+      }, 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 14, 
+        "hp": 10, 
+        "ht": 11, 
+        "st": 9, 
+        "dx": 9, 
+        "basic-speed": 5
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 14, 
+        "hp": 10, 
+        "ht": 11, 
+        "st": 9, 
+        "dx": 9, 
+        "basic-speed": 5
+      }, 
+      "advantages": {
+        "honest face": 1, 
+        "likes knick knacks": -1, 
+        "nosy": -1, 
+        "wealth (struggling)": -10, 
+        "deep sleeper": 1, 
+        "cultural familiarity (terraformers)": 1, 
+        "habit (fidget)": -1, 
+        "alcohol intolerance": -1, 
+        "impulsiveness": -15, 
+        "empathy (sensitive)": 5, 
+        "short attention span": -15, 
+        "curious": -10, 
+        "dreamer": -1, 
+        "bad tember": -10, 
+        "combat reflexes": 15, 
+        "versatile": 5, 
+        "vodou practitioner (Mambo 1)": 15
+      }, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "samuel - Erik": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+        {
+          "acc": 4, 
+          "count": 1, 
+          "name": "pistol, Sig D65", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 9
+          }
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "C Cell"
+        }, 
+        {
+          "count": 1, 
+          "name": "knife, small", 
+          "notes": "B272", 
+          "damage": {
+            "sw": {
+              "plus": -3, 
+              "type": "cut"
+            }, 
+            "thr": {
+              "plus": -1, 
+              "type": "imp"
+            }
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "name": "sick stick", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 1, 
+              "num_dice": 1, 
+              "type": "fat"
+            }
+          }, 
+          "skill": "axe/mace", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "name": "brass knuckles", 
+          "notes": "B271", 
+          "damage": {
+            "thr": {
+              "plus": 0, 
+              "type": "cr"
+            }
+          }, 
+          "parry": 0, 
+          "skill": "karate", 
+          "type": "melee weapon"
+        }
+      ], 
+      "weapon-index": null, 
+      "skills": {
+        "throwing": 13, 
+        "armoury (small arms)": 10, 
+        "scrounging": 12, 
+        "camouflage": 11, 
+        "stealth": 12, 
+        "brawling": 15, 
+        "beam weapons (pistol)": 15, 
+        "knife": 13, 
+        "urban survival": 11, 
+        "lockpicking": 10, 
+        "intimidation": 11, 
+        "streetwise": 11, 
+        "axe/mace": 13, 
+        "running": 10, 
+        "fast-draw (pistol)": 14, 
+        "climbing": 12, 
+        "theology (Vodou)": 10, 
+        "filch": 12, 
+        "pickpocket": 11, 
+        "beam weapons (rifle)": 13, 
+        "first aid": 12, 
+        "fast-draw (knife)": 14, 
+        "gesture": 11
+      }, 
+      "shock": 0, 
+      "current": {
+        "fp": 13, 
+        "iq": 11, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 12, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 13, 
+        "iq": 11, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 12, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {
+        "guilt complex (loss of sister)": -5, 
+        "light sleeper": -5, 
+        "fit": 5, 
+        "enemy (Gregory Occeant)": -20, 
+        "wealth (struggling)": -10, 
+        "rapid healing": 5, 
+        "vodou practitioner": 5, 
+        "vow (return to earth for sister)": -5, 
+        "flashbacks, mild": -5, 
+        "combat reflexes": 15
+      }, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "mama V - Karen": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+        {
+          "count": 1, 
+          "name": "sick stick", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 1, 
+              "num_dice": 1, 
+              "type": "fat"
+            }
+          }, 
+          "skill": "axe/mace", 
+          "type": "melee weapon"
+        }, 
+        {
+          "acc": 4, 
+          "count": 1, 
+          "name": "pistol, Sig D65", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 9
+          }
+        }, 
+        {
+          "count": 100000, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "C Cell"
+        }
+      ], 
+      "weapon-index": null, 
+      "skills": {
+        "physician": 14, 
+        "axe/mace": 7, 
+        "fast-draw (pistol)": 9, 
+        "brawling": 8, 
+        "first aid": 17, 
+        "beam weapons (pistol)": 14
+      }, 
+      "shock": 0, 
+      "current": {
+        "fp": 18, 
+        "iq": 16, 
+        "hp": 19, 
+        "ht": 8, 
+        "st": 9, 
+        "dx": 8, 
+        "basic-speed": 4
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 18, 
+        "iq": 16, 
+        "hp": 19, 
+        "ht": 8, 
+        "st": 9, 
+        "dx": 8, 
+        "basic-speed": 4
+      }, 
+      "advantages": {
+        "ailurophobia (cats)": -5, 
+        "compulsive vowing": -5, 
+        "lwa (Bokor, Papa Ghede)": 8, 
+        "vodou practitioner (Bokor 2)": 45, 
+        "agoraphobia (open spaces)": -10, 
+        "delusions (Papa Ghede is g-grandfather)": -1, 
+        "impulsiveness": -10, 
+        "distractible": -1, 
+        "responsive": -1, 
+        "curious": -5, 
+        "bad sight (farsighted)": -25, 
+        "likes shiny objects": -1, 
+        "personality change": -1
+      }, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }
   }, 
   "Equipment": [
     {
@@ -787,19 +1578,26 @@
       "name": "brass knuckles", 
       "notes": "B271", 
       "damage": {
-        "thr": {"plus": 0, "type": "cr"}
+        "thr": {
+          "plus": 0, 
+          "type": "cr"
+        }
       }, 
       "parry": 0, 
       "skill": "karate", 
       "type": "melee weapon"
-    },
+    }, 
     {
       "acc": 2, 
       "count": 1, 
       "name": "pistol, Baretta DX 192", 
       "notes": "", 
       "damage": {
-        "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
+        "dice": {
+          "plus": 4, 
+          "num_dice": 1, 
+          "type": "pi"
+        }
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
@@ -816,7 +1614,11 @@
       "name": "pistol, Sig D65", 
       "notes": "", 
       "damage": {
-        "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
+        "dice": {
+          "plus": 4, 
+          "num_dice": 1, 
+          "type": "pi"
+        }
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
@@ -833,7 +1635,11 @@
       "name": "pistol, Kalashnikov Makarov", 
       "notes": "", 
       "damage": {
-        "dice": {"num_dice": 1, "plus": 3, "type": "pi"}
+        "dice": {
+          "plus": 3, 
+          "num_dice": 1, 
+          "type": "pi"
+        }
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
@@ -850,7 +1656,11 @@
       "name": "pistol, Colt 170D", 
       "notes": "", 
       "damage": {
-        "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
+        "dice": {
+          "plus": 4, 
+          "num_dice": 1, 
+          "type": "pi"
+        }
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
@@ -866,8 +1676,14 @@
       "name": "knife, large", 
       "notes": "", 
       "damage": {
-        "thr": {"plus": 0, "type": "imp"},
-        "sw": {"plus": -2, "type": "cut"}
+        "sw": {
+          "plus": -2, 
+          "type": "cut"
+        }, 
+        "thr": {
+          "plus": 0, 
+          "type": "imp"
+        }
       }, 
       "parry": -1, 
       "skill": "knife", 
@@ -878,7 +1694,11 @@
       "name": "sick stick", 
       "notes": "", 
       "damage": {
-        "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
+        "dice": {
+          "plus": 1, 
+          "num_dice": 1, 
+          "type": "fat"
+        }
       }, 
       "skill": "axe/mace", 
       "type": "melee weapon"
@@ -2053,7 +2873,11 @@
             "name": "pistol, Sig D65", 
             "notes": "", 
             "damage": {
-              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2069,7 +2893,11 @@
             "name": "sick stick", 
             "notes": "", 
             "damage": {
-              "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
+              "dice": {
+                "plus": 1, 
+                "num_dice": 1, 
+                "type": "fat"
+              }
             }, 
             "skill": "axe/mace", 
             "type": "melee weapon"
@@ -2084,8 +2912,8 @@
         "weapon-index": null, 
         "skills": {
           "beam weapons (pistol)": 16, 
-          "axe/mace": 14, 
-          "brawling": 16
+          "brawling": 16, 
+          "axe/mace": 14
         }, 
         "shock": 0, 
         "current": {
@@ -2128,7 +2956,11 @@
             "name": "pistol, Colt 170D", 
             "notes": "", 
             "damage": {
-              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2192,7 +3024,11 @@
             "name": "pistol, Sig D65", 
             "notes": "", 
             "damage": {
-              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2208,7 +3044,11 @@
             "name": "sick stick", 
             "notes": "", 
             "damage": {
-              "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
+              "dice": {
+                "plus": 1, 
+                "num_dice": 1, 
+                "type": "fat"
+              }
             }, 
             "skill": "axe/mace", 
             "type": "melee weapon"
@@ -2223,8 +3063,8 @@
         "weapon-index": null, 
         "skills": {
           "beam weapons (pistol)": 16, 
-          "axe/mace": 14, 
-          "brawling": 16
+          "brawling": 16, 
+          "axe/mace": 14
         }, 
         "shock": 0, 
         "current": {
@@ -2267,7 +3107,11 @@
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
-              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2283,8 +3127,14 @@
             "name": "knife, large", 
             "notes": "", 
             "damage": {
-                "thr": {"plus": 0, "type": "imp"},
-                "sw": {"plus": -2, "type": "cut"}
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
             }, 
             "parry": -1, 
             "skill": "knife", 
@@ -2344,7 +3194,11 @@
             "name": "pistol, Kalashnikov Makarov", 
             "notes": "", 
             "damage": {
-              "dice": {"num_dice": 1, "plus": 3, "type": "pi"}
+              "dice": {
+                "plus": 3, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2409,7 +3263,11 @@
             "name": "pistol, Sig D65", 
             "notes": "", 
             "damage": {
-              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2425,7 +3283,11 @@
             "name": "sick stick", 
             "notes": "", 
             "damage": {
-              "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
+              "dice": {
+                "plus": 1, 
+                "num_dice": 1, 
+                "type": "fat"
+              }
             }, 
             "skill": "axe/mace", 
             "type": "melee weapon"
@@ -2440,8 +3302,8 @@
         "weapon-index": null, 
         "skills": {
           "beam weapons (pistol)": 16, 
-          "axe/mace": 14, 
-          "brawling": 16
+          "brawling": 16, 
+          "axe/mace": 14
         }, 
         "shock": 0, 
         "current": {
@@ -2484,7 +3346,11 @@
             "name": "pistol, Sig D65", 
             "notes": "", 
             "damage": {
-              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2500,7 +3366,11 @@
             "name": "sick stick", 
             "notes": "", 
             "damage": {
-              "dice": {"num_dice": 1, "plus": 1, "type": "fat"}
+              "dice": {
+                "plus": 1, 
+                "num_dice": 1, 
+                "type": "fat"
+              }
             }, 
             "skill": "axe/mace", 
             "type": "melee weapon"
@@ -2515,8 +3385,8 @@
         "weapon-index": null, 
         "skills": {
           "beam weapons (pistol)": 16, 
-          "axe/mace": 14, 
-          "brawling": 16
+          "brawling": 16, 
+          "axe/mace": 14
         }, 
         "shock": 0, 
         "current": {
@@ -2559,7 +3429,11 @@
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
-              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2575,8 +3449,14 @@
             "name": "knife, large", 
             "notes": "", 
             "damage": {
-                "thr": {"plus": 0, "type": "imp"},
-                "sw": {"plus": -2, "type": "cut"}
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
             }, 
             "parry": -1, 
             "skill": "knife", 
@@ -2699,7 +3579,11 @@
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
-              "dice": {"num_dice": 1, "plus": 4, "type": "pi"}
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
@@ -2715,8 +3599,14 @@
             "name": "knife, large", 
             "notes": "", 
             "damage": {
-                "thr": {"plus": 0, "type": "imp"},
-                "sw": {"plus": -2, "type": "cut"}
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
             }, 
             "parry": -1, 
             "skill": "knife", 

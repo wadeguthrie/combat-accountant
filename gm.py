@@ -470,6 +470,43 @@ class MainGmWindow(GmWindow):
             self.__char_detail.append({'text': '  (None)',
                                        'mode': mode})
 
+        # spells
+
+        if 'spells' in character:
+            mode = curses.A_NORMAL 
+            self.__char_detail.append({'text': 'Spells',
+                                       'mode': mode | curses.A_BOLD})
+
+            found_one = False
+            for spell, value in sorted(character['spells'].iteritems(),
+                                           key=lambda (k,v): (k, v)):
+                found_one = True
+                self.__char_detail.append({'text': '  %s: %d' % (spell, value),
+                                           'mode': mode})
+
+            if not found_one:
+                self.__char_detail.append({'text': '  (None)',
+                                           'mode': mode})
+
+        # notes
+
+        mode = curses.A_NORMAL 
+        self.__char_detail.append({'text': 'Notes',
+                                   'mode': mode | curses.A_BOLD})
+
+        found_one = False
+        if 'notes' in character:
+            for note in character['notes']:
+                found_one = True
+                self.__char_detail.append({'text': '  %s' % note,
+                                           'mode': mode})
+
+        if not found_one:
+            self.__char_detail.append({'text': '  (None)',
+                                       'mode': mode})
+
+        # ...and show the screen
+
         self.__char_detail_window.draw_window()
         self.__char_detail_window.refresh()
 
@@ -852,7 +889,7 @@ class FightGmWindow(GmWindow):
                 line += 1
 
         if 'notes' in fighter.details and fighter.details['notes'] is not None:
-            for note in fighter.details['notes'].split('\n'):
+            for note in fighter.details['notes']:
                 window.addstr(line, 0, note, mode)
                 line += 1
 
@@ -4053,15 +4090,19 @@ class FightHandler(ScreenHandler):
         # Now, get the notes for that person
         lines, cols = self._window.getmaxyx()
 
-        notes = (None if 'notes' not in notes_recipient.details else
-                                            notes_recipient.details['notes'])
+        if 'notes' not in notes_recipient.details:
+            notes = None
+        else:
+            notes = '\n'.join(notes_recipient.details['notes'])
+
         notes = self._window_manager.edit_window(
                     lines - 4,
                     self._window.fighter_win_width,
                     notes,  # initial string (w/ \n) for the window
                     'Notes',
                     '^G to exit')
-        notes_recipient.details['notes'] = notes
+
+        notes_recipient.details['notes'] = [x for x in notes.split('\n')]
 
         # Redraw the fighters
         next_PC_name = self.__next_PC_name()
