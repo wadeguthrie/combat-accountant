@@ -888,8 +888,9 @@ class FightGmWindow(GmWindow):
                 window.addstr(line, 0, string, mode)
                 line += 1
 
-        if 'notes' in fighter.details and fighter.details['notes'] is not None:
-            for note in fighter.details['notes']:
+        if ('short_notes' in fighter.details and 
+                                fighter.details['short_notes'] is not None):
+            for note in fighter.details['short_notes']:
                 window.addstr(line, 0, note, mode)
                 line += 1
 
@@ -4090,10 +4091,10 @@ class FightHandler(ScreenHandler):
         # Now, get the notes for that person
         lines, cols = self._window.getmaxyx()
 
-        if 'notes' not in notes_recipient.details:
+        if 'short_notes' not in notes_recipient.details:
             notes = None
         else:
-            notes = '\n'.join(notes_recipient.details['notes'])
+            notes = '\n'.join(notes_recipient.details['short_notes'])
 
         notes = self._window_manager.edit_window(
                     lines - 4,
@@ -4102,7 +4103,7 @@ class FightHandler(ScreenHandler):
                     'Notes',
                     '^G to exit')
 
-        notes_recipient.details['notes'] = [x for x in notes.split('\n')]
+        notes_recipient.details['short_notes'] = [x for x in notes.split('\n')]
 
         # Redraw the fighters
         next_PC_name = self.__next_PC_name()
