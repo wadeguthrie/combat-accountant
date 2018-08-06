@@ -520,11 +520,11 @@ class MainGmWindow(GmWindow):
             self.refresh()
             return
 
-        for line, character_name in enumerate(char_list):
+        for line, char in enumerate(char_list):
             mode = (curses.A_NORMAL if current_index is None or
                                        current_index != line
                                     else curses.A_STANDOUT)
-            self.__char_list_window.addstr(line, 0, character_name, mode)
+            self.__char_list_window.addstr(line, 0, char['name'], mode)
         self.refresh()
 
 
@@ -4436,9 +4436,10 @@ class MainHandler(ScreenHandler):
         self._window.status_ribbon(self._input_filename,
                                    self._maintain_json)
 
-        name = (None if self.__char_index is None
+        person = (None if self.__char_index is None
                 else self.__char_names[self.__char_index])
-        character = None if name is None else self.__world['PCs'][name]
+        character = (None if person is None else
+                            self.__world[person['group']][person['name']])
 
         self._window.show_character_list(self.__char_names, self.__char_index)
         self._window.show_character_detail(character)
@@ -4592,7 +4593,11 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
     def __setup_PC_list(self):
-        self.__char_names = sorted(self.__world['PCs'].iterkeys())
+        self.__char_names = [{'name': x, 'group': 'PCs'} for x in
+                                    sorted(self.__world['PCs'].iterkeys())]
+        if 'NPCs' in self.__world:
+            self.__char_names.extend([{'name': x, 'group': 'NPCs'} for x in
+                                    sorted(self.__world['NPCs'].iterkeys())])
         self.__char_index = 0
 
 

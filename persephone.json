@@ -952,79 +952,39 @@
     ]
   }, 
   "NPCs": {
-    "lawerence - Spenser": {
+    "Konstantin Alexei Mironov": {
+      "notes": [
+        "Talk w/ Konstantin Alexei Mironov (Russian prison tattoos).  He ",
+        "should arrive on time in a very nice business suit, have an ",
+        "expensive watch and nice jewelry.  He'll give an extremely firm ",
+        "handshake and look each person in the eye.  He'll have a very ",
+        "opulent office, very large, with a view (it's a display of wealth",
+        "and power).  He'll lead the party to a formal anteroom with a table",
+        "for meals.  He'll remove his shoes before entering (roll for the",
+        "party to notice).  Wine and cake (like a fruitcake) will be served",
+        "in a very formal way.  He'll have servants serve the food",
+        "hierarchically to the guests whom he'll treat with honor and",
+        "respect (which he'll expect in return).  He will use each of the",
+        "party's title (Officer), first, middle, and last name.  At the meal,",
+        "he'll discuss how harsh the conditions are, having a business in",
+        "the space station, and how he has overcome it to flourish with",
+        "relationships like the one being forged, now.  He'll urge everyone",
+        "to take second helpings.  Afterwards, he'll move to his desk where",
+        "chairs will be provided for each of the party.  At his desk, he'll",
+        "ask a favor of the party: to find out what's in those crates and",
+        "to give him this information.  The meeting won't be over until",
+        "they've reached a decision.",
+        "",
+        "He values: emotional connection, he's fatalistic and pessimistic,",
+        "he'll have fortress mentality.  He'll be direct"
+      ],
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [
-        {
-          "count": 1, 
-          "name": "knife, large", 
-          "notes": "", 
-          "damage": {
-            "sw": {
-              "plus": -2, 
-              "type": "cut"
-            }, 
-            "thr": {
-              "plus": 0, 
-              "type": "imp"
-            }
-          }, 
-          "parry": -1, 
-          "skill": "knife", 
-          "type": "melee weapon"
-        }, 
-        {
-          "acc": 4, 
-          "count": 1, 
-          "name": "pistol, Sig D65", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 4, 
-              "num_dice": 1, 
-              "type": "pi"
-            }
-          }, 
-          "reload": 3, 
-          "skill": "beam weapons (pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 9, 
-            "shots_left": 9
-          }
-        }, 
-        {
-          "count": 100000, 
-          "notes": "", 
-          "type": "misc", 
-          "name": "C Cell"
-        }
-      ], 
+      "stuff": [], 
       "weapon-index": null, 
-      "skills": {
-        "interrogation": 12, 
-        "guns (grenade launcher)": 9, 
-        "fast-draw (ammo)": 14, 
-        "observation": 12, 
-        "throwing": 10, 
-        "lockpicking": 12, 
-        "beam weapons (rifle)": 14, 
-        "streetwise": 12, 
-        "karate": 13, 
-        "axe/mace": 12, 
-        "stealth": 14, 
-        "brawling": 13, 
-        "first aid": 13, 
-        "armoury (small arms)": 11, 
-        "beam weapons (pistol)": 15, 
-        "holdout": 11, 
-        "knife": 15, 
-        "traps": 12
-      }, 
+      "skills": {}, 
       "shock": 0, 
       "current": {
         "fp": 11, 
@@ -1045,532 +1005,566 @@
         "dx": 13, 
         "basic-speed": 6
       }, 
-      "advantages": {
-        "g-experience": 3, 
-        "code of honor (professioal)": -5, 
-        "no sense of humor": -10, 
-        "dyslexia": -10, 
-        "weirdness magnet": -15, 
-        "nosy": -1, 
-        "pyromania": -10, 
-        "high pain threshold": 10, 
-        "alcohol intolerance": -1, 
-        "night vision": 4, 
-        "combat reflexes": 15
-      }, 
+      "advantages": {}, 
       "did_action_this_turn": false, 
       "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
     }, 
-    "vasilis - Alan": {
+    "Dima": {
+      "notes": [
+        "Bratva bank.",
+        "Tags: dark gray sportcoat",
+        "Description:",
+        "Dima and his four bodyguards move with the relaxed confidence of",
+        "those whose security have been foretold by the gods.  His black",
+        "hair and beard, punctuated by patches of gray, are closely cropped",
+        "and he wears a dark gray sportcoat over jeans and a black dress",
+        "shirt unbuttoned at the neck."
+      ],
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [
-        {
-          "acc": 3, 
-          "count": 1, 
-          "name": "pistol, Colt 170D", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 4, 
-              "num_dice": 1, 
-              "type": "pi"
-            }
-          }, 
-          "reload": 3, 
-          "skill": "beam weapons (pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 9, 
-            "shots_left": 9
-          }
-        }, 
-        {
-          "count": 100000, 
-          "notes": "", 
-          "type": "misc", 
-          "name": "C Cell"
-        }, 
-        {
-          "count": 1, 
-          "name": "sick stick", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 1, 
-              "num_dice": 1, 
-              "type": "fat"
-            }
-          }, 
-          "skill": "axe/mace", 
-          "type": "melee weapon"
-        }, 
-        {
-          "count": 1, 
-          "notes": "", 
-          "type": "misc", 
-          "name": "Hacking Equipment +1"
-        }
-      ], 
+      "stuff": [], 
       "weapon-index": null, 
-      "skills": {
-        "engineer (electronics)": 12, 
-        "engineer (starships)": 12, 
-        "cryptography": 13, 
-        "electronics operation": 13, 
-        "beam weapons (rifle)": 12, 
-        "computer hacking": 15, 
-        "axe/mace": 11, 
-        "computer programming": 12, 
-        "piloting": 13, 
-        "computer security": 12, 
-        "beam weapons (pistol)": 15, 
-        "armoury (small arms)": 13, 
-        "brawling": 12, 
-        "first aid": 14, 
-        "physics": 12, 
-        "mathematics (applied)": 12, 
-        "observation": 15
-      }, 
-      "shock": 0, 
-      "current": {
-        "fp": 10, 
-        "iq": 14, 
-        "hp": 12, 
-        "ht": 9, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.25
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 10, 
-        "iq": 14, 
-        "hp": 12, 
-        "ht": 9, 
-        "st": 10, 
-        "dx": 12, 
-        "basic-speed": 5.25
-      }, 
-      "advantages": {
-        "acute vision 1": 2, 
-        "eidetic memory": 5, 
-        "fit": 5, 
-        "humble": -1, 
-        "squeamish": -10, 
-        "secret (turned in evidence on brutal Bratva hit)": -30, 
-        "cannot speak/synthesizer": -10
-      }, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "deri - Chelsea": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-        {
-          "acc": 4, 
-          "count": 1, 
-          "name": "pistol, Sig D65", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 4, 
-              "num_dice": 1, 
-              "type": "pi"
-            }
-          }, 
-          "reload": 3, 
-          "skill": "beam weapons (pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 9, 
-            "shots_left": 9
-          }
-        }, 
-        {
-          "count": 100000, 
-          "notes": "", 
-          "type": "misc", 
-          "name": "C Cell"
-        }, 
-        {
-          "count": 1, 
-          "name": "sick stick", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 1, 
-              "num_dice": 1, 
-              "type": "fat"
-            }
-          }, 
-          "skill": "axe/mace", 
-          "type": "melee weapon"
-        }, 
-        {
-          "count": 1, 
-          "name": "knife, large", 
-          "notes": "", 
-          "damage": {
-            "sw": {
-              "plus": -2, 
-              "type": "cut"
-            }, 
-            "thr": {
-              "plus": 0, 
-              "type": "imp"
-            }
-          }, 
-          "parry": -1, 
-          "skill": "knife", 
-          "type": "melee weapon"
-        }, 
-        {
-          "count": 1, 
-          "name": "knife, small", 
-          "notes": "B272", 
-          "damage": {
-            "sw": {
-              "plus": -3, 
-              "type": "cut"
-            }, 
-            "thr": {
-              "plus": -1, 
-              "type": "imp"
-            }
-          }, 
-          "parry": -1, 
-          "skill": "knife", 
-          "type": "melee weapon"
-        }
-      ], 
-      "weapon-index": null, 
-      "skills": {
-        "electronics repair (terraforming)": 13, 
-        "thrown weapon (knife)": 10, 
-        "connoisseur (visual arts)": 13, 
-        "escape": 9, 
-        "mechanic (spacecraft)": 15, 
-        "electronics operation (terraforming)": 13, 
-        "fast talk": 15, 
-        "piloting (low-performance spacecraft)": 9, 
-        "forgery": 12, 
-        "brawling": 11, 
-        "hazardous materials (chemical)": 13, 
-        "beam weapons (pistol)": 11, 
-        "lip reading": 14, 
-        "area knowledge (space station)": 16, 
-        "streetwise": 15, 
-        "axe/mace": 8, 
-        "current affairs (terraforming)": 14, 
-        "climbing": 8, 
-        "detect lies": 14, 
-        "electronics repair (security)": 15, 
-        "computer hacking": 13, 
-        "computer operation": 14, 
-        "computer programming": 12, 
-        "electronics operation (security)": 14
-      }, 
+      "skills": {}, 
       "shock": 0, 
       "current": {
         "fp": 11, 
-        "iq": 14, 
-        "hp": 10, 
-        "ht": 11, 
-        "st": 9, 
-        "dx": 9, 
-        "basic-speed": 5
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 14, 
-        "hp": 10, 
-        "ht": 11, 
-        "st": 9, 
-        "dx": 9, 
-        "basic-speed": 5
-      }, 
-      "advantages": {
-        "honest face": 1, 
-        "likes knick knacks": -1, 
-        "nosy": -1, 
-        "wealth (struggling)": -10, 
-        "deep sleeper": 1, 
-        "cultural familiarity (terraformers)": 1, 
-        "habit (fidget)": -1, 
-        "alcohol intolerance": -1, 
-        "impulsiveness": -15, 
-        "empathy (sensitive)": 5, 
-        "short attention span": -15, 
-        "curious": -10, 
-        "dreamer": -1, 
-        "bad tember": -10, 
-        "combat reflexes": 15, 
-        "versatile": 5, 
-        "vodou practitioner (Mambo 1)": 15
-      }, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "samuel - Erik": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-        {
-          "acc": 4, 
-          "count": 1, 
-          "name": "pistol, Sig D65", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 4, 
-              "num_dice": 1, 
-              "type": "pi"
-            }
-          }, 
-          "reload": 3, 
-          "skill": "beam weapons (pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 9, 
-            "shots_left": 9
-          }
-        }, 
-        {
-          "count": 5, 
-          "notes": "", 
-          "type": "misc", 
-          "name": "C Cell"
-        }, 
-        {
-          "count": 1, 
-          "name": "knife, small", 
-          "notes": "B272", 
-          "damage": {
-            "sw": {
-              "plus": -3, 
-              "type": "cut"
-            }, 
-            "thr": {
-              "plus": -1, 
-              "type": "imp"
-            }
-          }, 
-          "parry": -1, 
-          "skill": "knife", 
-          "type": "melee weapon"
-        }, 
-        {
-          "count": 1, 
-          "name": "sick stick", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 1, 
-              "num_dice": 1, 
-              "type": "fat"
-            }
-          }, 
-          "skill": "axe/mace", 
-          "type": "melee weapon"
-        }, 
-        {
-          "count": 1, 
-          "name": "brass knuckles", 
-          "notes": "B271", 
-          "damage": {
-            "thr": {
-              "plus": 0, 
-              "type": "cr"
-            }
-          }, 
-          "parry": 0, 
-          "skill": "karate", 
-          "type": "melee weapon"
-        }
-      ], 
-      "weapon-index": null, 
-      "skills": {
-        "throwing": 13, 
-        "armoury (small arms)": 10, 
-        "scrounging": 12, 
-        "camouflage": 11, 
-        "stealth": 12, 
-        "brawling": 15, 
-        "beam weapons (pistol)": 15, 
-        "knife": 13, 
-        "urban survival": 11, 
-        "lockpicking": 10, 
-        "intimidation": 11, 
-        "streetwise": 11, 
-        "axe/mace": 13, 
-        "running": 10, 
-        "fast-draw (pistol)": 14, 
-        "climbing": 12, 
-        "theology (Vodou)": 10, 
-        "filch": 12, 
-        "pickpocket": 11, 
-        "beam weapons (rifle)": 13, 
-        "first aid": 12, 
-        "fast-draw (knife)": 14, 
-        "gesture": 11
-      }, 
-      "shock": 0, 
-      "current": {
-        "fp": 13, 
-        "iq": 11, 
+        "iq": 12, 
         "hp": 12, 
         "ht": 11, 
-        "st": 12, 
+        "st": 10, 
         "dx": 13, 
         "basic-speed": 6
       }, 
       "state": "alive", 
       "permanent": {
-        "fp": 13, 
-        "iq": 11, 
+        "fp": 11, 
+        "iq": 12, 
         "hp": 12, 
         "ht": 11, 
-        "st": 12, 
+        "st": 10, 
         "dx": 13, 
         "basic-speed": 6
       }, 
-      "advantages": {
-        "guilt complex (loss of sister)": -5, 
-        "light sleeper": -5, 
-        "fit": 5, 
-        "enemy (Gregory Occeant)": -20, 
-        "wealth (struggling)": -10, 
-        "rapid healing": 5, 
-        "vodou practitioner": 5, 
-        "vow (return to earth for sister)": -5, 
-        "flashbacks, mild": -5, 
-        "combat reflexes": 15
-      }, 
+      "advantages": {}, 
       "did_action_this_turn": false, 
       "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
     }, 
-    "mama V - Karen": {
+    "Mitchell Hurley": {
+      "notes": [
+        "Chief Deputy Marshal",
+        "Tags: tall, corpulent, sweet",
+        "Chief deputy Hurley is a big man.  At 6' 2\" and massively",
+        "corpulent, he looks like he's been poured into his uniform like",
+        "it was a sausage casing and, at that, the fabric strains at the",
+        "buttons.  In spite of this, though, he moves like someone who's",
+        "been large his entire life.  His head is topped by a thick bush",
+        "of sandy blonde hair which seems to go perfectly with his dirty",
+        "blue eyes.  Mitchell Hurley has a sweet demeanor and tends to get",
+        "things done by convincing agreement rather than XXX"
+      ],
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [
-        {
-          "count": 1, 
-          "name": "sick stick", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 1, 
-              "num_dice": 1, 
-              "type": "fat"
-            }
-          }, 
-          "skill": "axe/mace", 
-          "type": "melee weapon"
-        }, 
-        {
-          "acc": 4, 
-          "count": 1, 
-          "name": "pistol, Sig D65", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 4, 
-              "num_dice": 1, 
-              "type": "pi"
-            }
-          }, 
-          "reload": 3, 
-          "skill": "beam weapons (pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 9, 
-            "shots_left": 9
-          }
-        }, 
-        {
-          "count": 100000, 
-          "notes": "", 
-          "type": "misc", 
-          "name": "C Cell"
-        }
-      ], 
+      "stuff": [], 
       "weapon-index": null, 
-      "skills": {
-        "physician": 14, 
-        "axe/mace": 7, 
-        "fast-draw (pistol)": 9, 
-        "brawling": 8, 
-        "first aid": 17, 
-        "beam weapons (pistol)": 14
-      }, 
+      "skills": {}, 
       "shock": 0, 
       "current": {
-        "fp": 18, 
-        "iq": 16, 
-        "hp": 19, 
-        "ht": 8, 
-        "st": 9, 
-        "dx": 8, 
-        "basic-speed": 4
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
       }, 
       "state": "alive", 
       "permanent": {
-        "fp": 18, 
-        "iq": 16, 
-        "hp": 19, 
-        "ht": 8, 
-        "st": 9, 
-        "dx": 8, 
-        "basic-speed": 4
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
       }, 
-      "advantages": {
-        "ailurophobia (cats)": -5, 
-        "compulsive vowing": -5, 
-        "lwa (Bokor, Papa Ghede)": 8, 
-        "vodou practitioner (Bokor 2)": 45, 
-        "agoraphobia (open spaces)": -10, 
-        "delusions (Papa Ghede is g-grandfather)": -1, 
-        "impulsiveness": -10, 
-        "distractible": -1, 
-        "responsive": -1, 
-        "curious": -5, 
-        "bad sight (farsighted)": -25, 
-        "likes shiny objects": -1, 
-        "personality change": -1
-      }, 
+      "advantages": {}, 
       "did_action_this_turn": false, 
       "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
-    }
+    }, 
+    "Leland Stoddard": {
+      "notes": [
+        "Tags: bald, mustache, intense",
+        "Chief Deputy Marshal Leland Stoddard's face is almost entirely",
+        "mustache.  Big, brown, burly and bushy, his mustache dominates",
+        "his otherwise hairless head as if it makes up for all that shiny",
+        "skin. He presents an imposing presence even though he's only",
+        "slightly taller than average, and leanly built. He has the",
+        "certainty of purpose that blossoms from the deep understanding",
+        "that his will is God's will and his carriage promises an absolute",
+        "reckoning if your interests and his don't perfectly align. ",
+        "",
+        "He was a gunnery sergeant in the space marines and is known by the",
+        "Conglomerate as someone who gets ugly things done."
+      ],
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "Mackenzie": {
+      "notes": [
+        "Tags: aboriginal, awkward / headgear, bright",
+        "Mac's an aboriginal Australian with the characteristic umber",
+        "skin; deep-set eyes; wide nose; and giant mop of hair, akimbo.",
+        "She sports braces with dental headgear and, commensurate with her",
+        "age, has a mild dusting of pimples on her forehead.  Today, like",
+        "most days, she's wearing an oversized gray sweatshirt over olive",
+        "drab cargo pants and canvas Converse high-tops (covered in cartoon",
+        "bunnies).",
+        "",
+        "Mackenzie is 15 years old, 145 lbs, and 5' 2\".  She works most days",
+        "at the front desk and answering the phones but she also helps with",
+        "IT.  Turns out, she's _really_ good at IT and fills-in for the",
+        "lazy guy who's in charge of that department.  She's the adopted",
+        "child of a white father who is often away on one of the platforms.",
+        "She's not chipped (doesn't _have_ to get chipped until next year).",
+        "Her dad leaves open accounts for Mac whenever he's off-station.",
+        "She's technically a volunteer but she gets cards under the table.",
+        "",
+        "She's an outcast, being one of the very few aborigines in the",
+        "project.  She retreats into hacking but also spends some time in",
+        "the outer rings."
+      ],
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "Mambo Iriye": {
+      "notes": [
+        "Mambo that leads Masubi-1's Vodou Societe.  She detected the",
+        "mojo from crates on"
+      ],
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "Mama Cedella": {
+      "notes": [
+        "Bokor. Jamaican",
+        "Tags: Short, wiry gray hair, anorexic.",
+        "Description: An anorexic, mocha-colored lady shimmies out from",
+        "behind the pipes, her head bobbing to music only she can hear.",
+        "She wears a bright red, floor-length dress on her barely-5-foot",
+        "frame and there's a flash of wiry gray hair spilling out from",
+        "under her top-hat.",
+        "",
+        "Specialty: Knowledge (Loko)",
+        "Cedella's mind is broken by the telepathic slugs.  She sees",
+        "people that aren't there, she sees people that are slugs'",
+        "projections (avatars), she believes that she's invisible but also",
+        "believes that one of her more persistent shades can be seen by",
+        "others -- she has open conversations with that one and that's",
+        "her communication with the outside world.  When people talk to",
+        "her, she thinks they're talking to her shade.",
+        "",
+        "She's aware that some of the people she sees are hallucinations",
+        "-- when new people show up, she doesn't know if they're",
+        "hallucinations or not.  Her hallucinations (and the avatars) can",
+        "read her mind so she'll ask new people a question, the answer to",
+        "which they can see around them, and think the wrong answer.  Real",
+        "people get the environmental answer but imaginary people get the",
+        "answer in her head."
+      ],
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "Lady Shenice": {
+      "notes": [
+        "Bokor",
+        "",
+        "Tags: chubby",
+        "",
+        "Specialty: meta (Ti-Jean Petro)"
+      ],
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "Papa Jorge": {
+      "notes": [
+        "Bokor.  Dominican.",
+        "",
+        "Tags: Fireplug, square head, thick mop of black hair, always a",
+        "broad smile and a twinkle in his eyes",
+        "",
+        "Specialty: techno (Simbi)",
+        "",
+        "Jorge is a little fireplug of a man with a square head that sits",
+        "atop a blacksmith's body.  He has a ready smile and dimples you can",
+        "plant a tree in.  He gives you a dazzling grin and says 'Mucho gusto.'"
+      ],
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "Queen Clio": {
+      "notes": [
+        "(alpha) Bokor. Haitian (speaks with French accent)",
+        "Specialty: protection and warning (Papa Legba)",
+        "Tags: tall, thin, regal",
+        "Narrow face, mocha skin, high cheekbones, giant close-set eyes,",
+        "and jet black lips.  Black and white patterned turban, piled high",
+        "on her head.  Large hoop earrings.  Several rings and bracelets.",
+        "Bones woven into a necklace.",
+        "",
+        "A dress in indigo and teal satin with billowing skirts, and",
+        "voluminous sleeves to the wrist.  A bright turquoise wrap extends",
+        "to the floor.",
+        "",
+        "She went to a French finishing school in Port-O-Prince.",
+        "Office is a repurposed janitorial closet.  Heavily cluttered with",
+        "things sitting on top of things and stuff hanging from the ceiling.",
+        "Queen Clio's place is tucked into an alcove that, at one time, was",
+        "probably a janitorial closet.  She works at a small writing desk",
+        "on the other side of an overflowing bookshelf, both pushed up",
+        "against the wall on the left.  There are indigenous drums on the",
+        "floor and an African grave marker against the opposite wall,",
+        "leaning against an apothecary's cabinet that's supporting upwards",
+        "of a dozen human skulls surrounded by candles, tarot cards, and",
+        "prayer beads.  What you can see of the walls and ceiling is",
+        "painted a dark, deep, indigo interrupted by stars in shining gold",
+        "but they're mostly covered by prayer mats and vestments from myriad",
+        "religions plus various other items including a weathered chalice,",
+        "a few prayer wheels, and a dagger (maybe Egyptian or Sumerian?)",
+        "that's covered with a long-dried brown liquid.  A shrunken head",
+        "that looks disturbingly real is hanging from the ceiling along",
+        "with various stoppered bottles and a number of other things",
+        "including a Grecian vase filled with a small bundle of fresh",
+        "flowers.",
+        "",
+        "Office is a repurposed janitorial closet.  There're 13 skulls.",
+        "The stars are arranged like those of the Earth's night sky.  The",
+        "books on the shelf appear to be leather bound manuscripts with",
+        "ancient brass corner caps and buckled closures.  On the bookshelf",
+        "are bottles of wine and rum and holy water.  The apothecary's",
+        "cabinet contains finger bones, herbs, incense, and a bunch of",
+        "other stuff.  This part of the office terminates at an opaque",
+        "indigo drape.  Beyond that is her sleeping palette and personal",
+        "things."
+      ],
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "Bokor Requiem": {
+      "notes": [
+        "Bokor. Jamaican.",
+        "Tags: plain, intelligent, quiet",
+        "Specialty: necromancy (Baron Samedi)",
+        "Requiem is plain looking, with a nose that's just a little too",
+        "large for her face, puffy cheeks, and a slightly absent chin.  You",
+        "can see a bright, shiny light, though, behind her tiny, squinty",
+        "eyes.  There's plenty going on beneath that dowdy surface. Requiem",
+        "simply nods by way of greeting."
+      ],
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "Celeline Fermine": {
+      "notes": [
+        "(Pilot)",
+        "Cedeline and Diego Fermine.  Cedeline (Haitian) is the pilot and",
+        "Diego (Dominican) is her husband.  Diego's a maintenance worker",
+        "on Persephone Station."
+      ],
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    } 
   }, 
   "Equipment": [
     {
