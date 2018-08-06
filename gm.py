@@ -521,7 +521,14 @@ class MainGmWindow(GmWindow):
             return
 
         for line, char in enumerate(char_list):
-            mode = (curses.A_NORMAL if current_index is None or
+            mode = 0
+            if char['group'] == 'NPCs':
+                mode = curses.color_pair(GmWindowManager.CYAN_BLACK)
+            else:
+                mode = self._window_manager.get_mode_from_fighter_state(
+                                    Fighter.get_fighter_state(char['details']))
+
+            mode |= (curses.A_NORMAL if current_index is None or
                                        current_index != line
                                     else curses.A_STANDOUT)
             self.__char_list_window.addstr(line, 0, char['name'], mode)
@@ -631,17 +638,6 @@ class FightGmWindow(GmWindow):
         # assume rounds takes as much space as '%d' 
         self.len_timer_leader = len(self.__round_count_string)
 
-        self.__state_color = {
-                Fighter.ALIVE :
-                    curses.color_pair(GmWindowManager.GREEN_BLACK),
-                Fighter.INJURED :
-                    curses.color_pair(GmWindowManager.YELLOW_BLACK),
-                Fighter.UNCONSCIOUS :
-                    curses.color_pair(GmWindowManager.RED_BLACK),
-                Fighter.DEAD :
-                    curses.color_pair(GmWindowManager.RED_BLACK),
-        }
-
     def close(self):
         # Kill my subwindows, first
         if self.__character_window is not None:
@@ -746,7 +742,8 @@ class FightGmWindow(GmWindow):
                               selected_index=None):
         self.__summary_window.clear()
         for line, fighter in enumerate(fighters):
-            mode = self.__state_color[fighter.get_state()]
+            mode = self._window_manager.get_mode_from_fighter_state(
+                                                        fighter.get_state())
             fighter_string = '%s%s HP:%d/%d' % (
                                 ('> ' if line == current_index else '  '),
                                 fighter.name,
@@ -822,7 +819,8 @@ class FightGmWindow(GmWindow):
                                         fighter.details['current']['fp'],
                                         fighter.details['permanent']['fp'])
 
-        mode = self.__state_color[fighter_state] | curses.A_BOLD
+        mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
+                                                            | curses.A_BOLD)
         self._window.addstr(self.__FIGHTER_LINE, column, fighter_string, mode)
         return show_more_info
 
@@ -1025,6 +1023,12 @@ class GmWindowManager(object):
         self.__stdscr = None
         self.__y = 0 # For debug printouts
         self.__window_stack = [] # Stack of GmWindow
+        self.STATE_COLOR = {}
+
+    def get_mode_from_fighter_state(self,
+                                    state # from STATE_COLOR
+                                   ):
+        return self.STATE_COLOR[state]
 
 
     def __enter__(self):
@@ -1032,6 +1036,17 @@ class GmWindowManager(object):
             self.__stdscr = curses.initscr()
             curses.start_color()
             curses.use_default_colors()
+            self.STATE_COLOR = {
+                Fighter.ALIVE : 
+                    curses.color_pair(GmWindowManager.GREEN_BLACK),
+                Fighter.INJURED : 
+                    curses.color_pair(GmWindowManager.YELLOW_BLACK),
+                Fighter.UNCONSCIOUS : 
+                    curses.color_pair(GmWindowManager.RED_BLACK),
+                Fighter.DEAD : 
+                    curses.color_pair(GmWindowManager.RED_BLACK),
+            }
+
             curses.noecho()
             curses.cbreak() # respond instantly to keystrokes
             self.__stdscr.keypad(1) # special characters converted by curses
@@ -1677,13 +1692,16 @@ class Fighter(object):
         return self.details['stuff'][weapon_index], weapon_index
 
 
-    def get_state(self):
-        conscious_number = Fighter.conscious_map[self.details['state']]
+    @staticmethod
+    def get_fighter_state(details):
+        conscious_number = Fighter.conscious_map[details['state']]
         if (conscious_number == Fighter.ALIVE and 
-                                        self.details['current']['hp'] <
-                                            self.details['permanent']['hp']):
+                        details['current']['hp'] < details['permanent']['hp']):
             return Fighter.INJURED
         return conscious_number
+
+    def get_state(self):
+        return Fighter.get_fighter_state(self.details)
 
 
     def get_weapon_by_name(self,
@@ -4438,8 +4456,7 @@ class MainHandler(ScreenHandler):
 
         person = (None if self.__char_index is None
                 else self.__char_names[self.__char_index])
-        character = (None if person is None else
-                            self.__world[person['group']][person['name']])
+        character = None if person is None else person['details']
 
         self._window.show_character_list(self.__char_names, self.__char_index)
         self._window.show_character_detail(character)
@@ -4593,10 +4610,15 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
     def __setup_PC_list(self):
-        self.__char_names = [{'name': x, 'group': 'PCs'} for x in
-                                    sorted(self.__world['PCs'].iterkeys())]
+        self.__char_names = [{'name': x,
+                              'group': 'PCs',
+                              'details': self.__world['PCs'][x]
+                             } for x in sorted(self.__world['PCs'].iterkeys())]
         if 'NPCs' in self.__world:
-            self.__char_names.extend([{'name': x, 'group': 'NPCs'} for x in
+            self.__char_names.extend([{'name': x,
+                                       'group': 'NPCs',
+                                       'details': self.__world['NPCs'][x]
+                                      } for x in
                                     sorted(self.__world['NPCs'].iterkeys())])
         self.__char_index = 0
 
