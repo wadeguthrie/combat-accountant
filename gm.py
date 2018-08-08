@@ -512,7 +512,9 @@ class MainGmWindow(GmWindow):
 
 
     def show_character_list(self,
-                            char_list,
+                            char_list,  # [ {'name': xxx,
+                                        #    'group': xxx,
+                                        #    'details':xxx}, ...
                             current_index
                            ):
         self.__char_list_window.clear()
@@ -1239,7 +1241,7 @@ class GmWindowManager(object):
         if window is None:
             window = self.__stdscr
         c = window.getch()
-        # 'c' will be something like ord('p') or curses.KEY_HOME
+        # |c| will be something like ord('p') or curses.KEY_HOME
         return c
 
 
@@ -4422,6 +4424,8 @@ class MainHandler(ScreenHandler):
             curses.KEY_PPAGE:
                       {'name': 'char details pgup',   'func':
                                                             self.__prev_page},
+            ord('c'): {'name': 'character',           'func':
+                                                            self.__character},
             ord('o'): {'name': 'outfit characters',   'func':
                                                             self.__outfit},
             ord('t'): {'name': 'build from template', 'func':
@@ -4538,6 +4542,35 @@ class MainHandler(ScreenHandler):
                    index)]
         ignore = self._window_manager.menu('Your %s %s name is' % (
                                            type_name, gender_name), result)
+        return True
+
+    def __character(self):
+        keep_going = True
+        name = ''
+        original_index = self.__char_index
+        while keep_going:
+            user_input = self._window_manager.get_one_character()
+            if user_input == ord('\n'):
+                return True
+            elif user_input == GmWindowManager.ESCAPE:
+                self.__char_index = self.__char_index
+                self._draw_screen()
+                return True
+            else:
+                name += chr(user_input)
+                length = len(name)
+
+                # Look for a match and return the selection
+                for index, char in enumerate(self.__char_names):
+                            # [ {'name': xxx,
+                            #    'group': xxx,
+                            #    'details':xxx}, ...
+                    # (string, return value)
+                    if name == char['name'][:length]:
+                        self.__char_index = index
+                        self._draw_screen()
+                        break
+
         return True
 
     def __next_char(self):
