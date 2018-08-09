@@ -3,6 +3,7 @@
 import argparse
 import copy
 import curses
+import curses.ascii
 import curses.textpad
 import datetime
 import json
@@ -4557,7 +4558,11 @@ class MainHandler(ScreenHandler):
                 self._draw_screen()
                 return True
             else:
-                name += chr(user_input)
+                if user_input == curses.ascii.BS:
+                    name = name[:-1]
+                elif curses.ascii.isprint(user_input):
+                    name += chr(user_input)
+
                 length = len(name)
 
                 # Look for a match and return the selection
