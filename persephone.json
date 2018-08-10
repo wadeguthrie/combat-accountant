@@ -1012,7 +1012,7 @@
       "posture": "standing", 
       "opponent": null
     }, 
-    "Dima": {
+    "Dima Leonid Popov": {
       "notes": [
         "Bratva bank.",
         "Tags: dark gray sportcoat",
@@ -1029,7 +1029,9 @@
       }, 
       "stuff": [], 
       "weapon-index": null, 
-      "skills": {}, 
+      "skills": {
+        "brawling": 17
+      },
       "shock": 0, 
       "current": {
         "fp": 11, 

@@ -516,7 +516,8 @@ class MainGmWindow(GmWindow):
                             char_list,  # [ {'name': xxx,
                                         #    'group': xxx,
                                         #    'details':xxx}, ...
-                            current_index
+                            current_index,
+                            standout = False
                            ):
         self.__char_list_window.clear()
         if char_list is None:
@@ -524,11 +525,11 @@ class MainGmWindow(GmWindow):
             return
 
         for line, char in enumerate(char_list):
-            mode = 0
+            mode = curses.A_REVERSE if standout else 0
             if char['group'] == 'NPCs':
-                mode = curses.color_pair(GmWindowManager.CYAN_BLACK)
+                mode |= curses.color_pair(GmWindowManager.CYAN_BLACK)
             else:
-                mode = self._window_manager.get_mode_from_fighter_state(
+                mode |= self._window_manager.get_mode_from_fighter_state(
                                     Fighter.get_fighter_state(char['details']))
 
             mode |= (curses.A_NORMAL if current_index is None or
@@ -4454,7 +4455,7 @@ class MainHandler(ScreenHandler):
     # Protected Methods
     #
 
-    def _draw_screen(self):
+    def _draw_screen(self, inverse=False):
         self._window.clear()
         self._window.status_ribbon(self._input_filename,
                                    self._maintain_json)
@@ -4463,7 +4464,9 @@ class MainHandler(ScreenHandler):
                 else self.__char_names[self.__char_index])
         character = None if person is None else person['details']
 
-        self._window.show_character_list(self.__char_names, self.__char_index)
+        self._window.show_character_list(self.__char_names,
+                                         self.__char_index,
+                                         inverse)
         self._window.show_character_detail(character)
 
         self._window.command_ribbon(self._choices)
@@ -4549,13 +4552,15 @@ class MainHandler(ScreenHandler):
         keep_going = True
         name = ''
         original_index = self.__char_index
+        self._draw_screen(inverse=True)
         while keep_going:
             user_input = self._window_manager.get_one_character()
             if user_input == ord('\n'):
+                self._draw_screen(inverse=False)
                 return True
             elif user_input == GmWindowManager.ESCAPE:
                 self.__char_index = self.__char_index
-                self._draw_screen()
+                self._draw_screen(inverse=False)
                 return True
             else:
                 if user_input == curses.ascii.BS:
@@ -4573,7 +4578,7 @@ class MainHandler(ScreenHandler):
                     # (string, return value)
                     if name == char['name'][:length]:
                         self.__char_index = index
-                        self._draw_screen()
+                        self._draw_screen(inverse=True)
                         break
 
         return True
