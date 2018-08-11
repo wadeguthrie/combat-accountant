@@ -1012,7 +1012,7 @@
       "posture": "standing", 
       "opponent": null
     }, 
-    "Dima Leonid Popov": {
+    "Dima Leonid Popov (Bratva Bank)": {
       "notes": [
         "Bratva bank.",
         "Tags: dark gray sportcoat",
@@ -1027,10 +1027,72 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
+      "stuff": [
+        {
+          "acc": 4, 
+          "count": 1, 
+          "name": "pistol, Hand-built laser", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 9
+          }
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "name": "C Cell"
+        }, 
+        {
+          "count": 1, 
+          "name": "knife, small", 
+          "notes": "B272", 
+          "damage": {
+            "sw": {
+              "plus": -3, 
+              "type": "cut"
+            }, 
+            "thr": {
+              "plus": -1, 
+              "type": "imp"
+            }
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "name": "brass knuckles", 
+          "notes": "B271", 
+          "damage": {
+            "thr": {
+              "plus": 0, 
+              "type": "cr"
+            }
+          }, 
+          "parry": 0, 
+          "skill": "karate", 
+          "type": "melee weapon"
+        }
+
+      ], 
       "weapon-index": null, 
       "skills": {
-        "brawling": 17
+        "brawling": 18,
+        "beam weapons (pistol)": 18
       },
       "shock": 0, 
       "current": {
@@ -1059,7 +1121,7 @@
       "posture": "standing", 
       "opponent": null
     }, 
-    "Mitchell Hurley": {
+    "Hurley, Mitchell (Chief Deputy Marshal)": {
       "notes": [
         "Chief Deputy Marshal",
         "Tags: tall, corpulent, sweet",
@@ -1070,7 +1132,7 @@
         "been large his entire life.  His head is topped by a thick bush",
         "of sandy blonde hair which seems to go perfectly with his dirty",
         "blue eyes.  Mitchell Hurley has a sweet demeanor and tends to get",
-        "things done by convincing agreement rather than XXX"
+        "things done by convincing agreement rather than coersion."
       ],
       "aim": {
         "braced": false, 
@@ -1106,7 +1168,7 @@
       "posture": "standing", 
       "opponent": null
     }, 
-    "Leland Stoddard": {
+    "Stoddard, Leland (Chief Deputy Marshal)": {
       "notes": [
         "Tags: bald, mustache, intense",
         "Chief Deputy Marshal Leland Stoddard's face is almost entirely",

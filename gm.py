@@ -13,6 +13,7 @@ import random
 import sys
 
 # TODO:
+#   - Save for later.  Save a fight but don't come back to it.
 #   - should warn when trying to do a second action (take note of fastdraw)
 #   - should only be able to ready an unready weapon.
 #   - Add 2 weapon (or weapon & shield)
@@ -344,6 +345,7 @@ class MainGmWindow(GmWindow):
             - 4)                        # ...a space for the command ribbon.
         
         width = (cols / 2) - 1 # -1 for margin
+        # TODO: make a GmScrollableWindow
         self.__char_list_window = self._window_manager.new_native_window(
                                                  height,
                                                  width,
@@ -669,6 +671,7 @@ class FightGmWindow(GmWindow):
     def round_ribbon(self,
                      round_no,
                      saved,
+                     keep,
                      next_PC_name,
                      input_filename,
                      maintain_json
@@ -685,8 +688,13 @@ class FightGmWindow(GmWindow):
                             round_string,
                             curses.A_NORMAL)
 
-        if saved:
-            string = 'SAVED'
+        if saved or keep:
+            strings = []
+            if saved:
+                strings.append('SAVED')
+            if keep:
+                strings.append('KEEP')
+            string = ', '.join(strings)
             length = len(string)
             self._window.addstr(0, # y
                                 cols - (length + 1), # x
@@ -3571,6 +3579,7 @@ class FightHandler(ScreenHandler):
         self._window = self._window_manager.get_fight_gm_window(ruleset)
         self.__ruleset = ruleset
         self.__bodies_looted = False
+        self.__keep_monsters = False # Move monsters to 'dead' after fight
 
         # NOTE: 'h' and 'f' belong in Ruleset
         self._add_to_choice_dict({
@@ -3581,6 +3590,8 @@ class FightHandler(ScreenHandler):
             ord('D'): {'name': 'dead',        'func': self.__dead},
             ord('f'): {'name': 'FP damage',   'func': self.__damage_FP},
             ord('h'): {'name': 'History',     'func': self.__show_history},
+            ord('k'): {'name': 'keep monsters',
+                                              'func': self.__do_keep_monsters},
             ord('-'): {'name': 'HP damage',   'func': self.__damage_HP},
             ord('L'): {'name': 'Loot bodies', 'func': self.__loot_bodies},
             ord('m'): {'name': 'maneuver',    'func': self.__maneuver},
@@ -3698,7 +3709,8 @@ class FightHandler(ScreenHandler):
 
         # When done, move current fight to 'dead-monsters'
         if (not self._saved_fight['saved'] and
-                                    self._saved_fight['monsters'] is not None):
+                                self._saved_fight['monsters'] is not None and
+                                self.__keep_monsters == False):
             self.__world['dead-monsters'][self._saved_fight['monsters']] = (
                     self.__world['monsters'][self._saved_fight['monsters']])
             del(self.__world['monsters'][self._saved_fight['monsters']])
@@ -3908,6 +3920,19 @@ class FightHandler(ScreenHandler):
                                    self._saved_fight['index'])
         return True # Keep going
 
+
+    def __do_keep_monsters(self):
+        self.__keep_monsters = True # Don't move monsters to dead after fight
+        next_PC_name = self.__next_PC_name()
+        self._window.round_ribbon(self._saved_fight['round'],
+                                  self._saved_fight['saved'],
+                                  self.__keep_monsters,
+                                  next_PC_name,
+                                  self._input_filename,
+                                  self._maintain_json)
+        return True # Keep going
+
+
     def _draw_screen(self):
         self._window.clear()
         current_fighter = self.get_current_fighter()
@@ -3915,6 +3940,7 @@ class FightHandler(ScreenHandler):
         next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self._saved_fight['round'],
                                   self._saved_fight['saved'],
+                                  self.__keep_monsters,
                                   next_PC_name,
                                   self._input_filename,
                                   self._maintain_json)
@@ -4063,6 +4089,7 @@ class FightHandler(ScreenHandler):
         next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self._saved_fight['round'],
                                   self._saved_fight['saved'],
+                                  self.__keep_monsters,
                                   next_PC_name,
                                   self._input_filename,
                                   self._maintain_json)
@@ -4190,6 +4217,7 @@ class FightHandler(ScreenHandler):
         next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self._saved_fight['round'],
                                   self._saved_fight['saved'],
+                                  self.__keep_monsters,
                                   next_PC_name,
                                   self._input_filename,
                                   self._maintain_json)
@@ -4252,6 +4280,7 @@ class FightHandler(ScreenHandler):
         next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self._saved_fight['round'],
                                   self._saved_fight['saved'],
+                                  self.__keep_monsters,
                                   next_PC_name,
                                   self._input_filename,
                                   self._maintain_json)
