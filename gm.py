@@ -13,7 +13,12 @@ import random
 import sys
 
 # TODO:
-#   - Save for later.  Save a fight but don't come back to it.
+#   - '?' should show weapon and armor notes (as appropriate)
+#   - Add pop-up attack in maneuvers
+#   - Allow for markdown in 'notes' and 'short_notes'
+#   - Armor
+#   - Add ability to generate name for character in template
+#   - Allow NPCs to be part of monsters or the party
 #   - should warn when trying to do a second action (take note of fastdraw)
 #   - should only be able to ready an unready weapon.
 #   - Add 2 weapon (or weapon & shield)
@@ -3922,7 +3927,11 @@ class FightHandler(ScreenHandler):
 
 
     def __do_keep_monsters(self):
+        # TODO: keep and saved are mutually exclusive -- should store them in
+        # one variable.
+        # TODO: when leaving the fight, should ask save/keep
         self.__keep_monsters = True # Don't move monsters to dead after fight
+        self._saved_fight['saved'] = False
         next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self._saved_fight['round'],
                                   self._saved_fight['saved'],
@@ -4277,6 +4286,7 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         self._saved_fight['saved'] = True
+        self.__keep_monsters = False # Don't move monsters to dead after fight
         next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self._saved_fight['round'],
                                   self._saved_fight['saved'],

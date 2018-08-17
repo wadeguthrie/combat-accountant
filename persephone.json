@@ -69,8 +69,8 @@
         "skills": {
           "type": "value", 
           "value": {
-            "beam weapons (pistol)": 12, 
-            "brawling": 14, 
+            "beam weapons (pistol)": 15, 
+            "brawling": 15, 
             "knife": 15
           }
         }, 
@@ -368,19 +368,19 @@
         "engineer (electronics)": 12, 
         "engineer (starships)": 12, 
         "cryptography": 13, 
-        "electronics operation": 13, 
+        "mathematics (applied)": 12, 
         "beam weapons (rifle)": 12, 
         "computer hacking": 15, 
+        "electronics operation": 13, 
         "axe/mace": 11, 
         "computer programming": 12, 
-        "piloting": 13, 
+        "first aid": 14, 
         "computer security": 12, 
         "beam weapons (pistol)": 15, 
         "armoury (small arms)": 13, 
         "brawling": 12, 
-        "first aid": 14, 
         "physics": 12, 
-        "mathematics (applied)": 12, 
+        "piloting": 13, 
         "observation": 15
       }, 
       "shock": 0, 
@@ -681,75 +681,75 @@
         "gesture": 11
       }, 
       "notes": [
-        "Born November 1st 2099 (Fet Gede - All Souls Day) - 24 years old.",
-        "",
-        "Samuel grew up in the impoverished Port Au Prince commune of Cite",
-        "Soleil. This former shantytown grew to house well over one and a",
-        "half million souls by 2099. With the deaths of most of his family by",
-        "the time he turned 15, Samuel fled with Esther, his younger sister,",
-        "to the larger, and wealthier urban center of Port au Prince. To find",
-        "his fortune, as they say.",
-        "",
-        "He lived hand to mouth doing any kind of work, legal or otherwise,",
-        "to support himself and his sister for several years. Befriending a",
-        "few of the other homeless they eked out a rough, uneducated",
-        "existence. Around his 17th birthday, he met Beatrice Hyppolite, also",
-        "known as Missus H. Missus H took the children to her \"home\" in an",
-        "abandoned warehouse, where she acted as a mother figure for her",
-        "\"Lost Bays (babies)\" and began to teach Samuel to read and the",
-        "basics of history and arithmetic.",
-        "",
-        "Missus H was also a Vodouisant and head of her small Sosyete. She",
-        "encouraged Samuel to join her Sosyete and he picked up a rudimentary",
-        "understanding of Vodou. The power of Vodouisants disturbed Samuel",
-        "and he began to refuse to join in the Fets. But Missus H insisted",
-        "that Samuel had the touch. All the signs were present for him to be",
-        "a great Houngan. Missus H told Samuel that his birthday made him a",
-        "vessel for a reborn soul and he will forever be connected to the",
-        "spirit world. ",
-        "",
-        "By 2118, when he was 19, Samuel moved Esther and himself out of",
-        "Missus H's home and was able to find a steady, semi-legitimate job",
-        "as a night security guard for Professional Security Services (PSS),",
-        "a well known and long standing security company with roots in the",
-        "20th century. He worked his way through the ranks eventually being",
-        "trained in weapons and served as an armed security guard.",
-        "",
-        "Esther took work as a waitress in a nightclub/bar, the Cafe Trio,",
-        "and Samuel began to work part-time as a bouncer there. The Trio was",
-        "host to several members of Haiti's underground drug traffickers,",
-        "most notably Gregory Occeant. Occeant was a regular and a Hounsi.",
-        "His wealth and political power derived from the wealth have allowed",
-        "him to hire the services of Loveson Jabouin, a powerful Bokor.",
-        "",
-        "A year ago, while Samuel was working a night shift for PSS, Esther",
-        "went missing. She was last seen at the Trio speaking with Occeant",
-        "and Jabouin. Samuel suspects Occeant and/or Jabouin to be behind",
-        "her disappearance but he can't prove it. While trailing Jabouin,",
-        "Samuel followed him to his home. After the Bokor had left Samuel",
-        "broke in looking for proof or evidence of his sister's whereabouts.",
-        "He discovered an awful truth. Jabouin was head of a secret police",
-        "force under Occeant and his drug cartel. This group was tasked,",
-        "among other duties, with collecting slave labor for the cartel's",
-        "production facilities.",
-        "",
-        "Before Samuel could learn more Jabouin returned home. Samuel grabbed",
-        "a small leather pouch with an animal skull stitched to the flap. He",
-        "recognized this as part of the Bokor's ceremonial paraphernalia,",
-        "but Samuel has been too afraid of both the contents of the pouch and",
-        "the Bokor to ever open the pouch.",
-        "",
-        "With Jabouin now an enemy Samuel needed to escape Haiti, at the",
-        "very least. It was soon after that he came across an ad for security",
-        "on the space station Persephone. He sold what possessions he had,",
-        "collected his last paycheck and found the nearest recruitment office.",
-        "",
-        "The small pouch with the animal skull was packed in the bottom of",
-        "his suitcase and the haunting words of Missus H echo in his mind",
-        "whenever he thinks about the bag. \"In Haiti, there are secrets we",
-        "keep, even from ourselves.\"",
+        "Born November 1st 2099 (Fet Gede - All Souls Day) - 24 years old.", 
+        "", 
+        "Samuel grew up in the impoverished Port Au Prince commune of Cite", 
+        "Soleil. This former shantytown grew to house well over one and a", 
+        "half million souls by 2099. With the deaths of most of his family by", 
+        "the time he turned 15, Samuel fled with Esther, his younger sister,", 
+        "to the larger, and wealthier urban center of Port au Prince. To find", 
+        "his fortune, as they say.", 
+        "", 
+        "He lived hand to mouth doing any kind of work, legal or otherwise,", 
+        "to support himself and his sister for several years. Befriending a", 
+        "few of the other homeless they eked out a rough, uneducated", 
+        "existence. Around his 17th birthday, he met Beatrice Hyppolite, also", 
+        "known as Missus H. Missus H took the children to her \"home\" in an", 
+        "abandoned warehouse, where she acted as a mother figure for her", 
+        "\"Lost Bays (babies)\" and began to teach Samuel to read and the", 
+        "basics of history and arithmetic.", 
+        "", 
+        "Missus H was also a Vodouisant and head of her small Sosyete. She", 
+        "encouraged Samuel to join her Sosyete and he picked up a rudimentary", 
+        "understanding of Vodou. The power of Vodouisants disturbed Samuel", 
+        "and he began to refuse to join in the Fets. But Missus H insisted", 
+        "that Samuel had the touch. All the signs were present for him to be", 
+        "a great Houngan. Missus H told Samuel that his birthday made him a", 
+        "vessel for a reborn soul and he will forever be connected to the", 
+        "spirit world. ", 
+        "", 
+        "By 2118, when he was 19, Samuel moved Esther and himself out of", 
+        "Missus H's home and was able to find a steady, semi-legitimate job", 
+        "as a night security guard for Professional Security Services (PSS),", 
+        "a well known and long standing security company with roots in the", 
+        "20th century. He worked his way through the ranks eventually being", 
+        "trained in weapons and served as an armed security guard.", 
+        "", 
+        "Esther took work as a waitress in a nightclub/bar, the Cafe Trio,", 
+        "and Samuel began to work part-time as a bouncer there. The Trio was", 
+        "host to several members of Haiti's underground drug traffickers,", 
+        "most notably Gregory Occeant. Occeant was a regular and a Hounsi.", 
+        "His wealth and political power derived from the wealth have allowed", 
+        "him to hire the services of Loveson Jabouin, a powerful Bokor.", 
+        "", 
+        "A year ago, while Samuel was working a night shift for PSS, Esther", 
+        "went missing. She was last seen at the Trio speaking with Occeant", 
+        "and Jabouin. Samuel suspects Occeant and/or Jabouin to be behind", 
+        "her disappearance but he can't prove it. While trailing Jabouin,", 
+        "Samuel followed him to his home. After the Bokor had left Samuel", 
+        "broke in looking for proof or evidence of his sister's whereabouts.", 
+        "He discovered an awful truth. Jabouin was head of a secret police", 
+        "force under Occeant and his drug cartel. This group was tasked,", 
+        "among other duties, with collecting slave labor for the cartel's", 
+        "production facilities.", 
+        "", 
+        "Before Samuel could learn more Jabouin returned home. Samuel grabbed", 
+        "a small leather pouch with an animal skull stitched to the flap. He", 
+        "recognized this as part of the Bokor's ceremonial paraphernalia,", 
+        "but Samuel has been too afraid of both the contents of the pouch and", 
+        "the Bokor to ever open the pouch.", 
+        "", 
+        "With Jabouin now an enemy Samuel needed to escape Haiti, at the", 
+        "very least. It was soon after that he came across an ad for security", 
+        "on the space station Persephone. He sold what possessions he had,", 
+        "collected his last paycheck and found the nearest recruitment office.", 
+        "", 
+        "The small pouch with the animal skull was packed in the bottom of", 
+        "his suitcase and the haunting words of Missus H echo in his mind", 
+        "whenever he thinks about the bag. \"In Haiti, there are secrets we", 
+        "keep, even from ourselves.\"", 
         ""
-      ],
+      ], 
       "shock": 0, 
       "current": {
         "fp": 13, 
@@ -887,10 +887,1381 @@
       "opponent": null
     }
   }, 
-  "dead-monsters": {}, 
+  "dead-monsters": {
+    "Arena Attack Monsters": {
+      "5-Tank-B": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "4-Tank-C": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "3-Tank-A": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "1-Thief-A": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "7-Tank-D": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "8-Tank-F": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "6-Tank-E": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "2-Thief-B": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }
+    }, 
+    "Arena Attack Characters": {
+      "5-Tank-B": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "4-Tank-C": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "3-Tank-A": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "1-Thief-A": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "7-Bokor-A": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 10, 
+          "basic-speed": 5.25
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 10, 
+          "basic-speed": 5.25
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "8-Cleric-A": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 12, 
+          "iq": 13, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 11, 
+          "basic-speed": 5.5
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 12, 
+          "iq": 13, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 11, 
+          "basic-speed": 5.5
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "6-Tank-D": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "2-Thief-B": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [], 
+        "weapon-index": null, 
+        "skills": {}, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }
+    }, 
+    "Yet Another New Fight": {
+      "The Cleric": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "skills": {}, 
+        "did_action_this_turn": false, 
+        "shock": 0, 
+        "current": {
+          "fp": 12, 
+          "iq": 13, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 11, 
+          "basic-speed": 5.5
+        }, 
+        "permanent": {
+          "fp": 12, 
+          "iq": 13, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 11, 
+          "basic-speed": 5.5
+        }, 
+        "state": "alive", 
+        "stuff": [], 
+        "timers": [], 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "advantages": {}, 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "Dude": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "skills": {
+          "beam weapons (pistol)": 12, 
+          "brawling": 14, 
+          "knife": 15
+        }, 
+        "did_action_this_turn": false, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [], 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "opponent": null
+      }
+    }, 
+    "Arena Capture the Flag": {
+      "5-Tank-C": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "acc": 4, 
+            "count": 1, 
+            "name": "pistol, Sig D65", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 9, 
+              "shots_left": 9
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "sick stick", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 1, 
+                "num_dice": 1, 
+                "type": "fat"
+              }
+            }, 
+            "skill": "axe/mace", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "weapon-index": null, 
+        "skills": {
+          "beam weapons (pistol)": 16, 
+          "brawling": 16, 
+          "axe/mace": 14
+        }, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "1-Cleric": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "acc": 3, 
+            "count": 1, 
+            "name": "pistol, Colt 170D", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 9, 
+              "shots_left": 9
+            }
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "weapon-index": null, 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 12
+        }, 
+        "shock": 0, 
+        "current": {
+          "fp": 12, 
+          "iq": 13, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 11, 
+          "basic-speed": 5.5
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 12, 
+          "iq": 13, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 11, 
+          "basic-speed": 5.5
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "4-Tank-A": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "acc": 4, 
+            "count": 1, 
+            "name": "pistol, Sig D65", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 9, 
+              "shots_left": 9
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "sick stick", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 1, 
+                "num_dice": 1, 
+                "type": "fat"
+              }
+            }, 
+            "skill": "axe/mace", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "weapon-index": null, 
+        "skills": {
+          "beam weapons (pistol)": 16, 
+          "brawling": 16, 
+          "axe/mace": 14
+        }, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "8-Thief-B": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "weapon-index": null, 
+        "skills": {
+          "beam weapons (pistol)": 12, 
+          "brawling": 14, 
+          "knife": 15
+        }, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "high pain threshold": 10
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "3-Bokor": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Kalashnikov Makarov", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 3, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "weapon-index": null, 
+        "skills": {
+          "beam weapons (pistol)": 13, 
+          "brawling": 12
+        }, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 10, 
+          "basic-speed": 5.25
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 10, 
+          "basic-speed": 5.25
+        }, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "7-Tank-D": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "acc": 4, 
+            "count": 1, 
+            "name": "pistol, Sig D65", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 9, 
+              "shots_left": 9
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "sick stick", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 1, 
+                "num_dice": 1, 
+                "type": "fat"
+              }
+            }, 
+            "skill": "axe/mace", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "weapon-index": null, 
+        "skills": {
+          "beam weapons (pistol)": 16, 
+          "brawling": 16, 
+          "axe/mace": 14
+        }, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "6-Tank-B": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "acc": 4, 
+            "count": 1, 
+            "name": "pistol, Sig D65", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 9, 
+              "shots_left": 9
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "sick stick", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 1, 
+                "num_dice": 1, 
+                "type": "fat"
+              }
+            }, 
+            "skill": "axe/mace", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "weapon-index": null, 
+        "skills": {
+          "beam weapons (pistol)": 16, 
+          "brawling": 16, 
+          "axe/mace": 14
+        }, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "combat reflexes": 15
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "2-Thief-A": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "weapon-index": null, 
+        "skills": {
+          "beam weapons (pistol)": 12, 
+          "brawling": 14, 
+          "knife": 15
+        }, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "high pain threshold": 10
+        }, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
+        "timers": [], 
+        "posture": "standing", 
+        "opponent": null
+      }
+    }
+  }, 
   "current-fight": {
     "index": 0, 
-    "monsters": "Arena Attack Monsters", 
+    "monsters": "Arena Capture the Flag", 
     "fighters": [
       {
         "group": "PCs", 
@@ -901,40 +2272,40 @@
         "name": "lawerence - Spenser"
       }, 
       {
-        "group": "Arena Attack Monsters", 
-        "name": "3-Tank-A"
+        "group": "Arena Capture the Flag", 
+        "name": "8-Thief-B"
       }, 
       {
-        "group": "Arena Attack Monsters", 
-        "name": "1-Thief-A"
+        "group": "Arena Capture the Flag", 
+        "name": "5-Tank-C"
       }, 
       {
-        "group": "Arena Attack Monsters", 
+        "group": "Arena Capture the Flag", 
         "name": "7-Tank-D"
       }, 
       {
-        "group": "Arena Attack Monsters", 
-        "name": "6-Tank-E"
+        "group": "Arena Capture the Flag", 
+        "name": "6-Tank-B"
       }, 
       {
-        "group": "Arena Attack Monsters", 
-        "name": "8-Tank-F"
+        "group": "Arena Capture the Flag", 
+        "name": "4-Tank-A"
       }, 
       {
-        "group": "Arena Attack Monsters", 
-        "name": "5-Tank-B"
+        "group": "Arena Capture the Flag", 
+        "name": "2-Thief-A"
       }, 
       {
-        "group": "Arena Attack Monsters", 
-        "name": "2-Thief-B"
-      }, 
-      {
-        "group": "Arena Attack Monsters", 
-        "name": "4-Tank-C"
+        "group": "Arena Capture the Flag", 
+        "name": "1-Cleric"
       }, 
       {
         "group": "PCs", 
         "name": "vasilis - Alan"
+      }, 
+      {
+        "group": "Arena Capture the Flag", 
+        "name": "3-Bokor"
       }, 
       {
         "group": "PCs", 
@@ -952,32 +2323,7 @@
     ]
   }, 
   "NPCs": {
-    "Konstantin Alexei Mironov": {
-      "notes": [
-        "Talk w/ Konstantin Alexei Mironov (Russian prison tattoos).  He ",
-        "should arrive on time in a very nice business suit, have an ",
-        "expensive watch and nice jewelry.  He'll give an extremely firm ",
-        "handshake and look each person in the eye.  He'll have a very ",
-        "opulent office, very large, with a view (it's a display of wealth",
-        "and power).  He'll lead the party to a formal anteroom with a table",
-        "for meals.  He'll remove his shoes before entering (roll for the",
-        "party to notice).  Wine and cake (like a fruitcake) will be served",
-        "in a very formal way.  He'll have servants serve the food",
-        "hierarchically to the guests whom he'll treat with honor and",
-        "respect (which he'll expect in return).  He will use each of the",
-        "party's title (Officer), first, middle, and last name.  At the meal,",
-        "he'll discuss how harsh the conditions are, having a business in",
-        "the space station, and how he has overcome it to flourish with",
-        "relationships like the one being forged, now.  He'll urge everyone",
-        "to take second helpings.  Afterwards, he'll move to his desk where",
-        "chairs will be provided for each of the party.  At his desk, he'll",
-        "ask a favor of the party: to find out what's in those crates and",
-        "to give him this information.  The meeting won't be over until",
-        "they've reached a decision.",
-        "",
-        "He values: emotional connection, he's fatalistic and pessimistic,",
-        "he'll have fortress mentality.  He'll be direct"
-      ],
+    "Bokor Requiem": {
       "aim": {
         "braced": false, 
         "rounds": 0
@@ -985,6 +2331,16 @@
       "stuff": [], 
       "weapon-index": null, 
       "skills": {}, 
+      "notes": [
+        "Bokor. Jamaican.", 
+        "Tags: plain, intelligent, quiet", 
+        "Specialty: necromancy (Baron Samedi)", 
+        "Requiem is plain looking, with a nose that's just a little too", 
+        "large for her face, puffy cheeks, and a slightly absent chin.  You", 
+        "can see a bright, shiny light, though, behind her tiny, squinty", 
+        "eyes.  There's plenty going on beneath that dowdy surface. Requiem", 
+        "simply nods by way of greeting."
+      ], 
       "shock": 0, 
       "current": {
         "fp": 11, 
@@ -1013,16 +2369,6 @@
       "opponent": null
     }, 
     "Dima Leonid Popov (Bratva Bank)": {
-      "notes": [
-        "Bratva bank.",
-        "Tags: dark gray sportcoat",
-        "Description:",
-        "Dima and his four bodyguards move with the relaxed confidence of",
-        "those whose security have been foretold by the gods.  His black",
-        "hair and beard, punctuated by patches of gray, are closely cropped",
-        "and he wears a dark gray sportcoat over jeans and a black dress",
-        "shirt unbuttoned at the neck."
-      ],
       "aim": {
         "braced": false, 
         "rounds": 0
@@ -1087,13 +2433,22 @@
           "skill": "karate", 
           "type": "melee weapon"
         }
-
       ], 
       "weapon-index": null, 
       "skills": {
-        "brawling": 18,
-        "beam weapons (pistol)": 18
-      },
+        "beam weapons (pistol)": 18, 
+        "brawling": 18
+      }, 
+      "notes": [
+        "Bratva bank.", 
+        "Tags: dark gray sportcoat", 
+        "Description:", 
+        "Dima and his four bodyguards move with the relaxed confidence of", 
+        "those whose security have been foretold by the gods.  His black", 
+        "hair and beard, punctuated by patches of gray, are closely cropped", 
+        "and he wears a dark gray sportcoat over jeans and a black dress", 
+        "shirt unbuttoned at the neck."
+      ], 
       "shock": 0, 
       "current": {
         "fp": 11, 
@@ -1122,25 +2477,25 @@
       "opponent": null
     }, 
     "Hurley, Mitchell (Chief Deputy Marshal)": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
       "notes": [
-        "Chief Deputy Marshal",
-        "Tags: tall, corpulent, sweet",
-        "Chief deputy Hurley is a big man.  At 6' 2\" and massively",
-        "corpulent, he looks like he's been poured into his uniform like",
-        "it was a sausage casing and, at that, the fabric strains at the",
-        "buttons.  In spite of this, though, he moves like someone who's",
-        "been large his entire life.  His head is topped by a thick bush",
-        "of sandy blonde hair which seems to go perfectly with his dirty",
-        "blue eyes.  Mitchell Hurley has a sweet demeanor and tends to get",
+        "Chief Deputy Marshal", 
+        "Tags: tall, corpulent, sweet", 
+        "Chief deputy Hurley is a big man.  At 6' 2\" and massively", 
+        "corpulent, he looks like he's been poured into his uniform like", 
+        "it was a sausage casing and, at that, the fabric strains at the", 
+        "buttons.  In spite of this, though, he moves like someone who's", 
+        "been large his entire life.  His head is topped by a thick bush", 
+        "of sandy blonde hair which seems to go perfectly with his dirty", 
+        "blue eyes.  Mitchell Hurley has a sweet demeanor and tends to get", 
         "things done by convincing agreement rather than coersion."
-      ],
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "weapon-index": null, 
-      "skills": {}, 
+      ], 
       "shock": 0, 
       "current": {
         "fp": 11, 
@@ -1168,21 +2523,7 @@
       "posture": "standing", 
       "opponent": null
     }, 
-    "Stoddard, Leland (Chief Deputy Marshal)": {
-      "notes": [
-        "Tags: bald, mustache, intense",
-        "Chief Deputy Marshal Leland Stoddard's face is almost entirely",
-        "mustache.  Big, brown, burly and bushy, his mustache dominates",
-        "his otherwise hairless head as if it makes up for all that shiny",
-        "skin. He presents an imposing presence even though he's only",
-        "slightly taller than average, and leanly built. He has the",
-        "certainty of purpose that blossoms from the deep understanding",
-        "that his will is God's will and his carriage promises an absolute",
-        "reckoning if your interests and his don't perfectly align. ",
-        "",
-        "He was a gunnery sergeant in the space marines and is known by the",
-        "Conglomerate as someone who gets ugly things done."
-      ],
+    "Konstantin Alexei Mironov": {
       "aim": {
         "braced": false, 
         "rounds": 0
@@ -1190,253 +2531,31 @@
       "stuff": [], 
       "weapon-index": null, 
       "skills": {}, 
-      "shock": 0, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 13, 
-        "basic-speed": 6
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 13, 
-        "basic-speed": 6
-      }, 
-      "advantages": {}, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "Mackenzie": {
       "notes": [
-        "Tags: aboriginal, awkward / headgear, bright",
-        "Mac's an aboriginal Australian with the characteristic umber",
-        "skin; deep-set eyes; wide nose; and giant mop of hair, akimbo.",
-        "She sports braces with dental headgear and, commensurate with her",
-        "age, has a mild dusting of pimples on her forehead.  Today, like",
-        "most days, she's wearing an oversized gray sweatshirt over olive",
-        "drab cargo pants and canvas Converse high-tops (covered in cartoon",
-        "bunnies).",
-        "",
-        "Mackenzie is 15 years old, 145 lbs, and 5' 2\".  She works most days",
-        "at the front desk and answering the phones but she also helps with",
-        "IT.  Turns out, she's _really_ good at IT and fills-in for the",
-        "lazy guy who's in charge of that department.  She's the adopted",
-        "child of a white father who is often away on one of the platforms.",
-        "She's not chipped (doesn't _have_ to get chipped until next year).",
-        "Her dad leaves open accounts for Mac whenever he's off-station.",
-        "She's technically a volunteer but she gets cards under the table.",
-        "",
-        "She's an outcast, being one of the very few aborigines in the",
-        "project.  She retreats into hacking but also spends some time in",
-        "the outer rings."
-      ],
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "weapon-index": null, 
-      "skills": {}, 
-      "shock": 0, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 13, 
-        "basic-speed": 6
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 13, 
-        "basic-speed": 6
-      }, 
-      "advantages": {}, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "Mambo Iriye": {
-      "notes": [
-        "Mambo that leads Masubi-1's Vodou Societe.  She detected the",
-        "mojo from crates on"
-      ],
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "weapon-index": null, 
-      "skills": {}, 
-      "shock": 0, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 13, 
-        "basic-speed": 6
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 13, 
-        "basic-speed": 6
-      }, 
-      "advantages": {}, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "Mama Cedella": {
-      "notes": [
-        "Bokor. Jamaican",
-        "Tags: Short, wiry gray hair, anorexic.",
-        "Description: An anorexic, mocha-colored lady shimmies out from",
-        "behind the pipes, her head bobbing to music only she can hear.",
-        "She wears a bright red, floor-length dress on her barely-5-foot",
-        "frame and there's a flash of wiry gray hair spilling out from",
-        "under her top-hat.",
-        "",
-        "Specialty: Knowledge (Loko)",
-        "Cedella's mind is broken by the telepathic slugs.  She sees",
-        "people that aren't there, she sees people that are slugs'",
-        "projections (avatars), she believes that she's invisible but also",
-        "believes that one of her more persistent shades can be seen by",
-        "others -- she has open conversations with that one and that's",
-        "her communication with the outside world.  When people talk to",
-        "her, she thinks they're talking to her shade.",
-        "",
-        "She's aware that some of the people she sees are hallucinations",
-        "-- when new people show up, she doesn't know if they're",
-        "hallucinations or not.  Her hallucinations (and the avatars) can",
-        "read her mind so she'll ask new people a question, the answer to",
-        "which they can see around them, and think the wrong answer.  Real",
-        "people get the environmental answer but imaginary people get the",
-        "answer in her head."
-      ],
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "weapon-index": null, 
-      "skills": {}, 
-      "shock": 0, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 13, 
-        "basic-speed": 6
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 13, 
-        "basic-speed": 6
-      }, 
-      "advantages": {}, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "Lady Shenice": {
-      "notes": [
-        "Bokor",
-        "",
-        "Tags: chubby",
-        "",
-        "Specialty: meta (Ti-Jean Petro)"
-      ],
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "weapon-index": null, 
-      "skills": {}, 
-      "shock": 0, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 13, 
-        "basic-speed": 6
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "ht": 11, 
-        "st": 10, 
-        "dx": 13, 
-        "basic-speed": 6
-      }, 
-      "advantages": {}, 
-      "did_action_this_turn": false, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
-    }, 
-    "Papa Jorge": {
-      "notes": [
-        "Bokor.  Dominican.",
-        "",
-        "Tags: Fireplug, square head, thick mop of black hair, always a",
-        "broad smile and a twinkle in his eyes",
-        "",
-        "Specialty: techno (Simbi)",
-        "",
-        "Jorge is a little fireplug of a man with a square head that sits",
-        "atop a blacksmith's body.  He has a ready smile and dimples you can",
-        "plant a tree in.  He gives you a dazzling grin and says 'Mucho gusto.'"
-      ],
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "weapon-index": null, 
-      "skills": {}, 
+        "Talk w/ Konstantin Alexei Mironov (Russian prison tattoos).  He ", 
+        "should arrive on time in a very nice business suit, have an ", 
+        "expensive watch and nice jewelry.  He'll give an extremely firm ", 
+        "handshake and look each person in the eye.  He'll have a very ", 
+        "opulent office, very large, with a view (it's a display of wealth", 
+        "and power).  He'll lead the party to a formal anteroom with a table", 
+        "for meals.  He'll remove his shoes before entering (roll for the", 
+        "party to notice).  Wine and cake (like a fruitcake) will be served", 
+        "in a very formal way.  He'll have servants serve the food", 
+        "hierarchically to the guests whom he'll treat with honor and", 
+        "respect (which he'll expect in return).  He will use each of the", 
+        "party's title (Officer), first, middle, and last name.  At the meal,", 
+        "he'll discuss how harsh the conditions are, having a business in", 
+        "the space station, and how he has overcome it to flourish with", 
+        "relationships like the one being forged, now.  He'll urge everyone", 
+        "to take second helpings.  Afterwards, he'll move to his desk where", 
+        "chairs will be provided for each of the party.  At his desk, he'll", 
+        "ask a favor of the party: to find out what's in those crates and", 
+        "to give him this information.  The meeting won't be over until", 
+        "they've reached a decision.", 
+        "", 
+        "He values: emotional connection, he's fatalistic and pessimistic,", 
+        "he'll have fortress mentality.  He'll be direct"
+      ], 
       "shock": 0, 
       "current": {
         "fp": 11, 
@@ -1465,50 +2584,6 @@
       "opponent": null
     }, 
     "Queen Clio": {
-      "notes": [
-        "(alpha) Bokor. Haitian (speaks with French accent)",
-        "Specialty: protection and warning (Papa Legba)",
-        "Tags: tall, thin, regal",
-        "Narrow face, mocha skin, high cheekbones, giant close-set eyes,",
-        "and jet black lips.  Black and white patterned turban, piled high",
-        "on her head.  Large hoop earrings.  Several rings and bracelets.",
-        "Bones woven into a necklace.",
-        "",
-        "A dress in indigo and teal satin with billowing skirts, and",
-        "voluminous sleeves to the wrist.  A bright turquoise wrap extends",
-        "to the floor.",
-        "",
-        "She went to a French finishing school in Port-O-Prince.",
-        "Office is a repurposed janitorial closet.  Heavily cluttered with",
-        "things sitting on top of things and stuff hanging from the ceiling.",
-        "Queen Clio's place is tucked into an alcove that, at one time, was",
-        "probably a janitorial closet.  She works at a small writing desk",
-        "on the other side of an overflowing bookshelf, both pushed up",
-        "against the wall on the left.  There are indigenous drums on the",
-        "floor and an African grave marker against the opposite wall,",
-        "leaning against an apothecary's cabinet that's supporting upwards",
-        "of a dozen human skulls surrounded by candles, tarot cards, and",
-        "prayer beads.  What you can see of the walls and ceiling is",
-        "painted a dark, deep, indigo interrupted by stars in shining gold",
-        "but they're mostly covered by prayer mats and vestments from myriad",
-        "religions plus various other items including a weathered chalice,",
-        "a few prayer wheels, and a dagger (maybe Egyptian or Sumerian?)",
-        "that's covered with a long-dried brown liquid.  A shrunken head",
-        "that looks disturbingly real is hanging from the ceiling along",
-        "with various stoppered bottles and a number of other things",
-        "including a Grecian vase filled with a small bundle of fresh",
-        "flowers.",
-        "",
-        "Office is a repurposed janitorial closet.  There're 13 skulls.",
-        "The stars are arranged like those of the Earth's night sky.  The",
-        "books on the shelf appear to be leather bound manuscripts with",
-        "ancient brass corner caps and buckled closures.  On the bookshelf",
-        "are bottles of wine and rum and holy water.  The apothecary's",
-        "cabinet contains finger bones, herbs, incense, and a bunch of",
-        "other stuff.  This part of the office terminates at an opaque",
-        "indigo drape.  Beyond that is her sleeping palette and personal",
-        "things."
-      ],
       "aim": {
         "braced": false, 
         "rounds": 0
@@ -1516,6 +2591,50 @@
       "stuff": [], 
       "weapon-index": null, 
       "skills": {}, 
+      "notes": [
+        "(alpha) Bokor. Haitian (speaks with French accent)", 
+        "Specialty: protection and warning (Papa Legba)", 
+        "Tags: tall, thin, regal", 
+        "Narrow face, mocha skin, high cheekbones, giant close-set eyes,", 
+        "and jet black lips.  Black and white patterned turban, piled high", 
+        "on her head.  Large hoop earrings.  Several rings and bracelets.", 
+        "Bones woven into a necklace.", 
+        "", 
+        "A dress in indigo and teal satin with billowing skirts, and", 
+        "voluminous sleeves to the wrist.  A bright turquoise wrap extends", 
+        "to the floor.", 
+        "", 
+        "She went to a French finishing school in Port-O-Prince.", 
+        "Office is a repurposed janitorial closet.  Heavily cluttered with", 
+        "things sitting on top of things and stuff hanging from the ceiling.", 
+        "Queen Clio's place is tucked into an alcove that, at one time, was", 
+        "probably a janitorial closet.  She works at a small writing desk", 
+        "on the other side of an overflowing bookshelf, both pushed up", 
+        "against the wall on the left.  There are indigenous drums on the", 
+        "floor and an African grave marker against the opposite wall,", 
+        "leaning against an apothecary's cabinet that's supporting upwards", 
+        "of a dozen human skulls surrounded by candles, tarot cards, and", 
+        "prayer beads.  What you can see of the walls and ceiling is", 
+        "painted a dark, deep, indigo interrupted by stars in shining gold", 
+        "but they're mostly covered by prayer mats and vestments from myriad", 
+        "religions plus various other items including a weathered chalice,", 
+        "a few prayer wheels, and a dagger (maybe Egyptian or Sumerian?)", 
+        "that's covered with a long-dried brown liquid.  A shrunken head", 
+        "that looks disturbingly real is hanging from the ceiling along", 
+        "with various stoppered bottles and a number of other things", 
+        "including a Grecian vase filled with a small bundle of fresh", 
+        "flowers.", 
+        "", 
+        "Office is a repurposed janitorial closet.  There're 13 skulls.", 
+        "The stars are arranged like those of the Earth's night sky.  The", 
+        "books on the shelf appear to be leather bound manuscripts with", 
+        "ancient brass corner caps and buckled closures.  On the bookshelf", 
+        "are bottles of wine and rum and holy water.  The apothecary's", 
+        "cabinet contains finger bones, herbs, incense, and a bunch of", 
+        "other stuff.  This part of the office terminates at an opaque", 
+        "indigo drape.  Beyond that is her sleeping palette and personal", 
+        "things."
+      ], 
       "shock": 0, 
       "current": {
         "fp": 11, 
@@ -1543,17 +2662,7 @@
       "posture": "standing", 
       "opponent": null
     }, 
-    "Bokor Requiem": {
-      "notes": [
-        "Bokor. Jamaican.",
-        "Tags: plain, intelligent, quiet",
-        "Specialty: necromancy (Baron Samedi)",
-        "Requiem is plain looking, with a nose that's just a little too",
-        "large for her face, puffy cheeks, and a slightly absent chin.  You",
-        "can see a bright, shiny light, though, behind her tiny, squinty",
-        "eyes.  There's plenty going on beneath that dowdy surface. Requiem",
-        "simply nods by way of greeting."
-      ],
+    "Mama Cedella": {
       "aim": {
         "braced": false, 
         "rounds": 0
@@ -1561,6 +2670,81 @@
       "stuff": [], 
       "weapon-index": null, 
       "skills": {}, 
+      "notes": [
+        "Bokor. Jamaican", 
+        "Tags: Short, wiry gray hair, anorexic.", 
+        "Description: An anorexic, mocha-colored lady shimmies out from", 
+        "behind the pipes, her head bobbing to music only she can hear.", 
+        "She wears a bright red, floor-length dress on her barely-5-foot", 
+        "frame and there's a flash of wiry gray hair spilling out from", 
+        "under her top-hat.", 
+        "", 
+        "Specialty: Knowledge (Loko)", 
+        "Cedella's mind is broken by the telepathic slugs.  She sees", 
+        "people that aren't there, she sees people that are slugs'", 
+        "projections (avatars), she believes that she's invisible but also", 
+        "believes that one of her more persistent shades can be seen by", 
+        "others -- she has open conversations with that one and that's", 
+        "her communication with the outside world.  When people talk to", 
+        "her, she thinks they're talking to her shade.", 
+        "", 
+        "She's aware that some of the people she sees are hallucinations", 
+        "-- when new people show up, she doesn't know if they're", 
+        "hallucinations or not.  Her hallucinations (and the avatars) can", 
+        "read her mind so she'll ask new people a question, the answer to", 
+        "which they can see around them, and think the wrong answer.  Real", 
+        "people get the environmental answer but imaginary people get the", 
+        "answer in her head."
+      ], 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "Stoddard, Leland (Chief Deputy Marshal)": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "notes": [
+        "Tags: bald, mustache, intense", 
+        "Chief Deputy Marshal Leland Stoddard's face is almost entirely", 
+        "mustache.  Big, brown, burly and bushy, his mustache dominates", 
+        "his otherwise hairless head as if it makes up for all that shiny", 
+        "skin. He presents an imposing presence even though he's only", 
+        "slightly taller than average, and leanly built. He has the", 
+        "certainty of purpose that blossoms from the deep understanding", 
+        "that his will is God's will and his carriage promises an absolute", 
+        "reckoning if your interests and his don't perfectly align. ", 
+        "", 
+        "He was a gunnery sergeant in the space marines and is known by the", 
+        "Conglomerate as someone who gets ugly things done."
+      ], 
       "shock": 0, 
       "current": {
         "fp": 11, 
@@ -1589,12 +2773,6 @@
       "opponent": null
     }, 
     "Celeline Fermine": {
-      "notes": [
-        "(Pilot)",
-        "Cedeline and Diego Fermine.  Cedeline (Haitian) is the pilot and",
-        "Diego (Dominican) is her husband.  Diego's a maintenance worker",
-        "on Persephone Station."
-      ],
       "aim": {
         "braced": false, 
         "rounds": 0
@@ -1602,6 +2780,12 @@
       "stuff": [], 
       "weapon-index": null, 
       "skills": {}, 
+      "notes": [
+        "(Pilot)", 
+        "Cedeline and Diego Fermine.  Cedeline (Haitian) is the pilot and", 
+        "Diego (Dominican) is her husband.  Diego's a maintenance worker", 
+        "on Persephone Station."
+      ], 
       "shock": 0, 
       "current": {
         "fp": 11, 
@@ -1628,7 +2812,193 @@
       "timers": [], 
       "posture": "standing", 
       "opponent": null
-    } 
+    }, 
+    "Mackenzie": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "notes": [
+        "Tags: aboriginal, awkward / headgear, bright", 
+        "Mac's an aboriginal Australian with the characteristic umber", 
+        "skin; deep-set eyes; wide nose; and giant mop of hair, akimbo.", 
+        "She sports braces with dental headgear and, commensurate with her", 
+        "age, has a mild dusting of pimples on her forehead.  Today, like", 
+        "most days, she's wearing an oversized gray sweatshirt over olive", 
+        "drab cargo pants and canvas Converse high-tops (covered in cartoon", 
+        "bunnies).", 
+        "", 
+        "Mackenzie is 15 years old, 145 lbs, and 5' 2\".  She works most days", 
+        "at the front desk and answering the phones but she also helps with", 
+        "IT.  Turns out, she's _really_ good at IT and fills-in for the", 
+        "lazy guy who's in charge of that department.  She's the adopted", 
+        "child of a white father who is often away on one of the platforms.", 
+        "She's not chipped (doesn't _have_ to get chipped until next year).", 
+        "Her dad leaves open accounts for Mac whenever he's off-station.", 
+        "She's technically a volunteer but she gets cards under the table.", 
+        "", 
+        "She's an outcast, being one of the very few aborigines in the", 
+        "project.  She retreats into hacking but also spends some time in", 
+        "the outer rings."
+      ], 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "Mambo Iriye": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "notes": [
+        "Mambo that leads Masubi-1's Vodou Societe.  She detected the", 
+        "mojo from crates on"
+      ], 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "Papa Jorge": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "notes": [
+        "Bokor.  Dominican.", 
+        "", 
+        "Tags: Fireplug, square head, thick mop of black hair, always a", 
+        "broad smile and a twinkle in his eyes", 
+        "", 
+        "Specialty: techno (Simbi)", 
+        "", 
+        "Jorge is a little fireplug of a man with a square head that sits", 
+        "atop a blacksmith's body.  He has a ready smile and dimples you can", 
+        "plant a tree in.  He gives you a dazzling grin and says 'Mucho gusto.'"
+      ], 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }, 
+    "Lady Shenice": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "weapon-index": null, 
+      "skills": {}, 
+      "notes": [
+        "Bokor", 
+        "", 
+        "Tags: chubby", 
+        "", 
+        "Specialty: meta (Ti-Jean Petro)"
+      ], 
+      "shock": 0, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "ht": 11, 
+        "st": 10, 
+        "dx": 13, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "check_for_death": false, 
+      "timers": [], 
+      "posture": "standing", 
+      "opponent": null
+    }
   }, 
   "Equipment": [
     {
@@ -2318,812 +3688,18 @@
     }
   }, 
   "monsters": {
-    "Arena Attack Monsters": {
-      "5-Tank-B": {
+    "1st Hunting Party": {
+      "5: Amelia": {
         "aim": {
           "braced": false, 
           "rounds": 0
         }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "4-Tank-C": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "3-Tank-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "1-Thief-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "7-Tank-D": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "8-Tank-F": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "6-Tank-E": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "2-Thief-B": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }
-    }, 
-    "Arena Attack Characters": {
-      "5-Tank-B": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "4-Tank-C": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "3-Tank-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "1-Thief-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "7-Bokor-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 10, 
-          "basic-speed": 5.25
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 10, 
-          "basic-speed": 5.25
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "8-Cleric-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 12, 
-          "iq": 13, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 11, 
-          "basic-speed": 5.5
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 12, 
-          "iq": 13, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 11, 
-          "basic-speed": 5.5
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "6-Tank-D": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "2-Thief-B": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "weapon-index": null, 
-        "skills": {}, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }
-    }, 
-    "Arena Capture the Flag": {
-      "5-Tank-C": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "acc": 4, 
-            "count": 1, 
-            "name": "pistol, Sig D65", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "sick stick", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 1, 
-                "num_dice": 1, 
-                "type": "fat"
-              }
-            }, 
-            "skill": "axe/mace", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-        ], 
-        "weapon-index": null, 
-        "skills": {
-          "beam weapons (pistol)": 16, 
-          "brawling": 16, 
-          "axe/mace": 14
-        }, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "1-Cleric": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "acc": 3, 
-            "count": 1, 
-            "name": "pistol, Colt 170D", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-        ], 
-        "weapon-index": null, 
         "skills": {
           "beam weapons (pistol)": 15, 
-          "brawling": 12
-        }, 
-        "shock": 0, 
-        "current": {
-          "fp": 12, 
-          "iq": 13, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 11, 
-          "basic-speed": 5.5
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 12, 
-          "iq": 13, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 11, 
-          "basic-speed": 5.5
-        }, 
-        "advantages": {
-          "combat reflexes": 15
+          "brawling": 14, 
+          "knife": 15
         }, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "4-Tank-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "acc": 4, 
-            "count": 1, 
-            "name": "pistol, Sig D65", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "sick stick", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 1, 
-                "num_dice": 1, 
-                "type": "fat"
-              }
-            }, 
-            "skill": "axe/mace", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-        ], 
-        "weapon-index": null, 
-        "skills": {
-          "beam weapons (pistol)": 16, 
-          "brawling": 16, 
-          "axe/mace": 14
-        }, 
         "shock": 0, 
         "current": {
           "fp": 11, 
@@ -3134,7 +3710,6 @@
           "dx": 12, 
           "basic-speed": 5.75
         }, 
-        "state": "alive", 
         "permanent": {
           "fp": 11, 
           "iq": 12, 
@@ -3144,20 +3719,7 @@
           "dx": 12, 
           "basic-speed": 5.75
         }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "8-Thief-B": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
+        "state": "alive", 
         "stuff": [
           {
             "acc": 2, 
@@ -3205,56 +3767,609 @@
             "name": "C Cell"
           }
         ], 
+        "timers": [], 
         "weapon-index": null, 
+        "check_for_death": false, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "2: William": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
         "skills": {
-          "beam weapons (pistol)": 12, 
+          "beam weapons (pistol)": 15, 
           "brawling": 14, 
           "knife": 15
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "current": {
           "fp": 11, 
           "iq": 12, 
-          "hp": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
           "basic-speed": 5.75
         }, 
         "state": "alive", 
-        "permanent": {
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [], 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "1: Oliver": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 14, 
+          "knife": 15
+        }, 
+        "did_action_this_turn": false, 
+        "shock": 0, 
+        "current": {
           "fp": 11, 
           "iq": 12, 
-          "hp": 12, 
+          "hp": 11, 
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
           "basic-speed": 5.75
         }, 
-        "advantages": {
-          "high pain threshold": 10
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
         }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "3-Bokor": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
+        "state": "alive", 
         "stuff": [
           {
             "acc": 2, 
             "count": 1, 
-            "name": "pistol, Kalashnikov Makarov", 
+            "name": "pistol, Baretta DX 192", 
             "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [], 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "4: Olivia": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 14, 
+          "knife": 15
+        }, 
+        "did_action_this_turn": false, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [], 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "3: Charlotte": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 14, 
+          "knife": 15
+        }, 
+        "did_action_this_turn": false, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [], 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "opponent": null
+      }
+    }, 
+    "Dima's Crew": {
+      "5: Dmitry": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 15, 
+          "knife": 15
+        }, 
+        "did_action_this_turn": true, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "4: Andre": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 15, 
+          "knife": 15
+        }, 
+        "did_action_this_turn": true, 
+        "shock": 0, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "1: Dima": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 16, 
+          "knife": 16
+        }, 
+        "did_action_this_turn": false, 
+        "shock": 0, 
+        "short_notes": [
+          "* DR 5 on suit ", 
+          ""
+        ], 
+        "current": {
+          "fp": 12, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 12, 
+          "st": 13, 
+          "dx": 12, 
+          "basic-speed": 6.0
+        }, 
+        "permanent": {
+          "fp": 12, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 12, 
+          "st": 12, 
+          "dx": 12, 
+          "basic-speed": 6.0
+        }, 
+        "state": "alive", 
+        "stuff": [
+          {
+            "acc": 6, 
+            "count": 1, 
+            "name": "pistol, Hand-built laser", 
+            "notes": "Excellent master class weapon", 
             "damage": {
               "dice": {
                 "plus": 3, 
-                "num_dice": 1, 
+                "num_dice": 2, 
                 "type": "pi"
               }
             }, 
@@ -3263,8 +4378,8 @@
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
+              "shots": 9, 
+              "shots_left": 9
             }
           }, 
           {
@@ -3272,97 +4387,61 @@
             "notes": "", 
             "type": "misc", 
             "name": "C Cell"
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, small", 
+            "notes": "B272", 
+            "damage": {
+              "sw": {
+                "plus": -3, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": -1, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 1, 
+            "name": "brass knuckles", 
+            "notes": "B271, nice", 
+            "damage": {
+              "thr": {
+                "plus": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": 0, 
+            "skill": "karate", 
+            "type": "melee weapon"
           }
         ], 
+        "timers": [], 
         "weapon-index": null, 
-        "skills": {
-          "beam weapons (pistol)": 13, 
-          "brawling": 12
-        }, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 10, 
-          "basic-speed": 5.25
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 10, 
-          "basic-speed": 5.25
-        }, 
+        "check_for_death": false, 
         "advantages": {
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
         "posture": "standing", 
         "opponent": null
       }, 
-      "7-Tank-D": {
+      "3: Alex": {
         "aim": {
           "braced": false, 
           "rounds": 0
         }, 
-        "stuff": [
-          {
-            "acc": 4, 
-            "count": 1, 
-            "name": "pistol, Sig D65", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "sick stick", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 1, 
-                "num_dice": 1, 
-                "type": "fat"
-              }
-            }, 
-            "skill": "axe/mace", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-        ], 
-        "weapon-index": null, 
         "skills": {
-          "beam weapons (pistol)": 16, 
-          "brawling": 16, 
-          "axe/mace": 14
+          "beam weapons (pistol)": 15, 
+          "brawling": 15, 
+          "knife": 15
         }, 
+        "did_action_this_turn": true, 
         "shock": 0, 
         "current": {
           "fp": 11, 
@@ -3373,7 +4452,6 @@
           "dx": 12, 
           "basic-speed": 5.75
         }, 
-        "state": "alive", 
         "permanent": {
           "fp": 11, 
           "iq": 12, 
@@ -3383,103 +4461,7 @@
           "dx": 12, 
           "basic-speed": 5.75
         }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "6-Tank-B": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "acc": 4, 
-            "count": 1, 
-            "name": "pistol, Sig D65", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "sick stick", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 1, 
-                "num_dice": 1, 
-                "type": "fat"
-              }
-            }, 
-            "skill": "axe/mace", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-        ], 
-        "weapon-index": null, 
-        "skills": {
-          "beam weapons (pistol)": 16, 
-          "brawling": 16, 
-          "axe/mace": 14
-        }, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
         "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "combat reflexes": 15
-        }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "2-Thief-A": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
         "stuff": [
           {
             "acc": 2, 
@@ -3527,89 +4509,36 @@
             "name": "C Cell"
           }
         ], 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
         "weapon-index": null, 
-        "skills": {
-          "beam weapons (pistol)": 12, 
-          "brawling": 14, 
-          "knife": 15
-        }, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
+        "check_for_death": false, 
         "advantages": {
+          "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
-        "did_action_this_turn": false, 
-        "check_for_death": false, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }
-    }, 
-    "Yet Another New Fight": {
-      "The Cleric": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "skills": {}, 
-        "did_action_this_turn": false, 
-        "shock": 0, 
-        "current": {
-          "fp": 12, 
-          "iq": 13, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 11, 
-          "basic-speed": 5.5
-        }, 
-        "permanent": {
-          "fp": 12, 
-          "iq": 13, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "dx": 11, 
-          "basic-speed": 5.5
-        }, 
-        "state": "alive", 
-        "stuff": [], 
-        "timers": [], 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "advantages": {}, 
         "posture": "standing", 
         "opponent": null
       }, 
-      "Dude": {
+      "2: Nikita": {
         "aim": {
           "braced": false, 
           "rounds": 0
         }, 
         "skills": {
-          "beam weapons (pistol)": 12, 
-          "brawling": 14, 
+          "beam weapons (pistol)": 15, 
+          "brawling": 15, 
           "knife": 15
         }, 
-        "did_action_this_turn": false, 
+        "did_action_this_turn": true, 
         "shock": 0, 
         "current": {
           "fp": 11, 
@@ -3677,7 +4606,16 @@
             "name": "C Cell"
           }
         ], 
-        "timers": [], 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
         "weapon-index": null, 
         "check_for_death": false, 
         "advantages": {
