@@ -14,11 +14,13 @@ import sys
 
 # TODO:
 #   - '?' should show weapon and armor notes (as appropriate)
-#   - Add pop-up attack in maneuvers
 #   - Allow for markdown in 'notes' and 'short_notes'
 #   - Armor
-#   - Add ability to generate name for character in template
 #   - Allow NPCs to be part of monsters or the party
+#   - Add ability to generate name for character in template
+#   - characters need a state 'absent' where they're not shown.  timers should
+#     be able to make somebody un-absent when the timer expires
+#   - Add pop-up attack in maneuvers
 #   - should warn when trying to do a second action (take note of fastdraw)
 #   - should only be able to ready an unready weapon.
 #   - Add 2 weapon (or weapon & shield)

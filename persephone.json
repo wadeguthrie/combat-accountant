@@ -2437,7 +2437,8 @@
       "weapon-index": null, 
       "skills": {
         "beam weapons (pistol)": 18, 
-        "brawling": 18
+        "brawling": 18,
+        "knife": 18
       }, 
       "notes": [
         "Bratva bank.", 
@@ -2451,23 +2452,23 @@
       ], 
       "shock": 0, 
       "current": {
-        "fp": 11, 
+        "fp": 12, 
         "iq": 12, 
         "hp": 12, 
-        "ht": 11, 
-        "st": 10, 
+        "ht": 12, 
+        "st": 13, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6.25
       }, 
       "state": "alive", 
       "permanent": {
-        "fp": 11, 
+        "fp": 12, 
         "iq": 12, 
         "hp": 12, 
-        "ht": 11, 
-        "st": 10, 
+        "ht": 12, 
+        "st": 13, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6.25
       }, 
       "advantages": {}, 
       "did_action_this_turn": false, 
@@ -4136,42 +4137,46 @@
           "braced": false, 
           "rounds": 0
         }, 
+        "short_notes": [
+          "* DR 2 on suit ", 
+          ""
+        ], 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 15, 
-          "knife": 15
+          "beam weapons (pistol)": 17, 
+          "brawling": 17, 
+          "knife": 17
         }, 
         "did_action_this_turn": true, 
         "shock": 0, 
         "current": {
           "fp": 11, 
-          "iq": 12, 
+          "iq": 11, 
           "hp": 11, 
           "ht": 11, 
-          "st": 10, 
+          "st": 12, 
           "dx": 12, 
           "basic-speed": 5.75
         }, 
         "permanent": {
           "fp": 11, 
-          "iq": 12, 
+          "iq": 11, 
           "hp": 11, 
           "ht": 11, 
-          "st": 10, 
+          "st": 12, 
           "dx": 12, 
           "basic-speed": 5.75
         }, 
         "state": "alive", 
         "stuff": [
           {
-            "acc": 2, 
+            "acc": 6, 
             "count": 1, 
-            "name": "pistol, Baretta DX 192", 
-            "notes": "", 
+            "name": "pistol, Hand-built laser", 
+            "notes": "Nice weapon", 
             "damage": {
               "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
+                "plus": 1, 
+                "num_dice": 2, 
                 "type": "pi"
               }
             }, 
@@ -4180,8 +4185,8 @@
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
+              "shots": 7, 
+              "shots_left": 7
             }
           }, 
           {
@@ -4233,42 +4238,46 @@
           "braced": false, 
           "rounds": 0
         }, 
+        "short_notes": [
+          "* DR 2 on suit ", 
+          ""
+        ], 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 15, 
-          "knife": 15
+          "beam weapons (pistol)": 17, 
+          "brawling": 17, 
+          "knife": 17
         }, 
         "did_action_this_turn": true, 
         "shock": 0, 
         "current": {
           "fp": 11, 
-          "iq": 12, 
+          "iq": 11, 
           "hp": 11, 
           "ht": 11, 
-          "st": 10, 
+          "st": 12, 
           "dx": 12, 
           "basic-speed": 5.75
         }, 
         "permanent": {
           "fp": 11, 
-          "iq": 12, 
+          "iq": 11, 
           "hp": 11, 
           "ht": 11, 
-          "st": 10, 
+          "st": 12, 
           "dx": 12, 
           "basic-speed": 5.75
         }, 
         "state": "alive", 
         "stuff": [
           {
-            "acc": 2, 
+            "acc": 6, 
             "count": 1, 
-            "name": "pistol, Baretta DX 192", 
-            "notes": "", 
+            "name": "pistol, Hand-built laser", 
+            "notes": "Nice weapon", 
             "damage": {
               "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
+                "plus": 1, 
+                "num_dice": 2, 
                 "type": "pi"
               }
             }, 
@@ -4277,8 +4286,8 @@
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
+              "shots": 7, 
+              "shots_left": 7
             }
           }, 
           {
@@ -4331,14 +4340,14 @@
           "rounds": 0
         }, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 16, 
-          "knife": 16
+          "beam weapons (pistol)": 18, 
+          "brawling": 18, 
+          "knife": 18
         }, 
         "did_action_this_turn": false, 
         "shock": 0, 
         "short_notes": [
-          "* DR 5 on suit ", 
+          "* DR 3 on suit ", 
           ""
         ], 
         "current": {
@@ -4347,8 +4356,8 @@
           "hp": 12, 
           "ht": 12, 
           "st": 13, 
-          "dx": 12, 
-          "basic-speed": 6.0
+          "dx": 13, 
+          "basic-speed": 6.25
         }, 
         "permanent": {
           "fp": 12, 
@@ -4356,8 +4365,8 @@
           "hp": 12, 
           "ht": 12, 
           "st": 12, 
-          "dx": 12, 
-          "basic-speed": 6.0
+          "dx": 13, 
+          "basic-speed": 6.25
         }, 
         "state": "alive", 
         "stuff": [
@@ -4436,42 +4445,46 @@
           "braced": false, 
           "rounds": 0
         }, 
+        "short_notes": [
+          "* DR 2 on suit ", 
+          ""
+        ], 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 15, 
-          "knife": 15
+          "beam weapons (pistol)": 17, 
+          "brawling": 17, 
+          "knife": 17
         }, 
         "did_action_this_turn": true, 
         "shock": 0, 
         "current": {
           "fp": 11, 
-          "iq": 12, 
+          "iq": 11, 
           "hp": 11, 
           "ht": 11, 
-          "st": 10, 
+          "st": 12, 
           "dx": 12, 
           "basic-speed": 5.75
         }, 
         "permanent": {
           "fp": 11, 
-          "iq": 12, 
+          "iq": 11, 
           "hp": 11, 
           "ht": 11, 
-          "st": 10, 
+          "st": 12, 
           "dx": 12, 
           "basic-speed": 5.75
         }, 
         "state": "alive", 
         "stuff": [
           {
-            "acc": 2, 
+            "acc": 6, 
             "count": 1, 
-            "name": "pistol, Baretta DX 192", 
-            "notes": "", 
+            "name": "pistol, Hand-built laser", 
+            "notes": "Nice weapon", 
             "damage": {
               "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
+                "plus": 1, 
+                "num_dice": 2, 
                 "type": "pi"
               }
             }, 
@@ -4480,8 +4493,8 @@
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
+              "shots": 7, 
+              "shots_left": 7
             }
           }, 
           {
@@ -4533,42 +4546,46 @@
           "braced": false, 
           "rounds": 0
         }, 
+        "short_notes": [
+          "* DR 2 on suit ", 
+          ""
+        ], 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 15, 
-          "knife": 15
+          "beam weapons (pistol)": 17, 
+          "brawling": 17, 
+          "knife": 17
         }, 
         "did_action_this_turn": true, 
         "shock": 0, 
         "current": {
           "fp": 11, 
-          "iq": 12, 
+          "iq": 11, 
           "hp": 11, 
           "ht": 11, 
-          "st": 10, 
+          "st": 12, 
           "dx": 12, 
           "basic-speed": 5.75
         }, 
         "permanent": {
           "fp": 11, 
-          "iq": 12, 
+          "iq": 11, 
           "hp": 11, 
           "ht": 11, 
-          "st": 10, 
+          "st": 12, 
           "dx": 12, 
           "basic-speed": 5.75
         }, 
         "state": "alive", 
         "stuff": [
           {
-            "acc": 2, 
+            "acc": 6, 
             "count": 1, 
-            "name": "pistol, Baretta DX 192", 
-            "notes": "", 
+            "name": "pistol, Hand-built laser", 
+            "notes": "Nice weapon", 
             "damage": {
               "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
+                "plus": 1, 
+                "num_dice": 2, 
                 "type": "pi"
               }
             }, 
@@ -4577,8 +4594,8 @@
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
+              "shots": 7, 
+              "shots_left": 7
             }
           }, 
           {
