@@ -413,23 +413,37 @@ class MainGmWindow(GmWindow):
         self.__char_detail.append([{'text': 'Attributes',
                                     'mode': mode | curses.A_BOLD}])
         found_one = False
-        damaged = False
-        pieces = [' ']
+        pieces = []
         for item_key in character['permanent'].iterkeys():
+            leader = '' if found_one else '  '
+            text = '%s%s:%d/%d' % (leader,
+                                   item_key,
+                                   character['current'][item_key],
+                                   character['permanent'][item_key])
+            if (character['current'][item_key] == 
+                                            character['permanent'][item_key]):
+                mode = curses.A_NORMAL
+            else:
+                mode = (curses.color_pair(GmWindowManager.YELLOW_BLACK) |
+                                                                curses.A_BOLD)
+
+            pieces.append({'text': '%s ' % text, 'mode': mode})
             found_one = True
-            text = '%s:%d/%d' % (item_key,
-                                 character['current'][item_key],
-                                 character['permanent'][item_key])
-            pieces.append(text)
 
         if found_one:
-            if damaged:
-                mode = curses.color_pair(GmWindowManager.YELLOW_BLACK)
-            self.__char_detail.append([{'text': ' '.join(pieces),
-                                        'mode': mode}])
+            self.__char_detail.append(pieces)
         else:
             self.__char_detail.append([{'text': '  (None)',
                                         'mode': mode}])
+
+        #if found_one:
+        #    if damaged:
+        #        mode = curses.color_pair(GmWindowManager.YELLOW_BLACK)
+        #    self.__char_detail.append([{'text': ' '.join(pieces),
+        #                                'mode': mode}])
+        #else:
+        #    self.__char_detail.append([{'text': '  (None)',
+        #                                'mode': mode}])
 
         # stuff
 
@@ -1566,8 +1580,11 @@ class GmScrollableWindow(object):
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
         line_cnt = line_cnt if line_cnt < win_line_cnt else win_line_cnt
         for i in range(0, line_cnt):
+            left = 0
             for piece in self.__lines[i+self.top_line]:
-                self.__window.addstr(i, 0, piece['text'], piece['mode'])
+                self.__window.addstr(i, left, piece['text'], piece['mode'])
+                left += len(piece['text'])
+
 
     def get_showable_menu_lines(self):
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
