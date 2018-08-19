@@ -373,12 +373,12 @@
         "computer hacking": 15, 
         "electronics operation": 13, 
         "axe/mace": 11, 
-        "computer programming": 12, 
+        "brawling": 12, 
         "first aid": 14, 
         "computer security": 12, 
         "beam weapons (pistol)": 15, 
         "armoury (small arms)": 13, 
-        "brawling": 12, 
+        "computer programming": 12, 
         "physics": 12, 
         "piloting": 13, 
         "observation": 15
@@ -2261,51 +2261,39 @@
   }, 
   "current-fight": {
     "index": 0, 
-    "monsters": "Arena Capture the Flag", 
+    "monsters": "Dima's Crew", 
     "fighters": [
       {
-        "group": "PCs", 
-        "name": "samuel - Erik"
+        "group": "Dima's Crew", 
+        "name": "1: Dima"
       }, 
       {
         "group": "PCs", 
         "name": "lawerence - Spenser"
       }, 
       {
-        "group": "Arena Capture the Flag", 
-        "name": "8-Thief-B"
+        "group": "PCs", 
+        "name": "samuel - Erik"
       }, 
       {
-        "group": "Arena Capture the Flag", 
-        "name": "5-Tank-C"
+        "group": "Dima's Crew", 
+        "name": "2: Nikita"
       }, 
       {
-        "group": "Arena Capture the Flag", 
-        "name": "7-Tank-D"
+        "group": "Dima's Crew", 
+        "name": "5: Dmitry"
       }, 
       {
-        "group": "Arena Capture the Flag", 
-        "name": "6-Tank-B"
+        "group": "Dima's Crew", 
+        "name": "3: Alex"
       }, 
       {
-        "group": "Arena Capture the Flag", 
-        "name": "4-Tank-A"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "2-Thief-A"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "1-Cleric"
+        "group": "Dima's Crew", 
+        "name": "4: Andre"
       }, 
       {
         "group": "PCs", 
         "name": "vasilis - Alan"
-      }, 
-      {
-        "group": "Arena Capture the Flag", 
-        "name": "3-Bokor"
       }, 
       {
         "group": "PCs", 
@@ -2437,7 +2425,7 @@
       "weapon-index": null, 
       "skills": {
         "beam weapons (pistol)": 18, 
-        "brawling": 18,
+        "brawling": 18, 
         "knife": 18
       }, 
       "notes": [
@@ -3689,6 +3677,482 @@
     }
   }, 
   "monsters": {
+    "Dima's Crew": {
+      "5: Dmitry": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "skills": {
+          "beam weapons (pistol)": 17, 
+          "brawling": 17, 
+          "knife": 17
+        }, 
+        "did_action_this_turn": false, 
+        "shock": 0, 
+        "short_notes": [
+          "* DR 2 on suit ", 
+          ""
+        ], 
+        "current": {
+          "fp": 11, 
+          "iq": 11, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 12, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 11, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 12, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "stuff": [
+          {
+            "acc": 6, 
+            "count": 1, 
+            "name": "pistol, Hand-built laser", 
+            "notes": "Nice weapon", 
+            "damage": {
+              "dice": {
+                "plus": 1, 
+                "num_dice": 2, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 7, 
+              "shots_left": 7
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [], 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "4: Andre": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "skills": {
+          "beam weapons (pistol)": 17, 
+          "brawling": 17, 
+          "knife": 17
+        }, 
+        "did_action_this_turn": false, 
+        "shock": 0, 
+        "short_notes": [
+          "* DR 2 on suit ", 
+          ""
+        ], 
+        "current": {
+          "fp": 11, 
+          "iq": 11, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 12, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 11, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 12, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "stuff": [
+          {
+            "acc": 6, 
+            "count": 1, 
+            "name": "pistol, Hand-built laser", 
+            "notes": "Nice weapon", 
+            "damage": {
+              "dice": {
+                "plus": 1, 
+                "num_dice": 2, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 7, 
+              "shots_left": 7
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [], 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "1: Dima": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "skills": {
+          "beam weapons (pistol)": 18, 
+          "brawling": 18, 
+          "knife": 18
+        }, 
+        "did_action_this_turn": false, 
+        "shock": 0, 
+        "short_notes": [
+          "* DR 3 on suit ", 
+          ""
+        ], 
+        "current": {
+          "fp": 12, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 12, 
+          "st": 13, 
+          "dx": 13, 
+          "basic-speed": 6.25
+        }, 
+        "permanent": {
+          "fp": 12, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 12, 
+          "st": 12, 
+          "dx": 13, 
+          "basic-speed": 6.25
+        }, 
+        "state": "alive", 
+        "stuff": [
+          {
+            "acc": 6, 
+            "count": 1, 
+            "name": "pistol, Hand-built laser", 
+            "notes": "Excellent master class weapon", 
+            "damage": {
+              "dice": {
+                "plus": 3, 
+                "num_dice": 2, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 9, 
+              "shots_left": 9
+            }
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, small", 
+            "notes": "B272", 
+            "damage": {
+              "sw": {
+                "plus": -3, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": -1, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 1, 
+            "name": "brass knuckles", 
+            "notes": "B271, nice", 
+            "damage": {
+              "thr": {
+                "plus": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": 0, 
+            "skill": "karate", 
+            "type": "melee weapon"
+          }
+        ], 
+        "timers": [], 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "3: Alex": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "skills": {
+          "beam weapons (pistol)": 17, 
+          "brawling": 17, 
+          "knife": 17
+        }, 
+        "did_action_this_turn": false, 
+        "shock": 0, 
+        "short_notes": [
+          "* DR 2 on suit ", 
+          ""
+        ], 
+        "current": {
+          "fp": 11, 
+          "iq": 11, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 12, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 11, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 12, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "stuff": [
+          {
+            "acc": 6, 
+            "count": 1, 
+            "name": "pistol, Hand-built laser", 
+            "notes": "Nice weapon", 
+            "damage": {
+              "dice": {
+                "plus": 1, 
+                "num_dice": 2, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 7, 
+              "shots_left": 7
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [], 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "opponent": null
+      }, 
+      "2: Nikita": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "skills": {
+          "beam weapons (pistol)": 17, 
+          "brawling": 17, 
+          "knife": 17
+        }, 
+        "did_action_this_turn": false, 
+        "shock": 0, 
+        "short_notes": [
+          "* DR 2 on suit ", 
+          ""
+        ], 
+        "current": {
+          "fp": 11, 
+          "iq": 11, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 12, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 11, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 12, 
+          "dx": 12, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "stuff": [
+          {
+            "acc": 6, 
+            "count": 1, 
+            "name": "pistol, Hand-built laser", 
+            "notes": "Nice weapon", 
+            "damage": {
+              "dice": {
+                "plus": 1, 
+                "num_dice": 2, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 7, 
+              "shots_left": 7
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [], 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "opponent": null
+      }
+    }, 
     "1st Hunting Party": {
       "5: Amelia": {
         "aim": {
@@ -4121,518 +4585,6 @@
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "posture": "standing", 
-        "opponent": null
-      }
-    }, 
-    "Dima's Crew": {
-      "5: Dmitry": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "short_notes": [
-          "* DR 2 on suit ", 
-          ""
-        ], 
-        "skills": {
-          "beam weapons (pistol)": 17, 
-          "brawling": 17, 
-          "knife": 17
-        }, 
-        "did_action_this_turn": true, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 11, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 12, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 11, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 12, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "stuff": [
-          {
-            "acc": 6, 
-            "count": 1, 
-            "name": "pistol, Hand-built laser", 
-            "notes": "Nice weapon", 
-            "damage": {
-              "dice": {
-                "plus": 1, 
-                "num_dice": 2, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 7, 
-              "shots_left": 7
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "knife, large", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-        ], 
-        "timers": [
-          {
-            "rounds": 0.9, 
-            "string": [
-              "Do nothing", 
-              " Defense: any", 
-              " Move: none"
-            ]
-          }
-        ], 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "4: Andre": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "short_notes": [
-          "* DR 2 on suit ", 
-          ""
-        ], 
-        "skills": {
-          "beam weapons (pistol)": 17, 
-          "brawling": 17, 
-          "knife": 17
-        }, 
-        "did_action_this_turn": true, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 11, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 12, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 11, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 12, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "stuff": [
-          {
-            "acc": 6, 
-            "count": 1, 
-            "name": "pistol, Hand-built laser", 
-            "notes": "Nice weapon", 
-            "damage": {
-              "dice": {
-                "plus": 1, 
-                "num_dice": 2, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 7, 
-              "shots_left": 7
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "knife, large", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-        ], 
-        "timers": [
-          {
-            "rounds": 0.9, 
-            "string": [
-              "Do nothing", 
-              " Defense: any", 
-              " Move: none"
-            ]
-          }
-        ], 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "1: Dima": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "skills": {
-          "beam weapons (pistol)": 18, 
-          "brawling": 18, 
-          "knife": 18
-        }, 
-        "did_action_this_turn": false, 
-        "shock": 0, 
-        "short_notes": [
-          "* DR 3 on suit ", 
-          ""
-        ], 
-        "current": {
-          "fp": 12, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 12, 
-          "st": 13, 
-          "dx": 13, 
-          "basic-speed": 6.25
-        }, 
-        "permanent": {
-          "fp": 12, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 12, 
-          "st": 12, 
-          "dx": 13, 
-          "basic-speed": 6.25
-        }, 
-        "state": "alive", 
-        "stuff": [
-          {
-            "acc": 6, 
-            "count": 1, 
-            "name": "pistol, Hand-built laser", 
-            "notes": "Excellent master class weapon", 
-            "damage": {
-              "dice": {
-                "plus": 3, 
-                "num_dice": 2, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }, 
-          {
-            "count": 1, 
-            "name": "knife, small", 
-            "notes": "B272", 
-            "damage": {
-              "sw": {
-                "plus": -3, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": -1, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 1, 
-            "name": "brass knuckles", 
-            "notes": "B271, nice", 
-            "damage": {
-              "thr": {
-                "plus": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": 0, 
-            "skill": "karate", 
-            "type": "melee weapon"
-          }
-        ], 
-        "timers": [], 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "3: Alex": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "short_notes": [
-          "* DR 2 on suit ", 
-          ""
-        ], 
-        "skills": {
-          "beam weapons (pistol)": 17, 
-          "brawling": 17, 
-          "knife": 17
-        }, 
-        "did_action_this_turn": true, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 11, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 12, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 11, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 12, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "stuff": [
-          {
-            "acc": 6, 
-            "count": 1, 
-            "name": "pistol, Hand-built laser", 
-            "notes": "Nice weapon", 
-            "damage": {
-              "dice": {
-                "plus": 1, 
-                "num_dice": 2, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 7, 
-              "shots_left": 7
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "knife, large", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-        ], 
-        "timers": [
-          {
-            "rounds": 0.9, 
-            "string": [
-              "Do nothing", 
-              " Defense: any", 
-              " Move: none"
-            ]
-          }
-        ], 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "2: Nikita": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "short_notes": [
-          "* DR 2 on suit ", 
-          ""
-        ], 
-        "skills": {
-          "beam weapons (pistol)": 17, 
-          "brawling": 17, 
-          "knife": 17
-        }, 
-        "did_action_this_turn": true, 
-        "shock": 0, 
-        "current": {
-          "fp": 11, 
-          "iq": 11, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 12, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 11, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 12, 
-          "dx": 12, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "stuff": [
-          {
-            "acc": 6, 
-            "count": 1, 
-            "name": "pistol, Hand-built laser", 
-            "notes": "Nice weapon", 
-            "damage": {
-              "dice": {
-                "plus": 1, 
-                "num_dice": 2, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 7, 
-              "shots_left": 7
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "knife, large", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-        ], 
-        "timers": [
-          {
-            "rounds": 0.9, 
-            "string": [
-              "Do nothing", 
-              " Defense: any", 
-              " Move: none"
-            ]
-          }
-        ], 
         "weapon-index": null, 
         "check_for_death": false, 
         "advantages": {

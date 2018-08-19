@@ -344,7 +344,8 @@ class MainGmWindow(GmWindow):
                                            0)
 
         lines, cols = self._window.getmaxyx()
-        self.__char_detail = [] # [{'text', 'mode'}, ...]
+        self.__char_detail = [] # [[{'text', 'mode'}, ...],   # line 0
+                                #  [...],                  ]  # line 1...
 
         top_line = 1
         height = (lines                 # The whole window height, except...
@@ -352,7 +353,7 @@ class MainGmWindow(GmWindow):
             - 4)                        # ...a space for the command ribbon.
         
         width = (cols / 2) - 1 # -1 for margin
-        # TODO: make a GmScrollableWindow
+        # TODO: make this a GmScrollableWindow
         self.__char_list_window = self._window_manager.new_native_window(
                                                  height,
                                                  width,
@@ -409,8 +410,8 @@ class MainGmWindow(GmWindow):
         # attributes
 
         mode = curses.A_NORMAL 
-        self.__char_detail.append({'text': 'Attributes',
-                                   'mode': mode | curses.A_BOLD})
+        self.__char_detail.append([{'text': 'Attributes',
+                                    'mode': mode | curses.A_BOLD}])
         found_one = False
         damaged = False
         pieces = [' ']
@@ -424,96 +425,96 @@ class MainGmWindow(GmWindow):
         if found_one:
             if damaged:
                 mode = curses.color_pair(GmWindowManager.YELLOW_BLACK)
-            self.__char_detail.append({'text': ' '.join(pieces),
-                                       'mode': mode})
+            self.__char_detail.append([{'text': ' '.join(pieces),
+                                        'mode': mode}])
         else:
-            self.__char_detail.append({'text': '  (None)',
-                                       'mode': mode})
+            self.__char_detail.append([{'text': '  (None)',
+                                        'mode': mode}])
 
         # stuff
 
         mode = curses.A_NORMAL 
-        self.__char_detail.append({'text': 'Equipment',
-                                   'mode': mode | curses.A_BOLD})
+        self.__char_detail.append([{'text': 'Equipment',
+                                    'mode': mode | curses.A_BOLD}])
 
         found_one = False
         for item in character['stuff']:
             found_one = True
-            self.__char_detail.append({'text': '  %s' % item['name'],
-                                       'mode': mode})
+            self.__char_detail.append([{'text': '  %s' % item['name'],
+                                        'mode': mode}])
 
         if not found_one:
-            self.__char_detail.append({'text': '  (None)',
-                                       'mode': mode})
+            self.__char_detail.append([{'text': '  (None)',
+                                        'mode': mode}])
 
         # advantages
 
         mode = curses.A_NORMAL 
-        self.__char_detail.append({'text': 'Advantages',
-                                   'mode': mode | curses.A_BOLD})
+        self.__char_detail.append([{'text': 'Advantages',
+                                    'mode': mode | curses.A_BOLD}])
 
         found_one = False
         for advantage, value in sorted(character['advantages'].iteritems(),
                                        key=lambda (k,v): (k, v)):
             found_one = True
-            self.__char_detail.append({'text': '  %s: %d' % (advantage, value),
-                                       'mode': mode})
+            self.__char_detail.append([{'text': '  %s: %d' % (advantage, value),
+                                        'mode': mode}])
 
         if not found_one:
-            self.__char_detail.append({'text': '  (None)',
-                                       'mode': mode})
+            self.__char_detail.append([{'text': '  (None)',
+                                        'mode': mode}])
 
         # skills
 
         mode = curses.A_NORMAL 
-        self.__char_detail.append({'text': 'Skills',
-                                   'mode': mode | curses.A_BOLD})
+        self.__char_detail.append([{'text': 'Skills',
+                                    'mode': mode | curses.A_BOLD}])
 
         found_one = False
         for skill, value in sorted(character['skills'].iteritems(),
                                    key=lambda (k,v): (k,v)):
             found_one = True
-            self.__char_detail.append({'text': '  %s: %d' % (skill, value),
-                                       'mode': mode})
+            self.__char_detail.append([{'text': '  %s: %d' % (skill, value),
+                                        'mode': mode}])
 
         if not found_one:
-            self.__char_detail.append({'text': '  (None)',
-                                       'mode': mode})
+            self.__char_detail.append([{'text': '  (None)',
+                                        'mode': mode}])
 
         # spells
 
         if 'spells' in character:
             mode = curses.A_NORMAL 
-            self.__char_detail.append({'text': 'Spells',
-                                       'mode': mode | curses.A_BOLD})
+            self.__char_detail.append([{'text': 'Spells',
+                                        'mode': mode | curses.A_BOLD}])
 
             found_one = False
             for spell, value in sorted(character['spells'].iteritems(),
                                            key=lambda (k,v): (k, v)):
                 found_one = True
-                self.__char_detail.append({'text': '  %s: %d' % (spell, value),
-                                           'mode': mode})
+                self.__char_detail.append([{'text': '  %s: %d' % (spell, value),
+                                            'mode': mode}])
 
             if not found_one:
-                self.__char_detail.append({'text': '  (None)',
-                                           'mode': mode})
+                self.__char_detail.append([{'text': '  (None)',
+                                            'mode': mode}])
 
         # notes
 
         mode = curses.A_NORMAL 
-        self.__char_detail.append({'text': 'Notes',
-                                   'mode': mode | curses.A_BOLD})
+        self.__char_detail.append([{'text': 'Notes',
+                                    'mode': mode | curses.A_BOLD}])
 
         found_one = False
         if 'notes' in character:
             for note in character['notes']:
                 found_one = True
-                self.__char_detail.append({'text': '  %s' % note,
-                                           'mode': mode})
+                self.__char_detail.append([{'text': '  %s' % note,
+                                            'mode': mode}])
 
         if not found_one:
-            self.__char_detail.append({'text': '  (None)',
-                                       'mode': mode})
+            self.__char_detail.append([{'text': '  (None)',
+                                        'mode': mode}])
 
         # ...and show the screen
 
@@ -1139,7 +1140,8 @@ class GmWindowManager(object):
 
     def display_window(self,
                        title,
-                       lines  # [{'text', 'mode'}, ...]
+                       lines  # [[{'text', 'mode'}, ],    # line 0
+                              #  [...],               ]   # line 1
                       ):
         '''
         Presents a display of |lines| to the user.
@@ -1157,7 +1159,8 @@ class GmWindowManager(object):
         width += 1 # Seems to need one more space (or Curses freaks out)
 
         border_win, display_win = self.__centered_boxed_window(
-                                                    height, width,
+                                                    height,
+                                                    width,
                                                     title,
                                                     data_for_scrolling=lines)
         display_win.refresh()
@@ -1191,7 +1194,8 @@ class GmWindowManager(object):
                     footer
                    ):
 
-        border_win, edit_win = self.__centered_boxed_window(height, width,
+        border_win, edit_win = self.__centered_boxed_window(height,
+                                                            width,
                                                             title)
         if footer is not None:
             footer_start = ((width+2) - (len(footer))) / 2
@@ -1310,7 +1314,8 @@ class GmWindowManager(object):
                  ):
         '''Provides a window to get input from the screen.'''
 
-        border_win, menu_win = self.__centered_boxed_window(height, width,
+        border_win, menu_win = self.__centered_boxed_window(height,
+                                                            width,
                                                             title)
         string = self.get_string(menu_win)
 
@@ -1341,13 +1346,14 @@ class GmWindowManager(object):
         width += 1 # Seems to need one more space (or Curses freaks out)
 
         data_for_scrolling = []
-        for entry in strings_results:
-            data_for_scrolling.append({'text': entry[0],
-                                       'mode': curses.A_NORMAL})
         index = 0 if starting_index >= len(strings_results) else starting_index
-        data_for_scrolling[index]['mode'] = curses.A_STANDOUT
+        for i, entry in enumerate(strings_results):
+            mode = curses.A_STANDOUT if i == index else curses.A_NORMAL
+            data_for_scrolling.append([{'text': entry[0],
+                                        'mode': mode}])
         border_win, menu_win = self.__centered_boxed_window(
-                                        height, width,
+                                        height,
+                                        width,
                                         title,
                                         data_for_scrolling=data_for_scrolling)
         menu_win.refresh()
@@ -1406,8 +1412,11 @@ class GmWindowManager(object):
                 #                                            new_index,
                 #                                            index)
 
-                data_for_scrolling[old_index]['mode'] = curses.A_NORMAL
-                data_for_scrolling[index]['mode'] = curses.A_STANDOUT
+                for piece in data_for_scrolling[old_index]:
+                    piece['mode'] = curses.A_NORMAL
+
+                for piece in data_for_scrolling[index]:
+                    piece['mode'] = curses.A_STANDOUT
 
                 # NOTE: assumes we're only changing by one line at a time so
                 # we don't have to worry about scrolling more than once to get
@@ -1524,7 +1533,8 @@ class GmWindowManager(object):
 
 class GmScrollableWindow(object):
     def __init__(self,
-                 lines, # [{'text', 'mode'}, ...]
+                 lines,            # [[{'text', 'mode'}, ...],  # line 0
+                                   #  [...]                  ]  # line 1
                  window_manager,
                  height=None,
                  width=None, # window size
@@ -1556,9 +1566,8 @@ class GmScrollableWindow(object):
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
         line_cnt = line_cnt if line_cnt < win_line_cnt else win_line_cnt
         for i in range(0, line_cnt):
-            self.__window.addstr(i, 0,
-                                 self.__lines[i+self.top_line]['text'],
-                                 self.__lines[i+self.top_line]['mode'])
+            for piece in self.__lines[i+self.top_line]:
+                self.__window.addstr(i, 0, piece['text'], piece['mode'])
 
     def get_showable_menu_lines(self):
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
