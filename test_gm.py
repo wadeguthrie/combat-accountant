@@ -634,7 +634,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
     def test_initiative_order(self):
         random_debug_filename = 'foo'
 
-        world = {
+        world_dict = {
             # Don't need templates, dead-monsters, equipment, names
             'PCs': {
                 # 5.25, 10, rand=1
@@ -666,6 +666,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 'monsters': 'horsemen',
             },
         }
+
+        world = gm.World(world_dict)
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
         # Pestilence and Moe have same basic speed but different dx
@@ -699,14 +701,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # test that cycling a whole round goes to each fighter in order
 
         expected_index = 0
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
 
         fight_handler.modify_index(1)
         expected_index = 1
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         injured_fighter = current_fighter
         injured_index = expected_index
@@ -715,7 +717,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.modify_index(1)
         expected_index = 2
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         unconscious_fighter = current_fighter
         unconscious_index = expected_index
@@ -724,7 +726,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.modify_index(1)
         expected_index = 3
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         dead_fighter = current_fighter
         dead_index = expected_index
@@ -733,14 +735,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.modify_index(1)
         expected_index = 4
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
 
         fight_handler.modify_index(1)
         expected_index = 0 # wraps
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
@@ -758,7 +760,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert dead_fighter.get_state() == gm.Fighter.DEAD
 
         expected_index = 0
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
@@ -766,7 +768,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # This is the injured fighter -- should still see this one
         fight_handler.modify_index(1)
         expected_index = 1
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
@@ -774,7 +776,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # This is the unconscious fighter -- should still see this one
         fight_handler.modify_index(1)
         expected_index = 2
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
@@ -783,14 +785,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.modify_index(1)
         expected_index = 4
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
 
         fight_handler.modify_index(1)
         expected_index = 0 # wraps
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
@@ -825,7 +827,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         random_debug_filename = 'foo'
 
-        world = {
+        world_dict = {
             # Don't need templates, dead-monsters, equipment, names
             'PCs': {
                 # 5.5, 11, rand=2
@@ -858,6 +860,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 'monsters': 'marx',
             },
         }
+
+        world = gm.World(world_dict)
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
         # Pestilence and Moe have same basic speed but different dx
@@ -897,7 +901,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
 
         random_debug_filename = 'foo'
-        world = {
+        world_dict = {
             # Don't need templates, dead-monsters, equipment, names
             'PCs': {
                 # 5.25, 10, rand=1
@@ -930,6 +934,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             },
         }
 
+        world = gm.World(world_dict)
+
         # Famine and Jack have the same basic speed and dx -- it's up to rand
         # Pestilence and Moe have same basic speed but different dx
         expected = [{'name': 'Famine',     'group': 'horsemen'}, # 5.75, 12, 4
@@ -953,7 +959,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fighters = fight_handler.get_fighters()
 
         expected_index = 0
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         # Make fighter 0 fight figher 2
         current_fighter.details['opponent'] = {'group': 'PCs', 'name': 'Moe'}
@@ -961,7 +967,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Move ahead to fighter 1
         fight_handler.modify_index(1)
         expected_index = 1
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         # Wound fighter 2
         fighters[injured_index]['details']['current']['hp'] -= injured_hp
@@ -970,26 +976,26 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.modify_index(1)
         expected_index = 2
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         unconscious_fighter = current_fighter
         unconscious_index = expected_index
 
         fight_handler.modify_index(1)
         expected_index = 3
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         dead_fighter = current_fighter
         dead_index = expected_index
 
         fight_handler.modify_index(1)
         expected_index = 4
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
 
         fight_handler.modify_index(1)
         expected_index = 0 # wraps
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         # Change opponent of fighter 0 to fighter 1 -- At one time, I saw a
         # bug where it appeared that changing an opponent from an injured one
@@ -1006,7 +1012,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fight_handler.modify_index(1) # index 0
         fight_handler.modify_index(1) # index 1
         expected_index = 1
-        assert world['current-fight']['index'] == expected_index
+        assert world_dict['current-fight']['index'] == expected_index
 
         # Set expectations to the final configuration.
 
