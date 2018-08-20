@@ -3804,7 +3804,7 @@ class FightHandler(ScreenHandler):
             fight_group = self._saved_fight['monsters']
             fight = self.__world.get_list(fight_group)
             self.__world.details['dead-monsters'][fight_group] = fight
-            del fight
+            del self.__world.details['monsters'][fight_group]
 
 
     # Public to assist testing
