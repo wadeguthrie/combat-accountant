@@ -45,14 +45,49 @@ import unittest
 
 class MockFightGmWindow(object):
     def __init__(self, ruleset):
+        self.fighter_win_width = 10
+        self.len_timer_leader = 1
         pass
 
     def start_fight(self):
         pass
 
+    def show_fighters(self,
+                      current_fighter,
+                      opponent,
+                      fighters,
+                      index):
+        pass
+
+    def round_ribbon(self,
+                     fight_round,
+                     saved,
+                     keep_monsters,
+                     next_PC_name,
+                     input_filename,
+                     maintain_json):
+        pass
+
+    def clear(self):
+        pass
+
+    def close(self):
+        pass
+
+    def status_ribbon(self, input_filename, maintain_json):
+        pass
+
+    def command_ribbon(self, choices):
+        pass
+
+    def getmaxyx(self):
+        return 10, 10
+
+
 class MockWindowManager(object):
     def __init__(self):
         self.__menu_responses = {} # {menu_title: [selection, selection...]
+        self.__char_responses = [] # array of characters
 
     def error(self, string_array):
         pass
@@ -74,13 +109,29 @@ class MockWindowManager(object):
             print '** didn\'t find menu title "%s" in stored responses'
             assert False
         if len(self.__menu_responses[title]) == 0:
-            print '** responses["%s"] is empty, can\'t respond'
+            print ('** menu responses["%s"] is empty, can\'t respond' %
+                    title)
             assert False
         return self.__menu_responses[title].pop()
         
 
     def get_fight_gm_window(self, ruleset):
         return MockFightGmWindow(ruleset)
+
+    def set_char_response(self,
+                          selection # character
+                         ):
+        print 'set_char_response: Adding "%s"' % selection # TODO: remove
+        self.__char_responses.append(selection)
+        PP.pprint(self.__char_responses) # TODO: remove
+
+    def get_one_character(self):
+        print 'get_one_character: Returning from' # TODO: remove
+        PP.pprint(self.__char_responses) # TODO: remove
+        if len(self.__char_responses) == 0:
+            print '** character responses is empty, can\'t respond'
+            assert False
+        return self.__char_responses.pop()
 
 class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
     def setUp(self):
@@ -469,7 +520,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
     def test_get_unarmed_info(self):
         # Vodou Priest
-        #PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
         unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
         vodou_priest_fighter = gm.Fighter(
                                     'Vodou Priest',
@@ -1580,6 +1630,97 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # assert 0 timers -- yup, 0.9 timer is now gone
         assert len(fighter.details['timers']) == 0
 
+    def test_save(self):
+
+        world_dict = {
+          "Templates": {
+            "Arena Combat": {
+              "VodouCleric": {
+                "permanent": {
+                  "fp": { "type": "value", "value": 12 }, 
+                  "iq": { "type": "value", "value": 13 }, 
+                  "hp": { "type": "value", "value": 10 }, 
+                  "ht": { "type": "value", "value": 11 }, 
+                  "st": { "type": "value", "value": 10 }, 
+                  "dx": { "type": "value", "value": 11 }, 
+                  "basic-speed": { "type": "value", "value": 5.5 }
+                }
+              }, 
+            }
+          },  # Templates
+          "PCs": {
+            "Vodou Priest": self.__vodou_priest_fighter, 
+            "One More Guy": self.__one_more_guy, 
+          }, # PCs
+          "dead-monsters": {
+            "Arena Attack Monsters": {
+              "5-Tank-B": {
+                "state": "alive", 
+                "current": {"fp":11,"iq":12,"hp":11,"ht":11,"st":10,"dx":12},
+                "permanent":{"fp":11,"iq":12,"hp":11,"ht":11,"st":10,"dx":12}, 
+              }, # 5-Tank-B
+            }, # Arena Attack Monsters
+          }, # dead-monsters
+          "current-fight": {
+            "index": 0, 
+            "monsters": "Dima's Crew", 
+            "fighters": [
+              { "group": "Dima's Crew", "name": "Bokor Fighter" }, 
+              { "group": "PCs", "name": "Vodou Priest" }, 
+              { "group": "PCs", "name": "One More Guy" }, 
+              { "group": "Dima's Crew", "name": "Tank Fighter" }, 
+            ], 
+            "saved": True, 
+            "round": 0, 
+            "history": [
+              "--- Round 0 ---"
+            ]
+          },  # current-fight
+          "NPCs": {
+            "Bokor Requiem": {
+                "state": "alive", 
+                "current": {"fp":11,"iq":12,"hp":11,"ht":11,"st":10,"dx":12},
+                "permanent":{"fp":11,"iq":12,"hp":11,"ht":11,"st":10,"dx":12}, 
+            }, 
+          }, # NPCs
+          "monsters": {
+            "Dima's Crew": {
+              "Bokor Fighter": self.__bokor_fighter, 
+              "Tank Fighter": self.__tank_fighter , 
+            }, 
+            "1st Hunting Party": {
+              "5: Amelia": self.__thief_fighter, 
+            }
+          } # monsters
+        } # End of the world
+
+        # TODO: Pass world_dict to a fight
+        # TODO: Save the fight
+        # TODO: Check that you get what you expect
+
+        self.__window_manager = MockWindowManager()
+        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        world = gm.World(world_dict)
+
+        fight_handler = gm.FightHandler(self.__window_manager,
+                                        world,
+                                        "Dima's Crew", 
+                                        self.__ruleset,
+                                        "None", # used for bug reporting
+                                        "filename", # used for display
+                                        False) # maintain JSON
+
+        self.__window_manager.set_char_response(ord('q'))
+        self.__window_manager.set_menu_response('Leaving Fight', {'doit':None})
+
+        print 'TEST -> handle_user_input_until_done' # TODO: remove
+        fight_handler.handle_user_input_until_done()
+
+                                     
+        assert "Dima's Crew" not in world_dict['monsters']
+
+        assert "Dima's Crew" in world_dict['dead-monsters']
+
     #def test_random_seed(self):
     #    for i in range(10):
     #        random.seed() # randomize
@@ -1667,5 +1808,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
 if __name__ == '__main__':
+    PP = pprint.PrettyPrinter(indent=3, width=150)
     unittest.main() # runs all tests in this file
 

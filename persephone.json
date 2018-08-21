@@ -2269,15 +2269,11 @@
       }, 
       {
         "group": "PCs", 
-        "name": "lawerence - Spenser"
-      }, 
-      {
-        "group": "PCs", 
         "name": "samuel - Erik"
       }, 
       {
-        "group": "Dima's Crew", 
-        "name": "2: Nikita"
+        "group": "PCs", 
+        "name": "lawerence - Spenser"
       }, 
       {
         "group": "Dima's Crew", 
@@ -2285,11 +2281,15 @@
       }, 
       {
         "group": "Dima's Crew", 
-        "name": "3: Alex"
+        "name": "4: Andre"
       }, 
       {
         "group": "Dima's Crew", 
-        "name": "4: Andre"
+        "name": "2: Nikita"
+      }, 
+      {
+        "group": "Dima's Crew", 
+        "name": "3: Alex"
       }, 
       {
         "group": "PCs", 
