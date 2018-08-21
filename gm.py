@@ -3266,27 +3266,11 @@ class ScreenHandler(object):
         '''
         self._draw_screen()
 
-        PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
         keep_going = True
         while keep_going:
-            print 'ScreenHandler.handle_user_input_until_done -> get_one_character' # TODO: remove
-
-
-            # <TODO: remove the following
-
-            for key, value in self._choices.iteritems():
-                print '%c: ' % key,
-                PP.pprint(value)
-
-            # TODO: done removing>
-
-
             string = self._window_manager.get_one_character()
-            print 'got %r' % string # TODO: remove
             if string in self._choices:
-                print '  string _is_ in self._choices'
                 keep_going = self._choices[string]['func']()
-                print '  function returned %r' % keep_going # TODO: remove
 
     #
     # Protected Methods
@@ -3811,7 +3795,6 @@ class FightHandler(ScreenHandler):
 
 
     def handle_user_input_until_done(self):
-        print 'handle_user_input_until_done -> handle_user_input_until_done' # TODO: remove
         super(FightHandler, self).handle_user_input_until_done()
 
         # When done, move current fight to 'dead-monsters'
@@ -4340,8 +4323,6 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
-        print '** QUITTING **' # TODO: remove
-
         ask_to_save = False # Ask to save if some monster is conscious
         ask_to_loot = False # Ask to loot if some monster is unconscious
         for fighter in self.__fighters:
@@ -4624,7 +4605,6 @@ class MainHandler(ScreenHandler):
                                         campaign_debug_json,
                                         self._input_filename,
                                         self._maintain_json)
-        print 'MainHandler.__build_fight -> handle_user_input_until_done' # TODO: remove
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list() # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
@@ -4641,7 +4621,6 @@ class MainHandler(ScreenHandler):
                                          campaign_debug_json,
                                          self._input_filename,
                                          self._maintain_json)
-        print 'MainHandler.__outfit -> handle_user_input_until_done' # TODO: remove
         outfit.handle_user_input_until_done()
         self._draw_screen() # Redraw current screen when done building fight.
         return True # Keep going
@@ -4696,7 +4675,6 @@ class MainHandler(ScreenHandler):
         original_index = self.__char_index
         self._draw_screen(inverse=True)
         while keep_going:
-            print 'MainHandler.__character -> get_one_character' # TODO: remove
             user_input = self._window_manager.get_one_character()
             if user_input == ord('\n'):
                 self._draw_screen(inverse=False)
@@ -4790,7 +4768,6 @@ class MainHandler(ScreenHandler):
                              self._campaign_debug_json,
                              self._input_filename,
                              self._maintain_json)
-        print 'MainHandler.__run_fight -> handle_user_input_until_done' # TODO: remove
         fight.handle_user_input_until_done()
         self._draw_screen() # Redraw current screen when done with the fight.
 
@@ -5049,8 +5026,6 @@ if __name__ == '__main__':
                                              campaign_debug_json,
                                              filename,
                                              ARGS.maintainjson)
-                print 'main(1) -> handle_user_input_until_done' # TODO: remove
                 fight_handler.handle_user_input_until_done()
-            print 'main(2) -> handle_user_input_until_done' # TODO: remove
             main_handler.handle_user_input_until_done()
 

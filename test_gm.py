@@ -121,13 +121,9 @@ class MockWindowManager(object):
     def set_char_response(self,
                           selection # character
                          ):
-        print 'set_char_response: Adding "%s"' % selection # TODO: remove
         self.__char_responses.append(selection)
-        PP.pprint(self.__char_responses) # TODO: remove
 
     def get_one_character(self):
-        print 'get_one_character: Returning from' # TODO: remove
-        PP.pprint(self.__char_responses) # TODO: remove
         if len(self.__char_responses) == 0:
             print '** character responses is empty, can\'t respond'
             assert False
@@ -1632,7 +1628,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
     def test_save(self):
 
-        world_dict = {
+        base_world_dict = {
           "Templates": {
             "Arena Combat": {
               "VodouCleric": {
@@ -1670,7 +1666,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
               { "group": "PCs", "name": "One More Guy" }, 
               { "group": "Dima's Crew", "name": "Tank Fighter" }, 
             ], 
-            "saved": True, 
+            "saved": False, 
             "round": 0, 
             "history": [
               "--- Round 0 ---"
@@ -1694,12 +1690,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
           } # monsters
         } # End of the world
 
-        # TODO: Pass world_dict to a fight
-        # TODO: Save the fight
-        # TODO: Check that you get what you expect
+        # Test that leaving a fight moves the bad guys to the dead monster
+        # list
 
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        world_dict = copy.deepcopy(base_world_dict)
         world = gm.World(world_dict)
 
         fight_handler = gm.FightHandler(self.__window_manager,
@@ -1710,16 +1706,20 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         "filename", # used for display
                                         False) # maintain JSON
 
+        assert "Dima's Crew" in world_dict['monsters']
+        assert "Dima's Crew" not in world_dict['dead-monsters']
+
         self.__window_manager.set_char_response(ord('q'))
         self.__window_manager.set_menu_response('Leaving Fight', {'doit':None})
 
-        print 'TEST -> handle_user_input_until_done' # TODO: remove
         fight_handler.handle_user_input_until_done()
-
                                      
         assert "Dima's Crew" not in world_dict['monsters']
-
         assert "Dima's Crew" in world_dict['dead-monsters']
+        assert world_dict['current-fight']['saved'] == False
+
+        # TODO: test that saving the fight works
+        # TODO: test that keeping the fight works
 
     #def test_random_seed(self):
     #    for i in range(10):
