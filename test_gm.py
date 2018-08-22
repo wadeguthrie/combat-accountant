@@ -96,9 +96,17 @@ class MockWindowManager(object):
                           title,
                           selection # first part of string_results tuple
                          ):
+        #print 'set_menu_response: title: %s, add selection:' % title
+        #print '    ',
+        #PP.pprint(selection)
+
         if title not in self.__menu_responses:
             self.__menu_responses[title] = []
         self.__menu_responses[title].append(selection)
+
+        #print '  gives us a response queue of:'
+        #print '    ',
+        #PP.pprint(self.__menu_responses)
 
     def menu(self,
              title,
@@ -112,7 +120,17 @@ class MockWindowManager(object):
             print ('** menu responses["%s"] is empty, can\'t respond' %
                     title)
             assert False
-        return self.__menu_responses[title].pop()
+
+        result = self.__menu_responses[title].pop()
+
+        #print 'menu: title: %s, returning:' % title
+        #print '    ',
+        #PP.pprint(result)
+        #print '  gives us a response queue of:'
+        #print '    ',
+        #PP.pprint(self.__menu_responses)
+
+        return result
         
 
     def get_fight_gm_window(self, ruleset):
@@ -121,13 +139,31 @@ class MockWindowManager(object):
     def set_char_response(self,
                           selection # character
                          ):
+        #print 'set_char_response: add selection:'
+        #print '    ',
+        #PP.pprint(chr(selection))
+
         self.__char_responses.append(selection)
 
+        #print '  gives us a response queue of:'
+        #print '    ',
+        #PP.pprint(self.__char_responses)
+
     def get_one_character(self):
+
         if len(self.__char_responses) == 0:
             print '** character responses is empty, can\'t respond'
             assert False
-        return self.__char_responses.pop()
+        result = self.__char_responses.pop()
+
+        #print 'get_one_character: returning:'
+        #print '    ',
+        #PP.pprint(chr(result))
+        #print '  gives us a response queue of:'
+        #print '    ',
+        #PP.pprint(self.__char_responses)
+
+        return result
 
 class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
     def setUp(self):
@@ -1317,7 +1353,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Damage ruins aim -- miss will roll
 
-        #PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
         vodou_priest.reset_aim()
 
         # 1 round
@@ -1659,12 +1694,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
           }, # dead-monsters
           "current-fight": {
             "index": 0, 
-            "monsters": "Dima's Crew", 
+            "monsters": "Anybody", 
             "fighters": [
-              { "group": "Dima's Crew", "name": "Bokor Fighter" }, 
+              { "group": "Anybody", "name": "Bokor Fighter" }, 
               { "group": "PCs", "name": "Vodou Priest" }, 
               { "group": "PCs", "name": "One More Guy" }, 
-              { "group": "Dima's Crew", "name": "Tank Fighter" }, 
+              { "group": "Anybody", "name": "Tank Fighter" }, 
             ], 
             "saved": False, 
             "round": 0, 
@@ -1690,11 +1725,13 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
           } # monsters
         } # End of the world
 
-        # Test that leaving a fight moves the bad guys to the dead monster
-        # list
-
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+
+        # Test that leaving a fight moves the bad guys to the dead monster
+        # list
+        # print '\n----------- LEAVE FIGHT -----------\n'
+
         world_dict = copy.deepcopy(base_world_dict)
         world = gm.World(world_dict)
 
@@ -1708,6 +1745,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         assert "Dima's Crew" in world_dict['monsters']
         assert "Dima's Crew" not in world_dict['dead-monsters']
+        assert world_dict['current-fight']['saved'] == False
 
         self.__window_manager.set_char_response(ord('q'))
         self.__window_manager.set_menu_response('Leaving Fight', {'doit':None})
@@ -1718,8 +1756,72 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert "Dima's Crew" in world_dict['dead-monsters']
         assert world_dict['current-fight']['saved'] == False
 
-        # TODO: test that saving the fight works
-        # TODO: test that keeping the fight works
+        #
+        # test that SAVING the fight works
+        #
+        # print '\n----------- SAVE FIGHT -----------\n'
+
+        world_dict = copy.deepcopy(base_world_dict)
+        world = gm.World(world_dict)
+
+        assert world_dict['current-fight']['monsters'] != "Dima's Crew"
+
+        fight_handler = gm.FightHandler(self.__window_manager,
+                                        world,
+                                        "Dima's Crew", 
+                                        self.__ruleset,
+                                        "None", # used for bug reporting
+                                        "filename", # used for display
+                                        False) # maintain JSON
+
+        assert "Dima's Crew" in world_dict['monsters']
+        assert "Dima's Crew" not in world_dict['dead-monsters']
+        assert world_dict['current-fight']['saved'] == False
+
+        self.__window_manager.set_char_response(ord('q'))
+        # It's a stack so I'm putting things in reverse order
+        self.__window_manager.set_menu_response('Leaving Fight', {'doit':None})
+        self.__window_manager.set_menu_response(
+                    'Leaving Fight', {'doit': fight_handler.simply_save})
+
+
+        fight_handler.handle_user_input_until_done()
+                                     
+        assert "Dima's Crew" in world_dict['monsters']
+        assert "Dima's Crew" not in world_dict['dead-monsters']
+        assert world_dict['current-fight']['saved'] == True
+        assert world_dict['current-fight']['monsters'] == "Dima's Crew"
+
+        #
+        # test that KEEPING the fight works
+        #
+        # print '\n----------- KEEP FIGHT -----------\n'
+
+        world_dict = copy.deepcopy(base_world_dict)
+        world = gm.World(world_dict)
+
+        fight_handler = gm.FightHandler(self.__window_manager,
+                                        world,
+                                        "Dima's Crew", 
+                                        self.__ruleset,
+                                        "None", # used for bug reporting
+                                        "filename", # used for display
+                                        False) # maintain JSON
+
+        assert "Dima's Crew" in world_dict['monsters']
+        assert "Dima's Crew" not in world_dict['dead-monsters']
+        assert world_dict['current-fight']['saved'] == False
+
+        # It's a stack so I'm putting things in reverse order
+        self.__window_manager.set_char_response(ord('q'))
+        self.__window_manager.set_char_response(ord('k'))
+        self.__window_manager.set_menu_response('Leaving Fight', {'doit':None})
+
+        fight_handler.handle_user_input_until_done()
+                                     
+        assert "Dima's Crew" in world_dict['monsters']
+        assert "Dima's Crew" not in world_dict['dead-monsters']
+        assert world_dict['current-fight']['saved'] == False
 
     #def test_random_seed(self):
     #    for i in range(10):
@@ -1734,7 +1836,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
     #            print ''
 
     def __are_equal(self, lhs, rhs):
-        PP = pprint.PrettyPrinter(indent=3, width=150)
         if isinstance(lhs, dict):
             if not isinstance(rhs, dict):
                 print '** lhs is a dict but rhs is not'

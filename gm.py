@@ -4341,7 +4341,7 @@ class FightHandler(ScreenHandler):
 
             if not self._saved_fight['saved'] and ask_to_save:
                 quit_menu.append(('save the fight',
-                                 {'doit': self.__simply_save}))
+                                 {'doit': self.simply_save}))
 
             result = self._window_manager.menu('Leaving Fight', quit_menu)
             if result is None:
@@ -4355,7 +4355,7 @@ class FightHandler(ScreenHandler):
         self._window.close()
         return False # Leave the fight
 
-    def __simply_save(self):
+    def simply_save(self):
         self._saved_fight['saved'] = True
 
     def __save(self):
