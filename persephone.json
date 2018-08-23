@@ -2369,8 +2369,8 @@
           "notes": "", 
           "damage": {
             "dice": {
-              "plus": 4, 
-              "num_dice": 1, 
+              "plus": 3, 
+              "num_dice": 2, 
               "type": "pi"
             }
           }, 
@@ -2413,7 +2413,7 @@
           "notes": "B271", 
           "damage": {
             "thr": {
-              "plus": 0, 
+              "plus": 1, 
               "type": "cr"
             }
           }, 
@@ -2438,6 +2438,9 @@
         "and he wears a dark gray sportcoat over jeans and a black dress", 
         "shirt unbuttoned at the neck."
       ], 
+      "short_notes": [
+        "* DR 3 on suit "
+      ], 
       "shock": 0, 
       "current": {
         "fp": 12, 
@@ -2458,7 +2461,10 @@
         "dx": 13, 
         "basic-speed": 6.25
       }, 
-      "advantages": {}, 
+      "advantages": {
+        "combat reflexes": 15, 
+        "high pain threshold": 10
+      }, 
       "did_action_this_turn": false, 
       "check_for_death": false, 
       "timers": [], 
@@ -3862,111 +3868,8 @@
         "posture": "standing", 
         "opponent": null
       }, 
-      "1: Dima": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "skills": {
-          "beam weapons (pistol)": 18, 
-          "brawling": 18, 
-          "knife": 18
-        }, 
-        "did_action_this_turn": false, 
-        "shock": 0, 
-        "short_notes": [
-          "* DR 3 on suit ", 
-          ""
-        ], 
-        "current": {
-          "fp": 12, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 12, 
-          "st": 13, 
-          "dx": 13, 
-          "basic-speed": 6.25
-        }, 
-        "permanent": {
-          "fp": 12, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 12, 
-          "st": 12, 
-          "dx": 13, 
-          "basic-speed": 6.25
-        }, 
-        "state": "alive", 
-        "stuff": [
-          {
-            "acc": 6, 
-            "count": 1, 
-            "name": "pistol, Hand-built laser", 
-            "notes": "Excellent master class weapon", 
-            "damage": {
-              "dice": {
-                "plus": 3, 
-                "num_dice": 2, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }, 
-          {
-            "count": 1, 
-            "name": "knife, small", 
-            "notes": "B272", 
-            "damage": {
-              "sw": {
-                "plus": -3, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": -1, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 1, 
-            "name": "brass knuckles", 
-            "notes": "B271, nice", 
-            "damage": {
-              "thr": {
-                "plus": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": 0, 
-            "skill": "karate", 
-            "type": "melee weapon"
-          }
-        ], 
-        "timers": [], 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "posture": "standing", 
-        "opponent": null
+      "Dima Leonid Popov (Bratva Bank)": {
+        "redirect": "NPCs"
       }, 
       "3: Alex": {
         "aim": {

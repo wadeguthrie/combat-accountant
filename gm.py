@@ -4427,29 +4427,29 @@ class FightHandler(ScreenHandler):
                                                            why_opponent,
                                                            weapon,
                                                            unarmed_skills)
-            lines = [{'text': x,
-                      'mode': curses.A_NORMAL} for x in unarmed_info['why']]
+            lines = [[{'text': x,
+                       'mode': curses.A_NORMAL}] for x in unarmed_info['why']]
         else:
             if weapon['skill'] in why_target.details['skills']:
                 ignore, to_hit_why = self.__ruleset.get_to_hit(why_target,
                                                                why_opponent,
                                                                weapon)
-                lines = [{'text': x,
-                          'mode': curses.A_NORMAL} for x in to_hit_why]
+                lines = [[{'text': x,
+                           'mode': curses.A_NORMAL}] for x in to_hit_why]
 
                 # Damage
 
                 ignore, damage_why = self.__ruleset.get_damage(why_target,
                                                                weapon)
-                lines.extend([{'text': x,
-                               'mode': curses.A_NORMAL} for x in damage_why])
+                lines.extend([[{'text': x,
+                                'mode': curses.A_NORMAL}] for x in damage_why])
 
         ignore, defense_why = self.__ruleset.get_fighter_defenses_notes(
                                                             why_target,
                                                             why_opponent)
-        #lines.extend([(x, 0) for x in defense_why])
-        lines = [{'text': x,
-                  'mode': curses.A_NORMAL} for x in defense_why] + lines
+        lines = [[{'text': x,
+                   'mode': curses.A_NORMAL}] for x in defense_why] + lines
+        #PP.pprint(lines) # TODO: remove
 
         ignore = self._window_manager.display_window(
                     'How the Numbers Were Calculated', lines)
