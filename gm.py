@@ -13,7 +13,8 @@ import random
 import sys
 
 # TODO:
-#   - Allow NPCs to be part of monsters or the party
+#   - Looting bodies (and, maybe, outfitting): adding something you already
+#     have should increase the count of the previous thing
 #   - '?' should show weapon and armor notes (as appropriate)
 #   - Allow for markdown in 'notes' and 'short_notes'
 #   - Armor
@@ -1724,6 +1725,19 @@ class Fighter(object):
         self.details = fighter_details
         self.__ruleset = ruleset
 
+    def add_equipment(self,
+                      new_item, # dict describing new equipment
+                      source    # string describing where equipment came from
+                     ):
+        for item in self.details['stuff']:
+            if item['name'] == new_item['name']:
+                if self.__is_same_thing(item, new_item):
+                    item['count'] += new_item['count']
+                    return
+                new_item['name'] = '%s (from %s)' % (new_item['name'], source)
+                break
+
+        self.details['stuff'].append(new_item)
 
     def add_timer(self, rounds, text):
         self.details['timers'].append({'rounds': rounds, 'string': text})
@@ -1879,6 +1893,42 @@ class Fighter(object):
         self.__ruleset.start_turn(self)
         self.decrement_timers()
         self.remove_expired_keep_dying_timers()
+
+
+    def __is_same_thing(self,
+                        lhs,    # part of equipment dict (at level=0, is dict)
+                        rhs,    # part of equipment dict (at level=0, is dict)
+                        level=0 # how far deep in the recursive calls are we
+                       ):
+        level += 1
+
+        if isinstance(lhs, dict):
+            if not isinstance(rhs, dict):
+                return False
+            for key in rhs.iterkeys():
+                if key not in rhs:
+                    return False
+            for key in lhs.iterkeys():
+                if key not in rhs:
+                    return False
+                elif key == 'count' and level == 1:
+                    return True # the count doesn't go into the match of item
+                elif not self.__is_same_thing(lhs[key], rhs[key], level):
+                    return False
+            return True
+                
+        elif isinstance(lhs, list):
+            if not isinstance(rhs, list):
+                return False
+            if len(lhs) != len(rhs):
+                return False
+            for i in range(len(lhs)):
+                if not self.__is_same_thing(lhs[i], rhs[i], level):
+                    return False
+            return True
+
+        else:
+            return False if lhs != rhs else True
 
 
 
@@ -4105,7 +4155,7 @@ class FightHandler(ScreenHandler):
                     return True
 
                 new_item = bad_guy.details['stuff'].pop(index)
-                xfer['guy'].details['stuff'].append(new_item)
+                xfer['guy'].add_equipment(new_item, bad_guy.name)
 
         if not found_dead_bad_guy:
             self._window_manager.error(
@@ -4618,6 +4668,7 @@ class MainHandler(ScreenHandler):
 
         outfit = OutfitCharactersHandler(self._window_manager,
                                          self.__world,
+                                         self.__ruleset,
                                          campaign_debug_json,
                                          self._input_filename,
                                          self._maintain_json)
@@ -4794,6 +4845,7 @@ class OutfitCharactersHandler(ScreenHandler):
     def __init__(self,
                  window_manager,
                  world,
+                 ruleset,
                  campaign_debug_json,
                  filename, # JSON file containing the world
                  maintain_json
@@ -4816,6 +4868,7 @@ class OutfitCharactersHandler(ScreenHandler):
         })
         self._window = self._window_manager.get_outfit_gm_window()
         self.__world = world
+        self.__ruleset = ruleset
 
         lines, cols = self._window.getmaxyx()
         group_menu = [('PCs', 'PCs')]
@@ -4862,7 +4915,17 @@ class OutfitCharactersHandler(ScreenHandler):
         if item is None:
             return True # Keep going
 
-        self.__character['details']['stuff'].append(copy.deepcopy(item))
+        # Temporarily create a 'Fighter' object just to use one of its member
+        # functions.
+
+        fighter = Fighter(self.__character['name'],
+                          self.__group_name,
+                          self.__character['details'],
+                          self.__ruleset)
+
+        fighter.add_equipment(copy.deepcopy(item), 'the store')
+        #self.__character['details']['stuff'].append(copy.deepcopy(item))
+
         self._window.show_character(self.__character)
 
         return True # Keep going

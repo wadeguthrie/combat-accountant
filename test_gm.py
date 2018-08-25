@@ -281,13 +281,18 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "check_for_death": False, 
             "opponent": None
         } 
+
+        self.__tank_fighter_pistol_index = 0
+        self.__tank_fighter_stuff_count = 3
+
         self.__tank_fighter = {
             "shock": 0, 
             "did_action_this_turn": False,
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
-                 {"name": "pistol, Sig D65",
+                 {"name": "pistol, Sig D65",  # the index of this is stored
+                                              # in __tank_fighter_pistol_index
                   "type": "ranged weapon",
                   "damage": {"dice": "1d+4"},
                   "acc": 4,
@@ -1822,6 +1827,63 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert "Dima's Crew" in world_dict['monsters']
         assert "Dima's Crew" not in world_dict['dead-monsters']
         assert world_dict['current-fight']['saved'] == False
+
+    def test_add_equipment(self):
+        fighter = gm.Fighter('Tank',
+                             'group',
+                             copy.deepcopy(self.__tank_fighter),
+                             self.__ruleset)
+
+        original_item = fighter.details['stuff'][
+                                        self.__tank_fighter_pistol_index]
+        current_count = len(fighter.details['stuff'])
+        original_stuff = copy.deepcopy(fighter.details['stuff'])
+
+        # Same item
+
+        assert original_item['count'] == 1
+        same_item = copy.deepcopy(original_item)
+        same_item['count'] = 2
+        fighter.add_equipment(same_item, 'test')
+        assert original_item['count'] == 3
+
+        # Similar item
+
+        similar_item = copy.deepcopy(original_item)
+        similar_item['acc'] = original_item['acc'] + 1
+
+        assert len(fighter.details['stuff']) == current_count
+        fighter.add_equipment(similar_item, 'test')
+        current_count += 1
+        assert len(fighter.details['stuff']) == current_count
+
+        # Different item
+
+        different_item = {"name": "pistol, Baretta DX 192",
+                          "type": "ranged weapon",
+                          "damage": {"dice": "1d+4"},
+                          "acc": 2,
+                          "ammo": {"name": "C Cell",
+                                   "shots_left": 8,
+                                   "shots": 8},
+                          "reload": 3,
+                          "skill": "guns (pistol)",
+                          "count": 1,
+                          "notes": ""
+                         }
+
+        assert len(fighter.details['stuff']) == current_count
+        fighter.add_equipment(different_item, 'test')
+        current_count += 1
+        assert len(fighter.details['stuff']) == current_count
+
+        # Make sure we only add to the end
+
+        for i, original_item in enumerate(original_stuff):
+            # We've changed the count on the fighter's pistol
+            if i != self.__tank_fighter_pistol_index:
+                assert self.__are_equal(original_item,
+                                        fighter.details['stuff'][i])
 
     #def test_random_seed(self):
     #    for i in range(10):
