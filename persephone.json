@@ -250,6 +250,7 @@
         }
       ], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {
         "interrogation": 12, 
         "guns (grenade launcher)": 9, 
@@ -364,6 +365,7 @@
         }
       ], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {
         "engineer (electronics)": 12, 
         "engineer (starships)": 12, 
@@ -503,6 +505,7 @@
         }
       ], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {
         "electronics repair (terraforming)": 13, 
         "thrown weapon (knife)": 10, 
@@ -655,6 +658,7 @@
         }
       ], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {
         "throwing": 13, 
         "armoury (small arms)": 10, 
@@ -837,6 +841,7 @@
         }
       ], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {
         "physician": 14, 
         "axe/mace": 7, 
@@ -896,6 +901,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -933,6 +939,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -970,6 +977,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -1007,6 +1015,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -1045,6 +1054,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -1082,6 +1092,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -1119,6 +1130,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -1156,6 +1168,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -1196,6 +1209,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -1233,6 +1247,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -1270,6 +1285,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -1307,6 +1323,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -1345,6 +1362,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -1382,6 +1400,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -1419,6 +1438,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -1456,6 +1476,7 @@
         }, 
         "stuff": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {}, 
         "shock": 0, 
         "current": {
@@ -1519,6 +1540,7 @@
         "stuff": [], 
         "timers": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "check_for_death": false, 
         "advantages": {}, 
         "posture": "standing", 
@@ -1604,6 +1626,7 @@
         ], 
         "timers": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "check_for_death": false, 
         "advantages": {
           "combat reflexes": 15, 
@@ -1663,6 +1686,7 @@
           }
         ], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {
           "beam weapons (pistol)": 16, 
           "brawling": 16, 
@@ -1732,6 +1756,7 @@
           }
         ], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {
           "beam weapons (pistol)": 15, 
           "brawling": 12
@@ -1814,6 +1839,7 @@
           }
         ], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {
           "beam weapons (pistol)": 16, 
           "brawling": 16, 
@@ -1901,6 +1927,7 @@
           }
         ], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {
           "beam weapons (pistol)": 12, 
           "brawling": 14, 
@@ -1970,6 +1997,7 @@
           }
         ], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {
           "beam weapons (pistol)": 13, 
           "brawling": 12
@@ -2053,6 +2081,7 @@
           }
         ], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {
           "beam weapons (pistol)": 16, 
           "brawling": 16, 
@@ -2136,6 +2165,7 @@
           }
         ], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {
           "beam weapons (pistol)": 16, 
           "brawling": 16, 
@@ -2223,6 +2253,7 @@
           }
         ], 
         "weapon-index": null, 
+        "armor-index": null, 
         "skills": {
           "beam weapons (pistol)": 12, 
           "brawling": 14, 
@@ -2318,6 +2349,7 @@
       }, 
       "stuff": [], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {}, 
       "notes": [
         "Bokor. Jamaican.", 
@@ -2356,7 +2388,7 @@
       "posture": "standing", 
       "opponent": null
     }, 
-    "Dima Leonid Popov (Bratva Bank)": {
+    "Dima": {
       "aim": {
         "braced": false, 
         "rounds": 0
@@ -2420,15 +2452,24 @@
           "parry": 0, 
           "skill": "karate", 
           "type": "melee weapon"
-        }
+        },
+        {
+          "count": 1, 
+          "notes": "", 
+          "type": "armor", 
+          "name": "Sport coat/Jeans (Fortify [M66])",
+          "dr": 3
+        } 
       ], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {
         "beam weapons (pistol)": 18, 
         "brawling": 18, 
         "knife": 18
       }, 
       "notes": [
+        "Dima Leonid Popov",
         "Bratva bank.", 
         "Tags: dark gray sportcoat", 
         "Description:", 
@@ -2439,7 +2480,7 @@
         "shirt unbuttoned at the neck."
       ], 
       "short_notes": [
-        "* DR 3 on suit "
+        ""
       ], 
       "shock": 0, 
       "current": {
@@ -2478,6 +2519,7 @@
       }, 
       "stuff": [], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {}, 
       "notes": [
         "Chief Deputy Marshal", 
@@ -2525,6 +2567,7 @@
       }, 
       "stuff": [], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {}, 
       "notes": [
         "Talk w/ Konstantin Alexei Mironov (Russian prison tattoos).  He ", 
@@ -2585,6 +2628,7 @@
       }, 
       "stuff": [], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {}, 
       "notes": [
         "(alpha) Bokor. Haitian (speaks with French accent)", 
@@ -2664,6 +2708,7 @@
       }, 
       "stuff": [], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {}, 
       "notes": [
         "Bokor. Jamaican", 
@@ -2725,6 +2770,7 @@
       }, 
       "stuff": [], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {}, 
       "notes": [
         "Tags: bald, mustache, intense", 
@@ -2774,6 +2820,7 @@
       }, 
       "stuff": [], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {}, 
       "notes": [
         "(Pilot)", 
@@ -2815,6 +2862,7 @@
       }, 
       "stuff": [], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {}, 
       "notes": [
         "Tags: aboriginal, awkward / headgear, bright", 
@@ -2873,6 +2921,7 @@
       }, 
       "stuff": [], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {}, 
       "notes": [
         "Mambo that leads Masubi-1's Vodou Societe.  She detected the", 
@@ -2912,6 +2961,7 @@
       }, 
       "stuff": [], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {}, 
       "notes": [
         "Bokor.  Dominican.", 
@@ -2959,6 +3009,7 @@
       }, 
       "stuff": [], 
       "weapon-index": null, 
+      "armor-index": null, 
       "skills": {}, 
       "notes": [
         "Bokor", 
@@ -3768,6 +3819,7 @@
         ], 
         "timers": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "check_for_death": false, 
         "advantages": {
           "combat reflexes": 15, 
@@ -3860,6 +3912,7 @@
         ], 
         "timers": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "check_for_death": false, 
         "advantages": {
           "combat reflexes": 15, 
@@ -3868,7 +3921,7 @@
         "posture": "standing", 
         "opponent": null
       }, 
-      "Dima Leonid Popov (Bratva Bank)": {
+      "Dima": {
         "redirect": "NPCs"
       }, 
       "3: Alex": {
@@ -3955,6 +4008,7 @@
         ], 
         "timers": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "check_for_death": false, 
         "advantages": {
           "combat reflexes": 15, 
@@ -4047,6 +4101,7 @@
         ], 
         "timers": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "check_for_death": false, 
         "advantages": {
           "combat reflexes": 15, 
@@ -4137,6 +4192,7 @@
         ], 
         "timers": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "check_for_death": false, 
         "advantages": {
           "combat reflexes": 15, 
@@ -4225,6 +4281,7 @@
         ], 
         "timers": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "check_for_death": false, 
         "advantages": {
           "combat reflexes": 15, 
@@ -4313,6 +4370,7 @@
         ], 
         "timers": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "check_for_death": false, 
         "advantages": {
           "combat reflexes": 15, 
@@ -4401,6 +4459,7 @@
         ], 
         "timers": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "check_for_death": false, 
         "advantages": {
           "combat reflexes": 15, 
@@ -4489,6 +4548,7 @@
         ], 
         "timers": [], 
         "weapon-index": null, 
+        "armor-index": null, 
         "check_for_death": false, 
         "advantages": {
           "combat reflexes": 15, 

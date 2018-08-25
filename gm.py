@@ -1656,11 +1656,10 @@ class World(object):
         self.details = world_details
         self.__window_manager = window_manager
 
-    def get_pc(self, name):
-        return get_creature_details(name, 'PCs')
-
     def get_creature_details(self, name, group):
         if name is None or group is None:
+            self.__window_manager.error(
+                ['Name: %r or group: %r is "None"' % (name, group)])
             return None
 
         if group == 'PCs':
@@ -1668,16 +1667,28 @@ class World(object):
         elif group == 'NPCs':
             details = self.details['NPCs'][name]
         else:
-            if (group not in self.details['monsters'] or
-                                name not in self.details['monsters'][group]):
+            if group not in self.details['monsters']:
+                self.__window_manager.error(
+                    ['No "%s" group in "monsters"' % group])
+                return None
+
+            if name not in self.details['monsters'][group]:
+                self.__window_manager.error(
+                    ['No name "%s" in monster group "%s"' % (name, group)])
                 return None
 
             details = self.details['monsters'][group][name]
 
         if 'redirect' in details:
             if details['redirect'] not in self.details:
-                # TODO: remove the following or put in an 'Error'
-                print 'Could not find "%s" group in world' % details['redirect']
+                self.__window_manager.error(
+                    ['No "%s" group in world (redirect)' %
+                     details['redirect']])
+                return None
+            if name not in self.details[details['redirect']]:
+                self.__window_manager.error(
+                    ['No name "%s" in "%s" group (redirect)' %
+                     (name, details['redirect'])])
                 return None
             details = self.details[details['redirect']][name]
 
@@ -1803,6 +1814,13 @@ class Fighter(object):
         elif rounds < 3:
             self.details['aim']['rounds'] += 1
 
+    def don_armor_by_index(self,
+                           index  # Index of armor in fighter's 'stuff'
+                                  # list.  'None' removes current armor.
+                          ):
+        '''Puts on armor.'''
+        self.details['armor-index'] = index
+
 
     def draw_weapon_by_index(self,
                              index  # Index of weapon in fighter's 'stuff'
@@ -1817,6 +1835,13 @@ class Fighter(object):
     def end_turn(self):
         self.__ruleset.end_turn(self)
         self.remove_expired_kill_dying_timers()
+
+
+    def get_current_armor(self):
+        armor_index = self.details['armor-index']
+        if armor_index is None:
+            return None, None
+        return self.details['stuff'][armor_index], armor_index
 
 
     def get_current_weapon(self):
@@ -1907,6 +1932,7 @@ class Fighter(object):
         self.details['state'] = 'alive'
         self.details['timers'] = []
         self.details['weapon-index'] = None
+        # NOTE: person may go around wearing armor -- no need to reset
         self.details['opponent'] = None
         self.start_turn()
         self.__ruleset.start_fight(self)
@@ -2011,6 +2037,7 @@ class Ruleset(object):
         return {'stuff': [], 
                 'state': 'alive', 
                 'weapon-index': None,
+                'armor-index': None,
                 'timers': [], 
                 'opponent': None,
                 'permanent': {},
@@ -2218,6 +2245,21 @@ class GurpsRuleset(Ruleset):
                                          'param': {'weapon': index,
                                                    'fighter': fighter}}))
 
+        # Armor
+
+        armor, armor_index = fighter.get_current_armor()
+        don_armor_menu = []   # list of weapons that may be drawn this turn
+        for index, item in enumerate(fighter.details['stuff']):
+            if item['type'] == 'armor':
+                if armor is None or armor_index != index:
+                    don_armor_menu.append((item['name'],
+                                        {'text': [('Don %s' % item['name']),
+                                                  ' Defense: none',
+                                                  ' Move: none'],
+                                         'doit': self.don_armor,
+                                         'param': {'armor': index,
+                                                   'fighter': fighter}}))
+
         # Posture menu
 
         posture_menu = []
@@ -2341,6 +2383,34 @@ class GurpsRuleset(Ruleset):
                                           ' Defense: any',
                                           ' Move: step'],
                                  'menu': draw_weapon_menu}))
+
+        # Armor
+
+        if len(don_armor_menu) == 1:
+            action_menu.append(
+                (('Don %s' % don_armor_menu[0][0]),
+                 {'text': ['Don Armor',
+                           ' Defense: none',
+                           ' Move: none'],
+                  'doit': self.don_armor,
+                  'param': {'armor': don_armor_menu[0][1]['param']['armor'],
+                            'fighter': fighter}}))
+
+        elif len(don_armor_menu) > 1:
+            action_menu.append(('Don Armor',
+                                {'text': ['Don Armor',
+                                          ' Defense: none',
+                                          ' Move: none'],
+                                 'menu': don_armor_menu}))
+
+        if armor is not None:
+            action_menu.append((('Doff %s' % armor['name']), 
+                                   {'text': [('Doff %s' % armor['name']),
+                                             ' Defense: none',
+                                             ' Move: none'],
+                                    'doit': self.don_armor,
+                                    'param': {'armor': None,
+                                              'fighter': fighter}}))
 
         action_menu.append(('evaluate (B364)', {'text': ['Evaluate',
                                                          ' Defense: any',
@@ -2574,9 +2644,7 @@ class GurpsRuleset(Ruleset):
                                         opponent    # Fighter object
                                        ):
         notes = []
-        holding_weapon_index = fighter.details['weapon-index']
-        weapon = (None if holding_weapon_index is None else
-                  fighter.details['stuff'][holding_weapon_index])
+        weapon, holding_weapon_index = fighter.get_current_weapon()
         unarmed_skills = self.get_weapons_unarmed_skills(weapon)
 
         if weapon is not None:
@@ -2627,9 +2695,7 @@ class GurpsRuleset(Ruleset):
         notes = []
         why = []
 
-        holding_weapon_index = fighter.details['weapon-index']
-        weapon = (None if holding_weapon_index is None else
-                  fighter.details['stuff'][holding_weapon_index])
+        weapon, holding_weapon_index = fighter.get_current_weapon()
         unarmed_skills = self.get_weapons_unarmed_skills(weapon)
 
         unarmed_info = None
@@ -2670,11 +2736,8 @@ class GurpsRuleset(Ruleset):
 
         # Ranged weapon status
 
-        holding_weapon_index = fighter.details['weapon-index']
-        weapon = None
-
+        weapon, holding_weapon_index = fighter.get_current_weapon()
         if holding_weapon_index is not None:
-            weapon = fighter.details['stuff'][holding_weapon_index]
             if weapon['type'] == 'ranged weapon':
                 clip_name = weapon['ammo']['name']
                 clip = None
@@ -3256,6 +3319,16 @@ class GurpsRuleset(Ruleset):
 
         return
 
+    def don_armor(self,
+                  param # dict: {'armor': index, 'fighter': Fighter obj}
+                 ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        param['fighter'].don_armor_by_index(param['armor'])
+
+
     def draw_weapon(self,
                     param # dict: {'weapon': index, 'fighter': Fighter obj}
                    ):
@@ -3265,6 +3338,7 @@ class GurpsRuleset(Ruleset):
         '''
         param['fighter'].draw_weapon_by_index(param['weapon'])
         param['fighter'].reset_aim()
+
 
     def __get_damage_type_str(self,
                               damage_type
@@ -3819,18 +3893,20 @@ class FightHandler(ScreenHandler):
 
             for name in self.__world.get_list('PCs'):
                 details = self.__world.get_creature_details(name, 'PCs')
-                fighter = Fighter(name, 'PCs', details, self.__ruleset)
-                self.__fighters.append(fighter)
+                if details is not None:
+                    fighter = Fighter(name, 'PCs', details, self.__ruleset)
+                    self.__fighters.append(fighter)
 
             if monster_group is not None:
                 for name in self.__world.get_list(monster_group):
                     details = self.__world.get_creature_details(name,
                                                                 monster_group)
-                    fighter = Fighter(name,
-                                      monster_group,
-                                      details,
-                                      self.__ruleset)
-                    self.__fighters.append(fighter)
+                    if details is not None:
+                        fighter = Fighter(name,
+                                          monster_group,
+                                          details,
+                                          self.__ruleset)
+                        self.__fighters.append(fighter)
 
             # Sort by initiative = basic-speed followed by DEX followed by
             # random
@@ -3850,7 +3926,8 @@ class FightHandler(ScreenHandler):
             for name in self.__world.get_list(monster_group):
                 details = self.__world.get_creature_details(name,
                                                             monster_group)
-                self.__ruleset.is_creature_consistent(name, details)
+                if details is not None:
+                    self.__ruleset.is_creature_consistent(name, details)
 
         self._saved_fight['saved'] = False
         self._window.start_fight()
@@ -4508,10 +4585,7 @@ class FightHandler(ScreenHandler):
         lines = []
 
         why_opponent = self.get_opponent_for(why_target)
-
-        holding_weapon_index = why_target.details['weapon-index']
-        weapon = (None if holding_weapon_index is None else
-                  why_target.details['stuff'][holding_weapon_index])
+        weapon, holding_weapon_index = why_target.get_current_weapon()
         unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(weapon)
 
         if unarmed_skills is not None:
@@ -4662,7 +4736,8 @@ class MainHandler(ScreenHandler):
         # Check characters for consistency.
         for name in self.__world.get_list('PCs'):
             details = self.__world.get_creature_details(name, 'PCs')
-            self.__ruleset.is_creature_consistent(name, details)
+            if details is not None:
+                self.__ruleset.is_creature_consistent(name, details)
 
 
     #
@@ -4768,7 +4843,8 @@ class MainHandler(ScreenHandler):
         '''
         for name in self.__world.get_list('PCs'):
             details = self.__world.get_creature_details(name, 'PCs')
-            self.__ruleset.heal_fighter(details)
+            if details is not None:
+                self.__ruleset.heal_fighter(details)
         self._draw_screen()
         return True
 
@@ -5037,8 +5113,9 @@ class OutfitCharactersHandler(ScreenHandler):
 
         details = self.__world.get_creature_details(character_name,
                                                     self.__group_name)
-        self.__character = {'name': character_name, 'details': details}
-        self._window.show_character(self.__character)
+        if details is not None:
+            self.__character = {'name': character_name, 'details': details}
+            self._window.show_character(self.__character)
         return True # Keep going
 
 
