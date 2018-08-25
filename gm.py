@@ -13,11 +13,9 @@ import random
 import sys
 
 # TODO:
-#   - Looting bodies (and, maybe, outfitting): adding something you already
-#     have should increase the count of the previous thing
+#   - Armor
 #   - '?' should show weapon and armor notes (as appropriate)
 #   - Allow for markdown in 'notes' and 'short_notes'
-#   - Armor
 #   - Add ability to generate name for character in template
 #   - characters need a state 'absent' where they're not shown.  timers should
 #     be able to make somebody un-absent when the timer expires
@@ -3543,6 +3541,9 @@ class BuildFightHandler(ScreenHandler):
                        {'name': group_name,
                         'group': self.__world.get_list(group_name)})
                 for group_name in self.__world.details['monsters']]
+        group_menu.insert(0, ('NPCs',
+                              {'name': 'NPCs',
+                               'group': self.__world.get_list('NPCs')}))
         group_menu.insert(0, ('PCs',
                               {'name': 'PCs',
                                'group': self.__world.get_list('PCs')}))
