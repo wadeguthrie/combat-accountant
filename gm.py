@@ -1650,9 +1650,11 @@ class GmScrollableWindow(object):
 
 class World(object):
     def __init__(self,
-                 world_details  # dict from entire JSON
+                 world_details,  # dict from entire JSON
+                 window_manager  # a GmWindowManager object to handle I/O
                 ):
         self.details = world_details
+        self.__window_manager = window_manager
 
     def get_pc(self, name):
         return get_creature_details(name, 'PCs')
@@ -1695,6 +1697,29 @@ class World(object):
             return self.details['monsters'][group_name]
 
         return None
+
+    def get_random_name(self):
+        if self.details['Names'] is None:
+            self.__window_manager.error(
+                                    ['There are no "Names" in the database'])
+            return None
+
+        type_menu = [(x, x) for x in self.details['Names']]
+        type_name = self.__window_manager.menu('What kind of name', type_menu)
+        if type_name is None:
+            type_name = random.choice(self.details['Names'])
+            gender_name = random.choice(
+                            self.details['Names'][type_name])
+
+        else:
+            gender_menu = [(x, x)
+                   for x in self.details['Names'][type_name]]
+            gender_name = self.__window_manager.menu('What Gender', gender_menu)
+
+        index = random.randint(0,
+            len(self.details['Names'][type_name][gender_name]) - 1)
+
+        return self.details['Names'][type_name][gender_name][index]
 
 
 
@@ -3367,10 +3392,15 @@ class ScreenHandler(object):
 
 
 class BuildFightHandler(ScreenHandler):
+    (NPCs,
+     PCs,
+     MONSTERs) = range(3)
+
     def __init__(self,
                  window_manager,
                  world,
                  ruleset,
+                 creature_type, # one of: NPCs, PCs, or MONSTERs
                  campaign_debug_json,
                  filename, # JSON file containing the world
                  maintain_json
@@ -3406,10 +3436,9 @@ class BuildFightHandler(ScreenHandler):
                                 # we'll just add our monsters to the existing
                                 # one when we save.
 
-        self.__new_home = None  # This is a pointer to the existing group
-                                # (either a group of monsters or the PCs) or a
-                                # pointer to a monster group (if it's a new
-                                # group).
+
+        self.__template_name = None # Name of templates we'll use to create
+                                    # new creatures.
 
         self.__new_creatures = {}   # This is the recepticle for the new
                                     # creatures while they're being built.
@@ -3417,12 +3446,24 @@ class BuildFightHandler(ScreenHandler):
                                     # they'll be transferred to their new
                                     # home.
 
-        self.__group_name = None    # The name of the monsters or 'PCs'
-                                    # that will ultimately take these
-                                    # creatures.
+        if creature_type == BuildFightHandler.NPCs:
+            self.__is_new = False
+            self.__group_name = 'NPCs'
+            self.__new_home = self.__world.get_list('NPCs')
+        elif creature_type == BuildFightHandler.PCs:
+            self.__is_new = False
+            self.__group_name = 'PCs'
+            self.__new_home = self.__world.get_list('PCs')
+        else: # creature_type == BuildFightHandler.MONSTERs:
+            self.__new_home = None      # This is a pointer to the existing
+                                        # group (either a group of monsters,
+                                        # the NPCs, or the PCs) or a pointer
+                                        # to a monster group (if it's a new
+                                        # group).
 
-        self.__template_name = None # Name of templates we'll use to create
-                                    # new creatures.
+            self.__group_name = None    # The name of the monsters or 'PCs'
+                                        # that will ultimately take these
+                                        # creatures.
 
     #
     # Protected Methods
@@ -3470,10 +3511,10 @@ class BuildFightHandler(ScreenHandler):
             to_monster_name = self._window_manager.input_box(1,      # height
                                                              cols-4, # width
                                                              'Monster Name')
-            if to_monster_name is None:
-                self._window_manager.error(['You have to name your monster'])
-                keep_asking = True
-            elif to_monster_name in self.__new_creatures:
+            if to_monster_name is None or len(to_monster_name) == 0:
+                to_monster_name = self.__world.get_random_name()
+
+            if to_monster_name in self.__new_creatures:
                 self._window_manager.error(
                     ['Monster "%s" alread exists' % to_monster_name])
                 keep_asking = True
@@ -4584,30 +4625,34 @@ class MainHandler(ScreenHandler):
         self._add_to_choice_dict({
             curses.KEY_UP:
                       {'name': 'previous character',  'func':
-                                                            self.__prev_char},
+                                                        self.__prev_char},
             curses.KEY_DOWN:
                       {'name': 'next character',      'func':
-                                                            self.__next_char},
+                                                        self.__next_char},
             curses.KEY_NPAGE:
                       {'name': 'char details pgdown', 'func':
-                                                            self.__next_page},
+                                                        self.__next_page},
             curses.KEY_PPAGE:
                       {'name': 'char details pgup',   'func':
-                                                            self.__prev_page},
+                                                        self.__prev_page},
             ord('c'): {'name': 'character',           'func':
-                                                            self.__character},
+                                                        self.__character},
             ord('o'): {'name': 'outfit characters',   'func':
-                                                            self.__outfit},
-            ord('t'): {'name': 'build from template', 'func':
-                                                            self.__build_fight},
+                                                        self.__outfit},
+            ord('N'): {'name': 'new NPCs',            'func':
+                                                        self.__add_NPCs},
+            ord('P'): {'name': 'new PCs',             'func':
+                                                        self.__add_PCs},
+            ord('M'): {'name': 'new Monsters',        'func':
+                                                        self.__add_monsters},
             ord('f'): {'name': 'fight (run)',         'func':
-                                                            self.__run_fight},
+                                                        self.__run_fight},
             ord('H'): {'name': 'Heal',                'func':
-                                                            self.__fully_heal},
+                                                        self.__fully_heal},
             ord('n'): {'name': 'name',                'func':
-                                                            self.__get_a_name},
+                                                        self.__get_a_name},
             ord('q'): {'name': 'quit',                'func':
-                                                            self.__quit}
+                                                        self.__quit}
         })
         self.__setup_PC_list()
 
@@ -4644,7 +4689,7 @@ class MainHandler(ScreenHandler):
     # Private Methods - callbacks for 'choices' array for menu
     #
 
-    def __build_fight(self):
+    def __add_NPCs(self):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -4653,6 +4698,45 @@ class MainHandler(ScreenHandler):
         build_fight = BuildFightHandler(self._window_manager,
                                         self.__world,
                                         self.__ruleset,
+                                        BuildFightHandler.NPCs,
+                                        campaign_debug_json,
+                                        self._input_filename,
+                                        self._maintain_json)
+        build_fight.handle_user_input_until_done()
+        self.__setup_PC_list() # Since it may have changed
+        self._draw_screen() # Redraw current screen when done building fight.
+        return True # Keep going
+
+
+    def __add_PCs(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        build_fight = BuildFightHandler(self._window_manager,
+                                        self.__world,
+                                        self.__ruleset,
+                                        BuildFightHandler.PCs,
+                                        campaign_debug_json,
+                                        self._input_filename,
+                                        self._maintain_json)
+        build_fight.handle_user_input_until_done()
+        self.__setup_PC_list() # Since it may have changed
+        self._draw_screen() # Redraw current screen when done building fight.
+        return True # Keep going
+
+
+    def __add_monsters(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        build_fight = BuildFightHandler(self._window_manager,
+                                        self.__world,
+                                        self.__ruleset,
+                                        BuildFightHandler.MONSTERs,
                                         campaign_debug_json,
                                         self._input_filename,
                                         self._maintain_json)
@@ -4693,30 +4777,13 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        if self.__world.details['Names'] is None:
-            self._window_manager.error(['There are no "Names" in the database'])
+        name = self.__world.get_random_name()
+        if name is None:
             return True
-
-        type_menu = [(x, x) for x in self.__world.details['Names']]
-        type_name = self._window_manager.menu('What kind of name', type_menu)
-        if type_name is None:
-            type_name = random.choice(self.__world.details['Names'])
-            gender_name = random.choice(
-                            self.__world.details['Names'][type_name])
-
-        else:
-            gender_menu = [(x, x)
-                   for x in self.__world.details['Names'][type_name]]
-            gender_name = self._window_manager.menu('What Gender', gender_menu)
-
-        index = random.randint(0,
-            len(self.__world.details['Names'][type_name][gender_name]) - 1)
 
         # This really isn't a menu but it works perfectly to accomplish my
         # goal.
-        result = [(
-            self.__world.details['Names'][type_name][gender_name][index],
-            index)]
+        result = [(name, name)]
         ignore = self._window_manager.menu('Your %s %s name is' % (
                                            type_name, gender_name), result)
         return True
@@ -4925,7 +4992,6 @@ class OutfitCharactersHandler(ScreenHandler):
                           self.__ruleset)
 
         fighter.add_equipment(copy.deepcopy(item), 'the store')
-        #self.__character['details']['stuff'].append(copy.deepcopy(item))
 
         self._window.show_character(self.__character)
 
@@ -5072,7 +5138,7 @@ if __name__ == '__main__':
             if not ARGS.maintainjson:
                 campaign.write_data = campaign.read_data
 
-            world = World(campaign.read_data)
+            world = World(campaign.read_data, window_manager)
 
             # Enter into the mainloop
             main_handler = MainHandler(window_manager,
