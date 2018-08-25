@@ -2398,7 +2398,7 @@
           "acc": 4, 
           "count": 1, 
           "name": "pistol, Hand-built laser", 
-          "notes": "", 
+          "notes": "Hand build by XXX craftsman", 
           "damage": {
             "dice": {
               "plus": 3, 
@@ -2455,9 +2455,9 @@
         },
         {
           "count": 1, 
-          "notes": "", 
+          "notes": "Enchanted w/fortify spell [M66]", 
           "type": "armor", 
-          "name": "Sport coat/Jeans (Fortify [M66])",
+          "name": "Sport coat/Jeans",
           "dr": 3
         } 
       ], 

@@ -13,8 +13,6 @@ import random
 import sys
 
 # TODO:
-#   - Armor
-#   - '?' should show weapon and armor notes (as appropriate)
 #   - Allow for markdown in 'notes' and 'short_notes'
 #   - Add ability to generate name for character in template
 #   - characters need a state 'absent' where they're not shown.  timers should
@@ -879,8 +877,8 @@ class FightGmWindow(GmWindow):
             mode = curses.color_pair(GmWindowManager.CYAN_BLACK)
             mode = mode | curses.A_BOLD
 
-        notes, why = self.__ruleset.get_fighter_defenses_notes(fighter,
-                                                               opponent)
+        notes, ignore = self.__ruleset.get_fighter_defenses_notes(fighter,
+                                                                  opponent)
         for note in notes:
             window.addstr(line, 0, note, mode)
             line += 1
@@ -2726,6 +2724,16 @@ class GurpsRuleset(Ruleset):
             if parry_skill is not None:
                 why.extend(parry_why)
                 notes.append('Parry (B327, B376): %d' % parry_skill)
+
+        # ARmor
+
+        armor, armor_index = fighter.get_current_armor()
+        if armor is not None:
+            notes.append('Armor: "%s", DR: %d' % (armor['name'], armor['dr']))
+            if 'notes' in armor and len(armor['notes']) != 0:
+                why.append('Armor: "%s"' % armor['name'])
+                why.append('  %s' % armor['notes'])
+
 
         return notes, why
 
@@ -4609,6 +4617,12 @@ class FightHandler(ScreenHandler):
                                                                weapon)
                 lines.extend([[{'text': x,
                                 'mode': curses.A_NORMAL}] for x in damage_why])
+
+            if 'notes' in weapon and len(weapon['notes']) != 0:
+                lines.extend([[{'text': 'Weapon: "%s"' % weapon['name'],
+                               'mode': curses.A_NORMAL}]])
+                lines.extend([[{'text': '  %s' % weapon['notes'],
+                               'mode': curses.A_NORMAL}]])
 
         ignore, defense_why = self.__ruleset.get_fighter_defenses_notes(
                                                             why_target,
