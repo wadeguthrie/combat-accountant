@@ -2462,7 +2462,7 @@
         } 
       ], 
       "weapon-index": null, 
-      "armor-index": null, 
+      "armor-index": 4, 
       "skills": {
         "beam weapons (pistol)": 18, 
         "brawling": 18, 
