@@ -13,8 +13,8 @@ import random
 import sys
 
 # TODO:
+# TODO: make left pane of MainGmWindow a GmScrollableWindow
 #   - Allow for markdown in 'notes' and 'short_notes'
-#   - Add ability to generate name for character in template
 #   - characters need a state 'absent' where they're not shown.  timers should
 #     be able to make somebody un-absent when the timer expires
 #   - Add pop-up attack in maneuvers
@@ -1200,14 +1200,16 @@ class GmWindowManager(object):
             display_win.refresh()
 
 
-
     def edit_window(self,
                     height, width,
                     contents,  # initial string (w/ \n) for the window
                     title,
                     footer
                    ):
-
+        '''
+        Creates a window to edit a block of text using an EMACS style
+        interface.
+        '''
         border_win, edit_win = self.__centered_boxed_window(height,
                                                             width,
                                                             title)
@@ -1716,9 +1718,9 @@ class World(object):
         type_menu = [(x, x) for x in self.details['Names']]
         type_name = self.__window_manager.menu('What kind of name', type_menu)
         if type_name is None:
-            type_name = random.choice(self.details['Names'])
+            type_name = random.choice(self.details['Names'].keys())
             gender_name = random.choice(
-                            self.details['Names'][type_name])
+                            self.details['Names'][type_name].keys())
 
         else:
             gender_menu = [(x, x)
@@ -3574,52 +3576,107 @@ class BuildFightHandler(ScreenHandler):
                  'add this creature.'])
             return True # Keep going
 
-        if self.__template_name is None:
-            self.__new_template()
+        keep_adding_creatures = True
+        while keep_adding_creatures:
+            if self.__template_name is None:
+                self.__new_template()
 
-        # Based on which monster from the template
-        monster_menu = [(from_monster_name, from_monster_name)
-            for from_monster_name in
-                    self.__world.details['Templates'][self.__template_name]]
-        from_monster_name = self._window_manager.menu('Monster', monster_menu)
-        if from_monster_name is None:
-            return True # Keep going
+            # Based on which monster from the template
+            monster_menu = [(from_monster_name, from_monster_name)
+                for from_monster_name in
+                        self.__world.details['Templates'][self.__template_name]]
+            from_monster_name = self._window_manager.menu('Monster',
+                                                          monster_menu)
+            if from_monster_name is None:
+                return True # Keep going
 
-        # Get the new Monster Name
+            # Get the new Monster Name
 
-        keep_asking = True
-        lines, cols = self._window.getmaxyx()
-        while keep_asking:
-            to_monster_name = self._window_manager.input_box(1,      # height
-                                                             cols-4, # width
-                                                             'Monster Name')
-            if to_monster_name is None or len(to_monster_name) == 0:
-                to_monster_name = self.__world.get_random_name()
+            keep_asking = True
+            lines, cols = self._window.getmaxyx()
+            while keep_asking:
+                to_monster_name = self._window_manager.input_box(
+                                                            1,      # height
+                                                            cols-4, # width
+                                                            'Monster Name')
+                if to_monster_name is None or len(to_monster_name) == 0:
+                    # TODO: add name parameters (nationality/gender) to notes
+                    to_monster_name = self.__world.get_random_name()
 
-            if to_monster_name in self.__new_creatures:
-                self._window_manager.error(
-                    ['Monster "%s" alread exists' % to_monster_name])
-                keep_asking = True
-            else:
-                keep_asking = False
+                if to_monster_name in self.__new_creatures:
+                    self._window_manager.error(
+                        ['Monster "%s" alread exists' % to_monster_name])
+                    keep_asking = True
+                else:
+                    keep_asking = False
 
-        # Generate the Monster
+            # Generate the Monster
 
-        from_monster = (self.__world.details[
+            from_monster = (self.__world.details[
                         'Templates'][self.__template_name][from_monster_name])
-        to_monster = self.__ruleset.make_empty_creature()
+            to_monster = self.__ruleset.make_empty_creature()
 
-        for key, value in from_monster.iteritems():
-            if key == 'permanent':
-                for ikey, ivalue in value.iteritems():
-                    to_monster['permanent'][ikey] = (
-                        self.__get_value_from_template(ivalue, from_monster))
-                    to_monster['current'][ikey] = to_monster['permanent'][ikey]
-            else:
-                to_monster[key] = self.__get_value_from_template(value,
-                                                                  from_monster)
-        self.__new_creatures[to_monster_name] = to_monster
-        self._window.show_creatures(self.__new_creatures)
+            for key, value in from_monster.iteritems():
+                if key == 'permanent':
+                    for ikey, ivalue in value.iteritems():
+                        to_monster['permanent'][ikey] = (
+                            self.__get_value_from_template(ivalue,
+                                                           from_monster))
+                        to_monster['current'][ikey] = to_monster[
+                                                            'permanent'][ikey]
+                else:
+                    to_monster[key] = self.__get_value_from_template(
+                                                        value, from_monster)
+
+            # TODO: add personality stuff to notes
+
+            # Modify the creature we just created
+
+            keep_changing_this_creature = True
+            while keep_changing_this_creature:
+                temp_list = copy.deepcopy(self.__new_creatures)
+                temp_list[to_monster_name] = to_monster
+                self._window.show_creatures(temp_list)
+
+                action_menu = [('append to name', 'append'),
+                               ('notes', 'notes'),
+                               ('continue (add another creature)', 'continue'),
+                               ('quit', 'quit')]
+                action = self._window_manager.menu('What Next',
+                                                   action_menu,
+                                                   2) # start on 'continue'
+                if action == 'append':
+                    more_text = self._window_manager.input_box(1, # height
+                                                               cols-4, # width
+                                                               'Add to Name')
+                    temp_monster_name = '%s - %s' % (to_monster_name,
+                                                     more_text)
+                    if temp_monster_name in self.__new_creatures:
+                        self._window_manager.error(
+                            ['Monster "%s" alread exists' % temp_monster_name])
+                    else:
+                        to_monster_name = temp_monster_name
+                elif action == 'notes':
+                    if 'notes' not in to_monster:
+                        notes = None
+                    else:
+                        notes = '\n'.join(to_monster['notes'])
+                    notes = self._window_manager.edit_window(
+                                lines - 4,
+                                cols/2,
+                                notes,  # initial string (w/ \n) for the window
+                                'Notes',
+                                '^G to exit')
+                    to_monster['notes'] = [x for x in notes.split('\n')]
+                elif action == 'continue':
+                    keep_changing_this_creature = False
+                elif action == 'quit':
+                    keep_changing_this_creature = False
+                    keep_adding_creatures = False
+
+            self.__new_creatures[to_monster_name] = to_monster
+            self._window.show_creatures(self.__new_creatures)
+
         return True # Keep going
 
     def __delete_creature(self):
@@ -3633,7 +3690,7 @@ class BuildFightHandler(ScreenHandler):
         critter_menu = [(name, name)
                                 for name in self.__new_creatures.iterkeys()]
         critter_name = self._window_manager.menu('Delete Which Creature',
-                                                                critter_menu)
+                                                 critter_menu)
         if critter_name is not None:
             del(self.__new_creatures[critter_name])
 
