@@ -1724,7 +1724,7 @@ class World(object):
         if self.details['Names'] is None:
             self.__window_manager.error(
                                     ['There are no "Names" in the database'])
-            return None
+            return None, None, None
 
         type_menu = [(x, x) for x in self.details['Names']]
         type_name = self.__window_manager.menu('What kind of name', type_menu)
@@ -1741,7 +1741,9 @@ class World(object):
         index = random.randint(0,
             len(self.details['Names'][type_name][gender_name]) - 1)
 
-        return self.details['Names'][type_name][gender_name][index]
+        return (self.details['Names'][type_name][gender_name][index],
+                type_name,
+                gender_name)
 
 
 
@@ -3606,26 +3608,6 @@ class BuildFightHandler(ScreenHandler):
             if from_monster_name is None:
                 return True # Keep going
 
-            # Get the new Monster Name
-
-            keep_asking = True
-            lines, cols = self._window.getmaxyx()
-            while keep_asking:
-                to_monster_name = self._window_manager.input_box(
-                                                            1,      # height
-                                                            cols-4, # width
-                                                            'Monster Name')
-                if to_monster_name is None or len(to_monster_name) == 0:
-                    # TODO: add name parameters (nationality/gender) to notes
-                    to_monster_name = self.__world.get_random_name()
-
-                if to_monster_name in self.__new_creatures:
-                    self._window_manager.error(
-                        ['Monster "%s" alread exists' % to_monster_name])
-                    keep_asking = True
-                else:
-                    keep_asking = False
-
             # Generate the Monster
 
             from_monster = (self.__world.details[
@@ -3643,6 +3625,34 @@ class BuildFightHandler(ScreenHandler):
                 else:
                     to_monster[key] = self.__get_value_from_template(
                                                         value, from_monster)
+
+            # Get the new Monster Name
+
+            keep_asking = True
+            lines, cols = self._window.getmaxyx()
+            while keep_asking:
+                monster_name = self._window_manager.input_box(
+                                                            1,      # height
+                                                            cols-4, # width
+                                                            'Monster Name')
+                if monster_name is None or len(monster_name) == 0:
+                    monster_name, where, gender = self.__world.get_random_name()
+                    if monster_name is None:
+                        self._window_manager.error(
+                            ['Monster needs a name'])
+                        keep_asking = True
+                    else:
+                        if where is not None:
+                            to_monster['notes'].append('from: %s' % where)
+                        if gender is not None:
+                            to_monster['notes'].append('gender: %s' % gender)
+
+                if monster_name in self.__new_creatures:
+                    self._window_manager.error(
+                        ['Monster "%s" already exists' % monster_name])
+                    keep_asking = True
+                else:
+                    keep_asking = False
 
             # Add personality stuff to notes
         
@@ -3666,7 +3676,7 @@ class BuildFightHandler(ScreenHandler):
             keep_changing_this_creature = True
             while keep_changing_this_creature:
                 temp_list = copy.deepcopy(self.__new_creatures)
-                temp_list[to_monster_name] = to_monster
+                temp_list[monster_name] = to_monster
                 self._window.show_creatures(temp_list)
 
                 action_menu = [('append to name', 'append'),
@@ -3680,13 +3690,13 @@ class BuildFightHandler(ScreenHandler):
                     more_text = self._window_manager.input_box(1, # height
                                                                cols-4, # width
                                                                'Add to Name')
-                    temp_monster_name = '%s - %s' % (to_monster_name,
+                    temp_monster_name = '%s - %s' % (monster_name,
                                                      more_text)
                     if temp_monster_name in self.__new_creatures:
                         self._window_manager.error(
                             ['Monster "%s" alread exists' % temp_monster_name])
                     else:
-                        to_monster_name = temp_monster_name
+                        monster_name = temp_monster_name
                 elif action == 'notes':
                     if 'notes' not in to_monster:
                         notes = None
@@ -3705,7 +3715,7 @@ class BuildFightHandler(ScreenHandler):
                     keep_changing_this_creature = False
                     keep_adding_creatures = False
 
-            self.__new_creatures[to_monster_name] = to_monster
+            self.__new_creatures[monster_name] = to_monster
             self._window.show_creatures(self.__new_creatures)
 
         return True # Keep going
@@ -4957,7 +4967,7 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        name = self.__world.get_random_name()
+        name, ignore, ignore = self.__world.get_random_name()
         if name is None:
             return True
 
