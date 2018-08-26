@@ -2052,7 +2052,8 @@ class Ruleset(object):
                 'timers': [], 
                 'opponent': None,
                 'permanent': {},
-                'current': {} }
+                'current': {},
+                'notes': [] }
 
 
 class GurpsRuleset(Ruleset):
@@ -3639,7 +3640,25 @@ class BuildFightHandler(ScreenHandler):
                     to_monster[key] = self.__get_value_from_template(
                                                         value, from_monster)
 
-            # TODO: add personality stuff to notes
+            # Add personality stuff to notes
+        
+            print 'a' # TODO: remove
+            with GmJson('npc_detail.json') as npc_detail:
+                print 'b' # TODO: remove
+                for name, traits in npc_detail.read_data['traits'].iteritems():
+                    print 'c' # TODO: remove
+                    if isinstance(traits, dict):
+                        print 'd' # TODO: remove
+                        pass
+                    else:
+                        print 'e' # TODO: remove
+                        to_monster['notes'].append(
+                            '%s: %s' % (name, random.choice(traits)))
+                        print 'f' # TODO: remove
+                    print 'g' # TODO: remove
+                print 'h' # TODO: remove
+            print 'i' # TODO: remove
+
 
             # Modify the creature we just created
 
