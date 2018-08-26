@@ -13,7 +13,10 @@ import random
 import sys
 
 # TODO:
-# TODO: need templates for general masses, bad guys, captains, and bosses
+#   - template: if there's only 1, pick it
+#   - outfit during template
+#
+#   - Make sure |make_empty_creature| is complete
 #   - Allow for markdown in 'notes' and 'short_notes'
 #   - characters need a state 'absent' where they're not shown.  timers should
 #     be able to make somebody un-absent when the timer expires
@@ -1361,6 +1364,10 @@ class GmWindowManager(object):
         Presents a menu to the user and returns the result.
         '''
 
+        # if there's only 1 choice, autoselect it
+        if len(strings_results) == 1:
+            return strings_results[0][0]
+
         # height and width of text box (not border)
         height = len(strings_results)
         max_height = curses.LINES - 2 # 2 for the box
@@ -2055,7 +2062,9 @@ class Ruleset(object):
                 'opponent': None,
                 'permanent': {},
                 'current': {},
-                'notes': [] }
+                'notes': [],
+                'short-notes': [],
+                }
 
 
 class GurpsRuleset(Ruleset):
@@ -3604,7 +3613,7 @@ class BuildFightHandler(ScreenHandler):
                 for from_monster_name in
                         self.__world.details['Templates'][self.__template_name]]
             from_monster_name = self._window_manager.menu('Monster',
-                                                          monster_menu)
+                                                          sorted(monster_menu))
             if from_monster_name is None:
                 return True # Keep going
 
@@ -3643,7 +3652,7 @@ class BuildFightHandler(ScreenHandler):
                         keep_asking = True
                     else:
                         if where is not None:
-                            to_monster['notes'].append('from: %s' % where)
+                            to_monster['notes'].append('origin: %s' % where)
                         if gender is not None:
                             to_monster['notes'].append('gender: %s' % gender)
 
@@ -3683,6 +3692,7 @@ class BuildFightHandler(ScreenHandler):
                                ('notes', 'notes'),
                                ('continue (add another creature)', 'continue'),
                                ('quit', 'quit')]
+                # TODO: add 'outfit' into this list
                 action = self._window_manager.menu('What Next',
                                                    action_menu,
                                                    2) # start on 'continue'
@@ -3709,6 +3719,20 @@ class BuildFightHandler(ScreenHandler):
                                 'Notes',
                                 '^G to exit')
                     to_monster['notes'] = [x for x in notes.split('\n')]
+                # TODO: Actually, no -- we only want to be able to add and
+                # remove items
+                #
+                # elif action == 'outfit'
+                # outfit = OutfitCharactersHandler(self._window_manager,
+                                                 # self.__world,
+                                                 # self.__ruleset,
+                                                 # campaign_debug_json,
+                                                 # self._input_filename,
+                                                 # self._maintain_json)
+                # outfit.handle_user_input_until_done()
+                # self._draw_screen() # Redraw current screen when done
+                # outfitting
+
                 elif action == 'continue':
                     keep_changing_this_creature = False
                 elif action == 'quit':
@@ -3872,7 +3896,6 @@ class BuildFightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-
         # Get the new group info.
 
         # Get the template
