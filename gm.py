@@ -3650,10 +3650,16 @@ class BuildFightHandler(ScreenHandler):
                 for name, traits in npc_detail.read_data['traits'].iteritems():
                     trait = random.choice(traits)
                     if isinstance(trait, dict):
-                        pass
-                    else:
-                        to_monster['notes'].append('%s: %s' % (name, trait))
+                        trait_array = [trait['text']]
+                        for key in trait:
+                            if key in npc_detail.read_data['support']:
+                                trait_array.append('%s: %s' %
+                                    (key, 
+                                     random.choice(
+                                        npc_detail.read_data['support'][key])))
+                        trait = ', '.join(trait_array)
 
+                    to_monster['notes'].append('%s: %s' % (name, trait))
 
             # Modify the creature we just created
 

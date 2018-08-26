@@ -816,6 +816,44 @@
         "Woodworking",
         "Writing"
     ]
+  },
+  "unusual" : {
+    "facial features": [
+        "Acne",
+        "Beard",
+        "Buck-toothed",
+        "Bushy eyebrows",
+        "Chiseled",
+        "Doe-eyed",
+        "Distinctive nose",
+        "Gap-toothed",
+        "Goatee",
+        "Grizzled",
+        "Missing ear",
+        "Missing eye",
+        "Missing teeth",
+        "Moustache",
+        "Pierced",
+        "Pock-marked",
+        "Sideburns",
+        "Squinty",
+        "Stained teeth",
+        "Weather-beaten"
+    ]
+  },
+  "support": {
+    "bodyLocation": [
+        "Head/Face",
+        "Neck",
+        "Chest",
+        "Back",
+        "Stomach",
+        "Waist",
+        "Right arm",
+        "Left arm",
+        "Right leg",
+        "Left leg"
+    ]
   }
 }
 
