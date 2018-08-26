@@ -13,7 +13,7 @@ import random
 import sys
 
 # TODO:
-# TODO: make left pane of MainGmWindow a GmScrollableWindow
+# TODO: need templates for general masses, bad guys, captains, and bosses
 #   - Allow for markdown in 'notes' and 'short_notes'
 #   - characters need a state 'absent' where they're not shown.  timers should
 #     be able to make somebody un-absent when the timer expires
@@ -344,14 +344,19 @@ class MainGmWindow(GmWindow):
         self.__char_detail = [] # [[{'text', 'mode'}, ...],   # line 0
                                 #  [...],                  ]  # line 1...
 
+        self.__char_list = []   # [[{'text', 'mode'}, ...],   # line 0
+                                #  [...],                  ]  # line 1...
+
         top_line = 1
         height = (lines                 # The whole window height, except...
             - top_line                  # ...a block at the top, and...
             - 4)                        # ...a space for the command ribbon.
         
         width = (cols / 2) - 1 # -1 for margin
-        # TODO: make this a GmScrollableWindow
-        self.__char_list_window = self._window_manager.new_native_window(
+
+        self.__char_list_window = GmScrollableWindow(
+                                                 self.__char_list,
+                                                 self._window_manager,
                                                  height,
                                                  width,
                                                  top_line,
@@ -540,8 +545,10 @@ class MainGmWindow(GmWindow):
                             current_index,
                             standout = False
                            ):
-        self.__char_list_window.clear()
+        del self.__char_list[:]
+
         if char_list is None:
+            self.__char_list_window.draw_window()
             self.refresh()
             return
 
@@ -556,7 +563,11 @@ class MainGmWindow(GmWindow):
             mode |= (curses.A_NORMAL if current_index is None or
                                        current_index != line
                                     else curses.A_STANDOUT)
-            self.__char_list_window.addstr(line, 0, char['name'], mode)
+
+            self.__char_list.append([{'text': char['name'], 
+                                      'mode': mode}])
+
+        self.__char_list_window.draw_window()
         self.refresh()
 
 
@@ -4768,6 +4779,8 @@ class MainHandler(ScreenHandler):
         self.__world = world
         self.__ruleset = ruleset
         self._add_to_choice_dict({
+            # TODO: KEY_LEFT and KEY_RIGHT need to change window scrolled by
+            # KEY_UP and KEY_DOWN between char and char detail window.
             curses.KEY_UP:
                       {'name': 'previous character',  'func':
                                                         self.__prev_char},
