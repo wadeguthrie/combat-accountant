@@ -1,27 +1,26 @@
 {
   "Templates": {
-    "Arena Combat": {
+    "Bad Guys": {
         "everyday person" : {
+            "permanent": {
+              "fp": {"type": "value", "value": 10},
+              "iq": {"type": "value", "value": 10},
+              "hp": {"type": "value", "value": 10},
+              "ht": {"type": "value", "value": 10},
+              "st": {"type": "value", "value": 10},
+              "dx": {"type": "value", "value": 10},
+              "basic-speed": {"type": "value", "value": 5}
+            }
         },
         "bad guy: low level" : {
-        },
-        "bad guy: just-above-chars" : {
-            "skills": {
-                "type": "value",
-                "value": {
-              "beam weapons (pistol)": 17, 
-              "brawling": 17, 
-              "knife": 17
-              }
-            }, 
             "permanent": {
-              "fp": {"type": "value", "value": 11},
-              "iq": {"type": "value", "value": 11},
-              "hp": {"type": "value", "value": 11},
-              "ht": {"type": "value", "value": 11},
               "st": {"type": "value", "value": 12},
-              "dx": {"type": "value", "value": 12},
-              "basic-speed": {"type": "value", "value": 5.75}
+              "dx": {"type": "value", "value": 11},
+              "iq": {"type": "value", "value": 8},
+              "ht": {"type": "value", "value": 9},
+              "fp": {"type": "value", "value": 9},
+              "hp": {"type": "value", "value": 12},
+              "basic-speed": {"type": "value", "value": 4.75}
             }, 
             "stuff": {
                 "type": "value",
@@ -73,6 +72,97 @@
                   }
               ]
             }, 
+            "skills": {
+                "type": "value",
+                "value": {
+              "beam weapons (pistol)": 13, 
+              "brawling": 14, 
+              "knife": 14
+              }
+            }, 
+            "advantages": {
+              "type": "value",
+              "value": {
+                  "high pain threshold": 10
+              }
+            }
+        },
+        "bad guy: just-above-chars" : {
+            "skills": {
+                "type": "value",
+                "value": {
+              "beam weapons (pistol)": 17, 
+              "brawling": 17, 
+              "knife": 17
+              }
+            }, 
+            "permanent": {
+              "st": {"type": "value", "value": 15},
+              "dx": {"type": "value", "value": 10},
+              "iq": {"type": "value", "value": 9},
+              "ht": {"type": "value", "value": 11},
+              "fp": {"type": "value", "value": 11},
+              "hp": {"type": "value", "value": 15},
+              "basic-speed": {"type": "value", "value": 5.25}
+            }, 
+            "stuff": {
+                "type": "value",
+                "value": [
+                  {
+                    "acc": 6, 
+                    "count": 1, 
+                    "name": "pistol, Hand-built laser", 
+                    "notes": "Nice weapon", 
+                    "damage": {
+                      "dice": {
+                        "plus": 1, 
+                        "num_dice": 2, 
+                        "type": "pi"
+                      }
+                    }, 
+                    "reload": 3, 
+                    "skill": "beam weapons (pistol)", 
+                    "type": "ranged weapon", 
+                    "ammo": {
+                      "name": "C Cell", 
+                      "shots": 7, 
+                      "shots_left": 7
+                    }
+                  }, 
+                  {
+                    "count": 1, 
+                    "name": "knife, large", 
+                    "notes": "", 
+                    "damage": {
+                      "sw": {
+                        "plus": -2, 
+                        "type": "cut"
+                      }, 
+                      "thr": {
+                        "plus": 0, 
+                        "type": "imp"
+                      }
+                    }, 
+                    "parry": -1, 
+                    "skill": "knife", 
+                    "type": "melee weapon"
+                  }, 
+                  {
+                    "count": 5, 
+                    "notes": "", 
+                    "type": "misc", 
+                    "name": "C Cell"
+                  },
+                  {
+                    "count": 1, 
+                    "notes": "Enchanted w/fortify spell [M66]", 
+                    "type": "armor", 
+                    "name": "Sport coat/Jeans",
+                    "dr": 2
+                  } 
+              ]
+            }, 
+            "armor-index": {"type": "value", "value": 3}, 
             "advantages": {
               "type": "value",
               "value": {
@@ -162,12 +252,12 @@
             }
           }, 
           "permanent": {
-            "fp": {"type": "value", "value": 12},
+            "st": {"type": "value", "value": 16},
+            "dx": {"type": "value", "value": 11},
             "iq": {"type": "value", "value": 12},
-            "hp": {"type": "value", "value": 12},
-            "ht": {"type": "value", "value": 12},
-            "st": {"type": "value", "value": 13},
-            "dx": {"type": "value", "value": 13},
+            "ht": {"type": "value", "value": 10},
+            "fp": {"type": "value", "value": 10},
+            "hp": {"type": "value", "value": 16},
             "basic-speed": {"type": "value", "value": 6.25}
           }, 
           "advantages": {
@@ -178,38 +268,15 @@
             }
           }
         }, 
-        "bad guy: boss (highest)" : {
-        },
         "VodouCleric": {
           "permanent": {
-            "fp": {
-              "type": "value", 
-              "value": 12
-            }, 
-            "iq": {
-              "type": "value", 
-              "value": 13
-            }, 
-            "hp": {
-              "type": "value", 
-              "value": 10
-            }, 
-            "ht": {
-              "type": "value", 
-              "value": 11
-            }, 
-            "st": {
-              "type": "value", 
-              "value": 10
-            }, 
-            "dx": {
-              "type": "value", 
-              "value": 11
-            }, 
-            "basic-speed": {
-              "type": "value", 
-              "value": 5.5
-            }
+            "st": { "type": "value", "value": 10 }, 
+            "dx": { "type": "value", "value": 11 }, 
+            "iq": { "type": "value", "value": 13 }, 
+            "ht": { "type": "value", "value": 11 }, 
+            "fp": { "type": "value", "value": 12 }, 
+            "hp": { "type": "value", "value": 10 }, 
+            "basic-speed": { "type": "value", "value": 5.5 }
           }
         }, 
         "Bokor": {
@@ -690,6 +757,7 @@
         "thrown weapon (knife)": 10, 
         "connoisseur (visual arts)": 13, 
         "escape": 9, 
+        "knife": 5, 
         "mechanic (spacecraft)": 15, 
         "electronics operation (terraforming)": 13, 
         "fast talk": 15, 
