@@ -13,10 +13,9 @@ import random
 import sys
 
 # TODO:
-#   - template: if there's only 1, pick it
+#   - persephone.json templates: bad guys need weapons, need deputy marshals
 #   - outfit during template
 #
-#   - Make sure |make_empty_creature| is complete
 #   - Allow for markdown in 'notes' and 'short_notes'
 #   - characters need a state 'absent' where they're not shown.  timers should
 #     be able to make somebody un-absent when the timer expires
@@ -2055,13 +2054,13 @@ class Ruleset(object):
 
     def make_empty_creature(self):
         return {'stuff': [], 
-                'state': 'alive', 
                 'weapon-index': None,
                 'armor-index': None,
-                'timers': [], 
-                'opponent': None,
                 'permanent': {},
                 'current': {},
+                'state': 'alive', 
+                'timers': [], 
+                'opponent': None,
                 'notes': [],
                 'short-notes': [],
                 }
@@ -3287,8 +3286,8 @@ class GurpsRuleset(Ruleset):
         to_monster = super(GurpsRuleset, self).make_empty_creature()
         to_monster.update({'aim': { 'braced': False, 'rounds': 0 }, 
                            'skills': { }, 
-                           'advantages': { }, 
                            'shock': 0, 
+                           'advantages': { }, 
                            'did_action_this_turn': False,
                            'check_for_death': False, 
                            'posture': 'standing'})
