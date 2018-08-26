@@ -1,10 +1,27 @@
 {
   "traits": {
     "speech": [
-        "Foo",
-        "Bar",
-        "Baz",
-        "Quux"
+        "Accented",
+        "Breathless",
+        "Crisp",
+        "Fast",
+        "Guttural",
+        "Halting",
+        "Husky",
+        "Lisps",
+        "Low-pitched",
+        "Loud",
+        "Nasal",
+        "Nervous",
+        "Quiet",
+        "Raspy",
+        "Slow",
+        "Slurs",
+        "Squeaky",
+        "Stutters",
+        "Wheezy",
+        "Whiny",
+        "Whispery"
     ]
   }
 }
