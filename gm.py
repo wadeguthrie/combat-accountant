@@ -3546,10 +3546,14 @@ class BuildFightHandler(ScreenHandler):
             self.__is_new = False
             self.__group_name = 'NPCs'
             self.__new_home = self.__world.get_list('NPCs')
+            self._draw_screen()
+            self.__add_creature()
         elif creature_type == BuildFightHandler.PCs:
             self.__is_new = False
             self.__group_name = 'PCs'
             self.__new_home = self.__world.get_list('PCs')
+            self._draw_screen()
+            self.__add_creature()
         else: # creature_type == BuildFightHandler.MONSTERs:
             self.__new_home = None      # This is a pointer to the existing
                                         # group (either a group of monsters,
@@ -3642,22 +3646,13 @@ class BuildFightHandler(ScreenHandler):
 
             # Add personality stuff to notes
         
-            print 'a' # TODO: remove
             with GmJson('npc_detail.json') as npc_detail:
-                print 'b' # TODO: remove
                 for name, traits in npc_detail.read_data['traits'].iteritems():
-                    print 'c' # TODO: remove
-                    if isinstance(traits, dict):
-                        print 'd' # TODO: remove
+                    trait = random.choice(traits)
+                    if isinstance(trait, dict):
                         pass
                     else:
-                        print 'e' # TODO: remove
-                        to_monster['notes'].append(
-                            '%s: %s' % (name, random.choice(traits)))
-                        print 'f' # TODO: remove
-                    print 'g' # TODO: remove
-                print 'h' # TODO: remove
-            print 'i' # TODO: remove
+                        to_monster['notes'].append('%s: %s' % (name, trait))
 
 
             # Modify the creature we just created
