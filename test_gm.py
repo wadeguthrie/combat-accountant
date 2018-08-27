@@ -754,7 +754,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             },
         }
 
-        world = gm.World(world_dict)
+        world = gm.World(world_dict, self.__window_manager)
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
         # Pestilence and Moe have same basic speed but different dx
@@ -948,7 +948,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             },
         }
 
-        world = gm.World(world_dict)
+        world = gm.World(world_dict, self.__window_manager)
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
         # Pestilence and Moe have same basic speed but different dx
@@ -1021,7 +1021,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             },
         }
 
-        world = gm.World(world_dict)
+        world = gm.World(world_dict, self.__window_manager)
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
         # Pestilence and Moe have same basic speed but different dx
@@ -1738,7 +1738,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # print '\n----------- LEAVE FIGHT -----------\n'
 
         world_dict = copy.deepcopy(base_world_dict)
-        world = gm.World(world_dict)
+        world = gm.World(world_dict, self.__window_manager)
 
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
@@ -1767,7 +1767,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # print '\n----------- SAVE FIGHT -----------\n'
 
         world_dict = copy.deepcopy(base_world_dict)
-        world = gm.World(world_dict)
+        world = gm.World(world_dict, self.__window_manager)
 
         assert world_dict['current-fight']['monsters'] != "Dima's Crew"
 
@@ -1803,7 +1803,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # print '\n----------- KEEP FIGHT -----------\n'
 
         world_dict = copy.deepcopy(base_world_dict)
-        world = gm.World(world_dict)
+        world = gm.World(world_dict, self.__window_manager)
 
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
