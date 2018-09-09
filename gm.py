@@ -1172,9 +1172,14 @@ class GmWindowManager(object):
 
         # height and width of text box (not border)
         height = len(lines)
-        max_height = curses.LINES - 2 # 2 for the box
-        if height > max_height:
-            height = max_height
+
+        # I don't think I need the following now that I'm using a scrolling
+        # window:
+        #
+        #max_height = curses.LINES - 2 # 2 for the box
+        #if height > max_height:
+        #    height = max_height
+
         width = 0 if title is None else len(title)
         for line in lines:
             this_line_width = 0
@@ -2064,11 +2069,13 @@ class Ruleset(object):
                 if look_for_re.search(thing['name']):
                     result.append({'name': name,
                                    'group': group,
-                                   'location': 'stuff["name"]'})
+                                   'location': 'stuff["name"]',
+                                   'notes': thing['name']})
                 if 'notes' in thing and look_for_re.search(thing['notes']):
                     result.append({'name': name,
                                    'group': group,
-                                   'location': 'stuff["notes"]'})
+                                   'location': '%s["notes"]' % thing['name'],
+                                   'notes': thing['notes']})
 
         if 'notes' in creature:
             for line in creature['notes']:
@@ -2076,13 +2083,15 @@ class Ruleset(object):
                     result.append({'name': name,
                                    'group': group,
                                    'location': 'notes'})
+                    break # Don't want an entry for each time it's in notes
 
         if 'short_notes' in creature:
             for line in creature['short_notes']:
                 if look_for_re.search(line):
                     result.append({'name': name,
                                    'group': group,
-                                   'location': 'short_notes'})
+                                   'location': 'short_notes',
+                                   'notes': creature['short_notes']})
 
         return result
 
@@ -3331,16 +3340,23 @@ class GurpsRuleset(Ruleset):
         if 'advantages' in creature:
             for advantage in creature['advantages']:
                 if look_for_re.search(advantage):
-                    result.append({'name': name,
-                                   'group': group,
-                                   'location': 'advantages'})
+                    result.append(
+                        {'name': name,
+                         'group': group,
+                         'location': 'advantages',
+                         'notes': '%s=%d' % (
+                                        advantage,
+                                        creature['advantages'][advantage])})
 
         if 'skills' in creature:
             for skill in creature['skills']:
                 if look_for_re.search(skill):
-                    result.append({'name': name,
-                                   'group': group,
-                                   'location': 'skills'})
+                    result.append(
+                            {'name': name,
+                             'group': group,
+                             'location': 'skills',
+                             'notes': '%s=%d' % (skill,
+                                                 creature['skills'][skill])})
 
         return result
 
@@ -5050,9 +5066,9 @@ class MainHandler(ScreenHandler):
         return True
 
     def __search(self):
-        # TODO: should be something better than 50
+        lines, cols = self._window.getmaxyx()
         look_for_string = self._window_manager.input_box(1,
-                                                         50,
+                                                         cols-4,
                                                          'Search For What?')
 
         if look_for_string is None or len(look_for_string) <= 0:
@@ -5094,9 +5110,15 @@ class MainHandler(ScreenHandler):
         else:
             lines = []
             for match in all_results:
-                match_string = '%s (in %s): found in %s' % (match['name'],
+                if 'notes' in match:
+                    match_string = '%s (%s): in %s - %s' % (match['name'],
                                                             match['group'],
-                                                            match['location'])
+                                                            match['location'],
+                                                            match['notes'])
+                else:
+                    match_string = '%s (%s): in %s' % (match['name'],
+                                                       match['group'],
+                                                       match['location'])
 
                 lines.append([{'text': match_string,
                                'mode': curses.A_NORMAL}])
