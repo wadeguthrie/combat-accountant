@@ -10,12 +10,11 @@ import json
 import os
 import pprint
 import random
+import re
 import sys
 
 # TODO:
-#   - persephone.json templates: bad guys need weapons, need deputy marshals
 #   - outfit during template
-#
 #   - Allow for markdown in 'notes' and 'short_notes'
 #   - characters need a state 'absent' where they're not shown.  timers should
 #     be able to make somebody un-absent when the timer expires
@@ -2052,6 +2051,42 @@ class Ruleset(object):
                                         fighter_details['permanent'][stat])
         fighter_details['state'] = 'alive'
 
+    def search_one_creature(self,
+                            name,       # string containing the name
+                            group,      # string containing the group
+                            creature,   # dict describing the creature
+                            look_for_re # compiled Python regex
+                           ):
+        result = []
+
+        if 'stuff' in creature:
+            for thing in creature['stuff']:
+                if look_for_re.search(thing['name']):
+                    result.append({'name': name,
+                                   'group': group,
+                                   'location': 'stuff["name"]'})
+                if 'notes' in thing and look_for_re.search(thing['notes']):
+                    result.append({'name': name,
+                                   'group': group,
+                                   'location': 'stuff["notes"]'})
+
+        if 'notes' in creature:
+            for line in creature['notes']:
+                if look_for_re.search(line):
+                    result.append({'name': name,
+                                   'group': group,
+                                   'location': 'notes'})
+
+        if 'short_notes' in creature:
+            for line in creature['short_notes']:
+                if look_for_re.search(line):
+                    result.append({'name': name,
+                                   'group': group,
+                                   'location': 'short_notes'})
+
+        return result
+
+
     def make_empty_creature(self):
         return {'stuff': [], 
                 'weapon-index': None,
@@ -3279,6 +3314,34 @@ class GurpsRuleset(Ruleset):
                     '  that requires skill "%s"' % item['skill'],
                     '  but not the skill to use it'])
                 result = False
+        return result
+
+    def search_one_creature(self,
+                            name,       # string containing the name
+                            group,      # string containing the group
+                            creature,   # dict describing the creature
+                            look_for_re # compiled Python regex
+                           ):
+
+        result = super(GurpsRuleset, self).search_one_creature(name,
+                                                               group,
+                                                               creature,
+                                                               look_for_re)
+
+        if 'advantages' in creature:
+            for advantage in creature['advantages']:
+                if look_for_re.search(advantage):
+                    result.append({'name': name,
+                                   'group': group,
+                                   'location': 'advantages'})
+
+        if 'skills' in creature:
+            for skill in creature['skills']:
+                if look_for_re.search(skill):
+                    result.append({'name': name,
+                                   'group': group,
+                                   'location': 'skills'})
+
         return result
 
 
@@ -4862,7 +4925,9 @@ class MainHandler(ScreenHandler):
             ord('n'): {'name': 'name',                'func':
                                                         self.__get_a_name},
             ord('q'): {'name': 'quit',                'func':
-                                                        self.__quit}
+                                                        self.__quit},
+            ord('/'): {'name': 'search',              'func':
+                                                        self.__search}
         })
         self.__setup_PC_list()
 
@@ -4982,6 +5047,62 @@ class MainHandler(ScreenHandler):
             if details is not None:
                 self.__ruleset.heal_fighter(details)
         self._draw_screen()
+        return True
+
+    def __search(self):
+        # TODO: should be something better than 50
+        look_for_string = self._window_manager.input_box(1,
+                                                         50,
+                                                         'Search For What?')
+
+        if look_for_string is None or len(look_for_string) <= 0:
+            return True
+        look_for_re = re.compile(look_for_string)
+
+        all_results = []
+        for name in self.__world.get_list('PCs'):
+            creature = self.__world.get_creature_details(name, 'PCs')
+            result = self.__ruleset.search_one_creature(name,
+                                                        'PCs',
+                                                        creature,
+                                                        look_for_re)
+            if result is not None and len(result) > 0:
+                all_results.extend(result)
+
+        for name in self.__world.get_list('NPCs'):
+            creature = self.__world.get_creature_details(name, 'NPCs')
+            result = self.__ruleset.search_one_creature(name,
+                                                        'NPCs',
+                                                        creature,
+                                                        look_for_re)
+            if result is not None and len(result) > 0:
+                all_results.extend(result)
+
+        for fight in self.__world.details['monsters']:
+            for name in self.__world.details['monsters'][fight]:
+                creature = self.__world.get_creature_details(name, fight)
+                result = self.__ruleset.search_one_creature(name,
+                                                            'monsters->%s'
+                                                                    % fight,
+                                                            creature,
+                                                            look_for_re)
+                if result is not None and len(result) > 0:
+                    all_results.extend(result)
+
+        if len(all_results) <= 0:
+            self._window_manager.error(['"%s" not found' % look_for_string])
+        else:
+            lines = []
+            for match in all_results:
+                match_string = '%s (in %s): found in %s' % (match['name'],
+                                                            match['group'],
+                                                            match['location'])
+
+                lines.append([{'text': match_string,
+                               'mode': curses.A_NORMAL}])
+            self._window_manager.display_window('Found "%s"' % look_for_string,
+                                                lines)
+
         return True
 
     def __get_a_name(self):
