@@ -1747,6 +1747,9 @@ class World(object):
             gender_menu = [(x, x)
                    for x in self.details['Names'][type_name]]
             gender_name = self.__window_manager.menu('What Gender', gender_menu)
+            if gender_name is None:
+                gender_name = random.choice(
+                                self.details['Names'][type_name].keys())
 
         index = random.randint(0,
             len(self.details['Names'][type_name][gender_name]) - 1)
