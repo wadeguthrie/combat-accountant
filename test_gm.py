@@ -56,7 +56,8 @@ class MockFightGmWindow(object):
                       current_fighter,
                       opponent,
                       fighters,
-                      index):
+                      index,
+                      new_round):
         pass
 
     def round_ribbon(self,
