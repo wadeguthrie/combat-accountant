@@ -4267,16 +4267,7 @@ class FightHandler(ScreenHandler):
         # Figure out who loses the FP points
         current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
-        if opponent is None:
-            fp_recipient = current_fighter
-        else:
-            fp_recipient_menu = [(current_fighter.name, current_fighter),
-                                 (opponent.name,        opponent)]
-            fp_recipient = self._window_manager.menu('Who Loses FP',
-                                                     fp_recipient_menu,
-                                                     0)
-        if fp_recipient is None:
-            return True # Keep fighting
+        fp_recipient = current_fighter if opponent is None else opponent
 
         title = 'Reduce FP By...'
         height = 1
@@ -4313,16 +4304,7 @@ class FightHandler(ScreenHandler):
         # Figure out who loses the hit points
         current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
-        if opponent is None:
-            hp_recipient = current_fighter
-        else:
-            hp_recipient_menu = [(current_fighter.name, current_fighter),
-                                 (opponent.name, opponent)]
-            hp_recipient = self._window_manager.menu('Who Loses HP',
-                                                     hp_recipient_menu,
-                                                     1) # assume the opponent
-        if hp_recipient is None:
-            return True # Keep fighting
+        hp_recipient = current_fighter if opponent is None else opponent
 
         title = 'Reduce HP By...'
         height = 1
