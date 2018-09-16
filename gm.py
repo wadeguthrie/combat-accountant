@@ -917,7 +917,7 @@ class FightGmWindow(GmWindow):
 
         # now, back to normal
         mode = curses.A_NORMAL
-        notes, alerts = self.__ruleset.get_fighter_notes(fighter)
+        notes, alerts = self.__ruleset.get_fighter_notes(fighter, new_round)
         for note in notes:
             window.addstr(line, 0, note, mode)
             line += 1
@@ -945,7 +945,7 @@ class FightGmWindow(GmWindow):
         window.refresh()
 
         # Alerts, if any
-        if new_round and len(alerts) > 0:
+        if len(alerts) > 0:
             mode = curses.A_NORMAL 
             for alert in alerts:
                 self._window_manager.display_window(
@@ -2222,17 +2222,20 @@ class GurpsRuleset(Ruleset):
 
     def adjust_hp(self,
                   fighter,  # Fighter object
-                  adj # the number of HP to gain or lose
+                  adj       # the number of HP to gain or lose
                  ):
-        if adj < 0 and fighter.details['current']['hp'] < 0:
-            before_hp = fighter.details['current']['hp']
-            before_hp_multiple = (before_hp /
-                                    fighter.details['permanent']['hp'])
-            after_hp = (fighter.details['current']['hp'] + adj) * 1.0 + 0.1
-            after_hp_multiple = (after_hp /
-                                    fighter.details['permanent']['hp'])
-            if int(before_hp_multiple) != int(after_hp_multiple):
-                fighter.details['check_for_death'] = True
+        # B327 -- check for death
+        if adj < 0:
+            adjusted_hp = fighter.details['current']['hp'] + adj
+
+            if adjusted_hp <= -(5 * fighter.details['permanent']['hp']):
+                fighter.details['state'] = 'dead'
+            else:
+                threshold = -fighter.details['permanent']['hp']
+                while fighter.details['current']['hp'] <= threshold:
+                    threshold -= fighter.details['permanent']['hp']
+                if adjusted_hp <= threshold:
+                    fighter.details['check_for_death'] = True
 
         if 'high pain threshold' not in fighter.details['advantages']: # B59
             shock_amount = -4 if adj <= -4 else adj
@@ -2826,7 +2829,9 @@ class GurpsRuleset(Ruleset):
         return notes, why
 
     def get_fighter_notes(self,
-                          fighter   # Fighter object
+                          fighter,  # Fighter object
+                          new_round # True if this is the first time the
+                                    #   fighter gets to act in the round
                          ):
         notes = []
         alerts = [] # [{'title': xxx, 'lines': [text, text, text, ...]}, ...]
@@ -2876,22 +2881,29 @@ class GurpsRuleset(Ruleset):
             if fighter.details['current']['fp'] <= 0:
                 notes.append('On action: Roll vs. Will or pass out')
 
-            # B327
-            if fighter.details['current']['hp'] <= 0 and fighter.is_conscious():
-                if 'high pain threshold' in fighter.details['advantages']: # B59
-                    alerts.append(
-                        {'title': 'HP < 0, Is %s Unconscious?' % fighter.name,
-                         'lines': ['Roll 3d+3 <= HT (%d) or pass out' %
+            # B327 -- checking on each round whether the fighter is still
+            # conscious
+            if new_round:
+                if (fighter.details['current']['hp'] <= 0 and 
+                                                    fighter.is_conscious()):
+                    # B59
+                    if 'high pain threshold' in fighter.details['advantages']:
+                        alerts.append(
+                            {'title': 'HP < 0, Is %s Unconscious?' %
+                                                                fighter.name,
+                             'lines': ['Roll 3d+3 <= HT (%d) or pass out' %
                                             fighter.details['current']['ht'],
-                                   'See B327',
-                                   '(+3 due to high pain threshold, see B59)']})
-                else:
-                    alerts.append(
-                        {'title': 'HP < 0, Is %s Unconscious?' % fighter.name,
-                         'lines': ['Roll 3d <= HT (%d) or pass out' %
+                                       'See B327',
+                                       '(+3: high pain threshold, see B59)']})
+                    else:
+                        alerts.append(
+                            {'title': 'HP < 0, Is %s Unconscious?' %
+                                                                fighter.name,
+                             'lines': ['Roll 3d <= HT (%d) or pass out' %
                                             fighter.details['current']['ht'],
-                                   'See B327']})
+                                       'See B327']})
 
+        # B327 -- immediate chack for death
         if fighter.details['check_for_death']:
             alerts.append(
                 {'title': 'Is %s DEAD?' % fighter.name,
