@@ -14,11 +14,11 @@ import re
 import sys
 
 # TODO:
+#   - add 'use an item' to the maneuver menu reducing its count by 1
 #   - outfit during template
 #   - Allow for markdown in 'notes' and 'short_notes'
 #   - characters need a state 'absent' where they're not shown.  timers should
 #     be able to make somebody un-absent when the timer expires
-#   - Add pop-up attack in maneuvers
 #   - should warn when trying to do a second action (take note of fastdraw)
 #   - should only be able to ready an unready weapon.
 #   - Add 2 weapon (or weapon & shield)
@@ -750,7 +750,9 @@ class FightGmWindow(GmWindow):
                       current_fighter,  # Fighter object
                       opponent,         # Fighter object
                       fighters,
-                      current_index
+                      current_index,
+                      new_round         # True if fighter is just getting to
+                                        #  act for the first time this round
                      ):
         '''
         Displays the current state of the current fighter and his opponent,
@@ -764,7 +766,8 @@ class FightGmWindow(GmWindow):
             self.__show_fighter_notes(current_fighter,
                                       opponent,
                                       is_attacker=True,
-                                      window=self.__character_window)
+                                      window=self.__character_window,
+                                      new_round = new_round)
 
         if opponent is None:
             self.__opponent_window.clear()
@@ -774,7 +777,8 @@ class FightGmWindow(GmWindow):
                 self.__show_fighter_notes(opponent,
                                           current_fighter,
                                           is_attacker=False,
-                                          window=self.__opponent_window)
+                                          window=self.__opponent_window,
+                                          new_round = False)
         self.__show_summary_window(fighters, current_index)
         self.refresh()
 
@@ -872,8 +876,11 @@ class FightGmWindow(GmWindow):
                              fighter,           # Fighter object
                              opponent,          # Fighter object
                              is_attacker,       # True | False
-                             window             # Curses window for fighter's
+                             window,            # Curses window for fighter's
                                                 #   notes
+                             new_round          # True if fighter is just
+                                                #  getting to act for the
+                                                #  first time this round
                             ):
         '''
         Displays ancillary information about the fighter
@@ -910,7 +917,7 @@ class FightGmWindow(GmWindow):
 
         # now, back to normal
         mode = curses.A_NORMAL
-        notes = self.__ruleset.get_fighter_notes(fighter)
+        notes, alerts = self.__ruleset.get_fighter_notes(fighter)
         for note in notes:
             window.addstr(line, 0, note, mode)
             line += 1
@@ -936,6 +943,17 @@ class FightGmWindow(GmWindow):
                 line += 1
 
         window.refresh()
+
+        # Alerts, if any
+        if new_round and len(alerts) > 0:
+            mode = curses.A_NORMAL 
+            for alert in alerts:
+                self._window_manager.display_window(
+                           alert['title'],
+                           [[{'text': l,
+                              'mode': mode}] for l in alert['lines']])
+
+            window.refresh()
 
 
 
@@ -1167,7 +1185,7 @@ class GmWindowManager(object):
                               #  [...],               ]   # line 1
                       ):
         '''
-        Presents a display of |lines| to the user.
+        Presents a display of |lines| to the user.  Scrollable.
         '''
 
         # height and width of text box (not border)
@@ -1536,7 +1554,6 @@ class GmWindowManager(object):
         Creates a temporary window, on top of the current one, that is
         centered and has a box around it.
         '''
-
         # x and y of text box (not border)
         begin_x = (curses.COLS / 2) - (width/2)
         begin_y = (curses.LINES / 2) - (height/2)
@@ -2812,6 +2829,7 @@ class GurpsRuleset(Ruleset):
                           fighter   # Fighter object
                          ):
         notes = []
+        alerts = [] # [{'title': xxx, 'lines': [text, text, text, ...]}, ...]
 
         # Ranged weapon status
 
@@ -2858,17 +2876,31 @@ class GurpsRuleset(Ruleset):
             if fighter.details['current']['fp'] <= 0:
                 notes.append('On action: Roll vs. Will or pass out')
 
-            if fighter.details['current']['hp'] <= 0: # B327
+            # B327
+            if fighter.details['current']['hp'] <= 0 and fighter.is_conscious():
                 if 'high pain threshold' in fighter.details['advantages']: # B59
-                    notes.append('On turn: 3d+3 vs. HT or pass out')
+                    alerts.append(
+                        {'title': 'HP < 0, Is %s Unconscious?' % fighter.name,
+                         'lines': ['Roll 3d+3 <= HT (%d) or pass out' %
+                                            fighter.details['current']['ht'],
+                                   'See B327',
+                                   '(+3 due to high pain threshold, see B59)']})
                 else:
-                    notes.append('On turn: 3d vs. HT or pass out')
+                    alerts.append(
+                        {'title': 'HP < 0, Is %s Unconscious?' % fighter.name,
+                         'lines': ['Roll 3d <= HT (%d) or pass out' %
+                                            fighter.details['current']['ht'],
+                                   'See B327']})
 
         if fighter.details['check_for_death']:
-            notes.append('3d vs. HT or DIE')
+            alerts.append(
+                {'title': 'Is %s DEAD?' % fighter.name,
+                 'lines': ['Roll 3d <= HT (%d) or Die' %
+                                            fighter.details['current']['ht'],
+                           'See B327']})
             fighter.details['check_for_death'] = False  # Only show/roll once
 
-        return notes
+        return notes, alerts
 
 
     def get_unarmed_info(self,
@@ -4250,6 +4282,8 @@ class FightHandler(ScreenHandler):
         height = 1
         width = len(title)
         adj_string = self._window_manager.input_box(height, width, title)
+        if len(adj_string) <= 0:
+            return True
         adj = -int(adj_string)  # NOTE: SUBTRACTING the adjustment
         hp_adj = 0
 
@@ -4265,7 +4299,8 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'])
+                                   self._saved_fight['index'],
+                                   new_round = False)
         return True # Keep going
 
 
@@ -4293,6 +4328,8 @@ class FightHandler(ScreenHandler):
         height = 1
         width = len(title)
         adj_string = self._window_manager.input_box(height, width, title)
+        if len(adj_string) <= 0:
+            return True
         adj = -int(adj_string) # NOTE: SUBTRACTING the adjustment
         if adj == 0:
             return True # Keep fighting
@@ -4321,7 +4358,8 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'])
+                                   self._saved_fight['index'],
+                                   new_round = False)
         return True # Keep going
 
     def __dead(self):
@@ -4356,7 +4394,8 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'])
+                                   self._saved_fight['index'],
+                                   new_round = False)
         return True # Keep going
 
     def __defend(self):
@@ -4387,7 +4426,8 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'])
+                                   self._saved_fight['index'],
+                                   new_round = False)
         return True # Keep going
 
 
@@ -4421,7 +4461,8 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'])
+                                   self._saved_fight['index'],
+                                   new_round = False)
         self._window.status_ribbon(self._input_filename,
                                    self._maintain_json)
         self._window.command_ribbon(self._choices)
@@ -4527,7 +4568,8 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'])
+                                   self._saved_fight['index'],
+                                   new_round = False)
         return True # Keep going
 
 
@@ -4564,7 +4606,8 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'])
+                                   self._saved_fight['index'],
+                                   new_round = True)
         return True # Keep going
 
     def __next_PC_name(self):
@@ -4625,7 +4668,8 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'])
+                                   self._saved_fight['index'],
+                                   new_round = False)
         return True # Keep going
 
     def __pick_opponent(self):
@@ -4666,7 +4710,8 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'])
+                                   self._saved_fight['index'],
+                                   new_round = False)
         return True # Keep going
 
 
@@ -4692,7 +4737,8 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'])
+                                   self._saved_fight['index'],
+                                   new_round = False)
         return True # Keep going
 
 
@@ -4831,7 +4877,6 @@ class FightHandler(ScreenHandler):
                                                             why_opponent)
         lines = [[{'text': x,
                    'mode': curses.A_NORMAL}] for x in defense_why] + lines
-        #PP.pprint(lines) # TODO: remove
 
         ignore = self._window_manager.display_window(
                     'How the Numbers Were Calculated', lines)
@@ -4892,7 +4937,8 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'])
+                                   self._saved_fight['index'],
+                                   new_round = False)
         return True # Keep fighting
 
 

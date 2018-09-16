@@ -758,9 +758,18 @@
         "night vision": 4, 
         "combat reflexes": 15
       }, 
-      "did_action_this_turn": false, 
+      "did_action_this_turn": true, 
       "check_for_death": false, 
-      "timers": [], 
+      "timers": [
+        {
+          "rounds": 0.9, 
+          "string": [
+            "Move", 
+            " Defense: any", 
+            " Move: full"
+          ]
+        }
+      ], 
       "posture": "standing", 
       "opponent": null
     }, 
@@ -828,12 +837,12 @@
         "computer hacking": 15, 
         "electronics operation": 13, 
         "axe/mace": 11, 
-        "computer programming": 12, 
+        "brawling": 12, 
         "first aid": 14, 
         "computer security": 12, 
         "beam weapons (pistol)": 15, 
         "armoury (small arms)": 13, 
-        "brawling": 12, 
+        "computer programming": 12, 
         "physics": 12, 
         "piloting": 13, 
         "observation": 15
@@ -868,9 +877,18 @@
         "secret (turned in evidence on brutal Bratva hit)": -30, 
         "cannot speak/synthesizer": -10
       }, 
-      "did_action_this_turn": false, 
+      "did_action_this_turn": true, 
       "check_for_death": false, 
-      "timers": [], 
+      "timers": [
+        {
+          "rounds": 0.9, 
+          "string": [
+            "Do nothing", 
+            " Defense: any", 
+            " Move: none"
+          ]
+        }
+      ], 
       "posture": "standing", 
       "opponent": null
     }, 
@@ -958,7 +976,7 @@
           "type": "melee weapon"
         }
       ], 
-      "weapon-index": null, 
+      "weapon-index": 0, 
       "skills": {
         "electronics repair (terraforming)": 13, 
         "thrown weapon (knife)": 10, 
@@ -1241,10 +1259,19 @@
         "flashbacks, mild": -5, 
         "combat reflexes": 15
       }, 
-      "weapon-index": null, 
+      "weapon-index": 0, 
       "check_for_death": false, 
-      "timers": [], 
-      "did_action_this_turn": false, 
+      "timers": [
+        {
+          "rounds": 0.9, 
+          "string": [
+            "Move", 
+            " Defense: any", 
+            " Move: full"
+          ]
+        }
+      ], 
+      "did_action_this_turn": true, 
       "opponent": null
     }, 
     "mama V - Karen": {
@@ -1295,7 +1322,7 @@
           "name": "C Cell"
         }
       ], 
-      "weapon-index": null, 
+      "weapon-index": 1, 
       "skills": {
         "physician": 14, 
         "axe/mace": 7, 
@@ -1340,9 +1367,18 @@
         "likes shiny objects": -1, 
         "personality change": -1
       }, 
-      "did_action_this_turn": false, 
+      "did_action_this_turn": true, 
       "check_for_death": false, 
-      "timers": [], 
+      "timers": [
+        {
+          "rounds": 0.9, 
+          "string": [
+            "draw pistol, Sig D65", 
+            " Defense: any", 
+            " Move: step"
+          ]
+        }
+      ], 
       "posture": "standing", 
       "opponent": null
     }
@@ -2746,13 +2782,9 @@
     }
   }, 
   "current-fight": {
-    "index": 0, 
-    "monsters": "Dima's Crew", 
+    "index": 9, 
+    "monsters": "1st Hunting Party", 
     "fighters": [
-      {
-        "group": "Dima's Crew", 
-        "name": "1: Dima"
-      }, 
       {
         "group": "PCs", 
         "name": "samuel - Erik"
@@ -2762,24 +2794,32 @@
         "name": "lawerence - Spenser"
       }, 
       {
-        "group": "Dima's Crew", 
-        "name": "5: Dmitry"
+        "group": "1st Hunting Party", 
+        "name": "5: Amelia"
       }, 
       {
-        "group": "Dima's Crew", 
-        "name": "4: Andre"
+        "group": "1st Hunting Party", 
+        "name": "2: William"
       }, 
       {
-        "group": "Dima's Crew", 
-        "name": "2: Nikita"
+        "group": "1st Hunting Party", 
+        "name": "4: Olivia"
       }, 
       {
-        "group": "Dima's Crew", 
-        "name": "3: Alex"
+        "group": "1st Hunting Party", 
+        "name": "3: Charlotte"
+      }, 
+      {
+        "group": "1st Hunting Party", 
+        "name": "1: Oliver"
       }, 
       {
         "group": "PCs", 
         "name": "vasilis - Alan"
+      }, 
+      {
+        "group": "1st Hunting Party", 
+        "name": "6: Matthew"
       }, 
       {
         "group": "PCs", 
@@ -2790,10 +2830,31 @@
         "name": "mama V - Karen"
       }
     ], 
-    "saved": false, 
-    "round": 0, 
+    "saved": true, 
+    "round": 1, 
     "history": [
-      "--- Round 0 ---"
+      "--- Round 0 ---", 
+      " samuel - Erik did \"draw pistol, Sig D65\" maneuver", 
+      " lawerence - Spenser did \"Do nothing\" maneuver", 
+      " 5: Amelia did \"Do nothing\" maneuver", 
+      " 2: William did \"Do nothing\" maneuver", 
+      " 4: Olivia did \"Do nothing\" maneuver", 
+      " 3: Charlotte did \"Do nothing\" maneuver", 
+      " 1: Oliver did \"Do nothing\" maneuver", 
+      " vasilis - Alan did \"Do nothing\" maneuver", 
+      " 6: Matthew did \"Do nothing\" maneuver", 
+      " deri - Chelsea did \"draw pistol, Sig D65\" maneuver", 
+      " mama V - Karen did \"draw pistol, Sig D65\" maneuver", 
+      "--- Round 1 ---", 
+      " samuel - Erik did \"Move\" maneuver", 
+      " lawerence - Spenser did \"Move\" maneuver", 
+      " 5: Amelia did \"Do nothing\" maneuver", 
+      " 2: William did \"draw pistol, Baretta DX 192\" maneuver", 
+      " 4: Olivia did \"Do nothing\" maneuver", 
+      " 3: Charlotte did \"Do nothing\" maneuver", 
+      " 1: Oliver did \"draw pistol, Baretta DX 192\" maneuver", 
+      " vasilis - Alan did \"Do nothing\" maneuver", 
+      " 6: Matthew did \"Do nothing\" maneuver"
     ]
   }, 
   "NPCs": {
@@ -2814,7 +2875,10 @@
         "", 
         "Jorge is a little fireplug of a man with a square head that sits", 
         "atop a blacksmith's body.  He has a ready smile and dimples you can", 
-        "plant a tree in.  He gives you a dazzling grin and says 'Mucho gusto.'"
+        "plant a tree in.  He gives you a dazzling grin and says 'Mucho", 
+        " gusto.'", 
+        "", 
+        "Rolls (adj) against Samuel: 14, His Mojo: 15"
       ], 
       "shock": 0, 
       "armor-index": null, 
@@ -3178,6 +3242,53 @@
       "did_action_this_turn": false, 
       "opponent": null
     }, 
+    "Oscar": {
+      "did_action_this_turn": false, 
+      "short-notes": [], 
+      "advantages": {}, 
+      "weapon-index": null, 
+      "posture": "standing", 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "skills": {}, 
+      "notes": [
+        "origin: australian", 
+        "gender: male", 
+        "characteristics: Picks at lint or dirt on others' clothes", 
+        "instincts: To live forever", 
+        "hair: Curly", 
+        "speech: Nervous", 
+        "knack: Visions", 
+        "personality: Promiscuous"
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "dx": 10, 
+        "basic-speed": 5
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "dx": 10, 
+        "basic-speed": 5
+      }, 
+      "timers": [], 
+      "check_for_death": false, 
+      "opponent": null
+    }, 
     "Hurley, Mitchell (Chief Deputy Marshal)": {
       "aim": {
         "braced": false, 
@@ -3358,7 +3469,6 @@
           "name": "C Cell"
         }
       ], 
-      "weapon-index": null, 
       "skills": {
         "armoury (small arms)": 18, 
         "armoury (heavy weapons)": 18, 
@@ -3388,6 +3498,7 @@
         "dx": 11, 
         "basic-speed": 6.25
       }, 
+      "posture": "standing", 
       "state": "alive", 
       "permanent": {
         "fp": 10, 
@@ -3399,10 +3510,10 @@
         "basic-speed": 6.25
       }, 
       "advantages": {}, 
-      "did_action_this_turn": false, 
+      "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "posture": "standing", 
+      "did_action_this_turn": false, 
       "opponent": null
     }, 
     "Celeline Fermine - Pilot (dead)": {
@@ -3496,7 +3607,9 @@
         "cabinet contains finger bones, herbs, incense, and a bunch of", 
         "other stuff.  This part of the office terminates at an opaque", 
         "indigo drape.  Beyond that is her sleeping palette and personal", 
-        "things."
+        "things.", 
+        "", 
+        "Rolls (adj) against Samuel: 7, His Mojo: 16"
       ], 
       "shock": 0, 
       "armor-index": null, 
@@ -4811,14 +4924,6 @@
     }, 
     "1st Hunting Party": {
       "6: Matthew": {
-        "did_action_this_turn": false, 
-        "short-notes": [], 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
         "aim": {
           "braced": false, 
           "rounds": 0
@@ -4877,6 +4982,7 @@
             "name": "Sport coat/Jeans"
           }
         ], 
+        "weapon-index": null, 
         "skills": {
           "beam weapons (pistol)": 17, 
           "brawling": 17, 
@@ -4893,6 +4999,7 @@
           "personality: Introverted"
         ], 
         "shock": 0, 
+        "short-notes": [], 
         "armor-index": 3, 
         "current": {
           "fp": 11, 
@@ -4913,8 +5020,23 @@
           "dx": 10, 
           "basic-speed": 5.25
         }, 
-        "timers": [], 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "did_action_this_turn": true, 
         "check_for_death": false, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "posture": "standing", 
         "opponent": null
       }, 
       "4: Olivia": {
@@ -4927,7 +5049,7 @@
           "brawling": 14, 
           "knife": 15
         }, 
-        "did_action_this_turn": false, 
+        "did_action_this_turn": true, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4996,7 +5118,16 @@
             "name": "C Cell"
           }
         ], 
-        "timers": [], 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
         "weapon-index": null, 
         "check_for_death": false, 
         "advantages": {
@@ -5016,7 +5147,7 @@
           "brawling": 14, 
           "knife": 15
         }, 
-        "did_action_this_turn": false, 
+        "did_action_this_turn": true, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -5085,8 +5216,17 @@
             "name": "C Cell"
           }
         ], 
-        "timers": [], 
-        "weapon-index": null, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "draw pistol, Baretta DX 192", 
+              " Defense: any", 
+              " Move: step"
+            ]
+          }
+        ], 
+        "weapon-index": 0, 
         "check_for_death": false, 
         "advantages": {
           "combat reflexes": 15, 
@@ -5105,7 +5245,7 @@
           "brawling": 14, 
           "knife": 15
         }, 
-        "did_action_this_turn": false, 
+        "did_action_this_turn": true, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -5151,6 +5291,12 @@
           }, 
           {
             "count": 1, 
+            "notes": "M193, cost eR3570", 
+            "type": "misc", 
+            "name": "Fingerbone of major healing (8)"
+          }, 
+          {
+            "count": 1, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -5174,7 +5320,16 @@
             "name": "C Cell"
           }
         ], 
-        "timers": [], 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
         "weapon-index": null, 
         "check_for_death": false, 
         "advantages": {
@@ -5194,7 +5349,7 @@
           "brawling": 14, 
           "knife": 15
         }, 
-        "did_action_this_turn": false, 
+        "did_action_this_turn": true, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -5217,6 +5372,18 @@
         }, 
         "state": "alive", 
         "stuff": [
+          {
+            "count": 1, 
+            "notes": "M193, cost eR2910", 
+            "type": "misc", 
+            "name": "Fingerbone of fog"
+          }, 
+          {
+            "count": 1, 
+            "notes": "M193, cost eR3570", 
+            "type": "misc", 
+            "name": "Fingerbone of major healing (8)"
+          }, 
           {
             "acc": 2, 
             "count": 1, 
@@ -5263,8 +5430,17 @@
             "name": "C Cell"
           }
         ], 
-        "timers": [], 
-        "weapon-index": null, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "draw pistol, Baretta DX 192", 
+              " Defense: any", 
+              " Move: step"
+            ]
+          }
+        ], 
+        "weapon-index": 2, 
         "check_for_death": false, 
         "advantages": {
           "combat reflexes": 15, 
@@ -5283,7 +5459,7 @@
           "brawling": 14, 
           "knife": 15
         }, 
-        "did_action_this_turn": false, 
+        "did_action_this_turn": true, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -5352,7 +5528,16 @@
             "name": "C Cell"
           }
         ], 
-        "timers": [], 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
         "weapon-index": null, 
         "check_for_death": false, 
         "advantages": {
