@@ -14,11 +14,10 @@ import re
 import sys
 
 # TODO:
-#   - add 'absent' state and allow timers to change the state
-#   - add a timer that is tied to the round change
 #   - add ability to undo the -m option
 #   - add basic speed, show under notes (and on 'move' maneuver)
 #   - add major wound handling
+#   - add a timer that is tied to the round change
 #   - add 'use an item' to the maneuver menu reducing its count by 1
 #   - Need GurpsFighter to handle rules-based stuff.
 #   - outfit during template

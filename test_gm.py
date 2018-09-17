@@ -692,18 +692,19 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
         assert hand_to_hand_info['parry_skill'] == 12
 
-        # change posture of thief
+        # change posture of thief (opponent) -- note: posture of opponent does
+        # not modify melee attacks
         self.__ruleset.change_posture({'fighter': thief_fighter,
                                        'posture': 'crawling'}) # -2
         hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
                                                             thief_fighter,
                                                             None,
                                                             unarmed_skills)
-        assert hand_to_hand_info['punch_skill'] == (16 - 2)
+        assert hand_to_hand_info['punch_skill'] == 16
         assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
-        assert hand_to_hand_info['kick_skill'] == (14 - 2)
+        assert hand_to_hand_info['kick_skill'] == 14
         assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
-        assert hand_to_hand_info['parry_skill'] == 12 # no change to parry
+        assert hand_to_hand_info['parry_skill'] == 12
 
         # change posture of thief (back to standing)
         self.__ruleset.change_posture({'fighter': thief_fighter,
@@ -1504,7 +1505,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
         assert to_hit == expected_to_hit
 
-        # --- Opponents w/ posture ---
+        # --- Opponents w/ posture (shouldn't change melee attack) ---
 
         tank_fighter = gm.Fighter('Tank',
                                   'group',
@@ -1521,11 +1522,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
         assert to_hit == expected_to_hit
 
-        # change posture of thief (-2)
+        # change posture of tank (opponent)
         self.__ruleset.change_posture({'fighter': tank_fighter,
                                        'posture': 'crawling'}) # -2
         to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
-        assert to_hit == (expected_to_hit - 2)
+        assert to_hit == expected_to_hit
 
         # change posture of thief (back to standing)
         self.__ruleset.change_posture({'fighter': tank_fighter,
