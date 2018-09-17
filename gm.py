@@ -865,6 +865,9 @@ class FightGmWindow(GmWindow):
         elif fighter_state == Fighter.UNCONSCIOUS:
             fighter_string = '(UNCONSCIOUS)'
             show_more_info = False
+        elif fighter_state == Fighter.ABSENT:
+            fighter_string = '(ABSENT)'
+            show_more_info = False
         else:
             fighter_string = '%s HP: %d/%d FP: %d/%d' % (
                                         fighter.name,
@@ -1113,6 +1116,8 @@ class GmWindowManager(object):
                     curses.color_pair(GmWindowManager.RED_BLACK),
                 Fighter.DEAD : 
                     curses.color_pair(GmWindowManager.RED_BLACK),
+                Fighter.ABSENT : 
+                    curses.color_pair(GmWindowManager.BLUE_BLACK),
             }
 
             curses.noecho()
@@ -1790,12 +1795,14 @@ class Fighter(object):
      UNCONSCIOUS,
      DEAD,
      STATES,
-     INJURED) = range(5)
+     INJURED,
+     ABSENT) = range(6)
 
     conscious_map = {
         'alive': ALIVE,
         'unconscious': UNCONSCIOUS,
-        'dead': DEAD
+        'dead': DEAD,
+        'absent': ABSENT,
     }
 
     def __init__(self,
@@ -1936,6 +1943,8 @@ class Fighter(object):
     def is_dead(self):
         return True if self.details['state'] == 'dead' else False
 
+    def is_absent(self):
+        return True if self.details['state'] == 'absent' else False
 
     def perform_action_this_turn(self):
         # TODO (move to ruleset): actions are ruleset-based.
@@ -4257,6 +4266,10 @@ class FightHandler(ScreenHandler):
             if current_fighter.is_dead():
                 self.add_to_history(' %s did nothing (dead)' %
                                                         current_fighter.name)
+            elif current_fighter.is_absent():
+                self.add_to_history(' %s did nothing (absent)' %
+                                                        current_fighter.name)
+
             else:
                 keep_going = False
             if self._saved_fight['index'] == first_index:

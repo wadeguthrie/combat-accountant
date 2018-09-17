@@ -5010,7 +5010,7 @@
           "dx": 10, 
           "basic-speed": 5.25
         }, 
-        "state": "alive", 
+        "state": "absent", 
         "permanent": {
           "fp": 11, 
           "iq": 9, 
