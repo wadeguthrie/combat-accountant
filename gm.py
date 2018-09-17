@@ -17,7 +17,6 @@ import sys
 #   - add 'absent' state and allow timers to change the state
 #   - add a timer that is tied to the round change
 #   - add ability to undo the -m option
-#   - add ability to edit any creature
 #   - add basic speed, show under notes (and on 'move' maneuver)
 #   - add major wound handling
 #   - add 'use an item' to the maneuver menu reducing its count by 1
@@ -28,6 +27,7 @@ import sys
 #   - should warn when trying to do a second action (take note of fastdraw)
 #
 # TODO (eventually):
+#   - add ability to edit any creature
 #   - should only be able to ready an unready weapon.
 #   - Add 2 weapon (or weapon & shield)
 #   - Allow for markdown in 'notes' and 'short_notes'
@@ -935,16 +935,17 @@ class FightGmWindow(GmWindow):
         # Timers
         for timer in fighter.details['timers']:
             round_count_string = self.__round_count_string % timer['rounds']
-            if type(timer['string']) is list:
-                for i, substring in enumerate(timer['string']):
-                    string = substring if i != 0 else (
-                        '%s%s' % (round_count_string, substring))
+            if 'string' in timer:
+                if type(timer['string']) is list:
+                    for i, substring in enumerate(timer['string']):
+                        string = substring if i != 0 else (
+                            '%s%s' % (round_count_string, substring))
+                        window.addstr(line, 0, string, mode)
+                        line += 1
+                else:
+                    string = '%s%s' % (round_count_string, timer['string'])
                     window.addstr(line, 0, string, mode)
                     line += 1
-            else:
-                string = '%s%s' % (round_count_string, timer['string'])
-                window.addstr(line, 0, string, mode)
-                line += 1
 
         if ('short_notes' in fighter.details and 
                                 fighter.details['short_notes'] is not None):
@@ -1950,7 +1951,6 @@ class Fighter(object):
         # TODO (move to ruleset): actions are ruleset-based.
         self.details['did_action_this_turn'] = True
 
-
     def remove_expired_keep_dying_timers(self):
         '''
         Removes timers but keep the timers that are dying this round.  Call
@@ -1963,6 +1963,7 @@ class Fighter(object):
             if timer['rounds'] < 0:     # < keeps the timers dying this round
                 remove_these.insert(0, index) # largest indexes last
         for index in remove_these:
+            self.__fire_timer(self.details['timers'][index])
             del self.details['timers'][index]
 
 
@@ -1978,6 +1979,7 @@ class Fighter(object):
             if timer['rounds'] <= 0:    # <= kills the timers dying this round
                 remove_these.insert(0, index) # largest indexes last
         for index in remove_these:
+            self.__fire_timer(self.details['timers'][index])
             del self.details['timers'][index]
 
     def reset_aim(self):
@@ -2001,6 +2003,11 @@ class Fighter(object):
         self.__ruleset.start_turn(self)
         self.decrement_timers()
         self.remove_expired_keep_dying_timers()
+
+
+    def __fire_timer(self, timer):
+       if 'state' in timer:
+           self.details['state'] = timer['state']
 
 
     def __is_same_thing(self,
@@ -4272,6 +4279,15 @@ class FightHandler(ScreenHandler):
 
             else:
                 keep_going = False
+
+            # If we're skipping a fighter (due to his state), exercise his
+            # timers, anyway
+            if keep_going:
+                current_fighter.decrement_timers()
+                current_fighter.remove_expired_kill_dying_timers()
+
+            # If we didn't change the index (for instance, if everyone's
+            # dead), stop looking.  Otherwise, we're in an infinite loop.
             if self._saved_fight['index'] == first_index:
                 keep_going = False
 

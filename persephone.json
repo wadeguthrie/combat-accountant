@@ -5028,12 +5028,8 @@
         "check_for_death": false, 
         "timers": [
           {
-            "rounds": 0.9, 
-            "string": [
-              "Do nothing", 
-              " Defense: any", 
-              " Move: none"
-            ]
+            "rounds": 2, 
+            "state": "alive"
           }
         ], 
         "posture": "standing", 
