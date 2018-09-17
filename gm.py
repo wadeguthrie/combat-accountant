@@ -14,16 +14,23 @@ import re
 import sys
 
 # TODO:
+#   - add 'absent' state and allow timers to change the state
+#   - add a timer that is tied to the round change
+#   - add ability to undo the -m option
+#   - add ability to edit any creature
+#   - add basic speed, show under notes (and on 'move' maneuver)
+#   - add major wound handling
 #   - add 'use an item' to the maneuver menu reducing its count by 1
+#   - Need GurpsFighter to handle rules-based stuff.
 #   - outfit during template
-#   - Allow for markdown in 'notes' and 'short_notes'
 #   - characters need a state 'absent' where they're not shown.  timers should
 #     be able to make somebody un-absent when the timer expires
 #   - should warn when trying to do a second action (take note of fastdraw)
-#   - should only be able to ready an unready weapon.
-#   - Add 2 weapon (or weapon & shield)
 #
 # TODO (eventually):
+#   - should only be able to ready an unready weapon.
+#   - Add 2 weapon (or weapon & shield)
+#   - Allow for markdown in 'notes' and 'short_notes'
 #   - On startup, check each of the characters
 #       o eventually, there needs to be a list of approved skills &
 #         advantages; characters' data should only match the approved list
@@ -2205,7 +2212,7 @@ class GurpsRuleset(Ruleset):
                     20: {'thr': {'num_dice': 2, 'plus': -1},
                          'sw':  {'num_dice': 3, 'plus': +2}}}
 
-    # Posture: B551
+    # Posture: B551; 'attack' is melee, 'target' is ranged
     posture = {
         'standing':  {'attack':  0, 'defense':  0, 'target':  0},
         'crouching': {'attack': -2, 'defense':  0, 'target': -2},
@@ -2356,6 +2363,9 @@ class GurpsRuleset(Ruleset):
             if posture != fighter.details['posture']:
                 posture_menu.append(
                     (posture,   {'text': ['Change posture',
+                                          ' NOTE: crouch 1st action = free',
+                                          '       crouch->stand = free',
+                                          '       kneel->stand = step',
                                           ' Defense: any',
                                           ' Move: none'],
                                  'doit': self.change_posture,
@@ -2438,9 +2448,13 @@ class GurpsRuleset(Ruleset):
                 ])
 
         action_menu.extend([
-            ('posture (B551)',         {'text': ['Change posture',
-                                                 ' Defense: any',
-                                                 ' Move: none'],
+            ('posture (B551)',         {'text': [
+                                            'Change posture',
+                                            ' NOTE: crouch 1st action = free',
+                                            '       crouch->stand = free',
+                                            '       kneel->stand = step',
+                                            ' Defense: any',
+                                            ' Move: none'],
                                         'menu': posture_menu}),
             ('Concentrate (B366)',     {'text': ['Concentrate',
                                                  ' Defense: any w/will roll',
@@ -3060,21 +3074,7 @@ class GurpsRuleset(Ruleset):
                                                 (posture_mods['attack'],
                                                  fighter.details['posture']))
 
-        # Opponent's posture
-
-        if opponent is not None:
-            opponent_posture_mods = self.get_posture_mods(
-                                                opponent.details['posture'])
-            if opponent_posture_mods is not None:
-                result['punch_skill'] += opponent_posture_mods['target']
-                punch_why.append('  %+d for opponent\'s %s posture' %
-                                    (opponent_posture_mods['target'],
-                                     opponent.details['posture']))
-
-                result['kick_skill'] += opponent_posture_mods['target']
-                kick_why.append('  %+d for opponent\'s %s posture' %
-                                    (opponent_posture_mods['target'],
-                                     opponent.details['posture']))
+        # Opponent's posture only for ranged attacks -- not used, here
 
         parry_raw = result['parry_skill']
         parry_damage_modified = False
@@ -3316,10 +3316,11 @@ class GurpsRuleset(Ruleset):
             opponent_posture_mods = self.get_posture_mods(
                                                 opponent.details['posture'])
             if opponent_posture_mods is not None:
-                skill += opponent_posture_mods['target']
-                why.append('  %+d for opponent\'s %s posture' %
-                                    (opponent_posture_mods['target'],
-                                     opponent.details['posture']))
+                if weapon['type'] == 'ranged weapon':
+                    skill += opponent_posture_mods['target']
+                    why.append('  %+d for opponent\'s %s posture' %
+                                        (opponent_posture_mods['target'],
+                                         opponent.details['posture']))
 
 
         why.append('  ...for a to-hit total of %d' % skill)
