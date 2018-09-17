@@ -16,7 +16,6 @@ import sys
 # TODO:
 #   - add ability to undo the -m option
 #   - add basic speed, show under notes (and on 'move' maneuver)
-#   - add major wound handling
 #   - add a timer that is tied to the round change
 #   - add 'use an item' to the maneuver menu reducing its count by 1
 #   - Need GurpsFighter to handle rules-based stuff.
@@ -897,6 +896,12 @@ class FightGmWindow(GmWindow):
         window.clear()
         line = 0
 
+        if fighter.details['stunned']:
+            mode = curses.color_pair(GmWindowManager.RED_BLACK)
+            mode = mode | curses.A_BOLD
+            window.addstr(line, 0, '** STUNNED **', mode)
+            line += 1
+
         # Defender
 
         if is_attacker:
@@ -1399,7 +1404,7 @@ class GmWindowManager(object):
 
         # if there's only 1 choice, autoselect it
         if len(strings_results) == 1:
-            return strings_results[0][0]
+            return strings_results[0][1]
 
         # height and width of text box (not border)
         height = len(strings_results)
@@ -2237,6 +2242,9 @@ class GurpsRuleset(Ruleset):
         'lying':     {'attack': -4, 'defense': -3, 'target': -2},
     }
 
+    (MAJOR_WOUND_SUCCESS,
+     MAJOR_WOUND_SIMPLE_FAIL,
+     MAJOR_WOUND_BAD_FAIL) = range(3)
 
     def __init__(self, window_manager):
         super(GurpsRuleset, self).__init__(window_manager)
@@ -2246,8 +2254,8 @@ class GurpsRuleset(Ruleset):
                   fighter,  # Fighter object
                   adj       # the number of HP to gain or lose
                  ):
-        # B327 -- check for death
         if adj < 0:
+            # Check for Death (B327)
             adjusted_hp = fighter.details['current']['hp'] + adj
 
             if adjusted_hp <= -(5 * fighter.details['permanent']['hp']):
@@ -2259,6 +2267,44 @@ class GurpsRuleset(Ruleset):
                 if adjusted_hp <= threshold:
                     fighter.details['check_for_death'] = True
 
+            # Check for Major Injury (B420)
+            if -adj > (fighter.details['permanent']['hp'] / 2):
+                (SUCCESS, SIMPLE_FAIL, BAD_FAIL) = range(3)
+                if 'high pain threshold' in fighter.details['advantages']:
+                    total = fighter.details['current']['ht'] + 3
+                    menu_title = (
+                        'Major Wound (B420): Roll vs. HT+3 (%d) or be stunned' %
+                                                                        total)
+                elif 'low pain threshold' in fighter.details['advantages']:
+                    total = fighter.details['current']['ht'] - 4
+                    menu_title = (
+                        'Major Wound (B420): Roll vs. HT-4 (%d) or be stunned' %
+                                                                        total)
+                else:
+                    menu_title = (
+                        'Major Wound (B420): Roll vs. HT (%d) or be stunned' % 
+                                            fighter.details['current']['ht'])
+
+                stunned_menu = [('Succeeded (roll <= HT)',
+                                 GurpsRuleset.MAJOR_WOUND_SUCCESS),
+                                ('Missed roll by < 5',
+                                 GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL),
+                                ('Missed roll by >= 5',
+                                 GurpsRuleset.MAJOR_WOUND_BAD_FAIL),
+                               ]
+                stunned_results = self._window_manager.menu(menu_title,
+                                                            stunned_menu)
+                if stunned_results == GurpsRuleset.MAJOR_WOUND_BAD_FAIL:
+                    fighter.details['state'] = 'unconscious'
+                    fighter.draw_weapon_by_index(None)
+                elif stunned_results == GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL:
+                    self.change_posture({'fighter': fighter,
+                                         'posture': 'lying'})
+                    fighter.draw_weapon_by_index(None)
+                    fighter.details['stunned'] = True
+
+                # TODO:
+                #   (active defense at -4, can't retreat)
         if 'high pain threshold' not in fighter.details['advantages']: # B59
             shock_amount = -4 if adj <= -4 else adj
             if fighter.details['shock'] > shock_amount:
@@ -2328,6 +2374,15 @@ class GurpsRuleset(Ruleset):
 
     def end_turn(self, fighter):
         fighter.details['shock'] = 0
+        if fighter.details['stunned']:
+            stunned_menu = [('Succeeded (roll <= HT)', True),
+                            ('Missed roll', False),]
+            recovered_from_stun = self._window_manager.menu(
+                            'Stunned: Roll <= HT (%d) to recover' % 
+                                            fighter.details['current']['ht'],
+                            stunned_menu)
+            if recovered_from_stun:
+                fighter.details['stunned'] = False
 
     def get_action_menu(self,
                         fighter # Fighter object
@@ -2335,6 +2390,17 @@ class GurpsRuleset(Ruleset):
         ''' Builds the menu of maneuvers allowed for the fighter. '''
 
         action_menu = []
+
+        if fighter.details['stunned']:
+            action_menu.append(
+                ('do nothing (stunned)', {'text': ['Do Nothing (Stunned)',
+                                                   ' Defense: any @-4',
+                                                   ' Move: none'],
+                                          'doit': None}
+                )
+            )
+            return action_menu
+
 
         # Figure out who we are and what we're holding.
 
@@ -2348,13 +2414,16 @@ class GurpsRuleset(Ruleset):
                     item['type'] == 'melee weapon' or
                     item['type'] == 'shield'):
                 if weapon is None or weapon_index != index:
-                    draw_weapon_menu.append((item['name'],
-                                        {'text': [('draw %s' % item['name']),
+                    draw_weapon_menu.append(
+                        (item['name'], {'text': [('draw %s' % item['name']),
                                                   ' Defense: any',
                                                   ' Move: step'],
-                                         'doit': self.draw_weapon,
-                                         'param': {'weapon': index,
-                                                   'fighter': fighter}}))
+                                        'doit': self.draw_weapon,
+                                        'param': {'weapon': index,
+                                                  'fighter': fighter}
+                                       }
+                        )
+                    )
 
         # Armor
 
@@ -2611,6 +2680,10 @@ class GurpsRuleset(Ruleset):
                                                                 skill,
                                                                 block_skill))
 
+        if fighter.details['stunned']:
+            dodge_skill -= 4
+            dodge_why.append('  -4 due to being stunned (B420)')
+
         if 'combat reflexes' in fighter.details['advantages']:
             block_skill_modified = True
             block_why.append('  +1 due to combat reflexes (B43)')
@@ -2716,6 +2789,10 @@ class GurpsRuleset(Ruleset):
         dodge_why.append('Dodge (B326) @ int(basic-speed(%.1f))+3 = %d' % (
                                 fighter.details['current']['basic-speed'],
                                 dodge_skill))
+
+        if fighter.details['stunned']:
+            dodge_skill -= 4
+            dodge_why.append('  -4 due to being stunned (B420)')
 
         if 'combat reflexes' in fighter.details['advantages']: # B43
             dodge_skill_modified = True
@@ -3094,6 +3171,11 @@ class GurpsRuleset(Ruleset):
         parry_raw = result['parry_skill']
         parry_damage_modified = False
 
+        # Stunned
+        if fighter.details['stunned']:
+            result['parry_skill'] -= 4
+            parry_why.append('  -4 due to being stunned (B420)')
+
         # Brawling, Boxing, Karate, DX: Parry int(skill/2) + 3
         result['parry_skill'] = 3 + int(result['parry_skill']/2)
         parry_why.append('%s @ (punch(%d)/2)+3 = %d' % (result['parry_string'],
@@ -3243,6 +3325,11 @@ class GurpsRuleset(Ruleset):
                                                                 skill,
                                                                 parry_skill))
 
+
+        if fighter.details['stunned']:
+            dodge_skill -= 4
+            dodge_why.append('  -4 due to being stunned (B420)')
+
         if 'parry' in weapon:
             parry_skill += weapon['parry']
             parry_skill_modified = True
@@ -3350,6 +3437,7 @@ class GurpsRuleset(Ruleset):
         '''
         super(GurpsRuleset, self).heal_fighter(fighter_details)
         fighter_details['shock'] = 0
+        fighter_details['stunned'] = False
         fighter_details['check_for_death'] = False
 
 
@@ -3429,6 +3517,7 @@ class GurpsRuleset(Ruleset):
         to_monster.update({'aim': { 'braced': False, 'rounds': 0 }, 
                            'skills': { }, 
                            'shock': 0, 
+                           'stunned': 0,
                            'advantages': { }, 
                            'did_action_this_turn': False,
                            'check_for_death': False, 
@@ -3441,6 +3530,7 @@ class GurpsRuleset(Ruleset):
         Removes all the ruleset-related stuff from the old fight except injury.
         '''
         fighter.details['shock'] = 0
+        fighter.details['stunned'] = 0
         fighter.details['check_for_death'] = False
         fighter.details['posture'] = 'standing'
         fighter.reset_aim()
@@ -4347,7 +4437,7 @@ class FightHandler(ScreenHandler):
         opponent = self.get_opponent_for(current_fighter)
         hp_recipient = current_fighter if opponent is None else opponent
 
-        title = 'Reduce HP By...'
+        title = 'Reduce %s\'s HP By...' % hp_recipient.name
         height = 1
         width = len(title)
         adj_string = self._window_manager.input_box(height, width, title)
