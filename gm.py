@@ -856,24 +856,14 @@ class FightGmWindow(GmWindow):
                        column
                       ):
         show_more_info = True # conscious -- show all the fighter's info
-        fighter_state = fighter.get_state()
-        if fighter_state == Fighter.DEAD:
-            fighter_string = '(DEAD)'
-            show_more_info = False
-        elif fighter_state == Fighter.UNCONSCIOUS:
-            fighter_string = '(UNCONSCIOUS)'
-            show_more_info = False
-        elif fighter_state == Fighter.ABSENT:
-            fighter_string = '(ABSENT)'
-            show_more_info = False
-        else:
-            fighter_string = '%s HP: %d/%d FP: %d/%d' % (
-                                        fighter.name,
-                                        fighter.details['current']['hp'],
-                                        fighter.details['permanent']['hp'],
-                                        fighter.details['current']['fp'],
-                                        fighter.details['permanent']['fp'])
+        fighter_string = '%s HP: %d/%d FP: %d/%d' % (
+                                    fighter.name,
+                                    fighter.details['current']['hp'],
+                                    fighter.details['permanent']['hp'],
+                                    fighter.details['current']['fp'],
+                                    fighter.details['permanent']['fp'])
 
+        fighter_state = fighter.get_state()
         mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
                                                             | curses.A_BOLD)
         self._window.addstr(self.__FIGHTER_LINE, column, fighter_string, mode)
@@ -896,9 +886,20 @@ class FightGmWindow(GmWindow):
         window.clear()
         line = 0
 
-        if fighter.details['stunned']:
-            mode = curses.color_pair(GmWindowManager.RED_BLACK)
-            mode = mode | curses.A_BOLD
+        fighter_state = fighter.get_state()
+        mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
+                                                            | curses.A_BOLD)
+        if fighter_state == Fighter.DEAD:
+            window.addstr(line, 0, '** DEAD **', mode)
+            line += 1
+        elif fighter_state == Fighter.UNCONSCIOUS:
+            window.addstr(line, 0, '** UNCONSCIOUS **', mode)
+            line += 1
+        elif fighter_state == Fighter.ABSENT:
+            window.addstr(line, 0, '** ABSENT **', mode)
+            line += 1
+        elif fighter.details['stunned']:
+            mode = curses.color_pair(GmWindowManager.RED_BLACK) | curses.A_BOLD
             window.addstr(line, 0, '** STUNNED **', mode)
             line += 1
 
@@ -1799,7 +1800,8 @@ class Fighter(object):
     (ALIVE,
      UNCONSCIOUS,
      DEAD,
-     STATES,
+     STATES,    # States after this aren't in the 'bump_consciousness' cycle
+
      INJURED,
      ABSENT) = range(6)
 
@@ -3171,16 +3173,16 @@ class GurpsRuleset(Ruleset):
         parry_raw = result['parry_skill']
         parry_damage_modified = False
 
-        # Stunned
-        if fighter.details['stunned']:
-            result['parry_skill'] -= 4
-            parry_why.append('  -4 due to being stunned (B420)')
-
         # Brawling, Boxing, Karate, DX: Parry int(skill/2) + 3
         result['parry_skill'] = 3 + int(result['parry_skill']/2)
         parry_why.append('%s @ (punch(%d)/2)+3 = %d' % (result['parry_string'],
                                                         parry_raw,
                                                         result['parry_skill']))
+        # Stunned
+        if fighter.details['stunned']:
+            result['parry_skill'] -= 4
+            parry_why.append('  -4 due to being stunned (B420)')
+
         if 'combat reflexes' in fighter.details['advantages']:
             parry_damage_modified = True
             result['parry_skill'] += 1
