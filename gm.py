@@ -2303,8 +2303,6 @@ class GurpsRuleset(Ruleset):
                     fighter.draw_weapon_by_index(None)
                     fighter.details['stunned'] = True
 
-                # TODO:
-                #   (active defense at -4, can't retreat)
         if 'high pain threshold' not in fighter.details['advantages']: # B59
             shock_amount = -4 if adj <= -4 else adj
             if fighter.details['shock'] > shock_amount:
@@ -2450,7 +2448,7 @@ class GurpsRuleset(Ruleset):
         for posture in GurpsRuleset.posture.iterkeys():
             if posture != fighter.details['posture']:
                 posture_menu.append(
-                    (posture,   {'text': ['Change posture',
+                    (posture,   {'text': [('Change posture to %s' % posture),
                                           ' NOTE: crouch 1st action = free',
                                           '       crouch->stand = free',
                                           '       kneel->stand = step',
@@ -4411,10 +4409,10 @@ class FightHandler(ScreenHandler):
                 self._saved_fight['round'] += adj 
             current_fighter = self.get_current_fighter()
             if current_fighter.is_dead():
-                self.add_to_history(' %s did nothing (dead)' %
+                self.add_to_history(' (%s) did nothing (dead)' %
                                                         current_fighter.name)
             elif current_fighter.is_absent():
-                self.add_to_history(' %s did nothing (absent)' %
+                self.add_to_history(' (%s) did nothing (absent)' %
                                                         current_fighter.name)
 
             else:
@@ -4503,21 +4501,21 @@ class FightHandler(ScreenHandler):
         # Record for posterity
         if hp_recipient is opponent:
             if adj < 0:
-                self.add_to_history(' %s did %d HP to %s' %
+                self.add_to_history(' (%s) did %d HP to (%s)' %
                                                         (current_fighter.name,
                                                          -adj,
                                                          opponent.name))
             else:
-                self.add_to_history(' %s regained %d HP' %
-                                                        (current_fighter.name,
+                self.add_to_history(' (%s) regained %d HP' %
+                                                        (opponent.name,
                                                          adj))
         else:
             if adj < 0:
                 self.add_to_history(
-                        ' %s lost %d HP' % (current_fighter.name, -adj))
+                        ' (%s) lost %d HP' % (current_fighter.name, -adj))
             else:
                 self.add_to_history(
-                        ' %s regained %d HP' % (current_fighter.name, adj))
+                        ' (%s) regained %d HP' % (current_fighter.name, adj))
 
         self._window.show_fighters(current_fighter,
                                    opponent,
@@ -4551,7 +4549,7 @@ class FightHandler(ScreenHandler):
         dead_name = (current_fighter.name if now_dead is current_fighter
                                     else opponent.name)
 
-        self.add_to_history(' %s was marked as %s' % (
+        self.add_to_history(' (%s) was marked as (%s)' % (
                                                     dead_name,
                                                     now_dead.details['state']))
 
@@ -4585,7 +4583,7 @@ class FightHandler(ScreenHandler):
         # Defending costs you aim
         defender.reset_aim()
 
-        self.add_to_history(' %s defended (and lost aim)' % defender.name)
+        self.add_to_history(' (%s) defended (and lost aim)' % defender.name)
 
         self._window.show_fighters(current_fighter,
                                    opponent,
@@ -4726,8 +4724,8 @@ class FightHandler(ScreenHandler):
         # get deleted before the next round
         current_fighter.add_timer(0.9, maneuver['text'])
 
-        self.add_to_history(' %s did "%s" maneuver' % (current_fighter.name,
-                                                       maneuver['text'][0]))
+        self.add_to_history(' (%s) did (%s) maneuver' % (current_fighter.name,
+                                                         maneuver['text'][0]))
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
                                    opponent,
@@ -4858,6 +4856,10 @@ class FightHandler(ScreenHandler):
         if opponent_name is None:
             return True # don't leave the fight
 
+        self.add_to_history(' (%s) picked (%s) as opponent' % 
+                                                    (current_fighter.name,
+                                                     opponent_name))
+
         current_fighter.details['opponent'] = {'group': opponent_group,
                                                'name': opponent_name}
         opponent = self.__get_fighter_object(opponent_name, opponent_group)
@@ -4870,6 +4872,11 @@ class FightHandler(ScreenHandler):
             if answer == True:
                 opponent.details['opponent'] = {'group': current_fighter.group,
                                                 'name': current_fighter.name}
+
+                self.add_to_history(
+                                ' (%s) picked (%s) as opponent right back' % 
+                                                        (opponent_name,
+                                                         current_fighter.name))
 
         self._window.show_fighters(current_fighter,
                                    opponent,
