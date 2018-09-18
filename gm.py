@@ -14,7 +14,6 @@ import re
 import sys
 
 # TODO:
-#   - add 'use an item' to the maneuver menu reducing its count by 1
 #   - add laser sights to weapons
 
 #   - add ability to undo the -m option
@@ -2411,6 +2410,8 @@ class GurpsRuleset(Ruleset):
         holding_ranged = (False if weapon is None else
                                 (weapon['type'] == 'ranged weapon'))
 
+        # Draw weapon SUB-menu
+
         draw_weapon_menu = []   # list of weapons that may be drawn this turn
         for index, item in enumerate(fighter.details['stuff']):
             if (item['type'] == 'ranged weapon' or
@@ -2428,7 +2429,7 @@ class GurpsRuleset(Ruleset):
                         )
                     )
 
-        # Armor
+        # Armor SUB-menu
 
         armor, armor_index = fighter.get_current_armor()
         don_armor_menu = []   # list of weapons that may be drawn this turn
@@ -2443,7 +2444,7 @@ class GurpsRuleset(Ruleset):
                                          'param': {'armor': index,
                                                    'fighter': fighter}}))
 
-        # Posture menu
+        # Posture SUB-menu
 
         posture_menu = []
         for posture in GurpsRuleset.posture.iterkeys():
@@ -2458,6 +2459,19 @@ class GurpsRuleset(Ruleset):
                                  'doit': self.change_posture,
                                  'param': {'fighter': fighter,
                                            'posture': posture}}))
+
+        # Use SUB-menu
+
+        use_menu = []
+        for index, item in enumerate(fighter.details['stuff']):
+            if item['count'] > 0:
+                use_menu.append((item['name'],
+                                    {'text': [('Use %s' % item['name']),
+                                              ' Defense: (depends)',
+                                              ' Move: (depends)'],
+                                     'doit': self.use_item,
+                                     'param': {'item': index,
+                                               'fighter': fighter}}))
 
         # Build the action_menu.  Alphabetical order.  Only allow the things
         # the fighter can do based on zis current situation.
@@ -2575,6 +2589,24 @@ class GurpsRuleset(Ruleset):
                                           ' Defense: any',
                                           ' Move: step'],
                                  'menu': draw_weapon_menu}))
+
+        # Use stuff
+        if len(use_menu) == 1:
+            action_menu.append(
+                (('use %s' % use_menu[0][0]),
+                 {'text': ['Use Item',
+                           ' Defense: (depends)',
+                           ' Move: (depends)'],
+                  'doit': self.use_item,
+                  'param': {'item': use_menu[0][1]['param']['item'],
+                            'fighter': fighter}}))
+
+        elif len(use_menu) > 1:
+            action_menu.append(('use item',
+                                {'text': ['Use Item',
+                                          ' Defense: (depends)',
+                                          ' Move: (depends)'],
+                                 'menu': use_menu}))
 
         # Armor
 
@@ -3600,6 +3632,17 @@ class GurpsRuleset(Ruleset):
         '''
         param['fighter'].don_armor_by_index(param['armor'])
 
+    def use_item(self,
+                 param # dict: {'item': index, 'fighter': Fighter obj}
+                ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        fighter = param['fighter']
+        item_index = param['item']
+        item = fighter.details['stuff'][item_index]
+        item['count'] -= 1
 
     def draw_weapon(self,
                     param # dict: {'weapon': index, 'fighter': Fighter obj}
