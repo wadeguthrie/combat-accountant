@@ -14,14 +14,11 @@ import re
 import sys
 
 # TODO:
-#   - add ability to undo the -m option
 #   - add basic speed, show under notes (and on 'move' maneuver)
-#   - add a timer that is tied to the round change
 #   - add 'use an item' to the maneuver menu reducing its count by 1
-#   - Need GurpsFighter to handle rules-based stuff.
+#   - add ability to undo the -m option
+#   - add a timer that is tied to the round change
 #   - outfit during template
-#   - characters need a state 'absent' where they're not shown.  timers should
-#     be able to make somebody un-absent when the timer expires
 #   - should warn when trying to do a second action (take note of fastdraw)
 #
 # TODO (eventually):

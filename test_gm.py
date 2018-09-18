@@ -176,6 +176,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__vodou_priest_fighter_pistol_skill = 15
         self.__vodou_priest_fighter = {
             "shock": 0, 
+            "stunned": False,
             "did_action_this_turn": False,
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
@@ -216,6 +217,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # basic speed wrong but that's not really the point of this exercise
         self.__one_more_guy = {
             "shock": 0, 
+            "stunned": False,
             "did_action_this_turn": False,
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
@@ -250,6 +252,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         } 
         self.__bokor_fighter = {
             "shock": 0, 
+            "stunned": False,
             "did_action_this_turn": False,
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
@@ -288,6 +291,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         self.__tank_fighter = {
             "shock": 0, 
+            "stunned": False,
             "did_action_this_turn": False,
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
@@ -333,6 +337,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         self.__thief_fighter = {
             "shock": 0, 
+            "stunned": False,
             "did_action_this_turn": False,
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
@@ -902,11 +907,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fighters = fight_handler.get_fighters()
         assert len(expected_fighters) == len(fighters)
-        assert expected_fighters[0] == fighters[0]['details']
-        assert expected_fighters[1] == fighters[1]['details']
-        assert expected_fighters[2] == fighters[2]['details']
-        assert expected_fighters[3] == fighters[3]['details']
-        assert expected_fighters[4] == fighters[4]['details']
+
+        assert self.__are_equal(expected_fighters[0], fighters[0]['details'])
+        assert self.__are_equal(expected_fighters[1], fighters[1]['details'])
+        assert self.__are_equal(expected_fighters[2], fighters[2]['details'])
+        assert self.__are_equal(expected_fighters[3], fighters[3]['details'])
+        assert self.__are_equal(expected_fighters[4], fighters[4]['details'])
 
     def test_initiative_order_again(self):
         '''
@@ -1117,15 +1123,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Check that everything is as it should be
 
         assert len(expected_fighters) == len(fighters)
-        assert expected_fighters[0] == fighters[0]['details']
-
-        self.__are_equal(expected_fighters[1], fighters[1]['details'])
-
-        assert expected_fighters[1] == fighters[1]['details']
-
-        assert expected_fighters[2] == fighters[2]['details']
-        assert expected_fighters[3] == fighters[3]['details']
-        assert expected_fighters[4] == fighters[4]['details']
+        assert self.__are_equal(expected_fighters[0], fighters[0]['details'])
+        assert self.__are_equal(expected_fighters[1], fighters[1]['details'])
+        assert self.__are_equal(expected_fighters[2], fighters[2]['details'])
+        assert self.__are_equal(expected_fighters[3], fighters[3]['details'])
+        assert self.__are_equal(expected_fighters[4], fighters[4]['details'])
 
 
     def test_ranged_to_hit(self):
@@ -1909,7 +1911,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 PP.pprint(rhs)
                 return False
             for key in rhs.iterkeys():
-                if key not in rhs:
+                if key not in lhs:
                     print '** KEY "%s" not in lhs' % key
                     print '\nlhs'
                     PP.pprint(lhs)
