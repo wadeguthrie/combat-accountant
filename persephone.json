@@ -38,6 +38,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
+          },
+          "basic-move": {
+            "type": "value", 
+            "value": 5
           }
         }, 
         "advantages": {
@@ -135,6 +139,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 6.25
+          },
+          "basic-move": {
+            "type": "value", 
+            "value": 6
           }
         }, 
         "advantages": {
@@ -248,6 +256,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5
+          },
+          "basic-move": {
+            "type": "value", 
+            "value": 5
           }
         }
       }, 
@@ -280,6 +292,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.25
+          },
+          "basic-move": {
+            "type": "value", 
+            "value": 5
           }
         }
       }, 
@@ -320,6 +336,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
+          },
+          "basic-move": {
+            "type": "value", 
+            "value": 5
           }
         }, 
         "advantages": {
@@ -409,6 +429,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
+          },
+          "basic-move": {
+            "type": "value", 
+            "value": 5
           }
         }
       }, 
@@ -441,6 +465,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.5
+          },
+          "basic-move": {
+            "type": "value", 
+            "value": 5
           }
         }
       }, 
@@ -481,6 +509,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 4.75
+          },
+          "basic-move": {
+            "type": "value", 
+            "value": 4
           }
         }, 
         "advantages": {
@@ -577,6 +609,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.25
+          },
+          "basic-move": {
+            "type": "value", 
+            "value": 5
           }
         }, 
         "advantages": {
@@ -734,7 +770,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "state": "alive", 
       "permanent": {
@@ -744,7 +781,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "advantages": {
         "g-experience": 3, 
@@ -858,7 +896,8 @@
         "ht": 9, 
         "st": 10, 
         "dx": 12, 
-        "basic-speed": 5.25
+        "basic-speed": 5.25,
+        "basic-move": 5
       }, 
       "state": "alive", 
       "permanent": {
@@ -868,7 +907,8 @@
         "ht": 9, 
         "st": 10, 
         "dx": 12, 
-        "basic-speed": 5.25
+        "basic-speed": 5.25,
+        "basic-move": 5
       }, 
       "advantages": {
         "acute vision 1": 2, 
@@ -1016,7 +1056,8 @@
         "ht": 11, 
         "st": 9, 
         "dx": 9, 
-        "basic-speed": 5
+        "basic-speed": 5,
+        "basic-move": 5
       }, 
       "state": "alive", 
       "permanent": {
@@ -1026,7 +1067,8 @@
         "ht": 11, 
         "st": 9, 
         "dx": 9, 
-        "basic-speed": 5
+        "basic-speed": 5,
+        "basic-move": 5
       }, 
       "advantages": {
         "honest face": 1, 
@@ -1238,7 +1280,8 @@
         "ht": 11, 
         "st": 12, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -1249,7 +1292,8 @@
         "ht": 11, 
         "st": 12, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "advantages": {
         "guilt complex (loss of sister)": -5, 
@@ -1345,7 +1389,8 @@
         "ht": 8, 
         "st": 9, 
         "dx": 8, 
-        "basic-speed": 4
+        "basic-speed": 4,
+        "basic-move": 5
       }, 
       "state": "alive", 
       "permanent": {
@@ -1355,7 +1400,8 @@
         "ht": 8, 
         "st": 9, 
         "dx": 8, 
-        "basic-speed": 4
+        "basic-speed": 4,
+        "basic-move": 5
       }, 
       "advantages": {
         "ailurophobia (cats)": -5, 
@@ -1408,7 +1454,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1418,7 +1465,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -1447,7 +1495,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1457,7 +1506,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -1486,7 +1536,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1496,7 +1547,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -1525,7 +1577,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1535,7 +1588,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15, 
@@ -1565,7 +1619,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1575,7 +1630,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -1604,7 +1660,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1614,7 +1671,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -1643,7 +1701,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1653,7 +1712,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -1682,7 +1742,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1692,7 +1753,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15, 
@@ -1724,7 +1786,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1734,7 +1797,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -1763,7 +1827,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1773,7 +1838,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -1802,7 +1868,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1812,7 +1879,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -1841,7 +1909,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1851,7 +1920,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15, 
@@ -1881,7 +1951,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 10, 
-          "basic-speed": 5.25
+          "basic-speed": 5.25,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1891,7 +1962,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 10, 
-          "basic-speed": 5.25
+          "basic-speed": 5.25,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -1920,7 +1992,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 11, 
-          "basic-speed": 5.5
+          "basic-speed": 5.5,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1930,7 +2003,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 11, 
-          "basic-speed": 5.5
+          "basic-speed": 5.5,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -1959,7 +2033,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -1969,7 +2044,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -1998,7 +2074,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -2008,7 +2085,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15, 
@@ -2039,7 +2117,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 11, 
-          "basic-speed": 5.5
+          "basic-speed": 5.5,
+          "basic-move": 5
         }, 
         "permanent": {
           "fp": 12, 
@@ -2048,7 +2127,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 11, 
-          "basic-speed": 5.5
+          "basic-speed": 5.5,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "stuff": [], 
@@ -2080,7 +2160,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "permanent": {
           "fp": 11, 
@@ -2089,7 +2170,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "stuff": [
@@ -2215,7 +2297,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -2225,7 +2308,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -2285,7 +2369,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 11, 
-          "basic-speed": 5.5
+          "basic-speed": 5.5,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -2295,7 +2380,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 11, 
-          "basic-speed": 5.5
+          "basic-speed": 5.5,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -2370,7 +2456,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -2380,7 +2467,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -2459,7 +2547,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -2469,7 +2558,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "high pain threshold": 10
@@ -2529,7 +2619,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 10, 
-          "basic-speed": 5.25
+          "basic-speed": 5.25,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -2539,7 +2630,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 10, 
-          "basic-speed": 5.25
+          "basic-speed": 5.25,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15, 
@@ -2615,7 +2707,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -2625,7 +2718,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -2700,7 +2794,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -2710,7 +2805,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15
@@ -2789,7 +2885,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -2799,7 +2896,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "advantages": {
           "high pain threshold": 10
@@ -2921,7 +3019,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -2932,7 +3031,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -2968,7 +3068,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -2979,7 +3080,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -3090,7 +3192,8 @@
         "ht": 12, 
         "st": 13, 
         "dx": 13, 
-        "basic-speed": 6.25
+        "basic-speed": 6.25,
+        "basic-move": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -3101,7 +3204,8 @@
         "ht": 12, 
         "st": 13, 
         "dx": 13, 
-        "basic-speed": 6.25
+        "basic-speed": 6.25,
+        "basic-move": 6
       }, 
       "advantages": {
         "combat reflexes": 15, 
@@ -3153,7 +3257,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -3164,7 +3269,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -3197,7 +3303,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -3208,7 +3315,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -3259,7 +3367,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -3270,7 +3379,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -3311,7 +3421,8 @@
         "ht": 10, 
         "st": 10, 
         "dx": 10, 
-        "basic-speed": 5
+        "basic-speed": 5,
+        "basic-move": 5
       }, 
       "state": "alive", 
       "permanent": {
@@ -3321,7 +3432,8 @@
         "ht": 10, 
         "st": 10, 
         "dx": 10, 
-        "basic-speed": 5
+        "basic-speed": 5,
+        "basic-move": 5
       }, 
       "timers": [], 
       "check_for_death": false, 
@@ -3356,7 +3468,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -3367,7 +3480,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -3407,7 +3521,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -3418,7 +3533,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -3457,7 +3573,8 @@
         "ht": 10, 
         "st": 10, 
         "dx": 10, 
-        "basic-speed": 5
+        "basic-speed": 5,
+        "basic-move": 5
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -3468,7 +3585,8 @@
         "ht": 10, 
         "st": 10, 
         "dx": 10, 
-        "basic-speed": 5
+        "basic-speed": 5,
+        "basic-move": 5
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -3538,7 +3656,8 @@
         "ht": 10, 
         "st": 16, 
         "dx": 11, 
-        "basic-speed": 6.25
+        "basic-speed": 6.25,
+        "basic-move": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -3549,7 +3668,8 @@
         "ht": 10, 
         "st": 16, 
         "dx": 11, 
-        "basic-speed": 6.25
+        "basic-speed": 6.25,
+        "basic-move": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -3581,7 +3701,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -3592,7 +3713,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -3664,7 +3786,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -3675,7 +3798,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -3705,7 +3829,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -3716,7 +3841,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -3768,7 +3894,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -3779,7 +3906,8 @@
         "ht": 11, 
         "st": 10, 
         "dx": 13, 
-        "basic-speed": 6
+        "basic-speed": 6,
+        "basic-move": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -4591,7 +4719,8 @@
           "ht": 11, 
           "st": 12, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "permanent": {
           "fp": 11, 
@@ -4600,7 +4729,8 @@
           "ht": 11, 
           "st": 12, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "stuff": [
@@ -4692,7 +4822,8 @@
           "ht": 11, 
           "st": 12, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "permanent": {
           "fp": 11, 
@@ -4701,7 +4832,8 @@
           "ht": 11, 
           "st": 12, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "stuff": [
@@ -4795,7 +4927,8 @@
           "ht": 11, 
           "st": 12, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "permanent": {
           "fp": 11, 
@@ -4804,7 +4937,8 @@
           "ht": 11, 
           "st": 12, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "stuff": [
@@ -4895,7 +5029,8 @@
           "ht": 11, 
           "st": 12, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "permanent": {
           "fp": 11, 
@@ -4904,7 +5039,8 @@
           "ht": 11, 
           "st": 12, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "stuff": [
@@ -5059,7 +5195,8 @@
           "ht": 11, 
           "st": 15, 
           "dx": 10, 
-          "basic-speed": 5.25
+          "basic-speed": 5.25,
+          "basic-move": 5
         }, 
         "state": "absent", 
         "permanent": {
@@ -5069,7 +5206,8 @@
           "ht": 11, 
           "st": 15, 
           "dx": 10, 
-          "basic-speed": 5.25
+          "basic-speed": 5.25,
+          "basic-move": 5
         }, 
         "advantages": {
           "combat reflexes": 15, 
@@ -5107,7 +5245,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "permanent": {
           "fp": 11, 
@@ -5116,7 +5255,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "stuff": [
@@ -5206,7 +5346,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "permanent": {
           "fp": 11, 
@@ -5215,7 +5356,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "stuff": [
@@ -5305,7 +5447,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "permanent": {
           "fp": 11, 
@@ -5314,7 +5457,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "stuff": [
@@ -5410,7 +5554,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "permanent": {
           "fp": 11, 
@@ -5419,7 +5564,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "stuff": [
@@ -5521,7 +5667,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "permanent": {
           "fp": 11, 
@@ -5530,7 +5677,8 @@
           "ht": 11, 
           "st": 10, 
           "dx": 12, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75,
+          "basic-move": 5
         }, 
         "state": "alive", 
         "stuff": [

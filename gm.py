@@ -14,9 +14,11 @@ import re
 import sys
 
 # TODO:
-#   - add basic speed, show under notes (and on 'move' maneuver)
 #   - add 'use an item' to the maneuver menu reducing its count by 1
+#   - add laser sights to weapons
+
 #   - add ability to undo the -m option
+
 #   - add a timer that is tied to the round change
 #   - outfit during template
 #   - should warn when trying to do a second action (take note of fastdraw)
@@ -2390,6 +2392,8 @@ class GurpsRuleset(Ruleset):
 
         action_menu = []
 
+        move = fighter.details['current']['basic-move']
+
         if fighter.details['stunned']:
             action_menu.append(
                 ('do nothing (stunned)', {'text': ['Do Nothing (Stunned)',
@@ -2510,7 +2514,8 @@ class GurpsRuleset(Ruleset):
                                              'param': fighter}),
                         ('attack, all out', {'text': ['All out attack',
                                                       ' Defense: none',
-                                                      ' Move: 1/2'],
+                                                      ' Move: 1/2 = %d' %
+                                                                    (move/2)],
                                              'doit': self.__do_attack,
                                              'param': fighter})
                     ])
@@ -2525,7 +2530,8 @@ class GurpsRuleset(Ruleset):
                                              'param': fighter}),
                         ('attack, all out', {'text': ['All out attack',
                                                      ' Defense: none',
-                                                     ' Move: 1/2'],
+                                                     ' Move: 1/2 = %d' %
+                                                                    (move/2)],
                                              'doit': self.__do_attack,
                                              'param': fighter})
                 ])
@@ -2620,9 +2626,12 @@ class GurpsRuleset(Ruleset):
                                     'param': {'weapon': None,
                                               'fighter': fighter}}))
 
-        move_string = ('half (FP:B426)' if
-            fighter.details['current']['fp'] <
-                (fighter.details['permanent']['fp'] / 3) else 'full')
+        
+        if (fighter.details['current']['fp'] <
+                        (fighter.details['permanent']['fp'] / 3)):
+            move_string = 'half=%d (FP:B426)' % (move/2)
+        else:
+            move_string = 'full=%d' % move
 
         action_menu.extend([
             ('move (B364) %s' % move_string,
