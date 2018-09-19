@@ -4449,7 +4449,7 @@ class FightHandler(ScreenHandler):
         opponent = self.get_opponent_for(current_fighter)
         fp_recipient = current_fighter if opponent is None else opponent
 
-        title = 'Reduce FP By...'
+        title = 'Reduce (%s\'s) FP By...' % fp_recipient.name
         height = 1
         width = len(title)
         adj_string = self._window_manager.input_box(height, width, title)
@@ -4486,7 +4486,7 @@ class FightHandler(ScreenHandler):
         opponent = self.get_opponent_for(current_fighter)
         hp_recipient = current_fighter if opponent is None else opponent
 
-        title = 'Reduce %s\'s HP By...' % hp_recipient.name
+        title = 'Reduce (%s\'s) HP By...' % hp_recipient.name
         height = 1
         width = len(title)
         adj_string = self._window_manager.input_box(height, width, title)
