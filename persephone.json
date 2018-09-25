@@ -3951,7 +3951,8 @@
         "hair: Thinning", 
         "speech: Squeaky", 
         "knack: Political leverage", 
-        "personality: Liar"
+        "personality: Liar",
+        "** 18 spells **"
       ], 
       "shock": 0, 
       "short-notes": [], 
@@ -3978,7 +3979,9 @@
         "basic-move": 5, 
         "basic-speed": 5.25
       }, 
-      "advantages": {}, 
+      "advantages": {
+        "vodou practitioner (Mambo/Hougan 1)": 15
+      }, 
       "did_action_this_turn": false, 
       "weapon-index": null, 
       "timers": [], 
@@ -5900,6 +5903,27 @@
         }, 
         "stuff": [
           {
+            "acc": 8, 
+            "count": 1, 
+            "name": "laser rifle", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 0, 
+                "num_dice": 3, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (rifle)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 3, 
+              "shots_left": 3
+            }
+          },
+          {
             "acc": 3, 
             "count": 1, 
             "name": "pistol, average David-built laser", 
@@ -5943,17 +5967,11 @@
             "notes": "", 
             "type": "misc", 
             "name": "C Cell"
-          }, 
-          {
-            "count": 1, 
-            "type": "armor", 
-            "notes": "Enchanted w/fortify spell [M66]", 
-            "dr": 2, 
-            "name": "Sport coat/Jeans"
           }
         ], 
         "skills": {
           "beam weapons (pistol)": 17, 
+          "beam weapons (rifle)": 14, 
           "brawling": 17, 
           "knife": 17
         }, 
@@ -5968,7 +5986,7 @@
           "personality: Pleasant"
         ], 
         "shock": 0, 
-        "armor-index": 3, 
+        "armor-index": null, 
         "current": {
           "fp": 11, 
           "iq": 9, 
@@ -6100,7 +6118,10 @@
         "stunned": 0, 
         "did_action_this_turn": false, 
         "short-notes": [], 
-        "advantages": {}, 
+        "advantages": {
+            "vodou practitioner (Mambo/Hougan 1)": 15,
+            "primary lwa (Erzulie Freda)": 6
+        }, 
         "weapon-index": null, 
         "posture": "standing", 
         "aim": {
@@ -6117,13 +6138,14 @@
           "hair: Very Long", 
           "speech: Breathless", 
           "knack: Immunity from the law", 
-          "personality: Sycophantic"
+          "personality: Sycophantic",
+          "** 18 Spells **: body control, comm & empathy, healing"
         ], 
         "shock": 0, 
         "armor-index": null, 
         "current": {
           "fp": 11, 
-          "iq": 12, 
+          "iq": 13, 
           "hp": 10, 
           "ht": 11, 
           "st": 10, 
@@ -6142,6 +6164,41 @@
           "basic-move": 5, 
           "basic-speed": 5.25
         }, 
+        "spells": [
+            {"name": "might", "cost": null, "maintain": null,
+             "skill": 11, "notes": "M37", "time": 1},
+            {"name": "luck", "cost": 2, "maintain": 0,
+             "skill": 11, "notes": "V2", "time": 1},
+            {"name": "lend energy", "cost": null, "maintain": 0,
+             "skill": 11, "notes": "M89", "time": 1},
+            {"name": "sense life", "cost": null, "maintain": null,
+             "skill": 11, "notes": "M45, cost 1/2 per yard radius, see M11",
+             "time": 1},
+            {"name": "communicate", "cost": 4, "maintain": 4,
+             "skill": 11, "notes": "M48", "time": 4 },
+            {"name": "wizard eye", "cost": 4, "maintain": 2,
+             "skill": 11, "notes": "M104", "time": 2},
+            {"name": "far hearing", "cost": 4, "maintain": 2,
+             "skill": 11, "notes": "M173", "time": 3},
+            {"name": "sleep", "cost": 4, "maintain": 0,
+             "skill": 11, "notes": "M135", "time": 3},
+            {"name": "daze", "cost": 3, "maintain": 2,
+             "skill": 11, "notes": "M134", "time": 2},
+            {"name": "foolishness", "cost": null, "maintain": null,
+             "skill": 11, "notes": "M134", "time": 1},
+            {"name": "awaken", "cost": 1, "maintain": 0,
+             "skill": 11, "notes": "M90", "time": 1},
+            {"name": "lend vitality", "cost": null, "maintain": null,
+             "skill": 11, "notes": "M89", "time": 1},
+            {"name": "lend energy", "cost": null, "maintain": null,
+             "skill": 11, "notes": "M89", "time": 1},
+            {"name": "major heal", "cost": null, "maintain": null,
+             "skill": 11, "notes": "M91", "time": 1},
+            {"name": "minor heal", "cost": null, "maintain": null,
+             "skill": 11, "notes": "M91", "time": 1},
+            {"name": "restoration", "cost": 15, "maintain": 0,
+             "skill": 11, "notes": "M93", "time": 60}
+        ],
         "timers": [], 
         "check_for_death": false, 
         "opponent": null

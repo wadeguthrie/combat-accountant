@@ -2319,6 +2319,50 @@ class GurpsRuleset(Ruleset):
 
         super(GurpsRuleset, self).adjust_hp(fighter, adj)
 
+    def cast_spell(self,
+                       param, # dict {'fighter': <Fighter object>,
+                              #       'spell': <index in 'spells'>}
+                      ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+
+        fighter = param['fighter']
+        spell_index = param['spell']
+        spell = fighter.details['spells'][spell_index]
+
+        if spell['cost'] is None:
+            title = 'Cost to cast (%s) - see (%s) ' % (spell['name'],
+                                                       spell['notes'])
+            height = 1
+            width = len(title)
+            cost_string = ''
+            while len(cost_string) <= 0:
+                cost_string = self._window_manager.input_box(height,
+                                                             width,
+                                                             title)
+            cost = int(cost_string)
+        else:
+            cost = spell['cost']
+
+        # M8 - High skill level costs less
+        skill = spell['skill'] - 15
+        while skill >= 0:
+            cost -= 1
+            skill -= 5
+        if cost < 0:
+            cost = 0
+
+        fighter.details['current']['fp'] -= cost
+        fighter.add_timer(spell['time'] - 0.1,  # -0.1 so that it doesn't show
+                                                # up on the first round you
+                                                # can do something after you
+                                                # cast
+                          'Casting (%s) @ skill (%d): %s' % (spell['name'],
+                                                             spell['skill'],
+                                                             spell['notes']))
+
     def change_posture(self,
                        param, # dict {'fighter': <Fighter object>,
                               #       'posture': <string=new posture>}
@@ -2567,6 +2611,25 @@ class GurpsRuleset(Ruleset):
                                         'doit': self.do_defense,
                                         'param': fighter}),
         ])
+
+        # Spell casters.
+
+        if 'spells' in fighter.details:
+            spell_menu = []
+            for index, spell in enumerate(fighter.details['spells']):
+                spell_menu.append(  (spell['name'],
+                                    {'text': [('Cast (%s)' % spell['name']),
+                                              ' Defense: none',
+                                              ' Move: none'],
+                                     'doit': self.cast_spell,
+                                     'param': {'spell': index,
+                                               'fighter': fighter}}))
+
+            action_menu.append(('Cast Spell',
+                                {'text': ['Cast Spell',
+                                          ' Defense: none',
+                                          ' Move: none'],
+                                 'menu': spell_menu}))
 
         # TODO: should only be able to ready an unready weapon.
 
