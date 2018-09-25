@@ -297,7 +297,53 @@
             "type": "value", 
             "value": 5.25
           }
-        }
+        },
+        "spells": {
+            "type": "value",
+            "value": [
+                {"name": "might", "cost": null, "maintain": null,
+                 "skill": 11, "notes": "M37", "time": 1},
+                {"name": "luck", "cost": 2, "maintain": 0,
+                 "skill": 11, "notes": "V2", "time": 1},
+                {"name": "lend energy", "cost": null, "maintain": 0,
+                 "skill": 11, "notes": "M89", "time": 1},
+                {"name": "sense life", "cost": null, "maintain": null,
+                 "skill": 11, "notes": "M45, cost 1/2 per yard radius, see M11",
+                 "time": 1},
+                {"name": "communicate", "cost": 4, "maintain": 4,
+                 "skill": 11, "notes": "M48", "time": 4 },
+                {"name": "wizard eye", "cost": 4, "maintain": 2,
+                 "skill": 11, "notes": "M104", "time": 2},
+                {"name": "far hearing", "cost": 4, "maintain": 2,
+                 "skill": 11, "notes": "M173", "time": 3},
+                {"name": "sleep", "cost": 4, "maintain": 0,
+                 "skill": 11, "notes": "M135", "time": 3},
+                {"name": "daze", "cost": 3, "maintain": 2,
+                 "skill": 11, "notes": "M134", "time": 2},
+                {"name": "foolishness", "cost": null, "maintain": null,
+                 "skill": 11, "notes": "M134", "time": 1},
+                {"name": "awaken", "cost": 1, "maintain": 0,
+                 "skill": 11, "notes": "M90", "time": 1},
+                {"name": "lend vitality", "cost": null, "maintain": null,
+                 "skill": 11, "notes": "M89", "time": 1},
+                {"name": "lend energy", "cost": null, "maintain": null,
+                 "skill": 11, "notes": "M89", "time": 1},
+                {"name": "major heal", "cost": null, "maintain": null,
+                 "skill": 11, "notes": "M91", "time": 1},
+                {"name": "minor heal", "cost": null, "maintain": null,
+                 "skill": 11, "notes": "M91", "time": 1},
+                {"name": "restoration", "cost": 15, "maintain": 0,
+                 "skill": 11, "notes": "M93", "time": 60}
+            ]
+        },
+        "advantages": {
+          "type": "value", 
+          "value": {
+            "combat reflexes": 15, 
+            "high pain threshold": 10,
+            "vodou practitioner (Mambo 1)": 15
+          }
+        } 
       }, 
       "deputy marshal": {
         "skills": {
@@ -3967,6 +4013,41 @@
         "basic-move": 5, 
         "basic-speed": 5.25
       }, 
+      "spells": [
+        {"name": "might", "cost": null, "maintain": null,
+         "skill": 11, "notes": "M37", "time": 1},
+        {"name": "luck", "cost": 2, "maintain": 0,
+         "skill": 11, "notes": "V2", "time": 1},
+        {"name": "lend energy", "cost": null, "maintain": 0,
+         "skill": 11, "notes": "M89", "time": 1},
+        {"name": "sense life", "cost": null, "maintain": null,
+         "skill": 11, "notes": "M45, cost 1/2 per yard radius, see M11",
+         "time": 1},
+        {"name": "communicate", "cost": 4, "maintain": 4,
+         "skill": 11, "notes": "M48", "time": 4 },
+        {"name": "wizard eye", "cost": 4, "maintain": 2,
+         "skill": 11, "notes": "M104", "time": 2},
+        {"name": "far hearing", "cost": 4, "maintain": 2,
+         "skill": 11, "notes": "M173", "time": 3},
+        {"name": "sleep", "cost": 4, "maintain": 0,
+         "skill": 11, "notes": "M135", "time": 3},
+        {"name": "daze", "cost": 3, "maintain": 2,
+         "skill": 11, "notes": "M134", "time": 2},
+        {"name": "foolishness", "cost": null, "maintain": null,
+         "skill": 11, "notes": "M134", "time": 1},
+        {"name": "awaken", "cost": 1, "maintain": 0,
+         "skill": 11, "notes": "M90", "time": 1},
+        {"name": "lend vitality", "cost": null, "maintain": null,
+         "skill": 11, "notes": "M89", "time": 1},
+        {"name": "lend energy", "cost": null, "maintain": null,
+         "skill": 11, "notes": "M89", "time": 1},
+        {"name": "major heal", "cost": null, "maintain": null,
+         "skill": 11, "notes": "M91", "time": 1},
+        {"name": "minor heal", "cost": null, "maintain": null,
+         "skill": 11, "notes": "M91", "time": 1},
+        {"name": "restoration", "cost": 15, "maintain": 0,
+         "skill": 11, "notes": "M93", "time": 60}
+      ],
       "check_for_death": false, 
       "state": "alive", 
       "permanent": {

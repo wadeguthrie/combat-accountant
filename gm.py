@@ -2625,7 +2625,7 @@ class GurpsRuleset(Ruleset):
                                      'param': {'spell': index,
                                                'fighter': fighter}}))
 
-            action_menu.append(('Cast Spell',
+            action_menu.append(('cast Spell',
                                 {'text': ['Cast Spell',
                                           ' Defense: none',
                                           ' Move: none'],
