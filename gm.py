@@ -509,11 +509,12 @@ class MainGmWindow(GmWindow):
                                         'mode': mode | curses.A_BOLD}])
 
             found_one = False
-            for spell, value in sorted(character['spells'].iteritems(),
-                                           key=lambda (k,v): (k, v)):
+            for spell in sorted(character['spells'], key=lambda(x): x['name']):
                 found_one = True
-                self.__char_detail.append([{'text': '  %s: %d' % (spell, value),
-                                            'mode': mode}])
+                self.__char_detail.append(
+                                    [{'text': '  %s: %s' % (spell['name'],
+                                                            spell['notes']),
+                                      'mode': mode}])
 
             if not found_one:
                 self.__char_detail.append([{'text': '  (None)',
@@ -4281,6 +4282,7 @@ class BuildFightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         self.__maybe_save_group()
+        # TODO: do I need to del self._window?
         self._window.close()
         return False # Stop building this fight
 
