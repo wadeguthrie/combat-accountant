@@ -931,7 +931,7 @@ class FightGmWindow(GmWindow):
 
         # now, back to normal
         mode = curses.A_NORMAL
-        notes, alerts = self.__ruleset.get_fighter_notes(fighter, new_round)
+        notes = self.__ruleset.get_fighter_notes(fighter, new_round)
         for note in notes:
             window.addstr(line, 0, note, mode)
             line += 1
@@ -958,18 +958,6 @@ class FightGmWindow(GmWindow):
                 line += 1
 
         window.refresh()
-
-        # Alerts, if any
-        if len(alerts) > 0:
-            mode = curses.A_NORMAL 
-            for alert in alerts:
-                self._window_manager.display_window(
-                           alert['title'],
-                           [[{'text': l,
-                              'mode': mode}] for l in alert['lines']])
-
-            window.refresh()
-
 
 
 class OutfitCharactersGmWindow(GmWindow):
@@ -1416,6 +1404,10 @@ class GmWindowManager(object):
             if len(string) > width:
                 width = len(string)
         width += 1 # Seems to need one more space (or Curses freaks out)
+
+        lines, cols = self.getmaxyx()
+        if width > cols-4:
+            width = cols-4
 
         data_for_scrolling = []
         index = 0 if starting_index >= len(strings_results) else starting_index
@@ -2313,8 +2305,10 @@ class GurpsRuleset(Ruleset):
         if fighter.details['aim']['rounds'] > 0:
             aim_menu = [('made WILL roll', True),
                         ('did NOT make WILL roll', False)]
-            made_will_roll = self._window_manager.menu('WILL roll or lose aim',
-                                                       aim_menu)
+            made_will_roll = self._window_manager.menu(
+                ('roll <= WILL (%d) or lose aim' %
+                                            fighter.details['current']['wi']),
+                aim_menu)
             if not made_will_roll:
                 fighter.reset_aim()
 
@@ -2618,13 +2612,19 @@ class GurpsRuleset(Ruleset):
         if 'spells' in fighter.details:
             spell_menu = []
             for index, spell in enumerate(fighter.details['spells']):
-                spell_menu.append(  (spell['name'],
-                                    {'text': [('Cast (%s)' % spell['name']),
-                                              ' Defense: none',
-                                              ' Move: none'],
-                                     'doit': self.cast_spell,
-                                     'param': {'spell': index,
-                                               'fighter': fighter}}))
+                cast_text_array = ['%s -' % spell['name']]
+                for piece in ['cost', 'skill', 'time', 'notes']:
+                    if piece in spell:
+                        cast_text_array.append('%s:%r' % (piece, spell[piece]))
+                cast_text = ' '.join(cast_text_array)
+                spell_menu.append(  
+                    (cast_text,
+                    {'text': [('Cast (%s)' % spell['name']),
+                              ' Defense: none',
+                              ' Move: none'],
+                     'doit': self.cast_spell,
+                     'param': {'spell': index,
+                               'fighter': fighter}}))
 
             action_menu.append(('cast Spell',
                                 {'text': ['Cast Spell',
@@ -3042,7 +3042,6 @@ class GurpsRuleset(Ruleset):
                                     #   fighter gets to act in the round
                          ):
         notes = []
-        alerts = [] # [{'title': xxx, 'lines': [text, text, text, ...]}, ...]
 
         # Ranged weapon status
 
@@ -3085,42 +3084,8 @@ class GurpsRuleset(Ruleset):
             fighter.details['state'] = 'unconscious'
             notes.append('*UNCONSCIOUS*')
 
-        else:
-            if fighter.details['current']['fp'] <= 0:
-                notes.append('On action: Roll vs. Will or pass out')
 
-            # B327 -- checking on each round whether the fighter is still
-            # conscious
-            if new_round:
-                if (fighter.details['current']['hp'] <= 0 and 
-                                                    fighter.is_conscious()):
-                    # B59
-                    if 'high pain threshold' in fighter.details['advantages']:
-                        alerts.append(
-                            {'title': 'HP < 0, Is %s Unconscious?' %
-                                                                fighter.name,
-                             'lines': ['Roll 3d+3 <= HT (%d) or pass out' %
-                                            fighter.details['current']['ht'],
-                                       'See B327',
-                                       '(+3: high pain threshold, see B59)']})
-                    else:
-                        alerts.append(
-                            {'title': 'HP < 0, Is %s Unconscious?' %
-                                                                fighter.name,
-                             'lines': ['Roll 3d <= HT (%d) or pass out' %
-                                            fighter.details['current']['ht'],
-                                       'See B327']})
-
-        # B327 -- immediate chack for death
-        if fighter.details['check_for_death']:
-            alerts.append(
-                {'title': 'Is %s DEAD?' % fighter.name,
-                 'lines': ['Roll 3d <= HT (%d) or Die' %
-                                            fighter.details['current']['ht'],
-                           'See B327']})
-            fighter.details['check_for_death'] = False  # Only show/roll once
-
-        return notes, alerts
+        return notes
 
 
     def get_unarmed_info(self,
@@ -3640,6 +3605,59 @@ class GurpsRuleset(Ruleset):
 
     def start_turn(self, fighter):
         fighter.details['did_action_this_turn'] = False
+
+        if fighter.is_conscious():
+            if fighter.details['current']['fp'] <= 0:
+                pass_out_menu = [('made WILL roll (or did nothing)', True),
+                                 ('did NOT make WILL roll', False)]
+                made_will_roll = self._window_manager.menu(
+                    ('On Action: roll <= WILL (%d) or pass out' %
+                                            fighter.details['current']['wi']),
+                    pass_out_menu)
+                if not made_will_roll:
+                    fighter.details['state'] = 'unconscious'
+
+        # B327 -- immediate check for death
+        if fighter.is_conscious() and fighter.details['check_for_death']:
+            dead_menu = [('made HT roll', True),
+                         ('did NOT make HT roll', False)]
+            made_ht_roll = self._window_manager.menu(
+                ('%s: roll <= HT (%d) or DIE (B327)' %
+                            (fighter.name, fighter.details['current']['ht'])),
+                 dead_menu)
+
+            if not made_ht_roll:
+                fighter.details['state'] = 'dead'
+
+            fighter.details['check_for_death'] = False  # Only show/roll once
+
+        # B327 -- checking on each round whether the fighter is still
+        # conscious
+
+        if fighter.is_conscious() and fighter.details['current']['hp'] <= 0:
+            pass_out_menu = [('made HT roll', True),
+                             ('did NOT make HT roll', False)]
+
+            if 'high pain threshold' in fighter.details['advantages']:
+                unconscious_roll = fighter.details['current']['ht'] + 3
+
+                made_ht_roll = self._window_manager.menu(
+                    ('%s: HP < 0: roll <= HT+3 (%d) or pass out (B327,B59)' %
+                        (fighter.name, unconscious_roll)),
+                     pass_out_menu)
+
+                if not made_ht_roll:
+                    fighter.details['state'] = 'unconscious'
+            else:
+                made_ht_roll = self._window_manager.menu(
+                    ('%s: HP < 0: roll <= HT (%d) or pass out (B327)' %
+                        (fighter.name, fighter.details['current']['ht'])),
+                     pass_out_menu)
+
+                if not made_ht_roll:
+                    fighter.details['state'] = 'unconscious'
+
+
 
     #
     # Private Methods
