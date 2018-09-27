@@ -115,7 +115,8 @@ class MockWindowManager(object):
              starting_index = 0 # Who is selected when the menu starts
             ):
         if title not in self.__menu_responses:
-            print '** didn\'t find menu title "%s" in stored responses'
+            print ('** didn\'t find menu title "%s" in stored responses' %
+                    title)
             assert False
         if len(self.__menu_responses[title]) == 0:
             print ('** menu responses["%s"] is empty, can\'t respond' %
@@ -200,12 +201,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "state" : "alive",
             "posture" : "standing",
             "current": {
-                "fp": 12, "iq": 13, "hp": 10, "ht": 11, "st": 10, "dx": 11, 
-                "basic-speed": 5.5
+                "fp": 12, "iq": 13, "wi": 13, "hp": 10, "ht": 11, "st": 10,
+                "dx": 11, "basic-speed": 5.5
             }, 
             "permanent": {
-                "fp": 12, "iq": 13, "hp": 10, "ht": 11, "st": 10, "dx": 11, 
-                "basic-speed": 5.5
+                "fp": 12, "iq": 13, "wi": 13, "hp": 10, "ht": 11, "st": 10,
+                "dx": 11, "basic-speed": 5.5
             }, 
             "timers": [], 
             "check_for_death": False, 
@@ -239,12 +240,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "state" : "alive",
             "posture" : "standing",
             "current": {
-                "fp": 12, "iq": 13, "hp": 10, "ht": 11, "st": 10, "dx": 12, 
-                "basic-speed": 5.5
+                "fp": 12, "iq": 13, "wi": 13, "hp": 10, "ht": 11, "st": 10,
+                "dx": 12, "basic-speed": 5.5
             }, 
             "permanent": {
-                "fp": 12, "iq": 13, "hp": 10, "ht": 11, "st": 10, "dx": 12, 
-                "basic-speed": 5.5
+                "fp": 12, "iq": 13, "wi": 13, "hp": 10, "ht": 11, "st": 10,
+                "dx": 12, "basic-speed": 5.5
             }, 
             "timers": [], 
             "check_for_death": False, 
@@ -274,12 +275,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "state" : "alive",
             "posture" : "standing",
             "current": {
-                "fp": 11, "iq": 12, "hp": 10, "ht": 11, "st": 10, "dx": 10, 
-                "basic-speed": 5.25
+                "fp": 11, "iq": 12, "wi": 12, "hp": 10, "ht": 11, "st": 10,
+                "dx": 10, "basic-speed": 5.25
             }, 
             "permanent": {
-                "fp": 11, "iq": 12, "hp": 10, "ht": 11, "st": 10, "dx": 10, 
-                "basic-speed": 5.25
+                "fp": 11, "iq": 12, "wi": 12, "hp": 10, "ht": 11, "st": 10,
+                "dx": 10, "basic-speed": 5.25
             }, 
             "timers": [], 
             "check_for_death": False, 
@@ -321,12 +322,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "state" : "alive",
             "posture" : "standing",
             "current": {
-                "st": 10, "dx": 12, "iq": 12, "ht": 11, "fp": 11, "hp": 11, 
-                "basic-speed": 5.75
+                "st": 10, "dx": 12, "iq": 12, "wi": 12, "ht": 11, "fp": 11,
+                "hp": 11, "basic-speed": 5.75
             }, 
             "permanent": {
-                "fp": 11, "iq": 12, "hp": 11, "ht": 11, "st": 10, "dx": 12, 
-                "basic-speed": 5.75
+                "fp": 11, "iq": 12, "wi": 12, "hp": 11, "ht": 11, "st": 10,
+                "dx": 12, "basic-speed": 5.75
             }, 
             "timers": [], 
             "check_for_death": False, 
@@ -377,12 +378,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "state" : "alive",
             "posture" : "standing",
             "current": {
-                "fp": 11, "iq": 12, "hp": 12, "ht": 11, "st": 10, "dx": 12, 
-                "basic-speed": 5.75
+                "fp": 11, "iq": 12, "wi": 12, "hp": 12, "ht": 11, "st": 10,
+                "dx": 12, "basic-speed": 5.75
             }, 
             "permanent": {
-                "fp": 11, "iq": 12, "hp": 12, "ht": 11, "st": 10, "dx": 12, 
-                "basic-speed": 5.75
+                "fp": 11, "iq": 12, "wi": 12, "hp": 12, "ht": 11, "st": 10,
+                "dx": 12, "basic-speed": 5.75
             }, 
             "timers": [], 
             "check_for_death": False, 
@@ -1349,7 +1350,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # adjust_hp but MADE Will roll
         damage = -1
-        self.__window_manager.set_menu_response('WILL roll or lose aim', True)
+        self.__window_manager.set_menu_response('roll <= WILL (13) or lose aim',
+                                                True)
         self.__ruleset.adjust_hp(vodou_priest, damage)
 
         # 3 rounds
@@ -1378,7 +1380,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # adjust_hp and MISSES Will roll
-        self.__window_manager.set_menu_response('WILL roll or lose aim', False)
+        self.__window_manager.set_menu_response('roll <= WILL (13) or lose aim',
+                                                False)
         damage = -1
         self.__ruleset.adjust_hp(vodou_priest, damage)
 
@@ -1679,6 +1682,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 "permanent": {
                   "fp": { "type": "value", "value": 12 }, 
                   "iq": { "type": "value", "value": 13 }, 
+                  "wi": { "type": "value", "value": 13 }, 
                   "hp": { "type": "value", "value": 10 }, 
                   "ht": { "type": "value", "value": 11 }, 
                   "st": { "type": "value", "value": 10 }, 
@@ -1696,8 +1700,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "Arena Attack Monsters": {
               "5-Tank-B": {
                 "state": "alive", 
-                "current": {"fp":11,"iq":12,"hp":11,"ht":11,"st":10,"dx":12},
-                "permanent":{"fp":11,"iq":12,"hp":11,"ht":11,"st":10,"dx":12}, 
+                "current":
+                    {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12},
+                "permanent":
+                    {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12}, 
               }, # 5-Tank-B
             }, # Arena Attack Monsters
           }, # dead-monsters
@@ -1719,8 +1725,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
           "NPCs": {
             "Bokor Requiem": {
                 "state": "alive", 
-                "current": {"fp":11,"iq":12,"hp":11,"ht":11,"st":10,"dx":12},
-                "permanent":{"fp":11,"iq":12,"hp":11,"ht":11,"st":10,"dx":12}, 
+                "current":
+                    {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12},
+                "permanent":
+                    {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12}, 
             }, 
           }, # NPCs
           "monsters": {
