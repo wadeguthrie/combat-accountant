@@ -5485,15 +5485,15 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        name, ignore, ignore = self.__world.get_random_name()
+        name, type_name, gender_name = self.__world.get_random_name()
         if name is None:
             return True
 
-        # This really isn't a menu but it works perfectly to accomplish my
-        # goal.
-        result = [(name, name)]
-        ignore = self._window_manager.menu('Your %s %s name is' % (
-                                           type_name, gender_name), result)
+        lines = [[{'text': name, 'mode': curses.A_NORMAL}]]
+        self._window_manager.display_window(
+                'Your %s %s name is...' % (type_name, gender_name),
+                lines)
+
         return True
 
     def __character(self):
