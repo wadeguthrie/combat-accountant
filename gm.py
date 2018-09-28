@@ -755,8 +755,8 @@ class FightGmWindow(GmWindow):
                       opponent,         # Fighter object
                       fighters,
                       current_index,
-                      new_round         # True if fighter is just getting to
-                                        #  act for the first time this round
+                      selected_index=None   # index to view if it's not the
+                                            #  current index
                      ):
         '''
         Displays the current state of the current fighter and his opponent,
@@ -770,8 +770,7 @@ class FightGmWindow(GmWindow):
             self.__show_fighter_notes(current_fighter,
                                       opponent,
                                       is_attacker=True,
-                                      window=self.__character_window,
-                                      new_round = new_round)
+                                      window=self.__character_window)
 
         if opponent is None:
             self.__opponent_window.clear()
@@ -781,9 +780,8 @@ class FightGmWindow(GmWindow):
                 self.__show_fighter_notes(opponent,
                                           current_fighter,
                                           is_attacker=False,
-                                          window=self.__opponent_window,
-                                          new_round = False)
-        self.__show_summary_window(fighters, current_index)
+                                          window=self.__opponent_window)
+        self.__show_summary_window(fighters, current_index, selected_index)
         self.refresh()
 
 
@@ -873,11 +871,8 @@ class FightGmWindow(GmWindow):
                              fighter,           # Fighter object
                              opponent,          # Fighter object
                              is_attacker,       # True | False
-                             window,            # Curses window for fighter's
+                             window             # Curses window for fighter's
                                                 #   notes
-                             new_round          # True if fighter is just
-                                                #  getting to act for the
-                                                #  first time this round
                             ):
         '''
         Displays ancillary information about the fighter
@@ -931,7 +926,7 @@ class FightGmWindow(GmWindow):
 
         # now, back to normal
         mode = curses.A_NORMAL
-        notes = self.__ruleset.get_fighter_notes(fighter, new_round)
+        notes = self.__ruleset.get_fighter_notes(fighter)
         for note in notes:
             window.addstr(line, 0, note, mode)
             line += 1
@@ -3037,9 +3032,7 @@ class GurpsRuleset(Ruleset):
         return notes, why
 
     def get_fighter_notes(self,
-                          fighter,  # Fighter object
-                          new_round # True if this is the first time the
-                                    #   fighter gets to act in the round
+                          fighter   # Fighter object
                          ):
         notes = []
 
@@ -4328,6 +4321,20 @@ class FightHandler(ScreenHandler):
 
         # NOTE: 'h' and 'f' belong in Ruleset
         self._add_to_choice_dict({
+
+
+            curses.KEY_UP:
+                      {'name': 'previous character',  'func':
+                                                        self.__view_prev},
+            curses.KEY_DOWN:
+                      {'name': 'next character',      'func':
+                                                        self.__view_next},
+            curses.KEY_HOME:
+                      {'name': 'init character',      'func':
+                                                        self.__view_init},
+
+
+
             ord(' '): {'name': 'next',        'func': self.__next_fighter},
             ord('<'): {'name': 'prev',        'func': self.__prev_fighter},
             ord('?'): {'name': 'explain',     'func': self.__show_why},
@@ -4348,6 +4355,8 @@ class FightHandler(ScreenHandler):
         })
 
         self.__world = world
+        self.__viewing_index = None
+
         # self._saved_fight takes the form:
         # {
         #   'index': <number>  # current fighter that has the initiative
@@ -4553,8 +4562,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'],
-                                   new_round = False)
+                                   self._saved_fight['index'])
         return True # Keep going
 
 
@@ -4603,8 +4611,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'],
-                                   new_round = False)
+                                   self._saved_fight['index'])
         return True # Keep going
 
     def __dead(self):
@@ -4639,8 +4646,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'],
-                                   new_round = False)
+                                   self._saved_fight['index'])
         return True # Keep going
 
     def __defend(self):
@@ -4671,8 +4677,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'],
-                                   new_round = False)
+                                   self._saved_fight['index'])
         return True # Keep going
 
 
@@ -4706,8 +4711,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'],
-                                   new_round = False)
+                                   self._saved_fight['index'])
         self._window.status_ribbon(self._input_filename,
                                    self._maintain_json)
         self._window.command_ribbon(self._choices)
@@ -4813,16 +4817,66 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'],
-                                   new_round = False)
+                                   self._saved_fight['index'])
         return True # Keep going
 
+
+    def __change_viewing_index(self,
+                               adj  # integer adjustment to viewing index
+                              ):
+        self.__viewing_index += adj
+        if self.__viewing_index >= len(self._saved_fight['fighters']):
+            self.__viewing_index = 0
+        elif self.__viewing_index < 0:
+            self.__viewing_index = len(self._saved_fight['fighters']) - 1
+
+    def __view_prev(self): # look at previous character, don't change init
+        if self.__viewing_index is None:
+            self.__viewing_index = self._saved_fight['index']
+        self.__change_viewing_index(-1)
+        viewing_fighter = self.__fighters[self.__viewing_index]
+        opponent = self.get_opponent_for(viewing_fighter)
+        if self.__viewing_index == self._saved_fight['index']:
+            self.__viewing_index = None
+        self._window.show_fighters(viewing_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
+        return True # Keep going
+
+    def __view_next(self): # look at next character, don't change init
+        if self.__viewing_index is None:
+            self.__viewing_index = self._saved_fight['index']
+        self.__change_viewing_index(1)
+        viewing_fighter = self.__fighters[self.__viewing_index]
+        opponent = self.get_opponent_for(viewing_fighter)
+        if self.__viewing_index == self._saved_fight['index']:
+            self.__viewing_index = None
+        self._window.show_fighters(viewing_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
+        return True # Keep going
+
+    def __view_init(self): # look at initiative character (back to fight)
+        self.__viewing_index = None
+        current_fighter = self.get_current_fighter()
+        opponent = self.get_opponent_for(current_fighter)
+        self._window.show_fighters(current_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'])
+        return True # Keep going
 
     def __next_fighter(self):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+        self.__viewing_index = None
+
         # Finish off previous guy
         prev_fighter = self.get_current_fighter()
         if not prev_fighter.can_finish_turn():
@@ -4851,8 +4905,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'],
-                                   new_round = True)
+                                   self._saved_fight['index'])
         return True # Keep going
 
     def __next_PC_name(self):
@@ -4913,8 +4966,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'],
-                                   new_round = False)
+                                   self._saved_fight['index'])
         return True # Keep going
 
     def __pick_opponent(self):
@@ -4964,8 +5016,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'],
-                                   new_round = False)
+                                   self._saved_fight['index'])
         return True # Keep going
 
 
@@ -4974,6 +5025,7 @@ class FightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+        self.__viewing_index = None
         if (self._saved_fight['index'] == 0 and 
                 self._saved_fight['round'] == 0):
             return True # Not going backwards from the origin
@@ -4991,8 +5043,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'],
-                                   new_round = False)
+                                   self._saved_fight['index'])
         return True # Keep going
 
 
@@ -5191,8 +5242,7 @@ class FightHandler(ScreenHandler):
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
-                                   self._saved_fight['index'],
-                                   new_round = False)
+                                   self._saved_fight['index'])
         return True # Keep fighting
 
 
