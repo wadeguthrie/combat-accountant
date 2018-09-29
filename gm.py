@@ -5041,16 +5041,29 @@ class FightHandler(ScreenHandler):
 
         opponent_group = None
         opponent_menu = []
+        default_selection = None
         for fighter in self.__fighters:
             if fighter.group != current_fighter.group:
                 opponent_group = fighter.group
                 if fighter.is_conscious():
-                    opponent_menu.append((fighter.name, fighter.name))
+                    if fighter.details['opponent'] is None:
+                        if default_selection is None:
+                            default_selection = len(opponent_menu)
+                        menu_text = fighter.name
+                    else:
+                        menu_text = '%s (fighting %s)' % (
+                                fighter.name,
+                                fighter.details['opponent']['name'])
+                    opponent_menu.append((menu_text, fighter.name))
         if len(opponent_menu) <= 0:
             self._window_manager.error(['All the opponents are dead'])
             return True # don't leave the fight
 
-        opponent_name = self._window_manager.menu('Opponent', opponent_menu)
+        if default_selection is None:
+            default_selection = 0
+        opponent_name = self._window_manager.menu('Opponent',
+                                                  opponent_menu,
+                                                  default_selection)
 
         if opponent_name is None:
             return True # don't leave the fight
