@@ -5707,6 +5707,65 @@ class MainHandler(ScreenHandler):
         self.__char_index = 0
 
 
+class EquipmentManager(object):
+    def __init__(self,
+                 world,         # World object
+                 window_manager # GmWindowManager object
+                ):
+        '''
+        If you don't have a fighter object, do the following:
+
+        # Temporarily create a 'Fighter' object just to use one of its member
+        # functions.
+
+        fighter = Fighter(self.__character['name'],
+                          self.__group_name,
+                          self.__character['details'],
+                          self.__ruleset)
+
+        '''
+        self.__world = world
+        self.__window_manager = window_manager
+
+    def add_equipment(self,
+                      fighter       # Fighter object
+                     ):
+        if fighter is None:
+            return
+
+        # Pick an item off the shelf
+
+        # Rebuild this every time in case there are unique items in the
+        # equipment list
+        item_menu = [(item['name'], item)
+                            for item in self.__world.details['Equipment']]
+        item = self.__window_manager.menu('Item to Add', item_menu)
+        if item is not None:
+            fighter.add_equipment(copy.deepcopy(item), 'the store')
+
+        # self._window.show_character(self.__character)
+
+    def remove_equipment(self,
+                         fighter       # Fighter object
+                        ):
+        if fighter is None:
+            return
+
+        item_menu = [(item['name'], index)
+            for index, item in enumerate(fighter.details['stuff'])]
+        item_index = self.__window_manager.menu('Item to Remove', item_menu)
+        if item is None:
+            return True # Keep going
+
+        del(fighter.details['stuff'][item_index])
+        # Now, we're potentially messing with the order of things in the
+        # 'stuff' array.  Best not to depend on the weapon-index.
+        fighter.details['weapon-index'] = None
+        fighter.details['armor-index'] = None
+        #self._window.show_character(self.__character)
+
+
+
 class OutfitCharactersHandler(ScreenHandler):
     def __init__(self,
                  window_manager,
@@ -5735,6 +5794,8 @@ class OutfitCharactersHandler(ScreenHandler):
         self._window = self._window_manager.get_outfit_gm_window()
         self.__world = world
         self.__ruleset = ruleset
+        self.__equipment_manager = EquipmentManager(self.__world,
+                                                    self._window_manager)
 
         lines, cols = self._window.getmaxyx()
         group_menu = [('PCs', 'PCs')]
@@ -5771,28 +5832,14 @@ class OutfitCharactersHandler(ScreenHandler):
         '''
         if self.__character['details'] is None:
             self.__select_character()
-            return True
-
-        # Pick an item off the shelf
-
-        item_menu = [(item['name'], item)
-                            for item in self.__world.details['Equipment']]
-        item = self._window_manager.menu('Item to Add', item_menu)
-        if item is None:
-            return True # Keep going
-
-        # Temporarily create a 'Fighter' object just to use one of its member
-        # functions.
+            return True # TODO: should this really return, now?
 
         fighter = Fighter(self.__character['name'],
                           self.__group_name,
                           self.__character['details'],
                           self.__ruleset)
-
-        fighter.add_equipment(copy.deepcopy(item), 'the store')
-
+        self.__equipment_manager.add_equipment(fighter)
         self._window.show_character(self.__character)
-
         return True # Keep going
 
 
@@ -5804,20 +5851,13 @@ class OutfitCharactersHandler(ScreenHandler):
 
         if self.__character['details'] is None:
             self.__select_character()
-            return True
+            return True # TODO: should this really return, now?
 
-        # Pick an item off the shelf
-
-        item_menu = [(item['name'], index)
-            for index, item in enumerate(self.__character['details']['stuff'])]
-        item_index = self._window_manager.menu('Item to Remove', item_menu)
-        if item is None:
-            return True # Keep going
-
-        del(self.__character['details']['stuff'][item_index])
-        # Now, we're potentially messing with the order of things in the
-        # 'stuff' array.  Best not to depend on the weapon-index.
-        self.__character['details']['weapon-index'] = None
+        fighter = Fighter(self.__character['name'],
+                          self.__group_name,
+                          self.__character['details'],
+                          self.__ruleset)
+        self.__equipment_manager.remove_equipment(fighter)
         self._window.show_character(self.__character)
         return True # Keep going
 
