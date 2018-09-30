@@ -15,7 +15,6 @@ import sys
 
 # TODO:
 #   - Join, Leave the group
-#   - generalize add equipment / remove equipment
 #
 #   - add laser sights to weapons
 
@@ -1387,8 +1386,9 @@ class GmWindowManager(object):
         Presents a menu to the user and returns the result.
         '''
 
-        # if there's only 1 choice, autoselect it
-        if len(strings_results) == 1:
+        if len(strings_results) < 1: # if there's no choice, say so
+            return None
+        if len(strings_results) == 1: # if there's only 1 choice, autoselect it
             return strings_results[0][1]
 
         # height and width of text box (not border)
@@ -3910,6 +3910,9 @@ class BuildFightHandler(ScreenHandler):
                                     # they'll be transferred to their new
                                     # home.
 
+        self.__equipment_manager = EquipmentManager(world,
+                                                    window_manager)
+
         if creature_type == BuildFightHandler.NPCs:
             self.__is_new = False
             self.__group_name = 'NPCs'
@@ -4022,6 +4025,7 @@ class BuildFightHandler(ScreenHandler):
 
             # Add personality stuff to notes
         
+            # TODO: not for player characters
             with GmJson('npc_detail.json') as npc_detail:
                 for name, traits in npc_detail.read_data['traits'].iteritems():
                     trait = random.choice(traits)
@@ -4040,19 +4044,27 @@ class BuildFightHandler(ScreenHandler):
             # Modify the creature we just created
 
             keep_changing_this_creature = True
+
+            fighter = Fighter(monster_name,
+                              self.__group_name,
+                              to_monster,
+                              self.__ruleset)
+
             while keep_changing_this_creature:
                 temp_list = copy.deepcopy(self.__new_creatures)
                 temp_list[monster_name] = to_monster
                 self._window.show_creatures(temp_list)
 
                 action_menu = [('append to name', 'append'),
+                               ('Add equipment', 'add'),
+                               ('Remove equipment', 'remove'),
                                ('notes', 'notes'),
                                ('continue (add another creature)', 'continue'),
                                ('quit', 'quit')]
-                # TODO: add 'outfit' into this list
+
                 action = self._window_manager.menu('What Next',
                                                    action_menu,
-                                                   2) # start on 'continue'
+                                                   4) # start on 'continue'
                 if action == 'append':
                     more_text = self._window_manager.input_box(1, # height
                                                                cols-4, # width
@@ -4076,22 +4088,16 @@ class BuildFightHandler(ScreenHandler):
                                 'Notes',
                                 '^G to exit')
                     to_monster['notes'] = [x for x in notes.split('\n')]
-                # TODO: Actually, no -- we only want to be able to add and
-                # remove items
-                #
-                # elif action == 'outfit'
-                # outfit = OutfitCharactersHandler(self._window_manager,
-                                                 # self.__world,
-                                                 # self.__ruleset,
-                                                 # campaign_debug_json,
-                                                 # self._input_filename,
-                                                 # self._maintain_json)
-                # outfit.handle_user_input_until_done()
-                # self._draw_screen() # Redraw current screen when done
-                # outfitting
+
+                elif action == 'add':
+                    self.__equipment_manager.add_equipment(fighter)
+
+                elif action == 'remove':
+                    self.__equipment_manager.remove_equipment(fighter)
 
                 elif action == 'continue':
                     keep_changing_this_creature = False
+
                 elif action == 'quit':
                     keep_changing_this_creature = False
                     keep_adding_creatures = False
@@ -5367,21 +5373,25 @@ class MainHandler(ScreenHandler):
             curses.KEY_PPAGE:
                       {'name': 'char details pgup',   'func':
                                                         self.__prev_page},
-            ord('c'): {'name': 'character',           'func':
+            ord('c'): {'name': 'select character',    'func':
                                                         self.__character},
             ord('o'): {'name': 'outfit characters',   'func':
                                                         self.__outfit},
+            ord('J'): {'name': 'NPC joins PCs',       'func':
+                                                        self.__NPC_joins},
+            ord('L'): {'name': 'NPC leaves PCs',      'func':
+                                                        self.__NPC_leaves},
             ord('N'): {'name': 'new NPCs',            'func':
                                                         self.__add_NPCs},
             ord('P'): {'name': 'new PCs',             'func':
                                                         self.__add_PCs},
             ord('M'): {'name': 'new Monsters',        'func':
                                                         self.__add_monsters},
-            ord('f'): {'name': 'fight (run)',         'func':
+            ord('f'): {'name': 'fight',               'func':
                                                         self.__run_fight},
             ord('H'): {'name': 'Heal',                'func':
                                                         self.__fully_heal},
-            ord('n'): {'name': 'name',                'func':
+            ord('n'): {'name': 'random name',         'func':
                                                         self.__get_a_name},
             ord('q'): {'name': 'quit',                'func':
                                                         self.__quit},
@@ -5635,6 +5645,33 @@ class MainHandler(ScreenHandler):
         self._window.scroll_char_detail_down()
         return True
 
+    def __NPC_joins(self):
+        npc_menu = [(npc, npc) for npc in self.__world.details['NPCs'].keys()]
+        npc_name = self._window_manager.menu(
+                                'Add which NPC to the party',
+                                npc_menu)
+        if npc_name is None:
+            return True
+        
+        self.__world.details['PCs'][npc_name] = {'redirect': 'NPCs'}
+        self.__setup_PC_list()
+        self._draw_screen()
+        return True
+
+    def __NPC_leaves(self):
+        npc_menu = [(npc, npc) for npc in self.__world.details['PCs'].keys()
+                     if 'redirect' in self.__world.details['PCs'][npc]] # TODO
+        npc_name = self._window_manager.menu(
+                                'Remove which NPC from the party',
+                                npc_menu)
+        if npc_name is None:
+            return True
+        
+        del(self.__world.details['PCs'][npc_name])
+        self.__setup_PC_list()
+        self._draw_screen()
+        return True
+
     def __prev_char(self):
         if self.__char_index is None:
             self.__char_index = len(self.__char_names) - 1
@@ -5754,7 +5791,7 @@ class EquipmentManager(object):
         item_menu = [(item['name'], index)
             for index, item in enumerate(fighter.details['stuff'])]
         item_index = self.__window_manager.menu('Item to Remove', item_menu)
-        if item is None:
+        if item_index is None:
             return True # Keep going
 
         del(fighter.details['stuff'][item_index])
