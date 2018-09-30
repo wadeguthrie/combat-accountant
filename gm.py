@@ -508,12 +508,23 @@ class BuildFightGmWindow(GmWindow):
                                                       maintain_json)
         self._window.refresh()
 
-    def show_creatures(self, monsters):
+    def show_creatures(self,
+                       old_creatures,   # {name: {details}, ...} like in JSON
+                       new_names        # array of strings
+                      ):
         if self.__monster_window is not None:
             self.__monster_window.clear()
             mode = curses.A_NORMAL
-            for line, monster_name in enumerate(monsters):
-                self.__monster_window.addstr(line, 0, monster_name, mode)
+            line = 0
+            if old_creatures is not None:
+                for old_name in sorted(old_creatures.keys()):
+                    self.__monster_window.addstr(line, 0, old_name, mode)
+                    line += 1
+                line += 1 # add a space between the old and the new
+
+            for new_index, new_name in enumerate(new_names):
+                self.__monster_window.addstr(line, 0, new_name, mode)
+                line += 1
 
         self.refresh()
 
@@ -3936,12 +3947,30 @@ class BuildFightHandler(ScreenHandler):
                                         # that will ultimately take these
                                         # creatures.
 
+            new_existing_menu = [('new monster group', 'new'),
+                                 ('existing monster group', 'existing')]
+            new_existing = None
+            while new_existing is None:
+                new_existing = self._window_manager.menu('New or Pre-Existing',
+                                                          new_existing_menu)
+            if new_existing == 'new':
+                self.__new_group()
+            else:
+                self.__existing_group()
+
+            self._draw_screen()
+            self.__add_creature()
+
+
     #
     # Protected Methods
     #
 
     def _draw_screen(self):
         self._window.clear()
+        self._window.show_creatures(
+                            (None if self.__is_new else self.__new_home),
+                            self.__new_creatures)
         self._window.status_ribbon(self.__group_name,
                                    self.__template_name,
                                    self._input_filename,
@@ -4053,7 +4082,9 @@ class BuildFightHandler(ScreenHandler):
             while keep_changing_this_creature:
                 temp_list = copy.deepcopy(self.__new_creatures)
                 temp_list[monster_name] = to_monster
-                self._window.show_creatures(temp_list)
+                self._window.show_creatures(
+                                (None if self.__is_new else self.__new_home),
+                                temp_list)
 
                 action_menu = [('append to name', 'append'),
                                ('Add equipment', 'add'),
@@ -4103,7 +4134,9 @@ class BuildFightHandler(ScreenHandler):
                     keep_adding_creatures = False
 
             self.__new_creatures[monster_name] = to_monster
-            self._window.show_creatures(self.__new_creatures)
+            self._window.show_creatures(
+                                (None if self.__is_new else self.__new_home),
+                                self.__new_creatures)
 
         return True # Keep going
 
@@ -4122,7 +4155,9 @@ class BuildFightHandler(ScreenHandler):
         if critter_name is not None:
             del(self.__new_creatures[critter_name])
 
-        self._window.show_creatures(self.__new_creatures)
+        self._window.show_creatures(
+                                (None if self.__is_new else self.__new_home),
+                                self.__new_creatures)
 
         return True # Keep going
 
@@ -4174,7 +4209,6 @@ class BuildFightHandler(ScreenHandler):
         # Display our new state
 
         self._draw_screen()
-        self._window.show_creatures(self.__new_creatures)
 
         return True # Keep going
 
@@ -4191,6 +4225,7 @@ class BuildFightHandler(ScreenHandler):
                         self.__new_home[self.__group_name] = (
                                                         self.__new_creatures)
                     else:
+                        # add self.__new_creatures to self.__new_home
                         self.__new_home.update(self.__new_creatures)
 
             # Throw the old ones away
@@ -4222,7 +4257,7 @@ class BuildFightHandler(ScreenHandler):
             group_name = self._window_manager.input_box(1,      # height
                                                         cols-4, # width
                                                         'New Fight Name')
-            if group_name is None:
+            if group_name is None or len(group_name) == 0:
                 self._window_manager.error(['You have to name your fight'])
                 keep_asking = True
             elif group_name in self.__world.details['monsters']:
@@ -4249,7 +4284,6 @@ class BuildFightHandler(ScreenHandler):
         # Display our new state
 
         self._draw_screen()
-        self._window.show_creatures(self.__new_creatures)
 
         return True # Keep going
 
@@ -4274,7 +4308,6 @@ class BuildFightHandler(ScreenHandler):
         # Display our new state
 
         self._draw_screen()
-        self._window.show_creatures(self.__new_creatures)
 
         return True # Keep going
 
