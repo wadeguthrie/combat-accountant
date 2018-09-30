@@ -14,8 +14,6 @@ import re
 import sys
 
 # TODO:
-#   - Join, Leave the group
-#
 #   - add laser sights to weapons
 
 #   - add ability to undo the -m option
@@ -403,140 +401,16 @@ class MainGmWindow(GmWindow):
         self.__char_detail_window.refresh()
 
     def show_character_detail(self,
-                              character # dict as found in the JSON
+                              character, # dict as found in the JSON
+                              ruleset
                              ):
         self.__char_detail_window.clear()
         if character is None:
             self.refresh()
             return
 
-        # TODO (move to ruleset): the headings are ruleset specific
-
         del self.__char_detail[:]
-
-        # attributes
-
-        mode = curses.A_NORMAL 
-        self.__char_detail.append([{'text': 'Attributes',
-                                    'mode': mode | curses.A_BOLD}])
-        found_one = False
-        pieces = []
-        for item_key in character['permanent'].iterkeys():
-            leader = '' if found_one else '  '
-            text = '%s%s:%d/%d' % (leader,
-                                   item_key,
-                                   character['current'][item_key],
-                                   character['permanent'][item_key])
-            if (character['current'][item_key] == 
-                                            character['permanent'][item_key]):
-                mode = curses.A_NORMAL
-            else:
-                mode = (curses.color_pair(GmWindowManager.YELLOW_BLACK) |
-                                                                curses.A_BOLD)
-
-            pieces.append({'text': '%s ' % text, 'mode': mode})
-            found_one = True
-
-        if found_one:
-            self.__char_detail.append(pieces)
-        else:
-            self.__char_detail.append([{'text': '  (None)',
-                                        'mode': mode}])
-
-        #if found_one:
-        #    if damaged:
-        #        mode = curses.color_pair(GmWindowManager.YELLOW_BLACK)
-        #    self.__char_detail.append([{'text': ' '.join(pieces),
-        #                                'mode': mode}])
-        #else:
-        #    self.__char_detail.append([{'text': '  (None)',
-        #                                'mode': mode}])
-
-        # stuff
-
-        mode = curses.A_NORMAL 
-        self.__char_detail.append([{'text': 'Equipment',
-                                    'mode': mode | curses.A_BOLD}])
-
-        found_one = False
-        for item in character['stuff']:
-            found_one = True
-            self.__char_detail.append([{'text': '  %s' % item['name'],
-                                        'mode': mode}])
-
-        if not found_one:
-            self.__char_detail.append([{'text': '  (None)',
-                                        'mode': mode}])
-
-        # advantages
-
-        mode = curses.A_NORMAL 
-        self.__char_detail.append([{'text': 'Advantages',
-                                    'mode': mode | curses.A_BOLD}])
-
-        found_one = False
-        for advantage, value in sorted(character['advantages'].iteritems(),
-                                       key=lambda (k,v): (k, v)):
-            found_one = True
-            self.__char_detail.append([{'text': '  %s: %d' % (advantage, value),
-                                        'mode': mode}])
-
-        if not found_one:
-            self.__char_detail.append([{'text': '  (None)',
-                                        'mode': mode}])
-
-        # skills
-
-        mode = curses.A_NORMAL 
-        self.__char_detail.append([{'text': 'Skills',
-                                    'mode': mode | curses.A_BOLD}])
-
-        found_one = False
-        for skill, value in sorted(character['skills'].iteritems(),
-                                   key=lambda (k,v): (k,v)):
-            found_one = True
-            self.__char_detail.append([{'text': '  %s: %d' % (skill, value),
-                                        'mode': mode}])
-
-        if not found_one:
-            self.__char_detail.append([{'text': '  (None)',
-                                        'mode': mode}])
-
-        # spells
-
-        if 'spells' in character:
-            mode = curses.A_NORMAL 
-            self.__char_detail.append([{'text': 'Spells',
-                                        'mode': mode | curses.A_BOLD}])
-
-            found_one = False
-            for spell in sorted(character['spells'], key=lambda(x): x['name']):
-                found_one = True
-                self.__char_detail.append(
-                                    [{'text': '  %s: %s' % (spell['name'],
-                                                            spell['notes']),
-                                      'mode': mode}])
-
-            if not found_one:
-                self.__char_detail.append([{'text': '  (None)',
-                                            'mode': mode}])
-
-        # notes
-
-        mode = curses.A_NORMAL 
-        self.__char_detail.append([{'text': 'Notes',
-                                    'mode': mode | curses.A_BOLD}])
-
-        found_one = False
-        if 'notes' in character:
-            for note in character['notes']:
-                found_one = True
-                self.__char_detail.append([{'text': '  %s' % note,
-                                            'mode': mode}])
-
-        if not found_one:
-            self.__char_detail.append([{'text': '  (None)',
-                                        'mode': mode}])
+        ruleset.get_character_detail(character, self.__char_detail)
 
         # ...and show the screen
 
@@ -1302,6 +1176,9 @@ class GmWindowManager(object):
 
     def get_outfit_gm_window(self):
         return OutfitCharactersGmWindow(self)
+
+    def get_main_gm_window(self):
+        return MainGmWindow(self)
 
     def getmaxyx(self):
         return curses.LINES, curses.COLS
@@ -2800,6 +2677,129 @@ class GurpsRuleset(Ruleset):
             block_why.append('  ...for a block skill total = %d' % block_skill)
 
         return block_skill, block_why
+
+    def get_character_detail(self,
+                             character,   # dict as found in the JSON
+                             char_detail, # recepticle for character detail.
+                                          # [[{'text','mode'},...],  # line 0
+                                          #  [...],               ]  # line 1...
+                            ):
+
+        # attributes
+
+        mode = curses.A_NORMAL 
+        char_detail.append([{'text': 'Attributes',
+                             'mode': mode | curses.A_BOLD}])
+        found_one = False
+        pieces = []
+        for item_key in character['permanent'].iterkeys():
+            leader = '' if found_one else '  '
+            text = '%s%s:%d/%d' % (leader,
+                                   item_key,
+                                   character['current'][item_key],
+                                   character['permanent'][item_key])
+            if (character['current'][item_key] == 
+                                            character['permanent'][item_key]):
+                mode = curses.A_NORMAL
+            else:
+                mode = (curses.color_pair(GmWindowManager.YELLOW_BLACK) |
+                                                                curses.A_BOLD)
+
+            pieces.append({'text': '%s ' % text, 'mode': mode})
+            found_one = True
+
+        if found_one:
+            char_detail.append(pieces)
+        else:
+            char_detail.append([{'text': '  (None)',
+                                 'mode': mode}])
+
+        # stuff
+
+        mode = curses.A_NORMAL 
+        char_detail.append([{'text': 'Equipment',
+                             'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        for item in character['stuff']:
+            found_one = True
+            char_detail.append([{'text': '  %s' % item['name'],
+                                 'mode': mode}])
+
+        if not found_one:
+            char_detail.append([{'text': '  (None)',
+                                 'mode': mode}])
+
+        # advantages
+
+        mode = curses.A_NORMAL 
+        char_detail.append([{'text': 'Advantages',
+                             'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        for advantage, value in sorted(character['advantages'].iteritems(),
+                                       key=lambda (k,v): (k, v)):
+            found_one = True
+            char_detail.append([{'text': '  %s: %d' % (advantage, value),
+                                 'mode': mode}])
+
+        if not found_one:
+            char_detail.append([{'text': '  (None)',
+                                 'mode': mode}])
+
+        # skills
+
+        mode = curses.A_NORMAL 
+        char_detail.append([{'text': 'Skills',
+                             'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        for skill, value in sorted(character['skills'].iteritems(),
+                                   key=lambda (k,v): (k,v)):
+            found_one = True
+            char_detail.append([{'text': '  %s: %d' % (skill, value),
+                                 'mode': mode}])
+
+        if not found_one:
+            char_detail.append([{'text': '  (None)',
+                                 'mode': mode}])
+
+        # spells
+
+        if 'spells' in character:
+            mode = curses.A_NORMAL 
+            char_detail.append([{'text': 'Spells',
+                                 'mode': mode | curses.A_BOLD}])
+
+            found_one = False
+            for spell in sorted(character['spells'], key=lambda(x): x['name']):
+                found_one = True
+                char_detail.append(
+                                    [{'text': '  %s: %s' % (spell['name'],
+                                                            spell['notes']),
+                                      'mode': mode}])
+
+            if not found_one:
+                char_detail.append([{'text': '  (None)',
+                                     'mode': mode}])
+
+        # notes
+
+        mode = curses.A_NORMAL 
+        char_detail.append([{'text': 'Notes',
+                             'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        if 'notes' in character:
+            for note in character['notes']:
+                found_one = True
+                char_detail.append([{'text': '  %s' % note,
+                                     'mode': mode}])
+
+        if not found_one:
+            char_detail.append([{'text': '  (None)',
+                                 'mode': mode}])
+
 
 
     def get_damage(self,
@@ -5399,9 +5399,7 @@ class MainHandler(ScreenHandler):
                                                         self.__search}
         })
         self.__setup_PC_list()
-
-        # TODO: get this from the window manager
-        self._window = MainGmWindow(self._window_manager)
+        self._window = self._window_manager.get_main_gm_window()
 
         # Check characters for consistency.
         for name in self.__world.get_list('PCs'):
@@ -5420,13 +5418,13 @@ class MainHandler(ScreenHandler):
                                    self._maintain_json)
 
         person = (None if self.__char_index is None
-                else self.__char_names[self.__char_index])
+                                    else self.__char_names[self.__char_index])
         character = None if person is None else person['details']
 
         self._window.show_character_list(self.__char_names,
                                          self.__char_index,
                                          inverse)
-        self._window.show_character_detail(character)
+        self._window.show_character_detail(character, self.__ruleset)
 
         self._window.command_ribbon(self._choices)
 
@@ -5660,7 +5658,7 @@ class MainHandler(ScreenHandler):
 
     def __NPC_leaves(self):
         npc_menu = [(npc, npc) for npc in self.__world.details['PCs'].keys()
-                     if 'redirect' in self.__world.details['PCs'][npc]] # TODO
+                     if 'redirect' in self.__world.details['PCs'][npc]]
         npc_name = self._window_manager.menu(
                                 'Remove which NPC from the party',
                                 npc_menu)
