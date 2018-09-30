@@ -479,7 +479,7 @@ class BuildFightGmWindow(GmWindow):
             - top_line                  # ...a block at the top, and...
             - 4)                        # ...a space for the command ribbon.
         
-        width = (cols / 2) - 1 # -1 for margin
+        width = (cols / 2) - 2 # -1 for margin
 
         self.__char_list_window = GmScrollableWindow(
                                                  self.__char_list,
@@ -494,9 +494,24 @@ class BuildFightGmWindow(GmWindow):
                                                  height,
                                                  width,
                                                  top_line,
-                                                 width)
+                                                 width+1)
+        #mode = curses.color_pair(GmWindowManager.RED_WHITE) # TODO: remove
+        #error_win.addstr(line+1, 1, string, mode) # TODO: remove
+
+        # TODO: remove
+        #print '  BuildFightGmWindow::constructor' # TODO: remove
+        #print '  @@ __char_detail'
+        #self.__char_detail.append([{'text': 'Twas brillig and the slithy tove',
+        #                          'mode': curses.A_NORMAL}])
+        #print '  __char_detail_window.refresh (Twas brillig)' # TODO: remove
+        #self.__char_detail_window.draw_window()
+        #self.__char_detail_window.touchwin()
+        #self.__char_detail_window.refresh()
+        #print '  RETURN FROM CTOR (Twas brillig)\n' # TODO: remove
+        # TODO: done removing
 
     def close(self):
+        print '  BuildFightGmWindow::close' # TODO: remove
         # Kill my subwindows, first
         if self.__char_list_window is not None:
             del self.__char_list_window
@@ -508,19 +523,23 @@ class BuildFightGmWindow(GmWindow):
 
 
     def refresh(self):
+        print '  BuildFightGmWindow::refresh' # TODO: remove
         super(BuildFightGmWindow, self).refresh()
         if self.__char_list_window is not None:
+            print '    __char_list_window.refresh' # TODO: remove
             self.__char_list_window.refresh()
         if self.__char_detail_window is not None:
-            print 'refreshing char_detail_window' # TODO: remove
+            print '  __char_detail_window.refresh' # TODO: remove
             self.__char_detail_window.refresh()
 
     def scroll_char_detail_down(self):
+        print '  ** BuildFightGmWindow::scroll_char_detail_down' # TODO: remove
         self.__char_detail_window.scroll_down()
         self.__char_detail_window.draw_window()
         self.__char_detail_window.refresh()
 
     def scroll_char_detail_up(self):
+        print '  ** BuildFightGmWindow::scroll_char_detail_up' # TODO: remove
         self.__char_detail_window.scroll_up()
         self.__char_detail_window.draw_window()
         self.__char_detail_window.refresh()
@@ -529,25 +548,27 @@ class BuildFightGmWindow(GmWindow):
                               character, # dict as found in the JSON
                               ruleset
                              ):
-        print 'A' # TODO: remove
-        PP.pprint(character) # TODO: remove
+        print '  BuildFightGmWindow::show_character_detail' # TODO: remove
+        print '    __char_detail_window.clear' # TODO: remove
         self.__char_detail_window.clear()
         if character is None:
-            print 'RETURNING -- ERROR' # TODO: remove
             self.refresh()
             return
 
-        del self.__char_detail[:]
+        print '  @@ del __char_detail' # TODO: remove
+        del self.__char_detail[:] # TODO: remove
         ruleset.get_character_detail(character, self.__char_detail)
-        print '\nDETAILS' # TODO: remove
+        print '  @@ NEW __char_detail' # TODO: remove
         PP.pprint(self.__char_detail) # TODO: remove
 
         # ...and show the screen
 
-        print '\nabout to refresh' # TODO: remove
+        print '    __char_detail_window.touchwin' # TODO: remove
+        self.__char_detail_window.touchwin()
+        print '    __char_detail_window.draw_window' # TODO: remove
         self.__char_detail_window.draw_window()
+        print '    __char_detail_window.refresh' # TODO: remove
         self.__char_detail_window.refresh()
-        print '\ndone' # TODO: remove
 
     def status_ribbon(self,
                       group,            # name of group being modified,
@@ -557,6 +578,7 @@ class BuildFightGmWindow(GmWindow):
                      ):
         '''Prints the fight round information at the top of the screen.'''
 
+        print '  BuildFightGmWindow::status_ribbon' # TODO: remove
         group = '(No Group)' if group is None else group
         template = '(No Template)' if template is None else template
         self._window.move(0, 0)
@@ -572,46 +594,52 @@ class BuildFightGmWindow(GmWindow):
 
     def show_creatures(self,
                        old_creatures,   # {name: {details}, ...} like in JSON
-                       new_names,       # {name: {details}, ...} like in JSON
+                       new_creatures,   # {name: {details}, ...} like in JSON
                        new_char_name    # name of character to highlight
                       ):
 
         #self.__char_list = []   # [[{'text', 'mode'}, ...],   # line 0
         #                        #  [...],                  ]  # line 1...
 
-
+        print '  BuildFightGmWindow::show_creatures' # TODO: remove
+        print '    new_char_name: "%r"' % new_char_name # TODO: remove
+        print '    __char_list_window.clear' # TODO: remove
         self.__char_list_window.clear()
         del self.__char_list[:]
 
-        if self.__char_list_window is not None:
-            mode = curses.A_NORMAL
-            line = 0
-            if old_creatures is not None:
-                for old_name in sorted(old_creatures.keys()):
-                    self.__char_list.append([{'text': old_name, 'mode': mode}])
+        mode = curses.A_NORMAL
+        line = 0
+        if old_creatures is not None:
+            for old_name in sorted(old_creatures.keys()):
+                self.__char_list.append([{'text': old_name, 'mode': mode}])
 
-                # Blank line between old creatures and new
-                self.__char_list.append([{'text': '', 'mode': mode}])
+            # Blank line between old creatures and new
+            self.__char_list.append([{'text': '', 'mode': mode}])
 
-            for new_name in sorted(new_names):
-                now_mode = mode
-                if new_char_name is not None and new_name == new_char_name:
-                    now_mode |= curses.A_REVERSE
-                self.__char_list.append([{'text': new_name, 'mode': now_mode}])
-                line += 1
+        for new_name in sorted(new_creatures.keys()):
+            now_mode = mode
+            if new_char_name is not None and new_name == new_char_name:
+                now_mode |= curses.A_REVERSE
+            self.__char_list.append([{'text': new_name, 'mode': now_mode}])
+            line += 1
 
         # ...and show the screen
 
+        print '    __char_list_window.draw_window' # TODO: remove
         self.__char_list_window.draw_window()
+        print '    __char_list_window.refresh' # TODO: remove
         self.__char_list_window.refresh()
 
-        #self.refresh()
+        self.refresh()
 
     def touchwin(self):
+        print '  BuildFightGmWindow::touchwin' # TODO: remove
         super(BuildFightGmWindow, self).touchwin()
         if self.__char_list_window is not None:
+            print '    __char_list_window.touchwin' # TODO: remove
             self.__char_list_window.touchwin()
         if self.__char_detail_window is not None:
+            print '    __char_detail_window.touchwin' # TODO: remove
             self.__char_detail_window.touchwin()
 
     #
@@ -1365,6 +1393,7 @@ class GmWindowManager(object):
         if len(strings_results) == 1: # if there's only 1 choice, autoselect it
             return strings_results[0][1]
 
+        print '\n>> menu title: %r <<' % title # TODO: remove
         # height and width of text box (not border)
         height = len(strings_results)
         max_height = curses.LINES - 2 # 2 for the box
@@ -1588,6 +1617,9 @@ class GmScrollableWindow(object):
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
         self.__default_scroll_lines = win_line_cnt / 2
 
+    def window(self):   # TODO: remove
+        return self.__window    # TODO: remove
+
     def clear(self):
         self.__window.clear()
 
@@ -1597,6 +1629,7 @@ class GmScrollableWindow(object):
         '''
         self.clear()
         line_cnt = len(self.__lines) - self.top_line
+        print 'GmScrollableWindow::draw_window: %d lines' % line_cnt # TODO: remove
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
         line_cnt = line_cnt if line_cnt < win_line_cnt else win_line_cnt
         for i in range(0, line_cnt):
@@ -1612,6 +1645,7 @@ class GmScrollableWindow(object):
                 'bottom_line': self.top_line + win_line_cnt - 1}
 
     def refresh(self):
+        print '@@ GmScrollableWindow.refresh()' # TODO: remove
         self.__window.refresh()
 
     def scroll_down(self, line_cnt=None):
@@ -3984,6 +4018,8 @@ class BuildFightHandler(ScreenHandler):
         })
 
         self._window = self._window_manager.get_build_fight_gm_window()
+        #print '@@ BuildFightHandler -> get_build_fight_gm_window'# TODO: remove
+        #self._window_manager.get_one_character() # TODO: remove
 
         self.__world = world
         self.__ruleset = ruleset
@@ -4041,6 +4077,9 @@ class BuildFightHandler(ScreenHandler):
             while new_existing is None:
                 new_existing = self._window_manager.menu('New or Pre-Existing',
                                                           new_existing_menu)
+            self._draw_screen()
+            self.__add_creature()
+
             if new_existing == 'new':
                 self.__new_group()
             else:
@@ -4055,21 +4094,31 @@ class BuildFightHandler(ScreenHandler):
     #
 
     def _draw_screen(self):
+        print '\n_draw_screen'
+        print '_window.clear'
         self._window.clear()
+        print '_window.status_ribbon'
+        self._window.status_ribbon(self.__group_name,
+                                   self.__template_name,
+                                   self._input_filename,
+                                   self._maintain_json)
+        print '_window.command_ribbon'
+        self._window.command_ribbon(self._choices)
+        print '_window.show_creatures'
         self._window.show_creatures(
                             (None if self.__is_new else self.__new_home),
                             self.__new_creatures,
                             self.__new_char_name)
         if (self.__new_char_name is not None and
                                 self.__new_char_name in self.__new_creatures):
+            print '_window.show_character_detail'
             self._window.show_character_detail(
                                    self.__new_creatures[self.__new_char_name],
                                    self.__ruleset)
-        self._window.status_ribbon(self.__group_name,
-                                   self.__template_name,
-                                   self._input_filename,
-                                   self._maintain_json)
-        self._window.command_ribbon(self._choices)
+        else:                                                    # TODO: remove
+            print 'NOT _window.show_character_detail'            # TODO: remove
+            print '  new_char_name: "%r"' % self.__new_char_name # TODO: remove
+            PP.pprint(self.__new_creatures)                      # TODO: remove
 
     #
     # Private Methods
@@ -4080,6 +4129,7 @@ class BuildFightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+        print '\n__add_creature'
         if self.__new_home is None or self.__group_name is None:
             self._window_manager.error(
                 ['You must select a new or existing group to which to',
@@ -4177,10 +4227,16 @@ class BuildFightHandler(ScreenHandler):
                 temp_list = copy.deepcopy(self.__new_creatures)
                 temp_list[monster_name] = to_monster
                 self.__new_char_name = monster_name
+                print '  NEW CHAR NAME = "%r"' % self.__new_char_name # TODO: remove
+                print '_draw_screen.show_character_detail' # TODO: remove
                 self._window.show_creatures(
                                 (None if self.__is_new else self.__new_home),
                                 temp_list,
                                 self.__new_char_name)
+                print '_window.show_character_detail'
+                self._window.show_character_detail(
+                                to_monster,
+                                self.__ruleset)
 
                 action_menu = [('append to name', 'append'),
                                ('Add equipment', 'add'),
@@ -4226,6 +4282,7 @@ class BuildFightHandler(ScreenHandler):
                     keep_changing_this_creature = False
 
                 elif action == 'quit':
+                    print '---------- QUIT ----------'
                     keep_changing_this_creature = False
                     keep_adding_creatures = False
 
@@ -4238,6 +4295,7 @@ class BuildFightHandler(ScreenHandler):
         return True # Keep going
 
     def __delete_creature(self):
+        print '\n__delete_creature'
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -4260,6 +4318,7 @@ class BuildFightHandler(ScreenHandler):
         return True # Keep going
 
     def __existing_group(self):
+        print '\n__existing_group'
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -4311,6 +4370,7 @@ class BuildFightHandler(ScreenHandler):
         return True # Keep going
 
     def __maybe_save_group(self):
+        print '\n__maybe_save_group'
         keep_asking = True
         while keep_asking:
             save_menu = [('save', 'save'), ('quit (don\'t save)', 'don\'t')]
@@ -4331,6 +4391,7 @@ class BuildFightHandler(ScreenHandler):
 
 
     def __new_group(self):
+        print '\n__new_group'
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -4387,6 +4448,7 @@ class BuildFightHandler(ScreenHandler):
 
 
     def __new_template(self):
+        print '\n__new_template'
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -4414,6 +4476,7 @@ class BuildFightHandler(ScreenHandler):
                                   template_value,
                                   template
                                  ):
+        print '\n__get_value_from_template'
         if template_value['type'] == 'value':
             return template_value['value']
 
@@ -4427,6 +4490,7 @@ class BuildFightHandler(ScreenHandler):
         return None
 
     def __quit(self):
+        print '\n__quit'
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -5576,6 +5640,7 @@ class MainHandler(ScreenHandler):
                                         campaign_debug_json,
                                         self._input_filename,
                                         self._maintain_json)
+        self._window_manager.get_one_character() # TODO: remove
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list() # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
@@ -5595,6 +5660,7 @@ class MainHandler(ScreenHandler):
                                         campaign_debug_json,
                                         self._input_filename,
                                         self._maintain_json)
+        self._window_manager.get_one_character() # TODO: remove
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list() # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
@@ -5614,6 +5680,7 @@ class MainHandler(ScreenHandler):
                                         campaign_debug_json,
                                         self._input_filename,
                                         self._maintain_json)
+        self._window_manager.get_one_character() # TODO: remove
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list() # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
