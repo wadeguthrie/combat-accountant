@@ -1774,12 +1774,14 @@ class Fighter(object):
                  name,              # string
                  group,             # string = 'PCs' or some monster group
                  fighter_details,   # dict as in the JSON
-                 ruleset            # a Ruleset object
+                 ruleset,           # a Ruleset object
+                 window_manager     # a GmWindowManager object
                 ):
         self.name = name
         self.group = group
         self.details = fighter_details
         self.__ruleset = ruleset
+        self.__window_manager = window_manager
 
     def add_equipment(self,
                       new_item, # dict describing new equipment
@@ -1795,8 +1797,21 @@ class Fighter(object):
 
         self.details['stuff'].append(new_item)
 
-    def add_timer(self, rounds, text):
-        self.details['timers'].append({'rounds': rounds, 'string': text})
+    def add_timer(self,
+                  rounds,           # rounds until timer fires (3.0 rounds
+                                    #   fires at end of 3 rounds; 2.9 rounds
+                                    #   fires at beginning of 3 rounds.
+                  text,             # string to display (in fighter's notes)
+                                    #   while timer is running
+                  announcement=None # string to display (in its own window)
+                                    #   when timer fires
+                 ):
+        timer = {'rounds': rounds,
+                 'string': text}
+        if announcement is not None:
+            timer['announcement'] = announcement
+
+        self.details['timers'].append(timer)
 
 
     def bump_consciousness(self):
@@ -1970,8 +1985,19 @@ class Fighter(object):
 
 
     def __fire_timer(self, timer):
-       if 'state' in timer:
-           self.details['state'] = timer['state']
+        print '\nfiring timer:' # TODO: remove
+        PP.pprint(timer) # TODO: remove
+
+        if 'state' in timer:
+            print 'STATE: %r' % timer['state'] # TODO: remove
+            self.details['state'] = timer['state']
+        if 'announcement' in timer:
+            print 'ANNOUNCE: %r' % timer['announcement'] # TODO: remove
+            self.__window_manager.display_window(
+                                       ('Timer Fired for %s' % self.name),
+                                        [[{'text': timer['announcement'],
+                                           'mode': curses.A_NORMAL }]])
+        print 'done with timer' # TODO: remove
 
 
     def __is_same_thing(self,
@@ -2324,6 +2350,7 @@ class GurpsRuleset(Ruleset):
                           'Casting (%s) @ skill (%d): %s' % (spell['name'],
                                                              spell['skill'],
                                                              spell['notes']))
+
 
     def change_posture(self,
                        param, # dict {'fighter': <Fighter object>,
@@ -2785,6 +2812,7 @@ class GurpsRuleset(Ruleset):
                              'mode': mode | curses.A_BOLD}])
         found_one = False
         pieces = []
+        # TODO: break this into [iq, st, ht, and dx] and the rest
         for item_key in character['permanent'].iterkeys():
             leader = '' if found_one else '  '
             text = '%s%s:%d/%d' % (leader,
@@ -4169,7 +4197,8 @@ class BuildFightHandler(ScreenHandler):
             fighter = Fighter(monster_name,
                               self.__group_name,
                               to_monster,
-                              self.__ruleset)
+                              self.__ruleset,
+                              self._window_manager)
 
             while keep_changing_this_creature:
                 temp_list = copy.deepcopy(self.__new_creatures)
@@ -4518,7 +4547,8 @@ class FightHandler(ScreenHandler):
                                   self.__get_fighter_details(
                                                       saved_fighter['name'],
                                                       saved_fighter['group']),
-                                  self.__ruleset)
+                                  self.__ruleset,
+                                  self._window_manager)
                 self.__fighters.append(fighter)
         else:
             # TODO: when the history is reset (here), the JSON should be
@@ -4535,7 +4565,11 @@ class FightHandler(ScreenHandler):
             for name in self.__world.get_list('PCs'):
                 details = self.__world.get_creature_details(name, 'PCs')
                 if details is not None:
-                    fighter = Fighter(name, 'PCs', details, self.__ruleset)
+                    fighter = Fighter(name,
+                                      'PCs',
+                                      details,
+                                      self.__ruleset,
+                                      self._window_manager)
                     self.__fighters.append(fighter)
 
             if monster_group is not None:
@@ -4546,7 +4580,8 @@ class FightHandler(ScreenHandler):
                         fighter = Fighter(name,
                                           monster_group,
                                           details,
-                                          self.__ruleset)
+                                          self.__ruleset,
+                                          self._window_manager)
                         self.__fighters.append(fighter)
 
             # Sort by initiative = basic-speed followed by DEX followed by
@@ -5445,8 +5480,10 @@ class FightHandler(ScreenHandler):
         height = 1
         width = len(title)
         adj_string = self._window_manager.input_box(height, width, title)
+        if adj_string is None or len(adj_string) <= 0:
+            return True
         timer['rounds'] = int(adj_string)
-        if timer['rounds'] < 1:
+        if timer['rounds'] <= 0:
             return True # Keep fighting (even without installing the timer)
 
         # What is the timer's message?
@@ -5455,15 +5492,42 @@ class FightHandler(ScreenHandler):
         height = 1
         width = curses.COLS - 4
         timer['string'] = self._window_manager.input_box(
-                height,
-                self._window.fighter_win_width - 
-                        self._window.len_timer_leader,
-                title)
+                                        height,
+                                        self._window.fighter_win_width - 
+                                                self._window.len_timer_leader,
+                                        title)
+
+        # What is the timer's announcement?
+
+        title = 'Enter an announcement if you want one...'
+        height = 1
+        width = curses.COLS - 4
+        announcement = self._window_manager.input_box(
+                                        height,
+                                        self._window.fighter_win_width - 
+                                                self._window.len_timer_leader,
+                                        title)
+
+        if announcement is not None and len(announcement) <= 0:
+            announcement = None
+        else:
+            # Shave a little off the time so that the timer will announce
+            # as his round starts rather than at the end.
+            timer['rounds'] -= 0.1
 
         # Instal the timer.
 
         if timer['string'] is not None and len(timer['string']) != 0:
-            timer_recipient.add_timer(timer['rounds'], timer['string'])
+            timer_recipient.add_timer(timer['rounds'],
+                                      timer['string'],
+                                      announcement)
+
+
+        #fighter.add_timer(spell['time'],
+        #               announcement)
+        #               lines  # [[{'text', 'mode'}, ],    # line 0
+        #                      #  [...],               ]   # line 1
+        #              ):
 
         # Show stuff
         self._window.show_fighters(current_fighter,
@@ -5634,7 +5698,8 @@ class MainHandler(ScreenHandler):
         fighter = Fighter(self.__chars[self.__char_index]['name'],
                           self.__chars[self.__char_index]['group'],
                           self.__chars[self.__char_index]['details'],
-                          self.__ruleset)
+                          self.__ruleset,
+                          self._window_manager)
         self.__equipment_manager.add_equipment(fighter)
         self._draw_screen()
         return True # Keep going
@@ -5648,7 +5713,8 @@ class MainHandler(ScreenHandler):
         fighter = Fighter(self.__chars[self.__char_index]['name'],
                           self.__chars[self.__char_index]['group'],
                           self.__chars[self.__char_index]['details'],
-                          self.__ruleset)
+                          self.__ruleset,
+                          self._window_manager)
         self.__equipment_manager.remove_equipment(fighter)
         self._draw_screen()
         return True # Keep going
@@ -5921,7 +5987,8 @@ class EquipmentManager(object):
         fighter = Fighter(self.__character['name'],
                           self.__group_name,
                           self.__character['details'],
-                          self.__ruleset)
+                          self.__ruleset,
+                          self._window_manager)
 
         '''
         self.__world = world
@@ -6037,7 +6104,8 @@ class OutfitCharactersHandler(ScreenHandler):
         fighter = Fighter(self.__character['name'],
                           self.__group_name,
                           self.__character['details'],
-                          self.__ruleset)
+                          self.__ruleset,
+                          self._window_manager)
         self.__equipment_manager.add_equipment(fighter)
         self._window.show_character(self.__character)
         return True # Keep going
@@ -6056,7 +6124,8 @@ class OutfitCharactersHandler(ScreenHandler):
         fighter = Fighter(self.__character['name'],
                           self.__group_name,
                           self.__character['details'],
-                          self.__ruleset)
+                          self.__ruleset,
+                          self._window_manager)
         self.__equipment_manager.remove_equipment(fighter)
         self._window.show_character(self.__character)
         return True # Keep going
