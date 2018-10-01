@@ -5495,43 +5495,49 @@ class MainHandler(ScreenHandler):
             # KEY_UP and KEY_DOWN between char and char detail window.
             curses.KEY_UP:
                       {'name': 'previous character',  'func':
-                                                        self.__prev_char},
+                                                       self.__prev_char},
             curses.KEY_DOWN:
                       {'name': 'next character',      'func':
-                                                        self.__next_char},
+                                                       self.__next_char},
             curses.KEY_NPAGE:
                       {'name': 'char details pgdown', 'func':
-                                                        self.__next_page},
+                                                       self.__next_page},
             curses.KEY_PPAGE:
                       {'name': 'char details pgup',   'func':
-                                                        self.__prev_page},
+                                                       self.__prev_page},
             ord('c'): {'name': 'select character',    'func':
-                                                        self.__character},
+                                                       self.__character},
+            ord('e'): {'name': 'add equipment',       'func':
+                                                       self.__add_equipment},
+            ord('E'): {'name': 'remove equipment',    'func':
+                                                       self.__remove_equipment},
             ord('o'): {'name': 'outfit characters',   'func':
-                                                        self.__outfit},
+                                                       self.__outfit},
             ord('J'): {'name': 'NPC joins PCs',       'func':
-                                                        self.__NPC_joins},
+                                                       self.__NPC_joins},
             ord('L'): {'name': 'NPC leaves PCs',      'func':
-                                                        self.__NPC_leaves},
+                                                       self.__NPC_leaves},
             ord('N'): {'name': 'new NPCs',            'func':
-                                                        self.__add_NPCs},
+                                                       self.__add_NPCs},
             ord('P'): {'name': 'new PCs',             'func':
-                                                        self.__add_PCs},
+                                                       self.__add_PCs},
             ord('M'): {'name': 'new Monsters',        'func':
-                                                        self.__add_monsters},
+                                                       self.__add_monsters},
             ord('f'): {'name': 'fight',               'func':
-                                                        self.__run_fight},
+                                                       self.__run_fight},
             ord('H'): {'name': 'Heal',                'func':
-                                                        self.__fully_heal},
+                                                       self.__fully_heal},
             ord('n'): {'name': 'random name',         'func':
-                                                        self.__get_a_name},
+                                                       self.__get_a_name},
             ord('q'): {'name': 'quit',                'func':
-                                                        self.__quit},
+                                                       self.__quit},
             ord('/'): {'name': 'search',              'func':
-                                                        self.__search}
+                                                       self.__search}
         })
         self.__setup_PC_list()
         self._window = self._window_manager.get_main_gm_window()
+        self.__equipment_manager = EquipmentManager(self.__world,
+                                                    self._window_manager)
 
         # Check characters for consistency.
         for name in self.__world.get_list('PCs'):
@@ -5550,10 +5556,10 @@ class MainHandler(ScreenHandler):
                                    self._maintain_json)
 
         person = (None if self.__char_index is None
-                                    else self.__char_names[self.__char_index])
+                                    else self.__chars[self.__char_index])
         character = None if person is None else person['details']
 
-        self._window.show_character_list(self.__char_names,
+        self._window.show_character_list(self.__chars,
                                          self.__char_index,
                                          inverse)
         self._window.show_character_detail(character, self.__ruleset)
@@ -5618,6 +5624,33 @@ class MainHandler(ScreenHandler):
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list() # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
+        return True # Keep going
+
+    def __add_equipment(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = Fighter(self.__chars[self.__char_index]['name'],
+                          self.__chars[self.__char_index]['group'],
+                          self.__chars[self.__char_index]['details'],
+                          self.__ruleset)
+        self.__equipment_manager.add_equipment(fighter)
+        self._draw_screen()
+        return True # Keep going
+
+
+    def __remove_equipment(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = Fighter(self.__chars[self.__char_index]['name'],
+                          self.__chars[self.__char_index]['group'],
+                          self.__chars[self.__char_index]['details'],
+                          self.__ruleset)
+        self.__equipment_manager.remove_equipment(fighter)
+        self._draw_screen()
         return True # Keep going
 
     def __outfit(self):
@@ -5749,7 +5782,7 @@ class MainHandler(ScreenHandler):
                 length = len(name)
 
                 # Look for a match and return the selection
-                for index, char in enumerate(self.__char_names):
+                for index, char in enumerate(self.__chars):
                             # [ {'name': xxx,
                             #    'group': xxx,
                             #    'details':xxx}, ...
@@ -5766,7 +5799,7 @@ class MainHandler(ScreenHandler):
             self.__char_index = 0
         else:
             self.__char_index += 1
-            if self.__char_index >= len(self.__char_names):
+            if self.__char_index >= len(self.__chars):
                 self.__char_index = 0
         self._draw_screen()
         return True
@@ -5804,11 +5837,11 @@ class MainHandler(ScreenHandler):
 
     def __prev_char(self):
         if self.__char_index is None:
-            self.__char_index = len(self.__char_names) - 1
+            self.__char_index = len(self.__chars) - 1
         else:
             self.__char_index -= 1
             if self.__char_index < 0:
-                self.__char_index = len(self.__char_names) - 1
+                self.__char_index = len(self.__chars) - 1
         self._draw_screen()
         return True
 
@@ -5858,7 +5891,7 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
     def __setup_PC_list(self):
-        self.__char_names = [
+        self.__chars = [
                     {'name': x,
                      'group': 'PCs',
                      'details': self.__world.get_creature_details(x, 'PCs')
@@ -5866,7 +5899,7 @@ class MainHandler(ScreenHandler):
 
         npcs = self.__world.get_list('NPCs')
         if npcs is not None:
-            self.__char_names.extend([
+            self.__chars.extend([
                     {'name': x,
                      'group': 'NPCs',
                      'details': self.__world.get_creature_details(x, 'NPCs')
