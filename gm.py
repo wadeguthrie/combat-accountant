@@ -1985,19 +1985,14 @@ class Fighter(object):
 
 
     def __fire_timer(self, timer):
-        print '\nfiring timer:' # TODO: remove
-        PP.pprint(timer) # TODO: remove
 
         if 'state' in timer:
-            print 'STATE: %r' % timer['state'] # TODO: remove
             self.details['state'] = timer['state']
         if 'announcement' in timer:
-            print 'ANNOUNCE: %r' % timer['announcement'] # TODO: remove
             self.__window_manager.display_window(
                                        ('Timer Fired for %s' % self.name),
                                         [[{'text': timer['announcement'],
                                            'mode': curses.A_NORMAL }]])
-        print 'done with timer' # TODO: remove
 
 
     def __is_same_thing(self,
