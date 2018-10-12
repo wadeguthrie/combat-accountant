@@ -3438,7 +3438,7 @@
       ], 
       "shock": 0, 
       "armor-index": 4, 
-      "short_notes": [
+      "short-notes": [
         ""
       ], 
       "current": {
@@ -4303,184 +4303,184 @@
       "did_action_this_turn": false, 
       "opponent": null
     }, 
-    "Anaica - Mambo on Tereshkova": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "spells": [
-        {
-          "cost": 1, 
-          "name": "awaken", 
-          "notes": "M90", 
-          "maintain": 0, 
-          "time": 1, 
-          "skill": 12
+    "Samantha - (party) Mambo on Tereshkova": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
         }, 
-        {
-          "cost": 4, 
-          "name": "communicate", 
-          "notes": "M48", 
-          "maintain": 4, 
-          "time": 4, 
-          "skill": 11
+        "stuff": [], 
+        "stunned": 0, 
+        "skills": {}, 
+        "notes": [
+          "origin: haitian", 
+          "gender: female", 
+          "characteristics: Dirty", 
+          "instincts: To restore the family name", 
+          "hair: Very Long", 
+          "speech: Breathless", 
+          "knack: Immunity from the law", 
+          "personality: Sycophantic (brown-noser)", 
+          "** 18 Spells **: body control, comm & empathy, healing"
+        ], 
+        "shock": 0, 
+        "short-notes": [], 
+        "armor-index": null, 
+        "current": {
+          "fp": 11, 
+          "iq": 13, 
+          "hp": 10, 
+          "wi": 13, 
+          "st": 10, 
+          "ht": 11, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.25
         }, 
-        {
-          "cost": 3, 
-          "name": "daze", 
-          "notes": "M134", 
-          "maintain": 2, 
-          "time": 2, 
-          "skill": 11
+        "posture": "standing", 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "wi": 12, 
+          "st": 10, 
+          "ht": 11, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.25
         }, 
-        {
-          "cost": 4, 
-          "name": "far hearing", 
-          "notes": "M173", 
-          "maintain": 2, 
-          "time": 3, 
-          "skill": 11
+        "advantages": {
+          "empathy": 5, 
+          "primary lwa (Erzulie Freda)": 6, 
+          "vodou practitioner (Mambo/Hougan 2)": 35
         }, 
-        {
-          "cost": null, 
-          "name": "foolishness", 
-          "notes": "M134", 
-          "maintain": null, 
-          "time": 1, 
-          "skill": 11
-        }, 
-        {
-          "cost": null, 
-          "name": "lend energy", 
-          "notes": "M89", 
-          "maintain": 0, 
-          "time": 1, 
-          "skill": 12
-        }, 
-        {
-          "cost": null, 
-          "name": "lend vitality", 
-          "notes": "M89", 
-          "maintain": null, 
-          "time": 1, 
-          "skill": 12
-        }, 
-        {
-          "cost": 2, 
-          "name": "luck", 
-          "notes": "V2", 
-          "maintain": 0, 
-          "time": 1, 
-          "skill": 11
-        }, 
-        {
-          "cost": null, 
-          "name": "major heal", 
-          "notes": "M91", 
-          "maintain": null, 
-          "time": 1, 
-          "skill": 11
-        }, 
-        {
-          "cost": null, 
-          "name": "minor heal", 
-          "notes": "M91", 
-          "maintain": null, 
-          "time": 1, 
-          "skill": 12
-        }, 
-        {
-          "cost": null, 
-          "name": "might", 
-          "notes": "M37", 
-          "maintain": null, 
-          "time": 1, 
-          "skill": 12
-        }, 
-        {
-          "cost": 15, 
-          "name": "restoration", 
-          "notes": "M93", 
-          "maintain": 0, 
-          "time": 60, 
-          "skill": 11
-        }, 
-        {
-          "cost": null, 
-          "name": "sense life", 
-          "notes": "M45, cost 1/2 per yard radius, see M11", 
-          "maintain": null, 
-          "time": 1, 
-          "skill": 12
-        }, 
-        {
-          "cost": 4, 
-          "name": "sleep", 
-          "notes": "M135", 
-          "maintain": 0, 
-          "time": 3, 
-          "skill": 11
-        }, 
-        {
-          "cost": 4, 
-          "name": "wizard eye", 
-          "notes": "M104", 
-          "maintain": 2, 
-          "time": 2, 
-          "skill": 11
-        }
-      ], 
-      "stuff": [], 
-      "stunned": 0, 
-      "skills": {}, 
-      "notes": [
-        "origin: haitian", 
-        "gender: female", 
-        "characteristics: Sharpens weapon", 
-        "instincts: To commit an atrocity", 
-        "hair: Thinning", 
-        "speech: Squeaky", 
-        "knack: Political leverage", 
-        "personality: Liar", 
-        "** 18 spells **"
-      ], 
-      "shock": 0, 
-      "short-notes": [], 
-      "armor-index": null, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 10, 
-        "wi": 12, 
-        "st": 10, 
-        "ht": 11, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5.25
-      }, 
-      "check_for_death": false, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 10, 
-        "wi": 12, 
-        "st": 10, 
-        "ht": 11, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5.25
-      }, 
-      "advantages": {
-        "empathy": 5, 
-        "lwa (Mambo, Erzulie Freda)": 6, 
-        "vodou practitioner (Mambo/Hougan 2)": 35
-      }, 
-      "did_action_this_turn": false, 
-      "weapon-index": null, 
-      "timers": [], 
-      "opponent": null, 
-      "posture": "standing"
+        "opponent": null, 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "timers": [], 
+        "did_action_this_turn": false, 
+        "spells": [
+          {
+            "cost": 1, 
+            "name": "awaken", 
+            "notes": "M90", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": 4, 
+            "name": "communicate", 
+            "notes": "M48", 
+            "maintain": 4, 
+            "time": 4, 
+            "skill": 11
+          }, 
+          {
+            "cost": 3, 
+            "name": "daze", 
+            "notes": "M134", 
+            "maintain": 2, 
+            "time": 2, 
+            "skill": 11
+          }, 
+          {
+            "cost": 4, 
+            "name": "far hearing", 
+            "notes": "M173", 
+            "maintain": 2, 
+            "time": 3, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "foolishness", 
+            "notes": "M134", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "lend energy", 
+            "notes": "M89", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": null, 
+            "name": "lend vitality", 
+            "notes": "M89", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": 2, 
+            "name": "luck", 
+            "notes": "V2", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "major heal", 
+            "notes": "M91", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "minor heal", 
+            "notes": "M91", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": null, 
+            "name": "might", 
+            "notes": "M37", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": 15, 
+            "name": "restoration", 
+            "notes": "M93", 
+            "maintain": 0, 
+            "time": 60, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "sense life", 
+            "notes": "M45, cost 1/2 per yard radius, see M11", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": 4, 
+            "name": "sleep", 
+            "notes": "M135", 
+            "maintain": 0, 
+            "time": 3, 
+            "skill": 11
+          }, 
+          {
+            "cost": 4, 
+            "name": "wizard eye", 
+            "notes": "M104", 
+            "maintain": 2, 
+            "time": 2, 
+            "skill": 11
+          }
+        ]
     }
   }, 
   "Equipment": [
@@ -5274,7 +5274,7 @@
         }, 
         "shock": 0, 
         "armor-index": 3, 
-        "short_notes": [
+        "short-notes": [
           ""
         ], 
         "current": {
@@ -5378,7 +5378,7 @@
         }, 
         "shock": 0, 
         "armor-index": 3, 
-        "short_notes": [
+        "short-notes": [
           "* DR 2 on suit ", 
           ""
         ], 
@@ -5486,7 +5486,7 @@
         }, 
         "shock": 0, 
         "armor-index": 3, 
-        "short_notes": [
+        "short-notes": [
           ""
         ], 
         "current": {
@@ -5590,7 +5590,7 @@
         }, 
         "shock": 0, 
         "armor-index": 3, 
-        "short_notes": [
+        "short-notes": [
           ""
         ], 
         "current": {
@@ -6741,184 +6741,184 @@
         "did_action_this_turn": false, 
         "opponent": null
       }, 
-      "Samantha - Mambo on Tereshkova": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "stunned": 0, 
-        "skills": {}, 
-        "notes": [
-          "origin: haitian", 
-          "gender: female", 
-          "characteristics: Dirty", 
-          "instincts: To restore the family name", 
-          "hair: Very Long", 
-          "speech: Breathless", 
-          "knack: Immunity from the law", 
-          "personality: Sycophantic", 
-          "** 18 Spells **: body control, comm & empathy, healing"
-        ], 
-        "shock": 0, 
-        "short-notes": [], 
-        "armor-index": null, 
-        "current": {
-          "fp": 11, 
-          "iq": 13, 
-          "hp": 10, 
-          "wi": 13, 
-          "st": 10, 
-          "ht": 11, 
-          "dx": 10, 
-          "basic-move": 5, 
-          "basic-speed": 5.25
-        }, 
-        "posture": "standing", 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "wi": 12, 
-          "st": 10, 
-          "ht": 11, 
-          "dx": 10, 
-          "basic-move": 5, 
-          "basic-speed": 5.25
-        }, 
-        "advantages": {
-          "empathy": 5, 
-          "primary lwa (Erzulie Freda)": 6, 
-          "vodou practitioner (Mambo/Hougan 2)": 35
-        }, 
-        "opponent": null, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "spells": [
-          {
-            "cost": 1, 
-            "name": "awaken", 
-            "notes": "M90", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 12
+      "Anaica - (badguy) Mambo on Tereshkova": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
           }, 
-          {
-            "cost": 4, 
-            "name": "communicate", 
-            "notes": "M48", 
-            "maintain": 4, 
-            "time": 4, 
-            "skill": 11
+          "spells": [
+            {
+              "cost": 1, 
+              "name": "awaken", 
+              "notes": "M90", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "communicate", 
+              "notes": "M48", 
+              "maintain": 4, 
+              "time": 4, 
+              "skill": 11
+            }, 
+            {
+              "cost": 3, 
+              "name": "daze", 
+              "notes": "M134", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "far hearing", 
+              "notes": "M173", 
+              "maintain": 2, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "foolishness", 
+              "notes": "M134", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "lend energy", 
+              "notes": "M89", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "lend vitality", 
+              "notes": "M89", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 2, 
+              "name": "luck", 
+              "notes": "V2", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "major heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "minor heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "might", 
+              "notes": "M37", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 15, 
+              "name": "restoration", 
+              "notes": "M93", 
+              "maintain": 0, 
+              "time": 60, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "sense life", 
+              "notes": "M45, cost 1/2 per yard radius, see M11", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "sleep", 
+              "notes": "M135", 
+              "maintain": 0, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "wizard eye", 
+              "notes": "M104", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }
+          ], 
+          "stuff": [], 
+          "stunned": 0, 
+          "skills": {}, 
+          "notes": [
+            "origin: haitian", 
+            "gender: female", 
+            "characteristics: Sharpens weapon", 
+            "instincts: To commit an atrocity", 
+            "hair: Thinning", 
+            "speech: Squeaky", 
+            "knack: Political leverage", 
+            "personality: Liar", 
+            "** 18 spells **"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": null, 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "ht": 11, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
           }, 
-          {
-            "cost": 3, 
-            "name": "daze", 
-            "notes": "M134", 
-            "maintain": 2, 
-            "time": 2, 
-            "skill": 11
+          "check_for_death": false, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "ht": 11, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
           }, 
-          {
-            "cost": 4, 
-            "name": "far hearing", 
-            "notes": "M173", 
-            "maintain": 2, 
-            "time": 3, 
-            "skill": 11
+          "advantages": {
+            "empathy": 5, 
+            "lwa (Mambo, Erzulie Freda)": 6, 
+            "vodou practitioner (Mambo/Hougan 2)": 35
           }, 
-          {
-            "cost": null, 
-            "name": "foolishness", 
-            "notes": "M134", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 11
-          }, 
-          {
-            "cost": null, 
-            "name": "lend energy", 
-            "notes": "M89", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": null, 
-            "name": "lend vitality", 
-            "notes": "M89", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": 2, 
-            "name": "luck", 
-            "notes": "V2", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 11
-          }, 
-          {
-            "cost": null, 
-            "name": "major heal", 
-            "notes": "M91", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 11
-          }, 
-          {
-            "cost": null, 
-            "name": "minor heal", 
-            "notes": "M91", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": null, 
-            "name": "might", 
-            "notes": "M37", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": 15, 
-            "name": "restoration", 
-            "notes": "M93", 
-            "maintain": 0, 
-            "time": 60, 
-            "skill": 11
-          }, 
-          {
-            "cost": null, 
-            "name": "sense life", 
-            "notes": "M45, cost 1/2 per yard radius, see M11", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": 4, 
-            "name": "sleep", 
-            "notes": "M135", 
-            "maintain": 0, 
-            "time": 3, 
-            "skill": 11
-          }, 
-          {
-            "cost": 4, 
-            "name": "wizard eye", 
-            "notes": "M104", 
-            "maintain": 2, 
-            "time": 2, 
-            "skill": 11
-          }
-        ]
+          "did_action_this_turn": false, 
+          "weapon-index": null, 
+          "timers": [], 
+          "opponent": null, 
+          "posture": "standing"
       }
     }
   }

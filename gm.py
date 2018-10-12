@@ -25,7 +25,7 @@ import sys
 #   - add ability to edit any creature
 #   - should only be able to ready an unready weapon.
 #   - Add 2 weapon (or weapon & shield)
-#   - Allow for markdown in 'notes' and 'short_notes'
+#   - Allow for markdown in 'notes' and 'short-notes'
 #   - On startup, check each of the characters
 #       o eventually, there needs to be a list of approved skills &
 #         advantages; characters' data should only match the approved list
@@ -914,9 +914,9 @@ class FightGmWindow(GmWindow):
                     window.addstr(line, 0, string, mode)
                     line += 1
 
-        if ('short_notes' in fighter.details and 
-                                fighter.details['short_notes'] is not None):
-            for note in fighter.details['short_notes']:
+        if ('short-notes' in fighter.details and 
+                                fighter.details['short-notes'] is not None):
+            for note in fighter.details['short-notes']:
                 window.addstr(line, 0, note, mode)
                 line += 1
 
@@ -2113,13 +2113,13 @@ class Ruleset(object):
                                    'location': 'notes'})
                     break # Don't want an entry for each time it's in notes
 
-        if 'short_notes' in creature:
-            for line in creature['short_notes']:
+        if 'short-notes' in creature:
+            for line in creature['short-notes']:
                 if look_for_re.search(line):
                     result.append({'name': name,
                                    'group': group,
-                                   'location': 'short_notes',
-                                   'notes': creature['short_notes']})
+                                   'location': 'short-notes',
+                                   'notes': creature['short-notes']})
 
         return result
 
@@ -4511,7 +4511,8 @@ class FightHandler(ScreenHandler):
             ord('-'): {'name': 'HP damage',   'func': self.__damage_HP},
             ord('L'): {'name': 'Loot bodies', 'func': self.__loot_bodies},
             ord('m'): {'name': 'maneuver',    'func': self.__maneuver},
-            ord('n'): {'name': 'notes',       'func': self.__notes},
+            ord('n'): {'name': 'short notes', 'func': self.__short_notes},
+            ord('N'): {'name': 'full Notes',  'func': self.__full_notes},
             ord('o'): {'name': 'opponent',    'func': self.__pick_opponent},
             ord('q'): {'name': 'quit',        'func': self.__quit},
             ord('s'): {'name': 'save',        'func': self.__save},
@@ -5147,7 +5148,17 @@ class FightHandler(ScreenHandler):
         return next_PC_name
 
 
-    def __notes(self):
+    def __short_notes(self):
+        return self.__notes('short-notes')
+
+
+    def __full_notes(self):
+        return self.__notes('notes')
+
+
+    def __notes(self,
+                notes_type  # 'short-notes' or 'notes'
+               ):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -5174,10 +5185,10 @@ class FightHandler(ScreenHandler):
         # Now, get the notes for that person
         lines, cols = self._window.getmaxyx()
 
-        if 'short_notes' not in notes_recipient.details:
+        if notes_type not in notes_recipient.details:
             notes = None
         else:
-            notes = '\n'.join(notes_recipient.details['short_notes'])
+            notes = '\n'.join(notes_recipient.details[notes_type])
 
         notes = self._window_manager.edit_window(
                     lines - 4,
@@ -5186,7 +5197,7 @@ class FightHandler(ScreenHandler):
                     'Notes',
                     '^G to exit')
 
-        notes_recipient.details['short_notes'] = [x for x in notes.split('\n')]
+        notes_recipient.details[notes_type] = [x for x in notes.split('\n')]
 
         # Redraw the fighters
         next_PC_name = self.__next_PC_name()
