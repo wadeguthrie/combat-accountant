@@ -5877,6 +5877,42 @@
             "type": "melee weapon"
           }, 
           {
+            "count": 1, 
+            "name": "Baseball card: Sasaki", 
+            "notes": "eR 500", 
+            "type": "misc"
+          },
+          {
+            "count": 2, 
+            "name": "Baseball card: Jackson", 
+            "notes": "eR 200", 
+            "type": "misc"
+          },
+          {
+            "count": 3, 
+            "name": "Baseball card: Salazar", 
+            "notes": "eR 10", 
+            "type": "misc"
+          },
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          },
+          {
+            "count": 1, 
+            "notes": "Needs a 'B' cell", 
+            "type": "misc", 
+            "name": "Multitool w/flashlight"
+          },
+          {
+            "count": 1, 
+            "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
+            "type": "misc", 
+            "name": "small bag"
+          },
+          {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
@@ -5970,6 +6006,36 @@
             "skill": "knife", 
             "type": "melee weapon"
           }, 
+          {
+            "count": 1, 
+            "name": "Baseball card: Sasaki", 
+            "notes": "eR 500", 
+            "type": "misc"
+          },
+          {
+            "count": 3, 
+            "name": "Baseball card: Jackson", 
+            "notes": "eR 200", 
+            "type": "misc"
+          },
+          {
+            "count": 4, 
+            "name": "Baseball card: Salazar", 
+            "notes": "eR 10", 
+            "type": "misc"
+          },
+          {
+            "count": 5, 
+            "name": "Med Patches", 
+            "notes": "3 for headache, 2 for allergies", 
+            "type": "misc"
+          },
+          {
+            "count": 1, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "Comb, Condom x2, breath mints"
+          },
           {
             "count": 5, 
             "notes": "", 
@@ -6186,6 +6252,48 @@
             "type": "melee weapon"
           }, 
           {
+            "count": 1, 
+            "notes": "holds: gum, nail clippers, comb", 
+            "type": "misc", 
+            "name": "small case (inside a pocket)"
+          },
+          {
+            "count": 1, 
+            "name": "Baseball card: Sasaki", 
+            "notes": "eR 500", 
+            "type": "misc"
+          },
+          {
+            "count": 2, 
+            "name": "Baseball card: Jackson", 
+            "notes": "eR 200", 
+            "type": "misc"
+          },
+          {
+            "count": 3, 
+            "name": "Baseball card: Salazar", 
+            "notes": "eR 10", 
+            "type": "misc"
+          },
+          {
+            "count": 1, 
+            "name": "Memory chip", 
+            "notes": "pictures of parents, sister and her kids", 
+            "type": "misc"
+          },
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          },
+          {
+            "count": 1, 
+            "notes": "Needs a 'B' cell", 
+            "type": "misc", 
+            "name": "Multitool w/flashlight"
+          },
+          {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
@@ -6279,6 +6387,36 @@
             "skill": "knife", 
             "type": "melee weapon"
           }, 
+          {
+            "count": 1, 
+            "name": "Baseball card: Sasaki", 
+            "notes": "eR 500", 
+            "type": "misc"
+          },
+          {
+            "count": 2, 
+            "name": "Baseball card: Jackson", 
+            "notes": "eR 200", 
+            "type": "misc"
+          },
+          {
+            "count": 7, 
+            "name": "Baseball card: Salazar", 
+            "notes": "eR 10", 
+            "type": "misc"
+          },
+          {
+            "count": 1, 
+            "notes": "Needs a 'B' cell", 
+            "type": "misc", 
+            "name": "Multitool w/flashlight"
+          },
+          {
+            "count": 1, 
+            "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
+            "type": "misc", 
+            "name": "small bag"
+          },
           {
             "count": 5, 
             "notes": "", 
@@ -6431,12 +6569,6 @@
             "type": "melee weapon"
           }, 
           {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }, 
-          {
             "acc": 3, 
             "count": 1, 
             "name": "pistol, Colt 170D", 
@@ -6456,7 +6588,38 @@
               "shots": 9, 
               "shots_left": 9
             }
-          }
+          },
+          {
+            "count": 2, 
+            "name": "Baseball card: Jackson", 
+            "notes": "eR 200", 
+            "type": "misc"
+          },
+          {
+            "count": 3, 
+            "name": "Baseball card: Salazar", 
+            "notes": "eR 10", 
+            "type": "misc"
+          },
+          {
+            "count": 1, 
+            "notes": "Needs a 'B' cell", 
+            "type": "misc", 
+            "name": "Multitool w/flashlight"
+          },
+          {
+            "count": 1, 
+            "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
+            "type": "misc", 
+            "name": "small bag"
+          },
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          } 
+
         ], 
         "stunned": 0, 
         "skills": {
@@ -6535,12 +6698,6 @@
             "type": "melee weapon"
           }, 
           {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }, 
-          {
             "acc": 3, 
             "count": 1, 
             "name": "pistol, Colt 170D", 
@@ -6560,7 +6717,31 @@
               "shots": 9, 
               "shots_left": 9
             }
-          }
+          },
+          {
+            "count": 2, 
+            "name": "Baseball card: Jackson", 
+            "notes": "eR 200", 
+            "type": "misc"
+          },
+          {
+            "count": 1, 
+            "name": "Baseball card: Pete Rose", 
+            "notes": "eR 10", 
+            "type": "misc"
+          },
+          {
+            "count": 1, 
+            "notes": "holds: candy, tampon x2, lip balm, nail clippers", 
+            "type": "misc", 
+            "name": "small bag"
+          },
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          } 
         ], 
         "stunned": 0, 
         "skills": {
@@ -6680,6 +6861,50 @@
             "skill": "knife", 
             "type": "melee weapon"
           }, 
+          {
+            "count": 1, 
+            "name": "Baseball card: Hasegawa", 
+            "notes": "eR 1000", 
+            "type": "misc"
+          },
+          {
+            "count": 1, 
+            "name": "Baseball card: Jackson", 
+            "notes": "eR 200", 
+            "type": "misc"
+          },
+          {
+            "count": 1, 
+            "name": "Baseball card: Pete Rose", 
+            "notes": "eR 10", 
+            "type": "misc"
+          },
+          {
+            "count": 3, 
+            "name": "Baseball card: Angel Salazar", 
+            "notes": "eR 10", 
+            "type": "misc"
+          },
+          {
+            "count": 1, 
+            "notes": "holds: candy, tampon x2, lip balm, nail clippers", 
+            "type": "misc", 
+            "name": "small bag"
+          },
+          {
+            "count": 1, 
+            "notes": "Needs a 'B' cell", 
+            "type": "misc", 
+            "name": "Multitool w/flashlight"
+          },
+          {
+            "count": 1, 
+            "notes": "2 keys: door to crate area, crates", 
+            "type": "misc", 
+            "name": "set of keys"
+          },
+
+
           {
             "count": 5, 
             "notes": "", 
