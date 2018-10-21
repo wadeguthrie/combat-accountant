@@ -4505,16 +4505,14 @@ class FightHandler(ScreenHandler):
 
 
             curses.KEY_UP:
-                      {'name': 'previous character',  'func':
-                                                        self.__view_prev},
+                      {'name': 'previous character',
+                                              'func': self.__view_prev},
             curses.KEY_DOWN:
-                      {'name': 'next character',      'func':
-                                                        self.__view_next},
+                      {'name': 'next character',
+                                              'func': self.__view_next},
             curses.KEY_HOME:
-                      {'name': 'init character',      'func':
-                                                        self.__view_init},
-
-
+                      {'name': 'current character',
+                                              'func': self.__view_init},
 
             ord(' '): {'name': 'next',        'func': self.__next_fighter},
             ord('<'): {'name': 'prev',        'func': self.__prev_fighter},
@@ -4523,6 +4521,8 @@ class FightHandler(ScreenHandler):
             ord('D'): {'name': 'dead',        'func': self.__dead},
             ord('f'): {'name': 'FP damage',   'func': self.__damage_FP},
             ord('h'): {'name': 'History',     'func': self.__show_history},
+            ord('i'): {'name': 'character info',
+                                              'func': self.__show_info},
             ord('k'): {'name': 'keep monsters',
                                               'func': self.__do_keep_monsters},
             ord('-'): {'name': 'HP damage',   'func': self.__damage_HP},
@@ -5395,6 +5395,36 @@ class FightHandler(ScreenHandler):
             lines.append([{'text': line, 'mode': mode}])
 
         self._window_manager.display_window('Fight History', lines)
+        return True
+
+    def __show_info(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        char_info = []
+        if self.__viewing_index is not None:
+            current_fighter = self.__fighters[self.__viewing_index]
+            opponent = self.get_opponent_for(current_fighter)
+            info_about = current_fighter
+        else:
+            current_fighter = self.get_current_fighter()
+            opponent = self.get_opponent_for(current_fighter)
+            if opponent is None:
+                info_about = current_fighter
+            else:
+                info_about_menu = [(current_fighter.name, current_fighter),
+                                   (opponent.name, opponent)]
+                info_about = self._window_manager.menu(
+                                        'Info About Whom',
+                                        info_about_menu)
+            if info_about is None:
+                return True # Keep fighting
+
+        self.__ruleset.get_character_detail(info_about.details,
+                                            char_info)
+        self._window_manager.display_window('%s Information' % info_about.name,
+                                            char_info)
         return True
 
     def display_window(self,
