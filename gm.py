@@ -2824,26 +2824,37 @@ class GurpsRuleset(Ruleset):
                              'mode': mode | curses.A_BOLD}])
         found_one = False
         pieces = []
-        # TODO: break this into [iq, st, ht, and dx] and the rest
-        for item_key in character['permanent'].iterkeys():
-            leader = '' if found_one else '  '
-            text = '%s%s:%d/%d' % (leader,
-                                   item_key,
-                                   character['current'][item_key],
-                                   character['permanent'][item_key])
-            if (character['current'][item_key] == 
+
+        first_row = ['iq', 'st', 'ht', 'dx']
+        for row in range(2):
+            found_one_this_row = False
+            for item_key in character['permanent'].iterkeys():
+                in_first_row = item_key in first_row
+                if row == 0 and not in_first_row:
+                    continue
+                if row != 0 and in_first_row:
+                    continue
+                leader = '' if found_one_this_row else '  '
+                text = '%s%s:%d/%d' % (leader,
+                                       item_key,
+                                       character['current'][item_key],
+                                       character['permanent'][item_key])
+                if (character['current'][item_key] == 
                                             character['permanent'][item_key]):
-                mode = curses.A_NORMAL
-            else:
-                mode = (curses.color_pair(GmWindowManager.YELLOW_BLACK) |
+                    mode = curses.A_NORMAL
+                else:
+                    mode = (curses.color_pair(GmWindowManager.YELLOW_BLACK) |
                                                                 curses.A_BOLD)
 
-            pieces.append({'text': '%s ' % text, 'mode': mode})
-            found_one = True
+                pieces.append({'text': '%s ' % text, 'mode': mode})
+                found_one = True
+                found_one_this_row = True
 
-        if found_one:
-            char_detail.append(pieces)
-        else:
+            if found_one_this_row:
+                char_detail.append(copy.deepcopy(pieces))
+                del pieces[:]
+
+        if not found_one:
             char_detail.append([{'text': '  (None)',
                                  'mode': mode}])
 
