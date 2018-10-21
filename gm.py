@@ -4177,14 +4177,16 @@ class BuildFightHandler(ScreenHandler):
 
             keep_asking = True
             lines, cols = self._window.getmaxyx()
+            monster_num = len(self.__new_creatures) + 1
+            if not self.__is_new:
+                monster_num += len(self.__new_home)
             while keep_asking:
-                monster_name = self._window_manager.input_box(
-                                                            1,      # height
-                                                            cols-4, # width
-                                                            'Monster Name')
-                if monster_name is None or len(monster_name) == 0:
-                    monster_name, where, gender = self.__world.get_random_name()
-                    if monster_name is None:
+                base_name = self._window_manager.input_box(1,      # height
+                                                           cols-4, # width
+                                                           'Monster Name')
+                if base_name is None or len(base_name) == 0:
+                    base_name, where, gender = self.__world.get_random_name()
+                    if base_name is None:
                         self._window_manager.error(
                             ['Monster needs a name'])
                         keep_asking = True
@@ -4194,6 +4196,7 @@ class BuildFightHandler(ScreenHandler):
                         if gender is not None:
                             to_monster['notes'].append('gender: %s' % gender)
 
+                monster_name = '%d - %s' % (monster_num, base_name)
                 if monster_name in self.__new_creatures:
                     self._window_manager.error(
                         ['Monster "%s" already exists' % monster_name])
