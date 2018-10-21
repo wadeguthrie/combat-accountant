@@ -4989,6 +4989,10 @@ class FightHandler(ScreenHandler):
                 new_item = bad_guy.details['stuff'].pop(index)
                 xfer['guy'].add_equipment(new_item, bad_guy.name)
 
+                # indexes are no longer good, remove the weapon and armor
+                bad_guy.don_armor_by_index(None)
+                bad_guy.draw_weapon_by_index(None)
+
         if not found_dead_bad_guy:
             self._window_manager.error(
                 ['Can\'t loot from the living -- there are no dead bad guys.'])
