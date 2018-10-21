@@ -42,6 +42,9 @@ import traceback
 #     redrawing everything way more often than I should.  Turns out, it's not
 #     costing me much but it's ugly, none-the-less
 
+# NOTE: debugging thoughts:
+#   - traceback.print_stack()
+
 class GmJson(object):
     '''
     Context manager that opens and loads a JSON.  Does so in a context manager
@@ -89,13 +92,11 @@ class GmJson(object):
         if exception_type is IOError:
             print 'IOError: %r' % exception_type
             print 'EXCEPTION val: %s' % exception_value
-            #print 'Traceback: %r' % exception_traceback
-            traceback.print_exc()
+            traceback.print_exc() # or traceback.format_exc()
         elif exception_type is not None:
             print 'EXCEPTION type: %r' % exception_type
             print 'EXCEPTION val: %s' % exception_value
-            #print 'Traceback: %r' % exception_traceback
-            traceback.print_exc()
+            traceback.print_exc() # or traceback.format_exc()
 
         if self.write_data is not None:
             with open(self.__filename, 'w') as f:
@@ -2254,6 +2255,7 @@ class GurpsRuleset(Ruleset):
             # Check for Major Injury (B420)
             if -adj > (fighter.details['permanent']['hp'] / 2):
                 (SUCCESS, SIMPLE_FAIL, BAD_FAIL) = range(3)
+                total = fighter.details['current']['ht']
                 if 'high pain threshold' in fighter.details['advantages']:
                     total = fighter.details['current']['ht'] + 3
                     menu_title = (
@@ -2265,15 +2267,16 @@ class GurpsRuleset(Ruleset):
                         'Major Wound (B420): Roll vs. HT-4 (%d) or be stunned' %
                                                                         total)
                 else:
+                    total = fighter.details['current']['ht']
                     menu_title = (
                         'Major Wound (B420): Roll vs. HT (%d) or be stunned' % 
-                                            fighter.details['current']['ht'])
+                                                                        total)
 
-                stunned_menu = [('Succeeded (roll <= HT)',
+                stunned_menu = [('Succeeded (roll <= HT (%d))' % total,
                                  GurpsRuleset.MAJOR_WOUND_SUCCESS),
-                                ('Missed roll by < 5',
+                                ('Missed roll by < 5 (roll < %d)' % (total+5),
                                  GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL),
-                                ('Missed roll by >= 5',
+                                ('Missed roll by >= 5 (roll >= %d)' % (total+5),
                                  GurpsRuleset.MAJOR_WOUND_BAD_FAIL),
                                ]
                 stunned_results = self._window_manager.menu(menu_title,
