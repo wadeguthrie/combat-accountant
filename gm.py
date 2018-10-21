@@ -2856,7 +2856,13 @@ class GurpsRuleset(Ruleset):
         found_one = False
         for item in character['stuff']:
             found_one = True
-            char_detail.append([{'text': '  %s' % item['name'],
+            texts = ['  %s' % item['name']]
+            if 'count' in item and item['count'] != 1:
+                texts.append(' (%d)' % item['count'])
+            if ('notes' in item and item['notes'] is not None and
+                                                    (len(item['notes']) > 0)):
+                texts.append(': %s' % item['notes'])
+            char_detail.append([{'text': ''.join(texts),
                                  'mode': mode}])
 
         if not found_one:
