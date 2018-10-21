@@ -865,7 +865,7 @@
       }, 
       "stuff": [
         {
-          "count": 1, 
+          "count": 4, 
           "name": "knife, large", 
           "notes": "", 
           "damage": {
@@ -900,7 +900,7 @@
           "ammo": {
             "name": "C Cell", 
             "shots": 9, 
-            "shots_left": 9
+            "shots_left": 8
           }
         }, 
         {
@@ -908,9 +908,120 @@
           "notes": "", 
           "type": "misc", 
           "name": "C Cell"
+        }, 
+        {
+          "count": 1, 
+          "notes": "2 keys: door to crate area, crates", 
+          "type": "misc", 
+          "name": "set of keys"
+        }, 
+        {
+          "count": 2, 
+          "notes": "Needs a 'B' cell", 
+          "type": "misc", 
+          "name": "Multitool w/flashlight"
+        }, 
+        {
+          "count": 3, 
+          "notes": "holds: candy, tampon x2, lip balm, nail clippers", 
+          "type": "misc", 
+          "name": "small bag"
+        }, 
+        {
+          "count": 3, 
+          "notes": "eR 10", 
+          "type": "misc", 
+          "name": "Baseball card: Angel Salazar"
+        }, 
+        {
+          "count": 2, 
+          "notes": "eR 10", 
+          "type": "misc", 
+          "name": "Baseball card: Pete Rose"
+        }, 
+        {
+          "count": 5, 
+          "notes": "eR 200", 
+          "type": "misc", 
+          "name": "Baseball card: Jackson"
+        }, 
+        {
+          "count": 1, 
+          "notes": "eR 1000", 
+          "type": "misc", 
+          "name": "Baseball card: Hasegawa"
+        }, 
+        {
+          "acc": 3, 
+          "count": 1, 
+          "name": "pistol, average David-built laser", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 1, 
+              "num_dice": 2, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 7, 
+            "shots_left": 7
+          }
+        }, 
+        {
+          "acc": 8, 
+          "count": 1, 
+          "name": "laser rifle", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 0, 
+              "num_dice": 3, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (rifle)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 3, 
+            "shots_left": 0
+          }
+        }, 
+        {
+          "acc": 3, 
+          "count": 2, 
+          "name": "pistol, Colt 170D", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "type": "pi", 
+              "num_dice": 1, 
+              "plus": 4
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 8
+          }
+        }, 
+        {
+          "count": 3, 
+          "notes": "eR 10", 
+          "type": "misc", 
+          "name": "Baseball card: Salazar"
         }
       ], 
-      "stunned": false, 
+      "stunned": 0, 
       "skills": {
         "interrogation": 12, 
         "guns (grenade launcher)": 9, 
@@ -931,7 +1042,7 @@
         "knife": 15, 
         "traps": 12
       }, 
-      "did_action_this_turn": true, 
+      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "current": {
@@ -970,20 +1081,14 @@
         "night vision": 4, 
         "combat reflexes": 15
       }, 
-      "weapon-index": null, 
+      "weapon-index": 1, 
       "check_for_death": false, 
-      "timers": [
-        {
-          "rounds": 0.9, 
-          "string": [
-            "Do nothing", 
-            " Defense: any", 
-            " Move: none"
-          ]
-        }
-      ], 
+      "timers": [], 
       "posture": "standing", 
-      "opponent": null
+      "opponent": {
+        "group": "Tereshkova - Battle for the Crate", 
+        "name": "Ayla"
+      }
     }, 
     "vasilis - Alan": {
       "aim": {
@@ -1039,7 +1144,7 @@
           "name": "Hacking Equipment +1"
         }
       ], 
-      "stunned": false, 
+      "stunned": 0, 
       "skills": {
         "engineer (electronics)": 12, 
         "engineer (starships)": 12, 
@@ -1062,10 +1167,14 @@
       "did_action_this_turn": true, 
       "shock": 0, 
       "armor-index": null, 
+      "short-notes": [
+        "In mech, canopy closed, lights on ", 
+        ""
+      ], 
       "current": {
         "fp": 10, 
         "iq": 14, 
-        "hp": 12, 
+        "hp": 11, 
         "wi": 14, 
         "st": 10, 
         "ht": 9, 
@@ -1073,7 +1182,7 @@
         "basic-move": 5, 
         "basic-speed": 5.25
       }, 
-      "state": "alive", 
+      "state": "unconscious", 
       "permanent": {
         "fp": 10, 
         "iq": 14, 
@@ -1100,14 +1209,17 @@
         {
           "rounds": 0.9, 
           "string": [
-            "Do nothing", 
+            "Move", 
             " Defense: any", 
-            " Move: none"
+            " Move: full=5"
           ]
         }
       ], 
       "posture": "standing", 
-      "opponent": null
+      "opponent": {
+        "group": "Tereshkova - Battle for the Crate", 
+        "name": "Alexander - Sergeant"
+      }
     }, 
     "deri - Chelsea": {
       "aim": {
@@ -1193,7 +1305,7 @@
           "type": "melee weapon"
         }
       ], 
-      "stunned": false, 
+      "stunned": 0, 
       "skills": {
         "electronics repair (terraforming)": 13, 
         "thrown weapon (knife)": 10, 
@@ -1266,7 +1378,7 @@
         "versatile": 5, 
         "vodou practitioner (Mambo 1)": 15
       }, 
-      "weapon-index": 0, 
+      "weapon-index": null, 
       "check_for_death": false, 
       "timers": [
         {
@@ -1305,7 +1417,7 @@
           "ammo": {
             "name": "C Cell", 
             "shots": 9, 
-            "shots_left": 9
+            "shots_left": 7
           }
         }, 
         {
@@ -1361,7 +1473,7 @@
           "type": "melee weapon"
         }
       ], 
-      "stunned": false, 
+      "stunned": 0, 
       "skills": {
         "throwing": 13, 
         "armoury (small arms)": 10, 
@@ -1495,20 +1607,28 @@
         "flashbacks, mild": -5, 
         "combat reflexes": 15
       }, 
-      "weapon-index": 0, 
+      "weapon-index": null, 
       "check_for_death": false, 
       "timers": [
         {
+          "announcement": "sleep", 
+          "rounds": 1.9, 
+          "string": "sleep"
+        }, 
+        {
           "rounds": 0.9, 
           "string": [
-            "Do nothing", 
+            "Attack", 
             " Defense: any", 
-            " Move: none"
+            " Move: step"
           ]
         }
       ], 
       "did_action_this_turn": true, 
-      "opponent": null
+      "opponent": {
+        "group": "Tereshkova - Battle for the Crate", 
+        "name": "Alexander - Sergeant"
+      }
     }, 
     "mama V - Karen": {
       "aim": {
@@ -1548,7 +1668,7 @@
           "ammo": {
             "name": "C Cell", 
             "shots": 9, 
-            "shots_left": 9
+            "shots_left": 8
           }
         }, 
         {
@@ -1558,7 +1678,7 @@
           "name": "C Cell"
         }
       ], 
-      "stunned": false, 
+      "stunned": 0, 
       "skills": {
         "physician": 14, 
         "axe/mace": 7, 
@@ -1608,20 +1728,23 @@
         "likes shiny objects": -1, 
         "personality change": -1
       }, 
-      "weapon-index": 1, 
+      "weapon-index": null, 
       "check_for_death": false, 
       "timers": [
         {
           "rounds": 0.9, 
           "string": [
-            "Do nothing", 
+            "Move", 
             " Defense: any", 
-            " Move: none"
+            " Move: full=5"
           ]
         }
       ], 
       "posture": "standing", 
-      "opponent": null
+      "opponent": {
+        "group": "Tereshkova - Battle for the Crate", 
+        "name": "Alexander - Sergeant"
+      }
     }
   }, 
   "dead-monsters": {
@@ -2318,6 +2441,760 @@
         "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
+        "opponent": null
+      }
+    }, 
+    "1st Hunting Party": {
+      "6: Matthew": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }, 
+          {
+            "count": 1, 
+            "type": "armor", 
+            "notes": "Enchanted w/fortify spell [M66]", 
+            "dr": 2, 
+            "name": "Sport coat/Jeans"
+          }
+        ], 
+        "stunned": false, 
+        "skills": {
+          "beam weapons (pistol)": 17, 
+          "brawling": 17, 
+          "knife": 17
+        }, 
+        "notes": [
+          "origin: australian", 
+          "gender: male", 
+          "characteristics: Black eye", 
+          "instincts: To hate", 
+          "hair: Straight", 
+          "speech: Crisp", 
+          "knack: Invention", 
+          "personality: Introverted"
+        ], 
+        "shock": 0, 
+        "short-notes": [], 
+        "armor-index": 3, 
+        "current": {
+          "fp": 11, 
+          "iq": 9, 
+          "hp": 15, 
+          "wi": 9, 
+          "st": 15, 
+          "ht": 11, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.25
+        }, 
+        "posture": "standing", 
+        "state": "absent", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 9, 
+          "hp": 15, 
+          "wi": 9, 
+          "st": 15, 
+          "ht": 11, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.25
+        }, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "timers": [
+          {
+            "state": "alive", 
+            "rounds": 2
+          }
+        ], 
+        "did_action_this_turn": true, 
+        "opponent": null
+      }, 
+      "4: Olivia": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stunned": false, 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 14, 
+          "knife": 15
+        }, 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "wi": 12, 
+          "st": 10, 
+          "ht": 11, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "wi": 12, 
+          "st": 10, 
+          "ht": 11, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "state": "unconscious", 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 1, 
+            "notes": "eR 500", 
+            "type": "misc", 
+            "name": "Baseball card: Sasaki"
+          }, 
+          {
+            "count": 2, 
+            "notes": "eR 200", 
+            "type": "misc", 
+            "name": "Baseball card: Jackson"
+          }, 
+          {
+            "count": 3, 
+            "notes": "eR 10", 
+            "type": "misc", 
+            "name": "Baseball card: Salazar"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }, 
+          {
+            "count": 1, 
+            "notes": "Needs a 'B' cell", 
+            "type": "misc", 
+            "name": "Multitool w/flashlight"
+          }, 
+          {
+            "count": 1, 
+            "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
+            "type": "misc", 
+            "name": "small bag"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [], 
+        "did_action_this_turn": false, 
+        "weapon-index": null, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "2: William": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stunned": false, 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 14, 
+          "knife": 15
+        }, 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "wi": 12, 
+          "st": 10, 
+          "ht": 11, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "wi": 12, 
+          "st": 10, 
+          "ht": 11, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "state": "unconscious", 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 1, 
+            "notes": "eR 500", 
+            "type": "misc", 
+            "name": "Baseball card: Sasaki"
+          }, 
+          {
+            "count": 3, 
+            "notes": "eR 200", 
+            "type": "misc", 
+            "name": "Baseball card: Jackson"
+          }, 
+          {
+            "count": 4, 
+            "notes": "eR 10", 
+            "type": "misc", 
+            "name": "Baseball card: Salazar"
+          }, 
+          {
+            "count": 5, 
+            "notes": "3 for headache, 2 for allergies", 
+            "type": "misc", 
+            "name": "Med Patches"
+          }, 
+          {
+            "count": 1, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "Comb, Condom x2, breath mints"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [], 
+        "did_action_this_turn": false, 
+        "weapon-index": 0, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "5: Amelia": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stunned": false, 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 14, 
+          "knife": 15
+        }, 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "wi": 12, 
+          "st": 10, 
+          "ht": 11, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "wi": 12, 
+          "st": 10, 
+          "ht": 11, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "notes": "M193, cost eR3570", 
+            "type": "misc", 
+            "name": "Fingerbone of major healing (8)"
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "did_action_this_turn": true, 
+        "weapon-index": null, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "1: Oliver": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stunned": false, 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 14, 
+          "knife": 15
+        }, 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "wi": 12, 
+          "st": 10, 
+          "ht": 11, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "wi": 12, 
+          "st": 10, 
+          "ht": 11, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "state": "unconscious", 
+        "stuff": [
+          {
+            "count": 1, 
+            "notes": "M193, cost eR2910", 
+            "type": "misc", 
+            "name": "Fingerbone of fog"
+          }, 
+          {
+            "count": 1, 
+            "notes": "M193, cost eR3570", 
+            "type": "misc", 
+            "name": "Fingerbone of major healing (8)"
+          }, 
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 1, 
+            "notes": "holds: gum, nail clippers, comb", 
+            "type": "misc", 
+            "name": "small case (inside a pocket)"
+          }, 
+          {
+            "count": 1, 
+            "notes": "eR 500", 
+            "type": "misc", 
+            "name": "Baseball card: Sasaki"
+          }, 
+          {
+            "count": 2, 
+            "notes": "eR 200", 
+            "type": "misc", 
+            "name": "Baseball card: Jackson"
+          }, 
+          {
+            "count": 3, 
+            "notes": "eR 10", 
+            "type": "misc", 
+            "name": "Baseball card: Salazar"
+          }, 
+          {
+            "count": 1, 
+            "notes": "pictures of parents, sister and her kids", 
+            "type": "misc", 
+            "name": "Memory chip"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }, 
+          {
+            "count": 1, 
+            "notes": "Needs a 'B' cell", 
+            "type": "misc", 
+            "name": "Multitool w/flashlight"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [], 
+        "did_action_this_turn": false, 
+        "weapon-index": 2, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "3: Charlotte": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stunned": false, 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 14, 
+          "knife": 15
+        }, 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "wi": 12, 
+          "st": 10, 
+          "ht": 11, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "wi": 12, 
+          "st": 10, 
+          "ht": 11, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "state": "unconscious", 
+        "stuff": [
+          {
+            "acc": 2, 
+            "count": 1, 
+            "name": "pistol, Baretta DX 192", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": 4, 
+                "num_dice": 1, 
+                "type": "pi"
+              }
+            }, 
+            "reload": 3, 
+            "skill": "beam weapons (pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "C Cell", 
+              "shots": 8, 
+              "shots_left": 8
+            }
+          }, 
+          {
+            "count": 1, 
+            "name": "knife, large", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 1, 
+            "notes": "eR 500", 
+            "type": "misc", 
+            "name": "Baseball card: Sasaki"
+          }, 
+          {
+            "count": 2, 
+            "notes": "eR 200", 
+            "type": "misc", 
+            "name": "Baseball card: Jackson"
+          }, 
+          {
+            "count": 7, 
+            "notes": "eR 10", 
+            "type": "misc", 
+            "name": "Baseball card: Salazar"
+          }, 
+          {
+            "count": 1, 
+            "notes": "Needs a 'B' cell", 
+            "type": "misc", 
+            "name": "Multitool w/flashlight"
+          }, 
+          {
+            "count": 1, 
+            "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
+            "type": "misc", 
+            "name": "small bag"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "timers": [], 
+        "did_action_this_turn": false, 
+        "weapon-index": null, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }
     }, 
@@ -3153,8 +4030,8 @@
     }
   }, 
   "current-fight": {
-    "index": 6, 
-    "monsters": "1st Hunting Party", 
+    "index": 1, 
+    "monsters": "Tereshkova - Battle for the Crate", 
     "fighters": [
       {
         "group": "PCs", 
@@ -3165,36 +4042,32 @@
         "name": "lawerence - Spenser"
       }, 
       {
-        "group": "1st Hunting Party", 
-        "name": "5: Amelia"
-      }, 
-      {
-        "group": "1st Hunting Party", 
-        "name": "2: William"
-      }, 
-      {
-        "group": "1st Hunting Party", 
-        "name": "4: Olivia"
-      }, 
-      {
-        "group": "1st Hunting Party", 
-        "name": "3: Charlotte"
-      }, 
-      {
-        "group": "1st Hunting Party", 
-        "name": "1: Oliver"
+        "group": "Tereshkova - Battle for the Crate", 
+        "name": "Austin - Diamond protocol security"
       }, 
       {
         "group": "PCs", 
         "name": "vasilis - Alan"
       }, 
       {
-        "group": "1st Hunting Party", 
-        "name": "6: Matthew"
+        "group": "Tereshkova - Battle for the Crate", 
+        "name": "Alexander - Sergeant"
+      }, 
+      {
+        "group": "Tereshkova - Battle for the Crate", 
+        "name": "Anaica - (badguy) Mambo on Tereshkova"
       }, 
       {
         "group": "PCs", 
         "name": "deri - Chelsea"
+      }, 
+      {
+        "group": "Tereshkova - Battle for the Crate", 
+        "name": "Ayla"
+      }, 
+      {
+        "group": "Tereshkova - Battle for the Crate", 
+        "name": "Ruby"
       }, 
       {
         "group": "PCs", 
@@ -3205,37 +4078,41 @@
     "round": 2, 
     "history": [
       "--- Round 0 ---", 
-      " samuel - Erik did \"draw pistol, Sig D65\" maneuver", 
-      " (lawerence - Spenser) did (Do nothing) maneuver", 
-      " 5: Amelia did \"Do nothing\" maneuver", 
-      " 2: William did \"Do nothing\" maneuver", 
-      " 4: Olivia did \"Do nothing\" maneuver", 
-      " 3: Charlotte did \"Do nothing\" maneuver", 
-      " 1: Oliver did \"Do nothing\" maneuver", 
-      " vasilis - Alan did \"Do nothing\" maneuver", 
-      " 6: Matthew did \"Do nothing\" maneuver", 
-      " deri - Chelsea did \"draw pistol, Sig D65\" maneuver", 
-      " mama V - Karen did \"draw pistol, Sig D65\" maneuver", 
-      "--- Round 1 ---", 
-      " samuel - Erik did \"Move\" maneuver", 
-      " lawerence - Spenser did \"Move\" maneuver", 
-      " 5: Amelia did \"Do nothing\" maneuver", 
-      " 2: William did \"draw pistol, Baretta DX 192\" maneuver", 
-      " 4: Olivia did \"Do nothing\" maneuver", 
-      " 3: Charlotte did \"Do nothing\" maneuver", 
-      " 1: Oliver did \"draw pistol, Baretta DX 192\" maneuver", 
-      " vasilis - Alan did \"Do nothing\" maneuver", 
-      " 6: Matthew did \"Do nothing\" maneuver", 
-      " (deri - Chelsea) did (Do nothing) maneuver", 
-      " (mama V - Karen) did (Do nothing) maneuver", 
-      "--- Round 2 ---", 
       " (samuel - Erik) did (Do nothing) maneuver", 
       " (lawerence - Spenser) did (Do nothing) maneuver", 
-      " (5: Amelia) did (Do nothing) maneuver", 
-      " (2: William) was marked as (unconscious)", 
-      " (4: Olivia) was marked as (unconscious)", 
-      " (3: Charlotte) was marked as (unconscious)", 
-      " (1: Oliver) was marked as (unconscious)"
+      " (Austin - Diamond protocol security) did (Do nothing) maneuver", 
+      " (vasilis - Alan) did (Do nothing) maneuver", 
+      " (Alexander - Sergeant) did (Do nothing) maneuver", 
+      " (Anaica - (badguy) Mambo on Tereshkova) did (Do nothing) maneuver", 
+      " (deri - Chelsea) did (Do nothing) maneuver", 
+      " (Ayla) did (draw pistol, Colt 170D) maneuver", 
+      " (Ruby) did (draw pistol, Colt 170D) maneuver", 
+      " (mama V - Karen) picked (Alexander - Sergeant) as opponent", 
+      " (mama V - Karen) did 6 HP to (Alexander - Sergeant)", 
+      " (mama V - Karen) did (Attack) maneuver", 
+      "--- Round 1 ---", 
+      " (samuel - Erik) picked (Alexander - Sergeant) as opponent", 
+      " (samuel - Erik) did (Attack) maneuver", 
+      " (lawerence - Spenser) picked (Ayla) as opponent", 
+      " (Ayla) picked (lawerence - Spenser) as opponent right back", 
+      " (lawerence - Spenser) did (draw pistol, Sig D65) maneuver", 
+      " (lawerence - Spenser) did 7 HP to (Ayla)", 
+      " (Austin - Diamond protocol security) was marked as (unconscious)", 
+      " (Austin - Diamond protocol security) was marked as (dead)", 
+      " (vasilis - Alan) picked (Alexander - Sergeant) as opponent", 
+      " (Alexander - Sergeant) picked (vasilis - Alan) as opponent right back", 
+      " (vasilis - Alan) did (Move) maneuver", 
+      " (Alexander - Sergeant) did (Do nothing) maneuver", 
+      " (Anaica - (badguy) Mambo on Tereshkova) did (Cast (sleep)) maneuver", 
+      " (deri - Chelsea) did (Do nothing) maneuver", 
+      " (Ruby) did (Do nothing) maneuver", 
+      " (mama V - Karen) did (Move) maneuver", 
+      "--- Round 2 ---", 
+      " (samuel - Erik) did 4 HP to (Alexander - Sergeant)", 
+      " (samuel - Erik) did (Attack) maneuver", 
+      " (vasilis - Alan) was marked as (unconscious)", 
+      " (Alexander - Sergeant) was marked as (unconscious)", 
+      " (Ruby) was marked as (unconscious)"
     ]
   }, 
   "NPCs": {
@@ -3469,6 +4346,53 @@
         "combat reflexes": 15, 
         "high pain threshold": 10
       }, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
+      "opponent": null
+    }, 
+    "Celeline Fermine - Pilot (dead)": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "stunned": false, 
+      "skills": {}, 
+      "notes": [
+        "(Pilot)", 
+        "Cedeline and Diego Fermine.  Cedeline (Haitian) is the pilot and", 
+        "Diego (Dominican) is her husband.  Diego's a maintenance worker", 
+        "on Persephone Station."
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 10, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6
+      }, 
+      "posture": "standing", 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 10, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
@@ -3759,15 +4683,6 @@
       "opponent": null
     }, 
     "Jessica - Tereshkova security": {
-      "stunned": 0, 
-      "did_action_this_turn": false, 
-      "short-notes": [], 
-      "advantages": {
-        "combat reflexes": 15, 
-        "high pain threshold": 10
-      }, 
-      "weapon-index": null, 
-      "posture": "standing", 
       "aim": {
         "braced": false, 
         "rounds": 0
@@ -3819,6 +4734,7 @@
           "name": "C Cell"
         }
       ], 
+      "stunned": 0, 
       "skills": {
         "beam weapons (pistol)": 15, 
         "brawling": 14, 
@@ -3835,6 +4751,7 @@
         "personality: Cranky"
       ], 
       "shock": 0, 
+      "short-notes": [], 
       "armor-index": null, 
       "current": {
         "fp": 11, 
@@ -3847,6 +4764,7 @@
         "basic-move": 5, 
         "basic-speed": 5.75
       }, 
+      "posture": "standing", 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
@@ -3859,8 +4777,14 @@
         "basic-move": 5, 
         "basic-speed": 5.75
       }, 
-      "timers": [], 
+      "advantages": {
+        "combat reflexes": 15, 
+        "high pain threshold": 10
+      }, 
+      "weapon-index": null, 
       "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
       "opponent": null
     }, 
     "Stoddard, Leland (Chief Deputy Marshal)": {
@@ -4057,52 +4981,184 @@
       "did_action_this_turn": false, 
       "opponent": null
     }, 
-    "Celeline Fermine - Pilot (dead)": {
+    "Samantha - (party) Mambo on Tereshkova": {
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
       "stuff": [], 
-      "stunned": false, 
+      "stunned": 0, 
       "skills": {}, 
       "notes": [
-        "(Pilot)", 
-        "Cedeline and Diego Fermine.  Cedeline (Haitian) is the pilot and", 
-        "Diego (Dominican) is her husband.  Diego's a maintenance worker", 
-        "on Persephone Station."
+        "origin: haitian", 
+        "gender: female", 
+        "characteristics: Dirty", 
+        "instincts: To restore the family name", 
+        "hair: Very Long", 
+        "speech: Breathless", 
+        "knack: Immunity from the law", 
+        "personality: Sycophantic (brown-noser)", 
+        "** 18 Spells **: body control, comm & empathy, healing"
       ], 
       "shock": 0, 
+      "short-notes": [], 
       "armor-index": null, 
       "current": {
         "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "wi": 12, 
+        "iq": 13, 
+        "hp": 10, 
+        "wi": 13, 
         "st": 10, 
         "ht": 11, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5.25
       }, 
       "posture": "standing", 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
-        "hp": 12, 
+        "hp": 10, 
         "wi": 12, 
         "st": 10, 
         "ht": 11, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5.25
       }, 
-      "advantages": {}, 
+      "advantages": {
+        "empathy": 5, 
+        "primary lwa (Erzulie Freda)": 6, 
+        "vodou practitioner (Mambo/Hougan 2)": 35
+      }, 
+      "opponent": null, 
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
       "did_action_this_turn": false, 
-      "opponent": null
+      "spells": [
+        {
+          "cost": 1, 
+          "name": "awaken", 
+          "notes": "M90", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 4, 
+          "name": "communicate", 
+          "notes": "M48", 
+          "maintain": 4, 
+          "time": 4, 
+          "skill": 11
+        }, 
+        {
+          "cost": 3, 
+          "name": "daze", 
+          "notes": "M134", 
+          "maintain": 2, 
+          "time": 2, 
+          "skill": 11
+        }, 
+        {
+          "cost": 4, 
+          "name": "far hearing", 
+          "notes": "M173", 
+          "maintain": 2, 
+          "time": 3, 
+          "skill": 11
+        }, 
+        {
+          "cost": null, 
+          "name": "foolishness", 
+          "notes": "M134", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 11
+        }, 
+        {
+          "cost": null, 
+          "name": "lend energy", 
+          "notes": "M89", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": null, 
+          "name": "lend vitality", 
+          "notes": "M89", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "luck", 
+          "notes": "V2", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 11
+        }, 
+        {
+          "cost": null, 
+          "name": "major heal", 
+          "notes": "M91", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 11
+        }, 
+        {
+          "cost": null, 
+          "name": "minor heal", 
+          "notes": "M91", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": null, 
+          "name": "might", 
+          "notes": "M37", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 15, 
+          "name": "restoration", 
+          "notes": "M93", 
+          "maintain": 0, 
+          "time": 60, 
+          "skill": 11
+        }, 
+        {
+          "cost": null, 
+          "name": "sense life", 
+          "notes": "M45, cost 1/2 per yard radius, see M11", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 4, 
+          "name": "sleep", 
+          "notes": "M135", 
+          "maintain": 0, 
+          "time": 3, 
+          "skill": 11
+        }, 
+        {
+          "cost": 4, 
+          "name": "wizard eye", 
+          "notes": "M104", 
+          "maintain": 2, 
+          "time": 2, 
+          "skill": 11
+        }
+      ]
     }, 
     "Queen Clio - Bokor": {
       "aim": {
@@ -4302,185 +5358,6 @@
       "timers": [], 
       "did_action_this_turn": false, 
       "opponent": null
-    }, 
-    "Samantha - (party) Mambo on Tereshkova": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "stunned": 0, 
-        "skills": {}, 
-        "notes": [
-          "origin: haitian", 
-          "gender: female", 
-          "characteristics: Dirty", 
-          "instincts: To restore the family name", 
-          "hair: Very Long", 
-          "speech: Breathless", 
-          "knack: Immunity from the law", 
-          "personality: Sycophantic (brown-noser)", 
-          "** 18 Spells **: body control, comm & empathy, healing"
-        ], 
-        "shock": 0, 
-        "short-notes": [], 
-        "armor-index": null, 
-        "current": {
-          "fp": 11, 
-          "iq": 13, 
-          "hp": 10, 
-          "wi": 13, 
-          "st": 10, 
-          "ht": 11, 
-          "dx": 10, 
-          "basic-move": 5, 
-          "basic-speed": 5.25
-        }, 
-        "posture": "standing", 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "wi": 12, 
-          "st": 10, 
-          "ht": 11, 
-          "dx": 10, 
-          "basic-move": 5, 
-          "basic-speed": 5.25
-        }, 
-        "advantages": {
-          "empathy": 5, 
-          "primary lwa (Erzulie Freda)": 6, 
-          "vodou practitioner (Mambo/Hougan 2)": 35
-        }, 
-        "opponent": null, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "spells": [
-          {
-            "cost": 1, 
-            "name": "awaken", 
-            "notes": "M90", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": 4, 
-            "name": "communicate", 
-            "notes": "M48", 
-            "maintain": 4, 
-            "time": 4, 
-            "skill": 11
-          }, 
-          {
-            "cost": 3, 
-            "name": "daze", 
-            "notes": "M134", 
-            "maintain": 2, 
-            "time": 2, 
-            "skill": 11
-          }, 
-          {
-            "cost": 4, 
-            "name": "far hearing", 
-            "notes": "M173", 
-            "maintain": 2, 
-            "time": 3, 
-            "skill": 11
-          }, 
-          {
-            "cost": null, 
-            "name": "foolishness", 
-            "notes": "M134", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 11
-          }, 
-          {
-            "cost": null, 
-            "name": "lend energy", 
-            "notes": "M89", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": null, 
-            "name": "lend vitality", 
-            "notes": "M89", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": 2, 
-            "name": "luck", 
-            "notes": "V2", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 11
-          }, 
-          {
-            "cost": null, 
-            "name": "major heal", 
-            "notes": "M91", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 11
-          }, 
-          {
-            "cost": null, 
-            "name": "minor heal", 
-            "notes": "M91", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": null, 
-            "name": "might", 
-            "notes": "M37", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": 15, 
-            "name": "restoration", 
-            "notes": "M93", 
-            "maintain": 0, 
-            "time": 60, 
-            "skill": 11
-          }, 
-          {
-            "cost": null, 
-            "name": "sense life", 
-            "notes": "M45, cost 1/2 per yard radius, see M11", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": 4, 
-            "name": "sleep", 
-            "notes": "M135", 
-            "maintain": 0, 
-            "time": 3, 
-            "skill": 11
-          }, 
-          {
-            "cost": 4, 
-            "name": "wizard eye", 
-            "notes": "M104", 
-            "maintain": 2, 
-            "time": 2, 
-            "skill": 11
-          }
-        ]
     }
   }, 
   "Equipment": [
@@ -5682,89 +6559,304 @@
         "opponent": null
       }
     }, 
-    "1st Hunting Party": {
-      "6: Matthew": {
+    "Tereshkova - Battle for the Crate": {
+      "Anaica - (badguy) Mambo on Tereshkova": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "spells": [
+          {
+            "cost": 1, 
+            "name": "awaken", 
+            "notes": "M90", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": 4, 
+            "name": "communicate", 
+            "notes": "M48", 
+            "maintain": 4, 
+            "time": 4, 
+            "skill": 11
+          }, 
+          {
+            "cost": 3, 
+            "name": "daze", 
+            "notes": "M134", 
+            "maintain": 2, 
+            "time": 2, 
+            "skill": 11
+          }, 
+          {
+            "cost": 4, 
+            "name": "far hearing", 
+            "notes": "M173", 
+            "maintain": 2, 
+            "time": 3, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "foolishness", 
+            "notes": "M134", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "lend energy", 
+            "notes": "M89", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": null, 
+            "name": "lend vitality", 
+            "notes": "M89", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": 2, 
+            "name": "luck", 
+            "notes": "V2", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "major heal", 
+            "notes": "M91", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "minor heal", 
+            "notes": "M91", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": null, 
+            "name": "might", 
+            "notes": "M37", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": 15, 
+            "name": "restoration", 
+            "notes": "M93", 
+            "maintain": 0, 
+            "time": 60, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "sense life", 
+            "notes": "M45, cost 1/2 per yard radius, see M11", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": 4, 
+            "name": "sleep", 
+            "notes": "M135", 
+            "maintain": 0, 
+            "time": 3, 
+            "skill": 11
+          }, 
+          {
+            "cost": 4, 
+            "name": "wizard eye", 
+            "notes": "M104", 
+            "maintain": 2, 
+            "time": 2, 
+            "skill": 11
+          }
+        ], 
+        "stuff": [], 
+        "stunned": 0, 
+        "skills": {}, 
+        "notes": [
+          "origin: haitian", 
+          "gender: female", 
+          "characteristics: Sharpens weapon", 
+          "instincts: To commit an atrocity", 
+          "hair: Thinning", 
+          "speech: Squeaky", 
+          "knack: Political leverage", 
+          "personality: Liar", 
+          "** 18 spells **"
+        ], 
+        "shock": 0, 
+        "short-notes": [], 
+        "armor-index": null, 
+        "current": {
+          "fp": 5, 
+          "iq": 12, 
+          "hp": 10, 
+          "wi": 12, 
+          "st": 10, 
+          "ht": 11, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.25
+        }, 
+        "check_for_death": false, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "wi": 12, 
+          "st": 10, 
+          "ht": 11, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.25
+        }, 
+        "advantages": {
+          "empathy": 5, 
+          "lwa (Mambo, Erzulie Freda)": 6, 
+          "vodou practitioner (Mambo/Hougan 2)": 35
+        }, 
+        "did_action_this_turn": true, 
+        "weapon-index": null, 
+        "timers": [
+          {
+            "rounds": 2.9, 
+            "string": "Casting (sleep) @ skill (11): M135"
+          }, 
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Cast (sleep)", 
+              " Defense: none", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "opponent": null, 
+        "posture": "standing"
+      }, 
+      "Ayla": {
         "aim": {
           "braced": false, 
           "rounds": 0
         }, 
         "stuff": [
           {
-            "acc": 2, 
-            "count": 1, 
-            "name": "pistol, Baretta DX 192", 
+            "count": 5, 
             "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "knife, large", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
+            "type": "misc", 
+            "name": "C Cell"
+          }
+        ], 
+        "stunned": 0, 
+        "skills": {
+          "beam weapons (pistol)": 13, 
+          "brawling": 14, 
+          "knife": 14
+        }, 
+        "notes": [
+          "origin: australian", 
+          "gender: female", 
+          "characteristics: Repeats (I could use some taters) over and over", 
+          "instincts: To devour", 
+          "hair: Short", 
+          "speech: Halting", 
+          "knack: A much-needed bag of taters", 
+          "personality: Reckless"
+        ], 
+        "shock": 0, 
+        "short-notes": [], 
+        "armor-index": null, 
+        "current": {
+          "fp": 9, 
+          "iq": 8, 
+          "hp": -9, 
+          "wi": 8, 
+          "st": 12, 
+          "ht": 9, 
+          "dx": 11, 
+          "basic-move": 4, 
+          "basic-speed": 4.75
+        }, 
+        "posture": "standing", 
+        "state": "unconscious", 
+        "permanent": {
+          "fp": 9, 
+          "iq": 8, 
+          "hp": 12, 
+          "wi": 8, 
+          "st": 12, 
+          "ht": 9, 
+          "dx": 11, 
+          "basic-move": 4, 
+          "basic-speed": 4.75
+        }, 
+        "advantages": {
+          "high pain threshold": 10
+        }, 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "timers": [], 
+        "did_action_this_turn": false, 
+        "opponent": {
+          "group": "PCs", 
+          "name": "lawerence - Spenser"
+        }
+      }, 
+      "Alexander - Sergeant": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
             "name": "C Cell"
-          }, 
-          {
-            "count": 1, 
-            "type": "armor", 
-            "notes": "Enchanted w/fortify spell [M66]", 
-            "dr": 2, 
-            "name": "Sport coat/Jeans"
           }
         ], 
-        "stunned": false, 
+        "stunned": 0, 
         "skills": {
           "beam weapons (pistol)": 17, 
           "brawling": 17, 
+          "beam weapons (rifle)": 14, 
           "knife": 17
         }, 
         "notes": [
           "origin: australian", 
           "gender: male", 
-          "characteristics: Black eye", 
-          "instincts: To hate", 
-          "hair: Straight", 
-          "speech: Crisp", 
-          "knack: Invention", 
-          "personality: Introverted"
+          "characteristics: Always wears tattered clothes", 
+          "instincts: To not screw it all up", 
+          "hair: Bald", 
+          "speech: Raspy", 
+          "knack: Immunity to fire", 
+          "personality: Pleasant"
         ], 
         "shock": 0, 
         "short-notes": [], 
-        "armor-index": 3, 
+        "armor-index": null, 
         "current": {
           "fp": 11, 
           "iq": 9, 
-          "hp": 15, 
+          "hp": -6, 
           "wi": 9, 
           "st": 15, 
           "ht": 11, 
@@ -5773,7 +6865,7 @@
           "basic-speed": 5.25
         }, 
         "posture": "standing", 
-        "state": "absent", 
+        "state": "unconscious", 
         "permanent": {
           "fp": 11, 
           "iq": 9, 
@@ -5791,358 +6883,6 @@
         }, 
         "weapon-index": null, 
         "check_for_death": false, 
-        "timers": [
-          {
-            "state": "alive", 
-            "rounds": 2
-          }
-        ], 
-        "did_action_this_turn": true, 
-        "opponent": null
-      }, 
-      "4: Olivia": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stunned": false, 
-        "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 14, 
-          "knife": 15
-        }, 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "wi": 12, 
-          "st": 10, 
-          "ht": 11, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "wi": 12, 
-          "st": 10, 
-          "ht": 11, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "state": "unconscious", 
-        "stuff": [
-          {
-            "acc": 2, 
-            "count": 1, 
-            "name": "pistol, Baretta DX 192", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "knife, large", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 1, 
-            "name": "Baseball card: Sasaki", 
-            "notes": "eR 500", 
-            "type": "misc"
-          },
-          {
-            "count": 2, 
-            "name": "Baseball card: Jackson", 
-            "notes": "eR 200", 
-            "type": "misc"
-          },
-          {
-            "count": 3, 
-            "name": "Baseball card: Salazar", 
-            "notes": "eR 10", 
-            "type": "misc"
-          },
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          },
-          {
-            "count": 1, 
-            "notes": "Needs a 'B' cell", 
-            "type": "misc", 
-            "name": "Multitool w/flashlight"
-          },
-          {
-            "count": 1, 
-            "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
-            "type": "misc", 
-            "name": "small bag"
-          },
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-        ], 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "weapon-index": null, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "posture": "standing", 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "2: William": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stunned": false, 
-        "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 14, 
-          "knife": 15
-        }, 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "wi": 12, 
-          "st": 10, 
-          "ht": 11, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "wi": 12, 
-          "st": 10, 
-          "ht": 11, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "state": "unconscious", 
-        "stuff": [
-          {
-            "acc": 2, 
-            "count": 1, 
-            "name": "pistol, Baretta DX 192", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "knife, large", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 1, 
-            "name": "Baseball card: Sasaki", 
-            "notes": "eR 500", 
-            "type": "misc"
-          },
-          {
-            "count": 3, 
-            "name": "Baseball card: Jackson", 
-            "notes": "eR 200", 
-            "type": "misc"
-          },
-          {
-            "count": 4, 
-            "name": "Baseball card: Salazar", 
-            "notes": "eR 10", 
-            "type": "misc"
-          },
-          {
-            "count": 5, 
-            "name": "Med Patches", 
-            "notes": "3 for headache, 2 for allergies", 
-            "type": "misc"
-          },
-          {
-            "count": 1, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "Comb, Condom x2, breath mints"
-          },
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-        ], 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "weapon-index": 0, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "posture": "standing", 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "5: Amelia": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stunned": false, 
-        "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 14, 
-          "knife": 15
-        }, 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "wi": 12, 
-          "st": 10, 
-          "ht": 11, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "wi": 12, 
-          "st": 10, 
-          "ht": 11, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "stuff": [
-          {
-            "acc": 2, 
-            "count": 1, 
-            "name": "pistol, Baretta DX 192", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
-            }
-          }, 
-          {
-            "count": 1, 
-            "notes": "M193, cost eR3570", 
-            "type": "misc", 
-            "name": "Fingerbone of major healing (8)"
-          }, 
-          {
-            "count": 1, 
-            "name": "knife, large", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-        ], 
         "timers": [
           {
             "rounds": 0.9, 
@@ -6154,145 +6894,17 @@
           }
         ], 
         "did_action_this_turn": true, 
-        "weapon-index": null, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "posture": "standing", 
-        "check_for_death": false, 
-        "opponent": null
+        "opponent": {
+          "group": "PCs", 
+          "name": "vasilis - Alan"
+        }
       }, 
-      "1: Oliver": {
+      "Ruby": {
         "aim": {
           "braced": false, 
           "rounds": 0
         }, 
-        "stunned": false, 
-        "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 14, 
-          "knife": 15
-        }, 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "wi": 12, 
-          "st": 10, 
-          "ht": 11, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "wi": 12, 
-          "st": 10, 
-          "ht": 11, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "state": "unconscious", 
         "stuff": [
-          {
-            "count": 1, 
-            "notes": "M193, cost eR2910", 
-            "type": "misc", 
-            "name": "Fingerbone of fog"
-          }, 
-          {
-            "count": 1, 
-            "notes": "M193, cost eR3570", 
-            "type": "misc", 
-            "name": "Fingerbone of major healing (8)"
-          }, 
-          {
-            "acc": 2, 
-            "count": 1, 
-            "name": "pistol, Baretta DX 192", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "knife, large", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 1, 
-            "notes": "holds: gum, nail clippers, comb", 
-            "type": "misc", 
-            "name": "small case (inside a pocket)"
-          },
-          {
-            "count": 1, 
-            "name": "Baseball card: Sasaki", 
-            "notes": "eR 500", 
-            "type": "misc"
-          },
-          {
-            "count": 2, 
-            "name": "Baseball card: Jackson", 
-            "notes": "eR 200", 
-            "type": "misc"
-          },
-          {
-            "count": 3, 
-            "name": "Baseball card: Salazar", 
-            "notes": "eR 10", 
-            "type": "misc"
-          },
-          {
-            "count": 1, 
-            "name": "Memory chip", 
-            "notes": "pictures of parents, sister and her kids", 
-            "type": "misc"
-          },
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          },
-          {
-            "count": 1, 
-            "notes": "Needs a 'B' cell", 
-            "type": "misc", 
-            "name": "Multitool w/flashlight"
-          },
           {
             "count": 5, 
             "notes": "", 
@@ -6300,143 +6912,67 @@
             "name": "C Cell"
           }
         ], 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "weapon-index": 2, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "posture": "standing", 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "3: Charlotte": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stunned": false, 
+        "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 15, 
+          "beam weapons (pistol)": 13, 
           "brawling": 14, 
-          "knife": 15
+          "knife": 14
         }, 
+        "notes": [
+          "origin: australian", 
+          "gender: female", 
+          "characteristics: Sings", 
+          "instincts: To heal an old wound", 
+          "hair: Messy", 
+          "speech: Guttural", 
+          "knack: Power overwhelming", 
+          "personality: Crabby"
+        ], 
         "shock": 0, 
+        "short-notes": [], 
         "armor-index": null, 
         "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "wi": 12, 
-          "st": 10, 
-          "ht": 11, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "wi": 12, 
-          "st": 10, 
-          "ht": 11, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "state": "unconscious", 
-        "stuff": [
-          {
-            "acc": 2, 
-            "count": 1, 
-            "name": "pistol, Baretta DX 192", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "knife, large", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 1, 
-            "name": "Baseball card: Sasaki", 
-            "notes": "eR 500", 
-            "type": "misc"
-          },
-          {
-            "count": 2, 
-            "name": "Baseball card: Jackson", 
-            "notes": "eR 200", 
-            "type": "misc"
-          },
-          {
-            "count": 7, 
-            "name": "Baseball card: Salazar", 
-            "notes": "eR 10", 
-            "type": "misc"
-          },
-          {
-            "count": 1, 
-            "notes": "Needs a 'B' cell", 
-            "type": "misc", 
-            "name": "Multitool w/flashlight"
-          },
-          {
-            "count": 1, 
-            "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
-            "type": "misc", 
-            "name": "small bag"
-          },
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-        ], 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "weapon-index": null, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "fp": 9, 
+          "iq": 8, 
+          "hp": -3, 
+          "wi": 8, 
+          "st": 12, 
+          "ht": 9, 
+          "dx": 11, 
+          "basic-move": 4, 
+          "basic-speed": 4.75
         }, 
         "posture": "standing", 
+        "state": "unconscious", 
+        "permanent": {
+          "fp": 9, 
+          "iq": 8, 
+          "hp": 12, 
+          "wi": 8, 
+          "st": 12, 
+          "ht": 9, 
+          "dx": 11, 
+          "basic-move": 4, 
+          "basic-speed": 4.75
+        }, 
+        "advantages": {
+          "high pain threshold": 10
+        }, 
+        "weapon-index": 1, 
         "check_for_death": false, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "did_action_this_turn": true, 
         "opponent": null
-      }
-    }, 
-    "Tereshkova - Battle for the Crate": {
+      }, 
       "Austin - Diamond protocol security": {
         "aim": {
           "braced": false, 
@@ -6521,8 +7057,8 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
-        "state": "alive", 
+        "posture": "standing", 
+        "state": "dead", 
         "permanent": {
           "fp": 11, 
           "iq": 12, 
@@ -6538,612 +7074,11 @@
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
-        "did_action_this_turn": false, 
-        "weapon-index": null, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "Ruby": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "name": "knife, large", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "acc": 3, 
-            "count": 1, 
-            "name": "pistol, Colt 170D", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "type": "pi", 
-                "num_dice": 1, 
-                "plus": 4
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          },
-          {
-            "count": 2, 
-            "name": "Baseball card: Jackson", 
-            "notes": "eR 200", 
-            "type": "misc"
-          },
-          {
-            "count": 3, 
-            "name": "Baseball card: Salazar", 
-            "notes": "eR 10", 
-            "type": "misc"
-          },
-          {
-            "count": 1, 
-            "notes": "Needs a 'B' cell", 
-            "type": "misc", 
-            "name": "Multitool w/flashlight"
-          },
-          {
-            "count": 1, 
-            "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
-            "type": "misc", 
-            "name": "small bag"
-          },
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          } 
-
-        ], 
-        "stunned": 0, 
-        "skills": {
-          "beam weapons (pistol)": 13, 
-          "brawling": 14, 
-          "knife": 14
-        }, 
-        "notes": [
-          "origin: australian", 
-          "gender: female", 
-          "characteristics: Sings", 
-          "instincts: To heal an old wound", 
-          "hair: Messy", 
-          "speech: Guttural", 
-          "knack: Power overwhelming", 
-          "personality: Crabby"
-        ], 
-        "shock": 0, 
-        "short-notes": [], 
-        "armor-index": null, 
-        "current": {
-          "fp": 9, 
-          "iq": 8, 
-          "hp": 12, 
-          "wi": 8, 
-          "st": 12, 
-          "ht": 9, 
-          "dx": 11, 
-          "basic-move": 4, 
-          "basic-speed": 4.75
-        }, 
-        "posture": "standing", 
-        "state": "alive", 
-        "permanent": {
-          "fp": 9, 
-          "iq": 8, 
-          "hp": 12, 
-          "wi": 8, 
-          "st": 12, 
-          "ht": 9, 
-          "dx": 11, 
-          "basic-move": 4, 
-          "basic-speed": 4.75
-        }, 
-        "advantages": {
-          "high pain threshold": 10
-        }, 
         "weapon-index": null, 
         "check_for_death": false, 
         "timers": [], 
         "did_action_this_turn": false, 
         "opponent": null
-      }, 
-      "Ayla": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "name": "knife, large", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "acc": 3, 
-            "count": 1, 
-            "name": "pistol, Colt 170D", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "type": "pi", 
-                "num_dice": 1, 
-                "plus": 4
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 9, 
-              "shots_left": 9
-            }
-          },
-          {
-            "count": 2, 
-            "name": "Baseball card: Jackson", 
-            "notes": "eR 200", 
-            "type": "misc"
-          },
-          {
-            "count": 1, 
-            "name": "Baseball card: Pete Rose", 
-            "notes": "eR 10", 
-            "type": "misc"
-          },
-          {
-            "count": 1, 
-            "notes": "holds: candy, tampon x2, lip balm, nail clippers", 
-            "type": "misc", 
-            "name": "small bag"
-          },
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          } 
-        ], 
-        "stunned": 0, 
-        "skills": {
-          "beam weapons (pistol)": 13, 
-          "brawling": 14, 
-          "knife": 14
-        }, 
-        "notes": [
-          "origin: australian", 
-          "gender: female", 
-          "characteristics: Repeats (I could use some taters) over and over", 
-          "instincts: To devour", 
-          "hair: Short", 
-          "speech: Halting", 
-          "knack: A much-needed bag of taters", 
-          "personality: Reckless"
-        ], 
-        "shock": 0, 
-        "short-notes": [], 
-        "armor-index": null, 
-        "current": {
-          "fp": 9, 
-          "iq": 8, 
-          "hp": 12, 
-          "wi": 8, 
-          "st": 12, 
-          "ht": 9, 
-          "dx": 11, 
-          "basic-move": 4, 
-          "basic-speed": 4.75
-        }, 
-        "posture": "standing", 
-        "state": "alive", 
-        "permanent": {
-          "fp": 9, 
-          "iq": 8, 
-          "hp": 12, 
-          "wi": 8, 
-          "st": 12, 
-          "ht": 9, 
-          "dx": 11, 
-          "basic-move": 4, 
-          "basic-speed": 4.75
-        }, 
-        "advantages": {
-          "high pain threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "opponent": null
-      }, 
-      "Alexander - Sergeant": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "acc": 8, 
-            "count": 1, 
-            "name": "laser rifle", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 0, 
-                "num_dice": 3, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (rifle)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 3, 
-              "shots_left": 3
-            }
-          }, 
-          {
-            "acc": 3, 
-            "count": 1, 
-            "name": "pistol, average David-built laser", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 1, 
-                "num_dice": 2, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "beam weapons (pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 7, 
-              "shots_left": 7
-            }
-          }, 
-          {
-            "count": 1, 
-            "name": "knife, large", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 1, 
-            "name": "Baseball card: Hasegawa", 
-            "notes": "eR 1000", 
-            "type": "misc"
-          },
-          {
-            "count": 1, 
-            "name": "Baseball card: Jackson", 
-            "notes": "eR 200", 
-            "type": "misc"
-          },
-          {
-            "count": 1, 
-            "name": "Baseball card: Pete Rose", 
-            "notes": "eR 10", 
-            "type": "misc"
-          },
-          {
-            "count": 3, 
-            "name": "Baseball card: Angel Salazar", 
-            "notes": "eR 10", 
-            "type": "misc"
-          },
-          {
-            "count": 1, 
-            "notes": "holds: candy, tampon x2, lip balm, nail clippers", 
-            "type": "misc", 
-            "name": "small bag"
-          },
-          {
-            "count": 1, 
-            "notes": "Needs a 'B' cell", 
-            "type": "misc", 
-            "name": "Multitool w/flashlight"
-          },
-          {
-            "count": 1, 
-            "notes": "2 keys: door to crate area, crates", 
-            "type": "misc", 
-            "name": "set of keys"
-          },
-
-
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "name": "C Cell"
-          }
-        ], 
-        "stunned": 0, 
-        "skills": {
-          "beam weapons (pistol)": 17, 
-          "brawling": 17, 
-          "beam weapons (rifle)": 14, 
-          "knife": 17
-        }, 
-        "notes": [
-          "origin: australian", 
-          "gender: male", 
-          "characteristics: Always wears tattered clothes", 
-          "instincts: To not screw it all up", 
-          "hair: Bald", 
-          "speech: Raspy", 
-          "knack: Immunity to fire", 
-          "personality: Pleasant"
-        ], 
-        "shock": 0, 
-        "short-notes": [], 
-        "armor-index": null, 
-        "current": {
-          "fp": 11, 
-          "iq": 9, 
-          "hp": 15, 
-          "wi": 9, 
-          "st": 15, 
-          "ht": 11, 
-          "dx": 10, 
-          "basic-move": 5, 
-          "basic-speed": 5.25
-        }, 
-        "posture": "standing", 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 9, 
-          "hp": 15, 
-          "wi": 9, 
-          "st": 15, 
-          "ht": 11, 
-          "dx": 10, 
-          "basic-move": 5, 
-          "basic-speed": 5.25
-        }, 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "opponent": null
-      }, 
-      "Anaica - (badguy) Mambo on Tereshkova": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "spells": [
-            {
-              "cost": 1, 
-              "name": "awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
-              "skill": 12
-            }, 
-            {
-              "cost": 4, 
-              "name": "communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
-              "skill": 11
-            }, 
-            {
-              "cost": 3, 
-              "name": "daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
-              "skill": 11
-            }, 
-            {
-              "cost": 4, 
-              "name": "far hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
-              "skill": 11
-            }, 
-            {
-              "cost": null, 
-              "name": "foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
-              "skill": 11
-            }, 
-            {
-              "cost": null, 
-              "name": "lend energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
-              "skill": 12
-            }, 
-            {
-              "cost": null, 
-              "name": "lend vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
-              "skill": 12
-            }, 
-            {
-              "cost": 2, 
-              "name": "luck", 
-              "notes": "V2", 
-              "maintain": 0, 
-              "time": 1, 
-              "skill": 11
-            }, 
-            {
-              "cost": null, 
-              "name": "major heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
-              "skill": 11
-            }, 
-            {
-              "cost": null, 
-              "name": "minor heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
-              "skill": 12
-            }, 
-            {
-              "cost": null, 
-              "name": "might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
-              "skill": 12
-            }, 
-            {
-              "cost": 15, 
-              "name": "restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
-              "skill": 11
-            }, 
-            {
-              "cost": null, 
-              "name": "sense life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
-              "skill": 12
-            }, 
-            {
-              "cost": 4, 
-              "name": "sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
-              "skill": 11
-            }, 
-            {
-              "cost": 4, 
-              "name": "wizard eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
-              "skill": 11
-            }
-          ], 
-          "stuff": [], 
-          "stunned": 0, 
-          "skills": {}, 
-          "notes": [
-            "origin: haitian", 
-            "gender: female", 
-            "characteristics: Sharpens weapon", 
-            "instincts: To commit an atrocity", 
-            "hair: Thinning", 
-            "speech: Squeaky", 
-            "knack: Political leverage", 
-            "personality: Liar", 
-            "** 18 spells **"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": null, 
-          "current": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 10, 
-            "wi": 12, 
-            "st": 10, 
-            "ht": 11, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "check_for_death": false, 
-          "state": "alive", 
-          "permanent": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 10, 
-            "wi": 12, 
-            "st": 10, 
-            "ht": 11, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "advantages": {
-            "empathy": 5, 
-            "lwa (Mambo, Erzulie Freda)": 6, 
-            "vodou practitioner (Mambo/Hougan 2)": 35
-          }, 
-          "did_action_this_turn": false, 
-          "weapon-index": null, 
-          "timers": [], 
-          "opponent": null, 
-          "posture": "standing"
       }
     }
   }

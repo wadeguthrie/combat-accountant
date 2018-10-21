@@ -12,6 +12,7 @@ import pprint
 import random
 import re
 import sys
+import traceback
 
 # TODO:
 #   - add laser sights to weapons
@@ -88,11 +89,13 @@ class GmJson(object):
         if exception_type is IOError:
             print 'IOError: %r' % exception_type
             print 'EXCEPTION val: %s' % exception_value
-            print 'Traceback: %r' % exception_traceback
+            #print 'Traceback: %r' % exception_traceback
+            traceback.print_exc()
         elif exception_type is not None:
             print 'EXCEPTION type: %r' % exception_type
             print 'EXCEPTION val: %s' % exception_value
-            print 'Traceback: %r' % exception_traceback
+            #print 'Traceback: %r' % exception_traceback
+            traceback.print_exc()
 
         if self.write_data is not None:
             with open(self.__filename, 'w') as f:
