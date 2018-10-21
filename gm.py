@@ -1534,6 +1534,14 @@ class GmWindowManager(object):
         Creates a temporary window, on top of the current one, that is
         centered and has a box around it.
         '''
+        box_margin = 2
+
+        # make sure we're not bigger than the screen
+        if height > (curses.LINES - box_margin):
+            height = curses.LINES - box_margin
+        if width > (curses.COLS - box_margin):
+            width = curses.COLS - box_margin
+
         # x and y of text box (not border)
         begin_x = (curses.COLS / 2) - (width/2)
         begin_y = (curses.LINES / 2) - (height/2)
@@ -1541,11 +1549,14 @@ class GmWindowManager(object):
         #print 'c h:%d, w:%d, y:%d, x:%d' % (
         #    height+2, width+2, begin_y-1, begin_x-1)
 
-        border_win = curses.newwin(height+2, width+2, begin_y-1, begin_x-1)
+        border_win = curses.newwin(height+box_margin,
+                                   width+box_margin,
+                                   begin_y-1,
+                                   begin_x-1)
         border_win.border()
 
         if title is not None:
-            title_start = ((width + 2) - (len(title))) / 2
+            title_start = ((width+box_margin) - (len(title))) / 2
             border_win.addstr(0, title_start, title)
         border_win.refresh()
 
