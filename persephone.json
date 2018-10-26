@@ -4055,7 +4055,7 @@
       }, 
       {
         "group": "Tereshkova - Battle for the Crate", 
-        "name": "Anaica - (badguy) Mambo on Tereshkova"
+        "name": "Anaica - (party friend) Mambo on Tereshkova"
       }, 
       {
         "group": "PCs", 
@@ -4116,7 +4116,7 @@
     ]
   }, 
   "NPCs": {
-      "Anaica - (badguy) Mambo on Tereshkova": {
+      "Anaica - (party friend) Mambo on Tereshkova": {
         "aim": {
           "braced": false, 
           "rounds": 0
@@ -6752,7 +6752,7 @@
       }
     }, 
     "Tereshkova - Battle for the Crate": {
-      "Anaica - (badguy) Mambo on Tereshkova": {
+      "Anaica - (party friend) Mambo on Tereshkova": {
         "redirect": "NPCs"
       }, 
       "Ayla": {

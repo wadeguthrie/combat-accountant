@@ -15,6 +15,7 @@ import sys
 import traceback
 
 # TODO:
+#   - Need way to move bad guy to NPC status
 #   - add laser sights to weapons
 
 #   - add ability to undo the -m option
