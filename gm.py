@@ -15,7 +15,8 @@ import sys
 import traceback
 
 # TODO:
-#   - Need way to move bad guy to NPC status
+#   - Need way to 'P'romote bad guy to NPC status
+#   - Fights should have their own equipment
 #   - add laser sights to weapons
 
 #   - add ability to undo the -m option
@@ -4526,7 +4527,7 @@ class FightHandler(ScreenHandler):
 
 
             curses.KEY_UP:
-                      {'name': 'previous character',
+                      {'name': 'prev character',
                                               'func': self.__view_prev},
             curses.KEY_DOWN:
                       {'name': 'next character',
@@ -4535,11 +4536,12 @@ class FightHandler(ScreenHandler):
                       {'name': 'current character',
                                               'func': self.__view_init},
 
-            ord(' '): {'name': 'next',        'func': self.__next_fighter},
-            ord('<'): {'name': 'prev',        'func': self.__prev_fighter},
+            ord(' '): {'name': 'next fighter','func': self.__next_fighter},
+            ord('<'): {'name': 'prev fighter','func': self.__prev_fighter},
             ord('?'): {'name': 'explain',     'func': self.__show_why},
             ord('d'): {'name': 'defend',      'func': self.__defend},
-            ord('D'): {'name': 'dead',        'func': self.__dead},
+            ord('D'): {'name': 'dead/unconscious',
+                                              'func': self.__dead},
             ord('f'): {'name': 'FP damage',   'func': self.__damage_FP},
             ord('h'): {'name': 'History',     'func': self.__show_history},
             ord('i'): {'name': 'character info',
@@ -4552,6 +4554,8 @@ class FightHandler(ScreenHandler):
             ord('n'): {'name': 'short notes', 'func': self.__short_notes},
             ord('N'): {'name': 'full Notes',  'func': self.__full_notes},
             ord('o'): {'name': 'opponent',    'func': self.__pick_opponent},
+            ord('P'): {'name': 'promote to NPC',
+                                              'func': self.__promote_to_NPC},
             ord('q'): {'name': 'quit',        'func': self.__quit},
             ord('s'): {'name': 'save',        'func': self.__save},
             ord('t'): {'name': 'timer',       'func': self.__timer}
@@ -4836,40 +4840,27 @@ class FightHandler(ScreenHandler):
                                    self.__viewing_index)
         return True # Keep going
 
+
     def __dead(self):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        if self.__viewing_index is not None:
-            current_fighter = self.__fighters[self.__viewing_index]
-            opponent = self.get_opponent_for(current_fighter)
-            now_dead = current_fighter
-        else:
-            current_fighter = self.get_current_fighter()
-            opponent = self.get_opponent_for(current_fighter)
+        now_dead, current_fighter = self.__select_fighter('Who is Dead',
+                                                          default_selection=1)
+        if now_dead is None:
+            return True # Keep fighting
 
-            if opponent is None:
-                now_dead = current_fighter
-            else:
-                now_dead_menu = [(current_fighter.name, current_fighter),
-                                 (opponent.name, opponent)]
-                now_dead = self._window_manager.menu('Who is Dead',
-                                                     now_dead_menu,
-                                                     1) # assume it's opponent
-            if now_dead is None:
-                return True # Keep fighting
-
-        now_dead.bump_consciousness()
         if now_dead.is_conscious():
             now_dead.details['opponent'] = None # dead men fight nobody
-        dead_name = (current_fighter.name if now_dead is current_fighter
-                                    else opponent.name)
+        now_dead.bump_consciousness()
 
+        dead_name = now_dead.name
         self.add_to_history(' (%s) was marked as (%s)' % (
                                                     dead_name,
                                                     now_dead.details['state']))
 
+        opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
@@ -5205,24 +5196,10 @@ class FightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        # Figure out for whom these notes are...
-        if self.__viewing_index is not None:
-            current_fighter = self.__fighters[self.__viewing_index]
-            opponent = self.get_opponent_for(current_fighter)
-            notes_recipient = current_fighter
-        else:
-            current_fighter = self.get_current_fighter()
-            opponent = self.get_opponent_for(current_fighter)
-            if opponent is None:
-                notes_recipient = current_fighter
-            else:
-                notes_recipient_menu = [(current_fighter.name, current_fighter),
-                                        (opponent.name, opponent)]
-                notes_recipient = self._window_manager.menu(
-                                        'Notes For Whom',
-                                        notes_recipient_menu)
-            if notes_recipient is None:
-                return True # Keep fighting
+        notes_recipient, current_fighter = self.__select_fighter(
+                                                            'Notes For Whom')
+        if notes_recipient is None:
+            return True # Keep fighting
 
         # Now, get the notes for that person
         lines, cols = self._window.getmaxyx()
@@ -5242,7 +5219,7 @@ class FightHandler(ScreenHandler):
         notes_recipient.details[notes_type] = [x for x in notes.split('\n')]
 
         # Redraw the fighters
-        next_PC_name = self.__next_PC_name()
+        opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
@@ -5347,6 +5324,12 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
 
+    def __promote_to_NPC(self):
+        # get the bad guy (current selection, verify bad guy)
+        # TODO
+        return True # Keep going
+
+
     def __quit(self):
         '''
         Command ribbon method.
@@ -5384,6 +5367,37 @@ class FightHandler(ScreenHandler):
 
         self._window.close()
         return False # Leave the fight
+
+
+    def __select_fighter(self,
+                         menu_title, # string: title of fighter/opponent menu
+                         default_selection=0  # int: for menu:
+                                              #   0=current fighter, 1=opponent
+                         ):
+        '''
+        Selects a fighter to be the object of the current action.
+        '''
+        selected_fighter = None
+        current_fighter = None
+        if self.__viewing_index is not None:
+            current_fighter = self.__fighters[self.__viewing_index]
+            opponent = self.get_opponent_for(current_fighter)
+            selected_fighter = current_fighter
+        else:
+            current_fighter = self.get_current_fighter()
+            opponent = self.get_opponent_for(current_fighter)
+
+            if opponent is None:
+                selected_fighter = current_fighter
+            else:
+                selected_fighter_menu = [
+                                    (current_fighter.name, current_fighter),
+                                    (opponent.name, opponent)]
+                selected_fighter = self._window_manager.menu(
+                                                     menu_title,
+                                                     selected_fighter_menu,
+                                                     default_selection)
+        return selected_fighter, current_fighter
 
     def simply_save(self):
         self._saved_fight['saved'] = True
@@ -5424,23 +5438,10 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         char_info = []
-        if self.__viewing_index is not None:
-            current_fighter = self.__fighters[self.__viewing_index]
-            opponent = self.get_opponent_for(current_fighter)
-            info_about = current_fighter
-        else:
-            current_fighter = self.get_current_fighter()
-            opponent = self.get_opponent_for(current_fighter)
-            if opponent is None:
-                info_about = current_fighter
-            else:
-                info_about_menu = [(current_fighter.name, current_fighter),
-                                   (opponent.name, opponent)]
-                info_about = self._window_manager.menu(
-                                        'Info About Whom',
-                                        info_about_menu)
-            if info_about is None:
-                return True # Keep fighting
+
+        info_about, current_fighter = self.__select_fighter('Info About Whom')
+        if info_about is None:
+            return True # Keep fighting
 
         self.__ruleset.get_character_detail(info_about.details,
                                             char_info)
@@ -5460,23 +5461,9 @@ class FightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        # Figure out for whom these notes are...
-        if self.__viewing_index is not None:
-            current_fighter = self.__fighters[self.__viewing_index]
-            opponent = self.get_opponent_for(current_fighter)
-            why_target = current_fighter
-        else:
-            current_fighter = self.get_current_fighter()
-            opponent = self.get_opponent_for(current_fighter)
-            if opponent is None:
-                why_target = current_fighter
-            else:
-                notes_recipient_menu = [(current_fighter.name, current_fighter),
-                                        (opponent.name, opponent)]
-                why_target = self._window_manager.menu('Details For Whom',
-                                                       notes_recipient_menu)
-            if why_target is None:
-                return True # Keep fighting
+        why_target, current_fighter = self.__select_fighter('Details For Whom')
+        if why_target is None:
+            return True # Keep fighting
 
         lines = []
 
@@ -5519,7 +5506,8 @@ class FightHandler(ScreenHandler):
                    'mode': curses.A_NORMAL}] for x in defense_why] + lines
 
         ignore = self._window_manager.display_window(
-                    'How the Numbers Were Calculated', lines)
+                    'How %s\'s Numbers Were Calculated' % why_target.name,
+                    lines)
         return True
 
 
@@ -5531,25 +5519,10 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
-        # Who gets the timer?
-        if self.__viewing_index is not None:
-            current_fighter = self.__fighters[self.__viewing_index]
-            opponent = self.get_opponent_for(current_fighter)
-            timer_recipient = current_fighter
-        else:
-            current_fighter = self.get_current_fighter()
-            opponent = self.get_opponent_for(current_fighter)
-            if opponent is None:
-                timer_recipient = current_fighter
-            else:
-                timer_recipient_menu = [(current_fighter.name, current_fighter),
-                                        (opponent.name, opponent)]
-                timer_recipient = self._window_manager.menu(
-                                        'Who Gets Timer',
-                                        timer_recipient_menu,
-                                        0)
-            if timer_recipient is None:
-                return True # Keep fighting
+        timer_recipient, current_fighter = self.__select_fighter(
+                                                            'Who Gets Timer')
+        if timer_recipient is None:
+            return True # Keep fighting
 
         # How long is the timer?
 
@@ -5600,14 +5573,9 @@ class FightHandler(ScreenHandler):
                                       timer['string'],
                                       announcement)
 
-
-        #fighter.add_timer(spell['time'],
-        #               announcement)
-        #               lines  # [[{'text', 'mode'}, ],    # line 0
-        #                      #  [...],               ]   # line 1
-        #              ):
-
         # Show stuff
+
+        opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
