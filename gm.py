@@ -4137,6 +4137,9 @@ class BuildFightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+        # TODO: Add some comments in here (or refactor), it's really hard
+        # to read.
+
         if self.__new_home is None or self.__group_name is None:
             self._window_manager.error(
                 ['You must select a new or existing group to which to',
@@ -4554,8 +4557,8 @@ class FightHandler(ScreenHandler):
             ord('n'): {'name': 'short notes', 'func': self.__short_notes},
             ord('N'): {'name': 'full Notes',  'func': self.__full_notes},
             ord('o'): {'name': 'opponent',    'func': self.__pick_opponent},
-            ord('P'): {'name': 'promote to NPC',
-                                              'func': self.__promote_to_NPC},
+            #ord('P'): {'name': 'promote to NPC',
+            #                                  'func': self.__promote_to_NPC},
             ord('q'): {'name': 'quit',        'func': self.__quit},
             ord('s'): {'name': 'save',        'func': self.__save},
             ord('t'): {'name': 'timer',       'func': self.__timer}
@@ -5324,10 +5327,44 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
 
-    def __promote_to_NPC(self):
-        # get the bad guy (current selection, verify bad guy)
-        # TODO
-        return True # Keep going
+    #def __promote_to_NPC(self):
+    #    if self.__viewing_index is not None:
+    #        new_NPC = self.__fighters[self.__viewing_index]
+    #    else:
+    #        current_fighter = self.get_current_fighter()
+    #        if (current_fighter.group == 'PCs' or
+    #                                        current_fighter.group == 'NPCs'):
+    #            opponent = self.get_opponent_for(current_fighter)
+    #            new_NPC = current_fighter if opponent is None else opponent
+    #        else:
+    #            new_NPC = current_fighter
+
+    #    if new_NPC.group == 'PCs':
+    #        self._window_manager.error(['%s is already a PC' % new_NPC.name])
+    #        return True
+    #    if new_NPC.group == 'NPCs':
+    #        self._window_manager.error(['%s is already an NPC' % new_NPC.name])
+    #        return True
+
+    #    # Now we have chosen a monster that's NOT an NPC or PC, promote him.
+
+    #    # Make the NPC entry
+
+    #    if new_NPC.name in self.__world.details['NPCs']:
+    #        self._window_manager.error(['There\'s already an NPC named %s' %
+    #                                    new_NPC.name])
+    #        return True
+
+    #    details_copy = copy.deepcopy(new_NPC.details)
+    #    self.__world.details['NPCs'][new_NPC.name] = details_copy
+
+    #    # Make the redirect entry
+
+    #    redirect_entry = { "redirect": "NPCs" }
+    #    new_NPC.details = redirect_entry
+    #    self.__world.details['monsters'][new_NPC.group][new_NPC.name] = (
+    #                                                        redirect_entry)
+    #    return True # Keep going
 
 
     def __quit(self):
