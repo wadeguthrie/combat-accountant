@@ -6142,14 +6142,21 @@ class EquipmentManager(object):
         if item_index is None:
             return None
 
-        item = fighter.details['stuff'][item_index]
-        del(fighter.details['stuff'][item_index]) # TODO: does 'del' delete
-                                                  #  the object?
+        if ('count' in fighter.details['stuff'][item_index] and
+                        fighter.details['stuff'][item_index]['count'] > 1):
+            item = copy.deepcopy(fighter.details['stuff'][item_index])
+            item['count'] = 1
+            fighter.details['stuff'][item_index]['count'] -= 1
+        else:
+            item = fighter.details['stuff'][item_index]
+            fighter.details['stuff'].pop(item_index)
 
-        # Now, we're potentially messing with the order of things in the
-        # 'stuff' array.  Best not to depend on the weapon-index.
-        fighter.details['weapon-index'] = None
-        fighter.details['armor-index'] = None
+            # Now, we're potentially messing with the order of things in the
+            # 'stuff' array.  Best not to depend on the weapon-index.
+            fighter.details['weapon-index'] = None
+            fighter.details['armor-index'] = None
+
+
         #self._window.show_character(self.__character)
         return item
 
