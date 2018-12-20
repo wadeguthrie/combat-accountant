@@ -1195,6 +1195,10 @@ class GmWindowManager(object):
                 display_win.scroll_to(0)
             elif user_input == curses.KEY_END:
                 display_win.scroll_to(len(lines)-1)
+            elif user_input == curses.KEY_UP:
+                display_win.scroll_up(1)
+            elif user_input == curses.KEY_DOWN:
+                display_win.scroll_down(1)
             elif user_input == curses.KEY_NPAGE:
                 display_win.scroll_down()
             elif user_input == curses.KEY_PPAGE:
@@ -1801,17 +1805,25 @@ class Fighter(object):
         self.__window_manager = window_manager
 
     def add_equipment(self,
-                      new_item, # dict describing new equipment
-                      source    # string describing where equipment came from
+                      new_item,   # dict describing new equipment
+                      source=None # string describing where equipment came from
                      ):
+        # TODO: test source names
+        if source is not None and ' (from ' not in new_item['name']:
+            # Just want the original source, not intermediate owners
+            new_name = new_item['name'] = ('%s (from %s)' % (new_item['name']),
+                                           source)
+        else:
+            new_name = new_item['name']
+
         for item in self.details['stuff']:
             if item['name'] == new_item['name']:
                 if self.__is_same_thing(item, new_item):
                     item['count'] += new_item['count']
                     return
-                new_item['name'] = '%s (from %s)' % (new_item['name'], source)
                 break
 
+        new_item['name'] = new_name
         self.details['stuff'].append(new_item)
 
     def add_timer(self,
@@ -5062,6 +5074,12 @@ class FightHandler(ScreenHandler):
             param = None if 'param' not in maneuver else maneuver['param']
             (maneuver['doit'])(param)
 
+        # TODO: call the ruleset to execute the action
+        # TODO: change 'maneuver' to 'action'
+        # TODO: fill-in current_fighter, opponent, world
+        # if 'action' in maneuver:
+        #   self.__ruleset.do_action(action, current_fighter)
+
         self.__ruleset.do_maneuver(current_fighter)
         # a round count larger than 0 will get shown but less than 1 will
         # get deleted before the next round
@@ -5658,6 +5676,8 @@ class MainHandler(ScreenHandler):
                                                        self.__add_equipment},
             ord('E'): {'name': 'remove equipment',    'func':
                                                        self.__remove_equipment},
+            ord('g'): {'name': 'give equipment',      'func':
+                                                       self.__give_equipment},
             ord('o'): {'name': 'outfit characters',   'func':
                                                        self.__outfit},
             ord('J'): {'name': 'NPC joins PCs',       'func':
@@ -5674,8 +5694,6 @@ class MainHandler(ScreenHandler):
                                                        self.__run_fight},
             ord('H'): {'name': 'Heal',                'func':
                                                        self.__fully_heal},
-            ord('n'): {'name': 'random name',         'func':
-                                                       self.__get_a_name},
             ord('q'): {'name': 'quit',                'func':
                                                        self.__quit},
             ord('/'): {'name': 'search',              'func':
@@ -5788,6 +5806,38 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
 
+    def __give_equipment(self):
+        from_fighter = Fighter(self.__chars[self.__char_index]['name'],
+                               self.__chars[self.__char_index]['group'],
+                               self.__chars[self.__char_index]['details'],
+                               self.__ruleset,
+                               self._window_manager)
+
+        item = self.__equipment_manager.remove_equipment(from_fighter)
+        if item is None:
+            return True # Keep going
+
+        character_list = self.__world.get_list('PCs')
+        character_menu = [(dude, dude) for dude in character_list]
+        to_fighter_info = self._window_manager.menu(
+                                        'Give "%s" to whom?' % item['name'],
+                                        character_menu)
+
+        if to_fighter_info is None:
+            from_fighter.add_equipment(item, None)
+            self._draw_screen()
+            return True # Keep going
+
+        to_fighter = Fighter(to_fighter_info,
+                             'PCs',
+                             character_list[to_fighter_info],
+                             self.__ruleset,
+                             self._window_manager)
+
+        to_fighter.add_equipment(item, None)
+        self._draw_screen()
+        return True # Keep going
+
     def __remove_equipment(self):
         '''
         Command ribbon method.
@@ -5889,22 +5939,6 @@ class MainHandler(ScreenHandler):
                                'mode': curses.A_NORMAL}])
             self._window_manager.display_window('Found "%s"' % look_for_string,
                                                 lines)
-
-        return True
-
-    def __get_a_name(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        name, type_name, gender_name = self.__world.get_random_name()
-        if name is None:
-            return True
-
-        lines = [[{'text': name, 'mode': curses.A_NORMAL}]]
-        self._window_manager.display_window(
-                'Your %s %s name is...' % (type_name, gender_name),
-                lines)
 
         return True
 
@@ -6078,7 +6112,8 @@ class EquipmentManager(object):
         self.__window_manager = window_manager
 
     def add_equipment(self,
-                      fighter       # Fighter object
+                      fighter,      # Fighter object
+                      item = None   # dict
                      ):
         if fighter is None:
             return
@@ -6105,15 +6140,18 @@ class EquipmentManager(object):
             for index, item in enumerate(fighter.details['stuff'])]
         item_index = self.__window_manager.menu('Item to Remove', item_menu)
         if item_index is None:
-            return True # Keep going
+            return None
 
-        del(fighter.details['stuff'][item_index])
+        item = fighter.details['stuff'][item_index]
+        del(fighter.details['stuff'][item_index]) # TODO: does 'del' delete
+                                                  #  the object?
+
         # Now, we're potentially messing with the order of things in the
         # 'stuff' array.  Best not to depend on the weapon-index.
         fighter.details['weapon-index'] = None
         fighter.details['armor-index'] = None
         #self._window.show_character(self.__character)
-
+        return item
 
 
 class OutfitCharactersHandler(ScreenHandler):
