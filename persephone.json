@@ -183,7 +183,7 @@
               }, 
               "reload": 3, 
               "skill": "beam weapons (pistol)", 
-              "owners": [],
+              "owners": ["David (smith)"],
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -827,7 +827,7 @@
               }, 
               "reload": 3, 
               "skill": "beam weapons (pistol)", 
-              "owners": [],
+              "owners": ["David (smith)"],
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -992,7 +992,7 @@
           }, 
           "reload": 3, 
           "skill": "beam weapons (pistol)", 
-          "owners": [],
+          "owners": ["David (smith)"],
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -4559,7 +4559,7 @@
           }, 
           "reload": 3, 
           "skill": "beam weapons (pistol)", 
-          "owners": [],
+          "owners": ["David (smith)"],
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -5239,7 +5239,7 @@
           }, 
           "reload": 3, 
           "skill": "beam weapons (pistol)", 
-          "owners": [],
+          "owners": ["David (smith)"],
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -5775,15 +5775,7 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [
-        {
-            "count": 1, 
-            "notes": "M193, cost eR3570", 
-            "type": "misc", 
-            "owners": ["Original"],
-            "name": "Fingerbone of major healing (8)"
-        }
-      ], 
+      "stuff": [], 
       "skills": {}, 
       "notes": [
         "origin: russian", 
@@ -5948,15 +5940,7 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [
-        {
-            "count": 1, 
-            "notes": "M193, cost eR3570", 
-            "type": "misc", 
-            "owners": ["First", "Second"],
-            "name": "Fingerbone of major healing (8)"
-        }
-      ], 
+      "stuff": [], 
       "skills": {}, 
       "notes": [
         "origin: haitian", 
@@ -6116,7 +6100,7 @@
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
-      "owners": [],
+      "owners": ["David (smith)"],
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -6138,7 +6122,7 @@
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
-      "owners": [],
+      "owners": ["David (smith)"],
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -6844,7 +6828,7 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": [],
+            "owners": ["David (smith)"],
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -6953,7 +6937,7 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": [],
+            "owners": ["David (smith)"],
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -7064,7 +7048,7 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": [],
+            "owners": ["David (smith)"],
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -7172,7 +7156,7 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": [],
+            "owners": ["David (smith)"],
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
