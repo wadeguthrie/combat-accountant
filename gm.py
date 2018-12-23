@@ -983,19 +983,24 @@ class OutfitCharactersGmWindow(GmWindow):
 
             # TODO: equipment must have an object with a 'show me' method
             #   that method would give weapon and armor details
-            texts = ['  %s' % item['name']]
+            texts = ['%s' % item['name']]
             if 'count' in item and item['count'] != 1:
                 texts.append(' (%d)' % item['count'])
-            if item['owners'] is not None and len(item['owners']) > 0:
-                texts.append(' from: ')
-                texts.append('%s' % '->'.join(item['owners']))
 
             if ('notes' in item and item['notes'] is not None and
                                                     (len(item['notes']) > 0)):
                 texts.append(': %s' % item['notes'])
 
-            self.__outfit_window.addstr(line, 0, '%s' % ''.join(texts), mode)
+            self.__outfit_window.addstr(line, 0, '  %s' % ''.join(texts), mode)
             line += 1
+            if item['owners'] is not None and len(item['owners']) > 0:
+                texts = ['Owners: ']
+                texts.append('%s' % '->'.join(item['owners']))
+                self.__outfit_window.addstr(line,
+                                            0,
+                                            '    %s' % ''.join(texts),
+                                            mode)
+                line += 1
 
         if not found_stuff:
             self.__outfit_window.addstr(line, 0, '  (Nothing)', mode)
@@ -2893,15 +2898,18 @@ class GurpsRuleset(Ruleset):
             texts = ['  %s' % item['name']]
             if 'count' in item and item['count'] != 1:
                 texts.append(' (%d)' % item['count'])
-            if item['owners'] is not None and len(item['owners']) > 0:
-                texts.append(' from: ')
-                texts.append('%s' % '->'.join(item['owners']))
 
             if ('notes' in item and item['notes'] is not None and
                                                     (len(item['notes']) > 0)):
                 texts.append(': %s' % item['notes'])
             char_detail.append([{'text': ''.join(texts),
                                  'mode': mode}])
+
+            if item['owners'] is not None and len(item['owners']) > 0:
+                texts = ['    Owners: ']
+                texts.append('%s' % '->'.join(item['owners']))
+                char_detail.append([{'text': ''.join(texts),
+                                     'mode': mode}])
 
         if not found_one:
             char_detail.append([{'text': '  (None)',
