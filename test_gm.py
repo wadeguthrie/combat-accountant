@@ -190,9 +190,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "reload": 3,
                   "skill": "guns (pistol)",
                   "count": 1,
-                  "notes": ""
+                  "owners": 1,
+                  "notes": None
                  },
-                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "" }
+                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
+                  "owners": None }
             ],
             "skills": {"guns (pistol)":
                                     self.__vodou_priest_fighter_pistol_skill,
@@ -231,9 +233,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "reload": 3,
                   "skill": "guns (pistol)",
                   "count": 1,
+                  "owners": None,
                   "notes": ""
                  },
-                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "" }
+                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
+                  "owners": None,
+                 }
             ],
             "skills": {"guns (pistol)": 15, "brawling": 12},
             "advantages": {"combat reflexes": 15},
@@ -266,9 +271,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "reload": 3,
                   "skill": "guns (pistol)",
                   "count": 1,
+                  "owners": None,
                   "notes": ""
                  },
-                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "" }
+                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
+                  "owners": None,
+                 }
             ],
             "skills": {"guns (pistol)": 13, "brawling": 12},
             "advantages": {"combat reflexes": 15},
@@ -306,6 +314,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "reload": 3,
                   "skill": "guns (pistol)",
                   "count": 1,
+                  "owners": None,
                   "notes": ""
                  },
                  {"name": "sick stick",
@@ -313,9 +322,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "damage": {"dice": "1d+1 fat"},
                   "skill": "axe/mace",
                   "count": 1,
+                  "owners": None,
                   "notes": ""
                  },
-                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "" }
+                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
+                  "owners": None,
+                 }
             ],
             "skills": {"guns (pistol)": 16, "brawling": 16, "axe/mace": 14},
             "advantages": {"combat reflexes": 15},
@@ -351,6 +363,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "reload": 3,
                   "skill": "guns (pistol)",
                   "count": 1,
+                  "owners": None,
                   "notes": ""
                  },
                  {"name": "knife, large",
@@ -359,6 +372,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "skill": "knife",
                   "parry": -1,
                   "count": 1,
+                  "owners": None,
                   "notes": ""
                  },
                  {"count": 1, 
@@ -367,9 +381,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "damage": { "thr": {"plus": 0, "type": "cr"} }, 
                   "parry": 0, 
                   "skill": "karate", 
+                  "owners": None,
                   "type": "melee weapon"
                  },
-                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "" }
+                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
+                  "owners": None,
+                 }
             ],
             "skills": {"guns (pistol)": 12,
                        "brawling": 14,
@@ -1907,6 +1924,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                           "reload": 3,
                           "skill": "guns (pistol)",
                           "count": 1,
+                          "owners": None,
                           "notes": ""
                          }
 

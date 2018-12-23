@@ -503,7 +503,7 @@ class BuildFightGmWindow(GmWindow):
                                                  width+1)
 
     def close(self):
-        #print '  BuildFightGmWindow::close' # TODO: remove
+        #print '  BuildFightGmWindow::close'
         # Kill my subwindows, first
         if self.__char_list_window is not None:
             del self.__char_list_window
@@ -515,7 +515,7 @@ class BuildFightGmWindow(GmWindow):
 
 
     def refresh(self):
-        #print '  BuildFightGmWindow::refresh' # TODO: remove
+        #print '  BuildFightGmWindow::refresh'
         super(BuildFightGmWindow, self).refresh()
         if self.__char_list_window is not None:
             self.__char_list_window.refresh()
@@ -523,13 +523,13 @@ class BuildFightGmWindow(GmWindow):
             self.__char_detail_window.refresh()
 
     def scroll_char_detail_down(self):
-        #print '  ** BuildFightGmWindow::scroll_char_detail_down' # TODO: remove
+        #print '  ** BuildFightGmWindow::scroll_char_detail_down'
         self.__char_detail_window.scroll_down()
         self.__char_detail_window.draw_window()
         self.__char_detail_window.refresh()
 
     def scroll_char_detail_up(self):
-        #print '  ** BuildFightGmWindow::scroll_char_detail_up' # TODO: remove
+        #print '  ** BuildFightGmWindow::scroll_char_detail_up'
         self.__char_detail_window.scroll_up()
         self.__char_detail_window.draw_window()
         self.__char_detail_window.refresh()
@@ -538,7 +538,7 @@ class BuildFightGmWindow(GmWindow):
                               character, # dict as found in the JSON
                               ruleset
                              ):
-        #print '  BuildFightGmWindow::show_character_detail' # TODO: remove
+        #print '  BuildFightGmWindow::show_character_detail'
         self.__char_detail_window.clear()
         if character is None:
             self.refresh()
@@ -1827,7 +1827,6 @@ class Fighter(object):
                       new_item,   # dict describing new equipment
                       source=None # string describing where equipment came from
                      ):
-        # TODO: test source names
         if source is not None and new_item['owners'] is not None:
             new_item['owners'].append(source)
 
