@@ -4234,7 +4234,11 @@ class BuildFightHandler(ScreenHandler):
                         if gender is not None:
                             to_monster['notes'].append('gender: %s' % gender)
 
-                monster_name = '%d - %s' % (monster_num, base_name)
+                if self.__group_name == 'NPCs' or self.__group_name == 'PCs':
+                    monster_name = base_name
+                else:
+                    monster_name = '%d - %s' % (monster_num, base_name)
+
                 if monster_name in self.__new_creatures:
                     self._window_manager.error(
                         ['Monster "%s" already exists' % monster_name])
@@ -4244,21 +4248,21 @@ class BuildFightHandler(ScreenHandler):
 
             # Add personality stuff to notes
         
-            # TODO: not for player characters
-            with GmJson('npc_detail.json') as npc_detail:
-                for name, traits in npc_detail.read_data['traits'].iteritems():
-                    trait = random.choice(traits)
-                    if isinstance(trait, dict):
-                        trait_array = [trait['text']]
-                        for key in trait:
-                            if key in npc_detail.read_data['support']:
-                                trait_array.append('%s: %s' %
-                                    (key, 
-                                     random.choice(
-                                        npc_detail.read_data['support'][key])))
-                        trait = ', '.join(trait_array)
+            if self.__group_name != 'PCs':
+                with GmJson('npc_detail.json') as npc_detail:
+                    for name, traits in npc_detail.read_data['traits'].iteritems():
+                        trait = random.choice(traits)
+                        if isinstance(trait, dict):
+                            trait_array = [trait['text']]
+                            for key in trait:
+                                if key in npc_detail.read_data['support']:
+                                    trait_array.append('%s: %s' %
+                                        (key, 
+                                         random.choice(
+                                            npc_detail.read_data['support'][key])))
+                            trait = ', '.join(trait_array)
 
-                    to_monster['notes'].append('%s: %s' % (name, trait))
+                        to_monster['notes'].append('%s: %s' % (name, trait))
 
             # Modify the creature we just created
 
