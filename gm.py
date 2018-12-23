@@ -25,6 +25,7 @@ import traceback
 #   - should warn when trying to do a second action (take note of fastdraw)
 #
 # TODO (eventually):
+#   - anything with 'RULESET' comment should be moved to the ruleset
 #   - add ability to edit any creature
 #   - should only be able to ready an unready weapon.
 #   - Add 2 weapon (or weapon & shield)
@@ -959,7 +960,7 @@ class OutfitCharactersGmWindow(GmWindow):
     def show_character(self,
                        character # dict: {'name': None, 'details': None}
                       ):
-        # TODO (move to ruleset): this is ruleset specific
+        # RULESET: this is ruleset specific
         self.__outfit_window.clear()
         if character['name'] is None:
             self.refresh()
@@ -1871,7 +1872,7 @@ class Fighter(object):
                 break
 
     def can_finish_turn(self):
-        # TODO (move to ruleset): actions are ruleset-based.
+        # RULESET: actions are ruleset-based.
         if self.details['did_action_this_turn'] or not self.is_conscious():
             return True
         return False
@@ -1882,7 +1883,7 @@ class Fighter(object):
             timer['rounds'] -= 1
 
 
-    # TODO (move to ruleset): do_aim is ruleset-based.
+    # RULESET: do_aim is ruleset-based.
     def do_aim(self,
                braced   # True | False
               ):
@@ -1969,7 +1970,7 @@ class Fighter(object):
         return True if self.details['state'] == 'absent' else False
 
     def perform_action_this_turn(self):
-        # TODO (move to ruleset): actions are ruleset-based.
+        # RULESET: actions are ruleset-based.
         self.details['did_action_this_turn'] = True
 
     def remove_expired_keep_dying_timers(self):
@@ -2004,7 +2005,7 @@ class Fighter(object):
             del self.details['timers'][index]
 
     def reset_aim(self):
-        # TODO (move to ruleset): do_aim is ruleset-based.
+        # RULESET: do_aim is ruleset-based.
         self.details['aim']['rounds'] = 0
         self.details['aim']['braced'] = False
 
@@ -4782,7 +4783,7 @@ class FightHandler(ScreenHandler):
     # Private Methods
     #
 
-    # TODO (move to ruleset): all of FP belongs in Ruleset
+    # RULESET: all of FP belongs in Ruleset
     def __damage_FP(self):
         '''
         Command ribbon method.
@@ -4808,7 +4809,7 @@ class FightHandler(ScreenHandler):
         hp_adj = 0
 
         # If FP go below zero, you lose HP along with FP
-        # TODO (move to ruleset): this -- especially -- should be in Ruleset
+        # RULESET: this -- especially -- should be in Ruleset
         if adj < 0  and -adj > fp_recipient.details['current']['fp']:
             hp_adj = adj
             if fp_recipient.details['current']['fp'] > 0:
@@ -5179,7 +5180,7 @@ class FightHandler(ScreenHandler):
         # Finish off previous guy
         prev_fighter = self.get_current_fighter()
         if not prev_fighter.can_finish_turn():
-            # TODO (move to ruleset): This should _so_ be in the ruleset but
+            # RULESET: This should _so_ be in the ruleset but
             # I'm not sure how to achieve that.  It also makes the assumption
             # that you can't move on to the next fighter _because_ no
             # maneuver/action has been performed.
