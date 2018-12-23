@@ -980,7 +980,21 @@ class OutfitCharactersGmWindow(GmWindow):
         found_stuff = False
         for item in character['details']['stuff']:
             found_stuff = True
-            self.__outfit_window.addstr(line, 0, '  %s' % item['name'], mode)
+
+            # TODO: equipment must have an object with a 'show me' method
+            #   that method would give weapon and armor details
+            texts = ['  %s' % item['name']]
+            if 'count' in item and item['count'] != 1:
+                texts.append(' (%d)' % item['count'])
+            if item['owners'] is not None and len(item['owners']) > 0:
+                texts.append(' from: ')
+                texts.append('%s' % '->'.join(item['owners']))
+
+            if ('notes' in item and item['notes'] is not None and
+                                                    (len(item['notes']) > 0)):
+                texts.append(': %s' % item['notes'])
+
+            self.__outfit_window.addstr(line, 0, '%s' % ''.join(texts), mode)
             line += 1
 
         if not found_stuff:
@@ -1809,12 +1823,8 @@ class Fighter(object):
                       source=None # string describing where equipment came from
                      ):
         # TODO: test source names
-        if source is not None and ' (from ' not in new_item['name']:
-            # Just want the original source, not intermediate owners
-            new_name = new_item['name'] = ('%s (from %s)' % (new_item['name']),
-                                           source)
-        else:
-            new_name = new_item['name']
+        if source is not None and new_item['owners'] is not None:
+            new_item['owners'].append(source)
 
         for item in self.details['stuff']:
             if item['name'] == new_item['name']:
@@ -1823,7 +1833,6 @@ class Fighter(object):
                     return
                 break
 
-        new_item['name'] = new_name
         self.details['stuff'].append(new_item)
 
     def add_timer(self,
@@ -2884,6 +2893,10 @@ class GurpsRuleset(Ruleset):
             texts = ['  %s' % item['name']]
             if 'count' in item and item['count'] != 1:
                 texts.append(' (%d)' % item['count'])
+            if item['owners'] is not None and len(item['owners']) > 0:
+                texts.append(' from: ')
+                texts.append('%s' % '->'.join(item['owners']))
+
             if ('notes' in item and item['notes'] is not None and
                                                     (len(item['notes']) > 0)):
                 texts.append(': %s' % item['notes'])
@@ -5834,7 +5847,7 @@ class MainHandler(ScreenHandler):
                              self.__ruleset,
                              self._window_manager)
 
-        to_fighter.add_equipment(item, None)
+        to_fighter.add_equipment(item, from_fighter.name)
         self._draw_screen()
         return True # Keep going
 
