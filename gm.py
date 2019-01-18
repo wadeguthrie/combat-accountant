@@ -2074,6 +2074,37 @@ class Fighter(object):
             return False if lhs != rhs else True
 
 
+class Equipment(object):
+    def __init__(self,
+                 item   # dict as found in the JSON
+                ):
+        self.__item = item
+
+    def get_description(self):
+        found_one = True
+        char_detail = []
+        texts = ['  %s' % item['name']]
+        if 'count' in item and item['count'] != 1:
+            texts.append(' (%d)' % item['count'])
+
+        if ('notes' in item and item['notes'] is not None and
+                                                (len(item['notes']) > 0)):
+            texts.append(': %s' % item['notes'])
+        char_detail.append([{'text': ''.join(texts),
+                             'mode': mode}])
+
+        if item['owners'] is not None and len(item['owners']) > 0:
+            texts = ['    Owners: ']
+            texts.append('%s' % '->'.join(item['owners']))
+            char_detail.append([{'text': ''.join(texts),
+                                 'mode': mode}])
+        if not found_one:
+            char_detail.append([{'text': '  (None)',
+                                 'mode': mode}])
+
+        return char_detail
+
+
 
 class Ruleset(object):
     '''
@@ -2134,6 +2165,12 @@ class Ruleset(object):
                             look_for_re # compiled Python regex
                            ):
         result = []
+
+        if look_for_re.search(name):
+            result.append({'name': name,
+                           'group': group,
+                           'location': 'name',
+                           'notes': name})
 
         if 'stuff' in creature:
             for thing in creature['stuff']:

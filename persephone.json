@@ -61,6 +61,7 @@
             {
               "acc": 2, 
               "count": 1, 
+              "owners": null, 
               "name": "pistol, Baretta DX 192", 
               "notes": "", 
               "damage": {
@@ -72,7 +73,6 @@
               }, 
               "reload": 3, 
               "skill": "beam weapons (pistol)", 
-              "owners": null,
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -82,6 +82,7 @@
             }, 
             {
               "count": 1, 
+              "owners": null, 
               "name": "knife, large", 
               "notes": "", 
               "damage": {
@@ -96,14 +97,13 @@
               }, 
               "parry": -1, 
               "skill": "knife", 
-              "owners": null,
               "type": "melee weapon"
             }, 
             {
               "count": 5, 
               "notes": "", 
               "type": "misc", 
-              "owners": null,
+              "owners": null, 
               "name": "C Cell"
             }
           ]
@@ -173,6 +173,9 @@
             {
               "acc": 4, 
               "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
               "name": "pistol, nice David-built laser", 
               "damage": {
                 "dice": {
@@ -183,7 +186,6 @@
               }, 
               "reload": 3, 
               "skill": "beam weapons (pistol)", 
-              "owners": ["David (smith)"],
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -195,11 +197,12 @@
               "count": 5, 
               "notes": "", 
               "type": "misc", 
-              "owners": null,
+              "owners": null, 
               "name": "C Cell"
             }, 
             {
               "count": 1, 
+              "owners": null, 
               "name": "knife, small", 
               "notes": "B272", 
               "damage": {
@@ -214,11 +217,11 @@
               }, 
               "parry": -1, 
               "skill": "knife", 
-              "owners": null,
               "type": "melee weapon"
             }, 
             {
               "count": 1, 
+              "owners": null, 
               "name": "brass knuckles", 
               "notes": "B271", 
               "damage": {
@@ -229,7 +232,6 @@
               }, 
               "parry": 0, 
               "skill": "karate", 
-              "owners": null,
               "type": "melee weapon"
             }, 
             {
@@ -517,6 +519,7 @@
             {
               "acc": 2, 
               "count": 1, 
+              "owners": null, 
               "name": "pistol, Baretta DX 192", 
               "notes": "", 
               "damage": {
@@ -528,7 +531,6 @@
               }, 
               "reload": 3, 
               "skill": "beam weapons (pistol)", 
-              "owners": null,
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -538,6 +540,7 @@
             }, 
             {
               "count": 1, 
+              "owners": null, 
               "name": "knife, large", 
               "notes": "", 
               "damage": {
@@ -552,14 +555,13 @@
               }, 
               "parry": -1, 
               "skill": "knife", 
-              "owners": null,
               "type": "melee weapon"
             }, 
             {
               "count": 5, 
               "notes": "", 
               "type": "misc", 
-              "owners": null,
+              "owners": null, 
               "name": "C Cell"
             }
           ]
@@ -703,6 +705,7 @@
           "value": [
             {
               "count": 1, 
+              "owners": null, 
               "name": "knife, large", 
               "notes": "", 
               "damage": {
@@ -717,19 +720,19 @@
               }, 
               "parry": -1, 
               "skill": "knife", 
-              "owners": null,
               "type": "melee weapon"
             }, 
             {
               "count": 5, 
               "notes": "", 
               "type": "misc", 
-              "owners": null,
+              "owners": null, 
               "name": "C Cell"
             }, 
             {
               "acc": 3, 
               "count": 1, 
+              "owners": null, 
               "name": "pistol, Colt 170D", 
               "notes": "", 
               "damage": {
@@ -741,7 +744,6 @@
               }, 
               "reload": 3, 
               "skill": "beam weapons (pistol)", 
-              "owners": null,
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -816,6 +818,9 @@
             {
               "acc": 3, 
               "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
               "name": "pistol, average David-built laser", 
               "notes": "", 
               "damage": {
@@ -827,7 +832,6 @@
               }, 
               "reload": 3, 
               "skill": "beam weapons (pistol)", 
-              "owners": ["David (smith)"],
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -837,6 +841,7 @@
             }, 
             {
               "count": 1, 
+              "owners": null, 
               "name": "knife, large", 
               "notes": "", 
               "damage": {
@@ -851,23 +856,22 @@
               }, 
               "parry": -1, 
               "skill": "knife", 
-              "owners": null,
               "type": "melee weapon"
             }, 
             {
               "count": 5, 
               "notes": "", 
               "type": "misc", 
-              "owners": null,
+              "owners": null, 
               "name": "C Cell"
             }, 
             {
               "count": 1, 
+              "owners": [], 
+              "name": "Sport coat/Jeans", 
               "type": "armor", 
               "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 2, 
-              "owners": [],
-              "name": "Sport coat/Jeans"
+              "dr": 2
             }
           ]
         }
@@ -883,6 +887,7 @@
       "stuff": [
         {
           "count": 4, 
+          "owners": null, 
           "name": "knife, large", 
           "notes": "", 
           "damage": {
@@ -897,12 +902,12 @@
           }, 
           "parry": -1, 
           "skill": "knife", 
-          "owners": null,
           "type": "melee weapon"
         }, 
         {
           "acc": 4, 
           "count": 1, 
+          "owners": null, 
           "name": "pistol, Sig D65", 
           "notes": "", 
           "damage": {
@@ -914,7 +919,6 @@
           }, 
           "reload": 3, 
           "skill": "beam weapons (pistol)", 
-          "owners": null,
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -926,61 +930,64 @@
           "count": 100000, 
           "notes": "", 
           "type": "misc", 
-          "owners": null,
+          "owners": null, 
           "name": "C Cell"
         }, 
         {
           "count": 1, 
           "notes": "2 keys: door to crate area, crates", 
           "type": "misc", 
-          "owners": [],
+          "owners": [], 
           "name": "set of keys"
         }, 
         {
           "count": 2, 
           "notes": "Needs a 'B' cell", 
           "type": "misc", 
-          "owners": null,
+          "owners": null, 
           "name": "Multitool w/flashlight"
         }, 
         {
           "count": 3, 
           "notes": "holds: candy, tampon x2, lip balm, nail clippers", 
           "type": "misc", 
-          "owners": [],
+          "owners": [], 
           "name": "small bag"
         }, 
         {
           "count": 3, 
           "notes": "eR 10", 
           "type": "misc", 
-          "owners": null,
+          "owners": null, 
           "name": "Baseball card: Angel Salazar"
         }, 
         {
           "count": 2, 
           "notes": "eR 10", 
           "type": "misc", 
-          "owners": null,
+          "owners": null, 
           "name": "Baseball card: Pete Rose"
         }, 
         {
           "count": 5, 
           "notes": "eR 200", 
           "type": "misc", 
-          "owners": null,
+          "owners": null, 
           "name": "Baseball card: Jackson"
         }, 
         {
           "count": 1, 
           "notes": "eR 1000", 
           "type": "misc", 
-          "owners": null,
+          "owners": null, 
           "name": "Baseball card: Hasegawa"
         }, 
         {
           "acc": 3, 
           "count": 1, 
+          "owners": [
+            "David (smith)"
+          ], 
           "name": "pistol, average David-built laser", 
           "notes": "", 
           "damage": {
@@ -992,7 +999,6 @@
           }, 
           "reload": 3, 
           "skill": "beam weapons (pistol)", 
-          "owners": ["David (smith)"],
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -1003,6 +1009,7 @@
         {
           "acc": 8, 
           "count": 1, 
+          "owners": [], 
           "name": "laser rifle", 
           "notes": "", 
           "damage": {
@@ -1014,7 +1021,6 @@
           }, 
           "reload": 3, 
           "skill": "beam weapons (rifle)", 
-          "owners": [],
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -1025,6 +1031,7 @@
         {
           "acc": 3, 
           "count": 2, 
+          "owners": null, 
           "name": "pistol, Colt 170D", 
           "notes": "", 
           "damage": {
@@ -1036,7 +1043,6 @@
           }, 
           "reload": 3, 
           "skill": "beam weapons (pistol)", 
-          "owners": null,
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -1048,12 +1054,13 @@
           "count": 3, 
           "notes": "eR 10", 
           "type": "misc", 
-          "owners": null,
+          "owners": null, 
           "name": "Baseball card: Salazar"
         }, 
         {
           "acc": 2, 
           "count": 1, 
+          "owners": null, 
           "name": "pistol, Baretta DX 192", 
           "notes": "", 
           "damage": {
@@ -1065,7 +1072,6 @@
           }, 
           "reload": 3, 
           "skill": "beam weapons (pistol)", 
-          "owners": null,
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -1095,6 +1101,7 @@
         "knife": 15, 
         "traps": 12
       }, 
+      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "short-notes": [
@@ -1111,7 +1118,6 @@
         "basic-move": 6, 
         "basic-speed": 6
       }, 
-      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
@@ -1137,8 +1143,8 @@
         "night vision": 4, 
         "combat reflexes": 15
       }, 
-      "did_action_this_turn": false, 
       "weapon-index": null, 
+      "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
@@ -1152,6 +1158,7 @@
         {
           "acc": 3, 
           "count": 1, 
+          "owners": null, 
           "name": "pistol, Colt 170D", 
           "notes": "", 
           "damage": {
@@ -1163,7 +1170,6 @@
           }, 
           "reload": 3, 
           "skill": "beam weapons (pistol)", 
-          "owners": null,
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -1175,11 +1181,12 @@
           "count": 100000, 
           "notes": "", 
           "type": "misc", 
-          "owners": null,
+          "owners": null, 
           "name": "C Cell"
         }, 
         {
           "count": 1, 
+          "owners": null, 
           "name": "sick stick", 
           "notes": "", 
           "damage": {
@@ -1190,14 +1197,13 @@
             }
           }, 
           "skill": "axe/mace", 
-          "owners": null,
           "type": "melee weapon"
         }, 
         {
           "count": 1, 
           "notes": "", 
           "type": "misc", 
-          "owners": [],
+          "owners": [], 
           "name": "Hacking Equipment +1"
         }
       ], 
@@ -1211,16 +1217,17 @@
         "computer hacking": 15, 
         "electronics operation": 13, 
         "axe/mace": 11, 
-        "computer programming": 12, 
+        "brawling": 12, 
         "first aid": 14, 
         "computer security": 12, 
         "beam weapons (pistol)": 15, 
         "armoury (small arms)": 13, 
-        "brawling": 12, 
+        "computer programming": 12, 
         "physics": 12, 
         "piloting": 13, 
         "observation": 15
       }, 
+      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "short-notes": [
@@ -1238,7 +1245,6 @@
         "basic-move": 5, 
         "basic-speed": 5.25
       }, 
-      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 10, 
@@ -1260,8 +1266,8 @@
         "secret (turned in evidence on brutal Bratva hit)": -30, 
         "cannot speak/synthesizer": -10
       }, 
-      "did_action_this_turn": false, 
       "weapon-index": null, 
+      "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
@@ -1275,6 +1281,7 @@
         {
           "acc": 4, 
           "count": 1, 
+          "owners": null, 
           "name": "pistol, Sig D65", 
           "notes": "", 
           "damage": {
@@ -1286,7 +1293,6 @@
           }, 
           "reload": 3, 
           "skill": "beam weapons (pistol)", 
-          "owners": null,
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -1298,11 +1304,12 @@
           "count": 100000, 
           "notes": "", 
           "type": "misc", 
-          "owners": null,
+          "owners": null, 
           "name": "C Cell"
         }, 
         {
           "count": 1, 
+          "owners": null, 
           "name": "sick stick", 
           "notes": "", 
           "damage": {
@@ -1313,11 +1320,11 @@
             }
           }, 
           "skill": "axe/mace", 
-          "owners": null,
           "type": "melee weapon"
         }, 
         {
           "count": 2, 
+          "owners": null, 
           "name": "knife, large", 
           "notes": "", 
           "damage": {
@@ -1332,11 +1339,11 @@
           }, 
           "parry": -1, 
           "skill": "knife", 
-          "owners": null,
           "type": "melee weapon"
         }, 
         {
           "count": 1, 
+          "owners": null, 
           "name": "knife, small", 
           "notes": "B272", 
           "damage": {
@@ -1351,7 +1358,6 @@
           }, 
           "parry": -1, 
           "skill": "knife", 
-          "owners": null,
           "type": "melee weapon"
         }
       ], 
@@ -1383,6 +1389,7 @@
         "knife": 5, 
         "electronics operation (security)": 14
       }, 
+      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "current": {
@@ -1396,7 +1403,6 @@
         "basic-move": 5, 
         "basic-speed": 5
       }, 
-      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
@@ -1428,8 +1434,8 @@
         "versatile": 5, 
         "vodou practitioner (Mambo 1)": 15
       }, 
-      "did_action_this_turn": false, 
       "weapon-index": null, 
+      "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
@@ -1443,6 +1449,7 @@
         {
           "acc": 4, 
           "count": 1, 
+          "owners": null, 
           "name": "pistol, Sig D65", 
           "notes": "", 
           "damage": {
@@ -1454,7 +1461,6 @@
           }, 
           "reload": 3, 
           "skill": "beam weapons (pistol)", 
-          "owners": null,
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -1466,11 +1472,12 @@
           "count": 25, 
           "notes": "", 
           "type": "misc", 
-          "owners": null,
+          "owners": null, 
           "name": "C Cell"
         }, 
         {
           "count": 1, 
+          "owners": null, 
           "name": "knife, small", 
           "notes": "B272", 
           "damage": {
@@ -1485,11 +1492,11 @@
           }, 
           "parry": -1, 
           "skill": "knife", 
-          "owners": null,
           "type": "melee weapon"
         }, 
         {
           "count": 1, 
+          "owners": null, 
           "name": "sick stick", 
           "notes": "", 
           "damage": {
@@ -1500,11 +1507,11 @@
             }
           }, 
           "skill": "axe/mace", 
-          "owners": null,
           "type": "melee weapon"
         }, 
         {
           "count": 1, 
+          "owners": null, 
           "name": "brass knuckles", 
           "notes": "B271", 
           "damage": {
@@ -1515,7 +1522,6 @@
           }, 
           "parry": 0, 
           "skill": "karate", 
-          "owners": null,
           "type": "melee weapon"
         }
       ], 
@@ -1676,6 +1682,7 @@
       "stuff": [
         {
           "count": 1, 
+          "owners": null, 
           "name": "sick stick", 
           "notes": "", 
           "damage": {
@@ -1686,12 +1693,12 @@
             }
           }, 
           "skill": "axe/mace", 
-          "owners": null,
           "type": "melee weapon"
         }, 
         {
           "acc": 4, 
           "count": 1, 
+          "owners": null, 
           "name": "pistol, Sig D65", 
           "notes": "", 
           "damage": {
@@ -1703,7 +1710,6 @@
           }, 
           "reload": 3, 
           "skill": "beam weapons (pistol)", 
-          "owners": null,
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -1715,7 +1721,7 @@
           "count": 100000, 
           "notes": "", 
           "type": "misc", 
-          "owners": null,
+          "owners": null, 
           "name": "C Cell"
         }
       ], 
@@ -1728,6 +1734,7 @@
         "first aid": 17, 
         "beam weapons (pistol)": 14
       }, 
+      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "current": {
@@ -1741,7 +1748,6 @@
         "basic-move": 5, 
         "basic-speed": 4
       }, 
-      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 18, 
@@ -1769,8 +1775,8 @@
         "likes shiny objects": -1, 
         "personality change": -1
       }, 
-      "did_action_this_turn": false, 
       "weapon-index": null, 
+      "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
@@ -1786,6 +1792,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -1799,7 +1806,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -1815,8 +1821,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -1829,6 +1835,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -1842,7 +1849,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -1858,8 +1864,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -1872,6 +1878,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -1885,7 +1892,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -1901,8 +1907,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -1915,6 +1921,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -1928,7 +1935,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -1945,8 +1951,8 @@
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -1959,6 +1965,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -1972,7 +1979,6 @@
           "basic-move": 5, 
           "basic-speed": 5.25
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -1988,8 +1994,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2002,6 +2008,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2015,7 +2022,6 @@
           "basic-move": 5, 
           "basic-speed": 5.5
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 12, 
@@ -2031,8 +2037,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2045,6 +2051,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2058,7 +2065,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2074,8 +2080,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2088,6 +2094,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2101,7 +2108,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2118,8 +2124,8 @@
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2401,6 +2407,7 @@
           {
             "acc": 2, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
@@ -2412,7 +2419,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -2422,6 +2428,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -2436,23 +2443,22 @@
             }, 
             "parry": -1, 
             "skill": "knife", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }, 
           {
             "count": 1, 
+            "owners": [], 
+            "name": "Sport coat/Jeans", 
             "type": "armor", 
             "notes": "Enchanted w/fortify spell [M66]", 
-            "dr": 2, 
-            "owners": [],
-            "name": "Sport coat/Jeans"
+            "dr": 2
           }
         ], 
         "stunned": false, 
@@ -2553,6 +2559,7 @@
           {
             "acc": 2, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
@@ -2564,7 +2571,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -2574,6 +2580,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -2588,68 +2595,67 @@
             }, 
             "parry": -1, 
             "skill": "knife", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 1, 
             "notes": "eR 500", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Baseball card: Sasaki"
           }, 
           {
             "count": 2, 
             "notes": "eR 200", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Baseball card: Jackson"
           }, 
           {
             "count": 3, 
             "notes": "eR 10", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Baseball card: Salazar"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }, 
           {
             "count": 1, 
             "notes": "Needs a 'B' cell", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Multitool w/flashlight"
           }, 
           {
             "count": 1, 
             "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "small bag"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "2: William": {
@@ -2692,6 +2698,7 @@
           {
             "acc": 2, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
@@ -2703,7 +2710,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -2713,6 +2719,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -2727,61 +2734,60 @@
             }, 
             "parry": -1, 
             "skill": "knife", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 1, 
             "notes": "eR 500", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Baseball card: Sasaki"
           }, 
           {
             "count": 3, 
             "notes": "eR 200", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Baseball card: Jackson"
           }, 
           {
             "count": 4, 
             "notes": "eR 10", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Baseball card: Salazar"
           }, 
           {
             "count": 5, 
             "notes": "3 for headache, 2 for allergies", 
             "type": "misc", 
-            "owners": [],
+            "owners": [], 
             "name": "Med Patches"
           }, 
           {
             "count": 1, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Comb, Condom x2, breath mints"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }
         ], 
         "timers": [], 
-        "weapon-index": 0, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": 0, 
         "advantages": {
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "5: Amelia": {
@@ -2824,6 +2830,7 @@
           {
             "acc": 2, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
@@ -2835,7 +2842,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -2847,11 +2853,12 @@
             "count": 1, 
             "notes": "M193, cost eR3570", 
             "type": "misc", 
-            "owners": [],
+            "owners": [], 
             "name": "Fingerbone of major healing (8)"
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -2866,14 +2873,13 @@
             }, 
             "parry": -1, 
             "skill": "knife", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": [],
+            "owners": [], 
             "name": "C Cell"
           }
         ], 
@@ -2887,14 +2893,14 @@
             ]
           }
         ], 
-        "weapon-index": null, 
         "did_action_this_turn": true, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "1: Oliver": {
@@ -2938,19 +2944,20 @@
             "count": 1, 
             "notes": "M193, cost eR2910", 
             "type": "misc", 
-            "owners": [],
+            "owners": [], 
             "name": "Fingerbone of fog"
           }, 
           {
             "count": 1, 
             "notes": "M193, cost eR3570", 
             "type": "misc", 
-            "owners": [],
+            "owners": [], 
             "name": "Fingerbone of major healing (8)"
           }, 
           {
             "acc": 2, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
@@ -2962,7 +2969,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -2972,6 +2978,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -2986,75 +2993,74 @@
             }, 
             "parry": -1, 
             "skill": "knife", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 1, 
             "notes": "holds: gum, nail clippers, comb", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "small case (inside a pocket)"
           }, 
           {
             "count": 1, 
             "notes": "eR 500", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Baseball card: Sasaki"
           }, 
           {
             "count": 2, 
             "notes": "eR 200", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Baseball card: Jackson"
           }, 
           {
             "count": 3, 
             "notes": "eR 10", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Baseball card: Salazar"
           }, 
           {
             "count": 1, 
             "notes": "pictures of parents, sister and her kids", 
             "type": "misc", 
-            "owners": [],
+            "owners": [], 
             "name": "Memory chip"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }, 
           {
             "count": 1, 
             "notes": "Needs a 'B' cell", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Multitool w/flashlight"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }
         ], 
         "timers": [], 
-        "weapon-index": 2, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": 2, 
         "advantages": {
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "3: Charlotte": {
@@ -3097,6 +3103,7 @@
           {
             "acc": 2, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
@@ -3108,7 +3115,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -3118,6 +3124,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -3132,61 +3139,60 @@
             }, 
             "parry": -1, 
             "skill": "knife", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 1, 
             "notes": "eR 500", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Baseball card: Sasaki"
           }, 
           {
             "count": 2, 
             "notes": "eR 200", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Baseball card: Jackson"
           }, 
           {
             "count": 7, 
             "notes": "eR 10", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Baseball card: Salazar"
           }, 
           {
             "count": 1, 
             "notes": "Needs a 'B' cell", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "Multitool w/flashlight"
           }, 
           {
             "count": 1, 
             "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "small bag"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }
     }, 
@@ -3225,11 +3231,11 @@
         "state": "alive", 
         "stuff": [], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {}, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "Dude": {
@@ -3272,6 +3278,7 @@
           {
             "acc": 2, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
@@ -3283,7 +3290,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -3293,6 +3299,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -3307,26 +3314,25 @@
             }, 
             "parry": -1, 
             "skill": "knife", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }
     }, 
@@ -3339,6 +3345,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3352,7 +3359,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -3368,8 +3374,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3382,6 +3388,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3395,7 +3402,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -3411,8 +3417,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3425,6 +3431,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3438,7 +3445,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -3454,8 +3460,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3468,6 +3474,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3481,7 +3488,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -3498,8 +3504,8 @@
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3512,6 +3518,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3525,7 +3532,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -3541,8 +3547,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3555,6 +3561,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3568,7 +3575,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -3584,8 +3590,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3598,6 +3604,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3611,7 +3618,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -3627,8 +3633,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3641,6 +3647,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3654,7 +3661,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -3671,8 +3677,8 @@
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3688,6 +3694,7 @@
           {
             "acc": 4, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Sig D65", 
             "notes": "", 
             "damage": {
@@ -3699,7 +3706,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -3709,6 +3715,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "sick stick", 
             "notes": "", 
             "damage": {
@@ -3719,14 +3726,13 @@
               }
             }, 
             "skill": "axe/mace", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }
         ], 
@@ -3736,6 +3742,7 @@
           "brawling": 16, 
           "axe/mace": 14
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3749,7 +3756,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -3765,8 +3771,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3780,6 +3786,7 @@
           {
             "acc": 3, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Colt 170D", 
             "notes": "", 
             "damage": {
@@ -3791,7 +3798,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -3803,7 +3809,7 @@
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }
         ], 
@@ -3812,6 +3818,7 @@
           "beam weapons (pistol)": 15, 
           "brawling": 12
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3825,7 +3832,6 @@
           "basic-move": 5, 
           "basic-speed": 5.5
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 12, 
@@ -3841,8 +3847,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3856,6 +3862,7 @@
           {
             "acc": 4, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Sig D65", 
             "notes": "", 
             "damage": {
@@ -3867,7 +3874,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -3877,6 +3883,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "sick stick", 
             "notes": "", 
             "damage": {
@@ -3887,14 +3894,13 @@
               }
             }, 
             "skill": "axe/mace", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }
         ], 
@@ -3904,6 +3910,7 @@
           "brawling": 16, 
           "axe/mace": 14
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3917,7 +3924,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -3933,8 +3939,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3948,6 +3954,7 @@
           {
             "acc": 2, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
@@ -3959,7 +3966,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -3969,6 +3975,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -3983,14 +3990,13 @@
             }, 
             "parry": -1, 
             "skill": "knife", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }
         ], 
@@ -4000,6 +4006,7 @@
           "brawling": 14, 
           "knife": 15
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4013,7 +4020,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4029,8 +4035,8 @@
         "advantages": {
           "high pain threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4044,6 +4050,7 @@
           {
             "acc": 2, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Kalashnikov Makarov", 
             "notes": "", 
             "damage": {
@@ -4055,7 +4062,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -4067,7 +4073,7 @@
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }
         ], 
@@ -4076,6 +4082,7 @@
           "beam weapons (pistol)": 13, 
           "brawling": 12
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4089,7 +4096,6 @@
           "basic-move": 5, 
           "basic-speed": 5.25
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4106,8 +4112,8 @@
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4121,6 +4127,7 @@
           {
             "acc": 4, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Sig D65", 
             "notes": "", 
             "damage": {
@@ -4132,7 +4139,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -4142,6 +4148,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "sick stick", 
             "notes": "", 
             "damage": {
@@ -4152,14 +4159,13 @@
               }
             }, 
             "skill": "axe/mace", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }
         ], 
@@ -4169,6 +4175,7 @@
           "brawling": 16, 
           "axe/mace": 14
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4182,7 +4189,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4198,8 +4204,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4213,6 +4219,7 @@
           {
             "acc": 4, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Sig D65", 
             "notes": "", 
             "damage": {
@@ -4224,7 +4231,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -4234,6 +4240,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "sick stick", 
             "notes": "", 
             "damage": {
@@ -4244,14 +4251,13 @@
               }
             }, 
             "skill": "axe/mace", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }
         ], 
@@ -4261,6 +4267,7 @@
           "brawling": 16, 
           "axe/mace": 14
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4274,7 +4281,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4290,8 +4296,8 @@
         "advantages": {
           "combat reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4305,6 +4311,7 @@
           {
             "acc": 2, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
@@ -4316,7 +4323,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -4326,6 +4332,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -4340,14 +4347,13 @@
             }, 
             "parry": -1, 
             "skill": "knife", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }
         ], 
@@ -4357,6 +4363,7 @@
           "brawling": 14, 
           "knife": 15
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4370,7 +4377,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4386,8 +4392,8 @@
         "advantages": {
           "high pain threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4432,60 +4438,111 @@
     ]
   }, 
   "NPCs": {
-    "Papa Jorge - Bokor": {
+    "Isaac Harris - Tiger team leader": {
+      "stunned": 0, 
+      "did_action_this_turn": false, 
+      "short-notes": [], 
+      "advantages": {
+        "combat reflexes": 15, 
+        "high pain threshold": 10
+      }, 
+      "weapon-index": null, 
+      "posture": "standing", 
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
-      "stunned": false, 
-      "skills": {}, 
+      "stuff": [
+        {
+          "acc": 2, 
+          "count": 1, 
+          "owners": null, 
+          "name": "pistol, Baretta DX 192", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 8, 
+            "shots_left": 8
+          }
+        }, 
+        {
+          "count": 1, 
+          "owners": null, 
+          "name": "knife, large", 
+          "notes": "", 
+          "damage": {
+            "sw": {
+              "plus": -2, 
+              "type": "cut"
+            }, 
+            "thr": {
+              "plus": 0, 
+              "type": "imp"
+            }
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "C Cell"
+        }
+      ], 
+      "skills": {
+        "beam weapons (pistol)": 15, 
+        "brawling": 14, 
+        "knife": 15
+      }, 
       "notes": [
-        "Bokor.  Dominican.", 
-        "", 
-        "Tags: Fireplug, square head, thick mop of black hair, always a", 
-        "broad smile and a twinkle in his eyes", 
-        "", 
-        "Specialty: techno (Simbi)", 
-        "", 
-        "Jorge is a little fireplug of a man with a square head that sits", 
-        "atop a blacksmith's body.  He has a ready smile and dimples you can", 
-        "plant a tree in.  He gives you a dazzling grin and says 'Mucho", 
-        " gusto.'", 
-        "", 
-        "Rolls (adj) against Samuel: 14, His Mojo: 15"
+        "station history: lifer (born on Earth, this is 1st station)", 
+        "characteristics: Sneers", 
+        "instincts: To improve the realm", 
+        "hair: Dreadlocks", 
+        "speech: Nervous", 
+        "knack: A big idea", 
+        "personality: Moody"
       ], 
       "shock": 0, 
       "armor-index": null, 
       "current": {
         "fp": 11, 
         "iq": 12, 
-        "hp": 12, 
-        "wi": 12, 
-        "st": 10, 
+        "hp": 11, 
         "ht": 11, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6
+        "st": 10, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
       }, 
-      "posture": "standing", 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
-        "hp": 12, 
-        "wi": 12, 
-        "st": 10, 
+        "hp": 11, 
         "ht": 11, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6
+        "st": 10, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
       }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "check_for_death": false, 
       "opponent": null
     }, 
     "Bokor Requiem": {
@@ -4505,251 +4562,6 @@
         "can see a bright, shiny light, though, behind her tiny, squinty", 
         "eyes.  There's plenty going on beneath that dowdy surface. Requiem", 
         "simply nods by way of greeting."
-      ], 
-      "shock": 0, 
-      "armor-index": null, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "wi": 12, 
-        "st": 10, 
-        "ht": 11, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6
-      }, 
-      "posture": "standing", 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "wi": 12, 
-        "st": 10, 
-        "ht": 11, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6
-      }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "did_action_this_turn": false, 
-      "opponent": null
-    }, 
-    "Dima - Bratva": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-        {
-          "acc": 4, 
-          "count": 1, 
-          "name": "pistol, nice David-built laser", 
-          "notes": "Hand built by David", 
-          "damage": {
-            "dice": {
-              "plus": 3, 
-              "num_dice": 2, 
-              "type": "pi"
-            }
-          }, 
-          "reload": 3, 
-          "skill": "beam weapons (pistol)", 
-          "owners": ["David (smith)"],
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 8, 
-            "shots_left": 8
-          }
-        }, 
-        {
-          "count": 5, 
-          "notes": "", 
-          "type": "misc", 
-          "owners": null,
-          "name": "C Cell"
-        }, 
-        {
-          "count": 1, 
-          "name": "knife, small", 
-          "notes": "B272", 
-          "damage": {
-            "sw": {
-              "plus": -3, 
-              "type": "cut"
-            }, 
-            "thr": {
-              "plus": -1, 
-              "type": "imp"
-            }
-          }, 
-          "parry": -1, 
-          "skill": "knife", 
-          "owners": null,
-          "type": "melee weapon"
-        }, 
-        {
-          "count": 1, 
-          "name": "brass knuckles", 
-          "notes": "B271", 
-          "damage": {
-            "thr": {
-              "plus": 1, 
-              "type": "cr"
-            }
-          }, 
-          "parry": 0, 
-          "skill": "karate", 
-          "owners": null,
-          "type": "melee weapon"
-        }, 
-        {
-          "count": 1, 
-          "type": "armor", 
-          "notes": "Enchanted w/fortify spell [M66]", 
-          "dr": 3, 
-          "owners": [],
-          "name": "Sport coat/Jeans"
-        }
-      ], 
-      "stunned": 0, 
-      "skills": {
-        "beam weapons (pistol)": 18, 
-        "brawling": 18, 
-        "knife": 18
-      }, 
-      "notes": [
-        "Dima Leonid Popov", 
-        "Bratva bank.", 
-        "Tags: dark gray sportcoat", 
-        "Description:", 
-        "Dima and his four bodyguards move with the relaxed confidence of", 
-        "those whose security have been foretold by the gods.  His black", 
-        "hair and beard, punctuated by patches of gray, are closely cropped", 
-        "and he wears a dark gray sportcoat over jeans and a black dress", 
-        "shirt unbuttoned at the neck."
-      ], 
-      "shock": 0, 
-      "armor-index": 4, 
-      "short-notes": [
-        ""
-      ], 
-      "current": {
-        "fp": 12, 
-        "iq": 12, 
-        "hp": 12, 
-        "wi": 12, 
-        "st": 13, 
-        "ht": 12, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6.25
-      }, 
-      "posture": "standing", 
-      "state": "alive", 
-      "permanent": {
-        "fp": 12, 
-        "iq": 12, 
-        "hp": 12, 
-        "wi": 12, 
-        "st": 13, 
-        "ht": 12, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6.25
-      }, 
-      "advantages": {
-        "combat reflexes": 15, 
-        "high pain threshold": 10
-      }, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "did_action_this_turn": false, 
-      "opponent": null
-    }, 
-    "Celeline Fermine - Pilot (dead)": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "stunned": false, 
-      "skills": {}, 
-      "notes": [
-        "(Pilot)", 
-        "Cedeline and Diego Fermine.  Cedeline (Haitian) is the pilot and", 
-        "Diego (Dominican) is her husband.  Diego's a maintenance worker", 
-        "on Persephone Station."
-      ], 
-      "shock": 0, 
-      "armor-index": null, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "wi": 12, 
-        "st": 10, 
-        "ht": 11, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6
-      }, 
-      "posture": "standing", 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "wi": 12, 
-        "st": 10, 
-        "ht": 11, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6
-      }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "did_action_this_turn": false, 
-      "opponent": null
-    }, 
-    "Mackenzie - Marshal's Intern": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "stunned": false, 
-      "skills": {}, 
-      "notes": [
-        "Tags: aboriginal, awkward / headgear, bright", 
-        "Mac's an aboriginal Australian with the characteristic umber", 
-        "skin; deep-set eyes; wide nose; and giant mop of hair, akimbo.", 
-        "She sports braces with dental headgear and, commensurate with her", 
-        "age, has a mild dusting of pimples on her forehead.  Today, like", 
-        "most days, she's wearing an oversized gray sweatshirt over olive", 
-        "drab cargo pants and canvas Converse high-tops (covered in cartoon", 
-        "bunnies).", 
-        "", 
-        "Mackenzie is 15 years old, 145 lbs, and 5' 2\".  She works most days", 
-        "at the front desk and answering the phones but she also helps with", 
-        "IT.  Turns out, she's _really_ good at IT and fills-in for the", 
-        "lazy guy who's in charge of that department.  She's the adopted", 
-        "child of a white father who is often away on one of the platforms.", 
-        "She's not chipped (doesn't _have_ to get chipped until next year).", 
-        "Her dad leaves open accounts for Mac whenever he's off-station.", 
-        "She's technically a volunteer but she gets cards under the table.", 
-        "", 
-        "She's an outcast, being one of the very few aborigines in the", 
-        "project.  She retreats into hacking but also spends some time in", 
-        "the outer rings."
       ], 
       "shock": 0, 
       "armor-index": null, 
@@ -4832,283 +4644,55 @@
       "did_action_this_turn": false, 
       "opponent": null
     }, 
-    "Konstantin - Bratva": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "stunned": false, 
-      "skills": {}, 
-      "notes": [
-        "Talk w/ Konstantin Alexei Mironov (Russian prison tattoos).  He ", 
-        "should arrive on time in a very nice business suit, have an ", 
-        "expensive watch and nice jewelry.  He'll give an extremely firm ", 
-        "handshake and look each person in the eye.  He'll have a very ", 
-        "opulent office, very large, with a view (it's a display of wealth", 
-        "and power).  He'll lead the party to a formal anteroom with a table", 
-        "for meals.  He'll remove his shoes before entering (roll for the", 
-        "party to notice).  Wine and cake (like a fruitcake) will be served", 
-        "in a very formal way.  He'll have servants serve the food", 
-        "hierarchically to the guests whom he'll treat with honor and", 
-        "respect (which he'll expect in return).  He will use each of the", 
-        "party's title (Officer), first, middle, and last name.  At the meal,", 
-        "he'll discuss how harsh the conditions are, having a business in", 
-        "the space station, and how he has overcome it to flourish with", 
-        "relationships like the one being forged, now.  He'll urge everyone", 
-        "to take second helpings.  Afterwards, he'll move to his desk where", 
-        "chairs will be provided for each of the party.  At his desk, he'll", 
-        "ask a favor of the party: to find out what's in those crates and", 
-        "to give him this information.  The meeting won't be over until", 
-        "they've reached a decision.", 
-        "", 
-        "He values: emotional connection, he's fatalistic and pessimistic,", 
-        "he'll have fortress mentality.  He'll be direct"
-      ], 
-      "shock": 0, 
-      "armor-index": null, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "wi": 12, 
-        "st": 10, 
-        "ht": 11, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6
-      }, 
-      "posture": "standing", 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "wi": 12, 
-        "st": 10, 
-        "ht": 11, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6
-      }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "did_action_this_turn": false, 
-      "opponent": null
-    }, 
-    "Oscar": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "stunned": false, 
-      "skills": {}, 
-      "notes": [
-        "origin: australian", 
-        "gender: male", 
-        "characteristics: Picks at lint or dirt on others' clothes", 
-        "instincts: To live forever", 
-        "hair: Curly", 
-        "speech: Nervous", 
-        "knack: Visions", 
-        "personality: Promiscuous"
-      ], 
-      "shock": 0, 
-      "short-notes": [], 
-      "armor-index": null, 
-      "current": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "wi": 10, 
-        "st": 10, 
-        "ht": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5
-      }, 
-      "posture": "standing", 
-      "state": "alive", 
-      "permanent": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "wi": 10, 
-        "st": 10, 
-        "ht": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5
-      }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "did_action_this_turn": false, 
-      "opponent": null
-    }, 
-    "Hurley, Mitchell (Chief Deputy Marshal)": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "stunned": false, 
-      "skills": {}, 
-      "notes": [
-        "Chief Deputy Marshal", 
-        "Tags: tall, corpulent, sweet", 
-        "Chief deputy Hurley is a big man.  At 6' 2\" and massively", 
-        "corpulent, he looks like he's been poured into his uniform like", 
-        "it was a sausage casing and, at that, the fabric strains at the", 
-        "buttons.  In spite of this, though, he moves like someone who's", 
-        "been large his entire life.  His head is topped by a thick bush", 
-        "of sandy blonde hair which seems to go perfectly with his dirty", 
-        "blue eyes.  Mitchell Hurley has a sweet demeanor and tends to get", 
-        "things done by convincing agreement rather than coersion."
-      ], 
-      "shock": 0, 
-      "armor-index": null, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "wi": 12, 
-        "st": 10, 
-        "ht": 11, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6
-      }, 
-      "posture": "standing", 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "wi": 12, 
-        "st": 10, 
-        "ht": 11, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6
-      }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "did_action_this_turn": false, 
-      "opponent": null
-    }, 
-    "Jessica - Tereshkova security": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-        {
-          "acc": 2, 
-          "count": 1, 
-          "name": "pistol, Baretta DX 192", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 4, 
-              "num_dice": 1, 
-              "type": "pi"
-            }
-          }, 
-          "reload": 3, 
-          "skill": "beam weapons (pistol)", 
-          "owners": null,
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 8, 
-            "shots_left": 8
-          }
-        }, 
-        {
-          "count": 1, 
-          "name": "knife, large", 
-          "notes": "", 
-          "damage": {
-            "sw": {
-              "plus": -2, 
-              "type": "cut"
-            }, 
-            "thr": {
-              "plus": 0, 
-              "type": "imp"
-            }
-          }, 
-          "parry": -1, 
-          "skill": "knife", 
-          "owners": null,
-          "type": "melee weapon"
-        }, 
-        {
-          "count": 5, 
-          "notes": "", 
-          "type": "misc", 
-          "owners": null,
-          "name": "C Cell"
-        }
-      ], 
+    "Lincoln Thompson - Operations manager on Tereshkova": {
       "stunned": 0, 
-      "skills": {
-        "beam weapons (pistol)": 15, 
-        "brawling": 14, 
-        "knife": 15
+      "did_action_this_turn": false, 
+      "short-notes": [], 
+      "advantages": {}, 
+      "weapon-index": null, 
+      "posture": "standing", 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
+      "stuff": [], 
+      "skills": {}, 
       "notes": [
-        "origin: australian", 
-        "gender: female", 
-        "characteristics: Dirty", 
-        "instincts: To earn affection", 
-        "hair: Curly", 
-        "speech: Nasal", 
-        "knack: Visions", 
-        "personality: Cranky"
+        "station history: lifer (born on Earth, this is 1st station)", 
+        "characteristics: Covered in sores, boils, or a rash", 
+        "instincts: To be forgotten", 
+        "hair: Dreadlocks", 
+        "speech: Whiny", 
+        "knack: A mysterious ore", 
+        "personality: Lust"
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": null, 
       "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
         "st": 10, 
-        "wi": 12, 
-        "dx": 12, 
+        "wi": 10, 
+        "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.75
+        "basic-speed": 5
       }, 
-      "posture": "standing", 
       "state": "alive", 
       "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
         "st": 10, 
-        "wi": 12, 
-        "dx": 12, 
+        "wi": 10, 
+        "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.75
+        "basic-speed": 5
       }, 
-      "advantages": {
-        "combat reflexes": 15, 
-        "high pain threshold": 10
-      }, 
-      "weapon-index": null, 
-      "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "check_for_death": false, 
       "opponent": null
     }, 
     "Stoddard, Leland (Chief Deputy Marshal)": {
@@ -5212,93 +4796,6 @@
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
-      }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "did_action_this_turn": false, 
-      "opponent": null
-    }, 
-    "David - Master Weaponsmith": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-        {
-          "acc": 4, 
-          "count": 1, 
-          "name": "pistol, best David-built laser", 
-          "damage": {
-            "dice": {
-              "plus": 4, 
-              "num_dice": 2, 
-              "type": "pi"
-            }
-          }, 
-          "reload": 3, 
-          "skill": "beam weapons (pistol)", 
-          "owners": ["David (smith)"],
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 9, 
-            "shots_left": 9
-          }
-        }, 
-        {
-          "count": 5, 
-          "notes": "", 
-          "type": "misc", 
-          "owners": null,
-          "name": "C Cell"
-        }
-      ], 
-      "stunned": false, 
-      "skills": {
-        "armoury (small arms)": 18, 
-        "armoury (heavy weapons)": 18, 
-        "gunner (beams)": 16, 
-        "gunner (cannon)": 16, 
-        "beam weapons (pistol)": 16
-      }, 
-      "notes": [
-        "origin: russian", 
-        "gender: male", 
-        "characteristics: Collects teeth/hair/claws of slain opponents", 
-        "instincts: To retire", 
-        "hair: Curly", 
-        "speech: Whiny", 
-        "knack: Utter unremarkableness", 
-        "personality: Trusting"
-      ], 
-      "shock": 0, 
-      "short-notes": [], 
-      "armor-index": 4, 
-      "current": {
-        "fp": 10, 
-        "iq": 12, 
-        "hp": 16, 
-        "wi": 12, 
-        "st": 16, 
-        "ht": 10, 
-        "dx": 11, 
-        "basic-move": 6, 
-        "basic-speed": 6.25
-      }, 
-      "posture": "standing", 
-      "state": "alive", 
-      "permanent": {
-        "fp": 10, 
-        "iq": 12, 
-        "hp": 16, 
-        "wi": 12, 
-        "st": 16, 
-        "ht": 10, 
-        "dx": 11, 
-        "basic-move": 6, 
-        "basic-speed": 6.25
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -5461,6 +4958,7 @@
         "basic-move": 5, 
         "basic-speed": 5.25
       }, 
+      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
@@ -5478,9 +4976,8 @@
         "lwa (Mambo, Erzulie Freda)": 6, 
         "vodou practitioner (Mambo/Hougan 2)": 35
       }, 
-      "opponent": null, 
+      "did_action_this_turn": true, 
       "weapon-index": null, 
-      "check_for_death": false, 
       "timers": [
         {
           "rounds": 2.9, 
@@ -5495,7 +4992,7 @@
           ]
         }
       ], 
-      "did_action_this_turn": true, 
+      "opponent": null, 
       "posture": "standing"
     }, 
     "Samantha - (party) Mambo on Tereshkova": {
@@ -5519,7 +5016,6 @@
       ], 
       "shock": 0, 
       "short-notes": [], 
-      "posture": "standing", 
       "armor-index": null, 
       "current": {
         "fp": 11, 
@@ -5532,7 +5028,7 @@
         "basic-move": 5, 
         "basic-speed": 5.25
       }, 
-      "check_for_death": false, 
+      "posture": "standing", 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
@@ -5550,10 +5046,11 @@
         "primary lwa (Erzulie Freda)": 6, 
         "vodou practitioner (Mambo/Hougan 2)": 35
       }, 
-      "did_action_this_turn": false, 
-      "weapon-index": null, 
-      "timers": [], 
       "opponent": null, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
       "spells": [
         {
           "cost": 1, 
@@ -5764,57 +5261,539 @@
       "did_action_this_turn": false, 
       "opponent": null
     }, 
-    "Dmitriy - radio operator on Tereshkova": {
-      "stunned": 0, 
-      "did_action_this_turn": false, 
-      "short-notes": [], 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "posture": "standing", 
+    "Konstantin - Bratva": {
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
       "stuff": [], 
+      "stunned": false, 
       "skills": {}, 
       "notes": [
-        "origin: russian", 
-        "gender: male", 
-        "station history: lifer (born on Earth, this is 1st station)", 
-        "characteristics: Sings", 
-        "instincts: To help others", 
-        "hair: Well groomed", 
-        "speech: Whispery", 
-        "knack: Cooking", 
-        "personality: Obedient"
+        "Talk w/ Konstantin Alexei Mironov (Russian prison tattoos).  He ", 
+        "should arrive on time in a very nice business suit, have an ", 
+        "expensive watch and nice jewelry.  He'll give an extremely firm ", 
+        "handshake and look each person in the eye.  He'll have a very ", 
+        "opulent office, very large, with a view (it's a display of wealth", 
+        "and power).  He'll lead the party to a formal anteroom with a table", 
+        "for meals.  He'll remove his shoes before entering (roll for the", 
+        "party to notice).  Wine and cake (like a fruitcake) will be served", 
+        "in a very formal way.  He'll have servants serve the food", 
+        "hierarchically to the guests whom he'll treat with honor and", 
+        "respect (which he'll expect in return).  He will use each of the", 
+        "party's title (Officer), first, middle, and last name.  At the meal,", 
+        "he'll discuss how harsh the conditions are, having a business in", 
+        "the space station, and how he has overcome it to flourish with", 
+        "relationships like the one being forged, now.  He'll urge everyone", 
+        "to take second helpings.  Afterwards, he'll move to his desk where", 
+        "chairs will be provided for each of the party.  At his desk, he'll", 
+        "ask a favor of the party: to find out what's in those crates and", 
+        "to give him this information.  The meeting won't be over until", 
+        "they've reached a decision.", 
+        "", 
+        "He values: emotional connection, he's fatalistic and pessimistic,", 
+        "he'll have fortress mentality.  He'll be direct"
       ], 
       "shock": 0, 
+      "armor-index": null, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 10, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6
+      }, 
+      "posture": "standing", 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 10, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
+      "opponent": null
+    }, 
+    "Papa Jorge - Bokor": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "stunned": false, 
+      "skills": {}, 
+      "notes": [
+        "Bokor.  Dominican.", 
+        "", 
+        "Tags: Fireplug, square head, thick mop of black hair, always a", 
+        "broad smile and a twinkle in his eyes", 
+        "", 
+        "Specialty: techno (Simbi)", 
+        "", 
+        "Jorge is a little fireplug of a man with a square head that sits", 
+        "atop a blacksmith's body.  He has a ready smile and dimples you can", 
+        "plant a tree in.  He gives you a dazzling grin and says 'Mucho", 
+        " gusto.'", 
+        "", 
+        "Rolls (adj) against Samuel: 14, His Mojo: 15"
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 10, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6
+      }, 
+      "posture": "standing", 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 10, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
+      "opponent": null
+    }, 
+    "Jessica - Tereshkova security": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+        {
+          "acc": 2, 
+          "count": 1, 
+          "owners": null, 
+          "name": "pistol, Baretta DX 192", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 8, 
+            "shots_left": 8
+          }
+        }, 
+        {
+          "count": 1, 
+          "owners": null, 
+          "name": "knife, large", 
+          "notes": "", 
+          "damage": {
+            "sw": {
+              "plus": -2, 
+              "type": "cut"
+            }, 
+            "thr": {
+              "plus": 0, 
+              "type": "imp"
+            }
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "C Cell"
+        }
+      ], 
+      "stunned": 0, 
+      "skills": {
+        "beam weapons (pistol)": 15, 
+        "brawling": 14, 
+        "knife": 15
+      }, 
+      "notes": [
+        "origin: australian", 
+        "gender: female", 
+        "characteristics: Dirty", 
+        "instincts: To earn affection", 
+        "hair: Curly", 
+        "speech: Nasal", 
+        "knack: Visions", 
+        "personality: Cranky"
+      ], 
+      "shock": 0, 
+      "short-notes": [], 
+      "armor-index": null, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "posture": "standing", 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "advantages": {
+        "combat reflexes": 15, 
+        "high pain threshold": 10
+      }, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
+      "opponent": null
+    }, 
+    "Dima - Bratva": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+        {
+          "acc": 4, 
+          "count": 1, 
+          "owners": [
+            "David (smith)"
+          ], 
+          "name": "pistol, nice David-built laser", 
+          "notes": "Hand built by David", 
+          "damage": {
+            "dice": {
+              "plus": 3, 
+              "num_dice": 2, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 8, 
+            "shots_left": 8
+          }
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "C Cell"
+        }, 
+        {
+          "count": 1, 
+          "owners": null, 
+          "name": "knife, small", 
+          "notes": "B272", 
+          "damage": {
+            "sw": {
+              "plus": -3, 
+              "type": "cut"
+            }, 
+            "thr": {
+              "plus": -1, 
+              "type": "imp"
+            }
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "owners": null, 
+          "name": "brass knuckles", 
+          "notes": "B271", 
+          "damage": {
+            "thr": {
+              "plus": 1, 
+              "type": "cr"
+            }
+          }, 
+          "parry": 0, 
+          "skill": "karate", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "owners": [], 
+          "name": "Sport coat/Jeans", 
+          "type": "armor", 
+          "notes": "Enchanted w/fortify spell [M66]", 
+          "dr": 3
+        }
+      ], 
+      "stunned": 0, 
+      "skills": {
+        "beam weapons (pistol)": 18, 
+        "brawling": 18, 
+        "knife": 18
+      }, 
+      "notes": [
+        "Dima Leonid Popov", 
+        "Bratva bank.", 
+        "Tags: dark gray sportcoat", 
+        "Description:", 
+        "Dima and his four bodyguards move with the relaxed confidence of", 
+        "those whose security have been foretold by the gods.  His black", 
+        "hair and beard, punctuated by patches of gray, are closely cropped", 
+        "and he wears a dark gray sportcoat over jeans and a black dress", 
+        "shirt unbuttoned at the neck."
+      ], 
+      "shock": 0, 
+      "armor-index": 4, 
+      "short-notes": [
+        ""
+      ], 
+      "current": {
+        "fp": 12, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 13, 
+        "ht": 12, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6.25
+      }, 
+      "posture": "standing", 
+      "state": "alive", 
+      "permanent": {
+        "fp": 12, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 13, 
+        "ht": 12, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6.25
+      }, 
+      "advantages": {
+        "combat reflexes": 15, 
+        "high pain threshold": 10
+      }, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
+      "opponent": null
+    }, 
+    "Mackenzie - Marshal's Intern": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "stunned": false, 
+      "skills": {}, 
+      "notes": [
+        "Tags: aboriginal, awkward / headgear, bright", 
+        "Mac's an aboriginal Australian with the characteristic umber", 
+        "skin; deep-set eyes; wide nose; and giant mop of hair, akimbo.", 
+        "She sports braces with dental headgear and, commensurate with her", 
+        "age, has a mild dusting of pimples on her forehead.  Today, like", 
+        "most days, she's wearing an oversized gray sweatshirt over olive", 
+        "drab cargo pants and canvas Converse high-tops (covered in cartoon", 
+        "bunnies).", 
+        "", 
+        "Mackenzie is 15 years old, 145 lbs, and 5' 2\".  She works most days", 
+        "at the front desk and answering the phones but she also helps with", 
+        "IT.  Turns out, she's _really_ good at IT and fills-in for the", 
+        "lazy guy who's in charge of that department.  She's the adopted", 
+        "child of a white father who is often away on one of the platforms.", 
+        "She's not chipped (doesn't _have_ to get chipped until next year).", 
+        "Her dad leaves open accounts for Mac whenever he's off-station.", 
+        "She's technically a volunteer but she gets cards under the table.", 
+        "", 
+        "She's an outcast, being one of the very few aborigines in the", 
+        "project.  She retreats into hacking but also spends some time in", 
+        "the outer rings."
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 10, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6
+      }, 
+      "posture": "standing", 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 10, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
+      "opponent": null
+    }, 
+    "Oscar": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "stunned": false, 
+      "skills": {}, 
+      "notes": [
+        "origin: australian", 
+        "gender: male", 
+        "characteristics: Picks at lint or dirt on others' clothes", 
+        "instincts: To live forever", 
+        "hair: Curly", 
+        "speech: Nervous", 
+        "knack: Visions", 
+        "personality: Promiscuous"
+      ], 
+      "shock": 0, 
+      "short-notes": [], 
       "armor-index": null, 
       "current": {
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
-        "st": 10, 
         "wi": 10, 
+        "st": 10, 
+        "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
       }, 
+      "posture": "standing", 
       "state": "alive", 
       "permanent": {
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
-        "st": 10, 
         "wi": 10, 
+        "st": 10, 
+        "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
       }, 
-      "timers": [], 
+      "advantages": {}, 
+      "weapon-index": null, 
       "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
+      "opponent": null
+    }, 
+    "Hurley, Mitchell (Chief Deputy Marshal)": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "stunned": false, 
+      "skills": {}, 
+      "notes": [
+        "Chief Deputy Marshal", 
+        "Tags: tall, corpulent, sweet", 
+        "Chief deputy Hurley is a big man.  At 6' 2\" and massively", 
+        "corpulent, he looks like he's been poured into his uniform like", 
+        "it was a sausage casing and, at that, the fabric strains at the", 
+        "buttons.  In spite of this, though, he moves like someone who's", 
+        "been large his entire life.  His head is topped by a thick bush", 
+        "of sandy blonde hair which seems to go perfectly with his dirty", 
+        "blue eyes.  Mitchell Hurley has a sweet demeanor and tends to get", 
+        "things done by convincing agreement rather than coersion."
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 10, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6
+      }, 
+      "posture": "standing", 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 10, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
       "opponent": null
     }, 
     "Mambo Iriye - Bokor": {
@@ -5860,6 +5839,195 @@
       "check_for_death": false, 
       "timers": [], 
       "did_action_this_turn": false, 
+      "opponent": null
+    }, 
+    "David - Master Weaponsmith": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+        {
+          "acc": 4, 
+          "count": 1, 
+          "owners": [
+            "David (smith)"
+          ], 
+          "name": "pistol, best David-built laser", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 2, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 9
+          }
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "C Cell"
+        }
+      ], 
+      "stunned": false, 
+      "skills": {
+        "armoury (small arms)": 18, 
+        "armoury (heavy weapons)": 18, 
+        "gunner (beams)": 16, 
+        "gunner (cannon)": 16, 
+        "beam weapons (pistol)": 16
+      }, 
+      "notes": [
+        "origin: russian", 
+        "gender: male", 
+        "characteristics: Collects teeth/hair/claws of slain opponents", 
+        "instincts: To retire", 
+        "hair: Curly", 
+        "speech: Whiny", 
+        "knack: Utter unremarkableness", 
+        "personality: Trusting"
+      ], 
+      "shock": 0, 
+      "short-notes": [], 
+      "armor-index": 4, 
+      "current": {
+        "fp": 10, 
+        "iq": 12, 
+        "hp": 16, 
+        "wi": 12, 
+        "st": 16, 
+        "ht": 10, 
+        "dx": 11, 
+        "basic-move": 6, 
+        "basic-speed": 6.25
+      }, 
+      "posture": "standing", 
+      "state": "alive", 
+      "permanent": {
+        "fp": 10, 
+        "iq": 12, 
+        "hp": 16, 
+        "wi": 12, 
+        "st": 16, 
+        "ht": 10, 
+        "dx": 11, 
+        "basic-move": 6, 
+        "basic-speed": 6.25
+      }, 
+      "advantages": {}, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
+      "opponent": null
+    }, 
+    "Celeline Fermine - Pilot (dead)": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "stunned": false, 
+      "skills": {}, 
+      "notes": [
+        "(Pilot)", 
+        "Cedeline and Diego Fermine.  Cedeline (Haitian) is the pilot and", 
+        "Diego (Dominican) is her husband.  Diego's a maintenance worker", 
+        "on Persephone Station."
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 10, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6
+      }, 
+      "posture": "standing", 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 10, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6
+      }, 
+      "advantages": {}, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
+      "opponent": null
+    }, 
+    "Dmitriy - radio operator on Tereshkova": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "stunned": 0, 
+      "skills": {}, 
+      "notes": [
+        "origin: russian", 
+        "gender: male", 
+        "station history: lifer (born on Earth, this is 1st station)", 
+        "characteristics: Sings", 
+        "instincts: To help others", 
+        "hair: Well groomed", 
+        "speech: Whispery", 
+        "knack: Cooking", 
+        "personality: Obedient"
+      ], 
+      "shock": 0, 
+      "short-notes": [], 
+      "armor-index": null, 
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "wi": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5
+      }, 
+      "check_for_death": false, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "wi": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "weapon-index": null, 
+      "timers": [], 
+      "posture": "standing", 
       "opponent": null
     }, 
     "Mama Cedella - Bokor": {
@@ -5930,17 +6098,12 @@
       "opponent": null
     }, 
     "Anel - control tower, tereshkova": {
-      "stunned": 0, 
-      "did_action_this_turn": false, 
-      "short-notes": [], 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "posture": "standing", 
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
       "stuff": [], 
+      "stunned": 0, 
       "skills": {}, 
       "notes": [
         "origin: haitian", 
@@ -5954,6 +6117,7 @@
         "personality: Daring"
       ], 
       "shock": 0, 
+      "short-notes": [], 
       "armor-index": null, 
       "current": {
         "fp": 10, 
@@ -5966,6 +6130,7 @@
         "basic-move": 5, 
         "basic-speed": 5
       }, 
+      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 10, 
@@ -5978,14 +6143,18 @@
         "basic-move": 5, 
         "basic-speed": 5
       }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "weapon-index": null, 
       "timers": [], 
-      "check_for_death": false, 
+      "posture": "standing", 
       "opponent": null
     }
   }, 
   "Equipment": [
     {
       "count": 1, 
+      "owners": null, 
       "name": "brass knuckles", 
       "notes": "B271", 
       "damage": {
@@ -5996,12 +6165,12 @@
       }, 
       "parry": 0, 
       "skill": "karate", 
-      "owners": null,
       "type": "melee weapon"
     }, 
     {
       "acc": 2, 
       "count": 1, 
+      "owners": null, 
       "name": "pistol, Baretta DX 192", 
       "notes": "", 
       "damage": {
@@ -6013,7 +6182,6 @@
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
-      "owners": null,
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -6024,6 +6192,7 @@
     {
       "acc": 4, 
       "count": 1, 
+      "owners": null, 
       "name": "pistol, Sig D65", 
       "notes": "", 
       "damage": {
@@ -6035,7 +6204,6 @@
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
-      "owners": null,
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -6046,6 +6214,7 @@
     {
       "acc": 2, 
       "count": 1, 
+      "owners": null, 
       "name": "pistol, Kalashnikov Makarov", 
       "notes": "", 
       "damage": {
@@ -6057,7 +6226,6 @@
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
-      "owners": null,
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -6068,6 +6236,7 @@
     {
       "acc": 3, 
       "count": 1, 
+      "owners": null, 
       "name": "pistol, Colt 170D", 
       "notes": "", 
       "damage": {
@@ -6079,7 +6248,6 @@
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
-      "owners": null,
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -6090,6 +6258,9 @@
     {
       "acc": 4, 
       "count": 1, 
+      "owners": [
+        "David (smith)"
+      ], 
       "name": "pistol, nice David-built laser", 
       "damage": {
         "dice": {
@@ -6100,7 +6271,6 @@
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
-      "owners": ["David (smith)"],
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -6111,6 +6281,9 @@
     {
       "acc": 3, 
       "count": 1, 
+      "owners": [
+        "David (smith)"
+      ], 
       "name": "pistol, average David-built laser", 
       "notes": "Nice weapon", 
       "damage": {
@@ -6122,7 +6295,6 @@
       }, 
       "reload": 3, 
       "skill": "beam weapons (pistol)", 
-      "owners": ["David (smith)"],
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -6133,6 +6305,7 @@
     {
       "acc": 1, 
       "count": 1, 
+      "owners": [], 
       "name": "zip tazer, nice", 
       "notes": "hand built", 
       "damage": {
@@ -6144,7 +6317,6 @@
       }, 
       "reload": 3, 
       "skill": "guns (pistol)", 
-      "owners": [],
       "type": "ranged weapon", 
       "ammo": {
         "name": "Zip Clip", 
@@ -6155,6 +6327,7 @@
     {
       "acc": 1, 
       "count": 1, 
+      "owners": [], 
       "name": "zip tazer, not-so-nice", 
       "notes": "hand built", 
       "damage": {
@@ -6166,7 +6339,6 @@
       }, 
       "reload": 3, 
       "skill": "guns (pistol)", 
-      "owners": [],
       "type": "ranged weapon", 
       "ammo": {
         "name": "Zip Clip", 
@@ -6176,6 +6348,7 @@
     }, 
     {
       "count": 1, 
+      "owners": null, 
       "name": "knife, large", 
       "notes": "", 
       "damage": {
@@ -6190,11 +6363,11 @@
       }, 
       "parry": -1, 
       "skill": "knife", 
-      "owners": null,
       "type": "melee weapon"
     }, 
     {
       "count": 1, 
+      "owners": null, 
       "name": "sick stick", 
       "notes": "", 
       "damage": {
@@ -6205,21 +6378,20 @@
         }
       }, 
       "skill": "axe/mace", 
-      "owners": null,
       "type": "melee weapon"
     }, 
     {
       "count": 1000000, 
       "notes": "", 
       "type": "misc", 
-      "owners": [],
+      "owners": [], 
       "name": "Zip Clip"
     }, 
     {
       "count": 1000000, 
       "notes": "", 
       "type": "misc", 
-      "owners": null,
+      "owners": null, 
       "name": "C Cell"
     }
   ], 
@@ -6817,6 +6989,9 @@
           {
             "acc": 3, 
             "count": 1, 
+            "owners": [
+              "David (smith)"
+            ], 
             "name": "pistol, average David-built laser", 
             "notes": "Nice weapon", 
             "damage": {
@@ -6828,7 +7003,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": ["David (smith)"],
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -6838,6 +7012,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -6852,34 +7027,33 @@
             }, 
             "parry": -1, 
             "skill": "knife", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }, 
           {
             "count": 1, 
+            "owners": [], 
+            "name": "Sport coat/Jeans", 
             "type": "armor", 
             "notes": "Enchanted w/fortify spell [M66]", 
-            "dr": 2, 
-            "owners": [],
-            "name": "Sport coat/Jeans"
+            "dr": 2
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "4: Andre": {
@@ -6926,6 +7100,9 @@
           {
             "acc": 3, 
             "count": 1, 
+            "owners": [
+              "David (smith)"
+            ], 
             "name": "pistol, average David-built laser", 
             "notes": "Nice weapon", 
             "damage": {
@@ -6937,7 +7114,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": ["David (smith)"],
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -6947,6 +7123,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -6961,34 +7138,33 @@
             }, 
             "parry": -1, 
             "skill": "knife", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }, 
           {
             "count": 1, 
+            "owners": [], 
+            "name": "Sport coat/Jeans", 
             "type": "armor", 
             "notes": "Enchanted w/fortify spell [M66]", 
-            "dr": 2, 
-            "owners": [],
-            "name": "Sport coat/Jeans"
+            "dr": 2
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "Dima - Bratva": {
@@ -7037,6 +7213,9 @@
           {
             "acc": 3, 
             "count": 1, 
+            "owners": [
+              "David (smith)"
+            ], 
             "name": "pistol, average David-built laser", 
             "notes": "Nice weapon", 
             "damage": {
@@ -7048,7 +7227,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": ["David (smith)"],
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -7058,6 +7236,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -7072,34 +7251,33 @@
             }, 
             "parry": -1, 
             "skill": "knife", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }, 
           {
             "count": 1, 
+            "owners": [], 
+            "name": "Sport coat/Jeans", 
             "type": "armor", 
             "notes": "Enchanted w/fortify spell [M66]", 
-            "dr": 2, 
-            "owners": [],
-            "name": "Sport coat/Jeans"
+            "dr": 2
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "2: Nikita": {
@@ -7145,6 +7323,9 @@
           {
             "acc": 3, 
             "count": 1, 
+            "owners": [
+              "David (smith)"
+            ], 
             "name": "pistol, average David-built laser", 
             "notes": "Nice weapon", 
             "damage": {
@@ -7156,7 +7337,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": ["David (smith)"],
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -7166,6 +7346,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -7180,50 +7361,38 @@
             }, 
             "parry": -1, 
             "skill": "knife", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }, 
           {
             "count": 1, 
+            "owners": [], 
+            "name": "Sport coat/Jeans", 
             "type": "armor", 
             "notes": "Enchanted w/fortify spell [M66]", 
-            "dr": 2, 
-            "owners": [],
-            "name": "Sport coat/Jeans"
+            "dr": 2
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "combat reflexes": 15, 
           "high pain threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }
     }, 
     "radio shack": {
       "1 - Louis": {
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [
-          ""
-        ], 
-        "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
         "aim": {
           "braced": false, 
           "rounds": 0
@@ -7232,6 +7401,7 @@
           {
             "acc": 2, 
             "count": 1, 
+            "owners": null, 
             "name": "pistol, Baretta DX 192", 
             "notes": "", 
             "damage": {
@@ -7243,7 +7413,6 @@
             }, 
             "reload": 3, 
             "skill": "beam weapons (pistol)", 
-            "owners": null,
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -7253,6 +7422,7 @@
           }, 
           {
             "count": 1, 
+            "owners": null, 
             "name": "knife, large", 
             "notes": "", 
             "damage": {
@@ -7267,17 +7437,17 @@
             }, 
             "parry": -1, 
             "skill": "knife", 
-            "owners": null,
             "type": "melee weapon"
           }, 
           {
             "count": 5, 
             "notes": "", 
             "type": "misc", 
-            "owners": null,
+            "owners": null, 
             "name": "C Cell"
           }
         ], 
+        "stunned": 0, 
         "skills": {
           "beam weapons (pistol)": 15, 
           "brawling": 14, 
@@ -7295,6 +7465,9 @@
           "personality: Charming"
         ], 
         "shock": 0, 
+        "short-notes": [
+          ""
+        ], 
         "armor-index": null, 
         "current": {
           "fp": 11, 
@@ -7307,6 +7480,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -7319,8 +7493,14 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "advantages": {
+          "combat reflexes": 15, 
+          "high pain threshold": 10
+        }, 
+        "did_action_this_turn": false, 
+        "weapon-index": null, 
         "timers": [], 
-        "check_for_death": false, 
+        "posture": "standing", 
         "opponent": {
           "group": "PCs", 
           "name": "lawerence - Spenser"
