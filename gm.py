@@ -2074,35 +2074,6 @@ class Fighter(object):
             return False if lhs != rhs else True
 
 
-class Equipment(object):
-    def __init__(self,
-                 item   # dict as found in the JSON
-                ):
-        self.__item = item
-
-    def get_description(self):
-        found_one = True
-        char_detail = []
-        texts = ['  %s' % item['name']]
-        if 'count' in item and item['count'] != 1:
-            texts.append(' (%d)' % item['count'])
-
-        if ('notes' in item and item['notes'] is not None and
-                                                (len(item['notes']) > 0)):
-            texts.append(': %s' % item['notes'])
-        char_detail.append([{'text': ''.join(texts),
-                             'mode': mode}])
-
-        if item['owners'] is not None and len(item['owners']) > 0:
-            texts = ['    Owners: ']
-            texts.append('%s' % '->'.join(item['owners']))
-            char_detail.append([{'text': ''.join(texts),
-                                 'mode': mode}])
-        if not found_one:
-            char_detail.append([{'text': '  (None)',
-                                 'mode': mode}])
-
-        return char_detail
 
 
 
@@ -2926,27 +2897,13 @@ class GurpsRuleset(Ruleset):
         # stuff
 
         mode = curses.A_NORMAL 
-        char_detail.append([{'text': 'Equipment',
+        char_detail.append([{'text': 'Equipment - NEW', # TODO: remove
                              'mode': mode | curses.A_BOLD}])
 
         found_one = False
         for item in character['stuff']:
             found_one = True
-            texts = ['  %s' % item['name']]
-            if 'count' in item and item['count'] != 1:
-                texts.append(' (%d)' % item['count'])
-
-            if ('notes' in item and item['notes'] is not None and
-                                                    (len(item['notes']) > 0)):
-                texts.append(': %s' % item['notes'])
-            char_detail.append([{'text': ''.join(texts),
-                                 'mode': mode}])
-
-            if item['owners'] is not None and len(item['owners']) > 0:
-                texts = ['    Owners: ']
-                texts.append('%s' % '->'.join(item['owners']))
-                char_detail.append([{'text': ''.join(texts),
-                                     'mode': mode}])
+            EquipmentManager.get_description(item, char_detail)
 
         if not found_one:
             char_detail.append([{'text': '  (None)',
@@ -6191,6 +6148,38 @@ class EquipmentManager(object):
             fighter.add_equipment(copy.deepcopy(item), 'the store')
 
         # self._window.show_character(self.__character)
+
+
+    @staticmethod
+    def get_description(
+                        item,        # Input: dict for a 'stuff' item from JSON
+                        char_detail  # Output: recepticle for character detail.
+                                     # [[{'text','mode'},...],  # line 0
+                                     #  [...],               ]  # line 1...
+                       ):
+        '''
+        This is kind-of messed up.  Each type of equipment should have its own
+        class that has its own 'get_description'.  In lieu of that, though,
+        I'm going to centralize it.
+        '''
+
+        mode = curses.A_NORMAL 
+        texts = ['  %s' % item['name']]
+        if 'count' in item and item['count'] != 1:
+            texts.append(' (%d)' % item['count'])
+
+        if ('notes' in item and item['notes'] is not None and
+                                                (len(item['notes']) > 0)):
+            texts.append(': %s' % item['notes'])
+        char_detail.append([{'text': ''.join(texts),
+                             'mode': mode}])
+
+        if item['owners'] is not None and len(item['owners']) > 0:
+            texts = ['    Owners: ']
+            texts.append('%s' % '->'.join(item['owners']))
+            char_detail.append([{'text': ''.join(texts),
+                                 'mode': mode}])
+
 
     def remove_equipment(self,
                          fighter       # Fighter object
