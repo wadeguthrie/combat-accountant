@@ -4648,7 +4648,7 @@
       "did_action_this_turn": false, 
       "opponent": null
     }, 
-    "Lincoln Thompson - Operations manager on Tereshkova": {
+    "Maia Thompson - Operations manager on Tereshkova": {
       "stunned": 0, 
       "did_action_this_turn": false, 
       "short-notes": [], 
@@ -4662,13 +4662,7 @@
       "stuff": [], 
       "skills": {}, 
       "notes": [
-        "station history: lifer (born on Earth, this is 1st station)", 
-        "characteristics: Covered in sores, boils, or a rash", 
-        "instincts: To be forgotten", 
-        "hair: Dreadlocks", 
-        "speech: Whiny", 
-        "knack: A mysterious ore", 
-        "personality: Lust"
+        "station history: lifer (born on Earth, this is 1st station)"
       ], 
       "shock": 0, 
       "armor-index": null, 
