@@ -6174,6 +6174,39 @@ class EquipmentManager(object):
         char_detail.append([{'text': ''.join(texts),
                              'mode': mode}])
 
+        # TODO: this should be brought out into type-specific objects
+        if item['type'] == 'ranged weapon':
+            texts = ['    ']
+            texts.append('acc: %d' % item['acc'])
+            texts.append(', dam(%s): %dd%+d' % (
+                                          item['damage']['dice']['type'],
+                                          item['damage']['dice']['num_dice'],
+                                          item['damage']['dice']['plus']))
+            texts.append(', reload: %d' % item['reload'])
+            # acc, damage (dice), reload
+            char_detail.append([{'text': ''.join(texts),
+                                 'mode': mode}])
+        elif item['type'] == 'melee weapon':
+            texts = ['    ']
+            if 'dice' in item['damage']:
+                texts.append('dam(%s): %dd%+d' % (
+                                          item['damage']['dice']['type'],
+                                          item['damage']['dice']['num_dice'],
+                                          item['damage']['dice']['plus']))
+            if 'sw' in item['damage']:
+                texts.append('dam(sw): %s%+d' % (
+                                          item['damage']['sw']['type'],
+                                          item['damage']['sw']['plus']))
+            if 'thr' in item['damage']:
+                texts.append(', dam(thr): %s%+d' % (
+                                          item['damage']['thr']['type'],
+                                          item['damage']['thr']['plus']))
+            if 'parry' in item:
+                texts.append(', parry: %d' % item['parry'])
+
+            char_detail.append([{'text': ''.join(texts),
+                                 'mode': mode}])
+
         if item['owners'] is not None and len(item['owners']) > 0:
             texts = ['    Owners: ']
             texts.append('%s' % '->'.join(item['owners']))
