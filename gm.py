@@ -6176,18 +6176,17 @@ class EquipmentManager(object):
 
         # TODO: this should be brought out into type-specific objects
         if item['type'] == 'ranged weapon':
-            texts = ['    ']
+            texts = []
             texts.append('acc: %d' % item['acc'])
-            texts.append(', dam(%s): %dd%+d' % (
+            texts.append('dam(%s): %dd%+d' % (
                                           item['damage']['dice']['type'],
                                           item['damage']['dice']['num_dice'],
                                           item['damage']['dice']['plus']))
-            texts.append(', reload: %d' % item['reload'])
-            # acc, damage (dice), reload
-            char_detail.append([{'text': ''.join(texts),
+            texts.append('reload: %d' % item['reload'])
+            char_detail.append([{'text': ('     ' + ', '.join(texts)),
                                  'mode': mode}])
         elif item['type'] == 'melee weapon':
-            texts = ['    ']
+            texts = []
             if 'dice' in item['damage']:
                 texts.append('dam(%s): %dd%+d' % (
                                           item['damage']['dice']['type'],
@@ -6198,17 +6197,22 @@ class EquipmentManager(object):
                                           item['damage']['sw']['type'],
                                           item['damage']['sw']['plus']))
             if 'thr' in item['damage']:
-                texts.append(', dam(thr): %s%+d' % (
+                texts.append('dam(thr): %s%+d' % (
                                           item['damage']['thr']['type'],
                                           item['damage']['thr']['plus']))
             if 'parry' in item:
-                texts.append(', parry: %d' % item['parry'])
+                texts.append('parry: %d' % item['parry'])
 
-            char_detail.append([{'text': ''.join(texts),
+            char_detail.append([{'text': ('     ' + ', '.join(texts)),
+                                 'mode': mode}])
+        elif item['type'] == 'armor':
+            texts = []
+            texts.append('dr: %d' % item['dr'])
+            char_detail.append([{'text': ('     ' + ', '.join(texts)),
                                  'mode': mode}])
 
         if item['owners'] is not None and len(item['owners']) > 0:
-            texts = ['    Owners: ']
+            texts = ['     Owners: ']
             texts.append('%s' % '->'.join(item['owners']))
             char_detail.append([{'text': ''.join(texts),
                                  'mode': mode}])

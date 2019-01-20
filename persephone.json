@@ -986,7 +986,8 @@
           "acc": 3, 
           "count": 1, 
           "owners": [
-            "David (smith)"
+            "David (smith)",
+            "Alexander - sergeant"
           ], 
           "name": "pistol, average David-built laser", 
           "notes": "", 
@@ -1019,6 +1020,9 @@
               "type": "pi"
             }
           }, 
+          "owners": [
+            "Alexander - sergeant"
+          ], 
           "reload": 3, 
           "skill": "beam weapons (rifle)", 
           "type": "ranged weapon", 
