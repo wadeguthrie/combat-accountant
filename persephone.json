@@ -971,6 +971,20 @@
       }, 
       "stuff": [
         {
+          "count": 1, 
+          "owners": null, 
+          "name": "tear gas", 
+          "notes": "HT180", 
+          "type": "misc"
+        },
+        {
+          "count": 1, 
+          "owners": null, 
+          "name": "pepper spray", 
+          "notes": "HT180", 
+          "type": "misc"
+        },
+        {
           "count": 4, 
           "owners": null, 
           "name": "knife, large", 
@@ -1146,23 +1160,26 @@
       ], 
       "stunned": 0, 
       "skills": {
-        "interrogation": 12, 
-        "guns (grenade launcher)": 9, 
-        "fast-draw (ammo)": 14, 
-        "observation": 12, 
-        "throwing": 10, 
-        "lockpicking": 12, 
-        "beam weapons (rifle)": 14, 
-        "streetwise": 12, 
-        "karate": 13, 
-        "axe/mace": 12, 
-        "stealth": 14, 
-        "brawling": 13, 
-        "first aid": 13, 
+        "acting": 7, 
         "armoury (small arms)": 11, 
+        "axe/mace": 12, 
         "beam weapons (pistol)": 15, 
+        "beam weapons (rifle)": 14, 
+        "brawling": 13, 
+        "fast-draw (ammo)": 14, 
+        "fast-talk": 13, 
+        "first aid": 14, 
+        "gambling": 7, 
+        "guns (grenade launcher)": 9, 
         "holdout": 11, 
+        "interrogation": 12, 
+        "karate": 13, 
         "knife": 15, 
+        "lockpicking": 12, 
+        "observation": 13, 
+        "stealth": 14, 
+        "streetwise": 12, 
+        "throwing": 10, 
         "traps": 12
       }, 
       "shock": 0, 
@@ -1201,7 +1218,7 @@
         "dyslexia": -10, 
         "weirdness magnet": -15, 
         "nosy": -1, 
-        "pyromania": -10, 
+        "pyromania": -5, 
         "high pain threshold": 10, 
         "alcohol intolerance": -1, 
         "night vision": 4, 
@@ -1302,18 +1319,18 @@
         "engineer (starships)": 12, 
         "cryptography": 13, 
         "mathematics (applied)": 12, 
-        "beam weapons (rifle)": 12, 
+        "beam weapons (rifle)": 16, 
         "computer hacking": 15, 
         "electronics operation": 13, 
         "axe/mace": 11, 
         "computer programming": 12, 
         "first aid": 14, 
         "computer security": 12, 
-        "beam weapons (pistol)": 15, 
+        "beam weapons (pistol)": 16, 
         "armoury (small arms)": 13, 
         "brawling": 12, 
         "physics": 12, 
-        "piloting": 13, 
+        "piloting": 14, 
         "observation": 15
       }, 
       "shock": 0, 
@@ -1325,7 +1342,7 @@
       "current": {
         "fp": 10, 
         "iq": 14, 
-        "hp": 11, 
+        "hp": 12, 
         "wi": 14, 
         "st": 10, 
         "ht": 9, 
@@ -1350,6 +1367,7 @@
         "acute vision 1": 2, 
         "eidetic memory": 5, 
         "fit": 5, 
+        "g-experience": 1, 
         "humble": -1, 
         "squeamish": -10, 
         "secret (turned in evidence on brutal Bratva hit)": -30, 
@@ -1366,6 +1384,200 @@
         "braced": false, 
         "rounds": 0
       }, 
+      "spells": [
+        {
+          "cost": 1, 
+          "name": "alarm", 
+          "notes": "M100", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 4, 
+          "name": "alter visage", 
+          "notes": "M41", 
+          "maintain": 0, 
+          "time": 60, 
+          "skill": 13
+        },
+        {
+          "cost": 1, 
+          "name": "bless plants", 
+          "notes": "M161", 
+          "maintain": 4, 
+          "time": 300, 
+          "skill": 13
+        }, 
+        {
+          "cost": 1, 
+          "name": "boost dexterity", 
+          "notes": "M37", 
+          "maintain": 2, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "bravery", 
+          "notes": "M134", 
+          "maintain": 2, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 1, 
+          "name": "clumsiness", 
+          "notes": "M36", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "emotional control", 
+          "notes": "M137", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 1, 
+          "name": "fear", 
+          "notes": "M134", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 3, 
+          "name": "fumble", 
+          "notes": "M38", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 4, 
+          "name": "grace", 
+          "notes": "M37", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 1, 
+          "name": "hair growth", 
+          "notes": "M39", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "haircut", 
+          "notes": "M39", 
+          "maintain": null, 
+          "time": 2, 
+          "skill": 12
+        }, 
+        {
+          "cost": 3, 
+          "name": "heal plant", 
+          "notes": "M161", 
+          "maintain": null, 
+          "time": 60, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "identify plant", 
+          "notes": "M161", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "itch", 
+          "notes": "M35", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "loyalty", 
+          "notes": "M136", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 5, 
+          "name": "luck", 
+          "notes": "V2", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 14
+        }, 
+        {
+          "cost": 1, 
+          "name": "lure", 
+          "notes": "M137", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "seek plant", 
+          "notes": "M161", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "sense emotion", 
+          "notes": "M45", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "sense foes", 
+          "notes": "M45", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": null, 
+          "name": "shapeshifting (rat)", 
+          "notes": "M32",
+          "maintain": null, 
+          "time": 3, 
+          "skill": 13
+        }, 
+        {
+          "cost": 2, 
+          "name": "spasm", 
+          "notes": "M35", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 1, 
+          "name": "tell time", 
+          "notes": "M100", 
+          "maintain": 2, 
+          "time": 1, 
+          "skill": 12
+        }
+      ], 
       "stuff": [
         {
           "acc": 4, 
@@ -1452,31 +1664,33 @@
       ], 
       "stunned": 0, 
       "skills": {
-        "electronics repair (terraforming)": 13, 
-        "thrown weapon (knife)": 10, 
-        "computer hacking": 13, 
-        "escape": 9, 
-        "mechanic (spacecraft)": 15, 
-        "electronics operation (terraforming)": 13, 
-        "fast talk": 15, 
-        "piloting (low-performance spacecraft)": 9, 
-        "forgery": 12, 
-        "brawling": 11, 
-        "hazardous materials (chemical)": 13, 
-        "beam weapons (pistol)": 11, 
-        "lip reading": 14, 
         "area knowledge (space station)": 16, 
-        "streetwise": 15, 
         "axe/mace": 8, 
-        "current affairs (terraforming)": 14, 
+        "beam weapons (pistol)": 11, 
+        "brawling": 11, 
         "climbing": 8, 
-        "detect lies": 14, 
-        "electronics repair (security)": 15, 
-        "connoisseur (visual arts)": 13, 
+        "computer hacking": 13, 
         "computer operation": 14, 
         "computer programming": 12, 
-        "knife": 5, 
-        "electronics operation (security)": 14
+        "connoisseur (visual arts)": 13, 
+        "current affairs (terraforming)": 14, 
+        "detect lies": 14, 
+        "diplomacy": 14, 
+        "electronics operation (security)": 14,
+        "electronics operation (terraforming)": 13, 
+        "electronics repair (security)": 15, 
+        "electronics repair (terraforming)": 13, 
+        "escape": 9, 
+        "fast talk": 15, 
+        "forgery": 12, 
+        "hazardous materials (chemical)": 13, 
+        "knife": 10, 
+        "law (conglomerate/trans-territorial)": 13, 
+        "lip reading": 14, 
+        "mechanic (spacecraft)": 15, 
+        "piloting (low-performance spacecraft)": 9, 
+        "streetwise": 15, 
+        "thrown weapon (knife)": 10
       }, 
       "shock": 0, 
       "armor-index": null, 
@@ -1511,12 +1725,13 @@
         "wealth (struggling)": -10, 
         "deep sleeper": 1, 
         "cultural familiarity (terraformers)": 1, 
+        "g-experience": 1, 
         "habit (fidget)": -1, 
         "alcohol intolerance": -1, 
         "impulsiveness": -15, 
         "empathy (sensitive)": 5, 
         "short attention span": -15, 
-        "curious": -10, 
+        "curious": -7, 
         "dreamer": -1, 
         "bad tember": -10, 
         "combat reflexes": 15, 
@@ -1612,33 +1827,58 @@
           "parry": 0, 
           "skill": "karate", 
           "type": "melee weapon"
+        },
+        {
+          "acc": 3, 
+          "count": 1, 
+          "owners": [
+            "David (smith)", 
+            "Austin - Diamond protocol security"
+          ], 
+          "name": "pistol, average David-built laser", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 1, 
+              "num_dice": 2, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 7, 
+            "shots_left": 7
+          }
         }
       ], 
       "stunned": 0, 
       "skills": {
-        "throwing": 13, 
         "armoury (small arms)": 10, 
-        "scrounging": 12, 
-        "camouflage": 11, 
-        "stealth": 12, 
-        "brawling": 15, 
-        "beam weapons (pistol)": 15, 
-        "knife": 13, 
-        "urban survival": 11, 
-        "lockpicking": 10, 
-        "intimidation": 11, 
-        "streetwise": 11, 
         "axe/mace": 13, 
-        "running": 10, 
-        "fast-draw (pistol)": 14, 
-        "climbing": 12, 
-        "theology (Vodou)": 10, 
-        "filch": 12, 
-        "pickpocket": 11, 
+        "beam weapons (pistol)": 16, 
         "beam weapons (rifle)": 13, 
-        "first aid": 12, 
+        "brawling": 15, 
+        "camouflage": 11, 
+        "climbing": 12, 
         "fast-draw (knife)": 14, 
-        "gesture": 11
+        "fast-draw (pistol)": 14, 
+        "filch": 12, 
+        "first aid": 13, 
+        "gesture": 11,
+        "intimidation": 12, 
+        "knife": 14, 
+        "lockpicking": 10, 
+        "pickpocket": 11, 
+        "running": 10, 
+        "scrounging": 12, 
+        "stealth": 12, 
+        "streetwise": 11, 
+        "theology (Vodou)": 10, 
+        "throwing": 14, 
+        "urban survival": 11
       }, 
       "notes": [
         "Born November 1st 2099 (Fet Gede - All Souls Day) - 24 years old.", 
@@ -1737,16 +1977,17 @@
         "basic-speed": 6
       }, 
       "advantages": {
+        "combat reflexes": 15,
+        "enemy (Gregory Occeant)": -20, 
+        "fit": 5, 
+        "flashbacks, mild": -5, 
+        "g-experience": 1, 
         "guilt complex (loss of sister)": -5, 
         "light sleeper": -5, 
-        "fit": 5, 
-        "enemy (Gregory Occeant)": -20, 
-        "wealth (struggling)": -10, 
         "rapid healing": 5, 
         "vodou practitioner": 5, 
         "vow (return to earth for sister)": -5, 
-        "flashbacks, mild": -5, 
-        "combat reflexes": 15
+        "wealth (struggling)": -10
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -1850,20 +2091,191 @@
         "basic-speed": 4
       }, 
       "advantages": {
-        "ailurophobia (cats)": -5, 
-        "compulsive vowing": -5, 
-        "lwa (Bokor, Papa Ghede)": 8, 
-        "vodou practitioner (Bokor 2)": 45, 
         "agoraphobia (open spaces)": -10, 
-        "delusions (Papa Ghede is g-grandfather)": -1, 
-        "impulsiveness": -10, 
-        "distractible": -1, 
-        "responsive": -1, 
-        "curious": -5, 
+        "ailurophobia (cats)": -5, 
         "bad sight (farsighted)": -25, 
+        "channeling": 10, 
+        "compulsive vowing": -5, 
+        "curious": -5, 
+        "delusions (Papa Ghede is g-grandfather)": -1, 
+        "distractible": -1, 
+        "impulsiveness": -10, 
         "likes shiny objects": -1, 
-        "personality change": -1
+        "lwa (Bokor, Papa Ghede)": 8, 
+        "personality change": -1,
+        "responsive": -1, 
+        "vodou practitioner (Bokor 2)": 45
       }, 
+      "spells": [
+        {
+          "cost": 1, 
+          "name": "climbing", 
+          "notes": "M35", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 15
+        }, 
+        {
+          "cost": null, 
+          "name": "lend energy", 
+          "notes": "M89", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 15
+        }, 
+        {
+          "cost": null, 
+          "name": "lend vitality", 
+          "notes": "M89", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 15
+        }, 
+        {
+          "cost": 1, 
+          "name": "minor healing", 
+          "notes": "M91", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 15
+        },
+        {
+          "cost": 1, 
+          "name": "major healing", 
+          "notes": "M91", 
+          "maintain": 4, 
+          "time": 1, 
+          "skill": 14
+        }, 
+        {
+          "cost": 2, 
+          "name": "relieve sickness", 
+          "notes": "M90", 
+          "maintain": 2, 
+          "time": 10, 
+          "skill": 15
+        }, 
+        {
+          "cost": 4, 
+          "name": "cure disease", 
+          "notes": "M91", 
+          "maintain": 2, 
+          "time": 600, 
+          "skill": 15
+        }, 
+        {
+          "cost": 2, 
+          "name": "death vision", 
+          "notes": "M149", 
+          "maintain": null, 
+          "time": 3, 
+          "skill": 16
+        }, 
+        {
+          "cost": 20, 
+          "name": "summon spirit", 
+          "notes": "M150", 
+          "maintain": 0, 
+          "time": 300, 
+          "skill": 16
+        }, 
+        {
+          "cost": 8, 
+          "name": "zombie", 
+          "notes": "M151", 
+          "maintain": null, 
+          "time": 60, 
+          "skill": 16
+        }, 
+        {
+          "cost": 2, 
+          "name": "detect magic", 
+          "notes": "M101", 
+          "maintain": null, 
+          "time": 300, 
+          "skill": 14
+        }, 
+        {
+          "cost": 2, 
+          "name": "identify spell", 
+          "notes": "M102", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 14
+        }, 
+        {
+          "cost": 8, 
+          "name": "analyze magic", 
+          "notes": "M102", 
+          "maintain": null, 
+          "time": 3600, 
+          "skill": 14
+        }, 
+        {
+          "cost": 1, 
+          "name": "conceal magic", 
+          "notes": "M122", 
+          "maintain": null, 
+          "time": 3, 
+          "skill": 14
+        }, 
+        {
+          "cost": 1, 
+          "name": "foolishness", 
+          "notes": "M134", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 14
+        }, 
+        {
+          "cost": 2, 
+          "name": "seek plant", 
+          "notes": "M161", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 14
+        }, 
+        {
+          "cost": 2, 
+          "name": "shield", 
+          "notes": "M167", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 14
+        }, 
+        {
+          "cost": 3, 
+          "name": "seek machine", 
+          "notes": "M175", 
+          "maintain": null, 
+          "time": 10, 
+          "skill": 14
+        }, 
+        {
+          "cost": 1, 
+          "name": "light", 
+          "notes": "M110", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 14
+        }, 
+        {
+          "cost": null, 
+          "name": "enchant", 
+          "notes": "M56", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 13
+        }, 
+        {
+          "cost": 20, 
+          "name": "powerstone", 
+          "notes": "M69", 
+          "maintain": null, 
+          "time": 1, 
+          "skill": 14
+        }
+      ], 
       "did_action_this_turn": false, 
       "weapon-index": null, 
       "timers": [], 

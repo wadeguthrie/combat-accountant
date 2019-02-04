@@ -2897,7 +2897,7 @@ class GurpsRuleset(Ruleset):
         # stuff
 
         mode = curses.A_NORMAL 
-        char_detail.append([{'text': 'Equipment - NEW', # TODO: remove
+        char_detail.append([{'text': 'Equipment',
                              'mode': mode | curses.A_BOLD}])
 
         found_one = False
