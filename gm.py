@@ -3954,17 +3954,17 @@ class ScreenHandler(object):
     Base class for the "business logic" backing the user interface.
     '''
 
+    maintainjson = False
+
     def __init__(self,
                  window_manager,
                  campaign_debug_json,
                  filename,
-                 saved_fight,
-                 maintain_json):
+                 saved_fight):
         self._window_manager = window_manager
         self._campaign_debug_json = campaign_debug_json
         self._input_filename = filename
         self._saved_fight = saved_fight
-        self._maintain_json = maintain_json
 
         self._choices = {
             ord('B'): {'name': 'Bug Report', 'func': self._make_bug_report},
@@ -4045,15 +4045,13 @@ class BuildFightHandler(ScreenHandler):
                  ruleset,
                  creature_type, # one of: NPCs, PCs, or MONSTERs
                  campaign_debug_json,
-                 filename, # JSON file containing the world
-                 maintain_json
+                 filename # JSON file containing the world
                 ):
         super(BuildFightHandler, self).__init__(
                                             window_manager,
                                             campaign_debug_json,
                                             filename,
-                                            world.details['current-fight'],
-                                            maintain_json)
+                                            world.details['current-fight'])
         self._add_to_choice_dict({
             ord('a'): {'name': 'add creature',    'func': self.__add_creature},
             ord('d'): {'name': 'delete creature', 'func':
@@ -4143,7 +4141,7 @@ class BuildFightHandler(ScreenHandler):
         self._window.status_ribbon(self.__group_name,
                                    self.__template_name,
                                    self._input_filename,
-                                   self._maintain_json)
+                                   ScreenHandler.maintainjson)
         self._window.command_ribbon(self._choices)
         self._window.show_creatures(
                             (None if self.__is_new else self.__new_home),
@@ -4543,14 +4541,12 @@ class FightHandler(ScreenHandler):
                  monster_group,
                  ruleset,
                  campaign_debug_json,
-                 filename, # JSON file containing the world
-                 maintain_json
+                 filename # JSON file containing the world
                 ):
         super(FightHandler, self).__init__(window_manager,
                                            campaign_debug_json,
                                            filename,
-                                           world.details['current-fight'],
-                                           maintain_json)
+                                           world.details['current-fight'])
         self._window = self._window_manager.get_fight_gm_window(ruleset)
         self.__ruleset = ruleset
         self.__bodies_looted = False
@@ -4955,7 +4951,7 @@ class FightHandler(ScreenHandler):
                                   self.__keep_monsters,
                                   next_PC_name,
                                   self._input_filename,
-                                  self._maintain_json)
+                                  ScreenHandler.maintainjson)
         return True # Keep going
 
 
@@ -4969,14 +4965,14 @@ class FightHandler(ScreenHandler):
                                   self.__keep_monsters,
                                   next_PC_name,
                                   self._input_filename,
-                                  self._maintain_json)
+                                  ScreenHandler.maintainjson)
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
                                    self._saved_fight['index'],
                                    self.__viewing_index)
         self._window.status_ribbon(self._input_filename,
-                                   self._maintain_json)
+                                   ScreenHandler.maintainjson)
         self._window.command_ribbon(self._choices)
 
 
@@ -5193,7 +5189,7 @@ class FightHandler(ScreenHandler):
                                   self.__keep_monsters,
                                   next_PC_name,
                                   self._input_filename,
-                                  self._maintain_json)
+                                  ScreenHandler.maintainjson)
 
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
@@ -5353,7 +5349,7 @@ class FightHandler(ScreenHandler):
                                   self.__keep_monsters,
                                   next_PC_name,
                                   self._input_filename,
-                                  self._maintain_json)
+                                  ScreenHandler.maintainjson)
         current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
@@ -5489,7 +5485,7 @@ class FightHandler(ScreenHandler):
                                   self.__keep_monsters,
                                   next_PC_name,
                                   self._input_filename,
-                                  self._maintain_json)
+                                  ScreenHandler.maintainjson)
         return True # Keep going
 
     def __show_history(self):
@@ -5664,14 +5660,12 @@ class MainHandler(ScreenHandler):
                  world,
                  ruleset,
                  campaign_debug_json,
-                 filename, # JSON file containing the world
-                 maintain_json
+                 filename # JSON file containing the world
                 ):
         super(MainHandler, self).__init__(window_manager,
                                           campaign_debug_json,
                                           filename,
-                                          world.details['current-fight'],
-                                          maintain_json)
+                                          world.details['current-fight'])
         self.__world = world
         self.__ruleset = ruleset
         self._add_to_choice_dict({
@@ -5739,7 +5733,7 @@ class MainHandler(ScreenHandler):
     def _draw_screen(self, inverse=False):
         self._window.clear()
         self._window.status_ribbon(self._input_filename,
-                                   self._maintain_json)
+                                   ScreenHandler.maintainjson)
 
         person = (None if self.__char_index is None
                                     else self.__chars[self.__char_index])
@@ -5767,8 +5761,7 @@ class MainHandler(ScreenHandler):
                                         self.__ruleset,
                                         BuildFightHandler.NPCs,
                                         campaign_debug_json,
-                                        self._input_filename,
-                                        self._maintain_json)
+                                        self._input_filename)
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list() # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
@@ -5786,8 +5779,7 @@ class MainHandler(ScreenHandler):
                                         self.__ruleset,
                                         BuildFightHandler.PCs,
                                         campaign_debug_json,
-                                        self._input_filename,
-                                        self._maintain_json)
+                                        self._input_filename)
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list() # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
@@ -5805,8 +5797,7 @@ class MainHandler(ScreenHandler):
                                         self.__ruleset,
                                         BuildFightHandler.MONSTERs,
                                         campaign_debug_json,
-                                        self._input_filename,
-                                        self._maintain_json)
+                                        self._input_filename)
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list() # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
@@ -5919,8 +5910,7 @@ class MainHandler(ScreenHandler):
                                          self.__world,
                                          self.__ruleset,
                                          campaign_debug_json,
-                                         self._input_filename,
-                                         self._maintain_json)
+                                         self._input_filename)
         outfit.handle_user_input_until_done()
         self._draw_screen() # Redraw current screen when done building fight.
         return True # Keep going
@@ -6123,8 +6113,7 @@ class MainHandler(ScreenHandler):
                              monster_group,
                              self.__ruleset,
                              self._campaign_debug_json,
-                             self._input_filename,
-                             self._maintain_json)
+                             self._input_filename)
         fight.handle_user_input_until_done()
         self._draw_screen() # Redraw current screen when done with the fight.
 
@@ -6291,15 +6280,13 @@ class OutfitCharactersHandler(ScreenHandler):
                  world,
                  ruleset,
                  campaign_debug_json,
-                 filename, # JSON file containing the world
-                 maintain_json
+                 filename # JSON file containing the world
                 ):
         super(OutfitCharactersHandler, self).__init__(
                                             window_manager,
                                             campaign_debug_json,
                                             filename,
-                                            world.details['current-fight'],
-                                            maintain_json)
+                                            world.details['current-fight'])
 
         self._add_to_choice_dict({
             ord('a'): {'name': 'add equipment',    'func':
@@ -6337,7 +6324,7 @@ class OutfitCharactersHandler(ScreenHandler):
         self._window.clear()
         self._window.show_character(self.__character)
         self._window.status_ribbon(self._input_filename,
-                                   self._maintain_json)
+                                   ScreenHandler.maintainjson)
         self._window.command_ribbon(self._choices)
 
     #
@@ -6495,6 +6482,7 @@ if __name__ == '__main__':
 
             # Save the state of things when we leave since there wasn't a
             # horrible crash while reading the data.
+            ScreenHandler.maintainjson = ARGS.maintainjson
             if not ARGS.maintainjson:
                 campaign.write_data = campaign.read_data
 
@@ -6505,8 +6493,7 @@ if __name__ == '__main__':
                                        world,
                                        ruleset,
                                        campaign_debug_json,
-                                       filename,
-                                       ARGS.maintainjson)
+                                       filename)
 
             if campaign.read_data['current-fight']['saved']:
                 fight_handler = FightHandler(window_manager,
@@ -6514,8 +6501,7 @@ if __name__ == '__main__':
                                              None,
                                              ruleset,
                                              campaign_debug_json,
-                                             filename,
-                                             ARGS.maintainjson)
+                                             filename)
                 fight_handler.handle_user_input_until_done()
             main_handler.handle_user_input_until_done()
 
