@@ -5727,6 +5727,8 @@ class MainHandler(ScreenHandler):
                                                        self.__quit},
             ord('s'): {'name': 'add spell',           'func':
                                                        self.__add_spell},
+            ord('S'): {'name': 'toggle: Save On Exit','func':
+                                                       self.__maintain_json},
             ord('/'): {'name': 'search',              'func':
                                                        self.__search}
         })
@@ -5911,10 +5913,7 @@ class MainHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
-        ScreenHandler.maintainjson
-        if not ARGS.maintainjson:
-            campaign.write_data = campaign.read_data
-
+        world.toggle_saved_on_exit()
         self._draw_screen()
         return True # Keep going
 
