@@ -18,9 +18,6 @@ import traceback
 #   - Need way to 'P'romote bad guy to NPC status
 #   - Fights should have their own equipment
 #   - add laser sights to weapons
-
-#   - add ability to undo the -m option
-
 #   - add a timer that is tied to the round change
 #   - should warn when trying to do a second action (take note of fastdraw)
 #
@@ -1705,11 +1702,30 @@ class GmScrollableWindow(object):
 
 class World(object):
     def __init__(self,
-                 world_details,  # dict from entire JSON
+                 world_details,  # GmJson object
                  window_manager  # a GmWindowManager object to handle I/O
                 ):
-        self.details = world_details
+        self.__gm_json = world_details # only used for toggling whether the
+                                       # data is saved on exit of the program.
+        self.details = world_details.read_data # entire dict from JSON
         self.__window_manager = window_manager
+
+    def is_saved_on_exit(self):
+        return False if self.__gm_json.write_data is None else True
+
+    def dont_save_on_exit(self):
+        self.__gm_json.write_data = None
+        ScreenHandler.maintainjson = True
+
+    def do_save_on_exit(self):
+        self.__gm_json.write_data = self.__gm_json.read_data
+        ScreenHandler.maintainjson = False
+
+    def toggle_saved_on_exit(self):
+        if self.is_saved_on_exit():
+            self.dont_save_on_exit()
+        else:
+            self.do_save_on_exit()
 
     def get_creature_details(self, name, group):
         if name is None or group is None:
@@ -5886,6 +5902,22 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True # Keep going
 
+
+    def __maintain_json(self):
+        '''
+        Command ribbon method.  Toggles whether the results of this session
+        are saved to the .json file when the program is exited.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        ScreenHandler.maintainjson
+        if not ARGS.maintainjson:
+            campaign.write_data = campaign.read_data
+
+        self._draw_screen()
+        return True # Keep going
+
     def __remove_equipment(self):
         '''
         Command ribbon method.
@@ -6480,13 +6512,14 @@ if __name__ == '__main__':
                 window_manager.error(['No "PCs" in %s' % filename])
                 sys.exit(2)
 
+            world = World(campaign, window_manager)
+
             # Save the state of things when we leave since there wasn't a
             # horrible crash while reading the data.
-            ScreenHandler.maintainjson = ARGS.maintainjson
-            if not ARGS.maintainjson:
-                campaign.write_data = campaign.read_data
-
-            world = World(campaign.read_data, window_manager)
+            if ARGS.maintainjson:
+                world.dont_save_on_exit()
+            else:
+                world.do_save_on_exit()
 
             # Enter into the mainloop
             main_handler = MainHandler(window_manager,
