@@ -396,7 +396,7 @@
               "cost": 2, 
               "name": "luck", 
               "notes": "V2", 
-              "maintain": 0, 
+              "maintain": 1, 
               "time": 1, 
               "skill": 11
             }, 
@@ -1514,10 +1514,10 @@
           "skill": 12
         }, 
         {
-          "cost": 5, 
+          "cost": 2, 
           "name": "luck", 
           "notes": "V2", 
-          "maintain": 0, 
+          "maintain": 1, 
           "time": 1, 
           "skill": 14
         }, 
@@ -2132,16 +2132,16 @@
           "skill": 15
         }, 
         {
-          "cost": 1, 
-          "name": "minor healing", 
+          "cost": null, 
+          "name": "minor heal", 
           "notes": "M91", 
-          "maintain": 0, 
+          "maintain": null, 
           "time": 1, 
           "skill": 15
         },
         {
           "cost": 1, 
-          "name": "major healing", 
+          "name": "major heal", 
           "notes": "M91", 
           "maintain": 4, 
           "time": 1, 
@@ -2220,7 +2220,7 @@
           "skill": 14
         }, 
         {
-          "cost": 1, 
+          "cost": null, 
           "name": "foolishness", 
           "notes": "M134", 
           "maintain": null, 
@@ -3355,7 +3355,7 @@
             "notes": "M193, cost eR3570", 
             "type": "misc", 
             "owners": [], 
-            "name": "Fingerbone of major healing (8)"
+            "name": "Fingerbone of major heal (8)"
           }, 
           {
             "count": 1, 
@@ -3453,7 +3453,7 @@
             "notes": "M193, cost eR3570", 
             "type": "misc", 
             "owners": [], 
-            "name": "Fingerbone of major healing (8)"
+            "name": "Fingerbone of major heal (8)"
           }, 
           {
             "acc": 2, 
@@ -5213,7 +5213,7 @@
           "cost": 2, 
           "name": "luck", 
           "notes": "V2", 
-          "maintain": 0, 
+          "maintain": 1, 
           "time": 1, 
           "skill": 11
         }, 
@@ -5455,7 +5455,7 @@
           "cost": 2, 
           "name": "luck", 
           "notes": "V2", 
-          "maintain": 0, 
+          "maintain": 1, 
           "time": 1, 
           "skill": 11
         }, 
@@ -6996,6 +6996,61 @@
       "name": "C Cell"
     }
   ], 
+  "spells": [
+        { "name": "alarm", "cost": 1, "notes": "M100", "maintain": 0, "time": 1, "skill": 12 }, 
+        { "name": "alter visage", "cost": 4, "notes": "M41", "maintain": 0, "time": 60, "skill": 13 },
+        { "name": "analyze magic", "cost": 8, "notes": "M102", "maintain": null, "time": 3600, "skill": 14 }, 
+        { "name": "awaken", "cost": 1, "notes": "M90", "maintain": 0, "time": 1, "skill": 12 }, 
+        { "name": "bless plants", "cost": 1, "notes": "M161", "maintain": 4, "time": 300, "skill": 13 }, 
+        { "name": "boost dexterity", "cost": 1, "notes": "M37", "maintain": 2, "time": 1, "skill": 12 }, 
+        { "name": "bravery", "cost": 2, "notes": "M134", "maintain": 2, "time": 1, "skill": 12 }, 
+        { "name": "climbing", "cost": 1, "notes": "M35", "maintain": 0, "time": 1, "skill": 15 }, 
+        { "name": "clumsiness", "cost": 1, "notes": "M36", "maintain": null, "time": 1, "skill": 12 }, 
+        { "name": "communicate", "cost": 4, "notes": "M48", "maintain": 4, "time": 4, "skill": 11 }, 
+        { "name": "conceal magic", "cost": 1, "notes": "M122", "maintain": null, "time": 3, "skill": 14 }, 
+        { "name": "cure disease", "cost": 4, "notes": "M91", "maintain": 2, "time": 600, "skill": 15 }, 
+        { "name": "daze", "cost": 3, "notes": "M134", "maintain": 2, "time": 2, "skill": 11 }, 
+        { "name": "death vision", "cost": 2, "notes": "M149", "maintain": null, "time": 3, "skill": 16 }, 
+        { "name": "detect magic", "cost": 2, "notes": "M101", "maintain": null, "time": 300, "skill": 14 }, 
+        { "name": "emotional control", "cost": 2, "notes": "M137", "maintain": 0, "time": 1, "skill": 12 }, 
+        { "name": "enchant", "cost": null, "notes": "M56", "maintain": null, "time": 1, "skill": 13 }, 
+        { "name": "far hearing", "cost": 4, "notes": "M173", "maintain": 2, "time": 3, "skill": 11 }, 
+        { "name": "fear", "cost": 1, "notes": "M134", "maintain": null, "time": 1, "skill": 12 }, 
+        { "name": "foolishness", "cost": null, "notes": "M134", "maintain": null, "time": 1, "skill": 11 }, 
+        { "name": "fumble", "cost": 3, "notes": "M38", "maintain": null, "time": 1, "skill": 12 }, 
+        { "name": "grace", "cost": 4, "notes": "M37", "maintain": null, "time": 1, "skill": 12 }, 
+        { "name": "hair growth", "cost": 1, "notes": "M39", "maintain": null, "time": 1, "skill": 12 }, 
+        { "name": "haircut", "cost": 2, "notes": "M39", "maintain": null, "time": 2, "skill": 12 }, 
+        { "name": "heal plant", "cost": 3, "notes": "M161", "maintain": null, "time": 60, "skill": 12 }, 
+        { "name": "identify plant", "cost": 2, "notes": "M161", "maintain": null, "time": 1, "skill": 12 }, 
+        { "name": "identify spell", "cost": 2, "notes": "M102", "maintain": null, "time": 1, "skill": 14 }, 
+        { "name": "itch", "cost": 2, "notes": "M35", "maintain": null, "time": 1, "skill": 12 }, 
+        { "name": "lend energy", "cost": null, "notes": "M89", "maintain": 0, "time": 1, "skill": 15 }, 
+        { "name": "lend vitality", "cost": null, "notes": "M89", "maintain": null, "time": 1, "skill": 15 }, 
+        { "name": "light", "cost": 1, "notes": "M110", "maintain": 0, "time": 1, "skill": 14 }, 
+        { "name": "loyalty", "cost": 2, "notes": "M136", "maintain": null, "time": 1, "skill": 12 }, 
+        { "name": "luck", "cost": 2, "notes": "V2", "maintain": 1, "time": 1, "skill": 11 }, 
+        { "name": "lure", "cost": 1, "notes": "M137", "maintain": null, "time": 1, "skill": 12 }, 
+        { "name": "major heal", "cost": null, "notes": "M91", "maintain": null, "time": 1, "skill": 11 }, 
+        { "name": "might", "cost": null, "notes": "M37", "maintain": null, "time": 1, "skill": 12 }, 
+        { "name": "minor heal", "cost": null, "notes": "M91", "maintain": null, "time": 1, "skill": 12 }, 
+        { "name": "powerstone", "cost": 20, "notes": "M69", "maintain": null, "time": 1, "skill": 14 },
+        { "name": "relieve sickness", "cost": 2, "notes": "M90", "maintain": 2, "time": 10, "skill": 15 }, 
+        { "name": "restoration", "cost": 15, "notes": "M93", "maintain": 0, "time": 60, "skill": 11 }, 
+        { "name": "seek machine", "cost": 3, "notes": "M175", "maintain": null, "time": 10, "skill": 14 }, 
+        { "name": "seek plant", "cost": 2, "notes": "M161", "maintain": null, "time": 1, "skill": 14 }, 
+        { "name": "sense emotion", "cost": 2, "notes": "M45", "maintain": null, "time": 1, "skill": 12 }, 
+        { "name": "sense foes", "cost": 2, "notes": "M45", "maintain": 0, "time": 1, "skill": 12 }, 
+        { "name": "sense life", "cost": null, "notes": "M45, cost 1/2 per yard radius, see M11", "maintain": null, "time": 1, "skill": 12 }, 
+        { "name": "shapeshifting (rat)", "cost": null, "notes": "M32", "maintain": null, "time": 3, "skill": 13 }, 
+        { "name": "shield", "cost": 2, "notes": "M167", "maintain": null, "time": 1, "skill": 14 }, 
+        { "name": "sleep", "cost": 4, "notes": "M135", "maintain": 0, "time": 3, "skill": 11 }, 
+        { "name": "spasm", "cost": 2, "notes": "M35", "maintain": 0, "time": 1, "skill": 12 }, 
+        { "name": "summon spirit", "cost": 20, "notes": "M150", "maintain": 0, "time": 300, "skill": 16 }, 
+        { "name": "tell time", "cost": 1, "notes": "M100", "maintain": 2, "time": 1, "skill": 12 },
+        { "name": "wizard eye", "cost": 4, "notes": "M104", "maintain": 2, "time": 2, "skill": 11 },
+        { "name": "zombie", "cost": 8, "notes": "M151", "maintain": null, "time": 60, "skill": 16 }
+  ],
   "Names": {
     "russian": {
       "male": [
@@ -8110,3 +8165,7 @@
     }
   }
 }
+
+
+
+

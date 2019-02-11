@@ -5715,6 +5715,8 @@ class MainHandler(ScreenHandler):
                                                        self.__fully_heal},
             ord('q'): {'name': 'quit',                'func':
                                                        self.__quit},
+            ord('s'): {'name': 'add spell',           'func':
+                                                       self.__add_spell},
             ord('/'): {'name': 'search',              'func':
                                                        self.__search}
         })
@@ -5824,6 +5826,42 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True # Keep going
 
+    def __add_spell(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = Fighter(self.__chars[self.__char_index]['name'],
+                          self.__chars[self.__char_index]['group'],
+                          self.__chars[self.__char_index]['details'],
+                          self.__ruleset,
+                          self._window_manager)
+
+
+        # Is the fighter a caster?
+        if 'spells' not in fighter.details:
+            self._window_manager.error(
+                ['Doesn\'t look like %s casts spells' % fighter.name])
+            return True
+
+        # Pick from the spell list
+        spell_menu = [(spell['name'], spell)
+                            for spell in self.__world.details['spells']]
+        new_spell = self._window_manager.menu('Spell to Add', spell_menu)
+
+        # Check if spell is already there
+        for spell in fighter.details['spells']:
+            if spell['name'] == new_spell['name']:
+                self._window_manager.error(
+                    ['%s already has spell "%s"' % (fighter.name,
+                                                    spell['name'])])
+                return True
+
+        if new_spell is not None:
+            fighter.details['spells'].append(copy.deepcopy(new_spell))
+
+        self._draw_screen()
+        return True # Keep going
 
     def __give_equipment(self):
         from_fighter = Fighter(self.__chars[self.__char_index]['name'],
@@ -6146,8 +6184,6 @@ class EquipmentManager(object):
         item = self.__window_manager.menu('Item to Add', item_menu)
         if item is not None:
             fighter.add_equipment(copy.deepcopy(item), 'the store')
-
-        # self._window.show_character(self.__character)
 
 
     @staticmethod
