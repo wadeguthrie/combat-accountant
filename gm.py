@@ -240,6 +240,10 @@ class GmWindow(object):
                 command_string = '<PGUP>'
             elif command == curses.KEY_NPAGE:
                 command_string = '<PGDN>'
+            elif command == curses.KEY_LEFT:
+                command_string = '<LEFT>'
+            elif command == curses.KEY_RIGHT:
+                command_string = '<RIGHT>'
             else:
                 command_string = '%c' % chr(command)
 
@@ -355,9 +359,10 @@ class MainGmWindow(GmWindow):
                                 #  [...],                  ]  # line 1...
 
         top_line = 1
+        # TODO: get the actual size of the command ribbon
         height = (lines                 # The whole window height, except...
             - top_line                  # ...a block at the top, and...
-            - 4)                        # ...a space for the command ribbon.
+            - 5)                        # ...a space for the command ribbon.
         
         width = (cols / 2) - 1 # -1 for margin
 
@@ -365,7 +370,7 @@ class MainGmWindow(GmWindow):
                                                  self.__char_list,
                                                  self._window_manager,
                                                  height,
-                                                 width,
+                                                 width-1,
                                                  top_line,
                                                  1)
         self.__char_detail_window  = GmScrollableWindow(
@@ -394,6 +399,11 @@ class MainGmWindow(GmWindow):
         if self.__char_detail_window is not None:
             self.__char_detail_window.refresh()
 
+    def char_detail_home(self):
+        self.__char_detail_window.scroll_to(0)
+        self.__char_detail_window.draw_window()
+        self.__char_detail_window.refresh()
+
     def scroll_char_detail_down(self):
         self.__char_detail_window.scroll_down()
         self.__char_detail_window.draw_window()
@@ -403,6 +413,21 @@ class MainGmWindow(GmWindow):
         self.__char_detail_window.scroll_up()
         self.__char_detail_window.draw_window()
         self.__char_detail_window.refresh()
+
+    def char_list_home(self):
+        self.__char_list_window.scroll_to(0)
+        self.__char_list_window.draw_window()
+        self.__char_list_window.refresh()
+
+    def scroll_char_list_down(self):
+        self.__char_list_window.scroll_down()
+        self.__char_list_window.draw_window()
+        self.__char_list_window.refresh()
+
+    def scroll_char_list_up(self):
+        self.__char_list_window.scroll_up()
+        self.__char_list_window.draw_window()
+        self.__char_list_window.refresh()
 
     def show_character_detail(self,
                               character, # dict as found in the JSON
@@ -5671,6 +5696,9 @@ class FightHandler(ScreenHandler):
 
 
 class MainHandler(ScreenHandler):
+    (CHAR_LIST,
+     CHAR_DETAIL) = range(2)
+
     def __init__(self,
                  window_manager,
                  world,
@@ -5684,9 +5712,11 @@ class MainHandler(ScreenHandler):
                                           world.details['current-fight'])
         self.__world = world
         self.__ruleset = ruleset
+        self.__current_pane = MainHandler.CHAR_DETAIL
         self._add_to_choice_dict({
-            # TODO: KEY_LEFT and KEY_RIGHT need to change window scrolled by
-            # KEY_UP and KEY_DOWN between char and char detail window.
+            curses.KEY_HOME:
+                      {'name': 'scroll home',         'func':
+                                                       self.__first_page},
             curses.KEY_UP:
                       {'name': 'previous character',  'func':
                                                        self.__prev_char},
@@ -5694,11 +5724,18 @@ class MainHandler(ScreenHandler):
                       {'name': 'next character',      'func':
                                                        self.__next_char},
             curses.KEY_NPAGE:
-                      {'name': 'char details pgdown', 'func':
+                      {'name': 'scroll down',         'func':
                                                        self.__next_page},
             curses.KEY_PPAGE:
-                      {'name': 'char details pgup',   'func':
+                      {'name': 'scroll up',           'func':
                                                        self.__prev_page},
+            curses.KEY_LEFT:
+                      {'name': 'scroll chars',        'func':
+                                                       self.__left_pane},
+            curses.KEY_RIGHT:
+                      {'name': 'scroll char detail',  'func':
+                                                       self.__right_pane},
+
             ord('c'): {'name': 'select character',    'func':
                                                        self.__character},
             ord('e'): {'name': 'add equipment',       'func':
@@ -6065,8 +6102,26 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True
 
+    def __right_pane(self):
+        self.__current_pane = MainHandler.CHAR_DETAIL
+        return True
+
+    def __left_pane(self):
+        self.__current_pane = MainHandler.CHAR_LIST
+        return True
+
     def __next_page(self):
-        self._window.scroll_char_detail_down()
+        if self.__current_pane == MainHandler.CHAR_DETAIL:
+            self._window.scroll_char_detail_down()
+        else:
+            self._window.scroll_char_list_down()
+        return True
+
+    def __first_page(self):
+        if self.__current_pane == MainHandler.CHAR_DETAIL:
+            self._window.char_detail_home()
+        else:
+            self._window.char_list_home()
         return True
 
     def __NPC_joins(self):
@@ -6107,7 +6162,10 @@ class MainHandler(ScreenHandler):
         return True
 
     def __prev_page(self):
-        self._window.scroll_char_detail_up()
+        if self.__current_pane == MainHandler.CHAR_DETAIL:
+            self._window.scroll_char_detail_up()
+        else:
+            self._window.scroll_char_list_up()
         return True
 
 
