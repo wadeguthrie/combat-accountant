@@ -198,9 +198,8 @@ if __name__ == '__main__':
             if cost_gcs != advantages_json[name.text]:
                 print '  ** %s = %r in GCS but %r in JSON' % (
                     name.text, cost_gcs.text, advantages_json[name.text])
-            #else: # TODO: remove
-            #    print '  ** %s = %r in BOTH GCS & JSON' % (name.text,
-            #                                               cost_gcs)
+            else:
+                print '  %s: %r' % (name.text, cost_gcs)
 
             del(advantages_json[name.text])
     for advantage_json in advantages_json:
@@ -222,6 +221,7 @@ if __name__ == '__main__':
             if name.text not in spells_json:
                 print '  ** %s in GCS but not in JSON' % name.text
             else:
+                print '  %s' % name.text
                 # TODO: compare skill levels
                 del(spells_json[name.text])
         for child in spells_json:
