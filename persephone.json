@@ -51,8 +51,8 @@
         "advantages": {
           "type": "value", 
           "value": {
-            "combat reflexes": 15, 
-            "high pain threshold": 10
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
           }
         }, 
         "stuff": {
@@ -159,8 +159,8 @@
         "advantages": {
           "type": "value", 
           "value": {
-            "combat reflexes": 15, 
-            "high pain threshold": 10
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
           }
         }, 
         "armor-index": {
@@ -326,11 +326,11 @@
         "advantages": {
           "type": "value", 
           "value": {
-            "empathy": 5, 
-            "vodou practitioner (Mambo 2)": 35, 
-            "combat reflexes": 15, 
-            "high pain threshold": 10, 
-            "lwa (Mambo, Erzulie Freda)": 6
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10, 
+            "Lwa (Mambo, Erzulie Freda)": 6
           }
         }, 
         "spells": {
@@ -509,8 +509,8 @@
         "advantages": {
           "type": "value", 
           "value": {
-            "combat reflexes": 15, 
-            "high pain threshold": 10
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
           }
         }, 
         "stuff": {
@@ -607,6 +607,91 @@
           }
         }
       }, 
+      "Zombie": {
+        "skills": {
+          "type": "value", 
+          "value": {
+            "beam weapons (pistol)": 15, 
+            "brawling": 12, 
+            "knife": 15
+          }
+        }, 
+        "permanent": {
+          "fp": {
+            "type": "value", 
+            "value": 16
+          }, 
+          "iq": {
+            "type": "value", 
+            "value": 8
+          }, 
+          "hp": {
+            "type": "value", 
+            "value": 16
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "st": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "ht": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "dx": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "basic-move": {
+            "type": "value", 
+            "value": 5
+          }, 
+          "basic-speed": {
+            "type": "value", 
+            "value": 5.0
+          }
+        }, 
+        "advantages": {
+          "type": "value", 
+          "value": {
+            "Appearance (Monstrous)": 0, 
+            "Wealth": 0, 
+            "High Pain Threshold": 10
+          }
+        }, 
+        "short-notes": {
+          "type": "value", 
+          "value": [
+            "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+            "Automatically fails alive roll at -HP,", 
+            "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+          ]
+        }, 
+        "stuff": {
+          "type": "value", 
+          "value": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "arms & teeth", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": -1, 
+                  "num_dice": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "knife", 
+              "type": "melee weapon"
+            }
+          ]
+        }
+      }, 
       "VodouCleric": {
         "permanent": {
           "fp": {
@@ -697,7 +782,7 @@
         "advantages": {
           "type": "value", 
           "value": {
-            "high pain threshold": 10
+            "High Pain Threshold": 10
           }
         }, 
         "stuff": {
@@ -804,8 +889,8 @@
         "advantages": {
           "type": "value", 
           "value": {
-            "combat reflexes": 15, 
-            "high pain threshold": 10
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
           }
         }, 
         "armor-index": {
@@ -875,92 +960,7 @@
             }
           ]
         }
-      },
-      "Zombie": {
-        "skills": {
-          "type": "value", 
-          "value": {
-            "beam weapons (pistol)": 15, 
-            "brawling": 12, 
-            "knife": 15
-          }
-        }, 
-        "permanent": {
-          "fp": {
-            "type": "value", 
-            "value": 16
-          }, 
-          "iq": {
-            "type": "value", 
-            "value": 8
-          }, 
-          "hp": {
-            "type": "value", 
-            "value": 16
-          }, 
-          "wi": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "st": {
-            "type": "value", 
-            "value": 12
-          }, 
-          "ht": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "dx": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "basic-move": {
-            "type": "value", 
-            "value": 5
-          }, 
-          "basic-speed": {
-            "type": "value", 
-            "value": 5.0
-          }
-        }, 
-        "advantages": {
-          "type": "value", 
-          "value": {
-            "wealth": 0,
-            "appearance (monstrous)": 0,
-            "high pain threshold": 10
-          }
-        }, 
-        "stuff": {
-          "type": "value", 
-          "value": [
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "arms & teeth", 
-              "notes": "", 
-              "damage": {
-                "dice": {
-                  "plus": -1, 
-                  "num_dice": 1, 
-                  "type": "cr"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "knife", 
-              "type": "melee weapon"
-            }
-          ]
-        },
-        "short-notes": {
-          "type": "value",
-          "value": [
-            "Darkvision, doesn't breathe, bad smell, immune to mind control",
-            "Automatically fails alive roll at -HP,",
-            "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-          ]
-        }
-      } 
+      }
     }
   }, 
   "PCs": {
@@ -973,17 +973,17 @@
         {
           "count": 1, 
           "owners": null, 
-          "name": "tear gas", 
+          "type": "misc", 
           "notes": "HT180", 
-          "type": "misc"
-        },
+          "name": "tear gas"
+        }, 
         {
           "count": 1, 
           "owners": null, 
-          "name": "pepper spray", 
+          "type": "misc", 
           "notes": "HT180", 
-          "type": "misc"
-        },
+          "name": "pepper spray"
+        }, 
         {
           "count": 4, 
           "owners": null, 
@@ -1160,26 +1160,26 @@
       ], 
       "stunned": 0, 
       "skills": {
-        "acting": 7, 
-        "armoury (small arms)": 11, 
-        "axe/mace": 12, 
-        "beam weapons (pistol)": 15, 
-        "beam weapons (rifle)": 14, 
-        "brawling": 13, 
-        "fast-draw (ammo)": 14, 
-        "fast-talk": 13, 
-        "first aid": 14, 
-        "gambling": 7, 
-        "guns (grenade launcher)": 9, 
-        "holdout": 11, 
         "interrogation": 12, 
-        "karate": 13, 
-        "knife": 15, 
-        "lockpicking": 12, 
+        "armoury (small arms)": 11, 
+        "guns (grenade launcher)": 9, 
+        "fast-draw (ammo)": 14, 
         "observation": 13, 
-        "stealth": 14, 
-        "streetwise": 12, 
         "throwing": 10, 
+        "lockpicking": 12, 
+        "beam weapons (rifle)": 14, 
+        "streetwise": 12, 
+        "karate": 13, 
+        "axe/mace": 12, 
+        "acting": 7, 
+        "brawling": 13, 
+        "first aid": 14, 
+        "beam weapons (pistol)": 15, 
+        "fast-talk": 13, 
+        "gambling": 7, 
+        "holdout": 11, 
+        "stealth": 14, 
+        "knife": 15, 
         "traps": 12
       }, 
       "shock": 0, 
@@ -1212,17 +1212,17 @@
         "basic-speed": 6
       }, 
       "advantages": {
-        "g-experience": 3, 
-        "code of honor (professioal)": -5, 
-        "no sense of humor": -10, 
-        "dyslexia": -10, 
-        "weirdness magnet": -15, 
-        "nosy": -1, 
-        "pyromania": -5, 
-        "high pain threshold": 10, 
-        "alcohol intolerance": -1, 
-        "night vision": 4, 
-        "combat reflexes": 15
+        "G-Experience": 3, 
+        "Code Of Honor (Professioal)": -5, 
+        "No Sense Of Humor": -10, 
+        "Dyslexia": -10, 
+        "Weirdness Magnet": -15, 
+        "Nosy": -1, 
+        "Pyromania": -5, 
+        "High Pain Threshold": 10, 
+        "Alcohol Intolerance": -1, 
+        "Night Vision": 4, 
+        "Combat Reflexes": 15
       }, 
       "did_action_this_turn": false, 
       "weapon-index": null, 
@@ -1364,14 +1364,14 @@
         "basic-speed": 5.25
       }, 
       "advantages": {
-        "acute vision 1": 2, 
-        "eidetic memory": 5, 
-        "fit": 5, 
-        "g-experience": 1, 
-        "humble": -1, 
-        "squeamish": -10, 
-        "secret (turned in evidence on brutal Bratva hit)": -30, 
-        "cannot speak/synthesizer": -10
+        "G-Experience": 1, 
+        "Acute Vision 1": 2, 
+        "Eidetic Memory": 5, 
+        "Fit": 5, 
+        "Humble": -1, 
+        "Squeamish": -10, 
+        "Secret (Turned In Evidence On Brutal Bratva Hit)": -30, 
+        "Cannot Speak/Synthesizer": -10
       }, 
       "did_action_this_turn": false, 
       "weapon-index": null, 
@@ -1400,7 +1400,7 @@
           "maintain": 0, 
           "time": 60, 
           "skill": 13
-        },
+        }, 
         {
           "cost": 1, 
           "name": "bless plants", 
@@ -1556,7 +1556,7 @@
         {
           "cost": null, 
           "name": "shapeshifting (rat)", 
-          "notes": "M32",
+          "notes": "M32", 
           "maintain": null, 
           "time": 3, 
           "skill": 13
@@ -1664,33 +1664,33 @@
       ], 
       "stunned": 0, 
       "skills": {
-        "area knowledge (space station)": 16, 
-        "axe/mace": 8, 
-        "beam weapons (pistol)": 11, 
-        "brawling": 11, 
-        "climbing": 8, 
+        "electronics repair (terraforming)": 13, 
+        "diplomacy": 14, 
+        "thrown weapon (knife)": 10, 
         "computer hacking": 13, 
+        "escape": 9, 
+        "mechanic (spacecraft)": 15, 
+        "electronics operation (terraforming)": 13, 
+        "fast talk": 15, 
+        "connoisseur (visual arts)": 13, 
+        "forgery": 12, 
+        "brawling": 11, 
+        "hazardous materials (chemical)": 13, 
+        "beam weapons (pistol)": 11, 
+        "lip reading": 14, 
+        "knife": 10, 
+        "streetwise": 15, 
+        "axe/mace": 8, 
+        "current affairs (terraforming)": 14, 
+        "climbing": 8, 
+        "detect lies": 14, 
+        "electronics repair (security)": 15, 
+        "law (conglomerate/trans-territorial)": 13, 
         "computer operation": 14, 
         "computer programming": 12, 
-        "connoisseur (visual arts)": 13, 
-        "current affairs (terraforming)": 14, 
-        "detect lies": 14, 
-        "diplomacy": 14, 
-        "electronics operation (security)": 14,
-        "electronics operation (terraforming)": 13, 
-        "electronics repair (security)": 15, 
-        "electronics repair (terraforming)": 13, 
-        "escape": 9, 
-        "fast talk": 15, 
-        "forgery": 12, 
-        "hazardous materials (chemical)": 13, 
-        "knife": 10, 
-        "law (conglomerate/trans-territorial)": 13, 
-        "lip reading": 14, 
-        "mechanic (spacecraft)": 15, 
+        "area knowledge (space station)": 16, 
         "piloting (low-performance spacecraft)": 9, 
-        "streetwise": 15, 
-        "thrown weapon (knife)": 10
+        "electronics operation (security)": 14
       }, 
       "shock": 0, 
       "armor-index": null, 
@@ -1719,24 +1719,24 @@
         "basic-speed": 5
       }, 
       "advantages": {
-        "honest face": 1, 
-        "likes knick knacks": -1, 
-        "nosy": -1, 
-        "wealth (struggling)": -10, 
-        "deep sleeper": 1, 
-        "cultural familiarity (terraformers)": 1, 
-        "g-experience": 1, 
-        "habit (fidget)": -1, 
-        "alcohol intolerance": -1, 
-        "impulsiveness": -15, 
-        "empathy (sensitive)": 5, 
-        "short attention span": -15, 
-        "curious": -7, 
-        "dreamer": -1, 
-        "bad tember": -10, 
-        "combat reflexes": 15, 
-        "versatile": 5, 
-        "vodou practitioner (Mambo 1)": 15
+        "G-Experience": 1, 
+        "Honest Face": 1, 
+        "Likes Knick Knacks": -1, 
+        "Nosy": -1, 
+        "Wealth (Struggling)": -10, 
+        "Deep Sleeper": 1, 
+        "Cultural Familiarity (Terraformers)": 1, 
+        "Habit (Fidget)": -1, 
+        "Alcohol Intolerance": -1, 
+        "Impulsiveness": -15, 
+        "Empathy (Sensitive)": 5, 
+        "Short Attention Span": -15, 
+        "Curious": -7, 
+        "Dreamer": -1, 
+        "Bad Tember": -10, 
+        "Combat Reflexes": 15, 
+        "Versatile": 5, 
+        "Vodou Practitioner (Mambo 1)": 15
       }, 
       "did_action_this_turn": false, 
       "weapon-index": null, 
@@ -1827,7 +1827,7 @@
           "parry": 0, 
           "skill": "karate", 
           "type": "melee weapon"
-        },
+        }, 
         {
           "acc": 3, 
           "count": 1, 
@@ -1856,29 +1856,29 @@
       ], 
       "stunned": 0, 
       "skills": {
-        "armoury (small arms)": 10, 
-        "axe/mace": 13, 
-        "beam weapons (pistol)": 16, 
-        "beam weapons (rifle)": 13, 
-        "brawling": 15, 
-        "camouflage": 11, 
-        "climbing": 12, 
-        "fast-draw (knife)": 14, 
-        "fast-draw (pistol)": 14, 
-        "filch": 12, 
-        "first aid": 13, 
-        "gesture": 11,
-        "intimidation": 12, 
-        "knife": 14, 
-        "lockpicking": 10, 
-        "pickpocket": 11, 
-        "running": 10, 
-        "scrounging": 12, 
-        "stealth": 12, 
-        "streetwise": 11, 
-        "theology (Vodou)": 10, 
         "throwing": 14, 
-        "urban survival": 11
+        "armoury (small arms)": 10, 
+        "scrounging": 12, 
+        "camouflage": 11, 
+        "stealth": 12, 
+        "brawling": 15, 
+        "beam weapons (pistol)": 16, 
+        "knife": 14, 
+        "urban survival": 11, 
+        "lockpicking": 10, 
+        "intimidation": 12, 
+        "streetwise": 11, 
+        "axe/mace": 13, 
+        "running": 10, 
+        "fast-draw (pistol)": 14, 
+        "climbing": 12, 
+        "theology (Vodou)": 10, 
+        "filch": 12, 
+        "pickpocket": 11, 
+        "beam weapons (rifle)": 13, 
+        "first aid": 13, 
+        "fast-draw (knife)": 14, 
+        "gesture": 11
       }, 
       "notes": [
         "Born November 1st 2099 (Fet Gede - All Souls Day) - 24 years old.", 
@@ -1977,17 +1977,17 @@
         "basic-speed": 6
       }, 
       "advantages": {
-        "combat reflexes": 15,
-        "enemy (Gregory Occeant)": -20, 
-        "fit": 5, 
-        "flashbacks, mild": -5, 
-        "g-experience": 1, 
-        "guilt complex (loss of sister)": -5, 
-        "light sleeper": -5, 
-        "rapid healing": 5, 
-        "vodou practitioner": 5, 
-        "vow (return to earth for sister)": -5, 
-        "wealth (struggling)": -10
+        "G-Experience": 1, 
+        "Guilt Complex (Loss Of Sister)": -5, 
+        "Enemy (Gregory Occeant)": -20, 
+        "Fit": 5, 
+        "Light Sleeper": -5, 
+        "Wealth (Struggling)": -10, 
+        "Rapid Healing": 5, 
+        "Vodou Practitioner": 5, 
+        "Vow (Return To Earth For Sister)": -5, 
+        "Flashbacks, Mild": -5, 
+        "Combat Reflexes": 15
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -2008,103 +2008,6 @@
       "aim": {
         "braced": false, 
         "rounds": 0
-      }, 
-      "stuff": [
-        {
-          "count": 1, 
-          "owners": null, 
-          "name": "sick stick", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 1, 
-              "num_dice": 1, 
-              "type": "fat"
-            }
-          }, 
-          "skill": "axe/mace", 
-          "type": "melee weapon"
-        }, 
-        {
-          "acc": 4, 
-          "count": 1, 
-          "owners": null, 
-          "name": "pistol, Sig D65", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 4, 
-              "num_dice": 1, 
-              "type": "pi"
-            }
-          }, 
-          "reload": 3, 
-          "skill": "beam weapons (pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 9, 
-            "shots_left": 8
-          }
-        }, 
-        {
-          "count": 100000, 
-          "notes": "", 
-          "type": "misc", 
-          "owners": null, 
-          "name": "C Cell"
-        }
-      ], 
-      "stunned": 0, 
-      "skills": {
-        "physician": 14, 
-        "axe/mace": 7, 
-        "fast-draw (pistol)": 9, 
-        "brawling": 8, 
-        "first aid": 17, 
-        "beam weapons (pistol)": 14
-      }, 
-      "shock": 0, 
-      "armor-index": null, 
-      "current": {
-        "fp": 18, 
-        "iq": 16, 
-        "hp": 19, 
-        "wi": 16, 
-        "st": 9, 
-        "ht": 8, 
-        "dx": 8, 
-        "basic-move": 5, 
-        "basic-speed": 4
-      }, 
-      "check_for_death": false, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 18, 
-        "iq": 16, 
-        "hp": 19, 
-        "wi": 16, 
-        "st": 9, 
-        "ht": 8, 
-        "dx": 8, 
-        "basic-move": 5, 
-        "basic-speed": 4
-      }, 
-      "advantages": {
-        "agoraphobia (open spaces)": -10, 
-        "ailurophobia (cats)": -5, 
-        "bad sight (farsighted)": -25, 
-        "channeling": 10, 
-        "compulsive vowing": -5, 
-        "curious": -5, 
-        "delusions (Papa Ghede is g-grandfather)": -1, 
-        "distractible": -1, 
-        "impulsiveness": -10, 
-        "likes shiny objects": -1, 
-        "lwa (Bokor, Papa Ghede)": 8, 
-        "personality change": -1,
-        "responsive": -1, 
-        "vodou practitioner (Bokor 2)": 45
       }, 
       "spells": [
         {
@@ -2138,7 +2041,7 @@
           "maintain": null, 
           "time": 1, 
           "skill": 15
-        },
+        }, 
         {
           "cost": 1, 
           "name": "major heal", 
@@ -2276,6 +2179,103 @@
           "skill": 14
         }
       ], 
+      "stuff": [
+        {
+          "count": 1, 
+          "owners": null, 
+          "name": "sick stick", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 1, 
+              "num_dice": 1, 
+              "type": "fat"
+            }
+          }, 
+          "skill": "axe/mace", 
+          "type": "melee weapon"
+        }, 
+        {
+          "acc": 4, 
+          "count": 1, 
+          "owners": null, 
+          "name": "pistol, Sig D65", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 8
+          }
+        }, 
+        {
+          "count": 100000, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "C Cell"
+        }
+      ], 
+      "stunned": 0, 
+      "skills": {
+        "physician": 14, 
+        "axe/mace": 7, 
+        "fast-draw (pistol)": 9, 
+        "brawling": 8, 
+        "first aid": 17, 
+        "beam weapons (pistol)": 14
+      }, 
+      "shock": 0, 
+      "armor-index": null, 
+      "current": {
+        "fp": 18, 
+        "iq": 16, 
+        "hp": 19, 
+        "wi": 16, 
+        "st": 9, 
+        "ht": 8, 
+        "dx": 8, 
+        "basic-move": 5, 
+        "basic-speed": 4
+      }, 
+      "check_for_death": false, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 18, 
+        "iq": 16, 
+        "hp": 19, 
+        "wi": 16, 
+        "st": 9, 
+        "ht": 8, 
+        "dx": 8, 
+        "basic-move": 5, 
+        "basic-speed": 4
+      }, 
+      "advantages": {
+        "Impulsiveness": -10, 
+        "Ailurophobia (Cats)": -5, 
+        "Compulsive Vowing": -5, 
+        "Lwa (Bokor, Papa Ghede)": 8, 
+        "Vodou Practitioner (Bokor 2)": 45, 
+        "Agoraphobia (Open Spaces)": -10, 
+        "Delusions (Papa Ghede is g-grandfather)": -1, 
+        "Channeling": 10, 
+        "Distractible": -1, 
+        "Responsive": -1, 
+        "Curious": -5, 
+        "Bad Sight (Farsighted)": -25, 
+        "Likes Shiny Objects": -1, 
+        "Personality Change": -1
+      }, 
       "did_action_this_turn": false, 
       "weapon-index": null, 
       "timers": [], 
@@ -2320,7 +2320,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -2363,7 +2363,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -2406,7 +2406,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -2449,8 +2449,8 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -2493,7 +2493,7 @@
           "basic-speed": 5.25
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -2536,7 +2536,7 @@
           "basic-speed": 5.5
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -2579,7 +2579,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -2622,8 +2622,8 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -2684,8 +2684,8 @@
           "basic-speed": 5.25
         }, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "weapon-index": null, 
         "check_for_death": false, 
@@ -2755,7 +2755,7 @@
           "basic-speed": 4.75
         }, 
         "advantages": {
-          "high pain threshold": 10
+          "High Pain Threshold": 10
         }, 
         "weapon-index": null, 
         "check_for_death": false, 
@@ -2816,7 +2816,7 @@
           "basic-speed": 4.75
         }, 
         "advantages": {
-          "high pain threshold": 10
+          "High Pain Threshold": 10
         }, 
         "weapon-index": null, 
         "check_for_death": false, 
@@ -2888,8 +2888,8 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "weapon-index": null, 
         "check_for_death": false, 
@@ -3006,8 +3006,8 @@
           "basic-speed": 5.25
         }, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "weapon-index": null, 
         "check_for_death": false, 
@@ -3153,8 +3153,8 @@
         "did_action_this_turn": false, 
         "check_for_death": false, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "posture": "standing", 
         "opponent": null
@@ -3285,8 +3285,8 @@
         "did_action_this_turn": false, 
         "check_for_death": false, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "posture": "standing", 
         "opponent": null
@@ -3398,8 +3398,8 @@
         "did_action_this_turn": true, 
         "check_for_death": false, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "posture": "standing", 
         "opponent": null
@@ -3558,8 +3558,8 @@
         "did_action_this_turn": false, 
         "check_for_death": false, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "posture": "standing", 
         "opponent": null
@@ -3690,8 +3690,8 @@
         "did_action_this_turn": false, 
         "check_for_death": false, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "posture": "standing", 
         "opponent": null
@@ -3830,8 +3830,8 @@
         "did_action_this_turn": false, 
         "check_for_death": false, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "posture": "standing", 
         "opponent": null
@@ -3873,7 +3873,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -3916,7 +3916,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -3959,7 +3959,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -4002,8 +4002,8 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -4046,7 +4046,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -4089,7 +4089,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -4132,7 +4132,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -4175,8 +4175,8 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -4270,7 +4270,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -4346,7 +4346,7 @@
           "basic-speed": 5.5
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -4438,7 +4438,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -4534,7 +4534,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "high pain threshold": 10
+          "High Pain Threshold": 10
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -4610,8 +4610,8 @@
           "basic-speed": 5.25
         }, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -4703,7 +4703,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -4795,7 +4795,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15
+          "Combat Reflexes": 15
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -4891,7 +4891,7 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "high pain threshold": 10
+          "High Pain Threshold": 10
         }, 
         "did_action_this_turn": false, 
         "weapon-index": null, 
@@ -5314,9 +5314,9 @@
         "basic-speed": 5.25
       }, 
       "advantages": {
-        "empathy": 5, 
-        "lwa (Mambo, Erzulie Freda)": 6, 
-        "vodou practitioner (Mambo/Hougan 2)": 35
+        "Empathy": 5, 
+        "Lwa (Mambo, Erzulie Freda)": 6, 
+        "Vodou Practitioner (Mambo/Hougan 2)": 35
       }, 
       "opponent": null, 
       "weapon-index": null, 
@@ -5386,9 +5386,9 @@
         "basic-speed": 5.25
       }, 
       "advantages": {
-        "empathy": 5, 
-        "primary lwa (Erzulie Freda)": 6, 
-        "vodou practitioner (Mambo/Hougan 2)": 35
+        "Empathy": 5, 
+        "Primary Lwa (Erzulie Freda)": 6, 
+        "Vodou Practitioner (Mambo/Hougan 2)": 35
       }, 
       "did_action_this_turn": false, 
       "weapon-index": null, 
@@ -5824,6 +5824,115 @@
       "did_action_this_turn": false, 
       "opponent": null
     }, 
+    "Owen Martin - Journeyman deputy marshal (party's boss)": {
+      "stunned": 0, 
+      "did_action_this_turn": false, 
+      "short-notes": [], 
+      "advantages": {
+        "Combat Reflexes": 15, 
+        "High Pain Threshold": 10
+      }, 
+      "weapon-index": null, 
+      "posture": "standing", 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+        {
+          "acc": 2, 
+          "count": 1, 
+          "owners": null, 
+          "name": "pistol, Baretta DX 192", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 8, 
+            "shots_left": 8
+          }
+        }, 
+        {
+          "count": 1, 
+          "owners": null, 
+          "name": "knife, large", 
+          "notes": "", 
+          "damage": {
+            "sw": {
+              "plus": -2, 
+              "type": "cut"
+            }, 
+            "thr": {
+              "plus": 0, 
+              "type": "imp"
+            }
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "C Cell"
+        }
+      ], 
+      "skills": {
+        "beam weapons (pistol)": 15, 
+        "brawling": 14, 
+        "knife": 15
+      }, 
+      "notes": [
+        "origin: australian", 
+        "gender: male", 
+        "station history: lifer (born on Earth, this is 1st station)", 
+        "characteristics: Easily confused", 
+        "instincts: To accumulate power", 
+        "hair: Messy", 
+        "speech: Stutters", 
+        "knack: The love of someone powerful", 
+        "personality: Shy"
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "timers": [], 
+      "check_for_death": false, 
+      "opponent": null
+    }, 
     "Mama Cedella - Bokor": {
       "aim": {
         "braced": false, 
@@ -5976,6 +6085,59 @@
       "check_for_death": false, 
       "timers": [], 
       "did_action_this_turn": false, 
+      "opponent": null
+    }, 
+    "Ryder - marshal intern": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "stunned": 0, 
+      "skills": {}, 
+      "notes": [
+        "origin: australian", 
+        "gender: male", 
+        "station history: lifer (born on Earth, this is 1st station)", 
+        "characteristics: Sucks teeth", 
+        "instincts: To rise in rank", 
+        "hair: Frazzled", 
+        "speech: Nasal", 
+        "knack: Muscle", 
+        "personality: Bullying"
+      ], 
+      "shock": 0, 
+      "short-notes": [], 
+      "armor-index": null, 
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "wi": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5
+      }, 
+      "check_for_death": false, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "wi": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5
+      }, 
+      "advantages": {}, 
+      "did_action_this_turn": false, 
+      "weapon-index": null, 
+      "timers": [], 
+      "posture": "standing", 
       "opponent": null
     }, 
     "Papa Jorge - Bokor": {
@@ -6133,8 +6295,8 @@
         "basic-speed": 5.75
       }, 
       "advantages": {
-        "combat reflexes": 15, 
-        "high pain threshold": 10
+        "Combat Reflexes": 15, 
+        "High Pain Threshold": 10
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -6269,8 +6431,8 @@
         "basic-speed": 6.25
       }, 
       "advantages": {
-        "combat reflexes": 15, 
-        "high pain threshold": 10
+        "Combat Reflexes": 15, 
+        "High Pain Threshold": 10
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -6343,17 +6505,12 @@
       "opponent": null
     }, 
     "Lucy - Director of Operations": {
-      "stunned": 0, 
-      "did_action_this_turn": false, 
-      "short-notes": [], 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "posture": "standing", 
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
       "stuff": [], 
+      "stunned": 0, 
       "skills": {}, 
       "notes": [
         "origin: australian", 
@@ -6367,6 +6524,7 @@
         "personality: Miserly"
       ], 
       "shock": 0, 
+      "short-notes": [], 
       "armor-index": null, 
       "current": {
         "fp": 10, 
@@ -6379,6 +6537,7 @@
         "basic-move": 5, 
         "basic-speed": 5
       }, 
+      "posture": "standing", 
       "state": "alive", 
       "permanent": {
         "fp": 10, 
@@ -6391,8 +6550,11 @@
         "basic-move": 5, 
         "basic-speed": 5
       }, 
-      "timers": [], 
+      "advantages": {}, 
+      "weapon-index": null, 
       "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
       "opponent": null
     }, 
     "Hurley, Mitchell (Chief Deputy Marshal)": {
@@ -6494,17 +6656,12 @@
       "opponent": null
     }, 
     "Arseniy - Xenobiologist in tiger team": {
-      "stunned": 0, 
-      "did_action_this_turn": false, 
-      "short-notes": [], 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "posture": "standing", 
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
       "stuff": [], 
+      "stunned": 0, 
       "skills": {}, 
       "notes": [
         "origin: russian", 
@@ -6518,6 +6675,7 @@
         "personality: Sensible"
       ], 
       "shock": 0, 
+      "short-notes": [], 
       "armor-index": null, 
       "current": {
         "fp": 10, 
@@ -6530,6 +6688,7 @@
         "basic-move": 5, 
         "basic-speed": 5
       }, 
+      "posture": "standing", 
       "state": "alive", 
       "permanent": {
         "fp": 10, 
@@ -6542,8 +6701,11 @@
         "basic-move": 5, 
         "basic-speed": 5
       }, 
-      "timers": [], 
+      "advantages": {}, 
+      "weapon-index": null, 
       "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
       "opponent": null
     }, 
     "Maia Thompson - Operations manager on Tereshkova": {
@@ -6571,7 +6733,7 @@
         "basic-move": 5, 
         "basic-speed": 5
       }, 
-      "check_for_death": false, 
+      "posture": "standing", 
       "state": "alive", 
       "permanent": {
         "fp": 10, 
@@ -6585,10 +6747,10 @@
         "basic-speed": 5
       }, 
       "advantages": {}, 
-      "did_action_this_turn": false, 
       "weapon-index": null, 
+      "check_for_death": false, 
       "timers": [], 
-      "posture": "standing", 
+      "did_action_this_turn": false, 
       "opponent": null
     }, 
     "Isaac Harris - Tiger team leader": {
@@ -6675,7 +6837,7 @@
         "basic-move": 5, 
         "basic-speed": 5.75
       }, 
-      "check_for_death": false, 
+      "posture": "standing", 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
@@ -6689,13 +6851,13 @@
         "basic-speed": 5.75
       }, 
       "advantages": {
-        "combat reflexes": 15, 
-        "high pain threshold": 10
+        "Combat Reflexes": 15, 
+        "High Pain Threshold": 10
       }, 
-      "did_action_this_turn": false, 
       "weapon-index": null, 
+      "check_for_death": false, 
       "timers": [], 
-      "posture": "standing", 
+      "did_action_this_turn": false, 
       "opponent": null
     }, 
     "Anel - control tower, tereshkova": {
@@ -6996,61 +7158,6 @@
       "name": "C Cell"
     }
   ], 
-  "spells": [
-        { "name": "alarm", "cost": 1, "notes": "M100", "maintain": 0, "time": 1, "skill": 12 }, 
-        { "name": "alter visage", "cost": 4, "notes": "M41", "maintain": 0, "time": 60, "skill": 13 },
-        { "name": "analyze magic", "cost": 8, "notes": "M102", "maintain": null, "time": 3600, "skill": 14 }, 
-        { "name": "awaken", "cost": 1, "notes": "M90", "maintain": 0, "time": 1, "skill": 12 }, 
-        { "name": "bless plants", "cost": 1, "notes": "M161", "maintain": 4, "time": 300, "skill": 13 }, 
-        { "name": "boost dexterity", "cost": 1, "notes": "M37", "maintain": 2, "time": 1, "skill": 12 }, 
-        { "name": "bravery", "cost": 2, "notes": "M134", "maintain": 2, "time": 1, "skill": 12 }, 
-        { "name": "climbing", "cost": 1, "notes": "M35", "maintain": 0, "time": 1, "skill": 15 }, 
-        { "name": "clumsiness", "cost": 1, "notes": "M36", "maintain": null, "time": 1, "skill": 12 }, 
-        { "name": "communicate", "cost": 4, "notes": "M48", "maintain": 4, "time": 4, "skill": 11 }, 
-        { "name": "conceal magic", "cost": 1, "notes": "M122", "maintain": null, "time": 3, "skill": 14 }, 
-        { "name": "cure disease", "cost": 4, "notes": "M91", "maintain": 2, "time": 600, "skill": 15 }, 
-        { "name": "daze", "cost": 3, "notes": "M134", "maintain": 2, "time": 2, "skill": 11 }, 
-        { "name": "death vision", "cost": 2, "notes": "M149", "maintain": null, "time": 3, "skill": 16 }, 
-        { "name": "detect magic", "cost": 2, "notes": "M101", "maintain": null, "time": 300, "skill": 14 }, 
-        { "name": "emotional control", "cost": 2, "notes": "M137", "maintain": 0, "time": 1, "skill": 12 }, 
-        { "name": "enchant", "cost": null, "notes": "M56", "maintain": null, "time": 1, "skill": 13 }, 
-        { "name": "far hearing", "cost": 4, "notes": "M173", "maintain": 2, "time": 3, "skill": 11 }, 
-        { "name": "fear", "cost": 1, "notes": "M134", "maintain": null, "time": 1, "skill": 12 }, 
-        { "name": "foolishness", "cost": null, "notes": "M134", "maintain": null, "time": 1, "skill": 11 }, 
-        { "name": "fumble", "cost": 3, "notes": "M38", "maintain": null, "time": 1, "skill": 12 }, 
-        { "name": "grace", "cost": 4, "notes": "M37", "maintain": null, "time": 1, "skill": 12 }, 
-        { "name": "hair growth", "cost": 1, "notes": "M39", "maintain": null, "time": 1, "skill": 12 }, 
-        { "name": "haircut", "cost": 2, "notes": "M39", "maintain": null, "time": 2, "skill": 12 }, 
-        { "name": "heal plant", "cost": 3, "notes": "M161", "maintain": null, "time": 60, "skill": 12 }, 
-        { "name": "identify plant", "cost": 2, "notes": "M161", "maintain": null, "time": 1, "skill": 12 }, 
-        { "name": "identify spell", "cost": 2, "notes": "M102", "maintain": null, "time": 1, "skill": 14 }, 
-        { "name": "itch", "cost": 2, "notes": "M35", "maintain": null, "time": 1, "skill": 12 }, 
-        { "name": "lend energy", "cost": null, "notes": "M89", "maintain": 0, "time": 1, "skill": 15 }, 
-        { "name": "lend vitality", "cost": null, "notes": "M89", "maintain": null, "time": 1, "skill": 15 }, 
-        { "name": "light", "cost": 1, "notes": "M110", "maintain": 0, "time": 1, "skill": 14 }, 
-        { "name": "loyalty", "cost": 2, "notes": "M136", "maintain": null, "time": 1, "skill": 12 }, 
-        { "name": "luck", "cost": 2, "notes": "V2", "maintain": 1, "time": 1, "skill": 11 }, 
-        { "name": "lure", "cost": 1, "notes": "M137", "maintain": null, "time": 1, "skill": 12 }, 
-        { "name": "major heal", "cost": null, "notes": "M91", "maintain": null, "time": 1, "skill": 11 }, 
-        { "name": "might", "cost": null, "notes": "M37", "maintain": null, "time": 1, "skill": 12 }, 
-        { "name": "minor heal", "cost": null, "notes": "M91", "maintain": null, "time": 1, "skill": 12 }, 
-        { "name": "powerstone", "cost": 20, "notes": "M69", "maintain": null, "time": 1, "skill": 14 },
-        { "name": "relieve sickness", "cost": 2, "notes": "M90", "maintain": 2, "time": 10, "skill": 15 }, 
-        { "name": "restoration", "cost": 15, "notes": "M93", "maintain": 0, "time": 60, "skill": 11 }, 
-        { "name": "seek machine", "cost": 3, "notes": "M175", "maintain": null, "time": 10, "skill": 14 }, 
-        { "name": "seek plant", "cost": 2, "notes": "M161", "maintain": null, "time": 1, "skill": 14 }, 
-        { "name": "sense emotion", "cost": 2, "notes": "M45", "maintain": null, "time": 1, "skill": 12 }, 
-        { "name": "sense foes", "cost": 2, "notes": "M45", "maintain": 0, "time": 1, "skill": 12 }, 
-        { "name": "sense life", "cost": null, "notes": "M45, cost 1/2 per yard radius, see M11", "maintain": null, "time": 1, "skill": 12 }, 
-        { "name": "shapeshifting (rat)", "cost": null, "notes": "M32", "maintain": null, "time": 3, "skill": 13 }, 
-        { "name": "shield", "cost": 2, "notes": "M167", "maintain": null, "time": 1, "skill": 14 }, 
-        { "name": "sleep", "cost": 4, "notes": "M135", "maintain": 0, "time": 3, "skill": 11 }, 
-        { "name": "spasm", "cost": 2, "notes": "M35", "maintain": 0, "time": 1, "skill": 12 }, 
-        { "name": "summon spirit", "cost": 20, "notes": "M150", "maintain": 0, "time": 300, "skill": 16 }, 
-        { "name": "tell time", "cost": 1, "notes": "M100", "maintain": 2, "time": 1, "skill": 12 },
-        { "name": "wizard eye", "cost": 4, "notes": "M104", "maintain": 2, "time": 2, "skill": 11 },
-        { "name": "zombie", "cost": 8, "notes": "M151", "maintain": null, "time": 60, "skill": 16 }
-  ],
   "Names": {
     "russian": {
       "male": [
@@ -7706,8 +7813,8 @@
         "did_action_this_turn": false, 
         "check_for_death": false, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "posture": "standing", 
         "opponent": null
@@ -7817,8 +7924,8 @@
         "did_action_this_turn": false, 
         "check_for_death": false, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "posture": "standing", 
         "opponent": null
@@ -7930,8 +8037,8 @@
         "did_action_this_turn": false, 
         "check_for_death": false, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "posture": "standing", 
         "opponent": null
@@ -8040,8 +8147,8 @@
         "did_action_this_turn": false, 
         "check_for_death": false, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "posture": "standing", 
         "opponent": null
@@ -8150,8 +8257,8 @@
           "basic-speed": 5.75
         }, 
         "advantages": {
-          "combat reflexes": 15, 
-          "high pain threshold": 10
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
         }, 
         "weapon-index": null, 
         "check_for_death": false, 
@@ -8163,9 +8270,431 @@
         }
       }
     }
-  }
+  }, 
+  "spells": [
+    {
+      "cost": 1, 
+      "name": "alarm", 
+      "notes": "M100", 
+      "maintain": 0, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": 4, 
+      "name": "alter visage", 
+      "notes": "M41", 
+      "maintain": 0, 
+      "time": 60, 
+      "skill": 13
+    }, 
+    {
+      "cost": 8, 
+      "name": "analyze magic", 
+      "notes": "M102", 
+      "maintain": null, 
+      "time": 3600, 
+      "skill": 14
+    }, 
+    {
+      "cost": 1, 
+      "name": "awaken", 
+      "notes": "M90", 
+      "maintain": 0, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": 1, 
+      "name": "bless plants", 
+      "notes": "M161", 
+      "maintain": 4, 
+      "time": 300, 
+      "skill": 13
+    }, 
+    {
+      "cost": 1, 
+      "name": "boost dexterity", 
+      "notes": "M37", 
+      "maintain": 2, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": 2, 
+      "name": "bravery", 
+      "notes": "M134", 
+      "maintain": 2, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": 1, 
+      "name": "climbing", 
+      "notes": "M35", 
+      "maintain": 0, 
+      "time": 1, 
+      "skill": 15
+    }, 
+    {
+      "cost": 1, 
+      "name": "clumsiness", 
+      "notes": "M36", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": 4, 
+      "name": "communicate", 
+      "notes": "M48", 
+      "maintain": 4, 
+      "time": 4, 
+      "skill": 11
+    }, 
+    {
+      "cost": 1, 
+      "name": "conceal magic", 
+      "notes": "M122", 
+      "maintain": null, 
+      "time": 3, 
+      "skill": 14
+    }, 
+    {
+      "cost": 4, 
+      "name": "cure disease", 
+      "notes": "M91", 
+      "maintain": 2, 
+      "time": 600, 
+      "skill": 15
+    }, 
+    {
+      "cost": 3, 
+      "name": "daze", 
+      "notes": "M134", 
+      "maintain": 2, 
+      "time": 2, 
+      "skill": 11
+    }, 
+    {
+      "cost": 2, 
+      "name": "death vision", 
+      "notes": "M149", 
+      "maintain": null, 
+      "time": 3, 
+      "skill": 16
+    }, 
+    {
+      "cost": 2, 
+      "name": "detect magic", 
+      "notes": "M101", 
+      "maintain": null, 
+      "time": 300, 
+      "skill": 14
+    }, 
+    {
+      "cost": 2, 
+      "name": "emotional control", 
+      "notes": "M137", 
+      "maintain": 0, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": null, 
+      "name": "enchant", 
+      "notes": "M56", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 13
+    }, 
+    {
+      "cost": 4, 
+      "name": "far hearing", 
+      "notes": "M173", 
+      "maintain": 2, 
+      "time": 3, 
+      "skill": 11
+    }, 
+    {
+      "cost": 1, 
+      "name": "fear", 
+      "notes": "M134", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": null, 
+      "name": "foolishness", 
+      "notes": "M134", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 11
+    }, 
+    {
+      "cost": 3, 
+      "name": "fumble", 
+      "notes": "M38", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": 4, 
+      "name": "grace", 
+      "notes": "M37", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": 1, 
+      "name": "hair growth", 
+      "notes": "M39", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": 2, 
+      "name": "haircut", 
+      "notes": "M39", 
+      "maintain": null, 
+      "time": 2, 
+      "skill": 12
+    }, 
+    {
+      "cost": 3, 
+      "name": "heal plant", 
+      "notes": "M161", 
+      "maintain": null, 
+      "time": 60, 
+      "skill": 12
+    }, 
+    {
+      "cost": 2, 
+      "name": "identify plant", 
+      "notes": "M161", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": 2, 
+      "name": "identify spell", 
+      "notes": "M102", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 14
+    }, 
+    {
+      "cost": 2, 
+      "name": "itch", 
+      "notes": "M35", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": null, 
+      "name": "lend energy", 
+      "notes": "M89", 
+      "maintain": 0, 
+      "time": 1, 
+      "skill": 15
+    }, 
+    {
+      "cost": null, 
+      "name": "lend vitality", 
+      "notes": "M89", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 15
+    }, 
+    {
+      "cost": 1, 
+      "name": "light", 
+      "notes": "M110", 
+      "maintain": 0, 
+      "time": 1, 
+      "skill": 14
+    }, 
+    {
+      "cost": 2, 
+      "name": "loyalty", 
+      "notes": "M136", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": 2, 
+      "name": "luck", 
+      "notes": "V2", 
+      "maintain": 1, 
+      "time": 1, 
+      "skill": 11
+    }, 
+    {
+      "cost": 1, 
+      "name": "lure", 
+      "notes": "M137", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": null, 
+      "name": "major heal", 
+      "notes": "M91", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 11
+    }, 
+    {
+      "cost": null, 
+      "name": "might", 
+      "notes": "M37", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": null, 
+      "name": "minor heal", 
+      "notes": "M91", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": 20, 
+      "name": "powerstone", 
+      "notes": "M69", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 14
+    }, 
+    {
+      "cost": 2, 
+      "name": "relieve sickness", 
+      "notes": "M90", 
+      "maintain": 2, 
+      "time": 10, 
+      "skill": 15
+    }, 
+    {
+      "cost": 15, 
+      "name": "restoration", 
+      "notes": "M93", 
+      "maintain": 0, 
+      "time": 60, 
+      "skill": 11
+    }, 
+    {
+      "cost": 3, 
+      "name": "seek machine", 
+      "notes": "M175", 
+      "maintain": null, 
+      "time": 10, 
+      "skill": 14
+    }, 
+    {
+      "cost": 2, 
+      "name": "seek plant", 
+      "notes": "M161", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 14
+    }, 
+    {
+      "cost": 2, 
+      "name": "sense emotion", 
+      "notes": "M45", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": 2, 
+      "name": "sense foes", 
+      "notes": "M45", 
+      "maintain": 0, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": null, 
+      "name": "sense life", 
+      "notes": "M45, cost 1/2 per yard radius, see M11", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": null, 
+      "name": "shapeshifting (rat)", 
+      "notes": "M32", 
+      "maintain": null, 
+      "time": 3, 
+      "skill": 13
+    }, 
+    {
+      "cost": 2, 
+      "name": "shield", 
+      "notes": "M167", 
+      "maintain": null, 
+      "time": 1, 
+      "skill": 14
+    }, 
+    {
+      "cost": 4, 
+      "name": "sleep", 
+      "notes": "M135", 
+      "maintain": 0, 
+      "time": 3, 
+      "skill": 11
+    }, 
+    {
+      "cost": 2, 
+      "name": "spasm", 
+      "notes": "M35", 
+      "maintain": 0, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": 20, 
+      "name": "summon spirit", 
+      "notes": "M150", 
+      "maintain": 0, 
+      "time": 300, 
+      "skill": 16
+    }, 
+    {
+      "cost": 1, 
+      "name": "tell time", 
+      "notes": "M100", 
+      "maintain": 2, 
+      "time": 1, 
+      "skill": 12
+    }, 
+    {
+      "cost": 4, 
+      "name": "wizard eye", 
+      "notes": "M104", 
+      "maintain": 2, 
+      "time": 2, 
+      "skill": 11
+    }, 
+    {
+      "cost": 8, 
+      "name": "zombie", 
+      "notes": "M151", 
+      "maintain": null, 
+      "time": 60, 
+      "skill": 16
+    }
+  ]
 }
-
-
-
-

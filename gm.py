@@ -2344,12 +2344,12 @@ class GurpsRuleset(Ruleset):
             if -adj > (fighter.details['permanent']['hp'] / 2):
                 (SUCCESS, SIMPLE_FAIL, BAD_FAIL) = range(3)
                 total = fighter.details['current']['ht']
-                if 'high pain threshold' in fighter.details['advantages']:
+                if 'High Pain Threshold' in fighter.details['advantages']:
                     total = fighter.details['current']['ht'] + 3
                     menu_title = (
                         'Major Wound (B420): Roll vs. HT+3 (%d) or be stunned' %
                                                                         total)
-                elif 'low pain threshold' in fighter.details['advantages']:
+                elif 'Low Pain Threshold' in fighter.details['advantages']:
                     total = fighter.details['current']['ht'] - 4
                     menu_title = (
                         'Major Wound (B420): Roll vs. HT-4 (%d) or be stunned' %
@@ -2378,7 +2378,7 @@ class GurpsRuleset(Ruleset):
                     fighter.draw_weapon_by_index(None)
                     fighter.details['stunned'] = True
 
-        if 'high pain threshold' not in fighter.details['advantages']: # B59
+        if 'High Pain Threshold' not in fighter.details['advantages']: # B59
             shock_amount = -4 if adj <= -4 else adj
             if fighter.details['shock'] > shock_amount:
                 fighter.details['shock'] = shock_amount
@@ -2869,7 +2869,7 @@ class GurpsRuleset(Ruleset):
             dodge_skill -= 4
             dodge_why.append('  -4 due to being stunned (B420)')
 
-        if 'combat reflexes' in fighter.details['advantages']:
+        if 'Combat Reflexes' in fighter.details['advantages']:
             block_skill_modified = True
             block_why.append('  +1 due to combat reflexes (B43)')
             block_skill += 1
@@ -3113,7 +3113,7 @@ class GurpsRuleset(Ruleset):
             dodge_skill -= 4
             dodge_why.append('  -4 due to being stunned (B420)')
 
-        if 'combat reflexes' in fighter.details['advantages']: # B43
+        if 'Combat Reflexes' in fighter.details['advantages']: # B43
             dodge_skill_modified = True
             dodge_why.append('  +1 due to combat reflexes (B43)')
             dodge_skill += 1
@@ -3463,7 +3463,7 @@ class GurpsRuleset(Ruleset):
             result['parry_skill'] -= 4
             parry_why.append('  -4 due to being stunned (B420)')
 
-        if 'combat reflexes' in fighter.details['advantages']:
+        if 'Combat Reflexes' in fighter.details['advantages']:
             parry_damage_modified = True
             result['parry_skill'] += 1
             parry_why.append('  +1 due to combat reflexes (B43)')
@@ -3617,7 +3617,7 @@ class GurpsRuleset(Ruleset):
             parry_skill_modified = True
             parry_why.append('  %+d due to weapon modifiers' % weapon['parry'])
 
-        if 'combat reflexes' in fighter.details['advantages']:
+        if 'Combat Reflexes' in fighter.details['advantages']:
             parry_skill_modified = True
             parry_why.append('  +1 due to combat reflexes (B43)')
             parry_skill += 1
@@ -3853,7 +3853,7 @@ class GurpsRuleset(Ruleset):
             pass_out_menu = [('made HT roll', True),
                              ('did NOT make HT roll', False)]
 
-            if 'high pain threshold' in fighter.details['advantages']:
+            if 'High Pain Threshold' in fighter.details['advantages']:
                 unconscious_roll = fighter.details['current']['ht'] + 3
 
                 made_ht_roll = self._window_manager.menu(
