@@ -1,5 +1,6 @@
 #! /usr/bin/python
 
+import copy
 import json
 import pprint
 import xml.etree.ElementTree as ET
@@ -107,8 +108,8 @@ class GmJson(object):
 if __name__ == '__main__':
     PP = pprint.PrettyPrinter(indent=3, width=150)
 
-    char_xml = ET.parse('sample.gcs').getroot()
-    #PP.pprint(char_xml)
+    char_gcs = ET.parse('sample.gcs').getroot()
+    #PP.pprint(char_gcs)
 
     chars_json = None
     filename = 'persephone.json'
@@ -143,11 +144,11 @@ if __name__ == '__main__':
     '''
     attributes = [ 'HP', 'FP', 'ST', 'DX', 'IQ', 'HT' ]
     for attribute in attributes:
-        attr = char_xml.find(attribute)
+        attr = char_gcs.find(attribute)
         print '  %r %r' % (attribute, attr.text)
 
     print '\n-- Skill List -----'
-    skills = char_xml.find('skill_list')
+    skills = char_gcs.find('skill_list')
     for child in skills:
         name = child.find('name')
         # TODO: will need to have a table of skills to look-up the point
@@ -155,14 +156,42 @@ if __name__ == '__main__':
         cost = child.find('points')
         print '  %r %r' % (name.text, 0 if cost is None else cost.text)
 
-    print '\n-- Advantages -----'
-    advantages = char_xml.find('advantage_list')
-    for child in advantages:
-        name = child.find('name')
-        cost = child.find('base_points')
-        print '  %r %r' % (name.text, 0 if cost is None else cost.text)
 
-    spells_gcs = char_xml.find('spell_list')
+    ## ADVANTAGES #####
+
+    print '\n-- Advantages -----'
+    advantages_gcs = char_gcs.find('advantage_list')
+    #for advantage_gcs in advantages_gcs:
+    #    name = advantage_gcs.find('name')
+    #    cost = advantage_gcs.find('base_points')
+    #    print '  %r %r' % (name.text, 0 if cost is None else cost.text)
+
+    if 'advantages' in char_json:
+        advantages_json = copy.deepcopy(char_json['advantages'])
+    else:
+        advantages_json = {}
+
+    for advantage_gcs in advantages_gcs:
+        name = advantage_gcs.find('name')
+        if name.text not in advantages_json:
+            print '  ** %s in GCS but not in JSON' % name.text
+        else:
+            cost_gcs = advantage_gcs.find('base_points')
+
+            if cost_gcs is None:
+                print '  ** %s = has no base points in GCS' % name.text
+            elif int(cost_gcs.text) != advantages_json[name.text]:
+                print '  ** %s = %r in GCS but %r in JSON' % (
+                        name.text, cost_gcs.text, advantages_json[name.text])
+
+            del(advantages_json[name.text])
+    for advantage_json in advantages_json:
+        print '  ** %s in JSON but not in GCS' % advantage_json
+
+
+    ## SPELLS #####
+
+    spells_gcs = char_gcs.find('spell_list')
     if spells_gcs is not None:
         if 'spells' in char_json:
             spells_json = {k['name']: k['skill'] for k in char_json['spells']}
@@ -172,7 +201,6 @@ if __name__ == '__main__':
         for child in spells_gcs:
             name = child.find('name')
             # TODO: figure out how the difficulty is stored
-            #print '  %r' % name.text
             if name.text not in spells_json:
                 print '  ** %s in GCS but not in JSON' % name.text
             else:
