@@ -173,16 +173,34 @@ if __name__ == '__main__':
 
     for advantage_gcs in advantages_gcs:
         name = advantage_gcs.find('name')
+        #print 'ADVANTAGE NAME: "%r"' % name.text # TODO: remove
         if name.text not in advantages_json:
             print '  ** %s in GCS but not in JSON' % name.text
         else:
-            cost_gcs = advantage_gcs.find('base_points')
+            cost_text_gcs = advantage_gcs.find('base_points')
+            cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
+            for modifier in advantage_gcs.findall('modifier'):
 
-            if cost_gcs is None:
-                print '  ** %s = has no base points in GCS' % name.text
-            elif int(cost_gcs.text) != advantages_json[name.text]:
+
+                #modifier_name = modifier.find('name') # TODO: remove
+                #print '-modifier name: "%r"' % modifier_name.text # TODO: remove
+                #PP.pprint(modifier.attrib) # TODO: remove
+
+
+                if ('enabled' not in modifier.attrib or
+                                    modifier.attrib['enabled'] != 'no'):
+                    modifier_cost_element = modifier.find('cost')
+                    modifier_cost = 0
+                    if modifier_cost_element is not None:
+                        modifier_cost_text = modifier_cost_element.text
+                        if modifier_cost_text is not None:
+                            cost_gcs += int(modifier_cost_text)
+            if cost_gcs != advantages_json[name.text]:
                 print '  ** %s = %r in GCS but %r in JSON' % (
-                        name.text, cost_gcs.text, advantages_json[name.text])
+                    name.text, cost_gcs.text, advantages_json[name.text])
+            #else: # TODO: remove
+            #    print '  ** %s = %r in BOTH GCS & JSON' % (name.text,
+            #                                               cost_gcs)
 
             del(advantages_json[name.text])
     for advantage_json in advantages_json:
