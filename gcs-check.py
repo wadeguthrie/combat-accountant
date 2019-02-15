@@ -105,6 +105,15 @@ class GmJson(object):
 
         return GmJson.__byteify(my_dict, ignore_dicts=True), None
 
+def get_gca_attribute(char_gcs, # Element from the XML file
+                      attr_name # string
+                     ):
+    attr_gcs_element = char_gcs.find(attr_name)
+    attr_gcs_text = attr_gcs_element.text
+    attr_gcs = int(attr_gcs_text)
+    return attr_gcs
+
+
 if __name__ == '__main__':
     PP = pprint.PrettyPrinter(indent=3, width=150)
 
@@ -142,10 +151,40 @@ if __name__ == '__main__':
     '* spell_list' {}
     '? equipment_list' {}
     '''
-    attributes = [ 'HP', 'FP', 'ST', 'DX', 'IQ', 'HT' ]
-    for attribute in attributes:
-        attr = char_gcs.find(attribute)
-        print '  %r %r' % (attribute, attr.text)
+    # TODO: add move, will, and speed -- gca has points spent / json has result
+    attr_names_json_from_gca = {
+                                 'ST': 'st' ,
+                                 'DX': 'dx' ,
+                                 'IQ': 'iq' ,
+                                 'HT': 'ht'
+                               }
+    for attr_name in attr_names_json_from_gca:
+        attr_gcs = get_gca_attribute(char_gcs, attr_name)
+        attr_json = char_json['permanent'][attr_names_json_from_gca[attr_name]]
+        if attr_gcs != attr_json:
+            print '  ** %s = %r in GCS but %r in JSON' % (attr_name,
+                                                          attr_gcs,
+                                                          attr_json)
+        else:
+            print '  %s: %r' % (attr_name, attr_gcs)
+
+    # HP
+    attr_gcs = get_gca_attribute(char_gcs, 'HP')
+    attr_gcs += get_gca_attribute(char_gcs, 'ST')
+    attr_json = char_json['permanent']['hp']
+    if attr_gcs != attr_json:
+        print '  ** HP = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
+    else:
+        print '  HP: %r' % attr_gcs
+
+    # FP
+    attr_gcs = get_gca_attribute(char_gcs, 'FP')
+    attr_gcs += get_gca_attribute(char_gcs, 'HT')
+    attr_json = char_json['permanent']['fp']
+    if attr_gcs != attr_json:
+        print '  ** FP = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
+    else:
+        print '  FP: %r' % attr_gcs
 
     print '\n-- Skill List -----'
     skills = char_gcs.find('skill_list')
