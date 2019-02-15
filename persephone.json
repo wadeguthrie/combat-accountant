@@ -338,7 +338,7 @@
           "value": [
             {
               "cost": 1, 
-              "name": "awaken", 
+              "name": "Awaken", 
               "notes": "M90", 
               "maintain": 0, 
               "time": 1, 
@@ -346,7 +346,7 @@
             }, 
             {
               "cost": 4, 
-              "name": "communicate", 
+              "name": "Communicate", 
               "notes": "M48", 
               "maintain": 4, 
               "time": 4, 
@@ -354,7 +354,7 @@
             }, 
             {
               "cost": 3, 
-              "name": "daze", 
+              "name": "Daze", 
               "notes": "M134", 
               "maintain": 2, 
               "time": 2, 
@@ -362,7 +362,7 @@
             }, 
             {
               "cost": 4, 
-              "name": "far hearing", 
+              "name": "Far Hearing", 
               "notes": "M173", 
               "maintain": 2, 
               "time": 3, 
@@ -370,7 +370,7 @@
             }, 
             {
               "cost": null, 
-              "name": "foolishness", 
+              "name": "Foolishness", 
               "notes": "M134", 
               "maintain": null, 
               "time": 1, 
@@ -378,7 +378,7 @@
             }, 
             {
               "cost": null, 
-              "name": "lend energy", 
+              "name": "Lend Energy", 
               "notes": "M89", 
               "maintain": 0, 
               "time": 1, 
@@ -386,7 +386,7 @@
             }, 
             {
               "cost": null, 
-              "name": "lend vitality", 
+              "name": "Lend Vitality", 
               "notes": "M89", 
               "maintain": null, 
               "time": 1, 
@@ -394,7 +394,7 @@
             }, 
             {
               "cost": 2, 
-              "name": "luck", 
+              "name": "Luck", 
               "notes": "V2", 
               "maintain": 1, 
               "time": 1, 
@@ -402,7 +402,7 @@
             }, 
             {
               "cost": null, 
-              "name": "major heal", 
+              "name": "Major Heal", 
               "notes": "M91", 
               "maintain": null, 
               "time": 1, 
@@ -410,7 +410,7 @@
             }, 
             {
               "cost": null, 
-              "name": "minor heal", 
+              "name": "Minor Heal", 
               "notes": "M91", 
               "maintain": null, 
               "time": 1, 
@@ -418,7 +418,7 @@
             }, 
             {
               "cost": null, 
-              "name": "might", 
+              "name": "Might", 
               "notes": "M37", 
               "maintain": null, 
               "time": 1, 
@@ -426,7 +426,7 @@
             }, 
             {
               "cost": 15, 
-              "name": "restoration", 
+              "name": "Restoration", 
               "notes": "M93", 
               "maintain": 0, 
               "time": 60, 
@@ -434,7 +434,7 @@
             }, 
             {
               "cost": null, 
-              "name": "sense life", 
+              "name": "Sense Life", 
               "notes": "M45, cost 1/2 per yard radius, see M11", 
               "maintain": null, 
               "time": 1, 
@@ -442,7 +442,7 @@
             }, 
             {
               "cost": 4, 
-              "name": "sleep", 
+              "name": "Sleep", 
               "notes": "M135", 
               "maintain": 0, 
               "time": 3, 
@@ -450,7 +450,7 @@
             }, 
             {
               "cost": 4, 
-              "name": "wizard eye", 
+              "name": "Wizard Eye", 
               "notes": "M104", 
               "maintain": 2, 
               "time": 2, 
@@ -1387,7 +1387,7 @@
       "spells": [
         {
           "cost": 1, 
-          "name": "alarm", 
+          "name": "Alarm", 
           "notes": "M100", 
           "maintain": 0, 
           "time": 1, 
@@ -1395,7 +1395,7 @@
         }, 
         {
           "cost": 4, 
-          "name": "alter visage", 
+          "name": "Alter Visage", 
           "notes": "M41", 
           "maintain": 0, 
           "time": 60, 
@@ -1403,7 +1403,7 @@
         }, 
         {
           "cost": 1, 
-          "name": "bless plants", 
+          "name": "Bless Plants", 
           "notes": "M161", 
           "maintain": 4, 
           "time": 300, 
@@ -1411,7 +1411,7 @@
         }, 
         {
           "cost": 1, 
-          "name": "boost dexterity", 
+          "name": "Boost Dexterity", 
           "notes": "M37", 
           "maintain": 2, 
           "time": 1, 
@@ -1419,7 +1419,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "bravery", 
+          "name": "Bravery", 
           "notes": "M134", 
           "maintain": 2, 
           "time": 1, 
@@ -1427,7 +1427,7 @@
         }, 
         {
           "cost": 1, 
-          "name": "clumsiness", 
+          "name": "Clumsiness", 
           "notes": "M36", 
           "maintain": null, 
           "time": 1, 
@@ -1435,7 +1435,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "emotional control", 
+          "name": "Emotional Control", 
           "notes": "M137", 
           "maintain": 0, 
           "time": 1, 
@@ -1443,7 +1443,7 @@
         }, 
         {
           "cost": 1, 
-          "name": "fear", 
+          "name": "Fear", 
           "notes": "M134", 
           "maintain": null, 
           "time": 1, 
@@ -1451,7 +1451,7 @@
         }, 
         {
           "cost": 3, 
-          "name": "fumble", 
+          "name": "Fumble", 
           "notes": "M38", 
           "maintain": null, 
           "time": 1, 
@@ -1459,7 +1459,7 @@
         }, 
         {
           "cost": 4, 
-          "name": "grace", 
+          "name": "Grace", 
           "notes": "M37", 
           "maintain": null, 
           "time": 1, 
@@ -1467,7 +1467,7 @@
         }, 
         {
           "cost": 1, 
-          "name": "hair growth", 
+          "name": "Hair Growth", 
           "notes": "M39", 
           "maintain": null, 
           "time": 1, 
@@ -1475,7 +1475,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "haircut", 
+          "name": "Haircut", 
           "notes": "M39", 
           "maintain": null, 
           "time": 2, 
@@ -1483,7 +1483,7 @@
         }, 
         {
           "cost": 3, 
-          "name": "heal plant", 
+          "name": "Heal Plant", 
           "notes": "M161", 
           "maintain": null, 
           "time": 60, 
@@ -1491,7 +1491,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "identify plant", 
+          "name": "Identify Plant", 
           "notes": "M161", 
           "maintain": null, 
           "time": 1, 
@@ -1499,7 +1499,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "itch", 
+          "name": "Itch", 
           "notes": "M35", 
           "maintain": null, 
           "time": 1, 
@@ -1507,7 +1507,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "loyalty", 
+          "name": "Loyalty", 
           "notes": "M136", 
           "maintain": null, 
           "time": 1, 
@@ -1515,7 +1515,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "luck", 
+          "name": "Luck", 
           "notes": "V2", 
           "maintain": 1, 
           "time": 1, 
@@ -1523,7 +1523,7 @@
         }, 
         {
           "cost": 1, 
-          "name": "lure", 
+          "name": "Lure", 
           "notes": "M137", 
           "maintain": null, 
           "time": 1, 
@@ -1531,7 +1531,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "seek plant", 
+          "name": "Seek Plant", 
           "notes": "M161", 
           "maintain": null, 
           "time": 1, 
@@ -1539,7 +1539,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "sense emotion", 
+          "name": "Sense Emotion", 
           "notes": "M45", 
           "maintain": null, 
           "time": 1, 
@@ -1547,7 +1547,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "sense foes", 
+          "name": "Sense Foes", 
           "notes": "M45", 
           "maintain": 0, 
           "time": 1, 
@@ -1555,7 +1555,7 @@
         }, 
         {
           "cost": null, 
-          "name": "shapeshifting (rat)", 
+          "name": "Shapeshifting (Rat)", 
           "notes": "M32", 
           "maintain": null, 
           "time": 3, 
@@ -1563,7 +1563,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "spasm", 
+          "name": "Spasm", 
           "notes": "M35", 
           "maintain": 0, 
           "time": 1, 
@@ -1571,7 +1571,7 @@
         }, 
         {
           "cost": 1, 
-          "name": "tell time", 
+          "name": "Tell Time", 
           "notes": "M100", 
           "maintain": 2, 
           "time": 1, 
@@ -2012,7 +2012,7 @@
       "spells": [
         {
           "cost": 1, 
-          "name": "climbing", 
+          "name": "Climbing", 
           "notes": "M35", 
           "maintain": 0, 
           "time": 1, 
@@ -2020,7 +2020,7 @@
         }, 
         {
           "cost": null, 
-          "name": "lend energy", 
+          "name": "Lend Energy", 
           "notes": "M89", 
           "maintain": 0, 
           "time": 1, 
@@ -2028,7 +2028,7 @@
         }, 
         {
           "cost": null, 
-          "name": "lend vitality", 
+          "name": "Lend Vitality", 
           "notes": "M89", 
           "maintain": null, 
           "time": 1, 
@@ -2036,7 +2036,7 @@
         }, 
         {
           "cost": null, 
-          "name": "minor heal", 
+          "name": "Minor Healing", 
           "notes": "M91", 
           "maintain": null, 
           "time": 1, 
@@ -2044,7 +2044,7 @@
         }, 
         {
           "cost": 1, 
-          "name": "major heal", 
+          "name": "Major Healing", 
           "notes": "M91", 
           "maintain": 4, 
           "time": 1, 
@@ -2052,7 +2052,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "relieve sickness", 
+          "name": "Relieve Sickness", 
           "notes": "M90", 
           "maintain": 2, 
           "time": 10, 
@@ -2060,7 +2060,7 @@
         }, 
         {
           "cost": 4, 
-          "name": "cure disease", 
+          "name": "Cure Disease", 
           "notes": "M91", 
           "maintain": 2, 
           "time": 600, 
@@ -2068,7 +2068,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "death vision", 
+          "name": "Death Vision", 
           "notes": "M149", 
           "maintain": null, 
           "time": 3, 
@@ -2076,7 +2076,7 @@
         }, 
         {
           "cost": 20, 
-          "name": "summon spirit", 
+          "name": "Summon Spirit", 
           "notes": "M150", 
           "maintain": 0, 
           "time": 300, 
@@ -2084,7 +2084,7 @@
         }, 
         {
           "cost": 8, 
-          "name": "zombie", 
+          "name": "Zombie", 
           "notes": "M151", 
           "maintain": null, 
           "time": 60, 
@@ -2092,7 +2092,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "detect magic", 
+          "name": "Detect Magic", 
           "notes": "M101", 
           "maintain": null, 
           "time": 300, 
@@ -2100,7 +2100,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "identify spell", 
+          "name": "Identify Spell", 
           "notes": "M102", 
           "maintain": null, 
           "time": 1, 
@@ -2108,7 +2108,7 @@
         }, 
         {
           "cost": 8, 
-          "name": "analyze magic", 
+          "name": "Analyze Magic", 
           "notes": "M102", 
           "maintain": null, 
           "time": 3600, 
@@ -2116,7 +2116,7 @@
         }, 
         {
           "cost": 1, 
-          "name": "conceal magic", 
+          "name": "Conceal Magic", 
           "notes": "M122", 
           "maintain": null, 
           "time": 3, 
@@ -2124,7 +2124,7 @@
         }, 
         {
           "cost": null, 
-          "name": "foolishness", 
+          "name": "Foolishness", 
           "notes": "M134", 
           "maintain": null, 
           "time": 1, 
@@ -2132,7 +2132,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "seek plant", 
+          "name": "Seek Plant", 
           "notes": "M161", 
           "maintain": null, 
           "time": 1, 
@@ -2140,7 +2140,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "shield", 
+          "name": "Shield", 
           "notes": "M167", 
           "maintain": null, 
           "time": 1, 
@@ -2148,7 +2148,7 @@
         }, 
         {
           "cost": 3, 
-          "name": "seek machine", 
+          "name": "Seek Machine", 
           "notes": "M175", 
           "maintain": null, 
           "time": 10, 
@@ -2156,7 +2156,7 @@
         }, 
         {
           "cost": 1, 
-          "name": "light", 
+          "name": "Light", 
           "notes": "M110", 
           "maintain": 0, 
           "time": 1, 
@@ -2164,7 +2164,7 @@
         }, 
         {
           "cost": null, 
-          "name": "enchant", 
+          "name": "Enchant", 
           "notes": "M56", 
           "maintain": null, 
           "time": 1, 
@@ -2172,7 +2172,7 @@
         }, 
         {
           "cost": 20, 
-          "name": "powerstone", 
+          "name": "Powerstone", 
           "notes": "M69", 
           "maintain": null, 
           "time": 1, 
@@ -5155,7 +5155,7 @@
       "spells": [
         {
           "cost": 1, 
-          "name": "awaken", 
+          "name": "Awaken", 
           "notes": "M90", 
           "maintain": 0, 
           "time": 1, 
@@ -5163,7 +5163,7 @@
         }, 
         {
           "cost": 4, 
-          "name": "communicate", 
+          "name": "Communicate", 
           "notes": "M48", 
           "maintain": 4, 
           "time": 4, 
@@ -5171,7 +5171,7 @@
         }, 
         {
           "cost": 3, 
-          "name": "daze", 
+          "name": "Daze", 
           "notes": "M134", 
           "maintain": 2, 
           "time": 2, 
@@ -5179,7 +5179,7 @@
         }, 
         {
           "cost": 4, 
-          "name": "far hearing", 
+          "name": "Far Hearing", 
           "notes": "M173", 
           "maintain": 2, 
           "time": 3, 
@@ -5187,7 +5187,7 @@
         }, 
         {
           "cost": null, 
-          "name": "foolishness", 
+          "name": "Foolishness", 
           "notes": "M134", 
           "maintain": null, 
           "time": 1, 
@@ -5195,7 +5195,7 @@
         }, 
         {
           "cost": null, 
-          "name": "lend energy", 
+          "name": "Lend Energy", 
           "notes": "M89", 
           "maintain": 0, 
           "time": 1, 
@@ -5203,7 +5203,7 @@
         }, 
         {
           "cost": null, 
-          "name": "lend vitality", 
+          "name": "Lend Vitality", 
           "notes": "M89", 
           "maintain": null, 
           "time": 1, 
@@ -5211,7 +5211,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "luck", 
+          "name": "Luck", 
           "notes": "V2", 
           "maintain": 1, 
           "time": 1, 
@@ -5219,7 +5219,7 @@
         }, 
         {
           "cost": null, 
-          "name": "major heal", 
+          "name": "Major Heal", 
           "notes": "M91", 
           "maintain": null, 
           "time": 1, 
@@ -5227,7 +5227,7 @@
         }, 
         {
           "cost": null, 
-          "name": "minor heal", 
+          "name": "Minor Heal", 
           "notes": "M91", 
           "maintain": null, 
           "time": 1, 
@@ -5235,7 +5235,7 @@
         }, 
         {
           "cost": null, 
-          "name": "might", 
+          "name": "Might", 
           "notes": "M37", 
           "maintain": null, 
           "time": 1, 
@@ -5243,7 +5243,7 @@
         }, 
         {
           "cost": 15, 
-          "name": "restoration", 
+          "name": "Restoration", 
           "notes": "M93", 
           "maintain": 0, 
           "time": 60, 
@@ -5251,7 +5251,7 @@
         }, 
         {
           "cost": null, 
-          "name": "sense life", 
+          "name": "Sense Life", 
           "notes": "M45, cost 1/2 per yard radius, see M11", 
           "maintain": null, 
           "time": 1, 
@@ -5259,7 +5259,7 @@
         }, 
         {
           "cost": 4, 
-          "name": "sleep", 
+          "name": "Sleep", 
           "notes": "M135", 
           "maintain": 0, 
           "time": 3, 
@@ -5267,7 +5267,7 @@
         }, 
         {
           "cost": 4, 
-          "name": "wizard eye", 
+          "name": "Wizard Eye", 
           "notes": "M104", 
           "maintain": 2, 
           "time": 2, 
@@ -5397,7 +5397,7 @@
       "spells": [
         {
           "cost": 1, 
-          "name": "awaken", 
+          "name": "Awaken", 
           "notes": "M90", 
           "maintain": 0, 
           "time": 1, 
@@ -5405,7 +5405,7 @@
         }, 
         {
           "cost": 4, 
-          "name": "communicate", 
+          "name": "Communicate", 
           "notes": "M48", 
           "maintain": 4, 
           "time": 4, 
@@ -5413,7 +5413,7 @@
         }, 
         {
           "cost": 3, 
-          "name": "daze", 
+          "name": "Daze", 
           "notes": "M134", 
           "maintain": 2, 
           "time": 2, 
@@ -5421,7 +5421,7 @@
         }, 
         {
           "cost": 4, 
-          "name": "far hearing", 
+          "name": "Far Hearing", 
           "notes": "M173", 
           "maintain": 2, 
           "time": 3, 
@@ -5429,7 +5429,7 @@
         }, 
         {
           "cost": null, 
-          "name": "foolishness", 
+          "name": "Foolishness", 
           "notes": "M134", 
           "maintain": null, 
           "time": 1, 
@@ -5437,7 +5437,7 @@
         }, 
         {
           "cost": null, 
-          "name": "lend energy", 
+          "name": "Lend Energy", 
           "notes": "M89", 
           "maintain": 0, 
           "time": 1, 
@@ -5445,7 +5445,7 @@
         }, 
         {
           "cost": null, 
-          "name": "lend vitality", 
+          "name": "Lend Vitality", 
           "notes": "M89", 
           "maintain": null, 
           "time": 1, 
@@ -5453,7 +5453,7 @@
         }, 
         {
           "cost": 2, 
-          "name": "luck", 
+          "name": "Luck", 
           "notes": "V2", 
           "maintain": 1, 
           "time": 1, 
@@ -5461,7 +5461,7 @@
         }, 
         {
           "cost": null, 
-          "name": "major heal", 
+          "name": "Major Heal", 
           "notes": "M91", 
           "maintain": null, 
           "time": 1, 
@@ -5469,7 +5469,7 @@
         }, 
         {
           "cost": null, 
-          "name": "minor heal", 
+          "name": "Minor Heal", 
           "notes": "M91", 
           "maintain": null, 
           "time": 1, 
@@ -5477,7 +5477,7 @@
         }, 
         {
           "cost": null, 
-          "name": "might", 
+          "name": "Might", 
           "notes": "M37", 
           "maintain": null, 
           "time": 1, 
@@ -5485,7 +5485,7 @@
         }, 
         {
           "cost": 15, 
-          "name": "restoration", 
+          "name": "Restoration", 
           "notes": "M93", 
           "maintain": 0, 
           "time": 60, 
@@ -5493,7 +5493,7 @@
         }, 
         {
           "cost": null, 
-          "name": "sense life", 
+          "name": "Sense Life", 
           "notes": "M45, cost 1/2 per yard radius, see M11", 
           "maintain": null, 
           "time": 1, 
@@ -5501,7 +5501,7 @@
         }, 
         {
           "cost": 4, 
-          "name": "sleep", 
+          "name": "Sleep", 
           "notes": "M135", 
           "maintain": 0, 
           "time": 3, 
@@ -5509,7 +5509,7 @@
         }, 
         {
           "cost": 4, 
-          "name": "wizard eye", 
+          "name": "Wizard Eye", 
           "notes": "M104", 
           "maintain": 2, 
           "time": 2, 
@@ -8274,7 +8274,7 @@
   "spells": [
     {
       "cost": 1, 
-      "name": "alarm", 
+      "name": "Alarm", 
       "notes": "M100", 
       "maintain": 0, 
       "time": 1, 
@@ -8282,7 +8282,7 @@
     }, 
     {
       "cost": 4, 
-      "name": "alter visage", 
+      "name": "Alter Visage", 
       "notes": "M41", 
       "maintain": 0, 
       "time": 60, 
@@ -8290,7 +8290,7 @@
     }, 
     {
       "cost": 8, 
-      "name": "analyze magic", 
+      "name": "Analyze Magic", 
       "notes": "M102", 
       "maintain": null, 
       "time": 3600, 
@@ -8298,7 +8298,7 @@
     }, 
     {
       "cost": 1, 
-      "name": "awaken", 
+      "name": "Awaken", 
       "notes": "M90", 
       "maintain": 0, 
       "time": 1, 
@@ -8306,7 +8306,7 @@
     }, 
     {
       "cost": 1, 
-      "name": "bless plants", 
+      "name": "Bless Plants", 
       "notes": "M161", 
       "maintain": 4, 
       "time": 300, 
@@ -8314,7 +8314,7 @@
     }, 
     {
       "cost": 1, 
-      "name": "boost dexterity", 
+      "name": "Boost Dexterity", 
       "notes": "M37", 
       "maintain": 2, 
       "time": 1, 
@@ -8322,7 +8322,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "bravery", 
+      "name": "Bravery", 
       "notes": "M134", 
       "maintain": 2, 
       "time": 1, 
@@ -8330,7 +8330,7 @@
     }, 
     {
       "cost": 1, 
-      "name": "climbing", 
+      "name": "Climbing", 
       "notes": "M35", 
       "maintain": 0, 
       "time": 1, 
@@ -8338,7 +8338,7 @@
     }, 
     {
       "cost": 1, 
-      "name": "clumsiness", 
+      "name": "Clumsiness", 
       "notes": "M36", 
       "maintain": null, 
       "time": 1, 
@@ -8346,7 +8346,7 @@
     }, 
     {
       "cost": 4, 
-      "name": "communicate", 
+      "name": "Communicate", 
       "notes": "M48", 
       "maintain": 4, 
       "time": 4, 
@@ -8354,7 +8354,7 @@
     }, 
     {
       "cost": 1, 
-      "name": "conceal magic", 
+      "name": "Conceal Magic", 
       "notes": "M122", 
       "maintain": null, 
       "time": 3, 
@@ -8362,7 +8362,7 @@
     }, 
     {
       "cost": 4, 
-      "name": "cure disease", 
+      "name": "Cure Disease", 
       "notes": "M91", 
       "maintain": 2, 
       "time": 600, 
@@ -8370,7 +8370,7 @@
     }, 
     {
       "cost": 3, 
-      "name": "daze", 
+      "name": "Daze", 
       "notes": "M134", 
       "maintain": 2, 
       "time": 2, 
@@ -8378,7 +8378,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "death vision", 
+      "name": "Death Vision", 
       "notes": "M149", 
       "maintain": null, 
       "time": 3, 
@@ -8386,7 +8386,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "detect magic", 
+      "name": "Detect Magic", 
       "notes": "M101", 
       "maintain": null, 
       "time": 300, 
@@ -8394,7 +8394,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "emotional control", 
+      "name": "Emotional Control", 
       "notes": "M137", 
       "maintain": 0, 
       "time": 1, 
@@ -8402,7 +8402,7 @@
     }, 
     {
       "cost": null, 
-      "name": "enchant", 
+      "name": "Enchant", 
       "notes": "M56", 
       "maintain": null, 
       "time": 1, 
@@ -8410,7 +8410,7 @@
     }, 
     {
       "cost": 4, 
-      "name": "far hearing", 
+      "name": "Far Hearing", 
       "notes": "M173", 
       "maintain": 2, 
       "time": 3, 
@@ -8418,7 +8418,7 @@
     }, 
     {
       "cost": 1, 
-      "name": "fear", 
+      "name": "Fear", 
       "notes": "M134", 
       "maintain": null, 
       "time": 1, 
@@ -8426,7 +8426,7 @@
     }, 
     {
       "cost": null, 
-      "name": "foolishness", 
+      "name": "Foolishness", 
       "notes": "M134", 
       "maintain": null, 
       "time": 1, 
@@ -8434,7 +8434,7 @@
     }, 
     {
       "cost": 3, 
-      "name": "fumble", 
+      "name": "Fumble", 
       "notes": "M38", 
       "maintain": null, 
       "time": 1, 
@@ -8442,7 +8442,7 @@
     }, 
     {
       "cost": 4, 
-      "name": "grace", 
+      "name": "Grace", 
       "notes": "M37", 
       "maintain": null, 
       "time": 1, 
@@ -8450,7 +8450,7 @@
     }, 
     {
       "cost": 1, 
-      "name": "hair growth", 
+      "name": "Hair Growth", 
       "notes": "M39", 
       "maintain": null, 
       "time": 1, 
@@ -8458,7 +8458,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "haircut", 
+      "name": "Haircut", 
       "notes": "M39", 
       "maintain": null, 
       "time": 2, 
@@ -8466,7 +8466,7 @@
     }, 
     {
       "cost": 3, 
-      "name": "heal plant", 
+      "name": "Heal Plant", 
       "notes": "M161", 
       "maintain": null, 
       "time": 60, 
@@ -8474,7 +8474,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "identify plant", 
+      "name": "Identify Plant", 
       "notes": "M161", 
       "maintain": null, 
       "time": 1, 
@@ -8482,7 +8482,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "identify spell", 
+      "name": "Identify Spell", 
       "notes": "M102", 
       "maintain": null, 
       "time": 1, 
@@ -8490,7 +8490,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "itch", 
+      "name": "Itch", 
       "notes": "M35", 
       "maintain": null, 
       "time": 1, 
@@ -8498,7 +8498,7 @@
     }, 
     {
       "cost": null, 
-      "name": "lend energy", 
+      "name": "Lend Energy", 
       "notes": "M89", 
       "maintain": 0, 
       "time": 1, 
@@ -8506,7 +8506,7 @@
     }, 
     {
       "cost": null, 
-      "name": "lend vitality", 
+      "name": "Lend Vitality", 
       "notes": "M89", 
       "maintain": null, 
       "time": 1, 
@@ -8514,7 +8514,7 @@
     }, 
     {
       "cost": 1, 
-      "name": "light", 
+      "name": "Light", 
       "notes": "M110", 
       "maintain": 0, 
       "time": 1, 
@@ -8522,7 +8522,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "loyalty", 
+      "name": "Loyalty", 
       "notes": "M136", 
       "maintain": null, 
       "time": 1, 
@@ -8530,7 +8530,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "luck", 
+      "name": "Luck", 
       "notes": "V2", 
       "maintain": 1, 
       "time": 1, 
@@ -8538,7 +8538,7 @@
     }, 
     {
       "cost": 1, 
-      "name": "lure", 
+      "name": "Lure", 
       "notes": "M137", 
       "maintain": null, 
       "time": 1, 
@@ -8546,7 +8546,7 @@
     }, 
     {
       "cost": null, 
-      "name": "major heal", 
+      "name": "Major Heal", 
       "notes": "M91", 
       "maintain": null, 
       "time": 1, 
@@ -8554,7 +8554,7 @@
     }, 
     {
       "cost": null, 
-      "name": "might", 
+      "name": "Might", 
       "notes": "M37", 
       "maintain": null, 
       "time": 1, 
@@ -8562,7 +8562,7 @@
     }, 
     {
       "cost": null, 
-      "name": "minor heal", 
+      "name": "Minor Heal", 
       "notes": "M91", 
       "maintain": null, 
       "time": 1, 
@@ -8570,7 +8570,7 @@
     }, 
     {
       "cost": 20, 
-      "name": "powerstone", 
+      "name": "Powerstone", 
       "notes": "M69", 
       "maintain": null, 
       "time": 1, 
@@ -8578,7 +8578,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "relieve sickness", 
+      "name": "Relieve Sickness", 
       "notes": "M90", 
       "maintain": 2, 
       "time": 10, 
@@ -8586,7 +8586,7 @@
     }, 
     {
       "cost": 15, 
-      "name": "restoration", 
+      "name": "Restoration", 
       "notes": "M93", 
       "maintain": 0, 
       "time": 60, 
@@ -8594,7 +8594,7 @@
     }, 
     {
       "cost": 3, 
-      "name": "seek machine", 
+      "name": "Seek Machine", 
       "notes": "M175", 
       "maintain": null, 
       "time": 10, 
@@ -8602,7 +8602,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "seek plant", 
+      "name": "Seek Plant", 
       "notes": "M161", 
       "maintain": null, 
       "time": 1, 
@@ -8610,7 +8610,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "sense emotion", 
+      "name": "Sense Emotion", 
       "notes": "M45", 
       "maintain": null, 
       "time": 1, 
@@ -8618,7 +8618,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "sense foes", 
+      "name": "Sense Foes", 
       "notes": "M45", 
       "maintain": 0, 
       "time": 1, 
@@ -8626,7 +8626,7 @@
     }, 
     {
       "cost": null, 
-      "name": "sense life", 
+      "name": "Sense Life", 
       "notes": "M45, cost 1/2 per yard radius, see M11", 
       "maintain": null, 
       "time": 1, 
@@ -8634,7 +8634,7 @@
     }, 
     {
       "cost": null, 
-      "name": "shapeshifting (rat)", 
+      "name": "Shapeshifting (Rat)", 
       "notes": "M32", 
       "maintain": null, 
       "time": 3, 
@@ -8642,7 +8642,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "shield", 
+      "name": "Shield", 
       "notes": "M167", 
       "maintain": null, 
       "time": 1, 
@@ -8650,7 +8650,7 @@
     }, 
     {
       "cost": 4, 
-      "name": "sleep", 
+      "name": "Sleep", 
       "notes": "M135", 
       "maintain": 0, 
       "time": 3, 
@@ -8658,7 +8658,7 @@
     }, 
     {
       "cost": 2, 
-      "name": "spasm", 
+      "name": "Spasm", 
       "notes": "M35", 
       "maintain": 0, 
       "time": 1, 
@@ -8666,7 +8666,7 @@
     }, 
     {
       "cost": 20, 
-      "name": "summon spirit", 
+      "name": "Summon Spirit", 
       "notes": "M150", 
       "maintain": 0, 
       "time": 300, 
@@ -8674,7 +8674,7 @@
     }, 
     {
       "cost": 1, 
-      "name": "tell time", 
+      "name": "Tell Time", 
       "notes": "M100", 
       "maintain": 2, 
       "time": 1, 
@@ -8682,7 +8682,7 @@
     }, 
     {
       "cost": 4, 
-      "name": "wizard eye", 
+      "name": "Wizard Eye", 
       "notes": "M104", 
       "maintain": 2, 
       "time": 2, 
@@ -8690,7 +8690,7 @@
     }, 
     {
       "cost": 8, 
-      "name": "zombie", 
+      "name": "Zombie", 
       "notes": "M151", 
       "maintain": null, 
       "time": 60, 

@@ -110,13 +110,13 @@ if __name__ == '__main__':
     char_xml = ET.parse('sample.gcs').getroot()
     #PP.pprint(char_xml)
 
-    json_chars = None
+    chars_json = None
     filename = 'persephone.json'
     with GmJson(filename, window_manager=None) as campaign:
-        json_chars = campaign.read_data
+        chars_json = campaign.read_data
 
 
-    json_char = json_chars['PCs']['mama V - Karen']
+    char_json = chars_json['PCs']['mama V - Karen']
 
     '''
     'created_date' {}
@@ -141,14 +141,6 @@ if __name__ == '__main__':
     '* spell_list' {}
     '? equipment_list' {}
     '''
-    #for child in char_xml:
-    #    print '%r %r' % (child.tag, child.attrib)
-
-
-    #for child in advantages:
-    #    print '\n---'
-    #    for info in child:
-    #        print '%r %r %r' % (info.tag, info.attrib, info.text)
     attributes = [ 'HP', 'FP', 'ST', 'DX', 'IQ', 'HT' ]
     for attribute in attributes:
         attr = char_xml.find(attribute)
@@ -170,10 +162,21 @@ if __name__ == '__main__':
         cost = child.find('base_points')
         print '  %r %r' % (name.text, 0 if cost is None else cost.text)
 
-    spells = char_xml.find('spell_list')
-    if spells is not None:
+    spells_gcs = char_xml.find('spell_list')
+    if spells_gcs is not None:
+        if 'spells' in char_json:
+            spells_json = {k['name']: k['skill'] for k in char_json['spells']}
+        else:
+            spells_json = {}
         print '\n-- Spell List -----'
-        for child in spells:
+        for child in spells_gcs:
             name = child.find('name')
             # TODO: figure out how the difficulty is stored
-            print '  %r' % name.text
+            #print '  %r' % name.text
+            if name.text not in spells_json:
+                print '  ** %s in GCS but not in JSON' % name.text
+            else:
+                # TODO: compare skill levels
+                del(spells_json[name.text])
+        for child in spells_json:
+            print '  ** %s in JSON but not in GCS' % child
