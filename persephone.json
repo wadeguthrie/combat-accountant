@@ -1182,6 +1182,7 @@
         "knife": 15, 
         "traps": 12
       }, 
+      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "short-notes": [
@@ -1198,7 +1199,6 @@
         "basic-move": 6, 
         "basic-speed": 6
       }, 
-      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
@@ -1224,8 +1224,8 @@
         "Night Vision": 4, 
         "Combat Reflexes": 15
       }, 
-      "did_action_this_turn": false, 
       "weapon-index": null, 
+      "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
@@ -1323,16 +1323,17 @@
         "computer hacking": 15, 
         "electronics operation": 13, 
         "axe/mace": 11, 
-        "computer programming": 12, 
+        "brawling": 12, 
         "first aid": 14, 
         "computer security": 12, 
         "beam weapons (pistol)": 16, 
         "armoury (small arms)": 13, 
-        "brawling": 12, 
+        "computer programming": 12, 
         "physics": 12, 
         "piloting": 14, 
         "observation": 15
       }, 
+      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "short-notes": [
@@ -1350,7 +1351,6 @@
         "basic-move": 5, 
         "basic-speed": 5.25
       }, 
-      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 10, 
@@ -1373,8 +1373,8 @@
         "Secret (Turned In Evidence On Brutal Bratva Hit)": -30, 
         "Cannot Speak/Synthesizer": -10
       }, 
-      "did_action_this_turn": false, 
       "weapon-index": null, 
+      "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
@@ -1692,6 +1692,7 @@
         "piloting (low-performance spacecraft)": 9, 
         "electronics operation (security)": 14
       }, 
+      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "current": {
@@ -1705,7 +1706,6 @@
         "basic-move": 5, 
         "basic-speed": 5
       }, 
-      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
@@ -1725,9 +1725,9 @@
         "Nosy": -1, 
         "Wealth (Struggling)": -10, 
         "Deep Sleeper": 1, 
-        "Cultural Familiarity (Terraformers)": 1, 
         "Habit (Fidget)": -1, 
         "Alcohol Intolerance": -1, 
+        "Cultural Familiarity (Terraformers)": 1, 
         "Impulsiveness": -15, 
         "Empathy (Sensitive)": 5, 
         "Short Attention Span": -15, 
@@ -1738,8 +1738,8 @@
         "Versatile": 5, 
         "Vodou Practitioner (Mambo 1)": 15
       }, 
-      "did_action_this_turn": false, 
       "weapon-index": null, 
+      "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
@@ -2234,6 +2234,7 @@
         "first aid": 17, 
         "beam weapons (pistol)": 14
       }, 
+      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "current": {
@@ -2247,7 +2248,6 @@
         "basic-move": 5, 
         "basic-speed": 4
       }, 
-      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 18, 
@@ -2261,23 +2261,23 @@
         "basic-speed": 4
       }, 
       "advantages": {
-        "Impulsiveness": -10, 
         "Ailurophobia (Cats)": -5, 
         "Compulsive Vowing": -5, 
-        "Lwa (Bokor)": 8, 
-        "Vodou Practitioner": 45, 
+        "Like Shiny objects": -1, 
         "Agoraphobia (Open Spaces)": -10, 
+        "Vodou Practitioner": 45, 
         "Delusions": -1, 
-        "Channeling": 10, 
+        "Personality Change": -1, 
         "Distractible": -1, 
         "Responsive": -1, 
         "Curious": -5, 
         "Bad Sight (Farsighted)": -25, 
-        "Like Shiny objects": -1, 
-        "Personality Change": -1
+        "Lwa (Bokor)": 8, 
+        "Impulsiveness": -10, 
+        "Channeling": 10
       }, 
-      "did_action_this_turn": false, 
       "weapon-index": null, 
+      "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
@@ -2293,6 +2293,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2306,7 +2307,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2322,8 +2322,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2336,6 +2336,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2349,7 +2350,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2365,8 +2365,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2379,6 +2379,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2392,7 +2393,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2408,8 +2408,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2422,6 +2422,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2435,7 +2436,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2452,8 +2452,8 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2466,6 +2466,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2479,7 +2480,6 @@
           "basic-move": 5, 
           "basic-speed": 5.25
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2495,8 +2495,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2509,6 +2509,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2522,7 +2523,6 @@
           "basic-move": 5, 
           "basic-speed": 5.5
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 12, 
@@ -2538,8 +2538,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2552,6 +2552,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2565,7 +2566,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2581,8 +2581,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2595,6 +2595,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2608,7 +2609,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2625,8 +2625,8 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3149,14 +3149,14 @@
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "2: William": {
@@ -3281,14 +3281,14 @@
           }
         ], 
         "timers": [], 
-        "weapon-index": 0, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": 0, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "5: Amelia": {
@@ -3394,14 +3394,14 @@
             ]
           }
         ], 
-        "weapon-index": null, 
         "did_action_this_turn": true, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "1: Oliver": {
@@ -3554,14 +3554,14 @@
           }
         ], 
         "timers": [], 
-        "weapon-index": 2, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": 2, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "3: Charlotte": {
@@ -3686,14 +3686,14 @@
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }
     }, 
@@ -3732,11 +3732,11 @@
         "state": "alive", 
         "stuff": [], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {}, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "Dude": {
@@ -3826,14 +3826,14 @@
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }
     }, 
@@ -3846,6 +3846,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3859,7 +3860,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -3875,8 +3875,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3889,6 +3889,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3902,7 +3903,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -3918,8 +3918,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3932,6 +3932,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3945,7 +3946,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -3961,8 +3961,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3975,6 +3975,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -3988,7 +3989,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4005,8 +4005,8 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4019,6 +4019,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4032,7 +4033,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4048,8 +4048,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4062,6 +4062,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4075,7 +4076,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4091,8 +4091,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4105,6 +4105,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4118,7 +4119,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4134,8 +4134,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4148,6 +4148,7 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4161,7 +4162,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4178,8 +4178,8 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4243,6 +4243,7 @@
           "brawling": 16, 
           "axe/mace": 14
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4256,7 +4257,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4272,8 +4272,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4319,6 +4319,7 @@
           "beam weapons (pistol)": 15, 
           "brawling": 12
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4332,7 +4333,6 @@
           "basic-move": 5, 
           "basic-speed": 5.5
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 12, 
@@ -4348,8 +4348,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4411,6 +4411,7 @@
           "brawling": 16, 
           "axe/mace": 14
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4424,7 +4425,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4440,8 +4440,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4507,6 +4507,7 @@
           "brawling": 14, 
           "knife": 15
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4520,7 +4521,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4536,8 +4536,8 @@
         "advantages": {
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4583,6 +4583,7 @@
           "beam weapons (pistol)": 13, 
           "brawling": 12
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4596,7 +4597,6 @@
           "basic-move": 5, 
           "basic-speed": 5.25
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4613,8 +4613,8 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4676,6 +4676,7 @@
           "brawling": 16, 
           "axe/mace": 14
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4689,7 +4690,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4705,8 +4705,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4768,6 +4768,7 @@
           "brawling": 16, 
           "axe/mace": 14
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4781,7 +4782,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4797,8 +4797,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4864,6 +4864,7 @@
           "brawling": 14, 
           "knife": 15
         }, 
+        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4877,7 +4878,6 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4893,8 +4893,8 @@
         "advantages": {
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -5301,6 +5301,7 @@
         "basic-move": 5, 
         "basic-speed": 5.25
       }, 
+      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
@@ -5318,9 +5319,8 @@
         "Lwa (Mambo, Erzulie Freda)": 6, 
         "Vodou Practitioner (Mambo/Hougan 2)": 35
       }, 
-      "opponent": null, 
+      "did_action_this_turn": true, 
       "weapon-index": null, 
-      "check_for_death": false, 
       "timers": [
         {
           "rounds": 2.9, 
@@ -5335,7 +5335,7 @@
           ]
         }
       ], 
-      "did_action_this_turn": true, 
+      "opponent": null, 
       "posture": "standing"
     }, 
     "Samantha - (party) Mambo on Tereshkova": {
@@ -5359,7 +5359,6 @@
       ], 
       "shock": 0, 
       "short-notes": [], 
-      "posture": "standing", 
       "armor-index": null, 
       "current": {
         "fp": 11, 
@@ -5372,7 +5371,7 @@
         "basic-move": 5, 
         "basic-speed": 5.25
       }, 
-      "check_for_death": false, 
+      "posture": "standing", 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
@@ -5390,10 +5389,11 @@
         "Primary Lwa (Erzulie Freda)": 6, 
         "Vodou Practitioner (Mambo/Hougan 2)": 35
       }, 
-      "did_action_this_turn": false, 
-      "weapon-index": null, 
-      "timers": [], 
       "opponent": null, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
       "spells": [
         {
           "cost": 1, 
@@ -5581,6 +5581,115 @@
       "check_for_death": false, 
       "timers": [], 
       "did_action_this_turn": false, 
+      "opponent": null
+    }, 
+    "Owen Martin - Journeyman deputy marshal (party's boss)": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [
+        {
+          "acc": 2, 
+          "count": 1, 
+          "owners": null, 
+          "name": "pistol, Baretta DX 192", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "beam weapons (pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 8, 
+            "shots_left": 8
+          }
+        }, 
+        {
+          "count": 1, 
+          "owners": null, 
+          "name": "knife, large", 
+          "notes": "", 
+          "damage": {
+            "sw": {
+              "plus": -2, 
+              "type": "cut"
+            }, 
+            "thr": {
+              "plus": 0, 
+              "type": "imp"
+            }
+          }, 
+          "parry": -1, 
+          "skill": "knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "C Cell"
+        }
+      ], 
+      "stunned": 0, 
+      "skills": {
+        "beam weapons (pistol)": 15, 
+        "brawling": 14, 
+        "knife": 15
+      }, 
+      "notes": [
+        "origin: australian", 
+        "gender: male", 
+        "station history: lifer (born on Earth, this is 1st station)", 
+        "characteristics: Easily confused", 
+        "instincts: To accumulate power", 
+        "hair: Messy", 
+        "speech: Stutters", 
+        "knack: The love of someone powerful", 
+        "personality: Shy"
+      ], 
+      "shock": 0, 
+      "short-notes": [], 
+      "armor-index": null, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "check_for_death": false, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "advantages": {
+        "Combat Reflexes": 15, 
+        "High Pain Threshold": 10
+      }, 
+      "did_action_this_turn": false, 
+      "weapon-index": null, 
+      "timers": [], 
+      "posture": "standing", 
       "opponent": null
     }, 
     "Oscar": {
@@ -5824,115 +5933,6 @@
       "did_action_this_turn": false, 
       "opponent": null
     }, 
-    "Owen Martin - Journeyman deputy marshal (party's boss)": {
-      "stunned": 0, 
-      "did_action_this_turn": false, 
-      "short-notes": [], 
-      "advantages": {
-        "Combat Reflexes": 15, 
-        "High Pain Threshold": 10
-      }, 
-      "weapon-index": null, 
-      "posture": "standing", 
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-        {
-          "acc": 2, 
-          "count": 1, 
-          "owners": null, 
-          "name": "pistol, Baretta DX 192", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 4, 
-              "num_dice": 1, 
-              "type": "pi"
-            }
-          }, 
-          "reload": 3, 
-          "skill": "beam weapons (pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 8, 
-            "shots_left": 8
-          }
-        }, 
-        {
-          "count": 1, 
-          "owners": null, 
-          "name": "knife, large", 
-          "notes": "", 
-          "damage": {
-            "sw": {
-              "plus": -2, 
-              "type": "cut"
-            }, 
-            "thr": {
-              "plus": 0, 
-              "type": "imp"
-            }
-          }, 
-          "parry": -1, 
-          "skill": "knife", 
-          "type": "melee weapon"
-        }, 
-        {
-          "count": 5, 
-          "notes": "", 
-          "type": "misc", 
-          "owners": null, 
-          "name": "C Cell"
-        }
-      ], 
-      "skills": {
-        "beam weapons (pistol)": 15, 
-        "brawling": 14, 
-        "knife": 15
-      }, 
-      "notes": [
-        "origin: australian", 
-        "gender: male", 
-        "station history: lifer (born on Earth, this is 1st station)", 
-        "characteristics: Easily confused", 
-        "instincts: To accumulate power", 
-        "hair: Messy", 
-        "speech: Stutters", 
-        "knack: The love of someone powerful", 
-        "personality: Shy"
-      ], 
-      "shock": 0, 
-      "armor-index": null, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "wi": 12, 
-        "dx": 12, 
-        "basic-move": 5, 
-        "basic-speed": 5.75
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "wi": 12, 
-        "dx": 12, 
-        "basic-move": 5, 
-        "basic-speed": 5.75
-      }, 
-      "timers": [], 
-      "check_for_death": false, 
-      "opponent": null
-    }, 
     "Mama Cedella - Bokor": {
       "aim": {
         "braced": false, 
@@ -6120,7 +6120,7 @@
         "basic-move": 5, 
         "basic-speed": 5
       }, 
-      "check_for_death": false, 
+      "posture": "standing", 
       "state": "alive", 
       "permanent": {
         "fp": 10, 
@@ -6134,10 +6134,10 @@
         "basic-speed": 5
       }, 
       "advantages": {}, 
-      "did_action_this_turn": false, 
       "weapon-index": null, 
+      "check_for_death": false, 
       "timers": [], 
-      "posture": "standing", 
+      "did_action_this_turn": false, 
       "opponent": null
     }, 
     "Papa Jorge - Bokor": {
@@ -7809,14 +7809,14 @@
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "4: Andre": {
@@ -7920,14 +7920,14 @@
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "Dima - Bratva": {
@@ -8033,14 +8033,14 @@
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
         "opponent": null
       }, 
       "2: Nikita": {
@@ -8143,14 +8143,496 @@
           }
         ], 
         "timers": [], 
-        "weapon-index": null, 
         "did_action_this_turn": false, 
-        "check_for_death": false, 
+        "weapon-index": null, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
+        "check_for_death": false, 
+        "opponent": null
+      }
+    }, 
+    "Radio Shack - Zombies": {
+      "1 - zombie": {
+        "stunned": 0, 
+        "did_action_this_turn": false, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "posture": "standing", 
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 12, 
+          "knife": 15
+        }, 
+        "notes": [
+          "station history: lifer (born on Earth, this is 1st station)", 
+          "characteristics: Excessively clean", 
+          "instincts: To reunite with a loved one", 
+          "hair: Long", 
+          "speech: Breathless", 
+          "knack: A big idea", 
+          "personality: Wistful"
+        ], 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.0
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.0
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "2 - zombie": {
+        "stunned": 0, 
+        "did_action_this_turn": false, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "posture": "standing", 
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 12, 
+          "knife": 15
+        }, 
+        "notes": [
+          "station history: roo (bounce between stations)", 
+          "characteristics: Tone-deaf", 
+          "instincts: To convince someone to do their dirty work", 
+          "hair: Wavy", 
+          "speech: Husky", 
+          "knack: A way with knots", 
+          "personality: Overbearing"
+        ], 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.0
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.0
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "5 - zombie": {
+        "stunned": 0, 
+        "did_action_this_turn": false, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "posture": "standing", 
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 12, 
+          "knife": 15
+        }, 
+        "notes": [
+          "station history: staby (born on this station)", 
+          "characteristics: Pokes/taps others with finger", 
+          "instincts: To earn affection", 
+          "hair: Very Long", 
+          "speech: Nosy", 
+          "knack: Hedge wizardry", 
+          "personality: Aggressive"
+        ], 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.0
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.0
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "6 - zombie": {
+        "stunned": 0, 
+        "did_action_this_turn": false, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "posture": "standing", 
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 12, 
+          "knife": 15
+        }, 
+        "notes": [
+          "station history: staby (born on this station)", 
+          "characteristics: Birthmark, bodyLocation: Chest", 
+          "instincts: To hate", 
+          "hair: Greasy", 
+          "speech: Curt short", 
+          "knack: The language of birds", 
+          "personality: Arrogant"
+        ], 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.0
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.0
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "4 - zombie": {
+        "stunned": 0, 
+        "did_action_this_turn": false, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "posture": "standing", 
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 12, 
+          "knife": 15
+        }, 
+        "notes": [
+          "station history: lifer (born on Earth, this is 1st station)", 
+          "characteristics: Unable to let a joke die", 
+          "instincts: To become someone else", 
+          "hair: Strange hairstyle", 
+          "speech: Curt short", 
+          "knack: Endless ideas", 
+          "personality: Epicurean"
+        ], 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.0
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.0
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "3 - zombie": {
+        "stunned": 0, 
+        "did_action_this_turn": false, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "posture": "standing", 
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "skills": {
+          "beam weapons (pistol)": 15, 
+          "brawling": 12, 
+          "knife": 15
+        }, 
+        "notes": [
+          "station history: staby (born on this station)", 
+          "characteristics: Rolls eyes when bored/annoyed", 
+          "instincts: To kill a hated foe", 
+          "hair: Pony-tail", 
+          "speech: Whispery", 
+          "knack: A way with knots", 
+          "personality: Tawdry"
+        ], 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.0
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.0
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
         "opponent": null
       }
     }, 
