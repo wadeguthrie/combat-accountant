@@ -121,60 +121,60 @@ class Skills(object):
     level_from_cost = {1:0, 2:1, 4:2, 8:3, 12:4, 16:5, 20:6, 24:7, 28:5}
     difficulty_offset = {'E':0, 'A':-1, 'H':-2, 'VH':-3}
     skills = {
-        'Acting': {'attr':'IQ', 'diff':'A'},
-        'Area Knowledge': {'attr':'IQ', 'diff':'E'},
-        'Armoury': {'attr':'IQ', 'diff':'A'},
-        'Axe/Mace': {'attr':'DX', 'diff':'A'},
-        'Beam Weapons': {'attr':'DX', 'diff':'E'},
-        'Brawling': {'attr':'DX', 'diff':'E'},
-        'Camouflage': {'attr':'IQ', 'diff':'E'},
-        'Climbing': {'attr':'DX', 'diff':'A'},
-        'Computer Hacking': {'attr':'IQ', 'diff':'VH'},
-        'Computer Operation': {'attr':'IQ', 'diff':'E'},
+        'Acting':               {'attr':'IQ', 'diff':'A'},
+        'Area Knowledge':       {'attr':'IQ', 'diff':'E'},
+        'Armoury':              {'attr':'IQ', 'diff':'A'},
+        'Axe/Mace':             {'attr':'DX', 'diff':'A'},
+        'Beam Weapons':         {'attr':'DX', 'diff':'E'},
+        'Brawling':             {'attr':'DX', 'diff':'E'},
+        'Camouflage':           {'attr':'IQ', 'diff':'E'},
+        'Climbing':             {'attr':'DX', 'diff':'A'},
+        'Computer Hacking':     {'attr':'IQ', 'diff':'VH'},
+        'Computer Operation':   {'attr':'IQ', 'diff':'E'},
         'Computer Programming': {'attr':'IQ', 'diff':'H'},
-        'Connoisseur': {'attr':'IQ', 'diff':'A'},
-        'Cryptography': {'attr':'IQ', 'diff':'H'},
-        'Current Affairs': {'attr':'IQ', 'diff':'E'},
-        'Detect Lies': {'attr':'Per', 'diff':'H'},
-        'Diplomacy': {'attr':'IQ', 'diff':'H'},
-        'Electronics Operation': {'attr':'IQ', 'diff':'A'},
-        'Electronics Repair': {'attr':'IQ', 'diff':'A'},
-        'Engineer': {'attr':'IQ', 'diff':'H'},
-        'Escape': {'attr':'DX', 'diff':'H'},
-        'Fast-Draw': {'attr':'DX', 'diff':'E'},
-        'Fast-Talk': {'attr':'IQ', 'diff':'A'},
-        'Filch': {'attr':'DX', 'diff':'A'},
-        'First Aid': {'attr':'IQ', 'diff':'E'},
-        'Forgery': {'attr':'IQ', 'diff':'H'},
-        'Gambling': {'attr':'IQ', 'diff':'A'},
-        'Gesture': {'attr':'IQ', 'diff':'E'},
-        'Gunner': {'attr':'DX', 'diff':'E'},
-        'Guns': {'attr':'DX', 'diff':'E'},
-        'Hazardous Materials': {'attr':'IQ', 'diff':'A'},
-        'Holdout': {'attr':'IQ', 'diff':'A'},
-        'Interrogation': {'attr':'IQ', 'diff':'A'},
-        'Intimidation': {'attr':'Will', 'diff':'A'},
-        'Karate': {'attr':'DX', 'diff':'H'},
-        'Knife': {'attr':'DX', 'diff':'E'},
-        'Law': {'attr':'IQ', 'diff':'H'},
-        'Lip Reading': {'attr':'Per', 'diff':'A'},
-        'Lockpicking': {'attr':'IQ', 'diff':'A'},
-        'Mathematics': {'attr':'IQ', 'diff':'H'},
-        'Mechanic': {'attr':'IQ', 'diff':'A'},
-        'Observation': {'attr':'Per', 'diff':'A'},
-        'Physician': {'attr':'IQ', 'diff':'H'},
-        'Physics': {'attr':'IQ', 'diff':'VH'},
-        'Pickpocket': {'attr':'DX', 'diff':'H'},
-        'Piloting': {'attr':'DX', 'diff':'A'},
-        'Running': {'attr':'HT', 'diff':'A'},
-        'Scrounging': {'attr':'Per', 'diff':'E'},
-        'Stealth': {'attr':'DX', 'diff':'A'},
-        'Streetwise': {'attr':'IQ', 'diff':'A'},
-        'Theology': {'attr':'IQ', 'diff':'H'},
-        'Throwing': {'attr':'DX', 'diff':'A'},
-        'Thrown Weapon': {'attr':'DX', 'diff':'E'},
-        'Traps': {'attr':'IQ', 'diff':'A'},
-        'Urban Survival': {'attr':'Per', 'diff':'A'},
+        'Connoisseur':          {'attr':'IQ', 'diff':'A'},
+        'Cryptography':         {'attr':'IQ', 'diff':'H'},
+        'Current Affairs':      {'attr':'IQ', 'diff':'E'},
+        'Detect Lies':          {'attr':'Per', 'diff':'H'},
+        'Diplomacy':            {'attr':'IQ', 'diff':'H'},
+        'Electronics Operation':{'attr':'IQ', 'diff':'A'},
+        'Electronics Repair':   {'attr':'IQ', 'diff':'A'},
+        'Engineer':             {'attr':'IQ', 'diff':'H'},
+        'Escape':               {'attr':'DX', 'diff':'H'},
+        'Fast-Draw':            {'attr':'DX', 'diff':'E'},
+        'Fast-Talk':            {'attr':'IQ', 'diff':'A'},
+        'Filch':                {'attr':'DX', 'diff':'A'},
+        'First Aid':            {'attr':'IQ', 'diff':'E'},
+        'Forgery':              {'attr':'IQ', 'diff':'H'},
+        'Gambling':             {'attr':'IQ', 'diff':'A'},
+        'Gesture':              {'attr':'IQ', 'diff':'E'},
+        'Gunner':               {'attr':'DX', 'diff':'E'},
+        'Guns':                 {'attr':'DX', 'diff':'E'},
+        'Hazardous Materials':  {'attr':'IQ', 'diff':'A'},
+        'Holdout':              {'attr':'IQ', 'diff':'A'},
+        'Interrogation':        {'attr':'IQ', 'diff':'A'},
+        'Intimidation':         {'attr':'Will', 'diff':'A'},
+        'Karate':               {'attr':'DX', 'diff':'H'},
+        'Knife':                {'attr':'DX', 'diff':'E'},
+        'Law':                  {'attr':'IQ', 'diff':'H'},
+        'Lip Reading':          {'attr':'Per', 'diff':'A'},
+        'Lockpicking':          {'attr':'IQ', 'diff':'A'},
+        'Mathematics':          {'attr':'IQ', 'diff':'H'},
+        'Mechanic':             {'attr':'IQ', 'diff':'A'},
+        'Observation':          {'attr':'Per', 'diff':'A'},
+        'Physician':            {'attr':'IQ', 'diff':'H'},
+        'Physics':              {'attr':'IQ', 'diff':'VH'},
+        'Pickpocket':           {'attr':'DX', 'diff':'H'},
+        'Piloting':             {'attr':'DX', 'diff':'A'},
+        'Running':              {'attr':'HT', 'diff':'A'},
+        'Scrounging':           {'attr':'Per', 'diff':'E'},
+        'Stealth':              {'attr':'DX', 'diff':'A'},
+        'Streetwise':           {'attr':'IQ', 'diff':'A'},
+        'Theology':             {'attr':'IQ', 'diff':'H'},
+        'Throwing':             {'attr':'DX', 'diff':'A'},
+        'Thrown Weapon':        {'attr':'DX', 'diff':'E'},
+        'Traps':                {'attr':'IQ', 'diff':'A'},
+        'Urban Survival':       {'attr':'Per', 'diff':'A'},
     }
 
     @staticmethod
@@ -201,11 +201,261 @@ class Skills(object):
         level += attribs[skill['attr']]
         return level
 
+class Character(object):
+    def __init__(self,
+                 char_json, # dict for this char directly from the JSON
+                 char_gcs   # results of ET.parse for the GCS file
+                ):
+        self.char_json = char_json
+
+        '''
+        'created_date' {}
+        'modified_date' {}
+        'profile' {}
+        '* HP' {}
+        '* FP' {}
+        'total_points' {}
+        '* ST' {}
+        '* DX' {}
+        '* IQ' {}
+        '* HT' {}
+        '* will' {}
+        'perception' {}
+        '? speed' {}
+        '? move' {}
+        'include_punch' {}
+        'include_kick' {}
+        'include_kick_with_boots' {}
+        '- advantage_list' {}
+        '- skill_list' {}
+        '* spell_list' {}
+        '? equipment_list' {}
+        '''
+        self.char_gcs = char_gcs
+        self.attrs = {}
+
+    def check_for_consistency(self):
+        self.check_attribs()
+
+        print '\n-- Skills -----'
+        self.check_skills()
+
+        print '\n-- Advantages -----'
+        self.check_advantages()
+
+        if 'spells' in self.char_json:
+            print '\n-- Spell List -----'
+            self.check_spells()
+
+        self.check_equipment()
+
+    def check_attribs(self):
+        # TODO: add move, will, and speed -- gca has points spent / json
+        # has result
+        attr_names_json_from_gca = {
+                                     'ST': 'st' ,
+                                     'DX': 'dx' ,
+                                     'IQ': 'iq' ,
+                                     'HT': 'ht'
+                                   }
+        for attr_name in attr_names_json_from_gca:
+            attr_gcs = get_gca_attribute(self.char_gcs, attr_name)
+            self.attrs[attr_name] = attr_gcs
+            attr_json = self.char_json['permanent'][
+                                        attr_names_json_from_gca[attr_name]]
+            if attr_gcs != attr_json:
+                print '  ** %s = %r in GCS but %r in JSON' % (attr_name,
+                                                              attr_gcs,
+                                                              attr_json)
+            else:
+                print '  %s: %r' % (attr_name, attr_gcs)
+
+        # HP
+        attr_gcs = self.attrs['ST']
+        attr_gcs += get_gca_attribute(self.char_gcs, 'HP')
+        attr_json = self.char_json['permanent']['hp']
+        if attr_gcs != attr_json:
+            print '  ** HP = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
+        else:
+            print '  HP: %r' % attr_gcs
+
+        # FP
+        attr_gcs = self.attrs['HT']
+        attr_gcs += get_gca_attribute(self.char_gcs, 'FP')
+        attr_json = self.char_json['permanent']['fp']
+        if attr_gcs != attr_json:
+            print '  ** FP = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
+        else:
+            print '  FP: %r' % attr_gcs
+
+        # WILL
+        # TODO:
+        attr_gcs = self.attrs['IQ']
+        # TODO: do I need to multiply by 5 (the cost for a Will point?)
+        #attr_gcs += get_gca_attribute(self.char_gcs, 'will')
+        #attr_json = self.char_json['permanent']['Per']
+        #if attr_gcs != attr_json:
+        #    print '  ** Will = %r in GCS but %r in JSON' % (attr_gcs,
+        #                                                    attr_json)
+        #else:
+        #    print '  Per: %r' % attr_gcs
+        self.attrs['Will'] = attr_gcs
+
+        # PERCEPTION
+        # TODO:
+        attr_gcs = self.attrs['IQ']
+        # TODO: do I need to multiply by 5 (the cost for a perception point?)
+        #attr_gcs += get_gca_attribute(self.char_gcs, 'perception')
+        #attr_json = self.char_json['permanent']['Per']
+        #if attr_gcs != attr_json:
+        #    print '  ** Per = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
+        #else:
+        #    print '  Per: %r' % attr_gcs
+        self.attrs['Per'] = attr_gcs
+
+
+    def check_skills(self):
+        skills_gcs = self.char_gcs.find('skill_list')
+
+        if 'skills' in self.char_json:
+            skills_json = copy.deepcopy(self.char_json['skills'])
+        else:
+            skills_json = {}
+
+        for skill_gcs in skills_gcs:
+            base_name = skill_gcs.find('name').text
+            #print 'SKILL BASE NAME: "%r"' % base_name # TODO: remove
+            specs = []
+            for specialization in skill_gcs.findall('specialization'):
+                specs.append(specialization.text)
+            if len(specs) > 0:
+                name_text = '%s (%s)' % (base_name, ','.join(specs))
+            else:
+                name_text = base_name
+            #print '  "%r"' % name_text # TODO: remove
+
+            if name_text not in skills_json:
+                print '  ** "%s" in GCS but not in JSON' % name_text
+            else:
+                cost_text_gcs = skill_gcs.find('points')
+                cost_gcs = 0 if cost_text_gcs is None else int(
+                                                            cost_text_gcs.text)
+
+                level_gcs = Skills.get_level(self.attrs, base_name, cost_gcs)
+                if level_gcs != skills_json[name_text]:
+                    print '  ** %s = %r in GCS but %r in JSON' % (
+                        name_text, level_gcs, skills_json[name_text])
+                else:
+                    print '  %s: %r' % (name_text, level_gcs)
+
+                del(skills_json[name_text])
+        for skill_json in skills_json:
+            print '  ** "%s" in JSON but not in GCS' % skill_json
+
+    def check_advantages(self):
+        ## ADVANTAGES #####
+        # Checks points spent
+
+        advantages_gcs = self.char_gcs.find('advantage_list')
+        #for advantage_gcs in advantages_gcs:
+        #    name = advantage_gcs.find('name')
+        #    cost = advantage_gcs.find('base_points')
+        #    print '  %r %r' % (name.text, 0 if cost is None else cost.text)
+
+        if 'advantages' in self.char_json:
+            advantages_json = copy.deepcopy(self.char_json['advantages'])
+        else:
+            advantages_json = {}
+
+        for advantage_gcs in advantages_gcs:
+            name = advantage_gcs.find('name')
+            #print 'ADVANTAGE NAME: "%r"' % name.text # TODO: remove
+            if name.text not in advantages_json:
+                print '  ** %s in GCS but not in JSON' % name.text
+            else:
+                cost_text_gcs = advantage_gcs.find('base_points')
+                cost_gcs = 0 if cost_text_gcs is None else int(
+                                                            cost_text_gcs.text)
+                for modifier in advantage_gcs.findall('modifier'):
+                    # TODO: remove
+                    #modifier_name = modifier.find('name')
+                    #print '-modifier name: "%r"' % modifier_name.text
+                    #PP.pprint(modifier.attrib)
+
+                    if ('enabled' not in modifier.attrib or
+                                        modifier.attrib['enabled'] != 'no'):
+                        modifier_cost_element = modifier.find('cost')
+                        modifier_cost = 0
+                        if modifier_cost_element is not None:
+                            modifier_cost_text = modifier_cost_element.text
+                            if modifier_cost_text is not None:
+                                cost_gcs += int(modifier_cost_text)
+                if cost_gcs != advantages_json[name.text]:
+                    print '  ** %s = %r in GCS but %r in JSON' % (
+                        name.text, cost_gcs.text, advantages_json[name.text])
+                else:
+                    print '  %s: %r' % (name.text, cost_gcs)
+
+                del(advantages_json[name.text])
+        for advantage_json in advantages_json:
+            print '  ** %s in JSON but not in GCS' % advantage_json
+
+    def check_spells(self):
+        ## SPELLS #####
+        # TODO: need to include difficulty level
+        # TODO: should do a better job of making sure that both files either 
+        #   DO have spells or DON'T have spells
+
+        spells_gcs = self.char_gcs.find('spell_list')
+        if spells_gcs is not None:
+            if 'spells' in self.char_json:
+                spells_json = {k['name']: k['skill'] 
+                                            for k in self.char_json['spells']}
+            else:
+                spells_json = {}
+            for child in spells_gcs:
+                name = child.find('name')
+                # TODO: figure out how the difficulty is stored
+                if name.text not in spells_json:
+                    print '  ** %s in GCS but not in JSON' % name.text
+                else:
+                    print '  %s' % name.text
+                    # TODO: compare skill levels
+                    del(spells_json[name.text])
+            for child in spells_json:
+                print '  ** %s in JSON but not in GCS' % child
+
+
+    def check_equipment(self):
+        ## EQUIPMENT #####
+        # TODO: 
+
+        '''
+        print '\n-- Equipment -----'
+        stuff_gcs = self.char_gcs.find('equipment_list')
+
+        if 'stuff' in self.char_json:
+            stuff_json = copy.deepcopy(self.char_json['stuff'])
+        else:
+            stuff_json = {}
+
+        if stuff_gcs is not None:
+            for child in stuff_gcs:
+                name = child.find('name')
+                if name.text not in spells_json:
+                    print '  ** %s in GCS but not in JSON' % name.text
+                else:
+                    print '  %s' % name.text
+                    # TODO: compare skill levels
+                    del(spells_json[name.text])
+        for thing in spells_json:
+            print '  ** %s in JSON but not in GCS' % thing
+        '''
+
 if __name__ == '__main__':
     PP = pprint.PrettyPrinter(indent=3, width=150)
 
     char_gcs = ET.parse('sample.gcs').getroot()
-    #PP.pprint(char_gcs)
 
     chars_json = None
     filename = 'persephone.json'
@@ -215,187 +465,5 @@ if __name__ == '__main__':
 
     char_json = chars_json['PCs']['mama V - Karen']
 
-    '''
-    'created_date' {}
-    'modified_date' {}
-    'profile' {}
-    '* HP' {}
-    '* FP' {}
-    'total_points' {}
-    '* ST' {}
-    '* DX' {}
-    '* IQ' {}
-    '* HT' {}
-    '* will' {}
-    'perception' {}
-    '? speed' {}
-    '? move' {}
-    'include_punch' {}
-    'include_kick' {}
-    'include_kick_with_boots' {}
-    '- advantage_list' {}
-    '- skill_list' {}
-    '* spell_list' {}
-    '? equipment_list' {}
-    '''
-    # TODO: add move, will, and speed -- gca has points spent / json has result
-    attr_names_json_from_gca = {
-                                 'ST': 'st' ,
-                                 'DX': 'dx' ,
-                                 'IQ': 'iq' ,
-                                 'HT': 'ht'
-                               }
-    attrs = {}
-    for attr_name in attr_names_json_from_gca:
-        attr_gcs = get_gca_attribute(char_gcs, attr_name)
-        attrs[attr_name] = attr_gcs
-        attr_json = char_json['permanent'][attr_names_json_from_gca[attr_name]]
-        if attr_gcs != attr_json:
-            print '  ** %s = %r in GCS but %r in JSON' % (attr_name,
-                                                          attr_gcs,
-                                                          attr_json)
-        else:
-            print '  %s: %r' % (attr_name, attr_gcs)
-
-    # HP
-    attr_gcs = get_gca_attribute(char_gcs, 'HP')
-    attr_gcs += attrs['ST']
-    attr_json = char_json['permanent']['hp']
-    if attr_gcs != attr_json:
-        print '  ** HP = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
-    else:
-        print '  HP: %r' % attr_gcs
-
-    # FP
-    attr_gcs = get_gca_attribute(char_gcs, 'FP')
-    attr_gcs += attrs['HT']
-    attr_json = char_json['permanent']['fp']
-    if attr_gcs != attr_json:
-        print '  ** FP = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
-    else:
-        print '  FP: %r' % attr_gcs
-
-    ## SKILLS #####
-
-    print '\n-- Skills -----'
-    #skills = char_gcs.find('skill_list')
-    #for child in skills:
-    #    name = child.find('name')
-    #    # TODO: will need to have a table of skills to look-up the point
-    #    # cost versus the resulting value
-    #    cost = child.find('points')
-    #    print '  %r %r' % (name.text, 0 if cost is None else cost.text)
-
-    skills_gcs = char_gcs.find('skill_list')
-    #for skill_gcs in skills_gcs:
-    #    name = skill_gcs.find('name')
-    #    cost = skill_gcs.find('base_points')
-    #    print '  %r %r' % (name.text, 0 if cost is None else cost.text)
-
-    if 'skills' in char_json:
-        skills_json = copy.deepcopy(char_json['skills'])
-    else:
-        skills_json = {}
-
-    for skill_gcs in skills_gcs:
-        base_name = skill_gcs.find('name').text
-        #print 'SKILL BASE NAME: "%r"' % base_name # TODO: remove
-        specs = []
-        for specialization in skill_gcs.findall('specialization'):
-            specs.append(specialization.text)
-        if len(specs) > 0:
-            name_text = '%s (%s)' % (base_name, ','.join(specs))
-        else:
-            name_text = base_name
-        #print '  "%r"' % name_text # TODO: remove
-
-        if name_text not in skills_json:
-            print '  ** "%s" in GCS but not in JSON' % name_text
-        else:
-            cost_text_gcs = skill_gcs.find('points')
-            cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
-
-            level_gcs = Skills.get_level(attrs, base_name, cost_gcs)
-            if level_gcs != skills_json[name_text]:
-                print '  ** %s = %r in GCS but %r in JSON' % (
-                    name_text, cost_gcs, skills_json[name_text])
-            else:
-                print '  %s: %r' % (name_text, cost_gcs)
-
-            del(skills_json[name_text])
-    for skill_json in skills_json:
-        print '  ** "%s" in JSON but not in GCS' % skill_json
-
-
-    ## ADVANTAGES #####
-    # Checks points spent
-
-    print '\n-- Advantages -----'
-    advantages_gcs = char_gcs.find('advantage_list')
-    #for advantage_gcs in advantages_gcs:
-    #    name = advantage_gcs.find('name')
-    #    cost = advantage_gcs.find('base_points')
-    #    print '  %r %r' % (name.text, 0 if cost is None else cost.text)
-
-    if 'advantages' in char_json:
-        advantages_json = copy.deepcopy(char_json['advantages'])
-    else:
-        advantages_json = {}
-
-    for advantage_gcs in advantages_gcs:
-        name = advantage_gcs.find('name')
-        #print 'ADVANTAGE NAME: "%r"' % name.text # TODO: remove
-        if name.text not in advantages_json:
-            print '  ** %s in GCS but not in JSON' % name.text
-        else:
-            cost_text_gcs = advantage_gcs.find('base_points')
-            cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
-            for modifier in advantage_gcs.findall('modifier'):
-
-
-                #modifier_name = modifier.find('name') # TODO: remove
-                #print '-modifier name: "%r"' % modifier_name.text # TODO: remove
-                #PP.pprint(modifier.attrib) # TODO: remove
-
-
-                if ('enabled' not in modifier.attrib or
-                                    modifier.attrib['enabled'] != 'no'):
-                    modifier_cost_element = modifier.find('cost')
-                    modifier_cost = 0
-                    if modifier_cost_element is not None:
-                        modifier_cost_text = modifier_cost_element.text
-                        if modifier_cost_text is not None:
-                            cost_gcs += int(modifier_cost_text)
-            if cost_gcs != advantages_json[name.text]:
-                print '  ** %s = %r in GCS but %r in JSON' % (
-                    name.text, cost_gcs.text, advantages_json[name.text])
-            else:
-                print '  %s: %r' % (name.text, cost_gcs)
-
-            del(advantages_json[name.text])
-    for advantage_json in advantages_json:
-        print '  ** %s in JSON but not in GCS' % advantage_json
-
-
-    ## SPELLS #####
-    # TODO: need to include difficulty level
-
-    spells_gcs = char_gcs.find('spell_list')
-    if spells_gcs is not None:
-        if 'spells' in char_json:
-            spells_json = {k['name']: k['skill'] for k in char_json['spells']}
-        else:
-            spells_json = {}
-        print '\n-- Spell List -----'
-        for child in spells_gcs:
-            name = child.find('name')
-            # TODO: figure out how the difficulty is stored
-            if name.text not in spells_json:
-                print '  ** %s in GCS but not in JSON' % name.text
-            else:
-                print '  %s' % name.text
-                # TODO: compare skill levels
-                del(spells_json[name.text])
-        for child in spells_json:
-            print '  ** %s in JSON but not in GCS' % child
-
+    character = Character(char_json, char_gcs)
+    character.check_for_consistency()
