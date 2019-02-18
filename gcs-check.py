@@ -114,13 +114,92 @@ def get_gca_attribute(char_gcs, # Element from the XML file
     return attr_gcs
 
 class Skills(object):
-
     # To go from (cost, difficulty, attribute) to skill-level:
     #   level_from_cost[cost] = base level
     #   difficulty_offset[difficulty] : add to base-level
     #   attribute : add to base-level
     level_from_cost = {1:0, 2:1, 4:2, 8:3, 12:4, 16:5, 20:6, 24:7, 28:5}
-    difficulty_offset = {'e':0, 'a':-1, 'h':-2, 'vh':-3}
+    difficulty_offset = {'E':0, 'A':-1, 'H':-2, 'VH':-3}
+    skills = {
+        'Acting': {'attr':'IQ', 'diff':'A'},
+        'Area Knowledge': {'attr':'IQ', 'diff':'E'},
+        'Armoury': {'attr':'IQ', 'diff':'A'},
+        'Axe/Mace': {'attr':'DX', 'diff':'A'},
+        'Beam Weapons': {'attr':'DX', 'diff':'E'},
+        'Brawling': {'attr':'DX', 'diff':'E'},
+        'Camouflage': {'attr':'IQ', 'diff':'E'},
+        'Climbing': {'attr':'DX', 'diff':'A'},
+        'Computer Hacking': {'attr':'IQ', 'diff':'VH'},
+        'Computer Operation': {'attr':'IQ', 'diff':'E'},
+        'Computer Programming': {'attr':'IQ', 'diff':'H'},
+        'Connoisseur': {'attr':'IQ', 'diff':'A'},
+        'Cryptography': {'attr':'IQ', 'diff':'H'},
+        'Current Affairs': {'attr':'IQ', 'diff':'E'},
+        'Detect Lies': {'attr':'Per', 'diff':'H'},
+        'Diplomacy': {'attr':'IQ', 'diff':'H'},
+        'Electronics Operation': {'attr':'IQ', 'diff':'A'},
+        'Electronics Repair': {'attr':'IQ', 'diff':'A'},
+        'Engineer': {'attr':'IQ', 'diff':'H'},
+        'Escape': {'attr':'DX', 'diff':'H'},
+        'Fast-Draw': {'attr':'DX', 'diff':'E'},
+        'Fast-Talk': {'attr':'IQ', 'diff':'A'},
+        'Filch': {'attr':'DX', 'diff':'A'},
+        'First Aid': {'attr':'IQ', 'diff':'E'},
+        'Forgery': {'attr':'IQ', 'diff':'H'},
+        'Gambling': {'attr':'IQ', 'diff':'A'},
+        'Gesture': {'attr':'IQ', 'diff':'E'},
+        'Gunner': {'attr':'DX', 'diff':'E'},
+        'Guns': {'attr':'DX', 'diff':'E'},
+        'Hazardous Materials': {'attr':'IQ', 'diff':'A'},
+        'Holdout': {'attr':'IQ', 'diff':'A'},
+        'Interrogation': {'attr':'IQ', 'diff':'A'},
+        'Intimidation': {'attr':'Will', 'diff':'A'},
+        'Karate': {'attr':'DX', 'diff':'H'},
+        'Knife': {'attr':'DX', 'diff':'E'},
+        'Law': {'attr':'IQ', 'diff':'H'},
+        'Lip Reading': {'attr':'Per', 'diff':'A'},
+        'Lockpicking': {'attr':'IQ', 'diff':'A'},
+        'Mathematics': {'attr':'IQ', 'diff':'H'},
+        'Mechanic': {'attr':'IQ', 'diff':'A'},
+        'Observation': {'attr':'Per', 'diff':'A'},
+        'Physician': {'attr':'IQ', 'diff':'H'},
+        'Physics': {'attr':'IQ', 'diff':'VH'},
+        'Pickpocket': {'attr':'DX', 'diff':'H'},
+        'Piloting': {'attr':'DX', 'diff':'A'},
+        'Running': {'attr':'HT', 'diff':'A'},
+        'Scrounging': {'attr':'Per', 'diff':'E'},
+        'Stealth': {'attr':'DX', 'diff':'A'},
+        'Streetwise': {'attr':'IQ', 'diff':'A'},
+        'Theology': {'attr':'IQ', 'diff':'H'},
+        'Throwing': {'attr':'DX', 'diff':'A'},
+        'Thrown Weapon': {'attr':'DX', 'diff':'E'},
+        'Traps': {'attr':'IQ', 'diff':'A'},
+        'Urban Survival': {'attr':'Per', 'diff':'A'},
+    }
+
+    @staticmethod
+    def get_level(attribs,    # dict containing HT, IQ, etc.
+                  skill_name, # name of skill
+                  cost        # points spent on skill
+                 ):
+        if skill_name not in Skills.skills:
+            print '** No data for skill "%s"' % skill_name
+            return 0
+        skill = Skills.skills[skill_name]
+        while cost not in Skills.level_from_cost and cost > 1:
+            cost -= 1
+        if cost < 1:
+            print '** Cost %d invalid for skill %s' % (cost, skill_name)
+            return 0
+        level = Skills.level_from_cost[cost]
+
+        level += Skills.difficulty_offset[skill['diff']]
+
+        if skill['attr'] not in attribs:
+            print '** Required attribute "%s" not supplied' % skill['attr']
+            return 0
+        level += attribs[skill['attr']]
+        return level
 
 if __name__ == '__main__':
     PP = pprint.PrettyPrinter(indent=3, width=150)
@@ -196,6 +275,8 @@ if __name__ == '__main__':
     else:
         print '  FP: %r' % attr_gcs
 
+    ## SKILLS #####
+
     print '\n-- Skills -----'
     #skills = char_gcs.find('skill_list')
     #for child in skills:
@@ -217,23 +298,29 @@ if __name__ == '__main__':
         skills_json = {}
 
     for skill_gcs in skills_gcs:
-        base_name = skill_gcs.find('name')
-        #print 'SKILL BASE NAME: "%r"' % base_name.text # TODO: remove
+        base_name = skill_gcs.find('name').text
+        #print 'SKILL BASE NAME: "%r"' % base_name # TODO: remove
         specs = []
         for specialization in skill_gcs.findall('specialization'):
             specs.append(specialization.text)
         if len(specs) > 0:
-            name_text = '%s (%s)' % (base_name.text, ','.join(specs))
+            name_text = '%s (%s)' % (base_name, ','.join(specs))
         else:
-            name_text = base_name.text
-        print 'SKILL FULL NAME: "%r"' % name_text # TODO: remove
+            name_text = base_name
+        #print '  "%r"' % name_text # TODO: remove
 
         if name_text not in skills_json:
             print '  ** "%s" in GCS but not in JSON' % name_text
         else:
             cost_text_gcs = skill_gcs.find('points')
             cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
-            # TODO: compare calculated skill level vs points
+
+            level_gcs = Skills.get_level(attrs, base_name, cost_gcs)
+            if level_gcs != skills_json[name_text]:
+                print '  ** %s = %r in GCS but %r in JSON' % (
+                    name_text, cost_gcs, skills_json[name_text])
+            else:
+                print '  %s: %r' % (name_text, cost_gcs)
 
             del(skills_json[name_text])
     for skill_json in skills_json:
@@ -241,6 +328,7 @@ if __name__ == '__main__':
 
 
     ## ADVANTAGES #####
+    # Checks points spent
 
     print '\n-- Advantages -----'
     advantages_gcs = char_gcs.find('advantage_list')
@@ -290,6 +378,7 @@ if __name__ == '__main__':
 
 
     ## SPELLS #####
+    # TODO: need to include difficulty level
 
     spells_gcs = char_gcs.find('spell_list')
     if spells_gcs is not None:
@@ -309,3 +398,4 @@ if __name__ == '__main__':
                 del(spells_json[name.text])
         for child in spells_json:
             print '  ** %s in JSON but not in GCS' % child
+

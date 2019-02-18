@@ -1648,7 +1648,7 @@
         "Escape": 9, 
         "Mechanic (Spacecraft)": 15, 
         "Electronics Operation (Terraforming)": 13, 
-        "Fast Talk": 15, 
+        "Fast-Talk": 15, 
         "Connoisseur (Visual Arts)": 13, 
         "Forgery": 12, 
         "Brawling": 11, 
@@ -1662,7 +1662,7 @@
         "Climbing": 8, 
         "Detect Lies": 14, 
         "Electronics Repair (Security)": 15, 
-        "Law (Conglomerate/Trans-Territorial)": 13, 
+        "Law (Conglomerate, Trans territorial jurisdiction/the void)": 13,
         "Computer Operation": 14, 
         "Computer Programming": 12, 
         "Area Knowledge (Space Station)": 16, 
@@ -2215,7 +2215,8 @@
         "Fast-Draw (Pistol)": 9, 
         "Brawling": 8, 
         "First Aid": 17, 
-        "Beam Weapons (Pistol)": 14
+        "Beam Weapons (Pistol)": 14,
+        "Law (Conglomerate, Trans territorial jurisdiction/the void)": 14
       }, 
       "shock": 0, 
       "armor-index": null, 
