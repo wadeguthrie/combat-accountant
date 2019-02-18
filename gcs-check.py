@@ -113,6 +113,14 @@ def get_gca_attribute(char_gcs, # Element from the XML file
     attr_gcs = int(attr_gcs_text)
     return attr_gcs
 
+class Skills(object):
+
+    # To go from (cost, difficulty, attribute) to skill-level:
+    #   level_from_cost[cost] = base level
+    #   difficulty_offset[difficulty] : add to base-level
+    #   attribute : add to base-level
+    level_from_cost = {1:0, 2:1, 4:2, 8:3, 12:4, 16:5, 20:6, 24:7, 28:5}
+    difficulty_offset = {'e':0, 'a':-1, 'h':-2, 'vh':-3}
 
 if __name__ == '__main__':
     PP = pprint.PrettyPrinter(indent=3, width=150)
@@ -158,8 +166,10 @@ if __name__ == '__main__':
                                  'IQ': 'iq' ,
                                  'HT': 'ht'
                                }
+    attrs = {}
     for attr_name in attr_names_json_from_gca:
         attr_gcs = get_gca_attribute(char_gcs, attr_name)
+        attrs[attr_name] = attr_gcs
         attr_json = char_json['permanent'][attr_names_json_from_gca[attr_name]]
         if attr_gcs != attr_json:
             print '  ** %s = %r in GCS but %r in JSON' % (attr_name,
@@ -170,7 +180,7 @@ if __name__ == '__main__':
 
     # HP
     attr_gcs = get_gca_attribute(char_gcs, 'HP')
-    attr_gcs += get_gca_attribute(char_gcs, 'ST')
+    attr_gcs += attrs['ST']
     attr_json = char_json['permanent']['hp']
     if attr_gcs != attr_json:
         print '  ** HP = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
@@ -179,21 +189,55 @@ if __name__ == '__main__':
 
     # FP
     attr_gcs = get_gca_attribute(char_gcs, 'FP')
-    attr_gcs += get_gca_attribute(char_gcs, 'HT')
+    attr_gcs += attrs['HT']
     attr_json = char_json['permanent']['fp']
     if attr_gcs != attr_json:
         print '  ** FP = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
     else:
         print '  FP: %r' % attr_gcs
 
-    print '\n-- Skill List -----'
-    skills = char_gcs.find('skill_list')
-    for child in skills:
-        name = child.find('name')
-        # TODO: will need to have a table of skills to look-up the point
-        # cost versus the resulting value
-        cost = child.find('points')
-        print '  %r %r' % (name.text, 0 if cost is None else cost.text)
+    print '\n-- Skills -----'
+    #skills = char_gcs.find('skill_list')
+    #for child in skills:
+    #    name = child.find('name')
+    #    # TODO: will need to have a table of skills to look-up the point
+    #    # cost versus the resulting value
+    #    cost = child.find('points')
+    #    print '  %r %r' % (name.text, 0 if cost is None else cost.text)
+
+    skills_gcs = char_gcs.find('skill_list')
+    #for skill_gcs in skills_gcs:
+    #    name = skill_gcs.find('name')
+    #    cost = skill_gcs.find('base_points')
+    #    print '  %r %r' % (name.text, 0 if cost is None else cost.text)
+
+    if 'skills' in char_json:
+        skills_json = copy.deepcopy(char_json['skills'])
+    else:
+        skills_json = {}
+
+    for skill_gcs in skills_gcs:
+        base_name = skill_gcs.find('name')
+        #print 'SKILL BASE NAME: "%r"' % base_name.text # TODO: remove
+        specs = []
+        for specialization in skill_gcs.findall('specialization'):
+            specs.append(specialization.text)
+        if len(specs) > 0:
+            name_text = '%s (%s)' % (base_name.text, ','.join(specs))
+        else:
+            name_text = base_name.text
+        print 'SKILL FULL NAME: "%r"' % name_text # TODO: remove
+
+        if name_text not in skills_json:
+            print '  ** "%s" in GCS but not in JSON' % name_text
+        else:
+            cost_text_gcs = skill_gcs.find('points')
+            cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
+            # TODO: compare calculated skill level vs points
+
+            del(skills_json[name_text])
+    for skill_json in skills_json:
+        print '  ** "%s" in JSON but not in GCS' % skill_json
 
 
     ## ADVANTAGES #####

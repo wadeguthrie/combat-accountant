@@ -5,9 +5,9 @@
         "skills": {
           "type": "value", 
           "value": {
-            "beam weapons (pistol)": 15, 
-            "brawling": 15, 
-            "knife": 15
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 15, 
+            "Knife": 15
           }
         }, 
         "permanent": {
@@ -72,7 +72,7 @@
                 }
               }, 
               "reload": 3, 
-              "skill": "beam weapons (pistol)", 
+              "skill": "Beam Weapons (Pistol)", 
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -96,7 +96,7 @@
                 }
               }, 
               "parry": -1, 
-              "skill": "knife", 
+              "skill": "Knife", 
               "type": "melee weapon"
             }, 
             {
@@ -113,9 +113,9 @@
         "skills": {
           "type": "value", 
           "value": {
-            "beam weapons (pistol)": 18, 
-            "brawling": 18, 
-            "knife": 18
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
           }
         }, 
         "permanent": {
@@ -185,7 +185,7 @@
                 }
               }, 
               "reload": 3, 
-              "skill": "beam weapons (pistol)", 
+              "skill": "Beam Weapons (Pistol)", 
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -216,7 +216,7 @@
                 }
               }, 
               "parry": -1, 
-              "skill": "knife", 
+              "skill": "Knife", 
               "type": "melee weapon"
             }, 
             {
@@ -231,7 +231,7 @@
                 }
               }, 
               "parry": 0, 
-              "skill": "karate", 
+              "skill": "Karate", 
               "type": "melee weapon"
             }, 
             {
@@ -463,9 +463,9 @@
         "skills": {
           "type": "value", 
           "value": {
-            "beam weapons (pistol)": 15, 
-            "brawling": 14, 
-            "knife": 15
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 14, 
+            "Knife": 15
           }
         }, 
         "permanent": {
@@ -530,7 +530,7 @@
                 }
               }, 
               "reload": 3, 
-              "skill": "beam weapons (pistol)", 
+              "skill": "Beam Weapons (Pistol)", 
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -554,7 +554,7 @@
                 }
               }, 
               "parry": -1, 
-              "skill": "knife", 
+              "skill": "Knife", 
               "type": "melee weapon"
             }, 
             {
@@ -611,9 +611,9 @@
         "skills": {
           "type": "value", 
           "value": {
-            "beam weapons (pistol)": 15, 
-            "brawling": 12, 
-            "knife": 15
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 12, 
+            "Knife": 15
           }
         }, 
         "permanent": {
@@ -686,7 +686,7 @@
                 }
               }, 
               "parry": -1, 
-              "skill": "knife", 
+              "skill": "Knife", 
               "type": "melee weapon"
             }
           ]
@@ -736,9 +736,9 @@
         "skills": {
           "type": "value", 
           "value": {
-            "beam weapons (pistol)": 13, 
-            "brawling": 14, 
-            "knife": 14
+            "Beam Weapons (Pistol)": 13, 
+            "Brawling": 14, 
+            "Knife": 14
           }
         }, 
         "permanent": {
@@ -804,7 +804,7 @@
                 }
               }, 
               "parry": -1, 
-              "skill": "knife", 
+              "skill": "Knife", 
               "type": "melee weapon"
             }, 
             {
@@ -828,7 +828,7 @@
                 }
               }, 
               "reload": 3, 
-              "skill": "beam weapons (pistol)", 
+              "skill": "Beam Weapons (Pistol)", 
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -843,9 +843,9 @@
         "skills": {
           "type": "value", 
           "value": {
-            "beam weapons (pistol)": 17, 
-            "brawling": 17, 
-            "knife": 17
+            "Beam Weapons (Pistol)": 17, 
+            "Brawling": 17, 
+            "Knife": 17
           }
         }, 
         "permanent": {
@@ -916,7 +916,7 @@
                 }
               }, 
               "reload": 3, 
-              "skill": "beam weapons (pistol)", 
+              "skill": "Beam Weapons (Pistol)", 
               "type": "ranged weapon", 
               "ammo": {
                 "name": "C Cell", 
@@ -940,7 +940,7 @@
                 }
               }, 
               "parry": -1, 
-              "skill": "knife", 
+              "skill": "Knife", 
               "type": "melee weapon"
             }, 
             {
@@ -1000,7 +1000,7 @@
             }
           }, 
           "parry": -1, 
-          "skill": "knife", 
+          "skill": "Knife", 
           "type": "melee weapon"
         }, 
         {
@@ -1017,7 +1017,7 @@
             }
           }, 
           "reload": 3, 
-          "skill": "beam weapons (pistol)", 
+          "skill": "Beam Weapons (Pistol)", 
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -1098,7 +1098,7 @@
             }
           }, 
           "reload": 3, 
-          "skill": "guns (pistol)", 
+          "skill": "Guns (Pistol)", 
           "type": "ranged weapon", 
           "ammo": {
             "name": "Zip Clip", 
@@ -1150,27 +1150,27 @@
       ], 
       "stunned": 0, 
       "skills": {
-        "interrogation": 12, 
-        "armoury (small arms)": 11, 
-        "guns (grenade launcher)": 9, 
-        "fast-draw (ammo)": 14, 
-        "observation": 13, 
-        "throwing": 10, 
-        "lockpicking": 12, 
-        "beam weapons (rifle)": 14, 
-        "streetwise": 12, 
-        "karate": 13, 
-        "axe/mace": 12, 
-        "acting": 7, 
-        "brawling": 13, 
-        "first aid": 14, 
-        "beam weapons (pistol)": 15, 
-        "fast-talk": 13, 
-        "gambling": 7, 
-        "holdout": 11, 
-        "stealth": 14, 
-        "knife": 15, 
-        "traps": 12
+        "Interrogation": 12, 
+        "Armoury (Small Arms)": 11, 
+        "Guns (Grenade Launcher)": 9, 
+        "Fast-Draw (Ammo)": 14, 
+        "Observation": 13, 
+        "Throwing": 10, 
+        "Lockpicking": 12, 
+        "Beam Weapons (Rifle)": 14, 
+        "Streetwise": 12, 
+        "Karate": 13, 
+        "Axe/Mace": 12, 
+        "Acting": 7, 
+        "Brawling": 13, 
+        "First Aid": 14, 
+        "Beam Weapons (Pistol)": 15, 
+        "Fast-Talk": 13, 
+        "Gambling": 7, 
+        "Holdout": 11, 
+        "Stealth": 14, 
+        "Knife": 15, 
+        "Traps": 12
       }, 
       "shock": 0, 
       "armor-index": null, 
@@ -1240,7 +1240,7 @@
             }
           }, 
           "reload": 3, 
-          "skill": "beam weapons (pistol)", 
+          "skill": "Beam Weapons (Pistol)", 
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -1267,7 +1267,7 @@
               "type": "fat"
             }
           }, 
-          "skill": "axe/mace", 
+          "skill": "Axe/Mace", 
           "type": "melee weapon"
         }, 
         {
@@ -1280,23 +1280,23 @@
       ], 
       "stunned": 0, 
       "skills": {
-        "engineer (electronics)": 12, 
-        "engineer (starships)": 12, 
-        "cryptography": 13, 
-        "mathematics (applied)": 12, 
-        "beam weapons (rifle)": 16, 
-        "computer hacking": 15, 
-        "electronics operation": 13, 
-        "axe/mace": 11, 
-        "computer programming": 12, 
-        "first aid": 14, 
-        "computer security": 12, 
-        "beam weapons (pistol)": 16, 
-        "armoury (small arms)": 13, 
-        "brawling": 12, 
-        "physics": 12, 
-        "piloting": 14, 
-        "observation": 15
+        "Engineer (Electronics)": 12, 
+        "Engineer (Starships)": 12, 
+        "Cryptography": 13, 
+        "Mathematics (Applied)": 12, 
+        "Beam Weapons (Rifle)": 16, 
+        "Computer Hacking": 15, 
+        "Electronics Operation": 13, 
+        "Axe/Mace": 11, 
+        "Computer Programming": 12, 
+        "First Aid": 14, 
+        "Computer Security": 12, 
+        "Beam Weapons (Pistol)": 16, 
+        "Armoury (Small Arms)": 13, 
+        "Brawling": 12, 
+        "Physics": 12, 
+        "Piloting": 14, 
+        "Observation": 15
       }, 
       "shock": 0, 
       "armor-index": null, 
@@ -1570,7 +1570,7 @@
             }
           }, 
           "reload": 3, 
-          "skill": "beam weapons (pistol)", 
+          "skill": "Beam Weapons (Pistol)", 
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -1597,7 +1597,7 @@
               "type": "fat"
             }
           }, 
-          "skill": "axe/mace", 
+          "skill": "Axe/Mace", 
           "type": "melee weapon"
         }, 
         {
@@ -1616,7 +1616,7 @@
             }
           }, 
           "parry": -1, 
-          "skill": "knife", 
+          "skill": "Knife", 
           "type": "melee weapon"
         }, 
         {
@@ -1635,39 +1635,39 @@
             }
           }, 
           "parry": -1, 
-          "skill": "knife", 
+          "skill": "Knife", 
           "type": "melee weapon"
         }
       ], 
       "stunned": 0, 
       "skills": {
-        "electronics repair (terraforming)": 13, 
-        "diplomacy": 14, 
-        "thrown weapon (knife)": 10, 
-        "computer hacking": 13, 
-        "escape": 9, 
-        "mechanic (spacecraft)": 15, 
-        "electronics operation (terraforming)": 13, 
-        "fast talk": 15, 
-        "connoisseur (visual arts)": 13, 
-        "forgery": 12, 
-        "brawling": 11, 
-        "hazardous materials (chemical)": 13, 
-        "beam weapons (pistol)": 11, 
-        "lip reading": 14, 
-        "knife": 10, 
-        "streetwise": 15, 
-        "axe/mace": 8, 
-        "current affairs (terraforming)": 14, 
-        "climbing": 8, 
-        "detect lies": 14, 
-        "electronics repair (security)": 15, 
-        "law (conglomerate/trans-territorial)": 13, 
-        "computer operation": 14, 
-        "computer programming": 12, 
-        "area knowledge (space station)": 16, 
-        "piloting (low-performance spacecraft)": 9, 
-        "electronics operation (security)": 14
+        "Electronics Repair (Terraforming)": 13, 
+        "Diplomacy": 14, 
+        "Thrown Weapon (Knife)": 10, 
+        "Computer Hacking": 13, 
+        "Escape": 9, 
+        "Mechanic (Spacecraft)": 15, 
+        "Electronics Operation (Terraforming)": 13, 
+        "Fast Talk": 15, 
+        "Connoisseur (Visual Arts)": 13, 
+        "Forgery": 12, 
+        "Brawling": 11, 
+        "Hazardous Materials (Chemical)": 13, 
+        "Beam Weapons (Pistol)": 11, 
+        "Lip Reading": 14, 
+        "Knife": 10, 
+        "Streetwise": 15, 
+        "Axe/Mace": 8, 
+        "Current Affairs (Terraforming)": 14, 
+        "Climbing": 8, 
+        "Detect Lies": 14, 
+        "Electronics Repair (Security)": 15, 
+        "Law (Conglomerate/Trans-Territorial)": 13, 
+        "Computer Operation": 14, 
+        "Computer Programming": 12, 
+        "Area Knowledge (Space Station)": 16, 
+        "Piloting (Low-performance Spacecraft)": 9, 
+        "Electronics Operation (Security)": 14
       }, 
       "shock": 0, 
       "armor-index": null, 
@@ -1744,7 +1744,7 @@
             }
           }, 
           "reload": 3, 
-          "skill": "beam weapons (pistol)", 
+          "skill": "Beam Weapons (Pistol)", 
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -1775,7 +1775,7 @@
             }
           }, 
           "parry": -1, 
-          "skill": "knife", 
+          "skill": "Knife", 
           "type": "melee weapon"
         }, 
         {
@@ -1790,7 +1790,7 @@
               "type": "fat"
             }
           }, 
-          "skill": "axe/mace", 
+          "skill": "Axe/Mace", 
           "type": "melee weapon"
         }, 
         {
@@ -1805,7 +1805,7 @@
             }
           }, 
           "parry": 0, 
-          "skill": "karate", 
+          "skill": "Karate", 
           "type": "melee weapon"
         }, 
         {
@@ -1825,7 +1825,7 @@
             }
           }, 
           "reload": 3, 
-          "skill": "beam weapons (pistol)", 
+          "skill": "Beam Weapons (Pistol)", 
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -1836,29 +1836,29 @@
       ], 
       "stunned": 0, 
       "skills": {
-        "throwing": 14, 
-        "armoury (small arms)": 10, 
-        "scrounging": 12, 
-        "camouflage": 11, 
-        "stealth": 12, 
-        "brawling": 15, 
-        "beam weapons (pistol)": 16, 
-        "knife": 14, 
-        "urban survival": 11, 
-        "lockpicking": 10, 
-        "intimidation": 12, 
-        "streetwise": 11, 
-        "axe/mace": 13, 
-        "running": 10, 
-        "fast-draw (pistol)": 14, 
-        "climbing": 12, 
-        "theology (Vodou)": 10, 
-        "filch": 12, 
-        "pickpocket": 11, 
-        "beam weapons (rifle)": 13, 
-        "first aid": 13, 
-        "fast-draw (knife)": 14, 
-        "gesture": 11
+        "Throwing": 14, 
+        "Armoury (Small Arms)": 10, 
+        "Scrounging": 12, 
+        "Camouflage": 11, 
+        "Stealth": 12, 
+        "Brawling": 15, 
+        "Beam Weapons (Pistol)": 16, 
+        "Knife": 14, 
+        "Urban Survival": 11, 
+        "Lockpicking": 10, 
+        "Intimidation": 12, 
+        "Streetwise": 11, 
+        "Axe/Mace": 13, 
+        "Running": 10, 
+        "Fast-Draw (Pistol)": 14, 
+        "Climbing": 12, 
+        "Theology (Vodou)": 10, 
+        "Filch": 12, 
+        "Pickpocket": 11, 
+        "Beam Weapons (Rifle)": 13, 
+        "First Aid": 13, 
+        "Fast-Draw (Knife)": 14, 
+        "Gesture": 11
       }, 
       "notes": [
         "Born November 1st 2099 (Fet Gede - All Souls Day) - 24 years old.", 
@@ -2175,7 +2175,7 @@
               "type": "fat"
             }
           }, 
-          "skill": "axe/mace", 
+          "skill": "Axe/Mace", 
           "type": "melee weapon"
         }, 
         {
@@ -2192,7 +2192,7 @@
             }
           }, 
           "reload": 3, 
-          "skill": "beam weapons (pistol)", 
+          "skill": "Beam Weapons (Pistol)", 
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -2210,12 +2210,12 @@
       ], 
       "stunned": 0, 
       "skills": {
-        "physician": 14, 
-        "axe/mace": 7, 
-        "fast-draw (pistol)": 9, 
-        "brawling": 8, 
-        "first aid": 17, 
-        "beam weapons (pistol)": 14
+        "Physician": 14, 
+        "Axe/Mace": 7, 
+        "Fast-Draw (Pistol)": 9, 
+        "Brawling": 8, 
+        "First Aid": 17, 
+        "Beam Weapons (Pistol)": 14
       }, 
       "shock": 0, 
       "armor-index": null, 
@@ -2636,10 +2636,10 @@
         "stuff": [], 
         "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 17, 
-          "brawling": 17, 
-          "beam weapons (rifle)": 14, 
-          "knife": 17
+          "Beam Weapons (Pistol)": 17, 
+          "Brawling": 17, 
+          "Beam Weapons (Rifle)": 14, 
+          "Knife": 17
         }, 
         "notes": [
           "origin: australian", 
@@ -2708,9 +2708,9 @@
         "stuff": [], 
         "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 13, 
-          "brawling": 14, 
-          "knife": 14
+          "Beam Weapons (Pistol)": 13, 
+          "Brawling": 14, 
+          "Knife": 14
         }, 
         "notes": [
           "origin: australian", 
@@ -2769,9 +2769,9 @@
         "stuff": [], 
         "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 13, 
-          "brawling": 14, 
-          "knife": 14
+          "Beam Weapons (Pistol)": 13, 
+          "Brawling": 14, 
+          "Knife": 14
         }, 
         "notes": [
           "origin: australian", 
@@ -2839,9 +2839,9 @@
         "stuff": [], 
         "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 14, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 14, 
+          "Knife": 15
         }, 
         "notes": [
           "origin: australian ", 
@@ -2914,7 +2914,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -2938,7 +2938,7 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }, 
           {
@@ -2959,9 +2959,9 @@
         ], 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 17, 
-          "brawling": 17, 
-          "knife": 17
+          "Beam Weapons (Pistol)": 17, 
+          "Brawling": 17, 
+          "Knife": 17
         }, 
         "notes": [
           "origin: australian", 
@@ -3022,9 +3022,9 @@
         }, 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 14, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 14, 
+          "Knife": 15
         }, 
         "shock": 0, 
         "armor-index": null, 
@@ -3066,7 +3066,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -3090,7 +3090,7 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }, 
           {
@@ -3161,9 +3161,9 @@
         }, 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 14, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 14, 
+          "Knife": 15
         }, 
         "shock": 0, 
         "armor-index": null, 
@@ -3205,7 +3205,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -3229,7 +3229,7 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }, 
           {
@@ -3293,9 +3293,9 @@
         }, 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 14, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 14, 
+          "Knife": 15
         }, 
         "shock": 0, 
         "armor-index": null, 
@@ -3337,7 +3337,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -3368,7 +3368,7 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }, 
           {
@@ -3406,9 +3406,9 @@
         }, 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 14, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 14, 
+          "Knife": 15
         }, 
         "shock": 0, 
         "armor-index": null, 
@@ -3450,7 +3450,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -3474,7 +3474,7 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }, 
           {
@@ -3552,9 +3552,9 @@
         }, 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 14, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 14, 
+          "Knife": 15
         }, 
         "shock": 0, 
         "armor-index": null, 
@@ -3596,7 +3596,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -3620,7 +3620,7 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }, 
           {
@@ -3727,9 +3727,9 @@
         }, 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 12, 
-          "brawling": 14, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 12, 
+          "Brawling": 14, 
+          "Knife": 15
         }, 
         "shock": 0, 
         "armor-index": null, 
@@ -3771,7 +3771,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -3795,7 +3795,7 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }, 
           {
@@ -4186,15 +4186,15 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }
         ], 
         "stunned": true, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 12, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
         }, 
         "notes": [
           "station history: lifer (born on Earth, this is 1st station)", 
@@ -4275,15 +4275,15 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }
         ], 
         "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 12, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
         }, 
         "notes": [
           "station history: roo (bounce between stations)", 
@@ -4358,15 +4358,15 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }
         ], 
         "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 12, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
         }, 
         "notes": [
           "station history: staby (born on this station)", 
@@ -4438,15 +4438,15 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }
         ], 
         "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 12, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
         }, 
         "notes": [
           "station history: staby (born on this station)", 
@@ -4518,15 +4518,15 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }
         ], 
         "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 12, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
         }, 
         "notes": [
           "station history: lifer (born on Earth, this is 1st station)", 
@@ -4601,15 +4601,15 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }
         ], 
         "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 12, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
         }, 
         "notes": [
           "station history: staby (born on this station)", 
@@ -4687,7 +4687,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -4707,7 +4707,7 @@
                 "type": "fat"
               }
             }, 
-            "skill": "axe/mace", 
+            "skill": "Axe/Mace", 
             "type": "melee weapon"
           }, 
           {
@@ -4720,9 +4720,9 @@
         ], 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 16, 
-          "brawling": 16, 
-          "axe/mace": 14
+          "Beam Weapons (Pistol)": 16, 
+          "Brawling": 16, 
+          "Axe/Mace": 14
         }, 
         "shock": 0, 
         "armor-index": null, 
@@ -4779,7 +4779,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -4797,8 +4797,8 @@
         ], 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 12
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12
         }, 
         "shock": 0, 
         "armor-index": null, 
@@ -4855,7 +4855,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -4875,7 +4875,7 @@
                 "type": "fat"
               }
             }, 
-            "skill": "axe/mace", 
+            "skill": "Axe/Mace", 
             "type": "melee weapon"
           }, 
           {
@@ -4888,9 +4888,9 @@
         ], 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 16, 
-          "brawling": 16, 
-          "axe/mace": 14
+          "Beam Weapons (Pistol)": 16, 
+          "Brawling": 16, 
+          "Axe/Mace": 14
         }, 
         "shock": 0, 
         "armor-index": null, 
@@ -4947,7 +4947,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -4971,7 +4971,7 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }, 
           {
@@ -4984,9 +4984,9 @@
         ], 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 12, 
-          "brawling": 14, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 12, 
+          "Brawling": 14, 
+          "Knife": 15
         }, 
         "shock": 0, 
         "armor-index": null, 
@@ -5043,7 +5043,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -5061,8 +5061,8 @@
         ], 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 13, 
-          "brawling": 12
+          "Beam Weapons (Pistol)": 13, 
+          "Brawling": 12
         }, 
         "shock": 0, 
         "armor-index": null, 
@@ -5120,7 +5120,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -5140,7 +5140,7 @@
                 "type": "fat"
               }
             }, 
-            "skill": "axe/mace", 
+            "skill": "Axe/Mace", 
             "type": "melee weapon"
           }, 
           {
@@ -5153,9 +5153,9 @@
         ], 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 16, 
-          "brawling": 16, 
-          "axe/mace": 14
+          "Beam Weapons (Pistol)": 16, 
+          "Brawling": 16, 
+          "Axe/Mace": 14
         }, 
         "shock": 0, 
         "armor-index": null, 
@@ -5212,7 +5212,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -5232,7 +5232,7 @@
                 "type": "fat"
               }
             }, 
-            "skill": "axe/mace", 
+            "skill": "Axe/Mace", 
             "type": "melee weapon"
           }, 
           {
@@ -5245,9 +5245,9 @@
         ], 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 16, 
-          "brawling": 16, 
-          "axe/mace": 14
+          "Beam Weapons (Pistol)": 16, 
+          "Brawling": 16, 
+          "Axe/Mace": 14
         }, 
         "shock": 0, 
         "armor-index": null, 
@@ -5304,7 +5304,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -5341,9 +5341,9 @@
         ], 
         "stunned": false, 
         "skills": {
-          "beam weapons (pistol)": 12, 
-          "brawling": 14, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 12, 
+          "Brawling": 14, 
+          "Knife": 15
         }, 
         "shock": 0, 
         "armor-index": null, 
@@ -6231,7 +6231,7 @@
             }
           }, 
           "reload": 3, 
-          "skill": "beam weapons (pistol)", 
+          "skill": "Beam Weapons (Pistol)", 
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -6255,7 +6255,7 @@
             }
           }, 
           "parry": -1, 
-          "skill": "knife", 
+          "skill": "Knife", 
           "type": "melee weapon"
         }, 
         {
@@ -6268,9 +6268,9 @@
       ], 
       "stunned": 0, 
       "skills": {
-        "beam weapons (pistol)": 15, 
-        "brawling": 14, 
-        "knife": 15
+        "Beam Weapons (Pistol)": 15, 
+        "Brawling": 14, 
+        "Knife": 15
       }, 
       "notes": [
         "origin: australian", 
@@ -6393,7 +6393,7 @@
             }
           }, 
           "reload": 3, 
-          "skill": "beam weapons (pistol)", 
+          "skill": "Beam Weapons (Pistol)", 
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -6411,11 +6411,11 @@
       ], 
       "stunned": false, 
       "skills": {
-        "armoury (small arms)": 18, 
-        "armoury (heavy weapons)": 18, 
-        "gunner (beams)": 16, 
-        "gunner (cannon)": 16, 
-        "beam weapons (pistol)": 16
+        "Armoury (Small Arms)": 18, 
+        "Armoury (Heavy Weapons)": 18, 
+        "Gunner (Beams)": 16, 
+        "Gunner (Cannon)": 16, 
+        "Beam Weapons (Pistol)": 16
       }, 
       "notes": [
         "origin: russian", 
@@ -6844,7 +6844,7 @@
             }
           }, 
           "reload": 3, 
-          "skill": "beam weapons (pistol)", 
+          "skill": "Beam Weapons (Pistol)", 
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -6868,7 +6868,7 @@
             }
           }, 
           "parry": -1, 
-          "skill": "knife", 
+          "skill": "Knife", 
           "type": "melee weapon"
         }, 
         {
@@ -6881,9 +6881,9 @@
       ], 
       "stunned": 0, 
       "skills": {
-        "beam weapons (pistol)": 15, 
-        "brawling": 14, 
-        "knife": 15
+        "Beam Weapons (Pistol)": 15, 
+        "Brawling": 14, 
+        "Knife": 15
       }, 
       "notes": [
         "origin: australian", 
@@ -6954,7 +6954,7 @@
             }
           }, 
           "reload": 3, 
-          "skill": "beam weapons (pistol)", 
+          "skill": "Beam Weapons (Pistol)", 
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -6985,7 +6985,7 @@
             }
           }, 
           "parry": -1, 
-          "skill": "knife", 
+          "skill": "Knife", 
           "type": "melee weapon"
         }, 
         {
@@ -7000,7 +7000,7 @@
             }
           }, 
           "parry": 0, 
-          "skill": "karate", 
+          "skill": "Karate", 
           "type": "melee weapon"
         }, 
         {
@@ -7014,9 +7014,9 @@
       ], 
       "stunned": 0, 
       "skills": {
-        "beam weapons (pistol)": 18, 
-        "brawling": 18, 
-        "knife": 18
+        "Beam Weapons (Pistol)": 18, 
+        "Brawling": 18, 
+        "Knife": 18
       }, 
       "notes": [
         "Dima Leonid Popov", 
@@ -7401,7 +7401,7 @@
             }
           }, 
           "reload": 3, 
-          "skill": "beam weapons (pistol)", 
+          "skill": "Beam Weapons (Pistol)", 
           "type": "ranged weapon", 
           "ammo": {
             "name": "C Cell", 
@@ -7425,7 +7425,7 @@
             }
           }, 
           "parry": -1, 
-          "skill": "knife", 
+          "skill": "Knife", 
           "type": "melee weapon"
         }, 
         {
@@ -7438,9 +7438,9 @@
       ], 
       "stunned": 0, 
       "skills": {
-        "beam weapons (pistol)": 15, 
-        "brawling": 14, 
-        "knife": 15
+        "Beam Weapons (Pistol)": 15, 
+        "Brawling": 14, 
+        "Knife": 15
       }, 
       "notes": [
         "station history: lifer (born on Earth, this is 1st station)", 
@@ -7555,7 +7555,7 @@
         }
       }, 
       "parry": 0, 
-      "skill": "karate", 
+      "skill": "Karate", 
       "type": "melee weapon"
     }, 
     {
@@ -7572,7 +7572,7 @@
         }
       }, 
       "reload": 3, 
-      "skill": "beam weapons (pistol)", 
+      "skill": "Beam Weapons (Pistol)", 
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -7594,7 +7594,7 @@
         }
       }, 
       "reload": 3, 
-      "skill": "beam weapons (pistol)", 
+      "skill": "Beam Weapons (Pistol)", 
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -7616,7 +7616,7 @@
         }
       }, 
       "reload": 3, 
-      "skill": "beam weapons (pistol)", 
+      "skill": "Beam Weapons (Pistol)", 
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -7638,7 +7638,7 @@
         }
       }, 
       "reload": 3, 
-      "skill": "beam weapons (pistol)", 
+      "skill": "Beam Weapons (Pistol)", 
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -7661,7 +7661,7 @@
         }
       }, 
       "reload": 3, 
-      "skill": "beam weapons (pistol)", 
+      "skill": "Beam Weapons (Pistol)", 
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -7685,7 +7685,7 @@
         }
       }, 
       "reload": 3, 
-      "skill": "beam weapons (pistol)", 
+      "skill": "Beam Weapons (Pistol)", 
       "type": "ranged weapon", 
       "ammo": {
         "name": "C Cell", 
@@ -7707,7 +7707,7 @@
         }
       }, 
       "reload": 3, 
-      "skill": "guns (pistol)", 
+      "skill": "Guns (Pistol)", 
       "type": "ranged weapon", 
       "ammo": {
         "name": "Zip Clip", 
@@ -7729,7 +7729,7 @@
         }
       }, 
       "reload": 3, 
-      "skill": "guns (pistol)", 
+      "skill": "Guns (Pistol)", 
       "type": "ranged weapon", 
       "ammo": {
         "name": "Zip Clip", 
@@ -7753,7 +7753,7 @@
         }
       }, 
       "parry": -1, 
-      "skill": "knife", 
+      "skill": "Knife", 
       "type": "melee weapon"
     }, 
     {
@@ -7768,7 +7768,7 @@
           "type": "fat"
         }
       }, 
-      "skill": "axe/mace", 
+      "skill": "Axe/Mace", 
       "type": "melee weapon"
     }, 
     {
@@ -8344,9 +8344,9 @@
         }, 
         "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 17, 
-          "brawling": 17, 
-          "knife": 17
+          "Beam Weapons (Pistol)": 17, 
+          "Brawling": 17, 
+          "Knife": 17
         }, 
         "shock": 0, 
         "armor-index": 3, 
@@ -8393,7 +8393,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -8417,7 +8417,7 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }, 
           {
@@ -8454,9 +8454,9 @@
         }, 
         "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 17, 
-          "brawling": 17, 
-          "knife": 17
+          "Beam Weapons (Pistol)": 17, 
+          "Brawling": 17, 
+          "Knife": 17
         }, 
         "shock": 0, 
         "armor-index": 3, 
@@ -8504,7 +8504,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -8528,7 +8528,7 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }, 
           {
@@ -8568,9 +8568,9 @@
         }, 
         "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 17, 
-          "brawling": 17, 
-          "knife": 17
+          "Beam Weapons (Pistol)": 17, 
+          "Brawling": 17, 
+          "Knife": 17
         }, 
         "shock": 0, 
         "armor-index": 3, 
@@ -8617,7 +8617,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -8641,7 +8641,7 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }, 
           {
@@ -8678,9 +8678,9 @@
         }, 
         "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 17, 
-          "brawling": 17, 
-          "knife": 17
+          "Beam Weapons (Pistol)": 17, 
+          "Brawling": 17, 
+          "Knife": 17
         }, 
         "shock": 0, 
         "armor-index": 3, 
@@ -8727,7 +8727,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -8751,7 +8751,7 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }, 
           {
@@ -8803,7 +8803,7 @@
               }
             }, 
             "reload": 3, 
-            "skill": "beam weapons (pistol)", 
+            "skill": "Beam Weapons (Pistol)", 
             "type": "ranged weapon", 
             "ammo": {
               "name": "C Cell", 
@@ -8827,7 +8827,7 @@
               }
             }, 
             "parry": -1, 
-            "skill": "knife", 
+            "skill": "Knife", 
             "type": "melee weapon"
           }, 
           {
@@ -8840,9 +8840,9 @@
         ], 
         "stunned": 0, 
         "skills": {
-          "beam weapons (pistol)": 15, 
-          "brawling": 14, 
-          "knife": 15
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 14, 
+          "Knife": 15
         }, 
         "notes": [
           "origin: australian", 
