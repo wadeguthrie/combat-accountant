@@ -4864,6 +4864,7 @@ class FightHandler(ScreenHandler):
 
         # Figure out who loses the hit points
 
+        auto_attack = False
         if self.__viewing_index is not None:
             current_fighter = self.__fighters[self.__viewing_index]
             opponent = self.get_opponent_for(current_fighter)
@@ -4871,7 +4872,11 @@ class FightHandler(ScreenHandler):
         else:
             current_fighter = self.get_current_fighter()
             opponent = self.get_opponent_for(current_fighter)
-            hp_recipient = current_fighter if opponent is None else opponent
+            if opponent is None:
+                hp_recipient = current_fighter
+            else:
+                hp_recipient = opponent
+                auto_attack = True
 
         title = 'Reduce (%s\'s) HP By...' % hp_recipient.name
         height = 1
@@ -4884,6 +4889,20 @@ class FightHandler(ScreenHandler):
             return True # Keep fighting
 
         self.__ruleset.adjust_hp(hp_recipient, adj)
+
+        # Automatically do the attack maneuver
+        if auto_attack:
+            action_menu = self.__ruleset.get_action_menu(current_fighter)
+            for action in action_menu:
+                if action[0] == 'attack':
+                    maneuver = action[1]
+                    param = (None if 'param' not in maneuver
+                                  else maneuver['param'])
+                    (maneuver['doit'])(param)
+                    self.__ruleset.do_maneuver(current_fighter)
+                    current_fighter.add_timer(0.9, maneuver['text'])
+                    self.add_to_history(' (%s) did (%s) maneuver' %
+                                (current_fighter.name, maneuver['text'][0]))
 
         # Record for posterity
         if hp_recipient is opponent:
