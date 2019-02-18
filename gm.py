@@ -2067,6 +2067,12 @@ class Fighter(object):
         self.decrement_timers()
         self.remove_expired_keep_dying_timers()
 
+    def toggle_absent(self):
+
+        if self.details['state'] == 'absent':
+            self.details['state'] = 'alive'
+        else:
+            self.details['state'] = 'absent'
 
     def __fire_timer(self, timer):
 
@@ -4610,6 +4616,7 @@ class FightHandler(ScreenHandler):
             ord(' '): {'name': 'next fighter','func': self.__next_fighter},
             ord('<'): {'name': 'prev fighter','func': self.__prev_fighter},
             ord('?'): {'name': 'explain',     'func': self.__show_why},
+            ord('A'): {'name': 'absent',      'func': self.__absent},
             ord('d'): {'name': 'defend',      'func': self.__defend},
             ord('D'): {'name': 'dead/unconscious',
                                               'func': self.__dead},
@@ -4931,6 +4938,35 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
 
+    def __absent(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        now_absent, current_fighter = self.__select_fighter('Who is Absent',
+                                                          default_selection=1)
+        if now_absent is None:
+            return True # Keep fighting
+
+        if now_absent.is_conscious(): # and not absent
+            now_absent.details['opponent'] = None # absent men fight nobody
+            now_absent.toggle_absent()
+        else:
+            now_absent.toggle_absent()
+
+        absnet_name = now_absent.name
+        self.add_to_history(' (%s) was marked as (%s)' % (
+                                                absnet_name,
+                                                now_absent.details['state']))
+
+        opponent = self.get_opponent_for(current_fighter)
+        self._window.show_fighters(current_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
+        return True # Keep going
+
     def __dead(self):
         '''
         Command ribbon method.
@@ -5080,6 +5116,7 @@ class FightHandler(ScreenHandler):
             if bad_guy.group == 'PCs': # only steal from bad guys
                 continue
             if bad_guy.is_conscious(): # only steal from the dead/unconscious
+                # Note that absent characters are not marked as conscious
                 continue
             found_dead_bad_guy = True
 
