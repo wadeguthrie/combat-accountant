@@ -1,9 +1,18 @@
 #! /usr/bin/python
 
+import argparse
 import copy
+import glob
 import json
 import pprint
+import sys
 import xml.etree.ElementTree as ET
+
+class MyArgumentParser(argparse.ArgumentParser):
+    def error(self, message):
+        sys.stderr.write('error: %s\n' % message)
+        self.print_help()
+        sys.exit(2) 
 
 class GmJson(object):
     '''
@@ -453,17 +462,31 @@ class Character(object):
         '''
 
 if __name__ == '__main__':
+    parser = MyArgumentParser()
+    parser.add_argument('json_filename',
+             help='Input JSON file containing characters')
+    parser.add_argument('gca_filename',
+             help='Input GCA file containing characters (may use wildcards)')
+    parser.add_argument('-v', '--verbose', help='verbose', action='store_true',
+                        default=False)
+
+    ARGS = parser.parse_args()
     PP = pprint.PrettyPrinter(indent=3, width=150)
 
-    char_gcs = ET.parse('sample.gcs').getroot()
+    chars_json = []
+    with GmJson(ARGS.json_filename, window_manager=None) as campaign:
+        data_json = campaign.read_data
+        chars_json = [k for k in data_json['PCs'].keys()]
 
-    chars_json = None
-    filename = 'persephone.json'
-    with GmJson(filename, window_manager=None) as campaign:
-        chars_json = campaign.read_data
+    for gcs_file in glob.glob(ARGS.gca_filename):
+        char_gcs = ET.parse(gcs_file).getroot()
+        print 'Which character goes with "%s":' % gcs_file
+        for i, char_name_json in enumerate(chars_json):
+            print '  %d) %s' % (i, char_name_json)
+        char_number_json = input('Number:')
 
+        print '\n== CHARACTER NAME "%s" =====' % chars_json[char_number_json]
+        char_json = data_json['PCs'][chars_json[char_number_json]]
+        character = Character(char_json, char_gcs)
+        character.check_for_consistency()
 
-    char_json = chars_json['PCs']['mama V - Karen']
-
-    character = Character(char_json, char_gcs)
-    character.check_for_consistency()
