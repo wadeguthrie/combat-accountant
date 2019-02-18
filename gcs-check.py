@@ -114,7 +114,7 @@ class GmJson(object):
 
         return GmJson.__byteify(my_dict, ignore_dicts=True), None
 
-def get_gca_attribute(char_gcs, # Element from the XML file
+def get_gcs_attribute(char_gcs, # Element from the XML file
                       attr_name # string
                      ):
     attr_gcs_element = char_gcs.find(attr_name)
@@ -135,6 +135,8 @@ class Skills(object):
         'Armoury':              {'attr':'IQ', 'diff':'A'},
         'Axe/Mace':             {'attr':'DX', 'diff':'A'},
         'Beam Weapons':         {'attr':'DX', 'diff':'E'},
+        # Bartender is really a professional skill
+        'Bartender':            {'attr':'IQ', 'diff':'A'},
         'Brawling':             {'attr':'DX', 'diff':'E'},
         'Camouflage':           {'attr':'IQ', 'diff':'E'},
         'Climbing':             {'attr':'DX', 'diff':'A'},
@@ -148,6 +150,7 @@ class Skills(object):
         'Diplomacy':            {'attr':'IQ', 'diff':'H'},
         'Electronics Operation':{'attr':'IQ', 'diff':'A'},
         'Electronics Repair':   {'attr':'IQ', 'diff':'A'},
+        'Expert Skill':         {'attr':'IQ', 'diff':'H'},
         'Engineer':             {'attr':'IQ', 'diff':'H'},
         'Escape':               {'attr':'DX', 'diff':'H'},
         'Fast-Draw':            {'attr':'DX', 'diff':'E'},
@@ -177,6 +180,7 @@ class Skills(object):
         'Piloting':             {'attr':'DX', 'diff':'A'},
         'Running':              {'attr':'HT', 'diff':'A'},
         'Scrounging':           {'attr':'Per', 'diff':'E'},
+        'Search':               {'attr':'Per', 'diff':'A'},
         'Stealth':              {'attr':'DX', 'diff':'A'},
         'Streetwise':           {'attr':'IQ', 'diff':'A'},
         'Theology':             {'attr':'IQ', 'diff':'H'},
@@ -259,19 +263,19 @@ class Character(object):
         self.check_equipment()
 
     def check_attribs(self):
-        # TODO: add move, will, and speed -- gca has points spent / json
+        # TODO: add move, will, and speed -- gcs has points spent / json
         # has result
-        attr_names_json_from_gca = {
+        attr_names_json_from_gcs = {
                                      'ST': 'st' ,
                                      'DX': 'dx' ,
                                      'IQ': 'iq' ,
                                      'HT': 'ht'
                                    }
-        for attr_name in attr_names_json_from_gca:
-            attr_gcs = get_gca_attribute(self.char_gcs, attr_name)
+        for attr_name in attr_names_json_from_gcs:
+            attr_gcs = get_gcs_attribute(self.char_gcs, attr_name)
             self.attrs[attr_name] = attr_gcs
             attr_json = self.char_json['permanent'][
-                                        attr_names_json_from_gca[attr_name]]
+                                        attr_names_json_from_gcs[attr_name]]
             if attr_gcs != attr_json:
                 print '  ** %s = %r in GCS but %r in JSON' % (attr_name,
                                                               attr_gcs,
@@ -281,7 +285,7 @@ class Character(object):
 
         # HP
         attr_gcs = self.attrs['ST']
-        attr_gcs += get_gca_attribute(self.char_gcs, 'HP')
+        attr_gcs += get_gcs_attribute(self.char_gcs, 'HP')
         attr_json = self.char_json['permanent']['hp']
         if attr_gcs != attr_json:
             print '  ** HP = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
@@ -290,7 +294,7 @@ class Character(object):
 
         # FP
         attr_gcs = self.attrs['HT']
-        attr_gcs += get_gca_attribute(self.char_gcs, 'FP')
+        attr_gcs += get_gcs_attribute(self.char_gcs, 'FP')
         attr_json = self.char_json['permanent']['fp']
         if attr_gcs != attr_json:
             print '  ** FP = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
@@ -301,7 +305,7 @@ class Character(object):
         # TODO:
         attr_gcs = self.attrs['IQ']
         # TODO: do I need to multiply by 5 (the cost for a Will point?)
-        #attr_gcs += get_gca_attribute(self.char_gcs, 'will')
+        #attr_gcs += get_gcs_attribute(self.char_gcs, 'will')
         #attr_json = self.char_json['permanent']['Per']
         #if attr_gcs != attr_json:
         #    print '  ** Will = %r in GCS but %r in JSON' % (attr_gcs,
@@ -314,7 +318,7 @@ class Character(object):
         # TODO:
         attr_gcs = self.attrs['IQ']
         # TODO: do I need to multiply by 5 (the cost for a perception point?)
-        #attr_gcs += get_gca_attribute(self.char_gcs, 'perception')
+        #attr_gcs += get_gcs_attribute(self.char_gcs, 'perception')
         #attr_json = self.char_json['permanent']['Per']
         #if attr_gcs != attr_json:
         #    print '  ** Per = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
@@ -401,7 +405,7 @@ class Character(object):
                                 cost_gcs += int(modifier_cost_text)
                 if cost_gcs != advantages_json[name.text]:
                     print '  ** %s = %r in GCS but %r in JSON' % (
-                        name.text, cost_gcs.text, advantages_json[name.text])
+                        name.text, cost_gcs, advantages_json[name.text])
                 else:
                     print '  %s: %r' % (name.text, cost_gcs)
 
@@ -465,8 +469,8 @@ if __name__ == '__main__':
     parser = MyArgumentParser()
     parser.add_argument('json_filename',
              help='Input JSON file containing characters')
-    parser.add_argument('gca_filename',
-             help='Input GCA file containing characters (may use wildcards)')
+    parser.add_argument('gcs_filename',
+             help='Input GCS file containing characters (may use wildcards)')
     parser.add_argument('-v', '--verbose', help='verbose', action='store_true',
                         default=False)
 
@@ -478,7 +482,7 @@ if __name__ == '__main__':
         data_json = campaign.read_data
         chars_json = [k for k in data_json['PCs'].keys()]
 
-    for gcs_file in glob.glob(ARGS.gca_filename):
+    for gcs_file in glob.glob(ARGS.gcs_filename):
         char_gcs = ET.parse(gcs_file).getroot()
         print 'Which character goes with "%s":' % gcs_file
         for i, char_name_json in enumerate(chars_json):
