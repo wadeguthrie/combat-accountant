@@ -1082,51 +1082,36 @@
           "name": "Baseball card: Hasegawa"
         }, 
         {
-          "acc": 3, 
+          "acc": 1, 
           "count": 1, 
           "owners": [
-            "David (smith)", 
+            "(Unknown)", 
             "Alexander - sergeant"
           ], 
-          "name": "pistol, average David-built laser", 
-          "notes": "", 
+          "name": "zip tazer, nice", 
+          "notes": "hand built", 
           "damage": {
             "dice": {
-              "plus": 1, 
-              "num_dice": 2, 
-              "type": "pi"
+              "plus": 3, 
+              "num_dice": 1, 
+              "type": "fp"
             }
           }, 
           "reload": 3, 
-          "skill": "beam weapons (pistol)", 
+          "skill": "guns (pistol)", 
           "type": "ranged weapon", 
           "ammo": {
-            "name": "C Cell", 
-            "shots": 7, 
-            "shots_left": 7
+            "name": "Zip Clip", 
+            "shots": 6, 
+            "shots_left": 4
           }
         }, 
         {
-          "acc": 3, 
-          "count": 2, 
-          "owners": null, 
-          "name": "pistol, Colt 170D", 
+          "count": 1, 
           "notes": "", 
-          "damage": {
-            "dice": {
-              "type": "pi", 
-              "num_dice": 1, 
-              "plus": 4
-            }
-          }, 
-          "reload": 3, 
-          "skill": "beam weapons (pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 9, 
-            "shots_left": 8
-          }
+          "type": "misc", 
+          "owners": [], 
+          "name": "Zip Clip"
         }, 
         {
           "count": 3, 
@@ -1136,26 +1121,31 @@
           "name": "Baseball card: Salazar"
         }, 
         {
-          "acc": 2, 
           "count": 1, 
-          "owners": null, 
-          "name": "pistol, Baretta DX 192", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 4, 
-              "num_dice": 1, 
-              "type": "pi"
-            }
-          }, 
-          "reload": 3, 
-          "skill": "beam weapons (pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 8, 
-            "shots_left": 8
-          }
+          "notes": "M91, cost eR3570", 
+          "type": "misc", 
+          "owners": [
+            "Oliver"
+          ], 
+          "name": "Fingerbone of major heal (8)"
+        }, 
+        {
+          "count": 1, 
+          "notes": "M91, cost eR?", 
+          "type": "misc", 
+          "owners": [
+            "Zoe Pound member - 1st explosion"
+          ], 
+          "name": "Fingerbone of minor heal (4)"
+        }, 
+        {
+          "count": 1, 
+          "notes": "M193, cost eR2910", 
+          "type": "misc", 
+          "owners": [
+            "Oliver"
+          ], 
+          "name": "Fingerbone of fog"
         }
       ], 
       "stunned": 0, 
@@ -1286,31 +1276,6 @@
           "type": "misc", 
           "owners": [], 
           "name": "Hacking Equipment +1"
-        }, 
-        {
-          "acc": 8, 
-          "count": 1, 
-          "owners": [
-            "Alexander - sergeant", 
-            "lawerence - Spenser"
-          ], 
-          "name": "laser rifle", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 0, 
-              "num_dice": 3, 
-              "type": "pi"
-            }
-          }, 
-          "reload": 3, 
-          "skill": "beam weapons (rifle)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 3, 
-            "shots_left": 0
-          }
         }
       ], 
       "stunned": 0, 
@@ -1374,7 +1339,7 @@
         "Cannot Speak/Synthesizer": -10
       }, 
       "did_action_this_turn": true, 
-      "weapon-index": 0, 
+      "weapon-index": null, 
       "timers": [
         {
           "rounds": 0.9, 
@@ -3382,7 +3347,7 @@
           }, 
           {
             "count": 1, 
-            "notes": "M193, cost eR3570", 
+            "notes": "M91, cost eR3570", 
             "type": "misc", 
             "owners": [], 
             "name": "Fingerbone of major heal (8)"
@@ -3471,20 +3436,6 @@
         }, 
         "state": "unconscious", 
         "stuff": [
-          {
-            "count": 1, 
-            "notes": "M193, cost eR2910", 
-            "type": "misc", 
-            "owners": [], 
-            "name": "Fingerbone of fog"
-          }, 
-          {
-            "count": 1, 
-            "notes": "M193, cost eR3570", 
-            "type": "misc", 
-            "owners": [], 
-            "name": "Fingerbone of major heal (8)"
-          }, 
           {
             "acc": 2, 
             "count": 1, 
@@ -4272,7 +4223,7 @@
           "basic-move": 5, 
           "basic-speed": 5.0
         }, 
-        "check_for_death": false, 
+        "posture": "lying", 
         "state": "unconscious", 
         "permanent": {
           "fp": 16, 
@@ -4290,8 +4241,8 @@
           "Wealth": 0, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": true, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [
           {
             "rounds": 0.9, 
@@ -4302,7 +4253,7 @@
             ]
           }
         ], 
-        "posture": "lying", 
+        "did_action_this_turn": true, 
         "opponent": null
       }, 
       "2 - zombie": {
@@ -4361,7 +4312,7 @@
           "basic-move": 5, 
           "basic-speed": 5.0
         }, 
-        "check_for_death": false, 
+        "posture": "standing", 
         "state": "dead", 
         "permanent": {
           "fp": 16, 
@@ -4379,10 +4330,10 @@
           "Wealth": 0, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": true, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
-        "posture": "standing", 
+        "did_action_this_turn": true, 
         "opponent": {
           "group": "PCs", 
           "name": "samuel - Erik"
@@ -4444,7 +4395,7 @@
           "basic-move": 5, 
           "basic-speed": 5.0
         }, 
-        "check_for_death": false, 
+        "posture": "standing", 
         "state": "dead", 
         "permanent": {
           "fp": 16, 
@@ -4462,10 +4413,10 @@
           "Wealth": 0, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
-        "posture": "standing", 
+        "did_action_this_turn": false, 
         "opponent": null
       }, 
       "6 - zombie": {
@@ -4524,7 +4475,7 @@
           "basic-move": 5, 
           "basic-speed": 5.0
         }, 
-        "check_for_death": false, 
+        "posture": "standing", 
         "state": "dead", 
         "permanent": {
           "fp": 16, 
@@ -4542,10 +4493,10 @@
           "Wealth": 0, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
-        "posture": "standing", 
+        "did_action_this_turn": false, 
         "opponent": null
       }, 
       "4 - zombie": {
@@ -4604,7 +4555,7 @@
           "basic-move": 5, 
           "basic-speed": 5.0
         }, 
-        "check_for_death": false, 
+        "posture": "standing", 
         "state": "unconscious", 
         "permanent": {
           "fp": 16, 
@@ -4622,10 +4573,10 @@
           "Wealth": 0, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
-        "posture": "standing", 
+        "did_action_this_turn": false, 
         "opponent": {
           "group": "PCs", 
           "name": "samuel - Erik"
@@ -4687,7 +4638,7 @@
           "basic-move": 5, 
           "basic-speed": 5.0
         }, 
-        "check_for_death": false, 
+        "posture": "standing", 
         "state": "dead", 
         "permanent": {
           "fp": 16, 
@@ -4705,10 +4656,10 @@
           "Wealth": 0, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
-        "posture": "standing", 
+        "did_action_this_turn": false, 
         "opponent": {
           "group": "PCs", 
           "name": "vasilis - Alan"
@@ -5615,17 +5566,12 @@
       "opponent": null
     }, 
     "Catherine - tereshkova mechanic": {
-      "stunned": 0, 
-      "did_action_this_turn": false, 
-      "short-notes": [], 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "posture": "standing", 
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
       "stuff": [], 
+      "stunned": 0, 
       "skills": {}, 
       "notes": [
         "origin: russian", 
@@ -5639,6 +5585,7 @@
         "personality: Docile"
       ], 
       "shock": 0, 
+      "short-notes": [], 
       "armor-index": null, 
       "current": {
         "fp": 10, 
@@ -5651,6 +5598,7 @@
         "basic-move": 5, 
         "basic-speed": 5
       }, 
+      "posture": "standing", 
       "state": "alive", 
       "permanent": {
         "fp": 10, 
@@ -5663,8 +5611,11 @@
         "basic-move": 5, 
         "basic-speed": 5
       }, 
-      "timers": [], 
+      "advantages": {}, 
+      "weapon-index": null, 
       "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
       "opponent": null
     }, 
     "Lady Shenice - Bokor": {
