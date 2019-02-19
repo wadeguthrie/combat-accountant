@@ -83,7 +83,7 @@
             {
               "count": 1, 
               "owners": null, 
-              "name": "knife, large", 
+              "name": "Large Knife", 
               "notes": "", 
               "damage": {
                 "sw": {
@@ -203,7 +203,7 @@
             {
               "count": 1, 
               "owners": null, 
-              "name": "knife, small", 
+              "name": "Small Knife", 
               "notes": "B272", 
               "damage": {
                 "sw": {
@@ -541,7 +541,7 @@
             {
               "count": 1, 
               "owners": null, 
-              "name": "knife, large", 
+              "name": "Large Knife", 
               "notes": "", 
               "damage": {
                 "sw": {
@@ -791,7 +791,7 @@
             {
               "count": 1, 
               "owners": null, 
-              "name": "knife, large", 
+              "name": "Large Knife", 
               "notes": "", 
               "damage": {
                 "sw": {
@@ -818,7 +818,7 @@
               "acc": 3, 
               "count": 1, 
               "owners": null, 
-              "name": "pistol, Colt 170D", 
+              "name": "Blaster Pistol, Colt Series 170D", 
               "notes": "", 
               "damage": {
                 "dice": {
@@ -927,7 +927,7 @@
             {
               "count": 1, 
               "owners": null, 
-              "name": "knife, large", 
+              "name": "Large Knife", 
               "notes": "", 
               "damage": {
                 "sw": {
@@ -987,7 +987,7 @@
         {
           "count": 4, 
           "owners": null, 
-          "name": "knife, large", 
+          "name": "Large Knife", 
           "notes": "", 
           "damage": {
             "sw": {
@@ -1007,7 +1007,7 @@
           "acc": 4, 
           "count": 1, 
           "owners": null, 
-          "name": "pistol, Sig D65", 
+          "name": "Blaster Pistol, Sig Sauer D65", 
           "notes": "", 
           "damage": {
             "dice": {
@@ -1231,7 +1231,7 @@
           "acc": 3, 
           "count": 1, 
           "owners": null, 
-          "name": "pistol, Colt 170D", 
+          "name": "Blaster Pistol, Colt Series 170D", 
           "notes": "", 
           "damage": {
             "dice": {
@@ -1259,7 +1259,7 @@
         {
           "count": 1, 
           "owners": null, 
-          "name": "sick stick", 
+          "name": "Sick Stick", 
           "notes": "", 
           "damage": {
             "dice": {
@@ -1293,7 +1293,7 @@
         "First Aid": 14, 
         "Expert Skill (Computer Security)": 12, 
         "Beam Weapons (Pistol)": 16, 
-        "Armoury (Small Arms)": 13, 
+        "Armoury (Small Arms)": 14, 
         "Brawling": 12, 
         "Physics": 11, 
         "Piloting (Low-Performance Spacecraft)": 14, 
@@ -1350,7 +1350,7 @@
         {
           "rounds": 0.9, 
           "string": [
-            "draw pistol, Colt 170D", 
+            "draw Blaster Pistol, Colt Series 170D", 
             " Defense: any", 
             " Move: step"
           ]
@@ -1566,7 +1566,7 @@
           "acc": 4, 
           "count": 1, 
           "owners": null, 
-          "name": "pistol, Sig D65", 
+          "name": "Blaster Pistol, Sig Sauer D65", 
           "notes": "", 
           "damage": {
             "dice": {
@@ -1594,7 +1594,7 @@
         {
           "count": 1, 
           "owners": null, 
-          "name": "sick stick", 
+          "name": "Sick Stick", 
           "notes": "", 
           "damage": {
             "dice": {
@@ -1609,7 +1609,7 @@
         {
           "count": 2, 
           "owners": null, 
-          "name": "knife, large", 
+          "name": "Large Knife", 
           "notes": "", 
           "damage": {
             "sw": {
@@ -1628,7 +1628,7 @@
         {
           "count": 1, 
           "owners": null, 
-          "name": "knife, small", 
+          "name": "Small Knife", 
           "notes": "B272", 
           "damage": {
             "sw": {
@@ -1741,7 +1741,7 @@
           "acc": 4, 
           "count": 1, 
           "owners": null, 
-          "name": "pistol, Sig D65", 
+          "name": "Blaster Pistol, Sig Sauer D65", 
           "notes": "", 
           "damage": {
             "dice": {
@@ -1769,7 +1769,7 @@
         {
           "count": 1, 
           "owners": null, 
-          "name": "knife, small", 
+          "name": "Small Knife", 
           "notes": "B272", 
           "damage": {
             "sw": {
@@ -1788,7 +1788,7 @@
         {
           "count": 1, 
           "owners": null, 
-          "name": "sick stick", 
+          "name": "Sick Stick", 
           "notes": "", 
           "damage": {
             "dice": {
@@ -2174,7 +2174,7 @@
         {
           "count": 1, 
           "owners": null, 
-          "name": "sick stick", 
+          "name": "Sick Stick", 
           "notes": "", 
           "damage": {
             "dice": {
@@ -2190,7 +2190,7 @@
           "acc": 4, 
           "count": 1, 
           "owners": null, 
-          "name": "pistol, Sig D65", 
+          "name": "Blaster Pistol, Sig Sauer D65", 
           "notes": "", 
           "damage": {
             "dice": {
@@ -2274,7 +2274,7 @@
         {
           "rounds": 0.9, 
           "string": [
-            "draw pistol, Sig D65", 
+            "draw Blaster Pistol, Sig Sauer D65", 
             " Defense: any", 
             " Move: step"
           ]
@@ -2934,7 +2934,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "knife, large", 
+            "name": "Large Knife", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -3086,7 +3086,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "knife, large", 
+            "name": "Large Knife", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -3225,7 +3225,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "knife, large", 
+            "name": "Large Knife", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -3364,7 +3364,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "knife, large", 
+            "name": "Large Knife", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -3470,7 +3470,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "knife, large", 
+            "name": "Large Knife", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -3616,7 +3616,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "knife, large", 
+            "name": "Large Knife", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -3791,7 +3791,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "knife, large", 
+            "name": "Large Knife", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -4686,7 +4686,7 @@
             "acc": 4, 
             "count": 1, 
             "owners": null, 
-            "name": "pistol, Sig D65", 
+            "name": "Blaster Pistol, Sig Sauer D65", 
             "notes": "", 
             "damage": {
               "dice": {
@@ -4707,7 +4707,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "sick stick", 
+            "name": "Sick Stick", 
             "notes": "", 
             "damage": {
               "dice": {
@@ -4778,7 +4778,7 @@
             "acc": 3, 
             "count": 1, 
             "owners": null, 
-            "name": "pistol, Colt 170D", 
+            "name": "Blaster Pistol, Colt Series 170D", 
             "notes": "", 
             "damage": {
               "dice": {
@@ -4854,7 +4854,7 @@
             "acc": 4, 
             "count": 1, 
             "owners": null, 
-            "name": "pistol, Sig D65", 
+            "name": "Blaster Pistol, Sig Sauer D65", 
             "notes": "", 
             "damage": {
               "dice": {
@@ -4875,7 +4875,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "sick stick", 
+            "name": "Sick Stick", 
             "notes": "", 
             "damage": {
               "dice": {
@@ -4967,7 +4967,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "knife, large", 
+            "name": "Large Knife", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -5119,7 +5119,7 @@
             "acc": 4, 
             "count": 1, 
             "owners": null, 
-            "name": "pistol, Sig D65", 
+            "name": "Blaster Pistol, Sig Sauer D65", 
             "notes": "", 
             "damage": {
               "dice": {
@@ -5140,7 +5140,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "sick stick", 
+            "name": "Sick Stick", 
             "notes": "", 
             "damage": {
               "dice": {
@@ -5211,7 +5211,7 @@
             "acc": 4, 
             "count": 1, 
             "owners": null, 
-            "name": "pistol, Sig D65", 
+            "name": "Blaster Pistol, Sig Sauer D65", 
             "notes": "", 
             "damage": {
               "dice": {
@@ -5232,7 +5232,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "sick stick", 
+            "name": "Sick Stick", 
             "notes": "", 
             "damage": {
               "dice": {
@@ -5324,7 +5324,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "knife, large", 
+            "name": "Large Knife", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -5511,7 +5511,7 @@
       " (samuel - Erik) did 8 HP to (4 - zombie)", 
       " (4 - zombie) was marked as (unconscious)", 
       " (samuel - Erik) did (Attack) maneuver", 
-      " (vasilis - Alan) did (draw pistol, Colt 170D) maneuver", 
+      " (vasilis - Alan) did (draw Blaster Pistol, Colt Series 170D) maneuver", 
       " (1 - zombie) did (Do Nothing (Stunned)) maneuver", 
       " (5 - zombie) did nothing (dead)", 
       " (3 - zombie) did nothing (dead)", 
@@ -6251,7 +6251,7 @@
         {
           "count": 1, 
           "owners": null, 
-          "name": "knife, large", 
+          "name": "Large Knife", 
           "notes": "", 
           "damage": {
             "sw": {
@@ -6864,7 +6864,7 @@
         {
           "count": 1, 
           "owners": null, 
-          "name": "knife, large", 
+          "name": "Large Knife", 
           "notes": "", 
           "damage": {
             "sw": {
@@ -6981,7 +6981,7 @@
         {
           "count": 1, 
           "owners": null, 
-          "name": "knife, small", 
+          "name": "Small Knife", 
           "notes": "B272", 
           "damage": {
             "sw": {
@@ -7421,7 +7421,7 @@
         {
           "count": 1, 
           "owners": null, 
-          "name": "knife, large", 
+          "name": "Large Knife", 
           "notes": "", 
           "damage": {
             "sw": {
@@ -7593,7 +7593,7 @@
       "acc": 4, 
       "count": 1, 
       "owners": null, 
-      "name": "pistol, Sig D65", 
+      "name": "Blaster Pistol, Sig Sauer D65", 
       "notes": "", 
       "damage": {
         "dice": {
@@ -7637,7 +7637,7 @@
       "acc": 3, 
       "count": 1, 
       "owners": null, 
-      "name": "pistol, Colt 170D", 
+      "name": "Blaster Pistol, Colt Series 170D", 
       "notes": "", 
       "damage": {
         "dice": {
@@ -7749,7 +7749,7 @@
     {
       "count": 1, 
       "owners": null, 
-      "name": "knife, large", 
+      "name": "Large Knife", 
       "notes": "", 
       "damage": {
         "sw": {
@@ -7768,7 +7768,7 @@
     {
       "count": 1, 
       "owners": null, 
-      "name": "sick stick", 
+      "name": "Sick Stick", 
       "notes": "", 
       "damage": {
         "dice": {
@@ -8413,7 +8413,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "knife, large", 
+            "name": "Large Knife", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -8524,7 +8524,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "knife, large", 
+            "name": "Large Knife", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -8637,7 +8637,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "knife, large", 
+            "name": "Large Knife", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -8747,7 +8747,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "knife, large", 
+            "name": "Large Knife", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -8823,7 +8823,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "knife, large", 
+            "name": "Large Knife", 
             "notes": "", 
             "damage": {
               "sw": {

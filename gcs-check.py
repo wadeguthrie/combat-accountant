@@ -196,6 +196,13 @@ class Skills(object):
                   cost        # points spent on skill
                  ):
 
+        # TODO: the following skills are augmented by stuff
+        #   - beam weapons: laser sight
+        #   - first aid: first aid kit
+        #   - axe/mace: ?
+        #   - armory: good quality equipment and ?
+        #   - detect lies: ?
+        #   - fast draw ammo: ?
         if skill_name not in Skills.skills:
             print '** No data for skill "%s"' % skill_name
             return 0
@@ -270,6 +277,7 @@ class Character(object):
             print '\n-- Spell List -----'
             self.check_spells()
 
+        print '\n-- Equipment -----'
         self.check_equipment()
 
     def check_attribs(self):
@@ -338,6 +346,8 @@ class Character(object):
 
 
     def check_skills(self):
+        # Checks skill cost
+
         skills_gcs = self.char_gcs.find('skill_list')
 
         if 'skills' in self.char_json:
@@ -452,27 +462,25 @@ class Character(object):
         ## EQUIPMENT #####
         # TODO: 
 
-        '''
-        print '\n-- Equipment -----'
         stuff_gcs = self.char_gcs.find('equipment_list')
 
         if 'stuff' in self.char_json:
-            stuff_json = copy.deepcopy(self.char_json['stuff'])
+            #PP.pprint(self.char_json['stuff'])
+            stuff_json = {k['name']:1 for k in self.char_json['stuff']}
         else:
             stuff_json = {}
 
         if stuff_gcs is not None:
             for child in stuff_gcs:
-                name = child.find('name')
-                if name.text not in spells_json:
+                name = child.find('description')
+                if name.text not in stuff_json:
                     print '  **GCS> "%s" in GCS but not in JSON' % name.text
                 else:
                     print '  %s' % name.text
                     # TODO: compare skill levels
-                    del(spells_json[name.text])
-        for thing in spells_json:
+                    del(stuff_json[name.text])
+        for thing in stuff_json:
             print '  **JSON> "%s" in JSON but not in GCS' % thing
-        '''
 
     def __get_advantage_cost(self,
                              advantage_gcs # element from xml.etree.ElementTree
