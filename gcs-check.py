@@ -134,7 +134,8 @@ class Skills(object):
         'Area Knowledge':       {'attr':'IQ', 'diff':'E', 'default':-4},
         'Armoury':              {'attr':'IQ', 'diff':'A', 'default':-5},
         'Axe/Mace':             {'attr':'DX', 'diff':'A', 'default':None},
-        'Beam Weapons':         {'attr':'DX', 'diff':'E', 'default':-4},
+        'Beam Weapons':         {'attr':'DX', 'diff':'E', 'default':-4,
+                                 'equip': {'Laser Sight': 1}},
         # Bartender is really a professional skill
         'Bartender':            {'attr':'IQ', 'diff':'A', 'default':-5},
         'Brawling':             {'attr':'DX', 'diff':'E', 'default':None},
@@ -199,8 +200,6 @@ class Skills(object):
                      ):
 
         # TODO: the following skills are augmented by stuff
-        #   - beam weapons: laser sight
-        #   - first aid: first aid kit
         #   - axe/mace: ?
         #   - armory: good quality equipment and ?
         #   - detect lies: ?
