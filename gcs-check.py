@@ -397,9 +397,7 @@ class Character(object):
             if name.text not in advantages_json:
                 print '  **GCS> "%s" in GCS but not in JSON' % name.text
             else:
-                cost_text_gcs = advantage_gcs.find('base_points')
-                cost_gcs = 0 if cost_text_gcs is None else int(
-                                                            cost_text_gcs.text)
+                cost_gcs = self.__get_advantage_cost(advantage_gcs)
                 for modifier in advantage_gcs.findall('modifier'):
                     # TODO: remove
                     #modifier_name = modifier.find('name')
@@ -475,6 +473,21 @@ class Character(object):
         for thing in spells_json:
             print '  **JSON> "%s" in JSON but not in GCS' % thing
         '''
+
+    def __get_advantage_cost(self,
+                             advantage_gcs # element from xml.etree.ElementTree
+                            ):
+        cost_text_gcs = advantage_gcs.find('base_points')
+        cost_gcs = 0 if cost_text_gcs is None else int(
+                                                    cost_text_gcs.text)
+        levels_element = advantage_gcs.find('levels')
+        if levels_element is not None:
+            levels = int(levels_element.text)
+            points_per_level_element = advantage_gcs.find('points_per_level')
+            if points_per_level_element is not None:
+                levels *= int(points_per_level_element.text)
+                cost_gcs += levels
+        return cost_gcs
 
 if __name__ == '__main__':
     parser = MyArgumentParser()
