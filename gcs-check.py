@@ -130,64 +130,64 @@ class Skills(object):
     level_from_cost = {1:0, 2:1, 4:2, 8:3, 12:4, 16:5, 20:6, 24:7, 28:5}
     difficulty_offset = {'E':0, 'A':-1, 'H':-2, 'VH':-3}
     skills = {
-        'Acting':               {'attr':'IQ', 'diff':'A'},
-        'Area Knowledge':       {'attr':'IQ', 'diff':'E'},
-        'Armoury':              {'attr':'IQ', 'diff':'A'},
-        'Axe/Mace':             {'attr':'DX', 'diff':'A'},
-        'Beam Weapons':         {'attr':'DX', 'diff':'E'},
+        'Acting':               {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Area Knowledge':       {'attr':'IQ', 'diff':'E', 'default':-4},
+        'Armoury':              {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Axe/Mace':             {'attr':'DX', 'diff':'A', 'default':None},
+        'Beam Weapons':         {'attr':'DX', 'diff':'E', 'default':-4},
         # Bartender is really a professional skill
-        'Bartender':            {'attr':'IQ', 'diff':'A'},
-        'Brawling':             {'attr':'DX', 'diff':'E'},
-        'Camouflage':           {'attr':'IQ', 'diff':'E'},
-        'Climbing':             {'attr':'DX', 'diff':'A'},
-        'Computer Hacking':     {'attr':'IQ', 'diff':'VH'},
-        'Computer Operation':   {'attr':'IQ', 'diff':'E'},
-        'Computer Programming': {'attr':'IQ', 'diff':'H'},
-        'Connoisseur':          {'attr':'IQ', 'diff':'A'},
-        'Cryptography':         {'attr':'IQ', 'diff':'H'},
-        'Current Affairs':      {'attr':'IQ', 'diff':'E'},
-        'Detect Lies':          {'attr':'Per', 'diff':'H'},
-        'Diplomacy':            {'attr':'IQ', 'diff':'H'},
-        'Electronics Operation':{'attr':'IQ', 'diff':'A'},
-        'Electronics Repair':   {'attr':'IQ', 'diff':'A'},
-        'Expert Skill':         {'attr':'IQ', 'diff':'H'},
-        'Engineer':             {'attr':'IQ', 'diff':'H'},
-        'Escape':               {'attr':'DX', 'diff':'H'},
-        'Fast-Draw':            {'attr':'DX', 'diff':'E'},
-        'Fast-Talk':            {'attr':'IQ', 'diff':'A'},
-        'Filch':                {'attr':'DX', 'diff':'A'},
-        'First Aid':            {'attr':'IQ', 'diff':'E'},
-        'Forgery':              {'attr':'IQ', 'diff':'H'},
-        'Gambling':             {'attr':'IQ', 'diff':'A'},
-        'Gesture':              {'attr':'IQ', 'diff':'E'},
-        'Gunner':               {'attr':'DX', 'diff':'E'},
-        'Guns':                 {'attr':'DX', 'diff':'E'},
-        'Hazardous Materials':  {'attr':'IQ', 'diff':'A'},
-        'Holdout':              {'attr':'IQ', 'diff':'A'},
-        'Interrogation':        {'attr':'IQ', 'diff':'A'},
-        'Intimidation':         {'attr':'Will', 'diff':'A'},
-        'Karate':               {'attr':'DX', 'diff':'H'},
-        'Knife':                {'attr':'DX', 'diff':'E'},
-        'Law':                  {'attr':'IQ', 'diff':'H'},
-        'Lip Reading':          {'attr':'Per', 'diff':'A'},
-        'Lockpicking':          {'attr':'IQ', 'diff':'A'},
-        'Mathematics':          {'attr':'IQ', 'diff':'H'},
-        'Mechanic':             {'attr':'IQ', 'diff':'A'},
-        'Observation':          {'attr':'Per', 'diff':'A'},
-        'Physician':            {'attr':'IQ', 'diff':'H'},
-        'Physics':              {'attr':'IQ', 'diff':'VH'},
-        'Pickpocket':           {'attr':'DX', 'diff':'H'},
-        'Piloting':             {'attr':'DX', 'diff':'A'},
-        'Running':              {'attr':'HT', 'diff':'A'},
-        'Scrounging':           {'attr':'Per', 'diff':'E'},
-        'Search':               {'attr':'Per', 'diff':'A'},
-        'Stealth':              {'attr':'DX', 'diff':'A'},
-        'Streetwise':           {'attr':'IQ', 'diff':'A'},
-        'Theology':             {'attr':'IQ', 'diff':'H'},
-        'Throwing':             {'attr':'DX', 'diff':'A'},
-        'Thrown Weapon':        {'attr':'DX', 'diff':'E'},
-        'Traps':                {'attr':'IQ', 'diff':'A'},
-        'Urban Survival':       {'attr':'Per', 'diff':'A'},
+        'Bartender':            {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Brawling':             {'attr':'DX', 'diff':'E', 'default':None},
+        'Camouflage':           {'attr':'IQ', 'diff':'E', 'default':-4},
+        'Climbing':             {'attr':'DX', 'diff':'A', 'default':-5},
+        'Computer Hacking':     {'attr':'IQ', 'diff':'VH', 'default':None},
+        'Computer Operation':   {'attr':'IQ', 'diff':'E', 'default':-4},
+        'Computer Programming': {'attr':'IQ', 'diff':'H', 'default':None},
+        'Connoisseur':          {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Cryptography':         {'attr':'IQ', 'diff':'H', 'default':None},
+        'Current Affairs':      {'attr':'IQ', 'diff':'E', 'default':-4},
+        'Detect Lies':          {'attr':'Per', 'diff':'H', 'default':-6},
+        'Diplomacy':            {'attr':'IQ', 'diff':'H', 'default':-6},
+        'Electronics Operation':{'attr':'IQ', 'diff':'A', 'default':-5},
+        'Electronics Repair':   {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Expert Skill':         {'attr':'IQ', 'diff':'H', 'default':None},
+        'Engineer':             {'attr':'IQ', 'diff':'H', 'default':None},
+        'Escape':               {'attr':'DX', 'diff':'H', 'default':-6},
+        'Fast-Draw':            {'attr':'DX', 'diff':'E', 'default':None},
+        'Fast-Talk':            {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Filch':                {'attr':'DX', 'diff':'A', 'default':-5},
+        'First Aid':            {'attr':'IQ', 'diff':'E', 'default':-4},
+        'Forgery':              {'attr':'IQ', 'diff':'H', 'default':-6},
+        'Gambling':             {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Gesture':              {'attr':'IQ', 'diff':'E', 'default':-4},
+        'Gunner':               {'attr':'DX', 'diff':'E', 'default':-4},
+        'Guns':                 {'attr':'DX', 'diff':'E', 'default':-4},
+        'Hazardous Materials':  {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Holdout':              {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Interrogation':        {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Intimidation':         {'attr':'Will', 'diff':'A', 'default':-5},
+        'Karate':               {'attr':'DX', 'diff':'H', 'default':None},
+        'Knife':                {'attr':'DX', 'diff':'E', 'default':None},
+        'Law':                  {'attr':'IQ', 'diff':'H', 'default':-6},
+        'Lip Reading':          {'attr':'Per', 'diff':'A', 'default':-10},
+        'Lockpicking':          {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Mathematics':          {'attr':'IQ', 'diff':'H', 'default':-6},
+        'Mechanic':             {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Observation':          {'attr':'Per', 'diff':'A', 'default':-5},
+        'Physician':            {'attr':'IQ', 'diff':'H', 'default':-7},
+        'Physics':              {'attr':'IQ', 'diff':'VH', 'default':-6},
+        'Pickpocket':           {'attr':'DX', 'diff':'H', 'default':-6},
+        'Piloting':             {'attr':'DX', 'diff':'A', 'default':None},
+        'Running':              {'attr':'HT', 'diff':'A', 'default':-5},
+        'Scrounging':           {'attr':'Per', 'diff':'E', 'default':-4},
+        'Search':               {'attr':'Per', 'diff':'A', 'default':-5},
+        'Stealth':              {'attr':'DX', 'diff':'A', 'default':-5},
+        'Streetwise':           {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Theology':             {'attr':'IQ', 'diff':'H', 'default':-6},
+        'Throwing':             {'attr':'DX', 'diff':'A', 'default':-3},
+        'Thrown Weapon':        {'attr':'DX', 'diff':'E', 'default':-4},
+        'Traps':                {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Urban Survival':       {'attr':'Per', 'diff':'A', 'default':-5},
     }
 
     @staticmethod
@@ -195,22 +195,32 @@ class Skills(object):
                   skill_name, # name of skill
                   cost        # points spent on skill
                  ):
+
         if skill_name not in Skills.skills:
             print '** No data for skill "%s"' % skill_name
             return 0
         skill = Skills.skills[skill_name]
-        while cost not in Skills.level_from_cost and cost > 1:
-            cost -= 1
-        if cost < 1:
-            print '** Cost %d invalid for skill %s' % (cost, skill_name)
-            return 0
-        level = Skills.level_from_cost[cost]
-
-        level += Skills.difficulty_offset[skill['diff']]
-
         if skill['attr'] not in attribs:
             print '** Required attribute "%s" not supplied' % skill['attr']
             return 0
+
+        # Return a default value
+        if cost == 0:
+            if skill['default'] is None:
+                print '** No default for skill "%s"' % skill_name
+                return 0
+            return attribs[skill['attr']] + skill['default']
+
+        # Adjust cost down if someone has extra points in a skill
+        while cost not in Skills.level_from_cost and cost > 1:
+            cost -= 1
+        if cost < 1 and not default:
+            print '** Cost %d invalid for skill %s' % (cost, skill_name)
+            return 0
+
+        # Calculate the skill level
+        level = Skills.level_from_cost[cost]
+        level += Skills.difficulty_offset[skill['diff']]
         level += attribs[skill['attr']]
         return level
 
@@ -348,7 +358,7 @@ class Character(object):
             #print '  "%r"' % name_text # TODO: remove
 
             if name_text not in skills_json:
-                print '  ** "%s" in GCS but not in JSON' % name_text
+                print '  **GCS> "%s" in GCS but not in JSON' % name_text
             else:
                 cost_text_gcs = skill_gcs.find('points')
                 cost_gcs = 0 if cost_text_gcs is None else int(
@@ -363,11 +373,12 @@ class Character(object):
 
                 del(skills_json[name_text])
         for skill_json in skills_json:
-            print '  ** "%s" in JSON but not in GCS' % skill_json
+            print '  **JSON> "%s" in JSON but not in GCS' % skill_json
 
     def check_advantages(self):
         ## ADVANTAGES #####
         # Checks points spent
+        # TODO: deal with 'levels' and 'points_per_level'
 
         advantages_gcs = self.char_gcs.find('advantage_list')
         #for advantage_gcs in advantages_gcs:
@@ -384,7 +395,7 @@ class Character(object):
             name = advantage_gcs.find('name')
             #print 'ADVANTAGE NAME: "%r"' % name.text # TODO: remove
             if name.text not in advantages_json:
-                print '  ** %s in GCS but not in JSON' % name.text
+                print '  **GCS> "%s" in GCS but not in JSON' % name.text
             else:
                 cost_text_gcs = advantage_gcs.find('base_points')
                 cost_gcs = 0 if cost_text_gcs is None else int(
@@ -411,7 +422,7 @@ class Character(object):
 
                 del(advantages_json[name.text])
         for advantage_json in advantages_json:
-            print '  ** %s in JSON but not in GCS' % advantage_json
+            print '  **JSON> "%s" in JSON but not in GCS' % advantage_json
 
     def check_spells(self):
         ## SPELLS #####
@@ -430,13 +441,13 @@ class Character(object):
                 name = child.find('name')
                 # TODO: figure out how the difficulty is stored
                 if name.text not in spells_json:
-                    print '  ** %s in GCS but not in JSON' % name.text
+                    print '  **GCS> "%s" in GCS but not in JSON' % name.text
                 else:
                     print '  %s' % name.text
                     # TODO: compare skill levels
                     del(spells_json[name.text])
             for child in spells_json:
-                print '  ** %s in JSON but not in GCS' % child
+                print '  **JSON> "%s" in JSON but not in GCS' % child
 
 
     def check_equipment(self):
@@ -456,13 +467,13 @@ class Character(object):
             for child in stuff_gcs:
                 name = child.find('name')
                 if name.text not in spells_json:
-                    print '  ** %s in GCS but not in JSON' % name.text
+                    print '  **GCS> "%s" in GCS but not in JSON' % name.text
                 else:
                     print '  %s' % name.text
                     # TODO: compare skill levels
                     del(spells_json[name.text])
         for thing in spells_json:
-            print '  ** %s in JSON but not in GCS' % thing
+            print '  **JSON> "%s" in JSON but not in GCS' % thing
         '''
 
 if __name__ == '__main__':
@@ -484,10 +495,10 @@ if __name__ == '__main__':
 
     for gcs_file in glob.glob(ARGS.gcs_filename):
         char_gcs = ET.parse(gcs_file).getroot()
-        print 'Which character goes with "%s":' % gcs_file
+        print '\nWhich character goes with "%s":' % gcs_file
         for i, char_name_json in enumerate(chars_json):
             print '  %d) %s' % (i, char_name_json)
-        char_number_json = input('Number:')
+        char_number_json = input('Number: ')
 
         print '\n== CHARACTER NAME "%s" =====' % chars_json[char_number_json]
         char_json = data_json['PCs'][chars_json[char_number_json]]
