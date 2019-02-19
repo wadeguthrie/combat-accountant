@@ -232,6 +232,29 @@ class Skills(object):
         return level
 
 class Character(object):
+    equipment_white_list_gcs = {
+      "Ballistic Sunglasses":1,
+      "Ballistic Gloves":1,
+      "Web Gear":1,
+      "Pocket Watch":1,
+      "Flashlight":1,
+      "Electronic Cuffs":1,
+      "Cigarette Lighter":1,
+      "Holster, Shoulder":1,
+      "Multi-Tool":1,
+      "Snack":1,
+      "Plastic Bags":1,
+      "Nitrile Gloves":1,
+      "Microfiber Towel":1,
+      "Measuring laser":1,
+      "Marker":1,
+      "Index Cards":1,
+      "Glowstick":1,
+      "Fire-Starter Paste":1,
+      "Camera, Digital, Full-Sized":1,
+      "Sheath": 1,
+      "Lanyard, Woven Steel": 1,
+    }
     def __init__(self,
                  char_json, # dict for this char directly from the JSON
                  char_gcs   # results of ET.parse for the GCS file
@@ -388,7 +411,6 @@ class Character(object):
     def check_advantages(self):
         ## ADVANTAGES #####
         # Checks points spent
-        # TODO: deal with 'levels' and 'points_per_level'
 
         advantages_gcs = self.char_gcs.find('advantage_list')
         #for advantage_gcs in advantages_gcs:
@@ -409,7 +431,6 @@ class Character(object):
             else:
                 cost_gcs = self.__get_advantage_cost(advantage_gcs)
                 for modifier in advantage_gcs.findall('modifier'):
-                    # TODO: remove
                     #modifier_name = modifier.find('name')
                     #print '-modifier name: "%r"' % modifier_name.text
                     #PP.pprint(modifier.attrib)
@@ -457,6 +478,20 @@ class Character(object):
             for child in spells_json:
                 print '  **JSON> "%s" in JSON but not in GCS' % child
 
+    def __add_item_to_gcs_list(self,
+                               item,        # ET item
+                               stuff_gcs    # list of names of items
+                              ):
+        name = item.find('description')
+        stuff_gcs.append(name.text)
+        #print 'adding %s' % name.text
+        if item.tag == 'equipment_container':
+            #print '<< CONTAINER'
+            for contents in item.findall('equipment_container'):
+                self.__add_item_to_gcs_list(contents, stuff_gcs)
+            for contents in item.findall('equipment'):
+                self.__add_item_to_gcs_list(contents, stuff_gcs)
+            #print '>> CONTAINER'
 
     def check_equipment(self):
         ## EQUIPMENT #####
@@ -466,13 +501,7 @@ class Character(object):
 
         stuff_gcs = []
         for child in top_stuff_gcs:
-            name = child.find('description')
-            stuff_gcs.append(name.text)
-            if child.tag == 'equipment_container':
-                # TODO: only one level, here -- should be recursive
-                for contents in child.findall('equipment'):
-                    name = contents.find('description')
-                    stuff_gcs.append(name.text)
+            self.__add_item_to_gcs_list(child, stuff_gcs)
 
         if 'stuff' in self.char_json:
             #PP.pprint(self.char_json['stuff'])
@@ -481,7 +510,9 @@ class Character(object):
             stuff_json = {}
 
         for name in stuff_gcs:
-            if name not in stuff_json:
+            if name in Character.equipment_white_list_gcs:
+                pass
+            elif name not in stuff_json:
                 print '  **GCS> "%s" in GCS but not in JSON' % name
             else:
                 print '  %s' % name

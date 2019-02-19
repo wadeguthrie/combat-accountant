@@ -975,14 +975,14 @@
           "owners": null, 
           "type": "misc", 
           "notes": "HT180", 
-          "name": "tear gas"
+          "name": "Tear Gas Spray"
         }, 
         {
           "count": 1, 
           "owners": null, 
           "type": "misc", 
           "notes": "HT180", 
-          "name": "pepper spray"
+          "name": "Pepper Spray"
         }, 
         {
           "count": 4, 
@@ -1044,7 +1044,7 @@
           "notes": "Needs a 'B' cell", 
           "type": "misc", 
           "owners": null, 
-          "name": "Multitool w/flashlight"
+          "name": "Multi-Tool"
         }, 
         {
           "count": 3, 
@@ -1082,14 +1082,43 @@
           "name": "Baseball card: Hasegawa"
         }, 
         {
+          "count": 1, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "Electronic Lockpick"
+        },
+        {
+          "count": 1, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "First Aid Kit"
+        },
+        {
+          "count": 1, 
+          "owners": null, 
+          "name": "Sick Stick", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 1, 
+              "num_dice": 1, 
+              "type": "fat"
+            }
+          }, 
+          "skill": "Axe/Mace", 
+          "type": "melee weapon"
+        },
+        {
           "acc": 1, 
           "count": 1, 
           "owners": [
             "(Unknown)", 
             "Alexander - sergeant"
           ], 
-          "name": "zip tazer, nice", 
-          "notes": "hand built", 
+          "name": "Makeshift Taser", 
+          "notes": "hand built, zip taser, nice", 
           "damage": {
             "dice": {
               "plus": 3, 
