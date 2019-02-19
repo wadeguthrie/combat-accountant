@@ -460,9 +460,19 @@ class Character(object):
 
     def check_equipment(self):
         ## EQUIPMENT #####
-        # TODO: 
+        top_stuff_gcs = self.char_gcs.find('equipment_list')
+        if top_stuff_gcs is None:
+            return
 
-        stuff_gcs = self.char_gcs.find('equipment_list')
+        stuff_gcs = []
+        for child in top_stuff_gcs:
+            name = child.find('description')
+            stuff_gcs.append(name.text)
+            if child.tag == 'equipment_container':
+                # TODO: only one level, here -- should be recursive
+                for contents in child.findall('equipment'):
+                    name = contents.find('description')
+                    stuff_gcs.append(name.text)
 
         if 'stuff' in self.char_json:
             #PP.pprint(self.char_json['stuff'])
@@ -470,15 +480,12 @@ class Character(object):
         else:
             stuff_json = {}
 
-        if stuff_gcs is not None:
-            for child in stuff_gcs:
-                name = child.find('description')
-                if name.text not in stuff_json:
-                    print '  **GCS> "%s" in GCS but not in JSON' % name.text
-                else:
-                    print '  %s' % name.text
-                    # TODO: compare skill levels
-                    del(stuff_json[name.text])
+        for name in stuff_gcs:
+            if name not in stuff_json:
+                print '  **GCS> "%s" in GCS but not in JSON' % name
+            else:
+                print '  %s' % name
+                del(stuff_json[name])
         for thing in stuff_json:
             print '  **JSON> "%s" in JSON but not in GCS' % thing
 
