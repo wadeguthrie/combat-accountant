@@ -156,7 +156,8 @@ class Skills(object):
         'Fast-Draw':            {'attr':'DX', 'diff':'E', 'default':None},
         'Fast-Talk':            {'attr':'IQ', 'diff':'A', 'default':-5},
         'Filch':                {'attr':'DX', 'diff':'A', 'default':-5},
-        'First Aid':            {'attr':'IQ', 'diff':'E', 'default':-4},
+        'First Aid':            {'attr':'IQ', 'diff':'E', 'default':-4,
+                                 'equip': {'First Aid Kit': 1}},
         'Forgery':              {'attr':'IQ', 'diff':'H', 'default':-6},
         'Gambling':             {'attr':'IQ', 'diff':'A', 'default':-5},
         'Gesture':              {'attr':'IQ', 'diff':'E', 'default':-4},
@@ -191,10 +192,11 @@ class Skills(object):
     }
 
     @staticmethod
-    def get_level(attribs,    # dict containing HT, IQ, etc.
-                  skill_name, # name of skill
-                  cost        # points spent on skill
-                 ):
+    def get_gcs_level(attribs,    # dict containing HT, IQ, etc.
+                      equipment,  # xxx
+                      skill_name, # name of skill
+                      cost        # points spent on skill
+                     ):
 
         # TODO: the following skills are augmented by stuff
         #   - beam weapons: laser sight
@@ -229,6 +231,13 @@ class Skills(object):
         level = Skills.level_from_cost[cost]
         level += Skills.difficulty_offset[skill['diff']]
         level += attribs[skill['attr']]
+
+        # Add modifiers due to equipment
+        if 'equip' in skill:
+            for item, plus in skill['equip'].iteritems():
+                if item in equipment:
+                    level += plus
+
         return level
 
 class Character(object):
@@ -323,6 +332,12 @@ class Character(object):
         '''
         self.char_gcs = char_gcs
         self.attrs = {}
+
+        # Build the equipment list up front so that skills may make use of it
+        self.stuff_gcs = []
+        top_stuff_gcs = self.char_gcs.find('equipment_list')
+        for child in top_stuff_gcs:
+            self.__add_item_to_gcs_list(child, self.stuff_gcs)
 
     def check_for_consistency(self):
         self.check_attribs()
@@ -434,7 +449,10 @@ class Character(object):
                 cost_gcs = 0 if cost_text_gcs is None else int(
                                                             cost_text_gcs.text)
 
-                level_gcs = Skills.get_level(self.attrs, base_name, cost_gcs)
+                level_gcs = Skills.get_gcs_level(self.attrs,
+                                                 self.stuff_gcs,
+                                                 base_name,
+                                                 cost_gcs)
                 if level_gcs != skills_json[name_text]:
                     print '  ** %s = %r in GCS but %r in JSON' % (
                         name_text, level_gcs, skills_json[name_text])
@@ -532,21 +550,13 @@ class Character(object):
 
     def check_equipment(self):
         ## EQUIPMENT #####
-        top_stuff_gcs = self.char_gcs.find('equipment_list')
-        if top_stuff_gcs is None:
-            return
-
-        stuff_gcs = []
-        for child in top_stuff_gcs:
-            self.__add_item_to_gcs_list(child, stuff_gcs)
-
         if 'stuff' in self.char_json:
             #PP.pprint(self.char_json['stuff'])
             stuff_json = {k['name']:1 for k in self.char_json['stuff']}
         else:
             stuff_json = {}
 
-        for name in stuff_gcs:
+        for name in self.stuff_gcs:
             if name in Character.equipment_white_list_gcs:
                 pass
             elif name not in stuff_json:
