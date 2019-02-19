@@ -1832,7 +1832,7 @@
         {
           "count": 1, 
           "owners": null, 
-          "name": "brass knuckles", 
+          "name": "Brass Knuckles", 
           "notes": "B271", 
           "damage": {
             "thr": {
@@ -1843,7 +1843,14 @@
           "parry": 0, 
           "skill": "Karate", 
           "type": "melee weapon"
-        }, 
+        },
+        {
+          "count": 1, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "First Aid Kit"
+        },
         {
           "acc": 3, 
           "count": 1, 
@@ -1851,7 +1858,7 @@
             "David (smith)", 
             "Austin - Diamond protocol security"
           ], 
-          "name": "pistol, average David-built laser", 
+          "name": "Laser Pistol - Stats unknown (from Austin)",
           "notes": "", 
           "damage": {
             "dice": {
@@ -2200,6 +2207,13 @@
         }
       ], 
       "stuff": [
+        {
+          "count": 1, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "First Aid Kit"
+        },
         {
           "count": 1, 
           "owners": null, 
