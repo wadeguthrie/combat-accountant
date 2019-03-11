@@ -131,6 +131,7 @@ class Skills(object):
     difficulty_offset = {'E':0, 'A':-1, 'H':-2, 'VH':-3}
     skills = {
         'Acting':               {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Administration':       {'attr':'IQ', 'diff':'A', 'default':-5},
         'Area Knowledge':       {'attr':'IQ', 'diff':'E', 'default':-4},
         'Armoury':              {'attr':'IQ', 'diff':'A', 'default':-5},
         'Axe/Mace':             {'attr':'DX', 'diff':'A', 'default':None},
@@ -148,11 +149,14 @@ class Skills(object):
         'Cryptography':         {'attr':'IQ', 'diff':'H', 'default':None},
         'Current Affairs':      {'attr':'IQ', 'diff':'E', 'default':-4},
         'Detect Lies':          {'attr':'Per', 'diff':'H', 'default':-6},
+        'Diagnosis':            {'attr':'IQ', 'diff':'H', 'default':-6},
         'Diplomacy':            {'attr':'IQ', 'diff':'H', 'default':-6},
         'Electronics Operation':{'attr':'IQ', 'diff':'A', 'default':-5},
         'Electronics Repair':   {'attr':'IQ', 'diff':'A', 'default':-5},
         'Expert Skill':         {'attr':'IQ', 'diff':'H', 'default':None},
+        'Explosives':           {'attr':'IQ', 'diff':'A', 'default':-5},
         'Engineer':             {'attr':'IQ', 'diff':'H', 'default':None},
+        'Environment Suit':     {'attr':'DX', 'diff':'A', 'default':-5},
         'Escape':               {'attr':'DX', 'diff':'H', 'default':-6},
         'Fast-Draw':            {'attr':'DX', 'diff':'E', 'default':None},
         'Fast-Talk':            {'attr':'IQ', 'diff':'A', 'default':-5},
@@ -160,17 +164,21 @@ class Skills(object):
         'First Aid':            {'attr':'IQ', 'diff':'E', 'default':-4,
                                  'equip': {'First Aid Kit': 1}},
         'Forgery':              {'attr':'IQ', 'diff':'H', 'default':-6},
+        'Forward Observer':     {'attr':'IQ', 'diff':'A', 'default':-5},
         'Gambling':             {'attr':'IQ', 'diff':'A', 'default':-5},
         'Gesture':              {'attr':'IQ', 'diff':'E', 'default':-4},
         'Gunner':               {'attr':'DX', 'diff':'E', 'default':-4},
         'Guns':                 {'attr':'DX', 'diff':'E', 'default':-4},
         'Hazardous Materials':  {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Hiking':               {'attr':'HT', 'diff':'A', 'default':-5},
         'Holdout':              {'attr':'IQ', 'diff':'A', 'default':-5},
         'Interrogation':        {'attr':'IQ', 'diff':'A', 'default':-5},
         'Intimidation':         {'attr':'Will', 'diff':'A', 'default':-5},
+        'Jumping':              {'attr':'DX', 'diff':'E', 'default':None},
         'Karate':               {'attr':'DX', 'diff':'H', 'default':None},
         'Knife':                {'attr':'DX', 'diff':'E', 'default':None},
         'Law':                  {'attr':'IQ', 'diff':'H', 'default':-6},
+        'Leadership':           {'attr':'IQ', 'diff':'A', 'default':-5},
         'Lip Reading':          {'attr':'Per', 'diff':'A', 'default':-10},
         'Lockpicking':          {'attr':'IQ', 'diff':'A', 'default':-5},
         'Mathematics':          {'attr':'IQ', 'diff':'H', 'default':-6},
@@ -181,10 +189,15 @@ class Skills(object):
         'Pickpocket':           {'attr':'DX', 'diff':'H', 'default':-6},
         'Piloting':             {'attr':'DX', 'diff':'A', 'default':None},
         'Running':              {'attr':'HT', 'diff':'A', 'default':-5},
+        'Savoir-Faire':         {'attr':'IQ', 'diff':'E', 'default':-4},
         'Scrounging':           {'attr':'Per', 'diff':'E', 'default':-4},
         'Search':               {'attr':'Per', 'diff':'A', 'default':-5},
+        'Soldier':              {'attr':'IQ', 'diff':'A', 'default':-5},
         'Stealth':              {'attr':'DX', 'diff':'A', 'default':-5},
         'Streetwise':           {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Surgery':              {'attr':'IQ', 'diff':'VH', 'default':None},
+        'Survival':             {'attr':'Per', 'diff':'A', 'default':None},
+        'Tactics':              {'attr':'IQ', 'diff':'H', 'default':-6},
         'Theology':             {'attr':'IQ', 'diff':'H', 'default':-6},
         'Throwing':             {'attr':'DX', 'diff':'A', 'default':-3},
         'Thrown Weapon':        {'attr':'DX', 'diff':'E', 'default':-4},
@@ -205,7 +218,7 @@ class Skills(object):
         #   - detect lies: ?
         #   - fast draw ammo: ?
         if skill_name not in Skills.skills:
-            print '** No data for skill "%s"' % skill_name
+            print '** Need to add "%s" to gcs-check.py' % skill_name
             return 0
         skill = Skills.skills[skill_name]
         if skill['attr'] not in attribs:
@@ -335,8 +348,9 @@ class Character(object):
         # Build the equipment list up front so that skills may make use of it
         self.stuff_gcs = []
         top_stuff_gcs = self.char_gcs.find('equipment_list')
-        for child in top_stuff_gcs:
-            self.__add_item_to_gcs_list(child, self.stuff_gcs)
+        if top_stuff_gcs is not None:
+            for child in top_stuff_gcs:
+                self.__add_item_to_gcs_list(child, self.stuff_gcs)
 
     def check_for_consistency(self):
         self.check_attribs()
@@ -369,9 +383,9 @@ class Character(object):
             attr_json = self.char_json['permanent'][
                                         attr_names_json_from_gcs[attr_name]]
             if attr_gcs != attr_json:
-                print '  ** %s = %r in GCS but %r in JSON' % (attr_name,
-                                                              attr_gcs,
-                                                              attr_json)
+                print '   ** %s = %r in GCS but %r in JSON' % (attr_name,
+                                                               attr_gcs,
+                                                               attr_json)
             else:
                 print '  %s: %r' % (attr_name, attr_gcs)
 
@@ -380,7 +394,7 @@ class Character(object):
         attr_gcs += get_gcs_attribute(self.char_gcs, 'HP')
         attr_json = self.char_json['permanent']['hp']
         if attr_gcs != attr_json:
-            print '  ** HP = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
+            print '   ** HP = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
         else:
             print '  HP: %r' % attr_gcs
 
@@ -389,7 +403,7 @@ class Character(object):
         attr_gcs += get_gcs_attribute(self.char_gcs, 'FP')
         attr_json = self.char_json['permanent']['fp']
         if attr_gcs != attr_json:
-            print '  ** FP = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
+            print '   ** FP = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
         else:
             print '  FP: %r' % attr_gcs
 
@@ -400,7 +414,7 @@ class Character(object):
         #attr_gcs += get_gcs_attribute(self.char_gcs, 'will')
         #attr_json = self.char_json['permanent']['Per']
         #if attr_gcs != attr_json:
-        #    print '  ** Will = %r in GCS but %r in JSON' % (attr_gcs,
+        #    print '   ** Will = %r in GCS but %r in JSON' % (attr_gcs,
         #                                                    attr_json)
         #else:
         #    print '  Per: %r' % attr_gcs
@@ -413,7 +427,7 @@ class Character(object):
         #attr_gcs += get_gcs_attribute(self.char_gcs, 'perception')
         #attr_json = self.char_json['permanent']['Per']
         #if attr_gcs != attr_json:
-        #    print '  ** Per = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
+        #    print '   ** Per = %r in GCS but %r in JSON' % (attr_gcs, attr_json)
         #else:
         #    print '  Per: %r' % attr_gcs
         self.attrs['Per'] = attr_gcs
@@ -441,71 +455,88 @@ class Character(object):
                 name_text = base_name
             #print '  "%r"' % name_text # TODO: remove
 
+            cost_text_gcs = skill_gcs.find('points')
+            cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
+            level_gcs = Skills.get_gcs_level(self.attrs,
+                                             self.stuff_gcs,
+                                             base_name,
+                                             cost_gcs)
             if name_text not in skills_json:
-                print '  **GCS> "%s" in GCS but not in JSON' % name_text
+                print '   **GCS> "%s" in GCS (%r) but not in JSON' % (name_text,
+                                                                     level_gcs)
             else:
-                cost_text_gcs = skill_gcs.find('points')
-                cost_gcs = 0 if cost_text_gcs is None else int(
-                                                            cost_text_gcs.text)
-
-                level_gcs = Skills.get_gcs_level(self.attrs,
-                                                 self.stuff_gcs,
-                                                 base_name,
-                                                 cost_gcs)
                 if level_gcs != skills_json[name_text]:
-                    print '  ** %s = %r in GCS but %r in JSON' % (
+                    print '   ** %s = %r in GCS but %r in JSON' % (
                         name_text, level_gcs, skills_json[name_text])
                 else:
                     print '  %s: %r' % (name_text, level_gcs)
 
                 del(skills_json[name_text])
         for skill_json in skills_json:
-            print '  **JSON> "%s" in JSON but not in GCS' % skill_json
+            print '   **JSON> "%s" in JSON but not in GCS' % skill_json
+
+    def __add_advantage_to_gcs_list(self,
+                               advantage_gcs,   # ET item
+                               advantages_gcs   # {name: cost, ...
+                              ):
+        if advantage_gcs.tag == 'advantage_container':
+            #print '<< CONTAINER'
+            for contents in advantage_gcs.findall('advantage_container'):
+                self.__add_advantage_to_gcs_list(contents, advantages_gcs)
+            for contents in advantage_gcs.findall('advantage'):
+                self.__add_advantage_to_gcs_list(contents, advantages_gcs)
+            #print '>> CONTAINER'
+        else:
+            name = advantage_gcs.find('name')
+            cost_gcs = self.__get_advantage_cost(advantage_gcs)
+
+            #print 'ADVANTAGE NAME: "%r"' % name.text # TODO: remove
+            for modifier in advantage_gcs.findall('modifier'):
+                #modifier_name = modifier.find('name')
+                #print '-modifier name: "%r"' % modifier_name.text
+                #PP.pprint(modifier.attrib)
+
+                if ('enabled' not in modifier.attrib or
+                                    modifier.attrib['enabled'] != 'no'):
+                    modifier_cost_element = modifier.find('cost')
+                    modifier_cost = 0
+                    if modifier_cost_element is not None:
+                        modifier_cost_text = modifier_cost_element.text
+                        if modifier_cost_text is not None:
+                            cost_gcs += int(modifier_cost_text)
+            advantages_gcs[name.text] = cost_gcs
+
 
     def check_advantages(self):
         ## ADVANTAGES #####
         # Checks points spent
 
-        advantages_gcs = self.char_gcs.find('advantage_list')
-        #for advantage_gcs in advantages_gcs:
-        #    name = advantage_gcs.find('name')
-        #    cost = advantage_gcs.find('base_points')
-        #    print '  %r %r' % (name.text, 0 if cost is None else cost.text)
+        advantages_gcs_raw = self.char_gcs.find('advantage_list')
 
         if 'advantages' in self.char_json:
             advantages_json = copy.deepcopy(self.char_json['advantages'])
         else:
             advantages_json = {}
 
-        for advantage_gcs in advantages_gcs:
-            name = advantage_gcs.find('name')
-            #print 'ADVANTAGE NAME: "%r"' % name.text # TODO: remove
-            if name.text not in advantages_json:
-                print '  **GCS> "%s" in GCS but not in JSON' % name.text
+        advantages_gcs_raw = self.char_gcs.find('advantage_list')
+        advantages_gcs = {}
+        for child in advantages_gcs_raw:
+            self.__add_advantage_to_gcs_list(child, advantages_gcs)
+
+        for name in advantages_gcs:
+            #print 'ADVANTAGE NAME: "%r"' % name # TODO: remove
+            if name not in advantages_json:
+                print '   **GCS> "%s" in GCS but not in JSON' % name
             else:
-                cost_gcs = self.__get_advantage_cost(advantage_gcs)
-                for modifier in advantage_gcs.findall('modifier'):
-                    #modifier_name = modifier.find('name')
-                    #print '-modifier name: "%r"' % modifier_name.text
-                    #PP.pprint(modifier.attrib)
-
-                    if ('enabled' not in modifier.attrib or
-                                        modifier.attrib['enabled'] != 'no'):
-                        modifier_cost_element = modifier.find('cost')
-                        modifier_cost = 0
-                        if modifier_cost_element is not None:
-                            modifier_cost_text = modifier_cost_element.text
-                            if modifier_cost_text is not None:
-                                cost_gcs += int(modifier_cost_text)
-                if cost_gcs != advantages_json[name.text]:
-                    print '  ** %s = %r in GCS but %r in JSON' % (
-                        name.text, cost_gcs, advantages_json[name.text])
+                if advantages_gcs[name] != advantages_json[name]:
+                    print '   ** %s = %r in GCS but %r in JSON' % (
+                        name, advantages_gcs[name], advantages_json[name])
                 else:
-                    print '  %s: %r' % (name.text, cost_gcs)
+                    print '  %s: %r' % (name, advantages_gcs[name])
 
-                del(advantages_json[name.text])
+                del(advantages_json[name])
         for advantage_json in advantages_json:
-            print '  **JSON> "%s" in JSON but not in GCS' % advantage_json
+            print '   **JSON> "%s" in JSON but not in GCS' % advantage_json
 
     def check_spells(self):
         ## SPELLS #####
@@ -524,13 +555,13 @@ class Character(object):
                 name = child.find('name')
                 # TODO: figure out how the difficulty is stored
                 if name.text not in spells_json:
-                    print '  **GCS> "%s" in GCS but not in JSON' % name.text
+                    print '   **GCS> "%s" in GCS but not in JSON' % name.text
                 else:
                     print '  %s' % name.text
                     # TODO: compare skill levels
                     del(spells_json[name.text])
             for child in spells_json:
-                print '  **JSON> "%s" in JSON but not in GCS' % child
+                print '   **JSON> "%s" in JSON but not in GCS' % child
 
     def __add_item_to_gcs_list(self,
                                item,        # ET item
@@ -559,19 +590,18 @@ class Character(object):
             if name in Character.equipment_white_list_gcs:
                 pass
             elif name not in stuff_json:
-                print '  **GCS> "%s" in GCS but not in JSON' % name
+                print '   **GCS> "%s" in GCS but not in JSON' % name
             else:
                 print '  %s' % name
                 del(stuff_json[name])
         for thing in stuff_json:
-            print '  **JSON> "%s" in JSON but not in GCS' % thing
+            print '   **JSON> "%s" in JSON but not in GCS' % thing
 
     def __get_advantage_cost(self,
                              advantage_gcs # element from xml.etree.ElementTree
                             ):
         cost_text_gcs = advantage_gcs.find('base_points')
-        cost_gcs = 0 if cost_text_gcs is None else int(
-                                                    cost_text_gcs.text)
+        cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
         levels_element = advantage_gcs.find('levels')
         if levels_element is not None:
             levels = int(levels_element.text)

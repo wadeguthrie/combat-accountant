@@ -2031,6 +2031,116 @@
         "name": "4 - zombie"
       }
     }, 
+    "chloe - Nicole": {
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "stunned": 0, 
+      "skills": {
+        "Administration": 11, 
+        "Armoury (Small Arms)": 12, 
+        "Beam Weapons (Pistol)": 14, 
+        "Beam Weapons (Rifle)": 14, 
+        "Brawling": 14, 
+        "Camouflage": 12, 
+        "Climbing": 13, 
+        "Diagnosis": 12, 
+        "Electronics Operation (Communications)": 11, 
+        "Electronics Operation (Security)": 11, 
+        "Electronics Operation (Sensors)": 11, 
+        "Engineer (Combat)": 10, 
+        "Environment Suit": 13, 
+        "Escape": 12, 
+        "Explosives (Demolition)": 12, 
+        "Fast-Draw (Knife)": 14, 
+        "Fast-Draw (Pistol)": 14, 
+        "First Aid": 15, 
+        "Forward Observer": 11, 
+        "Gunner (Beams)": 14, 
+        "Guns (Grenade Launcher)": 14, 
+        "Guns (Shotgun)": 14, 
+        "Hiking": 10, 
+        "Interrogation": 11, 
+        "Jumping": 14, 
+        "Knife": 14, 
+        "Leadership": 11, 
+        "Mathematics (Applied)": 10, 
+        "No-Landing Extraction": 14, 
+        "Piloting (Low-Performance Spacecraft)": 13, 
+        "Savoir-Faire (Military)": 12, 
+        "Scrounging": 12, 
+        "Soldier": 11, 
+        "Stealth": 13, 
+        "Surgery": 10, 
+        "Survival (Desert)": 11, 
+        "Survival (Low Atmosphere)": 11, 
+        "Survival (Mountain)": 11, 
+        "Tactics": 10, 
+        "Throwing": 13, 
+        "Traps": 11 
+      }, 
+      "notes": [
+        "" 
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "wi": 0, 
+        "st": 11, 
+        "ht": 11, 
+        "dx": 14, 
+        "basic-move": 0, 
+        "basic-speed": 0
+      }, 
+      "posture": "standing", 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "wi": 0, 
+        "st": 11, 
+        "ht": 11, 
+        "dx": 14, 
+        "basic-move": 0, 
+        "basic-speed": 0
+      }, 
+      "advantages": {
+        "G-Experience": 1, 
+        "Guilt Complex (Loss Of Sister)": -5, 
+        "Enemy (Gregory Occeant)": -20, 
+        "Fit": 5, 
+        "Light Sleeper": -5, 
+        "Wealth (Struggling)": -10, 
+        "Rapid Healing": 5, 
+        "Vodou Practitioner": 5, 
+        "Vow (Return To Earth For Sister)": -5, 
+        "Flashbacks, Mild": -5, 
+        "Combat Reflexes": 15
+      }, 
+      "weapon-index": 0, 
+      "check_for_death": false, 
+      "timers": [
+        {
+          "rounds": 0.9, 
+          "string": [
+            "Attack", 
+            " Defense: any", 
+            " Move: step"
+          ]
+        }
+      ], 
+      "did_action_this_turn": true, 
+      "opponent": {
+        "group": "Radio Shack - Zombies", 
+        "name": "4 - zombie"
+      }
+    }, 
     "mama V - Karen": {
       "aim": {
         "braced": false, 
