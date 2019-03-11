@@ -526,7 +526,9 @@ class Character(object):
         for name in advantages_gcs:
             #print 'ADVANTAGE NAME: "%r"' % name # TODO: remove
             if name not in advantages_json:
-                print '   **GCS> "%s" in GCS but not in JSON' % name
+                print '   **GCS> "%s" (%r) in GCS but not in JSON' % (
+                                                        name,
+                                                        advantages_gcs[name])
             else:
                 if advantages_gcs[name] != advantages_json[name]:
                     print '   ** %s = %r in GCS but %r in JSON' % (
