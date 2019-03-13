@@ -964,6 +964,9 @@
     }
   }, 
   "PCs": {
+    "Anaica - (party friend) Mambo on Tereshkova": {
+      "redirect": "NPCs"
+    }, 
     "lawerence - Spenser": {
       "aim": {
         "braced": false, 
@@ -2990,9 +2993,6 @@
         ], 
         "did_action_this_turn": true, 
         "opponent": null
-      }, 
-      "Anaica - (party friend) Mambo on Tereshkova": {
-        "redirect": "NPCs"
       }, 
       "Austin - Diamond protocol security": {
         "aim": {
