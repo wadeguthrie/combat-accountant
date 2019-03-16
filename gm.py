@@ -15,6 +15,9 @@ import sys
 import traceback
 
 # TODO:
+#   - Need equipment containers
+#   - Need maintain spell
+#   - Need spell duration timer
 #   - Need way to 'P'romote bad guy to NPC status
 #   - Fights should have their own equipment
 #   - add laser sights to weapons
