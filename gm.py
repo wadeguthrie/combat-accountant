@@ -5962,7 +5962,7 @@ class MainHandler(ScreenHandler):
         self._draw_screen() # Redraw current screen when done building fight.
         return True # Keep going
 
-    def __add_equipment(self):
+    def __add_equipment(self, throw_away):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -5976,7 +5976,7 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True # Keep going
 
-    def __add_spell(self):
+    def __add_spell(self, throw_away):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -6013,7 +6013,7 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True # Keep going
 
-    def __give_equipment(self):
+    def __give_equipment(self, throw_away):
         from_fighter = Fighter(self.__chars[self.__char_index]['name'],
                                self.__chars[self.__char_index]['group'],
                                self.__chars[self.__char_index]['details'],
@@ -6058,7 +6058,7 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True # Keep going
 
-    def __remove_equipment(self):
+    def __remove_equipment(self, throw_away):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -6081,8 +6081,8 @@ class MainHandler(ScreenHandler):
                     ('add spell',           {'doit': self.__add_spell})]
         result = self._window_manager.menu('Do what', sub_menu)
 
-        if 'doit' in result and result['doit'] is not None:
-            (result['doit'])()
+        #if 'doit' in result and result['doit'] is not None:
+        #    (result['doit'])()
 
         return True # Keep going
 
@@ -6100,7 +6100,7 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
 
-    def __outfit(self):
+    def __outfit(self, throw_away):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
