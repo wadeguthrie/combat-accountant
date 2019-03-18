@@ -5800,24 +5800,15 @@ class MainHandler(ScreenHandler):
 
             ord('e'): {'name': 'equip character',     'func': 
                                                        self.__equip},
-            ord('J'): {'name': 'NPC joins PCs',       'func':
-                                                       self.__NPC_joins},
-            ord('L'): {'name': 'NPC leaves PCs',      'func':
-                                                       self.__NPC_leaves},
-            ord('N'): {'name': 'new NPCs',            'func':
-                                                       self.__add_NPCs},
-            ord('P'): {'name': 'new PCs',             'func':
-                                                       self.__add_PCs},
-            ord('M'): {'name': 'new Monsters',        'func':
-                                                       self.__add_monsters},
+            ord('p'): {'name': 'change party or monsters', 'func': 
+                                                       self.__party},
+
             ord('f'): {'name': 'fight',               'func':
                                                        self.__run_fight},
             ord('H'): {'name': 'Heal',                'func':
                                                        self.__fully_heal},
             ord('q'): {'name': 'quit',                'func':
                                                        self.__quit},
-            ord('s'): {'name': 'add spell',           'func':
-                                                       self.__add_spell},
             ord('S'): {'name': 'toggle: Save On Exit','func':
                                                        self.__maintain_json},
             ord('/'): {'name': 'search',              'func':
@@ -5912,7 +5903,7 @@ class MainHandler(ScreenHandler):
         self._draw_screen() # Redraw current screen when done building fight.
         return True # Keep going
 
-    def __add_equipment(self, throw_away):
+    def __add_equipment(self):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -5963,7 +5954,7 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True # Keep going
 
-    def __give_equipment(self, throw_away):
+    def __give_equipment(self):
         from_fighter = Fighter(self.__chars[self.__char_index]['name'],
                                self.__chars[self.__char_index]['group'],
                                self.__chars[self.__char_index]['details'],
@@ -6008,7 +5999,7 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True # Keep going
 
-    def __remove_equipment(self, throw_away):
+    def __remove_equipment(self):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -6027,16 +6018,30 @@ class MainHandler(ScreenHandler):
         sub_menu = [('add equipment',       {'doit': self.__add_equipment}),
                     ('remove equipment',    {'doit': self.__remove_equipment}),
                     ('give equipment',      {'doit': self.__give_equipment}),
-                    ('outfit characters',   {'doit': self.__outfit})]
+                    ('outfit characters',   {'doit': self.__outfit}),
+                    ('add spell',           {'doit': self.__add_spell})]
         result = self._window_manager.menu('Do what', sub_menu)
 
         if 'doit' in result and result['doit'] is not None:
-            param = None if 'param' not in result else result['param']
-            (result['doit'])(param)
+            (result['doit'])()
+
+        return True # Keep going
+
+    def __party(self):
+        sub_menu = [('NPC joins PCs',   {'doit': self.__NPC_joins}),
+                    ('NPC leaves PCs',  {'doit': self.__NPC_leaves}),
+                    ('new NPCs',        {'doit': self.__add_NPCs}),
+                    ('new PCs',         {'doit': self.__add_PCs}),
+                    ('new Monsters',    {'doit': self.__add_monsters})]
+        result = self._window_manager.menu('Do what', sub_menu)
+
+        if 'doit' in result and result['doit'] is not None:
+            (result['doit'])()
+
         return True # Keep going
 
 
-    def __outfit(self, throw_away):
+    def __outfit(self):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
