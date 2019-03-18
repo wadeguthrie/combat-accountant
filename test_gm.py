@@ -1503,7 +1503,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # Defend
-        self.__ruleset.do_defense(vodou_priest)
+        self.__ruleset.do_defense({'fighter': vodou_priest})
 
         # 3 rounds
         vodou_priest.do_aim(braced=True)
