@@ -1181,7 +1181,7 @@
           "ammo": {
             "name": "C Cell", 
             "shots": 9, 
-            "shots_left": 8
+            "shots_left": 2
           }
         }, 
         {
@@ -1202,13 +1202,12 @@
         "First Aid": 17, 
         "Beam Weapons (Pistol)": 14
       }, 
-      "did_action_this_turn": true, 
       "shock": 0, 
       "armor-index": null, 
       "current": {
         "fp": 18, 
         "iq": 16, 
-        "hp": 19, 
+        "hp": 14, 
         "wi": 16, 
         "st": 9, 
         "ht": 8, 
@@ -1216,6 +1215,7 @@
         "basic-move": 5, 
         "basic-speed": 4
       }, 
+      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 18, 
@@ -1244,13 +1244,13 @@
         "Impulsiveness": -10, 
         "Lwa (Bokor)": 8
       }, 
-      "weapon-index": 1, 
-      "check_for_death": false, 
+      "did_action_this_turn": true, 
+      "weapon-index": 2, 
       "timers": [
         {
           "rounds": 0.9, 
           "string": [
-            "draw Blaster Pistol, Sig Sauer D65", 
+            "Attack", 
             " Defense: any", 
             " Move: step"
           ]
@@ -1258,8 +1258,8 @@
       ], 
       "posture": "standing", 
       "opponent": {
-        "group": "Radio Shack - Zombies", 
-        "name": "1 - zombie"
+        "group": "Panama Hat", 
+        "name": "5 - zombie"
       }
     }, 
     "lawerence - Spenser": {
@@ -1320,7 +1320,7 @@
           "ammo": {
             "name": "C Cell", 
             "shots": 9, 
-            "shots_left": 8
+            "shots_left": 2
           }
         }, 
         {
@@ -1500,7 +1500,6 @@
         "Holdout": 11, 
         "Law (Conglomerate)": 10
       }, 
-      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "short-notes": [
@@ -1509,7 +1508,7 @@
       "current": {
         "fp": 11, 
         "iq": 12, 
-        "hp": 12, 
+        "hp": 9, 
         "wi": 12, 
         "st": 10, 
         "ht": 11, 
@@ -1517,7 +1516,8 @@
         "basic-move": 6, 
         "basic-speed": 6
       }, 
-      "state": "unconscious", 
+      "check_for_death": false, 
+      "state": "alive", 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -1542,11 +1542,23 @@
         "Night Vision": 4, 
         "Combat Reflexes": 15
       }, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
+      "did_action_this_turn": true, 
+      "weapon-index": 3, 
+      "timers": [
+        {
+          "rounds": 0.9, 
+          "string": [
+            "Attack", 
+            " Defense: any", 
+            " Move: step"
+          ]
+        }
+      ], 
       "posture": "standing", 
-      "opponent": null
+      "opponent": {
+        "group": "Panama Hat", 
+        "name": "11 - Panama Hat"
+      }
     }, 
     "samuel - Erik": {
       "aim": {
@@ -1554,28 +1566,6 @@
         "rounds": 0
       }, 
       "stuff": [
-        {
-          "acc": 4, 
-          "count": 1, 
-          "owners": null, 
-          "name": "Blaster Pistol, Sig Sauer D65", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 4, 
-              "num_dice": 1, 
-              "type": "pi"
-            }
-          }, 
-          "reload": 3, 
-          "skill": "Beam Weapons (Pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 9, 
-            "shots_left": 2
-          }
-        }, 
         {
           "count": 25, 
           "notes": "", 
@@ -1661,7 +1651,7 @@
           "ammo": {
             "name": "C Cell", 
             "shots": 7, 
-            "shots_left": 7
+            "shots_left": 5
           }
         }
       ], 
@@ -1767,7 +1757,7 @@
       "current": {
         "fp": 13, 
         "iq": 11, 
-        "hp": 7, 
+        "hp": 12, 
         "wi": 11, 
         "st": 12, 
         "ht": 11, 
@@ -1801,22 +1791,22 @@
         "Flashbacks, Mild": -5, 
         "Combat Reflexes": 15
       }, 
-      "weapon-index": 0, 
+      "weapon-index": null, 
       "check_for_death": false, 
       "timers": [
         {
           "rounds": 0.9, 
           "string": [
-            "Attack", 
+            "Do nothing", 
             " Defense: any", 
-            " Move: step"
+            " Move: none"
           ]
         }
       ], 
       "did_action_this_turn": true, 
       "opponent": {
-        "group": "Radio Shack - Zombies", 
-        "name": "4 - zombie"
+        "group": "Panama Hat", 
+        "name": "2 - zombie"
       }
     }, 
     "Anaica - (party friend) Mambo on Tereshkova": {
@@ -1827,7 +1817,30 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
+      "stuff": [
+        {
+          "acc": 4, 
+          "count": 1, 
+          "owners": null, 
+          "name": "Blaster Pistol, Sig Sauer D65", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "Beam Weapons (Pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 0
+          }
+        }
+      ], 
       "stunned": 0, 
       "skills": {
         "Environment Suit": 13, 
@@ -1840,16 +1853,16 @@
         "Brawling": 14, 
         "Beam Weapons (Pistol)": 14, 
         "Engineer (Combat)": 10, 
-        "Jumping": 14, 
         "Knife": 14, 
         "Piloting (Low-Performance Spacecraft)": 13, 
         "Mathematics (Applied)": 10, 
         "Interrogation": 11, 
         "Fast-Draw (Pistol)": 14, 
-        "First Aid": 15, 
+        "Jumping": 14, 
         "Survival (Desert)": 11, 
         "Armoury (Small Arms)": 12, 
         "Climbing": 13, 
+        "First Aid": 15, 
         "Guns (Shotgun)": 14, 
         "Guns (Grenade Launcher)": 14, 
         "Tactics": 10, 
@@ -1880,7 +1893,7 @@
       "current": {
         "fp": 11, 
         "iq": 12, 
-        "hp": 11, 
+        "hp": 6, 
         "wi": 12, 
         "st": 11, 
         "ht": 11, 
@@ -1889,7 +1902,7 @@
         "basic-speed": 6.25
       }, 
       "posture": "standing", 
-      "state": "alive", 
+      "state": "dead", 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -1917,21 +1930,9 @@
       }, 
       "weapon-index": 0, 
       "check_for_death": false, 
-      "timers": [
-        {
-          "rounds": 0.9, 
-          "string": [
-            "Attack", 
-            " Defense: any", 
-            " Move: step"
-          ]
-        }
-      ], 
-      "did_action_this_turn": true, 
-      "opponent": {
-        "group": "Radio Shack - Zombies", 
-        "name": "4 - zombie"
-      }
+      "timers": [], 
+      "did_action_this_turn": false, 
+      "opponent": null
     }, 
     "vasilis - Alan": {
       "aim": {
@@ -1958,7 +1959,7 @@
           "ammo": {
             "name": "C Cell", 
             "shots": 9, 
-            "shots_left": 9
+            "shots_left": 6
           }
         }, 
         {
@@ -2016,7 +2017,6 @@
         "Computer Programming": 12, 
         "Electronics Operation (Security)": 13
       }, 
-      "did_action_this_turn": true, 
       "shock": 0, 
       "armor-index": null, 
       "short-notes": [
@@ -2034,6 +2034,7 @@
         "basic-move": 5, 
         "basic-speed": 5.25
       }, 
+      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 10, 
@@ -2056,13 +2057,13 @@
         "Cannot Speak (Mute) - Computer Voice Synthesizer": -10, 
         "Secret (Turned in evidence on brutal mob hit)": -30
       }, 
-      "weapon-index": null, 
-      "check_for_death": false, 
+      "did_action_this_turn": true, 
+      "weapon-index": 0, 
       "timers": [
         {
           "rounds": 0.9, 
           "string": [
-            "draw Blaster Pistol, Colt Series 170D", 
+            "Attack", 
             " Defense: any", 
             " Move: step"
           ]
@@ -2070,8 +2071,8 @@
       ], 
       "posture": "standing", 
       "opponent": {
-        "group": "Radio Shack - Zombies", 
-        "name": "3 - zombie"
+        "group": "Panama Hat", 
+        "name": "2 - zombie"
       }
     }, 
     "deri - Chelsea": {
@@ -2293,7 +2294,7 @@
           "ammo": {
             "name": "C Cell", 
             "shots": 9, 
-            "shots_left": 6
+            "shots_left": 3
           }
         }, 
         {
@@ -2387,13 +2388,12 @@
         "Piloting (Low-Performance Spacecraft)": 9, 
         "Area Knowledge (Space Station)": 16
       }, 
-      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "current": {
-        "fp": 11, 
+        "fp": 9, 
         "iq": 14, 
-        "hp": 10, 
+        "hp": 2, 
         "wi": 14, 
         "st": 9, 
         "ht": 11, 
@@ -2401,6 +2401,7 @@
         "basic-move": 5, 
         "basic-speed": 5
       }, 
+      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
@@ -2434,13 +2435,22 @@
         "Versatile": 5, 
         "Dreamer": -1
       }, 
+      "did_action_this_turn": true, 
       "weapon-index": 0, 
-      "check_for_death": false, 
-      "timers": [], 
+      "timers": [
+        {
+          "rounds": 0.9, 
+          "string": [
+            "Attack", 
+            " Defense: any", 
+            " Move: step"
+          ]
+        }
+      ], 
       "posture": "standing", 
       "opponent": {
-        "group": "Radio Shack - Zombies", 
-        "name": "1 - zombie"
+        "group": "Panama Hat", 
+        "name": "7 - zombie"
       }
     }
   }, 
@@ -2454,7 +2464,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2468,6 +2477,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2483,8 +2493,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2497,7 +2507,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2511,6 +2520,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2526,8 +2536,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2540,7 +2550,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2554,6 +2563,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2569,8 +2579,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2583,7 +2593,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2597,6 +2606,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2613,8 +2623,8 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2627,7 +2637,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2641,6 +2650,7 @@
           "basic-move": 5, 
           "basic-speed": 5.25
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2656,8 +2666,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2670,7 +2680,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2684,6 +2693,7 @@
           "basic-move": 5, 
           "basic-speed": 5.5
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 12, 
@@ -2699,8 +2709,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2713,7 +2723,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2727,6 +2736,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2742,8 +2752,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -2756,7 +2766,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -2770,6 +2779,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -2786,8 +2796,8 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -3307,14 +3317,14 @@
           }
         ], 
         "timers": [], 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
-        "check_for_death": false, 
         "opponent": null
       }, 
       "2: William": {
@@ -3439,14 +3449,14 @@
           }
         ], 
         "timers": [], 
-        "did_action_this_turn": false, 
         "weapon-index": 0, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
-        "check_for_death": false, 
         "opponent": null
       }, 
       "5: Amelia": {
@@ -3552,14 +3562,14 @@
             ]
           }
         ], 
-        "did_action_this_turn": true, 
         "weapon-index": null, 
+        "did_action_this_turn": true, 
+        "check_for_death": false, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
-        "check_for_death": false, 
         "opponent": null
       }, 
       "1: Oliver": {
@@ -3698,14 +3708,14 @@
           }
         ], 
         "timers": [], 
-        "did_action_this_turn": false, 
         "weapon-index": 2, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
-        "check_for_death": false, 
         "opponent": null
       }, 
       "3: Charlotte": {
@@ -3830,14 +3840,14 @@
           }
         ], 
         "timers": [], 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
-        "check_for_death": false, 
         "opponent": null
       }
     }, 
@@ -3876,11 +3886,11 @@
         "state": "alive", 
         "stuff": [], 
         "timers": [], 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
         "advantages": {}, 
         "posture": "standing", 
-        "check_for_death": false, 
         "opponent": null
       }, 
       "Dude": {
@@ -3970,14 +3980,14 @@
           }
         ], 
         "timers": [], 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
-        "check_for_death": false, 
         "opponent": null
       }
     }, 
@@ -3990,7 +4000,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4004,6 +4013,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4019,8 +4029,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4033,7 +4043,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4047,6 +4056,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4062,8 +4072,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4076,7 +4086,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4090,6 +4099,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4105,8 +4115,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4119,7 +4129,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4133,6 +4142,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4149,8 +4159,8 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4163,7 +4173,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4177,6 +4186,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4192,8 +4202,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4206,7 +4216,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4220,6 +4229,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4235,8 +4245,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4249,7 +4259,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4263,6 +4272,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4278,8 +4288,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4292,7 +4302,6 @@
         "stuff": [], 
         "stunned": false, 
         "skills": {}, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4306,6 +4315,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4322,8 +4332,8 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4418,6 +4428,9 @@
         ], 
         "did_action_this_turn": true, 
         "opponent": null
+      }, 
+      "Maia Thompson - Operations manager on Tereshkova": {
+        "redirect": "NPCs"
       }, 
       "2 - zombie": {
         "aim": {
@@ -4829,6 +4842,1336 @@
         }
       }
     }, 
+    "Panama Hat": {
+      "1 - zombie": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "stunned": 0, 
+        "skills": {
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "station history: roo (bounce between stations)", 
+          "characteristics: Wears flamboyant or outlandish clothes", 
+          "instincts: To retreat from society", 
+          "hair: Wiry", 
+          "speech: Raspy", 
+          "knack: Bluffing", 
+          "personality: Dull"
+        ], 
+        "shock": 0, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "armor-index": null, 
+        "current": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 13, 
+          "basic-move": 5, 
+          "basic-speed": 6.0
+        }, 
+        "posture": "standing", 
+        "state": "alive", 
+        "permanent": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 13, 
+          "basic-move": 5, 
+          "basic-speed": 6.0
+        }, 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "did_action_this_turn": true, 
+        "opponent": {
+          "group": "PCs", 
+          "name": "chloe - Nicole"
+        }
+      }, 
+      "2 - zombie": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "stunned": false, 
+        "skills": {
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "station history: lifer (born on Earth, this is 1st station)", 
+          "characteristics: Hydrophobic (afraid of water)", 
+          "instincts: To serve", 
+          "hair: Greasy", 
+          "speech: Guttural", 
+          "knack: Political leverage", 
+          "personality: Overbearing"
+        ], 
+        "shock": 0, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "armor-index": null, 
+        "current": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": -17, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "posture": "lying", 
+        "state": "dead", 
+        "permanent": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "check_for_death": true, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "did_action_this_turn": true, 
+        "opponent": null
+      }, 
+      "10 - Wight": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "spells": [
+          {
+            "cost": 3, 
+            "name": "Throw Spell", 
+            "notes": "M128", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": null, 
+            "name": "Lightning", 
+            "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": null, 
+            "name": "Stop Power", 
+            "notes": "M179, 3 pts /1.5 yard radius ", 
+            "maintain": 0, 
+            "time": 3, 
+            "skill": 16
+          }, 
+          {
+            "cost": 5, 
+            "name": "Malfunction", 
+            "notes": "M177, touch", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": null, 
+            "name": "Armor", 
+            "notes": "M167, 2xDR, lasts 1 minute", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 3, 
+            "name": "Rotting Death", 
+            "notes": "M154 vs. HT, needs touch", 
+            "maintain": 2, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 2, 
+            "name": "Death Vision", 
+            "notes": "M149, vs. IQ", 
+            "maintain": null, 
+            "time": 3, 
+            "skill": 16
+          }, 
+          {
+            "cost": 2, 
+            "name": "Blink", 
+            "notes": "M148", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 4, 
+            "name": "Command", 
+            "notes": "M136, vs. Will", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 4, 
+            "name": "Sleep", 
+            "notes": "M135", 
+            "maintain": 0, 
+            "time": 3, 
+            "skill": 16
+          }, 
+          {
+            "cost": 4, 
+            "name": "Panic", 
+            "notes": "M134, vs. Will", 
+            "maintain": 2, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": null, 
+            "name": "Death Touch", 
+            "notes": "M41, 1-3, needs touch", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 4, 
+            "name": "Choke", 
+            "notes": "M40, vs. HT", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 4, 
+            "name": "Strike Blind", 
+            "notes": "M38, vs HT", 
+            "maintain": 2, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 2, 
+            "name": "Pain", 
+            "notes": "M36, vs. HT", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 2, 
+            "name": "Stun", 
+            "notes": "M37, B420, vs. HT", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 2, 
+            "name": "Luck", 
+            "notes": "V2", 
+            "maintain": 1, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": null, 
+            "name": "Fog", 
+            "notes": "M193, cost: 2/yard radius, lasts 1 minute", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }
+        ], 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "stunned": 0, 
+        "skills": {
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "station history: staby (born on this station)", 
+          "characteristics: Dirty", 
+          "instincts: To go where no man has gone before", 
+          "hair: Wiry", 
+          "speech: Wheezy", 
+          "knack: Perfect memory", 
+          "personality: Nurturing"
+        ], 
+        "shock": 0, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "armor-index": null, 
+        "current": {
+          "fp": 20, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 13, 
+          "basic-move": 5, 
+          "basic-speed": 6.0
+        }, 
+        "check_for_death": false, 
+        "state": "absent", 
+        "permanent": {
+          "fp": 20, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 13, 
+          "basic-move": 5, 
+          "basic-speed": 6.0
+        }, 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "did_action_this_turn": false, 
+        "weapon-index": null, 
+        "timers": [], 
+        "opponent": null, 
+        "posture": "standing"
+      }, 
+      "5 - zombie": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "stunned": 0, 
+        "skills": {
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "station history: lifer (born on Earth, this is 1st station)", 
+          "characteristics: Double-checks everything", 
+          "instincts: To be careful", 
+          "hair: Thinning", 
+          "speech: Nosy", 
+          "knack: Persistence", 
+          "personality: Sensual"
+        ], 
+        "shock": 0, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "armor-index": null, 
+        "current": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 6, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.5
+        }, 
+        "posture": "standing", 
+        "state": "alive", 
+        "permanent": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.5
+        }, 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Attack", 
+              " Defense: any", 
+              " Move: step"
+            ]
+          }
+        ], 
+        "did_action_this_turn": true, 
+        "opponent": {
+          "group": "PCs", 
+          "name": "deri - Chelsea"
+        }
+      }, 
+      "6 - zombie": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "stunned": true, 
+        "skills": {
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "station history: lifer (born on Earth, this is 1st station)", 
+          "characteristics: Hates animals", 
+          "instincts: To atone", 
+          "hair: Wavy", 
+          "speech: Um Uh", 
+          "knack: A tie to a monster", 
+          "personality: Incoherent"
+        ], 
+        "shock": 0, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "armor-index": null, 
+        "current": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": -13, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 11, 
+          "basic-move": 5, 
+          "basic-speed": 5.25
+        }, 
+        "posture": "lying", 
+        "state": "alive", 
+        "permanent": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 11, 
+          "basic-move": 5, 
+          "basic-speed": 5.25
+        }, 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do Nothing (Stunned)", 
+              " Defense: any @-4", 
+              " Move: none"
+            ]
+          }, 
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do Nothing (Stunned)", 
+              " Defense: any @-4", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "did_action_this_turn": true, 
+        "opponent": {
+          "group": "PCs", 
+          "name": "mama V - Karen"
+        }
+      }, 
+      "9 - Wight": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "spells": [
+          {
+            "cost": 3, 
+            "name": "Throw Spell", 
+            "notes": "M128", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": null, 
+            "name": "Lightning", 
+            "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": null, 
+            "name": "Stop Power", 
+            "notes": "M179, 3 pts /1.5 yard radius ", 
+            "maintain": 0, 
+            "time": 3, 
+            "skill": 16
+          }, 
+          {
+            "cost": 5, 
+            "name": "Malfunction", 
+            "notes": "M177, touch", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": null, 
+            "name": "Armor", 
+            "notes": "M167, 2xDR, lasts 1 minute", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 3, 
+            "name": "Rotting Death", 
+            "notes": "M154 vs. HT, needs touch", 
+            "maintain": 2, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 2, 
+            "name": "Death Vision", 
+            "notes": "M149, vs. IQ", 
+            "maintain": null, 
+            "time": 3, 
+            "skill": 16
+          }, 
+          {
+            "cost": 2, 
+            "name": "Blink", 
+            "notes": "M148", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 4, 
+            "name": "Command", 
+            "notes": "M136, vs. Will", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 4, 
+            "name": "Sleep", 
+            "notes": "M135", 
+            "maintain": 0, 
+            "time": 3, 
+            "skill": 16
+          }, 
+          {
+            "cost": 4, 
+            "name": "Panic", 
+            "notes": "M134, vs. Will", 
+            "maintain": 2, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": null, 
+            "name": "Death Touch", 
+            "notes": "M41, 1-3, needs touch", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 4, 
+            "name": "Choke", 
+            "notes": "M40, vs. HT", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 4, 
+            "name": "Strike Blind", 
+            "notes": "M38, vs HT", 
+            "maintain": 2, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 2, 
+            "name": "Pain", 
+            "notes": "M36, vs. HT", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 2, 
+            "name": "Stun", 
+            "notes": "M37, B420, vs. HT", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": 2, 
+            "name": "Luck", 
+            "notes": "V2", 
+            "maintain": 1, 
+            "time": 1, 
+            "skill": 16
+          }, 
+          {
+            "cost": null, 
+            "name": "Fog", 
+            "notes": "M193, cost: 2/yard radius, lasts 1 minute", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 16
+          }
+        ], 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "stunned": 0, 
+        "skills": {
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "station history: lifer (born on Earth, this is 1st station)", 
+          "characteristics: Jumps conversation topics", 
+          "instincts: To atone", 
+          "hair: Strange hairstyle", 
+          "speech: Sultry/sexy", 
+          "knack: Hidden knowledge", 
+          "personality: Rigid"
+        ], 
+        "shock": 0, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "armor-index": null, 
+        "current": {
+          "fp": 20, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 13, 
+          "basic-move": 5, 
+          "basic-speed": 6.0
+        }, 
+        "check_for_death": false, 
+        "state": "absent", 
+        "permanent": {
+          "fp": 20, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 13, 
+          "basic-move": 5, 
+          "basic-speed": 6.0
+        }, 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "did_action_this_turn": false, 
+        "weapon-index": null, 
+        "timers": [], 
+        "opponent": null, 
+        "posture": "standing"
+      }, 
+      "11 - Panama Hat": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "spells": [
+          {
+            "cost": 6, 
+            "name": "Charm", 
+            "notes": "M139, vs. Will", 
+            "maintain": 3, 
+            "time": 1, 
+            "skill": 18
+          }, 
+          {
+            "cost": null, 
+            "name": "Teleport", 
+            "notes": "M147, cost: 5 for 100 yards", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 18
+          }, 
+          {
+            "cost": 30, 
+            "name": "Enslave", 
+            "notes": "M141, vs. Will", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 18
+          }, 
+          {
+            "cost": 12, 
+            "name": "Lesser Geas", 
+            "notes": "M140, vs. Will ", 
+            "maintain": 0, 
+            "time": 30, 
+            "skill": 18
+          }, 
+          {
+            "cost": 3, 
+            "name": "False Memory", 
+            "notes": "M139, vs. Will", 
+            "maintain": 0, 
+            "time": 5, 
+            "skill": 18
+          }, 
+          {
+            "cost": null, 
+            "name": "Manastone", 
+            "notes": "M70", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 18
+          }, 
+          {
+            "cost": null, 
+            "name": "Repair", 
+            "notes": "M118", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 18
+          }, 
+          {
+            "cost": null, 
+            "name": "Planar Summons", 
+            "notes": "M82", 
+            "maintain": 0, 
+            "time": 300, 
+            "skill": 18
+          }, 
+          {
+            "cost": 8, 
+            "name": "Agonize", 
+            "notes": "M40, HT negates", 
+            "maintain": 6, 
+            "time": 1, 
+            "skill": 18
+          }, 
+          {
+            "cost": null, 
+            "name": "Armor", 
+            "notes": "M167, 2xDR, lasts 1 minute", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 18
+          }, 
+          {
+            "cost": 2, 
+            "name": "Blink", 
+            "notes": "M148", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 18
+          }
+        ], 
+        "stuff": [], 
+        "stunned": 0, 
+        "skills": {}, 
+        "notes": [
+          "station history: staby (born on this station)", 
+          "characteristics: Loves the sea and ships", 
+          "instincts: To commit an atrocity", 
+          "hair: Short", 
+          "speech: Low-pitched", 
+          "knack: A hidden entrance to the city", 
+          "personality: Gracious"
+        ], 
+        "shock": 0, 
+        "short-notes": [], 
+        "armor-index": null, 
+        "current": {
+          "fp": 16, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "wi": 12, 
+          "dx": 13, 
+          "basic-move": 5, 
+          "basic-speed": 6
+        }, 
+        "check_for_death": false, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 30, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "wi": 12, 
+          "dx": 13, 
+          "basic-move": 5, 
+          "basic-speed": 6
+        }, 
+        "advantages": {
+          "Empathy": 5, 
+          "Vodou Practitioner (Mambo 2)": 35, 
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10, 
+          "Lwa (Mambo, Erzulie Freda)": 6
+        }, 
+        "did_action_this_turn": true, 
+        "weapon-index": null, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Move", 
+              " Defense: any", 
+              " Move: full=5"
+            ]
+          }
+        ], 
+        "opponent": {
+          "group": "PCs", 
+          "name": "samuel - Erik"
+        }, 
+        "posture": "standing"
+      }, 
+      "8 - zombie": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "stunned": 0, 
+        "skills": {
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "station history: roo (bounce between stations)", 
+          "characteristics: Interrupts others", 
+          "instincts: To be remembered in song", 
+          "hair: Greasy", 
+          "speech: Whiny", 
+          "knack: A key to an important door", 
+          "personality: Solitary"
+        ], 
+        "shock": 0, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "armor-index": null, 
+        "current": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.0
+        }, 
+        "posture": "standing", 
+        "state": "alive", 
+        "permanent": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 10, 
+          "basic-move": 5, 
+          "basic-speed": 5.0
+        }, 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Do nothing", 
+              " Defense: any", 
+              " Move: none"
+            ]
+          }
+        ], 
+        "did_action_this_turn": true, 
+        "opponent": null
+      }, 
+      "7 - zombie": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "stunned": 0, 
+        "skills": {
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "station history: staby (born on this station)", 
+          "characteristics: Hates quiet pauses in conversations", 
+          "instincts: To make money", 
+          "hair: Thinning", 
+          "speech: Nosy", 
+          "knack: Unique perspective", 
+          "personality: Zealous"
+        ], 
+        "shock": 0, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "armor-index": null, 
+        "current": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": -7, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 13, 
+          "basic-move": 5, 
+          "basic-speed": 6.0
+        }, 
+        "posture": "standing", 
+        "state": "alive", 
+        "permanent": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 13, 
+          "basic-move": 5, 
+          "basic-speed": 6.0
+        }, 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "timers": [], 
+        "did_action_this_turn": false, 
+        "opponent": {
+          "group": "PCs", 
+          "name": "deri - Chelsea"
+        }
+      }, 
+      "4 - zombie": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "stunned": 0, 
+        "skills": {
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "station history: lifer (born on Earth, this is 1st station)", 
+          "characteristics: Limps", 
+          "instincts: To be a champion", 
+          "hair: Limp", 
+          "speech: Um Uh", 
+          "knack: A library", 
+          "personality: Generous"
+        ], 
+        "shock": 0, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "armor-index": null, 
+        "current": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 10, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "posture": "standing", 
+        "state": "alive", 
+        "permanent": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "timers": [
+          {
+            "rounds": 0.9, 
+            "string": [
+              "Attack", 
+              " Defense: any", 
+              " Move: step"
+            ]
+          }
+        ], 
+        "did_action_this_turn": true, 
+        "opponent": null
+      }, 
+      "3 - zombie": {
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "arms & teeth", 
+            "notes": "", 
+            "damage": {
+              "dice": {
+                "plus": -1, 
+                "num_dice": 1, 
+                "type": "cr"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "stunned": 0, 
+        "skills": {
+          "Beam Weapons (Pistol)": 15, 
+          "Brawling": 12, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "station history: staby (born on this station)", 
+          "characteristics: Plays with own jewelry", 
+          "instincts: To party", 
+          "hair: Frazzled", 
+          "speech: Prim, haughty, proud", 
+          "knack: A discerning eye", 
+          "personality: Cowardly"
+        ], 
+        "shock": 0, 
+        "short-notes": [
+          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+          "Automatically fails alive roll at -HP,", 
+          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+        ], 
+        "armor-index": null, 
+        "current": {
+          "fp": 7, 
+          "iq": 8, 
+          "hp": -1, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.5
+        }, 
+        "posture": "standing", 
+        "state": "dead", 
+        "permanent": {
+          "fp": 16, 
+          "iq": 8, 
+          "hp": 16, 
+          "ht": 10, 
+          "st": 12, 
+          "wi": 10, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.5
+        }, 
+        "advantages": {
+          "Appearance (Monstrous)": 0, 
+          "Wealth": 0, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "check_for_death": false, 
+        "timers": [], 
+        "did_action_this_turn": false, 
+        "opponent": {
+          "group": "PCs", 
+          "name": "lawerence - Spenser"
+        }
+      }
+    }, 
     "Arena Capture the Flag": {
       "5-Tank-C": {
         "aim": {
@@ -4887,7 +6230,6 @@
           "Brawling": 16, 
           "Axe/Mace": 14
         }, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4901,6 +6243,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -4916,8 +6259,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -4963,7 +6306,6 @@
           "Beam Weapons (Pistol)": 15, 
           "Brawling": 12
         }, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -4977,6 +6319,7 @@
           "basic-move": 5, 
           "basic-speed": 5.5
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 12, 
@@ -4992,8 +6335,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -5055,7 +6398,6 @@
           "Brawling": 16, 
           "Axe/Mace": 14
         }, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -5069,6 +6411,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -5084,8 +6427,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -5151,7 +6494,6 @@
           "Brawling": 14, 
           "Knife": 15
         }, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -5165,6 +6507,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -5180,8 +6523,8 @@
         "advantages": {
           "High Pain Threshold": 10
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -5227,7 +6570,6 @@
           "Beam Weapons (Pistol)": 13, 
           "Brawling": 12
         }, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -5241,6 +6583,7 @@
           "basic-move": 5, 
           "basic-speed": 5.25
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -5257,8 +6600,8 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -5320,7 +6663,6 @@
           "Brawling": 16, 
           "Axe/Mace": 14
         }, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -5334,6 +6676,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -5349,8 +6692,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -5412,7 +6755,6 @@
           "Brawling": 16, 
           "Axe/Mace": 14
         }, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -5426,6 +6768,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -5441,8 +6784,8 @@
         "advantages": {
           "Combat Reflexes": 15
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -5508,7 +6851,6 @@
           "Brawling": 14, 
           "Knife": 15
         }, 
-        "did_action_this_turn": false, 
         "shock": 0, 
         "armor-index": null, 
         "current": {
@@ -5522,6 +6864,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -5537,8 +6880,8 @@
         "advantages": {
           "High Pain Threshold": 10
         }, 
+        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "check_for_death": false, 
         "timers": [], 
         "posture": "standing", 
         "opponent": null
@@ -5546,9 +6889,17 @@
     }
   }, 
   "current-fight": {
-    "index": 9, 
-    "monsters": "Radio Shack - Zombies", 
+    "index": 7, 
+    "monsters": "Panama Hat", 
     "fighters": [
+      {
+        "group": "PCs", 
+        "name": "chloe - Nicole"
+      }, 
+      {
+        "group": "Panama Hat", 
+        "name": "9 - Wight"
+      }, 
       {
         "group": "PCs", 
         "name": "lawerence - Spenser"
@@ -5558,32 +6909,52 @@
         "name": "samuel - Erik"
       }, 
       {
+        "group": "Panama Hat", 
+        "name": "1 - zombie"
+      }, 
+      {
+        "group": "Panama Hat", 
+        "name": "10 - Wight"
+      }, 
+      {
+        "group": "Panama Hat", 
+        "name": "11 - Panama Hat"
+      }, 
+      {
+        "group": "Panama Hat", 
+        "name": "7 - zombie"
+      }, 
+      {
+        "group": "Panama Hat", 
+        "name": "2 - zombie"
+      }, 
+      {
+        "group": "Panama Hat", 
+        "name": "4 - zombie"
+      }, 
+      {
+        "group": "Panama Hat", 
+        "name": "5 - zombie"
+      }, 
+      {
+        "group": "Panama Hat", 
+        "name": "3 - zombie"
+      }, 
+      {
         "group": "PCs", 
         "name": "vasilis - Alan"
       }, 
       {
-        "group": "Radio Shack - Zombies", 
-        "name": "1 - zombie"
-      }, 
-      {
-        "group": "Radio Shack - Zombies", 
-        "name": "5 - zombie"
-      }, 
-      {
-        "group": "Radio Shack - Zombies", 
-        "name": "3 - zombie"
-      }, 
-      {
-        "group": "Radio Shack - Zombies", 
-        "name": "2 - zombie"
-      }, 
-      {
-        "group": "Radio Shack - Zombies", 
+        "group": "Panama Hat", 
         "name": "6 - zombie"
       }, 
       {
-        "group": "Radio Shack - Zombies", 
-        "name": "4 - zombie"
+        "group": "PCs", 
+        "name": "Anaica - (party friend) Mambo on Tereshkova"
+      }, 
+      {
+        "group": "Panama Hat", 
+        "name": "8 - zombie"
       }, 
       {
         "group": "PCs", 
@@ -5595,85 +6966,175 @@
       }
     ], 
     "saved": false, 
-    "round": 4, 
+    "round": 5, 
     "history": [
       "--- Round 0 ---", 
-      " (lawerence - Spenser) was marked as (unconscious)", 
-      " (samuel - Erik) did (draw pistol, Sig D65) maneuver", 
-      " (samuel - Erik) picked (2 - zombie) as opponent", 
-      " (2 - zombie) picked (samuel - Erik) as opponent right back", 
-      " (samuel - Erik) did 5 HP to (2 - zombie)", 
-      " (samuel - Erik) did (Attack) maneuver", 
-      " (vasilis - Alan) did (Wait) maneuver", 
-      " (1 - zombie) picked (samuel - Erik) as opponent", 
+      " (9 - Wight) was marked as (unconscious)", 
+      " (9 - Wight) was marked as (dead)", 
+      " (9 - Wight) was marked as (alive)", 
+      " (9 - Wight) was marked as (absent)", 
+      " (10 - Wight) was marked as (absent)", 
+      " (chloe - Nicole) did (Ready (draw, etc.)) maneuver", 
+      " (Anaica - (party friend) Mambo on Tereshkova) was marked as (absent)", 
+      " (9 - Wight) did nothing (absent)", 
+      " (lawerence - Spenser) did (draw Blaster Pistol, Sig Sauer D65) maneuver", 
+      " (samuel - Erik) did (draw Laser Pistol - Stats unknown (from Austin)) maneuver", 
       " (1 - zombie) did (Move) maneuver", 
-      " (5 - zombie) was marked as (unconscious)", 
-      " (3 - zombie) did (Move) maneuver", 
-      " (2 - zombie) did (Move) maneuver", 
-      " (6 - zombie) was marked as (unconscious)", 
-      " (4 - zombie) did (Move) maneuver", 
-      " (deri - Chelsea) did (draw pistol, Sig D65) maneuver", 
-      " (mama V - Karen) did (Move) maneuver", 
-      "--- Round 1 ---", 
-      " (samuel - Erik) did (Attack) maneuver", 
-      " (vasilis - Alan) picked (3 - zombie) as opponent", 
-      " (3 - zombie) picked (vasilis - Alan) as opponent right back", 
-      " (vasilis - Alan) did 20 HP to (3 - zombie)", 
+      " (10 - Wight) did nothing (absent)", 
+      " (11 - Panama Hat) did (Cast (Armor)) maneuver", 
+      " (7 - zombie) did (Move) maneuver", 
+      " (2 - zombie) did (Move & Attack) maneuver", 
+      " (2 - zombie) picked (vasilis - Alan) as opponent", 
+      " (vasilis - Alan) picked (2 - zombie) as opponent right back", 
+      " (4 - zombie) picked (chloe - Nicole) as opponent", 
+      " (chloe - Nicole) picked (4 - zombie) as opponent right back", 
+      " (4 - zombie) did (Move & Attack) maneuver", 
+      " (5 - zombie) picked (deri - Chelsea) as opponent", 
+      " (5 - zombie) did (Move & Attack) maneuver", 
+      " (3 - zombie) picked (lawerence - Spenser) as opponent", 
+      " (lawerence - Spenser) picked (3 - zombie) as opponent right back", 
+      " (3 - zombie) did (Move & Attack) maneuver", 
       " (vasilis - Alan) did (Attack) maneuver", 
-      " (1 - zombie) did (Move) maneuver", 
-      " (3 - zombie) was marked as (dead)", 
-      " (2 - zombie) did (Move) maneuver", 
-      " (6 - zombie) was marked as (dead)", 
-      " (4 - zombie) did (Move) maneuver", 
-      " (deri - Chelsea) picked (2 - zombie) as opponent", 
-      " (deri - Chelsea) did 8 HP to (2 - zombie)", 
+      " (vasilis - Alan) did 2 HP to (2 - zombie)", 
+      " (6 - zombie) picked (mama V - Karen) as opponent", 
+      " (mama V - Karen) picked (6 - zombie) as opponent right back", 
+      " (6 - zombie) did (Move & Attack) maneuver", 
+      " (Anaica - (party friend) Mambo on Tereshkova) did nothing (absent)", 
+      " (8 - zombie) did (Move) maneuver", 
+      " (deri - Chelsea) picked (7 - zombie) as opponent", 
+      " (7 - zombie) picked (deri - Chelsea) as opponent right back", 
+      " (deri - Chelsea) did (draw Blaster Pistol, Sig Sauer D65) maneuver", 
       " (deri - Chelsea) did (Attack) maneuver", 
-      " (mama V - Karen) did (Move) maneuver", 
-      "--- Round 2 ---", 
-      " (samuel - Erik) picked (4 - zombie) as opponent", 
-      " (4 - zombie) picked (samuel - Erik) as opponent right back", 
-      " (samuel - Erik) did (Attack) maneuver", 
-      " (vasilis - Alan) did (Move) maneuver", 
-      " (1 - zombie) did 2 HP to (samuel - Erik)", 
-      " (1 - zombie) did (Attack) maneuver", 
-      " (5 - zombie) was marked as (dead)", 
-      " (3 - zombie) did nothing (dead)", 
-      " (2 - zombie) did (Attack) maneuver", 
-      " (6 - zombie) did nothing (dead)", 
-      " (4 - zombie) did (Attack) maneuver", 
-      " (deri - Chelsea) did 10 HP to (2 - zombie)", 
-      " (2 - zombie) was marked as (dead)", 
-      " (deri - Chelsea) did (Attack) maneuver", 
-      " (mama V - Karen) picked (1 - zombie) as opponent", 
+      " (deri - Chelsea) did 9 HP to (7 - zombie)", 
+      " (mama V - Karen) did (draw Blaster Pistol, Sig Sauer D65) maneuver", 
       " (mama V - Karen) did (Attack) maneuver", 
-      "--- Round 3 ---", 
-      " (samuel - Erik) did 8 HP to (4 - zombie)", 
+      " (mama V - Karen) did (Attack) maneuver", 
+      " (mama V - Karen) did 10 HP to (6 - zombie)", 
+      "--- Round 1 ---", 
+      " (chloe - Nicole) did (Attack) maneuver", 
+      " (chloe - Nicole) did 5 HP to (4 - zombie)", 
+      " (9 - Wight) did nothing (absent)", 
+      " (lawerence - Spenser) did (Attack) maneuver", 
+      " (lawerence - Spenser) did 6 HP to (3 - zombie)", 
+      " (samuel - Erik) picked (11 - Panama Hat) as opponent", 
+      " (11 - Panama Hat) picked (samuel - Erik) as opponent right back", 
       " (samuel - Erik) did (Attack) maneuver", 
-      " (vasilis - Alan) did (Move) maneuver", 
-      " (1 - zombie) did 3 HP to (samuel - Erik)", 
-      " (1 - zombie) did (Attack) maneuver", 
-      " (5 - zombie) did nothing (dead)", 
-      " (3 - zombie) did nothing (dead)", 
-      " (2 - zombie) did nothing (dead)", 
-      " (6 - zombie) did nothing (dead)", 
+      " (samuel - Erik) did (Attack) maneuver", 
+      " (1 - zombie) did (Do nothing) maneuver", 
+      " (10 - Wight) did nothing (absent)", 
+      " (11 - Panama Hat) did (Do nothing) maneuver", 
+      " (7 - zombie) did (Attack) maneuver", 
+      " (2 - zombie) picked (samuel - Erik) as opponent", 
+      " (2 - zombie) did (Move & Attack) maneuver", 
       " (4 - zombie) did (Attack) maneuver", 
-      " (deri - Chelsea) picked (1 - zombie) as opponent", 
-      " (deri - Chelsea) did (Attack) maneuver", 
-      " (mama V - Karen) did (draw pistol, Sig D65) maneuver", 
-      " (mama V - Karen) did 10 HP to (1 - zombie)", 
-      "--- Round 4 ---", 
-      " (samuel - Erik) did 8 HP to (4 - zombie)", 
-      " (4 - zombie) was marked as (unconscious)", 
-      " (samuel - Erik) did (Attack) maneuver", 
+      " (4 - zombie) did 1 HP to (chloe - Nicole)", 
+      " (5 - zombie) did (Attack) maneuver", 
+      " (5 - zombie) did 3 HP to (deri - Chelsea)", 
+      " (3 - zombie) did (Attack) maneuver", 
+      " (3 - zombie) did 3 HP to (lawerence - Spenser)", 
+      " (vasilis - Alan) did (Attack) maneuver", 
+      " (vasilis - Alan) did 5 HP to (2 - zombie)", 
       " (vasilis - Alan) did (draw Blaster Pistol, Colt Series 170D) maneuver", 
-      " (1 - zombie) did (Do Nothing (Stunned)) maneuver", 
-      " (5 - zombie) did nothing (dead)", 
+      " (6 - zombie) did (Attack) maneuver", 
+      " (6 - zombie) did 4 HP to (mama V - Karen)", 
+      " (Anaica - (party friend) Mambo on Tereshkova) did nothing (absent)", 
+      " (8 - zombie) did (Do nothing) maneuver", 
+      " (deri - Chelsea) did (Attack) maneuver", 
+      " (deri - Chelsea) did 7 HP to (7 - zombie)", 
+      " (mama V - Karen) did (Attack) maneuver", 
+      " (mama V - Karen) did 5 HP to (6 - zombie)", 
+      "--- Round 2 ---", 
+      " (chloe - Nicole) did (Attack) maneuver", 
+      " (chloe - Nicole) did 1 HP to (4 - zombie)", 
+      " (9 - Wight) did nothing (absent)", 
+      " (lawerence - Spenser) did (Attack) maneuver", 
+      " (lawerence - Spenser) did 6 HP to (3 - zombie)", 
+      " (lawerence - Spenser) did (Attack) maneuver", 
+      " (lawerence - Spenser) did 5 HP to (3 - zombie)", 
+      " (samuel - Erik) did (Unready Laser Pistol - Stats unknown (from Austin)) maneuver", 
+      " (samuel - Erik) picked (2 - zombie) as opponent", 
+      " (1 - zombie) did (Do nothing) maneuver", 
+      " (10 - Wight) did nothing (absent)", 
+      " (11 - Panama Hat) did (Cast (Agonize)) maneuver", 
+      " (7 - zombie) did (Attack) maneuver", 
+      " (2 - zombie) did (Attack) maneuver", 
+      " (4 - zombie) did (Attack) maneuver", 
+      " (5 - zombie) did (Attack) maneuver", 
+      " (5 - zombie) did 1 HP to (deri - Chelsea)", 
+      " (vasilis - Alan) did (Attack) maneuver", 
+      " (vasilis - Alan) did 9 HP to (2 - zombie)", 
+      " (6 - zombie) did (Attack) maneuver", 
+      " (Anaica - (party friend) Mambo on Tereshkova) did nothing (absent)", 
+      " (8 - zombie) did (Do nothing) maneuver", 
+      " (deri - Chelsea) did (Move & Attack) maneuver", 
+      " (mama V - Karen) did (Attack) maneuver", 
+      " (mama V - Karen) did 5 HP to (6 - zombie)", 
+      "--- Round 3 ---", 
+      " (chloe - Nicole) did (Do nothing) maneuver", 
+      " (9 - Wight) did nothing (absent)", 
+      " (lawerence - Spenser) did (Attack) maneuver", 
+      " (samuel - Erik) did (Move) maneuver", 
+      " (1 - zombie) did (Do nothing) maneuver", 
+      " (10 - Wight) did nothing (absent)", 
+      " (11 - Panama Hat) did (Do nothing) maneuver", 
+      " (7 - zombie) did (Attack) maneuver", 
+      " (2 - zombie) did (Do Nothing (Stunned)) maneuver", 
+      " (2 - zombie) did (Do Nothing (Stunned)) maneuver", 
+      " (4 - zombie) did (Attack) maneuver", 
+      " (5 - zombie) did (Attack) maneuver", 
+      " (3 - zombie) was marked as (dead)", 
+      " (vasilis - Alan) did (Attack) maneuver", 
+      " (vasilis - Alan) did 8 HP to (2 - zombie)", 
+      " (6 - zombie) did (Attack) maneuver", 
+      " (6 - zombie) did 1 HP to (mama V - Karen)", 
+      " (Anaica - (party friend) Mambo on Tereshkova) did nothing (absent)", 
+      " (8 - zombie) did (Do nothing) maneuver", 
+      " (deri - Chelsea) did (Cast (Itch)) maneuver", 
+      " (mama V - Karen) did (Attack) maneuver", 
+      " (mama V - Karen) did 9 HP to (6 - zombie)", 
+      "--- Round 4 ---", 
+      " (chloe - Nicole) did (Move) maneuver", 
+      " (9 - Wight) did nothing (absent)", 
+      " (lawerence - Spenser) did (Attack) maneuver", 
+      " (samuel - Erik) did (Do nothing) maneuver", 
+      " (1 - zombie) picked (chloe - Nicole) as opponent", 
+      " (1 - zombie) did (Attack) maneuver", 
+      " (1 - zombie) did 3 HP to (chloe - Nicole)", 
+      " (10 - Wight) did nothing (absent)", 
+      " (11 - Panama Hat) did (Do nothing) maneuver", 
+      " (7 - zombie) did (Attack) maneuver", 
+      " (7 - zombie) did 4 HP to (deri - Chelsea)", 
+      " (2 - zombie) did (Do nothing) maneuver", 
+      " (4 - zombie) did (Attack) maneuver", 
+      " (4 - zombie) did 1 HP to (chloe - Nicole)", 
+      " (5 - zombie) did (Attack) maneuver", 
       " (3 - zombie) did nothing (dead)", 
-      " (2 - zombie) did nothing (dead)", 
-      " (6 - zombie) did nothing (dead)", 
-      " (4 - zombie) picked (samuel - Erik) as opponent", 
-      " (deri - Chelsea) did 10 HP to (1 - zombie)", 
-      " (1 - zombie) was marked as (unconscious)"
+      " (vasilis - Alan) did (Attack) maneuver", 
+      " (vasilis - Alan) did 9 HP to (2 - zombie)", 
+      " (2 - zombie) was marked as (unconscious)", 
+      " (2 - zombie) was marked as (dead)", 
+      " (6 - zombie) did (Do Nothing (Stunned)) maneuver", 
+      " (6 - zombie) did (Do Nothing (Stunned)) maneuver", 
+      " (Anaica - (party friend) Mambo on Tereshkova) did nothing (absent)", 
+      " (8 - zombie) did (Do nothing) maneuver", 
+      " (deri - Chelsea) did (Attack) maneuver", 
+      " (deri - Chelsea) did 7 HP to (7 - zombie)", 
+      " (mama V - Karen) picked (5 - zombie) as opponent", 
+      " (mama V - Karen) did (Attack) maneuver", 
+      " (mama V - Karen) did 10 HP to (5 - zombie)", 
+      "--- Round 5 ---", 
+      " (4 - zombie) was marked as (unconscious)", 
+      " (4 - zombie) was marked as (dead)", 
+      " (4 - zombie) was marked as (alive)", 
+      " (chloe - Nicole) was marked as (unconscious)", 
+      " (chloe - Nicole) was marked as (dead)", 
+      " (9 - Wight) did nothing (absent)", 
+      " (lawerence - Spenser) picked (11 - Panama Hat) as opponent", 
+      " (lawerence - Spenser) did (Attack) maneuver", 
+      " (samuel - Erik) did (Do nothing) maneuver", 
+      " (1 - zombie) did (Do nothing) maneuver", 
+      " (10 - Wight) did nothing (absent)", 
+      " (11 - Panama Hat) did (Move) maneuver"
     ]
   }, 
   "NPCs": {
@@ -6082,7 +7543,7 @@
       "short-notes": [], 
       "armor-index": null, 
       "current": {
-        "fp": 5, 
+        "fp": 11, 
         "iq": 12, 
         "hp": 10, 
         "wi": 12, 
@@ -6092,8 +7553,7 @@
         "basic-move": 5, 
         "basic-speed": 5.25
       }, 
-      "check_for_death": false, 
-      "state": "alive", 
+      "state": "absent", 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -6110,23 +7570,11 @@
         "Lwa (Mambo, Erzulie Freda)": 6, 
         "Vodou Practitioner (Mambo/Hougan 2)": 35
       }, 
-      "did_action_this_turn": true, 
-      "weapon-index": null, 
-      "timers": [
-        {
-          "rounds": 2.9, 
-          "string": "Casting (sleep) @ skill (11): M135"
-        }, 
-        {
-          "rounds": 0.9, 
-          "string": [
-            "Cast (sleep)", 
-            " Defense: none", 
-            " Move: none"
-          ]
-        }
-      ], 
       "opponent": null, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
       "posture": "standing"
     }, 
     "Samantha - (party) Mambo on Tereshkova": {
@@ -6150,6 +7598,7 @@
       ], 
       "shock": 0, 
       "short-notes": [], 
+      "posture": "standing", 
       "armor-index": null, 
       "current": {
         "fp": 11, 
@@ -6162,7 +7611,7 @@
         "basic-move": 5, 
         "basic-speed": 5.25
       }, 
-      "posture": "standing", 
+      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
@@ -6180,11 +7629,10 @@
         "Primary Lwa (Erzulie Freda)": 6, 
         "Vodou Practitioner (Mambo/Hougan 2)": 35
       }, 
-      "opponent": null, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
       "did_action_this_turn": false, 
+      "weapon-index": null, 
+      "timers": [], 
+      "opponent": null, 
       "spells": [
         {
           "cost": 1, 
@@ -8499,1091 +9947,6 @@
     }
   }, 
   "monsters": {
-    "Panama Hat": {
-      "10 - Wight": {
-        "spells": [
-{"name": "Throw Spell", "cost": 3, "maintain": 0, "notes": "M128",
-  "time": 1, "skill": 16},
-{"name": "Lightning", "cost": null, "maintain": 0, "notes": "M196, cost 1-3, cast=cost, needs an attack",
-  "time": 1, "skill": 16},
-{"name": "Stop Power", "cost": null, "maintain": 0, "notes": "M179, 3 pts /1.5 yard radius ",
-  "time": 3, "skill": 16},
-{"name": "Malfunction", "cost": 5, "maintain": 0, "notes": "M177, touch",
-  "time": 1, "skill": 16},
-{
-      "cost": null, 
-      "name": "Armor", 
-      "notes": "M167, 2xDR, lasts 1 minute", 
-      "maintain": 0, 
-      "time": 1, 
-      "skill": 16
-    },
-{"name": "Rotting Death", "cost": 3, "maintain": 2, "notes": "M154 vs. HT, needs touch",
-  "time": 1, "skill": 16},
-{
-      "cost": 2, 
-      "name": "Death Vision", 
-      "notes": "M149, vs. IQ", 
-      "maintain": null, 
-      "time": 3, 
-      "skill": 16
-    },
-{
-      "cost": 2, 
-      "name": "Blink", 
-      "notes": "M148", 
-      "maintain": 0, 
-      "time": 1, 
-      "skill": 16
-    },
-{ "name": "Command", "cost": 4, "maintain": 0, "notes": "M136, vs. Will",
-  "time": 1, "skill": 16},
-{
-      "cost": 4, 
-      "name": "Sleep", 
-      "notes": "M135", 
-      "maintain": 0, 
-      "time": 3, 
-      "skill": 16
-    },
-{"name": "Panic", "cost": 4, "maintain": 2, "notes": "M134, vs. Will",
-  "time": 1, "skill": 16},
-{ "name": "Death Touch", "cost": null, "maintain": 0, "notes": "M41, 1-3, needs touch",
-  "time": 1, "skill": 16},
-{ "name": "Choke", "cost": 4, "maintain": 0, "notes": "M40, vs. HT",
-  "time": 1, "skill": 16},
-{"name": "Strike Blind", "cost": 4, "maintain": 2, "notes": "M38, vs HT",
-  "time": 1, "skill": 16},
-{"name": "Pain", "cost": 2, "maintain": 0, "notes": "M36, vs. HT",
-  "time": 1, "skill": 16},
-{"name": "Stun", "cost": 2, "maintain": 0, "notes": "M37, B420, vs. HT",
-  "time": 1, "skill": 16},
-{
-      "cost": 2, 
-      "name": "Luck", 
-      "notes": "V2", 
-      "maintain": 1, 
-      "time": 1, 
-      "skill": 16
-    },
-{"name": "Fog", "cost": null, "maintain": 0, "notes": "M193, cost: 2/yard radius, lasts 1 minute",
-  "time": 1, "skill": 16}
-        ],
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: staby (born on this station)", 
-          "characteristics: Dirty", 
-          "instincts: To go where no man has gone before", 
-          "hair: Wiry", 
-          "speech: Wheezy", 
-          "knack: Perfect memory", 
-          "personality: Nurturing"
-        ], 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 20, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 20, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      },
-      "9 - Wight": {
-        "spells": [
-{"name": "Throw Spell", "cost": 3, "maintain": 0, "notes": "M128",
-  "time": 1, "skill": 16},
-{"name": "Lightning", "cost": null, "maintain": 0, "notes": "M196, cost 1-3, cast=cost, needs an attack",
-  "time": 1, "skill": 16},
-{"name": "Stop Power", "cost": null, "maintain": 0, "notes": "M179, 3 pts /1.5 yard radius ",
-  "time": 3, "skill": 16},
-{"name": "Malfunction", "cost": 5, "maintain": 0, "notes": "M177, touch",
-  "time": 1, "skill": 16},
-{
-      "cost": null, 
-      "name": "Armor", 
-      "notes": "M167, 2xDR, lasts 1 minute", 
-      "maintain": 0, 
-      "time": 1, 
-      "skill": 16
-    },
-{"name": "Rotting Death", "cost": 3, "maintain": 2, "notes": "M154 vs. HT, needs touch",
-  "time": 1, "skill": 16},
-{
-      "cost": 2, 
-      "name": "Death Vision", 
-      "notes": "M149, vs. IQ", 
-      "maintain": null, 
-      "time": 3, 
-      "skill": 16
-    },
-{
-      "cost": 2, 
-      "name": "Blink", 
-      "notes": "M148", 
-      "maintain": 0, 
-      "time": 1, 
-      "skill": 16
-    },
-{ "name": "Command", "cost": 4, "maintain": 0, "notes": "M136, vs. Will",
-  "time": 1, "skill": 16},
-{
-      "cost": 4, 
-      "name": "Sleep", 
-      "notes": "M135", 
-      "maintain": 0, 
-      "time": 3, 
-      "skill": 16
-    },
-{"name": "Panic", "cost": 4, "maintain": 2, "notes": "M134, vs. Will",
-  "time": 1, "skill": 16},
-{ "name": "Death Touch", "cost": null, "maintain": 0, "notes": "M41, 1-3, needs touch",
-  "time": 1, "skill": 16},
-{ "name": "Choke", "cost": 4, "maintain": 0, "notes": "M40, vs. HT",
-  "time": 1, "skill": 16},
-{"name": "Strike Blind", "cost": 4, "maintain": 2, "notes": "M38, vs HT",
-  "time": 1, "skill": 16},
-{"name": "Pain", "cost": 2, "maintain": 0, "notes": "M36, vs. HT",
-  "time": 1, "skill": 16},
-{"name": "Stun", "cost": 2, "maintain": 0, "notes": "M37, B420, vs. HT",
-  "time": 1, "skill": 16},
-{
-      "cost": 2, 
-      "name": "Luck", 
-      "notes": "V2", 
-      "maintain": 1, 
-      "time": 1, 
-      "skill": 16
-    },
-{"name": "Fog", "cost": null, "maintain": 0, "notes": "M193, cost: 2/yard radius, lasts 1 minute",
-  "time": 1, "skill": 16}
-        ],
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: lifer (born on Earth, this is 1st station)", 
-          "characteristics: Jumps conversation topics", 
-          "instincts: To atone", 
-          "hair: Strange hairstyle", 
-          "speech: Sultry/sexy", 
-          "knack: Hidden knowledge", 
-          "personality: Rigid"
-        ], 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 20, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 20, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "11 - Panama Hat": {
-        "spells": [
-            {
-              "name": "Charm",
-              "cost": 6,
-              "maintain": 3,
-              "notes": "M139, vs. Will",
-              "time": 1,
-              "skill": 18
-            },
-            {
-              "name": "Teleport",
-              "cost": null,
-              "maintain": 0,
-              "notes": "M147, cost: 5 for 100 yards",
-              "time": 1,
-              "skill": 18
-            },
-            {
-              "name": "Enslave",
-              "cost": 30,
-              "maintain": 0,
-              "notes": "M141, vs. Will",
-              "time": 1,
-              "skill": 18
-            },
-            {
-              "name": "Lesser Geas",
-              "cost": 12,
-              "maintain": 0,
-              "notes": "M140, vs. Will ",
-              "time": 30,
-              "skill": 18
-            },
-            {
-              "name": "False Memory",
-              "cost": 3,
-              "maintain": 0,
-              "notes": "M139, vs. Will",
-              "time": 5,
-              "skill": 18
-            },
-            {
-              "name": "Manastone",
-              "cost": null,
-              "maintain": 0,
-              "notes": "M70",
-              "time": 1,
-              "skill": 18
-            },
-            {
-              "name": "Repair",
-              "cost": null,
-              "maintain": 0,
-              "notes": "M118",
-              "time": 1,
-              "skill": 18
-            },
-            {
-              "name": "Planar Summons",
-              "cost": null,
-              "maintain": 0,
-              "notes": "M82",
-              "time": 300,
-              "skill": 18
-            },
-            {
-              "cost": 8, 
-              "name": "Agonize", 
-              "notes": "M40, HT negates", 
-              "maintain": 6, 
-              "time": 1, 
-              "skill": 18
-            },
-            {
-              "cost": null, 
-              "name": "Armor", 
-              "notes": "M167, 2xDR, lasts 1 minute", 
-              "maintain": 0, 
-              "time": 1, 
-              "skill": 18
-            },
-            {
-              "cost": 2, 
-              "name": "Blink", 
-              "notes": "M148", 
-              "maintain": 0, 
-              "time": 1, 
-              "skill": 18
-            }
-        ],
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [], 
-        "advantages": {
-          "Empathy": 5, 
-          "Vodou Practitioner (Mambo 2)": 35, 
-          "Combat Reflexes": 15, 
-          "High Pain Threshold": 10, 
-          "Lwa (Mambo, Erzulie Freda)": 6
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "skills": {}, 
-        "notes": [
-          "station history: staby (born on this station)", 
-          "characteristics: Loves the sea and ships", 
-          "instincts: To commit an atrocity", 
-          "hair: Short", 
-          "speech: Low-pitched", 
-          "knack: A hidden entrance to the city", 
-          "personality: Gracious"
-        ], 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 30, 
-          "iq": 12, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "wi": 12, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 30, 
-          "iq": 12, 
-          "hp": 10, 
-          "ht": 11, 
-          "st": 10, 
-          "wi": 12, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "1 - zombie": {
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: roo (bounce between stations)", 
-          "characteristics: Wears flamboyant or outlandish clothes", 
-          "instincts: To retreat from society", 
-          "hair: Wiry", 
-          "speech: Raspy", 
-          "knack: Bluffing", 
-          "personality: Dull"
-        ], 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "2 - zombie": {
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: lifer (born on Earth, this is 1st station)", 
-          "characteristics: Hydrophobic (afraid of water)", 
-          "instincts: To serve", 
-          "hair: Greasy", 
-          "speech: Guttural", 
-          "knack: Political leverage", 
-          "personality: Overbearing"
-        ], 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "5 - zombie": {
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: lifer (born on Earth, this is 1st station)", 
-          "characteristics: Double-checks everything", 
-          "instincts: To be careful", 
-          "hair: Thinning", 
-          "speech: Nosy", 
-          "knack: Persistence", 
-          "personality: Sensual"
-        ], 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.5
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.5
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "6 - zombie": {
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: lifer (born on Earth, this is 1st station)", 
-          "characteristics: Hates animals", 
-          "instincts: To atone", 
-          "hair: Wavy", 
-          "speech: Um Uh", 
-          "knack: A tie to a monster", 
-          "personality: Incoherent"
-        ], 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 11, 
-          "basic-move": 5, 
-          "basic-speed": 5.25
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 11, 
-          "basic-move": 5, 
-          "basic-speed": 5.25
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "8 - zombie": {
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: roo (bounce between stations)", 
-          "characteristics: Interrupts others", 
-          "instincts: To be remembered in song", 
-          "hair: Greasy", 
-          "speech: Whiny", 
-          "knack: A key to an important door", 
-          "personality: Solitary"
-        ], 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 10, 
-          "basic-move": 5, 
-          "basic-speed": 5.0
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 10, 
-          "basic-move": 5, 
-          "basic-speed": 5.0
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "7 - zombie": {
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: staby (born on this station)", 
-          "characteristics: Hates quiet pauses in conversations", 
-          "instincts: To make money", 
-          "hair: Thinning", 
-          "speech: Nosy", 
-          "knack: Unique perspective", 
-          "personality: Zealous"
-        ], 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "4 - zombie": {
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: lifer (born on Earth, this is 1st station)", 
-          "characteristics: Limps", 
-          "instincts: To be a champion", 
-          "hair: Limp", 
-          "speech: Um Uh", 
-          "knack: A library", 
-          "personality: Generous"
-        ], 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "3 - zombie": {
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: staby (born on this station)", 
-          "characteristics: Plays with own jewelry", 
-          "instincts: To party", 
-          "hair: Frazzled", 
-          "speech: Prim, haughty, proud", 
-          "knack: A discerning eye", 
-          "personality: Cowardly"
-        ], 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.5
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "wi": 10, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.5
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }
-    }, 
     "Dima's Crew": {
       "5: Dmitry": {
         "aim": {
@@ -9685,14 +10048,14 @@
           }
         ], 
         "timers": [], 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
-        "check_for_death": false, 
         "opponent": null
       }, 
       "4: Andre": {
@@ -9796,14 +10159,14 @@
           }
         ], 
         "timers": [], 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
-        "check_for_death": false, 
         "opponent": null
       }, 
       "Dima - Bratva": {
@@ -9909,14 +10272,14 @@
           }
         ], 
         "timers": [], 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
-        "check_for_death": false, 
         "opponent": null
       }, 
       "2: Nikita": {
@@ -10019,14 +10382,14 @@
           }
         ], 
         "timers": [], 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "did_action_this_turn": false, 
+        "check_for_death": false, 
         "advantages": {
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
         "posture": "standing", 
-        "check_for_death": false, 
         "opponent": null
       }
     }, 
@@ -10179,7 +10542,7 @@
       "maintain": null, 
       "time": 3600, 
       "skill": 14
-    },
+    }, 
     {
       "cost": null, 
       "name": "Armor", 
@@ -10187,7 +10550,7 @@
       "maintain": 0, 
       "time": 1, 
       "skill": 18
-    },
+    }, 
     {
       "cost": 1, 
       "name": "Awaken", 
@@ -10211,7 +10574,7 @@
       "maintain": 0, 
       "time": 1, 
       "skill": 18
-    },
+    }, 
     {
       "cost": 1, 
       "name": "Boost Dexterity", 
@@ -10229,21 +10592,21 @@
       "skill": 12
     }, 
     {
-      "name": "Charm",
-      "cost": 6,
+      "cost": 6, 
+      "name": "Charm", 
+      "notes": "M139, vs. Will", 
       "maintain": 3, 
-      "notes": "M139, vs. Will",
-      "time": 1,
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
-      "name": "Choke",
-      "cost": 4,
-      "maintain": 0,
-      "notes": "M40, vs. HT",
-      "time": 1,
+      "cost": 4, 
+      "name": "Choke", 
+      "notes": "M40, vs. HT", 
+      "maintain": 0, 
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
       "cost": 1, 
       "name": "Climbing", 
@@ -10261,13 +10624,13 @@
       "skill": 12
     }, 
     {
-      "name": "Command",
-      "cost": 4,
-      "maintain": 0,
-      "notes": "M136, vs. Will",
-      "time": 1,
+      "cost": 4, 
+      "name": "Command", 
+      "notes": "M136, vs. Will", 
+      "maintain": 0, 
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
       "cost": 4, 
       "name": "Communicate", 
@@ -10299,15 +10662,15 @@
       "maintain": 2, 
       "time": 2, 
       "skill": 11
-    },
+    }, 
     {
-      "name": "Death Touch",
-      "cost": null,
-      "maintain": 0,
-      "notes": "M41, 1-3, needs touch",
-      "time": 1,
+      "cost": null, 
+      "name": "Death Touch", 
+      "notes": "M41, 1-3, needs touch", 
+      "maintain": 0, 
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
       "cost": 2, 
       "name": "Death Vision", 
@@ -10341,21 +10704,21 @@
       "skill": 13
     }, 
     {
-      "name": "Enslave",
-      "cost": 30,
-      "maintain": 0,
-      "notes": "M141, vs. Will",
-      "time": 1,
+      "cost": 30, 
+      "name": "Enslave", 
+      "notes": "M141, vs. Will", 
+      "maintain": 0, 
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
-      "name": "False Memory",
-      "cost": 3,
-      "maintain": 0,
-      "notes": "M139, vs. Will",
-      "time": 5,
+      "cost": 3, 
+      "name": "False Memory", 
+      "notes": "M139, vs. Will", 
+      "maintain": 0, 
+      "time": 5, 
       "skill": 18
-    },
+    }, 
     {
       "cost": 4, 
       "name": "Far Hearing", 
@@ -10373,13 +10736,13 @@
       "skill": 12
     }, 
     {
-      "name": "Fog",
-      "cost": null,
-      "maintain": 0,
-      "notes": "M193, cost: 2/yard radius, lasts 1 minute",
-      "time": 1,
+      "cost": null, 
+      "name": "Fog", 
+      "notes": "M193, cost: 2/yard radius, lasts 1 minute", 
+      "maintain": 0, 
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
       "cost": null, 
       "name": "Foolishness", 
@@ -10469,13 +10832,13 @@
       "skill": 15
     }, 
     {
-      "name": "Lesser Geas",
-      "cost": 12,
-      "maintain": 0,
-      "notes": "M140, vs. Will ",
-      "time": 30,
+      "cost": 12, 
+      "name": "Lesser Geas", 
+      "notes": "M140, vs. Will ", 
+      "maintain": 0, 
+      "time": 30, 
       "skill": 18
-    },
+    }, 
     {
       "cost": 1, 
       "name": "Light", 
@@ -10485,13 +10848,13 @@
       "skill": 14
     }, 
     {
-      "name": "Lightning",
-      "cost": null,
-      "maintain": 0,
-      "notes": "M196, cost 1-3, cast=cost, needs an attack",
-      "time": 1,
+      "cost": null, 
+      "name": "Lightning", 
+      "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+      "maintain": 0, 
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
       "cost": 2, 
       "name": "Loyalty", 
@@ -10525,21 +10888,21 @@
       "skill": 11
     }, 
     {
-      "name": "Malfunction",
-      "cost": 5,
-      "maintain": 0,
-      "notes": "M177, touch",
-      "time": 1,
+      "cost": 5, 
+      "name": "Malfunction", 
+      "notes": "M177, touch", 
+      "maintain": 0, 
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
-      "name": "Manastone",
-      "cost": null,
-      "maintain": 0,
-      "notes": "M70",
-      "time": 1,
+      "cost": null, 
+      "name": "Manastone", 
+      "notes": "M70", 
+      "maintain": 0, 
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
       "cost": null, 
       "name": "Might", 
@@ -10557,29 +10920,29 @@
       "skill": 12
     }, 
     {
-      "name": "Pain",
-      "cost": 2,
-      "maintain": 0,
-      "notes": "M36, vs. HT",
-      "time": 1,
+      "cost": 2, 
+      "name": "Pain", 
+      "notes": "M36, vs. HT", 
+      "maintain": 0, 
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
-      "name": "Panic",
-      "cost": 4,
-      "maintain": 2,
-      "notes": "M134, vs. Will",
-      "time": 1,
+      "cost": 4, 
+      "name": "Panic", 
+      "notes": "M134, vs. Will", 
+      "maintain": 2, 
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
-      "name": "Planar Summons",
-      "cost": null,
-      "maintain": 0,
-      "notes": "M82",
-      "time": 300,
+      "cost": null, 
+      "name": "Planar Summons", 
+      "notes": "M82", 
+      "maintain": 0, 
+      "time": 300, 
       "skill": 18
-    },
+    }, 
     {
       "cost": 20, 
       "name": "Powerstone", 
@@ -10597,13 +10960,13 @@
       "skill": 15
     }, 
     {
-      "name": "Repair",
-      "cost": null,
-      "maintain": 0,
-      "notes": "M118",
-      "time": 1,
+      "cost": null, 
+      "name": "Repair", 
+      "notes": "M118", 
+      "maintain": 0, 
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
       "cost": 15, 
       "name": "Restoration", 
@@ -10613,13 +10976,13 @@
       "skill": 11
     }, 
     {
-      "name": "Rotting Death",
-      "cost": 3,
-      "maintain": 2,
-      "notes": "M154 vs. HT, needs touch",
-      "time": 1,
+      "cost": 3, 
+      "name": "Rotting Death", 
+      "notes": "M154 vs. HT, needs touch", 
+      "maintain": 2, 
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
       "cost": 3, 
       "name": "Seek Machine", 
@@ -10693,29 +11056,29 @@
       "skill": 12
     }, 
     {
-      "name": "Stop Power",
-      "cost": null,
-      "maintain": 0,
-      "notes": "M179, 3 pts /1.5 yard radius",
-      "time": 3,
+      "cost": null, 
+      "name": "Stop Power", 
+      "notes": "M179, 3 pts /1.5 yard radius", 
+      "maintain": 0, 
+      "time": 3, 
       "skill": 18
-    },
+    }, 
     {
-      "name": "Strike Blind",
-      "cost": 4,
-      "maintain": 2,
-      "notes": "M38, vs HT",
-      "time": 1,
+      "cost": 4, 
+      "name": "Strike Blind", 
+      "notes": "M38, vs HT", 
+      "maintain": 2, 
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
-      "name": "Stun",
-      "cost": 2,
-      "maintain": 0,
-      "notes": "M37, B420, vs. HT",
-      "time": 1,
+      "cost": 2, 
+      "name": "Stun", 
+      "notes": "M37, B420, vs. HT", 
+      "maintain": 0, 
+      "time": 1, 
       "skill": 18
-    },
+    }, 
     {
       "cost": 20, 
       "name": "Summon Spirit", 
@@ -10733,14 +11096,21 @@
       "skill": 12
     }, 
     {
-      "name": "Teleport", "cost": null, "maintain": 0,
-      "notes": "M147, cost: 5 for 100 yards",
-      "time": 1, "skill": 18
-    },
+      "cost": null, 
+      "name": "Teleport", 
+      "notes": "M147, cost: 5 for 100 yards", 
+      "maintain": 0, 
+      "time": 1, 
+      "skill": 18
+    }, 
     {
-      "name": "Throw Spell", "cost": 3, "maintain": 0, "notes": "M128",
-      "time": 1, "skill": 18
-    },
+      "cost": 3, 
+      "name": "Throw Spell", 
+      "notes": "M128", 
+      "maintain": 0, 
+      "time": 1, 
+      "skill": 18
+    }, 
     {
       "cost": 4, 
       "name": "Wizard Eye", 

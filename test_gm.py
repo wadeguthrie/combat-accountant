@@ -42,6 +42,10 @@ import unittest
 #       permenant
 # TODO: test that removing something works
 
+class BaseWorld(object):
+    def __init__(self, world_dict):
+        self.read_data = copy.deepcopy(world_dict)
+
 
 class MockFightGmWindow(object):
     def __init__(self, ruleset):
@@ -188,7 +192,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "acc": self.__colt_pistol_acc,
                   "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
                   "reload": 3,
-                  "skill": "guns (pistol)",
+                  "skill": "Guns (Pistol)",
                   "count": 1,
                   "owners": 1,
                   "notes": None
@@ -196,10 +200,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                  {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
                   "owners": None }
             ],
-            "skills": {"guns (pistol)":
+            "skills": {"Guns (Pistol)":
                                     self.__vodou_priest_fighter_pistol_skill,
-                       "brawling": 12},
-            "advantages": {"combat reflexes": 15},
+                       "Brawling": 12},
+            "advantages": {"Combat Reflexes": 15},
             "state" : "alive",
             "posture" : "standing",
             "current": {
@@ -231,7 +235,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "acc": 3,
                   "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
                   "reload": 3,
-                  "skill": "guns (pistol)",
+                  "skill": "Guns (Pistol)",
                   "count": 1,
                   "owners": None,
                   "notes": ""
@@ -240,8 +244,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "owners": None,
                  }
             ],
-            "skills": {"guns (pistol)": 15, "brawling": 12},
-            "advantages": {"combat reflexes": 15},
+            "skills": {"Guns (Pistol)": 15, "Brawling": 12},
+            "advantages": {"Combat Reflexes": 15},
             "state" : "alive",
             "posture" : "standing",
             "current": {
@@ -269,7 +273,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "acc": 2,
                   "ammo": {"name": "C Cell", "shots_left": 8, "shots": 8},
                   "reload": 3,
-                  "skill": "guns (pistol)",
+                  "skill": "Guns (Pistol)",
                   "count": 1,
                   "owners": None,
                   "notes": ""
@@ -278,8 +282,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "owners": None,
                  }
             ],
-            "skills": {"guns (pistol)": 13, "brawling": 12},
-            "advantages": {"combat reflexes": 15},
+            "skills": {"Guns (Pistol)": 13, "Brawling": 12},
+            "advantages": {"Combat Reflexes": 15},
             "state" : "alive",
             "posture" : "standing",
             "current": {
@@ -312,7 +316,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "acc": 4,
                   "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
                   "reload": 3,
-                  "skill": "guns (pistol)",
+                  "skill": "Guns (Pistol)",
                   "count": 1,
                   "owners": None,
                   "notes": ""
@@ -320,7 +324,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                  {"name": "sick stick",
                   "type": "melee weapon",
                   "damage": {"dice": "1d+1 fat"},
-                  "skill": "axe/mace",
+                  "skill": "Axe/Mace",
                   "count": 1,
                   "owners": None,
                   "notes": ""
@@ -329,8 +333,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "owners": None,
                  }
             ],
-            "skills": {"guns (pistol)": 16, "brawling": 16, "axe/mace": 14},
-            "advantages": {"combat reflexes": 15},
+            "skills": {"Guns (Pistol)": 16, "Brawling": 16, "Axe/Mace": 14},
+            "advantages": {"Combat Reflexes": 15},
             "state" : "alive",
             "posture" : "standing",
             "current": {
@@ -361,15 +365,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "acc": 2,
                   "ammo": {"name": "C Cell", "shots_left": 8, "shots": 8},
                   "reload": 3,
-                  "skill": "guns (pistol)",
+                  "skill": "Guns (Pistol)",
                   "count": 1,
                   "owners": None,
                   "notes": ""
                  },
-                 {"name": "knife, large",
+                 {"name": "Large Knife",
                   "type": "melee weapon",
                   "damage": {"dice": "1d-2", "type": "imp"},
-                  "skill": "knife",
+                  "skill": "Knife",
                   "parry": -1,
                   "count": 1,
                   "owners": None,
@@ -380,7 +384,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "notes": "B271", 
                   "damage": { "thr": {"plus": 0, "type": "cr"} }, 
                   "parry": 0, 
-                  "skill": "karate", 
+                  "skill": "Karate", 
                   "owners": None,
                   "type": "melee weapon"
                  },
@@ -388,9 +392,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "owners": None,
                  }
             ],
-            "skills": {"guns (pistol)": 12,
-                       "brawling": 14,
-                       "knife": self.__thief_knife_skill},
+            "skills": {"Guns (Pistol)": 12,
+                       "Brawling": 14,
+                       "Knife": self.__thief_knife_skill},
             "advantages": {},
             "state" : "alive",
             "posture" : "standing",
@@ -572,13 +576,13 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                                 weapon)
         assert parry_skill is None # None w/weapon; still OK hand-to-hand
 
-        # Armed (knife)
+        # Armed (Knife)
         thief_fighter = gm.Fighter('Thief',
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset,
                                    self.__window_manager)
-        weapon_index, weapon = thief_fighter.get_weapon_by_name('knife, large')
+        weapon_index, weapon = thief_fighter.get_weapon_by_name('Large Knife')
         thief_fighter.draw_weapon_by_index(weapon_index)
 
         self.__ruleset.change_posture({'fighter': thief_fighter,
@@ -765,7 +769,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
     def test_initiative_order(self):
         random_debug_filename = 'foo'
 
-        world_dict = {
+        world_obj = BaseWorld({
             # Don't need templates, dead-monsters, equipment, names
             'PCs': {
                 # 5.25, 10, rand=1
@@ -796,9 +800,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 'round': 2,
                 'monsters': 'horsemen',
             },
-        }
+        })
 
-        world = gm.World(world_dict, self.__window_manager)
+        world = gm.World(world_obj, self.__window_manager)
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
         # Pestilence and Moe have same basic speed but different dx
@@ -817,8 +821,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                             'horsemen',
                                             self.__ruleset,
                                             random_debug_filename,
-                                            filename='*INTERNAL*',
-                                            maintain_json=False
+                                            filename='*INTERNAL*'
                                            )
             fighters = fight_handler.get_fighters()
 
@@ -832,14 +835,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # test that cycling a whole round goes to each fighter in order
 
         expected_index = 0
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
 
         fight_handler.modify_index(1)
         expected_index = 1
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         injured_fighter = current_fighter
         injured_index = expected_index
@@ -848,7 +851,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.modify_index(1)
         expected_index = 2
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         unconscious_fighter = current_fighter
         unconscious_index = expected_index
@@ -857,7 +860,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.modify_index(1)
         expected_index = 3
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         dead_fighter = current_fighter
         dead_index = expected_index
@@ -866,14 +869,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.modify_index(1)
         expected_index = 4
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
 
         fight_handler.modify_index(1)
         expected_index = 0 # wraps
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
@@ -891,7 +894,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert dead_fighter.get_state() == gm.Fighter.DEAD
 
         expected_index = 0
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
@@ -899,7 +902,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # This is the injured fighter -- should still see this one
         fight_handler.modify_index(1)
         expected_index = 1
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
@@ -907,7 +910,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # This is the unconscious fighter -- should still see this one
         fight_handler.modify_index(1)
         expected_index = 2
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
@@ -916,14 +919,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.modify_index(1)
         expected_index = 4
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
 
         fight_handler.modify_index(1)
         expected_index = 0 # wraps
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         assert current_fighter.name == expected[expected_index]['name']
         assert current_fighter.group == expected[expected_index]['group']
@@ -959,7 +962,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         random_debug_filename = 'foo'
 
-        world_dict = {
+        world_obj = BaseWorld({
             # Don't need templates, dead-monsters, equipment, names
             'PCs': {
                 # 5.5, 11, rand=2
@@ -991,9 +994,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 'round': 2,
                 'monsters': 'marx',
             },
-        }
+        })
 
-        world = gm.World(world_dict, self.__window_manager)
+        world = gm.World(world_obj, self.__window_manager)
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
         # Pestilence and Moe have same basic speed but different dx
@@ -1014,8 +1017,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                             'marx',
                                             self.__ruleset,
                                             random_debug_filename,
-                                            filename='*INTERNAL*',
-                                            maintain_json=False
+                                            filename='*INTERNAL*'
                                            )
             fighters = fight_handler.get_fighters()
 
@@ -1033,7 +1035,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
 
         random_debug_filename = 'foo'
-        world_dict = {
+        world_obj = BaseWorld({
             # Don't need templates, dead-monsters, equipment, names
             'PCs': {
                 # 5.25, 10, rand=1
@@ -1064,9 +1066,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 'round': 2,
                 'monsters': 'horsemen',
             },
-        }
+        })
 
-        world = gm.World(world_dict, self.__window_manager)
+        world = gm.World(world_obj, self.__window_manager)
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
         # Pestilence and Moe have same basic speed but different dx
@@ -1085,13 +1087,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         'horsemen',
                                         self.__ruleset,
                                         random_debug_filename,
-                                        filename='*INTERNAL*',
-                                        maintain_json=False
+                                        filename='*INTERNAL*'
                                        )
         fighters = fight_handler.get_fighters()
 
         expected_index = 0
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         # Make fighter 0 fight figher 2
         current_fighter.details['opponent'] = {'group': 'PCs', 'name': 'Moe'}
@@ -1099,7 +1100,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Move ahead to fighter 1
         fight_handler.modify_index(1)
         expected_index = 1
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         # Wound fighter 2
         fighters[injured_index]['details']['current']['hp'] -= injured_hp
@@ -1108,26 +1109,26 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.modify_index(1)
         expected_index = 2
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         unconscious_fighter = current_fighter
         unconscious_index = expected_index
 
         fight_handler.modify_index(1)
         expected_index = 3
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         dead_fighter = current_fighter
         dead_index = expected_index
 
         fight_handler.modify_index(1)
         expected_index = 4
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
 
         fight_handler.modify_index(1)
         expected_index = 0 # wraps
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         # Change opponent of fighter 0 to fighter 1 -- At one time, I saw a
         # bug where it appeared that changing an opponent from an injured one
@@ -1144,7 +1145,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fight_handler.modify_index(1) # index 0
         fight_handler.modify_index(1) # index 1
         expected_index = 1
-        assert world_dict['current-fight']['index'] == expected_index
+        assert world_obj.read_data['current-fight']['index'] == expected_index
 
         # Set expectations to the final configuration.
 
@@ -1716,7 +1717,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert len(fighter.details['timers']) == 0
 
     def test_save(self):
-
         base_world_dict = {
           "Templates": {
             "Arena Combat": {
@@ -1791,51 +1791,49 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # list
         # print '\n----------- LEAVE FIGHT -----------\n'
 
-        world_dict = copy.deepcopy(base_world_dict)
-        world = gm.World(world_dict, self.__window_manager)
+        world_obj = BaseWorld(base_world_dict)
+        world = gm.World(world_obj, self.__window_manager)
 
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
                                         "Dima's Crew", 
                                         self.__ruleset,
                                         "None", # used for bug reporting
-                                        "filename", # used for display
-                                        False) # maintain JSON
+                                        "filename") # used for display
 
-        assert "Dima's Crew" in world_dict['monsters']
-        assert "Dima's Crew" not in world_dict['dead-monsters']
-        assert world_dict['current-fight']['saved'] == False
+        assert "Dima's Crew" in world_obj.read_data['monsters']
+        assert "Dima's Crew" not in world_obj.read_data['dead-monsters']
+        assert world_obj.read_data['current-fight']['saved'] == False
 
         self.__window_manager.set_char_response(ord('q'))
         self.__window_manager.set_menu_response('Leaving Fight', {'doit':None})
 
         fight_handler.handle_user_input_until_done()
                                      
-        assert "Dima's Crew" not in world_dict['monsters']
-        assert "Dima's Crew" in world_dict['dead-monsters']
-        assert world_dict['current-fight']['saved'] == False
+        assert "Dima's Crew" not in world_obj.read_data['monsters']
+        assert "Dima's Crew" in world_obj.read_data['dead-monsters']
+        assert world_obj.read_data['current-fight']['saved'] == False
 
         #
         # test that SAVING the fight works
         #
         # print '\n----------- SAVE FIGHT -----------\n'
 
-        world_dict = copy.deepcopy(base_world_dict)
-        world = gm.World(world_dict, self.__window_manager)
+        world_obj = BaseWorld(base_world_dict)
+        world = gm.World(world_obj, self.__window_manager)
 
-        assert world_dict['current-fight']['monsters'] != "Dima's Crew"
+        assert world_obj.read_data['current-fight']['monsters'] != "Dima's Crew"
 
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
                                         "Dima's Crew", 
                                         self.__ruleset,
                                         "None", # used for bug reporting
-                                        "filename", # used for display
-                                        False) # maintain JSON
+                                        "filename") # used for display
 
-        assert "Dima's Crew" in world_dict['monsters']
-        assert "Dima's Crew" not in world_dict['dead-monsters']
-        assert world_dict['current-fight']['saved'] == False
+        assert "Dima's Crew" in world_obj.read_data['monsters']
+        assert "Dima's Crew" not in world_obj.read_data['dead-monsters']
+        assert world_obj.read_data['current-fight']['saved'] == False
 
         self.__window_manager.set_char_response(ord('q'))
         # It's a stack so I'm putting things in reverse order
@@ -1846,30 +1844,29 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.handle_user_input_until_done()
                                      
-        assert "Dima's Crew" in world_dict['monsters']
-        assert "Dima's Crew" not in world_dict['dead-monsters']
-        assert world_dict['current-fight']['saved'] == True
-        assert world_dict['current-fight']['monsters'] == "Dima's Crew"
+        assert "Dima's Crew" in world_obj.read_data['monsters']
+        assert "Dima's Crew" not in world_obj.read_data['dead-monsters']
+        assert world_obj.read_data['current-fight']['saved'] == True
+        assert world_obj.read_data['current-fight']['monsters'] == "Dima's Crew"
 
         #
         # test that KEEPING the fight works
         #
         # print '\n----------- KEEP FIGHT -----------\n'
 
-        world_dict = copy.deepcopy(base_world_dict)
-        world = gm.World(world_dict, self.__window_manager)
+        world_obj = BaseWorld(base_world_dict)
+        world = gm.World(world_obj, self.__window_manager)
 
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
                                         "Dima's Crew", 
                                         self.__ruleset,
                                         "None", # used for bug reporting
-                                        "filename", # used for display
-                                        False) # maintain JSON
+                                        "filename") # used for display
 
-        assert "Dima's Crew" in world_dict['monsters']
-        assert "Dima's Crew" not in world_dict['dead-monsters']
-        assert world_dict['current-fight']['saved'] == False
+        assert "Dima's Crew" in world_obj.read_data['monsters']
+        assert "Dima's Crew" not in world_obj.read_data['dead-monsters']
+        assert world_obj.read_data['current-fight']['saved'] == False
 
         # It's a stack so I'm putting things in reverse order
         self.__window_manager.set_char_response(ord('q'))
@@ -1878,9 +1875,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.handle_user_input_until_done()
                                      
-        assert "Dima's Crew" in world_dict['monsters']
-        assert "Dima's Crew" not in world_dict['dead-monsters']
-        assert world_dict['current-fight']['saved'] == False
+        assert "Dima's Crew" in world_obj.read_data['monsters']
+        assert "Dima's Crew" not in world_obj.read_data['dead-monsters']
+        assert world_obj.read_data['current-fight']['saved'] == False
 
     def test_add_equipment(self):
         fighter = gm.Fighter('Tank',
@@ -1922,7 +1919,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    "shots_left": 8,
                                    "shots": 8},
                           "reload": 3,
-                          "skill": "guns (pistol)",
+                          "skill": "Guns (Pistol)",
                           "count": 1,
                           "owners": None,
                           "notes": ""

@@ -1468,7 +1468,7 @@ class GmWindowManager(object):
                 del border_win
                 del menu_win
                 self.hard_refresh_all()
-                return strings_results[index][1]
+                return self.__handle_menu_return(strings_results[index][1])
             elif user_input == GmWindowManager.ESCAPE:
                 del border_win
                 del menu_win
@@ -1483,7 +1483,8 @@ class GmWindowManager(object):
                         del border_win
                         del menu_win
                         self.hard_refresh_all()
-                        return strings_results[index][1]
+                        return self.__handle_menu_return(
+                                                    strings_results[index][1])
 
             if new_index != index:
                 old_index = index
@@ -1514,6 +1515,28 @@ class GmWindowManager(object):
 
             menu_win.draw_window()
             menu_win.refresh()
+
+    def __handle_menu_return(self,
+                             menu_selection
+                            ):
+
+        if menu_selection is None:
+            return None # Keep going
+
+        while 'menu' in menu_selection:
+            menu_selection = self._window_manager.menu('Which',
+                                                       menu_selection['menu'])
+            if menu_selection is None:    # bail out regardless of nesting level
+                return None               # Keep going
+
+        if 'doit' in menu_selection and menu_selection['doit'] is not None:
+            param = (None if 'param' not in menu_selection
+                          else menu_selection['param'])
+            # TODO: return the result of this?
+            (menu_selection['doit'])(param)
+            return None
+
+        return menu_selection
 
 
     def new_native_window(self,
@@ -3350,11 +3373,11 @@ class GurpsRuleset(Ruleset):
         plus_per_die_of_thrust_string = None
 
         # boxing, brawling, karate, dx
-        if ('brawling' in fighter.details['skills'] and
-                                                'brawling' in unarmed_skills):
-            if result['punch_skill'] <= fighter.details['skills']['brawling']:
+        if ('Brawling' in fighter.details['skills'] and
+                                                'Brawling' in unarmed_skills):
+            if result['punch_skill'] <= fighter.details['skills']['Brawling']:
                 result['punch_string'] = 'Brawling Punch (B182, B271, B370)'
-                result['punch_skill'] = fighter.details['skills']['brawling']
+                result['punch_skill'] = fighter.details['skills']['Brawling']
                 result['kick_string'] = 'Brawling Kick (B182, B271, B370)'
                 # Brawling: @DX+2 = +1 per die of thrusting damage
                 if result['punch_skill'] >= fighter.details['current']['dx']+2:
@@ -3363,15 +3386,15 @@ class GurpsRuleset(Ruleset):
                         'Brawling(%d) @DX(%d)+2 = +1/die of thrusting damage' %
                             (result['punch_skill'],
                              fighter.details['current']['dx']))
-            if result['parry_skill'] <= fighter.details['skills']['brawling']:
-                result['parry_skill'] = fighter.details['skills']['brawling']
+            if result['parry_skill'] <= fighter.details['skills']['Brawling']:
+                result['parry_skill'] = fighter.details['skills']['Brawling']
                 result['parry_string'] = 'Brawling Parry (B182, B376)'
         if ('karate' in fighter.details['skills'] and
                                                 'karate' in unarmed_skills):
-            if result['punch_skill'] <= fighter.details['skills']['karate']:
+            if result['punch_skill'] <= fighter.details['skills']['Karate']:
                 result['punch_string'] = 'Karate Punch (B203, B271, B370)'
                 result['kick_string'] = 'Karate Kick (B203, B271, B370)'
-                result['punch_skill'] = fighter.details['skills']['karate']
+                result['punch_skill'] = fighter.details['skills']['Karate']
                 # Karate: @DX+1+ = +2 per die of thrusting damage
                 # Karate: @DX = +1 per die of thrusting damage
                 if result['punch_skill'] >= fighter.details['current']['dx']+1:
@@ -3389,8 +3412,8 @@ class GurpsRuleset(Ruleset):
                 else:
                     plus_per_die_of_thrust = 0
                     plus_per_die_of_thrust_string = None
-            if result['parry_skill'] <= fighter.details['skills']['karate']:
-                result['parry_skill'] = fighter.details['skills']['karate']
+            if result['parry_skill'] <= fighter.details['skills']['Karate']:
+                result['parry_skill'] = fighter.details['skills']['Karate']
                 result['parry_string'] = 'Karate Parry (B203, B376)'
 
         # (brawling, karate, dx) - 2
@@ -3406,9 +3429,9 @@ class GurpsRuleset(Ruleset):
             # TODO: if skills are equal, boxing should be used in favor of
             # brawling or DX but NOT in favor of karate.  It's placed here
             # because the kick skill isn't improved by boxing.
-            if result['punch_skill'] < fighter.details['skills']['boxing']:
+            if result['punch_skill'] < fighter.details['skills']['Boxing']:
                 result['punch_string'] = 'Boxing Punch (B182, B271, B370)'
-                result['punch_skill'] = fighter.details['skills']['boxing']
+                result['punch_skill'] = fighter.details['skills']['Boxing']
                 # Boxing: @DX+2+ = +2 per die of thrusting damage
                 # Boxing: @DX+1 = +1 per die of thrusting damage
                 if result['punch_skill'] >= fighter.details['current']['dx']+2:
@@ -3427,8 +3450,8 @@ class GurpsRuleset(Ruleset):
                 else:
                     plus_per_die_of_thrust = 0
                     plus_per_die_of_thrust_string = None
-            if result['parry_skill'] < fighter.details['skills']['boxing']:
-                result['parry_skill'] = fighter.details['skills']['boxing']
+            if result['parry_skill'] < fighter.details['skills']['Boxing']:
+                result['parry_skill'] = fighter.details['skills']['Boxing']
                 result['parry_string'] = 'Boxing Parry (B182, B376)'
 
         punch_why.append('%s, to-hit: %d' % (result['punch_string'],
@@ -3983,7 +4006,7 @@ class GurpsRuleset(Ruleset):
         '''
 
         # Skills in increasing order of difficulty
-        all_unarmed_skills = ['dx', 'brawling', 'boxing', 'karate']
+        all_unarmed_skills = ['dx', 'Brawling', 'Boxing', 'Karate']
 
         if weapon is None: # No weapon uses unarmed skills by definition
             return all_unarmed_skills
@@ -5179,15 +5202,6 @@ class FightHandler(ScreenHandler):
         maneuver = self._window_manager.menu('Maneuver', action_menu)
         if maneuver is None:
             return True # Keep going
-
-        while 'menu' in maneuver:
-            maneuver = self._window_manager.menu('Which', maneuver['menu'])
-            if maneuver is None:    # Can bail out regardless of nesting level
-                return True         # Keep going
-
-        if 'doit' in maneuver and maneuver['doit'] is not None:
-            param = None if 'param' not in maneuver else maneuver['param']
-            (maneuver['doit'])(param)
 
         # TODO: call the ruleset to execute the action
         # TODO: change 'maneuver' to 'action'
