@@ -1468,7 +1468,7 @@ class GmWindowManager(object):
                 del border_win
                 del menu_win
                 self.hard_refresh_all()
-                return self.__handle_menu_return(strings_results[index][1])
+                return strings_results[index][1]
             elif user_input == GmWindowManager.ESCAPE:
                 del border_win
                 del menu_win
@@ -1483,8 +1483,7 @@ class GmWindowManager(object):
                         del border_win
                         del menu_win
                         self.hard_refresh_all()
-                        return self.__handle_menu_return(
-                                                    strings_results[index][1])
+                        return strings_results[index][1]
 
             if new_index != index:
                 old_index = index
@@ -1515,28 +1514,6 @@ class GmWindowManager(object):
 
             menu_win.draw_window()
             menu_win.refresh()
-
-    def __handle_menu_return(self,
-                             menu_selection
-                            ):
-
-        if menu_selection is None:
-            return None # Keep going
-
-        while 'menu' in menu_selection:
-            menu_selection = self._window_manager.menu('Which',
-                                                       menu_selection['menu'])
-            if menu_selection is None:    # bail out regardless of nesting level
-                return None               # Keep going
-
-        if 'doit' in menu_selection and menu_selection['doit'] is not None:
-            param = (None if 'param' not in menu_selection
-                          else menu_selection['param'])
-            # TODO: return the result of this?
-            (menu_selection['doit'])(param)
-            return None
-
-        return menu_selection
 
 
     def new_native_window(self,
@@ -5203,6 +5180,15 @@ class FightHandler(ScreenHandler):
         if maneuver is None:
             return True # Keep going
 
+        while 'menu' in maneuver:
+            maneuver = self._window_manager.menu('Which', maneuver['menu'])
+            if maneuver is None:    # Can bail out regardless of nesting level
+                return True         # Keep going
+
+        if 'doit' in maneuver and maneuver['doit'] is not None:
+            param = None if 'param' not in maneuver else maneuver['param']
+            (maneuver['doit'])(param)
+
         # TODO: call the ruleset to execute the action
         # TODO: change 'maneuver' to 'action'
         # TODO: fill-in current_fighter, opponent, world
@@ -5811,14 +5797,9 @@ class MainHandler(ScreenHandler):
 
             ord('c'): {'name': 'select character',    'func':
                                                        self.__character},
-            ord('e'): {'name': 'add equipment',       'func':
-                                                       self.__add_equipment},
-            ord('E'): {'name': 'remove equipment',    'func':
-                                                       self.__remove_equipment},
-            ord('g'): {'name': 'give equipment',      'func':
-                                                       self.__give_equipment},
-            ord('o'): {'name': 'outfit characters',   'func':
-                                                       self.__outfit},
+
+            ord('e'): {'name': 'equip character',     'func': 
+                                                       self.__equip},
             ord('J'): {'name': 'NPC joins PCs',       'func':
                                                        self.__NPC_joins},
             ord('L'): {'name': 'NPC leaves PCs',      'func':
@@ -5931,7 +5912,7 @@ class MainHandler(ScreenHandler):
         self._draw_screen() # Redraw current screen when done building fight.
         return True # Keep going
 
-    def __add_equipment(self):
+    def __add_equipment(self, throw_away):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -5982,7 +5963,7 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True # Keep going
 
-    def __give_equipment(self):
+    def __give_equipment(self, throw_away):
         from_fighter = Fighter(self.__chars[self.__char_index]['name'],
                                self.__chars[self.__char_index]['group'],
                                self.__chars[self.__char_index]['details'],
@@ -6027,7 +6008,7 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True # Keep going
 
-    def __remove_equipment(self):
+    def __remove_equipment(self, throw_away):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -6041,7 +6022,21 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True # Keep going
 
-    def __outfit(self):
+
+    def __equip(self):
+        sub_menu = [('add equipment',       {'doit': self.__add_equipment}),
+                    ('remove equipment',    {'doit': self.__remove_equipment}),
+                    ('give equipment',      {'doit': self.__give_equipment}),
+                    ('outfit characters',   {'doit': self.__outfit})]
+        result = self._window_manager.menu('Do what', sub_menu)
+
+        if 'doit' in result and result['doit'] is not None:
+            param = None if 'param' not in result else result['param']
+            (result['doit'])(param)
+        return True # Keep going
+
+
+    def __outfit(self, throw_away):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.

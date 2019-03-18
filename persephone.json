@@ -1809,131 +1809,6 @@
         "name": "2 - zombie"
       }
     }, 
-    "Anaica - (party friend) Mambo on Tereshkova": {
-      "redirect": "NPCs"
-    }, 
-    "chloe - Nicole": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [
-        {
-          "acc": 4, 
-          "count": 1, 
-          "owners": null, 
-          "name": "Blaster Pistol, Sig Sauer D65", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "plus": 4, 
-              "num_dice": 1, 
-              "type": "pi"
-            }
-          }, 
-          "reload": 3, 
-          "skill": "Beam Weapons (Pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 9, 
-            "shots_left": 0
-          }
-        }
-      ], 
-      "stunned": 0, 
-      "skills": {
-        "Environment Suit": 13, 
-        "No-Landing Extraction": 14, 
-        "Administration": 11, 
-        "Camouflage": 12, 
-        "Survival (Mountain)": 11, 
-        "Stealth": 13, 
-        "Electronics Operation (Sensors)": 11, 
-        "Brawling": 14, 
-        "Beam Weapons (Pistol)": 14, 
-        "Engineer (Combat)": 10, 
-        "Knife": 14, 
-        "Piloting (Low-Performance Spacecraft)": 13, 
-        "Mathematics (Applied)": 10, 
-        "Interrogation": 11, 
-        "Fast-Draw (Pistol)": 14, 
-        "Jumping": 14, 
-        "Survival (Desert)": 11, 
-        "Armoury (Small Arms)": 12, 
-        "Climbing": 13, 
-        "First Aid": 15, 
-        "Guns (Shotgun)": 14, 
-        "Guns (Grenade Launcher)": 14, 
-        "Tactics": 10, 
-        "Traps": 11, 
-        "Savoir-Faire (Military)": 12, 
-        "Beam Weapons (Rifle)": 14, 
-        "Soldier": 11, 
-        "Diagnosis": 12, 
-        "Fast-Draw (Knife)": 14, 
-        "Leadership": 11, 
-        "Hiking": 10, 
-        "Explosives (Demolition)": 12, 
-        "Survival (Low Atmosphere)": 11, 
-        "Throwing": 13, 
-        "Gunner (Beams)": 14, 
-        "Forward Observer": 11, 
-        "Electronics Operation (Communications)": 11, 
-        "Electronics Operation (Security)": 11, 
-        "Escape": 12, 
-        "Surgery": 10, 
-        "Scrounging": 12
-      }, 
-      "notes": [
-        ""
-      ], 
-      "shock": 0, 
-      "armor-index": null, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 6, 
-        "wi": 12, 
-        "st": 11, 
-        "ht": 11, 
-        "dx": 14, 
-        "basic-move": 6, 
-        "basic-speed": 6.25
-      }, 
-      "posture": "standing", 
-      "state": "dead", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "wi": 12, 
-        "st": 11, 
-        "ht": 11, 
-        "dx": 14, 
-        "basic-move": 6, 
-        "basic-speed": 6.25
-      }, 
-      "advantages": {
-        "G-Experience (Zero-G)": 1, 
-        "Fit": 5, 
-        "Overconfidence": -5, 
-        "Rank": 10, 
-        "Nightmares": -5, 
-        "Stubbornness": -5, 
-        "Sense of Duty": -5, 
-        "Impulsiveness": -10, 
-        "Bad Back (Mild)": -15, 
-        "Flashbacks (Mild, -2, 2D seconds)": -5, 
-        "Code of Honor (Soldier's)": -10, 
-        "Chummy": -5
-      }, 
-      "weapon-index": 0, 
-      "check_for_death": false, 
-      "timers": [], 
-      "did_action_this_turn": false, 
-      "opponent": null
-    }, 
     "vasilis - Alan": {
       "aim": {
         "braced": false, 
@@ -4932,7 +4807,7 @@
         "did_action_this_turn": true, 
         "opponent": {
           "group": "PCs", 
-          "name": "chloe - Nicole"
+          "name": "vasilis - Alan"
         }
       }, 
       "2 - zombie": {
@@ -6893,10 +6768,6 @@
     "monsters": "Panama Hat", 
     "fighters": [
       {
-        "group": "PCs", 
-        "name": "chloe - Nicole"
-      }, 
-      {
         "group": "Panama Hat", 
         "name": "9 - Wight"
       }, 
@@ -6947,10 +6818,6 @@
       {
         "group": "Panama Hat", 
         "name": "6 - zombie"
-      }, 
-      {
-        "group": "PCs", 
-        "name": "Anaica - (party friend) Mambo on Tereshkova"
       }, 
       {
         "group": "Panama Hat", 
