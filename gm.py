@@ -15,9 +15,6 @@ import sys
 import traceback
 
 # TODO:
-#   - Attack w/ no opponent should a) be allowed and b) ask who the opponent
-#       should be
-#   - Consciousness should not be a toggle but a menu
 #   - dead-monsters should be an array so that it's chronological
 #   - Multiple weapons
 #   - Need equipment containers
@@ -2545,7 +2542,8 @@ class GurpsRuleset(Ruleset):
                 fighter.details['stunned'] = False
 
     def get_action_menu(self,
-                        fighter # Fighter object
+                        fighter,        # Fighter object
+                        fight_handler   # FightHandler object
                        ):
         ''' Builds the menu of maneuvers allowed for the fighter. '''
 
@@ -2585,8 +2583,8 @@ class GurpsRuleset(Ruleset):
                                         'doit': self.draw_weapon,
                                         'param': {'weapon': index,
                                                   'fighter': fighter,
-                                                  'text': ('draw %s' %
-                                                                item['name'])}
+                                                  'text': [('draw %s' %
+                                                                item['name'])]}
                                        }
                         )
                     )
@@ -2605,8 +2603,10 @@ class GurpsRuleset(Ruleset):
                                          'doit': self.don_armor,
                                          'param': {'armor': index,
                                                    'fighter': fighter,
-                                                   'text': ('Don %s' %
-                                                            item['name'])}}))
+                                                   'text': [('Don %s' %
+                                                            item['name'])]
+                                                  }
+                                        }))
 
         # Posture SUB-menu
 
@@ -2623,8 +2623,10 @@ class GurpsRuleset(Ruleset):
                                  'doit': self.change_posture,
                                  'param': {'fighter': fighter,
                                            'posture': posture,
-                                           'text': ('Change posture to %s' %
-                                                                posture)}}))
+                                           'text': [('Change posture to %s' %
+                                                                posture)]
+                                          }
+                                }))
 
         # Use SUB-menu
 
@@ -2638,8 +2640,10 @@ class GurpsRuleset(Ruleset):
                                      'doit': self.use_item,
                                      'param': {'item': index,
                                                'fighter': fighter,
-                                               'text': ('Use %s' %
-                                                            item['name'])}}))
+                                               'text': [('Use %s' %
+                                                            item['name'])]
+                                              }
+                                    }))
 
         # Build the action_menu.  Alphabetical order.  Only allow the things
         # the fighter can do based on zis current situation.
@@ -2660,14 +2664,16 @@ class GurpsRuleset(Ruleset):
                                          'doit': self.do_aim,
                                          'param': {'fighter': fighter,
                                                    'braced': True,
-                                                   'text': 'Aim with brace'}}),
+                                                   'text': ['Aim with brace']
+                                                  }
+                                        }),
                         ('Not Bracing', {'text': ['Aim',
                                                   ' Defense: any loses aim',
                                                   ' Move: step'],
                                          'doit': self.do_aim,
                                          'param': {'fighter': fighter,
                                                    'braced': False,
-                                                   'text': 'Aim'}})
+                                                   'text': ['Aim']}})
                     ]
                     action_menu.append(('Aim (B324, B364)',
                                         {'text': ['Aim',
@@ -2683,49 +2689,52 @@ class GurpsRuleset(Ruleset):
                                          'doit': self.do_aim,
                                          'param': {'fighter': fighter,
                                                    'braced': False,
-                                                   'text': 'Aim'}})
+                                                   'text': ['Aim']}})
                                       )
 
                 # NOTE: Can only attack with a ranged weapon if there are still
                 # shots in the gun.
 
                 # Can only attack if there's someone to attack
-                if fighter.details['opponent'] is not None:
-                    action_menu.extend([
-                        ('attack',          {'text': ['Attack',
-                                                      ' Defense: any',
-                                                      ' Move: step'],
-                                             'doit': self.__do_attack,
-                                             'param': {'fighter': fighter,
-                                                       'text': 'Attack'}}),
-                        ('attack, all out', {'text': ['All out attack',
-                                                      ' Defense: none',
-                                                      ' Move: 1/2 = %d' %
-                                                                    (move/2)],
-                                             'doit': self.__do_attack,
-                                             'param': {'fighter': fighter,
-                                                       'text':
-                                                        'All out attack'}})
-                    ])
+                action_menu.extend([
+                    ('attack',          {'text': ['Attack',
+                                                  ' Defense: any',
+                                                  ' Move: step'],
+                                         'doit': self.__do_attack,
+                                         'param': {'fighter': fighter,
+                                                   'text': ['Attack'],
+                                                   'fight_handler':
+                                                            fight_handler}}),
+                    ('attack, all out', {'text': ['All out attack',
+                                                  ' Defense: none',
+                                                  ' Move: 1/2 = %d' %
+                                                                (move/2)],
+                                         'doit': self.__do_attack,
+                                         'param': {'fighter': fighter,
+                                                   'text': ['All out attack'],
+                                                   'fight_handler':
+                                                            fight_handler}})
+                ])
         else:
             # Can only attack if there's someone to attack
-            if fighter.details['opponent'] is not None:
-                action_menu.extend([
-                        ('attack',          {'text': ['Attack',
-                                                        ' Defense: any',
-                                                        ' Move: step'],
-                                             'doit': self.__do_attack,
-                                             'param': {'fighter': fighter,
-                                                       'text': 'Attack'}}),
-                        ('attack, all out', {'text': ['All out attack',
-                                                     ' Defense: none',
-                                                     ' Move: 1/2 = %d' %
-                                                                    (move/2)],
-                                             'doit': self.__do_attack,
-                                             'param': {'fighter': fighter,
-                                                       'text':
-                                                            'All out attack'}})
-                ])
+            action_menu.extend([
+                    ('attack',          {'text': ['Attack',
+                                                    ' Defense: any',
+                                                    ' Move: step'],
+                                         'doit': self.__do_attack,
+                                         'param': {'fighter': fighter,
+                                                   'text': ['Attack'],
+                                                   'fight_handler':
+                                                            fight_handler}}),
+                    ('attack, all out', {'text': ['All out attack',
+                                                 ' Defense: none',
+                                                 ' Move: 1/2 = %d' % (move/2)],
+                                         'doit': self.__do_attack,
+                                         'param': {'fighter': fighter,
+                                                   'text': ['All out attack'],
+                                                   'fight_handler':
+                                                            fight_handler}})
+            ])
 
         action_menu.extend([
             ('posture (B551)',         {'text': [
@@ -2745,7 +2754,9 @@ class GurpsRuleset(Ruleset):
                                                  ' Move: step'],
                                         'doit': self.do_defense,
                                         'param': {'fighter': fighter,
-                                                  'text': 'All out defense'}}),
+                                                  'text': ['All out defense']
+                                                 }
+                                       }),
         ])
 
         # Spell casters.
@@ -2766,7 +2777,9 @@ class GurpsRuleset(Ruleset):
                      'doit': self.cast_spell,
                      'param': {'spell': index,
                                'fighter': fighter,
-                               'text': ('Cast (%s)' % spell['name'])}}))
+                               'text': [('Cast (%s)' % spell['name'])]
+                              }
+                    }))
 
             action_menu.append(('cast Spell',
                                 {'text': ['Cast Spell',
@@ -2786,7 +2799,9 @@ class GurpsRuleset(Ruleset):
                   'doit': self.draw_weapon,
                   'param': {'weapon': draw_weapon_menu[0][1]['param']['weapon'],
                             'fighter': fighter,
-                            'text': 'draw %s' % draw_weapon_menu[0][0]}}))
+                            'text': ['draw %s' % draw_weapon_menu[0][0]]
+                           }
+                 }))
 
         elif len(draw_weapon_menu) > 1:
             action_menu.append(('draw (ready, etc.; B325, B366, B382)',
@@ -2805,8 +2820,9 @@ class GurpsRuleset(Ruleset):
                   'doit': self.use_item,
                   'param': {'item': use_menu[0][1]['param']['item'],
                             'fighter': fighter,
-                            # TODO: item name would be helpful
-                            'text': 'use item'}}))
+                            'text': ['Use %s' % use_menu[0][0]]
+                           }
+                 }))
 
         elif len(use_menu) > 1:
             action_menu.append(('use item',
@@ -2826,7 +2842,9 @@ class GurpsRuleset(Ruleset):
                   'doit': self.don_armor,
                   'param': {'armor': don_armor_menu[0][1]['param']['armor'],
                             'fighter': fighter,
-                            'text': 'don armor'}}))
+                            'text': ['don armor (%s)' % don_armor_menu[0][0]]
+                           }
+                 }))
 
         elif len(don_armor_menu) > 1:
             action_menu.append(('Don Armor',
@@ -2843,7 +2861,10 @@ class GurpsRuleset(Ruleset):
                                     'doit': self.don_armor,
                                     'param': {'armor': None,
                                               'fighter': fighter,
-                                              'text': 'doff armor'}}))
+                                              'text': ['doff armor (%s)' %
+                                                                armor['name']]
+                                             }
+                                   }))
 
         action_menu.append(('evaluate (B364)', {'text': ['Evaluate',
                                                          ' Defense: any',
@@ -2866,8 +2887,10 @@ class GurpsRuleset(Ruleset):
                                     'doit': self.draw_weapon,
                                     'param': {'weapon': None,
                                               'fighter': fighter,
-                                              'text': 'sheathe %s' %
-                                                        weapon['name']}}))
+                                              'text': ['sheathe %s' %
+                                                        weapon['name']]
+                                             }
+                                   }))
 
         
         if (fighter.details['current']['fp'] <
@@ -2899,7 +2922,8 @@ class GurpsRuleset(Ruleset):
                                                  ' Move: step'],
                                         'doit': self.__do_reload,
                                         'param': {'fighter': fighter,
-                                                  'text': 'Reload'}}))
+                                                  'text': ['Reload']}
+                                       }))
 
         action_menu.extend([
             ('stun/surprise (do nothing)',
@@ -3952,9 +3976,12 @@ class GurpsRuleset(Ruleset):
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
+        if param['fighter'].details['opponent'] is None:
+            param['fight_handler'].pick_opponent()
+
         weapon, weapon_index = param['fighter'].get_current_weapon()
         if weapon is None or 'ammo' not in weapon:
-            return
+            return None if 'text' not in param else param
 
         weapon['ammo']['shots_left'] -= 1
         param['fighter'].reset_aim()
@@ -4695,7 +4722,7 @@ class FightHandler(ScreenHandler):
             ord('m'): {'name': 'maneuver',    'func': self.__maneuver},
             ord('n'): {'name': 'short notes', 'func': self.__short_notes},
             ord('N'): {'name': 'full Notes',  'func': self.__full_notes},
-            ord('o'): {'name': 'opponent',    'func': self.__pick_opponent},
+            ord('o'): {'name': 'opponent',    'func': self.pick_opponent},
             #ord('P'): {'name': 'promote to NPC',
             #                                  'func': self.__promote_to_NPC},
             ord('q'): {'name': 'quit',        'func': self.__quit},
@@ -4963,7 +4990,7 @@ class FightHandler(ScreenHandler):
 
         # Automatically do the attack maneuver
         if auto_attack:
-            action_menu = self.__ruleset.get_action_menu(current_fighter)
+            action_menu = self.__ruleset.get_action_menu(current_fighter, self)
             for action in action_menu:
                 if action[0] == 'attack':
                     maneuver = action[1]
@@ -5216,10 +5243,9 @@ class FightHandler(ScreenHandler):
                                        self._saved_fight['index'],
                                        self.__viewing_index)
 
-        action_menu = self.__ruleset.get_action_menu(current_fighter)
+        action_menu = self.__ruleset.get_action_menu(current_fighter, self)
         maneuver = self._window_manager.menu('Maneuver', action_menu)
         if maneuver is None:
-            print 'MANEUVER IS NONE'    # TODO: remove
             return True # Keep going
 
         # TODO: call the ruleset to execute the action
@@ -5236,6 +5262,7 @@ class FightHandler(ScreenHandler):
 
         self.add_to_history(' (%s) did (%s) maneuver' % (current_fighter.name,
                                                          maneuver['text'][0]))
+        opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
@@ -5397,7 +5424,7 @@ class FightHandler(ScreenHandler):
                                    self.__viewing_index)
         return True # Keep going
 
-    def __pick_opponent(self):
+    def pick_opponent(self):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
