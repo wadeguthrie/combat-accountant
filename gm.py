@@ -18,6 +18,7 @@ import traceback
 #   - Attack w/ no opponent should a) be allowed and b) ask who the opponent
 #       should be
 #   - Consciousness should not be a toggle but a menu
+#   - dead-monsters should be an array so that it's chronological
 #   - Multiple weapons
 #   - Need equipment containers
 #   - Need maintain spell
@@ -1874,10 +1875,9 @@ class Fighter(object):
     (ALIVE,
      UNCONSCIOUS,
      DEAD,
-     STATES,    # States after this aren't in the 'bump_consciousness' cycle
 
      INJURED,
-     ABSENT) = range(6)
+     ABSENT) = range(5)
 
     conscious_map = {
         'alive': ALIVE,
@@ -1932,14 +1932,10 @@ class Fighter(object):
         self.details['timers'].append(timer)
 
 
-    def bump_consciousness(self):
+    def set_consciousness(self, conscious_number):
         '''
-        Increments (modulo size) the state of the fighter.
+        Sets the state of the fighter.
         '''
-        conscious_number = Fighter.conscious_map[self.details['state']]
-        conscious_number += 1
-        if conscious_number >= Fighter.STATES:
-            conscious_number = 0
 
         for state_name, state_num in Fighter.conscious_map.iteritems():
             if state_num == conscious_number:
@@ -4685,7 +4681,6 @@ class FightHandler(ScreenHandler):
             ord(' '): {'name': 'next fighter','func': self.__next_fighter},
             ord('<'): {'name': 'prev fighter','func': self.__prev_fighter},
             ord('?'): {'name': 'explain',     'func': self.__show_why},
-            ord('A'): {'name': 'absent',      'func': self.__absent},
             ord('d'): {'name': 'defend',      'func': self.__defend},
             ord('D'): {'name': 'dead/unconscious',
                                               'func': self.__dead},
@@ -5007,35 +5002,6 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
 
-    def __absent(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        now_absent, current_fighter = self.__select_fighter('Who is Absent',
-                                                          default_selection=1)
-        if now_absent is None:
-            return True # Keep fighting
-
-        if now_absent.is_conscious(): # and not absent
-            now_absent.details['opponent'] = None # absent men fight nobody
-            now_absent.toggle_absent()
-        else:
-            now_absent.toggle_absent()
-
-        absnet_name = now_absent.name
-        self.add_to_history(' (%s) was marked as (%s)' % (
-                                                absnet_name,
-                                                now_absent.details['state']))
-
-        opponent = self.get_opponent_for(current_fighter)
-        self._window.show_fighters(current_fighter,
-                                   opponent,
-                                   self.__fighters,
-                                   self._saved_fight['index'],
-                                   self.__viewing_index)
-        return True # Keep going
-
     def __dead(self):
         '''
         Command ribbon method.
@@ -5046,9 +5012,18 @@ class FightHandler(ScreenHandler):
         if now_dead is None:
             return True # Keep fighting
 
-        if now_dead.is_conscious():
+
+        state_menu = sorted(Fighter.conscious_map.iteritems(),
+                            key=lambda x:x[1])
+
+        new_state_number = self._window_manager.menu('New State', state_menu)
+        if new_state_number is None:
+            return True # Keep fighting
+
+        now_dead.set_consciousness(new_state_number)
+
+        if not now_dead.is_conscious():
             now_dead.details['opponent'] = None # dead men fight nobody
-        now_dead.bump_consciousness()
 
         dead_name = now_dead.name
         self.add_to_history(' (%s) was marked as (%s)' % (

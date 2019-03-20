@@ -885,9 +885,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         injured_hp = 3 # arbitrary amount
         injured_fighter.details['current']['hp'] -= injured_hp
-        unconscious_fighter.bump_consciousness()
-        dead_fighter.bump_consciousness()   # once to unconscious
-        dead_fighter.bump_consciousness()   # twice to dead
+        unconscious_fighter.set_consciousness(gm.Fighter.UNCONSCIOUS)
+        dead_fighter.set_consciousness(gm.Fighter.DEAD)
 
         assert injured_fighter.get_state() == gm.Fighter.INJURED
         assert unconscious_fighter.get_state() == gm.Fighter.UNCONSCIOUS
