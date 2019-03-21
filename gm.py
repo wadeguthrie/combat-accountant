@@ -19,7 +19,6 @@ import traceback
 #   - Need equipment containers
 #   - Need maintain spell
 #   - Need spell duration timer
-#   - Need way to 'P'romote bad guy to NPC status
 #   - Fights should have their own equipment
 #   - add laser sights to weapons
 #   - add a timer that is tied to the round change
@@ -4690,6 +4689,8 @@ class FightHandler(ScreenHandler):
         self.__ruleset = ruleset
         self.__bodies_looted = False
         self.__keep_monsters = False # Move monsters to 'dead' after fight
+        self.__equipment_manager = EquipmentManager(world,
+                                                    self._window_manager)
 
         # NOTE: 'h' and 'f' belong in Ruleset
         self._add_to_choice_dict({
@@ -4712,6 +4713,7 @@ class FightHandler(ScreenHandler):
             ord('D'): {'name': 'dead/unconscious',
                                               'func': self.__dead},
             ord('f'): {'name': 'FP damage',   'func': self.__damage_FP},
+            ord('g'): {'name': 'give equip',  'func': self.__give_equipment},
             ord('h'): {'name': 'History',     'func': self.__show_history},
             ord('i'): {'name': 'character info',
                                               'func': self.__show_info},
@@ -5160,6 +5162,33 @@ class FightHandler(ScreenHandler):
                 return fighter
 
         return None
+
+    def __give_equipment(self):
+        if self.__viewing_index is not None:
+            from_fighter = self.__fighters[self.__viewing_index]
+        else:
+            from_fighter = self.get_current_fighter()
+
+        item = self.__equipment_manager.remove_equipment(from_fighter)
+        if item is None:
+            return True # Keep going
+
+
+        character_list = self.__world.get_list(from_fighter.group)
+        character_menu = [(dude, dude) for dude in character_list]
+        to_fighter_name = self._window_manager.menu(
+                                        'Give "%s" to whom?' % item['name'],
+                                        character_menu)
+
+        if to_fighter_name is None:
+            from_fighter.add_equipment(item, None)
+            return True # Keep going
+
+        to_fighter = self.__get_fighter_object(to_fighter_name,
+                                               from_fighter.group)
+
+        to_fighter.add_equipment(item, from_fighter.name)
+        return True # Keep going
 
 
     def __loot_bodies(self):
