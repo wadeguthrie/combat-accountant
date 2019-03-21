@@ -1895,6 +1895,14 @@ class Fighter(object):
         self.__ruleset = ruleset
         self.__window_manager = window_manager
 
+    @staticmethod
+    def get_fighter_state(details):
+        conscious_number = Fighter.conscious_map[details['state']]
+        if (conscious_number == Fighter.ALIVE and 
+                        details['current']['hp'] < details['permanent']['hp']):
+            return Fighter.INJURED
+        return conscious_number
+
     def add_equipment(self,
                       new_item,   # dict describing new equipment
                       source=None # string describing where equipment came from
@@ -1927,16 +1935,6 @@ class Fighter(object):
 
         self.details['timers'].append(timer)
 
-
-    def set_consciousness(self, conscious_number):
-        '''
-        Sets the state of the fighter.
-        '''
-
-        for state_name, state_num in Fighter.conscious_map.iteritems():
-            if state_num == conscious_number:
-                self.details['state'] = state_name
-                break
 
     def can_finish_turn(self):
         # RULESET: actions are ruleset-based.
@@ -1998,14 +1996,6 @@ class Fighter(object):
         return self.details['stuff'][weapon_index], weapon_index
 
 
-    @staticmethod
-    def get_fighter_state(details):
-        conscious_number = Fighter.conscious_map[details['state']]
-        if (conscious_number == Fighter.ALIVE and 
-                        details['current']['hp'] < details['permanent']['hp']):
-            return Fighter.INJURED
-        return conscious_number
-
     def get_state(self):
         return Fighter.get_fighter_state(self.details)
 
@@ -2039,6 +2029,28 @@ class Fighter(object):
     def perform_action_this_turn(self):
         # RULESET: actions are ruleset-based.
         self.details['did_action_this_turn'] = True
+
+    def remove_equipment(self,
+                         item_index,   # dict describing new equipment
+                        ):
+        # NOTE: This assumes that there won't be any placeholder items --
+        # items with a count of 0 (or less).
+        if ('count' in self.details['stuff'][item_index] and
+                        self.details['stuff'][item_index]['count'] > 1):
+            item = copy.deepcopy(self.details['stuff'][item_index])
+            item['count'] = 1
+            self.details['stuff'][item_index]['count'] -= 1
+        else:
+            item = self.details['stuff'][item_index]
+            self.details['stuff'].pop(item_index)
+
+            # Now, we're potentially messing with the order of things in the
+            # 'stuff' array.  Best not to depend on the weapon-index.
+            self.details['weapon-index'] = None
+            self.details['armor-index'] = None
+
+        #self._window.show_character(self.__character)
+        return item
 
     def remove_expired_keep_dying_timers(self):
         '''
@@ -2075,6 +2087,17 @@ class Fighter(object):
         # RULESET: do_aim is ruleset-based.
         self.details['aim']['rounds'] = 0
         self.details['aim']['braced'] = False
+
+
+    def set_consciousness(self, conscious_number):
+        '''
+        Sets the state of the fighter.
+        '''
+
+        for state_name, state_num in Fighter.conscious_map.iteritems():
+            if state_num == conscious_number:
+                self.details['state'] = state_name
+                break
 
 
     def start_fight(self):
@@ -6521,28 +6544,12 @@ class EquipmentManager(object):
             return
 
         item_menu = [(item['name'], index)
-            for index, item in enumerate(fighter.details['stuff'])]
+                    for index, item in enumerate(fighter.details['stuff'])]
         item_index = self.__window_manager.menu('Item to Remove', item_menu)
         if item_index is None:
             return None
 
-        if ('count' in fighter.details['stuff'][item_index] and
-                        fighter.details['stuff'][item_index]['count'] > 1):
-            item = copy.deepcopy(fighter.details['stuff'][item_index])
-            item['count'] = 1
-            fighter.details['stuff'][item_index]['count'] -= 1
-        else:
-            item = fighter.details['stuff'][item_index]
-            fighter.details['stuff'].pop(item_index)
-
-            # Now, we're potentially messing with the order of things in the
-            # 'stuff' array.  Best not to depend on the weapon-index.
-            fighter.details['weapon-index'] = None
-            fighter.details['armor-index'] = None
-
-
-        #self._window.show_character(self.__character)
-        return item
+        return fighter.remove_item(item_index)
 
 
 class OutfitCharactersHandler(ScreenHandler):
