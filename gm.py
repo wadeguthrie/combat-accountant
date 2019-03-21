@@ -1867,12 +1867,11 @@ class World(object):
 
 
 class Fighter(object):
-    # Injured is separate since it's tracked by HP
     (ALIVE,
      UNCONSCIOUS,
      DEAD,
 
-     INJURED,
+     INJURED, # Injured is separate since it's tracked by HP
      ABSENT) = range(5)
 
     conscious_map = {
@@ -4773,15 +4772,7 @@ class FightHandler(ScreenHandler):
                              #       'info': <Fighter object>}
 
         if self._saved_fight['saved']:
-            for saved_fighter in self._saved_fight['fighters']:
-                fighter = Fighter(saved_fighter['name'],
-                                  saved_fighter['group'],
-                                  self.__get_fighter_details(
-                                                      saved_fighter['name'],
-                                                      saved_fighter['group']),
-                                  self.__ruleset,
-                                  self._window_manager)
-                self.__fighters.append(fighter)
+            monster_group = self._saved_fight['monsters']
         else:
             # TODO: when the history is reset (here), the JSON should be
             # rewritten
@@ -4792,43 +4783,46 @@ class FightHandler(ScreenHandler):
             self._saved_fight['index'] = 0
             self._saved_fight['monsters'] = monster_group
 
-            self.__fighters = []    # contains objects
+        # Rebuild the fighter list (even if the fight was saved since monsters
+        # or characters could have been added since the save happened).
 
-            for name in self.__world.get_list('PCs'):
-                details = self.__world.get_creature_details(name, 'PCs')
+        self.__fighters = []    # contains objects
+
+        for name in self.__world.get_list('PCs'):
+            details = self.__world.get_creature_details(name, 'PCs')
+            if details is not None:
+                fighter = Fighter(name,
+                                  'PCs',
+                                  details,
+                                  self.__ruleset,
+                                  self._window_manager)
+                self.__fighters.append(fighter)
+
+        if monster_group is not None:
+            for name in self.__world.get_list(monster_group):
+                details = self.__world.get_creature_details(name,
+                                                            monster_group)
                 if details is not None:
                     fighter = Fighter(name,
-                                      'PCs',
+                                      monster_group,
                                       details,
                                       self.__ruleset,
                                       self._window_manager)
                     self.__fighters.append(fighter)
 
-            if monster_group is not None:
-                for name in self.__world.get_list(monster_group):
-                    details = self.__world.get_creature_details(name,
-                                                                monster_group)
-                    if details is not None:
-                        fighter = Fighter(name,
-                                          monster_group,
-                                          details,
-                                          self.__ruleset,
-                                          self._window_manager)
-                        self.__fighters.append(fighter)
+        # Sort by initiative = basic-speed followed by DEX followed by
+        # random
+        self.__fighters.sort(
+                key=lambda fighter:
+                    self.__ruleset.initiative(fighter), reverse=True)
 
-            # Sort by initiative = basic-speed followed by DEX followed by
-            # random
-            self.__fighters.sort(
-                    key=lambda fighter:
-                        self.__ruleset.initiative(fighter), reverse=True)
-
-            # Copy the fighter information into the saved_fight.  Also, make
-            # sure this looks like a _NEW_ fight.
-            self._saved_fight['fighters'] = []
-            for fighter in self.__fighters:
-                fighter.start_fight()
-                self._saved_fight['fighters'].append({'group': fighter.group,
-                                                       'name': fighter.name})
+        # Copy the fighter information into the saved_fight.  Also, make
+        # sure this looks like a _NEW_ fight.
+        self._saved_fight['fighters'] = []
+        for fighter in self.__fighters:
+            fighter.start_fight()
+            self._saved_fight['fighters'].append({'group': fighter.group,
+                                                   'name': fighter.name})
 
         if monster_group is not None:
             for name in self.__world.get_list(monster_group):
@@ -5977,7 +5971,7 @@ class MainHandler(ScreenHandler):
     # Private Methods - callbacks for 'choices' array for menu
     #
 
-    def __add_NPCs(self):
+    def __add_NPCs(self, throw_away):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -5995,7 +5989,7 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
 
-    def __add_PCs(self):
+    def __add_PCs(self, throw_away):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -6013,7 +6007,7 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
 
-    def __add_monsters(self):
+    def __add_monsters(self, throw_away):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -6160,14 +6154,7 @@ class MainHandler(ScreenHandler):
                     ('new NPCs',        {'doit': self.__add_NPCs}),
                     ('new PCs',         {'doit': self.__add_PCs}),
                     ('new Monsters',    {'doit': self.__add_monsters})]
-        result = self._window_manager.menu('Do what', sub_menu)
-        if result is None:
-            return True # Keep going
-
-        if 'doit' in result and result['doit'] is not None:
-            (result['doit'])()
-
-        return True # Keep going
+        return self._window_manager.menu('Do what', sub_menu)
 
 
     def __outfit(self, throw_away):
@@ -6326,28 +6313,31 @@ class MainHandler(ScreenHandler):
             self._window.char_list_home()
         return True
 
-    def __NPC_joins(self):
-        npc_menu = [(npc, npc) for npc in self.__world.details['NPCs'].keys()]
-        npc_name = self._window_manager.menu(
-                                'Add which NPC to the party',
-                                npc_menu)
-        if npc_name is None:
+    def __NPC_joins(self, throw_away):
+        npc_name = self.__chars[self.__char_index]['name']
+        if self.__chars[self.__char_index]['group'] != 'NPCs':
+            self._window_manager.error(['"%s" not an NPC' % npc_name])
             return True
-        
+
+        if npc_name in self.__world.details['PCs']:
+            self._window_manager.error(['"%s" already a PC' % npc_name])
+            return True
+
         self.__world.details['PCs'][npc_name] = {'redirect': 'NPCs'}
         self.__setup_PC_list()
         self._draw_screen()
         return True
 
-    def __NPC_leaves(self):
-        npc_menu = [(npc, npc) for npc in self.__world.details['PCs'].keys()
-                     if 'redirect' in self.__world.details['PCs'][npc]]
-        npc_name = self._window_manager.menu(
-                                'Remove which NPC from the party',
-                                npc_menu)
-        if npc_name is None:
+    def __NPC_leaves(self, throw_away):
+        npc_name = self.__chars[self.__char_index]['name']
+        if npc_name not in self.__world.details['NPCs']:
+            self._window_manager.error(['"%s" not an NPC' % npc_name])
             return True
-        
+
+        if npc_name not in self.__world.details['PCs']:
+            self._window_manager.error(['"%s" not in PC list' % npc_name])
+            return True
+
         del(self.__world.details['PCs'][npc_name])
         self.__setup_PC_list()
         self._draw_screen()
