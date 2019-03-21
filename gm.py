@@ -15,7 +15,6 @@ import sys
 import traceback
 
 # TODO:
-#   - dead-monsters should be an array so that it's chronological
 #   - Multiple weapons
 #   - Need equipment containers
 #   - Need maintain spell
@@ -25,6 +24,7 @@ import traceback
 #   - add laser sights to weapons
 #   - add a timer that is tied to the round change
 #   - should warn when trying to do a second action (take note of fastdraw)
+#   - dead-monsters should be an array so that it's chronological
 #
 # TODO (eventually):
 #   - anything with 'RULESET' comment should be moved to the ruleset
@@ -4723,8 +4723,8 @@ class FightHandler(ScreenHandler):
             ord('n'): {'name': 'short notes', 'func': self.__short_notes},
             ord('N'): {'name': 'full Notes',  'func': self.__full_notes},
             ord('o'): {'name': 'opponent',    'func': self.pick_opponent},
-            #ord('P'): {'name': 'promote to NPC',
-            #                                  'func': self.__promote_to_NPC},
+            ord('P'): {'name': 'promote to NPC',
+                                              'func': self.__promote_to_NPC},
             ord('q'): {'name': 'quit',        'func': self.__quit},
             ord('s'): {'name': 'save',        'func': self.__save},
             ord('t'): {'name': 'timer',       'func': self.__timer}
@@ -5521,44 +5521,58 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
 
-    #def __promote_to_NPC(self):
-    #    if self.__viewing_index is not None:
-    #        new_NPC = self.__fighters[self.__viewing_index]
-    #    else:
-    #        current_fighter = self.get_current_fighter()
-    #        if (current_fighter.group == 'PCs' or
-    #                                        current_fighter.group == 'NPCs'):
-    #            opponent = self.get_opponent_for(current_fighter)
-    #            new_NPC = current_fighter if opponent is None else opponent
-    #        else:
-    #            new_NPC = current_fighter
+    def __promote_to_NPC(self):
+        if self.__viewing_index is not None:
+            new_NPC = self.__fighters[self.__viewing_index]
+        else:
+            current_fighter = self.get_current_fighter()
+            if (current_fighter.group == 'PCs' or
+                                            current_fighter.group == 'NPCs'):
+                opponent = self.get_opponent_for(current_fighter)
+                new_NPC = current_fighter if opponent is None else opponent
+            else:
+                new_NPC = current_fighter
 
-    #    if new_NPC.group == 'PCs':
-    #        self._window_manager.error(['%s is already a PC' % new_NPC.name])
-    #        return True
-    #    if new_NPC.group == 'NPCs':
-    #        self._window_manager.error(['%s is already an NPC' % new_NPC.name])
-    #        return True
+        if new_NPC.group == 'PCs':
+            self._window_manager.error(['%s is already a PC' % new_NPC.name])
+            return True
+        if new_NPC.group == 'NPCs':
+            self._window_manager.error(['%s is already an NPC' % new_NPC.name])
+            return True
 
-    #    # Now we have chosen a monster that's NOT an NPC or PC, promote him.
+        # Now we have chosen a monster that's NOT an NPC or PC, promote him.
 
-    #    # Make the NPC entry
+        # Make the NPC entry
 
-    #    if new_NPC.name in self.__world.details['NPCs']:
-    #        self._window_manager.error(['There\'s already an NPC named %s' %
-    #                                    new_NPC.name])
-    #        return True
+        if new_NPC.name in self.__world.details['NPCs']:
+            self._window_manager.error(['There\'s already an NPC named %s' %
+                                        new_NPC.name])
+            return True
 
-    #    details_copy = copy.deepcopy(new_NPC.details)
-    #    self.__world.details['NPCs'][new_NPC.name] = details_copy
+        details_copy = copy.deepcopy(new_NPC.details)
+        self.__world.details['NPCs'][new_NPC.name] = details_copy
 
-    #    # Make the redirect entry
+        # Make the redirect entry
 
-    #    redirect_entry = { "redirect": "NPCs" }
-    #    new_NPC.details = redirect_entry
-    #    self.__world.details['monsters'][new_NPC.group][new_NPC.name] = (
-    #                                                        redirect_entry)
-    #    return True # Keep going
+        redirect_entry = { "redirect": "NPCs" }
+        old_details = new_NPC.details
+        self.__world.details['monsters'][new_NPC.group][new_NPC.name] = (
+                                                            redirect_entry)
+
+        # Replace fighter information with new fighter information
+
+        for index, fighter in enumerate(self.__fighters):
+            if (fighter.name == new_NPC.name and
+                                            fighter.group == new_NPC.group):
+                new_fighter = Fighter(new_NPC.name,
+                                      new_NPC.group,
+                                      details_copy,
+                                      self.__ruleset,
+                                      self._window_manager)
+                self.__fighters[index] = new_fighter
+                break
+
+        return True # Keep going
 
 
     def __quit(self):
@@ -6095,6 +6109,8 @@ class MainHandler(ScreenHandler):
                     ('new PCs',         {'doit': self.__add_PCs}),
                     ('new Monsters',    {'doit': self.__add_monsters})]
         result = self._window_manager.menu('Do what', sub_menu)
+        if result is None:
+            return True # Keep going
 
         if 'doit' in result and result['doit'] is not None:
             (result['doit'])()
@@ -6337,7 +6353,10 @@ class MainHandler(ScreenHandler):
                              self.__ruleset,
                              self._campaign_debug_json,
                              self._input_filename)
+
         fight.handle_user_input_until_done()
+
+        self.__setup_PC_list() # The fight may have changed the PC/NPC lists
         self._draw_screen() # Redraw current screen when done with the fight.
 
         return True # Keep going
@@ -6712,13 +6731,6 @@ if __name__ == '__main__':
             else:
                 world.do_save_on_exit()
 
-            # Enter into the mainloop
-            main_handler = MainHandler(window_manager,
-                                       world,
-                                       ruleset,
-                                       campaign_debug_json,
-                                       filename)
-
             if campaign.read_data['current-fight']['saved']:
                 fight_handler = FightHandler(window_manager,
                                              world,
@@ -6727,5 +6739,13 @@ if __name__ == '__main__':
                                              campaign_debug_json,
                                              filename)
                 fight_handler.handle_user_input_until_done()
+
+            # Enter into the mainloop
+            main_handler = MainHandler(window_manager,
+                                       world,
+                                       ruleset,
+                                       campaign_debug_json,
+                                       filename)
+
             main_handler.handle_user_input_until_done()
 
