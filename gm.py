@@ -6141,20 +6141,19 @@ class MainHandler(ScreenHandler):
                     ('give equipment',      {'doit': self.__give_equipment}),
                     ('outfit characters',   {'doit': self.__outfit}),
                     ('add spell',           {'doit': self.__add_spell})]
-        result = self._window_manager.menu('Do what', sub_menu)
-
-        #if 'doit' in result and result['doit'] is not None:
-        #    (result['doit'])()
-
+        self._window_manager.menu('Do what', sub_menu)
         return True # Keep going
 
+
     def __party(self):
-        sub_menu = [('NPC joins PCs',   {'doit': self.__NPC_joins}),
-                    ('NPC leaves PCs',  {'doit': self.__NPC_leaves}),
-                    ('new NPCs',        {'doit': self.__add_NPCs}),
-                    ('new PCs',         {'doit': self.__add_PCs}),
-                    ('new Monsters',    {'doit': self.__add_monsters})]
-        return self._window_manager.menu('Do what', sub_menu)
+        sub_menu = [('NPC joins PCs',      {'doit': self.__NPC_joins_PCs}),
+                    ('NPC leaves PCs',     {'doit': self.__NPC_leaves_PCs}),
+                    ('NPC joins Monsters', {'doit': self.__NPC_joins_monsters}),
+                    ('new NPCs',           {'doit': self.__add_NPCs}),
+                    ('new PCs',            {'doit': self.__add_PCs}),
+                    ('new Monsters',       {'doit': self.__add_monsters})]
+        self._window_manager.menu('Do what', sub_menu)
+        return True
 
 
     def __outfit(self, throw_away):
@@ -6313,7 +6312,30 @@ class MainHandler(ScreenHandler):
             self._window.char_list_home()
         return True
 
-    def __NPC_joins(self, throw_away):
+    def __NPC_joins_monsters(self, throw_away):
+        # Make sure the person is an NPC
+        npc_name = self.__chars[self.__char_index]['name']
+        if self.__chars[self.__char_index]['group'] != 'NPCs':
+            self._window_manager.error(['"%s" not an NPC' % npc_name])
+            return True
+
+        # Select the fight
+        fight_menu = [(fight, fight) for fight in 
+                                            self.__world.details['monsters']]
+        fight = self._window_manager.menu('Join Which Fight', fight_menu)
+
+        # Make sure the person isn't already in the fight
+        if npc_name in self.__world.details['monsters'][fight]:
+            self._window_manager.error(['"%s" already in fight "%s"' %
+                                                            npc_name, fight])
+            return True
+
+        self.__world.details['monsters'][fight][npc_name] = {'redirect': 'NPCs'}
+        self.__setup_PC_list()
+        self._draw_screen()
+        return True
+
+    def __NPC_joins_PCs(self, throw_away):
         npc_name = self.__chars[self.__char_index]['name']
         if self.__chars[self.__char_index]['group'] != 'NPCs':
             self._window_manager.error(['"%s" not an NPC' % npc_name])
@@ -6328,7 +6350,7 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True
 
-    def __NPC_leaves(self, throw_away):
+    def __NPC_leaves_PCs(self, throw_away):
         npc_name = self.__chars[self.__char_index]['name']
         if npc_name not in self.__world.details['NPCs']:
             self._window_manager.error(['"%s" not an NPC' % npc_name])
