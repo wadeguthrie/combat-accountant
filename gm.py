@@ -3013,7 +3013,7 @@ class GurpsRuleset(Ruleset):
         found_one = False
         pieces = []
 
-        first_row = ['iq', 'st', 'ht', 'dx']
+        first_row = ['iq', 'st', 'ht', 'dx', 'per']
         for row in range(2):
             found_one_this_row = False
             for item_key in character['permanent'].iterkeys():
