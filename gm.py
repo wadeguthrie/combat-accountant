@@ -3013,7 +3013,8 @@ class GurpsRuleset(Ruleset):
         found_one = False
         pieces = []
 
-        first_row = ['iq', 'st', 'ht', 'dx', 'per']
+        first_row = ['st', 'dx', 'iq', 'ht', 'per']
+        first_row_pieces = {}
         for row in range(2):
             found_one_this_row = False
             for item_key in character['permanent'].iterkeys():
@@ -3022,11 +3023,9 @@ class GurpsRuleset(Ruleset):
                     continue
                 if row != 0 and in_first_row:
                     continue
-                leader = '' if found_one_this_row else '  '
-                text = '%s%s:%d/%d' % (leader,
-                                       item_key,
-                                       character['current'][item_key],
-                                       character['permanent'][item_key])
+                text = '%s:%d/%d' % (item_key,
+                                     character['current'][item_key],
+                                     character['permanent'][item_key])
                 if (character['current'][item_key] == 
                                             character['permanent'][item_key]):
                     mode = curses.A_NORMAL
@@ -3034,11 +3033,20 @@ class GurpsRuleset(Ruleset):
                     mode = (curses.color_pair(GmWindowManager.YELLOW_BLACK) |
                                                                 curses.A_BOLD)
 
-                pieces.append({'text': '%s ' % text, 'mode': mode})
+                if row == 0:
+                    first_row_pieces[item_key] = {'text': '%s ' % text,
+                                                  'mode': mode}
+                else:
+                    pieces.append({'text': '%s ' % text, 'mode': mode})
                 found_one = True
                 found_one_this_row = True
 
             if found_one_this_row:
+                if row == 0:
+                    for item_key in first_row:
+                        pieces.append(first_row_pieces[item_key])
+
+                pieces.insert(0, {'text': '  ', 'mode': curses.A_NORMAL})
                 char_detail.append(copy.deepcopy(pieces))
                 del pieces[:]
 
