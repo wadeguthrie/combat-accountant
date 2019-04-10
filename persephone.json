@@ -1415,7 +1415,7 @@
             "(Unknown)", 
             "Alexander - sergeant"
           ], 
-          "name": "Makeshift Taser", 
+          "name": "Battery Launcher", 
           "notes": "hand built, zip taser, nice", 
           "damage": {
             "dice": {
@@ -1428,17 +1428,17 @@
           "skill": "Guns (Pistol)", 
           "type": "ranged weapon", 
           "ammo": {
-            "name": "Zip Clip", 
+            "name": "B cell clip", 
             "shots": 6, 
             "shots_left": 4
           }
         }, 
         {
-          "count": 1, 
+          "count": 2, 
           "notes": "", 
           "type": "misc", 
           "owners": [], 
-          "name": "Zip Clip"
+          "name": "B cell clip"
         }, 
         {
           "count": 3, 
@@ -1490,12 +1490,14 @@
         "First Aid": 14, 
         "Armoury (Small Arms)": 11, 
         "Guns (Grenade Launcher)": 9, 
-        "Fast-Draw (Ammo)": 14, 
+        "Guns (Pistol)": 13, 
+        "Fast-Draw (Ammo)": 13, 
         "Traps": 12, 
         "Beam Weapons (Rifle)": 14, 
         "Karate": 13, 
         "Axe/Mace": 12, 
         "Throwing": 10, 
+        "Search": 11, 
         "Acting": 7, 
         "Holdout": 11, 
         "Law (Conglomerate)": 10
@@ -1535,7 +1537,7 @@
         "Dyslexia": -10, 
         "Code of Honor (Professional)": -5, 
         "Nosy": -1, 
-        "Pyromania": -5, 
+        "Pyromania": -10, 
         "High Pain Threshold": 10, 
         "Weirdness Magnet": -15, 
         "Alcohol Intolerance": -1, 
@@ -1838,6 +1840,13 @@
           }
         }, 
         {
+          "count": 1, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "First Aid Kit"
+        },
+        {
           "count": 100000, 
           "notes": "", 
           "type": "misc", 
@@ -1874,23 +1883,25 @@
         "Beam Weapons (Pistol)": 16, 
         "Cryptography": 13, 
         "Piloting (Low-Performance Spacecraft)": 14, 
+        "Piloting (Loader Mech)": 13, 
         "Mathematics (Applied)": 12, 
         "Law (Conglomerate, trans-territorial jurisdiction/the void)": 12, 
-        "First Aid": 14, 
+        "Forensics": 14, 
+        "First Aid": 15, 
         "Armoury (Small Arms)": 14, 
-        "Climbing": 10, 
+        "Climbing": 11, 
         "Lip Reading": 13, 
         "Expert Skill (Computer Security)": 12, 
         "Search": 14, 
         "Bartender": 13, 
         "Observation": 15, 
         "Beam Weapons (Rifle)": 16, 
-        "Axe/Mace": 11, 
+        "Axe/Mace": 12, 
         "Physics": 11, 
         "Engineer (Electronics)": 12, 
         "Computer Hacking": 15, 
         "Computer Programming": 12, 
-        "Electronics Operation (Security)": 13
+        "Electronics Operation (Security)": 14
       }, 
       "shock": 0, 
       "armor-index": null, 
@@ -2298,12 +2309,12 @@
         "Nosy": -1, 
         "Like knick knacks": -1, 
         "Vodou Practitioner": 15, 
-        "Empathy (Sensitive)": 5, 
+        "Empathy": 15, 
         "Alcohol Intolerance": -1, 
-        "Impulsiveness": -15, 
+        "Impulsiveness": -10, 
         "Cultural Familiarity (Teraformers)": 1, 
-        "Short Attention Span": -15, 
-        "Curious": -7, 
+        "Short Attention Span": -10, 
+        "Curious": -5, 
         "Bad Temper": -10, 
         "Deep Sleeper": 1, 
         "Combat Reflexes": 15, 
@@ -2679,7 +2690,7 @@
       }
     }, 
     "Tereshkova - Battle for the Crate": {
-      "Alexander - Sergeant": {
+      "Alexander - Journeyman Deputy Marshal": {
         "aim": {
           "braced": false, 
           "rounds": 0
@@ -2700,7 +2711,8 @@
           "hair: Bald", 
           "speech: Raspy", 
           "knack: Immunity to fire", 
-          "personality: Pleasant"
+          "personality: Pleasant",
+          "With Stoddard"
         ], 
         "shock": 0, 
         "short-notes": [], 
@@ -3063,7 +3075,10 @@
         "did_action_this_turn": true, 
         "opponent": null
       }, 
-      "4: Olivia": {
+      "4: Olivia - Special Deputy Marshal": {
+        "notes": [
+          "With Stoddard" 
+        ],
         "aim": {
           "braced": false, 
           "rounds": 0
@@ -3202,7 +3217,10 @@
         "posture": "standing", 
         "opponent": null
       }, 
-      "2: William": {
+      "2: William - Deputy Marshal": {
+        "notes": [
+          "With Stoddard" 
+        ],
         "aim": {
           "braced": false, 
           "rounds": 0
@@ -3334,7 +3352,10 @@
         "posture": "standing", 
         "opponent": null
       }, 
-      "5: Amelia": {
+      "5: Amelia - Deputy Marshal": {
+        "notes": [
+          "With Stoddard" 
+        ],
         "aim": {
           "braced": false, 
           "rounds": 0
@@ -3447,7 +3468,10 @@
         "posture": "standing", 
         "opponent": null
       }, 
-      "1: Oliver": {
+      "1: Oliver - Deputy Marshal": {
+        "notes": [
+          "With Stoddard" 
+        ],
         "aim": {
           "braced": false, 
           "rounds": 0
@@ -3593,7 +3617,10 @@
         "posture": "standing", 
         "opponent": null
       }, 
-      "3: Charlotte": {
+      "3: Charlotte - Deputy Marshal": {
+        "notes": [
+          "With Stoddard" 
+        ],
         "aim": {
           "braced": false, 
           "rounds": 0

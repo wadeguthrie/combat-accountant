@@ -148,7 +148,9 @@ class Skills(object):
         'Connoisseur':          {'attr':'IQ', 'diff':'A', 'default':-5},
         'Cryptography':         {'attr':'IQ', 'diff':'H', 'default':None},
         'Current Affairs':      {'attr':'IQ', 'diff':'E', 'default':-4},
-        'Detect Lies':          {'attr':'Per', 'diff':'H', 'default':-6},
+        'Detect Lies':          {'attr':'Per', 'diff':'H', 'default':-6,
+                                 'advantage': {'Empathy': 3,
+                                               'Empathy (Sensitive)': 1}},
         'Diagnosis':            {'attr':'IQ', 'diff':'H', 'default':-6},
         'Diplomacy':            {'attr':'IQ', 'diff':'H', 'default':-6},
         'Electronics Operation':{'attr':'IQ', 'diff':'A', 'default':-5},
@@ -163,6 +165,7 @@ class Skills(object):
         'Filch':                {'attr':'DX', 'diff':'A', 'default':-5},
         'First Aid':            {'attr':'IQ', 'diff':'E', 'default':-4,
                                  'equip': {'First Aid Kit': 1}},
+        'Forensics':            {'attr':'IQ', 'diff':'H', 'default':-6},
         'Forgery':              {'attr':'IQ', 'diff':'H', 'default':-6},
         'Forward Observer':     {'attr':'IQ', 'diff':'A', 'default':-5},
         'Gambling':             {'attr':'IQ', 'diff':'A', 'default':-5},
@@ -206,8 +209,7 @@ class Skills(object):
     }
 
     @staticmethod
-    def get_gcs_level(attribs,    # dict containing HT, IQ, etc.
-                      equipment,  # xxx
+    def get_gcs_level(char,       # Character object
                       skill_name, # name of skill
                       cost        # points spent on skill
                      ):
@@ -215,13 +217,12 @@ class Skills(object):
         # TODO: the following skills are augmented by stuff
         #   - axe/mace: ?
         #   - armory: good quality equipment and ?
-        #   - detect lies: ?
         #   - fast draw ammo: ?
         if skill_name not in Skills.skills:
             print '** Need to add "%s" to gcs-check.py' % skill_name
             return 0
         skill = Skills.skills[skill_name]
-        if skill['attr'] not in attribs:
+        if skill['attr'] not in char.attrs:
             print '** Required attribute "%s" not supplied' % skill['attr']
             return 0
 
@@ -230,7 +231,7 @@ class Skills(object):
             if skill['default'] is None:
                 print '** No default for skill "%s"' % skill_name
                 return 0
-            return attribs[skill['attr']] + skill['default']
+            return char.attrs[skill['attr']] + skill['default']
 
         # Adjust cost down if someone has extra points in a skill
         while cost not in Skills.level_from_cost and cost > 1:
@@ -242,12 +243,16 @@ class Skills(object):
         # Calculate the skill level
         level = Skills.level_from_cost[cost]
         level += Skills.difficulty_offset[skill['diff']]
-        level += attribs[skill['attr']]
+        level += char.attrs[skill['attr']]
 
         # Add modifiers due to equipment
         if 'equip' in skill:
             for item, plus in skill['equip'].iteritems():
-                if item in equipment:
+                if item in char.stuff_gcs:
+                    level += plus
+        if 'advantage' in skill:
+            for item, plus in skill['advantage'].iteritems():
+                if item in char.advantages_gcs:
                     level += plus
 
         return level
@@ -344,6 +349,7 @@ class Character(object):
         '''
         self.char_gcs = char_gcs
         self.attrs = {}
+        self.advantages_gcs = {}
 
         # Build the equipment list up front so that skills may make use of it
         self.stuff_gcs = []
@@ -355,11 +361,11 @@ class Character(object):
     def check_for_consistency(self):
         self.check_attribs()
 
-        print '\n-- Skills -----'
-        self.check_skills()
-
         print '\n-- Advantages -----'
         self.check_advantages()
+
+        print '\n-- Skills -----'
+        self.check_skills()
 
         if 'spells' in self.char_json:
             print '\n-- Spell List -----'
@@ -435,6 +441,8 @@ class Character(object):
 
     def check_skills(self):
         # Checks skill cost
+        # NOTE: Must rund 'check_advantages' before this because some skills
+        #   are affected by advantages.
 
         skills_gcs = self.char_gcs.find('skill_list')
 
@@ -457,8 +465,7 @@ class Character(object):
 
             cost_text_gcs = skill_gcs.find('points')
             cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
-            level_gcs = Skills.get_gcs_level(self.attrs,
-                                             self.stuff_gcs,
+            level_gcs = Skills.get_gcs_level(self,
                                              base_name,
                                              cost_gcs)
             if name_text not in skills_json:
@@ -519,22 +526,21 @@ class Character(object):
             advantages_json = {}
 
         advantages_gcs_raw = self.char_gcs.find('advantage_list')
-        advantages_gcs = {}
         for child in advantages_gcs_raw:
-            self.__add_advantage_to_gcs_list(child, advantages_gcs)
+            self.__add_advantage_to_gcs_list(child, self.advantages_gcs)
 
-        for name in advantages_gcs:
+        for name in self.advantages_gcs:
             #print 'ADVANTAGE NAME: "%r"' % name # TODO: remove
             if name not in advantages_json:
                 print '   **GCS> "%s" (%r) in GCS but not in JSON' % (
-                                                        name,
-                                                        advantages_gcs[name])
+                                                    name,
+                                                    self.advantages_gcs[name])
             else:
-                if advantages_gcs[name] != advantages_json[name]:
+                if self.advantages_gcs[name] != advantages_json[name]:
                     print '   ** %s = %r in GCS but %r in JSON' % (
-                        name, advantages_gcs[name], advantages_json[name])
+                        name, self.advantages_gcs[name], advantages_json[name])
                 else:
-                    print '  %s: %r' % (name, advantages_gcs[name])
+                    print '  %s: %r' % (name, self.advantages_gcs[name])
 
                 del(advantages_json[name])
         for advantage_json in advantages_json:

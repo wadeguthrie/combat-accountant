@@ -18,7 +18,6 @@ import traceback
 #   - Multiple weapons
 #   - Need equipment containers
 #   - Need maintain spell
-#   - Need spell duration timer
 #   - Fights should have their own equipment
 #   - add laser sights to weapons
 #   - add a timer that is tied to the round change
@@ -5918,12 +5917,10 @@ class MainHandler(ScreenHandler):
 
             ord('c'): {'name': 'select character',    'func':
                                                        self.__character},
-
             ord('e'): {'name': 'equip character',     'func': 
                                                        self.__equip},
-            ord('p'): {'name': 'change party or monsters', 'func': 
+            ord('p'): {'name': 'personnel changes',   'func': 
                                                        self.__party},
-
             ord('f'): {'name': 'fight',               'func':
                                                        self.__run_fight},
             ord('H'): {'name': 'Heal',                'func':
