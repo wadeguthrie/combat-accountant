@@ -3034,6 +3034,8 @@ class GurpsRuleset(Ruleset):
                                                                 curses.A_BOLD)
 
                 if row == 0:
+                    # Save the first row as pieces so we can put them in the
+                    # proper order, later.
                     first_row_pieces[item_key] = {'text': '%s ' % text,
                                                   'mode': mode}
                 else:
@@ -4749,11 +4751,11 @@ class FightHandler(ScreenHandler):
             ord('k'): {'name': 'keep monsters',
                                               'func': self.__do_keep_monsters},
             ord('-'): {'name': 'HP damage',   'func': self.__damage_HP},
-            ord('L'): {'name': 'Loot bodies', 'func': self.__loot_bodies},
+            #ord('L'): {'name': 'Loot bodies', 'func': self.__loot_bodies},
             ord('m'): {'name': 'maneuver',    'func': self.__maneuver},
             ord('n'): {'name': 'short notes', 'func': self.__short_notes},
             ord('N'): {'name': 'full Notes',  'func': self.__full_notes},
-            ord('o'): {'name': 'opponent',    'func': self.pick_opponent},
+            #ord('o'): {'name': 'opponent',    'func': self.pick_opponent},
             ord('P'): {'name': 'promote to NPC',
                                               'func': self.__promote_to_NPC},
             ord('q'): {'name': 'quit',        'func': self.__quit},
@@ -4881,7 +4883,12 @@ class FightHandler(ScreenHandler):
                                 self.__keep_monsters == False):
             fight_group = self._saved_fight['monsters']
             fight = self.__world.get_list(fight_group)
-            self.__world.details['dead-monsters'][fight_group] = fight
+
+            fmt='%Y-%m-%d-%H-%M-%S'
+            date = datetime.datetime.now().strftime(fmt).format()
+            self.__world.details['dead-monsters'].append({'name': fight_group,
+                                                          'date': date,
+                                                          'fight': fight})
             del self.__world.details['monsters'][fight_group]
 
 
@@ -6314,7 +6321,9 @@ class MainHandler(ScreenHandler):
         if self.__current_pane == MainHandler.CHAR_DETAIL:
             self._window.char_detail_home()
         else:
+            self.__char_index = 0
             self._window.char_list_home()
+            self._draw_screen()
         return True
 
     def __NPC_joins_monsters(self, throw_away):
