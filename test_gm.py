@@ -1715,6 +1715,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # assert 0 timers -- yup, 0.9 timer is now gone
         assert len(fighter.details['timers']) == 0
 
+    def __is_in_dead_monsters(self, world_obj, fight_name):
+        for fight in world_obj.read_data['dead-monsters']:
+            if fight_name == fight['name']:
+                return True
+        return False
+
     def test_save(self):
         base_world_dict = {
           "Templates": {
@@ -1737,8 +1743,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "Vodou Priest": self.__vodou_priest_fighter, 
             "One More Guy": self.__one_more_guy, 
           }, # PCs
-          "dead-monsters": {
-            "Arena Attack Monsters": {
+          "dead-monsters": [
+            {"name": "Arena Attack Monsters",
+             "fight": {
               "5-Tank-B": {
                 "state": "alive", 
                 "current":
@@ -1746,8 +1753,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 "permanent":
                     {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12}, 
               }, # 5-Tank-B
-            }, # Arena Attack Monsters
-          }, # dead-monsters
+              "date": None
+              }
+            } # Arena Attack Monsters
+          ], # dead-monsters
           "current-fight": {
             "index": 0, 
             "monsters": "Anybody", 
@@ -1801,7 +1810,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         "filename") # used for display
 
         assert "Dima's Crew" in world_obj.read_data['monsters']
-        assert "Dima's Crew" not in world_obj.read_data['dead-monsters']
+        assert not self.__is_in_dead_monsters(world_obj, "Dima's Crew")
         assert world_obj.read_data['current-fight']['saved'] == False
 
         self.__window_manager.set_char_response(ord('q'))
@@ -1810,7 +1819,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fight_handler.handle_user_input_until_done()
                                      
         assert "Dima's Crew" not in world_obj.read_data['monsters']
-        assert "Dima's Crew" in world_obj.read_data['dead-monsters']
+        assert self.__is_in_dead_monsters(world_obj, "Dima's Crew")
         assert world_obj.read_data['current-fight']['saved'] == False
 
         #
@@ -1831,7 +1840,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         "filename") # used for display
 
         assert "Dima's Crew" in world_obj.read_data['monsters']
-        assert "Dima's Crew" not in world_obj.read_data['dead-monsters']
+        assert not self.__is_in_dead_monsters(world_obj, "Dima's Crew")
         assert world_obj.read_data['current-fight']['saved'] == False
 
         self.__window_manager.set_char_response(ord('q'))
@@ -1844,7 +1853,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fight_handler.handle_user_input_until_done()
                                      
         assert "Dima's Crew" in world_obj.read_data['monsters']
-        assert "Dima's Crew" not in world_obj.read_data['dead-monsters']
+        assert not self.__is_in_dead_monsters(world_obj, "Dima's Crew")
         assert world_obj.read_data['current-fight']['saved'] == True
         assert world_obj.read_data['current-fight']['monsters'] == "Dima's Crew"
 
@@ -1864,7 +1873,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         "filename") # used for display
 
         assert "Dima's Crew" in world_obj.read_data['monsters']
-        assert "Dima's Crew" not in world_obj.read_data['dead-monsters']
+        assert not self.__is_in_dead_monsters(world_obj, "Dima's Crew")
         assert world_obj.read_data['current-fight']['saved'] == False
 
         # It's a stack so I'm putting things in reverse order
@@ -1875,7 +1884,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fight_handler.handle_user_input_until_done()
                                      
         assert "Dima's Crew" in world_obj.read_data['monsters']
-        assert "Dima's Crew" not in world_obj.read_data['dead-monsters']
+        assert not self.__is_in_dead_monsters(world_obj, "Dima's Crew")
         assert world_obj.read_data['current-fight']['saved'] == False
 
     def test_add_equipment(self):

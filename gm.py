@@ -22,7 +22,6 @@ import traceback
 #   - add laser sights to weapons
 #   - add a timer that is tied to the round change
 #   - should warn when trying to do a second action (take note of fastdraw)
-#   - dead-monsters should be an array so that it's chronological
 #
 # TODO (eventually):
 #   - anything with 'RULESET' comment should be moved to the ruleset
@@ -5942,6 +5941,8 @@ class MainHandler(ScreenHandler):
                                                        self.__fully_heal},
             ord('q'): {'name': 'quit',                'func':
                                                        self.__quit},
+            ord('r'): {'name': 'resurrect fight',     'func':
+                                                       self.__resurrect_fight},
             ord('S'): {'name': 'toggle: Save On Exit','func':
                                                        self.__maintain_json},
             ord('/'): {'name': 'search',              'func':
@@ -6408,6 +6409,36 @@ class MainHandler(ScreenHandler):
         return False # Leave
 
 
+    def __resurrect_fight(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        # Ask which monster group to resurrect
+        fight_name_menu = []
+        for i, entry in enumerate(self.__world.details['dead-monsters']):
+            fight_name_menu.append((entry['name'], i))
+        monster_group_index = self._window_manager.menu('Resurrect Which Fight',
+                                                        fight_name_menu)
+        if monster_group_index is None:
+            return True
+
+        monster_group = self.__world.details['dead-monsters'][
+                                                        monster_group_index]
+
+        if monster_group['name'] in self.__world.details['monsters']:
+            self._window_manager.error(['Fight by name "%s" exists' %
+                                        monster_group['name']])
+            return True
+
+        # Put fight into regular monster list
+        self.__world.details['monsters'][monster_group['name']] = (
+                                                    monster_group['fight'])
+
+        # Remove fight from dead-monsters
+        del(self.__world.details['dead-monsters'][monster_group_index])
+        return True
+
     def __run_fight(self):
         '''
         Command ribbon method.
@@ -6420,9 +6451,7 @@ class MainHandler(ScreenHandler):
             # PP.pprint(fight_name_menu)
             monster_group = self._window_manager.menu('Fights',
                                                       fight_name_menu)
-            if (monster_group is not None and
-                    monster_group not in self.__world.details['monsters']):
-                print 'ERROR, monster list %s not found' % monster_group
+            if monster_group is None:
                 return True
 
         fight = FightHandler(self._window_manager,
