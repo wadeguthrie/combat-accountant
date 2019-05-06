@@ -31,10 +31,6 @@
             "type": "value", 
             "value": 10
           }, 
-          "per": {
-            "type": "value", 
-            "value": 12
-          }, 
           "ht": {
             "type": "value", 
             "value": 11
@@ -50,6 +46,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 12
           }
         }, 
         "advantages": {
@@ -143,10 +143,6 @@
             "type": "value", 
             "value": 16
           }, 
-          "per": {
-            "type": "value", 
-            "value": 12
-          }, 
           "ht": {
             "type": "value", 
             "value": 10
@@ -162,6 +158,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 6.25
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 12
           }
         }, 
         "advantages": {
@@ -274,10 +274,6 @@
             "type": "value", 
             "value": 10
           }, 
-          "per": {
-            "type": "value", 
-            "value": 10
-          }, 
           "ht": {
             "type": "value", 
             "value": 10
@@ -293,6 +289,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 10
           }
         }
       }, 
@@ -318,10 +318,6 @@
             "type": "value", 
             "value": 10
           }, 
-          "per": {
-            "type": "value", 
-            "value": 12
-          }, 
           "ht": {
             "type": "value", 
             "value": 11
@@ -337,6 +333,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.25
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 12
           }
         }, 
         "advantages": {
@@ -505,10 +505,6 @@
             "type": "value", 
             "value": 10
           }, 
-          "per": {
-            "type": "value", 
-            "value": 12
-          }, 
           "ht": {
             "type": "value", 
             "value": 11
@@ -524,6 +520,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 12
           }
         }, 
         "advantages": {
@@ -609,10 +609,6 @@
             "type": "value", 
             "value": 10
           }, 
-          "per": {
-            "type": "value", 
-            "value": 12
-          }, 
           "ht": {
             "type": "value", 
             "value": 11
@@ -628,6 +624,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 12
           }
         }
       }, 
@@ -661,10 +661,6 @@
             "type": "value", 
             "value": 12
           }, 
-          "per": {
-            "type": "value", 
-            "value": 8
-          }, 
           "ht": {
             "type": "value", 
             "value": 10
@@ -680,6 +676,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.0
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 8
           }
         }, 
         "advantages": {
@@ -742,10 +742,6 @@
             "type": "value", 
             "value": 10
           }, 
-          "per": {
-            "type": "value", 
-            "value": 13
-          }, 
           "ht": {
             "type": "value", 
             "value": 11
@@ -761,6 +757,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.5
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 13
           }
         }
       }, 
@@ -794,10 +794,6 @@
             "type": "value", 
             "value": 12
           }, 
-          "per": {
-            "type": "value", 
-            "value": 8
-          }, 
           "ht": {
             "type": "value", 
             "value": 9
@@ -813,6 +809,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 4.75
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 8
           }
         }, 
         "advantages": {
@@ -905,10 +905,6 @@
             "type": "value", 
             "value": 15
           }, 
-          "per": {
-            "type": "value", 
-            "value": 9
-          }, 
           "ht": {
             "type": "value", 
             "value": 11
@@ -924,6 +920,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.25
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 9
           }
         }, 
         "advantages": {
@@ -1253,14 +1253,14 @@
       "current": {
         "fp": 11, 
         "iq": 12, 
-        "hp": 9, 
+        "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "state": "alive", 
       "permanent": {
@@ -1269,11 +1269,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "advantages": {
         "G-Experience": 3, 
@@ -1494,11 +1494,11 @@
         "hp": 12, 
         "wi": 11, 
         "st": 12, 
-        "per": 11, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 11
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -1508,11 +1508,11 @@
         "hp": 12, 
         "wi": 11, 
         "st": 12, 
-        "per": 11, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 11
       }, 
       "advantages": {
         "G-Experience": 1, 
@@ -1850,16 +1850,16 @@
       "shock": 0, 
       "armor-index": null, 
       "current": {
-        "fp": 9, 
+        "fp": 11, 
         "iq": 14, 
-        "hp": 2, 
+        "hp": 10, 
         "wi": 14, 
         "st": 9, 
-        "per": 14, 
         "ht": 11, 
         "dx": 9, 
         "basic-move": 5, 
-        "basic-speed": 5
+        "basic-speed": 5, 
+        "per": 14
       }, 
       "state": "alive", 
       "permanent": {
@@ -1868,31 +1868,31 @@
         "hp": 10, 
         "wi": 14, 
         "st": 9, 
-        "per": 14, 
         "ht": 11, 
         "dx": 9, 
         "basic-move": 5, 
-        "basic-speed": 5
+        "basic-speed": 5, 
+        "per": 14
       }, 
       "advantages": {
         "G-Experience": 1, 
+        "Alcohol Intolerance": -1, 
         "Honest Face": 1, 
         "Wealth": -10, 
         "Extra Hit Points": 2, 
         "Habit": -1, 
         "Nosy": -1, 
         "Like knick knacks": -1, 
-        "Impulsiveness": -10, 
         "Vodou Practitioner": 15, 
-        "Alcohol Intolerance": -1, 
-        "Versatile": 5, 
+        "Empathy": 15, 
+        "Impulsiveness": -10, 
         "Cultural Familiarity (Teraformers)": 1, 
         "Short Attention Span": -10, 
         "Curious": -5, 
         "Bad Temper": -10, 
         "Deep Sleeper": 1, 
         "Combat Reflexes": 15, 
-        "Empathy": 15, 
+        "Versatile": 5, 
         "Dreamer": -1
       }, 
       "weapon-index": null, 
@@ -2006,11 +2006,11 @@
         "hp": 12, 
         "wi": 14, 
         "st": 10, 
-        "per": 14, 
         "ht": 9, 
         "dx": 12, 
         "basic-move": 5, 
-        "basic-speed": 5.25
+        "basic-speed": 5.25, 
+        "per": 14
       }, 
       "state": "alive", 
       "permanent": {
@@ -2019,11 +2019,11 @@
         "hp": 12, 
         "wi": 14, 
         "st": 10, 
-        "per": 14, 
         "ht": 9, 
         "dx": 12, 
         "basic-move": 5, 
-        "basic-speed": 5.25
+        "basic-speed": 5.25, 
+        "per": 14
       }, 
       "advantages": {
         "G-Experience": 1, 
@@ -2285,14 +2285,14 @@
       "current": {
         "fp": 18, 
         "iq": 16, 
-        "hp": 14, 
+        "hp": 19, 
         "wi": 16, 
         "st": 9, 
-        "per": 16, 
         "ht": 8, 
         "dx": 8, 
         "basic-move": 5, 
-        "basic-speed": 4
+        "basic-speed": 4, 
+        "per": 16
       }, 
       "state": "alive", 
       "permanent": {
@@ -2301,11 +2301,11 @@
         "hp": 19, 
         "wi": 16, 
         "st": 9, 
-        "per": 16, 
         "ht": 8, 
         "dx": 8, 
         "basic-move": 5, 
-        "basic-speed": 4
+        "basic-speed": 4, 
+        "per": 16
       }, 
       "advantages": {
         "Ailurophobia (Cats)": -5, 
@@ -2352,11 +2352,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -2365,11 +2365,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -2397,11 +2397,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -2410,11 +2410,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -2442,11 +2442,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -2455,11 +2455,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -2487,11 +2487,11 @@
             "hp": 12, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -2500,11 +2500,11 @@
             "hp": 12, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -2533,11 +2533,11 @@
             "hp": 10, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25
+            "basic-speed": 5.25, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -2546,11 +2546,11 @@
             "hp": 10, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25
+            "basic-speed": 5.25, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -2578,11 +2578,11 @@
             "hp": 10, 
             "wi": 13, 
             "st": 10, 
-            "per": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5
+            "basic-speed": 5.5, 
+            "per": 13
           }, 
           "state": "alive", 
           "permanent": {
@@ -2591,11 +2591,11 @@
             "hp": 10, 
             "wi": 13, 
             "st": 10, 
-            "per": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5
+            "basic-speed": 5.5, 
+            "per": 13
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -2623,11 +2623,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -2636,11 +2636,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -2668,11 +2668,11 @@
             "hp": 12, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -2681,11 +2681,11 @@
             "hp": 12, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -2720,11 +2720,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -2733,11 +2733,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -2765,11 +2765,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -2778,11 +2778,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -2810,11 +2810,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -2823,11 +2823,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -2855,11 +2855,11 @@
             "hp": 12, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -2868,11 +2868,11 @@
             "hp": 12, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -2901,11 +2901,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -2914,11 +2914,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -2946,11 +2946,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -2959,11 +2959,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -2991,11 +2991,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -3004,11 +3004,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -3036,11 +3036,11 @@
             "hp": 12, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -3049,11 +3049,11 @@
             "hp": 12, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -3137,11 +3137,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -3150,11 +3150,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -3215,11 +3215,11 @@
             "hp": 10, 
             "wi": 13, 
             "st": 10, 
-            "per": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5
+            "basic-speed": 5.5, 
+            "per": 13
           }, 
           "state": "alive", 
           "permanent": {
@@ -3228,11 +3228,11 @@
             "hp": 10, 
             "wi": 13, 
             "st": 10, 
-            "per": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5
+            "basic-speed": 5.5, 
+            "per": 13
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -3309,11 +3309,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -3322,11 +3322,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -3407,11 +3407,11 @@
             "hp": 12, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -3420,11 +3420,11 @@
             "hp": 12, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "High Pain Threshold": 10
@@ -3485,11 +3485,11 @@
             "hp": 10, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25
+            "basic-speed": 5.25, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -3498,11 +3498,11 @@
             "hp": 10, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25
+            "basic-speed": 5.25, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -3580,11 +3580,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -3593,11 +3593,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -3674,11 +3674,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -3687,11 +3687,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -3772,11 +3772,11 @@
             "hp": 12, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
@@ -3785,11 +3785,11 @@
             "hp": 12, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "High Pain Threshold": 10
@@ -3821,11 +3821,11 @@
             "hp": 10, 
             "wi": 13, 
             "st": 10, 
-            "per": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5
+            "basic-speed": 5.5, 
+            "per": 13
           }, 
           "permanent": {
             "fp": 12, 
@@ -3833,11 +3833,11 @@
             "hp": 10, 
             "wi": 13, 
             "st": 10, 
-            "per": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5
+            "basic-speed": 5.5, 
+            "per": 13
           }, 
           "state": "alive", 
           "stuff": [], 
@@ -3868,11 +3868,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "permanent": {
             "fp": 11, 
@@ -3880,11 +3880,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "stuff": [
@@ -3946,822 +3946,6 @@
           }, 
           "posture": "standing", 
           "check_for_death": false, 
-          "opponent": null
-        }
-      }
-    }, 
-    {
-      "date": null, 
-      "name": "1st Hunting Party", 
-      "fight": {
-        "5: Amelia - Deputy Marshal": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stunned": false, 
-          "skills": {
-            "Beam Weapons (Pistol)": 15, 
-            "Brawling": 14, 
-            "Knife": 15
-          }, 
-          "notes": [
-            "With Stoddard"
-          ], 
-          "shock": 0, 
-          "armor-index": null, 
-          "posture": "standing", 
-          "current": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75
-          }, 
-          "permanent": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75
-          }, 
-          "state": "alive", 
-          "stuff": [
-            {
-              "acc": 2, 
-              "count": 1, 
-              "owners": null, 
-              "name": "pistol, Baretta DX 192", 
-              "notes": "", 
-              "damage": {
-                "dice": {
-                  "plus": 4, 
-                  "num_dice": 1, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 1, 
-              "notes": "M91, cost eR3570", 
-              "type": "misc", 
-              "owners": [], 
-              "name": "Fingerbone of major heal (8)"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": [], 
-              "name": "C Cell"
-            }
-          ], 
-          "timers": [
-            {
-              "rounds": 0.9, 
-              "string": [
-                "Do nothing", 
-                " Defense: any", 
-                " Move: none"
-              ]
-            }
-          ], 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "did_action_this_turn": true, 
-          "opponent": null
-        }, 
-        "6: Matthew": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 2, 
-              "count": 1, 
-              "owners": null, 
-              "name": "pistol, Baretta DX 192", 
-              "notes": "", 
-              "damage": {
-                "dice": {
-                  "plus": 4, 
-                  "num_dice": 1, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": [], 
-              "name": "Sport coat/Jeans", 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 2
-            }
-          ], 
-          "stunned": false, 
-          "skills": {
-            "Beam Weapons (Pistol)": 17, 
-            "Brawling": 17, 
-            "Knife": 17
-          }, 
-          "notes": [
-            "origin: australian", 
-            "gender: male", 
-            "characteristics: Black eye", 
-            "instincts: To hate", 
-            "hair: Straight", 
-            "speech: Crisp", 
-            "knack: Invention", 
-            "personality: Introverted"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": 3, 
-          "current": {
-            "fp": 11, 
-            "iq": 9, 
-            "hp": 15, 
-            "wi": 9, 
-            "st": 15, 
-            "per": 9, 
-            "ht": 11, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "posture": "standing", 
-          "state": "absent", 
-          "permanent": {
-            "fp": 11, 
-            "iq": 9, 
-            "hp": 15, 
-            "wi": 9, 
-            "st": 15, 
-            "per": 9, 
-            "ht": 11, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [
-            {
-              "state": "alive", 
-              "rounds": 2
-            }
-          ], 
-          "did_action_this_turn": true, 
-          "opponent": null
-        }, 
-        "2: William - Deputy Marshal": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stunned": false, 
-          "skills": {
-            "Beam Weapons (Pistol)": 15, 
-            "Brawling": 14, 
-            "Knife": 15
-          }, 
-          "notes": [
-            "With Stoddard"
-          ], 
-          "shock": 0, 
-          "armor-index": null, 
-          "posture": "standing", 
-          "current": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75
-          }, 
-          "permanent": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75
-          }, 
-          "state": "unconscious", 
-          "stuff": [
-            {
-              "acc": 2, 
-              "count": 1, 
-              "owners": null, 
-              "name": "pistol, Baretta DX 192", 
-              "notes": "", 
-              "damage": {
-                "dice": {
-                  "plus": 4, 
-                  "num_dice": 1, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "notes": "eR 500", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Sasaki"
-            }, 
-            {
-              "count": 3, 
-              "notes": "eR 200", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Jackson"
-            }, 
-            {
-              "count": 4, 
-              "notes": "eR 10", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Salazar"
-            }, 
-            {
-              "count": 5, 
-              "notes": "3 for headache, 2 for allergies", 
-              "type": "misc", 
-              "owners": [], 
-              "name": "Med Patches"
-            }, 
-            {
-              "count": 1, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Comb, Condom x2, breath mints"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }
-          ], 
-          "timers": [], 
-          "weapon-index": 0, 
-          "check_for_death": false, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "did_action_this_turn": false, 
-          "opponent": null
-        }, 
-        "4: Olivia - Special Deputy Marshal": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stunned": false, 
-          "skills": {
-            "Beam Weapons (Pistol)": 15, 
-            "Brawling": 14, 
-            "Knife": 15
-          }, 
-          "notes": [
-            "With Stoddard"
-          ], 
-          "shock": 0, 
-          "armor-index": null, 
-          "posture": "standing", 
-          "current": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75
-          }, 
-          "permanent": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75
-          }, 
-          "state": "unconscious", 
-          "stuff": [
-            {
-              "acc": 2, 
-              "count": 1, 
-              "owners": null, 
-              "name": "pistol, Baretta DX 192", 
-              "notes": "", 
-              "damage": {
-                "dice": {
-                  "plus": 4, 
-                  "num_dice": 1, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "notes": "eR 500", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Sasaki"
-            }, 
-            {
-              "count": 2, 
-              "notes": "eR 200", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Jackson"
-            }, 
-            {
-              "count": 3, 
-              "notes": "eR 10", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Salazar"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "notes": "Needs a 'B' cell", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Multitool w/flashlight"
-            }, 
-            {
-              "count": 1, 
-              "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "small bag"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }
-          ], 
-          "timers": [], 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "did_action_this_turn": false, 
-          "opponent": null
-        }, 
-        "3: Charlotte - Deputy Marshal": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stunned": false, 
-          "skills": {
-            "Beam Weapons (Pistol)": 15, 
-            "Brawling": 14, 
-            "Knife": 15
-          }, 
-          "notes": [
-            "With Stoddard"
-          ], 
-          "shock": 0, 
-          "armor-index": null, 
-          "posture": "standing", 
-          "current": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75
-          }, 
-          "permanent": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75
-          }, 
-          "state": "unconscious", 
-          "stuff": [
-            {
-              "acc": 2, 
-              "count": 1, 
-              "owners": null, 
-              "name": "pistol, Baretta DX 192", 
-              "notes": "", 
-              "damage": {
-                "dice": {
-                  "plus": 4, 
-                  "num_dice": 1, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "notes": "eR 500", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Sasaki"
-            }, 
-            {
-              "count": 2, 
-              "notes": "eR 200", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Jackson"
-            }, 
-            {
-              "count": 7, 
-              "notes": "eR 10", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Salazar"
-            }, 
-            {
-              "count": 1, 
-              "notes": "Needs a 'B' cell", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Multitool w/flashlight"
-            }, 
-            {
-              "count": 1, 
-              "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "small bag"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }
-          ], 
-          "timers": [], 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "did_action_this_turn": false, 
-          "opponent": null
-        }, 
-        "1: Oliver - Deputy Marshal": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stunned": false, 
-          "skills": {
-            "Beam Weapons (Pistol)": 15, 
-            "Brawling": 14, 
-            "Knife": 15
-          }, 
-          "notes": [
-            "With Stoddard"
-          ], 
-          "shock": 0, 
-          "armor-index": null, 
-          "posture": "standing", 
-          "current": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75
-          }, 
-          "permanent": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75
-          }, 
-          "state": "unconscious", 
-          "stuff": [
-            {
-              "acc": 2, 
-              "count": 1, 
-              "owners": null, 
-              "name": "pistol, Baretta DX 192", 
-              "notes": "", 
-              "damage": {
-                "dice": {
-                  "plus": 4, 
-                  "num_dice": 1, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "notes": "holds: gum, nail clippers, comb", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "small case (inside a pocket)"
-            }, 
-            {
-              "count": 1, 
-              "notes": "eR 500", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Sasaki"
-            }, 
-            {
-              "count": 2, 
-              "notes": "eR 200", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Jackson"
-            }, 
-            {
-              "count": 3, 
-              "notes": "eR 10", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Salazar"
-            }, 
-            {
-              "count": 1, 
-              "notes": "pictures of parents, sister and her kids", 
-              "type": "misc", 
-              "owners": [], 
-              "name": "Memory chip"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "notes": "Needs a 'B' cell", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Multitool w/flashlight"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }
-          ], 
-          "timers": [], 
-          "weapon-index": 2, 
-          "check_for_death": false, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "did_action_this_turn": false, 
           "opponent": null
         }
       }
@@ -4801,11 +3985,11 @@
             "hp": -9, 
             "wi": 8, 
             "st": 12, 
-            "per": 8, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75
+            "basic-speed": 4.75, 
+            "per": 8
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -4815,11 +3999,11 @@
             "hp": 12, 
             "wi": 8, 
             "st": 12, 
-            "per": 8, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75
+            "basic-speed": 4.75, 
+            "per": 8
           }, 
           "advantages": {
             "High Pain Threshold": 10
@@ -4864,11 +4048,11 @@
             "hp": -3, 
             "wi": 8, 
             "st": 12, 
-            "per": 8, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75
+            "basic-speed": 4.75, 
+            "per": 8
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -4878,11 +4062,11 @@
             "hp": 12, 
             "wi": 8, 
             "st": 12, 
-            "per": 8, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75
+            "basic-speed": 4.75, 
+            "per": 8
           }, 
           "advantages": {
             "High Pain Threshold": 10
@@ -4935,11 +4119,11 @@
             "hp": -6, 
             "wi": 9, 
             "st": 15, 
-            "per": 9, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25
+            "basic-speed": 5.25, 
+            "per": 9
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -4949,11 +4133,11 @@
             "hp": 15, 
             "wi": 9, 
             "st": 15, 
-            "per": 9, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25
+            "basic-speed": 5.25, 
+            "per": 9
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -5010,11 +4194,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -5024,11 +4208,11 @@
             "hp": 11, 
             "wi": 12, 
             "st": 10, 
-            "per": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -5560,67 +4744,1589 @@
           }
         }
       }
+    }, 
+    {
+      "date": "2019-04-20-16-15-22", 
+      "name": "Panama Hat", 
+      "fight": {
+        "1 - zombie": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "arms & teeth", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": -1, 
+                  "num_dice": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 12, 
+            "Knife": 15
+          }, 
+          "notes": [
+            "station history: roo (bounce between stations)", 
+            "characteristics: Wears flamboyant or outlandish clothes", 
+            "instincts: To retreat from society", 
+            "hair: Wiry", 
+            "speech: Raspy", 
+            "knack: Bluffing", 
+            "personality: Dull"
+          ], 
+          "shock": 0, 
+          "short-notes": [
+            "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+            "Automatically fails alive roll at -HP,", 
+            "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+          ], 
+          "armor-index": null, 
+          "current": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 13, 
+            "basic-move": 5, 
+            "basic-speed": 6.0
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 13, 
+            "basic-move": 5, 
+            "basic-speed": 6.0
+          }, 
+          "advantages": {
+            "Appearance (Monstrous)": 0, 
+            "Wealth": 0, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "2 - zombie": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "arms & teeth", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": -1, 
+                  "num_dice": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 12, 
+            "Knife": 15
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Hydrophobic (afraid of water)", 
+            "instincts: To serve", 
+            "hair: Greasy", 
+            "speech: Guttural", 
+            "knack: Political leverage", 
+            "personality: Overbearing"
+          ], 
+          "shock": 0, 
+          "short-notes": [
+            "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+            "Automatically fails alive roll at -HP,", 
+            "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+          ], 
+          "armor-index": null, 
+          "current": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": -17, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "advantages": {
+            "Appearance (Monstrous)": 0, 
+            "Wealth": 0, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "10 - Wight": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "spells": [
+            {
+              "cost": 3, 
+              "name": "Throw Spell", 
+              "notes": "M128", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning", 
+              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Stop Power", 
+              "notes": "M179, 3 pts /1.5 yard radius ", 
+              "maintain": 0, 
+              "time": 3, 
+              "skill": 16
+            }, 
+            {
+              "cost": 5, 
+              "name": "Malfunction", 
+              "notes": "M177, touch", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Armor", 
+              "notes": "M167, 2xDR, lasts 1 minute", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 3, 
+              "name": "Rotting Death", 
+              "notes": "M154 vs. HT, needs touch", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Death Vision", 
+              "notes": "M149, vs. IQ", 
+              "maintain": null, 
+              "time": 3, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Blink", 
+              "notes": "M148", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Command", 
+              "notes": "M136, vs. Will", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Sleep", 
+              "notes": "M135", 
+              "maintain": 0, 
+              "time": 3, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Panic", 
+              "notes": "M134, vs. Will", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Death Touch", 
+              "notes": "M41, 1-3, needs touch", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Choke", 
+              "notes": "M40, vs. HT", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Strike Blind", 
+              "notes": "M38, vs HT", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Pain", 
+              "notes": "M36, vs. HT", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Stun", 
+              "notes": "M37, B420, vs. HT", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Luck", 
+              "notes": "V2", 
+              "maintain": 1, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Fog", 
+              "notes": "M193, cost: 2/yard radius, lasts 1 minute", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }
+          ], 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "arms & teeth", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": -1, 
+                  "num_dice": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 12, 
+            "Knife": 15
+          }, 
+          "notes": [
+            "station history: staby (born on this station)", 
+            "characteristics: Dirty", 
+            "instincts: To go where no man has gone before", 
+            "hair: Wiry", 
+            "speech: Wheezy", 
+            "knack: Perfect memory", 
+            "personality: Nurturing"
+          ], 
+          "shock": 0, 
+          "short-notes": [
+            "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+            "Automatically fails alive roll at -HP,", 
+            "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+          ], 
+          "armor-index": null, 
+          "current": {
+            "fp": 20, 
+            "iq": 8, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 13, 
+            "basic-move": 5, 
+            "basic-speed": 6.0
+          }, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 20, 
+            "iq": 8, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 13, 
+            "basic-move": 5, 
+            "basic-speed": 6.0
+          }, 
+          "advantages": {
+            "Appearance (Monstrous)": 0, 
+            "Wealth": 0, 
+            "High Pain Threshold": 10
+          }, 
+          "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "posture": "standing"
+        }, 
+        "5 - zombie": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "arms & teeth", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": -1, 
+                  "num_dice": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 12, 
+            "Knife": 15
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Double-checks everything", 
+            "instincts: To be careful", 
+            "hair: Thinning", 
+            "speech: Nosy", 
+            "knack: Persistence", 
+            "personality: Sensual"
+          ], 
+          "shock": 0, 
+          "short-notes": [
+            "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+            "Automatically fails alive roll at -HP,", 
+            "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+          ], 
+          "armor-index": null, 
+          "current": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": 6, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.5
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.5
+          }, 
+          "advantages": {
+            "Appearance (Monstrous)": 0, 
+            "Wealth": 0, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "6 - zombie": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "arms & teeth", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": -1, 
+                  "num_dice": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 12, 
+            "Knife": 15
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Hates animals", 
+            "instincts: To atone", 
+            "hair: Wavy", 
+            "speech: Um Uh", 
+            "knack: A tie to a monster", 
+            "personality: Incoherent"
+          ], 
+          "shock": 0, 
+          "short-notes": [
+            "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+            "Automatically fails alive roll at -HP,", 
+            "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+          ], 
+          "armor-index": null, 
+          "current": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": -13, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 11, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 11, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "advantages": {
+            "Appearance (Monstrous)": 0, 
+            "Wealth": 0, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "9 - Wight": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "spells": [
+            {
+              "cost": 3, 
+              "name": "Throw Spell", 
+              "notes": "M128", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning", 
+              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Stop Power", 
+              "notes": "M179, 3 pts /1.5 yard radius ", 
+              "maintain": 0, 
+              "time": 3, 
+              "skill": 16
+            }, 
+            {
+              "cost": 5, 
+              "name": "Malfunction", 
+              "notes": "M177, touch", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Armor", 
+              "notes": "M167, 2xDR, lasts 1 minute", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 3, 
+              "name": "Rotting Death", 
+              "notes": "M154 vs. HT, needs touch", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Death Vision", 
+              "notes": "M149, vs. IQ", 
+              "maintain": null, 
+              "time": 3, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Blink", 
+              "notes": "M148", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Command", 
+              "notes": "M136, vs. Will", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Sleep", 
+              "notes": "M135", 
+              "maintain": 0, 
+              "time": 3, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Panic", 
+              "notes": "M134, vs. Will", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Death Touch", 
+              "notes": "M41, 1-3, needs touch", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Choke", 
+              "notes": "M40, vs. HT", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Strike Blind", 
+              "notes": "M38, vs HT", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Pain", 
+              "notes": "M36, vs. HT", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Stun", 
+              "notes": "M37, B420, vs. HT", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Luck", 
+              "notes": "V2", 
+              "maintain": 1, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Fog", 
+              "notes": "M193, cost: 2/yard radius, lasts 1 minute", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }
+          ], 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "arms & teeth", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": -1, 
+                  "num_dice": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 12, 
+            "Knife": 15
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Jumps conversation topics", 
+            "instincts: To atone", 
+            "hair: Strange hairstyle", 
+            "speech: Sultry/sexy", 
+            "knack: Hidden knowledge", 
+            "personality: Rigid"
+          ], 
+          "shock": 0, 
+          "short-notes": [
+            "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+            "Automatically fails alive roll at -HP,", 
+            "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+          ], 
+          "armor-index": null, 
+          "current": {
+            "fp": 20, 
+            "iq": 8, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 13, 
+            "basic-move": 5, 
+            "basic-speed": 6.0
+          }, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 20, 
+            "iq": 8, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 13, 
+            "basic-move": 5, 
+            "basic-speed": 6.0
+          }, 
+          "advantages": {
+            "Appearance (Monstrous)": 0, 
+            "Wealth": 0, 
+            "High Pain Threshold": 10
+          }, 
+          "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "posture": "standing"
+        }, 
+        "11 - Panama Hat": {
+          "redirect": "NPCs"
+        }, 
+        "8 - zombie": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "arms & teeth", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": -1, 
+                  "num_dice": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 12, 
+            "Knife": 15
+          }, 
+          "notes": [
+            "station history: roo (bounce between stations)", 
+            "characteristics: Interrupts others", 
+            "instincts: To be remembered in song", 
+            "hair: Greasy", 
+            "speech: Whiny", 
+            "knack: A key to an important door", 
+            "personality: Solitary"
+          ], 
+          "shock": 0, 
+          "short-notes": [
+            "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+            "Automatically fails alive roll at -HP,", 
+            "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+          ], 
+          "armor-index": null, 
+          "current": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.0
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.0
+          }, 
+          "advantages": {
+            "Appearance (Monstrous)": 0, 
+            "Wealth": 0, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "7 - zombie": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "arms & teeth", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": -1, 
+                  "num_dice": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 12, 
+            "Knife": 15
+          }, 
+          "notes": [
+            "station history: staby (born on this station)", 
+            "characteristics: Hates quiet pauses in conversations", 
+            "instincts: To make money", 
+            "hair: Thinning", 
+            "speech: Nosy", 
+            "knack: Unique perspective", 
+            "personality: Zealous"
+          ], 
+          "shock": 0, 
+          "short-notes": [
+            "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+            "Automatically fails alive roll at -HP,", 
+            "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+          ], 
+          "armor-index": null, 
+          "current": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": -7, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 13, 
+            "basic-move": 5, 
+            "basic-speed": 6.0
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 13, 
+            "basic-move": 5, 
+            "basic-speed": 6.0
+          }, 
+          "advantages": {
+            "Appearance (Monstrous)": 0, 
+            "Wealth": 0, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "4 - zombie": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "arms & teeth", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": -1, 
+                  "num_dice": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 12, 
+            "Knife": 15
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Limps", 
+            "instincts: To be a champion", 
+            "hair: Limp", 
+            "speech: Um Uh", 
+            "knack: A library", 
+            "personality: Generous"
+          ], 
+          "shock": 0, 
+          "short-notes": [
+            "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+            "Automatically fails alive roll at -HP,", 
+            "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+          ], 
+          "armor-index": null, 
+          "current": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": 10, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "advantages": {
+            "Appearance (Monstrous)": 0, 
+            "Wealth": 0, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "3 - zombie": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "arms & teeth", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": -1, 
+                  "num_dice": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 12, 
+            "Knife": 15
+          }, 
+          "notes": [
+            "station history: staby (born on this station)", 
+            "characteristics: Plays with own jewelry", 
+            "instincts: To party", 
+            "hair: Frazzled", 
+            "speech: Prim, haughty, proud", 
+            "knack: A discerning eye", 
+            "personality: Cowardly"
+          ], 
+          "shock": 0, 
+          "short-notes": [
+            "Darkvision, doesn't breathe, bad smell, immune to mind control", 
+            "Automatically fails alive roll at -HP,", 
+            "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
+          ], 
+          "armor-index": null, 
+          "current": {
+            "fp": 7, 
+            "iq": 8, 
+            "hp": -1, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.5
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 16, 
+            "iq": 8, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 12, 
+            "per": 8, 
+            "wi": 10, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.5
+          }, 
+          "advantages": {
+            "Appearance (Monstrous)": 0, 
+            "Wealth": 0, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }
+      }
+    }, 
+    {
+      "date": "2019-05-06-14-21-59", 
+      "name": "1st Hunting Party", 
+      "fight": {
+        "Amelia - Deputy Marshal (Stoddard)": {
+          "redirect": "NPCs"
+        }, 
+        "6: Matthew": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 2, 
+              "count": 1, 
+              "owners": null, 
+              "name": "pistol, Baretta DX 192", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": 4, 
+                  "num_dice": 1, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Large Knife", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": [], 
+              "name": "Sport coat/Jeans", 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 2
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 17, 
+            "Brawling": 17, 
+            "Knife": 17
+          }, 
+          "notes": [
+            "origin: australian", 
+            "gender: male", 
+            "characteristics: Black eye", 
+            "instincts: To hate", 
+            "hair: Straight", 
+            "speech: Crisp", 
+            "knack: Invention", 
+            "personality: Introverted"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": 3, 
+          "current": {
+            "fp": 11, 
+            "iq": 9, 
+            "hp": 15, 
+            "wi": 9, 
+            "st": 15, 
+            "ht": 11, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25, 
+            "per": 9
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 11, 
+            "iq": 9, 
+            "hp": 15, 
+            "wi": 9, 
+            "st": 15, 
+            "ht": 11, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25, 
+            "per": 9
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "William - Deputy Marshal (Stoddard)": {
+          "redirect": "NPCs"
+        }, 
+        "Olivia - Special Deputy Marshal (Stoddard)": {
+          "redirect": "NPCs"
+        }, 
+        "3: Charlotte - Deputy Marshal": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 14, 
+            "Knife": 15
+          }, 
+          "notes": [
+            "With Stoddard"
+          ], 
+          "shock": 0, 
+          "armor-index": null, 
+          "posture": "standing", 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75, 
+            "per": 12
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75, 
+            "per": 12
+          }, 
+          "state": "alive", 
+          "stuff": [
+            {
+              "acc": 2, 
+              "count": 1, 
+              "owners": null, 
+              "name": "pistol, Baretta DX 192", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": 4, 
+                  "num_dice": 1, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Large Knife", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "notes": "eR 500", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Baseball card: Sasaki"
+            }, 
+            {
+              "count": 2, 
+              "notes": "eR 200", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Baseball card: Jackson"
+            }, 
+            {
+              "count": 7, 
+              "notes": "eR 10", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Baseball card: Salazar"
+            }, 
+            {
+              "count": 1, 
+              "notes": "Needs a 'B' cell", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Multitool w/flashlight"
+            }, 
+            {
+              "count": 1, 
+              "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "small bag"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }
+          ], 
+          "timers": [], 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "1: Oliver - Deputy Marshal": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 14, 
+            "Knife": 15
+          }, 
+          "notes": [
+            "With Stoddard"
+          ], 
+          "shock": 0, 
+          "armor-index": null, 
+          "posture": "standing", 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75, 
+            "per": 12
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75, 
+            "per": 12
+          }, 
+          "state": "alive", 
+          "stuff": [
+            {
+              "acc": 2, 
+              "count": 1, 
+              "owners": null, 
+              "name": "pistol, Baretta DX 192", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": 4, 
+                  "num_dice": 1, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Large Knife", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "notes": "holds: gum, nail clippers, comb", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "small case (inside a pocket)"
+            }, 
+            {
+              "count": 1, 
+              "notes": "eR 500", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Baseball card: Sasaki"
+            }, 
+            {
+              "count": 2, 
+              "notes": "eR 200", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Baseball card: Jackson"
+            }, 
+            {
+              "count": 3, 
+              "notes": "eR 10", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Baseball card: Salazar"
+            }, 
+            {
+              "count": 1, 
+              "notes": "pictures of parents, sister and her kids", 
+              "type": "misc", 
+              "owners": [], 
+              "name": "Memory chip"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "notes": "Needs a 'B' cell", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Multitool w/flashlight"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }
+          ], 
+          "timers": [], 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }
+      }
     }
   ], 
   "current-fight": {
     "index": 0, 
-    "monsters": "Panama Hat", 
+    "monsters": "1st Hunting Party", 
     "fighters": [
       {
-        "group": "Panama Hat", 
-        "name": "9 - Wight"
-      }, 
-      {
-        "group": "Panama Hat", 
-        "name": "11 - Panama Hat"
+        "group": "PCs", 
+        "name": "lawerence - Spenser"
       }, 
       {
         "group": "PCs", 
         "name": "samuel - Erik"
       }, 
       {
-        "group": "Panama Hat", 
-        "name": "10 - Wight"
+        "group": "1st Hunting Party", 
+        "name": "2: William - Deputy Marshal"
       }, 
       {
-        "group": "PCs", 
-        "name": "lawerence - Spenser"
+        "group": "1st Hunting Party", 
+        "name": "4: Olivia - Special Deputy Marshal"
       }, 
       {
-        "group": "Panama Hat", 
-        "name": "1 - zombie"
+        "group": "1st Hunting Party", 
+        "name": "5: Amelia - Deputy Marshal"
       }, 
       {
-        "group": "Panama Hat", 
-        "name": "7 - zombie"
+        "group": "1st Hunting Party", 
+        "name": "3: Charlotte - Deputy Marshal"
       }, 
       {
-        "group": "Panama Hat", 
-        "name": "4 - zombie"
-      }, 
-      {
-        "group": "Panama Hat", 
-        "name": "2 - zombie"
-      }, 
-      {
-        "group": "Panama Hat", 
-        "name": "5 - zombie"
-      }, 
-      {
-        "group": "Panama Hat", 
-        "name": "3 - zombie"
+        "group": "1st Hunting Party", 
+        "name": "1: Oliver - Deputy Marshal"
       }, 
       {
         "group": "PCs", 
         "name": "vasilis - Alan"
       }, 
       {
-        "group": "Panama Hat", 
-        "name": "6 - zombie"
-      }, 
-      {
-        "group": "Panama Hat", 
-        "name": "8 - zombie"
+        "group": "1st Hunting Party", 
+        "name": "6: Matthew"
       }, 
       {
         "group": "PCs", 
@@ -5631,7 +6337,7 @@
         "name": "mama V - Karen"
       }
     ], 
-    "saved": true, 
+    "saved": false, 
     "round": 0, 
     "history": [
       "--- Round 0 ---"
@@ -5664,11 +6370,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -5678,11 +6384,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -5769,11 +6475,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -5783,11 +6489,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -5795,6 +6501,115 @@
       "timers": [], 
       "did_action_this_turn": false, 
       "opponent": null
+    }, 
+    "Amelia - Deputy Marshal (Stoddard)": {
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "per": 12, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "stuff": [
+        {
+          "acc": 2, 
+          "count": 1, 
+          "owners": null, 
+          "name": "pistol, Baretta DX 192", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "type": "pi", 
+              "num_dice": 1, 
+              "plus": 4
+            }
+          }, 
+          "reload": 3, 
+          "skill": "Beam Weapons (Pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 8, 
+            "shots_left": 8
+          }
+        }, 
+        {
+          "count": 1, 
+          "notes": "M91, cost eR3570", 
+          "type": "misc", 
+          "owners": [], 
+          "name": "Fingerbone of major heal (8)"
+        }, 
+        {
+          "count": 1, 
+          "owners": null, 
+          "name": "Large Knife", 
+          "notes": "", 
+          "damage": {
+            "sw": {
+              "type": "cut", 
+              "plus": -2
+            }, 
+            "thr": {
+              "type": "imp", 
+              "plus": 0
+            }
+          }, 
+          "parry": -1, 
+          "skill": "Knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": [], 
+          "name": "C Cell"
+        }
+      ], 
+      "stunned": 0, 
+      "skills": {
+        "Beam Weapons (Pistol)": 15, 
+        "Brawling": 14, 
+        "Knife": 15
+      }, 
+      "notes": [
+        "With Stoddard"
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "per": 12, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "timers": [], 
+      "opponent": null, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "advantages": {
+        "Combat Reflexes": 15, 
+        "High Pain Threshold": 10
+      }, 
+      "did_action_this_turn": false, 
+      "posture": "standing"
     }, 
     "Stoddard, Leland (Chief Deputy Marshal)": {
       "aim": {
@@ -5826,11 +6641,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -5840,11 +6655,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -5882,11 +6697,11 @@
         "hp": 10, 
         "wi": 10, 
         "st": 10, 
-        "per": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5
+        "basic-speed": 5, 
+        "per": 10
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -5896,11 +6711,11 @@
         "hp": 10, 
         "wi": 10, 
         "st": 10, 
-        "per": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5
+        "basic-speed": 5, 
+        "per": 10
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -6058,11 +6873,11 @@
         "hp": 10, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25
+        "basic-speed": 5.25, 
+        "per": 12
       }, 
       "check_for_death": false, 
       "state": "absent", 
@@ -6072,11 +6887,11 @@
         "hp": 10, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25
+        "basic-speed": 5.25, 
+        "per": 12
       }, 
       "advantages": {
         "Empathy": 5, 
@@ -6117,11 +6932,11 @@
         "hp": 10, 
         "wi": 13, 
         "st": 10, 
-        "per": 13, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25
+        "basic-speed": 5.25, 
+        "per": 13
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -6131,11 +6946,11 @@
         "hp": 10, 
         "wi": 12, 
         "st": 10, 
-        "per": 13, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25
+        "basic-speed": 5.25, 
+        "per": 13
       }, 
       "advantages": {
         "Empathy": 5, 
@@ -6311,11 +7126,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -6325,11 +7140,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -6476,11 +7291,11 @@
         "hp": 10, 
         "wi": 10, 
         "st": 10, 
-        "per": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5
+        "basic-speed": 5, 
+        "per": 10
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -6490,11 +7305,11 @@
         "hp": 10, 
         "wi": 10, 
         "st": 10, 
-        "per": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5
+        "basic-speed": 5, 
+        "per": 10
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -6567,11 +7382,11 @@
         "hp": 16, 
         "wi": 12, 
         "st": 16, 
-        "per": 12, 
         "ht": 10, 
         "dx": 11, 
         "basic-move": 6, 
-        "basic-speed": 6.25
+        "basic-speed": 6.25, 
+        "per": 12
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -6581,11 +7396,11 @@
         "hp": 16, 
         "wi": 12, 
         "st": 16, 
-        "per": 12, 
         "ht": 10, 
         "dx": 11, 
         "basic-move": 6, 
-        "basic-speed": 6.25
+        "basic-speed": 6.25, 
+        "per": 12
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -6616,11 +7431,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -6630,11 +7445,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -6740,11 +7555,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -6754,11 +7569,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -6766,6 +7581,150 @@
       "timers": [], 
       "did_action_this_turn": false, 
       "opponent": null
+    }, 
+    "Olivia - Special Deputy Marshal (Stoddard)": {
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "per": 12, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "stuff": [
+        {
+          "acc": 2, 
+          "count": 1, 
+          "owners": null, 
+          "name": "pistol, Baretta DX 192", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "type": "pi", 
+              "num_dice": 1, 
+              "plus": 4
+            }
+          }, 
+          "reload": 3, 
+          "skill": "Beam Weapons (Pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 8, 
+            "shots_left": 8
+          }
+        }, 
+        {
+          "count": 1, 
+          "owners": null, 
+          "name": "Large Knife", 
+          "notes": "", 
+          "damage": {
+            "sw": {
+              "type": "cut", 
+              "plus": -2
+            }, 
+            "thr": {
+              "type": "imp", 
+              "plus": 0
+            }
+          }, 
+          "parry": -1, 
+          "skill": "Knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "notes": "eR 500", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "Baseball card: Sasaki"
+        }, 
+        {
+          "count": 2, 
+          "notes": "eR 200", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "Baseball card: Jackson"
+        }, 
+        {
+          "count": 3, 
+          "notes": "eR 10", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "Baseball card: Salazar"
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "C Cell"
+        }, 
+        {
+          "count": 1, 
+          "notes": "Needs a 'B' cell", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "Multitool w/flashlight"
+        }, 
+        {
+          "count": 1, 
+          "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "small bag"
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "C Cell"
+        }
+      ], 
+      "stunned": 0, 
+      "skills": {
+        "Beam Weapons (Pistol)": 15, 
+        "Brawling": 14, 
+        "Knife": 15
+      }, 
+      "notes": [
+        "With Stoddard"
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "per": 12, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "timers": [], 
+      "opponent": null, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "advantages": {
+        "Combat Reflexes": 15, 
+        "High Pain Threshold": 10
+      }, 
+      "did_action_this_turn": false, 
+      "posture": "standing"
     }, 
     "Queen Clio - Bokor": {
       "aim": {
@@ -6829,11 +7788,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -6843,11 +7802,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -6942,11 +7901,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -6956,11 +7915,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -7187,11 +8146,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 13, 
-        "per": 12, 
         "ht": 12, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6.25
+        "basic-speed": 6.25, 
+        "per": 12
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -7201,11 +8160,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 13, 
-        "per": 12, 
         "ht": 12, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6.25
+        "basic-speed": 6.25, 
+        "per": 12
       }, 
       "advantages": {
         "Combat Reflexes": 15, 
@@ -7216,6 +8175,143 @@
       "timers": [], 
       "did_action_this_turn": false, 
       "opponent": null
+    }, 
+    "William - Deputy Marshal (Stoddard)": {
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "per": 12, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "stuff": [
+        {
+          "acc": 2, 
+          "count": 1, 
+          "owners": null, 
+          "name": "pistol, Baretta DX 192", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "type": "pi", 
+              "num_dice": 1, 
+              "plus": 4
+            }
+          }, 
+          "reload": 3, 
+          "skill": "Beam Weapons (Pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 8, 
+            "shots_left": 8
+          }
+        }, 
+        {
+          "count": 1, 
+          "owners": null, 
+          "name": "Large Knife", 
+          "notes": "", 
+          "damage": {
+            "sw": {
+              "type": "cut", 
+              "plus": -2
+            }, 
+            "thr": {
+              "type": "imp", 
+              "plus": 0
+            }
+          }, 
+          "parry": -1, 
+          "skill": "Knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "notes": "eR 500", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "Baseball card: Sasaki"
+        }, 
+        {
+          "count": 3, 
+          "notes": "eR 200", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "Baseball card: Jackson"
+        }, 
+        {
+          "count": 4, 
+          "notes": "eR 10", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "Baseball card: Salazar"
+        }, 
+        {
+          "count": 5, 
+          "notes": "3 for headache, 2 for allergies", 
+          "type": "misc", 
+          "owners": [], 
+          "name": "Med Patches"
+        }, 
+        {
+          "count": 1, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "Comb, Condom x2, breath mints"
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "C Cell"
+        }
+      ], 
+      "stunned": 0, 
+      "skills": {
+        "Beam Weapons (Pistol)": 15, 
+        "Brawling": 14, 
+        "Knife": 15
+      }, 
+      "notes": [
+        "With Stoddard"
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "per": 12, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "timers": [], 
+      "opponent": null, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "advantages": {
+        "Combat Reflexes": 15, 
+        "High Pain Threshold": 10
+      }, 
+      "did_action_this_turn": false, 
+      "posture": "standing"
     }, 
     "Mackenzie - Marshal's Intern": {
       "aim": {
@@ -7256,11 +8352,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -7270,11 +8366,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -7366,11 +8462,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -7380,11 +8476,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -7413,11 +8509,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -7427,11 +8523,11 @@
         "hp": 12, 
         "wi": 12, 
         "st": 10, 
-        "per": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -8650,1121 +9746,244 @@
     }
   }, 
   "monsters": {
-    "Panama Hat": {
-      "1 - zombie": {
+    "Tail in the Outer Ring": {
+      "2 - Rose": {
         "aim": {
           "braced": false, 
           "rounds": 0
         }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
+        "stuff": [], 
         "stunned": 0, 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
+        "skills": {}, 
         "notes": [
-          "station history: roo (bounce between stations)", 
+          "origin: haitian", 
+          "gender: female", 
+          "station history: lifer (born on Earth, this is 1st station)", 
           "characteristics: Wears flamboyant or outlandish clothes", 
-          "instincts: To retreat from society", 
-          "hair: Wiry", 
-          "speech: Raspy", 
-          "knack: Bluffing", 
-          "personality: Dull"
+          "instincts: To overcome a disadvantage", 
+          "hair: Very Long", 
+          "speech: Curt short", 
+          "knack: A magic carpet", 
+          "personality: Pathological"
         ], 
         "shock": 0, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
+        "short-notes": [], 
         "armor-index": null, 
         "current": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "posture": "standing", 
-        "state": "alive", 
-        "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "opponent": null
-      }, 
-      "2 - zombie": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "stunned": 0, 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: lifer (born on Earth, this is 1st station)", 
-          "characteristics: Hydrophobic (afraid of water)", 
-          "instincts: To serve", 
-          "hair: Greasy", 
-          "speech: Guttural", 
-          "knack: Political leverage", 
-          "personality: Overbearing"
-        ], 
-        "shock": 0, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "armor-index": null, 
-        "current": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": -17, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "posture": "standing", 
-        "state": "alive", 
-        "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "opponent": null
-      }, 
-      "10 - Wight": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "spells": [
-          {
-            "cost": 3, 
-            "name": "Throw Spell", 
-            "notes": "M128", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": null, 
-            "name": "Lightning", 
-            "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": null, 
-            "name": "Stop Power", 
-            "notes": "M179, 3 pts /1.5 yard radius ", 
-            "maintain": 0, 
-            "time": 3, 
-            "skill": 16
-          }, 
-          {
-            "cost": 5, 
-            "name": "Malfunction", 
-            "notes": "M177, touch", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": null, 
-            "name": "Armor", 
-            "notes": "M167, 2xDR, lasts 1 minute", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 3, 
-            "name": "Rotting Death", 
-            "notes": "M154 vs. HT, needs touch", 
-            "maintain": 2, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 2, 
-            "name": "Death Vision", 
-            "notes": "M149, vs. IQ", 
-            "maintain": null, 
-            "time": 3, 
-            "skill": 16
-          }, 
-          {
-            "cost": 2, 
-            "name": "Blink", 
-            "notes": "M148", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 4, 
-            "name": "Command", 
-            "notes": "M136, vs. Will", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 4, 
-            "name": "Sleep", 
-            "notes": "M135", 
-            "maintain": 0, 
-            "time": 3, 
-            "skill": 16
-          }, 
-          {
-            "cost": 4, 
-            "name": "Panic", 
-            "notes": "M134, vs. Will", 
-            "maintain": 2, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": null, 
-            "name": "Death Touch", 
-            "notes": "M41, 1-3, needs touch", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 4, 
-            "name": "Choke", 
-            "notes": "M40, vs. HT", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 4, 
-            "name": "Strike Blind", 
-            "notes": "M38, vs HT", 
-            "maintain": 2, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 2, 
-            "name": "Pain", 
-            "notes": "M36, vs. HT", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 2, 
-            "name": "Stun", 
-            "notes": "M37, B420, vs. HT", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 2, 
-            "name": "Luck", 
-            "notes": "V2", 
-            "maintain": 1, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": null, 
-            "name": "Fog", 
-            "notes": "M193, cost: 2/yard radius, lasts 1 minute", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }
-        ], 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "stunned": 0, 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: staby (born on this station)", 
-          "characteristics: Dirty", 
-          "instincts: To go where no man has gone before", 
-          "hair: Wiry", 
-          "speech: Wheezy", 
-          "knack: Perfect memory", 
-          "personality: Nurturing"
-        ], 
-        "shock": 0, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "armor-index": null, 
-        "current": {
-          "fp": 20, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 20, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "opponent": null, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "posture": "standing"
-      }, 
-      "5 - zombie": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "stunned": 0, 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: lifer (born on Earth, this is 1st station)", 
-          "characteristics: Double-checks everything", 
-          "instincts: To be careful", 
-          "hair: Thinning", 
-          "speech: Nosy", 
-          "knack: Persistence", 
-          "personality: Sensual"
-        ], 
-        "shock": 0, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "armor-index": null, 
-        "current": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 6, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.5
-        }, 
-        "posture": "standing", 
-        "state": "alive", 
-        "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.5
-        }, 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "opponent": null
-      }, 
-      "6 - zombie": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "stunned": 0, 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: lifer (born on Earth, this is 1st station)", 
-          "characteristics: Hates animals", 
-          "instincts: To atone", 
-          "hair: Wavy", 
-          "speech: Um Uh", 
-          "knack: A tie to a monster", 
-          "personality: Incoherent"
-        ], 
-        "shock": 0, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "armor-index": null, 
-        "current": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": -13, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 11, 
-          "basic-move": 5, 
-          "basic-speed": 5.25
-        }, 
-        "posture": "standing", 
-        "state": "alive", 
-        "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 11, 
-          "basic-move": 5, 
-          "basic-speed": 5.25
-        }, 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "opponent": null
-      }, 
-      "9 - Wight": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "spells": [
-          {
-            "cost": 3, 
-            "name": "Throw Spell", 
-            "notes": "M128", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": null, 
-            "name": "Lightning", 
-            "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": null, 
-            "name": "Stop Power", 
-            "notes": "M179, 3 pts /1.5 yard radius ", 
-            "maintain": 0, 
-            "time": 3, 
-            "skill": 16
-          }, 
-          {
-            "cost": 5, 
-            "name": "Malfunction", 
-            "notes": "M177, touch", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": null, 
-            "name": "Armor", 
-            "notes": "M167, 2xDR, lasts 1 minute", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 3, 
-            "name": "Rotting Death", 
-            "notes": "M154 vs. HT, needs touch", 
-            "maintain": 2, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 2, 
-            "name": "Death Vision", 
-            "notes": "M149, vs. IQ", 
-            "maintain": null, 
-            "time": 3, 
-            "skill": 16
-          }, 
-          {
-            "cost": 2, 
-            "name": "Blink", 
-            "notes": "M148", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 4, 
-            "name": "Command", 
-            "notes": "M136, vs. Will", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 4, 
-            "name": "Sleep", 
-            "notes": "M135", 
-            "maintain": 0, 
-            "time": 3, 
-            "skill": 16
-          }, 
-          {
-            "cost": 4, 
-            "name": "Panic", 
-            "notes": "M134, vs. Will", 
-            "maintain": 2, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": null, 
-            "name": "Death Touch", 
-            "notes": "M41, 1-3, needs touch", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 4, 
-            "name": "Choke", 
-            "notes": "M40, vs. HT", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 4, 
-            "name": "Strike Blind", 
-            "notes": "M38, vs HT", 
-            "maintain": 2, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 2, 
-            "name": "Pain", 
-            "notes": "M36, vs. HT", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 2, 
-            "name": "Stun", 
-            "notes": "M37, B420, vs. HT", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": 2, 
-            "name": "Luck", 
-            "notes": "V2", 
-            "maintain": 1, 
-            "time": 1, 
-            "skill": 16
-          }, 
-          {
-            "cost": null, 
-            "name": "Fog", 
-            "notes": "M193, cost: 2/yard radius, lasts 1 minute", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 16
-          }
-        ], 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "stunned": 0, 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: lifer (born on Earth, this is 1st station)", 
-          "characteristics: Jumps conversation topics", 
-          "instincts: To atone", 
-          "hair: Strange hairstyle", 
-          "speech: Sultry/sexy", 
-          "knack: Hidden knowledge", 
-          "personality: Rigid"
-        ], 
-        "shock": 0, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "armor-index": null, 
-        "current": {
-          "fp": 20, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 20, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "opponent": null, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "posture": "standing"
-      }, 
-      "11 - Panama Hat": {
-        "redirect": "NPCs"
-      }, 
-      "8 - zombie": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "stunned": 0, 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: roo (bounce between stations)", 
-          "characteristics: Interrupts others", 
-          "instincts: To be remembered in song", 
-          "hair: Greasy", 
-          "speech: Whiny", 
-          "knack: A key to an important door", 
-          "personality: Solitary"
-        ], 
-        "shock": 0, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "armor-index": null, 
-        "current": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 10, 
-          "basic-move": 5, 
-          "basic-speed": 5.0
-        }, 
-        "posture": "standing", 
-        "state": "alive", 
-        "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 10, 
-          "basic-move": 5, 
-          "basic-speed": 5.0
-        }, 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "opponent": null
-      }, 
-      "7 - zombie": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "stunned": 0, 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: staby (born on this station)", 
-          "characteristics: Hates quiet pauses in conversations", 
-          "instincts: To make money", 
-          "hair: Thinning", 
-          "speech: Nosy", 
-          "knack: Unique perspective", 
-          "personality: Zealous"
-        ], 
-        "shock": 0, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "armor-index": null, 
-        "current": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": -7, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "posture": "standing", 
-        "state": "alive", 
-        "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 13, 
-          "basic-move": 5, 
-          "basic-speed": 6.0
-        }, 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "opponent": null
-      }, 
-      "4 - zombie": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
-        "stunned": 0, 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "station history: lifer (born on Earth, this is 1st station)", 
-          "characteristics: Limps", 
-          "instincts: To be a champion", 
-          "hair: Limp", 
-          "speech: Um Uh", 
-          "knack: A library", 
-          "personality: Generous"
-        ], 
-        "shock": 0, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
-        "armor-index": null, 
-        "current": {
-          "fp": 16, 
-          "iq": 8, 
+          "fp": 10, 
+          "iq": 10, 
           "hp": 10, 
           "ht": 10, 
-          "st": 12, 
-          "per": 8, 
+          "st": 10, 
+          "per": 10, 
           "wi": 10, 
-          "dx": 12, 
+          "dx": 10, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 5
         }, 
         "posture": "standing", 
         "state": "alive", 
         "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
+          "fp": 10, 
+          "iq": 10, 
+          "hp": 10, 
           "ht": 10, 
-          "st": 12, 
-          "per": 8, 
+          "st": 10, 
+          "per": 10, 
           "wi": 10, 
-          "dx": 12, 
+          "dx": 10, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 5
         }, 
-        "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
-        }, 
+        "advantages": {}, 
         "weapon-index": null, 
         "check_for_death": false, 
         "timers": [], 
         "did_action_this_turn": false, 
         "opponent": null
       }, 
-      "3 - zombie": {
+      "1 - Guerlande": {
         "aim": {
           "braced": false, 
           "rounds": 0
         }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "arms & teeth", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": -1, 
-                "num_dice": 1, 
-                "type": "cr"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }
-        ], 
+        "stuff": [], 
         "stunned": 0, 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 12, 
-          "Knife": 15
-        }, 
+        "skills": {}, 
         "notes": [
-          "station history: staby (born on this station)", 
-          "characteristics: Plays with own jewelry", 
-          "instincts: To party", 
+          "origin: haitian", 
+          "gender: female", 
+          "station history: lifer (born on Earth, this is 1st station)", 
+          "characteristics: Unable to figure out which color clothes match", 
+          "instincts: To expand their land", 
           "hair: Frazzled", 
-          "speech: Prim, haughty, proud", 
-          "knack: A discerning eye", 
-          "personality: Cowardly"
+          "speech: Loud", 
+          "knack: A majestic beard", 
+          "personality: Senile"
         ], 
         "shock": 0, 
-        "short-notes": [
-          "Darkvision, doesn't breathe, bad smell, immune to mind control", 
-          "Automatically fails alive roll at -HP,", 
-          "Reduced damage: pi+ x0.5, pi x0.33, pi- x0.2"
-        ], 
+        "short-notes": [], 
+        "posture": "standing", 
         "armor-index": null, 
         "current": {
-          "fp": 7, 
-          "iq": 8, 
-          "hp": -1, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 12, 
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 10, 
           "basic-move": 5, 
-          "basic-speed": 5.5
+          "basic-speed": 5.25
         }, 
-        "posture": "standing", 
+        "check_for_death": false, 
         "state": "alive", 
         "permanent": {
-          "fp": 16, 
-          "iq": 8, 
-          "hp": 16, 
-          "ht": 10, 
-          "st": 12, 
-          "per": 8, 
-          "wi": 10, 
-          "dx": 12, 
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 10, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 10, 
           "basic-move": 5, 
-          "basic-speed": 5.5
+          "basic-speed": 5.25
         }, 
         "advantages": {
-          "Appearance (Monstrous)": 0, 
-          "Wealth": 0, 
-          "High Pain Threshold": 10
+          "Empathy": 5, 
+          "Vodou Practitioner (Mambo 2)": 35, 
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10, 
+          "Lwa (Mambo, Erzulie Freda)": 6
         }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
         "did_action_this_turn": false, 
-        "opponent": null
+        "weapon-index": null, 
+        "timers": [], 
+        "opponent": null, 
+        "spells": [
+          {
+            "cost": 1, 
+            "name": "Awaken", 
+            "notes": "M90", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": 4, 
+            "name": "Communicate", 
+            "notes": "M48", 
+            "maintain": 4, 
+            "time": 4, 
+            "skill": 11
+          }, 
+          {
+            "cost": 3, 
+            "name": "Daze", 
+            "notes": "M134", 
+            "maintain": 2, 
+            "time": 2, 
+            "skill": 11
+          }, 
+          {
+            "cost": 4, 
+            "name": "Far Hearing", 
+            "notes": "M173", 
+            "maintain": 2, 
+            "time": 3, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "Foolishness", 
+            "notes": "M134", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "Lend Energy", 
+            "notes": "M89", 
+            "maintain": 0, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": null, 
+            "name": "Lend Vitality", 
+            "notes": "M89", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": 2, 
+            "name": "Luck", 
+            "notes": "V2", 
+            "maintain": 1, 
+            "time": 1, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "Major Heal", 
+            "notes": "M91", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "Minor Heal", 
+            "notes": "M91", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": null, 
+            "name": "Might", 
+            "notes": "M37", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": 15, 
+            "name": "Restoration", 
+            "notes": "M93", 
+            "maintain": 0, 
+            "time": 60, 
+            "skill": 11
+          }, 
+          {
+            "cost": null, 
+            "name": "Sense Life", 
+            "notes": "M45, cost 1/2 per yard radius, see M11", 
+            "maintain": null, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "cost": 4, 
+            "name": "Sleep", 
+            "notes": "M135", 
+            "maintain": 0, 
+            "time": 3, 
+            "skill": 11
+          }, 
+          {
+            "cost": 4, 
+            "name": "Wizard Eye", 
+            "notes": "M104", 
+            "maintain": 2, 
+            "time": 2, 
+            "skill": 11
+          }
+        ]
       }
     }, 
     "Dima's Crew": {
@@ -9790,11 +10009,11 @@
           "hp": 11, 
           "wi": 11, 
           "st": 12, 
-          "per": 11, 
           "ht": 11, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75, 
+          "per": 11
         }, 
         "permanent": {
           "fp": 11, 
@@ -9802,11 +10021,11 @@
           "hp": 11, 
           "wi": 11, 
           "st": 12, 
-          "per": 11, 
           "ht": 11, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75, 
+          "per": 11
         }, 
         "state": "alive", 
         "stuff": [
@@ -9903,11 +10122,11 @@
           "hp": 11, 
           "wi": 11, 
           "st": 12, 
-          "per": 11, 
           "ht": 11, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75, 
+          "per": 11
         }, 
         "permanent": {
           "fp": 11, 
@@ -9915,11 +10134,11 @@
           "hp": 11, 
           "wi": 11, 
           "st": 12, 
-          "per": 11, 
           "ht": 11, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75, 
+          "per": 11
         }, 
         "state": "alive", 
         "stuff": [
@@ -10018,11 +10237,11 @@
           "hp": 11, 
           "wi": 11, 
           "st": 12, 
-          "per": 11, 
           "ht": 11, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75, 
+          "per": 11
         }, 
         "permanent": {
           "fp": 11, 
@@ -10030,11 +10249,11 @@
           "hp": 11, 
           "wi": 11, 
           "st": 12, 
-          "per": 11, 
           "ht": 11, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75, 
+          "per": 11
         }, 
         "state": "alive", 
         "stuff": [
@@ -10130,11 +10349,11 @@
           "hp": 11, 
           "wi": 11, 
           "st": 12, 
-          "per": 11, 
           "ht": 11, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75, 
+          "per": 11
         }, 
         "permanent": {
           "fp": 11, 
@@ -10142,11 +10361,11 @@
           "hp": 11, 
           "wi": 11, 
           "st": 12, 
-          "per": 11, 
           "ht": 11, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 5.75, 
+          "per": 11
         }, 
         "state": "alive", 
         "stuff": [

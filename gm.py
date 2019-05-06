@@ -4155,6 +4155,9 @@ class ScreenHandler(object):
             string = self._window_manager.get_one_character()
             if string in self._choices:
                 keep_going = self._choices[string]['func']()
+            else:
+                self._window_manager.error(
+                                    ['Invalid command: "%c" ' % chr(string)])
 
     #
     # Protected Methods
@@ -5629,6 +5632,10 @@ class FightHandler(ScreenHandler):
                                       self.__ruleset,
                                       self._window_manager)
                 self.__fighters[index] = new_fighter
+                self._window_manager.display_window(
+                                               ('Promoted Monster to NPC'),
+                                                [[{'text': new_NPC.name,
+                                                   'mode': curses.A_NORMAL }]])
                 break
 
         return True # Keep going
