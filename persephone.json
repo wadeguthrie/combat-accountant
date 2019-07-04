@@ -109,6 +109,30 @@
               "type": "misc", 
               "owners": null, 
               "name": "C Cell"
+            }, 
+            {
+              "acc": 1, 
+              "count": 1, 
+              "owners": [
+                "the store"
+              ], 
+              "name": "zip tazer, nice", 
+              "notes": "hand built", 
+              "damage": {
+                "dice": {
+                  "type": "fp", 
+                  "num_dice": 1, 
+                  "plus": 3
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Guns (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "Zip Clip", 
+                "shots": 6, 
+                "shots_left": 6
+              }
             }
           ]
         }
@@ -1876,23 +1900,23 @@
       }, 
       "advantages": {
         "G-Experience": 1, 
-        "Alcohol Intolerance": -1, 
         "Honest Face": 1, 
         "Wealth": -10, 
         "Extra Hit Points": 2, 
         "Habit": -1, 
         "Nosy": -1, 
         "Like knick knacks": -1, 
-        "Vodou Practitioner": 15, 
-        "Empathy": 15, 
         "Impulsiveness": -10, 
+        "Vodou Practitioner": 15, 
+        "Alcohol Intolerance": -1, 
+        "Versatile": 5, 
         "Cultural Familiarity (Teraformers)": 1, 
         "Short Attention Span": -10, 
         "Curious": -5, 
         "Bad Temper": -10, 
         "Deep Sleeper": 1, 
         "Combat Reflexes": 15, 
-        "Versatile": 5, 
+        "Empathy": 15, 
         "Dreamer": -1
       }, 
       "weapon-index": null, 
@@ -5870,270 +5894,6 @@
       "date": "2019-05-06-14-21-59", 
       "name": "1st Hunting Party", 
       "fight": {
-        "Amelia - Deputy Marshal (Stoddard)": {
-          "redirect": "NPCs"
-        }, 
-        "6: Matthew": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 2, 
-              "count": 1, 
-              "owners": null, 
-              "name": "pistol, Baretta DX 192", 
-              "notes": "", 
-              "damage": {
-                "dice": {
-                  "plus": 4, 
-                  "num_dice": 1, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": [], 
-              "name": "Sport coat/Jeans", 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 2
-            }
-          ], 
-          "stunned": 0, 
-          "skills": {
-            "Beam Weapons (Pistol)": 17, 
-            "Brawling": 17, 
-            "Knife": 17
-          }, 
-          "notes": [
-            "origin: australian", 
-            "gender: male", 
-            "characteristics: Black eye", 
-            "instincts: To hate", 
-            "hair: Straight", 
-            "speech: Crisp", 
-            "knack: Invention", 
-            "personality: Introverted"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": 3, 
-          "current": {
-            "fp": 11, 
-            "iq": 9, 
-            "hp": 15, 
-            "wi": 9, 
-            "st": 15, 
-            "ht": 11, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 9
-          }, 
-          "posture": "standing", 
-          "state": "alive", 
-          "permanent": {
-            "fp": 11, 
-            "iq": 9, 
-            "hp": 15, 
-            "wi": 9, 
-            "st": 15, 
-            "ht": 11, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 9
-          }, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
-          "did_action_this_turn": false, 
-          "opponent": null
-        }, 
-        "William - Deputy Marshal (Stoddard)": {
-          "redirect": "NPCs"
-        }, 
-        "Olivia - Special Deputy Marshal (Stoddard)": {
-          "redirect": "NPCs"
-        }, 
-        "3: Charlotte - Deputy Marshal": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stunned": 0, 
-          "skills": {
-            "Beam Weapons (Pistol)": 15, 
-            "Brawling": 14, 
-            "Knife": 15
-          }, 
-          "notes": [
-            "With Stoddard"
-          ], 
-          "shock": 0, 
-          "armor-index": null, 
-          "posture": "standing", 
-          "current": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "wi": 12, 
-            "st": 10, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
-          }, 
-          "permanent": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "wi": 12, 
-            "st": 10, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
-          }, 
-          "state": "alive", 
-          "stuff": [
-            {
-              "acc": 2, 
-              "count": 1, 
-              "owners": null, 
-              "name": "pistol, Baretta DX 192", 
-              "notes": "", 
-              "damage": {
-                "dice": {
-                  "plus": 4, 
-                  "num_dice": 1, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "notes": "eR 500", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Sasaki"
-            }, 
-            {
-              "count": 2, 
-              "notes": "eR 200", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Jackson"
-            }, 
-            {
-              "count": 7, 
-              "notes": "eR 10", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Baseball card: Salazar"
-            }, 
-            {
-              "count": 1, 
-              "notes": "Needs a 'B' cell", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Multitool w/flashlight"
-            }, 
-            {
-              "count": 1, 
-              "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "small bag"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }
-          ], 
-          "timers": [], 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "did_action_this_turn": false, 
-          "opponent": null
-        }, 
         "1: Oliver - Deputy Marshal": {
           "aim": {
             "braced": false, 
@@ -6282,6 +6042,270 @@
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "William - Deputy Marshal (Stoddard)": {
+          "redirect": "NPCs"
+        }, 
+        "Amelia - Deputy Marshal (Stoddard)": {
+          "redirect": "NPCs"
+        }, 
+        "Olivia - Special Deputy Marshal (Stoddard)": {
+          "redirect": "NPCs"
+        }, 
+        "3: Charlotte - Deputy Marshal": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 14, 
+            "Knife": 15
+          }, 
+          "notes": [
+            "With Stoddard"
+          ], 
+          "shock": 0, 
+          "armor-index": null, 
+          "posture": "standing", 
+          "current": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75, 
+            "per": 12
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75, 
+            "per": 12
+          }, 
+          "state": "alive", 
+          "stuff": [
+            {
+              "acc": 2, 
+              "count": 1, 
+              "owners": null, 
+              "name": "pistol, Baretta DX 192", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": 4, 
+                  "num_dice": 1, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Large Knife", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "notes": "eR 500", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Baseball card: Sasaki"
+            }, 
+            {
+              "count": 2, 
+              "notes": "eR 200", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Baseball card: Jackson"
+            }, 
+            {
+              "count": 7, 
+              "notes": "eR 10", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Baseball card: Salazar"
+            }, 
+            {
+              "count": 1, 
+              "notes": "Needs a 'B' cell", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Multitool w/flashlight"
+            }, 
+            {
+              "count": 1, 
+              "notes": "holds: mints, tampon x2, condom x2, moisturizer, nail file", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "small bag"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }
+          ], 
+          "timers": [], 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "6: Matthew": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 2, 
+              "count": 1, 
+              "owners": null, 
+              "name": "pistol, Baretta DX 192", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": 4, 
+                  "num_dice": 1, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Large Knife", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": [], 
+              "name": "Sport coat/Jeans", 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 2
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 17, 
+            "Brawling": 17, 
+            "Knife": 17
+          }, 
+          "notes": [
+            "origin: australian", 
+            "gender: male", 
+            "characteristics: Black eye", 
+            "instincts: To hate", 
+            "hair: Straight", 
+            "speech: Crisp", 
+            "knack: Invention", 
+            "personality: Introverted"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": 3, 
+          "current": {
+            "fp": 11, 
+            "iq": 9, 
+            "hp": 15, 
+            "wi": 9, 
+            "st": 15, 
+            "ht": 11, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25, 
+            "per": 9
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 11, 
+            "iq": 9, 
+            "hp": 15, 
+            "wi": 9, 
+            "st": 15, 
+            "ht": 11, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25, 
+            "per": 9
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
           "did_action_this_turn": false, 
           "opponent": null
         }
@@ -6501,115 +6525,6 @@
       "timers": [], 
       "did_action_this_turn": false, 
       "opponent": null
-    }, 
-    "Amelia - Deputy Marshal (Stoddard)": {
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "per": 12, 
-        "wi": 12, 
-        "dx": 12, 
-        "basic-move": 5, 
-        "basic-speed": 5.75
-      }, 
-      "stuff": [
-        {
-          "acc": 2, 
-          "count": 1, 
-          "owners": null, 
-          "name": "pistol, Baretta DX 192", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "type": "pi", 
-              "num_dice": 1, 
-              "plus": 4
-            }
-          }, 
-          "reload": 3, 
-          "skill": "Beam Weapons (Pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 8, 
-            "shots_left": 8
-          }
-        }, 
-        {
-          "count": 1, 
-          "notes": "M91, cost eR3570", 
-          "type": "misc", 
-          "owners": [], 
-          "name": "Fingerbone of major heal (8)"
-        }, 
-        {
-          "count": 1, 
-          "owners": null, 
-          "name": "Large Knife", 
-          "notes": "", 
-          "damage": {
-            "sw": {
-              "type": "cut", 
-              "plus": -2
-            }, 
-            "thr": {
-              "type": "imp", 
-              "plus": 0
-            }
-          }, 
-          "parry": -1, 
-          "skill": "Knife", 
-          "type": "melee weapon"
-        }, 
-        {
-          "count": 5, 
-          "notes": "", 
-          "type": "misc", 
-          "owners": [], 
-          "name": "C Cell"
-        }
-      ], 
-      "stunned": 0, 
-      "skills": {
-        "Beam Weapons (Pistol)": 15, 
-        "Brawling": 14, 
-        "Knife": 15
-      }, 
-      "notes": [
-        "With Stoddard"
-      ], 
-      "shock": 0, 
-      "armor-index": null, 
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "per": 12, 
-        "wi": 12, 
-        "dx": 12, 
-        "basic-move": 5, 
-        "basic-speed": 5.75
-      }, 
-      "timers": [], 
-      "opponent": null, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "advantages": {
-        "Combat Reflexes": 15, 
-        "High Pain Threshold": 10
-      }, 
-      "did_action_this_turn": false, 
-      "posture": "standing"
     }, 
     "Stoddard, Leland (Chief Deputy Marshal)": {
       "aim": {
@@ -7318,6 +7233,115 @@
       "did_action_this_turn": false, 
       "opponent": null
     }, 
+    "Amelia - Deputy Marshal (Stoddard)": {
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "per": 12, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "stuff": [
+        {
+          "acc": 2, 
+          "count": 1, 
+          "owners": null, 
+          "name": "pistol, Baretta DX 192", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "type": "pi", 
+              "num_dice": 1, 
+              "plus": 4
+            }
+          }, 
+          "reload": 3, 
+          "skill": "Beam Weapons (Pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 8, 
+            "shots_left": 8
+          }
+        }, 
+        {
+          "count": 1, 
+          "notes": "M91, cost eR3570", 
+          "type": "misc", 
+          "owners": [], 
+          "name": "Fingerbone of major heal (8)"
+        }, 
+        {
+          "count": 1, 
+          "owners": null, 
+          "name": "Large Knife", 
+          "notes": "", 
+          "damage": {
+            "sw": {
+              "type": "cut", 
+              "plus": -2
+            }, 
+            "thr": {
+              "type": "imp", 
+              "plus": 0
+            }
+          }, 
+          "parry": -1, 
+          "skill": "Knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": [], 
+          "name": "C Cell"
+        }
+      ], 
+      "stunned": 0, 
+      "skills": {
+        "Beam Weapons (Pistol)": 15, 
+        "Brawling": 14, 
+        "Knife": 15
+      }, 
+      "notes": [
+        "With Stoddard"
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "per": 12, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "timers": [], 
+      "opponent": null, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "advantages": {
+        "Combat Reflexes": 15, 
+        "High Pain Threshold": 10
+      }, 
+      "did_action_this_turn": false, 
+      "posture": "standing"
+    }, 
     "David - Master Weaponsmith": {
       "aim": {
         "braced": false, 
@@ -7581,6 +7605,143 @@
       "timers": [], 
       "did_action_this_turn": false, 
       "opponent": null
+    }, 
+    "William - Deputy Marshal (Stoddard)": {
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "per": 12, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "stuff": [
+        {
+          "acc": 2, 
+          "count": 1, 
+          "owners": null, 
+          "name": "pistol, Baretta DX 192", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "type": "pi", 
+              "num_dice": 1, 
+              "plus": 4
+            }
+          }, 
+          "reload": 3, 
+          "skill": "Beam Weapons (Pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 8, 
+            "shots_left": 8
+          }
+        }, 
+        {
+          "count": 1, 
+          "owners": null, 
+          "name": "Large Knife", 
+          "notes": "", 
+          "damage": {
+            "sw": {
+              "type": "cut", 
+              "plus": -2
+            }, 
+            "thr": {
+              "type": "imp", 
+              "plus": 0
+            }
+          }, 
+          "parry": -1, 
+          "skill": "Knife", 
+          "type": "melee weapon"
+        }, 
+        {
+          "count": 1, 
+          "notes": "eR 500", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "Baseball card: Sasaki"
+        }, 
+        {
+          "count": 3, 
+          "notes": "eR 200", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "Baseball card: Jackson"
+        }, 
+        {
+          "count": 4, 
+          "notes": "eR 10", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "Baseball card: Salazar"
+        }, 
+        {
+          "count": 5, 
+          "notes": "3 for headache, 2 for allergies", 
+          "type": "misc", 
+          "owners": [], 
+          "name": "Med Patches"
+        }, 
+        {
+          "count": 1, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "Comb, Condom x2, breath mints"
+        }, 
+        {
+          "count": 5, 
+          "notes": "", 
+          "type": "misc", 
+          "owners": null, 
+          "name": "C Cell"
+        }
+      ], 
+      "stunned": 0, 
+      "skills": {
+        "Beam Weapons (Pistol)": 15, 
+        "Brawling": 14, 
+        "Knife": 15
+      }, 
+      "notes": [
+        "With Stoddard"
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "per": 12, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
+      }, 
+      "timers": [], 
+      "opponent": null, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "advantages": {
+        "Combat Reflexes": 15, 
+        "High Pain Threshold": 10
+      }, 
+      "did_action_this_turn": false, 
+      "posture": "standing"
     }, 
     "Olivia - Special Deputy Marshal (Stoddard)": {
       "current": {
@@ -8133,7 +8294,9 @@
         "those whose security have been foretold by the gods.  His black", 
         "hair and beard, punctuated by patches of gray, are closely cropped", 
         "and he wears a dark gray sportcoat over jeans and a black dress", 
-        "shirt unbuttoned at the neck."
+        "shirt unbuttoned at the neck.", 
+        "", 
+        "Dislikes Samuel.  He would not drink with him."
       ], 
       "shock": 0, 
       "armor-index": 4, 
@@ -8175,143 +8338,6 @@
       "timers": [], 
       "did_action_this_turn": false, 
       "opponent": null
-    }, 
-    "William - Deputy Marshal (Stoddard)": {
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "per": 12, 
-        "wi": 12, 
-        "dx": 12, 
-        "basic-move": 5, 
-        "basic-speed": 5.75
-      }, 
-      "stuff": [
-        {
-          "acc": 2, 
-          "count": 1, 
-          "owners": null, 
-          "name": "pistol, Baretta DX 192", 
-          "notes": "", 
-          "damage": {
-            "dice": {
-              "type": "pi", 
-              "num_dice": 1, 
-              "plus": 4
-            }
-          }, 
-          "reload": 3, 
-          "skill": "Beam Weapons (Pistol)", 
-          "type": "ranged weapon", 
-          "ammo": {
-            "name": "C Cell", 
-            "shots": 8, 
-            "shots_left": 8
-          }
-        }, 
-        {
-          "count": 1, 
-          "owners": null, 
-          "name": "Large Knife", 
-          "notes": "", 
-          "damage": {
-            "sw": {
-              "type": "cut", 
-              "plus": -2
-            }, 
-            "thr": {
-              "type": "imp", 
-              "plus": 0
-            }
-          }, 
-          "parry": -1, 
-          "skill": "Knife", 
-          "type": "melee weapon"
-        }, 
-        {
-          "count": 1, 
-          "notes": "eR 500", 
-          "type": "misc", 
-          "owners": null, 
-          "name": "Baseball card: Sasaki"
-        }, 
-        {
-          "count": 3, 
-          "notes": "eR 200", 
-          "type": "misc", 
-          "owners": null, 
-          "name": "Baseball card: Jackson"
-        }, 
-        {
-          "count": 4, 
-          "notes": "eR 10", 
-          "type": "misc", 
-          "owners": null, 
-          "name": "Baseball card: Salazar"
-        }, 
-        {
-          "count": 5, 
-          "notes": "3 for headache, 2 for allergies", 
-          "type": "misc", 
-          "owners": [], 
-          "name": "Med Patches"
-        }, 
-        {
-          "count": 1, 
-          "notes": "", 
-          "type": "misc", 
-          "owners": null, 
-          "name": "Comb, Condom x2, breath mints"
-        }, 
-        {
-          "count": 5, 
-          "notes": "", 
-          "type": "misc", 
-          "owners": null, 
-          "name": "C Cell"
-        }
-      ], 
-      "stunned": 0, 
-      "skills": {
-        "Beam Weapons (Pistol)": 15, 
-        "Brawling": 14, 
-        "Knife": 15
-      }, 
-      "notes": [
-        "With Stoddard"
-      ], 
-      "shock": 0, 
-      "armor-index": null, 
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "state": "alive", 
-      "permanent": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "per": 12, 
-        "wi": 12, 
-        "dx": 12, 
-        "basic-move": 5, 
-        "basic-speed": 5.75
-      }, 
-      "timers": [], 
-      "opponent": null, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "advantages": {
-        "Combat Reflexes": 15, 
-        "High Pain Threshold": 10
-      }, 
-      "did_action_this_turn": false, 
-      "posture": "standing"
     }, 
     "Mackenzie - Marshal's Intern": {
       "aim": {
@@ -10556,6 +10582,968 @@
           "group": "PCs", 
           "name": "lawerence - Spenser"
         }
+      }
+    }, 
+    "Baz for Sphere": {
+      "3 - Anaica": {
+        "stunned": 0, 
+        "did_action_this_turn": false, 
+        "short-notes": [], 
+        "advantages": {}, 
+        "weapon-index": null, 
+        "posture": "standing", 
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "acc": 1, 
+            "count": 1, 
+            "owners": [
+              "the store"
+            ], 
+            "name": "zip tazer, nice", 
+            "notes": "hand built", 
+            "damage": {
+              "dice": {
+                "type": "fp", 
+                "num_dice": 1, 
+                "plus": 3
+              }
+            }, 
+            "reload": 3, 
+            "skill": "Guns (Pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "Zip Clip", 
+              "shots": 6, 
+              "shots_left": 6
+            }
+          },
+          {
+              "count": 2, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": [], 
+              "name": "Zip Clip"
+          }
+        ], 
+        "skills": {
+          "Guns (Pistol)": 15
+        }, 
+        "notes": [
+          "origin: haitian", 
+          "gender: female", 
+          "station history: staby (born on this station)", 
+          "characteristics: Always gives vaguest possible answer", 
+          "instincts: To discover", 
+          "hair: Straight", 
+          "speech: Um Uh", 
+          "knack: The love of someone powerful", 
+          "personality: Impetuous"
+        ], 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "2 - Mirlande": {
+        "stunned": 0, 
+        "did_action_this_turn": false, 
+        "short-notes": [], 
+        "advantages": {
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "posture": "standing", 
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+          {
+            "acc": 1, 
+            "count": 1, 
+            "owners": [
+              "the store"
+            ], 
+            "name": "zip tazer, nice", 
+            "notes": "hand built", 
+            "damage": {
+              "dice": {
+                "type": "fp", 
+                "num_dice": 1, 
+                "plus": 3
+              }
+            }, 
+            "reload": 3, 
+            "skill": "Guns (Pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "Zip Clip", 
+              "shots": 6, 
+              "shots_left": 6
+            }
+          }, 
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "Large Knife", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }, 
+          {
+              "count": 2, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": [], 
+              "name": "Zip Clip"
+          }, 
+          {
+            "acc": 1, 
+            "count": 1, 
+            "owners": [
+              "the store"
+            ], 
+            "name": "zip tazer, nice", 
+            "notes": "hand built", 
+            "damage": {
+              "dice": {
+                "type": "fp", 
+                "num_dice": 1, 
+                "plus": 3
+              }
+            }, 
+            "reload": 3, 
+            "skill": "Guns (Pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "Zip Clip", 
+              "shots": 6, 
+              "shots_left": 6
+            }
+          }
+        ], 
+        "skills": {
+          "Guns (Pistol)": 15,
+          "Brawling": 15, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "origin: haitian", 
+          "gender: female", 
+          "station history: staby (born on this station)", 
+          "characteristics: Swears profusely", 
+          "instincts: To destroy an artifact", 
+          "hair: Thick", 
+          "speech: Trails-off", 
+          "knack: A way with knots", 
+          "personality: Likable"
+        ], 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "5 - Watson": {
+        "stunned": 0, 
+        "did_action_this_turn": false, 
+        "short-notes": [], 
+        "advantages": {
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "posture": "standing", 
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+           {
+              "count": 2, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": [], 
+              "name": "Zip Clip"
+           }, 
+           {
+            "acc": 1, 
+            "count": 1, 
+            "owners": [
+              "the store"
+            ], 
+            "name": "zip tazer, nice", 
+            "notes": "hand built", 
+            "damage": {
+              "dice": {
+                "type": "fp", 
+                "num_dice": 1, 
+                "plus": 3
+              }
+            }, 
+            "reload": 3, 
+            "skill": "Guns (Pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "Zip Clip", 
+              "shots": 6, 
+              "shots_left": 6
+            }
+          }, 
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "Large Knife", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "owners": null, 
+            "name": "C Cell"
+          }, 
+          {
+            "acc": 1, 
+            "count": 1, 
+            "owners": [
+              "the store"
+            ], 
+            "name": "zip tazer, nice", 
+            "notes": "hand built", 
+            "damage": {
+              "dice": {
+                "type": "fp", 
+                "num_dice": 1, 
+                "plus": 3
+              }
+            }, 
+            "reload": 3, 
+            "skill": "Guns (Pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "Zip Clip", 
+              "shots": 6, 
+              "shots_left": 6
+            }
+          }
+        ], 
+        "skills": {
+          "Guns (Pistol)": 15,
+          "Brawling": 15, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "origin: haitian", 
+          "gender: male", 
+          "station history: lifer (born on Earth, this is 1st station)", 
+          "characteristics: Perfumed", 
+          "instincts: To prove a point", 
+          "hair: Wavy", 
+          "speech: Monotone", 
+          "knack: A plan for the perfect crime", 
+          "personality: Reserved"
+        ], 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "7 - Jameson": {
+        "stunned": 0, 
+        "did_action_this_turn": false, 
+        "short-notes": [], 
+        "advantages": {}, 
+        "weapon-index": null, 
+        "posture": "standing", 
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+           {
+              "count": 2, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": [], 
+              "name": "Zip Clip"
+           }, 
+          {
+            "acc": 1, 
+            "count": 1, 
+            "owners": [
+              "the store"
+            ], 
+            "name": "zip tazer, nice", 
+            "notes": "hand built", 
+            "damage": {
+              "dice": {
+                "type": "fp", 
+                "num_dice": 1, 
+                "plus": 3
+              }
+            }, 
+            "reload": 3, 
+            "skill": "Guns (Pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "Zip Clip", 
+              "shots": 6, 
+              "shots_left": 6
+            }
+          }
+        ], 
+        "skills": {
+          "Guns (Pistol)": 15
+        }, 
+        "notes": [
+          "origin: haitian", 
+          "gender: male", 
+          "station history: roo (bounce between stations)", 
+          "characteristics: Burn scar, bodyLocation: Neck", 
+          "instincts: To go where no man has gone before", 
+          "hair: Streaked", 
+          "speech: Nosy", 
+          "knack: Secret martial arts techniques", 
+          "personality: Solicitous"
+        ], 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "6 - Anel": {
+        "stunned": 0, 
+        "did_action_this_turn": false, 
+        "short-notes": [], 
+        "advantages": {
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "posture": "standing", 
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+           {
+              "count": 2, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": [], 
+              "name": "Zip Clip"
+           }, 
+          {
+            "acc": 1, 
+            "count": 1, 
+            "owners": [
+              "the store"
+            ], 
+            "name": "zip tazer, nice", 
+            "notes": "hand built", 
+            "damage": {
+              "dice": {
+                "type": "fp", 
+                "num_dice": 1, 
+                "plus": 3
+              }
+            }, 
+            "reload": 3, 
+            "skill": "Guns (Pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "Zip Clip", 
+              "shots": 6, 
+              "shots_left": 6
+            }
+          }, 
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "Large Knife", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "owners": null, 
+            "name": "C Cell"
+          }, 
+          {
+            "acc": 1, 
+            "count": 1, 
+            "owners": [
+              "the store"
+            ], 
+            "name": "zip tazer, nice", 
+            "notes": "hand built", 
+            "damage": {
+              "dice": {
+                "type": "fp", 
+                "num_dice": 1, 
+                "plus": 3
+              }
+            }, 
+            "reload": 3, 
+            "skill": "Guns (Pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "Zip Clip", 
+              "shots": 6, 
+              "shots_left": 6
+            }
+          }
+        ], 
+        "skills": {
+          "Guns (Pistol)": 15,
+          "Brawling": 15, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "origin: haitian", 
+          "gender: male", 
+          "station history: staby (born on this station)", 
+          "characteristics: Hemaphobic (afraid of blood)", 
+          "instincts: To find true love", 
+          "hair: Very Long", 
+          "speech: Whiny", 
+          "knack: Sense of direction", 
+          "personality: Reverent"
+        ], 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "1 - Nephtalie": {
+        "stunned": 0, 
+        "did_action_this_turn": false, 
+        "short-notes": [], 
+        "advantages": {
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "posture": "standing", 
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+           {
+              "count": 2, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": [], 
+              "name": "Zip Clip"
+           }, 
+          {
+            "acc": 1, 
+            "count": 1, 
+            "owners": [
+              "the store"
+            ], 
+            "name": "zip tazer, nice", 
+            "notes": "hand built", 
+            "damage": {
+              "dice": {
+                "type": "fp", 
+                "num_dice": 1, 
+                "plus": 3
+              }
+            }, 
+            "reload": 3, 
+            "skill": "Guns (Pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "Zip Clip", 
+              "shots": 6, 
+              "shots_left": 6
+            }
+          }, 
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "Large Knife", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "owners": null, 
+            "name": "C Cell"
+          }, 
+          {
+            "acc": 1, 
+            "count": 1, 
+            "owners": [
+              "the store"
+            ], 
+            "name": "zip tazer, nice", 
+            "notes": "hand built", 
+            "damage": {
+              "dice": {
+                "type": "fp", 
+                "num_dice": 1, 
+                "plus": 3
+              }
+            }, 
+            "reload": 3, 
+            "skill": "Guns (Pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "Zip Clip", 
+              "shots": 6, 
+              "shots_left": 6
+            }
+          }
+        ], 
+        "skills": {
+          "Guns (Pistol)": 15,
+          "Brawling": 15, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "origin: haitian", 
+          "gender: female", 
+          "station history: roo (bounce between stations)", 
+          "characteristics: Short attention span", 
+          "instincts: To recover a lost memory", 
+          "hair: Streaked", 
+          "speech: Accented", 
+          "knack: A trained wolf", 
+          "personality: Obnoxious"
+        ], 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "4 - Islande - Sniper": {
+        "stunned": 0, 
+        "did_action_this_turn": false, 
+        "short-notes": [], 
+        "advantages": {
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "posture": "standing", 
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+           {
+              "count": 2, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": [], 
+              "name": "Zip Clip C"
+           }, 
+          {
+            "acc": 8, 
+            "count": 1, 
+            "owners": [
+              "the store"
+            ], 
+            "name": "zip tazer rifle, nice", 
+            "notes": "hand built", 
+            "damage": {
+              "dice": {
+                "type": "fp", 
+                "num_dice": 3, 
+                "plus": 0
+              }
+            }, 
+            "reload": 3, 
+            "skill": "Guns (Rifle)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "Zip Clip C", 
+              "shots": 6, 
+              "shots_left": 6
+            }
+          }
+        ], 
+        "skills": {
+          "Fast-Draw (Ammo)": 15, 
+          "Guns (Rifle)": 18
+        }, 
+        "notes": [
+          "origin: haitian", 
+          "gender: female", 
+          "station history: staby (born on this station)", 
+          "characteristics: Believes all animals can talk to each other", 
+          "instincts: To save someone from a monstrosity", 
+          "hair: Long", 
+          "speech: Halting", 
+          "knack: A way with knots", 
+          "personality: Humble"
+        ], 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 15, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 12, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 15, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
+      }, 
+      "8 - James - Leader": {
+        "stunned": 0, 
+        "did_action_this_turn": false, 
+        "short-notes": [], 
+        "advantages": {
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10
+        }, 
+        "weapon-index": null, 
+        "posture": "standing", 
+        "aim": {
+          "braced": false, 
+          "rounds": 0
+        }, 
+        "stuff": [
+           {
+              "count": 2, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": [], 
+              "name": "Zip Clip"
+           }, 
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "Large Knife", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }, 
+          {
+            "count": 5, 
+            "notes": "", 
+            "type": "misc", 
+            "owners": null, 
+            "name": "C Cell"
+          }, 
+          {
+            "acc": 1, 
+            "count": 1, 
+            "owners": [
+              "the store"
+            ], 
+            "name": "zip tazer, nice", 
+            "notes": "hand built", 
+            "damage": {
+              "dice": {
+                "type": "fp", 
+                "num_dice": 1, 
+                "plus": 3
+              }
+            }, 
+            "reload": 3, 
+            "skill": "Guns (Pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "Zip Clip", 
+              "shots": 6, 
+              "shots_left": 6
+            }
+          }
+        ], 
+        "skills": {
+          "Guns (Pistol)": 15, 
+          "Brawling": 15, 
+          "Knife": 15
+        }, 
+        "notes": [
+          "origin: haitian", 
+          "gender: male", 
+          "station history: lifer (born on Earth, this is 1st station)", 
+          "characteristics: Warts", 
+          "instincts: To become a terror to criminals", 
+          "hair: Curly", 
+          "speech: Breathless", 
+          "knack: Brewing", 
+          "personality: Elitist"
+        ], 
+        "shock": 0, 
+        "armor-index": null, 
+        "current": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "state": "alive", 
+        "permanent": {
+          "fp": 11, 
+          "iq": 12, 
+          "hp": 11, 
+          "ht": 11, 
+          "st": 10, 
+          "per": 12, 
+          "wi": 12, 
+          "dx": 12, 
+          "basic-move": 5, 
+          "basic-speed": 5.75
+        }, 
+        "timers": [], 
+        "check_for_death": false, 
+        "opponent": null
       }
     }
   }, 

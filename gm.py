@@ -15,6 +15,10 @@ import sys
 import traceback
 
 # TODO:
+#   - Equip monster group after creation
+#   - Equipping item should indicate if person doesn't have skill (and offer
+#     to give him the skill)
+#
 #   - Multiple weapons
 #   - Need equipment containers
 #   - Need maintain spell
@@ -602,7 +606,8 @@ class BuildFightGmWindow(GmWindow):
     def show_creatures(self,
                        old_creatures,   # {name: {details}, ...} like in JSON
                        new_creatures,   # {name: {details}, ...} like in JSON
-                       new_char_name    # name of character to highlight
+                       new_char_name,   # name of character to highlight
+                       viewing_index    # index into creature list
                       ):
 
         #self.__char_list = []   # [[{'text', 'mode'}, ...],   # line 0
@@ -620,9 +625,12 @@ class BuildFightGmWindow(GmWindow):
             # Blank line between old creatures and new
             self.__char_list.append([{'text': '', 'mode': mode}])
 
-        for new_name in sorted(new_creatures.keys()):
+        for index, new_name in enumerate(sorted(new_creatures.keys())):
             now_mode = mode
-            if new_char_name is not None and new_name == new_char_name:
+            if viewing_index is not None:
+                if index == viewing_index:
+                    now_mode |= curses.A_REVERSE
+            elif new_char_name is not None and new_name == new_char_name:
                 now_mode |= curses.A_REVERSE
             self.__char_list.append([{'text': new_name, 'mode': now_mode}])
             line += 1
@@ -4224,6 +4232,10 @@ class BuildFightHandler(ScreenHandler):
                                             filename,
                                             world.details['current-fight'])
         self._add_to_choice_dict({
+            curses.KEY_UP:
+                      {'name': 'prev character',  'func': self.__view_prev},
+            curses.KEY_DOWN:
+                      {'name': 'next character',  'func': self.__view_next},
             ord('a'): {'name': 'add creature',    'func': self.__add_creature},
             ord('d'): {'name': 'delete creature', 'func':
                                                     self.__delete_creature},
@@ -4233,6 +4245,7 @@ class BuildFightHandler(ScreenHandler):
             ord('t'): {'name': 'change template', 'func': self.__new_template},
             ord('q'): {'name': 'quit',            'func': self.__quit},
         })
+        self.__viewing_index = None
 
         self._window = self._window_manager.get_build_fight_gm_window()
 
@@ -4317,7 +4330,8 @@ class BuildFightHandler(ScreenHandler):
         self._window.show_creatures(
                             (None if self.__is_new else self.__new_home),
                             self.__new_creatures,
-                            self.__new_char_name)
+                            self.__new_char_name,
+                            self.__viewing_index)
         if (self.__new_char_name is not None and
                                 self.__new_char_name in self.__new_creatures):
             self._window.show_character_detail(
@@ -4336,6 +4350,7 @@ class BuildFightHandler(ScreenHandler):
         # TODO: Add some comments in here (or refactor), it's really hard
         # to read.
 
+        self.__viewing_index = None
         if self.__new_home is None or self.__group_name is None:
             self._window_manager.error(
                 ['You must select a new or existing group to which to',
@@ -4444,7 +4459,8 @@ class BuildFightHandler(ScreenHandler):
                 self._window.show_creatures(
                                 (None if self.__is_new else self.__new_home),
                                 temp_list,
-                                self.__new_char_name)
+                                self.__new_char_name,
+                                self.__viewing_index)
                 self._window.show_character_detail(
                                 to_monster,
                                 self.__ruleset)
@@ -4500,7 +4516,8 @@ class BuildFightHandler(ScreenHandler):
             self._window.show_creatures(
                                 (None if self.__is_new else self.__new_home),
                                 self.__new_creatures,
-                                self.__new_char_name)
+                                self.__new_char_name,
+                                self.__viewing_index)
 
         return True # Keep going
 
@@ -4519,10 +4536,12 @@ class BuildFightHandler(ScreenHandler):
         if critter_name is not None:
             del(self.__new_creatures[critter_name])
 
+        self.__viewing_index = None
         self._window.show_creatures(
                                 (None if self.__is_new else self.__new_home),
                                 self.__new_creatures,
-                                self.__new_char_name)
+                                self.__new_char_name,
+                                self.__viewing_index)
 
         return True # Keep going
 
@@ -4702,6 +4721,41 @@ class BuildFightHandler(ScreenHandler):
         # TODO: do I need to del self._window?
         self._window.close()
         return False # Stop building this fight
+
+    def __change_viewing_index(self,
+                               adj  # integer adjustment to viewing index
+                              ):
+        self.__viewing_index += adj
+        if self.__viewing_index >= len(self.__new_creatures):
+            self.__viewing_index = 0
+        elif self.__viewing_index < 0:
+            self.__viewing_index = len(self.__new_creatures) - 1
+
+    def __view_prev(self): # look at previous character, don't change init
+        if len(self.__new_creatures) == 0:
+            return True
+        if self.__viewing_index is None:
+            self.__viewing_index = len(self.__new_creatures) - 1
+        self.__change_viewing_index(-1)
+        self._window.show_creatures(
+                                (None if self.__is_new else self.__new_home),
+                                self.__new_creatures,
+                                self.__new_char_name,
+                                self.__viewing_index)
+        return True # Keep going
+
+    def __view_next(self): # look at next character, don't change init
+        if len(self.__new_creatures) == 0:
+            return True
+        if self.__viewing_index is None:
+            self.__viewing_index = len(self.__new_creatures) - 1
+        self.__change_viewing_index(1)
+        self._window.show_creatures(
+                                (None if self.__is_new else self.__new_home),
+                                self.__new_creatures,
+                                self.__new_char_name,
+                                self.__viewing_index)
+        return True # Keep going
 
 
 
