@@ -610,30 +610,43 @@ class BuildFightGmWindow(GmWindow):
                        viewing_index    # index into creature list
                       ):
 
-        #self.__char_list = []   # [[{'text', 'mode'}, ...],   # line 0
-        #                        #  [...],                  ]  # line 1...
+        # self.__viewing_index = None # dict: {'new'=True, index=0}
+
+        # self.__char_list = []   # [[{'text', 'mode'}, ...],   # line 0
+        #                         #  [...],                  ]  # line 1...
+
+        print '\n--- SHOW_CREATURES ---'    # TODO: remove
+        PP.pprint(viewing_index)            # TODO: remove
 
         self.__char_list_window.clear()
         del self.__char_list[:]
 
         mode = curses.A_NORMAL
-        line = 0
         if old_creatures is not None:
-            for old_name in sorted(old_creatures.keys()):
-                self.__char_list.append([{'text': old_name, 'mode': mode}])
+            for index, old_name in enumerate(sorted(old_creatures.keys())):
+                now_mode = mode
+                if viewing_index is not None and not viewing_index['new']:
+                    print 'Index in OLD list' # TODO: remove
+                    if index == viewing_index['index']:
+                        print '  FOUND index: %d' % index # TODO: remove
+                        now_mode |= curses.A_REVERSE
+                self.__char_list.append([{'text': old_name, 'mode': now_mode}])
 
             # Blank line between old creatures and new
             self.__char_list.append([{'text': '', 'mode': mode}])
 
         for index, new_name in enumerate(sorted(new_creatures.keys())):
             now_mode = mode
-            if viewing_index is not None:
-                if index == viewing_index:
+            if viewing_index is None:
+                if new_char_name is not None and new_name == new_char_name:
                     now_mode |= curses.A_REVERSE
-            elif new_char_name is not None and new_name == new_char_name:
-                now_mode |= curses.A_REVERSE
+            else:
+                if viewing_index['new']:
+                    print 'Index in NEW list' # TODO: remove
+                    if index == viewing_index['index']:
+                        print '  FOUND index: %d' % index # TODO: remove
+                        now_mode |= curses.A_REVERSE
             self.__char_list.append([{'text': new_name, 'mode': now_mode}])
-            line += 1
 
         # ...and show the screen
 
@@ -4245,8 +4258,6 @@ class BuildFightHandler(ScreenHandler):
             ord('t'): {'name': 'change template', 'func': self.__new_template},
             ord('q'): {'name': 'quit',            'func': self.__quit},
         })
-        self.__viewing_index = None
-
         self._window = self._window_manager.get_build_fight_gm_window()
 
         self.__world = world
@@ -4274,7 +4285,9 @@ class BuildFightHandler(ScreenHandler):
         self.__equipment_manager = EquipmentManager(world,
                                                     window_manager)
 
+        # TODO: instead of this, change self.__viewing_index, EVERYWHERE
         self.__new_char_name = None
+        self.__viewing_index = None # dict: {'new'=True, index=0}
 
         if creature_type == BuildFightHandler.NPCs:
             self.__is_new = False
@@ -4368,6 +4381,7 @@ class BuildFightHandler(ScreenHandler):
                         self.__world.details['Templates'][self.__template_name]]
             from_monster_name = self._window_manager.menu('Monster',
                                                           sorted(monster_menu))
+            # TODO: maybe not
             if from_monster_name is None:
                 return True # Keep going
 
@@ -4725,17 +4739,66 @@ class BuildFightHandler(ScreenHandler):
     def __change_viewing_index(self,
                                adj  # integer adjustment to viewing index
                               ):
-        self.__viewing_index += adj
-        if self.__viewing_index >= len(self.__new_creatures):
-            self.__viewing_index = 0
-        elif self.__viewing_index < 0:
-            self.__viewing_index = len(self.__new_creatures) - 1
+        '''
+        We're managing two lists, here, as if they're one.  They are:
+            * old list: (None if self.__is_new else self.__new_home),
+            * new list: self.__new_creatures,
+        Note that either list may be empty.  The old list goes before the new
+        list but we're wrapping so advancing off of one list goes to the other
+        (unless it's empty).
 
-    def __view_prev(self): # look at previous character, don't change init
-        if len(self.__new_creatures) == 0:
-            return True
+        The index is stored like this:
+            * self.__viewing_index = None # dict: {'new'=True, index=0}
+        '''
+
+        print '\n--- CHANGE_VIEWING_INDEX by %d ---' % adj # TODO: remove
+        len_list = {'old': (0 if self.__is_new else len(self.__new_home)),
+                    'new': len(self.__new_creatures)}
+        print 'length of new=%d, old=%d' % (len_list['new'],  # TODO: remove
+                                            len_list['old'])  # TODO: remove
+
+        if len_list['old'] == 0 and len_list['new'] == 0:
+            return
+
         if self.__viewing_index is None:
-            self.__viewing_index = len(self.__new_creatures) - 1
+            print 'NULL __viewing_index: Creating a new one' # TODO: remove
+            self.__viewing_index = {'new': True,
+                                    'index': len(self.__new_creatures) - 1}
+
+        if self.__viewing_index['new']:
+            print 'this_list=new, other_list=old' # TODO: remove
+            this_list = 'new'
+            other_list = 'old'
+        else:
+            print 'this_list=old, other_list=new' # TODO: remove
+            this_list = 'old'
+            other_list = 'new'
+
+        self.__viewing_index['index'] += adj
+        print 'New index: %d' % self.__viewing_index['index'] # TODO: remove
+
+        if self.__viewing_index['index'] >= len_list[this_list]:
+            print 'OVER-flow' # TODO: remove
+            self.__viewing_index['index'] = 0
+            if len_list[other_list] > 0:
+                self.__viewing_index['new'] = (True if other_list == 'new' 
+                                                    else False)
+                print '  - swapping lists, now %s' % ( # TODO: remove
+                    'NEW' if self.__viewing_index['new'] else 'OLD') # TODO: remove
+        elif self.__viewing_index['index'] < 0:
+            print 'UNDER-flow' # TODO: remove
+            if len_list[other_list] <= 0:
+                self.__viewing_index['index'] = len_list[this_list] - 1
+            else:
+                self.__viewing_index['index'] = len_list[other_list] - 1
+                self.__viewing_index['new'] = (True if other_list == 'new' 
+                                                    else False)
+                print '  - swapping lists, now %s' % ( # TODO: remove
+                    'NEW' if self.__viewing_index['new'] else 'OLD') # TODO: remove
+        print 'Final index: %d' % self.__viewing_index['index'] # TODO: remove
+
+
+    def __view_prev(self): # look at previous character
         self.__change_viewing_index(-1)
         self._window.show_creatures(
                                 (None if self.__is_new else self.__new_home),
@@ -4744,11 +4807,7 @@ class BuildFightHandler(ScreenHandler):
                                 self.__viewing_index)
         return True # Keep going
 
-    def __view_next(self): # look at next character, don't change init
-        if len(self.__new_creatures) == 0:
-            return True
-        if self.__viewing_index is None:
-            self.__viewing_index = len(self.__new_creatures) - 1
+    def __view_next(self): # look at next character
         self.__change_viewing_index(1)
         self._window.show_creatures(
                                 (None if self.__is_new else self.__new_home),
@@ -6223,9 +6282,9 @@ class MainHandler(ScreenHandler):
         sub_menu = [('NPC joins PCs',      {'doit': self.__NPC_joins_PCs}),
                     ('NPC leaves PCs',     {'doit': self.__NPC_leaves_PCs}),
                     ('NPC joins Monsters', {'doit': self.__NPC_joins_monsters}),
-                    ('new NPCs',           {'doit': self.__add_NPCs}),
-                    ('new PCs',            {'doit': self.__add_PCs}),
-                    ('new Monsters',       {'doit': self.__add_monsters})]
+                    ('NPCs',               {'doit': self.__add_NPCs}),
+                    ('PCs',                {'doit': self.__add_PCs}),
+                    ('Monsters',           {'doit': self.__add_monsters})]
         self._window_manager.menu('Do what', sub_menu)
         return True
 
