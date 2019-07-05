@@ -10585,7 +10585,7 @@
       }
     }, 
     "Baz for Sphere": {
-      "3 - Anaica": {
+      "3 - Anaica - Mambo/Medic": {
         "stunned": 0, 
         "did_action_this_turn": false, 
         "short-notes": [], 
@@ -10597,6 +10597,25 @@
           "rounds": 0
         }, 
         "stuff": [
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "Large Knife", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          },
           {
             "acc": 1, 
             "count": 1, 
@@ -10630,6 +10649,8 @@
           }
         ], 
         "skills": {
+          "Brawling": 13, 
+          "Knife": 15,
           "Guns (Pistol)": 15
         }, 
         "notes": [
@@ -10655,7 +10676,7 @@
           "wi": 12, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 6.25
         }, 
         "state": "alive", 
         "permanent": {
@@ -10668,13 +10689,13 @@
           "wi": 12, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 6.25
         }, 
         "timers": [], 
         "check_for_death": false, 
         "opponent": null
       }, 
-      "2 - Mirlande": {
+      "2 - James": {
         "stunned": 0, 
         "did_action_this_turn": false, 
         "short-notes": [], 
@@ -10792,7 +10813,7 @@
           "wi": 12, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 6
         }, 
         "state": "alive", 
         "permanent": {
@@ -10805,7 +10826,7 @@
           "wi": 12, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 6
         }, 
         "timers": [], 
         "check_for_death": false, 
@@ -10923,239 +10944,6 @@
           "speech: Monotone", 
           "knack: A plan for the perfect crime", 
           "personality: Reserved"
-        ], 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "per": 12, 
-          "wi": 12, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "ht": 11, 
-          "st": 10, 
-          "per": 12, 
-          "wi": 12, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "7 - Jameson": {
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [], 
-        "advantages": {}, 
-        "weapon-index": null, 
-        "posture": "standing", 
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-           {
-              "count": 2, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": [], 
-              "name": "Zip Clip"
-           }, 
-          {
-            "acc": 1, 
-            "count": 1, 
-            "owners": [
-              "the store"
-            ], 
-            "name": "zip tazer, nice", 
-            "notes": "hand built", 
-            "damage": {
-              "dice": {
-                "type": "fp", 
-                "num_dice": 1, 
-                "plus": 3
-              }
-            }, 
-            "reload": 3, 
-            "skill": "Guns (Pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "Zip Clip", 
-              "shots": 6, 
-              "shots_left": 6
-            }
-          }
-        ], 
-        "skills": {
-          "Guns (Pistol)": 15
-        }, 
-        "notes": [
-          "origin: haitian", 
-          "gender: male", 
-          "station history: roo (bounce between stations)", 
-          "characteristics: Burn scar, bodyLocation: Neck", 
-          "instincts: To go where no man has gone before", 
-          "hair: Streaked", 
-          "speech: Nosy", 
-          "knack: Secret martial arts techniques", 
-          "personality: Solicitous"
-        ], 
-        "shock": 0, 
-        "armor-index": null, 
-        "current": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "per": 12, 
-          "wi": 12, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "ht": 11, 
-          "st": 10, 
-          "per": 12, 
-          "wi": 12, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "timers": [], 
-        "check_for_death": false, 
-        "opponent": null
-      }, 
-      "6 - Anel": {
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [], 
-        "advantages": {
-          "Combat Reflexes": 15, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-           {
-              "count": 2, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": [], 
-              "name": "Zip Clip"
-           }, 
-          {
-            "acc": 1, 
-            "count": 1, 
-            "owners": [
-              "the store"
-            ], 
-            "name": "zip tazer, nice", 
-            "notes": "hand built", 
-            "damage": {
-              "dice": {
-                "type": "fp", 
-                "num_dice": 1, 
-                "plus": 3
-              }
-            }, 
-            "reload": 3, 
-            "skill": "Guns (Pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "Zip Clip", 
-              "shots": 6, 
-              "shots_left": 6
-            }
-          }, 
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "Large Knife", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "owners": null, 
-            "name": "C Cell"
-          }, 
-          {
-            "acc": 1, 
-            "count": 1, 
-            "owners": [
-              "the store"
-            ], 
-            "name": "zip tazer, nice", 
-            "notes": "hand built", 
-            "damage": {
-              "dice": {
-                "type": "fp", 
-                "num_dice": 1, 
-                "plus": 3
-              }
-            }, 
-            "reload": 3, 
-            "skill": "Guns (Pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "Zip Clip", 
-              "shots": 6, 
-              "shots_left": 6
-            }
-          }
-        ], 
-        "skills": {
-          "Guns (Pistol)": 15,
-          "Brawling": 15, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "origin: haitian", 
-          "gender: male", 
-          "station history: staby (born on this station)", 
-          "characteristics: Hemaphobic (afraid of blood)", 
-          "instincts: To find true love", 
-          "hair: Very Long", 
-          "speech: Whiny", 
-          "knack: Sense of direction", 
-          "personality: Reverent"
         ], 
         "shock": 0, 
         "armor-index": null, 
@@ -11313,7 +11101,7 @@
           "wi": 12, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 5.25
         }, 
         "state": "alive", 
         "permanent": {
@@ -11326,7 +11114,7 @@
           "wi": 12, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 5.25
         }, 
         "timers": [], 
         "check_for_death": false, 
@@ -11348,6 +11136,25 @@
         }, 
         "stuff": [
            {
+            "count": 1, 
+            "owners": null, 
+            "name": "Large Knife", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "plus": -2, 
+                "type": "cut"
+              }, 
+              "thr": {
+                "plus": 0, 
+                "type": "imp"
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          },
+          {
               "count": 2, 
               "notes": "", 
               "type": "misc", 
@@ -11380,6 +11187,7 @@
           }
         ], 
         "skills": {
+          "Knife": 15,
           "Fast-Draw (Ammo)": 15, 
           "Guns (Rifle)": 18
         }, 
@@ -11406,7 +11214,7 @@
           "wi": 12, 
           "dx": 15, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 5
         }, 
         "state": "alive", 
         "permanent": {
@@ -11419,13 +11227,13 @@
           "wi": 12, 
           "dx": 15, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 5
         }, 
         "timers": [], 
         "check_for_death": false, 
         "opponent": null
       }, 
-      "8 - James - Leader": {
+      "6 - Mirlande - Leader": {
         "stunned": 0, 
         "did_action_this_turn": false, 
         "short-notes": [], 
@@ -11526,7 +11334,7 @@
           "wi": 12, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 6
         }, 
         "state": "alive", 
         "permanent": {
@@ -11539,7 +11347,7 @@
           "wi": 12, 
           "dx": 12, 
           "basic-move": 5, 
-          "basic-speed": 5.75
+          "basic-speed": 6
         }, 
         "timers": [], 
         "check_for_death": false, 
