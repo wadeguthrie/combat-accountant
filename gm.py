@@ -615,9 +615,6 @@ class BuildFightGmWindow(GmWindow):
         # self.__char_list = []   # [[{'text', 'mode'}, ...],   # line 0
         #                         #  [...],                  ]  # line 1...
 
-        print '\n--- SHOW_CREATURES ---'    # TODO: remove
-        PP.pprint(viewing_index)            # TODO: remove
-
         self.__char_list_window.clear()
         del self.__char_list[:]
 
@@ -626,9 +623,7 @@ class BuildFightGmWindow(GmWindow):
             for index, old_name in enumerate(sorted(old_creatures.keys())):
                 now_mode = mode
                 if viewing_index is not None and not viewing_index['new']:
-                    print 'Index in OLD list' # TODO: remove
                     if index == viewing_index['index']:
-                        print '  FOUND index: %d' % index # TODO: remove
                         now_mode |= curses.A_REVERSE
                 self.__char_list.append([{'text': old_name, 'mode': now_mode}])
 
@@ -642,9 +637,7 @@ class BuildFightGmWindow(GmWindow):
                     now_mode |= curses.A_REVERSE
             else:
                 if viewing_index['new']:
-                    print 'Index in NEW list' # TODO: remove
                     if index == viewing_index['index']:
-                        print '  FOUND index: %d' % index # TODO: remove
                         now_mode |= curses.A_REVERSE
             self.__char_list.append([{'text': new_name, 'mode': now_mode}])
 
@@ -4285,7 +4278,6 @@ class BuildFightHandler(ScreenHandler):
         self.__equipment_manager = EquipmentManager(world,
                                                     window_manager)
 
-        # TODO: instead of this, change self.__viewing_index, EVERYWHERE
         self.__new_char_name = None
         self.__viewing_index = None # dict: {'new'=True, index=0}
 
@@ -4751,51 +4743,37 @@ class BuildFightHandler(ScreenHandler):
             * self.__viewing_index = None # dict: {'new'=True, index=0}
         '''
 
-        print '\n--- CHANGE_VIEWING_INDEX by %d ---' % adj # TODO: remove
         len_list = {'old': (0 if self.__is_new else len(self.__new_home)),
                     'new': len(self.__new_creatures)}
-        print 'length of new=%d, old=%d' % (len_list['new'],  # TODO: remove
-                                            len_list['old'])  # TODO: remove
 
         if len_list['old'] == 0 and len_list['new'] == 0:
             return
 
         if self.__viewing_index is None:
-            print 'NULL __viewing_index: Creating a new one' # TODO: remove
             self.__viewing_index = {'new': True,
                                     'index': len(self.__new_creatures) - 1}
 
         if self.__viewing_index['new']:
-            print 'this_list=new, other_list=old' # TODO: remove
             this_list = 'new'
             other_list = 'old'
         else:
-            print 'this_list=old, other_list=new' # TODO: remove
             this_list = 'old'
             other_list = 'new'
 
         self.__viewing_index['index'] += adj
-        print 'New index: %d' % self.__viewing_index['index'] # TODO: remove
 
         if self.__viewing_index['index'] >= len_list[this_list]:
-            print 'OVER-flow' # TODO: remove
             self.__viewing_index['index'] = 0
             if len_list[other_list] > 0:
                 self.__viewing_index['new'] = (True if other_list == 'new' 
                                                     else False)
-                print '  - swapping lists, now %s' % ( # TODO: remove
-                    'NEW' if self.__viewing_index['new'] else 'OLD') # TODO: remove
         elif self.__viewing_index['index'] < 0:
-            print 'UNDER-flow' # TODO: remove
             if len_list[other_list] <= 0:
                 self.__viewing_index['index'] = len_list[this_list] - 1
             else:
                 self.__viewing_index['index'] = len_list[other_list] - 1
                 self.__viewing_index['new'] = (True if other_list == 'new' 
                                                     else False)
-                print '  - swapping lists, now %s' % ( # TODO: remove
-                    'NEW' if self.__viewing_index['new'] else 'OLD') # TODO: remove
-        print 'Final index: %d' % self.__viewing_index['index'] # TODO: remove
 
 
     def __view_prev(self): # look at previous character
