@@ -4245,9 +4245,13 @@ class BuildFightHandler(ScreenHandler):
             ord('a'): {'name': 'add creature',    'func': self.__add_creature},
             ord('d'): {'name': 'delete creature', 'func':
                                                     self.__delete_creature},
-            ord('e'): {'name': 'existing group',  'func':
+            ord('e'): {'name': 'add equipment',   'func':
+                                                    self.__add_equipment},
+            ord('E'): {'name': 'remove equipment','func':
+                                                    self.__remove_equipment},
+            ord('g'): {'name': 'new group',       'func': self.__new_group},
+            ord('G'): {'name': 'existing group',  'func':
                                                     self.__existing_group},
-            ord('n'): {'name': 'new group',       'func': self.__new_group},
             ord('t'): {'name': 'change template', 'func': self.__new_template},
             ord('q'): {'name': 'quit',            'func': self.__quit},
         })
@@ -4462,6 +4466,8 @@ class BuildFightHandler(ScreenHandler):
                 temp_list = copy.deepcopy(self.__new_creatures)
                 temp_list[monster_name] = to_monster
                 self.__new_char_name = monster_name
+                #self.__viewing_index = {'new':True,
+                #                        index:len(temp_list)-1}
                 self._window.show_creatures(
                                 (None if self.__is_new else self.__new_home),
                                 temp_list,
@@ -4472,8 +4478,6 @@ class BuildFightHandler(ScreenHandler):
                                 self.__ruleset)
 
                 action_menu = [('append to name', 'append'),
-                               ('Add equipment', 'add'),
-                               ('Remove equipment', 'remove'),
                                ('notes', 'notes'),
                                ('continue (add another creature)', 'continue'),
                                ('quit', 'quit')]
@@ -4505,12 +4509,6 @@ class BuildFightHandler(ScreenHandler):
                                 '^G to exit')
                     to_monster['notes'] = [x for x in notes.split('\n')]
 
-                elif action == 'add':
-                    self.__equipment_manager.add_equipment(fighter)
-
-                elif action == 'remove':
-                    self.__equipment_manager.remove_equipment(fighter)
-
                 elif action == 'continue':
                     keep_changing_this_creature = False
 
@@ -4526,6 +4524,58 @@ class BuildFightHandler(ScreenHandler):
                                 self.__viewing_index)
 
         return True # Keep going
+
+    def __add_equipment(self):
+        name, body = self.__name_n_body_from_index(
+                                self.__viewing_index,
+                                (None if self.__is_new else self.__new_home),
+                                self.__new_creatures)
+        if name is None or body is None:
+            return True
+
+        fighter = Fighter(name,
+                          self.__group_name,
+                          body,
+                          self.__ruleset,
+                          self._window_manager)
+
+        self.__equipment_manager.add_equipment(fighter)
+        return True
+
+    def __remove_equipment(self):
+        name, body = self.__name_n_body_from_index(
+                                self.__viewing_index,
+                                (None if self.__is_new else self.__new_home),
+                                self.__new_creatures)
+        if name is None or body is None:
+            return True
+
+        fighter = Fighter(name,
+                          self.__group_name,
+                          body,
+                          self.__ruleset,
+                          self._window_manager)
+        self.__equipment_manager.remove_equipment(fighter)
+        return True
+
+
+    def __name_n_body_from_index(self,
+                                 index,
+                                 old_creatures,
+                                 new_ceatures
+                                ):
+        if index is None:
+            return None, None
+
+        if index['new']:
+            creatures = sorted(new_creatures.items(), key=lambda x: x[0])
+        else:
+            creatures = sorted(old_creatures.items(), key=lambda x: x[0])
+
+        monster_name = creatures[index['index']][0]
+        monster_body = creatures[index['index']][1]
+
+        return monster_name, monster_body
 
     def __delete_creature(self):
         '''
