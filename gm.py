@@ -567,7 +567,6 @@ class BuildFightGmWindow(GmWindow):
                               character, # dict as found in the JSON
                               ruleset
                              ):
-        #print '  BuildFightGmWindow::show_character_detail'
         self.__char_detail_window.clear()
         if character is None:
             self.refresh()
@@ -607,7 +606,8 @@ class BuildFightGmWindow(GmWindow):
                        old_creatures,   # {name: {details}, ...} like in JSON
                        new_creatures,   # {name: {details}, ...} like in JSON
                        new_char_name,   # name of character to highlight
-                       viewing_index    # index into creature list
+                       viewing_index,   # index into creature list
+                       ruleset          # Ruleset object
                       ):
 
         # self.__viewing_index = None # dict: {'new'=True, index=0}
@@ -618,33 +618,44 @@ class BuildFightGmWindow(GmWindow):
         self.__char_list_window.clear()
         del self.__char_list[:]
 
+
         mode = curses.A_NORMAL
+        highlighted_creature = None
         if old_creatures is not None:
-            for index, old_name in enumerate(sorted(old_creatures.keys())):
+            creatures = sorted(old_creatures.items(), key=lambda x: x[0])
+            for index, name_body in enumerate(creatures):
                 now_mode = mode
                 if viewing_index is not None and not viewing_index['new']:
                     if index == viewing_index['index']:
                         now_mode |= curses.A_REVERSE
-                self.__char_list.append([{'text': old_name, 'mode': now_mode}])
+                        highlighted_creature = name_body[1]
+                self.__char_list.append([{'text': name_body[0],
+                                          'mode': now_mode}])
 
             # Blank line between old creatures and new
             self.__char_list.append([{'text': '', 'mode': mode}])
 
-        for index, new_name in enumerate(sorted(new_creatures.keys())):
+        creatures = sorted(new_creatures.items(), key=lambda x: x[0])
+        for index, name_body in enumerate(creatures):
             now_mode = mode
             if viewing_index is None:
-                if new_char_name is not None and new_name == new_char_name:
+                if new_char_name is not None and name_body[0] == new_char_name:
                     now_mode |= curses.A_REVERSE
+                    highlighted_creature = name_body[1]
             else:
                 if viewing_index['new']:
                     if index == viewing_index['index']:
                         now_mode |= curses.A_REVERSE
-            self.__char_list.append([{'text': new_name, 'mode': now_mode}])
+            self.__char_list.append([{'text': name_body[0], 'mode': now_mode}])
 
         # ...and show the screen
 
         self.__char_list_window.draw_window()
         self.__char_list_window.refresh()
+
+        # show the detail of the selected guy
+
+        self.show_character_detail(highlighted_creature, ruleset)
 
         self.refresh() # TODO: needed?
 
@@ -4336,11 +4347,17 @@ class BuildFightHandler(ScreenHandler):
                                    self._input_filename,
                                    ScreenHandler.maintainjson)
         self._window.command_ribbon(self._choices)
+        name, body = self.__name_n_body_from_index(
+                                self.__viewing_index,
+                                (None if self.__is_new else self.__new_home),
+                                self.__new_creatures)
         self._window.show_creatures(
-                            (None if self.__is_new else self.__new_home),
-                            self.__new_creatures,
-                            self.__new_char_name,
-                            self.__viewing_index)
+                                (None if self.__is_new else self.__new_home),
+                                self.__new_creatures,
+                                self.__new_char_name,
+                                self.__viewing_index,
+                                self.__ruleset)
+        # TODO: not here
         if (self.__new_char_name is not None and
                                 self.__new_char_name in self.__new_creatures):
             self._window.show_character_detail(
@@ -4472,9 +4489,8 @@ class BuildFightHandler(ScreenHandler):
                                 (None if self.__is_new else self.__new_home),
                                 temp_list,
                                 self.__new_char_name,
-                                self.__viewing_index)
-                self._window.show_character_detail(
-                                to_monster,
+                                self.__viewing_index,
+                                # to_monster,
                                 self.__ruleset)
 
                 action_menu = [('append to name', 'append'),
@@ -4521,7 +4537,8 @@ class BuildFightHandler(ScreenHandler):
                                 (None if self.__is_new else self.__new_home),
                                 self.__new_creatures,
                                 self.__new_char_name,
-                                self.__viewing_index)
+                                self.__viewing_index,
+                                self.__ruleset)
 
         return True # Keep going
 
@@ -4597,7 +4614,8 @@ class BuildFightHandler(ScreenHandler):
                                 (None if self.__is_new else self.__new_home),
                                 self.__new_creatures,
                                 self.__new_char_name,
-                                self.__viewing_index)
+                                self.__viewing_index,
+                                self.__ruleset)
 
         return True # Keep going
 
@@ -4832,7 +4850,8 @@ class BuildFightHandler(ScreenHandler):
                                 (None if self.__is_new else self.__new_home),
                                 self.__new_creatures,
                                 self.__new_char_name,
-                                self.__viewing_index)
+                                self.__viewing_index,
+                                self.__ruleset)
         return True # Keep going
 
     def __view_next(self): # look at next character
@@ -4841,7 +4860,8 @@ class BuildFightHandler(ScreenHandler):
                                 (None if self.__is_new else self.__new_home),
                                 self.__new_creatures,
                                 self.__new_char_name,
-                                self.__viewing_index)
+                                self.__viewing_index,
+                                self.__ruleset)
         return True # Keep going
 
 
