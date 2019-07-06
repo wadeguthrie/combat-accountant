@@ -646,6 +646,7 @@ class BuildFightGmWindow(GmWindow):
                 if viewing_index['new']:
                     if index == viewing_index['index']:
                         now_mode |= curses.A_REVERSE
+                        highlighted_creature = name_body[1]
             self.__char_list.append([{'text': name_body[0], 'mode': now_mode}])
 
         # ...and show the screen
@@ -4333,7 +4334,8 @@ class BuildFightHandler(ScreenHandler):
                 self.__existing_group()
 
             self._draw_screen()
-            self.__add_creature()
+            if new_existing == 'new':
+                self.__add_creature()
 
 
     #
@@ -4490,7 +4492,6 @@ class BuildFightHandler(ScreenHandler):
                                 temp_list,
                                 self.__new_char_name,
                                 self.__viewing_index,
-                                # to_monster,
                                 self.__ruleset)
 
                 action_menu = [('append to name', 'append'),
@@ -4500,7 +4501,7 @@ class BuildFightHandler(ScreenHandler):
 
                 action = self._window_manager.menu('What Next',
                                                    action_menu,
-                                                   4) # start on 'continue'
+                                                   2) # start on 'continue'
                 if action == 'append':
                     more_text = self._window_manager.input_box(1, # height
                                                                cols-4, # width
@@ -4557,6 +4558,13 @@ class BuildFightHandler(ScreenHandler):
                           self._window_manager)
 
         self.__equipment_manager.add_equipment(fighter)
+        self._window.show_creatures(
+                                (None if self.__is_new else self.__new_home),
+                                self.__new_creatures,
+                                self.__new_char_name,
+                                self.__viewing_index,
+                                self.__ruleset)
+
         return True
 
     def __remove_equipment(self):
@@ -4573,6 +4581,12 @@ class BuildFightHandler(ScreenHandler):
                           self.__ruleset,
                           self._window_manager)
         self.__equipment_manager.remove_equipment(fighter)
+        self._window.show_creatures(
+                                (None if self.__is_new else self.__new_home),
+                                self.__new_creatures,
+                                self.__new_char_name,
+                                self.__viewing_index,
+                                self.__ruleset)
         return True
 
 
@@ -6772,7 +6786,7 @@ class EquipmentManager(object):
         if item_index is None:
             return None
 
-        return fighter.remove_item(item_index)
+        return fighter.remove_equipment(item_index)
 
 
 class OutfitCharactersHandler(ScreenHandler):
