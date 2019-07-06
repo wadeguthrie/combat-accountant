@@ -15,9 +15,10 @@ import sys
 import traceback
 
 # TODO:
-#   - Equip monster group after creation
 #   - Equipping item should indicate if person doesn't have skill (and offer
 #     to give him the skill)
+#   - Equipping item should ask to add ammo for item
+#   - Equipping item should only add one
 #
 #   - Multiple weapons
 #   - Need equipment containers
