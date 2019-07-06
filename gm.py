@@ -4593,7 +4593,7 @@ class BuildFightHandler(ScreenHandler):
     def __name_n_body_from_index(self,
                                  index,
                                  old_creatures,
-                                 new_ceatures
+                                 new_creatures
                                 ):
         if index is None:
             return None, None
@@ -6344,9 +6344,9 @@ class MainHandler(ScreenHandler):
         sub_menu = [('NPC joins PCs',      {'doit': self.__NPC_joins_PCs}),
                     ('NPC leaves PCs',     {'doit': self.__NPC_leaves_PCs}),
                     ('NPC joins Monsters', {'doit': self.__NPC_joins_monsters}),
-                    ('NPCs',               {'doit': self.__add_NPCs}),
-                    ('PCs',                {'doit': self.__add_PCs}),
-                    ('Monsters',           {'doit': self.__add_monsters})]
+                    ('npc list',           {'doit': self.__add_NPCs}),
+                    ('pc list',            {'doit': self.__add_PCs}),
+                    ('monster list',       {'doit': self.__add_monsters})]
         self._window_manager.menu('Do what', sub_menu)
         return True
 
