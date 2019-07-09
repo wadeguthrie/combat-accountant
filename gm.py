@@ -608,11 +608,10 @@ class BuildFightGmWindow(GmWindow):
                        old_creatures,   # {name: {details}, ...} like in JSON
                        new_creatures,   # {name: {details}, ...} like in JSON
                        new_char_name,   # name of character to highlight
-                       viewing_index,   # index into creature list
+                       viewing_index,   # index into creature list:
+                                        #   dict: {'new'=True, index=0}
                        ruleset          # Ruleset object
                       ):
-
-        # self.__viewing_index = None # dict: {'new'=True, index=0}
 
         # self.__char_list = []   # [[{'text', 'mode'}, ...],   # line 0
         #                         #  [...],                  ]  # line 1...
@@ -4565,16 +4564,25 @@ class BuildFightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        if not self.__viewing_index['new'] and self.__is_new:
-            # Nothing old to delete (not sure how we got here)
-            return True
+        if self.__viewing_index is None:
+            name = self.__new_char_name
+            critters = (self.__new_home if len(self.__new_creatures) == 0
+                                        else self.__new_creatures)
 
-        critters = (self.__new_creatures if self.__viewing_index['new']
-                                                        else self.__new_home)
-        name, ignore_body = self.__name_n_body_from_index(
+        else:
+            if not self.__viewing_index['new'] and self.__is_new:
+                # Nothing old to delete (not sure how we got here)
+                return True
+
+            critters = (self.__new_creatures if self.__viewing_index['new']
+                                             else self.__new_home)
+            name, ignore_body = self.__name_n_body_from_index(
                                 self.__viewing_index,
                                 (None if self.__is_new else self.__new_home),
                                 self.__new_creatures)
+
+        if name is None:
+            return True
 
         critter_menu = [('Yes', 'yes'), ('No', 'no')]
         answer = self._window_manager.menu('Delete "%s" ARE YOU SURE?' % name,
@@ -4582,6 +4590,7 @@ class BuildFightHandler(ScreenHandler):
                                            1) # Chose 'No' by default
 
         if answer is not None and answer == 'yes':
+            self.__new_char_name = None
             del(critters[name])
 
         self.__viewing_index = None
