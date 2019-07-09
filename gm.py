@@ -6112,9 +6112,7 @@ class MainHandler(ScreenHandler):
                       {'name': 'scroll char detail',  'func':
                                                        self.__right_pane},
 
-            ord('c'): {'name': 'select character',    'func':
-                                                       self.__character},
-            ord('e'): {'name': 'equip character',     'func': 
+            ord('e'): {'name': 'equip/mod PC/NPC/monster', 'func': 
                                                        self.__equip},
             ord('p'): {'name': 'personnel changes',   'func': 
                                                        self.__party},
@@ -6256,6 +6254,8 @@ class MainHandler(ScreenHandler):
         spell_menu = [(spell['name'], spell)
                             for spell in self.__world.details['spells']]
         new_spell = self._window_manager.menu('Spell to Add', spell_menu)
+        if new_spell is None:
+            return True
 
         # Check if spell is already there
         for spell in fighter.details['spells']:
@@ -6335,8 +6335,14 @@ class MainHandler(ScreenHandler):
         sub_menu = [('add equipment',       {'doit': self.__add_equipment}),
                     ('remove equipment',    {'doit': self.__remove_equipment}),
                     ('give equipment',      {'doit': self.__give_equipment}),
-                    ('outfit characters',   {'doit': self.__outfit}),
-                    ('add spell',           {'doit': self.__add_spell})]
+                    ('add spell',           {'doit': self.__add_spell}),
+                    # TODO: short notes
+                    # TODO: notes
+                    # TODO: attributes - needs ruleset support
+                    # TODO: skills - needs ruleset support
+                    # TODO: advantages - needs ruleset support
+                    ('Monsters',            {'doit': self.__outfit}),
+                    ]
         self._window_manager.menu('Do what', sub_menu)
         return True # Keep going
 
@@ -6423,6 +6429,8 @@ class MainHandler(ScreenHandler):
             self._window_manager.error(['"%s" not found' % look_for_string])
         else:
             lines = []
+            result_menu = []
+
             for match in all_results:
                 if 'notes' in match:
                     match_string = '%s (%s): in %s - %s' % (match['name'],
@@ -6434,45 +6442,21 @@ class MainHandler(ScreenHandler):
                                                        match['group'],
                                                        match['location'])
 
-                lines.append([{'text': match_string,
-                               'mode': curses.A_NORMAL}])
-            self._window_manager.display_window('Found "%s"' % look_for_string,
-                                                lines)
+                index = None
+                for i, character in enumerate(self.__chars):
+                    if (character['name'] == match['name'] and
+                                    character['group'] == match['group']):
+                        index = i
 
-        return True
+                # TODO(maybe): if not found, pick from monster list?
+                result_menu.append((match_string, index))
 
-    def __character(self):
-        keep_going = True
-        name = ''
-        original_index = self.__char_index
-        self._draw_screen(inverse=True)
-        while keep_going:
-            user_input = self._window_manager.get_one_character()
-            if user_input == ord('\n'):
-                self._draw_screen(inverse=False)
-                return True
-            elif user_input == GmWindowManager.ESCAPE:
-                self.__char_index = self.__char_index
-                self._draw_screen(inverse=False)
-                return True
-            else:
-                if user_input == curses.ascii.BS:
-                    name = name[:-1]
-                elif curses.ascii.isprint(user_input):
-                    name += chr(user_input)
+            menu_title = 'Found "%s"' % look_for_string
 
-                length = len(name)
-
-                # Look for a match and return the selection
-                for index, char in enumerate(self.__chars):
-                            # [ {'name': xxx,
-                            #    'group': xxx,
-                            #    'details':xxx}, ...
-                    # (string, return value)
-                    if name == char['name'][:length]:
-                        self.__char_index = index
-                        self._draw_screen(inverse=True)
-                        break
+            select_result = self._window_manager.menu(menu_title, result_menu)
+            if select_result is not None:
+                self.__char_index = select_result
+                self._draw_screen()
 
         return True
 
@@ -6820,7 +6804,7 @@ class OutfitCharactersHandler(ScreenHandler):
                                                     self._window_manager)
 
         lines, cols = self._window.getmaxyx()
-        group_menu = [('PCs', 'PCs')]
+        group_menu = []
         group_menu.extend([(group, group)
                                 for group in self.__world.details['monsters']])
         self.__group_name = self._window_manager.menu('Outfit Which Group',
