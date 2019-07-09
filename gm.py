@@ -4570,6 +4570,7 @@ class BuildFightHandler(ScreenHandler):
         else:
             critters = self.__new_creatures
 
+        # TODO: delete the currently selected one
         critter_menu = [(name, name) for name in critters.iterkeys()]
         critter_name = self._window_manager.menu('Delete Which Creature',
                                                  critter_menu)

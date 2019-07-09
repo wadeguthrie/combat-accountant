@@ -1900,23 +1900,23 @@
       }, 
       "advantages": {
         "G-Experience": 1, 
-        "Alcohol Intolerance": -1, 
         "Honest Face": 1, 
         "Wealth": -10, 
         "Extra Hit Points": 2, 
         "Habit": -1, 
         "Nosy": -1, 
         "Like knick knacks": -1, 
-        "Vodou Practitioner": 15, 
-        "Empathy": 15, 
         "Impulsiveness": -10, 
+        "Vodou Practitioner": 15, 
+        "Alcohol Intolerance": -1, 
+        "Versatile": 5, 
         "Cultural Familiarity (Teraformers)": 1, 
         "Short Attention Span": -10, 
         "Curious": -5, 
         "Bad Temper": -10, 
         "Deep Sleeper": 1, 
         "Combat Reflexes": 15, 
-        "Versatile": 5, 
+        "Empathy": 15, 
         "Dreamer": -1
       }, 
       "did_action_this_turn": false, 
@@ -10585,25 +10585,72 @@
       }
     }, 
     "Baz for Sphere": {
-      "7 - Joseph - Mambo/Medic": {
-        "stunned": 0, 
-        "did_action_this_turn": false, 
-        "short-notes": [], 
-        "advantages": {
-          "Empathy": 5, 
-          "Vodou Practitioner (Mambo 2)": 35, 
-          "Combat Reflexes": 15, 
-          "High Pain Threshold": 10, 
-          "Lwa (Mambo, Erzulie Freda)": 6
-        }, 
-        "weapon-index": null, 
-        "posture": "standing", 
+      "3 - Joseph - Mambo/Medic": {
         "aim": {
           "braced": false, 
           "rounds": 0
         }, 
-        "stuff": [], 
-        "skills": {}, 
+        "stuff": [
+          {
+            "acc": 1, 
+            "count": 1, 
+            "owners": [
+              "the store"
+            ], 
+            "name": "zip tazer, nice", 
+            "notes": "hand built", 
+            "damage": {
+              "dice": {
+                "type": "fp", 
+                "num_dice": 1, 
+                "plus": 3
+              }
+            }, 
+            "reload": 3, 
+            "skill": "Guns (Pistol)", 
+            "type": "ranged weapon", 
+            "ammo": {
+              "name": "Zip Clip", 
+              "shots": 6, 
+              "shots_left": 6
+            }
+          }, 
+          {
+            "count": 2, 
+            "notes": "", 
+            "type": "misc", 
+            "owners": [
+              "the store"
+            ], 
+            "name": "Zip Clip"
+          }, 
+          {
+            "count": 1, 
+            "owners": null, 
+            "name": "Large Knife", 
+            "notes": "", 
+            "damage": {
+              "sw": {
+                "type": "cut", 
+                "plus": -2
+              }, 
+              "thr": {
+                "type": "imp", 
+                "plus": 0
+              }
+            }, 
+            "parry": -1, 
+            "skill": "Knife", 
+            "type": "melee weapon"
+          }
+        ], 
+        "stunned": 0, 
+        "skills": {
+          "Physician": 14, 
+          "Guns (Pistol)": 11, 
+          "Brawling": 11, 
+          "Knife": 11
+        }, 
         "notes": [
           "origin: haitian", 
           "gender: male", 
@@ -10616,6 +10663,7 @@
           "personality: Stingy"
         ], 
         "shock": 0, 
+        "short-notes": [], 
         "armor-index": null, 
         "current": {
           "fp": 11, 
@@ -10629,6 +10677,7 @@
           "basic-move": 5, 
           "basic-speed": 5.25
         }, 
+        "posture": "standing", 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -10642,8 +10691,18 @@
           "basic-move": 5, 
           "basic-speed": 5.25
         }, 
-        "timers": [], 
+        "advantages": {
+          "Empathy": 5, 
+          "Vodou Practitioner (Mambo 2)": 35, 
+          "Combat Reflexes": 15, 
+          "High Pain Threshold": 10, 
+          "Lwa (Mambo, Erzulie Freda)": 6
+        }, 
+        "opponent": null, 
+        "weapon-index": null, 
         "check_for_death": false, 
+        "timers": [], 
+        "did_action_this_turn": false, 
         "spells": [
           {
             "cost": 1, 
@@ -10765,8 +10824,7 @@
             "time": 2, 
             "skill": 11
           }
-        ], 
-        "opponent": null
+        ]
       }, 
       "5 - Watson": {
         "aim": {
@@ -10888,7 +10946,7 @@
           "basic-move": 5, 
           "basic-speed": 5.75
         }, 
-        "check_for_death": false, 
+        "posture": "standing", 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -10906,10 +10964,10 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
-        "posture": "standing", 
+        "did_action_this_turn": false, 
         "opponent": null
       }, 
       "2 - James": {
@@ -11025,7 +11083,7 @@
           "basic-move": 5, 
           "basic-speed": 6
         }, 
-        "check_for_death": false, 
+        "posture": "standing", 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -11043,10 +11101,10 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
-        "posture": "standing", 
+        "did_action_this_turn": false, 
         "opponent": null
       }, 
       "6 - Mirlande - Leader": {
@@ -11080,13 +11138,6 @@
             "parry": -1, 
             "skill": "Knife", 
             "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "owners": null, 
-            "name": "C Cell"
           }, 
           {
             "acc": 1, 
@@ -11145,7 +11196,7 @@
           "basic-move": 5, 
           "basic-speed": 6
         }, 
-        "check_for_death": false, 
+        "posture": "standing", 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -11163,120 +11214,10 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
-        "timers": [], 
-        "posture": "standing", 
-        "opponent": null
-      }, 
-      "3 - Anaica - Mambo/Medic": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "Large Knife", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "acc": 1, 
-            "count": 1, 
-            "owners": [
-              "the store"
-            ], 
-            "name": "zip tazer, nice", 
-            "notes": "hand built", 
-            "damage": {
-              "dice": {
-                "type": "fp", 
-                "num_dice": 1, 
-                "plus": 3
-              }
-            }, 
-            "reload": 3, 
-            "skill": "Guns (Pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "Zip Clip", 
-              "shots": 6, 
-              "shots_left": 6
-            }
-          }, 
-          {
-            "count": 2, 
-            "notes": "", 
-            "type": "misc", 
-            "owners": [], 
-            "name": "Zip Clip"
-          }
-        ], 
-        "stunned": 0, 
-        "skills": {
-          "Guns (Pistol)": 15, 
-          "Brawling": 13, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "origin: haitian", 
-          "gender: female", 
-          "station history: staby (born on this station)", 
-          "characteristics: Always gives vaguest possible answer", 
-          "instincts: To discover", 
-          "hair: Straight", 
-          "speech: Um Uh", 
-          "knack: The love of someone powerful", 
-          "personality: Impetuous"
-        ], 
-        "shock": 0, 
-        "short-notes": [], 
-        "armor-index": null, 
-        "current": {
-          "fp": 11, 
-          "ht": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "wi": 12, 
-          "st": 10, 
-          "per": 12, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 6.25
-        }, 
         "check_for_death": false, 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "ht": 11, 
-          "iq": 12, 
-          "hp": 12, 
-          "wi": 12, 
-          "st": 10, 
-          "per": 12, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 6.25
-        }, 
-        "advantages": {}, 
-        "did_action_this_turn": false, 
-        "weapon-index": null, 
         "timers": [], 
-        "posture": "standing", 
+        "did_action_this_turn": false, 
         "opponent": null
       }, 
       "1 - Nephtalie": {
@@ -11399,7 +11340,7 @@
           "basic-move": 5, 
           "basic-speed": 5.25
         }, 
-        "check_for_death": false, 
+        "posture": "standing", 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -11417,10 +11358,10 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
-        "posture": "standing", 
+        "did_action_this_turn": false, 
         "opponent": null
       }, 
       "4 - Islande - Sniper": {
@@ -11512,7 +11453,7 @@
           "basic-move": 5, 
           "basic-speed": 5
         }, 
-        "check_for_death": false, 
+        "posture": "standing", 
         "state": "alive", 
         "permanent": {
           "fp": 11, 
@@ -11530,10 +11471,10 @@
           "Combat Reflexes": 15, 
           "High Pain Threshold": 10
         }, 
-        "did_action_this_turn": false, 
         "weapon-index": null, 
+        "check_for_death": false, 
         "timers": [], 
-        "posture": "standing", 
+        "did_action_this_turn": false, 
         "opponent": null
       }
     }
