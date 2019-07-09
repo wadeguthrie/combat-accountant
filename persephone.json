@@ -9208,14 +9208,14 @@
       "type": "melee weapon"
     }, 
     {
-      "count": 1000000, 
+      "count": 1, 
       "notes": "", 
       "type": "misc", 
       "owners": [], 
       "name": "Zip Clip"
     }, 
     {
-      "count": 1000000, 
+      "count": 1, 
       "notes": "", 
       "type": "misc", 
       "owners": null, 

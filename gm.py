@@ -15,10 +15,11 @@ import sys
 import traceback
 
 # TODO:
+#   - Add other categories to equip/mod: attributes, skills, notes, etc
+#
 #   - Equipping item should indicate if person doesn't have skill (and offer
 #     to give him the skill)
 #   - Equipping item should ask to add ammo for item
-#   - Equipping item should only add one
 #
 #   - Multiple weapons
 #   - Need equipment containers
@@ -4258,10 +4259,6 @@ class BuildFightHandler(ScreenHandler):
             ord('a'): {'name': 'add creature',    'func': self.__add_creature},
             ord('d'): {'name': 'delete creature', 'func':
                                                     self.__delete_creature},
-            ord('e'): {'name': 'add equipment',   'func':
-                                                    self.__add_equipment},
-            ord('E'): {'name': 'remove equipment','func':
-                                                    self.__remove_equipment},
             ord('g'): {'name': 'new group',       'func': self.__new_group},
             ord('G'): {'name': 'existing group',  'func':
                                                     self.__existing_group},
@@ -4292,8 +4289,7 @@ class BuildFightHandler(ScreenHandler):
                                     # they'll be transferred to their new
                                     # home.
 
-        self.__equipment_manager = EquipmentManager(world,
-                                                    window_manager)
+        self.__equipment_manager = EquipmentManager(world, window_manager)
 
         self.__new_char_name = None
         self.__viewing_index = None # dict: {'new'=True, index=0}
@@ -4335,8 +4331,10 @@ class BuildFightHandler(ScreenHandler):
                 self.__existing_group()
 
             self._draw_screen()
-            if new_existing == 'new':
-                self.__add_creature()
+            self.__add_creature()
+
+    def get_group_name(self):
+        return self.__group_name
 
 
     #
@@ -4360,7 +4358,6 @@ class BuildFightHandler(ScreenHandler):
                                 self.__new_char_name,
                                 self.__viewing_index,
                                 self.__ruleset)
-        # TODO: not here
         if (self.__new_char_name is not None and
                                 self.__new_char_name in self.__new_creatures):
             self._window.show_character_detail(
@@ -4544,52 +4541,6 @@ class BuildFightHandler(ScreenHandler):
 
         return True # Keep going
 
-    def __add_equipment(self):
-        name, body = self.__name_n_body_from_index(
-                                self.__viewing_index,
-                                (None if self.__is_new else self.__new_home),
-                                self.__new_creatures)
-        if name is None or body is None:
-            return True
-
-        fighter = Fighter(name,
-                          self.__group_name,
-                          body,
-                          self.__ruleset,
-                          self._window_manager)
-
-        self.__equipment_manager.add_equipment(fighter)
-        self._window.show_creatures(
-                                (None if self.__is_new else self.__new_home),
-                                self.__new_creatures,
-                                self.__new_char_name,
-                                self.__viewing_index,
-                                self.__ruleset)
-
-        return True
-
-    def __remove_equipment(self):
-        name, body = self.__name_n_body_from_index(
-                                self.__viewing_index,
-                                (None if self.__is_new else self.__new_home),
-                                self.__new_creatures)
-        if name is None or body is None:
-            return True
-
-        fighter = Fighter(name,
-                          self.__group_name,
-                          body,
-                          self.__ruleset,
-                          self._window_manager)
-        self.__equipment_manager.remove_equipment(fighter)
-        self._window.show_creatures(
-                                (None if self.__is_new else self.__new_home),
-                                self.__new_creatures,
-                                self.__new_char_name,
-                                self.__viewing_index,
-                                self.__ruleset)
-        return True
-
 
     def __name_n_body_from_index(self,
                                  index,
@@ -4700,6 +4651,10 @@ class BuildFightHandler(ScreenHandler):
                     else:
                         # add self.__new_creatures to self.__new_home
                         self.__new_home.update(self.__new_creatures)
+                else:
+                    self.__group_name = None
+            else:
+                self.__group_name = None
 
             # Throw the old ones away
             self.__new_creatures = {}
@@ -6114,12 +6069,15 @@ class MainHandler(ScreenHandler):
 
             ord('e'): {'name': 'equip/mod PC/NPC/monster', 'func': 
                                                        self.__equip},
-            ord('p'): {'name': 'personnel changes',   'func': 
+            ord('p'): {'name': 'move/add personnel',  'func': 
                                                        self.__party},
             ord('f'): {'name': 'fight',               'func':
                                                        self.__run_fight},
             ord('H'): {'name': 'Heal',                'func':
                                                        self.__fully_heal},
+            ord('M'): {'name': 'toggle Monster/PC/NPC', 'func':
+                                       self.__toggle_Monster_PC_NPC_display},
+
             ord('q'): {'name': 'quit',                'func':
                                                        self.__quit},
             ord('r'): {'name': 'resurrect fight',     'func':
@@ -6129,7 +6087,8 @@ class MainHandler(ScreenHandler):
             ord('/'): {'name': 'search',              'func':
                                                        self.__search}
         })
-        self.__setup_PC_list()
+        self.__current_display = None
+        self.__setup_PC_list(self.__current_display)
         self._window = self._window_manager.get_main_gm_window()
         self.__equipment_manager = EquipmentManager(self.__world,
                                                     self._window_manager)
@@ -6165,6 +6124,26 @@ class MainHandler(ScreenHandler):
     # Private Methods - callbacks for 'choices' array for menu
     #
 
+
+    def __toggle_Monster_PC_NPC_display(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        if self.__current_display is None:
+            group_menu = [(group_name, group_name)
+                            for group_name in self.__world.details['monsters']]
+            self.__current_display = self._window_manager.menu(
+                                                    'Which Monster Group',
+                                                    group_menu)
+        else:
+            self.__current_display = None
+
+        self.__setup_PC_list(self.__current_display)
+        self._draw_screen()
+        return True
+
+
     def __add_NPCs(self, throw_away):
         '''
         Command ribbon method.
@@ -6178,7 +6157,7 @@ class MainHandler(ScreenHandler):
                                         campaign_debug_json,
                                         self._input_filename)
         build_fight.handle_user_input_until_done()
-        self.__setup_PC_list() # Since it may have changed
+        self.__setup_PC_list(self.__current_display) # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
         return True # Keep going
 
@@ -6196,7 +6175,7 @@ class MainHandler(ScreenHandler):
                                         campaign_debug_json,
                                         self._input_filename)
         build_fight.handle_user_input_until_done()
-        self.__setup_PC_list() # Since it may have changed
+        self.__setup_PC_list(self.__current_display) # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
         return True # Keep going
 
@@ -6214,7 +6193,13 @@ class MainHandler(ScreenHandler):
                                         campaign_debug_json,
                                         self._input_filename)
         build_fight.handle_user_input_until_done()
-        self.__setup_PC_list() # Since it may have changed
+
+        last_group_name = build_fight.get_group_name()
+        if (last_group_name is not None and last_group_name != 'PCs' and
+                                            last_group_name != 'NPCs'):
+            self.__current_display = last_group_name
+
+        self.__setup_PC_list(self.__current_display) # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
         return True # Keep going
 
@@ -6341,7 +6326,6 @@ class MainHandler(ScreenHandler):
                     # TODO: attributes - needs ruleset support
                     # TODO: skills - needs ruleset support
                     # TODO: advantages - needs ruleset support
-                    ('Monsters',            {'doit': self.__outfit}),
                     ]
         self._window_manager.menu('Do what', sub_menu)
         return True # Keep going
@@ -6357,21 +6341,6 @@ class MainHandler(ScreenHandler):
         self._window_manager.menu('Do what', sub_menu)
         return True
 
-
-    def __outfit(self, throw_away):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-
-        outfit = OutfitCharactersHandler(self._window_manager,
-                                         self.__world,
-                                         self.__ruleset,
-                                         campaign_debug_json,
-                                         self._input_filename)
-        outfit.handle_user_input_until_done()
-        self._draw_screen() # Redraw current screen when done building fight.
-        return True # Keep going
 
     def __fully_heal(self):
         '''
@@ -6513,7 +6482,7 @@ class MainHandler(ScreenHandler):
             return True
 
         self.__world.details['monsters'][fight][npc_name] = {'redirect': 'NPCs'}
-        self.__setup_PC_list()
+        self.__setup_PC_list(self.__current_display)
         self._draw_screen()
         return True
 
@@ -6528,7 +6497,7 @@ class MainHandler(ScreenHandler):
             return True
 
         self.__world.details['PCs'][npc_name] = {'redirect': 'NPCs'}
-        self.__setup_PC_list()
+        self.__setup_PC_list(self.__current_display)
         self._draw_screen()
         return True
 
@@ -6543,7 +6512,7 @@ class MainHandler(ScreenHandler):
             return True
 
         del(self.__world.details['PCs'][npc_name])
-        self.__setup_PC_list()
+        self.__setup_PC_list(self.__current_display)
         self._draw_screen()
         return True
 
@@ -6630,25 +6599,44 @@ class MainHandler(ScreenHandler):
 
         fight.handle_user_input_until_done()
 
-        self.__setup_PC_list() # The fight may have changed the PC/NPC lists
+        self.__current_display = None
+        self.__setup_PC_list(self.__current_display) # The fight may have
+                                                     # changed the PC/NPC lists
         self._draw_screen() # Redraw current screen when done with the fight.
 
         return True # Keep going
 
-    def __setup_PC_list(self):
-        self.__chars = [
+    def __setup_PC_list(self,
+                        group=None):
+        if group is not None:
+            self.__chars = []
+            monsters = self.__world.get_list(group)
+            if monsters is not None:
+                self.__chars.extend([
+                    {'name': x,
+                     'group': group,
+                     'details': self.__world.get_creature_details(x, group)
+                    } for x in sorted(self.__world.get_list(group))])
+            if len(self.__chars) == 0:
+                group = None
+
+        if group is None:
+            self.__chars = [
                     {'name': x,
                      'group': 'PCs',
                      'details': self.__world.get_creature_details(x, 'PCs')
                     } for x in sorted(self.__world.get_list('PCs'))]
 
-        npcs = self.__world.get_list('NPCs')
-        if npcs is not None:
-            self.__chars.extend([
+            npcs = self.__world.get_list('NPCs')
+            if npcs is not None:
+                self.__chars.extend([
                     {'name': x,
                      'group': 'NPCs',
                      'details': self.__world.get_creature_details(x, 'NPCs')
                     } for x in sorted(self.__world.get_list('NPCs'))])
+        else:
+            pass
+
         self.__char_index = 0
 
 
@@ -6677,6 +6665,10 @@ class EquipmentManager(object):
                       fighter,      # Fighter object
                       item = None   # dict
                      ):
+        '''
+        Transfer an item of equipment from the store to a fighter.  Ask the
+        user which item.
+        '''
         if fighter is None:
             return
 
@@ -6773,129 +6765,6 @@ class EquipmentManager(object):
 
         return fighter.remove_equipment(item_index)
 
-
-class OutfitCharactersHandler(ScreenHandler):
-    def __init__(self,
-                 window_manager,
-                 world,
-                 ruleset,
-                 campaign_debug_json,
-                 filename # JSON file containing the world
-                ):
-        super(OutfitCharactersHandler, self).__init__(
-                                            window_manager,
-                                            campaign_debug_json,
-                                            filename,
-                                            world.details['current-fight'])
-
-        self._add_to_choice_dict({
-            ord('a'): {'name': 'add equipment',    'func':
-                                                      self.__add_equipment},
-            ord('r'): {'name': 'remove equipment', 'func':
-                                                      self.__remove_equipment},
-            ord('s'): {'name': 'select character', 'func':
-                                                      self.__select_character},
-            ord('q'): {'name': 'quit',             'func': self.__quit},
-        })
-        self._window = self._window_manager.get_outfit_gm_window()
-        self.__world = world
-        self.__ruleset = ruleset
-        self.__equipment_manager = EquipmentManager(self.__world,
-                                                    self._window_manager)
-
-        lines, cols = self._window.getmaxyx()
-        group_menu = []
-        group_menu.extend([(group, group)
-                                for group in self.__world.details['monsters']])
-        self.__group_name = self._window_manager.menu('Outfit Which Group',
-                                                      group_menu)
-
-        # TODO: need to exit if a group isn't chosen
-
-        self.__character = {'name': None, 'details': None}
-        self.__select_character()
-        self._window.show_character(self.__character)
-
-    #
-    # Protected Methods
-    #
-
-    def _draw_screen(self):
-        self._window.clear()
-        self._window.show_character(self.__character)
-        self._window.status_ribbon(self._input_filename,
-                                   ScreenHandler.maintainjson)
-        self._window.command_ribbon(self._choices)
-
-    #
-    # Private Methods
-    #
-
-    def __add_equipment(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        if self.__character['details'] is None:
-            self.__select_character()
-            return True # TODO: should this really return, now?
-
-        fighter = Fighter(self.__character['name'],
-                          self.__group_name,
-                          self.__character['details'],
-                          self.__ruleset,
-                          self._window_manager)
-        self.__equipment_manager.add_equipment(fighter)
-        self._window.show_character(self.__character)
-        return True # Keep going
-
-
-    def __remove_equipment(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-
-        if self.__character['details'] is None:
-            self.__select_character()
-            return True # TODO: should this really return, now?
-
-        fighter = Fighter(self.__character['name'],
-                          self.__group_name,
-                          self.__character['details'],
-                          self.__ruleset,
-                          self._window_manager)
-        self.__equipment_manager.remove_equipment(fighter)
-        self._window.show_character(self.__character)
-        return True # Keep going
-
-
-    def __select_character(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        character_list = self.__world.get_list(self.__group_name)
-        character_menu = [(dude, dude) for dude in character_list]
-        character_name = self._window_manager.menu('Character', character_menu)
-        if character_name is None:
-            return True # Keep going
-
-        details = self.__world.get_creature_details(character_name,
-                                                    self.__group_name)
-        if details is not None:
-            self.__character = {'name': character_name, 'details': details}
-            self._window.show_character(self.__character)
-        return True # Keep going
-
-
-    def __quit(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        self._window.close()
-        return False # Stop building this fight
 
 
 class MyArgumentParser(argparse.ArgumentParser):
