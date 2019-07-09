@@ -6728,6 +6728,7 @@ class EquipmentManager(object):
                             for item in self.__world.details['stuff']]
         item = self.__window_manager.menu('Item to Add', item_menu)
         if item is not None:
+            # TODO: don't put 'the store' if there's already a list
             fighter.add_equipment(copy.deepcopy(item), 'the store')
 
 
