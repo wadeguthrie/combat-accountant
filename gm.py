@@ -4565,17 +4565,24 @@ class BuildFightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        if len(self.__new_creatures) == 0:
-            critters = self.__new_home
-        else:
-            critters = self.__new_creatures
+        if not self.__viewing_index['new'] and self.__is_new:
+            # Nothing old to delete (not sure how we got here)
+            return True
 
-        # TODO: delete the currently selected one
-        critter_menu = [(name, name) for name in critters.iterkeys()]
-        critter_name = self._window_manager.menu('Delete Which Creature',
-                                                 critter_menu)
-        if critter_name is not None:
-            del(critters[critter_name])
+        critters = (self.__new_creatures if self.__viewing_index['new']
+                                                        else self.__new_home)
+        name, ignore_body = self.__name_n_body_from_index(
+                                self.__viewing_index,
+                                (None if self.__is_new else self.__new_home),
+                                self.__new_creatures)
+
+        critter_menu = [('Yes', 'yes'), ('No', 'no')]
+        answer = self._window_manager.menu('Delete "%s" ARE YOU SURE?' % name,
+                                           critter_menu,
+                                           1) # Chose 'No' by default
+
+        if answer is not None and answer == 'yes':
+            del(critters[name])
 
         self.__viewing_index = None
         self._window.show_creatures(
