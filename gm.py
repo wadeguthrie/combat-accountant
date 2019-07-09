@@ -17,7 +17,6 @@ import traceback
 # TODO:
 #   - Add other categories to equip/mod: attributes, skills, notes, etc
 #
-#   - Equipping item should indicate if person doesn't have skill (and offer
 #     to give him the skill)
 #   - Equipping item should ask to add ammo for item
 #
@@ -6369,13 +6368,57 @@ class MainHandler(ScreenHandler):
                     ('remove equipment',    {'doit': self.__remove_equipment}),
                     ('give equipment',      {'doit': self.__give_equipment}),
                     ('add spell',           {'doit': self.__add_spell}),
-                    # TODO: short notes
-                    # TODO: notes
+                    ('short notes',         {'doit': self.__short_notes}),
+                    ('notes',               {'doit': self.__full_notes}),
                     # TODO: attributes - needs ruleset support
                     # TODO: skills - needs ruleset support
                     # TODO: advantages - needs ruleset support
                     ]
         self._window_manager.menu('Do what', sub_menu)
+        return True # Keep going
+
+
+    def __short_notes(self, throw_away):
+        return self.__notes('short-notes')
+
+
+    def __full_notes(self, throw_away):
+        return self.__notes('notes')
+
+
+    def __notes(self,
+                notes_type  # 'short-notes' or 'notes'
+               ):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = Fighter(self.__chars[self.__char_index]['name'],
+                          self.__chars[self.__char_index]['group'],
+                          self.__chars[self.__char_index]['details'],
+                          self.__ruleset,
+                          self._window_manager)
+        if fighter is None:
+            return True # Keep fighting
+
+        # Now, get the notes for that person
+        lines, cols = self._window.getmaxyx()
+
+        if notes_type not in fighter.details:
+            notes = None
+        else:
+            notes = '\n'.join(fighter.details[notes_type])
+
+        notes = self._window_manager.edit_window(
+                    lines - 4,
+                    cols / 2, # arbitrary width
+                    notes,    # initial string (w/ \n) for the window
+                    'Notes',
+                    '^G to exit')
+
+        fighter.details[notes_type] = [x for x in notes.split('\n')]
+        self._draw_screen()
+
         return True # Keep going
 
 
