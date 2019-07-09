@@ -4328,7 +4328,7 @@ class BuildFightHandler(ScreenHandler):
             if new_existing == 'new':
                 self.__new_group()
             else:
-                self.__existing_group()
+                self.__existing_group(creature_type)
 
             self._draw_screen()
             self.__add_creature()
@@ -4566,14 +4566,15 @@ class BuildFightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         if len(self.__new_creatures) == 0:
-            return True
+            critters = self.__new_home
+        else:
+            critters = self.__new_creatures
 
-        critter_menu = [(name, name)
-                                for name in self.__new_creatures.iterkeys()]
+        critter_menu = [(name, name) for name in critters.iterkeys()]
         critter_name = self._window_manager.menu('Delete Which Creature',
                                                  critter_menu)
         if critter_name is not None:
-            del(self.__new_creatures[critter_name])
+            del(critters[critter_name])
 
         self.__viewing_index = None
         self._window.show_creatures(
@@ -4585,7 +4586,10 @@ class BuildFightHandler(ScreenHandler):
 
         return True # Keep going
 
-    def __existing_group(self):
+    def __existing_group(self,
+                         creature_type # BuildFightHandler.NPCs, ...
+                        ):
+
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -4604,16 +4608,20 @@ class BuildFightHandler(ScreenHandler):
 
         # Get the group information
 
-        group_menu = [(group_name,
+        if creature_type == BuildFightHandler.MONSTERs:
+            group_menu = [(group_name,
                        {'name': group_name,
                         'group': self.__world.get_list(group_name)})
                 for group_name in self.__world.details['monsters']]
-        group_menu.insert(0, ('NPCs',
+        if creature_type == BuildFightHandler.NPCs:
+            group_menu.insert(0, ('NPCs',
                               {'name': 'NPCs',
                                'group': self.__world.get_list('NPCs')}))
-        group_menu.insert(0, ('PCs',
+        if creature_type == BuildFightHandler.PCs:
+            group_menu.insert(0, ('PCs',
                               {'name': 'PCs',
                                'group': self.__world.get_list('PCs')}))
+
         group_answer = self._window_manager.menu('To Which Group', group_menu)
         if group_answer is None:
             return True # Keep going
@@ -6067,15 +6075,15 @@ class MainHandler(ScreenHandler):
                       {'name': 'scroll char detail',  'func':
                                                        self.__right_pane},
 
-            ord('e'): {'name': 'equip/mod PC/NPC/monster', 'func': 
+            ord('e'): {'name': 'EQUIP/mod PC/NPC/monster', 'func': 
                                                        self.__equip},
-            ord('p'): {'name': 'move/add personnel',  'func': 
+            ord('p'): {'name': 'move/add PERSONNEL',  'func': 
                                                        self.__party},
-            ord('f'): {'name': 'fight',               'func':
+            ord('f'): {'name': 'FIGHT',               'func':
                                                        self.__run_fight},
             ord('H'): {'name': 'Heal',                'func':
                                                        self.__fully_heal},
-            ord('M'): {'name': 'toggle Monster/PC/NPC', 'func':
+            ord('M'): {'name': 'show MONSTERs or PC/NPC', 'func':
                                        self.__toggle_Monster_PC_NPC_display},
 
             ord('q'): {'name': 'quit',                'func':
