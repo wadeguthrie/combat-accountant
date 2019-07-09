@@ -4565,9 +4565,9 @@ class BuildFightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         if self.__viewing_index is None:
+            # Auto-select the most recently added new creature
             name = self.__new_char_name
-            critters = (self.__new_home if len(self.__new_creatures) == 0
-                                        else self.__new_creatures)
+            critters = self.__new_creatures
 
         else:
             if not self.__viewing_index['new'] and self.__is_new:
@@ -4577,9 +4577,10 @@ class BuildFightHandler(ScreenHandler):
             critters = (self.__new_creatures if self.__viewing_index['new']
                                              else self.__new_home)
             name, ignore_body = self.__name_n_body_from_index(
-                                self.__viewing_index,
-                                (None if self.__is_new else self.__new_home),
-                                self.__new_creatures)
+                                            self.__viewing_index,
+                                            (None if self.__is_new 
+                                                else self.__new_home),
+                                            self.__new_creatures)
 
         if name is None:
             return True
