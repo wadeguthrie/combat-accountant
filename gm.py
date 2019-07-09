@@ -6162,11 +6162,24 @@ class MainHandler(ScreenHandler):
             self.__current_display = self._window_manager.menu(
                                                     'Which Monster Group',
                                                     group_menu)
+
+
+
         else:
             self.__current_display = None
 
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
+
+        # If this is a monster list, run a consistency check
+        if self.__current_display is not None:
+            monsters = self.__world.get_list(self.__current_display)
+            for name in monsters:
+                creature = self.__world.get_creature_details(
+                                                        name,
+                                                        self.__current_display)
+                self.__ruleset.is_creature_consistent(name, creature)
+
         return True
 
 
@@ -6227,6 +6240,15 @@ class MainHandler(ScreenHandler):
 
         self.__setup_PC_list(self.__current_display) # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
+
+        # If this is a monster list, run a consistency check
+        if self.__current_display is not None:
+            monsters = self.__world.get_list(self.__current_display)
+            for name in monsters:
+                creature = self.__world.get_creature_details(
+                                                        name,
+                                                        self.__current_display)
+                self.__ruleset.is_creature_consistent(name, creature)
         return True # Keep going
 
     def __add_equipment(self, throw_away):

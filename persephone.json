@@ -9132,7 +9132,9 @@
     {
       "acc": 1, 
       "count": 1, 
-      "owners": [], 
+      "owners": [
+        "The Street"
+      ], 
       "name": "zip tazer, nice", 
       "notes": "hand built", 
       "damage": {
@@ -9154,7 +9156,9 @@
     {
       "acc": 1, 
       "count": 1, 
-      "owners": [], 
+      "owners": [
+        "The Street"
+      ], 
       "name": "zip tazer, not-so-nice", 
       "notes": "hand built", 
       "damage": {
@@ -9211,7 +9215,9 @@
       "count": 1, 
       "notes": "", 
       "type": "misc", 
-      "owners": [], 
+      "owners": [
+        "The Street"
+      ], 
       "name": "Zip Clip"
     }, 
     {
@@ -11275,13 +11281,6 @@
             "parry": -1, 
             "skill": "Knife", 
             "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "owners": null, 
-            "name": "C Cell"
           }, 
           {
             "acc": 1, 
