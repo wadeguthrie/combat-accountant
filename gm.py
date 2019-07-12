@@ -15,10 +15,12 @@ import sys
 import traceback
 
 # TODO:
-#   - Add other categories to equip/mod: attributes, skills, etc
+#   - Adding Skills/Advantages that already exist should just change the
+#     right-hand side, not add a second entry
+#   - Should be able to delete a Skill/Advantage
+#   - Move spells from persephone.json into ruleset
 #
 #   - Equipping item should ask to add ammo for item
-#
 #   - Multiple weapons
 #   - Need equipment containers
 #   - Need maintain spell
@@ -2380,7 +2382,18 @@ class GurpsRuleset(Ruleset):
                     19: {'thr': {'num_dice': 2, 'plus': -1},
                          'sw':  {'num_dice': 3, 'plus': +1}},
                     20: {'thr': {'num_dice': 2, 'plus': -1},
-                         'sw':  {'num_dice': 3, 'plus': +2}}}
+                         'sw':  {'num_dice': 3, 'plus': +2}},
+                    21: {'thr': {'num_dice': 2, 'plus': 0},
+                         'sw':  {'num_dice': 4, 'plus': -1}},
+                    22: {'thr': {'num_dice': 2, 'plus': 0},
+                         'sw':  {'num_dice': 4, 'plus': 0}},
+                    23: {'thr': {'num_dice': 2, 'plus': +1},
+                         'sw':  {'num_dice': 4, 'plus': +1}},
+                    24: {'thr': {'num_dice': 2, 'plus': +1},
+                         'sw':  {'num_dice': 4, 'plus': +2}},
+                    25: {'thr': {'num_dice': 2, 'plus': +2},
+                         'sw':  {'num_dice': 5, 'plus': -1}}
+                         }
 
     # Posture: B551; 'attack' is melee, 'target' is ranged
     posture = {
