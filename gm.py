@@ -15,9 +15,8 @@ import sys
 import traceback
 
 # TODO:
-#   - Add other categories to equip/mod: attributes, skills, notes, etc
+#   - Add other categories to equip/mod: attributes, skills, etc
 #
-#     to give him the skill)
 #   - Equipping item should ask to add ammo for item
 #
 #   - Multiple weapons
@@ -3022,6 +3021,94 @@ class GurpsRuleset(Ruleset):
             block_why.append('  ...for a block skill total = %d' % block_skill)
 
         return block_skill, block_why
+
+
+    def get_creature_abilities(self):
+        return {
+            'skills': {
+                # 'name': {'ask': 'number' | 'string' }
+                #         {'value': value}
+                "Acting": {'ask': 'number'}, 
+                "Area Knowledge (Space Station)": {'ask': 'number'},
+                "Armoury (Heavy Weapons)": {'ask': 'number'}, 
+                "Armoury (Small Arms)": {'ask': 'number'}, 
+                "Axe/Mace": {'ask': 'number'}, 
+                "Bartender": {'ask': 'number'}, 
+                "Beam Weapons (Pistol)": {'ask': 'number'}, 
+                "Beam Weapons (Rifle)": {'ask': 'number'}, 
+                "Brawling": {'ask': 'number'}, 
+                "Camouflage": {'ask': 'number'}, 
+                "Climbing": {'ask': 'number'}, 
+                "Climbing": {'ask': 'number'}, 
+                "Computer Hacking": {'ask': 'number'}, 
+                "Computer Operation": {'ask': 'number'}, 
+                "Computer Programming": {'ask': 'number'}, 
+                "Connoisseur (Visual Arts)": {'ask': 'number'}, 
+                "Cryptography": {'ask': 'number'}, 
+                "Current Affairs (Teraforming)": {'ask': 'number'}, 
+                "Detect Lies": {'ask': 'number'}, 
+                "Diplomacy": {'ask': 'number'}, 
+                "Electronics Operation (Security)": {'ask': 'number'}, 
+                "Electronics Operation (Teraforming)": {'ask': 'number'}, 
+                "Electronics Repair (Security)": {'ask': 'number'}, 
+                "Electronics Repair (Teraforming)": {'ask': 'number'}, 
+                "Engineer (Electronics)": {'ask': 'number'}, 
+                "Engineer (Starships)": {'ask': 'number'}, 
+                "Escape": {'ask': 'number'}, 
+                "Expert Skill (Computer Security)": {'ask': 'number'}, 
+                "Fast-Draw (Ammo)": {'ask': 'number'}, 
+                "Fast-Draw (Knife)": {'ask': 'number'}, 
+                "Fast-Draw (Pistol)": {'ask': 'number'}, 
+                "Fast-Talk": {'ask': 'number'}, 
+                "Filch": {'ask': 'number'}, 
+                "First Aid": {'ask': 'number'}, 
+                "Forensics": {'ask': 'number'}, 
+                "Forgery": {'ask': 'number'}, 
+                "Gambling": {'ask': 'number'}, 
+                "Gesture": {'ask': 'number'}, 
+                "Gunner (Beams)": {'ask': 'number'}, 
+                "Gunner (Cannon)": {'ask': 'number'}, 
+                "Guns (Grenade Launcher)": {'ask': 'number'}, 
+                "Guns (Pistol)": {'ask': 'number'}, 
+                "Hazardous Materials (Chemical)": {'ask': 'number'}, 
+                "Holdout": {'ask': 'number'}, 
+                "Interrogation": {'ask': 'number'}, 
+                "Intimidation": {'ask': 'number'}, 
+                "Karate": {'ask': 'number'}, 
+                "Knife": {'ask': 'number'}, 
+                "Law (Conglomerate)": {'ask': 'number'},
+                "Law (Conglomerate, Trans territorial jurisdiction/the void)":
+                {'ask': 'number'}, 
+                "Lip Reading": {'ask': 'number'}, 
+                "Lockpicking": {'ask': 'number'}, 
+                "Mathematics (Applied)": {'ask': 'number'}, 
+                "Mechanic (Spacecraft)": {'ask': 'number'}, 
+                "Observation": {'ask': 'number'}, 
+                "Physician": {'ask': 'number'}, 
+                "Physics": {'ask': 'number'}, 
+                "Pickpocket": {'ask': 'number'}, 
+                "Piloting (Loader Mech)": {'ask': 'number'},
+                "Piloting (Low-Performance Spacecraft)": {'ask': 'number'}, 
+                "Running": {'ask': 'number'}, 
+                "Scrounging": {'ask': 'number'},
+                "Search": {'ask': 'number'}, 
+                "Stealth": {'ask': 'number'}, 
+                "Streetwise": {'ask': 'number'}, 
+                "Theology (Vodun)": {'ask': 'number'}, 
+                "Throwing": {'ask': 'number'}, 
+                "Thrown Weapon (Knife)": {'ask': 'number'}, 
+                "Traps": {'ask': 'number'}, 
+                "Urban Survival": {'ask': 'number'}, 
+            },
+            'advantages': {
+            }
+        }
+
+    #   { 
+    #       'Skills': { 'Axe/Mace': 8, 'Climbing': 8, },
+    #       'Advantages': { 'Bad Tempter': -10, 'Nosy': -1, },
+    #   }
+
 
     def get_character_detail(self,
                              character,   # dict as found in the JSON
@@ -6374,9 +6461,81 @@ class MainHandler(ScreenHandler):
                     # TODO: skills - needs ruleset support
                     # TODO: advantages - needs ruleset support
                     ]
+
+        #   { 
+        #       'Skills': { 'Axe/Mace': 8, 'Climbing': 8, },
+        #       'Advantages': { 'Bad Tempter': -10, 'Nosy': -1, },
+        #   }
+
+        self.__ruleset_abilities = self.__ruleset.get_creature_abilities()
+        for ability in self.__ruleset_abilities:
+            sub_menu.append(('add %s' % ability,
+                                            {'doit': self.__ruleset_ability,
+                                             'param': ability}))
+
         self._window_manager.menu('Do what', sub_menu)
         return True # Keep going
 
+    def __ruleset_ability(self,
+                          param # string: ability name
+                         ):
+        fighter = Fighter(self.__chars[self.__char_index]['name'],
+                          self.__chars[self.__char_index]['group'],
+                          self.__chars[self.__char_index]['details'],
+                          self.__ruleset,
+                          self._window_manager)
+
+        #   { 
+        #       'Skills':     { 'Axe/Mace': 8,      'Climbing': 8, },
+        #       'Advantages': { 'Bad Tempter': -10, 'Nosy': -1, },
+        #   }
+
+        ability_menu = [(name, {'name': name, 'predicate': predicate})
+            for name, predicate in self.__ruleset_abilities[param].iteritems()]
+
+        new_ability = self._window_manager.menu(('Adding %s' % param),
+                                                              ability_menu)
+        if new_ability is None:
+            return True
+
+        # Note: there are a couple options, here: if this ability isn't
+        # already in the character either a) ignore it or b) add it.  We'll be
+        # permissive, here.
+
+        if param not in fighter.details:
+            fighter.details[param] = {}
+
+        # The predicate will take one of several forms...
+        # 'name': {'ask': 'number' | 'string' }
+        #         {'value': value}
+
+        result = None
+        if 'ask' in new_ability['predicate']:
+            title = 'Value for %s' % new_ability['name']
+            height = 1
+            width = len(title)
+            adj_string = self._window_manager.input_box(height, width, title)
+            if adj_string is None or len(adj_string) <= 0:
+                return True
+
+            if new_ability['predicate']['ask'] == 'number':
+                result = int(adj_string)
+            else:
+                result = adj_string
+
+        elif 'value' in new_ability['predicate']:
+            result = new_ability['predicate']['value']
+        else:
+            result = None
+            self._window_manager.error(
+                ['unknown predicate "%r" for "%s"' % (new_ability['predicate'],
+                                                      new_ability['name'])])
+
+        if result is not None:
+            fighter.details[param][new_ability['name']] = result
+
+        self._draw_screen()
+        return None if 'text' not in param else param
 
     def __short_notes(self, throw_away):
         return self.__notes('short-notes')
