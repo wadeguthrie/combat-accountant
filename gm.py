@@ -3101,6 +3101,63 @@ class GurpsRuleset(Ruleset):
                 "Urban Survival": {'ask': 'number'}, 
             },
             'advantages': {
+        # 'name': {'ask': 'number' | 'string' }
+        #         {'value': value}
+                "Acute Vision": {'ask': 'number'}, 
+                "Phobia": {'ask': 'string'},
+                "Alcohol Intolerance": {'value': -1}, 
+                "Appearance": {'ask': 'string'}, 
+                "Bad Sight": {'value': -25}, 
+                "Bad Temper": {'value': -10}, 
+                "Cannot Speak": {'value': -10}, 
+                "Channeling": {'value': 10}, 
+                "Code of Honor": {'ask': 'string'}, 
+                "Combat Reflexes": {'value': 15},
+                "Compulsive Behavior": {'ask': 'string'}, 
+                "Cultural Familiarity": {'ask': 'string'},
+                "Curious": {'value': -5}, 
+                "Deep Sleeper": {'value': 1}, 
+                "Delusions": {'ask': 'string'},
+                "Distractible": {'value': 1}, 
+                "Dreamer": {'value': -1},
+                "Dyslexia": {'value': -10}, 
+                "Eidetic Memory": {'ask': 'number'}, 
+                "Empathy": {'ask': 'number'},
+                "Enemy": {'ask': 'string'},
+                "Extra Hit Points": {'ask': 'number'}, 
+                "Fit": {'value': 5}, 
+                "Flashbacks": {'ask': 'string'}, 
+                "G-Experience": {'ask': 'number'},
+                "Guilt Complex": {'ask': 'string'},
+                "Habit": {'ask': 'string'}, 
+                "High Pain Threshold": {'value': 10}, 
+                "Honest Face": {'value': 1}, 
+                "Humble": {'value', -1}, 
+                "Impulsiveness": {'ask': 'number'}, 
+                "Light Sleeper": {'value': -5}, 
+                "Like (Quirk) ": {'ask': 'string'},
+                "Lwa": {'ask': 'string'},
+                "Night Vision": {'ask': 'number'},
+                "No Sense of Humor": {'value': -10}, 
+                "Nosy": {'value': -1}, 
+                "Personality Change": {'ask': 'string'}, 
+                "Pyromania": {'value': -10}, 
+                "Rapid Healing": {'value': 5}, 
+                "Responsive": {'value': -1}, 
+                "Secret": {'ask': 'string'},
+                "Short Attention Span": {'value': -10}, 
+                "Squeamish": {'value': -10}, 
+                "Versatile": {'value': 5}, 
+                "Vodou Practitioner (level 0)": {'value': 5},
+                "Vodou Practitioner (Mambo/Hougan 1)": {'value': 15},
+                "Vodou Practitioner (Mambo/Hougan 2)": {'value': 35},
+                "Vodou Practitioner (Mambo/Hougan 3)": {'value': 65},
+                "Vodou Practitioner (Bokor 1)": {'value': 20},
+                "Vodou Practitioner (Bokor 2)": {'value': 45},
+                "Vodou Practitioner (Bokor 3)": {'value': 75},
+                "Vow": {'ask': 'string'},
+                "Wealth": {'ask': 'string'},
+                "Weirdness Magnet": {'value': -15}, 
             }
         }
 
@@ -3193,7 +3250,7 @@ class GurpsRuleset(Ruleset):
         for advantage, value in sorted(character['advantages'].iteritems(),
                                        key=lambda (k,v): (k, v)):
             found_one = True
-            char_detail.append([{'text': '  %s: %d' % (advantage, value),
+            char_detail.append([{'text': '  %s: %r' % (advantage, value),
                                  'mode': mode}])
 
         if not found_one:
@@ -6458,7 +6515,6 @@ class MainHandler(ScreenHandler):
                     ('short notes',         {'doit': self.__short_notes}),
                     ('notes',               {'doit': self.__full_notes}),
                     # TODO: attributes - needs ruleset support
-                    # TODO: skills - needs ruleset support
                     # TODO: advantages - needs ruleset support
                     ]
 
@@ -6494,7 +6550,7 @@ class MainHandler(ScreenHandler):
             for name, predicate in self.__ruleset_abilities[param].iteritems()]
 
         new_ability = self._window_manager.menu(('Adding %s' % param),
-                                                              ability_menu)
+                                                          sorted(ability_menu))
         if new_ability is None:
             return True
 
@@ -6511,9 +6567,14 @@ class MainHandler(ScreenHandler):
 
         result = None
         if 'ask' in new_ability['predicate']:
-            title = 'Value for %s' % new_ability['name']
+            if new_ability['predicate']['ask'] == 'number':
+                title = 'Value for %s' % new_ability['name']
+                width = len(title) + 2 # Margin to make it prettier
+            else:
+                title = 'String for %s' % new_ability['name']
+                lines, cols = self._window.getmaxyx()
+                width = cols/2
             height = 1
-            width = len(title)
             adj_string = self._window_manager.input_box(height, width, title)
             if adj_string is None or len(adj_string) <= 0:
                 return True
