@@ -10702,6 +10702,78 @@
             "maintain": 2, 
             "time": 2, 
             "skill": 11
+          }, 
+          {
+            "name": "Agonize", 
+            "notes": "M40, HT negates", 
+            "maintain": 6, 
+            "cost": 8, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "name": "Fear", 
+            "notes": "M134", 
+            "maintain": null, 
+            "cost": 1, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "name": "Pain", 
+            "notes": "M36, vs. HT", 
+            "maintain": 0, 
+            "cost": 2, 
+            "time": 1, 
+            "skill": 18
+          }, 
+          {
+            "name": "Panic", 
+            "notes": "M134, vs. Will", 
+            "maintain": 2, 
+            "cost": 4, 
+            "time": 1, 
+            "skill": 18
+          }, 
+          {
+            "name": "Summon Demon", 
+            "notes": "M155", 
+            "maintain": 0, 
+            "cost": 20, 
+            "time": 300, 
+            "skill": 16
+          }, 
+          {
+            "name": "Mind-Sending", 
+            "notes": "M47", 
+            "maintain": 4, 
+            "cost": 4, 
+            "time": 4, 
+            "skill": 12
+          }, 
+          {
+            "name": "Terror", 
+            "notes": "M134, Area, Will negates", 
+            "maintain": 0, 
+            "cost": 4, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "name": "Wall Of Lightning", 
+            "notes": "M197", 
+            "maintain": 0, 
+            "cost": null, 
+            "time": 1, 
+            "skill": 18
+          }, 
+          {
+            "name": "Zombie", 
+            "notes": "M151", 
+            "maintain": null, 
+            "cost": 8, 
+            "time": 60, 
+            "skill": 16
           }
         ]
       }, 
@@ -10879,6 +10951,78 @@
             "maintain": 2, 
             "time": 2, 
             "skill": 11
+          }, 
+          {
+            "name": "Agonize", 
+            "notes": "M40, HT negates", 
+            "maintain": 6, 
+            "cost": 8, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "name": "Fear", 
+            "notes": "M134", 
+            "maintain": null, 
+            "cost": 1, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "name": "Pain", 
+            "notes": "M36, vs. HT", 
+            "maintain": 0, 
+            "cost": 2, 
+            "time": 1, 
+            "skill": 18
+          }, 
+          {
+            "name": "Panic", 
+            "notes": "M134, vs. Will", 
+            "maintain": 2, 
+            "cost": 4, 
+            "time": 1, 
+            "skill": 18
+          }, 
+          {
+            "name": "Summon Demon", 
+            "notes": "M155", 
+            "maintain": 0, 
+            "cost": 20, 
+            "time": 300, 
+            "skill": 16
+          }, 
+          {
+            "name": "Mind-Sending", 
+            "notes": "M47", 
+            "maintain": 4, 
+            "cost": 4, 
+            "time": 4, 
+            "skill": 12
+          }, 
+          {
+            "name": "Terror", 
+            "notes": "M134, Area, Will negates", 
+            "maintain": 0, 
+            "cost": 4, 
+            "time": 1, 
+            "skill": 12
+          }, 
+          {
+            "name": "Wall Of Lightning", 
+            "notes": "M197", 
+            "maintain": 0, 
+            "cost": null, 
+            "time": 1, 
+            "skill": 18
+          }, 
+          {
+            "name": "Zombie", 
+            "notes": "M151", 
+            "maintain": null, 
+            "cost": 8, 
+            "time": 60, 
+            "skill": 16
           }
         ]
       }, 
