@@ -17,7 +17,6 @@ import traceback
 # TODO:
 #   - Adding Skills/Advantages that already exist should just change the
 #     right-hand side, not add a second entry
-#   - Should be able to delete a Skill/Advantage
 #   - Move spells from persephone.json into ruleset
 #
 #   - Equipping item should ask to add ammo for item
@@ -4741,7 +4740,7 @@ class BuildFightHandler(ScreenHandler):
         if name is None:
             return True
 
-        critter_menu = [('Yes', 'yes'), ('No', 'no')]
+        critter_menu = [('yes', 'yes'), ('no', 'no')]
         answer = self._window_manager.menu('Delete "%s" ARE YOU SURE?' % name,
                                            critter_menu,
                                            1) # Chose 'No' by default
@@ -6440,7 +6439,7 @@ class MainHandler(ScreenHandler):
             return True
 
         # Pick from the spell list
-        keep_asking_menu = [('Yes', True), ('No', False)]
+        keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
         while keep_asking:
             # Rebuild the spell menu since we're adding to it each iteration
@@ -6486,7 +6485,7 @@ class MainHandler(ScreenHandler):
                 ['Doesn\'t look like %s casts spells' % fighter.name])
             return True
 
-        keep_asking_menu = [('Yes', True), ('No', False)]
+        keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
         while keep_asking:
             # Make the spell list again (since we've removed one)
@@ -6578,8 +6577,11 @@ class MainHandler(ScreenHandler):
 
         self.__ruleset_abilities = self.__ruleset.get_creature_abilities()
         for ability in self.__ruleset_abilities:
-            sub_menu.append(('add %s' % ability,
+            sub_menu.append(('%s (add)' % ability,
                                             {'doit': self.__ruleset_ability,
+                                             'param': ability}))
+            sub_menu.append(('%s (remove)' % ability.capitalize(),
+                                            {'doit': self.__ruleset_ability_rm,
                                              'param': ability}))
 
         # Add these at the end since they're less likely to be used (I'm
@@ -6611,7 +6613,7 @@ class MainHandler(ScreenHandler):
             for name, predicate in self.__ruleset_abilities[param].iteritems()]
 
 
-        keep_asking_menu = [('Yes', True), ('No', False)]
+        keep_asking_menu = [('yes', True), ('no', False)]
 
         keep_asking = True
         while keep_asking:
@@ -6663,11 +6665,43 @@ class MainHandler(ScreenHandler):
             if result is not None:
                 fighter.details[param][new_ability['name']] = result
 
-            self._draw_screen()
-
             keep_asking = self._window_manager.menu(('Add More %s' % param),
                                                     keep_asking_menu)
         return None if 'text' not in param else param
+
+    def __ruleset_ability_rm(self,
+                             param # string: ability name
+                            ):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = Fighter(self.__chars[self.__char_index]['name'],
+                          self.__chars[self.__char_index]['group'],
+                          self.__chars[self.__char_index]['details'],
+                          self.__ruleset,
+                          self._window_manager)
+
+        keep_asking_menu = [('yes', True), ('no', False)]
+        keep_asking = True
+        while keep_asking:
+            # Make the ability list again (since we've removed one)
+            ability_menu = [(ability, ability)
+                        for ability in sorted(fighter.details[param].keys())]
+            bad_ability_name = self._window_manager.menu(
+                                        '%s to Remove' % param.capitalize(),
+                                        ability_menu)
+
+            if bad_ability_name is None:
+                return True
+
+            del fighter.details[param][bad_ability_name]
+            self._draw_screen()
+
+            keep_asking = self._window_manager.menu(
+                                        'Remove More %s' % param.capitalize(),
+                                        keep_asking_menu)
+        return True # Keep going
 
     def __short_notes(self, throw_away):
         return self.__notes('short-notes')
