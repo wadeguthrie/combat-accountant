@@ -6440,13 +6440,13 @@ class MainHandler(ScreenHandler):
             return True
 
         # Pick from the spell list
-        spell_menu = [(spell['name'], spell)
-                        for spell in sorted(self.__world.details['spells'],
-                                            key=lambda x:x['name'])]
         keep_asking_menu = [('Yes', True), ('No', False)]
-
         keep_asking = True
         while keep_asking:
+            # Rebuild the spell menu since we're adding to it each iteration
+            spell_menu = [(spell['name'], spell)
+                        for spell in sorted(self.__world.details['spells'],
+                                            key=lambda x:x['name'])]
             new_spell = self._window_manager.menu('Spell to Add', spell_menu)
             if new_spell is None:
                 return True
@@ -6465,6 +6465,47 @@ class MainHandler(ScreenHandler):
                 self._draw_screen()
 
             keep_asking = self._window_manager.menu('Add More Spells',
+                                                    keep_asking_menu)
+        return True # Keep going
+
+
+    def __remove_spell(self, throw_away):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = Fighter(self.__chars[self.__char_index]['name'],
+                          self.__chars[self.__char_index]['group'],
+                          self.__chars[self.__char_index]['details'],
+                          self.__ruleset,
+                          self._window_manager)
+
+        # Is the fighter a caster?
+        if 'spells' not in fighter.details:
+            self._window_manager.error(
+                ['Doesn\'t look like %s casts spells' % fighter.name])
+            return True
+
+        keep_asking_menu = [('Yes', True), ('No', False)]
+        keep_asking = True
+        while keep_asking:
+            # Make the spell list again (since we've removed one)
+            spell_menu = [(spell['name'], spell['name'])
+                        for spell in sorted(fighter.details['spells'],
+                                            key=lambda x:x['name'])]
+            bad_spell_name = self._window_manager.menu('Spell to Remove',
+                                                       spell_menu)
+
+            if bad_spell_name is None:
+                return True
+
+            for index, spell in enumerate(fighter.details['spells']):
+                if spell['name'] == bad_spell_name:
+                    del fighter.details['spells'][index]
+                    self._draw_screen()
+                    break
+
+            keep_asking = self._window_manager.menu('Remove More Spells',
                                                     keep_asking_menu)
         return True # Keep going
 
@@ -6529,25 +6570,25 @@ class MainHandler(ScreenHandler):
 
 
     def __equip(self):
-        sub_menu = [('add equipment',       {'doit': self.__add_equipment}),
-                    ('remove equipment',    {'doit': self.__remove_equipment}),
+        sub_menu = [('equipment (add)',     {'doit': self.__add_equipment}),
+                    ('Equipment (remove)',  {'doit': self.__remove_equipment}),
                     ('give equipment',      {'doit': self.__give_equipment}),
-                    ('add spell',           {'doit': self.__add_spell}),
-                    ('short notes',         {'doit': self.__short_notes}),
-                    ('notes',               {'doit': self.__full_notes}),
                     # TODO: attributes - needs ruleset support
                     ]
-
-        #   { 
-        #       'Skills': { 'Axe/Mace': 8, 'Climbing': 8, },
-        #       'Advantages': { 'Bad Tempter': -10, 'Nosy': -1, },
-        #   }
 
         self.__ruleset_abilities = self.__ruleset.get_creature_abilities()
         for ability in self.__ruleset_abilities:
             sub_menu.append(('add %s' % ability,
                                             {'doit': self.__ruleset_ability,
                                              'param': ability}))
+
+        # Add these at the end since they're less likely to be used (I'm
+        # guessing) than the abilities from the ruleset
+        sub_menu.append(('spell (add)',     {'doit': self.__add_spell}))
+        sub_menu.append(('Spell (remove)',  {'doit': self.__remove_spell}))
+        sub_menu.append(('notes',           {'doit': self.__full_notes}))
+        sub_menu.append(('Notes (short)',   {'doit': self.__short_notes}))
+
 
         self._window_manager.menu('Do what', sub_menu)
         return True # Keep going
