@@ -6441,23 +6441,31 @@ class MainHandler(ScreenHandler):
 
         # Pick from the spell list
         spell_menu = [(spell['name'], spell)
-                            for spell in self.__world.details['spells']]
-        new_spell = self._window_manager.menu('Spell to Add', spell_menu)
-        if new_spell is None:
-            return True
+                        for spell in sorted(self.__world.details['spells'],
+                                            key=lambda x:x['name'])]
+        keep_asking_menu = [('Yes', True), ('No', False)]
 
-        # Check if spell is already there
-        for spell in fighter.details['spells']:
-            if spell['name'] == new_spell['name']:
-                self._window_manager.error(
-                    ['%s already has spell "%s"' % (fighter.name,
-                                                    spell['name'])])
+        keep_asking = True
+        while keep_asking:
+            new_spell = self._window_manager.menu('Spell to Add', spell_menu)
+            if new_spell is None:
                 return True
 
-        if new_spell is not None:
-            fighter.details['spells'].append(copy.deepcopy(new_spell))
+            # Check if spell is already there
+            for spell in fighter.details['spells']:
+                if spell['name'] == new_spell['name']:
+                    self._window_manager.error(
+                        ['%s already has spell "%s"' % (fighter.name,
+                                                        spell['name'])])
+                    new_spell = None
+                    break
 
-        self._draw_screen()
+            if new_spell is not None:
+                fighter.details['spells'].append(copy.deepcopy(new_spell))
+                self._draw_screen()
+
+            keep_asking = self._window_manager.menu('Add More Spells',
+                                                    keep_asking_menu)
         return True # Keep going
 
     def __give_equipment(self, throw_away):
@@ -6528,7 +6536,6 @@ class MainHandler(ScreenHandler):
                     ('short notes',         {'doit': self.__short_notes}),
                     ('notes',               {'doit': self.__full_notes}),
                     # TODO: attributes - needs ruleset support
-                    # TODO: advantages - needs ruleset support
                     ]
 
         #   { 
@@ -6562,53 +6569,63 @@ class MainHandler(ScreenHandler):
         ability_menu = [(name, {'name': name, 'predicate': predicate})
             for name, predicate in self.__ruleset_abilities[param].iteritems()]
 
-        new_ability = self._window_manager.menu(('Adding %s' % param),
+
+        keep_asking_menu = [('Yes', True), ('No', False)]
+
+        keep_asking = True
+        while keep_asking:
+            new_ability = self._window_manager.menu(('Adding %s' % param),
                                                           sorted(ability_menu))
-        if new_ability is None:
-            return True
-
-        # Note: there are a couple options, here: if this ability isn't
-        # already in the character either a) ignore it or b) add it.  We'll be
-        # permissive, here.
-
-        if param not in fighter.details:
-            fighter.details[param] = {}
-
-        # The predicate will take one of several forms...
-        # 'name': {'ask': 'number' | 'string' }
-        #         {'value': value}
-
-        result = None
-        if 'ask' in new_ability['predicate']:
-            if new_ability['predicate']['ask'] == 'number':
-                title = 'Value for %s' % new_ability['name']
-                width = len(title) + 2 # Margin to make it prettier
-            else:
-                title = 'String for %s' % new_ability['name']
-                lines, cols = self._window.getmaxyx()
-                width = cols/2
-            height = 1
-            adj_string = self._window_manager.input_box(height, width, title)
-            if adj_string is None or len(adj_string) <= 0:
+            if new_ability is None:
                 return True
 
-            if new_ability['predicate']['ask'] == 'number':
-                result = int(adj_string)
-            else:
-                result = adj_string
+            # Note: there are a couple options, here: if this ability isn't
+            # already in the character either a) ignore it or b) add it.  
+            # We'll be permissive, here.
 
-        elif 'value' in new_ability['predicate']:
-            result = new_ability['predicate']['value']
-        else:
+            if param not in fighter.details:
+                fighter.details[param] = {}
+
+            # The predicate will take one of several forms...
+            # 'name': {'ask': 'number' | 'string' }
+            #         {'value': value}
+
             result = None
-            self._window_manager.error(
-                ['unknown predicate "%r" for "%s"' % (new_ability['predicate'],
-                                                      new_ability['name'])])
+            if 'ask' in new_ability['predicate']:
+                if new_ability['predicate']['ask'] == 'number':
+                    title = 'Value for %s' % new_ability['name']
+                    width = len(title) + 2 # Margin to make it prettier
+                else:
+                    title = 'String for %s' % new_ability['name']
+                    lines, cols = self._window.getmaxyx()
+                    width = cols/2
+                height = 1
+                adj_string = self._window_manager.input_box(height,
+                                                            width,
+                                                            title)
+                if adj_string is None or len(adj_string) <= 0:
+                    return True
 
-        if result is not None:
-            fighter.details[param][new_ability['name']] = result
+                if new_ability['predicate']['ask'] == 'number':
+                    result = int(adj_string)
+                else:
+                    result = adj_string
 
-        self._draw_screen()
+            elif 'value' in new_ability['predicate']:
+                result = new_ability['predicate']['value']
+            else:
+                result = None
+                self._window_manager.error(
+                    ['unknown predicate "%r" for "%s"' % 
+                            (new_ability['predicate'], new_ability['name'])])
+
+            if result is not None:
+                fighter.details[param][new_ability['name']] = result
+
+            self._draw_screen()
+
+            keep_asking = self._window_manager.menu(('Add More %s' % param),
+                                                    keep_asking_menu)
         return None if 'text' not in param else param
 
     def __short_notes(self, throw_away):
