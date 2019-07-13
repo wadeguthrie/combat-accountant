@@ -1900,23 +1900,23 @@
       }, 
       "advantages": {
         "G-Experience": 1, 
-        "Alcohol Intolerance": -1, 
         "Honest Face": 1, 
         "Wealth": -10, 
         "Extra Hit Points": 2, 
         "Habit": -1, 
         "Nosy": -1, 
         "Like knick knacks": -1, 
-        "Vodou Practitioner": 15, 
-        "Empathy": 15, 
         "Impulsiveness": -10, 
+        "Vodou Practitioner": 15, 
+        "Alcohol Intolerance": -1, 
+        "Versatile": 5, 
         "Cultural Familiarity (Teraformers)": 1, 
         "Short Attention Span": -10, 
         "Curious": -5, 
         "Bad Temper": -10, 
         "Deep Sleeper": 1, 
         "Combat Reflexes": 15, 
-        "Versatile": 5, 
+        "Empathy": 15, 
         "Dreamer": -1
       }, 
       "did_action_this_turn": false, 
@@ -6310,11 +6310,374 @@
           "opponent": null
         }
       }
+    }, 
+    {
+      "date": "2019-07-13-13-00-46", 
+      "name": "radio shack", 
+      "fight": {
+        "1 - Louis": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 2, 
+              "count": 1, 
+              "owners": null, 
+              "name": "pistol, Baretta DX 192", 
+              "notes": "", 
+              "damage": {
+                "dice": {
+                  "plus": 4, 
+                  "num_dice": 1, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Large Knife", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 15, 
+            "Brawling": 14, 
+            "Knife": 15
+          }, 
+          "notes": [
+            "origin: australian", 
+            "gender: male", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Puts garlic on all food", 
+            "instincts: To craft a masterwork", 
+            "hair: Wiry", 
+            "speech: Crisp", 
+            "knack: Resistance to disease", 
+            "personality: Charming"
+          ], 
+          "shock": 0, 
+          "short-notes": [
+            ""
+          ], 
+          "armor-index": null, 
+          "current": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }
+      }
+    }, 
+    {
+      "date": "2019-07-13-13-01-14", 
+      "name": "Tail in the Outer Ring", 
+      "fight": {
+        "2 - Rose": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [], 
+          "stunned": 0, 
+          "skills": {}, 
+          "notes": [
+            "origin: haitian", 
+            "gender: female", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Wears flamboyant or outlandish clothes", 
+            "instincts: To overcome a disadvantage", 
+            "hair: Very Long", 
+            "speech: Curt short", 
+            "knack: A magic carpet", 
+            "personality: Pathological"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": null, 
+          "current": {
+            "fp": 10, 
+            "ht": 10, 
+            "iq": 10, 
+            "hp": 10, 
+            "wi": 10, 
+            "st": 10, 
+            "per": 10, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "ht": 10, 
+            "iq": 10, 
+            "hp": 10, 
+            "wi": 10, 
+            "st": 10, 
+            "per": 10, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5
+          }, 
+          "advantages": {}, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "1 - Guerlande": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [], 
+          "stunned": 0, 
+          "skills": {}, 
+          "notes": [
+            "origin: haitian", 
+            "gender: female", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Unable to figure out which color clothes match", 
+            "instincts: To expand their land", 
+            "hair: Frazzled", 
+            "speech: Loud", 
+            "knack: A majestic beard", 
+            "personality: Senile"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": null, 
+          "current": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "spells": [
+            {
+              "cost": 1, 
+              "name": "Awaken", 
+              "notes": "M90", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Communicate", 
+              "notes": "M48", 
+              "maintain": 4, 
+              "time": 4, 
+              "skill": 11
+            }, 
+            {
+              "cost": 3, 
+              "name": "Daze", 
+              "notes": "M134", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Far Hearing", 
+              "notes": "M173", 
+              "maintain": 2, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Foolishness", 
+              "notes": "M134", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Energy", 
+              "notes": "M89", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Vitality", 
+              "notes": "M89", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 2, 
+              "name": "Luck", 
+              "notes": "V2", 
+              "maintain": 1, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Major Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Minor Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Might", 
+              "notes": "M37", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 15, 
+              "name": "Restoration", 
+              "notes": "M93", 
+              "maintain": 0, 
+              "time": 60, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Sense Life", 
+              "notes": "M45, cost 1/2 per yard radius, see M11", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Sleep", 
+              "notes": "M135", 
+              "maintain": 0, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Wizard Eye", 
+              "notes": "M104", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }
+          ]
+        }
+      }
     }
   ], 
   "current-fight": {
     "index": 0, 
-    "monsters": "1st Hunting Party", 
+    "monsters": "Tail in the Outer Ring", 
     "fighters": [
       {
         "group": "PCs", 
@@ -6325,32 +6688,16 @@
         "name": "samuel - Erik"
       }, 
       {
-        "group": "1st Hunting Party", 
-        "name": "2: William - Deputy Marshal"
-      }, 
-      {
-        "group": "1st Hunting Party", 
-        "name": "4: Olivia - Special Deputy Marshal"
-      }, 
-      {
-        "group": "1st Hunting Party", 
-        "name": "5: Amelia - Deputy Marshal"
-      }, 
-      {
-        "group": "1st Hunting Party", 
-        "name": "3: Charlotte - Deputy Marshal"
-      }, 
-      {
-        "group": "1st Hunting Party", 
-        "name": "1: Oliver - Deputy Marshal"
-      }, 
-      {
         "group": "PCs", 
         "name": "vasilis - Alan"
       }, 
       {
-        "group": "1st Hunting Party", 
-        "name": "6: Matthew"
+        "group": "Tail in the Outer Ring", 
+        "name": "1 - Guerlande"
+      }, 
+      {
+        "group": "Tail in the Outer Ring", 
+        "name": "2 - Rose"
       }, 
       {
         "group": "PCs", 
@@ -9827,246 +10174,6 @@
     }
   }, 
   "monsters": {
-    "Tail in the Outer Ring": {
-      "2 - Rose": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "stunned": 0, 
-        "skills": {}, 
-        "notes": [
-          "origin: haitian", 
-          "gender: female", 
-          "station history: lifer (born on Earth, this is 1st station)", 
-          "characteristics: Wears flamboyant or outlandish clothes", 
-          "instincts: To overcome a disadvantage", 
-          "hair: Very Long", 
-          "speech: Curt short", 
-          "knack: A magic carpet", 
-          "personality: Pathological"
-        ], 
-        "shock": 0, 
-        "short-notes": [], 
-        "armor-index": null, 
-        "current": {
-          "fp": 10, 
-          "ht": 10, 
-          "iq": 10, 
-          "hp": 10, 
-          "wi": 10, 
-          "st": 10, 
-          "per": 10, 
-          "dx": 10, 
-          "basic-move": 5, 
-          "basic-speed": 5
-        }, 
-        "posture": "standing", 
-        "state": "alive", 
-        "permanent": {
-          "fp": 10, 
-          "ht": 10, 
-          "iq": 10, 
-          "hp": 10, 
-          "wi": 10, 
-          "st": 10, 
-          "per": 10, 
-          "dx": 10, 
-          "basic-move": 5, 
-          "basic-speed": 5
-        }, 
-        "advantages": {}, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "opponent": null
-      }, 
-      "1 - Guerlande": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [], 
-        "stunned": 0, 
-        "skills": {}, 
-        "notes": [
-          "origin: haitian", 
-          "gender: female", 
-          "station history: lifer (born on Earth, this is 1st station)", 
-          "characteristics: Unable to figure out which color clothes match", 
-          "instincts: To expand their land", 
-          "hair: Frazzled", 
-          "speech: Loud", 
-          "knack: A majestic beard", 
-          "personality: Senile"
-        ], 
-        "shock": 0, 
-        "short-notes": [], 
-        "armor-index": null, 
-        "current": {
-          "fp": 11, 
-          "ht": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "wi": 12, 
-          "st": 10, 
-          "per": 12, 
-          "dx": 10, 
-          "basic-move": 5, 
-          "basic-speed": 5.25
-        }, 
-        "posture": "standing", 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "ht": 11, 
-          "iq": 12, 
-          "hp": 10, 
-          "wi": 12, 
-          "st": 10, 
-          "per": 12, 
-          "dx": 10, 
-          "basic-move": 5, 
-          "basic-speed": 5.25
-        }, 
-        "advantages": {
-          "Empathy": 5, 
-          "Vodou Practitioner (Mambo 2)": 35, 
-          "Combat Reflexes": 15, 
-          "High Pain Threshold": 10, 
-          "Lwa (Mambo, Erzulie Freda)": 6
-        }, 
-        "opponent": null, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "spells": [
-          {
-            "cost": 1, 
-            "name": "Awaken", 
-            "notes": "M90", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": 4, 
-            "name": "Communicate", 
-            "notes": "M48", 
-            "maintain": 4, 
-            "time": 4, 
-            "skill": 11
-          }, 
-          {
-            "cost": 3, 
-            "name": "Daze", 
-            "notes": "M134", 
-            "maintain": 2, 
-            "time": 2, 
-            "skill": 11
-          }, 
-          {
-            "cost": 4, 
-            "name": "Far Hearing", 
-            "notes": "M173", 
-            "maintain": 2, 
-            "time": 3, 
-            "skill": 11
-          }, 
-          {
-            "cost": null, 
-            "name": "Foolishness", 
-            "notes": "M134", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 11
-          }, 
-          {
-            "cost": null, 
-            "name": "Lend Energy", 
-            "notes": "M89", 
-            "maintain": 0, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": null, 
-            "name": "Lend Vitality", 
-            "notes": "M89", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": 2, 
-            "name": "Luck", 
-            "notes": "V2", 
-            "maintain": 1, 
-            "time": 1, 
-            "skill": 11
-          }, 
-          {
-            "cost": null, 
-            "name": "Major Heal", 
-            "notes": "M91", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 11
-          }, 
-          {
-            "cost": null, 
-            "name": "Minor Heal", 
-            "notes": "M91", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": null, 
-            "name": "Might", 
-            "notes": "M37", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": 15, 
-            "name": "Restoration", 
-            "notes": "M93", 
-            "maintain": 0, 
-            "time": 60, 
-            "skill": 11
-          }, 
-          {
-            "cost": null, 
-            "name": "Sense Life", 
-            "notes": "M45, cost 1/2 per yard radius, see M11", 
-            "maintain": null, 
-            "time": 1, 
-            "skill": 12
-          }, 
-          {
-            "cost": 4, 
-            "name": "Sleep", 
-            "notes": "M135", 
-            "maintain": 0, 
-            "time": 3, 
-            "skill": 11
-          }, 
-          {
-            "cost": 4, 
-            "name": "Wizard Eye", 
-            "notes": "M104", 
-            "maintain": 2, 
-            "time": 2, 
-            "skill": 11
-          }
-        ]
-      }
-    }, 
     "Dima's Crew": {
       "5: Dmitry": {
         "aim": {
@@ -10529,7 +10636,10 @@
         }, 
         "stuff": [], 
         "stunned": 0, 
-        "skills": {}, 
+        "skills": {
+          "Scrounging": 15, 
+          "Piloting (Loader Mech)": 15
+        }, 
         "notes": [
           "origin: haitian", 
           "gender: female", 
@@ -10573,8 +10683,6 @@
         "advantages": {
           "Empathy": 5, 
           "Vodou Practitioner (Mambo 2)": 35, 
-          "Combat Reflexes": 15, 
-          "High Pain Threshold": 10, 
           "Lwa (Mambo, Erzulie Freda)": 6
         }, 
         "opponent": null, 
@@ -10784,8 +10892,17 @@
         }, 
         "stuff": [], 
         "stunned": 0, 
-        "skills": {}, 
+        "skills": {
+          "Brawling": 17, 
+          "Intimidation": 19
+        }, 
         "notes": [
+          "Lwa of vengance and rage.", 
+          "Protector of mothers and children.", 
+          "Carrying baby sister, Erzulie Freda, who gave her scars on face.", 
+          "Cannot speak -- tongue has been cut out.  Red eyes when angry.", 
+          "Erzulie Freda translates.  Sounds like ki-ki-ki", 
+          "Smokes unfiltered cigarettes.", 
           "Savagery and Madness.", 
           "Goddess of beauty, lust, and love; vengence and discord;.", 
           "Appears young mulatto woman.", 
@@ -10803,7 +10920,7 @@
           "st": 25, 
           "per": 17, 
           "dx": 15, 
-          "basic-move": 9, 
+          "basic-move": 8, 
           "basic-speed": 8.25
         }, 
         "posture": "standing", 
@@ -10817,14 +10934,21 @@
           "st": 25, 
           "per": 17, 
           "dx": 15, 
-          "basic-move": 9, 
+          "basic-move": 8, 
           "basic-speed": 8.25
         }, 
         "advantages": {
-          "Vodou Practitioner (Lwa 5)": 140, 
+          "Affliction (Vomiting Blood, Others; vs. HT-2; Stunned)": 20, 
           "Empathy": 5, 
+          "Innate Attack (Immolation, 3d damage)": 20, 
+          "Cannot Harm Innocents": -5, 
+          "High Pain Threshold": 10, 
+          "Night Vision 5": 5, 
+          "Immune to metabolic hazards": 30, 
+          "Immunity to Mind-Affecting Magic": 30, 
+          "Vodou Practitioner (Lwa 5)": 140, 
           "Combat Reflexes": 15, 
-          "High Pain Threshold": 10
+          "DR 5": 25
         }, 
         "opponent": null, 
         "weapon-index": null, 
@@ -11033,7 +11157,10 @@
         }, 
         "stuff": [], 
         "stunned": 0, 
-        "skills": {}, 
+        "skills": {
+          "Piloting (Loader Mech)": 15, 
+          "Scrounging": 15
+        }, 
         "notes": [
           "origin: haitian", 
           "gender: female", 
@@ -11077,8 +11204,6 @@
         "advantages": {
           "Empathy": 5, 
           "Vodou Practitioner (Mambo 2)": 35, 
-          "Combat Reflexes": 15, 
-          "High Pain Threshold": 10, 
           "Lwa (Mambo, Erzulie Freda)": 6
         }, 
         "opponent": null, 
@@ -11280,124 +11405,6 @@
             "skill": 16
           }
         ]
-      }
-    }, 
-    "radio shack": {
-      "1 - Louis": {
-        "aim": {
-          "braced": false, 
-          "rounds": 0
-        }, 
-        "stuff": [
-          {
-            "acc": 2, 
-            "count": 1, 
-            "owners": null, 
-            "name": "pistol, Baretta DX 192", 
-            "notes": "", 
-            "damage": {
-              "dice": {
-                "plus": 4, 
-                "num_dice": 1, 
-                "type": "pi"
-              }
-            }, 
-            "reload": 3, 
-            "skill": "Beam Weapons (Pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "C Cell", 
-              "shots": 8, 
-              "shots_left": 8
-            }
-          }, 
-          {
-            "count": 1, 
-            "owners": null, 
-            "name": "Large Knife", 
-            "notes": "", 
-            "damage": {
-              "sw": {
-                "plus": -2, 
-                "type": "cut"
-              }, 
-              "thr": {
-                "plus": 0, 
-                "type": "imp"
-              }
-            }, 
-            "parry": -1, 
-            "skill": "Knife", 
-            "type": "melee weapon"
-          }, 
-          {
-            "count": 5, 
-            "notes": "", 
-            "type": "misc", 
-            "owners": null, 
-            "name": "C Cell"
-          }
-        ], 
-        "stunned": 0, 
-        "skills": {
-          "Beam Weapons (Pistol)": 15, 
-          "Brawling": 14, 
-          "Knife": 15
-        }, 
-        "notes": [
-          "origin: australian", 
-          "gender: male", 
-          "station history: lifer (born on Earth, this is 1st station)", 
-          "characteristics: Puts garlic on all food", 
-          "instincts: To craft a masterwork", 
-          "hair: Wiry", 
-          "speech: Crisp", 
-          "knack: Resistance to disease", 
-          "personality: Charming"
-        ], 
-        "shock": 0, 
-        "short-notes": [
-          ""
-        ], 
-        "armor-index": null, 
-        "current": {
-          "fp": 11, 
-          "ht": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "wi": 12, 
-          "st": 10, 
-          "per": 12, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "posture": "standing", 
-        "state": "alive", 
-        "permanent": {
-          "fp": 11, 
-          "ht": 11, 
-          "iq": 12, 
-          "hp": 11, 
-          "wi": 12, 
-          "st": 10, 
-          "per": 12, 
-          "dx": 12, 
-          "basic-move": 5, 
-          "basic-speed": 5.75
-        }, 
-        "advantages": {
-          "Combat Reflexes": 15, 
-          "High Pain Threshold": 10
-        }, 
-        "weapon-index": null, 
-        "check_for_death": false, 
-        "timers": [], 
-        "did_action_this_turn": false, 
-        "opponent": {
-          "group": "PCs", 
-          "name": "lawerence - Spenser"
-        }
       }
     }, 
     "Baz for Sphere": {

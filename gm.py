@@ -6622,8 +6622,8 @@ class MainHandler(ScreenHandler):
             if new_ability is None:
                 return True
 
-            # Note: there are a couple options, here: if this ability isn't
-            # already in the character either a) ignore it or b) add it.  
+            # There are a couple options, here: if this category of abilities
+            # isn't already in the character either a) ignore it or b) add it.
             # We'll be permissive, here.
 
             if param not in fighter.details:
@@ -6664,6 +6664,7 @@ class MainHandler(ScreenHandler):
 
             if result is not None:
                 fighter.details[param][new_ability['name']] = result
+            self._draw_screen()
 
             keep_asking = self._window_manager.menu(('Add More %s' % param),
                                                     keep_asking_menu)
