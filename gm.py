@@ -2265,6 +2265,28 @@ class Ruleset(object):
         return # Nothing to return
 
 
+    def don_armor(self,
+                  param # dict: {'armor': index, 'fighter': Fighter obj}
+                 ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        param['fighter'].don_armor_by_index(param['armor'])
+        return None if 'text' not in param else param
+
+
+    def draw_weapon(self,
+                    param # dict: {'weapon': index, 'fighter': Fighter obj}
+                   ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        param['fighter'].draw_weapon_by_index(param['weapon'])
+        return
+
+
     def get_action_menu(self,
                         action_menu,    # menu for user [(name, predicate)...]
                         fighter,        # Fighter object
@@ -2419,6 +2441,20 @@ class Ruleset(object):
                                         fighter_details['permanent'][stat])
         fighter_details['state'] = 'alive'
 
+
+    def make_empty_creature(self):
+        return {'stuff': [], 
+                'weapon-index': None,
+                'armor-index': None,
+                'permanent': {},
+                'current': {},
+                'state': 'alive', 
+                'timers': [], 
+                'opponent': None,
+                'notes': [],
+                'short-notes': [],
+                }
+
     def search_one_creature(self,
                             name,       # string containing the name
                             group,      # string containing the group
@@ -2465,18 +2501,18 @@ class Ruleset(object):
         return result
 
 
-    def make_empty_creature(self):
-        return {'stuff': [], 
-                'weapon-index': None,
-                'armor-index': None,
-                'permanent': {},
-                'current': {},
-                'state': 'alive', 
-                'timers': [], 
-                'opponent': None,
-                'notes': [],
-                'short-notes': [],
-                }
+    def use_item(self,
+                 param # dict: {'item': index, 'fighter': Fighter obj}
+                ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        fighter = param['fighter']
+        item_index = param['item']
+        item = fighter.details['stuff'][item_index]
+        item['count'] -= 1
+        return
 
 
 class GurpsRuleset(Ruleset):
@@ -4279,28 +4315,8 @@ class GurpsRuleset(Ruleset):
 
         return None if 'text' not in param else param
 
-    def don_armor(self,
-                  param # dict: {'armor': index, 'fighter': Fighter obj}
-                 ):
-        '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
-        '''
-        param['fighter'].don_armor_by_index(param['armor'])
-        return None if 'text' not in param else param
 
-    def use_item(self,
-                 param # dict: {'item': index, 'fighter': Fighter obj}
-                ):
-        '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
-        '''
-        fighter = param['fighter']
-        item_index = param['item']
-        item = fighter.details['stuff'][item_index]
-        item['count'] -= 1
-        return None if 'text' not in param else param
+
 
     def draw_weapon(self,
                     param # dict: {'weapon': index, 'fighter': Fighter obj}
@@ -4309,9 +4325,9 @@ class GurpsRuleset(Ruleset):
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        param['fighter'].draw_weapon_by_index(param['weapon'])
+        super(GurpsRuleset, self).draw_weapon(param)
         param['fighter'].reset_aim()
-        return None if 'text' not in param else param
+        return
 
 
     def __get_damage_type_str(self,
