@@ -1972,17 +1972,6 @@ class Fighter(object):
             timer['rounds'] -= 1
 
 
-    # RULESET: do_aim is ruleset-based.
-    def do_aim(self,
-               braced   # True | False
-              ):
-        rounds = self.details['aim']['rounds']
-        if rounds == 0:
-            self.details['aim']['braced'] = braced
-            self.details['aim']['rounds'] = 1
-        elif rounds < 3:
-            self.details['aim']['rounds'] += 1
-
     def don_armor_by_index(self,
                            index  # Index of armor in fighter's 'stuff'
                                   # list.  'None' removes current armor.
@@ -2219,6 +2208,7 @@ class Ruleset(object):
 
     def __init__(self, window_manager):
         self._window_manager = window_manager
+        self._fight_handler = None
 
     @staticmethod
     def roll(number, # the number of dice
@@ -2252,20 +2242,44 @@ class Ruleset(object):
                                                   fighter.name) # TODO: remove
         PP.pprint(action)                                       # TODO: remove
 
-        if action['name'] == 'draw-weapon':
-            self.draw_weapon({'fighter': fighter,
-                              'weapon':  action['weapon-index']})
+
+        if action['name'] == 'attack' or action['name'] == 'all-out-attack':
+            self._do_attack({'fighter': fighter,
+                             'fight_handler': self._fight_handler})
+        elif action['name'] == 'draw-weapon':
+            self._draw_weapon({'fighter': fighter,
+                               'weapon':  action['weapon-index']})
         elif action['name'] == 'don-armor':
             self.don_armor({'fighter': fighter,
                             'armor': action['armor-index']})
         elif action['name'] == 'use-item':
-            self.use_item({'fighter': fighter,
-                           'item': action['item-index']})
+            self._use_item({'fighter': fighter,
+                            'item': action['item-index']})
 
         return # Nothing to return
 
 
-    def don_armor(self,
+    def _do_attack(self,
+                   param # {'fighter': xxx, Fighter object for attacker
+                         #  'fight_handler', ...
+                  ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+
+        if param['fighter'].details['opponent'] is None:
+            param['fight_handler'].pick_opponent()
+
+        weapon, weapon_index = param['fighter'].get_current_weapon()
+        if weapon is None or 'ammo' not in weapon:
+            return
+
+        weapon['ammo']['shots_left'] -= 1
+        return
+
+
+    def _don_armor(self,
                   param # dict: {'armor': index, 'fighter': Fighter obj}
                  ):
         '''
@@ -2276,7 +2290,7 @@ class Ruleset(object):
         return None if 'text' not in param else param
 
 
-    def draw_weapon(self,
+    def _draw_weapon(self,
                     param # dict: {'weapon': index, 'fighter': Fighter obj}
                    ):
         '''
@@ -2302,7 +2316,90 @@ class Ruleset(object):
         holding_ranged = (False if weapon is None else
                                 (weapon['type'] == 'ranged weapon'))
 
-        # Draw or Holster weapon
+        ### Armor ###
+
+        # Armor SUB-menu
+
+        armor, armor_index = fighter.get_current_armor()
+        don_armor_menu = []   # list of armor that may be donned this turn
+        for index, item in enumerate(fighter.details['stuff']):
+            if item['type'] == 'armor':
+                if armor is None or armor_index != index:
+                    don_armor_menu.append((item['name'],
+                                        {'text': [('Don %s' % item['name']),
+                                                  ' Defense: none',
+                                                  ' Move: none'],
+                                         'action': { 'name': 'don-armor',
+                                                     'armor-index': index}
+                                        }))
+
+        # Armor menu
+
+        if len(don_armor_menu) == 1:
+            action_menu.append(
+                (('Don %s' % don_armor_menu[0][0]),
+                 {'text': ['Don Armor',
+                           ' Defense: none',
+                           ' Move: none'],
+                  'action': {
+                    'name': 'don-armor',
+                    'armor-index': don_armor_menu[0][1]['action']['armor-index']
+                  }
+                 }))
+
+        elif len(don_armor_menu) > 1:
+            action_menu.append(('Don Armor',
+                                {'text': ['Don Armor',
+                                          ' Defense: none',
+                                          ' Move: none'],
+                                 'menu': don_armor_menu}))
+
+        if armor is not None:
+            action_menu.append((('Doff %s' % armor['name']), 
+                                   {'text': [('Doff %s' % armor['name']),
+                                             ' Defense: none',
+                                             ' Move: none'],
+                                    'action': {'name': 'don-armor',
+                                               'armor-index': None}
+                                   }))
+
+        ### Attack ###
+
+
+        # TODO: move (and, in fact, all of the 'text') is rules-based
+        move = fighter.details['current']['basic-move']
+
+        if holding_ranged:
+            if weapon['ammo']['shots_left'] > 0:
+                # Can only attack if there's someone to attack
+                action_menu.extend([
+                    ('attack',          {'text': ['Attack',
+                                                  ' Defense: any',
+                                                  ' Move: step'],
+                                         'action': {'name': 'attack'}
+                                        }),
+                    ('attack, all out', {'text': ['All out attack',
+                                                  ' Defense: none',
+                                                  ' Move: 1/2 = %d' %
+                                                                (move/2)],
+                                         'action': {'name': 'all-out-attack'}
+                                        })
+                ])
+        else:
+            action_menu.extend([
+                    ('attack',          {'text': ['Attack',
+                                                    ' Defense: any',
+                                                    ' Move: step'],
+                                         'action': {'name': 'attack'}
+                                        }),
+                    ('attack, all out', {'text': ['All out attack',
+                                                 ' Defense: none',
+                                                 ' Move: 1/2 = %d' % (move/2)],
+                                         'action': {'name': 'all-out-attack'}
+                                        })
+            ])
+
+        ### Draw or Holster weapon ###
 
         if weapon is not None:
             action_menu.append((('holster/sheathe %s' % weapon['name']), 
@@ -2350,50 +2447,7 @@ class Ruleset(object):
                                               ' Move: step'],
                                      'menu': draw_weapon_menu}))
 
-        # Armor SUB-menu
-
-        armor, armor_index = fighter.get_current_armor()
-        don_armor_menu = []   # list of armor that may be donned this turn
-        for index, item in enumerate(fighter.details['stuff']):
-            if item['type'] == 'armor':
-                if armor is None or armor_index != index:
-                    don_armor_menu.append((item['name'],
-                                        {'text': [('Don %s' % item['name']),
-                                                  ' Defense: none',
-                                                  ' Move: none'],
-                                         'action': { 'name': 'don-armor',
-                                                     'armor-index': index}
-                                        }))
-
-        # Armor menu
-
-        if len(don_armor_menu) == 1:
-            action_menu.append(
-                (('Don %s' % don_armor_menu[0][0]),
-                 {'text': ['Don Armor',
-                           ' Defense: none',
-                           ' Move: none'],
-                  'action': {
-                    'name': 'don-armor',
-                    'armor-index': don_armor_menu[0][1]['action']['armor-index']
-                  }
-                 }))
-
-        elif len(don_armor_menu) > 1:
-            action_menu.append(('Don Armor',
-                                {'text': ['Don Armor',
-                                          ' Defense: none',
-                                          ' Move: none'],
-                                 'menu': don_armor_menu}))
-
-        if armor is not None:
-            action_menu.append((('Doff %s' % armor['name']), 
-                                   {'text': [('Doff %s' % armor['name']),
-                                             ' Defense: none',
-                                             ' Move: none'],
-                                    'action': {'name': 'don-armor',
-                                               'armor-index': None}
-                                   }))
+        ### Use Item ###
 
         # Use SUB-menu
 
@@ -2425,7 +2479,6 @@ class Ruleset(object):
                                           ' Defense: (depends)',
                                           ' Move: (depends)'],
                                  'menu': use_menu}))
-
 
         return # No need to return action menu since it was a parameter
 
@@ -2501,9 +2554,9 @@ class Ruleset(object):
         return result
 
 
-    def use_item(self,
-                 param # dict: {'item': index, 'fighter': Fighter obj}
-                ):
+    def _use_item(self,
+                  param # dict: {'item': index, 'fighter': Fighter obj}
+                 ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -2768,16 +2821,23 @@ class GurpsRuleset(Ruleset):
 
         return ', '.join(results)
 
-    def do_aim(self,
-               param, # dict {'fighter': <Fighter object>,
-                      #       'braced': True | False}
-              ):
+    def _do_aim(self,
+                param, # dict {'fighter': <Fighter object>,
+                       #       'braced': True | False}
+               ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        param['fighter'].do_aim(param['braced'])
-        return None if 'text' not in param else param
+
+        rounds = param['fighter'].details['aim']['rounds']
+        if rounds == 0:
+            param['fighter'].details['aim']['braced'] = param['braced']
+            param['fighter'].details['aim']['rounds'] = 1
+        elif rounds < 3:
+            param['fighter'].details['aim']['rounds'] += 1
+
+        return
 
     def do_defense(self,
                    param # {'fighter': <Fighter object>, ...
@@ -2819,9 +2879,20 @@ class GurpsRuleset(Ruleset):
 
         fighter.perform_action_this_turn()
 
-        if action['name'] == 'change-posture':
+        if action['name'] == 'aim':
+            self._do_aim({'fighter': fighter,
+                          'braced': action['braced']})
+
+        elif action['name'] == 'concentrate':
+            pass # This is here just so that it's logged
+
+        elif action['name'] == 'change-posture':
             self.change_posture({'fighter': fighter,
                                  'posture': action['posture']})
+
+        elif action['name'] == 'defend':
+            self.do_defense({'fighter': fighter})
+
         elif action['name'] == 'stunned':
             pass # This is here just so that it's logged
 
@@ -2835,6 +2906,7 @@ class GurpsRuleset(Ruleset):
         ''' Builds the menu of maneuvers allowed for the fighter. '''
 
         action_menu = []
+        self._fight_handler = fight_handler
 
         move = fighter.details['current']['basic-move']
 
@@ -2891,19 +2963,14 @@ class GurpsRuleset(Ruleset):
                                         {'text': ['Aim with brace',
                                                   ' Defense: any loses aim',
                                                   ' Move: step'],
-                                         'doit': self.do_aim,
-                                         'param': {'fighter': fighter,
-                                                   'braced': True,
-                                                   'text': ['Aim with brace']
-                                                  }
+                                         'action': {'name': 'aim',
+                                                    'braced': True}
                                         }),
                         ('Not Bracing', {'text': ['Aim',
                                                   ' Defense: any loses aim',
                                                   ' Move: step'],
-                                         'doit': self.do_aim,
-                                         'param': {'fighter': fighter,
-                                                   'braced': False,
-                                                   'text': ['Aim']}})
+                                         'action': {'name': 'aim',
+                                                   'braced': False}})
                     ]
                     action_menu.append(('Aim (B324, B364)',
                                         {'text': ['Aim',
@@ -2916,55 +2983,10 @@ class GurpsRuleset(Ruleset):
                                         {'text': ['Aim',
                                                   ' Defense: any loses aim',
                                                   ' Move: step'],
-                                         'doit': self.do_aim,
-                                         'param': {'fighter': fighter,
-                                                   'braced': False,
-                                                   'text': ['Aim']}})
+                                         'action': {'name': 'aim',
+                                                    'braced': False}})
                                       )
 
-                # NOTE: Can only attack with a ranged weapon if there are still
-                # shots in the gun.
-
-                # Can only attack if there's someone to attack
-                action_menu.extend([
-                    ('attack',          {'text': ['Attack',
-                                                  ' Defense: any',
-                                                  ' Move: step'],
-                                         'doit': self.__do_attack,
-                                         'param': {'fighter': fighter,
-                                                   'text': ['Attack'],
-                                                   'fight_handler':
-                                                            fight_handler}}),
-                    ('attack, all out', {'text': ['All out attack',
-                                                  ' Defense: none',
-                                                  ' Move: 1/2 = %d' %
-                                                                (move/2)],
-                                         'doit': self.__do_attack,
-                                         'param': {'fighter': fighter,
-                                                   'text': ['All out attack'],
-                                                   'fight_handler':
-                                                            fight_handler}})
-                ])
-        else:
-            # Can only attack if there's someone to attack
-            action_menu.extend([
-                    ('attack',          {'text': ['Attack',
-                                                    ' Defense: any',
-                                                    ' Move: step'],
-                                         'doit': self.__do_attack,
-                                         'param': {'fighter': fighter,
-                                                   'text': ['Attack'],
-                                                   'fight_handler':
-                                                            fight_handler}}),
-                    ('attack, all out', {'text': ['All out attack',
-                                                 ' Defense: none',
-                                                 ' Move: 1/2 = %d' % (move/2)],
-                                         'doit': self.__do_attack,
-                                         'param': {'fighter': fighter,
-                                                   'text': ['All out attack'],
-                                                   'fight_handler':
-                                                            fight_handler}})
-            ])
 
         action_menu.extend([
             ('posture (B551)',         {'text': [
@@ -2978,14 +3000,11 @@ class GurpsRuleset(Ruleset):
             ('Concentrate (B366)',     {'text': ['Concentrate',
                                                  ' Defense: any w/will roll',
                                                  ' Move: step'],
-                                        'doit': None}),
+                                        'action': {'name': 'concentrate'}}),
             ('Defense, all out',       {'text': ['All out defense',
                                                  ' Defense: double',
                                                  ' Move: step'],
-                                        'doit': self.do_defense,
-                                        'param': {'fighter': fighter,
-                                                  'text': ['All out defense']
-                                                 }
+                                        'action': {'name': 'defend'}
                                        }),
         ])
 
@@ -4271,23 +4290,17 @@ class GurpsRuleset(Ruleset):
     # Private Methods
     #
 
-    def __do_attack(self,
-                    param # {'fighter': xxx, Fighter object for attacker
-                   ):
+    def _do_attack(self,
+                   param # {'fighter': xxx, Fighter object for attacker
+                         #  'fight_handler', ...
+                  ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        if param['fighter'].details['opponent'] is None:
-            param['fight_handler'].pick_opponent()
-
-        weapon, weapon_index = param['fighter'].get_current_weapon()
-        if weapon is None or 'ammo' not in weapon:
-            return None if 'text' not in param else param
-
-        weapon['ammo']['shots_left'] -= 1
+        to_monster = super(GurpsRuleset, self)._do_attack(param)
         param['fighter'].reset_aim()
-        return None if 'text' not in param else param
+        return
 
 
     def __do_reload(self,
@@ -4318,14 +4331,14 @@ class GurpsRuleset(Ruleset):
 
 
 
-    def draw_weapon(self,
+    def _draw_weapon(self,
                     param # dict: {'weapon': index, 'fighter': Fighter obj}
                    ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        super(GurpsRuleset, self).draw_weapon(param)
+        super(GurpsRuleset, self)._draw_weapon(param)
         param['fighter'].reset_aim()
         return
 
