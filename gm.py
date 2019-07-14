@@ -2230,9 +2230,7 @@ class Ruleset(object):
 
     def do_action(self,
                   action, 
-                  fighter,  # Fighter object
-                  opponent, # Fighter object
-                  world
+                  fighter  # Fighter object
                  ):
         '''
         Default, non-ruleset related, action handling.  Good for drawing
@@ -2246,12 +2244,18 @@ class Ruleset(object):
         if action['name'] == 'attack' or action['name'] == 'all-out-attack':
             self._do_attack({'fighter': fighter,
                              'fight_handler': self._fight_handler})
+
         elif action['name'] == 'draw-weapon':
             self._draw_weapon({'fighter': fighter,
                                'weapon':  action['weapon-index']})
-        elif action['name'] == 'don-armor':
-            self.don_armor({'fighter': fighter,
-                            'armor': action['armor-index']})
+
+        elif action['name'] == 'don-armor': # or doff armor
+            self._don_armor({'fighter': fighter,
+                             'armor': action['armor-index']})
+
+        elif action['name'] == 'reload': # or doff armor
+            self._do_reload({'fighter': fighter})
+
         elif action['name'] == 'use-item':
             self._use_item({'fighter': fighter,
                             'item': action['item-index']})
@@ -2277,6 +2281,26 @@ class Ruleset(object):
 
         weapon['ammo']['shots_left'] -= 1
         return
+
+
+    def _do_reload(self,
+                   param # {'fighter': Fighter object for attacker
+                  ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        weapon, weapon_index = param['fighter'].get_current_weapon()
+        if weapon is None or 'ammo' not in weapon:
+            return False
+
+        clip_name = weapon['ammo']['name']
+        for item in param['fighter'].details['stuff']:
+            if item['name'] == clip_name and item['count'] > 0:
+                weapon['ammo']['shots_left'] = weapon['ammo']['shots']
+                item['count'] -= 1
+                return True
+        return False
 
 
     def _don_armor(self,
@@ -2446,6 +2470,16 @@ class Ruleset(object):
                                               ' Defense: any',
                                               ' Move: step'],
                                      'menu': draw_weapon_menu}))
+
+        ### RELOAD ###
+
+        if holding_ranged:
+            action_menu.append(('reload (ready)',
+                                               {'text': ['Ready (reload)',
+                                                         ' Defense: any',
+                                                         ' Move: step'],
+                                                'action': {'name': 'reload'}
+                                               }))
 
         ### Use Item ###
 
@@ -2722,8 +2756,8 @@ class GurpsRuleset(Ruleset):
                     fighter.details['state'] = 'unconscious'
                     fighter.draw_weapon_by_index(None)
                 elif stunned_results == GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL:
-                    self.change_posture({'fighter': fighter,
-                                         'posture': 'lying'})
+                    self._change_posture({'fighter': fighter,
+                                          'posture': 'lying'})
                     fighter.draw_weapon_by_index(None)
                     fighter.details['stunned'] = True
 
@@ -2745,10 +2779,10 @@ class GurpsRuleset(Ruleset):
 
         super(GurpsRuleset, self).adjust_hp(fighter, adj)
 
-    def cast_spell(self,
-                       param, # dict {'fighter': <Fighter object>,
-                              #       'spell': <index in 'spells'>}
-                      ):
+    def _cast_spell(self,
+                    param, # dict {'fighter': <Fighter object>,
+                           #       'spell': <index in 'spells'>}
+                   ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -2791,10 +2825,10 @@ class GurpsRuleset(Ruleset):
         return None if 'text' not in param else param
 
 
-    def change_posture(self,
-                       param, # dict {'fighter': <Fighter object>,
-                              #       'posture': <string=new posture>}
-                      ):
+    def _change_posture(self,
+                        param, # dict {'fighter': <Fighter object>,
+                               #       'posture': <string=new posture>}
+                       ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -2839,9 +2873,9 @@ class GurpsRuleset(Ruleset):
 
         return
 
-    def do_defense(self,
-                   param # {'fighter': <Fighter object>, ...
-                  ):
+    def _do_defense(self,
+                    param # {'fighter': <Fighter object>, ...
+                   ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -2851,6 +2885,23 @@ class GurpsRuleset(Ruleset):
 
     def do_maneuver(self, fighter):
         fighter.perform_action_this_turn()
+
+    def _do_reload(self,
+                   param # {'fighter': Fighter object for attacker
+                  ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        if super(GurpsRuleset, self)._do_reload(param):
+            reload_time = weapon['reload']
+            if 'fast-draw (ammo)' in param['fighter'].details['skills']:
+                reload_time -= 1
+            param['fighter'].add_timer(reload_time, 'RELOADING')
+            param['fighter'].reset_aim()
+            return True
+
+        return
 
     def end_turn(self, fighter):
         fighter.details['shock'] = 0
@@ -2866,12 +2917,10 @@ class GurpsRuleset(Ruleset):
 
     def do_action(self,
                   action, 
-                  fighter,  # Fighter object
-                  opponent, # Fighter object
-                  world
+                  fighter   # Fighter object
                  ):
         # TODO: not sure whether to call this first or last
-        super(GurpsRuleset, self).do_action(action, fighter, opponent, world)
+        super(GurpsRuleset, self).do_action(action, fighter)
 
         print ('\nGurpsRuleset::do_action for "%s" w/action:' % # TODO: remove
                                                   fighter.name) # TODO: remove
@@ -2883,17 +2932,40 @@ class GurpsRuleset(Ruleset):
             self._do_aim({'fighter': fighter,
                           'braced': action['braced']})
 
+        elif action['name'] == 'cast-spell':
+            self._cast_spell({'fighter': fighter,
+                              'spell': action['spell-index']})
+
+        elif action['name'] == 'change-posture':
+            self._change_posture({'fighter': fighter,
+                                  'posture': action['posture']})
+
         elif action['name'] == 'concentrate':
             pass # This is here just so that it's logged
 
-        elif action['name'] == 'change-posture':
-            self.change_posture({'fighter': fighter,
-                                 'posture': action['posture']})
-
         elif action['name'] == 'defend':
-            self.do_defense({'fighter': fighter})
+            self._do_defense({'fighter': fighter})
+
+        elif action['name'] == 'evaluate':
+            pass # This is here just so that it's logged
+
+        elif action['name'] == 'feint':
+            pass # This is here just so that it's logged
+        
+        elif action['name'] == 'move':
+            pass # This is here just so that it's logged
+
+        elif action['name'] == 'move-and-attack':
+            # TODO: is this really not an attack?
+            pass # This is here just so that it's logged
+
+        elif action['name'] == 'nothing':
+            pass # This is here just so that it's logged
 
         elif action['name'] == 'stunned':
+            pass # This is here just so that it's logged
+
+        elif action['name'] == 'wait':
             pass # This is here just so that it's logged
 
         return # Nothing to return
@@ -2909,8 +2981,6 @@ class GurpsRuleset(Ruleset):
         self._fight_handler = fight_handler
 
         move = fighter.details['current']['basic-move']
-
-        # TODO: convert 'doit' to 'action' throughout.
 
         if fighter.details['stunned']:
             action_menu.append(
@@ -3023,11 +3093,9 @@ class GurpsRuleset(Ruleset):
                     {'text': [('Cast (%s)' % spell['name']),
                               ' Defense: none',
                               ' Move: none'],
-                     'doit': self.cast_spell,
-                     'param': {'spell': index,
-                               'fighter': fighter,
-                               'text': [('Cast (%s)' % spell['name'])]
-                              }
+
+                     'action': {'name': 'cast-spell',
+                                'spell-index': index}
                     }))
 
             action_menu.append(('cast Spell',
@@ -3037,22 +3105,21 @@ class GurpsRuleset(Ruleset):
                                  'menu': spell_menu}))
 
 
-
-
         action_menu.append(('evaluate (B364)', {'text': ['Evaluate',
                                                          ' Defense: any',
                                                          ' Move: step'],
-                                                'doit': None}))
+                                                'action': {'name': 'evaluate'}
+                                               }))
 
         # Can only feint with a melee weapon
+        # TODO: maybe include some mechanics with feint
         if weapon is not None and holding_ranged == False:
             action_menu.append(('feint (B365)',
                                            {'text': ['Feint',
                                                      ' Defense: any, parry *',
                                                      ' Move: step'],
-                                            'doit': None}))
-
-
+                                            'action': {'name': 'feint'}
+                                           }))
         
         if (fighter.details['current']['fp'] <
                         (fighter.details['permanent']['fp'] / 3)):
@@ -3065,37 +3132,27 @@ class GurpsRuleset(Ruleset):
                                        {'text': ['Move',
                                                  ' Defense: any',
                                                  ' Move: %s' % move_string],
-                                        'doit': None}),
+                                        'action': {'name': 'move'}}),
             ('Move and attack (B365)', {'text': ['Move & Attack',
                                                  ' Defense: Dodge,block',
                                                  ' Move: %s' % move_string],
-                                        'doit': None}),
+                                        'action': {'name': 'feint'}}),
             ('nothing',                {'text': ['Do nothing',
                                                  ' Defense: any',
                                                  ' Move: none'],
-                                        'doit': None}),
+                                        'action': {'name': 'feint'}}),
         ])
-
-        if holding_ranged:
-            action_menu.append(('reload (ready)',         
-                                       {'text': ['Ready (reload)',
-                                                 ' Defense: any',
-                                                 ' Move: step'],
-                                        'doit': self.__do_reload,
-                                        'param': {'fighter': fighter,
-                                                  'text': ['Reload']}
-                                       }))
 
         action_menu.extend([
             ('stun/surprise (do nothing)',
                                {'text': ['Stun/Surprised',
                                          ' Defense: any @-4',
                                          ' Move: none'],
-                                'doit': None}),
+                                'action': {'name': 'stunned'}}),
             ('wait (B366)',    {'text': ['Wait',
                                          ' Defense: any, no All Out Attack',
                                          ' Move: none'],
-                                'doit': None})
+                                'action': {'name': 'wait'}}),
         ])
 
         # TODO: not sure whether to call this first or last
@@ -4303,9 +4360,9 @@ class GurpsRuleset(Ruleset):
         return
 
 
-    def __do_reload(self,
-                    param # {'fighter': Fighter object for attacker
-                   ):
+    def _do_reload(self,
+                   param # {'fighter': Fighter object for attacker
+                  ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -4327,8 +4384,6 @@ class GurpsRuleset(Ruleset):
                 return None if 'text' not in param else param['text']
 
         return None if 'text' not in param else param
-
-
 
 
     def _draw_weapon(self,
@@ -5423,15 +5478,17 @@ class FightHandler(ScreenHandler):
         if auto_attack:
             action_menu = self.__ruleset.get_action_menu(current_fighter, self)
             for action in action_menu:
-                if action[0] == 'attack':
-                    maneuver = action[1]
-                    param = (None if 'param' not in maneuver
-                                  else maneuver['param'])
-                    (maneuver['doit'])(param)
-                    self.__ruleset.do_maneuver(current_fighter)
-                    current_fighter.add_timer(0.9, maneuver['text'])
-                    self.add_to_history(' (%s) did (%s) maneuver' %
-                                (current_fighter.name, maneuver['text'][0]))
+                pass
+                # TODO: replace with action
+                #if action[0] == 'attack':
+                #    maneuver = action[1]
+                #    param = (None if 'param' not in maneuver
+                #                  else maneuver['param'])
+                #    (maneuver['doit'])(param)
+                #    self.__ruleset.do_maneuver(current_fighter)
+                #    current_fighter.add_timer(0.9, maneuver['text'])
+                #    self.add_to_history(' (%s) did (%s) maneuver' %
+                #                (current_fighter.name, maneuver['text'][0]))
 
         # Record for posterity
         if hp_recipient is opponent:
@@ -5710,9 +5767,7 @@ class FightHandler(ScreenHandler):
 
         if 'action' in maneuver:
             self.__ruleset.do_action(maneuver['action'], 
-                                     current_fighter,
-                                     opponent,
-                                     self.__world)
+                                     current_fighter)
         else:
             # TODO: when everything's an action, remove this 'else' clause
             #   because 'do_action' will automatically call do_maneuver
