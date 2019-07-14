@@ -2597,6 +2597,23 @@ class GurpsRuleset(Ruleset):
             if recovered_from_stun:
                 fighter.details['stunned'] = False
 
+    def do_action(self,
+                  action, 
+                  fighter,  # Fighter object
+                  opponent, # Fighter object
+                  world
+                 ):
+        print '\ndo_action for "%s" with action "%s"' % (   # TODO: remove
+                                            fighter.name,   # TODO: remove
+                                            action['name']) # TODO: remove
+        fighter.perform_action_this_turn()
+
+        if action['name'] == 'change_posture':
+            print 'changing posture to "%s"' % action['posture'] # TODO: remove
+            self.change_posture({'fighter': fighter,
+                                 'posture': action['posture']})
+
+
     def get_action_menu(self,
                         fighter,        # Fighter object
                         fight_handler   # FightHandler object
@@ -2676,12 +2693,8 @@ class GurpsRuleset(Ruleset):
                                           '       kneel->stand = step',
                                           ' Defense: any',
                                           ' Move: none'],
-                                 'doit': self.change_posture,
-                                 'param': {'fighter': fighter,
-                                           'posture': posture,
-                                           'text': [('Change posture to %s' %
-                                                                posture)]
-                                          }
+                                 'action': {'name': 'change_posture',
+                                            'posture': posture}
                                 }))
 
         # Use SUB-menu
@@ -5623,10 +5636,12 @@ class FightHandler(ScreenHandler):
             return True # Keep going
 
         # TODO: call the ruleset to execute the action
-        # TODO: change 'maneuver' to 'action'
-        # TODO: fill-in current_fighter, opponent, world
-        # if 'action' in maneuver:
-        #   self.__ruleset.do_action(action, current_fighter)
+
+        if 'action' in maneuver:
+            self.__ruleset.do_action(maneuver['action'], 
+                                     current_fighter,
+                                     opponent,
+                                     self.__world)
 
         self.__ruleset.do_maneuver(current_fighter)
         # a round count larger than 0 will get shown but less than 1 will
