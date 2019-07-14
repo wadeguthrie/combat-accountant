@@ -2254,6 +2254,9 @@ class Ruleset(object):
         if action['name'] == 'draw_weapon':
             self.draw_weapon({'fighter': fighter,
                               'weapon':  action['weapon_index']})
+        elif action['name'] == 'don_armor':
+            self.don_armor({'fighter': fighter,
+                            'armor': action['armor_index']})
 
         return # Nothing to return
 
@@ -2289,6 +2292,8 @@ class Ruleset(object):
                                                    'weapon_index': index}
                                        }))
 
+        # Draw menu
+
         if len(draw_weapon_menu) == 1:
             action_menu.append(
                 (('draw (ready, etc.; B325, B366, B382) %s' %
@@ -2308,7 +2313,53 @@ class Ruleset(object):
                                           ' Move: step'],
                                  'menu': draw_weapon_menu}))
 
+        # Armor SUB-menu
+
+        armor, armor_index = fighter.get_current_armor()
+        don_armor_menu = []   # list of armor that may be donned this turn
+        for index, item in enumerate(fighter.details['stuff']):
+            if item['type'] == 'armor':
+                if armor is None or armor_index != index:
+                    don_armor_menu.append((item['name'],
+                                        {'text': [('Don %s' % item['name']),
+                                                  ' Defense: none',
+                                                  ' Move: none'],
+                                         'action': { 'name': 'don_armor',
+                                                     'armor_index': index}
+                                        }))
+
+        # Armor menu
+
+        if len(don_armor_menu) == 1:
+            action_menu.append(
+                (('Don %s' % don_armor_menu[0][0]),
+                 {'text': ['Don Armor',
+                           ' Defense: none',
+                           ' Move: none'],
+                  'action': {
+                    'name': 'don_armor',
+                    'armor_index': don_armor_menu[0][1]['action']['armor_index']
+                  }
+                 }))
+
+        elif len(don_armor_menu) > 1:
+            action_menu.append(('Don Armor',
+                                {'text': ['Don Armor',
+                                          ' Defense: none',
+                                          ' Move: none'],
+                                 'menu': don_armor_menu}))
+
+        if armor is not None:
+            action_menu.append((('Doff %s' % armor['name']), 
+                                   {'text': [('Doff %s' % armor['name']),
+                                             ' Defense: none',
+                                             ' Move: none'],
+                                    'action': {'name': 'don_armor',
+                                               'armor_index': None}
+                                   }))
+
         return # No need to return action menu since it was a parameter
+
 
     def heal_fighter(self,
                      fighter_details    # 'details' is OK, here
@@ -2688,6 +2739,8 @@ class GurpsRuleset(Ruleset):
         if action['name'] == 'change_posture':
             self.change_posture({'fighter': fighter,
                                  'posture': action['posture']})
+        elif action['name'] == 'stunned':
+            pass # This is here just so that it's logged
 
         return # Nothing to return
 
@@ -2700,11 +2753,6 @@ class GurpsRuleset(Ruleset):
 
         action_menu = []
 
-        # TODO: not sure whether to call this first or last
-        super(GurpsRuleset, self).get_action_menu(action_menu,
-                                                  fighter,
-                                                  fight_handler)
-
         move = fighter.details['current']['basic-move']
 
         # TODO: convert 'doit' to 'action' throughout.
@@ -2714,10 +2762,10 @@ class GurpsRuleset(Ruleset):
                 ('do nothing (stunned)', {'text': ['Do Nothing (Stunned)',
                                                    ' Defense: any @-4',
                                                    ' Move: none'],
-                                          'doit': None}
+                                          'action': {'name': 'stunned'}}
                 )
             )
-            return action_menu
+            return action_menu # No other actions permitted
 
 
         # Figure out who we are and what we're holding.
@@ -2726,25 +2774,6 @@ class GurpsRuleset(Ruleset):
         holding_ranged = (False if weapon is None else
                                 (weapon['type'] == 'ranged weapon'))
 
-
-        # Armor SUB-menu
-
-        armor, armor_index = fighter.get_current_armor()
-        don_armor_menu = []   # list of weapons that may be drawn this turn
-        for index, item in enumerate(fighter.details['stuff']):
-            if item['type'] == 'armor':
-                if armor is None or armor_index != index:
-                    don_armor_menu.append((item['name'],
-                                        {'text': [('Don %s' % item['name']),
-                                                  ' Defense: none',
-                                                  ' Move: none'],
-                                         'doit': self.don_armor,
-                                         'param': {'armor': index,
-                                                   'fighter': fighter,
-                                                   'text': [('Don %s' %
-                                                            item['name'])]
-                                                  }
-                                        }))
 
         # Posture SUB-menu
 
@@ -2943,40 +2972,6 @@ class GurpsRuleset(Ruleset):
                                           ' Move: (depends)'],
                                  'menu': use_menu}))
 
-        # Armor
-
-        if len(don_armor_menu) == 1:
-            action_menu.append(
-                (('Don %s' % don_armor_menu[0][0]),
-                 {'text': ['Don Armor',
-                           ' Defense: none',
-                           ' Move: none'],
-                  'doit': self.don_armor,
-                  'param': {'armor': don_armor_menu[0][1]['param']['armor'],
-                            'fighter': fighter,
-                            'text': ['don armor (%s)' % don_armor_menu[0][0]]
-                           }
-                 }))
-
-        elif len(don_armor_menu) > 1:
-            action_menu.append(('Don Armor',
-                                {'text': ['Don Armor',
-                                          ' Defense: none',
-                                          ' Move: none'],
-                                 'menu': don_armor_menu}))
-
-        if armor is not None:
-            action_menu.append((('Doff %s' % armor['name']), 
-                                   {'text': [('Doff %s' % armor['name']),
-                                             ' Defense: none',
-                                             ' Move: none'],
-                                    'doit': self.don_armor,
-                                    'param': {'armor': None,
-                                              'fighter': fighter,
-                                              'text': ['doff armor (%s)' %
-                                                                armor['name']]
-                                             }
-                                   }))
 
         action_menu.append(('evaluate (B364)', {'text': ['Evaluate',
                                                          ' Defense: any',
@@ -3048,6 +3043,11 @@ class GurpsRuleset(Ruleset):
                                          ' Move: none'],
                                 'doit': None})
         ])
+
+        # TODO: not sure whether to call this first or last
+        super(GurpsRuleset, self).get_action_menu(action_menu,
+                                                  fighter,
+                                                  fight_handler)
 
         return action_menu
 
@@ -3599,7 +3599,7 @@ class GurpsRuleset(Ruleset):
                 why.extend(parry_why)
                 notes.append('Parry (B327, B376): %d' % parry_skill)
 
-        # ARmor
+        # Armor
 
         armor, armor_index = fighter.get_current_armor()
         if armor is not None:
