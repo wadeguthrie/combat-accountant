@@ -2250,6 +2250,69 @@ class Ruleset(object):
         pass  # TODO: for now
 
 
+    def get_action_menu(self,
+                        action_menu,    # menu for user [(name, predicate)...]
+                        fighter,        # Fighter object
+                        fight_handler   # FightHandler object
+                       ):
+        '''
+        Builds the menu of maneuvers allowed for the fighter. This is for the
+        non-ruleset-based stuff like drawing weapons and such.
+        '''
+        # Figure out who we are and what we're holding.
+
+        weapon, weapon_index = fighter.get_current_weapon()
+        holding_ranged = (False if weapon is None else
+                                (weapon['type'] == 'ranged weapon'))
+
+        # TODO: convert 'doit' to 'action' throughout.
+
+        # Draw weapon SUB-menu
+
+        draw_weapon_menu = []   # list of weapons that may be drawn this turn
+        for index, item in enumerate(fighter.details['stuff']):
+            if (item['type'] == 'ranged weapon' or
+                    item['type'] == 'melee weapon' or
+                    item['type'] == 'shield'):
+                if weapon is None or weapon_index != index:
+                    draw_weapon_menu.append(
+                        (item['name'], {'text': [('draw %s' % item['name']),
+                                                  ' Defense: any',
+                                                  ' Move: step'],
+                                        'doit': self.draw_weapon,
+                                        'param': {'weapon': index,
+                                                  'fighter': fighter,
+                                                  'text': [('draw %s' %
+                                                                item['name'])]}
+                                       }
+                        )
+                    )
+
+        # TODO: should only be able to ready an unready weapon 
+        # NOTE: ruleset based!
+
+        if len(draw_weapon_menu) == 1:
+            action_menu.append(
+                (('draw (ready, etc.; B325, B366, B382) %s' %
+                                                draw_weapon_menu[0][0]),
+                 {'text': ['Ready (draw, etc.)',
+                           ' Defense: any',
+                           ' Move: step'],
+                  'doit': self.draw_weapon,
+                  'param': {'weapon': draw_weapon_menu[0][1]['param']['weapon'],
+                            'fighter': fighter,
+                            'text': ['draw %s' % draw_weapon_menu[0][0]]
+                           }
+                 }))
+
+        elif len(draw_weapon_menu) > 1:
+            action_menu.append(('draw (ready, etc.; B325, B366, B382)',
+                                {'text': ['Ready (draw, etc.)',
+                                          ' Defense: any',
+                                          ' Move: step'],
+                                 'menu': draw_weapon_menu}))
+
+
     def heal_fighter(self,
                      fighter_details    # 'details' is OK, here
                     ):
@@ -2639,6 +2702,11 @@ class GurpsRuleset(Ruleset):
 
         action_menu = []
 
+        # TODO: not sure whether to call this first or last
+        super(GurpsRuleset, self).get_action_menu(action_menu,
+                                                  fighter,
+                                                  fight_handler)
+
         move = fighter.details['current']['basic-move']
 
         if fighter.details['stunned']:
@@ -2658,26 +2726,6 @@ class GurpsRuleset(Ruleset):
         holding_ranged = (False if weapon is None else
                                 (weapon['type'] == 'ranged weapon'))
 
-        # Draw weapon SUB-menu
-
-        draw_weapon_menu = []   # list of weapons that may be drawn this turn
-        for index, item in enumerate(fighter.details['stuff']):
-            if (item['type'] == 'ranged weapon' or
-                    item['type'] == 'melee weapon' or
-                    item['type'] == 'shield'):
-                if weapon is None or weapon_index != index:
-                    draw_weapon_menu.append(
-                        (item['name'], {'text': [('draw %s' % item['name']),
-                                                  ' Defense: any',
-                                                  ' Move: step'],
-                                        'doit': self.draw_weapon,
-                                        'param': {'weapon': index,
-                                                  'fighter': fighter,
-                                                  'text': [('draw %s' %
-                                                                item['name'])]}
-                                       }
-                        )
-                    )
 
         # Armor SUB-menu
 
@@ -2873,28 +2921,6 @@ class GurpsRuleset(Ruleset):
                                           ' Move: none'],
                                  'menu': spell_menu}))
 
-        # TODO: should only be able to ready an unready weapon.
-
-        if len(draw_weapon_menu) == 1:
-            action_menu.append(
-                (('draw (ready, etc.; B325, B366, B382) %s' %
-                                                draw_weapon_menu[0][0]),
-                 {'text': ['Ready (draw, etc.)',
-                           ' Defense: any',
-                           ' Move: step'],
-                  'doit': self.draw_weapon,
-                  'param': {'weapon': draw_weapon_menu[0][1]['param']['weapon'],
-                            'fighter': fighter,
-                            'text': ['draw %s' % draw_weapon_menu[0][0]]
-                           }
-                 }))
-
-        elif len(draw_weapon_menu) > 1:
-            action_menu.append(('draw (ready, etc.; B325, B366, B382)',
-                                {'text': ['Ready (draw, etc.)',
-                                          ' Defense: any',
-                                          ' Move: step'],
-                                 'menu': draw_weapon_menu}))
 
         # Use stuff
         if len(use_menu) == 1:
