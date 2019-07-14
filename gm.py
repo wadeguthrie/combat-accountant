@@ -2237,6 +2237,19 @@ class Ruleset(object):
         fighter.details['current']['hp'] += adj
 
 
+    def do_action(self,
+                  action, 
+                  fighter,  # Fighter object
+                  opponent, # Fighter object
+                  world
+                 ):
+        '''
+        Default, non-ruleset related, action handling.  Good for drawing
+        weapons and such.
+        '''
+        pass  # TODO: for now
+
+
     def heal_fighter(self,
                      fighter_details    # 'details' is OK, here
                     ):
@@ -2603,9 +2616,13 @@ class GurpsRuleset(Ruleset):
                   opponent, # Fighter object
                   world
                  ):
+        # TODO: not sure whether to call this first or last
+        super(GurpsRuleset, self).do_action(action, fighter, opponent, world)
+
         print '\ndo_action for "%s" with action "%s"' % (   # TODO: remove
                                             fighter.name,   # TODO: remove
                                             action['name']) # TODO: remove
+
         fighter.perform_action_this_turn()
 
         if action['name'] == 'change_posture':
@@ -5642,8 +5659,11 @@ class FightHandler(ScreenHandler):
                                      current_fighter,
                                      opponent,
                                      self.__world)
+        else:
+            # TODO: when everything's an action, remove this 'else' clause
+            #   because 'do_action' will automatically call do_maneuver
+            self.__ruleset.do_maneuver(current_fighter)
 
-        self.__ruleset.do_maneuver(current_fighter)
         # a round count larger than 0 will get shown but less than 1 will
         # get deleted before the next round
 
