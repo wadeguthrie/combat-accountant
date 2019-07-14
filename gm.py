@@ -15,9 +15,7 @@ import sys
 import traceback
 
 # TODO:
-#   - Adding Skills/Advantages that already exist should just change the
-#     right-hand side, not add a second entry
-#   - Move spells from persephone.json into ruleset
+#   - armor should affect hp minus
 #
 #   - Equipping item should ask to add ammo for item
 #   - Multiple weapons
@@ -27,6 +25,9 @@ import traceback
 #   - add laser sights to weapons
 #   - add a timer that is tied to the round change
 #   - should warn when trying to do a second action (take note of fastdraw)
+#   - Adding Skills/Advantages that already exist should just change the
+#     right-hand side, not add a second entry
+#   - Move spells from persephone.json into ruleset
 #
 # TODO (eventually):
 #   - anything with 'RULESET' comment should be moved to the ruleset
@@ -2251,12 +2252,15 @@ class Ruleset(object):
                                                   fighter.name) # TODO: remove
         PP.pprint(action)                                       # TODO: remove
 
-        if action['name'] == 'draw_weapon':
+        if action['name'] == 'draw-weapon':
             self.draw_weapon({'fighter': fighter,
-                              'weapon':  action['weapon_index']})
-        elif action['name'] == 'don_armor':
+                              'weapon':  action['weapon-index']})
+        elif action['name'] == 'don-armor':
             self.don_armor({'fighter': fighter,
-                            'armor': action['armor_index']})
+                            'armor': action['armor-index']})
+        elif action['name'] == 'use-item':
+            self.use_item({'fighter': fighter,
+                           'item': action['item-index']})
 
         return # Nothing to return
 
@@ -2276,42 +2280,53 @@ class Ruleset(object):
         holding_ranged = (False if weapon is None else
                                 (weapon['type'] == 'ranged weapon'))
 
-        # Draw weapon SUB-menu
+        # Draw or Holster weapon
 
-        draw_weapon_menu = []   # list of weapons that may be drawn this turn
-        for index, item in enumerate(fighter.details['stuff']):
-            if (item['type'] == 'ranged weapon' or
-                    item['type'] == 'melee weapon' or
-                    item['type'] == 'shield'):
-                if weapon is None or weapon_index != index:
-                    draw_weapon_menu.append(
-                        (item['name'], {'text': [('draw %s' % item['name']),
-                                                  ' Defense: any',
-                                                  ' Move: step'],
-                                        'action': {'name': 'draw_weapon',
-                                                   'weapon_index': index}
-                                       }))
+        if weapon is not None:
+            action_menu.append((('holster/sheathe %s' % weapon['name']), 
+                                   {'text': [('Unready %s' % weapon['name']),
+                                             ' Defense: any',
+                                             ' Move: step'],
+                                    'action': {'name': 'draw-weapon',
+                                               'weapon-index': None}
+                                   }))
+        else:
+            # Draw weapon SUB-menu
 
-        # Draw menu
+            draw_weapon_menu = []   # weapons that may be drawn this turn
+            for index, item in enumerate(fighter.details['stuff']):
+                if (item['type'] == 'ranged weapon' or
+                        item['type'] == 'melee weapon' or
+                        item['type'] == 'shield'):
+                    if weapon is None or weapon_index != index:
+                        draw_weapon_menu.append(
+                            (item['name'], {'text': [('draw %s' % item['name']),
+                                                      ' Defense: any',
+                                                      ' Move: step'],
+                                            'action': {'name': 'draw-weapon',
+                                                       'weapon-index': index}
+                                           }))
 
-        if len(draw_weapon_menu) == 1:
-            action_menu.append(
-                (('draw (ready, etc.; B325, B366, B382) %s' %
-                                                draw_weapon_menu[0][0]),
-                 {'text': ['Ready (draw, etc.)',
-                           ' Defense: any',
-                           ' Move: step'],
-                  'action': {'name': 'draw_weapon',
-                             'weapon_index': 
-                                draw_weapon_menu[0][1]['param']['weapon']}
-                 }))
+            # Draw menu
 
-        elif len(draw_weapon_menu) > 1:
-            action_menu.append(('draw (ready, etc.; B325, B366, B382)',
-                                {'text': ['Ready (draw, etc.)',
-                                          ' Defense: any',
-                                          ' Move: step'],
-                                 'menu': draw_weapon_menu}))
+            if len(draw_weapon_menu) == 1:
+                action_menu.append(
+                    (('draw (ready, etc.; B325, B366, B382) %s' %
+                                                    draw_weapon_menu[0][0]),
+                     {'text': ['Ready (draw, etc.)',
+                               ' Defense: any',
+                               ' Move: step'],
+                      'action': {'name': 'draw-weapon',
+                                 'weapon-index': 
+                                    draw_weapon_menu[0][1]['param']['weapon']}
+                     }))
+
+            elif len(draw_weapon_menu) > 1:
+                action_menu.append(('draw (ready, etc.; B325, B366, B382)',
+                                    {'text': ['Ready (draw, etc.)',
+                                              ' Defense: any',
+                                              ' Move: step'],
+                                     'menu': draw_weapon_menu}))
 
         # Armor SUB-menu
 
@@ -2324,8 +2339,8 @@ class Ruleset(object):
                                         {'text': [('Don %s' % item['name']),
                                                   ' Defense: none',
                                                   ' Move: none'],
-                                         'action': { 'name': 'don_armor',
-                                                     'armor_index': index}
+                                         'action': { 'name': 'don-armor',
+                                                     'armor-index': index}
                                         }))
 
         # Armor menu
@@ -2337,8 +2352,8 @@ class Ruleset(object):
                            ' Defense: none',
                            ' Move: none'],
                   'action': {
-                    'name': 'don_armor',
-                    'armor_index': don_armor_menu[0][1]['action']['armor_index']
+                    'name': 'don-armor',
+                    'armor-index': don_armor_menu[0][1]['action']['armor-index']
                   }
                  }))
 
@@ -2354,9 +2369,41 @@ class Ruleset(object):
                                    {'text': [('Doff %s' % armor['name']),
                                              ' Defense: none',
                                              ' Move: none'],
-                                    'action': {'name': 'don_armor',
-                                               'armor_index': None}
+                                    'action': {'name': 'don-armor',
+                                               'armor-index': None}
                                    }))
+
+        # Use SUB-menu
+
+        use_menu = []
+        for index, item in enumerate(fighter.details['stuff']):
+            if item['count'] > 0:
+                use_menu.append((item['name'],
+                                    {'text': [('Use %s' % item['name']),
+                                              ' Defense: (depends)',
+                                              ' Move: (depends)'],
+                                     'action': {'name': 'use-item',
+                                                'item-index': index}
+                                    }))
+        # Use menu
+
+        if len(use_menu) == 1:
+            action_menu.append(
+                (('use %s' % use_menu[0][0]),
+                 {'text': ['Use Item',
+                           ' Defense: (depends)',
+                           ' Move: (depends)'],
+                  'action': {'name':       'use-item',
+                             'item-index': use_menu[0][1]['param']['item']}
+                 }))
+
+        elif len(use_menu) > 1:
+            action_menu.append(('use item',
+                                {'text': ['Use Item',
+                                          ' Defense: (depends)',
+                                          ' Move: (depends)'],
+                                 'menu': use_menu}))
+
 
         return # No need to return action menu since it was a parameter
 
@@ -2736,7 +2783,7 @@ class GurpsRuleset(Ruleset):
 
         fighter.perform_action_this_turn()
 
-        if action['name'] == 'change_posture':
+        if action['name'] == 'change-posture':
             self.change_posture({'fighter': fighter,
                                  'posture': action['posture']})
         elif action['name'] == 'stunned':
@@ -2787,26 +2834,10 @@ class GurpsRuleset(Ruleset):
                                           '       kneel->stand = step',
                                           ' Defense: any',
                                           ' Move: none'],
-                                 'action': {'name': 'change_posture',
+                                 'action': {'name': 'change-posture',
                                             'posture': posture}
                                 }))
 
-        # Use SUB-menu
-
-        use_menu = []
-        for index, item in enumerate(fighter.details['stuff']):
-            if item['count'] > 0:
-                use_menu.append((item['name'],
-                                    {'text': [('Use %s' % item['name']),
-                                              ' Defense: (depends)',
-                                              ' Move: (depends)'],
-                                     'doit': self.use_item,
-                                     'param': {'item': index,
-                                               'fighter': fighter,
-                                               'text': [('Use %s' %
-                                                            item['name'])]
-                                              }
-                                    }))
 
         # Build the action_menu.  Alphabetical order.  Only allow the things
         # the fighter can do based on zis current situation.
@@ -2951,26 +2982,6 @@ class GurpsRuleset(Ruleset):
                                  'menu': spell_menu}))
 
 
-        # Use stuff
-        if len(use_menu) == 1:
-            action_menu.append(
-                (('use %s' % use_menu[0][0]),
-                 {'text': ['Use Item',
-                           ' Defense: (depends)',
-                           ' Move: (depends)'],
-                  'doit': self.use_item,
-                  'param': {'item': use_menu[0][1]['param']['item'],
-                            'fighter': fighter,
-                            'text': ['Use %s' % use_menu[0][0]]
-                           }
-                 }))
-
-        elif len(use_menu) > 1:
-            action_menu.append(('use item',
-                                {'text': ['Use Item',
-                                          ' Defense: (depends)',
-                                          ' Move: (depends)'],
-                                 'menu': use_menu}))
 
 
         action_menu.append(('evaluate (B364)', {'text': ['Evaluate',
@@ -2986,18 +2997,6 @@ class GurpsRuleset(Ruleset):
                                                      ' Move: step'],
                                             'doit': None}))
 
-        if weapon is not None:
-            action_menu.append((('holster/sheathe %s' % weapon['name']), 
-                                   {'text': [('Unready %s' % weapon['name']),
-                                             ' Defense: any',
-                                             ' Move: step'],
-                                    'doit': self.draw_weapon,
-                                    'param': {'weapon': None,
-                                              'fighter': fighter,
-                                              'text': ['sheathe %s' %
-                                                        weapon['name']]
-                                             }
-                                   }))
 
         
         if (fighter.details['current']['fp'] <
