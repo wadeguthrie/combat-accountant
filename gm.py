@@ -2247,7 +2247,15 @@ class Ruleset(object):
         Default, non-ruleset related, action handling.  Good for drawing
         weapons and such.
         '''
-        pass  # TODO: for now
+        print ('\nRuleset::do_action for "%s" with action:' %   # TODO: remove
+                                                  fighter.name) # TODO: remove
+        PP.pprint(action)                                       # TODO: remove
+
+        if action['name'] == 'draw_weapon':
+            self.draw_weapon({'fighter': fighter,
+                              'weapon':  action['weapon_index']})
+
+        return # Nothing to return
 
 
     def get_action_menu(self,
@@ -2265,8 +2273,6 @@ class Ruleset(object):
         holding_ranged = (False if weapon is None else
                                 (weapon['type'] == 'ranged weapon'))
 
-        # TODO: convert 'doit' to 'action' throughout.
-
         # Draw weapon SUB-menu
 
         draw_weapon_menu = []   # list of weapons that may be drawn this turn
@@ -2279,17 +2285,9 @@ class Ruleset(object):
                         (item['name'], {'text': [('draw %s' % item['name']),
                                                   ' Defense: any',
                                                   ' Move: step'],
-                                        'doit': self.draw_weapon,
-                                        'param': {'weapon': index,
-                                                  'fighter': fighter,
-                                                  'text': [('draw %s' %
-                                                                item['name'])]}
-                                       }
-                        )
-                    )
-
-        # TODO: should only be able to ready an unready weapon 
-        # NOTE: ruleset based!
+                                        'action': {'name': 'draw_weapon',
+                                                   'weapon_index': index}
+                                       }))
 
         if len(draw_weapon_menu) == 1:
             action_menu.append(
@@ -2298,11 +2296,9 @@ class Ruleset(object):
                  {'text': ['Ready (draw, etc.)',
                            ' Defense: any',
                            ' Move: step'],
-                  'doit': self.draw_weapon,
-                  'param': {'weapon': draw_weapon_menu[0][1]['param']['weapon'],
-                            'fighter': fighter,
-                            'text': ['draw %s' % draw_weapon_menu[0][0]]
-                           }
+                  'action': {'name': 'draw_weapon',
+                             'weapon_index': 
+                                draw_weapon_menu[0][1]['param']['weapon']}
                  }))
 
         elif len(draw_weapon_menu) > 1:
@@ -2312,6 +2308,7 @@ class Ruleset(object):
                                           ' Move: step'],
                                  'menu': draw_weapon_menu}))
 
+        return # No need to return action menu since it was a parameter
 
     def heal_fighter(self,
                      fighter_details    # 'details' is OK, here
@@ -2682,16 +2679,17 @@ class GurpsRuleset(Ruleset):
         # TODO: not sure whether to call this first or last
         super(GurpsRuleset, self).do_action(action, fighter, opponent, world)
 
-        print '\ndo_action for "%s" with action "%s"' % (   # TODO: remove
-                                            fighter.name,   # TODO: remove
-                                            action['name']) # TODO: remove
+        print ('\nGurpsRuleset::do_action for "%s" w/action:' % # TODO: remove
+                                                  fighter.name) # TODO: remove
+        PP.pprint(action)                                       # TODO: remove
 
         fighter.perform_action_this_turn()
 
         if action['name'] == 'change_posture':
-            print 'changing posture to "%s"' % action['posture'] # TODO: remove
             self.change_posture({'fighter': fighter,
                                  'posture': action['posture']})
+
+        return # Nothing to return
 
 
     def get_action_menu(self,
@@ -2708,6 +2706,8 @@ class GurpsRuleset(Ruleset):
                                                   fight_handler)
 
         move = fighter.details['current']['basic-move']
+
+        # TODO: convert 'doit' to 'action' throughout.
 
         if fighter.details['stunned']:
             action_menu.append(
