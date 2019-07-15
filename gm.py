@@ -1994,6 +1994,8 @@ class Fighter(object):
 
 
     def get_current_armor(self):
+        if 'armor-index' not in self.details:
+            return None, None
         armor_index = self.details['armor-index']
         if armor_index is None:
             return None, None
