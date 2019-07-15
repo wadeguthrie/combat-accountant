@@ -15,6 +15,10 @@ import sys
 import traceback
 
 # TODO:
+#   - clone monster
+#   - can't attack if reloading (stored in the weapon)
+#   - pick opponent should be an action so it gets logged
+#   - damage (HP and FP) should be actions so they get logged
 #   - Equipping item should ask to add ammo for item
 #   - Multiple weapons
 #   - Need equipment containers
@@ -2230,12 +2234,19 @@ class Ruleset(object):
 
     def do_action(self,
                   fighter,  # Fighter object
-                  action    # {'name': <action>, parameters...} - ALL TEXT
+                  action,   # {'name': <action>, parameters...} - ALL TEXT
+                  text_to_be_logged
                  ):
         '''
         Default, non-ruleset related, action handling.  Good for drawing
         weapons and such.
         '''
+
+        action_string = PP.pformat(action)
+        self._fight_handler.add_to_history(
+                        ' %s # (%s) did (%s) maneuver' % (action_string,
+                                                          fighter.name,
+                                                          text_to_be_logged))
 
         if action['name'] == 'attack' or action['name'] == 'all-out-attack':
             self._do_attack({'fighter': fighter,
@@ -2330,6 +2341,9 @@ class Ruleset(object):
         Builds the menu of maneuvers allowed for the fighter. This is for the
         non-ruleset-based stuff like drawing weapons and such.
         '''
+
+        self._fight_handler = fight_handler
+
         # Figure out who we are and what we're holding.
 
         weapon, weapon_index = fighter.get_current_weapon()
@@ -2913,8 +2927,6 @@ class GurpsRuleset(Ruleset):
         param['fighter'].reset_aim()
         return None if 'text' not in param else param
 
-    def do_maneuver(self, fighter):
-        fighter.perform_action_this_turn()
 
     def _do_reload(self,
                    param # {'fighter': Fighter object for attacker
@@ -2947,9 +2959,10 @@ class GurpsRuleset(Ruleset):
 
     def do_action(self,
                   fighter,  # Fighter object
-                  action    # {'name': <action>, parameters...} - ALL TEXT
+                  action,   # {'name': <action>, parameters...} - ALL TEXT
+                  text_to_be_logged
                  ):
-        super(GurpsRuleset, self).do_action(fighter, action)
+        super(GurpsRuleset, self).do_action(fighter, action, text_to_be_logged)
 
         fighter.perform_action_this_turn()
 
@@ -2981,7 +2994,8 @@ class GurpsRuleset(Ruleset):
             pass # This is here just so that it's logged
 
         elif action['name'] == 'move-and-attack':
-            # TODO: is this really not an attack?
+            # TODO: attack with -2 to ranged, -4 to melee (but not greater
+            # than 9)
             pass # This is here just so that it's logged
 
         elif action['name'] == 'nothing':
@@ -3003,7 +3017,6 @@ class GurpsRuleset(Ruleset):
         ''' Builds the menu of maneuvers allowed for the fighter. '''
 
         action_menu = []
-        self._fight_handler = fight_handler
 
         move = fighter.details['current']['basic-move']
 
@@ -3161,11 +3174,11 @@ class GurpsRuleset(Ruleset):
             ('Move and attack (B365)', {'text': ['Move & Attack',
                                                  ' Defense: Dodge,block',
                                                  ' Move: %s' % move_string],
-                                        'action': {'name': 'feint'}}),
+                                        'action': {'name': 'move-and-attack'}}),
             ('nothing',                {'text': ['Do nothing',
                                                  ' Defense: any',
                                                  ' Move: none'],
-                                        'action': {'name': 'feint'}}),
+                                        'action': {'name': 'nothing'}}),
         ])
 
         action_menu.extend([
@@ -5789,22 +5802,16 @@ class FightHandler(ScreenHandler):
         if maneuver is None:
             return True # Keep going
 
-        # TODO: call the ruleset to execute the action
-
         if 'action' in maneuver:
-            self.__ruleset.do_action(current_fighter, maneuver['action'])
-        else:
-            # TODO: when everything's an action, remove this 'else' clause
-            #   because 'do_action' will automatically call do_maneuver
-            self.__ruleset.do_maneuver(current_fighter)
+            self.__ruleset.do_action(current_fighter,
+                                     maneuver['action'],
+                                     maneuver['text'][0])
 
         # a round count larger than 0 will get shown but less than 1 will
         # get deleted before the next round
 
         current_fighter.add_timer(0.9, maneuver['text'])
 
-        self.add_to_history(' (%s) did (%s) maneuver' % (current_fighter.name,
-                                                         maneuver['text'][0]))
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
                                    opponent,

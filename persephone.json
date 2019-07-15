@@ -11739,30 +11739,6 @@
             "type": "misc", 
             "owners": null, 
             "name": "C Cell"
-          }, 
-          {
-            "acc": 1, 
-            "count": 1, 
-            "owners": [
-              "the store"
-            ], 
-            "name": "zip tazer, nice", 
-            "notes": "hand built", 
-            "damage": {
-              "dice": {
-                "type": "fp", 
-                "num_dice": 1, 
-                "plus": 3
-              }
-            }, 
-            "reload": 3, 
-            "skill": "Guns (Pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "Zip Clip", 
-              "shots": 6, 
-              "shots_left": 6
-            }
           }
         ], 
         "stunned": 0, 
@@ -11876,30 +11852,6 @@
             "type": "misc", 
             "owners": [], 
             "name": "Zip Clip"
-          }, 
-          {
-            "acc": 1, 
-            "count": 1, 
-            "owners": [
-              "the store"
-            ], 
-            "name": "zip tazer, nice", 
-            "notes": "hand built", 
-            "damage": {
-              "dice": {
-                "type": "fp", 
-                "num_dice": 1, 
-                "plus": 3
-              }
-            }, 
-            "reload": 3, 
-            "skill": "Guns (Pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "Zip Clip", 
-              "shots": 6, 
-              "shots_left": 6
-            }
           }
         ], 
         "stunned": 0, 
@@ -12126,30 +12078,6 @@
             "parry": -1, 
             "skill": "Knife", 
             "type": "melee weapon"
-          }, 
-          {
-            "acc": 1, 
-            "count": 1, 
-            "owners": [
-              "the store"
-            ], 
-            "name": "zip tazer, nice", 
-            "notes": "hand built", 
-            "damage": {
-              "dice": {
-                "type": "fp", 
-                "num_dice": 1, 
-                "plus": 3
-              }
-            }, 
-            "reload": 3, 
-            "skill": "Guns (Pistol)", 
-            "type": "ranged weapon", 
-            "ammo": {
-              "name": "Zip Clip", 
-              "shots": 6, 
-              "shots_left": 6
-            }
           }
         ], 
         "stunned": 0, 
