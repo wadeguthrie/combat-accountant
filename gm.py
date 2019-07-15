@@ -2236,7 +2236,7 @@ class Ruleset(object):
 
     def do_action(self,
                   fighter,  # Fighter object
-                  action    # {'name': <action>, parameters...} - ALL TEXT
+                  action    # {'name': <action>, parameters...}
                  ):
         '''
         Default, non-ruleset related, action handling.  Good for drawing
@@ -2253,7 +2253,12 @@ class Ruleset(object):
 
 
         handled = False
-        if action['name'] == 'attack' or action['name'] == 'all-out-attack':
+
+        if action['name'] == 'adjust-hp':
+            self.adjust_hp(fighter, action['adj'])
+            handled = True
+
+        elif action['name'] == 'attack' or action['name'] == 'all-out-attack':
             self._do_attack({'fighter': fighter,
                              'fight_handler': self._fight_handler})
             handled = True
@@ -5534,42 +5539,41 @@ class FightHandler(ScreenHandler):
         if adj == 0:
             return True # Keep fighting
 
-        self.__ruleset.adjust_hp(hp_recipient, adj)
+        # Automatically do the attack maneuver (HP had to come from somewhere)
+        # Not sure we should be auto-attacking, here.  Maybe making too many
+        # assumptions.
+        #
+        #if auto_attack:
+        #    self.__ruleset.do_action(current_fighter,
+        #                             {'name': 'attack',
+        #                              'fighter': current_fighter.name,
+        #                              'group' : current_fighter.group})
+        #    current_fighter.add_timer(0.9, ['Attack',
+        #                                    ' Defense: any',
+        #                                    ' Move: step'])
 
-        # Automatically do the attack maneuver
-        if auto_attack:
-            action_menu = self.__ruleset.get_action_menu(current_fighter, self)
-            for action in action_menu:
-                pass
-                # TODO: replace with action
-                #if action[0] == 'attack':
-                #    maneuver = action[1]
-                #    param = (None if 'param' not in maneuver
-                #                  else maneuver['param'])
-                #    (maneuver['doit'])(param)
-                #    self.__ruleset.do_maneuver(current_fighter)
-                #    current_fighter.add_timer(0.9, maneuver['text'])
-                #    self.add_to_history(' (%s) did (%s) maneuver' %
-                #                (current_fighter.name, maneuver['text'][0]))
+        action = {'name': 'adjust-hp', 'adj': adj}
 
         # Record for posterity
         if hp_recipient is opponent:
             if adj < 0:
-                self.add_to_history({'comment': ' (%s) did %d HP to (%s)' %
-                                                        (current_fighter.name,
-                                                         -adj,
-                                                         opponent.name)})
+                action['comment'] = '(%s) did %d HP to (%s)' % (
+                                                        current_fighter.name,
+                                                        -adj,
+                                                        opponent.name)
             else:
-                self.add_to_history({'comment': ' (%s) regained %d HP' %
-                                                        (opponent.name,
-                                                         adj)})
+                action['comment'] = '(%s) regained %d HP' % (opponent.name,
+                                                             adj)
         else:
             if adj < 0:
-                self.add_to_history({'comment':
-                        ' (%s) lost %d HP' % (current_fighter.name, -adj)})
+                action['comment'] = '(%s) lost %d HP' % (current_fighter.name,
+                                                         -adj)
             else:
-                self.add_to_history({'comment':
-                        ' (%s) regained %d HP' % (current_fighter.name, adj)})
+                action['comment'] = ' (%s) regained %d HP' % (
+                                                        current_fighter.name,
+                                                        adj)
+
+        self.__ruleset.do_action(hp_recipient, action)
 
         self._window.show_fighters(current_fighter,
                                    opponent,
