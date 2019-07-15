@@ -97,6 +97,12 @@ class MockWindowManager(object):
     def error(self, string_array):
         pass
 
+    def display_window(self,
+                       title,
+                       lines  # [{'text', 'mode'}, ...]
+                      ):
+        pass
+
     def set_menu_response(self,
                           title,
                           selection # first part of string_results tuple

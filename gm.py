@@ -2694,6 +2694,23 @@ class GurpsRuleset(Ruleset):
         'lying':     {'attack': -4, 'defense': -3, 'target': -2},
     }
 
+    hit_location_table = {3:  'head',
+                          4:  'head',
+                          5:  'face',
+                          6:  'right thigh',
+                          7:  'right calf',
+                          8:  'right arm',
+                          9:  'stomach',
+                          10: 'chest/back',
+                          11: 'groin/hip/butt',
+                          12: 'left arm',
+                          13: 'left calf',
+                          14: 'left thigh',
+                          15: 'hand',
+                          16: 'foot',
+                          17: 'neck',
+                          18: 'neck'}
+
     (MAJOR_WOUND_SUCCESS,
      MAJOR_WOUND_SIMPLE_FAIL,
      MAJOR_WOUND_BAD_FAIL) = range(3)
@@ -2710,7 +2727,19 @@ class GurpsRuleset(Ruleset):
             # Adjust for armor
             armor, armor_index = fighter.get_current_armor()
             if armor is not None:
-                adj = 0 if (armor['dr'] >= -adj) else armor['dr'] + adj 
+                if armor['dr'] >= -adj:
+                    return
+                adj += armor['dr']
+
+            # Hit location (just for flavor, not for special injury)
+            table_lookup = (random.randint(1,6) +
+                            random.randint(1,6) +
+                            random.randint(1,6))
+            hit_location = GurpsRuleset.hit_location_table[table_lookup]
+            self._window_manager.display_window(
+                    ('Did %d hp (after armor) to...' % -adj),
+                    [[{'text': ('...%s\'s %s' % (fighter.name, hit_location)),
+                       'mode': curses.A_NORMAL}]])
 
             # Check for Death (B327)
             adjusted_hp = fighter.details['current']['hp'] + adj
