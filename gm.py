@@ -5830,6 +5830,8 @@ class FightHandler(ScreenHandler):
             maneuver['action']['comment'] = '(%s) did (%s) maneuver' % (
                                                           current_fighter.name,
                                                           maneuver['text'][0])
+            maneuver['action']['fighter'] = current_fighter.name
+            maneuver['action']['group'] = current_fighter.group
             self.__ruleset.do_action(current_fighter,
                                      maneuver['action'])
 
