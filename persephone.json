@@ -1325,6 +1325,28 @@
       }, 
       "stuff": [
         {
+          "acc": 4, 
+          "count": 1, 
+          "owners": null, 
+          "name": "Blaster Pistol, Sig Sauer D65", 
+          "notes": "", 
+          "damage": {
+            "dice": {
+              "plus": 4, 
+              "num_dice": 1, 
+              "type": "pi"
+            }
+          }, 
+          "reload": 3, 
+          "skill": "Beam Weapons (Pistol)", 
+          "type": "ranged weapon", 
+          "ammo": {
+            "name": "C Cell", 
+            "shots": 9, 
+            "shots_left": 2
+          }
+        },
+        {
           "count": 25, 
           "notes": "", 
           "type": "misc", 
@@ -12078,7 +12100,7 @@
             "parry": -1, 
             "skill": "Knife", 
             "type": "melee weapon"
-          }
+          } 
         ], 
         "stunned": 0, 
         "skills": {

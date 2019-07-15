@@ -17,8 +17,9 @@ import traceback
 # TODO:
 #   - clone monster
 #   - can't attack if reloading (stored in the weapon)
-#   - pick opponent should be an action so it gets logged
-#   - damage (HP and FP) should be actions so they get logged
+#   - anything with 'add_to_history' should be an action so it gets logged:
+#       - pick opponent should be an action so it gets logged
+#       - damage (HP and FP) should be actions so they get logged
 #   - Equipping item should ask to add ammo for item
 #   - Multiple weapons
 #   - Need equipment containers
@@ -30,6 +31,7 @@ import traceback
 #   - Adding Skills/Advantages that already exist should just change the
 #     right-hand side, not add a second entry
 #   - Move spells from persephone.json into ruleset
+#   - Add playback of actions, like from: self._saved_fight['history']
 #
 # TODO (eventually):
 #   - anything with 'RULESET' comment should be moved to the ruleset
@@ -2213,7 +2215,6 @@ class Ruleset(object):
     def __init__(self, window_manager):
         self._window_manager = window_manager
         self._fight_handler = None
-        self._PP = pprint.PrettyPrinter(indent=3, width=150)
 
     @staticmethod
     def roll(number, # the number of dice
@@ -2235,8 +2236,7 @@ class Ruleset(object):
 
     def do_action(self,
                   fighter,  # Fighter object
-                  action,   # {'name': <action>, parameters...} - ALL TEXT
-                  text_to_be_logged = '<unknown>'
+                  action    # {'name': <action>, parameters...} - ALL TEXT
                  ):
         '''
         Default, non-ruleset related, action handling.  Good for drawing
@@ -2244,32 +2244,40 @@ class Ruleset(object):
         '''
 
         if self._fight_handler is not None:
-            action_string = self._PP.pformat(action)
-            self._fight_handler.add_to_history(
-                        ' %s # (%s) did (%s) maneuver' % (action_string,
-                                                          fighter.name,
-                                                          text_to_be_logged))
+            self._fight_handler.add_to_history(action)
 
+        if 'name' not in action:
+            return True # It's just a comment, ignore (but mark it 'handled')
+
+        # Actions
+
+
+        handled = False
         if action['name'] == 'attack' or action['name'] == 'all-out-attack':
             self._do_attack({'fighter': fighter,
                              'fight_handler': self._fight_handler})
+            handled = True
 
         elif action['name'] == 'draw-weapon':
             self._draw_weapon({'fighter': fighter,
                                'weapon':  action['weapon-index']})
+            handled = True
 
         elif action['name'] == 'don-armor': # or doff armor
             self._don_armor({'fighter': fighter,
                              'armor': action['armor-index']})
+            handled = True
 
         elif action['name'] == 'reload': # or doff armor
             self._do_reload({'fighter': fighter})
+            handled = True
 
         elif action['name'] == 'use-item':
             self._use_item({'fighter': fighter,
                             'item': action['item-index']})
+            handled = True
 
-        return # Nothing to return
+        return handled
 
 
     def _do_attack(self,
@@ -2961,53 +2969,64 @@ class GurpsRuleset(Ruleset):
 
     def do_action(self,
                   fighter,  # Fighter object
-                  action,   # {'name': <action>, parameters...} - ALL TEXT
-                  text_to_be_logged = '<unknown>'
+                  action    # {'name': <action>, parameters...} - ALL TEXT
                  ):
-        super(GurpsRuleset, self).do_action(fighter, action, text_to_be_logged)
+        handled = super(GurpsRuleset, self).do_action(fighter, action)
 
-        fighter.perform_action_this_turn()
+        if 'name' not in action:
+            return # It's just a comment
 
         if action['name'] == 'aim':
             self._do_aim({'fighter': fighter,
                           'braced': action['braced']})
+            handled = True
 
         elif action['name'] == 'cast-spell':
             self._cast_spell({'fighter': fighter,
                               'spell': action['spell-index']})
+            handled = True
 
         elif action['name'] == 'change-posture':
             self._change_posture({'fighter': fighter,
                                   'posture': action['posture']})
+            handled = True
 
         elif action['name'] == 'concentrate':
-            pass # This is here just so that it's logged
+            handled = True # This is here just so that it's logged
 
         elif action['name'] == 'defend':
             self._do_defense({'fighter': fighter})
+            handled = True
 
         elif action['name'] == 'evaluate':
-            pass # This is here just so that it's logged
+            handled = True # This is here just so that it's logged
 
         elif action['name'] == 'feint':
-            pass # This is here just so that it's logged
+            handled = True # This is here just so that it's logged
         
         elif action['name'] == 'move':
-            pass # This is here just so that it's logged
+            handled = True # This is here just so that it's logged
 
         elif action['name'] == 'move-and-attack':
             # TODO: attack with -2 to ranged, -4 to melee (but not greater
             # than 9)
-            pass # This is here just so that it's logged
+            handled = True # This is here just so that it's logged
 
         elif action['name'] == 'nothing':
-            pass # This is here just so that it's logged
+            handled = True # This is here just so that it's logged
 
         elif action['name'] == 'stunned':
-            pass # This is here just so that it's logged
+            handled = True # This is here just so that it's logged
 
         elif action['name'] == 'wait':
-            pass # This is here just so that it's logged
+            handled = True # This is here just so that it's logged
+
+        if handled:
+            fighter.perform_action_this_turn()
+        else:
+            self._window_manager.error(
+                            ['action "%s" is not handled by any ruleset' %
+                                                            action['name']])
 
         return # Nothing to return
 
@@ -4499,8 +4518,10 @@ class ScreenHandler(object):
             ord('B'): {'name': 'Bug Report', 'func': self._make_bug_report},
         }
 
-    def add_to_history(self, string):
-        self._saved_fight['history'].append(string)
+    def add_to_history(self,
+                       action # {'name':xxx, ...} - see Ruleset::do_action()
+                      ):
+        self._saved_fight['history'].append(action)
 
     def clear_history(self):
         self._saved_fight['history'] = []
@@ -5279,7 +5300,7 @@ class FightHandler(ScreenHandler):
             # TODO: when the history is reset (here), the JSON should be
             # rewritten
             self.clear_history()
-            self.add_to_history('--- Round 0 ---')
+            self.add_to_history({'comment': '--- Round 0 ---'})
 
             self._saved_fight['round'] = 0
             self._saved_fight['index'] = 0
@@ -5409,11 +5430,11 @@ class FightHandler(ScreenHandler):
                 self._saved_fight['round'] += adj 
             current_fighter = self.get_current_fighter()
             if current_fighter.is_dead():
-                self.add_to_history(' (%s) did nothing (dead)' %
-                                                        current_fighter.name)
+                self.add_to_history({'comment': ' (%s) did nothing (dead)' %
+                                                        current_fighter.name})
             elif current_fighter.is_absent():
-                self.add_to_history(' (%s) did nothing (absent)' %
-                                                        current_fighter.name)
+                self.add_to_history({'comment': ' (%s) did nothing (absent)' %
+                                                        current_fighter.name})
 
             else:
                 keep_going = False
@@ -5430,8 +5451,8 @@ class FightHandler(ScreenHandler):
                 keep_going = False
 
         if round_before != self._saved_fight['round']:
-            self.add_to_history('--- Round %d ---' %
-                                                self._saved_fight['round'])
+            self.add_to_history({'comment': '--- Round %d ---' %
+                                                self._saved_fight['round']})
 
 
     #
@@ -5534,21 +5555,21 @@ class FightHandler(ScreenHandler):
         # Record for posterity
         if hp_recipient is opponent:
             if adj < 0:
-                self.add_to_history(' (%s) did %d HP to (%s)' %
+                self.add_to_history({'comment': ' (%s) did %d HP to (%s)' %
                                                         (current_fighter.name,
                                                          -adj,
-                                                         opponent.name))
+                                                         opponent.name)})
             else:
-                self.add_to_history(' (%s) regained %d HP' %
+                self.add_to_history({'comment': ' (%s) regained %d HP' %
                                                         (opponent.name,
-                                                         adj))
+                                                         adj)})
         else:
             if adj < 0:
-                self.add_to_history(
-                        ' (%s) lost %d HP' % (current_fighter.name, -adj))
+                self.add_to_history({'comment':
+                        ' (%s) lost %d HP' % (current_fighter.name, -adj)})
             else:
-                self.add_to_history(
-                        ' (%s) regained %d HP' % (current_fighter.name, adj))
+                self.add_to_history({'comment':
+                        ' (%s) regained %d HP' % (current_fighter.name, adj)})
 
         self._window.show_fighters(current_fighter,
                                    opponent,
@@ -5582,9 +5603,9 @@ class FightHandler(ScreenHandler):
             now_dead.details['opponent'] = None # dead men fight nobody
 
         dead_name = now_dead.name
-        self.add_to_history(' (%s) was marked as (%s)' % (
-                                                    dead_name,
-                                                    now_dead.details['state']))
+        self.add_to_history({'comment': ' (%s) was marked as (%s)' % (
+                                                dead_name,
+                                                now_dead.details['state'])})
 
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
@@ -5625,7 +5646,8 @@ class FightHandler(ScreenHandler):
         # Defending costs you aim
         defender.reset_aim()
 
-        self.add_to_history(' (%s) defended (and lost aim)' % defender.name)
+        self.add_to_history({'comment':
+                             ' (%s) defended (and lost aim)' % defender.name})
 
         self._window.show_fighters(current_fighter,
                                    opponent,
@@ -5805,9 +5827,11 @@ class FightHandler(ScreenHandler):
             return True # Keep going
 
         if 'action' in maneuver:
+            maneuver['action']['comment'] = '(%s) did (%s) maneuver' % (
+                                                          current_fighter.name,
+                                                          maneuver['text'][0])
             self.__ruleset.do_action(current_fighter,
-                                     maneuver['action'],
-                                     maneuver['text'][0])
+                                     maneuver['action'])
 
         # a round count larger than 0 will get shown but less than 1 will
         # get deleted before the next round
@@ -6015,9 +6039,9 @@ class FightHandler(ScreenHandler):
         if opponent_name is None:
             return True # don't leave the fight
 
-        self.add_to_history(' (%s) picked (%s) as opponent' % 
+        self.add_to_history({'comment': ' (%s) picked (%s) as opponent' % 
                                                     (current_fighter.name,
-                                                     opponent_name))
+                                                     opponent_name)})
 
         current_fighter.details['opponent'] = {'group': opponent_group,
                                                'name': opponent_name}
@@ -6032,10 +6056,10 @@ class FightHandler(ScreenHandler):
                 opponent.details['opponent'] = {'group': current_fighter.group,
                                                 'name': current_fighter.name}
 
-                self.add_to_history(
+                self.add_to_history({'comment':
                                 ' (%s) picked (%s) as opponent right back' % 
                                                         (opponent_name,
-                                                         current_fighter.name))
+                                                         current_fighter.name)})
 
         self._window.show_fighters(current_fighter,
                                    opponent,
@@ -6225,10 +6249,12 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         lines = []
-        for line in self._saved_fight['history']:
-            mode = (curses.A_STANDOUT if line.startswith('---')
-                    else curses.A_NORMAL)
-            lines.append([{'text': line, 'mode': mode}])
+        for action in self._saved_fight['history']:
+            if 'comment' in action:
+                line = action['comment']
+                mode = (curses.A_STANDOUT if line.startswith('---')
+                        else curses.A_NORMAL)
+                lines.append([{'text': line, 'mode': mode}])
 
         self._window_manager.display_window('Fight History', lines)
         return True
