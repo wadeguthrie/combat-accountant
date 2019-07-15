@@ -424,13 +424,13 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   self.__ruleset,
                                   self.__window_manager)
 
-        self.__ruleset.change_posture({'fighter': vodou_priest,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': vodou_priest,
+                                        'posture': 'standing'})
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(vodou_priest)
         assert dodge_skill == 9
 
-        self.__ruleset.change_posture({'fighter': vodou_priest,
-                                       'posture': 'crawling'})
+        self.__ruleset._change_posture({'fighter': vodou_priest,
+                                        'posture': 'crawling'})
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(vodou_priest)
         assert dodge_skill == (9 + self.__crawling_defense_mod)
 
@@ -442,13 +442,13 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    self.__ruleset,
                                    self.__window_manager)
 
-        self.__ruleset.change_posture({'fighter': bokor_fighter,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': bokor_fighter,
+                                        'posture': 'standing'})
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(bokor_fighter)
         assert dodge_skill == 9
 
-        self.__ruleset.change_posture({'fighter': bokor_fighter,
-                                       'posture': 'crawling'})
+        self.__ruleset._change_posture({'fighter': bokor_fighter,
+                                        'posture': 'crawling'})
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(bokor_fighter)
         assert dodge_skill == (9 + self.__crawling_defense_mod)
 
@@ -553,14 +553,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         weapon_index, weapon  = tank_fighter.get_weapon_by_name('sick stick')
         tank_fighter.draw_weapon_by_index(weapon_index)
 
-        self.__ruleset.change_posture({'fighter': tank_fighter,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': tank_fighter,
+                                        'posture': 'standing'})
         parry_skill, parry_why = self.__ruleset.get_parry_skill(tank_fighter,
                                                                 weapon)
         assert parry_skill == 11
 
-        self.__ruleset.change_posture({'fighter': tank_fighter,
-                                       'posture': 'crawling'})
+        self.__ruleset._change_posture({'fighter': tank_fighter,
+                                        'posture': 'crawling'})
         parry_skill, parry_why = self.__ruleset.get_parry_skill(tank_fighter,
                                                                 weapon)
         assert parry_skill == (11 + self.__crawling_defense_mod)
@@ -585,14 +585,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         weapon_index, weapon = thief_fighter.get_weapon_by_name('Large Knife')
         thief_fighter.draw_weapon_by_index(weapon_index)
 
-        self.__ruleset.change_posture({'fighter': thief_fighter,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': thief_fighter,
+                                        'posture': 'standing'})
         parry_skill, parry_why = self.__ruleset.get_parry_skill(thief_fighter,
                                                                 weapon)
         assert parry_skill == 9
 
-        self.__ruleset.change_posture({'fighter': thief_fighter,
-                                       'posture': 'crawling'})
+        self.__ruleset._change_posture({'fighter': thief_fighter,
+                                        'posture': 'crawling'})
         parry_skill, parry_why = self.__ruleset.get_parry_skill(thief_fighter,
                                                                 weapon)
         assert parry_skill == (9 + self.__crawling_defense_mod)
@@ -668,8 +668,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Thief with posture additions
 
-        self.__ruleset.change_posture({'fighter': thief_fighter,
-                                       'posture': 'crawling'})
+        self.__ruleset._change_posture({'fighter': thief_fighter,
+                                        'posture': 'crawling'})
         hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
                                                             None,
                                                             None,
@@ -724,8 +724,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # --- Opponents w/ posture ---
 
-        self.__ruleset.change_posture({'fighter': thief_fighter,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': thief_fighter,
+                                        'posture': 'standing'})
 
         # Picking opponent doesn't change things
         hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
@@ -740,8 +740,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # change posture of thief (opponent) -- note: posture of opponent does
         # not modify melee attacks
-        self.__ruleset.change_posture({'fighter': thief_fighter,
-                                       'posture': 'crawling'}) # -2
+        self.__ruleset._change_posture({'fighter': thief_fighter,
+                                        'posture': 'crawling'}) # -2
         hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
                                                             thief_fighter,
                                                             None,
@@ -753,8 +753,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert hand_to_hand_info['parry_skill'] == 12
 
         # change posture of thief (back to standing)
-        self.__ruleset.change_posture({'fighter': thief_fighter,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': thief_fighter,
+                                        'posture': 'standing'})
         hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
                                                             thief_fighter,
                                                             None,
@@ -1191,8 +1191,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
         vodou_priest.reset_aim()
-        self.__ruleset.change_posture({'fighter': vodou_priest,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': vodou_priest,
+                                        'posture': 'standing'})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
@@ -1202,24 +1202,29 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
             + self.__colt_pistol_acc
             + 1) # braced
-        self.__ruleset.change_posture({'fighter': vodou_priest,
-                                       'posture': 'standing'})
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset._change_posture({'fighter': vodou_priest,
+                                        'posture': 'standing'})
+
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # 3 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
 
         # 4 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # no further benefit
 
@@ -1228,32 +1233,36 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
             + self.__colt_pistol_acc)
-        self.__ruleset.change_posture({'fighter': vodou_priest,
-                                       'posture': 'standing'})
-        vodou_priest.do_aim(braced=False)
+        self.__ruleset._change_posture({'fighter': vodou_priest,
+                                        'posture': 'standing'})
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': False})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
-        vodou_priest.do_aim(braced=False)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': False})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # 3 rounds
-        vodou_priest.do_aim(braced=False)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': False})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
 
         # 4 rounds
-        vodou_priest.do_aim(braced=False)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': False})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # no further benefit
 
         # no aim, posture (posture doesn't matter for ranged attacks: B551)
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
-        self.__ruleset.change_posture({'fighter': vodou_priest,
-                                       'posture': 'crawling'})
+        self.__ruleset._change_posture({'fighter': vodou_priest,
+                                        'posture': 'crawling'})
         vodou_priest.reset_aim()
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
@@ -1264,24 +1273,28 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
                                                 + self.__colt_pistol_acc # aim
                                                 +1) # braced
-        self.__ruleset.change_posture({'fighter': vodou_priest,
-                                       'posture': 'crawling'})
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset._change_posture({'fighter': vodou_priest,
+                                        'posture': 'crawling'})
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # 3 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
 
         # 4 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # no further benefit
 
@@ -1294,24 +1307,28 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
             + self.__colt_pistol_acc) # aim
-        self.__ruleset.change_posture({'fighter': vodou_priest,
-                                       'posture': 'crawling'})
-        vodou_priest.do_aim(braced=False)
+        self.__ruleset._change_posture({'fighter': vodou_priest,
+                                        'posture': 'crawling'})
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': False})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
-        vodou_priest.do_aim(braced=False)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': False})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # 3 rounds
-        vodou_priest.do_aim(braced=False)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': False})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
 
         # 4 rounds
-        vodou_priest.do_aim(braced=False)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': False})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # no further benefit
 
@@ -1325,24 +1342,24 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                           self.__ruleset,
                           self.__window_manager)
 
-        self.__ruleset.change_posture({'fighter': vodou_priest,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': vodou_priest,
+                                        'posture': 'standing'})
 
         # Picking opponent doesn't change things
-        self.__ruleset.change_posture({'fighter': tank,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': tank,
+                                        'posture': 'standing'})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon)
         assert to_hit == expected_to_hit
 
         # change posture of thief (-2)
-        self.__ruleset.change_posture({'fighter': tank,
-                                       'posture': 'crawling'}) # -2
+        self.__ruleset._change_posture({'fighter': tank,
+                                        'posture': 'crawling'}) # -2
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon)
         assert to_hit == (expected_to_hit - 2)
 
         # change posture of thief (back to standing)
-        self.__ruleset.change_posture({'fighter': tank,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': tank,
+                                        'posture': 'standing'})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon)
         assert to_hit == expected_to_hit
 
@@ -1365,8 +1382,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
         vodou_priest.reset_aim()
-        self.__ruleset.change_posture({'fighter': vodou_priest,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': vodou_priest,
+                                        'posture': 'standing'})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
@@ -1378,12 +1395,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
             + self.__colt_pistol_acc
             + 1) # braced
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
@@ -1394,7 +1413,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__ruleset.adjust_hp(vodou_priest, damage)
 
         # 3 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim',
+                                                'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         # aiming for 3 rounds + shock
         assert to_hit == expected_to_hit + 2 + damage
@@ -1409,12 +1429,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
             + self.__colt_pistol_acc
             + 1) # braced
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim', 'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim', 'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
@@ -1425,7 +1445,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__ruleset.adjust_hp(vodou_priest, damage)
 
         # 3 rounds (well, 1 round)
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim', 'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + damage # aiming for 1 round + shock
 
@@ -1439,21 +1459,21 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
             + self.__colt_pistol_acc
             + 1) # braced
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim', 'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim', 'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # Draw weapon
-        self.__ruleset.draw_weapon({'fighter': vodou_priest,
-                                    'weapon':  requested_weapon_index})
+        self.__ruleset._draw_weapon({'fighter': vodou_priest,
+                                     'weapon':  requested_weapon_index})
 
         # 3 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim', 'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit # aiming for 1 round
 
@@ -1464,48 +1484,48 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             + self.__colt_pistol_acc
             + 1) # braced
         vodou_priest.reset_aim()
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim', 'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim', 'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # Change posture
-        self.__ruleset.change_posture({'fighter': vodou_priest,
-                                       'posture': 'lying'})
+        self.__ruleset._change_posture({'fighter': vodou_priest,
+                                        'posture': 'lying'})
 
         # 3 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim', 'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit # aiming for 1 round
 
         # Defense ruins aim
 
         vodou_priest.reset_aim()
-        self.__ruleset.change_posture({'fighter': vodou_priest,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': vodou_priest,
+                                        'posture': 'standing'})
 
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
             + self.__colt_pistol_acc
             + 1) # braced
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim', 'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim', 'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # Defend
-        self.__ruleset.do_defense({'fighter': vodou_priest})
+        self.__ruleset._do_defense({'fighter': vodou_priest})
 
         # 3 rounds
-        vodou_priest.do_aim(braced=True)
+        self.__ruleset.do_action(vodou_priest, {'name': 'aim', 'braced': True})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit # aiming for 3 rounds
 
@@ -1513,8 +1533,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
         vodou_priest.reset_aim()
-        self.__ruleset.change_posture({'fighter': vodou_priest,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': vodou_priest,
+                                        'posture': 'standing'})
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
@@ -1537,16 +1557,16 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # no posture
         expected_to_hit = self.__thief_knife_skill
-        self.__ruleset.change_posture({'fighter': thief,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': thief,
+                                        'posture': 'standing'})
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
         assert to_hit == expected_to_hit
 
         # posture
         expected_to_hit = (self.__thief_knife_skill
                                                 + self.__crawling_attack_mod)
-        self.__ruleset.change_posture({'fighter': thief,
-                                       'posture': 'crawling'})
+        self.__ruleset._change_posture({'fighter': thief,
+                                        'posture': 'crawling'})
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
         assert to_hit == expected_to_hit
 
@@ -1558,25 +1578,25 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   self.__ruleset,
                                   self.__window_manager)
 
-        self.__ruleset.change_posture({'fighter': thief,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': thief,
+                                        'posture': 'standing'})
 
         # Picking opponent doesn't change things
         expected_to_hit = self.__thief_knife_skill
-        self.__ruleset.change_posture({'fighter': tank_fighter,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': tank_fighter,
+                                        'posture': 'standing'})
         to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
         assert to_hit == expected_to_hit
 
         # change posture of tank (opponent)
-        self.__ruleset.change_posture({'fighter': tank_fighter,
-                                       'posture': 'crawling'}) # -2
+        self.__ruleset._change_posture({'fighter': tank_fighter,
+                                        'posture': 'crawling'}) # -2
         to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
         assert to_hit == expected_to_hit
 
         # change posture of thief (back to standing)
-        self.__ruleset.change_posture({'fighter': tank_fighter,
-                                       'posture': 'standing'})
+        self.__ruleset._change_posture({'fighter': tank_fighter,
+                                        'posture': 'standing'})
         to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
         assert to_hit == expected_to_hit
 
@@ -1587,12 +1607,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
 
         # 1 round
-        thief.do_aim(braced=False)
+        self.__ruleset.do_action(thief, {'name': 'aim', 'braced': False})
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
-        thief.do_aim(braced=False)
+        self.__ruleset.do_action(thief, {'name': 'aim', 'braced': False})
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
         assert to_hit == expected_to_hit
 

@@ -2229,17 +2229,13 @@ class Ruleset(object):
 
 
     def do_action(self,
-                  action, 
-                  fighter  # Fighter object
+                  fighter,  # Fighter object
+                  action    # {'name': <action>, parameters...} - ALL TEXT
                  ):
         '''
         Default, non-ruleset related, action handling.  Good for drawing
         weapons and such.
         '''
-        print ('\nRuleset::do_action for "%s" with action:' %   # TODO: remove
-                                                  fighter.name) # TODO: remove
-        PP.pprint(action)                                       # TODO: remove
-
 
         if action['name'] == 'attack' or action['name'] == 'all-out-attack':
             self._do_attack({'fighter': fighter,
@@ -2916,15 +2912,11 @@ class GurpsRuleset(Ruleset):
                 fighter.details['stunned'] = False
 
     def do_action(self,
-                  action, 
-                  fighter   # Fighter object
+                  fighter,  # Fighter object
+                  action    # {'name': <action>, parameters...} - ALL TEXT
                  ):
         # TODO: not sure whether to call this first or last
-        super(GurpsRuleset, self).do_action(action, fighter)
-
-        print ('\nGurpsRuleset::do_action for "%s" w/action:' % # TODO: remove
-                                                  fighter.name) # TODO: remove
-        PP.pprint(action)                                       # TODO: remove
+        super(GurpsRuleset, self).do_action(fighter, action)
 
         fighter.perform_action_this_turn()
 
@@ -5766,8 +5758,7 @@ class FightHandler(ScreenHandler):
         # TODO: call the ruleset to execute the action
 
         if 'action' in maneuver:
-            self.__ruleset.do_action(maneuver['action'], 
-                                     current_fighter)
+            self.__ruleset.do_action(current_fighter, maneuver['action'])
         else:
             # TODO: when everything's an action, remove this 'else' clause
             #   because 'do_action' will automatically call do_maneuver
