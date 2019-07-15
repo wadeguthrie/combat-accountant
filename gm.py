@@ -2213,6 +2213,7 @@ class Ruleset(object):
     def __init__(self, window_manager):
         self._window_manager = window_manager
         self._fight_handler = None
+        self._PP = pprint.PrettyPrinter(indent=3, width=150)
 
     @staticmethod
     def roll(number, # the number of dice
@@ -2235,15 +2236,16 @@ class Ruleset(object):
     def do_action(self,
                   fighter,  # Fighter object
                   action,   # {'name': <action>, parameters...} - ALL TEXT
-                  text_to_be_logged
+                  text_to_be_logged = '<unknown>'
                  ):
         '''
         Default, non-ruleset related, action handling.  Good for drawing
         weapons and such.
         '''
 
-        action_string = PP.pformat(action)
-        self._fight_handler.add_to_history(
+        if self._fight_handler is not None:
+            action_string = self._PP.pformat(action)
+            self._fight_handler.add_to_history(
                         ' %s # (%s) did (%s) maneuver' % (action_string,
                                                           fighter.name,
                                                           text_to_be_logged))
@@ -2960,7 +2962,7 @@ class GurpsRuleset(Ruleset):
     def do_action(self,
                   fighter,  # Fighter object
                   action,   # {'name': <action>, parameters...} - ALL TEXT
-                  text_to_be_logged
+                  text_to_be_logged = '<unknown>'
                  ):
         super(GurpsRuleset, self).do_action(fighter, action, text_to_be_logged)
 
