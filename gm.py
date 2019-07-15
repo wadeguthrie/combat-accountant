@@ -3155,6 +3155,7 @@ class GurpsRuleset(Ruleset):
                                                   fighter,
                                                   fight_handler)
 
+        action_menu = sorted(action_menu, key=lambda x: x[0].upper())
         return action_menu
 
 
