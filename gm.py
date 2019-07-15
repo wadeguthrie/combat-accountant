@@ -15,8 +15,6 @@ import sys
 import traceback
 
 # TODO:
-#   - armor should affect hp minus
-#
 #   - Equipping item should ask to add ammo for item
 #   - Multiple weapons
 #   - Need equipment containers
@@ -2707,6 +2705,11 @@ class GurpsRuleset(Ruleset):
                   adj       # the number of HP to gain or lose
                  ):
         if adj < 0:
+            # Adjust for armor
+            armor, armor_index = fighter.get_current_armor()
+            if armor is not None:
+                adj = 0 if (armor['dr'] >= -adj) else armor['dr'] + adj 
+
             # Check for Death (B327)
             adjusted_hp = fighter.details['current']['hp'] + adj
 
@@ -2915,7 +2918,6 @@ class GurpsRuleset(Ruleset):
                   fighter,  # Fighter object
                   action    # {'name': <action>, parameters...} - ALL TEXT
                  ):
-        # TODO: not sure whether to call this first or last
         super(GurpsRuleset, self).do_action(fighter, action)
 
         fighter.perform_action_this_turn()
@@ -3147,7 +3149,6 @@ class GurpsRuleset(Ruleset):
                                 'action': {'name': 'wait'}}),
         ])
 
-        # TODO: not sure whether to call this first or last
         super(GurpsRuleset, self).get_action_menu(action_menu,
                                                   fighter,
                                                   fight_handler)
@@ -3708,7 +3709,7 @@ class GurpsRuleset(Ruleset):
         if armor is not None:
             notes.append('Armor: "%s", DR: %d' % (armor['name'], armor['dr']))
             if 'notes' in armor and len(armor['notes']) != 0:
-                why.append('Armor: "%s"' % armor['name'])
+                why.append('Armor: "%s", DR: %d' % (armor['name'], armor['dr']))
                 why.append('  %s' % armor['notes'])
 
 
@@ -5460,6 +5461,7 @@ class FightHandler(ScreenHandler):
         adj_string = self._window_manager.input_box(height, width, title)
         if len(adj_string) <= 0:
             return True
+
         adj = -int(adj_string) # NOTE: SUBTRACTING the adjustment
         if adj == 0:
             return True # Keep fighting
