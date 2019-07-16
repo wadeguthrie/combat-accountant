@@ -5456,7 +5456,7 @@ class FightHandler(ScreenHandler):
                 self.add_to_history({'comment': ' (%s) did nothing (dead)' %
                                                         current_fighter.name})
             elif current_fighter.is_absent():
-            # Allowed add_to_history.
+                # Allowed add_to_history.
                 self.add_to_history({'comment': ' (%s) did nothing (absent)' %
                                                         current_fighter.name})
 
@@ -5928,6 +5928,11 @@ class FightHandler(ScreenHandler):
             # that you can't move on to the next fighter _because_ no
             # maneuver/action has been performed.
             return self.__maneuver()
+        elif not prev_fighter.is_conscious():
+            # Allowed add_to_history.
+            self.add_to_history({'comment': '(%s) did nothing (unconscious)' %
+                                                    prev_fighter.name})
+
         prev_fighter.end_turn()
 
         # Start the new guy
