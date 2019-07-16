@@ -16,6 +16,7 @@ import traceback
 
 # TODO:
 #   - clone monster
+#   - need a test for each action (do_action)
 #   - can't attack if reloading (stored in the weapon)
 #   - anything with 'add_to_history' should be an action so it gets logged:
 #       - pick opponent should be an action so it gets logged
@@ -1931,6 +1932,13 @@ class Fighter(object):
             return Fighter.INJURED
         return conscious_number
 
+    @staticmethod
+    def get_name_from_state_number(number):
+        for name, value in Fighter.conscious_map.iteritems():
+            if value == number:
+                return name
+        return '<unknown>'
+
     def add_equipment(self,
                       new_item,   # dict describing new equipment
                       source=None # string describing where equipment came from
@@ -2118,6 +2126,9 @@ class Fighter(object):
                 self.details['state'] = state_name
                 break
 
+        if not self.is_conscious():
+            self.details['opponent'] = None # dead men fight nobody
+
 
     def start_fight(self):
         # NOTE: we're allowing health to still be messed-up, here
@@ -2214,7 +2225,6 @@ class Ruleset(object):
 
     def __init__(self, window_manager):
         self._window_manager = window_manager
-        self._fight_handler = None
 
     @staticmethod
     def roll(number, # the number of dice
@@ -2227,24 +2237,29 @@ class Ruleset(object):
             result += random.randint(1, dice)
         return result
 
-    def adjust_hp(self,
-                  fighter,  # Fighter object
-                  adj       # the number of HP to gain or lose
-                 ):
+    def _adjust_hp(self,
+                   fighter,  # Fighter object
+                   adj       # the number of HP to gain or lose
+                  ):
         fighter.details['current']['hp'] += adj
 
 
     def do_action(self,
-                  fighter,  # Fighter object
-                  action    # {'name': <action>, parameters...}
+                  fighter,      # Fighter object
+                  action,       # {'name': <action>, parameters...}
+                  fight_handler # FightHandler object
                  ):
         '''
+        ONLY to be used for fights (otherwise, there's no fight handler to log
+        the actions).
+
         Default, non-ruleset related, action handling.  Good for drawing
         weapons and such.
         '''
 
-        if self._fight_handler is not None:
-            self._fight_handler.add_to_history(action)
+        if fight_handler is not None:
+            # Allowed add_to_history.
+            fight_handler.add_to_history(action)
 
         if 'name' not in action:
             return True # It's just a comment, ignore (but mark it 'handled')
@@ -2255,12 +2270,16 @@ class Ruleset(object):
         handled = False
 
         if action['name'] == 'adjust-hp':
-            self.adjust_hp(fighter, action['adj'])
+            self._adjust_hp(fighter, action['adj'])
             handled = True
 
         elif action['name'] == 'attack' or action['name'] == 'all-out-attack':
             self._do_attack({'fighter': fighter,
-                             'fight_handler': self._fight_handler})
+                             'fight_handler': fight_handler})
+            handled = True
+
+        elif action['name'] == 'set-consciousness':
+            fighter.set_consciousness(action['level'])
             handled = True
 
         elif action['name'] == 'draw-weapon':
@@ -2285,79 +2304,14 @@ class Ruleset(object):
         return handled
 
 
-    def _do_attack(self,
-                   param # {'fighter': xxx, Fighter object for attacker
-                         #  'fight_handler', ...
-                  ):
-        '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
-        '''
-
-        if param['fighter'].details['opponent'] is None:
-            param['fight_handler'].pick_opponent()
-
-        weapon, weapon_index = param['fighter'].get_current_weapon()
-        if weapon is None or 'ammo' not in weapon:
-            return
-
-        weapon['ammo']['shots_left'] -= 1
-        return
-
-
-    def _do_reload(self,
-                   param # {'fighter': Fighter object for attacker
-                  ):
-        '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
-        '''
-        weapon, weapon_index = param['fighter'].get_current_weapon()
-        if weapon is None or 'ammo' not in weapon:
-            return False
-
-        clip_name = weapon['ammo']['name']
-        for item in param['fighter'].details['stuff']:
-            if item['name'] == clip_name and item['count'] > 0:
-                weapon['ammo']['shots_left'] = weapon['ammo']['shots']
-                item['count'] -= 1
-                return True
-        return False
-
-
-    def _don_armor(self,
-                  param # dict: {'armor': index, 'fighter': Fighter obj}
-                 ):
-        '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
-        '''
-        param['fighter'].don_armor_by_index(param['armor'])
-        return None if 'text' not in param else param
-
-
-    def _draw_weapon(self,
-                    param # dict: {'weapon': index, 'fighter': Fighter obj}
-                   ):
-        '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
-        '''
-        param['fighter'].draw_weapon_by_index(param['weapon'])
-        return
-
-
     def get_action_menu(self,
                         action_menu,    # menu for user [(name, predicate)...]
-                        fighter,        # Fighter object
-                        fight_handler   # FightHandler object
+                        fighter         # Fighter object
                        ):
         '''
         Builds the menu of maneuvers allowed for the fighter. This is for the
         non-ruleset-based stuff like drawing weapons and such.
         '''
-
-        self._fight_handler = fight_handler
 
         # Figure out who we are and what we're holding.
 
@@ -2613,6 +2567,68 @@ class Ruleset(object):
         return result
 
 
+    def _do_attack(self,
+                   param # {'fighter': xxx, Fighter object for attacker
+                         #  'fight_handler', ...
+                  ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+
+        if param['fighter'].details['opponent'] is None:
+            param['fight_handler'].pick_opponent()
+
+        weapon, weapon_index = param['fighter'].get_current_weapon()
+        if weapon is None or 'ammo' not in weapon:
+            return
+
+        weapon['ammo']['shots_left'] -= 1
+        return
+
+
+    def _do_reload(self,
+                   param # {'fighter': Fighter object for attacker
+                  ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        weapon, weapon_index = param['fighter'].get_current_weapon()
+        if weapon is None or 'ammo' not in weapon:
+            return False
+
+        clip_name = weapon['ammo']['name']
+        for item in param['fighter'].details['stuff']:
+            if item['name'] == clip_name and item['count'] > 0:
+                weapon['ammo']['shots_left'] = weapon['ammo']['shots']
+                item['count'] -= 1
+                return True
+        return False
+
+
+    def _don_armor(self,
+                  param # dict: {'armor': index, 'fighter': Fighter obj}
+                 ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        param['fighter'].don_armor_by_index(param['armor'])
+        return None if 'text' not in param else param
+
+
+    def _draw_weapon(self,
+                    param # dict: {'weapon': index, 'fighter': Fighter obj}
+                   ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        param['fighter'].draw_weapon_by_index(param['weapon'])
+        return
+
+
     def _use_item(self,
                   param # dict: {'item': index, 'fighter': Fighter obj}
                  ):
@@ -2748,10 +2764,10 @@ class GurpsRuleset(Ruleset):
         super(GurpsRuleset, self).__init__(window_manager)
 
 
-    def adjust_hp(self,
-                  fighter,  # Fighter object
-                  adj       # the number of HP to gain or lose
-                 ):
+    def _adjust_hp(self,
+                   fighter,  # Fighter object
+                   adj       # the number of HP to gain or lose
+                  ):
         if adj < 0:
             # Adjust for armor
             armor, armor_index = fighter.get_current_armor()
@@ -2836,7 +2852,7 @@ class GurpsRuleset(Ruleset):
             if not made_will_roll:
                 fighter.reset_aim()
 
-        super(GurpsRuleset, self).adjust_hp(fighter, adj)
+        super(GurpsRuleset, self)._adjust_hp(fighter, adj)
 
     def _cast_spell(self,
                     param, # dict {'fighter': <Fighter object>,
@@ -2973,10 +2989,13 @@ class GurpsRuleset(Ruleset):
                 fighter.details['stunned'] = False
 
     def do_action(self,
-                  fighter,  # Fighter object
-                  action    # {'name': <action>, parameters...} - ALL TEXT
+                  fighter,      # Fighter object
+                  action,       # {'name': <action>, parameters...}
+                  fight_handler # FightHandler object
                  ):
-        handled = super(GurpsRuleset, self).do_action(fighter, action)
+        handled = super(GurpsRuleset, self).do_action(fighter,
+                                                      action,
+                                                      fight_handler)
 
         if 'name' not in action:
             return # It's just a comment
@@ -3037,8 +3056,7 @@ class GurpsRuleset(Ruleset):
 
 
     def get_action_menu(self,
-                        fighter,        # Fighter object
-                        fight_handler   # FightHandler object
+                        fighter         # Fighter object
                        ):
         ''' Builds the menu of maneuvers allowed for the fighter. '''
 
@@ -3219,9 +3237,7 @@ class GurpsRuleset(Ruleset):
                                 'action': {'name': 'wait'}}),
         ])
 
-        super(GurpsRuleset, self).get_action_menu(action_menu,
-                                                  fighter,
-                                                  fight_handler)
+        super(GurpsRuleset, self).get_action_menu(action_menu, fighter)
 
         action_menu = sorted(action_menu, key=lambda x: x[0].upper())
         return action_menu
@@ -5305,6 +5321,7 @@ class FightHandler(ScreenHandler):
             # TODO: when the history is reset (here), the JSON should be
             # rewritten
             self.clear_history()
+            # Allowed add_to_history.
             self.add_to_history({'comment': '--- Round 0 ---'})
 
             self._saved_fight['round'] = 0
@@ -5435,9 +5452,11 @@ class FightHandler(ScreenHandler):
                 self._saved_fight['round'] += adj 
             current_fighter = self.get_current_fighter()
             if current_fighter.is_dead():
+                # Allowed add_to_history
                 self.add_to_history({'comment': ' (%s) did nothing (dead)' %
                                                         current_fighter.name})
             elif current_fighter.is_absent():
+            # Allowed add_to_history.
                 self.add_to_history({'comment': ' (%s) did nothing (absent)' %
                                                         current_fighter.name})
 
@@ -5456,6 +5475,7 @@ class FightHandler(ScreenHandler):
                 keep_going = False
 
         if round_before != self._saved_fight['round']:
+            # Allowed add_to_history.
             self.add_to_history({'comment': '--- Round %d ---' %
                                                 self._saved_fight['round']})
 
@@ -5514,7 +5534,6 @@ class FightHandler(ScreenHandler):
 
         # Figure out who loses the hit points
 
-        auto_attack = False
         if self.__viewing_index is not None:
             current_fighter = self.__fighters[self.__viewing_index]
             opponent = self.get_opponent_for(current_fighter)
@@ -5526,7 +5545,6 @@ class FightHandler(ScreenHandler):
                 hp_recipient = current_fighter
             else:
                 hp_recipient = opponent
-                auto_attack = True
 
         title = 'Reduce (%s\'s) HP By...' % hp_recipient.name
         height = 1
@@ -5538,19 +5556,6 @@ class FightHandler(ScreenHandler):
         adj = -int(adj_string) # NOTE: SUBTRACTING the adjustment
         if adj == 0:
             return True # Keep fighting
-
-        # Automatically do the attack maneuver (HP had to come from somewhere)
-        # Not sure we should be auto-attacking, here.  Maybe making too many
-        # assumptions.
-        #
-        #if auto_attack:
-        #    self.__ruleset.do_action(current_fighter,
-        #                             {'name': 'attack',
-        #                              'fighter': current_fighter.name,
-        #                              'group' : current_fighter.group})
-        #    current_fighter.add_timer(0.9, ['Attack',
-        #                                    ' Defense: any',
-        #                                    ' Move: step'])
 
         action = {'name': 'adjust-hp', 'adj': adj}
 
@@ -5573,7 +5578,7 @@ class FightHandler(ScreenHandler):
                                                         current_fighter.name,
                                                         adj)
 
-        self.__ruleset.do_action(hp_recipient, action)
+        self.__ruleset.do_action(hp_recipient, action, self)
 
         self._window.show_fighters(current_fighter,
                                    opponent,
@@ -5593,7 +5598,6 @@ class FightHandler(ScreenHandler):
         if now_dead is None:
             return True # Keep fighting
 
-
         state_menu = sorted(Fighter.conscious_map.iteritems(),
                             key=lambda x:x[1])
 
@@ -5601,15 +5605,18 @@ class FightHandler(ScreenHandler):
         if new_state_number is None:
             return True # Keep fighting
 
-        now_dead.set_consciousness(new_state_number)
-
-        if not now_dead.is_conscious():
-            now_dead.details['opponent'] = None # dead men fight nobody
-
         dead_name = now_dead.name
-        self.add_to_history({'comment': ' (%s) was marked as (%s)' % (
-                                                dead_name,
-                                                now_dead.details['state'])})
+
+        self.__ruleset.do_action(
+                now_dead,
+                {
+                    'name': 'set-consciousness',
+                    'level': new_state_number,
+                    'comment': '(%s) is now (%s)' % (
+                        dead_name,
+                        Fighter.get_name_from_state_number(new_state_number))
+                },
+                self)
 
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
@@ -5647,11 +5654,13 @@ class FightHandler(ScreenHandler):
         if defender is None:
             return True # Keep fighting
 
-        # Defending costs you aim
-        defender.reset_aim()
-
-        self.add_to_history({'comment':
-                             ' (%s) defended (and lost aim)' % defender.name})
+        self.__ruleset.do_action(
+            defender,
+            {
+                'name': 'defend',
+                'comment': '(%s) defended (and lost aim)' % defender.name
+            },
+            self)
 
         self._window.show_fighters(current_fighter,
                                    opponent,
@@ -5825,7 +5834,7 @@ class FightHandler(ScreenHandler):
                                        self._saved_fight['index'],
                                        self.__viewing_index)
 
-        action_menu = self.__ruleset.get_action_menu(current_fighter, self)
+        action_menu = self.__ruleset.get_action_menu(current_fighter)
         maneuver = self._window_manager.menu('Maneuver', action_menu)
         if maneuver is None:
             return True # Keep going
@@ -5837,7 +5846,8 @@ class FightHandler(ScreenHandler):
             maneuver['action']['fighter'] = current_fighter.name
             maneuver['action']['group'] = current_fighter.group
             self.__ruleset.do_action(current_fighter,
-                                     maneuver['action'])
+                                     maneuver['action'],
+                                     self)
 
         # a round count larger than 0 will get shown but less than 1 will
         # get deleted before the next round
