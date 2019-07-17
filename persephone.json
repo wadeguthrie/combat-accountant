@@ -11472,19 +11472,19 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "Large Knife", 
+            "name": "Baton", 
             "notes": "", 
             "damage": {
               "sw": {
-                "type": "cut", 
-                "plus": -2
+                "type": "cr", 
+                "plus": 0
               }, 
               "thr": {
-                "type": "imp", 
+                "type": "cr", 
                 "plus": 0
               }
             }, 
-            "parry": -1, 
+            "parry": 0, 
             "skill": "Knife", 
             "type": "melee weapon"
           }, 
@@ -11739,19 +11739,19 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "Large Knife", 
+            "name": "Baton", 
             "notes": "", 
             "damage": {
               "sw": {
-                "plus": -2, 
-                "type": "cut"
+                "type": "cr", 
+                "plus": 0
               }, 
               "thr": {
-                "plus": 0, 
-                "type": "imp"
+                "type": "cr", 
+                "plus": 0
               }
             }, 
-            "parry": -1, 
+            "parry": 0, 
             "skill": "Knife", 
             "type": "melee weapon"
           }, 
@@ -11852,19 +11852,19 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "Large Knife", 
+            "name": "Baton", 
             "notes": "", 
             "damage": {
               "sw": {
-                "plus": -2, 
-                "type": "cut"
+                "type": "cr", 
+                "plus": 0
               }, 
               "thr": {
-                "plus": 0, 
-                "type": "imp"
+                "type": "cr", 
+                "plus": 0
               }
             }, 
-            "parry": -1, 
+            "parry": 0, 
             "skill": "Knife", 
             "type": "melee weapon"
           }, 
@@ -11948,19 +11948,19 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "Large Knife", 
+            "name": "Baton", 
             "notes": "", 
             "damage": {
               "sw": {
-                "plus": -2, 
-                "type": "cut"
+                "type": "cr", 
+                "plus": 0
               }, 
               "thr": {
-                "plus": 0, 
-                "type": "imp"
+                "type": "cr", 
+                "plus": 0
               }
             }, 
-            "parry": -1, 
+            "parry": 0, 
             "skill": "Knife", 
             "type": "melee weapon"
           }, 
@@ -12085,19 +12085,19 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "Large Knife", 
+            "name": "Baton", 
             "notes": "", 
             "damage": {
               "sw": {
-                "plus": -2, 
-                "type": "cut"
+                "type": "cr", 
+                "plus": 0
               }, 
               "thr": {
-                "plus": 0, 
-                "type": "imp"
+                "type": "cr", 
+                "plus": 0
               }
             }, 
-            "parry": -1, 
+            "parry": 0, 
             "skill": "Knife", 
             "type": "melee weapon"
           } 
@@ -12167,19 +12167,19 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "Large Knife", 
+            "name": "Baton", 
             "notes": "", 
             "damage": {
               "sw": {
-                "plus": -2, 
-                "type": "cut"
+                "type": "cr", 
+                "plus": 0
               }, 
               "thr": {
-                "plus": 0, 
-                "type": "imp"
+                "type": "cr", 
+                "plus": 0
               }
             }, 
-            "parry": -1, 
+            "parry": 0, 
             "skill": "Knife", 
             "type": "melee weapon"
           }, 

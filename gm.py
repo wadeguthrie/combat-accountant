@@ -15,9 +15,12 @@ import sys
 import traceback
 
 # TODO:
+#   - can't attack if reloading (stored in the weapon)
+#       weapon['ready-in'] -- if >0, can't use - reloading sets this, count
+#       down each round.  Timer?
+#
 #   - clone monster
 #   - need a test for each action (do_action)
-#   - can't attack if reloading (stored in the weapon)
 #   - Equipping item should ask to add ammo for item
 #   - Multiple weapons
 #   - Need equipment containers
@@ -3219,14 +3222,17 @@ class GurpsRuleset(Ruleset):
                                                }))
 
         # Can only feint with a melee weapon
-        # TODO: maybe include some mechanics with feint
         if weapon is not None and holding_ranged == False:
             action_menu.append(('feint (B365)',
-                                           {'text': ['Feint',
-                                                     ' Defense: any, parry *',
-                                                     ' Move: step'],
-                                            'action': {'name': 'feint'}
-                                           }))
+                                   {'text': ['Feint',
+                                             ' Contest of melee weapon or DX',
+                                             '   subtract score from opp',
+                                             '   active defense next turn',
+                                             '   (for both, if all-out-attack)',
+                                             ' Defense: any, parry *',
+                                             ' Move: step'],
+                                    'action': {'name': 'feint'}
+                                   }))
         
         if (fighter.details['current']['fp'] <
                         (fighter.details['permanent']['fp'] / 3)):
