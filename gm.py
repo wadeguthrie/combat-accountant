@@ -35,9 +35,7 @@ import traceback
 #
 # TODO (eventually):
 #   - anything with 'RULESET' comment should be moved to the ruleset
-#   - add ability to edit any creature
 #   - should only be able to ready an unready weapon.
-#   - Add 2 weapon (or weapon & shield)
 #   - Allow for markdown in 'notes' and 'short-notes'
 #   - On startup, check each of the characters
 #       o eventually, there needs to be a list of approved skills &
@@ -46,10 +44,6 @@ import traceback
 #   - reloading where the number of shots is in the 'clip' (like with a gun or
 #     a quiver) rather than in the weapon (like in disruptors or lasers)
 #   - plusses on range-based ammo (a bullet with a spell on it, for instance)
-#   - Go for a transactional model -- will allow me to do better debugging,
-#       playback of debug stuff, and testing.  Instead of modifying 'world'
-#       directly, issue a transaction to an object that handles world.  Save
-#       the transaction to _history.
 #   - Optimize the way I'm using curses.  I'm willy-nilly touching and
 #     redrawing everything way more often than I should.  Turns out, it's not
 #     costing me much but it's ugly, none-the-less
@@ -2773,22 +2767,45 @@ class GurpsRuleset(Ruleset):
                    adj       # the number of HP to gain or lose
                   ):
         if adj < 0:
-            # Adjust for armor
-            armor, armor_index = fighter.get_current_armor()
-            if armor is not None:
-                if armor['dr'] >= -adj:
-                    return
-                adj += armor['dr']
 
             # Hit location (just for flavor, not for special injury)
             table_lookup = (random.randint(1,6) +
                             random.randint(1,6) +
                             random.randint(1,6))
             hit_location = GurpsRuleset.hit_location_table[table_lookup]
+
+            window_text = [
+                [{'text': ('...%s\'s %s' % (fighter.name, hit_location)),
+                  'mode': curses.A_NORMAL}]
+                           ]
+
+            # Adjust for armor
+            armor, armor_index = fighter.get_current_armor()
+            if armor is not None:
+                if armor['dr'] >= -adj:
+                    return
+                original_adj = adj
+                adj += armor['dr']
+                window_text.append([{'text':'', 'mode': curses.A_NORMAL}])
+                window_text.append(
+                    [{'text': ('%s was wearing %s (dr:%d)' % (fighter.name,
+                                                              armor['name'],
+                                                              armor['dr'])),
+                      'mode': curses.A_NORMAL}]
+                                  )
+                window_text.append(
+                    [{'text': ('so adj(%d) - dr(%d) = damage (%d)' % (
+                                                              -original_adj,
+                                                              armor['dr'],
+                                                              -adj)),
+                      'mode': curses.A_NORMAL}]
+                                  )
+
             self._window_manager.display_window(
-                    ('Did %d hp (after armor) to...' % -adj),
-                    [[{'text': ('...%s\'s %s' % (fighter.name, hit_location)),
-                       'mode': curses.A_NORMAL}]])
+                                    ('Did %d hp damage to...' % -adj),
+                                    window_text)
+
+
 
             # Check for Death (B327)
             adjusted_hp = fighter.details['current']['hp'] + adj
@@ -3004,7 +3021,11 @@ class GurpsRuleset(Ruleset):
         if 'name' not in action:
             return # It's just a comment
 
-        if action['name'] == 'aim':
+        if action['name'] == 'adjust-fp':
+            self._do_adjust_fp(fighter, action['adj'])
+            handled = True
+
+        elif action['name'] == 'aim':
             self._do_aim({'fighter': fighter,
                           'braced': action['braced']})
             handled = True
@@ -4431,6 +4452,21 @@ class GurpsRuleset(Ruleset):
     # Private Methods
     #
 
+    def _do_adjust_fp(self,
+                      fighter,  # Fighter object
+                      adj       # number: amount to adjust FP
+                     ):
+        # If FP go below zero, you lose HP along with FP
+        hp_adj = 0
+        if adj < 0  and -adj > fighter.details['current']['fp']:
+            hp_adj = adj
+            if fighter.details['current']['fp'] > 0:
+                hp_adj += fighter.details['current']['fp']
+
+        fighter.details['current']['hp'] += hp_adj
+        fighter.details['current']['fp'] += adj
+        return
+
     def _do_attack(self,
                    param # {'fighter': xxx, Fighter object for attacker
                          #  'fight_handler', ...
@@ -5511,17 +5547,14 @@ class FightHandler(ScreenHandler):
         if len(adj_string) <= 0:
             return True
         adj = -int(adj_string)  # NOTE: SUBTRACTING the adjustment
-        hp_adj = 0
 
-        # If FP go below zero, you lose HP along with FP
-        # RULESET: this -- especially -- should be in Ruleset
-        if adj < 0  and -adj > fp_recipient.details['current']['fp']:
-            hp_adj = adj
-            if fp_recipient.details['current']['fp'] > 0:
-                hp_adj += fp_recipient.details['current']['fp']
+        if adj < 0:
+            comment = '(%s) lost %d FP' % (current_fighter.name, -adj)
+        else:
+            comment = '(%s) regained %d FP' % (current_fighter.name, adj)
+        action = {'name': 'adjust-fp', 'adj': adj, 'comment': comment}
+        self.__ruleset.do_action(fp_recipient, action, self)
 
-        fp_recipient.details['current']['hp'] += hp_adj
-        fp_recipient.details['current']['fp'] += adj
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
@@ -5575,8 +5608,9 @@ class FightHandler(ScreenHandler):
                                                              adj)
         else:
             if adj < 0:
-                action['comment'] = '(%s) lost %d HP' % (current_fighter.name,
-                                                         -adj)
+                action['comment'] = '%d HP was done to (%s)' % (
+                                                        -adj,
+                                                        current_fighter.name)
             else:
                 action['comment'] = ' (%s) regained %d HP' % (
                                                         current_fighter.name,
