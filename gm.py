@@ -15,12 +15,11 @@ import sys
 import traceback
 
 # TODO:
+#   - damage (HP and FP) should be actions so they get logged
+#
 #   - clone monster
 #   - need a test for each action (do_action)
 #   - can't attack if reloading (stored in the weapon)
-#   - anything with 'add_to_history' should be an action so it gets logged:
-#       - pick opponent should be an action so it gets logged
-#       - damage (HP and FP) should be actions so they get logged
 #   - Equipping item should ask to add ammo for item
 #   - Multiple weapons
 #   - Need equipment containers
@@ -2290,6 +2289,11 @@ class Ruleset(object):
         elif action['name'] == 'don-armor': # or doff armor
             self._don_armor({'fighter': fighter,
                              'armor': action['armor-index']})
+            handled = True
+
+        elif action['name'] == 'pick-opponent':
+            fighter.details['opponent'] = {'group': action['opponent-group'],
+                                           'name': action['opponent-name']}
             handled = True
 
         elif action['name'] == 'reload': # or doff armor
@@ -6031,6 +6035,8 @@ class FightHandler(ScreenHandler):
         else:
             current_fighter = self.get_current_fighter()
 
+        # Pick the opponent.
+
         opponent_group = None
         opponent_menu = []
         default_selection = None
@@ -6060,12 +6066,18 @@ class FightHandler(ScreenHandler):
         if opponent_name is None:
             return True # don't leave the fight
 
-        self.add_to_history({'comment': ' (%s) picked (%s) as opponent' % 
-                                                    (current_fighter.name,
-                                                     opponent_name)})
+        # Now, make reflect the selection in the code.
 
-        current_fighter.details['opponent'] = {'group': opponent_group,
-                                               'name': opponent_name}
+        self.__ruleset.do_action(current_fighter,
+                                 {'name': 'pick-opponent',
+                                  'opponent-name': opponent_name,
+                                  'opponent-group': opponent_group,
+                                  'comment': '(%s) picked (%s) as opponent' % 
+                                                    (current_fighter.name,
+                                                     opponent_name)
+                                 },
+                                 self)
+
         opponent = self.__get_fighter_object(opponent_name, opponent_group)
 
         # Ask to have them fight each other
@@ -6074,13 +6086,16 @@ class FightHandler(ScreenHandler):
             answer = self._window_manager.menu('Make Opponents Go Both Ways',
                                         back_menu)
             if answer == True:
-                opponent.details['opponent'] = {'group': current_fighter.group,
-                                                'name': current_fighter.name}
-
-                self.add_to_history({'comment':
-                                ' (%s) picked (%s) as opponent right back' % 
+                self.__ruleset.do_action(
+                    opponent,
+                    {'name': 'pick-opponent',
+                     'opponent-name': current_fighter.name,
+                     'opponent-group': current_fighter.group,
+                     'comment': '(%s) picked (%s) as opponent right back' % 
                                                         (opponent_name,
-                                                         current_fighter.name)})
+                                                         current_fighter.name)
+                    },
+                    self)
 
         self._window.show_fighters(current_fighter,
                                    opponent,
