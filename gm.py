@@ -15,8 +15,6 @@ import sys
 import traceback
 
 # TODO:
-#   - damage (HP and FP) should be actions so they get logged
-#
 #   - clone monster
 #   - need a test for each action (do_action)
 #   - can't attack if reloading (stored in the weapon)
@@ -24,7 +22,7 @@ import traceback
 #   - Multiple weapons
 #   - Need equipment containers
 #   - Need maintain spell
-#   - Fights should have their own equipment
+#   - Fights should have their own equipment (how to display?)
 #   - add laser sights to weapons
 #   - add a timer that is tied to the round change
 #   - should warn when trying to do a second action (take note of fastdraw)
@@ -2304,7 +2302,8 @@ class Ruleset(object):
 
     def get_action_menu(self,
                         action_menu,    # menu for user [(name, predicate)...]
-                        fighter         # Fighter object
+                        fighter,        # Fighter object
+                        opponent        # Fighter object
                        ):
         '''
         Builds the menu of maneuvers allowed for the fighter. This is for the
@@ -2367,7 +2366,7 @@ class Ruleset(object):
         ### Attack ###
 
 
-        # TODO: move (and, in fact, all of the 'text') is rules-based
+        # TODO: Move (and, in fact, all of the 'text') is GurpsRuleset-based
         move = fighter.details['current']['basic-move']
 
         if holding_ranged:
@@ -3057,8 +3056,8 @@ class GurpsRuleset(Ruleset):
             handled = True # This is here just so that it's logged
 
         elif action['name'] == 'move-and-attack':
-            # TODO: attack with -2 to ranged, -4 to melee (but not greater
-            # than 9)
+            self._do_attack({'fighter': fighter,
+                             'fight_handler': fight_handler})
             handled = True # This is here just so that it's logged
 
         elif action['name'] == 'nothing':
@@ -3081,7 +3080,8 @@ class GurpsRuleset(Ruleset):
 
 
     def get_action_menu(self,
-                        fighter         # Fighter object
+                        fighter,    # Fighter object
+                        opponent    # Fighter object
                        ):
         ''' Builds the menu of maneuvers allowed for the fighter. '''
 
@@ -3234,15 +3234,41 @@ class GurpsRuleset(Ruleset):
         else:
             move_string = 'full=%d' % move
 
+        # Move and attack info
+        move_and_attack_notes = ['Move & Attack',
+                                 ' Defense: Dodge,block',
+                                 ' Move: %s' % move_string]
+        if weapon is None:
+            unarmed_skills = self.get_weapons_unarmed_skills(weapon)
+            unarmed_info = self.get_unarmed_info(fighter,
+                                                 opponent,
+                                                 weapon,
+                                                 unarmed_skills)
+            to_hit = unarmed_info['punch_skill'] - 4
+            to_hit = 9 if to_hit > 9 else to_hit
+            move_and_attack_notes.append(' Punch to-hit: %d' % to_hit)
+
+            to_hit = unarmed_info['kick_skill'] - 4
+            to_hit = 9 if to_hit > 9 else to_hit
+            move_and_attack_notes.append(' Kick to-hit: %d' % to_hit)
+        else:
+            to_hit, ignore_why = self.get_to_hit(fighter, opponent, weapon)
+            if holding_ranged:
+                to_hit -= 2 # or weapon's bulk rating, whichever is worse
+            else:
+                to_hit -= 4
+
+            to_hit = 9 if to_hit > 9 else to_hit
+            move_and_attack_notes.append(' %s to-hit: %d' % (weapon['name'],
+                                                             to_hit))
+
         action_menu.extend([
             ('move (B364) %s' % move_string,
                                        {'text': ['Move',
                                                  ' Defense: any',
                                                  ' Move: %s' % move_string],
                                         'action': {'name': 'move'}}),
-            ('Move and attack (B365)', {'text': ['Move & Attack',
-                                                 ' Defense: Dodge,block',
-                                                 ' Move: %s' % move_string],
+            ('Move and attack (B365)', {'text': move_and_attack_notes,
                                         'action': {'name': 'move-and-attack'}}),
             ('nothing',                {'text': ['Do nothing',
                                                  ' Defense: any',
@@ -3262,7 +3288,9 @@ class GurpsRuleset(Ruleset):
                                 'action': {'name': 'wait'}}),
         ])
 
-        super(GurpsRuleset, self).get_action_menu(action_menu, fighter)
+        super(GurpsRuleset, self).get_action_menu(action_menu,
+                                                  fighter,
+                                                  opponent)
 
         action_menu = sorted(action_menu, key=lambda x: x[0].upper())
         return action_menu
@@ -4534,7 +4562,7 @@ class GurpsRuleset(Ruleset):
                                    weapon # None or dict from JSON
                                   ):
         '''
-        If this weapon (which may be none) uses the unarmed combat skills.
+        If this weapon (which may be None) uses the unarmed combat skills.
         That's basically a blackjack or brass knuckles but there may be more.
         Assumes weapon's skill is the most advanced skill supported.
 
@@ -5872,7 +5900,8 @@ class FightHandler(ScreenHandler):
                                        self._saved_fight['index'],
                                        self.__viewing_index)
 
-        action_menu = self.__ruleset.get_action_menu(current_fighter)
+        action_menu = self.__ruleset.get_action_menu(current_fighter,
+                                                     opponent)
         maneuver = self._window_manager.menu('Maneuver', action_menu)
         if maneuver is None:
             return True # Keep going
