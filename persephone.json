@@ -1345,7 +1345,7 @@
             "shots": 9, 
             "shots_left": 2
           }
-        },
+        }, 
         {
           "count": 25, 
           "notes": "", 
@@ -1922,23 +1922,23 @@
       }, 
       "advantages": {
         "G-Experience": 1, 
+        "Empathy": 15, 
         "Honest Face": 1, 
         "Wealth": -10, 
         "Extra Hit Points": 2, 
         "Habit": -1, 
         "Nosy": -1, 
         "Like knick knacks": -1, 
-        "Impulsiveness": -10, 
         "Vodou Practitioner": 15, 
         "Alcohol Intolerance": -1, 
-        "Versatile": 5, 
+        "Impulsiveness": -10, 
         "Cultural Familiarity (Teraformers)": 1, 
         "Short Attention Span": -10, 
         "Curious": -5, 
         "Bad Temper": -10, 
         "Deep Sleeper": 1, 
         "Combat Reflexes": 15, 
-        "Empathy": 15, 
+        "Versatile": 5, 
         "Dreamer": -1
       }, 
       "did_action_this_turn": false, 
@@ -8988,7 +8988,7 @@
     }, 
     "11 - Panama Hat": {
       "current": {
-        "fp": 16, 
+        "fp": 30, 
         "iq": 12, 
         "hp": 10, 
         "wi": 12, 
@@ -9128,6 +9128,14 @@
         {
           "name": "Blink", 
           "notes": "M148", 
+          "maintain": 0, 
+          "cost": 2, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "name": "Stun", 
+          "notes": "M37, B420, vs. HT", 
           "maintain": 0, 
           "cost": 2, 
           "time": 1, 
@@ -9366,7 +9374,7 @@
       "parry": 0, 
       "skill": "Tonfa", 
       "type": "melee weapon"
-    },
+    }, 
     {
       "count": 1, 
       "notes": "unconscious but not dead for HT+1d hrs unless other healing", 
@@ -10215,6 +10223,11 @@
     }
   }, 
   "monsters": {
+    "Panama Hat": {
+      "11 - Panama Hat": {
+        "redirect": "NPCs"
+      }
+    }, 
     "Dima's Crew": {
       "5: Dmitry": {
         "aim": {
@@ -12119,7 +12132,7 @@
             "parry": 0, 
             "skill": "Tonfa", 
             "type": "melee weapon"
-          } 
+          }
         ], 
         "stunned": 0, 
         "skills": {

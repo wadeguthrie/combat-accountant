@@ -3207,6 +3207,7 @@ class GurpsRuleset(Ruleset):
                      'action': {'name': 'cast-spell',
                                 'spell-index': index}
                     }))
+            spell_menu = sorted(spell_menu, key=lambda x: x[0].upper())
 
             action_menu.append(('cast Spell',
                                 {'text': ['Cast Spell',
@@ -3603,9 +3604,10 @@ class GurpsRuleset(Ruleset):
             for spell in sorted(character['spells'], key=lambda(x): x['name']):
                 found_one = True
                 char_detail.append(
-                                    [{'text': '  %s: %s' % (spell['name'],
-                                                            spell['notes']),
-                                      'mode': mode}])
+                        [{'text': '  %s (%d): %s' % (spell['name'],
+                                                     spell['skill'],
+                                                     spell['notes']),
+                          'mode': mode}])
 
             if not found_one:
                 char_detail.append([{'text': '  (None)',
@@ -6563,7 +6565,9 @@ class MainHandler(ScreenHandler):
                                                        self.__party},
             ord('f'): {'name': 'FIGHT',               'func':
                                                        self.__run_fight},
-            ord('H'): {'name': 'Heal',                'func':
+            ord('h'): {'name': 'heal selected creature', 'func':
+                                                       self.__heal},
+            ord('H'): {'name': 'Heal all PCs',        'func':
                                                        self.__fully_heal},
             ord('M'): {'name': 'show MONSTERs or PC/NPC', 'func':
                                        self.__toggle_Monster_PC_NPC_display},
@@ -6769,7 +6773,18 @@ class MainHandler(ScreenHandler):
                     break
 
             if new_spell is not None:
-                fighter.details['spells'].append(copy.deepcopy(new_spell))
+                my_copy = copy.deepcopy(new_spell)
+
+                title = 'At What Skill Level...'
+                height = 1
+                width = len(title) + 2
+                skill_string = self._window_manager.input_box(height,
+                                                              width,
+                                                              title)
+                if skill_string is not None and len(skill_string) > 0:
+                    my_copy['skill'] = int(skill_string)
+
+                fighter.details['spells'].append(my_copy)
                 self._draw_screen()
 
             keep_asking = self._window_manager.menu('Add More Spells',
@@ -7065,6 +7080,20 @@ class MainHandler(ScreenHandler):
                     ('pc list',            {'doit': self.__add_PCs}),
                     ('monster list',       {'doit': self.__add_monsters})]
         self._window_manager.menu('Do what', sub_menu)
+        return True
+
+
+    def __heal(self):
+        '''
+        Command ribbon method.
+
+        Heals the selected creature.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        self.__ruleset.heal_fighter(self.__chars[self.__char_index]['details'])
+        self._draw_screen()
+
         return True
 
 
