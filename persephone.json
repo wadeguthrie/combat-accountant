@@ -9350,6 +9350,25 @@
   "stuff": [
     {
       "count": 1, 
+      "owners": [], 
+      "name": "Tonfa", 
+      "notes": "", 
+      "damage": {
+        "sw": {
+          "type": "cr", 
+          "plus": 0
+        }, 
+        "thr": {
+          "type": "cr", 
+          "plus": 1
+        }
+      }, 
+      "parry": 0, 
+      "skill": "Tonfa", 
+      "type": "melee weapon"
+    },
+    {
+      "count": 1, 
       "notes": "unconscious but not dead for HT+1d hrs unless other healing", 
       "type": "misc", 
       "owners": null, 
@@ -11472,7 +11491,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "Baton", 
+            "name": "Tonfa", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -11481,11 +11500,11 @@
               }, 
               "thr": {
                 "type": "cr", 
-                "plus": 0
+                "plus": 1
               }
             }, 
             "parry": 0, 
-            "skill": "Knife", 
+            "skill": "Tonfa", 
             "type": "melee weapon"
           }, 
           {
@@ -11522,7 +11541,7 @@
           "Guns (Pistol)": 11, 
           "Physician": 14, 
           "Brawling": 11, 
-          "Knife": 11
+          "Tonfa": 11
         }, 
         "notes": [
           "origin: haitian", 
@@ -11739,7 +11758,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "Baton", 
+            "name": "Tonfa", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -11748,11 +11767,11 @@
               }, 
               "thr": {
                 "type": "cr", 
-                "plus": 0
+                "plus": 1
               }
             }, 
             "parry": 0, 
-            "skill": "Knife", 
+            "skill": "Tonfa", 
             "type": "melee weapon"
           }, 
           {
@@ -11767,7 +11786,7 @@
         "skills": {
           "Guns (Pistol)": 15, 
           "Brawling": 15, 
-          "Knife": 15
+          "Tonfa": 15
         }, 
         "notes": [
           "origin: haitian", 
@@ -11852,7 +11871,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "Baton", 
+            "name": "Tonfa", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -11861,11 +11880,11 @@
               }, 
               "thr": {
                 "type": "cr", 
-                "plus": 0
+                "plus": 1
               }
             }, 
             "parry": 0, 
-            "skill": "Knife", 
+            "skill": "Tonfa", 
             "type": "melee weapon"
           }, 
           {
@@ -11880,7 +11899,7 @@
         "skills": {
           "Guns (Pistol)": 15, 
           "Brawling": 15, 
-          "Knife": 15
+          "Tonfa": 15
         }, 
         "notes": [
           "origin: haitian", 
@@ -11948,7 +11967,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "Baton", 
+            "name": "Tonfa", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -11957,11 +11976,11 @@
               }, 
               "thr": {
                 "type": "cr", 
-                "plus": 0
+                "plus": 1
               }
             }, 
             "parry": 0, 
-            "skill": "Knife", 
+            "skill": "Tonfa", 
             "type": "melee weapon"
           }, 
           {
@@ -11993,7 +12012,7 @@
         "skills": {
           "Guns (Pistol)": 15, 
           "Brawling": 15, 
-          "Knife": 15
+          "Tonfa": 15
         }, 
         "notes": [
           "origin: haitian", 
@@ -12085,7 +12104,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "Baton", 
+            "name": "Tonfa", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -12094,11 +12113,11 @@
               }, 
               "thr": {
                 "type": "cr", 
-                "plus": 0
+                "plus": 1
               }
             }, 
             "parry": 0, 
-            "skill": "Knife", 
+            "skill": "Tonfa", 
             "type": "melee weapon"
           } 
         ], 
@@ -12106,7 +12125,7 @@
         "skills": {
           "Guns (Pistol)": 15, 
           "Brawling": 15, 
-          "Knife": 15
+          "Tonfa": 15
         }, 
         "notes": [
           "origin: haitian", 
@@ -12167,7 +12186,7 @@
           {
             "count": 1, 
             "owners": null, 
-            "name": "Baton", 
+            "name": "Tonfa", 
             "notes": "", 
             "damage": {
               "sw": {
@@ -12176,11 +12195,11 @@
               }, 
               "thr": {
                 "type": "cr", 
-                "plus": 0
+                "plus": 1
               }
             }, 
             "parry": 0, 
-            "skill": "Knife", 
+            "skill": "Tonfa", 
             "type": "melee weapon"
           }, 
           {
@@ -12218,7 +12237,7 @@
         "stunned": 0, 
         "skills": {
           "Fast-Draw (Ammo)": 15, 
-          "Knife": 15, 
+          "Tonfa": 15, 
           "Guns (Rifle)": 18
         }, 
         "notes": [
