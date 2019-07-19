@@ -2729,6 +2729,811 @@ class GurpsRuleset(Ruleset):
                          'sw':  {'num_dice': 5, 'plus': -1}}
                          }
 
+    abilities = {
+        'skills': {
+            # 'name': {'ask': 'number' | 'string' }
+            #         {'value': value}
+            "Acting": {'ask': 'number'}, 
+            "Area Knowledge (Space Station)": {'ask': 'number'},
+            "Armoury (Heavy Weapons)": {'ask': 'number'}, 
+            "Armoury (Small Arms)": {'ask': 'number'}, 
+            "Axe/Mace": {'ask': 'number'}, 
+            "Bartender": {'ask': 'number'}, 
+            "Beam Weapons (Pistol)": {'ask': 'number'}, 
+            "Beam Weapons (Rifle)": {'ask': 'number'}, 
+            "Brawling": {'ask': 'number'}, 
+            "Camouflage": {'ask': 'number'}, 
+            "Climbing": {'ask': 'number'}, 
+            "Climbing": {'ask': 'number'}, 
+            "Computer Hacking": {'ask': 'number'}, 
+            "Computer Operation": {'ask': 'number'}, 
+            "Computer Programming": {'ask': 'number'}, 
+            "Connoisseur (Visual Arts)": {'ask': 'number'}, 
+            "Cryptography": {'ask': 'number'}, 
+            "Current Affairs (Teraforming)": {'ask': 'number'}, 
+            "Detect Lies": {'ask': 'number'}, 
+            "Diplomacy": {'ask': 'number'}, 
+            "Electronics Operation (Security)": {'ask': 'number'}, 
+            "Electronics Operation (Teraforming)": {'ask': 'number'}, 
+            "Electronics Repair (Security)": {'ask': 'number'}, 
+            "Electronics Repair (Teraforming)": {'ask': 'number'}, 
+            "Engineer (Electronics)": {'ask': 'number'}, 
+            "Engineer (Starships)": {'ask': 'number'}, 
+            "Escape": {'ask': 'number'}, 
+            "Expert Skill (Computer Security)": {'ask': 'number'}, 
+            "Fast-Draw (Ammo)": {'ask': 'number'}, 
+            "Fast-Draw (Knife)": {'ask': 'number'}, 
+            "Fast-Draw (Pistol)": {'ask': 'number'}, 
+            "Fast-Talk": {'ask': 'number'}, 
+            "Filch": {'ask': 'number'}, 
+            "First Aid": {'ask': 'number'}, 
+            "Forensics": {'ask': 'number'}, 
+            "Forgery": {'ask': 'number'}, 
+            "Gambling": {'ask': 'number'}, 
+            "Gesture": {'ask': 'number'}, 
+            "Gunner (Beams)": {'ask': 'number'}, 
+            "Gunner (Cannon)": {'ask': 'number'}, 
+            "Guns (Grenade Launcher)": {'ask': 'number'}, 
+            "Guns (Pistol)": {'ask': 'number'}, 
+            "Hazardous Materials (Chemical)": {'ask': 'number'}, 
+            "Holdout": {'ask': 'number'}, 
+            "Interrogation": {'ask': 'number'}, 
+            "Intimidation": {'ask': 'number'}, 
+            "Karate": {'ask': 'number'}, 
+            "Knife": {'ask': 'number'}, 
+            "Law (Conglomerate)": {'ask': 'number'},
+            "Law (Conglomerate, Trans territorial jurisdiction/the void)":
+            {'ask': 'number'}, 
+            "Lip Reading": {'ask': 'number'}, 
+            "Lockpicking": {'ask': 'number'}, 
+            "Mathematics (Applied)": {'ask': 'number'}, 
+            "Mechanic (Spacecraft)": {'ask': 'number'}, 
+            "Observation": {'ask': 'number'}, 
+            "Physician": {'ask': 'number'}, 
+            "Physics": {'ask': 'number'}, 
+            "Pickpocket": {'ask': 'number'}, 
+            "Piloting (Loader Mech)": {'ask': 'number'},
+            "Piloting (Low-Performance Spacecraft)": {'ask': 'number'}, 
+            "Running": {'ask': 'number'}, 
+            "Scrounging": {'ask': 'number'},
+            "Search": {'ask': 'number'}, 
+            "Stealth": {'ask': 'number'}, 
+            "Streetwise": {'ask': 'number'}, 
+            "Theology (Vodun)": {'ask': 'number'}, 
+            "Throwing": {'ask': 'number'}, 
+            "Thrown Weapon (Knife)": {'ask': 'number'}, 
+            "Traps": {'ask': 'number'}, 
+            "Urban Survival": {'ask': 'number'}, 
+        },
+        'advantages': {
+    # 'name': {'ask': 'number' | 'string' }
+    #         {'value': value}
+            "Acute Vision": {'ask': 'number'}, 
+            "Phobia": {'ask': 'string'},
+            "Alcohol Intolerance": {'value': -1}, 
+            "Appearance": {'ask': 'string'}, 
+            "Bad Sight": {'value': -25}, 
+            "Bad Temper": {'value': -10}, 
+            "Cannot Speak": {'value': -10}, 
+            "Channeling": {'value': 10}, 
+            "Code of Honor": {'ask': 'string'}, 
+            "Combat Reflexes": {'value': 15},
+            "Compulsive Behavior": {'ask': 'string'}, 
+            "Cultural Familiarity": {'ask': 'string'},
+            "Curious": {'value': -5}, 
+            "Deep Sleeper": {'value': 1}, 
+            "Delusions": {'ask': 'string'},
+            "Distractible": {'value': 1}, 
+            "Dreamer": {'value': -1},
+            "Dyslexia": {'value': -10}, 
+            "Eidetic Memory": {'ask': 'number'}, 
+            "Empathy": {'ask': 'number'},
+            "Enemy": {'ask': 'string'},
+            "Extra Hit Points": {'ask': 'number'}, 
+            "Fit": {'value': 5}, 
+            "Flashbacks": {'ask': 'string'}, 
+            "G-Experience": {'ask': 'number'},
+            "Guilt Complex": {'ask': 'string'},
+            "Habit": {'ask': 'string'}, 
+            "High Pain Threshold": {'value': 10}, 
+            "Honest Face": {'value': 1}, 
+            "Humble": {'value', -1}, 
+            "Impulsiveness": {'ask': 'number'}, 
+            "Light Sleeper": {'value': -5}, 
+            "Like (Quirk) ": {'ask': 'string'},
+            "Lwa": {'ask': 'string'},
+            "Night Vision": {'ask': 'number'},
+            "No Sense of Humor": {'value': -10}, 
+            "Nosy": {'value': -1}, 
+            "Personality Change": {'ask': 'string'}, 
+            "Pyromania": {'value': -10}, 
+            "Rapid Healing": {'value': 5}, 
+            "Responsive": {'value': -1}, 
+            "Secret": {'ask': 'string'},
+            "Short Attention Span": {'value': -10}, 
+            "Squeamish": {'value': -10}, 
+            "Versatile": {'value': 5}, 
+            "Vodou Practitioner (level 0)": {'value': 5},
+            "Vodou Practitioner (Mambo/Hougan 1)": {'value': 15},
+            "Vodou Practitioner (Mambo/Hougan 2)": {'value': 35},
+            "Vodou Practitioner (Mambo/Hougan 3)": {'value': 65},
+            "Vodou Practitioner (Bokor 1)": {'value': 20},
+            "Vodou Practitioner (Bokor 2)": {'value': 45},
+            "Vodou Practitioner (Bokor 3)": {'value': 75},
+            "Vow": {'ask': 'string'},
+            "Wealth": {'ask': 'string'},
+            "Weirdness Magnet": {'value': -15}, 
+        }
+    }
+
+    # These are specific to the Persephone version of the GURPS ruleset
+    spells = [
+        {
+          "cost": 4, 
+          "name": "Terror", 
+          "notes": "M134, Area, Will negates", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": None, 
+          "name": "Wall Of Lightning", 
+          "notes": "M197", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 10, 
+          "name": "Evisceration", 
+          "notes": "M154, HT/IQ negates, Magery 3", 
+          "maintain": 0, 
+          "time": 5, 
+          "skill": 12
+        }, 
+        {
+          "cost": 250, 
+          "name": "Golem", 
+          "notes": "M59", 
+          "maintain": 0, 
+          "time": 0, 
+          "skill": 12
+        }, 
+        {
+          "cost": 4, 
+          "name": "Mind-Sending", 
+          "notes": "M47", 
+          "maintain": 4, 
+          "time": 4, 
+          "skill": 12
+        }, 
+        {
+          "cost": 8, 
+          "name": "Agonize", 
+          "notes": "M40, HT negates", 
+          "maintain": 6, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 1, 
+          "name": "Alarm", 
+          "notes": "M100", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 4, 
+          "name": "Alter Visage", 
+          "notes": "M41", 
+          "maintain": 0, 
+          "time": 60, 
+          "skill": 13
+        }, 
+        {
+          "cost": 8, 
+          "name": "Analyze Magic", 
+          "notes": "M102", 
+          "maintain": None, 
+          "time": 3600, 
+          "skill": 14
+        }, 
+        {
+          "cost": None, 
+          "name": "Armor", 
+          "notes": "M167, 2xDR, lasts 1 minute", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 1, 
+          "name": "Awaken", 
+          "notes": "M90", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 1, 
+          "name": "Bless Plants", 
+          "notes": "M161", 
+          "maintain": 4, 
+          "time": 300, 
+          "skill": 13
+        }, 
+        {
+          "cost": 2, 
+          "name": "Blink", 
+          "notes": "M148", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 1, 
+          "name": "Boost Dexterity", 
+          "notes": "M37", 
+          "maintain": 2, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "Bravery", 
+          "notes": "M134", 
+          "maintain": 2, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 6, 
+          "name": "Charm", 
+          "notes": "M139, vs. Will", 
+          "maintain": 3, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 4, 
+          "name": "Choke", 
+          "notes": "M40, vs. HT", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 1, 
+          "name": "Climbing", 
+          "notes": "M35", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 15
+        }, 
+        {
+          "cost": 1, 
+          "name": "Clumsiness", 
+          "notes": "M36", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 4, 
+          "name": "Command", 
+          "notes": "M136, vs. Will", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 4, 
+          "name": "Communicate", 
+          "notes": "M48", 
+          "maintain": 4, 
+          "time": 4, 
+          "skill": 11
+        }, 
+        {
+          "cost": 1, 
+          "name": "Conceal Magic", 
+          "notes": "M122", 
+          "maintain": None, 
+          "time": 3, 
+          "skill": 14
+        }, 
+        {
+          "cost": 4, 
+          "name": "Cure Disease", 
+          "notes": "M91", 
+          "maintain": 2, 
+          "time": 600, 
+          "skill": 15
+        }, 
+        {
+          "cost": 3, 
+          "name": "Daze", 
+          "notes": "M134", 
+          "maintain": 2, 
+          "time": 2, 
+          "skill": 11
+        }, 
+        {
+          "cost": None, 
+          "name": "Death Touch", 
+          "notes": "M41, 1-3, needs touch", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 2, 
+          "name": "Death Vision", 
+          "notes": "M149, vs. IQ", 
+          "maintain": None, 
+          "time": 3, 
+          "skill": 16
+        }, 
+        {
+          "cost": 2, 
+          "name": "Detect Magic", 
+          "notes": "M101", 
+          "maintain": None, 
+          "time": 300, 
+          "skill": 14
+        }, 
+        {
+          "cost": 2, 
+          "name": "Emotional Control", 
+          "notes": "M137", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": None, 
+          "name": "Enchant", 
+          "notes": "M56", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 13
+        }, 
+        {
+          "cost": 30, 
+          "name": "Enslave", 
+          "notes": "M141, vs. Will", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 3, 
+          "name": "False Memory", 
+          "notes": "M139, vs. Will", 
+          "maintain": 0, 
+          "time": 5, 
+          "skill": 18
+        }, 
+        {
+          "cost": 4, 
+          "name": "Far Hearing", 
+          "notes": "M173", 
+          "maintain": 2, 
+          "time": 3, 
+          "skill": 11
+        }, 
+        {
+          "cost": 1, 
+          "name": "Fear", 
+          "notes": "M134", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": None, 
+          "name": "Fog", 
+          "notes": "M193, cost: 2/yard radius, lasts 1 minute", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": None, 
+          "name": "Foolishness", 
+          "notes": "M134", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 11
+        }, 
+        {
+          "cost": 3, 
+          "name": "Fumble", 
+          "notes": "M38", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 4, 
+          "name": "Grace", 
+          "notes": "M37", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 1, 
+          "name": "Hair Growth", 
+          "notes": "M39", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "Haircut", 
+          "notes": "M39", 
+          "maintain": None, 
+          "time": 2, 
+          "skill": 12
+        }, 
+        {
+          "cost": 3, 
+          "name": "Heal Plant", 
+          "notes": "M161", 
+          "maintain": None, 
+          "time": 60, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "Identify Plant", 
+          "notes": "M161", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "Identify Spell", 
+          "notes": "M102", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 14
+        }, 
+        {
+          "cost": 2, 
+          "name": "Itch", 
+          "notes": "M35", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": None, 
+          "name": "Lend Energy", 
+          "notes": "M89", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 15
+        }, 
+        {
+          "cost": None, 
+          "name": "Lend Vitality", 
+          "notes": "M89", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 15
+        }, 
+        {
+          "cost": 12, 
+          "name": "Lesser Geas", 
+          "notes": "M140, vs. Will ", 
+          "maintain": 0, 
+          "time": 30, 
+          "skill": 18
+        }, 
+        {
+          "cost": 1, 
+          "name": "Light", 
+          "notes": "M110", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 14
+        }, 
+        {
+          "cost": None, 
+          "name": "Lightning", 
+          "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 2, 
+          "name": "Loyalty", 
+          "notes": "M136", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "Luck", 
+          "notes": "V2", 
+          "maintain": 1, 
+          "time": 1, 
+          "skill": 11
+        }, 
+        {
+          "cost": 1, 
+          "name": "Lure", 
+          "notes": "M137", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": None, 
+          "name": "Major Heal", 
+          "notes": "M91", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 11
+        }, 
+        {
+          "cost": 5, 
+          "name": "Malfunction", 
+          "notes": "M177, touch", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": None, 
+          "name": "Manastone", 
+          "notes": "M70", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": None, 
+          "name": "Might", 
+          "notes": "M37", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": None, 
+          "name": "Minor Heal", 
+          "notes": "M91", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "Pain", 
+          "notes": "M36, vs. HT", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 4, 
+          "name": "Panic", 
+          "notes": "M134, vs. Will", 
+          "maintain": 2, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": None, 
+          "name": "Planar Summons", 
+          "notes": "M82", 
+          "maintain": 0, 
+          "time": 300, 
+          "skill": 18
+        }, 
+        {
+          "cost": 20, 
+          "name": "Powerstone", 
+          "notes": "M69", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 14
+        }, 
+        {
+          "cost": 2, 
+          "name": "Relieve Sickness", 
+          "notes": "M90", 
+          "maintain": 2, 
+          "time": 10, 
+          "skill": 15
+        }, 
+        {
+          "cost": None, 
+          "name": "Repair", 
+          "notes": "M118", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 15, 
+          "name": "Restoration", 
+          "notes": "M93", 
+          "maintain": 0, 
+          "time": 60, 
+          "skill": 11
+        }, 
+        {
+          "cost": 3, 
+          "name": "Rotting Death", 
+          "notes": "M154 vs. HT, needs touch", 
+          "maintain": 2, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 3, 
+          "name": "Seek Machine", 
+          "notes": "M175", 
+          "maintain": None, 
+          "time": 10, 
+          "skill": 14
+        }, 
+        {
+          "cost": 2, 
+          "name": "Seek Plant", 
+          "notes": "M161", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 14
+        }, 
+        {
+          "cost": 2, 
+          "name": "Sense Emotion", 
+          "notes": "M45", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": 2, 
+          "name": "Sense Foes", 
+          "notes": "M45", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": None, 
+          "name": "Sense Life", 
+          "notes": "M45, cost 1/2 per yard radius, see M11", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": None, 
+          "name": "Shapeshifting (Rat)", 
+          "notes": "M32", 
+          "maintain": None, 
+          "time": 3, 
+          "skill": 13
+        }, 
+        {
+          "cost": 2, 
+          "name": "Shield", 
+          "notes": "M167", 
+          "maintain": None, 
+          "time": 1, 
+          "skill": 14
+        }, 
+        {
+          "cost": 4, 
+          "name": "Sleep", 
+          "notes": "M135", 
+          "maintain": 0, 
+          "time": 3, 
+          "skill": 11
+        }, 
+        {
+          "cost": 2, 
+          "name": "Spasm", 
+          "notes": "M35", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": None, 
+          "name": "Stop Power", 
+          "notes": "M179, 3 pts /1.5 yard radius", 
+          "maintain": 0, 
+          "time": 3, 
+          "skill": 18
+        }, 
+        {
+          "cost": 4, 
+          "name": "Strike Blind", 
+          "notes": "M38, vs HT", 
+          "maintain": 2, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 2, 
+          "name": "Stun", 
+          "notes": "M37, B420, vs. HT", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 20, 
+          "name": "Summon Demon", 
+          "notes": "M155", 
+          "maintain": 0, 
+          "time": 300, 
+          "skill": 16
+        }, 
+        {
+          "cost": 20, 
+          "name": "Summon Spirit", 
+          "notes": "M150", 
+          "maintain": 0, 
+          "time": 300, 
+          "skill": 16
+        }, 
+        {
+          "cost": 1, 
+          "name": "Tell Time", 
+          "notes": "M100", 
+          "maintain": 2, 
+          "time": 1, 
+          "skill": 12
+        }, 
+        {
+          "cost": None, 
+          "name": "Teleport", 
+          "notes": "M147, cost: 5 for 100 yards", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 3, 
+          "name": "Throw Spell", 
+          "notes": "M128", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        }, 
+        {
+          "cost": 4, 
+          "name": "Wizard Eye", 
+          "notes": "M104", 
+          "maintain": 2, 
+          "time": 2, 
+          "skill": 11
+        }, 
+        {
+          "cost": 8, 
+          "name": "Zombie", 
+          "notes": "M151", 
+          "maintain": None, 
+          "time": 60, 
+          "skill": 16
+        }
+    ]
+
     # Posture: B551; 'attack' is melee, 'target' is ranged
     posture = {
         'standing':  {'attack':  0, 'defense':  0, 'target':  0},
@@ -3343,142 +4148,7 @@ class GurpsRuleset(Ruleset):
 
 
     def get_creature_abilities(self):
-        return {
-            'skills': {
-                # 'name': {'ask': 'number' | 'string' }
-                #         {'value': value}
-                "Acting": {'ask': 'number'}, 
-                "Area Knowledge (Space Station)": {'ask': 'number'},
-                "Armoury (Heavy Weapons)": {'ask': 'number'}, 
-                "Armoury (Small Arms)": {'ask': 'number'}, 
-                "Axe/Mace": {'ask': 'number'}, 
-                "Bartender": {'ask': 'number'}, 
-                "Beam Weapons (Pistol)": {'ask': 'number'}, 
-                "Beam Weapons (Rifle)": {'ask': 'number'}, 
-                "Brawling": {'ask': 'number'}, 
-                "Camouflage": {'ask': 'number'}, 
-                "Climbing": {'ask': 'number'}, 
-                "Climbing": {'ask': 'number'}, 
-                "Computer Hacking": {'ask': 'number'}, 
-                "Computer Operation": {'ask': 'number'}, 
-                "Computer Programming": {'ask': 'number'}, 
-                "Connoisseur (Visual Arts)": {'ask': 'number'}, 
-                "Cryptography": {'ask': 'number'}, 
-                "Current Affairs (Teraforming)": {'ask': 'number'}, 
-                "Detect Lies": {'ask': 'number'}, 
-                "Diplomacy": {'ask': 'number'}, 
-                "Electronics Operation (Security)": {'ask': 'number'}, 
-                "Electronics Operation (Teraforming)": {'ask': 'number'}, 
-                "Electronics Repair (Security)": {'ask': 'number'}, 
-                "Electronics Repair (Teraforming)": {'ask': 'number'}, 
-                "Engineer (Electronics)": {'ask': 'number'}, 
-                "Engineer (Starships)": {'ask': 'number'}, 
-                "Escape": {'ask': 'number'}, 
-                "Expert Skill (Computer Security)": {'ask': 'number'}, 
-                "Fast-Draw (Ammo)": {'ask': 'number'}, 
-                "Fast-Draw (Knife)": {'ask': 'number'}, 
-                "Fast-Draw (Pistol)": {'ask': 'number'}, 
-                "Fast-Talk": {'ask': 'number'}, 
-                "Filch": {'ask': 'number'}, 
-                "First Aid": {'ask': 'number'}, 
-                "Forensics": {'ask': 'number'}, 
-                "Forgery": {'ask': 'number'}, 
-                "Gambling": {'ask': 'number'}, 
-                "Gesture": {'ask': 'number'}, 
-                "Gunner (Beams)": {'ask': 'number'}, 
-                "Gunner (Cannon)": {'ask': 'number'}, 
-                "Guns (Grenade Launcher)": {'ask': 'number'}, 
-                "Guns (Pistol)": {'ask': 'number'}, 
-                "Hazardous Materials (Chemical)": {'ask': 'number'}, 
-                "Holdout": {'ask': 'number'}, 
-                "Interrogation": {'ask': 'number'}, 
-                "Intimidation": {'ask': 'number'}, 
-                "Karate": {'ask': 'number'}, 
-                "Knife": {'ask': 'number'}, 
-                "Law (Conglomerate)": {'ask': 'number'},
-                "Law (Conglomerate, Trans territorial jurisdiction/the void)":
-                {'ask': 'number'}, 
-                "Lip Reading": {'ask': 'number'}, 
-                "Lockpicking": {'ask': 'number'}, 
-                "Mathematics (Applied)": {'ask': 'number'}, 
-                "Mechanic (Spacecraft)": {'ask': 'number'}, 
-                "Observation": {'ask': 'number'}, 
-                "Physician": {'ask': 'number'}, 
-                "Physics": {'ask': 'number'}, 
-                "Pickpocket": {'ask': 'number'}, 
-                "Piloting (Loader Mech)": {'ask': 'number'},
-                "Piloting (Low-Performance Spacecraft)": {'ask': 'number'}, 
-                "Running": {'ask': 'number'}, 
-                "Scrounging": {'ask': 'number'},
-                "Search": {'ask': 'number'}, 
-                "Stealth": {'ask': 'number'}, 
-                "Streetwise": {'ask': 'number'}, 
-                "Theology (Vodun)": {'ask': 'number'}, 
-                "Throwing": {'ask': 'number'}, 
-                "Thrown Weapon (Knife)": {'ask': 'number'}, 
-                "Traps": {'ask': 'number'}, 
-                "Urban Survival": {'ask': 'number'}, 
-            },
-            'advantages': {
-        # 'name': {'ask': 'number' | 'string' }
-        #         {'value': value}
-                "Acute Vision": {'ask': 'number'}, 
-                "Phobia": {'ask': 'string'},
-                "Alcohol Intolerance": {'value': -1}, 
-                "Appearance": {'ask': 'string'}, 
-                "Bad Sight": {'value': -25}, 
-                "Bad Temper": {'value': -10}, 
-                "Cannot Speak": {'value': -10}, 
-                "Channeling": {'value': 10}, 
-                "Code of Honor": {'ask': 'string'}, 
-                "Combat Reflexes": {'value': 15},
-                "Compulsive Behavior": {'ask': 'string'}, 
-                "Cultural Familiarity": {'ask': 'string'},
-                "Curious": {'value': -5}, 
-                "Deep Sleeper": {'value': 1}, 
-                "Delusions": {'ask': 'string'},
-                "Distractible": {'value': 1}, 
-                "Dreamer": {'value': -1},
-                "Dyslexia": {'value': -10}, 
-                "Eidetic Memory": {'ask': 'number'}, 
-                "Empathy": {'ask': 'number'},
-                "Enemy": {'ask': 'string'},
-                "Extra Hit Points": {'ask': 'number'}, 
-                "Fit": {'value': 5}, 
-                "Flashbacks": {'ask': 'string'}, 
-                "G-Experience": {'ask': 'number'},
-                "Guilt Complex": {'ask': 'string'},
-                "Habit": {'ask': 'string'}, 
-                "High Pain Threshold": {'value': 10}, 
-                "Honest Face": {'value': 1}, 
-                "Humble": {'value', -1}, 
-                "Impulsiveness": {'ask': 'number'}, 
-                "Light Sleeper": {'value': -5}, 
-                "Like (Quirk) ": {'ask': 'string'},
-                "Lwa": {'ask': 'string'},
-                "Night Vision": {'ask': 'number'},
-                "No Sense of Humor": {'value': -10}, 
-                "Nosy": {'value': -1}, 
-                "Personality Change": {'ask': 'string'}, 
-                "Pyromania": {'value': -10}, 
-                "Rapid Healing": {'value': 5}, 
-                "Responsive": {'value': -1}, 
-                "Secret": {'ask': 'string'},
-                "Short Attention Span": {'value': -10}, 
-                "Squeamish": {'value': -10}, 
-                "Versatile": {'value': 5}, 
-                "Vodou Practitioner (level 0)": {'value': 5},
-                "Vodou Practitioner (Mambo/Hougan 1)": {'value': 15},
-                "Vodou Practitioner (Mambo/Hougan 2)": {'value': 35},
-                "Vodou Practitioner (Mambo/Hougan 3)": {'value': 65},
-                "Vodou Practitioner (Bokor 1)": {'value': 20},
-                "Vodou Practitioner (Bokor 2)": {'value': 45},
-                "Vodou Practitioner (Bokor 3)": {'value': 75},
-                "Vow": {'ask': 'string'},
-                "Wealth": {'ask': 'string'},
-                "Weirdness Magnet": {'value': -15}, 
-            }
-        }
+        return GurpsRuleset.abilities
 
     #   { 
     #       'Skills': { 'Axe/Mace': 8, 'Climbing': 8, },
@@ -6754,11 +7424,10 @@ class MainHandler(ScreenHandler):
         # Pick from the spell list
         keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
+        spell_menu = [(spell['name'], spell)
+                                for spell in sorted(self.__ruleset.spells,
+                                                    key=lambda x:x['name'])]
         while keep_asking:
-            # Rebuild the spell menu since we're adding to it each iteration
-            spell_menu = [(spell['name'], spell)
-                        for spell in sorted(self.__world.details['spells'],
-                                            key=lambda x:x['name'])]
             new_spell = self._window_manager.menu('Spell to Add', spell_menu)
             if new_spell is None:
                 return True
