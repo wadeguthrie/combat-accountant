@@ -790,7 +790,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 # 5.5, 12, rand=4
                 'Moe' : copy.deepcopy(self.__one_more_guy),
             },
-            'monsters': {
+            'fights': {
                 'horsemen' : {
                     # 5.75, 12, rand=4
                     'Famine' : copy.deepcopy(self.__thief_fighter),
@@ -979,7 +979,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 # 5.75, 12, rand=3
                 'Ted' : copy.deepcopy(self.__tank_fighter),
             },
-            'monsters': {
+            'fights': {
                 'marx' : {
                     # 5.5, 12, rand=4
                     'Groucho' : copy.deepcopy(self.__one_more_guy),
@@ -1055,7 +1055,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 # 5.5, 12, rand=4
                 'Moe' : copy.deepcopy(self.__one_more_guy),
             },
-            'monsters': {
+            'fights': {
                 'horsemen' : {
                     # 5.75, 12, rand=4
                     'Famine' : copy.deepcopy(self.__thief_fighter),
@@ -1865,7 +1865,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                     {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12}, 
             }, 
           }, # NPCs
-          "monsters": {
+          "fights": {
             "Dima's Crew": {
               "Bokor Fighter": self.__bokor_fighter, 
               "Tank Fighter": self.__tank_fighter , 
@@ -1873,7 +1873,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "1st Hunting Party": {
               "5: Amelia": self.__thief_fighter, 
             }
-          } # monsters
+          } # fights
         } # End of the world
 
         self.__window_manager = MockWindowManager()
@@ -1893,7 +1893,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         "None", # used for bug reporting
                                         "filename") # used for display
 
-        assert "Dima's Crew" in world_obj.read_data['monsters']
+        assert "Dima's Crew" in world_obj.read_data['fights']
         assert not self.__is_in_dead_monsters(world_obj, "Dima's Crew")
         assert world_obj.read_data['current-fight']['saved'] == False
 
@@ -1902,7 +1902,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.handle_user_input_until_done()
                                      
-        assert "Dima's Crew" not in world_obj.read_data['monsters']
+        assert "Dima's Crew" not in world_obj.read_data['fights']
         assert self.__is_in_dead_monsters(world_obj, "Dima's Crew")
         assert world_obj.read_data['current-fight']['saved'] == False
 
@@ -1923,7 +1923,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         "None", # used for bug reporting
                                         "filename") # used for display
 
-        assert "Dima's Crew" in world_obj.read_data['monsters']
+        assert "Dima's Crew" in world_obj.read_data['fights']
         assert not self.__is_in_dead_monsters(world_obj, "Dima's Crew")
         assert world_obj.read_data['current-fight']['saved'] == False
 
@@ -1936,7 +1936,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.handle_user_input_until_done()
                                      
-        assert "Dima's Crew" in world_obj.read_data['monsters']
+        assert "Dima's Crew" in world_obj.read_data['fights']
         assert not self.__is_in_dead_monsters(world_obj, "Dima's Crew")
         assert world_obj.read_data['current-fight']['saved'] == True
         assert world_obj.read_data['current-fight']['monsters'] == "Dima's Crew"
@@ -1956,7 +1956,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         "None", # used for bug reporting
                                         "filename") # used for display
 
-        assert "Dima's Crew" in world_obj.read_data['monsters']
+        assert "Dima's Crew" in world_obj.read_data['fights']
         assert not self.__is_in_dead_monsters(world_obj, "Dima's Crew")
         assert world_obj.read_data['current-fight']['saved'] == False
 
@@ -1967,7 +1967,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         fight_handler.handle_user_input_until_done()
                                      
-        assert "Dima's Crew" in world_obj.read_data['monsters']
+        assert "Dima's Crew" in world_obj.read_data['fights']
         assert not self.__is_in_dead_monsters(world_obj, "Dima's Crew")
         assert world_obj.read_data['current-fight']['saved'] == False
 
