@@ -1483,8 +1483,7 @@ class GmWindowManager(object):
         index = 0 if starting_index >= len(strings_results) else starting_index
         for i, entry in enumerate(strings_results):
             mode = curses.A_STANDOUT if i == index else curses.A_NORMAL
-            data_for_scrolling.append([{'text': entry[0],
-                                        'mode': mode}])
+            data_for_scrolling.append([{'text': entry[0], 'mode': mode}])
         border_win, menu_win = self.__centered_boxed_window(
                                         height,
                                         width,
@@ -1524,17 +1523,18 @@ class GmWindowManager(object):
                 return None
             else:
                 # Look for a match and return the selection
-                # TODO: this won't work right on page 2, etc., of the menu
-                #   because it starts looking at the beginning of the menu
-                #   rather than the beginning of what's visible
+                showable = menu_win.get_showable_menu_lines()
                 for index, entry in enumerate(strings_results):
                     # (string, return value)
                     # entry[MENU_STRING][0] is the 1st char of the string
-                    if user_input == ord(entry[MENU_STRING][0]):
-                        del border_win
-                        del menu_win
-                        self.hard_refresh_all()
-                        return self.__handle_menu_result(
+                    if index > showable['bottom_line']:
+                        break
+                    if index >= showable['top_line']:
+                        if user_input == ord(entry[MENU_STRING][0]):
+                            del border_win
+                            del menu_win
+                            self.hard_refresh_all()
+                            return self.__handle_menu_result(
                                         strings_results[index][MENU_RESULT])
 
             if new_index != index:
