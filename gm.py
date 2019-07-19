@@ -7433,8 +7433,11 @@ class EquipmentManager(object):
                             for item in self.__world.details['stuff']]
         item = self.__window_manager.menu('Item to Add', item_menu)
         if item is not None:
-            # TODO: don't put 'the store' if there's already a list
-            fighter.add_equipment(copy.deepcopy(item), 'the store')
+            source = None
+            if item['owners'] is not None and len(item['owners']) == 0:
+                source = 'the store'
+
+            fighter.add_equipment(copy.deepcopy(item), source)
 
 
     @staticmethod
