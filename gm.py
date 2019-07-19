@@ -7142,8 +7142,7 @@ class MainHandler(ScreenHandler):
             for name in self.__world.details['monsters'][fight]:
                 creature = self.__world.get_creature_details(name, fight)
                 result = self.__ruleset.search_one_creature(name,
-                                                            'monsters->%s'
-                                                                    % fight,
+                                                            '%s' % fight,
                                                             creature,
                                                             look_for_re)
                 if result is not None and len(result) > 0:
@@ -7172,7 +7171,6 @@ class MainHandler(ScreenHandler):
                                     character['group'] == match['group']):
                         index = i
 
-                # TODO(maybe): if not found, pick from monster list?
                 result_menu.append((match_string, index))
 
             menu_title = 'Found "%s"' % look_for_string
