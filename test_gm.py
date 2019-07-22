@@ -419,11 +419,204 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "check_for_death": False, 
             "opponent": None
         }
+
+
+        self.base_world_dict = {
+          "Templates": {
+            "Arena Combat": {
+              "VodouCleric": {
+                "permanent": {
+                  "fp": { "type": "value", "value": 12 }, 
+                  "iq": { "type": "value", "value": 13 }, 
+                  "wi": { "type": "value", "value": 13 }, 
+                  "hp": { "type": "value", "value": 10 }, 
+                  "ht": { "type": "value", "value": 11 }, 
+                  "st": { "type": "value", "value": 10 }, 
+                  "dx": { "type": "value", "value": 11 }, 
+                  "basic-speed": { "type": "value", "value": 5.5 }
+                }
+              }, 
+            }
+          },  # Templates
+          "PCs": {
+            "Vodou Priest": self.__vodou_priest_fighter, 
+            "One More Guy": self.__one_more_guy, 
+          }, # PCs
+          "dead-monsters": [
+            {"name": "Arena Attack Monsters",
+             "fight": {
+              "5-Tank-B": {
+                "state": "alive", 
+                "current":
+                    {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12},
+                "permanent":
+                    {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12}, 
+              }, # 5-Tank-B
+              "date": None
+              }
+            } # Arena Attack Monsters
+          ], # dead-monsters
+          "current-fight": {
+            "index": 0, 
+            "monsters": "Anybody", 
+            "fighters": [
+              { "group": "Anybody", "name": "Bokor Fighter" }, 
+              { "group": "PCs", "name": "Vodou Priest" }, 
+              { "group": "PCs", "name": "One More Guy" }, 
+              { "group": "Anybody", "name": "Tank Fighter" }, 
+            ], 
+            "saved": False, 
+            "round": 0, 
+            "history": [
+              "--- Round 0 ---"
+            ]
+          },  # current-fight
+          "NPCs": {
+            "Bokor Requiem": {
+                "state": "alive", 
+                "current":
+                    {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12},
+                "permanent":
+                    {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12}, 
+            }, 
+            "One More Guy": self.__one_more_guy
+          }, # NPCs
+          "fights": {
+            "Dima's Crew": {
+              "Bokor Fighter": self.__bokor_fighter, 
+              "Tank Fighter": self.__tank_fighter , 
+              "One More Guy": { "redirect": "NPCs" }
+            }, 
+            "1st Hunting Party": {
+              "5: Amelia": self.__thief_fighter, 
+            }
+          } # fights
+        } # End of the world
+
+        self.init_world_dict = {
+            # Don't need templates, dead-monsters, equipment, names
+            'PCs': {
+                # 5.25, 10, rand=1
+                'Manny' : copy.deepcopy(self.__bokor_fighter),
+
+                # 5.75, 12, rand=2
+                'Jack' : copy.deepcopy(self.__tank_fighter),
+
+                # 5.5, 12, rand=4
+                'Moe' : copy.deepcopy(self.__one_more_guy),
+            },
+            'NPCs': {
+            },
+            'fights': {
+                'horsemen' : {
+                    # 5.75, 12, rand=4
+                    'Famine' : copy.deepcopy(self.__thief_fighter),
+
+                    # 5.5, 11, rand=4
+                    'Pestilence' : copy.deepcopy(self.__vodou_priest_fighter),
+                }
+            },
+            'current-fight': {
+                # Needed
+                'saved': False,
+                'history': [], # Needed (maybe)
+
+                'index': 1,
+                'fighters': [],
+                'round': 2,
+                'monsters': 'horsemen',
+            },
+        } # End of world
+
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
     
     def tearDown(self):
         pass
+
+
+    def __are_equal(self, lhs, rhs):
+        if isinstance(lhs, dict):
+            if not isinstance(rhs, dict):
+                print '** lhs is a dict but rhs is not'
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
+                return False
+            for key in rhs.iterkeys():
+                if key not in lhs:
+                    print '** KEY "%s" not in lhs' % key
+                    print '\nlhs'
+                    PP.pprint(lhs)
+                    print '\nrhs'
+                    PP.pprint(rhs)
+                    return False
+            are_equal = True
+            for key in lhs.iterkeys():
+                if key not in rhs:
+                    print '** KEY "%s" not in rhs' % key
+                    print '\nlhs'
+                    PP.pprint(lhs)
+                    print '\nrhs'
+                    PP.pprint(rhs)
+                    are_equal = False
+                elif not self.__are_equal(lhs[key], rhs[key]):
+                    print 'lhs[%r] != rhs[%r]' % (key, key)
+                    print '\nlhs'
+                    PP.pprint(lhs)
+                    print '\nrhs'
+                    PP.pprint(rhs)
+                    are_equal = False
+            return are_equal
+                
+        elif isinstance(lhs, list):
+            if not isinstance(rhs, list):
+                print '** lhs is a list but rhs is not'
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
+                return False
+            if len(lhs) != len(rhs):
+                print '** length lhs=%d != len rhs=%d' % (len(lhs), len(rhs))
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
+                return False
+            are_equal = True
+            for i in range(len(lhs)):
+                if not self.__are_equal(lhs[i], rhs[i]):
+                    print '** lhs[%d] != rhs[%d]' % (i, i)
+                    print '\nlhs'
+                    PP.pprint(lhs)
+                    print '\nrhs'
+                    PP.pprint(rhs)
+                    are_equal = False
+            return are_equal
+
+        else:
+            if lhs != rhs:
+                print '** lhs=%r != rhs=%r' % (lhs, rhs)
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
+                return False
+            else:
+                return True
+
+
+    def __is_in_dead_monsters(self, world_obj, fight_name):
+        for fight in world_obj.read_data['dead-monsters']:
+            if fight_name == fight['name']:
+                return True
+        return False
+
+    #
+    #### Actual Tests ####
+    #
 
     def test_get_dodge_skill(self):
         # Deepcopy so that we don't taint the original
@@ -778,39 +971,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
     def test_initiative_order(self):
         random_debug_filename = 'foo'
 
-        world_obj = BaseWorld({
-            # Don't need templates, dead-monsters, equipment, names
-            'PCs': {
-                # 5.25, 10, rand=1
-                'Manny' : copy.deepcopy(self.__bokor_fighter),
-
-                # 5.75, 12, rand=2
-                'Jack' : copy.deepcopy(self.__tank_fighter),
-
-                # 5.5, 12, rand=4
-                'Moe' : copy.deepcopy(self.__one_more_guy),
-            },
-            'fights': {
-                'horsemen' : {
-                    # 5.75, 12, rand=4
-                    'Famine' : copy.deepcopy(self.__thief_fighter),
-
-                    # 5.5, 11, rand=4
-                    'Pestilence' : copy.deepcopy(self.__vodou_priest_fighter),
-                }
-            },
-            'current-fight': {
-                # Needed
-                'saved': False,
-                'history': [], # Needed (maybe)
-
-                'index': 1,
-                'fighters': [],
-                'round': 2,
-                'monsters': 'horsemen',
-            },
-        })
-
+        world_obj = BaseWorld(self.init_world_dict)
         world = gm.World(world_obj, self.__window_manager)
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
@@ -1799,82 +1960,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # assert 0 timers -- yup, 0.9 timer is now gone
         assert len(fighter.details['timers']) == 0
 
-    def __is_in_dead_monsters(self, world_obj, fight_name):
-        for fight in world_obj.read_data['dead-monsters']:
-            if fight_name == fight['name']:
-                return True
-        return False
 
     def test_save(self):
-        base_world_dict = {
-          "Templates": {
-            "Arena Combat": {
-              "VodouCleric": {
-                "permanent": {
-                  "fp": { "type": "value", "value": 12 }, 
-                  "iq": { "type": "value", "value": 13 }, 
-                  "wi": { "type": "value", "value": 13 }, 
-                  "hp": { "type": "value", "value": 10 }, 
-                  "ht": { "type": "value", "value": 11 }, 
-                  "st": { "type": "value", "value": 10 }, 
-                  "dx": { "type": "value", "value": 11 }, 
-                  "basic-speed": { "type": "value", "value": 5.5 }
-                }
-              }, 
-            }
-          },  # Templates
-          "PCs": {
-            "Vodou Priest": self.__vodou_priest_fighter, 
-            "One More Guy": self.__one_more_guy, 
-          }, # PCs
-          "dead-monsters": [
-            {"name": "Arena Attack Monsters",
-             "fight": {
-              "5-Tank-B": {
-                "state": "alive", 
-                "current":
-                    {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12},
-                "permanent":
-                    {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12}, 
-              }, # 5-Tank-B
-              "date": None
-              }
-            } # Arena Attack Monsters
-          ], # dead-monsters
-          "current-fight": {
-            "index": 0, 
-            "monsters": "Anybody", 
-            "fighters": [
-              { "group": "Anybody", "name": "Bokor Fighter" }, 
-              { "group": "PCs", "name": "Vodou Priest" }, 
-              { "group": "PCs", "name": "One More Guy" }, 
-              { "group": "Anybody", "name": "Tank Fighter" }, 
-            ], 
-            "saved": False, 
-            "round": 0, 
-            "history": [
-              "--- Round 0 ---"
-            ]
-          },  # current-fight
-          "NPCs": {
-            "Bokor Requiem": {
-                "state": "alive", 
-                "current":
-                    {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12},
-                "permanent":
-                    {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12}, 
-            }, 
-          }, # NPCs
-          "fights": {
-            "Dima's Crew": {
-              "Bokor Fighter": self.__bokor_fighter, 
-              "Tank Fighter": self.__tank_fighter , 
-            }, 
-            "1st Hunting Party": {
-              "5: Amelia": self.__thief_fighter, 
-            }
-          } # fights
-        } # End of the world
+        base_world_dict = copy.deepcopy(self.base_world_dict)
 
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
@@ -2042,77 +2130,66 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
     #                print random.randint(1, 6),
     #            print ''
 
-    def __are_equal(self, lhs, rhs):
-        if isinstance(lhs, dict):
-            if not isinstance(rhs, dict):
-                print '** lhs is a dict but rhs is not'
-                print '\nlhs'
-                PP.pprint(lhs)
-                print '\nrhs'
-                PP.pprint(rhs)
-                return False
-            for key in rhs.iterkeys():
-                if key not in lhs:
-                    print '** KEY "%s" not in lhs' % key
-                    print '\nlhs'
-                    PP.pprint(lhs)
-                    print '\nrhs'
-                    PP.pprint(rhs)
-                    return False
-            are_equal = True
-            for key in lhs.iterkeys():
-                if key not in rhs:
-                    print '** KEY "%s" not in rhs' % key
-                    print '\nlhs'
-                    PP.pprint(lhs)
-                    print '\nrhs'
-                    PP.pprint(rhs)
-                    are_equal = False
-                elif not self.__are_equal(lhs[key], rhs[key]):
-                    print 'lhs[%r] != rhs[%r]' % (key, key)
-                    print '\nlhs'
-                    PP.pprint(lhs)
-                    print '\nrhs'
-                    PP.pprint(rhs)
-                    are_equal = False
-            return are_equal
-                
-        elif isinstance(lhs, list):
-            if not isinstance(rhs, list):
-                print '** lhs is a list but rhs is not'
-                print '\nlhs'
-                PP.pprint(lhs)
-                print '\nrhs'
-                PP.pprint(rhs)
-                return False
-            if len(lhs) != len(rhs):
-                print '** length lhs=%d != len rhs=%d' % (len(lhs), len(rhs))
-                print '\nlhs'
-                PP.pprint(lhs)
-                print '\nrhs'
-                PP.pprint(rhs)
-                return False
-            are_equal = True
-            for i in range(len(lhs)):
-                if not self.__are_equal(lhs[i], rhs[i]):
-                    print '** lhs[%d] != rhs[%d]' % (i, i)
-                    print '\nlhs'
-                    PP.pprint(lhs)
-                    print '\nrhs'
-                    PP.pprint(rhs)
-                    are_equal = False
-            return are_equal
+    def test_redirects(self):
+        base_world_dict = copy.deepcopy(self.base_world_dict)
+        world_obj = BaseWorld(base_world_dict)
+        world = gm.World(world_obj, self.__window_manager)
 
-        else:
-            if lhs != rhs:
-                print '** lhs=%r != rhs=%r' % (lhs, rhs)
-                print '\nlhs'
-                PP.pprint(lhs)
-                print '\nrhs'
-                PP.pprint(rhs)
-                return False
-            else:
-                return True
+        # Verify that redirect that's in the World object works the way I
+        # expect it to.
+
+        source_char = world.get_creature_details('One More Guy', 'NPCs')
+        dest_char = world.get_creature_details('One More Guy', 'Dima\'s Crew')
+        assert self.__are_equal(source_char, dest_char)
+
+    def test_redirects_2(self):
+        init_world_dict = copy.deepcopy(self.init_world_dict)
+        world_obj = BaseWorld(init_world_dict)
+        world = gm.World(world_obj, self.__window_manager)
+
+        # random.randint(1, 6) should generate: 1 2 4 4 4 4 5 6 4 4
+        random.seed(9001) # 9001 is an arbitrary number
+
+        #expected = [{'name': 'Famine',     'group': 'horsemen'}, # 5.75, 12, 4
+        monster_famine_index = 0
+        #            {'name': 'Jack',       'group': 'PCs'},      # 5.75, 12, 2
+        pc_jack_index = 1
+        #            {'name': 'Moe',        'group': 'PCs'},      # 5.5,  12, 4
+        pc_moe_index = 2
+        #            {'name': 'Pestilence', 'group': 'horsemen'}, # 5.5,  11, 4
+        monster_pestilence_index = 3
+        #            {'name': 'Manny',      'group': 'PCs'}]      # 5.25, 10, 1
+        pc_manny_index = 4
+
+        fight_handler = gm.FightHandler(self.__window_manager,
+                                        world,
+                                        "horsemen",
+                                        self.__ruleset,
+                                        "None", # used for bug reporting
+                                        "filename") # used for display
+
+        
+
+        # FightHandler.__promote_to_NPC - check good change
+        fight_handler.set_viewing_index(monster_pestilence_index)
+        fight_handler.promote_to_NPC()
+        # There should now be an NPC named pestilence
+        source_char = world.get_creature_details('Pestilence','horsemen')
+        dest_char = world.get_creature_details('Pestilence','NPCs')
+        assert self.__are_equal(source_char, dest_char)
+
+        # TODO: FightHandler.__promote_to_NPC - check already an NPC
+        #fight_handler.set_viewing_index(new_index):
+        #fight_handler.promote_to_NPC()
+
+        # TODO: need to instrument 'error' to ckeck
+        # self._window_manager.error(['%s is already an NPC' % new_NPC.name])
+
+        #assert self.__are_equal(original_item, new_guy)
+
+        # TODO: FightHandler.__NPC_joins_monsters
+        # TODO: FightHandler.__NPC_joins_PCs
+
 
 
 if __name__ == '__main__':

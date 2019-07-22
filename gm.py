@@ -6048,7 +6048,7 @@ class FightHandler(ScreenHandler):
             ord('N'): {'name': 'full Notes',  'func': self.__full_notes},
             #ord('o'): {'name': 'opponent',    'func': self.pick_opponent},
             ord('P'): {'name': 'promote to NPC',
-                                              'func': self.__promote_to_NPC},
+                                              'func': self.promote_to_NPC},
             ord('q'): {'name': 'quit',        'func': self.__quit},
             ord('s'): {'name': 'save',        'func': self.__save},
             ord('t'): {'name': 'timer',       'func': self.__timer}
@@ -6885,7 +6885,12 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
 
-    def __promote_to_NPC(self):
+    # For testing, no actual code should call this
+    def set_viewing_index(self, new_index):
+        self.__viewing_index = new_index
+
+    # Public to enable testing
+    def promote_to_NPC(self):
         if self.__viewing_index is not None:
             new_NPC = self.__fighters[self.__viewing_index]
         else:
