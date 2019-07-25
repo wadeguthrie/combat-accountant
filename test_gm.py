@@ -93,12 +93,48 @@ class MockFightGmWindow(object):
 
 
 class MockWindowManager(object):
+    (FOUND_NO_ERROR,
+     FOUND_EXPECTED_ERROR,
+     FOUND_WRONG_ERROR, # Error state won't advance from here
+     FOUND_EXTRA_ERROR  # Error state won't advance from here
+    ) = range(4)
+
     def __init__(self):
         self.__menu_responses = {} # {menu_title: [selection, selection...]
         self.__char_responses = [] # array of characters
+        self.__expected_error = [] # array of single-line strings
+        self.error_state = MockWindowManager.FOUND_NO_ERROR
+
+    def expect_error(self, string_array):
+        '''
+        Use this like so:
+            mock_window_manager.expect_error(xxx)
+            <do your test>
+            assert(mock_window_manager.error_state == 
+                        MockWindowManager.FOUND_EXPECTED_ERROR)
+        '''
+        self.__expected_error = string_array
 
     def error(self, string_array):
-        pass
+        if len(self.__expected_error) > 0:
+            if string_array == self.__expected_error:
+                self.error_state = MockWindowManager.FOUND_EXPECTED_ERROR
+            else:
+                self.error_state == MockWindowManager.FOUND_WRONG_ERROR
+                print '\n** Found wrong error:'
+                PP.pprint(string_array)
+
+        elif self.error_state == MockWindowManager.FOUND_NO_ERROR:
+            self.error_state == MockWindowManager.FOUND_EXTRA_ERROR
+
+        elif self.error_state == MockWindowManager.FOUND_EXPECTED_ERROR:
+            self.error_state == MockWindowManager.FOUND_EXTRA_ERROR
+            print '\n** Found extra error:'
+            PP.pprint(string_array)
+
+        else:
+            print '\n** Found another error:'
+            PP.pprint(string_array)
 
     def display_window(self,
                        title,
@@ -2168,9 +2204,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         "None", # used for bug reporting
                                         "filename") # used for display
 
-        
+        ### FightHandler.__promote_to_NPC - check good change ###
 
-        # FightHandler.__promote_to_NPC - check good change
         fight_handler.set_viewing_index(monster_pestilence_index)
         fight_handler.promote_to_NPC()
         # There should now be an NPC named pestilence
@@ -2178,17 +2213,25 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         dest_char = world.get_creature_details('Pestilence','NPCs')
         assert self.__are_equal(source_char, dest_char)
 
-        # TODO: FightHandler.__promote_to_NPC - check already an NPC
-        #fight_handler.set_viewing_index(new_index):
-        #fight_handler.promote_to_NPC()
+        ### FightHandler.__promote_to_NPC - check already an NPC ###
 
-        # TODO: need to instrument 'error' to ckeck
+        self.__window_manager.expect_error(
+                                ['There\'s already an NPC named Pestilence'])
+        fight_handler.set_viewing_index(monster_pestilence_index)
+        fight_handler.promote_to_NPC()
+
+        assert(self.__window_manager.error_state == 
+                                    MockWindowManager.FOUND_EXPECTED_ERROR)
+
+        ### TODO: need to instrument 'error' to ckeck ###
+
         # self._window_manager.error(['%s is already an NPC' % new_NPC.name])
 
         #assert self.__are_equal(original_item, new_guy)
 
-        # TODO: FightHandler.__NPC_joins_monsters
-        # TODO: FightHandler.__NPC_joins_PCs
+        ### TODO: FightHandler.__NPC_joins_monsters ###
+
+        ### TODO: FightHandler.__NPC_joins_PCs ###
 
 
 
