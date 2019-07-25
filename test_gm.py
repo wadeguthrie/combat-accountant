@@ -2291,28 +2291,32 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                       "None", # used for bug reporting
                                       "filename") # used for display
 
-        ### TODO: MainHandler.NPC_joins_monsters - works ###
-
-        main_handler.next_char(groucho_index)
-        fighter = main_handler.get_fighter_from_char_index()
-        assert fighter.name == 'Groucho'
-
-        # TODO: setup menu return values
-        #main_handler.NPC_joins_monsters(None)
-
         ### TODO: MainHandler.NPC_joins_monsters - NPC already in fight ###
             #self._window_manager.error(['"%s" already in fight "%s"' %
 
         ### TODO: MainHandler.NPC_joins_monsters - not an NPC ###
             #self._window_manager.error(['"%s" not an NPC' % npc_name])
 
-        ### TODO: MainHandler.NPC_joins_PCs -- works ###
+        ### MainHandler.NPC_joins_monsters - works ###
+
+        main_handler.next_char(groucho_index)
+        fighter = main_handler.get_fighter_from_char_index()
+        # assert fighter.name == 'Groucho'
+
+        self.__window_manager.set_menu_response('Join Which Fight', 'horsemen')
+        main_handler.NPC_joins_monsters(None)
+
+        source_char = world.get_creature_details('Groucho','NPCs')
+        dest_char = world.get_creature_details('Groucho','horsemen')
+        assert self.__are_equal(source_char, dest_char)
 
         ### TODO: MainHandler.NPC_joins_PCs -- not an NPC ###
             #self._window_manager.error(['"%s" not an NPC' % npc_name])
 
         ### TODO: MainHandler.NPC_joins_PCs -- already PC w/that name ###
             #self._window_manager.error(['"%s" already a PC' % npc_name])
+
+        ### TODO: MainHandler.NPC_joins_PCs -- works ###
 
 
 
