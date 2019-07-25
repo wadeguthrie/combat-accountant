@@ -579,7 +579,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             'NPCs': {
                 # Same body for these as the PCs and horseman fights
                 'Groucho': copy.deepcopy(self.__tank_fighter),
-                'Harpo': copy.deepcopy(self.__thief_fighter),
+                'Zeppo': copy.deepcopy(self.__thief_fighter),
                 'Chico': copy.deepcopy(self.__bokor_fighter),
             },
             'fights': {
@@ -2276,6 +2276,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # {'name': 'Moe',        'group': 'PCs'},      # 5.5,  12, 4
         pc_moe_index = 2
+        last_pc_index = 2
 
         # Chico
         chico_index = 3
@@ -2283,8 +2284,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Grouch
         groucho_index = 4
 
-        # Harpo
-        harpo_index = 5
+        # Zeppo
+        zeppo_index = 5
 
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_obj = BaseWorld(init_world_dict)
@@ -2343,39 +2344,52 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
         ### MainHandler.NPC_joins_PCs -- not an NPC ###
-        # TODO: This is commented out because all of the creatures are
-        # either PCs or NPCs.  May want to switch to monsters on the 
-        # "display" for this test.
 
-        #self.__window_manager.reset_error_state()
+        main_handler.next_char(pc_manny_index)
+        fighter = main_handler.get_fighter_from_char_index()
+        assert fighter.name == 'Manny'
 
-        #main_handler.next_char(pc_manny_index)
-        #fighter = main_handler.get_fighter_from_char_index()
-        #self.__window_manager.expect_error(['"Manny" not an NPC'])
+        self.__window_manager.expect_error(['"Manny" not an NPC'])
 
-        #main_handler.NPC_joins_monsters(None)
+        main_handler.NPC_joins_monsters(None)
 
-        #assert(self.__window_manager.error_state == 
-        #                            MockWindowManager.FOUND_EXPECTED_ERROR)
+        assert(self.__window_manager.error_state == 
+                                    MockWindowManager.FOUND_EXPECTED_ERROR)
 
 
         ### MainHandler.NPC_joins_PCs -- works ###
 
         self.__window_manager.reset_error_state()
 
-        main_handler.next_char(chico_index)
+        # Doing zeppo so he gets put at the end of the alphabetized PC list
+        # to make the next test work.
+        main_handler.next_char(zeppo_index)
         fighter = main_handler.get_fighter_from_char_index()
-        assert fighter.name == 'Chico'
+        assert fighter.name == 'Zeppo'
 
         main_handler.NPC_joins_PCs(None)
 
-        source_char = world.get_creature_details('Chico','NPCs')
-        dest_char = world.get_creature_details('Chico','PCs')
+        source_char = world.get_creature_details('Zeppo','NPCs')
+        dest_char = world.get_creature_details('Zeppo','PCs')
         assert self.__are_equal(source_char, dest_char)
 
 
-        ### TODO: MainHandler.NPC_joins_PCs -- already PC w/that name ###
-            #self._window_manager.error(['"%s" already a PC' % npc_name])
+        ### MainHandler.NPC_joins_PCs -- already a PC ###
+        # There isn't a case where something's already a PC where it doesn't
+        # fire the 'Not an NPC' error.
+
+        # Zeppo should have been put at the end of the alphabetized PC list by
+        # the last test.  Now we know the index of an NPC that is also a PC.
+        #main_handler.next_char(last_pc_index + 1)
+        #fighter = main_handler.get_fighter_from_char_index()
+        #assert fighter.name == 'Zeppo'
+
+        #self.__window_manager.expect_error(['"Zeppo" already a PC'])
+
+        #main_handler.NPC_joins_monsters(None)
+
+        #assert(self.__window_manager.error_state == 
+        #                            MockWindowManager.FOUND_EXPECTED_ERROR)
 
 
 
