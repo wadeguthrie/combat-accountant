@@ -2295,6 +2295,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                       "None", # used for bug reporting
                                       "filename") # used for display
 
+
         ### MainHandler.NPC_joins_monsters - not an NPC ###
 
         self.__window_manager.reset_error_state()
@@ -2308,13 +2309,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert(self.__window_manager.error_state == 
                                     MockWindowManager.FOUND_EXPECTED_ERROR)
 
+
         ### MainHandler.NPC_joins_monsters - works ###
 
         self.__window_manager.reset_error_state()
 
         main_handler.next_char(groucho_index)
         fighter = main_handler.get_fighter_from_char_index()
-        # assert fighter.name == 'Groucho'
+        assert fighter.name == 'Groucho'
 
         self.__window_manager.set_menu_response('Join Which Fight', 'horsemen')
         main_handler.NPC_joins_monsters(None)
@@ -2323,11 +2325,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         dest_char = world.get_creature_details('Groucho','horsemen')
         assert self.__are_equal(source_char, dest_char)
 
+
         ### MainHandler.NPC_joins_monsters - NPC already in fight ###
 
         main_handler.next_char(groucho_index)
         fighter = main_handler.get_fighter_from_char_index()
-        # assert fighter.name == 'Groucho'
+        assert fighter.name == 'Groucho'
 
         self.__window_manager.set_menu_response('Join Which Fight', 'horsemen')
         self.__window_manager.expect_error(
@@ -2338,13 +2341,41 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert(self.__window_manager.error_state == 
                                     MockWindowManager.FOUND_EXPECTED_ERROR)
 
-        ### TODO: MainHandler.NPC_joins_PCs -- not an NPC ###
-            #self._window_manager.error(['"%s" not an NPC' % npc_name])
+
+        ### MainHandler.NPC_joins_PCs -- not an NPC ###
+        # TODO: This is commented out because all of the creatures are
+        # either PCs or NPCs.  May want to switch to monsters on the 
+        # "display" for this test.
+
+        #self.__window_manager.reset_error_state()
+
+        #main_handler.next_char(pc_manny_index)
+        #fighter = main_handler.get_fighter_from_char_index()
+        #self.__window_manager.expect_error(['"Manny" not an NPC'])
+
+        #main_handler.NPC_joins_monsters(None)
+
+        #assert(self.__window_manager.error_state == 
+        #                            MockWindowManager.FOUND_EXPECTED_ERROR)
+
+
+        ### MainHandler.NPC_joins_PCs -- works ###
+
+        self.__window_manager.reset_error_state()
+
+        main_handler.next_char(chico_index)
+        fighter = main_handler.get_fighter_from_char_index()
+        assert fighter.name == 'Chico'
+
+        main_handler.NPC_joins_PCs(None)
+
+        source_char = world.get_creature_details('Chico','NPCs')
+        dest_char = world.get_creature_details('Chico','PCs')
+        assert self.__are_equal(source_char, dest_char)
+
 
         ### TODO: MainHandler.NPC_joins_PCs -- already PC w/that name ###
             #self._window_manager.error(['"%s" already a PC' % npc_name])
-
-        ### TODO: MainHandler.NPC_joins_PCs -- works ###
 
 
 
