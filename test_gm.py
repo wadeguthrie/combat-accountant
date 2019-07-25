@@ -2295,8 +2295,18 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                       "None", # used for bug reporting
                                       "filename") # used for display
 
-        ### TODO: MainHandler.NPC_joins_monsters - not an NPC ###
-            #self._window_manager.error(['"%s" not an NPC' % npc_name])
+        ### MainHandler.NPC_joins_monsters - not an NPC ###
+
+        self.__window_manager.reset_error_state()
+
+        main_handler.next_char(pc_manny_index)
+        fighter = main_handler.get_fighter_from_char_index()
+        self.__window_manager.expect_error(['"Manny" not an NPC'])
+
+        main_handler.NPC_joins_monsters(None)
+
+        assert(self.__window_manager.error_state == 
+                                    MockWindowManager.FOUND_EXPECTED_ERROR)
 
         ### MainHandler.NPC_joins_monsters - works ###
 
