@@ -5821,6 +5821,9 @@ class BuildFightHandler(ScreenHandler):
     def __new_group(self):
         '''
         Command ribbon method.
+
+        Creates new group of monsters.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 

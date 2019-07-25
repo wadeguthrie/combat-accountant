@@ -492,6 +492,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         }
 
 
+        # WORLD: 1
         self.base_world_dict = {
           "Templates": {
             "Arena Combat": {
@@ -564,6 +565,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
           } # fights
         } # End of the world
 
+        # WORLD: 2
         self.init_world_dict = {
             # Don't need templates, dead-monsters, equipment, names
             'PCs': {
@@ -600,6 +602,41 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 'fighters': [],
                 'round': 2,
                 'monsters': 'horsemen',
+            },
+        }
+        
+        # WORLD: 3
+        self.init_world_dict_2 = {
+            # Don't need templates, dead-monsters, equipment, names
+            'PCs': {
+                # 5.5, 11, rand=2
+                'Bob' : copy.deepcopy(self.__vodou_priest_fighter),
+
+                # 5.75, 12, rand=3
+                'Ted' : copy.deepcopy(self.__tank_fighter),
+            },
+            'fights': {
+                'marx' : {
+                    # 5.5, 12, rand=4
+                    'Groucho' : copy.deepcopy(self.__one_more_guy),
+
+                    # 5.75, 12, rand=5
+                    'Harpo' : copy.deepcopy(self.__thief_fighter),
+
+                    # 5.25, 10, rand=3
+                    'Chico' : copy.deepcopy(self.__bokor_fighter),
+                }
+            },
+            'current-fight': {
+                # Needed
+                'saved': False,
+                'history': [], # Needed (maybe)
+
+                # Not needed if not saved
+                'index': 1,
+                'fighters': [],
+                'round': 2,
+                'monsters': 'marx',
             },
         } # End of world
 
@@ -694,6 +731,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
     #
 
     def test_get_dodge_skill(self):
+        '''
+        GURPS-specific test
+        '''
         # Deepcopy so that we don't taint the original
         vodou_priest = gm.Fighter('Priest',
                                   'group',
@@ -746,6 +786,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert dodge_skill == 8
 
     def test_get_block_skill(self):
+        '''
+        GURPS-specific test
+        '''
         # TODO: need non-trivial block tests
         vodou_priest_fighter = gm.Fighter(
                                   'Priest',
@@ -786,6 +829,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert block_skill == None
 
     def test_get_parry_skill(self):
+        '''
+        GURPS-specific test
+        '''
         # Unarmed
         weapon = None
         vodou_priest_fighter = gm.Fighter(
@@ -875,6 +921,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert parry_skill == (9 + self.__crawling_defense_mod)
 
     def test_get_unarmed_info(self):
+        '''
+        GURPS-specific test
+        '''
         # Vodou Priest
         unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
         vodou_priest_fighter = gm.Fighter(
@@ -1044,6 +1093,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
     def test_initiative_order(self):
+        '''
+        Partially GURPS-specific test
+        '''
         random_debug_filename = 'foo'
 
         world_obj = BaseWorld(self.init_world_dict)
@@ -1200,46 +1252,16 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
     def test_initiative_order_again(self):
         '''
+        Partially GURPS-specific test
+        '''
+        '''
         This is just like test_initiative_order_again except the fighters are
         reordered randomly and a different random seed is used.
         '''
 
         random_debug_filename = 'foo'
 
-        world_obj = BaseWorld({
-            # Don't need templates, dead-monsters, equipment, names
-            'PCs': {
-                # 5.5, 11, rand=2
-                'Bob' : copy.deepcopy(self.__vodou_priest_fighter),
-
-                # 5.75, 12, rand=3
-                'Ted' : copy.deepcopy(self.__tank_fighter),
-            },
-            'fights': {
-                'marx' : {
-                    # 5.5, 12, rand=4
-                    'Groucho' : copy.deepcopy(self.__one_more_guy),
-
-                    # 5.75, 12, rand=5
-                    'Harpo' : copy.deepcopy(self.__thief_fighter),
-
-                    # 5.25, 10, rand=3
-                    'Chico' : copy.deepcopy(self.__bokor_fighter),
-                }
-            },
-            'current-fight': {
-                # Needed
-                'saved': False,
-                'history': [], # Needed (maybe)
-
-                # Not needed if not saved
-                'index': 1,
-                'fighters': [],
-                'round': 2,
-                'monsters': 'marx',
-            },
-        })
-
+        world_obj = BaseWorld(self.init_world_dict_2)
         world = gm.World(world_obj, self.__window_manager)
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
@@ -1279,38 +1301,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
 
         random_debug_filename = 'foo'
-        world_obj = BaseWorld({
-            # Don't need templates, dead-monsters, equipment, names
-            'PCs': {
-                # 5.25, 10, rand=1
-                'Manny' : copy.deepcopy(self.__bokor_fighter),
-
-                # 5.75, 12, rand=2
-                'Jack' : copy.deepcopy(self.__tank_fighter),
-
-                # 5.5, 12, rand=4
-                'Moe' : copy.deepcopy(self.__one_more_guy),
-            },
-            'fights': {
-                'horsemen' : {
-                    # 5.75, 12, rand=4
-                    'Famine' : copy.deepcopy(self.__thief_fighter),
-
-                    # 5.5, 11, rand=4
-                    'Pestilence' : copy.deepcopy(self.__vodou_priest_fighter),
-                }
-            },
-            'current-fight': {
-                # Needed
-                'saved': False,
-                'history': [], # Needed (maybe)
-
-                'index': 1,
-                'fighters': [],
-                'round': 2,
-                'monsters': 'horsemen',
-            },
-        })
+        world_obj = BaseWorld(self.init_world_dict)
 
         world = gm.World(world_obj, self.__window_manager)
 
@@ -1413,6 +1404,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
     def test_ranged_to_hit(self):
+        '''
+        GURPS-specific test
+        '''
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
 
@@ -1627,6 +1621,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
     def test_messed_up_aim(self):
+        '''
+        GURPS-specific test
+        '''
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
@@ -1835,6 +1832,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
     def test_melee_to_hit(self):
+        '''
+        GURPS-specific test
+        '''
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
@@ -1917,6 +1917,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit
 
     def test_timers(self):
+        '''
+        Basic test
+        '''
         # TODO: timers should get their own class separated from the Fighter
         #       class.
 
@@ -2037,6 +2040,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
     def test_save(self):
+        '''
+        Basic test
+        '''
         base_world_dict = copy.deepcopy(self.base_world_dict)
 
         self.__window_manager = MockWindowManager()
@@ -2135,6 +2141,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert world_obj.read_data['current-fight']['saved'] == False
 
     def test_add_equipment(self):
+        '''
+        Basic test
+        '''
         fighter = gm.Fighter('Tank',
                              'group',
                              copy.deepcopy(self.__tank_fighter),
@@ -2206,6 +2215,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
     #            print ''
 
     def test_redirects(self):
+        '''
+        Basic test
+        '''
         base_world_dict = copy.deepcopy(self.base_world_dict)
         world_obj = BaseWorld(base_world_dict)
         world = gm.World(world_obj, self.__window_manager)
@@ -2217,7 +2229,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         dest_char = world.get_creature_details('One More Guy', 'Dima\'s Crew')
         assert self.__are_equal(source_char, dest_char)
 
+
     def test_redirects_promote_to_NPC(self):
+        '''
+        Basic test
+        '''
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_obj = BaseWorld(init_world_dict)
         world = gm.World(world_obj, self.__window_manager)
@@ -2267,7 +2283,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             # if npc_name not in self.__world.details['NPCs']:
             #self._window_manager.error(['%s is already an NPC' % new_NPC.name])
 
+
     def test_NPC_joins(self):
+        '''
+        Basic test
+        '''
         # {'name': 'Jack',       'group': 'PCs'},      # 5.75, 12, 2
         pc_jack_index = 0
 
