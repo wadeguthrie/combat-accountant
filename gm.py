@@ -7210,8 +7210,8 @@ class MainHandler(ScreenHandler):
                  window_manager,
                  world,
                  ruleset,
-                 campaign_debug_json,
-                 filename # JSON file containing the world
+                 campaign_debug_json, # For Debugging only
+                 filename # For Debugging Only: JSON file containing the world
                 ):
         super(MainHandler, self).__init__(window_manager,
                                           campaign_debug_json,
@@ -7229,7 +7229,7 @@ class MainHandler(ScreenHandler):
                                                        self.__prev_char},
             curses.KEY_DOWN:
                       {'name': 'next character',      'func':
-                                                       self.__next_char},
+                                                       self.next_char},
             curses.KEY_NPAGE:
                       {'name': 'scroll down',         'func':
                                                        self.__next_page},
@@ -7277,6 +7277,15 @@ class MainHandler(ScreenHandler):
             if details is not None:
                 self.__ruleset.is_creature_consistent(name, details)
 
+    # TODO: sort the methods
+
+    # This is public to facilitate testing
+    def get_fighter_from_char_index(self):
+        return Fighter(self.__chars[self.__char_index]['name'],
+                       self.__chars[self.__char_index]['group'],
+                       self.__chars[self.__char_index]['details'],
+                       self.__ruleset,
+                       self._window_manager)
 
     #
     # Protected Methods
@@ -7408,11 +7417,7 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = Fighter(self.__chars[self.__char_index]['name'],
-                          self.__chars[self.__char_index]['group'],
-                          self.__chars[self.__char_index]['details'],
-                          self.__ruleset,
-                          self._window_manager)
+        fighter = self.get_fighter_from_char_index()
         self.__equipment_manager.add_equipment(fighter)
         self._draw_screen()
         return True # Keep going
@@ -7422,12 +7427,7 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = Fighter(self.__chars[self.__char_index]['name'],
-                          self.__chars[self.__char_index]['group'],
-                          self.__chars[self.__char_index]['details'],
-                          self.__ruleset,
-                          self._window_manager)
-
+        fighter = self.get_fighter_from_char_index()
 
         # Is the fighter a caster?
         if 'spells' not in fighter.details:
@@ -7480,11 +7480,7 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = Fighter(self.__chars[self.__char_index]['name'],
-                          self.__chars[self.__char_index]['group'],
-                          self.__chars[self.__char_index]['details'],
-                          self.__ruleset,
-                          self._window_manager)
+        fighter = self.get_fighter_from_char_index()
 
         # Is the fighter a caster?
         if 'spells' not in fighter.details:
@@ -7516,11 +7512,7 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
     def __give_equipment(self, throw_away):
-        from_fighter = Fighter(self.__chars[self.__char_index]['name'],
-                               self.__chars[self.__char_index]['group'],
-                               self.__chars[self.__char_index]['details'],
-                               self.__ruleset,
-                               self._window_manager)
+        from_fighter = self.get_fighter_from_char_index()
 
         item = self.__equipment_manager.remove_equipment(from_fighter)
         if item is None:
@@ -7565,11 +7557,7 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = Fighter(self.__chars[self.__char_index]['name'],
-                          self.__chars[self.__char_index]['group'],
-                          self.__chars[self.__char_index]['details'],
-                          self.__ruleset,
-                          self._window_manager)
+        fighter = self.get_fighter_from_char_index()
         self.__equipment_manager.remove_equipment(fighter)
         self._draw_screen()
         return True # Keep going
@@ -7605,11 +7593,7 @@ class MainHandler(ScreenHandler):
     def __ruleset_ability(self,
                           param # string: ability name
                          ):
-        fighter = Fighter(self.__chars[self.__char_index]['name'],
-                          self.__chars[self.__char_index]['group'],
-                          self.__chars[self.__char_index]['details'],
-                          self.__ruleset,
-                          self._window_manager)
+        fighter = self.get_fighter_from_char_index()
 
         #   { 
         #       'Skills':     { 'Axe/Mace': 8,      'Climbing': 8, },
@@ -7684,11 +7668,7 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = Fighter(self.__chars[self.__char_index]['name'],
-                          self.__chars[self.__char_index]['group'],
-                          self.__chars[self.__char_index]['details'],
-                          self.__ruleset,
-                          self._window_manager)
+        fighter = self.get_fighter_from_char_index()
 
         keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
@@ -7726,11 +7706,7 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = Fighter(self.__chars[self.__char_index]['name'],
-                          self.__chars[self.__char_index]['group'],
-                          self.__chars[self.__char_index]['details'],
-                          self.__ruleset,
-                          self._window_manager)
+        fighter = self.get_fighter_from_char_index()
         if fighter is None:
             return True # Keep fighting
 
@@ -7756,9 +7732,9 @@ class MainHandler(ScreenHandler):
 
 
     def __party(self):
-        sub_menu = [('NPC joins PCs',      {'doit': self.__NPC_joins_PCs}),
+        sub_menu = [('NPC joins PCs',      {'doit': self.NPC_joins_PCs}),
                     ('NPC leaves PCs',     {'doit': self.__NPC_leaves_PCs}),
-                    ('NPC joins Monsters', {'doit': self.__NPC_joins_monsters}),
+                    ('NPC joins Monsters', {'doit': self.NPC_joins_monsters}),
                     ('npc list',           {'doit': self.__add_NPCs}),
                     ('pc list',            {'doit': self.__add_PCs}),
                     ('monster list',       {'doit': self.__add_monsters})]
@@ -7865,8 +7841,13 @@ class MainHandler(ScreenHandler):
 
         return True
 
-    def __next_char(self):
-        if self.__char_index is None:
+    # This is public to facilitate testing
+    def next_char(self,
+                  index=None  # Just for testing
+                 ):
+        if index is not None:
+            self.__char_index = index
+        elif self.__char_index is None:
             self.__char_index = 0
         else:
             self.__char_index += 1
@@ -7899,7 +7880,8 @@ class MainHandler(ScreenHandler):
             self._draw_screen()
         return True
 
-    def __NPC_joins_monsters(self, throw_away):
+    # This is public for testing purposes
+    def NPC_joins_monsters(self, throw_away):
         # Make sure the person is an NPC
         npc_name = self.__chars[self.__char_index]['name']
         if self.__chars[self.__char_index]['group'] != 'NPCs':
@@ -7923,7 +7905,8 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True
 
-    def __NPC_joins_PCs(self, throw_away):
+    # This is public for testing purposes
+    def NPC_joins_PCs(self, throw_away):
         npc_name = self.__chars[self.__char_index]['name']
         if self.__chars[self.__char_index]['group'] != 'NPCs':
             self._window_manager.error(['"%s" not an NPC' % npc_name])

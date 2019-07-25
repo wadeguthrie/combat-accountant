@@ -50,6 +50,35 @@ class MockFightHandler(object):
     def add_to_history(self, action):
         pass
 
+class MockMainGmWindow(object):
+    def __init__(self, window_manager=None):
+        pass
+
+    def clear(self):
+        pass
+
+    def command_ribbon(self, choices):
+        pass
+
+    def status_ribbon(self, input_filename, maintain_json):
+        pass
+
+    def show_character_detail(self,
+                              character, # dict as found in the JSON
+                              ruleset
+                             ):
+        pass
+
+    def show_character_list(self,
+                            char_list,  # [ {'name': xxx,
+                                        #    'group': xxx,
+                                        #    'details':xxx}, ...
+                            current_index,
+                            standout = False
+                           ):
+        pass
+
+
 class MockFightGmWindow(object):
     def __init__(self, ruleset):
         self.fighter_win_width = 10
@@ -186,6 +215,9 @@ class MockWindowManager(object):
 
     def get_fight_gm_window(self, ruleset):
         return MockFightGmWindow(ruleset)
+
+    def get_main_gm_window(self):
+        return MockMainGmWindow() # it takes a 'window manager' param
 
     def set_char_response(self,
                           selection # character
@@ -542,6 +574,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 'Moe' : copy.deepcopy(self.__one_more_guy),
             },
             'NPCs': {
+                # Same body for these as the PCs and horseman fights
+                'Groucho': copy.deepcopy(self.__tank_fighter),
+                'Harpo': copy.deepcopy(self.__thief_fighter),
+                'Chico': copy.deepcopy(self.__bokor_fighter),
             },
             'fights': {
                 'horsemen' : {
@@ -2178,7 +2214,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         dest_char = world.get_creature_details('One More Guy', 'Dima\'s Crew')
         assert self.__are_equal(source_char, dest_char)
 
-    def test_redirects_2(self):
+    def test_redirects_promote_to_NPC(self):
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_obj = BaseWorld(init_world_dict)
         world = gm.World(world_obj, self.__window_manager)
@@ -2204,7 +2240,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         "None", # used for bug reporting
                                         "filename") # used for display
 
-        ### FightHandler.__promote_to_NPC - check good change ###
+        ### FightHandler.promote_to_NPC - check good change ###
 
         fight_handler.set_viewing_index(monster_pestilence_index)
         fight_handler.promote_to_NPC()
@@ -2213,7 +2249,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         dest_char = world.get_creature_details('Pestilence','NPCs')
         assert self.__are_equal(source_char, dest_char)
 
-        ### FightHandler.__promote_to_NPC - check already an NPC ###
+        ### FightHandler.promote_to_NPC - check destination has an NPC ###
 
         self.__window_manager.expect_error(
                                 ['There\'s already an NPC named Pestilence'])
@@ -2223,15 +2259,60 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert(self.__window_manager.error_state == 
                                     MockWindowManager.FOUND_EXPECTED_ERROR)
 
-        ### TODO: need to instrument 'error' to ckeck ###
+        ### TODO: FightHandler.promote_to_NPC - check source already an NPC ###
+            # if npc_name not in self.__world.details['NPCs']:
+            #self._window_manager.error(['%s is already an NPC' % new_NPC.name])
 
-        # self._window_manager.error(['%s is already an NPC' % new_NPC.name])
+    def test_NPC_joins(self):
+        # {'name': 'Jack',       'group': 'PCs'},      # 5.75, 12, 2
+        pc_jack_index = 0
 
-        #assert self.__are_equal(original_item, new_guy)
+        # {'name': 'Manny',      'group': 'PCs'}]      # 5.25, 10, 1
+        pc_manny_index = 1
 
-        ### TODO: FightHandler.__NPC_joins_monsters ###
+        # {'name': 'Moe',        'group': 'PCs'},      # 5.5,  12, 4
+        pc_moe_index = 2
 
-        ### TODO: FightHandler.__NPC_joins_PCs ###
+        # Chico
+        chico_index = 3
+
+        # Grouch
+        groucho_index = 4
+
+        # Harpo
+        harpo_index = 5
+
+        init_world_dict = copy.deepcopy(self.init_world_dict)
+        world_obj = BaseWorld(init_world_dict)
+        world = gm.World(world_obj, self.__window_manager)
+        main_handler = gm.MainHandler(self.__window_manager,
+                                      world,
+                                      self.__ruleset,
+                                      "None", # used for bug reporting
+                                      "filename") # used for display
+
+        ### TODO: MainHandler.NPC_joins_monsters - works ###
+
+        main_handler.next_char(groucho_index)
+        fighter = main_handler.get_fighter_from_char_index()
+        assert fighter.name == 'Groucho'
+
+        # TODO: setup menu return values
+        #main_handler.NPC_joins_monsters(None)
+
+        ### TODO: MainHandler.NPC_joins_monsters - NPC already in fight ###
+            #self._window_manager.error(['"%s" already in fight "%s"' %
+
+        ### TODO: MainHandler.NPC_joins_monsters - not an NPC ###
+            #self._window_manager.error(['"%s" not an NPC' % npc_name])
+
+        ### TODO: MainHandler.NPC_joins_PCs -- works ###
+
+        ### TODO: MainHandler.NPC_joins_PCs -- not an NPC ###
+            #self._window_manager.error(['"%s" not an NPC' % npc_name])
+
+        ### TODO: MainHandler.NPC_joins_PCs -- already PC w/that name ###
+            #self._window_manager.error(['"%s" already a PC' % npc_name])
 
 
 
