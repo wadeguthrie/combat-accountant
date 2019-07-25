@@ -7897,7 +7897,7 @@ class MainHandler(ScreenHandler):
         fight = self.__world.get_group(fight_name)
         if npc_name in fight:
             self._window_manager.error(['"%s" already in fight "%s"' %
-                                                        npc_name, fight_name])
+                                                    (npc_name, fight_name)])
             return True
 
         fight[npc_name] = {'redirect': 'NPCs'}

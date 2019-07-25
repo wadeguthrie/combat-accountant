@@ -134,6 +134,9 @@ class MockWindowManager(object):
         self.__expected_error = [] # array of single-line strings
         self.error_state = MockWindowManager.FOUND_NO_ERROR
 
+    def reset_error_state(self):
+        self.error_state = MockWindowManager.FOUND_NO_ERROR
+
     def expect_error(self, string_array):
         '''
         Use this like so:
@@ -2218,6 +2221,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_obj = BaseWorld(init_world_dict)
         world = gm.World(world_obj, self.__window_manager)
+        self.__window_manager.reset_error_state()
 
         # random.randint(1, 6) should generate: 1 2 4 4 4 4 5 6 4 4
         random.seed(9001) # 9001 is an arbitrary number
@@ -2291,13 +2295,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                       "None", # used for bug reporting
                                       "filename") # used for display
 
-        ### TODO: MainHandler.NPC_joins_monsters - NPC already in fight ###
-            #self._window_manager.error(['"%s" already in fight "%s"' %
-
         ### TODO: MainHandler.NPC_joins_monsters - not an NPC ###
             #self._window_manager.error(['"%s" not an NPC' % npc_name])
 
         ### MainHandler.NPC_joins_monsters - works ###
+
+        self.__window_manager.reset_error_state()
 
         main_handler.next_char(groucho_index)
         fighter = main_handler.get_fighter_from_char_index()
@@ -2309,6 +2312,21 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         source_char = world.get_creature_details('Groucho','NPCs')
         dest_char = world.get_creature_details('Groucho','horsemen')
         assert self.__are_equal(source_char, dest_char)
+
+        ### MainHandler.NPC_joins_monsters - NPC already in fight ###
+
+        main_handler.next_char(groucho_index)
+        fighter = main_handler.get_fighter_from_char_index()
+        # assert fighter.name == 'Groucho'
+
+        self.__window_manager.set_menu_response('Join Which Fight', 'horsemen')
+        self.__window_manager.expect_error(
+                                    ['"Groucho" already in fight "horsemen"'])
+
+        main_handler.NPC_joins_monsters(None)
+
+        assert(self.__window_manager.error_state == 
+                                    MockWindowManager.FOUND_EXPECTED_ERROR)
 
         ### TODO: MainHandler.NPC_joins_PCs -- not an NPC ###
             #self._window_manager.error(['"%s" not an NPC' % npc_name])
