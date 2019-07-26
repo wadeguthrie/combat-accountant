@@ -293,11 +293,11 @@ class MockWindowManager(object):
         result = self.__menu_responses[title].pop(0)
 
         ### (Debugging Block ###
-        print '\nmenu: title: %s, returning:' % title,
-        PP.pprint(result)
-        print '  gives us a response queue of:'
-        print '    ',
-        PP.pprint(self.__menu_responses)
+        # print '\nmenu: title: %s, returning:' % title,
+        # PP.pprint(result)
+        # print '  gives us a response queue of:'
+        # print '    ',
+        # PP.pprint(self.__menu_responses)
         ### Debugging Block) ###
 
         return result
@@ -2624,7 +2624,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         ### Add a creature -- works ###
 
-        print '\n\n============= Add Creature =============\n\n'
+        #print '\n\n============= Add Creature =============\n\n'
 
         self.__window_manager.set_menu_response(
                             'New or Pre-Existing', 'existing')
