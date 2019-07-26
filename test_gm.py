@@ -293,11 +293,11 @@ class MockWindowManager(object):
         result = self.__menu_responses[title].pop()
 
         ### (Debugging Block ###
-        print '\nmenu: title: %s, returning:' % title,
-        PP.pprint(result)
-        print '  gives us a response queue of:'
-        print '    ',
-        PP.pprint(self.__menu_responses)
+        # print '\nmenu: title: %s, returning:' % title,
+        # PP.pprint(result)
+        # print '  gives us a response queue of:'
+        # print '    ',
+        # PP.pprint(self.__menu_responses)
         ### Debugging Block) ###
 
         return result
@@ -306,15 +306,15 @@ class MockWindowManager(object):
                                title,
                                selection # first part of string_results tuple
                               ):
-        print 'set_input_box_response: title: %s, add selection:' % title,
-        PP.pprint(selection)
+        # print 'set_input_box_response: title: %s, add selection:' % title,
+        # PP.pprint(selection)
 
         if title not in self.__input_box_responses:
             self.__input_box_responses[title] = []
         self.__input_box_responses[title].append(selection)
 
-        print '  gives us a response queue of:'
-        PP.pprint(self.__input_box_responses)
+        # print '  gives us a response queue of:'
+        # PP.pprint(self.__input_box_responses)
 
     def input_box(self,
                   height, # ignore
@@ -334,11 +334,11 @@ class MockWindowManager(object):
         result = self.__input_box_responses[title].pop(0)
 
         ### (Debugging Block ###
-        print '\ninput_box title: %s, returning:' % title,
-        PP.pprint(result)
-        print '  gives us a response queue of:'
-        print '    ',
-        PP.pprint(self.__input_box_responses)
+        # print '\ninput_box title: %s, returning:' % title,
+        # PP.pprint(result)
+        # print '  gives us a response queue of:'
+        # print '    ',
+        # PP.pprint(self.__input_box_responses)
         ### Debugging Block) ###
 
         return result
@@ -2579,7 +2579,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         ### Fight already exists ###
 
-        print '\n\n============= Fight Already Exists =============\n\n'
+        #print '\n\n============= Fight Already Exists =============\n\n'
 
         self.__window_manager.reset_error_state()
         self.__window_manager.set_menu_response(
