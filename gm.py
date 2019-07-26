@@ -5575,8 +5575,7 @@ class BuildFightHandler(ScreenHandler):
                 if base_name is None or len(base_name) == 0:
                     base_name, where, gender = self.__world.get_random_name()
                     if base_name is None:
-                        self._window_manager.error(
-                            ['Monster needs a name'])
+                        self._window_manager.error(['Monster needs a name'])
                         keep_asking = True
                     else:
                         if where is not None:

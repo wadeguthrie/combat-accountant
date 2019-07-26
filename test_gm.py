@@ -33,9 +33,6 @@ import unittest
 # TODO: test that deleting a creature works
 # TODO: test that you can add to the PCs
 # TODO: test that you can add to a monster group
-# TODO: test that you can create a new monster group
-# TODO: make sure that the templates work as expected (try a blank one, try
-#       two others with two different data sets)
 
 # -- OutfitCharactersHandler --
 # TODO: test that adding something actually adds the right thing and that it's
@@ -292,14 +289,15 @@ class MockWindowManager(object):
                                                                         title)
             assert False
 
+        # TODO: pop(0) to make it a FIFO queue -- then fix all the tests
         result = self.__menu_responses[title].pop()
 
         ### (Debugging Block ###
-        # print '\nmenu: title: %s, returning:' % title,
-        # PP.pprint(result)
-        # print '  gives us a response queue of:'
-        # print '    ',
-        # PP.pprint(self.__menu_responses)
+        print '\nmenu: title: %s, returning:' % title,
+        PP.pprint(result)
+        print '  gives us a response queue of:'
+        print '    ',
+        PP.pprint(self.__menu_responses)
         ### Debugging Block) ###
 
         return result
@@ -308,17 +306,15 @@ class MockWindowManager(object):
                                title,
                                selection # first part of string_results tuple
                               ):
-        #print 'set_input_box_response: title: %s, add selection:' % title
-        #print '    ',
-        #PP.pprint(selection)
+        print 'set_input_box_response: title: %s, add selection:' % title,
+        PP.pprint(selection)
 
         if title not in self.__input_box_responses:
             self.__input_box_responses[title] = []
         self.__input_box_responses[title].append(selection)
 
-        #print '  gives us a response queue of:'
-        #print '    ',
-        #PP.pprint(self.__input_box_responses)
+        print '  gives us a response queue of:'
+        PP.pprint(self.__input_box_responses)
 
     def input_box(self,
                   height, # ignore
@@ -326,22 +322,24 @@ class MockWindowManager(object):
                   title
                  ):
         if title not in self.__input_box_responses:
-            print ('** didn\'t find menu title "%s" in stored responses' %
+            print ('** input_box: title "%s" not found in stored responses' %
                     title)
             assert False
         if len(self.__input_box_responses[title]) == 0:
-            print ('** menu responses["%s"] is empty, can\'t respond' %
+            print ('** input_boxes: responses["%s"] is empty, can\'t respond' %
                     title)
             assert False
 
-        result = self.__input_box_responses[title].pop()
+        # FIFO queue
+        result = self.__input_box_responses[title].pop(0)
 
-        #print 'menu: title: %s, returning:' % title
-        #print '    ',
-        #PP.pprint(result)
-        #print '  gives us a response queue of:'
-        #print '    ',
-        #PP.pprint(self.__input_box_responses)
+        ### (Debugging Block ###
+        print '\ninput_box title: %s, returning:' % title,
+        PP.pprint(result)
+        print '  gives us a response queue of:'
+        print '    ',
+        PP.pprint(self.__input_box_responses)
+        ### Debugging Block) ###
 
         return result
         
@@ -2574,14 +2572,53 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         build_fight.handle_user_input_until_done()
 
         fights = world.get_fights()
-        # print '\nFIGHTS:', # TODO: remove
-        # PP.pprint(fights) # TODO: remove
         assert 'test_new_fight' in fights # verify that fight  exists
         if 'test_new_fight' in fights:
             creatures = world.get_creatures('test_new_fight')
-            # print 'CREATURES:', # TODO: remove
-            # PP.pprint(creatures) # TODO: remove
             assert '1 - Horatio' in creatures
+
+        ### Fight already exists ###
+
+        print '\n\n============= Fight Already Exists =============\n\n'
+
+        self.__window_manager.reset_error_state()
+        self.__window_manager.set_menu_response(
+                                        'New or Pre-Existing', 'new')
+        self.__window_manager.set_menu_response(
+                                        'From Which Template', 'Arena Combat')
+        # This one should error out
+        self.__window_manager.set_input_box_response(
+                                        'New Fight Name', 'test_new_fight')
+        # This one should work
+        self.__window_manager.set_input_box_response(
+                                        'New Fight Name', 'foo')
+
+        self.__window_manager.expect_error(
+                                ['Fight name "test_new_fight" already exists'])
+
+        # These are just so that the test finishes.
+        self.__window_manager.set_menu_response('Monster', 'VodouCleric')
+        self.__window_manager.set_input_box_response('Monster Name', 'Horatio')
+        self.__window_manager.set_menu_response('What Next', 'quit')
+        self.__window_manager.set_menu_response('Save foo', 'save')
+
+        build_fight = TestBuildFightHandler(self.__window_manager,
+                                            world,
+                                            self.__ruleset,
+                                            gm.BuildFightHandler.MONSTERs)
+
+        assert(self.__window_manager.error_state == 
+                                    MockWindowManager.FOUND_EXPECTED_ERROR)
+
+        build_fight.set_command_ribbon_input('q')
+        build_fight.handle_user_input_until_done()
+
+        #fights = world.get_fights()
+        #assert 'test_new_fight' in fights # verify that fight  exists
+        #if 'test_new_fight' in fights:
+        #    creatures = world.get_creatures('test_new_fight')
+        #    assert '1 - Horatio' in creatures
+
 
 if __name__ == '__main__':
     PP = pprint.PrettyPrinter(indent=3, width=150)
