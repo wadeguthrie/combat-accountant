@@ -289,8 +289,8 @@ class MockWindowManager(object):
                                                                         title)
             assert False
 
-        # TODO: pop(0) to make it a FIFO queue -- then fix all the tests
-        result = self.__menu_responses[title].pop()
+        # FIFO queue
+        result = self.__menu_responses[title].pop(0)
 
         ### (Debugging Block ###
         # print '\nmenu: title: %s, returning:' % title,
@@ -2225,10 +2225,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert world_obj.read_data['current-fight']['saved'] == False
 
         self.__window_manager.set_char_response(ord('q'))
-        # It's a stack so I'm putting things in reverse order
-        self.__window_manager.set_menu_response('Leaving Fight', {'doit':None})
         self.__window_manager.set_menu_response(
                     'Leaving Fight', {'doit': fight_handler.simply_save})
+        self.__window_manager.set_menu_response('Leaving Fight', {'doit':None})
 
 
         fight_handler.handle_user_input_until_done()
