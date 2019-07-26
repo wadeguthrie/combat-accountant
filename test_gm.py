@@ -42,6 +42,62 @@ import unittest
 #       permenant
 # TODO: test that removing something works
 
+class TestBuildFightHandler(gm.BuildFightHandler):
+    def __init__(self,
+                 window_manager,
+                 world,
+                 ruleset,
+                 creature_type # one of: NPCs, PCs, or MONSTERs
+                ):
+        super(TestBuildFightHandler, self).__init__(
+                 window_manager,
+                 world,
+                 ruleset,
+                 creature_type, # one of: NPCs, PCs, or MONSTERs
+                 "campaign_debug_json", # 
+                 "filename" # JSON file containing the world
+                )
+        self.__command_ribbon_input = []
+
+
+    def set_command_ribbon_input(self,
+                                 character  # command ribbon input
+                                ):
+        #print 'set_command_ribbon_input: add: %c' % character
+
+        self.__command_ribbon_input.append(ord(character))
+
+        #print '  gives us a response queue of:'
+        #print '    ',
+        #PP.pprint(self.__command_ribbon_input)
+
+
+    def handle_user_input_until_done(self):
+        if len(self.__command_ribbon_input) == 0:
+            print ('** command ribbon input is empty, can\'t respond')
+            assert False
+
+        keep_going = True
+        while keep_going:
+            if len(self.__command_ribbon_input) <= 0:
+                self._window_manager.error(
+                                ['Empty handle_user_input_until_done queue'])
+                return
+
+            string = self.__command_ribbon_input.pop()
+
+            #print 'handle_user_input_until_done: got %c' % string
+            #print '  gives us a response queue of:'
+            #print '    ',
+            #PP.pprint(self.__command_ribbon_input)
+
+            if string in self._choices:
+                keep_going = self._choices[string]['func']()
+            else:
+                self._window_manager.error(
+                                    ['Invalid command: "%c" ' % chr(string)])
+
+
 class BaseWorld(object):
     def __init__(self, world_dict):
         self.read_data = copy.deepcopy(world_dict)
@@ -79,8 +135,47 @@ class MockMainGmWindow(object):
         pass
 
 
-class MockFightGmWindow(object):
-    def __init__(self, ruleset):
+class MockGmWindow(object):
+    def clear(self):
+        pass
+
+    def close(self):
+        pass
+
+    def command_ribbon(self, choices):
+        pass
+
+    def getmaxyx(self):
+        return 10, 10
+
+
+class MockBuildFightGmWindow(MockGmWindow):
+    def __init__(self):
+        pass
+
+    def status_ribbon(self,
+                      group,            # name of group being modified,
+                      template,         # name of template 
+                      input_filename,   # passthru to base class
+                      maintain_json     # passthru to base class
+                     ):
+        pass
+
+    def show_creatures(self,
+                       old_creatures,   # {name: {details}, ...} like in JSON
+                       new_creatures,   # {name: {details}, ...} like in JSON
+                       new_char_name,   # name of character to highlight
+                       viewing_index,   # index into creature list:
+                                        #   dict: {'new'=True, index=0}
+                       ruleset          # Ruleset object
+                      ):
+        pass
+
+
+class MockFightGmWindow(MockGmWindow):
+    def __init__(self,
+                 ruleset    # throw away
+                ):
         self.fighter_win_width = 10
         self.len_timer_leader = 1
         pass
@@ -105,20 +200,8 @@ class MockFightGmWindow(object):
                      maintain_json):
         pass
 
-    def clear(self):
-        pass
-
-    def close(self):
-        pass
-
     def status_ribbon(self, input_filename, maintain_json):
         pass
-
-    def command_ribbon(self, choices):
-        pass
-
-    def getmaxyx(self):
-        return 10, 10
 
 
 class MockWindowManager(object):
@@ -130,6 +213,8 @@ class MockWindowManager(object):
 
     def __init__(self):
         self.__menu_responses = {} # {menu_title: [selection, selection...]
+        self.__input_box_responses = {} # {input_box_title: [selection,
+                                        #                    selection...]
         self.__char_responses = [] # array of characters
         self.__expected_error = [] # array of single-line strings
         self.error_state = MockWindowManager.FOUND_NO_ERROR
@@ -168,6 +253,9 @@ class MockWindowManager(object):
             print '\n** Found another error:'
             PP.pprint(string_array)
 
+    def get_build_fight_gm_window(self):
+        return MockBuildFightGmWindow()
+
     def display_window(self,
                        title,
                        lines  # [{'text', 'mode'}, ...]
@@ -176,7 +264,7 @@ class MockWindowManager(object):
 
     def set_menu_response(self,
                           title,
-                          selection # first part of string_results tuple
+                          selection # SECOND part of string_results tuple
                          ):
         #print 'set_menu_response: title: %s, add selection:' % title
         #print '    ',
@@ -196,22 +284,64 @@ class MockWindowManager(object):
              starting_index = 0 # Who is selected when the menu starts
             ):
         if title not in self.__menu_responses:
+            print ('\n** menu: title "%s" not found in stored responses' %
+                                                                        title)
+            assert False
+        if len(self.__menu_responses[title]) == 0:
+            print ('\n** menu: responses["%s"] is empty, can\'t respond' %
+                                                                        title)
+            assert False
+
+        result = self.__menu_responses[title].pop()
+
+        ### <Debugging Block ###
+        print '\nmenu: title: %s, returning:' % title,
+        PP.pprint(result)
+        print '  gives us a response queue of:'
+        print '    ',
+        PP.pprint(self.__menu_responses)
+        ### Debugging Block> ###
+
+        return result
+
+    def set_input_box_response(self,
+                               title,
+                               selection # first part of string_results tuple
+                              ):
+        #print 'set_input_box_response: title: %s, add selection:' % title
+        #print '    ',
+        #PP.pprint(selection)
+
+        if title not in self.__input_box_responses:
+            self.__input_box_responses[title] = []
+        self.__input_box_responses[title].append(selection)
+
+        #print '  gives us a response queue of:'
+        #print '    ',
+        #PP.pprint(self.__input_box_responses)
+
+    def input_box(self,
+                  height, # ignore
+                  width,  # ignore
+                  title
+                 ):
+        if title not in self.__input_box_responses:
             print ('** didn\'t find menu title "%s" in stored responses' %
                     title)
             assert False
-        if len(self.__menu_responses[title]) == 0:
+        if len(self.__input_box_responses[title]) == 0:
             print ('** menu responses["%s"] is empty, can\'t respond' %
                     title)
             assert False
 
-        result = self.__menu_responses[title].pop()
+        result = self.__input_box_responses[title].pop()
 
         #print 'menu: title: %s, returning:' % title
         #print '    ',
         #PP.pprint(result)
         #print '  gives us a response queue of:'
         #print '    ',
-        #PP.pprint(self.__menu_responses)
+        #PP.pprint(self.__input_box_responses)
 
         return result
         
@@ -2412,6 +2542,46 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         #                            MockWindowManager.FOUND_EXPECTED_ERROR)
 
 
+    def test_new_fight(self):
+        '''
+        Basic test
+        '''
+        ### Create Fight -- working ###
+
+        print '\n\n============= Create Fight =============\n\n'
+
+        world_dict = copy.deepcopy(self.base_world_dict)
+        world_obj = BaseWorld(world_dict)
+        world = gm.World(world_obj, self.__window_manager)
+
+        self.__window_manager.set_menu_response(
+                                        'New or Pre-Existing', 'new')
+        self.__window_manager.set_menu_response(
+                                        'From Which Template', 'Arena Combat')
+        self.__window_manager.set_input_box_response(
+                                        'New Fight Name', 'test_new_fight')
+        self.__window_manager.set_menu_response('Monster', 'VodouCleric')
+        self.__window_manager.set_input_box_response('Monster Name', 'Horatio')
+        self.__window_manager.set_menu_response('What Next', 'quit')
+        self.__window_manager.set_menu_response('Save test_new_fight', 'save')
+
+        build_fight = TestBuildFightHandler(self.__window_manager,
+                                            world,
+                                            self.__ruleset,
+                                            gm.BuildFightHandler.MONSTERs)
+
+        build_fight.set_command_ribbon_input('q')
+        build_fight.handle_user_input_until_done()
+
+        fights = world.get_fights()
+        print '\nFIGHTS:', # TODO: remove
+        PP.pprint(fights) # TODO: remove
+        assert 'test_new_fight' in fights # verify that fight  exists
+        if 'test_new_fight' in fights:
+            creatures = world.get_creatures('test_new_fight')
+            print 'CREATURES:', # TODO: remove
+            PP.pprint(creatures) # TODO: remove
+            assert '1 - Horatio' in creatures
 
 if __name__ == '__main__':
     PP = pprint.PrettyPrinter(indent=3, width=150)

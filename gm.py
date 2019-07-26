@@ -7282,7 +7282,8 @@ class MainHandler(ScreenHandler):
             ord('/'): {'name': 'search',              'func':
                                                        self.__search}
         })
-        self.__current_display = None
+        self.__current_display = None   # name of monster group or 'None' for
+                                        # PC/NPC list
         self.__setup_PC_list(self.__current_display)
         self._window = self._window_manager.get_main_gm_window()
         self.__equipment_manager = EquipmentManager(self.__world,
