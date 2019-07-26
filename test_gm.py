@@ -293,11 +293,11 @@ class MockWindowManager(object):
         result = self.__menu_responses[title].pop(0)
 
         ### (Debugging Block ###
-        # print '\nmenu: title: %s, returning:' % title,
-        # PP.pprint(result)
-        # print '  gives us a response queue of:'
-        # print '    ',
-        # PP.pprint(self.__menu_responses)
+        print '\nmenu: title: %s, returning:' % title,
+        PP.pprint(result)
+        print '  gives us a response queue of:'
+        print '    ',
+        PP.pprint(self.__menu_responses)
         ### Debugging Block) ###
 
         return result
@@ -2617,6 +2617,42 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         #if 'test_new_fight' in fights:
         #    creatures = world.get_creatures('test_new_fight')
         #    assert '1 - Horatio' in creatures
+
+        ### TODO: test that deleting a creature works ###
+        ### TODO: test that you can add to the PCs ###
+        ### TODO: test that you can add to a monster group ###
+
+        ### Add a creature -- works ###
+
+        print '\n\n============= Add Creature =============\n\n'
+
+        self.__window_manager.set_menu_response(
+                            'New or Pre-Existing', 'existing')
+        self.__window_manager.set_menu_response(
+                            'From Which Template', 'Arena Combat')
+        self.__window_manager.set_menu_response(
+                            'To Which Group',
+                            {'name': 'test_new_fight',
+                             'group': world.get_creatures('test_new_fight')})
+        self.__window_manager.set_menu_response('Monster', 'VodouCleric')
+        self.__window_manager.set_input_box_response('Monster Name', 'Ophelia')
+        self.__window_manager.set_menu_response('What Next', 'quit')
+        self.__window_manager.set_menu_response('Save test_new_fight', 'save')
+
+        build_fight = TestBuildFightHandler(self.__window_manager,
+                                            world,
+                                            self.__ruleset,
+                                            gm.BuildFightHandler.MONSTERs)
+
+        build_fight.set_command_ribbon_input('q')
+        build_fight.handle_user_input_until_done()
+
+        fights = world.get_fights()
+        assert 'test_new_fight' in fights # verify that fight  exists
+        if 'test_new_fight' in fights:
+            creatures = world.get_creatures('test_new_fight')
+            assert '2 - Ophelia' in creatures
+
 
 
 if __name__ == '__main__':
