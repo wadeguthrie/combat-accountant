@@ -294,13 +294,13 @@ class MockWindowManager(object):
 
         result = self.__menu_responses[title].pop()
 
-        ### <Debugging Block ###
-        print '\nmenu: title: %s, returning:' % title,
-        PP.pprint(result)
-        print '  gives us a response queue of:'
-        print '    ',
-        PP.pprint(self.__menu_responses)
-        ### Debugging Block> ###
+        ### (Debugging Block ###
+        # print '\nmenu: title: %s, returning:' % title,
+        # PP.pprint(result)
+        # print '  gives us a response queue of:'
+        # print '    ',
+        # PP.pprint(self.__menu_responses)
+        ### Debugging Block) ###
 
         return result
 
@@ -2548,7 +2548,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         ### Create Fight -- working ###
 
-        print '\n\n============= Create Fight =============\n\n'
+        # print '\n\n============= Create Fight =============\n\n'
 
         world_dict = copy.deepcopy(self.base_world_dict)
         world_obj = BaseWorld(world_dict)
@@ -2574,13 +2574,13 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         build_fight.handle_user_input_until_done()
 
         fights = world.get_fights()
-        print '\nFIGHTS:', # TODO: remove
-        PP.pprint(fights) # TODO: remove
+        # print '\nFIGHTS:', # TODO: remove
+        # PP.pprint(fights) # TODO: remove
         assert 'test_new_fight' in fights # verify that fight  exists
         if 'test_new_fight' in fights:
             creatures = world.get_creatures('test_new_fight')
-            print 'CREATURES:', # TODO: remove
-            PP.pprint(creatures) # TODO: remove
+            # print 'CREATURES:', # TODO: remove
+            # PP.pprint(creatures) # TODO: remove
             assert '1 - Horatio' in creatures
 
 if __name__ == '__main__':
