@@ -81,7 +81,8 @@ class TestBuildFightHandler(gm.BuildFightHandler):
                                 ['Empty handle_user_input_until_done queue'])
                 return
 
-            string = self.__command_ribbon_input.pop()
+            # FIFO queue
+            string = self.__command_ribbon_input.pop(0)
 
             #print 'handle_user_input_until_done: got %c' % string
             #print '  gives us a response queue of:'
@@ -2618,13 +2619,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         #    creatures = world.get_creatures('test_new_fight')
         #    assert '1 - Horatio' in creatures
 
-        ### TODO: test that deleting a creature works ###
-        ### TODO: test that you can add to the PCs ###
-        ### TODO: test that you can add to a monster group ###
+        ### Add a creature, delete a creature -- works ###
 
-        ### Add a creature -- works ###
-
-        #print '\n\n============= Add Creature =============\n\n'
+        # print '\n\n============= Add and Delete Creature =============\n\n'
 
         self.__window_manager.set_menu_response(
                             'New or Pre-Existing', 'existing')
@@ -2644,6 +2641,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                             self.__ruleset,
                                             gm.BuildFightHandler.MONSTERs)
 
+        # delete creature
+        build_fight.change_viewing_index(-1)
+        build_fight.set_command_ribbon_input('d')
+        self.__window_manager.set_menu_response('Save test_new_fight', 'yes')
+        self.__window_manager.set_menu_response(
+                                        'Delete "1 - Horatio" ARE YOU SURE?',
+                                        'yes')
+        # on with stuff
+
         build_fight.set_command_ribbon_input('q')
         build_fight.handle_user_input_until_done()
 
@@ -2651,7 +2657,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert 'test_new_fight' in fights # verify that fight  exists
         if 'test_new_fight' in fights:
             creatures = world.get_creatures('test_new_fight')
+            assert '1 - Horatio' not in creatures
             assert '2 - Ophelia' in creatures
+
+        ### TODO: test that you can add to the PCs ###
+        ### TODO: test that you can add to the NPCs ###
 
 
 

@@ -5773,8 +5773,8 @@ class BuildFightHandler(ScreenHandler):
 
         if creature_type == BuildFightHandler.MONSTERs:
             group_menu = [(group_name,
-                               {'name': group_name,
-                                'group': self.__world.get_creatures(group_name)})
+                           {'name': group_name,
+                            'group': self.__world.get_creatures(group_name)})
                                     for group_name in self.__world.get_fights()]
         if creature_type == BuildFightHandler.NPCs:
             group_menu.insert(0, ('NPCs',
@@ -5940,9 +5940,9 @@ class BuildFightHandler(ScreenHandler):
         self._window.close()
         return False # Stop building this fight
 
-    def __change_viewing_index(self,
-                               adj  # integer adjustment to viewing index
-                              ):
+    def change_viewing_index(self,
+                             adj  # integer adjustment to viewing index
+                            ):
         '''
         We're managing two lists, here, as if they're one.  They are:
             * old list: (None if self.__is_new else self.__new_home),
@@ -5953,6 +5953,8 @@ class BuildFightHandler(ScreenHandler):
 
         The index is stored like this:
             * self.__viewing_index = None # dict: {'new'=True, index=0}
+
+        This is public to facilitate testing.
         '''
 
         len_list = {'old': (0 if self.__is_new else len(self.__new_home)),
@@ -5989,7 +5991,7 @@ class BuildFightHandler(ScreenHandler):
 
 
     def __view_prev(self): # look at previous character
-        self.__change_viewing_index(-1)
+        self.change_viewing_index(-1)
         self._window.show_creatures(
                                 (None if self.__is_new else self.__new_home),
                                 self.__new_creatures,
@@ -5999,7 +6001,7 @@ class BuildFightHandler(ScreenHandler):
         return True # Keep going
 
     def __view_next(self): # look at next character
-        self.__change_viewing_index(1)
+        self.change_viewing_index(1)
         self._window.show_creatures(
                                 (None if self.__is_new else self.__new_home),
                                 self.__new_creatures,
