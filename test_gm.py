@@ -28,12 +28,6 @@ import unittest
 # Notes
 # TODO: test that notes are saved properly
 
-# -- BuildFightHandler --
-# TODO: test that adding a creature works
-# TODO: test that deleting a creature works
-# TODO: test that you can add to the PCs
-# TODO: test that you can add to a monster group
-
 # -- OutfitCharactersHandler --
 # TODO: test that adding something actually adds the right thing and that it's
 #       permenant
@@ -259,6 +253,9 @@ class MockWindowManager(object):
                        lines  # [{'text', 'mode'}, ...]
                       ):
         pass
+
+    def clear_menu_responses(self):
+        self.__menu_responses = {}
 
     def set_menu_response(self,
                           title,
@@ -2540,7 +2537,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         #                            MockWindowManager.FOUND_EXPECTED_ERROR)
 
 
-    def test_new_fight(self):
+    def test_new_fight_new_creatures(self):
         '''
         Basic test
         '''
@@ -2552,6 +2549,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         world_obj = BaseWorld(world_dict)
         world = gm.World(world_obj, self.__window_manager)
 
+        self.__window_manager.clear_menu_responses()
         self.__window_manager.set_menu_response(
                                         'New or Pre-Existing', 'new')
         self.__window_manager.set_menu_response(
@@ -2582,6 +2580,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         #print '\n\n============= Fight Already Exists =============\n\n'
 
         self.__window_manager.reset_error_state()
+        self.__window_manager.clear_menu_responses()
         self.__window_manager.set_menu_response(
                                         'New or Pre-Existing', 'new')
         self.__window_manager.set_menu_response(
@@ -2613,16 +2612,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         build_fight.set_command_ribbon_input('q')
         build_fight.handle_user_input_until_done()
 
-        #fights = world.get_fights()
-        #assert 'test_new_fight' in fights # verify that fight  exists
-        #if 'test_new_fight' in fights:
-        #    creatures = world.get_creatures('test_new_fight')
-        #    assert '1 - Horatio' in creatures
+        ### Add a creature, delete a monster -- works ###
 
-        ### Add a creature, delete a creature -- works ###
+        # print '\n\n============= Add and Delete Monster =============\n\n'
 
-        # print '\n\n============= Add and Delete Creature =============\n\n'
-
+        self.__window_manager.clear_menu_responses()
         self.__window_manager.set_menu_response(
                             'New or Pre-Existing', 'existing')
         self.__window_manager.set_menu_response(
@@ -2641,14 +2635,20 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                             self.__ruleset,
                                             gm.BuildFightHandler.MONSTERs)
 
-        # delete creature
+        # delete monster
+        #
+        # I may be too clever, here.  I know that we've just created a fight 
+        # with two creatures.  I know that adding a creature will point
+        # the viewing index at that creature.  To delete the _first_ creature,
+        # we need to back the viewing index up by 1.  That's what I'm doing,
+        # here.
         build_fight.change_viewing_index(-1)
         build_fight.set_command_ribbon_input('d')
         self.__window_manager.set_menu_response('Save test_new_fight', 'yes')
         self.__window_manager.set_menu_response(
                                         'Delete "1 - Horatio" ARE YOU SURE?',
                                         'yes')
-        # on with stuff
+        # finish up the test
 
         build_fight.set_command_ribbon_input('q')
         build_fight.handle_user_input_until_done()
@@ -2660,9 +2660,53 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             assert '1 - Horatio' not in creatures
             assert '2 - Ophelia' in creatures
 
-        ### TODO: test that you can add to the PCs ###
-        ### TODO: test that you can add to the NPCs ###
+        ### Add PCs -- works ###
 
+        # print '\n\n============= Add PCs =============\n\n'
+
+        group = 'PCs'
+        self.__window_manager.clear_menu_responses()
+        self.__window_manager.set_menu_response('From Which Template',
+                                                'Arena Combat')
+        self.__window_manager.set_menu_response('Monster', 'VodouCleric')
+        self.__window_manager.set_input_box_response('Monster Name', 'Skippy')
+        self.__window_manager.set_menu_response('What Next', 'quit')
+        self.__window_manager.set_menu_response(('Save %s' % group), 'save')
+
+        build_fight = TestBuildFightHandler(self.__window_manager,
+                                            world,
+                                            self.__ruleset,
+                                            gm.BuildFightHandler.PCs)
+
+        build_fight.set_command_ribbon_input('q')
+        build_fight.handle_user_input_until_done()
+
+        creatures = world.get_creatures(group)
+        assert 'Skippy' in creatures
+
+        ### Add NPCs ###
+
+        # print '\n\n============= Add NPCs =============\n\n'
+
+        group = 'NPCs'
+        self.__window_manager.clear_menu_responses()
+        self.__window_manager.set_menu_response('From Which Template',
+                                                'Arena Combat')
+        self.__window_manager.set_menu_response('Monster', 'VodouCleric')
+        self.__window_manager.set_input_box_response('Monster Name', 'Stinky')
+        self.__window_manager.set_menu_response('What Next', 'quit')
+        self.__window_manager.set_menu_response(('Save %s' % group), 'save')
+
+        build_fight = TestBuildFightHandler(self.__window_manager,
+                                            world,
+                                            self.__ruleset,
+                                            gm.BuildFightHandler.NPCs)
+
+        build_fight.set_command_ribbon_input('q')
+        build_fight.handle_user_input_until_done()
+
+        creatures = world.get_creatures(group)
+        assert 'Stinky' in creatures
 
 
 if __name__ == '__main__':
