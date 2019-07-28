@@ -33,6 +33,10 @@ import unittest
 #       permenant
 # TODO: test that removing something works
 
+# TODO: test 'search'
+# TODO: test 'resurrect fight'
+# TODO: test equipping characters
+
 class TestBuildFightHandler(gm.BuildFightHandler):
     def __init__(self,
                  window_manager,
@@ -680,12 +684,16 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
           }, # NPCs
           "fights": {
             "Dima's Crew": {
-              "Bokor Fighter": self.__bokor_fighter, 
-              "Tank Fighter": self.__tank_fighter , 
-              "One More Guy": { "redirect": "NPCs" }
+              "monsters" : {
+                "Bokor Fighter": self.__bokor_fighter, 
+                "Tank Fighter": self.__tank_fighter , 
+                "One More Guy": { "redirect": "NPCs" }
+              }
             }, 
             "1st Hunting Party": {
-              "5: Amelia": self.__thief_fighter, 
+              "monsters" : {
+                "5: Amelia": self.__thief_fighter, 
+              }
             }
           } # fights
         } # End of the world
@@ -710,12 +718,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 'Chico': copy.deepcopy(self.__bokor_fighter),
             },
             'fights': {
-                'horsemen' : {
+                'horsemen': {
+                  'monsters' : {
                     # 5.75, 12, rand=4
                     'Famine' : copy.deepcopy(self.__thief_fighter),
 
                     # 5.5, 11, rand=4
                     'Pestilence' : copy.deepcopy(self.__vodou_priest_fighter),
+                  }
                 }
             },
             'current-fight': {
@@ -742,6 +752,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             },
             'fights': {
                 'marx' : {
+                  'monsters' : {
                     # 5.5, 12, rand=4
                     'Groucho' : copy.deepcopy(self.__one_more_guy),
 
@@ -750,6 +761,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
                     # 5.25, 10, rand=3
                     'Chico' : copy.deepcopy(self.__bokor_fighter),
+                  }
                 }
             },
             'current-fight': {

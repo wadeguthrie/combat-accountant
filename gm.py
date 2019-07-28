@@ -1895,7 +1895,10 @@ class Fight(object):
         self.__details = world.details['fights'][self.__name]
 
     def get_creatures(self):
-        return self.__details
+        if 'monsters' not in self.__details:                # TODO: remove
+            PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
+            PP.pprint(self.__details)                       # TODO: remove
+        return self.__details['monsters']
 
 
 
@@ -5402,7 +5405,7 @@ class BuildFightHandler(ScreenHandler):
         self.__template_name = None # Name of templates we'll use to create
                                     # new creatures.
 
-        self.__new_creatures = {}   # This is the recepticle for the new
+        self.__new_creatures = None # This is the recepticle for the new
                                     # creatures while they're being built.
                                     # In the event that they're saved,
                                     # they'll be transferred to their new
@@ -5430,15 +5433,17 @@ class BuildFightHandler(ScreenHandler):
             while new_existing is None:
                 new_existing = self._window_manager.menu('New or Pre-Existing',
                                                           new_existing_menu)
-            # self._draw_screen()
-
             if new_existing == 'new':
                 self.__new_group()
             else:
                 self.__existing_group(creature_type)
 
+        if self.__new_creatures is None:
+            return
+
         self._draw_screen()
         self.__add_creature()
+        return
 
     def get_group_name(self):
         return self.__group_name
@@ -5481,7 +5486,6 @@ class BuildFightHandler(ScreenHandler):
 
         self.__viewing_index = None
         if self.__group_name is None:
-            print 'NO GROUP NAME' # TODO: remove
             self._window_manager.error(
                 ['You must select a new or existing group to which to',
                  'add this creature.'])
@@ -5504,7 +5508,6 @@ class BuildFightHandler(ScreenHandler):
                                                           sorted(creature_menu))
             # TODO: maybe not
             if from_creature_name is None:
-                print 'NO MONSTER NAME' # TODO: remove
                 return True # Keep going
 
             # Generate the creature for the template
@@ -5587,7 +5590,8 @@ class BuildFightHandler(ScreenHandler):
 
             while keep_changing_this_creature:
                 # Creating a temporary list to show.  Add the new creature by
-                # its current creature name.  Once the creature name is sorted,
+                # its current creature name and allow the name to be modified.
+                # Once the creature name is sorted,
                 # we can add it to the permanent list.  That simplifies the
                 # cleanup (since the lists are dictionaries, indexed by
                 # creature name).
@@ -5789,10 +5793,10 @@ class BuildFightHandler(ScreenHandler):
 
         self.__group_name = group_name
         fights = self.__world.get_fights() # New groups can
-                                                    # only be in fights.
+                                           # only be in fights.
 
-        fights[group_name] = {} # TODO: will be {'monsters': {}}
-        self.__new_creatures = fights[group_name] #TODO: will be ['monsters']
+        fights[group_name] = {'monsters': {}}
+        self.__new_creatures = fights[group_name]['monsters']
 
         # Display our new state
 
