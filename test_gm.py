@@ -154,7 +154,6 @@ class MockBuildFightGmWindow(MockGmWindow):
         pass
 
     def show_creatures(self,
-                       old_creatures,   # {name: {details}, ...} like in JSON
                        new_creatures,   # {name: {details}, ...} like in JSON
                        new_char_name,   # name of character to highlight
                        viewing_index,   # index into creature list:
@@ -2559,7 +2558,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response('Monster', 'VodouCleric')
         self.__window_manager.set_input_box_response('Monster Name', 'Horatio')
         self.__window_manager.set_menu_response('What Next', 'quit')
-        self.__window_manager.set_menu_response('Save test_new_fight', 'save')
 
         build_fight = TestBuildFightHandler(self.__window_manager,
                                             world,
@@ -2577,7 +2575,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         ### Fight already exists ###
 
-        #print '\n\n============= Fight Already Exists =============\n\n'
+        # print '\n\n============= Fight Already Exists =============\n\n'
 
         self.__window_manager.reset_error_state()
         self.__window_manager.clear_menu_responses()
@@ -2599,7 +2597,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response('Monster', 'VodouCleric')
         self.__window_manager.set_input_box_response('Monster Name', 'Horatio')
         self.__window_manager.set_menu_response('What Next', 'quit')
-        self.__window_manager.set_menu_response('Save foo', 'save')
 
         build_fight = TestBuildFightHandler(self.__window_manager,
                                             world,
@@ -2621,14 +2618,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                             'New or Pre-Existing', 'existing')
         self.__window_manager.set_menu_response(
                             'From Which Template', 'Arena Combat')
-        self.__window_manager.set_menu_response(
-                            'To Which Group',
-                            {'name': 'test_new_fight',
-                             'group': world.get_creatures('test_new_fight')})
+        self.__window_manager.set_menu_response('To Which Group',
+                                                'test_new_fight')
         self.__window_manager.set_menu_response('Monster', 'VodouCleric')
         self.__window_manager.set_input_box_response('Monster Name', 'Ophelia')
         self.__window_manager.set_menu_response('What Next', 'quit')
-        self.__window_manager.set_menu_response('Save test_new_fight', 'save')
 
         build_fight = TestBuildFightHandler(self.__window_manager,
                                             world,
@@ -2644,7 +2638,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # here.
         build_fight.change_viewing_index(-1)
         build_fight.set_command_ribbon_input('d')
-        self.__window_manager.set_menu_response('Save test_new_fight', 'yes')
         self.__window_manager.set_menu_response(
                                         'Delete "1 - Horatio" ARE YOU SURE?',
                                         'yes')
@@ -2671,7 +2664,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response('Monster', 'VodouCleric')
         self.__window_manager.set_input_box_response('Monster Name', 'Skippy')
         self.__window_manager.set_menu_response('What Next', 'quit')
-        self.__window_manager.set_menu_response(('Save %s' % group), 'save')
 
         build_fight = TestBuildFightHandler(self.__window_manager,
                                             world,
@@ -2695,7 +2687,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response('Monster', 'VodouCleric')
         self.__window_manager.set_input_box_response('Monster Name', 'Stinky')
         self.__window_manager.set_menu_response('What Next', 'quit')
-        self.__window_manager.set_menu_response(('Save %s' % group), 'save')
 
         build_fight = TestBuildFightHandler(self.__window_manager,
                                             world,

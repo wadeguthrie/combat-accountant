@@ -604,7 +604,6 @@ class BuildFightGmWindow(GmWindow):
         self._window.refresh()
 
     def show_creatures(self,
-                       old_creatures,   # {name: {details}, ...} like in JSON
                        new_creatures,   # {name: {details}, ...} like in JSON
                        new_char_name,   # name of character to highlight
                        viewing_index,   # index into creature list:
@@ -621,20 +620,6 @@ class BuildFightGmWindow(GmWindow):
 
         mode = curses.A_NORMAL
         highlighted_creature = None
-        if old_creatures is not None:
-            creatures = sorted(old_creatures.items(), key=lambda x: x[0])
-            for index, name_body in enumerate(creatures):
-                now_mode = mode
-                if viewing_index is not None and not viewing_index['new']:
-                    if index == viewing_index['index']:
-                        now_mode |= curses.A_REVERSE
-                        highlighted_creature = name_body[1]
-                self.__char_list.append([{'text': name_body[0],
-                                          'mode': now_mode}])
-
-            # Blank line between old creatures and new
-            self.__char_list.append([{'text': '', 'mode': mode}])
-
         creatures = sorted(new_creatures.items(), key=lambda x: x[0])
         for index, name_body in enumerate(creatures):
             now_mode = mode
@@ -643,10 +628,10 @@ class BuildFightGmWindow(GmWindow):
                     now_mode |= curses.A_REVERSE
                     highlighted_creature = name_body[1]
             else:
-                if viewing_index['new']:
-                    if index == viewing_index['index']:
-                        now_mode |= curses.A_REVERSE
-                        highlighted_creature = name_body[1]
+                if index == viewing_index:
+                    now_mode |= curses.A_REVERSE
+                    highlighted_creature = name_body[1]
+
             self.__char_list.append([{'text': name_body[0], 'mode': now_mode}])
 
         # ...and show the screen
@@ -5414,17 +5399,6 @@ class BuildFightHandler(ScreenHandler):
 
         self.__world = world
         self.__ruleset = ruleset
-
-        self.__is_new = None    # If we're creating a new group (i.e., a new
-                                # group of monsters), we'll have to add the
-                                # group when we save it.  We won't add the
-                                # group if we don't save it so that we don't
-                                # have a bunch of empty monster groups hanging
-                                # around.  If we're NOT creating a new group,
-                                # we'll just add our monsters to the existing
-                                # one when we save.
-
-
         self.__template_name = None # Name of templates we'll use to create
                                     # new creatures.
 
@@ -5437,27 +5411,15 @@ class BuildFightHandler(ScreenHandler):
         self.__equipment_manager = EquipmentManager(world, window_manager)
 
         self.__new_char_name = None
-        self.__viewing_index = None # dict: {'new'=True, index=0}
+        self.__viewing_index = None # integer index into self.__new_creatures
 
         if creature_type == BuildFightHandler.NPCs:
-            self.__is_new = False
             self.__group_name = 'NPCs'
-            self.__new_home = self.__world.get_creatures('NPCs')
-            self._draw_screen()
-            self.__add_creature()
+            self.__existing_group(creature_type)
         elif creature_type == BuildFightHandler.PCs:
-            self.__is_new = False
             self.__group_name = 'PCs'
-            self.__new_home = self.__world.get_creatures('PCs')
-            self._draw_screen()
-            self.__add_creature()
+            self.__existing_group(creature_type)
         else: # creature_type == BuildFightHandler.MONSTERs:
-            self.__new_home = None      # This is a pointer to the existing
-                                        # group (either a group of monsters,
-                                        # the NPCs, or the PCs) or a pointer
-                                        # to a monster group (if it's a new
-                                        # group).
-
             self.__group_name = None    # The name of the monsters or 'PCs'
                                         # that will ultimately take these
                                         # creatures.
@@ -5468,15 +5430,15 @@ class BuildFightHandler(ScreenHandler):
             while new_existing is None:
                 new_existing = self._window_manager.menu('New or Pre-Existing',
                                                           new_existing_menu)
-            self._draw_screen()
+            # self._draw_screen()
 
             if new_existing == 'new':
                 self.__new_group()
             else:
                 self.__existing_group(creature_type)
 
-            self._draw_screen()
-            self.__add_creature()
+        self._draw_screen()
+        self.__add_creature()
 
     def get_group_name(self):
         return self.__group_name
@@ -5493,16 +5455,12 @@ class BuildFightHandler(ScreenHandler):
                                    self._input_filename,
                                    ScreenHandler.maintainjson)
         self._window.command_ribbon(self._choices)
-        name, body = self.__name_n_body_from_index(
-                                self.__viewing_index,
-                                (None if self.__is_new else self.__new_home),
-                                self.__new_creatures)
-        self._window.show_creatures(
-                                (None if self.__is_new else self.__new_home),
-                                self.__new_creatures,
-                                self.__new_char_name,
-                                self.__viewing_index,
-                                self.__ruleset)
+        name, body = self.__name_n_body_from_index(self.__viewing_index,
+                                                   self.__new_creatures)
+        self._window.show_creatures(self.__new_creatures,
+                                    self.__new_char_name,
+                                    self.__viewing_index,
+                                    self.__ruleset)
         if (self.__new_char_name is not None and
                                 self.__new_char_name in self.__new_creatures):
             self._window.show_character_detail(
@@ -5518,56 +5476,60 @@ class BuildFightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        # TODO: Add some comments in here (or refactor), it's really hard
-        # to read.
+
+        # A little error checking
 
         self.__viewing_index = None
-        if self.__new_home is None or self.__group_name is None:
+        if self.__group_name is None:
+            print 'NO GROUP NAME' # TODO: remove
             self._window_manager.error(
                 ['You must select a new or existing group to which to',
                  'add this creature.'])
             return True # Keep going
 
+        # Add as many creatures as we want
+
         keep_adding_creatures = True
         while keep_adding_creatures:
+
+            # Get a template
             if self.__template_name is None:
                 self.__new_template()
 
-            # Based on which monster from the template
-            monster_menu = [(from_monster_name, from_monster_name)
-                for from_monster_name in
+            # Based on which creature from the template
+            creature_menu = [(from_creature_name, from_creature_name)
+                for from_creature_name in
                         self.__world.details['Templates'][self.__template_name]]
-            from_monster_name = self._window_manager.menu('Monster',
-                                                          sorted(monster_menu))
+            from_creature_name = self._window_manager.menu('Monster',
+                                                          sorted(creature_menu))
             # TODO: maybe not
-            if from_monster_name is None:
+            if from_creature_name is None:
+                print 'NO MONSTER NAME' # TODO: remove
                 return True # Keep going
 
-            # Generate the Monster
+            # Generate the creature for the template
 
-            from_monster = (self.__world.details[
-                        'Templates'][self.__template_name][from_monster_name])
-            to_monster = self.__ruleset.make_empty_creature()
+            from_creature = (self.__world.details[
+                        'Templates'][self.__template_name][from_creature_name])
+            to_creature = self.__ruleset.make_empty_creature()
 
-            for key, value in from_monster.iteritems():
+            for key, value in from_creature.iteritems():
                 if key == 'permanent':
                     for ikey, ivalue in value.iteritems():
-                        to_monster['permanent'][ikey] = (
+                        to_creature['permanent'][ikey] = (
                             self.__get_value_from_template(ivalue,
-                                                           from_monster))
-                        to_monster['current'][ikey] = to_monster[
+                                                           from_creature))
+                        to_creature['current'][ikey] = to_creature[
                                                             'permanent'][ikey]
                 else:
-                    to_monster[key] = self.__get_value_from_template(
-                                                        value, from_monster)
+                    to_creature[key] = self.__get_value_from_template(
+                                                        value, from_creature)
 
-            # Get the new Monster Name
+            # Get the new creature name
 
             keep_asking = True
             lines, cols = self._window.getmaxyx()
-            monster_num = len(self.__new_creatures) + 1
-            if not self.__is_new:
-                monster_num += len(self.__new_home)
+            creature_num = len(self.__new_creatures) + 1
             while keep_asking:
                 base_name = self._window_manager.input_box(1,      # height
                                                            cols-4, # width
@@ -5579,18 +5541,18 @@ class BuildFightHandler(ScreenHandler):
                         keep_asking = True
                     else:
                         if where is not None:
-                            to_monster['notes'].append('origin: %s' % where)
+                            to_creature['notes'].append('origin: %s' % where)
                         if gender is not None:
-                            to_monster['notes'].append('gender: %s' % gender)
+                            to_creature['notes'].append('gender: %s' % gender)
 
                 if self.__group_name == 'NPCs' or self.__group_name == 'PCs':
-                    monster_name = base_name
+                    creature_name = base_name
                 else:
-                    monster_name = '%d - %s' % (monster_num, base_name)
+                    creature_name = '%d - %s' % (creature_num, base_name)
 
-                if monster_name in self.__new_creatures:
+                if creature_name in self.__new_creatures:
                     self._window_manager.error(
-                        ['Monster "%s" already exists' % monster_name])
+                        ['Monster "%s" already exists' % creature_name])
                     keep_asking = True
                 else:
                     keep_asking = False
@@ -5611,30 +5573,31 @@ class BuildFightHandler(ScreenHandler):
                                             npc_detail.read_data['support'][key])))
                             trait = ', '.join(trait_array)
 
-                        to_monster['notes'].append('%s: %s' % (name, trait))
+                        to_creature['notes'].append('%s: %s' % (name, trait))
 
             # Modify the creature we just created
 
             keep_changing_this_creature = True
 
-            fighter = Fighter(monster_name,
+            fighter = Fighter(creature_name,
                               self.__group_name,
-                              to_monster,
+                              to_creature,
                               self.__ruleset,
                               self._window_manager)
 
             while keep_changing_this_creature:
+                # Creating a temporary list to show.  Add the new creature by
+                # its current creature name.  Once the creature name is sorted,
+                # we can add it to the permanent list.  That simplifies the
+                # cleanup (since the lists are dictionaries, indexed by
+                # creature name).
                 temp_list = copy.deepcopy(self.__new_creatures)
-                temp_list[monster_name] = to_monster
-                self.__new_char_name = monster_name
-                #self.__viewing_index = {'new':True,
-                #                        index:len(temp_list)-1}
-                self._window.show_creatures(
-                                (None if self.__is_new else self.__new_home),
-                                temp_list,
-                                self.__new_char_name,
-                                self.__viewing_index,
-                                self.__ruleset)
+                temp_list[creature_name] = to_creature
+                self.__new_char_name = creature_name
+                self._window.show_creatures(temp_list,
+                                            self.__new_char_name,
+                                            self.__viewing_index,
+                                            self.__ruleset)
 
                 action_menu = [('append to name', 'append'),
                                ('notes', 'notes'),
@@ -5648,25 +5611,26 @@ class BuildFightHandler(ScreenHandler):
                     more_text = self._window_manager.input_box(1, # height
                                                                cols-4, # width
                                                                'Add to Name')
-                    temp_monster_name = '%s - %s' % (monster_name,
+                    temp_creature_name = '%s - %s' % (creature_name,
                                                      more_text)
-                    if temp_monster_name in self.__new_creatures:
+                    if temp_creature_name in self.__new_creatures:
                         self._window_manager.error(
-                            ['Monster "%s" already exists' % temp_monster_name])
+                                            ['Monster "%s" already exists' %
+                                                temp_creature_name])
                     else:
-                        monster_name = temp_monster_name
+                        creature_name = temp_creature_name
                 elif action == 'notes':
-                    if 'notes' not in to_monster:
+                    if 'notes' not in to_creature:
                         notes = None
                     else:
-                        notes = '\n'.join(to_monster['notes'])
+                        notes = '\n'.join(to_creature['notes'])
                     notes = self._window_manager.edit_window(
                                 lines - 4,
                                 cols/2,
                                 notes,  # initial string (w/ \n) for the window
                                 'Notes',
                                 '^G to exit')
-                    to_monster['notes'] = [x for x in notes.split('\n')]
+                    to_creature['notes'] = [x for x in notes.split('\n')]
 
                 elif action == 'continue':
                     keep_changing_this_creature = False
@@ -5675,32 +5639,28 @@ class BuildFightHandler(ScreenHandler):
                     keep_changing_this_creature = False
                     keep_adding_creatures = False
 
-            self.__new_creatures[monster_name] = to_monster
-            self._window.show_creatures(
-                                (None if self.__is_new else self.__new_home),
-                                self.__new_creatures,
-                                self.__new_char_name,
-                                self.__viewing_index,
-                                self.__ruleset)
+            # Add our new creature to its group and show it to the world.
+
+            self.__new_creatures[creature_name] = to_creature
+            self._window.show_creatures(self.__new_creatures,
+                                        self.__new_char_name,
+                                        self.__viewing_index,
+                                        self.__ruleset)
 
         return True # Keep going
 
 
     def __name_n_body_from_index(self,
                                  index,
-                                 old_creatures,
                                  new_creatures
                                 ):
         if index is None:
             return None, None
 
-        if index['new']:
-            creatures = sorted(new_creatures.items(), key=lambda x: x[0])
-        else:
-            creatures = sorted(old_creatures.items(), key=lambda x: x[0])
+        creatures = sorted(new_creatures.items(), key=lambda x: x[0])
 
-        monster_name = creatures[index['index']][0]
-        monster_body = creatures[index['index']][1]
+        monster_name = creatures[index][0]
+        monster_body = creatures[index][1]
 
         return monster_name, monster_body
 
@@ -5712,19 +5672,10 @@ class BuildFightHandler(ScreenHandler):
         if self.__viewing_index is None:
             # Auto-select the most recently added new creature
             name = self.__new_char_name
-            critters = self.__new_creatures
 
         else:
-            if not self.__viewing_index['new'] and self.__is_new:
-                # Nothing old to delete (not sure how we got here)
-                return True
-
-            critters = (self.__new_creatures if self.__viewing_index['new']
-                                             else self.__new_home)
             name, ignore_body = self.__name_n_body_from_index(
                                             self.__viewing_index,
-                                            (None if self.__is_new 
-                                                else self.__new_home),
                                             self.__new_creatures)
 
         if name is None:
@@ -5737,15 +5688,13 @@ class BuildFightHandler(ScreenHandler):
 
         if answer is not None and answer == 'yes':
             self.__new_char_name = None
-            del(critters[name])
+            del(self.__new_creatures[name])
 
         self.__viewing_index = None
-        self._window.show_creatures(
-                                (None if self.__is_new else self.__new_home),
-                                self.__new_creatures,
-                                self.__new_char_name,
-                                self.__viewing_index,
-                                self.__ruleset)
+        self._window.show_creatures(self.__new_creatures,
+                                    self.__new_char_name,
+                                    self.__viewing_index,
+                                    self.__ruleset)
 
         return True # Keep going
 
@@ -5762,7 +5711,7 @@ class BuildFightHandler(ScreenHandler):
 
         lines, cols = self._window.getmaxyx()
         template_menu = [(template_name, template_name)
-                for template_name in self.__world.details['Templates']]
+                    for template_name in self.__world.details['Templates']]
         template_name = self._window_manager.menu('From Which Template',
                                                          template_menu)
         if template_name is None:
@@ -5772,63 +5721,30 @@ class BuildFightHandler(ScreenHandler):
         # Get the group information
 
         if creature_type == BuildFightHandler.MONSTERs:
-            group_menu = [(group_name,
-                           {'name': group_name,
-                            'group': self.__world.get_creatures(group_name)})
-                                    for group_name in self.__world.get_fights()]
-        if creature_type == BuildFightHandler.NPCs:
-            group_menu.insert(0, ('NPCs',
-                              {'name': 'NPCs',
-                               'group': self.__world.get_creatures('NPCs')}))
-        if creature_type == BuildFightHandler.PCs:
-            group_menu.insert(0, ('PCs',
-                              {'name': 'PCs',
-                               'group': self.__world.get_creatures('PCs')}))
+            group_menu = [(group_name, group_name)
+                            for group_name in self.__world.get_fights()]
+            group_answer = self._window_manager.menu('To Which Group',
+                                                     group_menu)
 
-        group_answer = self._window_manager.menu('To Which Group', group_menu)
+        elif creature_type == BuildFightHandler.NPCs:
+            group_answer = 'NPCs'
+
+        elif creature_type == BuildFightHandler.PCs:
+            group_answer = 'PCs'
+
         if group_answer is None:
             return True # Keep going
 
-        # Save the existing group (if there is one)
-
-        if self.__group_name is not None and self.__new_creatures is not None:
-            self.__maybe_save_group()
-
         # Set the name and group of the new group
 
-        self.__is_new = False
-        self.__group_name = group_answer['name']
-        self.__new_home = group_answer['group']
-        self.__new_creatures = {}
+        self.__group_name = group_answer
+        self.__new_creatures = self.__world.get_creatures(self.__group_name)
 
         # Display our new state
 
         self._draw_screen()
 
         return True # Keep going
-
-    def __maybe_save_group(self):
-        keep_asking = True
-        while keep_asking:
-            save_menu = [('save', 'save'), ('quit (don\'t save)', 'don\'t')]
-            save = self._window_manager.menu(
-                                'Save %s' % self.__group_name, save_menu)
-            if save is not None:
-                keep_asking = False
-                if save == 'save':
-                    if self.__is_new:
-                        self.__new_home[self.__group_name] = (
-                                                        self.__new_creatures)
-                    else:
-                        # add self.__new_creatures to self.__new_home
-                        self.__new_home.update(self.__new_creatures)
-                else:
-                    self.__group_name = None
-            else:
-                self.__group_name = None
-
-            # Throw the old ones away
-            self.__new_creatures = {}
 
 
     def __new_group(self):
@@ -5869,19 +5785,14 @@ class BuildFightHandler(ScreenHandler):
             else:
                 keep_asking = False
 
-
-        # Save the existing group (if there is one)
-
-        if self.__group_name is not None and self.__new_creatures is not None:
-            self.__maybe_save_group()
-
         # Set the name and group of the new group
 
-        self.__is_new = True
         self.__group_name = group_name
-        self.__new_home = self.__world.get_fights() # New groups can
+        fights = self.__world.get_fights() # New groups can
                                                     # only be in fights.
-        self.__new_creatures = {}
+
+        fights[group_name] = {} # TODO: will be {'monsters': {}}
+        self.__new_creatures = fights[group_name] #TODO: will be ['monsters']
 
         # Display our new state
 
@@ -5935,7 +5846,7 @@ class BuildFightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        self.__maybe_save_group()
+
         # TODO: do I need to del self._window?
         self._window.close()
         return False # Stop building this fight
@@ -5944,70 +5855,42 @@ class BuildFightHandler(ScreenHandler):
                              adj  # integer adjustment to viewing index
                             ):
         '''
-        We're managing two lists, here, as if they're one.  They are:
-            * old list: (None if self.__is_new else self.__new_home),
-            * new list: self.__new_creatures,
-        Note that either list may be empty.  The old list goes before the new
-        list but we're wrapping so advancing off of one list goes to the other
-        (unless it's empty).
-
-        The index is stored like this:
-            * self.__viewing_index = None # dict: {'new'=True, index=0}
-
         This is public to facilitate testing.
+
+        NOTE: this breaks if |adj| is > len(self.__new_creatures)
         '''
 
-        len_list = {'old': (0 if self.__is_new else len(self.__new_home)),
-                    'new': len(self.__new_creatures)}
-
-        if len_list['old'] == 0 and len_list['new'] == 0:
+        len_list = len(self.__new_creatures)
+        if len_list == 0:
             return
 
         if self.__viewing_index is None:
-            self.__viewing_index = {'new': True,
-                                    'index': len(self.__new_creatures) - 1}
+            # autoselect last added creature
+            self.__viewing_index = len_list - 1
 
-        if self.__viewing_index['new']:
-            this_list = 'new'
-            other_list = 'old'
-        else:
-            this_list = 'old'
-            other_list = 'new'
+        self.__viewing_index += adj
 
-        self.__viewing_index['index'] += adj
+        if self.__viewing_index >= len_list:
+            self.__viewing_index = 0
 
-        if self.__viewing_index['index'] >= len_list[this_list]:
-            self.__viewing_index['index'] = 0
-            if len_list[other_list] > 0:
-                self.__viewing_index['new'] = (True if other_list == 'new' 
-                                                    else False)
-        elif self.__viewing_index['index'] < 0:
-            if len_list[other_list] <= 0:
-                self.__viewing_index['index'] = len_list[this_list] - 1
-            else:
-                self.__viewing_index['index'] = len_list[other_list] - 1
-                self.__viewing_index['new'] = (True if other_list == 'new' 
-                                                    else False)
+        elif self.__viewing_index < 0:
+            self.__viewing_index = len_list - 1
 
 
     def __view_prev(self): # look at previous character
         self.change_viewing_index(-1)
-        self._window.show_creatures(
-                                (None if self.__is_new else self.__new_home),
-                                self.__new_creatures,
-                                self.__new_char_name,
-                                self.__viewing_index,
-                                self.__ruleset)
+        self._window.show_creatures(self.__new_creatures,
+                                    self.__new_char_name,
+                                    self.__viewing_index,
+                                    self.__ruleset)
         return True # Keep going
 
     def __view_next(self): # look at next character
         self.change_viewing_index(1)
-        self._window.show_creatures(
-                                (None if self.__is_new else self.__new_home),
-                                self.__new_creatures,
-                                self.__new_char_name,
-                                self.__viewing_index,
-                                self.__ruleset)
+        self._window.show_creatures(self.__new_creatures,
+                                    self.__new_char_name,
+                                    self.__viewing_index,
+                                    self.__ruleset)
         return True # Keep going
 
 
