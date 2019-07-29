@@ -1846,7 +1846,7 @@ class World(object):
 
         fights = self.get_fights()
         if group_name in fights:
-            fight = Fight(group_name, self)
+            fight = Fight(group_name, self.details['fights'][group_name])
             return fight.get_creatures()
 
         return None
@@ -1885,14 +1885,179 @@ class World(object):
                 type_name,
                 gender_name)
 
+class Equipment(object):
+    def __init__(self,
+                 equipment, # self.details['stuff'], list of items
+                ):
+        self.__equipment = equipment
+
+    def add(self,
+            new_item,   # dict describing new equipment
+            source=None # string describing where equipment came from
+           ):
+        if source is not None and new_item['owners'] is not None:
+            new_item['owners'].append(source)
+
+        for item in self.__equipment:
+            if item['name'] == new_item['name']:
+                if self.__is_same_thing(item, new_item):
+                    item['count'] += new_item['count']
+                    return
+                break
+
+        self.__equipment.append(new_item)
+
+    def get_item_by_index(self,
+                          index
+                         ):
+        return (None if index > len(self.__equipment) else
+                                                self.__equipment[index])
+
+    def get_list(self):
+        return self.__equipment
+
+    def remove(self,
+               item_index
+              ):
+        # NOTE: This assumes that there won't be any placeholder items --
+        # items with a count of 0 (or less).
+        if ('count' in self.__equipment[item_index] and
+                                self.__equipment[item_index]['count'] > 1):
+            item = copy.deepcopy(self.__equipment[item_index])
+            item['count'] = 1
+            self.__equipment[item_index]['count'] -= 1
+        else:
+            item = self.__equipment[item_index]
+            self.__equipment.pop(item_index)
+
+        return item
+
+
+    def __is_same_thing(self,
+                        lhs,    # part of equipment dict (at level=0, is dict)
+                        rhs,    # part of equipment dict (at level=0, is dict)
+                        level=0 # how far deep in the recursive calls are we
+                       ):
+        level += 1
+
+        if isinstance(lhs, dict):
+            if not isinstance(rhs, dict):
+                return False
+            for key in rhs.iterkeys():
+                if key not in rhs:
+                    return False
+            for key in lhs.iterkeys():
+                if key not in rhs:
+                    return False
+                elif key == 'count' and level == 1:
+                    return True # the count doesn't go into the match of item
+                elif not self.__is_same_thing(lhs[key], rhs[key], level):
+                    return False
+            return True
+                
+        elif isinstance(lhs, list):
+            if not isinstance(rhs, list):
+                return False
+            if len(lhs) != len(rhs):
+                return False
+            for i in range(len(lhs)):
+                if not self.__is_same_thing(lhs[i], rhs[i], level):
+                    return False
+            return True
+
+        else:
+            return False if lhs != rhs else True
+
+
+
+
+class Timers(object):
+    def __init__(self,
+                 timers,
+                ):
+        pass
+
+    def add(self,
+            rounds,             # rounds until timer fires (3.0 rounds
+                                #   fires at end of 3 rounds; 2.9 rounds
+                                #   fires at beginning of 3 rounds.
+            text,               # string to display (in fighter's notes)
+                                #   while timer is running
+            announcement = None # string to display (in its own window)
+                                #   when timer fires
+           ):
+        timer = {'rounds': rounds,
+                 'string': text}
+        if announcement is not None:
+            timer['announcement'] = announcement
+
+        self.details['timers'].append(timer)
+
+
+    def decrement(self):
+        for timer in self.details['timers']:
+            timer['rounds'] -= 1
+
+    def fire(self, timer):
+        if 'state' in timer:
+            self.details['state'] = timer['state']
+        if 'announcement' in timer:
+            self.__window_manager.display_window(
+                                       ('Timer Fired for %s' % self.name),
+                                        [[{'text': timer['announcement'],
+                                           'mode': curses.A_NORMAL }]])
+
+
+    def remove_expired_keep_dying(self):
+        '''
+        Removes timers but keep the timers that are dying this round.  Call
+        this at the beginning of the round.  Standard timers that die this
+        round are kept so that they're shown.
+        '''
+
+        remove_these = []
+        for index, timer in enumerate(self.details['timers']):
+            if timer['rounds'] < 0:     # < keeps the timers dying this round
+                remove_these.insert(0, index) # largest indexes last
+        for index in remove_these:
+            self.__fire_timer(self.details['timers'][index])
+            del self.details['timers'][index]
+
+
+    def remove_expired_kill_dying(self):
+        '''
+        Removes timers and kills the timers that are dying this round.  Call
+        this at the end of the round to scrape off the timers that expire this
+        round.
+        '''
+        # Remove any expired timers
+        remove_these = []
+        for index, timer in enumerate(self.details['timers']):
+            if timer['rounds'] <= 0:    # <= kills the timers dying this round
+                remove_these.insert(0, index) # largest indexes last
+        for index in remove_these:
+            self.__fire_timer(self.details['timers'][index])
+            del self.details['timers'][index]
+
+
+class Notes(object):
+    def __init__(self,
+                 notes
+                ):
+        pass
+
 
 class Fight(object):
     def __init__(self,
-                 name,  # string to index into world['fights']
-                 world  # World object
+                 name,      # string to index into world['fights']
+                 details    # world.details['fights'][name] (world is
+                            #   a World object)
                 ):
         self.__name = name
-        self.__details = world.details['fights'][self.__name]
+        self.__details = details
+        if 'stuff' not in self.__details:
+            self.__details['stuff'] = []
+        self.__equipment = Equipment(self.__details['stuff'])
 
     def get_creatures(self):
         if 'monsters' not in self.__details:                # TODO: remove
@@ -1929,6 +2094,7 @@ class Fighter(object):
         self.details = fighter_details
         self.__ruleset = ruleset
         self.__window_manager = window_manager
+        self.__equipment = Equipment(self.details['stuff'])
 
     @staticmethod
     def get_fighter_state(details):
@@ -1948,18 +2114,10 @@ class Fighter(object):
     def add_equipment(self,
                       new_item,   # dict describing new equipment
                       source=None # string describing where equipment came from
-                     ):
-        if source is not None and new_item['owners'] is not None:
-            new_item['owners'].append(source)
-
-        for item in self.details['stuff']:
-            if item['name'] == new_item['name']:
-                if self.__is_same_thing(item, new_item):
-                    item['count'] += new_item['count']
-                    return
-                break
-
-        self.details['stuff'].append(new_item)
+                      ):
+        self.__equipment.add(new_item, source)
+        self.details['weapon-index'] = None
+        self.details['armor-index'] = None
 
     def add_timer(self,
                   rounds,           # rounds until timer fires (3.0 rounds
@@ -1970,6 +2128,7 @@ class Fighter(object):
                   announcement=None # string to display (in its own window)
                                     #   when timer fires
                  ):
+        # TODO: remove in favor of object
         timer = {'rounds': rounds,
                  'string': text}
         if announcement is not None:
@@ -1986,6 +2145,7 @@ class Fighter(object):
 
 
     def decrement_timers(self):
+        # TODO: remove in favor of object
         for timer in self.details['timers']:
             timer['rounds'] -= 1
 
@@ -2019,14 +2179,16 @@ class Fighter(object):
         armor_index = self.details['armor-index']
         if armor_index is None:
             return None, None
-        return self.details['stuff'][armor_index], armor_index
+        armor = self.__equipment.get_item_by_index(armor_index)
+        return armor, armor_index
 
 
     def get_current_weapon(self):
         weapon_index = self.details['weapon-index']
         if weapon_index is None:
             return None, None
-        return self.details['stuff'][weapon_index], weapon_index
+        weapon = self.__equipment.get_item_by_index(weapon_index)
+        return weapon, weapon_index
 
 
     def get_state(self):
@@ -2041,7 +2203,7 @@ class Fighter(object):
 
         Returns index, item
         '''
-        for index, item in enumerate(self.details['stuff']):
+        for index, item in enumerate(self.__equipment.get_list()):
             if item['name'] == name:
                 self.details['weapon-index'] = index
                 return index, item
@@ -2064,28 +2226,16 @@ class Fighter(object):
         self.details['did_action_this_turn'] = True
 
     def remove_equipment(self,
-                         item_index,   # dict describing new equipment
+                         item_index
                         ):
-        # NOTE: This assumes that there won't be any placeholder items --
-        # items with a count of 0 (or less).
-        if ('count' in self.details['stuff'][item_index] and
-                        self.details['stuff'][item_index]['count'] > 1):
-            item = copy.deepcopy(self.details['stuff'][item_index])
-            item['count'] = 1
-            self.details['stuff'][item_index]['count'] -= 1
-        else:
-            item = self.details['stuff'][item_index]
-            self.details['stuff'].pop(item_index)
-
-            # Now, we're potentially messing with the order of things in the
-            # 'stuff' array.  Best not to depend on the weapon-index.
-            self.details['weapon-index'] = None
-            self.details['armor-index'] = None
-
+        item = self.__equipment.remove(item_index)
+        self.details['weapon-index'] = None
+        self.details['armor-index'] = None
         #self._window.show_character(self.__character)
         return item
 
     def remove_expired_keep_dying_timers(self):
+        # TODO: remove in favor of object
         '''
         Removes timers but keep the timers that are dying this round.  Call
         this at the beginning of the round.  Standard timers that die this
@@ -2102,6 +2252,7 @@ class Fighter(object):
 
 
     def remove_expired_kill_dying_timers(self):
+        # TODO: remove in favor of object
         '''
         Removes timers and kills the timers that are dying this round.  Call
         this at the end of the round to scrape off the timers that expire this
@@ -2160,6 +2311,7 @@ class Fighter(object):
             self.details['state'] = 'absent'
 
     def __fire_timer(self, timer):
+        # TODO: remove in favor of object
 
         if 'state' in timer:
             self.details['state'] = timer['state']
@@ -2168,43 +2320,6 @@ class Fighter(object):
                                        ('Timer Fired for %s' % self.name),
                                         [[{'text': timer['announcement'],
                                            'mode': curses.A_NORMAL }]])
-
-
-    def __is_same_thing(self,
-                        lhs,    # part of equipment dict (at level=0, is dict)
-                        rhs,    # part of equipment dict (at level=0, is dict)
-                        level=0 # how far deep in the recursive calls are we
-                       ):
-        level += 1
-
-        if isinstance(lhs, dict):
-            if not isinstance(rhs, dict):
-                return False
-            for key in rhs.iterkeys():
-                if key not in rhs:
-                    return False
-            for key in lhs.iterkeys():
-                if key not in rhs:
-                    return False
-                elif key == 'count' and level == 1:
-                    return True # the count doesn't go into the match of item
-                elif not self.__is_same_thing(lhs[key], rhs[key], level):
-                    return False
-            return True
-                
-        elif isinstance(lhs, list):
-            if not isinstance(rhs, list):
-                return False
-            if len(lhs) != len(rhs):
-                return False
-            for i in range(len(lhs)):
-                if not self.__is_same_thing(lhs[i], rhs[i], level):
-                    return False
-            return True
-
-        else:
-            return False if lhs != rhs else True
-
 
 
 
