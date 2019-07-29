@@ -436,17 +436,16 @@ class MainGmWindow(GmWindow):
         self.__char_list_window.draw_window()
         self.__char_list_window.refresh()
 
-    def show_character_detail(self,
-                              character, # dict as found in the JSON
-                              ruleset
-                             ):
+    def show_detail(self,
+                    character # Fighter or Fight object
+                   ):
         self.__char_detail_window.clear()
         if character is None:
             self.refresh()
             return
 
         del self.__char_detail[:]
-        ruleset.get_character_detail(character, self.__char_detail)
+        character.get_detail(self.__char_detail)
 
         # ...and show the screen
 
@@ -455,9 +454,7 @@ class MainGmWindow(GmWindow):
 
 
     def show_character_list(self,
-                            char_list,  # [ {'name': xxx,
-                                        #    'group': xxx,
-                                        #    'details':xxx}, ...
+                            char_list,  # [ Fighter(), Fighter(), ..]
                             current_index,
                             standout = False
                            ):
@@ -469,18 +466,22 @@ class MainGmWindow(GmWindow):
             return
 
         for line, char in enumerate(char_list):
+            # TODO: perhaps the colors should be consolidated in the Figher
+            #   and Fight objects
             mode = curses.A_REVERSE if standout else 0
-            if char['group'] == 'NPCs':
+            if char.group == 'NPCs':
                 mode |= curses.color_pair(GmWindowManager.CYAN_BLACK)
+            elif char.name == Fight.name:
+                mode |= curses.color_pair(GmWindowManager.BLUE_BLACK)
             else:
                 mode |= self._window_manager.get_mode_from_fighter_state(
-                                    Fighter.get_fighter_state(char['details']))
+                                    Fighter.get_fighter_state(char.details))
 
             mode |= (curses.A_NORMAL if current_index is None or
                                        current_index != line
                                     else curses.A_STANDOUT)
 
-            self.__char_list.append([{'text': char['name'], 
+            self.__char_list.append([{'text': char.name, 
                                       'mode': mode}])
 
         self.__char_list_window.draw_window()
@@ -1768,11 +1769,13 @@ class GmScrollableWindow(object):
 class World(object):
     def __init__(self,
                  world_details,  # GmJson object
+                 ruleset,        # Ruleset object
                  window_manager  # a GmWindowManager object to handle I/O
                 ):
         self.__gm_json = world_details # only used for toggling whether the
                                        # data is saved on exit of the program.
         self.details = world_details.read_data # entire dict from JSON
+        self.__ruleset = ruleset
         self.__window_manager = window_manager
 
     def is_saved_on_exit(self):
@@ -1835,8 +1838,8 @@ class World(object):
         return details
 
     def get_creatures(self,
-                     group_name  # 'PCs', 'NPCs', or a monster group
-                    ):
+                      group_name  # 'PCs', 'NPCs', or a monster group
+                     ):
         '''
         Used to get PCs, NPCs, or a fight's list of creatures.
         '''
@@ -1846,7 +1849,10 @@ class World(object):
 
         fights = self.get_fights()
         if group_name in fights:
-            fight = Fight(group_name, self.details['fights'][group_name])
+            fight = Fight(group_name,
+                          self.details['fights'][group_name],
+                          self.__ruleset
+                          )
             return fight.get_creatures()
 
         return None
@@ -2063,22 +2069,35 @@ class Notes(object):
 
 
 class Fight(object):
+    name = '<< ARENA >>'    # Describes the FIGHT object
     def __init__(self,
-                 name,      # string to index into world['fights']
-                 details    # world.details['fights'][name] (world is
+                 group,     # string to index into world['fights']
+                 details,   # world.details['fights'][name] (world is
                             #   a World object)
+                 ruleset    # Ruleset object
                 ):
-        self.__name = name
-        self.__details = details
-        if 'stuff' not in self.__details:
-            self.__details['stuff'] = []
-        self.__equipment = Equipment(self.__details['stuff'])
+        self.name = Fight.name
+        self.group = group
+        self.details = details
+        self.__ruleset = ruleset
+        if 'stuff' not in self.details:
+            self.details['stuff'] = []
+        self.equipment = Equipment(self.details['stuff'])
+
 
     def get_creatures(self):
-        if 'monsters' not in self.__details:                # TODO: remove
+        if 'monsters' not in self.details:                  # TODO: remove
             PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
-            PP.pprint(self.__details)                       # TODO: remove
-        return self.__details['monsters']
+            PP.pprint(self.details)                         # TODO: remove
+        return self.details['monsters']
+
+
+    def get_detail(self,
+                   char_detail, # recepticle for character detail.
+                                # [[{'text','mode'},...],  # line 0
+                                #  [...],               ]  # line 1...
+                   ):
+        self.__ruleset.get_fight_detail(self.details, char_detail)
 
 
 
@@ -2303,6 +2322,12 @@ class Fighter(object):
         if not self.is_conscious():
             self.details['opponent'] = None # dead men fight nobody
 
+    def get_detail(self,
+                   char_detail, # recepticle for character detail.
+                                # [[{'text','mode'},...],  # line 0
+                                #  [...],               ]  # line 1...
+                   ):
+        self.__ruleset.get_character_detail(self.details, char_detail)
 
     def start_fight(self):
         # NOTE: we're allowing health to still be messed-up, here
@@ -4444,6 +4469,46 @@ class GurpsRuleset(Ruleset):
             char_detail.append([{'text': '  (None)',
                                  'mode': mode}])
 
+    def get_fight_detail(self,
+                         fight,       # dict as found in the JSON
+                         char_detail, # recepticle for fight detail.
+                                      # [[{'text','mode'},...],  # line 0
+                                      #  [...],               ]  # line 1...
+                        ):
+
+        # stuff
+
+        mode = curses.A_NORMAL 
+        char_detail.append([{'text': 'Equipment',
+                             'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        if 'stuff' in fight:
+            for item in fight['stuff']:
+                found_one = True
+                EquipmentManager.get_description(item, char_detail)
+
+        if not found_one:
+            char_detail.append([{'text': '  (None)',
+                                 'mode': mode}])
+
+        # TODO: maybe here and in get_character_detail, include timers.
+        # notes
+
+        mode = curses.A_NORMAL 
+        char_detail.append([{'text': 'Notes',
+                             'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        if 'notes' in fight:
+            for note in fight['notes']:
+                found_one = True
+                char_detail.append([{'text': '  %s' % note,
+                                     'mode': mode}])
+
+        if not found_one:
+            char_detail.append([{'text': '  (None)',
+                                 'mode': mode}])
 
 
     def get_damage(self,
@@ -7319,11 +7384,7 @@ class MainHandler(ScreenHandler):
 
     # This is public to facilitate testing
     def get_fighter_from_char_index(self):
-        return Fighter(self.__chars[self.__char_index]['name'],
-                       self.__chars[self.__char_index]['group'],
-                       self.__chars[self.__char_index]['details'],
-                       self.__ruleset,
-                       self._window_manager)
+        return self.__chars[self.__char_index]
 
     #
     # Protected Methods
@@ -7334,14 +7395,13 @@ class MainHandler(ScreenHandler):
         self._window.status_ribbon(self._input_filename,
                                    ScreenHandler.maintainjson)
 
-        person = (None if self.__char_index is None
-                                    else self.__chars[self.__char_index])
-        character = None if person is None else person['details']
-
         self._window.show_character_list(self.__chars,
                                          self.__char_index,
                                          inverse)
-        self._window.show_character_detail(character, self.__ruleset)
+
+        person = (None if self.__char_index is None
+                       else self.__chars[self.__char_index])
+        self._window.show_detail(person)
 
         self._window.command_ribbon(self._choices)
 
@@ -7455,7 +7515,7 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = self.get_fighter_from_char_index()
+        fighter = self.__chars[self.__char_index]
         self.__equipment_manager.add_equipment(fighter)
         self._draw_screen()
         return True # Keep going
@@ -7465,7 +7525,7 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = self.get_fighter_from_char_index()
+        fighter = self.__chars[self.__char_index]
 
         # Is the fighter a caster?
         if 'spells' not in fighter.details:
@@ -7518,7 +7578,7 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = self.get_fighter_from_char_index()
+        fighter = self.__chars[self.__char_index]
 
         # Is the fighter a caster?
         if 'spells' not in fighter.details:
@@ -7550,7 +7610,7 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
     def __give_equipment(self, throw_away):
-        from_fighter = self.get_fighter_from_char_index()
+        from_fighter = self.__chars[self.__char_index]
 
         item = self.__equipment_manager.remove_equipment(from_fighter)
         if item is None:
@@ -7595,7 +7655,7 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = self.get_fighter_from_char_index()
+        fighter = self.__chars[self.__char_index]
         self.__equipment_manager.remove_equipment(fighter)
         self._draw_screen()
         return True # Keep going
@@ -7631,7 +7691,7 @@ class MainHandler(ScreenHandler):
     def __ruleset_ability(self,
                           param # string: ability name
                          ):
-        fighter = self.get_fighter_from_char_index()
+        fighter = self.__chars[self.__char_index]
 
         #   { 
         #       'Skills':     { 'Axe/Mace': 8,      'Climbing': 8, },
@@ -7706,7 +7766,7 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = self.get_fighter_from_char_index()
+        fighter = self.__chars[self.__char_index]
 
         keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
@@ -7744,7 +7804,7 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = self.get_fighter_from_char_index()
+        fighter = self.__chars[self.__char_index]
         if fighter is None:
             return True # Keep fighting
 
@@ -7788,7 +7848,7 @@ class MainHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        self.__ruleset.heal_fighter(self.__chars[self.__char_index]['details'])
+        self.__ruleset.heal_fighter(self.__chars[self.__char_index].details)
         self._draw_screen()
 
         return True
@@ -7864,8 +7924,8 @@ class MainHandler(ScreenHandler):
 
                 index = None
                 for i, character in enumerate(self.__chars):
-                    if (character['name'] == match['name'] and
-                                    character['group'] == match['group']):
+                    if (character.name == match['name'] and
+                                    character.group == match['group']):
                         index = i
 
                 result_menu.append((match_string, index))
@@ -7921,8 +7981,8 @@ class MainHandler(ScreenHandler):
     # This is public for testing purposes
     def NPC_joins_monsters(self, throw_away):
         # Make sure the person is an NPC
-        npc_name = self.__chars[self.__char_index]['name']
-        if self.__chars[self.__char_index]['group'] != 'NPCs':
+        npc_name = self.__chars[self.__char_index].name
+        if self.__chars[self.__char_index].group != 'NPCs':
             self._window_manager.error(['"%s" not an NPC' % npc_name])
             return True
 
@@ -7945,8 +8005,8 @@ class MainHandler(ScreenHandler):
 
     # This is public for testing purposes
     def NPC_joins_PCs(self, throw_away):
-        npc_name = self.__chars[self.__char_index]['name']
-        if self.__chars[self.__char_index]['group'] != 'NPCs':
+        npc_name = self.__chars[self.__char_index].name
+        if self.__chars[self.__char_index].group != 'NPCs':
             self._window_manager.error(['"%s" not an NPC' % npc_name])
             return True
 
@@ -7960,7 +8020,7 @@ class MainHandler(ScreenHandler):
         return True
 
     def __NPC_leaves_PCs(self, throw_away):
-        npc_name = self.__chars[self.__char_index]['name']
+        npc_name = self.__chars[self.__char_index].name
         if npc_name not in self.__world.details['NPCs']:
             self._window_manager.error(['"%s" not an NPC' % npc_name])
             return True
@@ -8070,28 +8130,38 @@ class MainHandler(ScreenHandler):
             self.__chars = []
             monsters = self.__world.get_creatures(group)
             if monsters is not None:
+                self.__chars = [ Fight(group,
+                                       self.__world.details['fights'][group],
+                                       self.__ruleset)
+                               ]
                 self.__chars.extend([
-                    {'name': x,
-                     'group': group,
-                     'details': self.__world.get_creature_details(x, group)
-                    } for x in sorted(self.__world.get_creatures(group))])
+                    Fighter(x,
+                            group,
+                            self.__world.get_creature_details(x, group),
+                            self.__ruleset,
+                            self._window_manager)
+                    for x in sorted(self.__world.get_creatures(group))])
             if len(self.__chars) == 0:
                 group = None
 
         if group is None:
             self.__chars = [
-                    {'name': x,
-                     'group': 'PCs',
-                     'details': self.__world.get_creature_details(x, 'PCs')
-                    } for x in sorted(self.__world.get_creatures('PCs'))]
+                    Fighter(x,
+                            'PCs',
+                            self.__world.get_creature_details(x, 'PCs'),
+                            self.__ruleset,
+                            self._window_manager)
+                    for x in sorted(self.__world.get_creatures('PCs'))]
 
             npcs = self.__world.get_creatures('NPCs')
             if npcs is not None:
                 self.__chars.extend([
-                    {'name': x,
-                     'group': 'NPCs',
-                     'details': self.__world.get_creature_details(x, 'NPCs')
-                    } for x in sorted(self.__world.get_creatures('NPCs'))])
+                        Fighter(x,
+                                'NPCs',
+                                self.__world.get_creature_details(x, 'NPCs'),
+                                self.__ruleset,
+                                self._window_manager)
+                        for x in sorted(self.__world.get_creatures('NPCs'))])
         else:
             pass
 
@@ -8311,7 +8381,7 @@ if __name__ == '__main__':
                 window_manager.error(['No "PCs" in %s' % filename])
                 sys.exit(2)
 
-            world = World(campaign, window_manager)
+            world = World(campaign, ruleset, window_manager)
 
             # Save the state of things when we leave since there wasn't a
             # horrible crash while reading the data.
