@@ -2276,7 +2276,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert not self.__is_in_dead_monsters(world_obj, "Dima's Crew")
         assert world_obj.read_data['current-fight']['saved'] == False
 
-    def test_add_equipment(self):
+    def test_add_remove_equipment(self):
         '''
         Basic test
         '''
@@ -2291,7 +2291,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         current_count = len(fighter.details['stuff'])
         original_stuff = copy.deepcopy(fighter.details['stuff'])
 
-        # Same item
+        # Same item - verify that the count goes up
 
         assert original_item['count'] == 1
         same_item = copy.deepcopy(original_item)
@@ -2299,9 +2299,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fighter.add_equipment(same_item, 'test')
         assert original_item['count'] == 3
 
-        # Similar item
+        # Similar item - verify that it doesn't just bump the count
 
         similar_item = copy.deepcopy(original_item)
+        similar_item['count'] = 1
         similar_item['acc'] = original_item['acc'] + 1
 
         assert len(fighter.details['stuff']) == current_count
@@ -2326,7 +2327,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                          }
 
         assert len(fighter.details['stuff']) == current_count
-        fighter.add_equipment(different_item, 'test')
+        new_pistol_index = fighter.add_equipment(different_item, 'test')
         current_count += 1
         assert len(fighter.details['stuff']) == current_count
 
@@ -2338,17 +2339,90 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 assert self.__are_equal(original_item,
                                         fighter.details['stuff'][i])
 
-    #def test_random_seed(self):
-    #    for i in range(10):
-    #        random.seed() # randomize
-    #        new_seed = random.randint(1, 10000)
-    #
-    #        print '\nseed: %d' % new_seed
-    #        for j in range(10):
-    #            random.seed(new_seed)
-    #            for k in range(5):
-    #                print random.randint(1, 6),
-    #            print ''
+        # Remove counted item
+        fighter.remove_equipment(self.__tank_fighter_pistol_index)
+        weapon = fighter.equipment.get_item_by_index(
+                                            self.__tank_fighter_pistol_index)
+        assert weapon is not None
+        assert weapon['count'] == 2 # one less than before
+
+        # Remove uncounted item
+        fighter.remove_equipment(new_pistol_index)
+        weapon = fighter.equipment.get_item_by_index(new_pistol_index)
+        assert weapon is None
+
+        # Check the whole list
+
+        '''
+        [
+         0=> {"name": "pistol, Sig D65",  # the index of this is stored
+                                          # in __tank_fighter_pistol_index
+              "type": "ranged weapon",
+              "damage": {"dice": "1d+4"},
+              "acc": 4,
+              "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
+              "reload": 3,
+              "skill": "Guns (Pistol)",
+              "count": 1, <------------------------------------------- now 2
+              "owners": None,
+              "notes": ""
+             },
+         1=> {"name": "sick stick",
+              "type": "melee weapon",
+              "damage": {"dice": "1d+1 fat"},
+              "skill": "Axe/Mace",
+              "count": 1,
+              "owners": None,
+              "notes": ""
+             },
+         2=> {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
+              "owners": None,
+             },
+         3=> {"name": "pistol, Sig D65",  # the index of this is stored
+                                          # in __tank_fighter_pistol_index
+              "type": "ranged weapon",
+              "damage": {"dice": "1d+4"},
+              "acc": 4, <---------------------- now 5 -- this is similar item
+              "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
+              "reload": 3,
+              "skill": "Guns (Pistol)",
+              "count": 1,
+              "owners": None,
+              "notes": ""
+             },
+         4=> {"name": "pistol, Baretta DX 192", XXXXX--different item-removed
+              "type": "ranged weapon",
+              "damage": {"dice": "1d+4"},
+              "acc": 2,
+              "ammo": {"name": "C Cell", "shots_left": 8, "shots": 8},
+              "reload": 3,
+              "skill": "Guns (Pistol)",
+              "count": 1,
+              "owners": None,
+              "notes": ""
+             }
+        ]
+        '''
+        weapon = fighter.equipment.get_item_by_index(0)
+        assert weapon['name'] == "pistol, Sig D65"
+        assert weapon['acc'] == 4
+        assert weapon['count'] == 2
+
+        weapon = fighter.equipment.get_item_by_index(1)
+        assert weapon['name'] == "sick stick"
+        assert weapon['count'] == 1
+
+        weapon = fighter.equipment.get_item_by_index(2)
+        assert weapon['name'] == "C Cell"
+        assert weapon['count'] == 5
+
+        weapon = fighter.equipment.get_item_by_index(3)
+        assert weapon['name'] == "pistol, Sig D65"
+        assert weapon['acc'] == 5
+        assert weapon['count'] == 1
+
+        weapon = fighter.equipment.get_item_by_index(4) # Removed
+        assert weapon is None
 
     def test_redirects(self):
         '''

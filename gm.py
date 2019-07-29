@@ -1907,20 +1907,35 @@ class Equipment(object):
 
         self.__equipment.append(new_item)
 
+        return len(self.__equipment) - 1 # current index of the added item
+
     def get_item_by_index(self,
                           index
                          ):
-        return (None if index > len(self.__equipment) else
+        return (None if index >= len(self.__equipment) else
                                                 self.__equipment[index])
 
-    def get_list(self):
-        return self.__equipment
+    # Here to facilitate testing
+    def get_item_by_name(self,
+                         name
+                        ):
+        '''
+        Remove weapon from sheath or holster.
+
+        Returns index, item
+        '''
+        for index, item in enumerate(self.__equipment):
+            if item['name'] == name:
+                return index, item
+        return None, None # didn't find one
+
 
     def remove(self,
                item_index
               ):
         # NOTE: This assumes that there won't be any placeholder items --
         # items with a count of 0 (or less).
+        # TODO: check item_index for validity
         if ('count' in self.__equipment[item_index] and
                                 self.__equipment[item_index]['count'] > 1):
             item = copy.deepcopy(self.__equipment[item_index])
@@ -2094,7 +2109,8 @@ class Fighter(object):
         self.details = fighter_details
         self.__ruleset = ruleset
         self.__window_manager = window_manager
-        self.__equipment = Equipment(self.details['stuff'])
+        # Public to facilitate testing
+        self.equipment = Equipment(self.details['stuff'])
 
     @staticmethod
     def get_fighter_state(details):
@@ -2115,9 +2131,10 @@ class Fighter(object):
                       new_item,   # dict describing new equipment
                       source=None # string describing where equipment came from
                       ):
-        self.__equipment.add(new_item, source)
+        index = self.equipment.add(new_item, source)
         self.details['weapon-index'] = None
         self.details['armor-index'] = None
+        return index
 
     def add_timer(self,
                   rounds,           # rounds until timer fires (3.0 rounds
@@ -2179,7 +2196,7 @@ class Fighter(object):
         armor_index = self.details['armor-index']
         if armor_index is None:
             return None, None
-        armor = self.__equipment.get_item_by_index(armor_index)
+        armor = self.equipment.get_item_by_index(armor_index)
         return armor, armor_index
 
 
@@ -2187,7 +2204,7 @@ class Fighter(object):
         weapon_index = self.details['weapon-index']
         if weapon_index is None:
             return None, None
-        weapon = self.__equipment.get_item_by_index(weapon_index)
+        weapon = self.equipment.get_item_by_index(weapon_index)
         return weapon, weapon_index
 
 
@@ -2195,6 +2212,7 @@ class Fighter(object):
         return Fighter.get_fighter_state(self.details)
 
 
+    # This is here to support testing
     def get_weapon_by_name(self,
                            name
                           ):
@@ -2203,11 +2221,10 @@ class Fighter(object):
 
         Returns index, item
         '''
-        for index, item in enumerate(self.__equipment.get_list()):
-            if item['name'] == name:
-                self.details['weapon-index'] = index
-                return index, item
-        return None, None # didn't find one
+        index, item = self.equipment.get_item_by_name(name)
+        if index is not None:
+            self.details['weapon-index'] = index
+        return index, item
 
 
     def is_conscious(self):
@@ -2228,7 +2245,7 @@ class Fighter(object):
     def remove_equipment(self,
                          item_index
                         ):
-        item = self.__equipment.remove(item_index)
+        item = self.equipment.remove(item_index)
         self.details['weapon-index'] = None
         self.details['armor-index'] = None
         #self._window.show_character(self.__character)
