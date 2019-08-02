@@ -642,7 +642,8 @@ class BuildFightGmWindow(GmWindow):
 
         # show the detail of the selected guy
 
-        self.show_character_detail(highlighted_creature, ruleset)
+        # TODO:
+        #self.show_character_detail(highlighted_creature, ruleset)
 
         self.refresh() # TODO: needed?
 
@@ -2070,6 +2071,11 @@ class Notes(object):
 
 class Fight(object):
     name = '<< ARENA >>'    # Describes the FIGHT object
+    empty_fight = {
+        'stuff': [],
+        'notes': [],
+        'timers': []
+    }
     def __init__(self,
                  group,     # string to index into world['fights']
                  details,   # world.details['fights'][name] (world is
@@ -5606,6 +5612,7 @@ class BuildFightHandler(ScreenHandler):
                                #    {'data': <from json>,
                                #     'obj': <Fighter> obj or <Fight> obj}
 
+        self.__deleted_critter_count = 0
         self.__equipment_manager = EquipmentManager(world, window_manager)
 
         self.__new_char_name = None
@@ -5655,17 +5662,16 @@ class BuildFightHandler(ScreenHandler):
                                    self._input_filename,
                                    ScreenHandler.maintainjson)
         self._window.command_ribbon(self._choices)
-        #name, body = self.__name_n_body_from_index(self.__viewing_index,
-        #                                           self.__critters)
         self._window.show_creatures(self.__critters['data'],
                                     self.__new_char_name,
                                     self.__viewing_index,
                                     self.__ruleset)
         if (self.__new_char_name is not None and
                             self.__new_char_name in self.__critters['data']):
-            self._window.show_character_detail(
-                            self.__critters['data'][self.__new_char_name],
-                            self.__ruleset)
+            pass # TODO: fix the following
+            #self._window.show_character_detail(
+            #                self.__critters['data'][self.__new_char_name],
+            #                self.__ruleset)
 
     #
     # Private Methods
@@ -5727,7 +5733,13 @@ class BuildFightHandler(ScreenHandler):
 
             keep_asking = True
             lines, cols = self._window.getmaxyx()
-            creature_num = len(self.__critters['data']) + 1
+
+            # We're not filling in the holes if we delete a monster, we're
+            #   just adding to the total of monsters created
+            # NOTE: this is still imperfect.  If you delete a monster and then
+            #   come back later, you'll still have numbering problems.
+            creature_num = (len(self.__critters['data']) + 1 +
+                                                self.__deleted_critter_count)
             while keep_asking:
                 base_name = self._window_manager.input_box(1,      # height
                                                            cols-4, # width
@@ -5777,19 +5789,12 @@ class BuildFightHandler(ScreenHandler):
 
             keep_changing_this_creature = True
 
-            fighter = Fighter(creature_name,
-                              self.__group_name,
-                              to_creature,
-                              self.__ruleset,
-                              self._window_manager)
-
             while keep_changing_this_creature:
                 # Creating a temporary list to show.  Add the new creature by
                 # its current creature name and allow the name to be modified.
                 # Once the creature name is sorted, we can add it to the
                 # permanent list.  That simplifies the cleanup (since the
                 # lists are dictionaries, indexed by creature name).
-                # TODO: this may need some work
                 temp_list = copy.deepcopy(self.__critters['data'])
                 temp_list[creature_name] = to_creature
                 self.__new_char_name = creature_name
@@ -5840,8 +5845,12 @@ class BuildFightHandler(ScreenHandler):
 
             # Add our new creature to its group and show it to the world.
 
-            # TODO: add the object, here
             self.__critters['data'][creature_name] = to_creature
+            self.__critters['obj'].append(Fighter(creature_name,
+                                                  self.__group_name,
+                                                  to_creature,
+                                                  self.__ruleset,
+                                                  self._window_manager))
             self._window.show_creatures(self.__critters['data'],
                                         self.__new_char_name,
                                         self.__viewing_index,
@@ -5872,25 +5881,52 @@ class BuildFightHandler(ScreenHandler):
         '''
         if self.__viewing_index is None:
             # Auto-select the most recently added new creature
-            name = self.__new_char_name
+            name_to_delete = self.__new_char_name
 
         else:
-            name, ignore_body = self.__name_n_body_from_index(
+            name_to_delete, ignore_body = self.__name_n_body_from_index(
                                             self.__viewing_index,
                                             self.__critters['data'])
 
-        if name is None:
+        if name_to_delete is None:
             return True
 
         critter_menu = [('yes', 'yes'), ('no', 'no')]
-        answer = self._window_manager.menu('Delete "%s" ARE YOU SURE?' % name,
-                                           critter_menu,
-                                           1) # Chose 'No' by default
+        answer = self._window_manager.menu(
+                                'Delete "%s" ARE YOU SURE?' % name_to_delete,
+                                critter_menu,
+                                1) # Choose 'No' by default
 
         if answer is not None and answer == 'yes':
+            found = False
+            for index, obj in enumerate(self.__critters['obj']):
+                if obj.name == name_to_delete:
+                    del(self.__critters['obj'][index])
+                    found = True
+                    break
+            if not found:
+                self._window_manager.error(
+                    ['Deleting monster "%s" who is not in object list' %
+                                                            name_to_delete])
+                print '\n--- BFH.__delete_creature ---'
+                print '\nData list:'
+                name_list = [x for x in self.__critters['data'].keys()]
+                PP.pprint(name_list)
+                print '\nObj list:'
+                name_list = [x.name for x in self.__critters['obj']]
+                PP.pprint(name_list)
+
             self.__new_char_name = None
-            # TODO: delete both the data and the object
-            del(self.__critters['data'][name])
+            del(self.__critters['data'][name_to_delete])
+            self.__deleted_critter_count += 1
+
+            print '\n--- BFH.__delete_creature ---' # TODO: remove
+            print '\nData list:' # TODO: remove
+            name_list = [x for x in self.__critters['data'].keys()] # TODO: remove
+            PP.pprint(name_list) # TODO: remove
+            print '\nObj list:' # TODO: remove
+            name_list = [x.name for x in self.__critters['obj']] # TODO: remove
+            PP.pprint(name_list) # TODO: remove
 
         self.__viewing_index = None
         self._window.show_creatures(self.__critters['data'],
@@ -5940,12 +5976,48 @@ class BuildFightHandler(ScreenHandler):
         # Set the name and group of the new group
 
         self.__group_name = group_answer
-        # TODO: add the object
         self.__critters = {
                     'data': self.__world.get_creatures(self.__group_name),
-                    'obj': None}
+                    'obj': []}
+
+        # Build the Fighter object array
+
+        the_fight_itself = None
+        for name, details in self.__critters['data'].iteritems():
+            if name == Fight.name:
+                the_fight_itself = detils
+            else:
+                fighter = Fighter(name,
+                                  self.__group_name,
+                                  details,
+                                  self.__ruleset,
+                                  self._window_manager)
+                self.__critters['obj'].append(fighter)
+
+        self.__critters['obj'] = sorted(self.__critters['obj'],
+                                        key=lambda x: x.name)
+
+        # Add the Fight to the object array
+
+        if the_fight_itself is None:
+            self.__critters['data'][Fight.name] = Fight.empty_fight
+            fight = Fight(self.__group_name,
+                          self.__world.details['fights'][self.__group_name],
+                          self.__ruleset)
+        else:
+            fight = Fight(self.__group_name, the_fight_itself, self.__ruleset)
+
+        self.__critters['obj'].insert(0, fight)
 
         # Display our new state
+
+        print '\n--- BFH.__existing_group (done) ---' # TODO: remove
+        print '\nData list:'
+        name_list = [x for x in self.__critters['data'].keys()]
+        PP.pprint(name_list)
+        print '\nObj list:'
+        name_list = [x.name for x in self.__critters['obj']]
+        PP.pprint(name_list)
 
         self._draw_screen()
 
@@ -5998,11 +6070,26 @@ class BuildFightHandler(ScreenHandler):
 
         fights[group_name] = {'monsters': {}}
 
-        self.__critters = {'data': fights[group_name]['monsters'],
-                           'obj': None}
-        # TODO: build 'obj'
+        self.__critters = {'data': fights[self.__group_name]['monsters'],
+                           'obj': []}
+
+
+        self.__critters['data'][Fight.name] = Fight.empty_fight
+        fight = Fight(self.__group_name,
+                      self.__world.details['fights'][self.__group_name],
+                      self.__ruleset)
+        self.__critters['obj'].insert(0, fight)
 
         # Display our new state
+
+        print '\n--- BFH.__new_group (done) ---' # TODO: remove
+        print '\nData list:'
+        name_list = [x for x in self.__critters['data'].keys()]
+        PP.pprint(name_list)
+        print '\nObj list:'
+        PP.pprint(self.__critters['obj'])
+        name_list = [x.name for x in self.__critters['obj']]
+        PP.pprint(name_list)
 
         self._draw_screen()
 
