@@ -2124,6 +2124,9 @@ class Fighter(object):
         self.__ruleset = ruleset
         self.__window_manager = window_manager
         # Public to facilitate testing
+        if 'stuff' not in self.details:
+            self.details['stuff'] = []
+
         self.equipment = Equipment(self.details['stuff'])
 
     @staticmethod
@@ -5973,17 +5976,20 @@ class BuildFightHandler(ScreenHandler):
         self.__critters['obj'] = sorted(self.__critters['obj'],
                                         key=lambda x: x.name)
 
-        # Add the Fight to the object array
+        # Add the Fight to the object array (but only for monsters).
 
-        if the_fight_itself is None:
-            self.__critters['data'][Fight.name] = Fight.empty_fight
-            fight = Fight(self.__group_name,
-                          self.__world.details['fights'][self.__group_name],
-                          self.__ruleset)
-        else:
-            fight = Fight(self.__group_name, the_fight_itself, self.__ruleset)
+        if creature_type == BuildFightHandler.MONSTERs:
+            if the_fight_itself is None:
+                self.__critters['data'][Fight.name] = Fight.empty_fight
+                fight = Fight(self.__group_name,
+                              self.__world.details['fights'][self.__group_name],
+                              self.__ruleset)
+            else:
+                fight = Fight(self.__group_name,
+                              the_fight_itself,
+                              self.__ruleset)
 
-        self.__critters['obj'].insert(0, fight)
+            self.__critters['obj'].insert(0, fight)
 
         # Display our new state
 
