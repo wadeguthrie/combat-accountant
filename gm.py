@@ -1827,6 +1827,8 @@ class World(object):
                      ):
         '''
         Used to get PCs, NPCs, or a fight's list of creatures.
+
+        Returns dict of details: {name: {<details>}, name: ... }
         '''
 
         if group_name in self.details:
@@ -2076,6 +2078,9 @@ class Fight(object):
 
 
     def get_creatures(self):
+        '''
+        Returns dict of details: {name: {<details>}, name: ... }
+        '''
         if 'monsters' not in self.details:                  # TODO: remove
             PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
             PP.pprint(self.details)                         # TODO: remove
@@ -5894,14 +5899,6 @@ class BuildFightHandler(ScreenHandler):
             del(self.__critters['data'][name_to_delete])
             self.__deleted_critter_count += 1
 
-            print '\n--- BFH.__delete_creature ---' # TODO: remove
-            print '\nData list:' # TODO: remove
-            name_list = [x for x in self.__critters['data'].keys()] # TODO: remove
-            PP.pprint(name_list) # TODO: remove
-            print '\nObj list:' # TODO: remove
-            name_list = [x.name for x in self.__critters['obj']] # TODO: remove
-            PP.pprint(name_list) # TODO: remove
-
         self.__viewing_index = None
         # BuildFightGmWindow
         self._window.show_creatures(self.__critters['obj'],
@@ -5984,14 +5981,6 @@ class BuildFightHandler(ScreenHandler):
         self.__critters['obj'].insert(0, fight)
 
         # Display our new state
-
-        print '\n--- BFH.__existing_group (done) ---' # TODO: remove
-        print '\nData list:'
-        name_list = [x for x in self.__critters['data'].keys()]
-        PP.pprint(name_list)
-        print '\nObj list:'
-        name_list = [x.name for x in self.__critters['obj']]
-        PP.pprint(name_list)
 
         self._draw_screen()
 
@@ -6081,16 +6070,6 @@ class BuildFightHandler(ScreenHandler):
 
         # Display our new state
 
-        print '\n--- BFH.__new_group (done) ---' # TODO: remove
-        print '\nData list:'
-        name_list = [x for x in self.__critters['data'].keys()]
-        PP.pprint(name_list)
-        print '\nObj list:'
-        PP.pprint(self.__critters['obj'])
-        name_list = [x.name for x in self.__critters['obj']]
-        print '\nNames from Obj list:'
-        PP.pprint(name_list)
-
         self._draw_screen()
 
         return True # Keep going
@@ -6141,6 +6120,14 @@ class BuildFightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+
+        print '\n--- BFH.__quit ---' # TODO: remove
+        print '\nData list:' # TODO: remove
+        name_list = [x for x in self.__critters['data'].keys()] # TODO: remove
+        PP.pprint(name_list) # TODO: remove
+        print '\nObj list:' # TODO: remove
+        name_list = [x.name for x in self.__critters['obj']] # TODO: remove
+        PP.pprint(name_list) # TODO: remove
 
         # TODO: do I need to del self._window?
         self._window.close()
@@ -7485,6 +7472,13 @@ class MainHandler(ScreenHandler):
     #
 
     def _draw_screen(self, inverse=False):
+        print '\n--- MH._draw_screen ---' # TODO: remove
+        print '\nObj list:'
+        PP.pprint(self.__chars)
+        name_list = [x.name for x in self.__chars]
+        print '\nNames from Obj list:'
+        PP.pprint(name_list)
+
         self._window.clear()
         self._window.status_ribbon(self._input_filename,
                                    ScreenHandler.maintainjson)
@@ -7586,6 +7580,13 @@ class MainHandler(ScreenHandler):
                                         campaign_debug_json,
                                         self._input_filename)
         build_fight.handle_user_input_until_done()
+
+        print '\n--- MH.__add_monsters ---'         # TODO: remove
+        print '\nObj list:'                         # TODO: remove
+        PP.pprint(self.__chars)                     # TODO: remove
+        name_list = [x.name for x in self.__chars]  # TODO: remove
+        print '\nNames from Obj list:'              # TODO: remove
+        PP.pprint(name_list)                        # TODO: remove
 
         # Display the last fight on the main screen
 
@@ -8238,19 +8239,39 @@ class MainHandler(ScreenHandler):
             self.__chars = []
             monsters = self.__world.get_creatures(group)
             if monsters is not None:
-                self.__chars = [ Fight(group,
-                                       self.__world.details['fights'][group],
-                                       self.__ruleset)
-                               ]
-                self.__chars.extend([
-                    Fighter(x,
-                            group,
-                            self.__world.get_creature_details(x, group),
-                            self.__ruleset,
-                            self._window_manager)
-                    for x in sorted(self.__world.get_creatures(group))])
-            if len(self.__chars) == 0:
-                group = None
+                the_fight_itself = None
+                for name, details in monsters.iteritems():
+                    if name == Fight.name:
+                        the_fight_itself = details
+                    else:
+                        fighter = Fighter(
+                                    name,
+                                    group,
+                                    self.__world.get_creature_details(name,
+                                                                      group),
+                                    self.__ruleset,
+                                    self._window_manager)
+                        self.__chars.append(fighter)
+
+                self.__chars = sorted(self.__chars, key=lambda x: x.name)
+
+                # Add the Fight to the object array
+
+                if len(self.__chars) == 0:
+                    group = None
+
+                # NOTE: I think we shouldn't add a fight object if one doesn't
+                # exist.
+                #
+                #elif the_fight_itself is None:
+                #    fight =  Fight(group,
+                #                   self.__world.details['fights'][group],
+                #                   self.__ruleset)
+
+                elif the_fight_itself is not None:
+                    fight = Fight(group, the_fight_itself, self.__ruleset)
+                    self.__chars.insert(0, fight)
+
 
         if group is None:
             self.__chars = [
@@ -8384,7 +8405,8 @@ class EquipmentManager(object):
             char_detail.append([{'text': ('     ' + ', '.join(texts)),
                                  'mode': mode}])
 
-        if item['owners'] is not None and len(item['owners']) > 0:
+        if ('owners' in item and item['owners'] is not None and
+                                                    len(item['owners']) > 0):
             texts = ['     Owners: ']
             texts.append('%s' % '->'.join(item['owners']))
             char_detail.append([{'text': ''.join(texts),
