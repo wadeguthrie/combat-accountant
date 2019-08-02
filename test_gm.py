@@ -120,13 +120,13 @@ class MockMainGmWindow(object):
                    ):
         pass
 
-    def show_character_list(self,
-                            char_list,  # [ {'name': xxx,
-                                        #    'group': xxx,
-                                        #    'details':xxx}, ...
-                            current_index,
-                            standout = False
-                           ):
+    def show_creatures(self,
+                       char_list,  # [ {'name': xxx,
+                                   #    'group': xxx,
+                                   #    'details':xxx}, ...
+                       current_index,
+                       standout = False
+                      ):
         pass
 
 
@@ -159,9 +159,8 @@ class MockBuildFightGmWindow(MockGmWindow):
     def show_creatures(self,
                        new_creatures,   # {name: {details}, ...} like in JSON
                        new_char_name,   # name of character to highlight
-                       viewing_index,   # index into creature list:
+                       viewing_index    # index into creature list:
                                         #   dict: {'new'=True, index=0}
-                       ruleset          # Ruleset object
                       ):
         pass
 
@@ -283,6 +282,7 @@ class MockWindowManager(object):
         if title not in self.__menu_responses:
             print ('\n** menu: title "%s" not found in stored responses' %
                                                                         title)
+            PP.pprint(self.__menu_responses)
             assert False
         if len(self.__menu_responses[title]) == 0:
             print ('\n** menu: responses["%s"] is empty, can\'t respond' %
@@ -2427,6 +2427,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Basic test
         '''
+        print '\n=== %s ===' % 'test_redirects' # TODO: remove
         base_world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(base_world_dict)
         world = gm.World(world_data, self.__ruleset, self.__window_manager)
@@ -2443,6 +2444,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Basic test
         '''
+        print '\n=== %s ===' % 'test_redirects_promote_to_NPC' # TODO: remove
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
         world = gm.World(world_data, self.__ruleset, self.__window_manager)
@@ -2494,9 +2496,18 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
     def test_NPC_joins(self):
+        print '\n=== %s ===' % 'test_NPC_joins' # TODO: remove
         '''
         Basic test
         '''
+        # NOTE: These indexes assume that we're NOT creating a fight.  When we
+        # create a fight, a Fight object '<< ARENA >>' will be created and
+        # added to the beginning of the fight.  The indexes, in that case,
+        # will be increased by 1 since the Fight will have index 0.  These
+        # indexes, however, are not used in the tests that create a new fight.
+
+        # << ARENA >> -- not in the tests that use indexes
+
         # {'name': 'Jack',       'group': 'PCs'},      # 5.75, 12, 2
         pc_jack_index = 0
 
@@ -2622,6 +2633,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
     def test_new_fight_new_creatures(self):
+        print '\n=== %s ===' % 'test_new_fight_new_creatures' # TODO: remove
         '''
         Basic test
         '''
@@ -2656,6 +2668,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert 'test_new_fight' in fights # verify that fight  exists
         if 'test_new_fight' in fights:
             creatures = world.get_creatures('test_new_fight')
+            # The 'creatures' should be '<< ARENA >>', '1 - Horatio'
             assert '1 - Horatio' in creatures
 
         ### Fight already exists ###
@@ -2714,6 +2727,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                             self.__ruleset,
                                             gm.BuildFightHandler.MONSTERs)
 
+        # The 'creatures' should be '<< ARENA >>', '1 - Horatio', '2 - Ophelia'
+
         # delete monster
         #
         # I may be too clever, here.  I know that we've just created a fight 
@@ -2721,6 +2736,16 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # the viewing index at that creature.  To delete the _first_ creature,
         # we need to back the viewing index up by 1.  That's what I'm doing,
         # here.
+        #
+        # <arena>
+        # 1 - horatio
+        # 2 - ophelia
+
+        print '\n>>>> Pre-error list of creatures:'             # TODO: remove
+        print_creatures = world.get_creatures('test_new_fight') # TODO: remove
+        print_names = [x for x in print_creatures.iterkeys()]   # TODO: remove
+        PP.pprint(print_names)                                  # TODO: remove
+
         build_fight.change_viewing_index(-1)
         build_fight.set_command_ribbon_input('d')
         self.__window_manager.set_menu_response(

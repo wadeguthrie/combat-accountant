@@ -5725,7 +5725,9 @@ class BuildFightHandler(ScreenHandler):
             #   just adding to the total of monsters created
             # NOTE: this is still imperfect.  If you delete a monster and then
             #   come back later, you'll still have numbering problems.
-            creature_num = (len(self.__critters['data']) + 1 +
+            # ALSO NOTE: we use 'len' rather than 'len'+1 because we've added
+            #   a Fight to the list -- the Fight has an implied prefix of '0'
+            creature_num = (len(self.__critters['data']) +
                                                 self.__deleted_critter_count)
             while keep_asking:
                 base_name = self._window_manager.input_box(1,      # height
@@ -5864,8 +5866,7 @@ class BuildFightHandler(ScreenHandler):
 
         else:
             name_to_delete, ignore_body = self.__name_n_body_from_index(
-                                            self.__viewing_index,
-                                            self.__critters['data'])
+                                                        self.__viewing_index)
 
         if name_to_delete is None:
             return True
@@ -5956,13 +5957,17 @@ class BuildFightHandler(ScreenHandler):
         the_fight_itself = None
         for name, details in self.__critters['data'].iteritems():
             if name == Fight.name:
-                the_fight_itself = detils
+                the_fight_itself = details
             else:
-                fighter = Fighter(name,
-                                  self.__group_name,
-                                  details,
-                                  self.__ruleset,
-                                  self._window_manager)
+                fighter = Fighter(
+                            name,
+                            self.__group_name,
+                            # Calls 'get_creature_details' in case 'details'
+                            # is a redirect.
+                            self.__world.get_creature_details(
+                                                    name, self.__group_name),
+                            self.__ruleset,
+                            self._window_manager)
                 self.__critters['obj'].append(fighter)
 
         self.__critters['obj'] = sorted(self.__critters['obj'],
@@ -5997,19 +6002,14 @@ class BuildFightHandler(ScreenHandler):
 
 
     def __name_n_body_from_index(self,
-                                 index,
-                                 new_creatures
+                                 index, # index into self.__critters['obj']
                                 ):
         if index is None:
             return None, None
 
-        # TODO: here, we assume the order they are on the screen
-        creatures = sorted(new_creatures.items(), key=lambda x: x[0])
+        fighter = self.__critters['obj'][index]
 
-        monster_name = creatures[index][0]
-        monster_body = creatures[index][1]
-
-        return monster_name, monster_body
+        return fighter.name, fighter.details
 
 
     def __new_group(self):
@@ -6121,13 +6121,14 @@ class BuildFightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
-        print '\n--- BFH.__quit ---' # TODO: remove
-        print '\nData list:' # TODO: remove
+        print '\n--- BFH.__quit ---'                            # TODO: remove
+        print '\nData list:'                                    # TODO: remove
         name_list = [x for x in self.__critters['data'].keys()] # TODO: remove
-        PP.pprint(name_list) # TODO: remove
-        print '\nObj list:' # TODO: remove
-        name_list = [x.name for x in self.__critters['obj']] # TODO: remove
-        PP.pprint(name_list) # TODO: remove
+        PP = pprint.PrettyPrinter(indent=3, width=150)          # TODO: remove
+        PP.pprint(name_list)                                    # TODO: remove
+        print '\nObj list:'                                     # TODO: remove
+        name_list = [x.name for x in self.__critters['obj']]    # TODO: remove
+        PP.pprint(name_list)                                    # TODO: remove
 
         # TODO: do I need to del self._window?
         self._window.close()
@@ -6142,7 +6143,10 @@ class BuildFightHandler(ScreenHandler):
         NOTE: this breaks if |adj| is > len(self.__critters['data'])
         '''
 
+        print '\nchange_viewing_index(%d), index=%r' % (    # TODO: remove
+                                adj, self.__viewing_index)  # TODO: remove
         len_list = len(self.__critters['data'])
+        print '  len_list = %d' % len_list                  # TODO: remove
         if len_list == 0:
             return
 
@@ -6158,6 +6162,7 @@ class BuildFightHandler(ScreenHandler):
         elif self.__viewing_index < 0:
             self.__viewing_index = len_list - 1
 
+        print '  adjusted index=%r' % self.__viewing_index  # TODO: remove
 
     def __view_prev(self): # look at previous character
         self.change_viewing_index(-1)
@@ -7101,6 +7106,9 @@ class FightHandler(ScreenHandler):
                                         new_NPC.name])
             return True
 
+        # TODO: do we need to call 'get_creature_details' in case 'details'
+        #   is a redirect?
+
         details_copy = copy.deepcopy(new_NPC.details)
         self.__world.details['NPCs'][new_NPC.name] = details_copy
 
@@ -7472,12 +7480,13 @@ class MainHandler(ScreenHandler):
     #
 
     def _draw_screen(self, inverse=False):
-        print '\n--- MH._draw_screen ---' # TODO: remove
-        print '\nObj list:'
-        PP.pprint(self.__chars)
-        name_list = [x.name for x in self.__chars]
-        print '\nNames from Obj list:'
-        PP.pprint(name_list)
+        print '\n--- MH._draw_screen ---'               # TODO: remove
+        print '\nObj list:'                             # TODO: remove
+        PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
+        PP.pprint(self.__chars)                         # TODO: remove
+        name_list = [x.name for x in self.__chars]      # TODO: remove
+        print '\nNames from Obj list:'                  # TODO: remove
+        PP.pprint(name_list)                            # TODO: remove
 
         self._window.clear()
         self._window.status_ribbon(self._input_filename,
