@@ -308,8 +308,28 @@ class GmWindow(object):
     def getmaxyx(self):
         return self._window.getmaxyx()
 
+
     def refresh(self):
         self._window.refresh()
+
+
+    def show_detail(self,
+                    character # Fighter or Fight object
+                   ):
+        self._char_detail_window.clear()
+        if character is None:
+            self.refresh()
+            return
+
+        del self._char_detail[:]
+        character.get_detail(self._char_detail)
+
+        # ...and show the screen
+
+        self._char_detail_window.draw_window()
+        self._char_detail_window.refresh()
+
+
 
     def status_ribbon(self,
                       filename,
@@ -359,7 +379,7 @@ class MainGmWindow(GmWindow):
                                            0)
 
         lines, cols = self._window.getmaxyx()
-        self.__char_detail = [] # [[{'text', 'mode'}, ...],   # line 0
+        self._char_detail = [] # [[{'text', 'mode'}, ...],   # line 0
                                 #  [...],                  ]  # line 1...
 
         self.__char_list = []   # [[{'text', 'mode'}, ...],   # line 0
@@ -380,8 +400,8 @@ class MainGmWindow(GmWindow):
                                                  width-1,
                                                  top_line,
                                                  1)
-        self.__char_detail_window  = GmScrollableWindow(
-                                                 self.__char_detail,
+        self._char_detail_window  = GmScrollableWindow(
+                                                 self._char_detail,
                                                  self._window_manager,
                                                  height,
                                                  width,
@@ -393,9 +413,9 @@ class MainGmWindow(GmWindow):
         if self.__char_list_window is not None:
             del self.__char_list_window
             self.__char_list_window = None
-        if self.__char_detail_window is not None:
-            del self.__char_detail_window
-            self.__char_detail_window = None
+        if self._char_detail_window is not None:
+            del self._char_detail_window
+            self._char_detail_window = None
         super(MainGmWindow, self).close()
 
 
@@ -403,23 +423,23 @@ class MainGmWindow(GmWindow):
         super(MainGmWindow, self).refresh()
         if self.__char_list_window is not None:
             self.__char_list_window.refresh()
-        if self.__char_detail_window is not None:
-            self.__char_detail_window.refresh()
+        if self._char_detail_window is not None:
+            self._char_detail_window.refresh()
 
     def char_detail_home(self):
-        self.__char_detail_window.scroll_to(0)
-        self.__char_detail_window.draw_window()
-        self.__char_detail_window.refresh()
+        self._char_detail_window.scroll_to(0)
+        self._char_detail_window.draw_window()
+        self._char_detail_window.refresh()
 
     def scroll_char_detail_down(self):
-        self.__char_detail_window.scroll_down()
-        self.__char_detail_window.draw_window()
-        self.__char_detail_window.refresh()
+        self._char_detail_window.scroll_down()
+        self._char_detail_window.draw_window()
+        self._char_detail_window.refresh()
 
     def scroll_char_detail_up(self):
-        self.__char_detail_window.scroll_up()
-        self.__char_detail_window.draw_window()
-        self.__char_detail_window.refresh()
+        self._char_detail_window.scroll_up()
+        self._char_detail_window.draw_window()
+        self._char_detail_window.refresh()
 
     def char_list_home(self):
         self.__char_list_window.scroll_to(0)
@@ -436,28 +456,13 @@ class MainGmWindow(GmWindow):
         self.__char_list_window.draw_window()
         self.__char_list_window.refresh()
 
-    def show_detail(self,
-                    character # Fighter or Fight object
-                   ):
-        self.__char_detail_window.clear()
-        if character is None:
-            self.refresh()
-            return
 
-        del self.__char_detail[:]
-        character.get_detail(self.__char_detail)
-
-        # ...and show the screen
-
-        self.__char_detail_window.draw_window()
-        self.__char_detail_window.refresh()
-
-
-    def show_character_list(self,
-                            char_list,  # [ Fighter(), Fighter(), ..]
-                            current_index,
-                            standout = False
-                           ):
+    # MainGmWindow
+    def show_creatures(self,
+                       char_list,  # [ Fighter(), Fighter(), ..]
+                       current_index,
+                       standout = False
+                      ):
         del self.__char_list[:]
 
         if char_list is None:
@@ -481,8 +486,7 @@ class MainGmWindow(GmWindow):
                                        current_index != line
                                     else curses.A_STANDOUT)
 
-            self.__char_list.append([{'text': char.name, 
-                                      'mode': mode}])
+            self.__char_list.append([{'text': char.name, 'mode': mode}])
 
         self.__char_list_window.draw_window()
         self.refresh()
@@ -492,8 +496,8 @@ class MainGmWindow(GmWindow):
         super(MainGmWindow, self).touchwin()
         if self.__char_list_window is not None:
             self.__char_list_window.touchwin()
-        if self.__char_detail_window is not None:
-            self.__char_detail_window.touchwin()
+        if self._char_detail_window is not None:
+            self._char_detail_window.touchwin()
 
 
 
@@ -505,7 +509,8 @@ class BuildFightGmWindow(GmWindow):
                                                  0,
                                                  0)
         lines, cols = self._window.getmaxyx()
-        self.__char_detail = [] # [[{'text', 'mode'}, ...],   # line 0
+        # TODO: should _char_detail be in GmWindow?
+        self._char_detail = []  # [[{'text', 'mode'}, ...],   # line 0
                                 #  [...],                  ]  # line 1...
 
         self.__char_list = []   # [[{'text', 'mode'}, ...],   # line 0
@@ -525,8 +530,8 @@ class BuildFightGmWindow(GmWindow):
                                                  width,
                                                  top_line,
                                                  1)
-        self.__char_detail_window  = GmScrollableWindow(
-                                                 self.__char_detail,
+        self._char_detail_window  = GmScrollableWindow(
+                                                 self._char_detail,
                                                  self._window_manager,
                                                  height,
                                                  width,
@@ -539,9 +544,9 @@ class BuildFightGmWindow(GmWindow):
         if self.__char_list_window is not None:
             del self.__char_list_window
             self.__char_list_window = None
-        if self.__char_detail_window is not None:
-            del self.__char_detail_window
-            self.__char_detail_window = None
+        if self._char_detail_window is not None:
+            del self._char_detail_window
+            self._char_detail_window = None
         super(BuildFightGmWindow, self).close()
 
 
@@ -550,38 +555,21 @@ class BuildFightGmWindow(GmWindow):
         super(BuildFightGmWindow, self).refresh()
         if self.__char_list_window is not None:
             self.__char_list_window.refresh()
-        if self.__char_detail_window is not None:
-            self.__char_detail_window.refresh()
+        if self._char_detail_window is not None:
+            self._char_detail_window.refresh()
 
     def scroll_char_detail_down(self):
         #print '  ** BuildFightGmWindow::scroll_char_detail_down'
-        self.__char_detail_window.scroll_down()
-        self.__char_detail_window.draw_window()
-        self.__char_detail_window.refresh()
+        self._char_detail_window.scroll_down()
+        self._char_detail_window.draw_window()
+        self._char_detail_window.refresh()
 
     def scroll_char_detail_up(self):
         #print '  ** BuildFightGmWindow::scroll_char_detail_up'
-        self.__char_detail_window.scroll_up()
-        self.__char_detail_window.draw_window()
-        self.__char_detail_window.refresh()
+        self._char_detail_window.scroll_up()
+        self._char_detail_window.draw_window()
+        self._char_detail_window.refresh()
 
-    def show_character_detail(self,
-                              character, # dict as found in the JSON
-                              ruleset
-                             ):
-        self.__char_detail_window.clear()
-        if character is None:
-            self.refresh()
-            return
-
-        del self.__char_detail[:]
-        ruleset.get_character_detail(character, self.__char_detail)
-
-        # ...and show the screen
-
-        self.__char_detail_window.touchwin() # TODO: needed?
-        self.__char_detail_window.draw_window()
-        self.__char_detail_window.refresh()
 
     def status_ribbon(self,
                       group,            # name of group being modified,
@@ -604,12 +592,12 @@ class BuildFightGmWindow(GmWindow):
                                                       maintain_json)
         self._window.refresh()
 
+    # BuildFightGmWindow
     def show_creatures(self,
-                       new_creatures,   # {name: {details}, ...} like in JSON
+                       char_list,       # [ Fighter(), Fighter(), ..]
                        new_char_name,   # name of character to highlight
-                       viewing_index,   # index into creature list:
+                       viewing_index    # index into creature list:
                                         #   dict: {'new'=True, index=0}
-                       ruleset          # Ruleset object
                       ):
 
         # self.__char_list = []   # [[{'text', 'mode'}, ...],   # line 0
@@ -618,22 +606,19 @@ class BuildFightGmWindow(GmWindow):
         self.__char_list_window.clear()
         del self.__char_list[:]
 
-
-        mode = curses.A_NORMAL
         highlighted_creature = None
-        creatures = sorted(new_creatures.items(), key=lambda x: x[0])
-        for index, name_body in enumerate(creatures):
-            now_mode = mode
+        for index, char in enumerate(char_list):
+            mode = curses.A_NORMAL
             if viewing_index is None:
-                if new_char_name is not None and name_body[0] == new_char_name:
-                    now_mode |= curses.A_REVERSE
-                    highlighted_creature = name_body[1]
+                if new_char_name is not None and char.name == new_char_name:
+                    mode |= curses.A_REVERSE
+                    highlighted_creature = char
             else:
                 if index == viewing_index:
-                    now_mode |= curses.A_REVERSE
-                    highlighted_creature = name_body[1]
+                    mode |= curses.A_REVERSE
+                    highlighted_creature = char
 
-            self.__char_list.append([{'text': name_body[0], 'mode': now_mode}])
+            self.__char_list.append([{'text': char.name, 'mode': mode}])
 
         # ...and show the screen
 
@@ -642,8 +627,7 @@ class BuildFightGmWindow(GmWindow):
 
         # show the detail of the selected guy
 
-        # TODO:
-        #self.show_character_detail(highlighted_creature, ruleset)
+        self.show_detail(highlighted_creature)
 
         self.refresh() # TODO: needed?
 
@@ -651,8 +635,8 @@ class BuildFightGmWindow(GmWindow):
         super(BuildFightGmWindow, self).touchwin()
         if self.__char_list_window is not None:
             self.__char_list_window.touchwin()
-        if self.__char_detail_window is not None:
-            self.__char_detail_window.touchwin()
+        if self._char_detail_window is not None:
+            self._char_detail_window.touchwin()
 
     #
     # Private methods
@@ -5662,16 +5646,14 @@ class BuildFightHandler(ScreenHandler):
                                    self._input_filename,
                                    ScreenHandler.maintainjson)
         self._window.command_ribbon(self._choices)
-        self._window.show_creatures(self.__critters['data'],
+        # BuildFightGmWindow
+        self._window.show_creatures(self.__critters['obj'],
                                     self.__new_char_name,
-                                    self.__viewing_index,
-                                    self.__ruleset)
+                                    self.__viewing_index)
         if (self.__new_char_name is not None and
                             self.__new_char_name in self.__critters['data']):
-            pass # TODO: fix the following
-            #self._window.show_character_detail(
-            #                self.__critters['data'][self.__new_char_name],
-            #                self.__ruleset)
+            critter = self.__get_fighter_object_from_name(self.__new_char_name)
+            self._window.show_detail(critter)
 
     #
     # Private Methods
@@ -5795,13 +5777,20 @@ class BuildFightHandler(ScreenHandler):
                 # Once the creature name is sorted, we can add it to the
                 # permanent list.  That simplifies the cleanup (since the
                 # lists are dictionaries, indexed by creature name).
-                temp_list = copy.deepcopy(self.__critters['data'])
-                temp_list[creature_name] = to_creature
+
+                # Note: we're not going to touch the objects in temp_list so
+                # it's OK that this is just copying references.
+                temp_list = [x for x in self.__critters['obj']]
+                temp_list.append(Fighter(creature_name,
+                                         self.__group_name,
+                                         to_creature,
+                                         self.__ruleset,
+                                         self._window_manager))
                 self.__new_char_name = creature_name
+                # BuildFightGmWindow
                 self._window.show_creatures(temp_list,
                                             self.__new_char_name,
-                                            self.__viewing_index,
-                                            self.__ruleset)
+                                            self.__viewing_index)
 
                 action_menu = [('append to name', 'append'),
                                ('notes', 'notes'),
@@ -5851,28 +5840,13 @@ class BuildFightHandler(ScreenHandler):
                                                   to_creature,
                                                   self.__ruleset,
                                                   self._window_manager))
-            self._window.show_creatures(self.__critters['data'],
+            # BuildFightGmWindow
+            self._window.show_creatures(self.__critters['obj'],
                                         self.__new_char_name,
-                                        self.__viewing_index,
-                                        self.__ruleset)
+                                        self.__viewing_index)
 
         return True # Keep going
 
-
-    def __name_n_body_from_index(self,
-                                 index,
-                                 new_creatures
-                                ):
-        if index is None:
-            return None, None
-
-        # TODO: here, we assume the order they are on the screen
-        creatures = sorted(new_creatures.items(), key=lambda x: x[0])
-
-        monster_name = creatures[index][0]
-        monster_body = creatures[index][1]
-
-        return monster_name, monster_body
 
     def __delete_creature(self):
         '''
@@ -5929,10 +5903,10 @@ class BuildFightHandler(ScreenHandler):
             PP.pprint(name_list) # TODO: remove
 
         self.__viewing_index = None
-        self._window.show_creatures(self.__critters['data'],
+        # BuildFightGmWindow
+        self._window.show_creatures(self.__critters['obj'],
                                     self.__new_char_name,
-                                    self.__viewing_index,
-                                    self.__ruleset)
+                                    self.__viewing_index)
 
         return True # Keep going
 
@@ -6024,6 +5998,31 @@ class BuildFightHandler(ScreenHandler):
         return True # Keep going
 
 
+    def __get_fighter_object_from_name(self,
+                                       name # string name of critter
+                                      ):
+        for critter in self.__critters['obj']:
+            if critter.name == name:
+                return critter
+        return None
+
+
+    def __name_n_body_from_index(self,
+                                 index,
+                                 new_creatures
+                                ):
+        if index is None:
+            return None, None
+
+        # TODO: here, we assume the order they are on the screen
+        creatures = sorted(new_creatures.items(), key=lambda x: x[0])
+
+        monster_name = creatures[index][0]
+        monster_body = creatures[index][1]
+
+        return monster_name, monster_body
+
+
     def __new_group(self):
         '''
         Command ribbon method.
@@ -6089,6 +6088,7 @@ class BuildFightHandler(ScreenHandler):
         print '\nObj list:'
         PP.pprint(self.__critters['obj'])
         name_list = [x.name for x in self.__critters['obj']]
+        print '\nNames from Obj list:'
         PP.pprint(name_list)
 
         self._draw_screen()
@@ -6174,18 +6174,18 @@ class BuildFightHandler(ScreenHandler):
 
     def __view_prev(self): # look at previous character
         self.change_viewing_index(-1)
-        self._window.show_creatures(self.__critters['data'],
+        # BuildFightGmWindow
+        self._window.show_creatures(self.__critters['obj'],
                                     self.__new_char_name,
-                                    self.__viewing_index,
-                                    self.__ruleset)
+                                    self.__viewing_index)
         return True # Keep going
 
     def __view_next(self): # look at next character
         self.change_viewing_index(1)
-        self._window.show_creatures(self.__critters['data'],
+        # BuildFightGmWindow
+        self._window.show_creatures(self.__critters['obj'],
                                     self.__new_char_name,
-                                    self.__viewing_index,
-                                    self.__ruleset)
+                                    self.__viewing_index)
         return True # Keep going
 
 
@@ -7489,9 +7489,10 @@ class MainHandler(ScreenHandler):
         self._window.status_ribbon(self._input_filename,
                                    ScreenHandler.maintainjson)
 
-        self._window.show_character_list(self.__chars,
-                                         self.__char_index,
-                                         inverse)
+        # MainGmWindow
+        self._window.show_creatures(self.__chars,
+                                    self.__char_index,
+                                    inverse)
 
         person = (None if self.__char_index is None
                        else self.__chars[self.__char_index])
