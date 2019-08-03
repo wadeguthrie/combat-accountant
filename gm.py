@@ -2081,9 +2081,6 @@ class Fight(object):
         '''
         Returns dict of details: {name: {<details>}, name: ... }
         '''
-        if 'monsters' not in self.details:                  # TODO: remove
-            PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
-            PP.pprint(self.details)                         # TODO: remove
         return self.details['monsters']
 
 
@@ -6127,15 +6124,6 @@ class BuildFightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
-        print '\n--- BFH.__quit ---'                            # TODO: remove
-        print '\nData list:'                                    # TODO: remove
-        name_list = [x for x in self.__critters['data'].keys()] # TODO: remove
-        PP = pprint.PrettyPrinter(indent=3, width=150)          # TODO: remove
-        PP.pprint(name_list)                                    # TODO: remove
-        print '\nObj list:'                                     # TODO: remove
-        name_list = [x.name for x in self.__critters['obj']]    # TODO: remove
-        PP.pprint(name_list)                                    # TODO: remove
-
         # TODO: do I need to del self._window?
         self._window.close()
         return False # Stop building this fight
@@ -6149,10 +6137,7 @@ class BuildFightHandler(ScreenHandler):
         NOTE: this breaks if |adj| is > len(self.__critters['data'])
         '''
 
-        print '\nchange_viewing_index(%d), index=%r' % (    # TODO: remove
-                                adj, self.__viewing_index)  # TODO: remove
         len_list = len(self.__critters['data'])
-        print '  len_list = %d' % len_list                  # TODO: remove
         if len_list == 0:
             return
 
@@ -6168,7 +6153,6 @@ class BuildFightHandler(ScreenHandler):
         elif self.__viewing_index < 0:
             self.__viewing_index = len_list - 1
 
-        print '  adjusted index=%r' % self.__viewing_index  # TODO: remove
 
     def __view_prev(self): # look at previous character
         self.change_viewing_index(-1)
@@ -7486,14 +7470,6 @@ class MainHandler(ScreenHandler):
     #
 
     def _draw_screen(self, inverse=False):
-        print '\n--- MH._draw_screen ---'               # TODO: remove
-        print '\nObj list:'                             # TODO: remove
-        PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
-        PP.pprint(self.__chars)                         # TODO: remove
-        name_list = [x.name for x in self.__chars]      # TODO: remove
-        print '\nNames from Obj list:'                  # TODO: remove
-        PP.pprint(name_list)                            # TODO: remove
-
         self._window.clear()
         self._window.status_ribbon(self._input_filename,
                                    ScreenHandler.maintainjson)
@@ -7595,13 +7571,6 @@ class MainHandler(ScreenHandler):
                                         campaign_debug_json,
                                         self._input_filename)
         build_fight.handle_user_input_until_done()
-
-        print '\n--- MH.__add_monsters ---'         # TODO: remove
-        print '\nObj list:'                         # TODO: remove
-        PP.pprint(self.__chars)                     # TODO: remove
-        name_list = [x.name for x in self.__chars]  # TODO: remove
-        print '\nNames from Obj list:'              # TODO: remove
-        PP.pprint(name_list)                        # TODO: remove
 
         # Display the last fight on the main screen
 

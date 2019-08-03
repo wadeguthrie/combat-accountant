@@ -2427,7 +2427,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        print '\n=== %s ===' % 'test_redirects' # TODO: remove
+        #print '\n=== %s ===' % 'test_redirects' # TODO: remove
         base_world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(base_world_dict)
         world = gm.World(world_data, self.__ruleset, self.__window_manager)
@@ -2444,7 +2444,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        print '\n=== %s ===' % 'test_redirects_promote_to_NPC' # TODO: remove
+        #print '\n=== %s ===' % 'test_redirects_promote_to_NPC' # TODO: remove
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
         world = gm.World(world_data, self.__ruleset, self.__window_manager)
@@ -2496,7 +2496,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
     def test_NPC_joins(self):
-        print '\n=== %s ===' % 'test_NPC_joins' # TODO: remove
+        #print '\n=== %s ===' % 'test_NPC_joins' # TODO: remove
         '''
         Basic test
         '''
@@ -2633,7 +2633,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
     def test_new_fight_new_creatures(self):
-        print '\n=== %s ===' % 'test_new_fight_new_creatures' # TODO: remove
+        #print '\n=== %s ===' % 'test_new_fight_new_creatures' # TODO: remove
         '''
         Basic test
         '''
@@ -2740,11 +2740,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # <arena>
         # 1 - horatio
         # 2 - ophelia
-
-        print '\n>>>> Pre-error list of creatures:'             # TODO: remove
-        print_creatures = world.get_creatures('test_new_fight') # TODO: remove
-        print_names = [x for x in print_creatures.iterkeys()]   # TODO: remove
-        PP.pprint(print_names)                                  # TODO: remove
 
         build_fight.change_viewing_index(-1)
         build_fight.set_command_ribbon_input('d')
