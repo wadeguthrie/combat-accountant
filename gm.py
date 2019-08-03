@@ -789,12 +789,9 @@ class FightGmWindow(GmWindow):
         for line, fighter in enumerate(fighters):
             mode = self._window_manager.get_mode_from_fighter_state(
                                                         fighter.get_state())
-            fighter_string = '%s%s HP:%d/%d' % (
-                                ('> ' if line == current_index else '  '),
-                                fighter.name,
-                                fighter.details['current']['hp'],
-                                fighter.details['permanent']['hp'])
-
+            fighter_string = '%s%s' % (
+                            ('> ' if line == current_index else '  '),
+                            fighter.get_short_summary_string())
 
             if selected_index is not None and selected_index == line:
                 mode = mode | curses.A_REVERSE
@@ -849,13 +846,7 @@ class FightGmWindow(GmWindow):
                        column
                       ):
         show_more_info = True # conscious -- show all the fighter's info
-        fighter_string = '%s HP: %d/%d FP: %d/%d' % (
-                                    fighter.name,
-                                    fighter.details['current']['hp'],
-                                    fighter.details['permanent']['hp'],
-                                    fighter.details['current']['fp'],
-                                    fighter.details['permanent']['fp'])
-
+        fighter_string = fighter.get_long_summary_string()
         fighter_state = fighter.get_state()
         mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
                                                             | curses.A_BOLD)
@@ -879,7 +870,9 @@ class FightGmWindow(GmWindow):
         fighter_state = fighter.get_state()
         mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
                                                             | curses.A_BOLD)
-        if fighter_state == Fighter.DEAD:
+        if fighter_state == Fighter.FIGHT:
+            pass
+        elif fighter_state == Fighter.DEAD:
             window.addstr(line, 0, '** DEAD **', mode)
             line += 1
         elif fighter_state == Fighter.UNCONSCIOUS:
@@ -901,11 +894,11 @@ class FightGmWindow(GmWindow):
             mode = curses.color_pair(GmWindowManager.CYAN_BLACK)
             mode = mode | curses.A_BOLD
 
-        notes, ignore = self.__ruleset.get_fighter_defenses_notes(fighter,
-                                                                  opponent)
-        for note in notes:
-            window.addstr(line, 0, note, mode)
-            line += 1
+        notes, ignore = fighter.get_defenses_notes(opponent)
+        if notes is not None:
+            for note in notes:
+                window.addstr(line, 0, note, mode)
+                line += 1
 
         # Attacker
 
@@ -914,21 +907,22 @@ class FightGmWindow(GmWindow):
             mode = mode | curses.A_BOLD
         else:
             mode = curses.A_NORMAL 
-        notes = self.__ruleset.get_fighter_to_hit_damage_notes(fighter,
-                                                               opponent)
-        for note in notes:
-            window.addstr(line, 0, note, mode)
-            line += 1
+        notes = fighter.get_to_hit_damage_notes(opponent)
+        if notes is not None:
+            for note in notes:
+                window.addstr(line, 0, note, mode)
+                line += 1
 
         # now, back to normal
         mode = curses.A_NORMAL
-        notes = self.__ruleset.get_fighter_notes(fighter)
-        for note in notes:
-            window.addstr(line, 0, note, mode)
-            line += 1
+        notes = fighter.get_notes()
+        if notes is not None:
+            for note in notes:
+                window.addstr(line, 0, note, mode)
+                line += 1
 
         # Timers
-        for timer in fighter.details['timers']:
+        for timer in fighter.get_timers():
             round_count_string = self.__round_count_string % timer['rounds']
             if 'string' in timer:
                 if type(timer['string']) is list:
@@ -1121,6 +1115,8 @@ class GmWindowManager(object):
                     curses.color_pair(GmWindowManager.RED_BLACK),
                 Fighter.ABSENT : 
                     curses.color_pair(GmWindowManager.BLUE_BLACK),
+                Fighter.FIGHT : 
+                    curses.color_pair(GmWindowManager.CYAN_BLACK),
             }
 
             curses.noecho()
@@ -2091,6 +2087,37 @@ class Fight(object):
                    ):
         self.__ruleset.get_fight_detail(self.details, char_detail)
 
+
+    def get_defenses_notes(self,
+                           opponent # Throw away Fighter object
+                          ):
+        return None, None
+
+    def get_timers(self):
+        return []
+
+    def get_to_hit_damage_notes(self,
+                                opponent # Throw away Fighter object
+                               ):
+        return None
+
+
+    def get_notes(self):
+        return None 
+
+
+    def get_state(self):
+        return Fighter.FIGHT
+
+
+    def get_short_summary_string(self):
+        return '%s' % self.name
+
+
+    def get_long_summary_string(self):
+        return '%s' % self.name
+
+
     def start_fight(self):
         pass
 
@@ -2109,13 +2136,15 @@ class Fighter(object):
      DEAD,
 
      INJURED, # Injured is separate since it's tracked by HP
-     ABSENT) = range(5)
+     ABSENT,
+     FIGHT) = range(6)
 
     conscious_map = {
         'alive': ALIVE,
         'unconscious': UNCONSCIOUS,
         'dead': DEAD,
         'absent': ABSENT,
+        'fight': FIGHT,
     }
 
     def __init__(self,
@@ -2232,8 +2261,47 @@ class Fighter(object):
         return weapon, weapon_index
 
 
+    def get_defenses_notes(self,
+                           opponent # Fighter object
+                          ):
+        defense_notes, defense_why = self.__ruleset.get_fighter_defenses_notes(
+                                                                self,
+                                                                opponent)
+        return defense_notes, defense_why
+
+
+    def get_timers(self):
+        return self.details['timers']
+
+    def get_to_hit_damage_notes(self,
+                                opponent # Fighter object
+                               ):
+        notes = self.__ruleset.get_fighter_to_hit_damage_notes(self, opponent)
+        return notes
+
+    def get_notes(self):
+        notes = self.__ruleset.get_fighter_notes(self)
+        return notes
+
+
     def get_state(self):
         return Fighter.get_fighter_state(self.details)
+
+
+    def get_short_summary_string(self):
+        fighter_string = '%s HP:%d/%d' % (self.name,
+                                          self.details['current']['hp'],
+                                          self.details['permanent']['hp'])
+        return fighter_string
+
+    def get_long_summary_string(self):
+        fighter_string = '%s HP: %d/%d FP: %d/%d' % (
+                                    self.name,
+                                    self.details['current']['hp'],
+                                    self.details['permanent']['hp'],
+                                    self.details['current']['fp'],
+                                    self.details['permanent']['fp'])
+        return fighter_string
 
 
     # This is here to support testing
@@ -4700,8 +4768,8 @@ class GurpsRuleset(Ruleset):
         return notes
 
     def get_fighter_defenses_notes(self,
-                                   fighter,  # Fighter object
-                                   opponent
+                                   fighter, # Fighter object
+                                   opponent # Fighter object
                                   ):
         notes = []
         why = []
@@ -6367,7 +6435,8 @@ class FightHandler(ScreenHandler):
                          fighter # Fighter object
                         ):
         ''' Returns Fighter object for opponent of 'fighter'. '''
-        if fighter is None or fighter.details['opponent'] is None:
+        if (fighter is None or fighter.name == Fight.name or
+                                        fighter.details['opponent'] is None):
             return None
 
         opponent = self.__get_fighter_object(
@@ -7183,7 +7252,7 @@ class FightHandler(ScreenHandler):
         ask_to_save = False # Ask to save if some monster is conscious
         ask_to_loot = False # Ask to loot if some monster is unconscious
         for fighter in self.__fighters:
-            if fighter.group != 'PCs':
+            if fighter.group != 'PCs' and fighter.name != Fight.name:
                 if fighter.is_conscious():
                     ask_to_save = True
                 else:
@@ -7345,11 +7414,10 @@ class FightHandler(ScreenHandler):
                 lines.extend([[{'text': '  %s' % weapon['notes'],
                                'mode': curses.A_NORMAL}]])
 
-        ignore, defense_why = self.__ruleset.get_fighter_defenses_notes(
-                                                            why_target,
-                                                            why_opponent)
-        lines = [[{'text': x,
-                   'mode': curses.A_NORMAL}] for x in defense_why] + lines
+        ignore, defense_why = why_target.get_defenses_notes(why_opponent)
+        if defense_why is not None:
+            lines = [[{'text': x,
+                       'mode': curses.A_NORMAL}] for x in defense_why] + lines
 
         ignore = self._window_manager.display_window(
                     'How %s\'s Numbers Were Calculated' % why_target.name,
