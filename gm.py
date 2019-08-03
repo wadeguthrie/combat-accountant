@@ -2091,6 +2091,16 @@ class Fight(object):
                    ):
         self.__ruleset.get_fight_detail(self.details, char_detail)
 
+    def start_fight(self):
+        pass
+
+
+    def decrement_timers(self):
+        pass  # For now, we'll add timers, later
+
+
+    def remove_expired_kill_dying_timers(self):
+        pass  # For now, we'll add timers, later
 
 
 class Fighter(object):
@@ -2326,7 +2336,10 @@ class Fighter(object):
 
     def start_fight(self):
         # NOTE: we're allowing health to still be messed-up, here
+        # TODO: should we allow the state to be absent?
         self.details['state'] = 'alive'
+        # TODO: we should allow timers to be here -- just delete them at the
+        # end of the fight
         self.details['timers'] = []
         self.details['weapon-index'] = None
         # NOTE: person may go around wearing armor -- no need to reset
@@ -6194,8 +6207,6 @@ class FightHandler(ScreenHandler):
 
         # NOTE: 'h' and 'f' belong in Ruleset
         self._add_to_choice_dict({
-
-
             curses.KEY_UP:
                       {'name': 'prev character',
                                               'func': self.__view_prev},
@@ -6244,6 +6255,9 @@ class FightHandler(ScreenHandler):
         #   'round': <number>  # round of the fight
         #   'monsters': <name> # group name of the monsters in the fight
         # }
+
+        # TODO: keep the fighter objects for the PCs and NPCs in the World
+        #   object .
         self.__fighters = [] # This is a parallel array to
                              # self._saved_fight['fighters'] but the contents
                              # are: {'group': <groupname>,
@@ -6277,11 +6291,17 @@ class FightHandler(ScreenHandler):
                                   self._window_manager)
                 self.__fighters.append(fighter)
 
+        the_fight_itself = None
         if monster_group is not None:
             for name in self.__world.get_creatures(monster_group):
                 details = self.__world.get_creature_details(name,
                                                             monster_group)
-                if details is not None:
+                if details is None:
+                    continue
+
+                if name == Fight.name:
+                    the_fight_itself = details
+                else:
                     fighter = Fighter(name,
                                       monster_group,
                                       details,
@@ -6294,6 +6314,14 @@ class FightHandler(ScreenHandler):
         self.__fighters.sort(
                 key=lambda fighter:
                     self.__ruleset.initiative(fighter), reverse=True)
+
+        # Put the fight info (if any) at the top of the list.
+        if the_fight_itself is not None:
+            fight = Fight(monster_group,
+                          the_fight_itself,
+                          self.__ruleset)
+
+            self.__fighters.insert(0, fight)
 
         # Copy the fighter information into the saved_fight.  Also, make
         # sure this looks like a _NEW_ fight.
@@ -6311,6 +6339,10 @@ class FightHandler(ScreenHandler):
                     self.__ruleset.is_creature_consistent(name, details)
 
         self._saved_fight['saved'] = False
+
+        if not self.should_we_show_current_fighter():
+            self.modify_index(1)
+
         self._window.start_fight()
 
 
@@ -6386,7 +6418,9 @@ class FightHandler(ScreenHandler):
                                             self._saved_fight['fighters']) - 1
                 self._saved_fight['round'] += adj 
             current_fighter = self.get_current_fighter()
-            if current_fighter.is_dead():
+            if current_fighter.name == Fight.name:
+                pass
+            elif current_fighter.is_dead():
                 # Allowed add_to_history
                 self.add_to_history({'comment': ' (%s) did nothing (dead)' %
                                                         current_fighter.name})
@@ -6414,6 +6448,19 @@ class FightHandler(ScreenHandler):
             self.add_to_history({'comment': '--- Round %d ---' %
                                                 self._saved_fight['round']})
 
+
+    def should_we_show_current_fighter(self):
+        current_fighter = self.get_current_fighter()
+        if current_fighter.name == Fight.name:
+            return False
+
+        if current_fighter.is_dead():
+            return False
+
+        if current_fighter.is_absent():
+            return False
+
+        return True
 
     #
     # Private Methods
