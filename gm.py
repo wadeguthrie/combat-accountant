@@ -15,26 +15,28 @@ import sys
 import traceback
 
 # TODO:
+#   - an item's type should be an array (so that a battle mech can be both
+#     armor and weapon.
+#
 #   - can't attack if reloading (stored in the weapon)
 #       weapon['ready-in'] -- if >0, can't use - reloading sets this, count
 #       down each round.  Timer?
 #
 #   - clone monster
 #   - need a test for each action (do_action)
-#   - Equipping item should ask to add ammo for item
 #   - Multiple weapons
 #   - Need equipment containers
 #   - Need maintain spell
-#   - Fights should have their own equipment (how to display?)
 #   - add laser sights to weapons
-#   - add a timer that is tied to the round change
 #   - should warn when trying to do a second action (take note of fastdraw)
 #   - Adding Skills/Advantages that already exist should just change the
 #     right-hand side, not add a second entry
-#   - Move spells from persephone.json into ruleset
 #   - Add playback of actions, like from: self._saved_fight['history']
 #
 # TODO (eventually):
+#   - Rules-specific equipment support
+#       o Equipping item should ask to add ammo for item
+#       o Equipping item should ask to add skills if they aren't there
 #   - anything with 'RULESET' comment should be moved to the ruleset
 #   - should only be able to ready an unready weapon.
 #   - Allow for markdown in 'notes' and 'short-notes'
@@ -330,7 +332,6 @@ class GmWindow(object):
         self._char_detail_window.refresh()
 
 
-
     def status_ribbon(self,
                       filename,
                       maintain_json):
@@ -360,6 +361,7 @@ class GmWindow(object):
 
     def touchwin(self):
         self._window.touchwin()
+
 
     def uses_whole_screen(self):
         lines, cols = self.getmaxyx()
@@ -408,6 +410,19 @@ class MainGmWindow(GmWindow):
                                                  top_line,
                                                  width)
 
+
+    def char_detail_home(self):
+        self._char_detail_window.scroll_to(0)
+        self._char_detail_window.draw_window()
+        self._char_detail_window.refresh()
+
+
+    def char_list_home(self):
+        self.__char_list_window.scroll_to(0)
+        self.__char_list_window.draw_window()
+        self.__char_list_window.refresh()
+
+
     def close(self):
         # Kill my subwindows, first
         if self.__char_list_window is not None:
@@ -426,30 +441,24 @@ class MainGmWindow(GmWindow):
         if self._char_detail_window is not None:
             self._char_detail_window.refresh()
 
-    def char_detail_home(self):
-        self._char_detail_window.scroll_to(0)
-        self._char_detail_window.draw_window()
-        self._char_detail_window.refresh()
 
     def scroll_char_detail_down(self):
         self._char_detail_window.scroll_down()
         self._char_detail_window.draw_window()
         self._char_detail_window.refresh()
 
+
     def scroll_char_detail_up(self):
         self._char_detail_window.scroll_up()
         self._char_detail_window.draw_window()
         self._char_detail_window.refresh()
 
-    def char_list_home(self):
-        self.__char_list_window.scroll_to(0)
-        self.__char_list_window.draw_window()
-        self.__char_list_window.refresh()
 
     def scroll_char_list_down(self):
         self.__char_list_window.scroll_down()
         self.__char_list_window.draw_window()
         self.__char_list_window.refresh()
+
 
     def scroll_char_list_up(self):
         self.__char_list_window.scroll_up()
@@ -538,6 +547,7 @@ class BuildFightGmWindow(GmWindow):
                                                  top_line,
                                                  width+1)
 
+
     def close(self):
         #print '  BuildFightGmWindow::close'
         # Kill my subwindows, first
@@ -558,11 +568,13 @@ class BuildFightGmWindow(GmWindow):
         if self._char_detail_window is not None:
             self._char_detail_window.refresh()
 
+
     def scroll_char_detail_down(self):
         #print '  ** BuildFightGmWindow::scroll_char_detail_down'
         self._char_detail_window.scroll_down()
         self._char_detail_window.draw_window()
         self._char_detail_window.refresh()
+
 
     def scroll_char_detail_up(self):
         #print '  ** BuildFightGmWindow::scroll_char_detail_up'
@@ -570,27 +582,6 @@ class BuildFightGmWindow(GmWindow):
         self._char_detail_window.draw_window()
         self._char_detail_window.refresh()
 
-
-    def status_ribbon(self,
-                      group,            # name of group being modified,
-                      template,         # name of template 
-                      input_filename,   # passthru to base class
-                      maintain_json     # passthru to base class
-                     ):
-        '''Prints the fight round information at the top of the screen.'''
-
-        group = '(No Group)' if group is None else group
-        template = '(No Template)' if template is None else template
-        self._window.move(0, 0)
-        self._window.clrtoeol()
-
-        self._window.addstr(0, 0,
-                            '"%s" from "%s" template' % (group, template),
-                            curses.A_NORMAL)
-
-        super(BuildFightGmWindow, self).status_ribbon(input_filename,
-                                                      maintain_json)
-        self._window.refresh()
 
     # BuildFightGmWindow
     def show_creatures(self,
@@ -630,6 +621,30 @@ class BuildFightGmWindow(GmWindow):
         self.show_detail(highlighted_creature)
 
         self.refresh() # TODO: needed?
+
+
+    def status_ribbon(self,
+                      group,            # name of group being modified,
+                      template,         # name of template 
+                      input_filename,   # passthru to base class
+                      maintain_json     # passthru to base class
+                     ):
+        '''Prints the fight round information at the top of the screen.'''
+
+        group = '(No Group)' if group is None else group
+        template = '(No Template)' if template is None else template
+        self._window.move(0, 0)
+        self._window.clrtoeol()
+
+        self._window.addstr(0, 0,
+                            '"%s" from "%s" template' % (group, template),
+                            curses.A_NORMAL)
+
+        super(BuildFightGmWindow, self).status_ribbon(input_filename,
+                                                      maintain_json)
+
+        self._window.refresh()
+
 
     def touchwin(self):
         super(BuildFightGmWindow, self).touchwin()
@@ -674,6 +689,7 @@ class FightGmWindow(GmWindow):
         self.__round_count_string = '%d Rnds: '
         # assume rounds takes as much space as '%d' 
         self.len_timer_leader = len(self.__round_count_string)
+
 
     def close(self):
         # Kill my subwindows, first
@@ -780,24 +796,6 @@ class FightGmWindow(GmWindow):
         self.__show_summary_window(fighters, current_index, selected_index)
         self.refresh()
 
-
-    def __show_summary_window(self,
-                              fighters,  # array of <Fighter object>
-                              current_index,
-                              selected_index=None):
-        self.__summary_window.clear()
-        for line, fighter in enumerate(fighters):
-            mode = self._window_manager.get_mode_from_fighter_state(
-                                                        fighter.get_state())
-            fighter_string = '%s%s' % (
-                            ('> ' if line == current_index else '  '),
-                            fighter.get_short_summary_string())
-
-            if selected_index is not None and selected_index == line:
-                mode = mode | curses.A_REVERSE
-            elif fighter.group == 'PCs':
-                mode = mode | curses.A_BOLD
-            self.__summary_window.addstr(line, 0, fighter_string, mode)
 
     def start_fight(self):
         lines, cols = self._window.getmaxyx()
@@ -945,6 +943,25 @@ class FightGmWindow(GmWindow):
         window.refresh()
 
 
+    def __show_summary_window(self,
+                              fighters,  # array of <Fighter object>
+                              current_index,
+                              selected_index=None):
+        self.__summary_window.clear()
+        for line, fighter in enumerate(fighters):
+            mode = self._window_manager.get_mode_from_fighter_state(
+                                                        fighter.get_state())
+            fighter_string = '%s%s' % (
+                            ('> ' if line == current_index else '  '),
+                            fighter.get_short_summary_string())
+
+            if selected_index is not None and selected_index == line:
+                mode = mode | curses.A_REVERSE
+            elif fighter.group == 'PCs':
+                mode = mode | curses.A_BOLD
+            self.__summary_window.addstr(line, 0, fighter_string, mode)
+
+
 class OutfitCharactersGmWindow(GmWindow):
     def __init__(self, window_manager):
         super(OutfitCharactersGmWindow, self).__init__(window_manager,
@@ -959,6 +976,7 @@ class OutfitCharactersGmWindow(GmWindow):
                                                                     1,
                                                                     1)
 
+
     def close(self):
         # Kill my subwindows, first
         if self.__outfit_window is not None:
@@ -971,6 +989,7 @@ class OutfitCharactersGmWindow(GmWindow):
         super(OutfitCharactersGmWindow, self).refresh()
         if self.__outfit_window is not None:
             self.__outfit_window.refresh()
+
 
     def show_character(self,
                        character # dict: {'name': None, 'details': None}
@@ -1092,11 +1111,6 @@ class GmWindowManager(object):
         self.__y = 0 # For debug printouts
         self.__window_stack = [] # Stack of GmWindow
         self.STATE_COLOR = {}
-
-    def get_mode_from_fighter_state(self,
-                                    state # from STATE_COLOR
-                                   ):
-        return self.STATE_COLOR[state]
 
 
     def __enter__(self):
@@ -1280,6 +1294,7 @@ class GmWindowManager(object):
         self.hard_refresh_all()
         return contents
 
+
     def error(self,
               strings, # array of single-line strings
               title=' ERROR '
@@ -1308,20 +1323,28 @@ class GmWindowManager(object):
         self.hard_refresh_all()
         return string
 
+
     def get_build_fight_gm_window(self):
         return BuildFightGmWindow(self)
+
 
     def get_fight_gm_window(self, ruleset):
         return FightGmWindow(self, ruleset)
 
-    def get_outfit_gm_window(self):
-        return OutfitCharactersGmWindow(self)
+
+    def get_mode_from_fighter_state(self,
+                                    state # from STATE_COLOR
+                                   ):
+        return self.STATE_COLOR[state]
+
 
     def get_main_gm_window(self):
         return MainGmWindow(self)
 
+
     def getmaxyx(self):
         return curses.LINES, curses.COLS
+
 
     def get_one_character(self,
                           window=None # Window (for Curses)
@@ -1333,6 +1356,10 @@ class GmWindowManager(object):
         c = window.getch()
         # |c| will be something like ord('p') or curses.KEY_HOME
         return c
+
+
+    def get_outfit_gm_window(self):
+        return OutfitCharactersGmWindow(self)
 
 
     def get_string(self, window=None):
@@ -1393,26 +1420,6 @@ class GmWindowManager(object):
         self.hard_refresh_all()
         return string
     
-    def __handle_menu_result(self,
-                             menu_result # Can literally be anything
-                            ):
-        '''
-        If a menu_result is a dict that contains either another menu or a
-        'doit' function do the menu or the doit function.
-        '''
-
-        if isinstance(menu_result, dict):
-            while 'menu' in menu_result:
-                menu_result = self.menu('Which', menu_result['menu'])
-                if menu_result is None: # Bail out regardless of nesting level
-                    return None         # Keep going
-
-            if 'doit' in menu_result and menu_result['doit'] is not None:
-                param = (None if 'param' not in menu_result 
-                              else menu_result['param'])
-                menu_result = (menu_result['doit'])(param)
-
-        return menu_result
 
     def menu(self,
              title,
@@ -1555,10 +1562,6 @@ class GmWindowManager(object):
         return window
 
 
-    def push_gm_window(self, window):
-        self.__window_stack.append(window)
-
-
     def pop_gm_window(self, delete_this_window):
         top_window = self.__window_stack[-1]
         for index, window in enumerate(self.__window_stack):
@@ -1579,6 +1582,10 @@ class GmWindowManager(object):
         self.__stdscr.addstr(self.__y, 0, string, mode)
         self.__y = 0 if self.__y == curses.LINES else self.__y + 1
         self.__stdscr.refresh()
+
+
+    def push_gm_window(self, window):
+        self.__window_stack.append(window)
 
 
     def refresh_all(self):
@@ -1646,6 +1653,28 @@ class GmWindowManager(object):
         return border_win, menu_win
 
 
+    def __handle_menu_result(self,
+                             menu_result # Can literally be anything
+                            ):
+        '''
+        If a menu_result is a dict that contains either another menu or a
+        'doit' function do the menu or the doit function.
+        '''
+
+        if isinstance(menu_result, dict):
+            while 'menu' in menu_result:
+                menu_result = self.menu('Which', menu_result['menu'])
+                if menu_result is None: # Bail out regardless of nesting level
+                    return None         # Keep going
+
+            if 'doit' in menu_result and menu_result['doit'] is not None:
+                param = (None if 'param' not in menu_result 
+                              else menu_result['param'])
+                menu_result = (menu_result['doit'])(param)
+
+        return menu_result
+
+
 class GmScrollableWindow(object):
     def __init__(self,
                  lines,            # [[{'text', 'mode'}, ...],  # line 0
@@ -1669,8 +1698,10 @@ class GmScrollableWindow(object):
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
         self.__default_scroll_lines = win_line_cnt / 2
 
+
     def clear(self):
         self.__window.clear()
+
 
     def draw_window(self):
         '''
@@ -1692,8 +1723,10 @@ class GmScrollableWindow(object):
         return {'top_line': self.top_line,
                 'bottom_line': self.top_line + win_line_cnt - 1}
 
+
     def refresh(self):
         self.__window.refresh()
+
 
     def scroll_down(self, line_cnt=None):
         if line_cnt is None:
@@ -1716,6 +1749,25 @@ class GmScrollableWindow(object):
         # NOTE: refresh the window yourself.  That way, you can modify the
         # lines before the refresh happens.
 
+
+    def scroll_to(self, line):
+        self.top_line = line
+        if self.top_line < 0:
+            self.top_line = 0
+        if self.top_line > len(self.__lines):
+            self.top_line = len(self.__lines)
+        self.draw_window()
+
+
+    def scroll_to_end(self):
+        win_line_cnt, win_col_cnt = self.__window.getmaxyx()
+
+        self.top_line = len(self.__lines) - win_line_cnt
+        if self.top_line < 0:
+            self.top_line = 0
+        self.draw_window()
+
+
     def scroll_up(self, line_cnt=None):
         if line_cnt is None:
             line_cnt = self.__default_scroll_lines
@@ -1727,21 +1779,6 @@ class GmScrollableWindow(object):
         # NOTE: refresh the window yourself.  That way, you can modify the
         # lines before the refresh happens.
 
-    def scroll_to(self, line):
-        self.top_line = line
-        if self.top_line < 0:
-            self.top_line = 0
-        if self.top_line > len(self.__lines):
-            self.top_line = len(self.__lines)
-        self.draw_window()
-
-    def scroll_to_end(self):
-        win_line_cnt, win_col_cnt = self.__window.getmaxyx()
-
-        self.top_line = len(self.__lines) - win_line_cnt
-        if self.top_line < 0:
-            self.top_line = 0
-        self.draw_window()
 
     def touchwin(self):
         self.__window.touchwin()
@@ -1759,22 +1796,39 @@ class World(object):
         self.__ruleset = ruleset
         self.__window_manager = window_manager
 
-    def is_saved_on_exit(self):
-        return False if self.__gm_json.write_data is None else True
 
     def dont_save_on_exit(self):
         self.__gm_json.write_data = None
         ScreenHandler.maintainjson = True
 
+
     def do_save_on_exit(self):
         self.__gm_json.write_data = self.__gm_json.read_data
         ScreenHandler.maintainjson = False
 
-    def toggle_saved_on_exit(self):
-        if self.is_saved_on_exit():
-            self.dont_save_on_exit()
-        else:
-            self.do_save_on_exit()
+
+    def get_creatures(self,
+                      group_name  # 'PCs', 'NPCs', or a monster group
+                     ):
+        '''
+        Used to get PCs, NPCs, or a fight's list of creatures.
+
+        Returns dict of details: {name: {<details>}, name: ... }
+        '''
+
+        if group_name in self.details:
+            return self.details[group_name]
+
+        fights = self.get_fights()
+        if group_name in fights:
+            fight = Fight(group_name,
+                          self.details['fights'][group_name],
+                          self.__ruleset
+                          )
+            return fight.get_creatures()
+
+        return None
+
 
     def get_creature_details(self, name, group_name):
         if name is None or group_name is None:
@@ -1818,33 +1872,13 @@ class World(object):
 
         return details
 
-    def get_creatures(self,
-                      group_name  # 'PCs', 'NPCs', or a monster group
-                     ):
-        '''
-        Used to get PCs, NPCs, or a fight's list of creatures.
-
-        Returns dict of details: {name: {<details>}, name: ... }
-        '''
-
-        if group_name in self.details:
-            return self.details[group_name]
-
-        fights = self.get_fights()
-        if group_name in fights:
-            fight = Fight(group_name,
-                          self.details['fights'][group_name],
-                          self.__ruleset
-                          )
-            return fight.get_creatures()
-
-        return None
 
     def get_fights(self):
         '''
         Returns {fight_name: {details}, fight_name: {details}, ...}
         '''
         return self.details['fights']
+
 
     def get_random_name(self):
         if self.details['Names'] is None:
@@ -1874,11 +1908,23 @@ class World(object):
                 type_name,
                 gender_name)
 
+
+    def is_saved_on_exit(self):
+        return False if self.__gm_json.write_data is None else True
+
+
+    def toggle_saved_on_exit(self):
+        if self.is_saved_on_exit():
+            self.dont_save_on_exit()
+        else:
+            self.do_save_on_exit()
+
 class Equipment(object):
     def __init__(self,
                  equipment, # self.details['stuff'], list of items
                 ):
         self.__equipment = equipment
+
 
     def add(self,
             new_item,   # dict describing new equipment
@@ -1898,14 +1944,15 @@ class Equipment(object):
 
         return len(self.__equipment) - 1 # current index of the added item
 
+
     def get_item_by_index(self,
                           index
                          ):
         return (None if index >= len(self.__equipment) else
                                                 self.__equipment[index])
 
-    # Here to facilitate testing
-    def get_item_by_name(self,
+
+    def get_item_by_name(self,              # Public to facilitate testing
                          name
                         ):
         '''
@@ -1936,6 +1983,9 @@ class Equipment(object):
 
         return item
 
+    #
+    # Private methods
+    #
 
     def __is_same_thing(self,
                         lhs,    # part of equipment dict (at level=0, is dict)
@@ -1981,6 +2031,7 @@ class Timers(object):
                 ):
         pass
 
+
     def add(self,
             rounds,             # rounds until timer fires (3.0 rounds
                                 #   fires at end of 3 rounds; 2.9 rounds
@@ -2001,6 +2052,7 @@ class Timers(object):
     def decrement(self):
         for timer in self.details['timers']:
             timer['rounds'] -= 1
+
 
     def fire(self, timer):
         if 'state' in timer:
@@ -2059,6 +2111,7 @@ class ThingsInFight(object):
                  ruleset    # Ruleset object
                 ):
         self.name = name
+        self.detailed_name = self.name
         self.group = group
         self.details = details
         self._ruleset = ruleset
@@ -2070,6 +2123,10 @@ class ThingsInFight(object):
         self.equipment = Equipment(self.details['stuff'])
 
 
+    #
+    # Equipment related methods
+    #
+
     def add_equipment(self,
                       new_item,   # dict describing new equipment
                       source=None # string describing where equipment came from
@@ -2077,23 +2134,38 @@ class ThingsInFight(object):
         return self.equipment.add(new_item, source)
 
 
+    def remove_equipment(self,
+                         item_index
+                        ):
+        return self.equipment.remove(item_index)
+
+    #
+    # Timers related methods
+    #
+
     def decrement_timers(self):
         pass  # For now, we'll add timers, later
 
 
+    def get_timers(self):
+        return []
+
+
+    def remove_expired_kill_dying_timers(self):
+        pass  # For now, we'll add timers, later
+
+    #
+    # Notes methods
+    #
 
     def get_defenses_notes(self,
                            opponent # Throw away Fighter object
                           ):
         return None, None
 
-    def get_timers(self):
-        return []
 
-    def get_to_hit_damage_notes(self,
-                                opponent # Throw away Fighter object
-                               ):
-        return None
+    def get_long_summary_string(self):
+        return '%s' % self.name
 
 
     def get_notes(self):
@@ -2104,21 +2176,21 @@ class ThingsInFight(object):
         return '%s' % self.name
 
 
-    def get_long_summary_string(self):
-        return '%s' % self.name
+    def get_to_hit_damage_notes(self,
+                                opponent # Throw away Fighter object
+                               ):
+        return None
 
+    #
+    # Miscellaneous methods
+    #
 
     def start_fight(self):
         pass
 
-
-    def remove_equipment(self,
-                         item_index
-                        ):
-        return self.equipment.remove(item_index)
-
-    def remove_expired_kill_dying_timers(self):
-        pass  # For now, we'll add timers, later
+    #
+    # Protected
+    #
 
     def _explain_numbers(self):
         '''
@@ -2135,7 +2207,8 @@ class ThingsInFight(object):
 
 
 class Fight(ThingsInFight):
-    name = '<< ARENA >>'    # Describes the FIGHT object
+    name = '<< ROOM >>'                 # Describes the FIGHT object
+    detailed_name = '<< ROOM: %s >>'    # insert the group into the '%s' slot
     empty_fight = {
         'stuff': [],
         'notes': [],
@@ -2148,6 +2221,7 @@ class Fight(ThingsInFight):
                  ruleset    # Ruleset object
                 ):
         super(Fight, self).__init__(Fight.name, group, details, ruleset)
+        self.detailed_name = Fight.detailed_name % group
         pass
 
 
@@ -2214,6 +2288,10 @@ class Fighter(ThingsInFight):
                 return name
         return '<unknown>'
 
+    #
+    # Equipment related methods
+    #
+
     def add_equipment(self,
                       new_item,   # dict describing new equipment
                       source=None # string describing where equipment came from
@@ -2222,36 +2300,6 @@ class Fighter(ThingsInFight):
         self.details['weapon-index'] = None
         self.details['armor-index'] = None
         return index
-
-    def add_timer(self,
-                  rounds,           # rounds until timer fires (3.0 rounds
-                                    #   fires at end of 3 rounds; 2.9 rounds
-                                    #   fires at beginning of 3 rounds.
-                  text,             # string to display (in fighter's notes)
-                                    #   while timer is running
-                  announcement=None # string to display (in its own window)
-                                    #   when timer fires
-                 ):
-        # TODO: remove in favor of object
-        timer = {'rounds': rounds,
-                 'string': text}
-        if announcement is not None:
-            timer['announcement'] = announcement
-
-        self.details['timers'].append(timer)
-
-
-    def can_finish_turn(self):
-        # RULESET: actions are ruleset-based.
-        if self.details['did_action_this_turn'] or not self.is_conscious():
-            return True
-        return False
-
-
-    def decrement_timers(self):
-        # TODO: remove in favor of object
-        for timer in self.details['timers']:
-            timer['rounds'] -= 1
 
 
     def don_armor_by_index(self,
@@ -2272,11 +2320,6 @@ class Fighter(ThingsInFight):
         self.details['weapon-index'] = index
 
 
-    def end_turn(self):
-        self._ruleset.end_turn(self)
-        self.remove_expired_kill_dying_timers()
-
-
     def get_current_armor(self):
         if 'armor-index' not in self.details:
             return None, None
@@ -2295,51 +2338,7 @@ class Fighter(ThingsInFight):
         return weapon, weapon_index
 
 
-    def get_defenses_notes(self,
-                           opponent # Fighter object
-                          ):
-        defense_notes, defense_why = self._ruleset.get_fighter_defenses_notes(
-                                                                self,
-                                                                opponent)
-        return defense_notes, defense_why
-
-
-    def get_timers(self):
-        return self.details['timers']
-
-    def get_to_hit_damage_notes(self,
-                                opponent # Fighter object
-                               ):
-        notes = self._ruleset.get_fighter_to_hit_damage_notes(self, opponent)
-        return notes
-
-    def get_notes(self):
-        notes = self._ruleset.get_fighter_notes(self)
-        return notes
-
-
-    def get_state(self):
-        return Fighter.get_fighter_state(self.details)
-
-
-    def get_short_summary_string(self):
-        fighter_string = '%s HP:%d/%d' % (self.name,
-                                          self.details['current']['hp'],
-                                          self.details['permanent']['hp'])
-        return fighter_string
-
-    def get_long_summary_string(self):
-        fighter_string = '%s HP: %d/%d FP: %d/%d' % (
-                                    self.name,
-                                    self.details['current']['hp'],
-                                    self.details['permanent']['hp'],
-                                    self.details['current']['fp'],
-                                    self.details['permanent']['fp'])
-        return fighter_string
-
-
-    # This is here to support testing
-    def get_weapon_by_name(self,
+    def get_weapon_by_name(self,                # Public to support testing
                            name
                           ):
         '''
@@ -2353,21 +2352,6 @@ class Fighter(ThingsInFight):
         return index, item
 
 
-    def is_conscious(self):
-        # NOTE: 'injured' is not stored in self.details['state']
-        return True if self.details['state'] == 'alive' else False
-
-
-    def is_dead(self):
-        return True if self.details['state'] == 'dead' else False
-
-    def is_absent(self):
-        return True if self.details['state'] == 'absent' else False
-
-    def perform_action_this_turn(self):
-        # RULESET: actions are ruleset-based.
-        self.details['did_action_this_turn'] = True
-
     def remove_equipment(self,
                          item_index
                         ):
@@ -2376,6 +2360,39 @@ class Fighter(ThingsInFight):
         self.details['armor-index'] = None
         #self._window.show_character(self.__character)
         return item
+
+
+    #
+    # Timers related methods
+    #
+
+    def add_timer(self,
+                  rounds,           # rounds until timer fires (3.0 rounds
+                                    #   fires at end of 3 rounds; 2.9 rounds
+                                    #   fires at beginning of 3 rounds.
+                  text,             # string to display (in fighter's notes)
+                                    #   while timer is running
+                  announcement=None # string to display (in its own window)
+                                    #   when timer fires
+                 ):
+        # TODO: remove in favor of object
+        timer = {'rounds': rounds,
+                 'string': text}
+        if announcement is not None:
+            timer['announcement'] = announcement
+
+        self.details['timers'].append(timer)
+
+
+    def decrement_timers(self):
+        # TODO: remove in favor of object
+        for timer in self.details['timers']:
+            timer['rounds'] -= 1
+
+
+    def get_timers(self):
+        return self.details['timers']
+
 
     def remove_expired_keep_dying_timers(self):
         # TODO: remove in favor of object
@@ -2410,6 +2427,94 @@ class Fighter(ThingsInFight):
             self.__fire_timer(self.details['timers'][index])
             del self.details['timers'][index]
 
+    #
+    # Notes related methods
+    #
+
+    def get_defenses_notes(self,
+                           opponent # Fighter object
+                          ):
+        defense_notes, defense_why = self._ruleset.get_fighter_defenses_notes(
+                                                                self,
+                                                                opponent)
+        return defense_notes, defense_why
+
+
+    def get_detail(self,
+                   char_detail, # recepticle for character detail.
+                                # [[{'text','mode'},...],  # line 0
+                                #  [...],               ]  # line 1...
+                   ):
+        self._ruleset.get_character_detail(self.details, char_detail)
+
+
+    def get_long_summary_string(self):
+        fighter_string = '%s HP: %d/%d FP: %d/%d' % (
+                                    self.name,
+                                    self.details['current']['hp'],
+                                    self.details['permanent']['hp'],
+                                    self.details['current']['fp'],
+                                    self.details['permanent']['fp'])
+        return fighter_string
+
+
+    def get_notes(self):
+        notes = self._ruleset.get_fighter_notes(self)
+        return notes
+
+
+    def get_to_hit_damage_notes(self,
+                                opponent # Fighter object
+                               ):
+        notes = self._ruleset.get_fighter_to_hit_damage_notes(self, opponent)
+        return notes
+
+
+    def get_short_summary_string(self):
+        fighter_string = '%s HP:%d/%d' % (self.name,
+                                          self.details['current']['hp'],
+                                          self.details['permanent']['hp'])
+        return fighter_string
+
+
+    #
+    # Miscellaneous methods
+    #
+
+    def can_finish_turn(self):
+        # RULESET: actions are ruleset-based.
+        if self.details['did_action_this_turn'] or not self.is_conscious():
+            return True
+        return False
+
+
+    def end_turn(self):
+        self._ruleset.end_turn(self)
+        self.remove_expired_kill_dying_timers()
+
+
+    def get_state(self):
+        return Fighter.get_fighter_state(self.details)
+
+
+    def is_conscious(self):
+        # NOTE: 'injured' is not stored in self.details['state']
+        return True if self.details['state'] == 'alive' else False
+
+
+    def is_dead(self):
+        return True if self.details['state'] == 'dead' else False
+
+
+    def is_absent(self):
+        return True if self.details['state'] == 'absent' else False
+
+
+    def perform_action_this_turn(self):
+        # RULESET: actions are ruleset-based.
+        self.details['did_action_this_turn'] = True
+
+
     def reset_aim(self):
         # RULESET: do_aim is ruleset-based.
         self.details['aim']['rounds'] = 0
@@ -2429,12 +2534,6 @@ class Fighter(ThingsInFight):
         if not self.is_conscious():
             self.details['opponent'] = None # dead men fight nobody
 
-    def get_detail(self,
-                   char_detail, # recepticle for character detail.
-                                # [[{'text','mode'},...],  # line 0
-                                #  [...],               ]  # line 1...
-                   ):
-        self._ruleset.get_character_detail(self.details, char_detail)
 
     def start_fight(self):
         # NOTE: we're allowing health to still be messed-up, here
@@ -2455,12 +2554,17 @@ class Fighter(ThingsInFight):
         self.decrement_timers()
         self.remove_expired_keep_dying_timers()
 
+
     def toggle_absent(self):
 
         if self.details['state'] == 'absent':
             self.details['state'] = 'alive'
         else:
             self.details['state'] = 'absent'
+
+    #
+    # Private methods
+    #
 
     def __fire_timer(self, timer):
         # TODO: remove in favor of object
@@ -2510,12 +2614,9 @@ class Ruleset(object):
             result += random.randint(1, dice)
         return result
 
-    def _adjust_hp(self,
-                   fighter,  # Fighter object
-                   adj       # the number of HP to gain or lose
-                  ):
-        fighter.details['current']['hp'] += adj
-
+    #
+    # Public Methods
+    #
 
     def do_action(self,
                   fighter,      # Fighter object
@@ -2800,6 +2901,7 @@ class Ruleset(object):
                 'short-notes': [],
                 }
 
+
     def search_one_creature(self,
                             name,       # string containing the name
                             group,      # string containing the group
@@ -2844,6 +2946,17 @@ class Ruleset(object):
                                    'notes': creature['short-notes']})
 
         return result
+
+    #
+    # Private and Protected Methods
+    #
+
+
+    def _adjust_hp(self,
+                   fighter,  # Fighter object
+                   adj       # the number of HP to gain or lose
+                  ):
+        fighter.details['current']['hp'] += adj
 
 
     def _do_attack(self,
@@ -3848,177 +3961,9 @@ class GurpsRuleset(Ruleset):
         super(GurpsRuleset, self).__init__(window_manager)
 
 
-    def _adjust_hp(self,
-                   fighter,  # Fighter object
-                   adj       # the number of HP to gain or lose
-                  ):
-        if adj < 0:
-
-            # Hit location (just for flavor, not for special injury)
-            table_lookup = (random.randint(1,6) +
-                            random.randint(1,6) +
-                            random.randint(1,6))
-            hit_location = GurpsRuleset.hit_location_table[table_lookup]
-
-            window_text = [
-                [{'text': ('...%s\'s %s' % (fighter.name, hit_location)),
-                  'mode': curses.A_NORMAL}]
-                           ]
-
-            # Adjust for armor
-            armor, armor_index = fighter.get_current_armor()
-            if armor is not None:
-                if armor['dr'] >= -adj:
-                    return
-                original_adj = adj
-                adj += armor['dr']
-                window_text.append([{'text':'', 'mode': curses.A_NORMAL}])
-                window_text.append(
-                    [{'text': ('%s was wearing %s (dr:%d)' % (fighter.name,
-                                                              armor['name'],
-                                                              armor['dr'])),
-                      'mode': curses.A_NORMAL}]
-                                  )
-                window_text.append(
-                    [{'text': ('so adj(%d) - dr(%d) = damage (%d)' % (
-                                                              -original_adj,
-                                                              armor['dr'],
-                                                              -adj)),
-                      'mode': curses.A_NORMAL}]
-                                  )
-
-            self._window_manager.display_window(
-                                    ('Did %d hp damage to...' % -adj),
-                                    window_text)
-
-
-
-            # Check for Death (B327)
-            adjusted_hp = fighter.details['current']['hp'] + adj
-
-            if adjusted_hp <= -(5 * fighter.details['permanent']['hp']):
-                fighter.details['state'] = 'dead'
-            else:
-                threshold = -fighter.details['permanent']['hp']
-                while fighter.details['current']['hp'] <= threshold:
-                    threshold -= fighter.details['permanent']['hp']
-                if adjusted_hp <= threshold:
-                    fighter.details['check_for_death'] = True
-
-            # Check for Major Injury (B420)
-            if -adj > (fighter.details['permanent']['hp'] / 2):
-                (SUCCESS, SIMPLE_FAIL, BAD_FAIL) = range(3)
-                total = fighter.details['current']['ht']
-                if 'High Pain Threshold' in fighter.details['advantages']:
-                    total = fighter.details['current']['ht'] + 3
-                    menu_title = (
-                        'Major Wound (B420): Roll vs. HT+3 (%d) or be stunned' %
-                                                                        total)
-                elif 'Low Pain Threshold' in fighter.details['advantages']:
-                    total = fighter.details['current']['ht'] - 4
-                    menu_title = (
-                        'Major Wound (B420): Roll vs. HT-4 (%d) or be stunned' %
-                                                                        total)
-                else:
-                    total = fighter.details['current']['ht']
-                    menu_title = (
-                        'Major Wound (B420): Roll vs. HT (%d) or be stunned' % 
-                                                                        total)
-
-                stunned_menu = [('Succeeded (roll <= HT (%d))' % total,
-                                 GurpsRuleset.MAJOR_WOUND_SUCCESS),
-                                ('Missed roll by < 5 (roll < %d)' % (total+5),
-                                 GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL),
-                                ('Missed roll by >= 5 (roll >= %d)' % (total+5),
-                                 GurpsRuleset.MAJOR_WOUND_BAD_FAIL),
-                               ]
-                stunned_results = self._window_manager.menu(menu_title,
-                                                            stunned_menu)
-                if stunned_results == GurpsRuleset.MAJOR_WOUND_BAD_FAIL:
-                    fighter.details['state'] = 'unconscious'
-                    fighter.draw_weapon_by_index(None)
-                elif stunned_results == GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL:
-                    self._change_posture({'fighter': fighter,
-                                          'posture': 'lying'})
-                    fighter.draw_weapon_by_index(None)
-                    fighter.details['stunned'] = True
-
-        if 'High Pain Threshold' not in fighter.details['advantages']: # B59
-            shock_amount = -4 if adj <= -4 else adj
-            if fighter.details['shock'] > shock_amount:
-                fighter.details['shock'] = shock_amount
-
-        # WILL roll or lose aim
-        if fighter.details['aim']['rounds'] > 0:
-            aim_menu = [('made WILL roll', True),
-                        ('did NOT make WILL roll', False)]
-            made_will_roll = self._window_manager.menu(
-                ('roll <= WILL (%d) or lose aim' %
-                                            fighter.details['current']['wi']),
-                aim_menu)
-            if not made_will_roll:
-                fighter.reset_aim()
-
-        super(GurpsRuleset, self)._adjust_hp(fighter, adj)
-
-    def _cast_spell(self,
-                    param, # dict {'fighter': <Fighter object>,
-                           #       'spell': <index in 'spells'>}
-                   ):
-        '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
-        '''
-
-        fighter = param['fighter']
-        spell_index = param['spell']
-        spell = fighter.details['spells'][spell_index]
-
-        if spell['cost'] is None:
-            title = 'Cost to cast (%s) - see (%s) ' % (spell['name'],
-                                                       spell['notes'])
-            height = 1
-            width = len(title)
-            cost_string = ''
-            while len(cost_string) <= 0:
-                cost_string = self._window_manager.input_box(height,
-                                                             width,
-                                                             title)
-            cost = int(cost_string)
-        else:
-            cost = spell['cost']
-
-        # M8 - High skill level costs less
-        skill = spell['skill'] - 15
-        while skill >= 0:
-            cost -= 1
-            skill -= 5
-        if cost < 0:
-            cost = 0
-
-        fighter.details['current']['fp'] -= cost
-        fighter.add_timer(spell['time'] - 0.1,  # -0.1 so that it doesn't show
-                                                # up on the first round you
-                                                # can do something after you
-                                                # cast
-                          'Casting (%s) @ skill (%d): %s' % (spell['name'],
-                                                             spell['skill'],
-                                                             spell['notes']))
-        return None if 'text' not in param else param
-
-
-    def _change_posture(self,
-                        param, # dict {'fighter': <Fighter object>,
-                               #       'posture': <string=new posture>}
-                       ):
-        '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
-        '''
-        param['fighter'].details['posture'] = param['posture']
-        param['fighter'].reset_aim()
-        return None if 'text' not in param else param
-
+    #
+    # Public Methods
+    #
 
     def damage_to_string(self,
                          damages # list of dict -- returned by 'get_damage'
@@ -4037,63 +3982,6 @@ class GurpsRuleset(Ruleset):
 
         return ', '.join(results)
 
-    def _do_aim(self,
-                param, # dict {'fighter': <Fighter object>,
-                       #       'braced': True | False}
-               ):
-        '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
-        '''
-
-        rounds = param['fighter'].details['aim']['rounds']
-        if rounds == 0:
-            param['fighter'].details['aim']['braced'] = param['braced']
-            param['fighter'].details['aim']['rounds'] = 1
-        elif rounds < 3:
-            param['fighter'].details['aim']['rounds'] += 1
-
-        return
-
-    def _do_defense(self,
-                    param # {'fighter': <Fighter object>, ...
-                   ):
-        '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
-        '''
-        param['fighter'].reset_aim()
-        return None if 'text' not in param else param
-
-
-    def _do_reload(self,
-                   param # {'fighter': Fighter object for attacker
-                  ):
-        '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
-        '''
-        if super(GurpsRuleset, self)._do_reload(param):
-            reload_time = weapon['reload']
-            if 'fast-draw (ammo)' in param['fighter'].details['skills']:
-                reload_time -= 1
-            param['fighter'].add_timer(reload_time, 'RELOADING')
-            param['fighter'].reset_aim()
-            return True
-
-        return
-
-    def end_turn(self, fighter):
-        fighter.details['shock'] = 0
-        if fighter.details['stunned']:
-            stunned_menu = [('Succeeded (roll <= HT)', True),
-                            ('Missed roll', False),]
-            recovered_from_stun = self._window_manager.menu(
-                            'Stunned: Roll <= HT (%d) to recover' % 
-                                            fighter.details['current']['ht'],
-                            stunned_menu)
-            if recovered_from_stun:
-                fighter.details['stunned'] = False
 
     def do_action(self,
                   fighter,      # Fighter object
@@ -4164,6 +4052,19 @@ class GurpsRuleset(Ruleset):
                                                             action['name']])
 
         return # Nothing to return
+
+
+    def end_turn(self, fighter):
+        fighter.details['shock'] = 0
+        if fighter.details['stunned']:
+            stunned_menu = [('Succeeded (roll <= HT)', True),
+                            ('Missed roll', False),]
+            recovered_from_stun = self._window_manager.menu(
+                            'Stunned: Roll <= HT (%d) to recover' % 
+                                            fighter.details['current']['ht'],
+                            stunned_menu)
+            if recovered_from_stun:
+                fighter.details['stunned'] = False
 
 
     def get_action_menu(self,
@@ -4426,9 +4327,6 @@ class GurpsRuleset(Ruleset):
         return block_skill, block_why
 
 
-    def get_creature_abilities(self):
-        return GurpsRuleset.abilities
-
     #   { 
     #       'Skills': { 'Axe/Mace': 8, 'Climbing': 8, },
     #       'Advantages': { 'Bad Tempter': -10, 'Nosy': -1, },
@@ -4579,46 +4477,9 @@ class GurpsRuleset(Ruleset):
             char_detail.append([{'text': '  (None)',
                                  'mode': mode}])
 
-    def get_fight_detail(self,
-                         fight,       # dict as found in the JSON
-                         char_detail, # recepticle for fight detail.
-                                      # [[{'text','mode'},...],  # line 0
-                                      #  [...],               ]  # line 1...
-                        ):
 
-        # stuff
-
-        mode = curses.A_NORMAL 
-        char_detail.append([{'text': 'Equipment',
-                             'mode': mode | curses.A_BOLD}])
-
-        found_one = False
-        if 'stuff' in fight:
-            for item in fight['stuff']:
-                found_one = True
-                EquipmentManager.get_description(item, char_detail)
-
-        if not found_one:
-            char_detail.append([{'text': '  (None)',
-                                 'mode': mode}])
-
-        # TODO: maybe here and in get_character_detail, include timers.
-        # notes
-
-        mode = curses.A_NORMAL 
-        char_detail.append([{'text': 'Notes',
-                             'mode': mode | curses.A_BOLD}])
-
-        found_one = False
-        if 'notes' in fight:
-            for note in fight['notes']:
-                found_one = True
-                char_detail.append([{'text': '  %s' % note,
-                                     'mode': mode}])
-
-        if not found_one:
-            char_detail.append([{'text': '  (None)',
-                                 'mode': mode}])
+    def get_creature_abilities(self):
+        return GurpsRuleset.abilities
 
 
     def get_damage(self,
@@ -4752,54 +4613,48 @@ class GurpsRuleset(Ruleset):
 
         return dodge_skill, dodge_why
 
-    def get_fighter_to_hit_damage_notes(self,
-                                        fighter,    # Fighter object
-                                        opponent    # Fighter object
-                                       ):
-        notes = []
-        weapon, holding_weapon_index = fighter.get_current_weapon()
-        unarmed_skills = self.get_weapons_unarmed_skills(weapon)
 
-        if weapon is not None:
-            notes.append('%s' % weapon['name'])
+    def get_fight_detail(self,
+                         fight,       # dict as found in the JSON
+                         char_detail, # recepticle for fight detail.
+                                      # [[{'text','mode'},...],  # line 0
+                                      #  [...],               ]  # line 1...
+                        ):
 
-        if unarmed_skills is None:
-            if weapon['skill'] in fighter.details['skills']:
-                to_hit, ignore_why = self.get_to_hit(fighter, opponent, weapon)
-                if to_hit is None:
-                    self._window_manager.error(
-                        ['%s requires "%s" skill not had by "%s"' %
-                                                             (weapon['name'],
-                                                              weapon['skill'],
-                                                              fighter.name)])
-                else:
-                    damage, ignore_why = self.get_damage(fighter, weapon)
-                    damage_str = self.damage_to_string(damage)
-                    notes.append('  to-hit: %d' % to_hit)
-                    notes.append('  damage: %s' % damage_str)
-            else:
-                self._window_manager.error(
-                    ['%s requires "%s" skill not had by "%s"' %
-                                                             (weapon['name'],
-                                                              weapon['skill'],
-                                                              fighter.name)])
-        else:
-            unarmed_info = self.get_unarmed_info(fighter,
-                                                 opponent,
-                                                 weapon,
-                                                 unarmed_skills)
+        # stuff
 
-            notes.append(unarmed_info['punch_string'])
-            notes.append('  to-hit: %d, damage: %s' % (
-                                                unarmed_info['punch_skill'],
-                                                unarmed_info['punch_damage']))
+        mode = curses.A_NORMAL 
+        char_detail.append([{'text': 'Equipment',
+                             'mode': mode | curses.A_BOLD}])
 
-            notes.append(unarmed_info['kick_string'])
-            notes.append('  to-hit: %d, damage: %s' % (
-                                                unarmed_info['kick_skill'],
-                                                unarmed_info['kick_damage']))
+        found_one = False
+        if 'stuff' in fight:
+            for item in fight['stuff']:
+                found_one = True
+                EquipmentManager.get_description(item, char_detail)
 
-        return notes
+        if not found_one:
+            char_detail.append([{'text': '  (None)',
+                                 'mode': mode}])
+
+        # TODO: maybe here and in get_character_detail, include timers.
+        # notes
+
+        mode = curses.A_NORMAL 
+        char_detail.append([{'text': 'Notes',
+                             'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        if 'notes' in fight:
+            for note in fight['notes']:
+                found_one = True
+                char_detail.append([{'text': '  %s' % note,
+                                     'mode': mode}])
+
+        if not found_one:
+            char_detail.append([{'text': '  (None)',
+                                 'mode': mode}])
+
 
     def get_fighter_defenses_notes(self,
                                    fighter, # Fighter object
@@ -4852,6 +4707,58 @@ class GurpsRuleset(Ruleset):
 
         return notes, why
 
+
+
+    def get_fighter_to_hit_damage_notes(self,
+                                        fighter,    # Fighter object
+                                        opponent    # Fighter object
+                                       ):
+        notes = []
+        weapon, holding_weapon_index = fighter.get_current_weapon()
+        unarmed_skills = self.get_weapons_unarmed_skills(weapon)
+
+        if weapon is not None:
+            notes.append('%s' % weapon['name'])
+
+        if unarmed_skills is None:
+            if weapon['skill'] in fighter.details['skills']:
+                to_hit, ignore_why = self.get_to_hit(fighter, opponent, weapon)
+                if to_hit is None:
+                    self._window_manager.error(
+                        ['%s requires "%s" skill not had by "%s"' %
+                                                             (weapon['name'],
+                                                              weapon['skill'],
+                                                              fighter.name)])
+                else:
+                    damage, ignore_why = self.get_damage(fighter, weapon)
+                    damage_str = self.damage_to_string(damage)
+                    notes.append('  to-hit: %d' % to_hit)
+                    notes.append('  damage: %s' % damage_str)
+            else:
+                self._window_manager.error(
+                    ['%s requires "%s" skill not had by "%s"' %
+                                                             (weapon['name'],
+                                                              weapon['skill'],
+                                                              fighter.name)])
+        else:
+            unarmed_info = self.get_unarmed_info(fighter,
+                                                 opponent,
+                                                 weapon,
+                                                 unarmed_skills)
+
+            notes.append(unarmed_info['punch_string'])
+            notes.append('  to-hit: %d, damage: %s' % (
+                                                unarmed_info['punch_skill'],
+                                                unarmed_info['punch_damage']))
+
+            notes.append(unarmed_info['kick_string'])
+            notes.append('  to-hit: %d, damage: %s' % (
+                                                unarmed_info['kick_skill'],
+                                                unarmed_info['kick_damage']))
+
+        return notes
+
+
     def get_fighter_notes(self,
                           fighter   # Fighter object
                          ):
@@ -4900,6 +4807,128 @@ class GurpsRuleset(Ruleset):
 
 
         return notes
+
+
+    def get_parry_skill(self,
+                        fighter,    # Fighter object
+                        weapon      # dict
+                       ):
+        if weapon is None or weapon['skill'] not in fighter.details['skills']:
+            return None, None
+        skill = fighter.details['skills'][weapon['skill']]
+        parry_why = []
+        parry_skill_modified = False
+
+        parry_skill = 3 + int(skill * 0.5)
+        parry_why.append('Parry (B327, B376) w/%s @ (skill(%d)/2)+3 = %d' % (
+                                                                weapon['name'],
+                                                                skill,
+                                                                parry_skill))
+
+
+        if fighter.details['stunned']:
+            dodge_skill -= 4
+            dodge_why.append('  -4 due to being stunned (B420)')
+
+        if 'parry' in weapon:
+            parry_skill += weapon['parry']
+            parry_skill_modified = True
+            parry_why.append('  %+d due to weapon modifiers' % weapon['parry'])
+
+        if 'Combat Reflexes' in fighter.details['advantages']:
+            parry_skill_modified = True
+            parry_why.append('  +1 due to combat reflexes (B43)')
+            parry_skill += 1
+
+        posture_mods = self.get_posture_mods(fighter.details['posture'])
+        if posture_mods is not None and posture_mods['defense'] != 0:
+            parry_skill_modified = True
+            parry_skill += posture_mods['defense']
+            parry_why.append('  %+d due to %s posture' % 
+                                                (posture_mods['defense'],
+                                                 fighter.details['posture']))
+        if parry_skill_modified:
+            parry_why.append('  ...for a parry skill total = %d' % parry_skill)
+
+        return parry_skill, parry_why
+
+
+    def get_posture_mods(self,
+                         posture    # string: 'standing' | ...
+                        ):
+        return (None if posture not in GurpsRuleset.posture else
+                                            GurpsRuleset.posture[posture])
+
+
+    def get_to_hit(self,
+                   fighter,     # Fighter object
+                   opponent,    # Fighter object
+                   weapon
+                  ):
+        '''
+        Returns tuple (skill, why) where:
+            'skill' (number) is the value the attacker needs to roll to-hit
+                    the target.
+            'why'   is an array of strings describing why the to-hit numbers
+                    are what they are.
+        '''
+        # TODO: need convenient defaults
+        if weapon['skill'] not in fighter.details['skills']:
+            return None
+
+        why = []
+        skill = fighter.details['skills'][weapon['skill']]
+        why.append('Weapon %s w/skill = %d' % (weapon['name'], skill))
+
+        if 'acc' in weapon:
+            if fighter.details['aim']['rounds'] > 0:
+                why.append('  +%d due to aiming for 1' % weapon['acc'])
+                skill += weapon['acc']
+                if fighter.details['aim']['braced']:
+                    why.append('  +1 due to bracing')
+                    skill += 1
+            if fighter.details['aim']['rounds'] == 2:
+                why.append('  +1 due to one more round of aiming')
+                skill += 1
+
+            elif fighter.details['aim']['rounds'] > 2:
+                why.append('  +2 due to 2 or more additional rounds of aiming')
+                skill += 2
+
+        # Shock
+
+        if fighter.details['shock'] != 0:
+            why.append('  %+d due to shock' % fighter.details['shock'])
+            skill += fighter.details['shock']
+
+        # Posture
+
+        posture_mods = self.get_posture_mods(fighter.details['posture'])
+        if posture_mods is not None and posture_mods['attack'] != 0:
+            if weapon['type'] == 'melee weapon':
+                why.append('  %+d due %s posture' % (
+                        posture_mods['attack'], fighter.details['posture']))
+                skill += posture_mods['attack']
+            else:
+                why.append('  NOTE: %s posture doesn\'t matter for ranged' % 
+                                                    fighter.details['posture'])
+                why.append('    attacks (B551).')
+
+        # Opponent's posture
+
+        if opponent is not None:
+            opponent_posture_mods = self.get_posture_mods(
+                                                opponent.details['posture'])
+            if opponent_posture_mods is not None:
+                if weapon['type'] == 'ranged weapon':
+                    skill += opponent_posture_mods['target']
+                    why.append('  %+d for opponent\'s %s posture' %
+                                        (opponent_posture_mods['target'],
+                                         opponent.details['posture']))
+
+
+        why.append('  ...for a to-hit total of %d' % skill)
+        return skill, why
 
 
     def get_unarmed_info(self,
@@ -5190,124 +5219,32 @@ class GurpsRuleset(Ruleset):
         return result
 
 
-    def get_parry_skill(self,
-                        fighter,    # Fighter object
-                        weapon      # dict
-                       ):
-        if weapon is None or weapon['skill'] not in fighter.details['skills']:
-            return None, None
-        skill = fighter.details['skills'][weapon['skill']]
-        parry_why = []
-        parry_skill_modified = False
-
-        parry_skill = 3 + int(skill * 0.5)
-        parry_why.append('Parry (B327, B376) w/%s @ (skill(%d)/2)+3 = %d' % (
-                                                                weapon['name'],
-                                                                skill,
-                                                                parry_skill))
-
-
-        if fighter.details['stunned']:
-            dodge_skill -= 4
-            dodge_why.append('  -4 due to being stunned (B420)')
-
-        if 'parry' in weapon:
-            parry_skill += weapon['parry']
-            parry_skill_modified = True
-            parry_why.append('  %+d due to weapon modifiers' % weapon['parry'])
-
-        if 'Combat Reflexes' in fighter.details['advantages']:
-            parry_skill_modified = True
-            parry_why.append('  +1 due to combat reflexes (B43)')
-            parry_skill += 1
-
-        posture_mods = self.get_posture_mods(fighter.details['posture'])
-        if posture_mods is not None and posture_mods['defense'] != 0:
-            parry_skill_modified = True
-            parry_skill += posture_mods['defense']
-            parry_why.append('  %+d due to %s posture' % 
-                                                (posture_mods['defense'],
-                                                 fighter.details['posture']))
-        if parry_skill_modified:
-            parry_why.append('  ...for a parry skill total = %d' % parry_skill)
-
-        return parry_skill, parry_why
-
-    def get_posture_mods(self,
-                         posture    # string: 'standing' | ...
-                        ):
-        return (None if posture not in GurpsRuleset.posture else
-                                            GurpsRuleset.posture[posture])
-
-    def get_to_hit(self,
-                   fighter,     # Fighter object
-                   opponent,    # Fighter object
-                   weapon
-                  ):
+    def get_weapons_unarmed_skills(self,
+                                   weapon # None or dict from JSON
+                                  ):
         '''
-        Returns tuple (skill, why) where:
-            'skill' (number) is the value the attacker needs to roll to-hit
-                    the target.
-            'why'   is an array of strings describing why the to-hit numbers
-                    are what they are.
+        If this weapon (which may be None) uses the unarmed combat skills.
+        That's basically a blackjack or brass knuckles but there may be more.
+        Assumes weapon's skill is the most advanced skill supported.
+
+        Returns array of skills supported by this weapon.
         '''
-        # TODO: need convenient defaults
-        if weapon['skill'] not in fighter.details['skills']:
+
+        # Skills in increasing order of difficulty
+        all_unarmed_skills = ['dx', 'Brawling', 'Boxing', 'Karate']
+
+        if weapon is None: # No weapon uses unarmed skills by definition
+            return all_unarmed_skills
+
+        if weapon['skill'] not in all_unarmed_skills:
             return None
 
-        why = []
-        skill = fighter.details['skills'][weapon['skill']]
-        why.append('Weapon %s w/skill = %d' % (weapon['name'], skill))
+        for i, skill in enumerate(all_unarmed_skills):
+            if weapon['skill'] == skill:
+                # Returns all of the skills through the matched one
+                return all_unarmed_skills[:i+1]
 
-        if 'acc' in weapon:
-            if fighter.details['aim']['rounds'] > 0:
-                why.append('  +%d due to aiming for 1' % weapon['acc'])
-                skill += weapon['acc']
-                if fighter.details['aim']['braced']:
-                    why.append('  +1 due to bracing')
-                    skill += 1
-            if fighter.details['aim']['rounds'] == 2:
-                why.append('  +1 due to one more round of aiming')
-                skill += 1
-
-            elif fighter.details['aim']['rounds'] > 2:
-                why.append('  +2 due to 2 or more additional rounds of aiming')
-                skill += 2
-
-        # Shock
-
-        if fighter.details['shock'] != 0:
-            why.append('  %+d due to shock' % fighter.details['shock'])
-            skill += fighter.details['shock']
-
-        # Posture
-
-        posture_mods = self.get_posture_mods(fighter.details['posture'])
-        if posture_mods is not None and posture_mods['attack'] != 0:
-            if weapon['type'] == 'melee weapon':
-                why.append('  %+d due %s posture' % (
-                        posture_mods['attack'], fighter.details['posture']))
-                skill += posture_mods['attack']
-            else:
-                why.append('  NOTE: %s posture doesn\'t matter for ranged' % 
-                                                    fighter.details['posture'])
-                why.append('    attacks (B551).')
-
-        # Opponent's posture
-
-        if opponent is not None:
-            opponent_posture_mods = self.get_posture_mods(
-                                                opponent.details['posture'])
-            if opponent_posture_mods is not None:
-                if weapon['type'] == 'ranged weapon':
-                    skill += opponent_posture_mods['target']
-                    why.append('  %+d for opponent\'s %s posture' %
-                                        (opponent_posture_mods['target'],
-                                         opponent.details['posture']))
-
-
-        why.append('  ...for a to-hit total of %d' % skill)
-        return skill, why
+        return None # Camel in Cairo -- should never get here
 
 
     def heal_fighter(self,
@@ -5361,6 +5298,20 @@ class GurpsRuleset(Ruleset):
                 result = False
         return result
 
+
+    def make_empty_creature(self):
+        to_monster = super(GurpsRuleset, self).make_empty_creature()
+        to_monster.update({'aim': { 'braced': False, 'rounds': 0 }, 
+                           'skills': { }, 
+                           'shock': 0, 
+                           'stunned': 0,
+                           'advantages': { }, 
+                           'did_action_this_turn': False,
+                           'check_for_death': False, 
+                           'posture': 'standing'})
+        return to_monster
+
+
     def search_one_creature(self,
                             name,       # string containing the name
                             group,      # string containing the group
@@ -5395,19 +5346,6 @@ class GurpsRuleset(Ruleset):
                                                  creature['skills'][skill])})
 
         return result
-
-
-    def make_empty_creature(self):
-        to_monster = super(GurpsRuleset, self).make_empty_creature()
-        to_monster.update({'aim': { 'braced': False, 'rounds': 0 }, 
-                           'skills': { }, 
-                           'shock': 0, 
-                           'stunned': 0,
-                           'advantages': { }, 
-                           'did_action_this_turn': False,
-                           'check_for_death': False, 
-                           'posture': 'standing'})
-        return to_monster
 
 
     def start_fight(self, fighter):
@@ -5476,10 +5414,182 @@ class GurpsRuleset(Ruleset):
                     fighter.details['state'] = 'unconscious'
 
 
+    #
+    # Protected and Private Methods
+    #
 
-    #
-    # Private Methods
-    #
+    def _adjust_hp(self,
+                   fighter,  # Fighter object
+                   adj       # the number of HP to gain or lose
+                  ):
+        if adj < 0:
+
+            # Hit location (just for flavor, not for special injury)
+            table_lookup = (random.randint(1,6) +
+                            random.randint(1,6) +
+                            random.randint(1,6))
+            hit_location = GurpsRuleset.hit_location_table[table_lookup]
+
+            window_text = [
+                [{'text': ('...%s\'s %s' % (fighter.name, hit_location)),
+                  'mode': curses.A_NORMAL}]
+                           ]
+
+            # Adjust for armor
+            armor, armor_index = fighter.get_current_armor()
+            if armor is not None:
+                if armor['dr'] >= -adj:
+                    return
+                original_adj = adj
+                adj += armor['dr']
+                window_text.append([{'text':'', 'mode': curses.A_NORMAL}])
+                window_text.append(
+                    [{'text': ('%s was wearing %s (dr:%d)' % (fighter.name,
+                                                              armor['name'],
+                                                              armor['dr'])),
+                      'mode': curses.A_NORMAL}]
+                                  )
+                window_text.append(
+                    [{'text': ('so adj(%d) - dr(%d) = damage (%d)' % (
+                                                              -original_adj,
+                                                              armor['dr'],
+                                                              -adj)),
+                      'mode': curses.A_NORMAL}]
+                                  )
+
+            self._window_manager.display_window(
+                                    ('Did %d hp damage to...' % -adj),
+                                    window_text)
+
+
+
+            # Check for Death (B327)
+            adjusted_hp = fighter.details['current']['hp'] + adj
+
+            if adjusted_hp <= -(5 * fighter.details['permanent']['hp']):
+                fighter.details['state'] = 'dead'
+            else:
+                threshold = -fighter.details['permanent']['hp']
+                while fighter.details['current']['hp'] <= threshold:
+                    threshold -= fighter.details['permanent']['hp']
+                if adjusted_hp <= threshold:
+                    fighter.details['check_for_death'] = True
+
+            # Check for Major Injury (B420)
+            if -adj > (fighter.details['permanent']['hp'] / 2):
+                (SUCCESS, SIMPLE_FAIL, BAD_FAIL) = range(3)
+                total = fighter.details['current']['ht']
+                if 'High Pain Threshold' in fighter.details['advantages']:
+                    total = fighter.details['current']['ht'] + 3
+                    menu_title = (
+                        'Major Wound (B420): Roll vs. HT+3 (%d) or be stunned' %
+                                                                        total)
+                elif 'Low Pain Threshold' in fighter.details['advantages']:
+                    total = fighter.details['current']['ht'] - 4
+                    menu_title = (
+                        'Major Wound (B420): Roll vs. HT-4 (%d) or be stunned' %
+                                                                        total)
+                else:
+                    total = fighter.details['current']['ht']
+                    menu_title = (
+                        'Major Wound (B420): Roll vs. HT (%d) or be stunned' % 
+                                                                        total)
+
+                stunned_menu = [('Succeeded (roll <= HT (%d))' % total,
+                                 GurpsRuleset.MAJOR_WOUND_SUCCESS),
+                                ('Missed roll by < 5 (roll < %d)' % (total+5),
+                                 GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL),
+                                ('Missed roll by >= 5 (roll >= %d)' % (total+5),
+                                 GurpsRuleset.MAJOR_WOUND_BAD_FAIL),
+                               ]
+                stunned_results = self._window_manager.menu(menu_title,
+                                                            stunned_menu)
+                if stunned_results == GurpsRuleset.MAJOR_WOUND_BAD_FAIL:
+                    fighter.details['state'] = 'unconscious'
+                    fighter.draw_weapon_by_index(None)
+                elif stunned_results == GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL:
+                    self._change_posture({'fighter': fighter,
+                                          'posture': 'lying'})
+                    fighter.draw_weapon_by_index(None)
+                    fighter.details['stunned'] = True
+
+        if 'High Pain Threshold' not in fighter.details['advantages']: # B59
+            shock_amount = -4 if adj <= -4 else adj
+            if fighter.details['shock'] > shock_amount:
+                fighter.details['shock'] = shock_amount
+
+        # WILL roll or lose aim
+        if fighter.details['aim']['rounds'] > 0:
+            aim_menu = [('made WILL roll', True),
+                        ('did NOT make WILL roll', False)]
+            made_will_roll = self._window_manager.menu(
+                ('roll <= WILL (%d) or lose aim' %
+                                            fighter.details['current']['wi']),
+                aim_menu)
+            if not made_will_roll:
+                fighter.reset_aim()
+
+        super(GurpsRuleset, self)._adjust_hp(fighter, adj)
+
+
+    def _cast_spell(self,
+                    param, # dict {'fighter': <Fighter object>,
+                           #       'spell': <index in 'spells'>}
+                   ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+
+        fighter = param['fighter']
+        spell_index = param['spell']
+        spell = fighter.details['spells'][spell_index]
+
+        if spell['cost'] is None:
+            title = 'Cost to cast (%s) - see (%s) ' % (spell['name'],
+                                                       spell['notes'])
+            height = 1
+            width = len(title)
+            cost_string = ''
+            while len(cost_string) <= 0:
+                cost_string = self._window_manager.input_box(height,
+                                                             width,
+                                                             title)
+            cost = int(cost_string)
+        else:
+            cost = spell['cost']
+
+        # M8 - High skill level costs less
+        skill = spell['skill'] - 15
+        while skill >= 0:
+            cost -= 1
+            skill -= 5
+        if cost < 0:
+            cost = 0
+
+        fighter.details['current']['fp'] -= cost
+        fighter.add_timer(spell['time'] - 0.1,  # -0.1 so that it doesn't show
+                                                # up on the first round you
+                                                # can do something after you
+                                                # cast
+                          'Casting (%s) @ skill (%d): %s' % (spell['name'],
+                                                             spell['skill'],
+                                                             spell['notes']))
+        return None if 'text' not in param else param
+
+
+    def _change_posture(self,
+                        param, # dict {'fighter': <Fighter object>,
+                               #       'posture': <string=new posture>}
+                       ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        param['fighter'].details['posture'] = param['posture']
+        param['fighter'].reset_aim()
+        return None if 'text' not in param else param
+
 
     def _do_adjust_fp(self,
                       fighter,  # Fighter object
@@ -5496,6 +5606,26 @@ class GurpsRuleset(Ruleset):
         fighter.details['current']['fp'] += adj
         return
 
+
+    def _do_aim(self,
+                param, # dict {'fighter': <Fighter object>,
+                       #       'braced': True | False}
+               ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+
+        rounds = param['fighter'].details['aim']['rounds']
+        if rounds == 0:
+            param['fighter'].details['aim']['braced'] = param['braced']
+            param['fighter'].details['aim']['rounds'] = 1
+        elif rounds < 3:
+            param['fighter'].details['aim']['rounds'] += 1
+
+        return
+
+
     def _do_attack(self,
                    param # {'fighter': xxx, Fighter object for attacker
                          #  'fight_handler', ...
@@ -5506,6 +5636,37 @@ class GurpsRuleset(Ruleset):
         '''
         to_monster = super(GurpsRuleset, self)._do_attack(param)
         param['fighter'].reset_aim()
+        return
+
+
+    def _do_defense(self,
+                    param # {'fighter': <Fighter object>, ...
+                   ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        param['fighter'].reset_aim()
+        return None if 'text' not in param else param
+
+
+    # TODO: consolidate the two _do_reload functions
+
+    def _do_reload(self,
+                   param # {'fighter': Fighter object for attacker
+                  ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        if super(GurpsRuleset, self)._do_reload(param):
+            reload_time = weapon['reload']
+            if 'fast-draw (ammo)' in param['fighter'].details['skills']:
+                reload_time -= 1
+            param['fighter'].add_timer(reload_time, 'RELOADING')
+            param['fighter'].reset_aim()
+            return True
+
         return
 
 
@@ -5559,32 +5720,6 @@ class GurpsRuleset(Ruleset):
         return damage_type_str
 
 
-    def get_weapons_unarmed_skills(self,
-                                   weapon # None or dict from JSON
-                                  ):
-        '''
-        If this weapon (which may be None) uses the unarmed combat skills.
-        That's basically a blackjack or brass knuckles but there may be more.
-        Assumes weapon's skill is the most advanced skill supported.
-
-        Returns array of skills supported by this weapon.
-        '''
-
-        # Skills in increasing order of difficulty
-        all_unarmed_skills = ['dx', 'Brawling', 'Boxing', 'Karate']
-
-        if weapon is None: # No weapon uses unarmed skills by definition
-            return all_unarmed_skills
-
-        if weapon['skill'] not in all_unarmed_skills:
-            return None
-
-        for i, skill in enumerate(all_unarmed_skills):
-            if weapon['skill'] == skill:
-                # Returns all of the skills through the matched one
-                return all_unarmed_skills[:i+1]
-
-        return None # Camel in Cairo -- should never get here
 
 
 class ScreenHandler(object):
@@ -5608,13 +5743,16 @@ class ScreenHandler(object):
             ord('B'): {'name': 'Bug Report', 'func': self._make_bug_report},
         }
 
+
     def add_to_history(self,
                        action # {'name':xxx, ...} - see Ruleset::do_action()
                       ):
         self._saved_fight['history'].append(action)
 
+
     def clear_history(self):
         self._saved_fight['history'] = []
+
 
     def handle_user_input_until_done(self):
         '''
@@ -5754,6 +5892,36 @@ class BuildFightHandler(ScreenHandler):
         self._draw_screen()
         self.__add_creature()
         return
+
+    #
+    # Public Methods
+    #
+
+    def change_viewing_index(self,
+                             adj  # integer adjustment to viewing index
+                            ):
+        '''
+        This is public to facilitate testing.
+
+        NOTE: this breaks if |adj| is > len(self.__critters['data'])
+        '''
+
+        len_list = len(self.__critters['data'])
+        if len_list == 0:
+            return
+
+        if self.__viewing_index is None:
+            # autoselect last added creature
+            self.__viewing_index = len_list - 1
+
+        self.__viewing_index += adj
+
+        if self.__viewing_index >= len_list:
+            self.__viewing_index = 0
+
+        elif self.__viewing_index < 0:
+            self.__viewing_index = len_list - 1
+
 
     def get_group_name(self):
         return self.__group_name
@@ -6027,6 +6195,7 @@ class BuildFightHandler(ScreenHandler):
 
         return True # Keep going
 
+
     def __existing_group(self,
                          creature_type # BuildFightHandler.NPCs, ...
                         ):
@@ -6120,6 +6289,23 @@ class BuildFightHandler(ScreenHandler):
         for critter in self.__critters['obj']:
             if critter.name == name:
                 return critter
+        return None
+
+
+    def __get_value_from_template(self,
+                                  template_value,
+                                  template
+                                 ):
+        if template_value['type'] == 'value':
+            return template_value['value']
+
+        # TODO(eventually, maybe):
+        #   {'type': 'ask-string', 'value': x}
+        #   {'type': 'ask-numeric', 'value': x}
+        #   {'type': 'ask-logical', 'value': x}
+        #   {'type': 'dice', 'value': 'ndm+x'}
+        #   {'type': 'derived', 'value': comlicated bunch of crap -- eventually}
+
         return None
 
 
@@ -6221,22 +6407,6 @@ class BuildFightHandler(ScreenHandler):
         return True # Keep going
 
 
-    def __get_value_from_template(self,
-                                  template_value,
-                                  template
-                                 ):
-        if template_value['type'] == 'value':
-            return template_value['value']
-
-        # TODO(eventually, maybe):
-        #   {'type': 'ask-string', 'value': x}
-        #   {'type': 'ask-numeric', 'value': x}
-        #   {'type': 'ask-logical', 'value': x}
-        #   {'type': 'dice', 'value': 'ndm+x'}
-        #   {'type': 'derived', 'value': comlicated bunch of crap -- eventually}
-
-        return None
-
     def __quit(self):
         '''
         Command ribbon method.
@@ -6247,31 +6417,6 @@ class BuildFightHandler(ScreenHandler):
         self._window.close()
         return False # Stop building this fight
 
-    def change_viewing_index(self,
-                             adj  # integer adjustment to viewing index
-                            ):
-        '''
-        This is public to facilitate testing.
-
-        NOTE: this breaks if |adj| is > len(self.__critters['data'])
-        '''
-
-        len_list = len(self.__critters['data'])
-        if len_list == 0:
-            return
-
-        if self.__viewing_index is None:
-            # autoselect last added creature
-            self.__viewing_index = len_list - 1
-
-        self.__viewing_index += adj
-
-        if self.__viewing_index >= len_list:
-            self.__viewing_index = 0
-
-        elif self.__viewing_index < 0:
-            self.__viewing_index = len_list - 1
-
 
     def __view_prev(self): # look at previous character
         self.change_viewing_index(-1)
@@ -6280,6 +6425,7 @@ class BuildFightHandler(ScreenHandler):
                                     self.__new_char_name,
                                     self.__viewing_index)
         return True # Keep going
+
 
     def __view_next(self): # look at next character
         self.change_viewing_index(1)
@@ -6451,10 +6597,18 @@ class FightHandler(ScreenHandler):
 
         self._window.start_fight()
 
+    #
+    # Public Methods
+    #
 
-    # Public to aid in testing
+    def display_window(self,
+                       title,
+                       lines  # [{'text', 'mode'}, ...]
+                      ):
+        return True
 
-    def get_current_fighter(self):
+
+    def get_current_fighter(self):              # Public to aid in testing
         '''
         Returns the Fighter object of the current fighter.
         '''
@@ -6502,8 +6656,7 @@ class FightHandler(ScreenHandler):
             del fights[fight_group]
 
 
-    # Public to assist testing
-    def modify_index(self,
+    def modify_index(self,                      # Public to assist testing
                      adj      # 1 or -1, adjust the index by this
                     ):
         '''
@@ -6556,6 +6709,149 @@ class FightHandler(ScreenHandler):
                                                 self._saved_fight['round']})
 
 
+    def pick_opponent(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        if self.__viewing_index is not None:
+            current_fighter = self.__fighters[self.__viewing_index]
+        else:
+            current_fighter = self.get_current_fighter()
+
+        # Pick the opponent.
+
+        opponent_group = None
+        opponent_menu = []
+        default_selection = None
+        for fighter in self.__fighters:
+            if fighter.group != current_fighter.group:
+                opponent_group = fighter.group
+                if fighter.is_conscious():
+                    if fighter.details['opponent'] is None:
+                        if default_selection is None:
+                            default_selection = len(opponent_menu)
+                        menu_text = fighter.name
+                    else:
+                        menu_text = '%s (fighting %s)' % (
+                                fighter.name,
+                                fighter.details['opponent']['name'])
+                    opponent_menu.append((menu_text, fighter.name))
+        if len(opponent_menu) <= 0:
+            self._window_manager.error(['All the opponents are dead'])
+            return True # don't leave the fight
+
+        if default_selection is None:
+            default_selection = 0
+        opponent_name = self._window_manager.menu('Opponent',
+                                                  opponent_menu,
+                                                  default_selection)
+
+        if opponent_name is None:
+            return True # don't leave the fight
+
+        # Now, make reflect the selection in the code.
+
+        self.__ruleset.do_action(current_fighter,
+                                 {'name': 'pick-opponent',
+                                  'opponent-name': opponent_name,
+                                  'opponent-group': opponent_group,
+                                  'comment': '(%s) picked (%s) as opponent' % 
+                                                    (current_fighter.name,
+                                                     opponent_name)
+                                 },
+                                 self)
+
+        opponent = self.__get_fighter_object(opponent_name, opponent_group)
+
+        # Ask to have them fight each other
+        if (opponent is not None and opponent.details['opponent'] is None):
+            back_menu = [('yes', True), ('no', False)]
+            answer = self._window_manager.menu('Make Opponents Go Both Ways',
+                                        back_menu)
+            if answer == True:
+                self.__ruleset.do_action(
+                    opponent,
+                    {'name': 'pick-opponent',
+                     'opponent-name': current_fighter.name,
+                     'opponent-group': current_fighter.group,
+                     'comment': '(%s) picked (%s) as opponent right back' % 
+                                                        (opponent_name,
+                                                         current_fighter.name)
+                    },
+                    self)
+
+        self._window.show_fighters(current_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
+        return True # Keep going
+
+
+    def promote_to_NPC(self):                       # Public to enable testing
+        if self.__viewing_index is not None:
+            new_NPC = self.__fighters[self.__viewing_index]
+        else:
+            current_fighter = self.get_current_fighter()
+            if (current_fighter.group == 'PCs' or
+                                            current_fighter.group == 'NPCs'):
+                opponent = self.get_opponent_for(current_fighter)
+                new_NPC = current_fighter if opponent is None else opponent
+            else:
+                new_NPC = current_fighter
+
+        if new_NPC.group == 'PCs':
+            self._window_manager.error(['%s is already a PC' % new_NPC.name])
+            return True
+        if new_NPC.group == 'NPCs':
+            self._window_manager.error(['%s is already an NPC' % new_NPC.name])
+            return True
+
+        # Now we have chosen a monster that's NOT an NPC or PC, promote him.
+
+        # Make the NPC entry
+
+        if new_NPC.name in self.__world.details['NPCs']:
+            self._window_manager.error(['There\'s already an NPC named %s' %
+                                        new_NPC.name])
+            return True
+
+        # TODO: do we need to call 'get_creature_details' in case 'details'
+        #   is a redirect?
+
+        details_copy = copy.deepcopy(new_NPC.details)
+        self.__world.details['NPCs'][new_NPC.name] = details_copy
+
+        # Make the redirect entry
+
+        group = self.__world.get_creatures(new_NPC.group)
+        group[new_NPC.name] = { "redirect": "NPCs" }
+
+        # Replace fighter information with new fighter information
+
+        for index, fighter in enumerate(self.__fighters):
+            if (fighter.name == new_NPC.name and
+                                            fighter.group == new_NPC.group):
+                new_fighter = Fighter(new_NPC.name,
+                                      new_NPC.group,
+                                      details_copy,
+                                      self.__ruleset,
+                                      self._window_manager)
+                self.__fighters[index] = new_fighter
+                self._window_manager.display_window(
+                                               ('Promoted Monster to NPC'),
+                                                [[{'text': new_NPC.name,
+                                                   'mode': curses.A_NORMAL }]])
+                break
+
+        return True # Keep going
+
+
+    def set_viewing_index(self, new_index):     # Public to support testing.
+        self.__viewing_index = new_index
+
+
     def should_we_show_current_fighter(self):
         current_fighter = self.get_current_fighter()
         if current_fighter.name == Fight.name:
@@ -6569,9 +6865,22 @@ class FightHandler(ScreenHandler):
 
         return True
 
+
+    def simply_save(self):
+        self._saved_fight['saved'] = True
+
     #
     # Private Methods
     #
+
+    def __change_viewing_index(self,
+                               adj  # integer adjustment to viewing index
+                              ):
+        self.__viewing_index += adj
+        if self.__viewing_index >= len(self._saved_fight['fighters']):
+            self.__viewing_index = 0
+        elif self.__viewing_index < 0:
+            self.__viewing_index = len(self._saved_fight['fighters']) - 1
 
     # RULESET: all of FP belongs in Ruleset
     def __damage_FP(self):
@@ -6713,6 +7022,7 @@ class FightHandler(ScreenHandler):
                                    self.__viewing_index)
         return True # Keep going
 
+
     def __defend(self):
         '''
         Command ribbon method.
@@ -6794,6 +7104,62 @@ class FightHandler(ScreenHandler):
         self._window.command_ribbon(self._choices)
 
 
+    def _explain_numbers(self):
+        '''
+        Returns [[{'text':x, 'mode':x}, {...}], [], [], ...]
+            where the outer array contains lines
+            each line is an array that contains a line-segment
+            each line segment has its own mode so, for example, only SOME of
+               the line is shown in bold
+        '''
+
+        why_opponent = self.get_opponent_for(why_target)
+        weapon, holding_weapon_index = why_target.get_current_weapon()
+
+        lines = []
+
+        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(weapon)
+
+        if unarmed_skills is not None:
+            unarmed_info = self.__ruleset.get_unarmed_info(why_target,
+                                                           why_opponent,
+                                                           weapon,
+                                                           unarmed_skills)
+            lines = [[{'text': x,
+                       'mode': curses.A_NORMAL}] for x in unarmed_info['why']]
+        else:
+            if weapon['skill'] in why_target.details['skills']:
+                ignore, to_hit_why = self.__ruleset.get_to_hit(why_target,
+                                                               why_opponent,
+                                                               weapon)
+                lines = [[{'text': x,
+                           'mode': curses.A_NORMAL}] for x in to_hit_why]
+
+                # Damage
+
+                ignore, damage_why = self.__ruleset.get_damage(why_target,
+                                                               weapon)
+                lines.extend([[{'text': x,
+                                'mode': curses.A_NORMAL}] for x in damage_why])
+
+            if 'notes' in weapon and len(weapon['notes']) != 0:
+                lines.extend([[{'text': 'Weapon: "%s"' % weapon['name'],
+                               'mode': curses.A_NORMAL}]])
+                lines.extend([[{'text': '  %s' % weapon['notes'],
+                               'mode': curses.A_NORMAL}]])
+
+        ignore, defense_why = why_target.get_defenses_notes(why_opponent)
+        if defense_why is not None:
+            lines = [[{'text': x,
+                       'mode': curses.A_NORMAL}] for x in defense_why] + lines
+
+        return lines
+
+
+    def __full_notes(self):
+        return self.__notes('notes')
+
+
     def __get_fighter_details(self,
                               name,     # string
                               group     # string
@@ -6811,6 +7177,7 @@ class FightHandler(ScreenHandler):
                 return fighter
 
         return None
+
 
     def __give_equipment(self):
         if self.__viewing_index is not None:
@@ -6836,7 +7203,7 @@ class FightHandler(ScreenHandler):
         to_fighter = self.__get_fighter_object(to_fighter_name,
                                                from_fighter.group)
 
-        to_fighter.add_equipment(item, from_fighter.name)
+        to_fighter.add_equipment(item, from_fighter.detailed_name)
         return True # Keep going
 
 
@@ -6889,7 +7256,7 @@ class FightHandler(ScreenHandler):
                     return True
 
                 new_item = bad_guy.details['stuff'].pop(index)
-                xfer['guy'].add_equipment(new_item, bad_guy.name)
+                xfer['guy'].add_equipment(new_item, bad_guy.detailed_name)
 
                 # indexes are no longer good, remove the weapon and armor
                 bad_guy.don_armor_by_index(None)
@@ -6951,56 +7318,6 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
 
-    def __change_viewing_index(self,
-                               adj  # integer adjustment to viewing index
-                              ):
-        self.__viewing_index += adj
-        if self.__viewing_index >= len(self._saved_fight['fighters']):
-            self.__viewing_index = 0
-        elif self.__viewing_index < 0:
-            self.__viewing_index = len(self._saved_fight['fighters']) - 1
-
-    def __view_prev(self): # look at previous character, don't change init
-        if self.__viewing_index is None:
-            self.__viewing_index = self._saved_fight['index']
-        self.__change_viewing_index(-1)
-        viewing_fighter = self.__fighters[self.__viewing_index]
-        opponent = self.get_opponent_for(viewing_fighter)
-        if self.__viewing_index == self._saved_fight['index']:
-            self.__viewing_index = None
-        self._window.show_fighters(viewing_fighter,
-                                   opponent,
-                                   self.__fighters,
-                                   self._saved_fight['index'],
-                                   self.__viewing_index)
-        return True # Keep going
-
-    def __view_next(self): # look at next character, don't change init
-        if self.__viewing_index is None:
-            self.__viewing_index = self._saved_fight['index']
-        self.__change_viewing_index(1)
-        viewing_fighter = self.__fighters[self.__viewing_index]
-        opponent = self.get_opponent_for(viewing_fighter)
-        if self.__viewing_index == self._saved_fight['index']:
-            self.__viewing_index = None
-        self._window.show_fighters(viewing_fighter,
-                                   opponent,
-                                   self.__fighters,
-                                   self._saved_fight['index'],
-                                   self.__viewing_index)
-        return True # Keep going
-
-    def __view_init(self): # look at initiative character (back to fight)
-        self.__viewing_index = None
-        current_fighter = self.get_current_fighter()
-        opponent = self.get_opponent_for(current_fighter)
-        self._window.show_fighters(current_fighter,
-                                   opponent,
-                                   self.__fighters,
-                                   self._saved_fight['index'],
-                                   self.__viewing_index)
-        return True # Keep going
-
     def __next_fighter(self):
         '''
         Command ribbon method.
@@ -7045,6 +7362,7 @@ class FightHandler(ScreenHandler):
                                    self.__viewing_index)
         return True # Keep going
 
+
     def __next_PC_name(self):
         '''
         Finds the name of the next PC to fight _after_ the current index.
@@ -7061,14 +7379,6 @@ class FightHandler(ScreenHandler):
                 break
             next_index += 1
         return next_PC_name
-
-
-    def __short_notes(self):
-        return self.__notes('short-notes')
-
-
-    def __full_notes(self):
-        return self.__notes('notes')
 
 
     def __notes(self,
@@ -7109,85 +7419,6 @@ class FightHandler(ScreenHandler):
                                    self.__viewing_index)
         return True # Keep going
 
-    def pick_opponent(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        if self.__viewing_index is not None:
-            current_fighter = self.__fighters[self.__viewing_index]
-        else:
-            current_fighter = self.get_current_fighter()
-
-        # Pick the opponent.
-
-        opponent_group = None
-        opponent_menu = []
-        default_selection = None
-        for fighter in self.__fighters:
-            if fighter.group != current_fighter.group:
-                opponent_group = fighter.group
-                if fighter.is_conscious():
-                    if fighter.details['opponent'] is None:
-                        if default_selection is None:
-                            default_selection = len(opponent_menu)
-                        menu_text = fighter.name
-                    else:
-                        menu_text = '%s (fighting %s)' % (
-                                fighter.name,
-                                fighter.details['opponent']['name'])
-                    opponent_menu.append((menu_text, fighter.name))
-        if len(opponent_menu) <= 0:
-            self._window_manager.error(['All the opponents are dead'])
-            return True # don't leave the fight
-
-        if default_selection is None:
-            default_selection = 0
-        opponent_name = self._window_manager.menu('Opponent',
-                                                  opponent_menu,
-                                                  default_selection)
-
-        if opponent_name is None:
-            return True # don't leave the fight
-
-        # Now, make reflect the selection in the code.
-
-        self.__ruleset.do_action(current_fighter,
-                                 {'name': 'pick-opponent',
-                                  'opponent-name': opponent_name,
-                                  'opponent-group': opponent_group,
-                                  'comment': '(%s) picked (%s) as opponent' % 
-                                                    (current_fighter.name,
-                                                     opponent_name)
-                                 },
-                                 self)
-
-        opponent = self.__get_fighter_object(opponent_name, opponent_group)
-
-        # Ask to have them fight each other
-        if (opponent is not None and opponent.details['opponent'] is None):
-            back_menu = [('yes', True), ('no', False)]
-            answer = self._window_manager.menu('Make Opponents Go Both Ways',
-                                        back_menu)
-            if answer == True:
-                self.__ruleset.do_action(
-                    opponent,
-                    {'name': 'pick-opponent',
-                     'opponent-name': current_fighter.name,
-                     'opponent-group': current_fighter.group,
-                     'comment': '(%s) picked (%s) as opponent right back' % 
-                                                        (opponent_name,
-                                                         current_fighter.name)
-                    },
-                    self)
-
-        self._window.show_fighters(current_fighter,
-                                   opponent,
-                                   self.__fighters,
-                                   self._saved_fight['index'],
-                                   self.__viewing_index)
-        return True # Keep going
-
 
     def __prev_fighter(self):
         '''
@@ -7214,70 +7445,6 @@ class FightHandler(ScreenHandler):
                                    self.__fighters,
                                    self._saved_fight['index'],
                                    self.__viewing_index)
-        return True # Keep going
-
-
-    # For testing, no actual code should call this
-    def set_viewing_index(self, new_index):
-        self.__viewing_index = new_index
-
-    # Public to enable testing
-    def promote_to_NPC(self):
-        if self.__viewing_index is not None:
-            new_NPC = self.__fighters[self.__viewing_index]
-        else:
-            current_fighter = self.get_current_fighter()
-            if (current_fighter.group == 'PCs' or
-                                            current_fighter.group == 'NPCs'):
-                opponent = self.get_opponent_for(current_fighter)
-                new_NPC = current_fighter if opponent is None else opponent
-            else:
-                new_NPC = current_fighter
-
-        if new_NPC.group == 'PCs':
-            self._window_manager.error(['%s is already a PC' % new_NPC.name])
-            return True
-        if new_NPC.group == 'NPCs':
-            self._window_manager.error(['%s is already an NPC' % new_NPC.name])
-            return True
-
-        # Now we have chosen a monster that's NOT an NPC or PC, promote him.
-
-        # Make the NPC entry
-
-        if new_NPC.name in self.__world.details['NPCs']:
-            self._window_manager.error(['There\'s already an NPC named %s' %
-                                        new_NPC.name])
-            return True
-
-        # TODO: do we need to call 'get_creature_details' in case 'details'
-        #   is a redirect?
-
-        details_copy = copy.deepcopy(new_NPC.details)
-        self.__world.details['NPCs'][new_NPC.name] = details_copy
-
-        # Make the redirect entry
-
-        group = self.__world.get_creatures(new_NPC.group)
-        group[new_NPC.name] = { "redirect": "NPCs" }
-
-        # Replace fighter information with new fighter information
-
-        for index, fighter in enumerate(self.__fighters):
-            if (fighter.name == new_NPC.name and
-                                            fighter.group == new_NPC.group):
-                new_fighter = Fighter(new_NPC.name,
-                                      new_NPC.group,
-                                      details_copy,
-                                      self.__ruleset,
-                                      self._window_manager)
-                self.__fighters[index] = new_fighter
-                self._window_manager.display_window(
-                                               ('Promoted Monster to NPC'),
-                                                [[{'text': new_NPC.name,
-                                                   'mode': curses.A_NORMAL }]])
-                break
-
         return True # Keep going
 
 
@@ -7320,56 +7487,25 @@ class FightHandler(ScreenHandler):
         return False # Leave the fight
 
 
-    def _explain_numbers(self):
+    def __short_notes(self):
+        return self.__notes('short-notes')
+
+
+    def __save(self):
         '''
-        Returns [[{'text':x, 'mode':x}, {...}], [], [], ...]
-            where the outer array contains lines
-            each line is an array that contains a line-segment
-            each line segment has its own mode so, for example, only SOME of
-               the line is shown in bold
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
         '''
-
-        why_opponent = self.get_opponent_for(why_target)
-        weapon, holding_weapon_index = why_target.get_current_weapon()
-
-        lines = []
-
-        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(weapon)
-
-        if unarmed_skills is not None:
-            unarmed_info = self.__ruleset.get_unarmed_info(why_target,
-                                                           why_opponent,
-                                                           weapon,
-                                                           unarmed_skills)
-            lines = [[{'text': x,
-                       'mode': curses.A_NORMAL}] for x in unarmed_info['why']]
-        else:
-            if weapon['skill'] in why_target.details['skills']:
-                ignore, to_hit_why = self.__ruleset.get_to_hit(why_target,
-                                                               why_opponent,
-                                                               weapon)
-                lines = [[{'text': x,
-                           'mode': curses.A_NORMAL}] for x in to_hit_why]
-
-                # Damage
-
-                ignore, damage_why = self.__ruleset.get_damage(why_target,
-                                                               weapon)
-                lines.extend([[{'text': x,
-                                'mode': curses.A_NORMAL}] for x in damage_why])
-
-            if 'notes' in weapon and len(weapon['notes']) != 0:
-                lines.extend([[{'text': 'Weapon: "%s"' % weapon['name'],
-                               'mode': curses.A_NORMAL}]])
-                lines.extend([[{'text': '  %s' % weapon['notes'],
-                               'mode': curses.A_NORMAL}]])
-
-        ignore, defense_why = why_target.get_defenses_notes(why_opponent)
-        if defense_why is not None:
-            lines = [[{'text': x,
-                       'mode': curses.A_NORMAL}] for x in defense_why] + lines
-
-        return lines
+        self._saved_fight['saved'] = True
+        self.__keep_monsters = False # Don't move monsters to dead after fight
+        next_PC_name = self.__next_PC_name()
+        self._window.round_ribbon(self._saved_fight['round'],
+                                  self._saved_fight['saved'],
+                                  self.__keep_monsters,
+                                  next_PC_name,
+                                  self._input_filename,
+                                  ScreenHandler.maintainjson)
+        return True # Keep going
 
 
     def __select_fighter(self,
@@ -7402,24 +7538,6 @@ class FightHandler(ScreenHandler):
                                                      default_selection)
         return selected_fighter, current_fighter
 
-    def simply_save(self):
-        self._saved_fight['saved'] = True
-
-    def __save(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        self._saved_fight['saved'] = True
-        self.__keep_monsters = False # Don't move monsters to dead after fight
-        next_PC_name = self.__next_PC_name()
-        self._window.round_ribbon(self._saved_fight['round'],
-                                  self._saved_fight['saved'],
-                                  self.__keep_monsters,
-                                  next_PC_name,
-                                  self._input_filename,
-                                  ScreenHandler.maintainjson)
-        return True # Keep going
 
     def __show_history(self):
         '''
@@ -7437,6 +7555,7 @@ class FightHandler(ScreenHandler):
         self._window_manager.display_window('Fight History', lines)
         return True
 
+
     def __show_info(self):
         '''
         Command ribbon method.
@@ -7453,12 +7572,6 @@ class FightHandler(ScreenHandler):
                                             char_info)
         return True
 
-    def display_window(self,
-                       title,
-                       lines  # [{'text', 'mode'}, ...]
-                      ):
-
-        return True
 
     def __show_why(self):
         '''
@@ -7550,6 +7663,52 @@ class FightHandler(ScreenHandler):
         return True # Keep fighting
 
 
+    def __view_init(self): # look at initiative character (back to fight)
+        self.__viewing_index = None
+        current_fighter = self.get_current_fighter()
+        opponent = self.get_opponent_for(current_fighter)
+        self._window.show_fighters(current_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
+        return True # Keep going
+
+
+    def __view_prev(self): # look at previous character, don't change init
+        if self.__viewing_index is None:
+            self.__viewing_index = self._saved_fight['index']
+        self.__change_viewing_index(-1)
+        viewing_fighter = self.__fighters[self.__viewing_index]
+        opponent = self.get_opponent_for(viewing_fighter)
+        if self.__viewing_index == self._saved_fight['index']:
+            self.__viewing_index = None
+        self._window.show_fighters(viewing_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
+        return True # Keep going
+
+
+    def __view_next(self): # look at next character, don't change init
+        if self.__viewing_index is None:
+            self.__viewing_index = self._saved_fight['index']
+        self.__change_viewing_index(1)
+        viewing_fighter = self.__fighters[self.__viewing_index]
+        opponent = self.get_opponent_for(viewing_fighter)
+        if self.__viewing_index == self._saved_fight['index']:
+            self.__viewing_index = None
+        self._window.show_fighters(viewing_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
+        return True # Keep going
+
+
+
+
 class MainHandler(ScreenHandler):
     (CHAR_LIST,
      CHAR_DETAIL) = range(2)
@@ -7627,102 +7786,82 @@ class MainHandler(ScreenHandler):
             if details is not None:
                 self.__ruleset.is_creature_consistent(name, details)
 
-    # TODO: sort the methods
+    #
+    # Public Methods
+    #
 
-    # This is public to facilitate testing
-    def get_fighter_from_char_index(self):
+    def get_fighter_from_char_index(self): # Public to facilitate testing
         return self.__chars[self.__char_index]
 
-    #
-    # Protected Methods
-    #
 
-    def _draw_screen(self, inverse=False):
-        self._window.clear()
-        self._window.status_ribbon(self._input_filename,
-                                   ScreenHandler.maintainjson)
-
-        # MainGmWindow
-        self._window.show_creatures(self.__chars,
-                                    self.__char_index,
-                                    inverse)
-
-        person = (None if self.__char_index is None
-                       else self.__chars[self.__char_index])
-        self._window.show_detail(person)
-
-        self._window.command_ribbon(self._choices)
-
-    #
-    # Private Methods - callbacks for 'choices' array for menu
-    #
-
-
-    def __toggle_Monster_PC_NPC_display(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        if self.__current_display is None:
-            group_menu = [(group_name, group_name)
-                            for group_name in self.__world.get_fights()]
-            self.__current_display = self._window_manager.menu(
-                                                    'Which Monster Group',
-                                                    group_menu)
-
-
-
+    def next_char(self,                     # Public to facilitate testing
+                  index=None  # Just for testing
+                 ):
+        if index is not None:
+            self.__char_index = index
+        elif self.__char_index is None:
+            self.__char_index = 0
         else:
-            self.__current_display = None
-
-        self.__setup_PC_list(self.__current_display)
+            self.__char_index += 1
+            if self.__char_index >= len(self.__chars):
+                self.__char_index = 0
         self._draw_screen()
-
-        # If this is a monster list, run a consistency check
-        #if self.__current_display is not None:
-        #    monsters = self.__world.get_creatures(self.__current_display)
-        #    for name in monsters:
-        #        creature = self.__world.get_creature_details(
-        #                                                name,
-        #                                                self.__current_display)
-        #        self.__ruleset.is_creature_consistent(name, creature)
-
         return True
 
 
-    def __add_NPCs(self, throw_away):
+    def NPC_joins_monsters(self, throw_away): # Public for testing purposes
+        # Make sure the person is an NPC
+        npc_name = self.__chars[self.__char_index].name
+        if self.__chars[self.__char_index].group != 'NPCs':
+            self._window_manager.error(['"%s" not an NPC' % npc_name])
+            return True
+
+        # Select the fight
+        fight_menu = [(fight_name, fight_name)
+                                for fight_name in self.__world.get_fights()]
+        fight_name = self._window_manager.menu('Join Which Fight', fight_menu)
+
+        # Make sure the person isn't already in the fight
+        fight = self.__world.get_creatures(fight_name)
+        if npc_name in fight:
+            self._window_manager.error(['"%s" already in fight "%s"' %
+                                                    (npc_name, fight_name)])
+            return True
+
+        fight[npc_name] = {'redirect': 'NPCs'}
+        self.__setup_PC_list(self.__current_display)
+        self._draw_screen()
+        return True
+
+
+    def NPC_joins_PCs(self,                 # Public for testing purposes
+                      throw_away):
+        npc_name = self.__chars[self.__char_index].name
+        if self.__chars[self.__char_index].group != 'NPCs':
+            self._window_manager.error(['"%s" not an NPC' % npc_name])
+            return True
+
+        if npc_name in self.__world.details['PCs']:
+            self._window_manager.error(['"%s" already a PC' % npc_name])
+            return True
+
+        self.__world.details['PCs'][npc_name] = {'redirect': 'NPCs'}
+        self.__setup_PC_list(self.__current_display)
+        self._draw_screen()
+        return True
+
+    #
+    # Protected and Private Methods
+    #
+
+    def __add_equipment(self, throw_away):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-
-        build_fight = BuildFightHandler(self._window_manager,
-                                        self.__world,
-                                        self.__ruleset,
-                                        BuildFightHandler.NPCs,
-                                        campaign_debug_json,
-                                        self._input_filename)
-        build_fight.handle_user_input_until_done()
-        self.__setup_PC_list(self.__current_display) # Since it may have changed
-        self._draw_screen() # Redraw current screen when done building fight.
-        return True # Keep going
-
-
-    def __add_PCs(self, throw_away):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-
-        build_fight = BuildFightHandler(self._window_manager,
-                                        self.__world,
-                                        self.__ruleset,
-                                        BuildFightHandler.PCs,
-                                        campaign_debug_json,
-                                        self._input_filename)
-        build_fight.handle_user_input_until_done()
-        self.__setup_PC_list(self.__current_display) # Since it may have changed
-        self._draw_screen() # Redraw current screen when done building fight.
+        fighter = self.__chars[self.__char_index]
+        self.__equipment_manager.add_equipment(fighter)
+        self._draw_screen()
         return True # Keep going
 
 
@@ -7762,15 +7901,42 @@ class MainHandler(ScreenHandler):
                 self.__ruleset.is_creature_consistent(name, creature)
         return True # Keep going
 
-    def __add_equipment(self, throw_away):
+
+    def __add_NPCs(self, throw_away):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = self.__chars[self.__char_index]
-        self.__equipment_manager.add_equipment(fighter)
-        self._draw_screen()
+
+        build_fight = BuildFightHandler(self._window_manager,
+                                        self.__world,
+                                        self.__ruleset,
+                                        BuildFightHandler.NPCs,
+                                        campaign_debug_json,
+                                        self._input_filename)
+        build_fight.handle_user_input_until_done()
+        self.__setup_PC_list(self.__current_display) # Since it may have changed
+        self._draw_screen() # Redraw current screen when done building fight.
         return True # Keep going
+
+
+    def __add_PCs(self, throw_away):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        build_fight = BuildFightHandler(self._window_manager,
+                                        self.__world,
+                                        self.__ruleset,
+                                        BuildFightHandler.PCs,
+                                        campaign_debug_json,
+                                        self._input_filename)
+        build_fight.handle_user_input_until_done()
+        self.__setup_PC_list(self.__current_display) # Since it may have changed
+        self._draw_screen() # Redraw current screen when done building fight.
+        return True # Keep going
+
 
     def __add_spell(self, throw_away):
         '''
@@ -7825,92 +7991,21 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
 
-    def __remove_spell(self, throw_away):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        fighter = self.__chars[self.__char_index]
+    def _draw_screen(self, inverse=False):
+        self._window.clear()
+        self._window.status_ribbon(self._input_filename,
+                                   ScreenHandler.maintainjson)
 
-        # Is the fighter a caster?
-        if 'spells' not in fighter.details:
-            self._window_manager.error(
-                ['Doesn\'t look like %s casts spells' % fighter.name])
-            return True
+        # MainGmWindow
+        self._window.show_creatures(self.__chars,
+                                    self.__char_index,
+                                    inverse)
 
-        keep_asking_menu = [('yes', True), ('no', False)]
-        keep_asking = True
-        while keep_asking:
-            # Make the spell list again (since we've removed one)
-            spell_menu = [(spell['name'], spell['name'])
-                        for spell in sorted(fighter.details['spells'],
-                                            key=lambda x:x['name'])]
-            bad_spell_name = self._window_manager.menu('Spell to Remove',
-                                                       spell_menu)
+        person = (None if self.__char_index is None
+                       else self.__chars[self.__char_index])
+        self._window.show_detail(person)
 
-            if bad_spell_name is None:
-                return True
-
-            for index, spell in enumerate(fighter.details['spells']):
-                if spell['name'] == bad_spell_name:
-                    del fighter.details['spells'][index]
-                    self._draw_screen()
-                    break
-
-            keep_asking = self._window_manager.menu('Remove More Spells',
-                                                    keep_asking_menu)
-        return True # Keep going
-
-    def __give_equipment(self, throw_away):
-        from_fighter = self.__chars[self.__char_index]
-
-        item = self.__equipment_manager.remove_equipment(from_fighter)
-        if item is None:
-            return True # Keep going
-
-        character_list = self.__world.get_creatures('PCs')
-        character_menu = [(dude, dude) for dude in character_list]
-        to_fighter_info = self._window_manager.menu(
-                                        'Give "%s" to whom?' % item['name'],
-                                        character_menu)
-
-        if to_fighter_info is None:
-            from_fighter.add_equipment(item, None)
-            self._draw_screen()
-            return True # Keep going
-
-        to_fighter = Fighter(to_fighter_info,
-                             'PCs',
-                             character_list[to_fighter_info],
-                             self.__ruleset,
-                             self._window_manager)
-
-        to_fighter.add_equipment(item, from_fighter.name)
-        self._draw_screen()
-        return True # Keep going
-
-
-    def __maintain_json(self):
-        '''
-        Command ribbon method.  Toggles whether the results of this session
-        are saved to the .json file when the program is exited.
-
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-
-        world.toggle_saved_on_exit()
-        self._draw_screen()
-        return True # Keep going
-
-    def __remove_equipment(self, throw_away):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        fighter = self.__chars[self.__char_index]
-        self.__equipment_manager.remove_equipment(fighter)
-        self._draw_screen()
-        return True # Keep going
+        self._window.command_ribbon(self._choices)
 
 
     def __equip(self):
@@ -7949,6 +8044,276 @@ class MainHandler(ScreenHandler):
         #        self.__ruleset.is_creature_consistent(name, creature)
 
         return True # Keep going
+
+
+    def __first_page(self):
+        if self.__current_pane == MainHandler.CHAR_DETAIL:
+            self._window.char_detail_home()
+        else:
+            self.__char_index = 0
+            self._window.char_list_home()
+            self._draw_screen()
+        return True
+
+
+    def __full_notes(self, throw_away):
+        return self.__notes('notes')
+
+
+    def __fully_heal(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        for name in self.__world.get_creatures('PCs'):
+            details = self.__world.get_creature_details(name, 'PCs')
+            if details is not None:
+                self.__ruleset.heal_fighter(details)
+        self._draw_screen()
+        return True
+
+
+    def __give_equipment(self, throw_away):
+        from_fighter = self.__chars[self.__char_index]
+
+        item = self.__equipment_manager.remove_equipment(from_fighter)
+        if item is None:
+            return True # Keep going
+
+        character_list = self.__world.get_creatures('PCs')
+        character_menu = [(dude, dude) for dude in character_list]
+        to_fighter_info = self._window_manager.menu(
+                                        'Give "%s" to whom?' % item['name'],
+                                        character_menu)
+
+        if to_fighter_info is None:
+            from_fighter.add_equipment(item, None)
+            self._draw_screen()
+            return True # Keep going
+
+        to_fighter = Fighter(to_fighter_info,
+                             'PCs',
+                             character_list[to_fighter_info],
+                             self.__ruleset,
+                             self._window_manager)
+
+        to_fighter.add_equipment(item, from_fighter.detailed_name)
+        self._draw_screen()
+        return True # Keep going
+
+
+    def __heal(self):
+        '''
+        Command ribbon method.
+
+        Heals the selected creature.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        self.__ruleset.heal_fighter(self.__chars[self.__char_index].details)
+        self._draw_screen()
+
+        return True
+
+
+    def __left_pane(self):
+        self.__current_pane = MainHandler.CHAR_LIST
+        return True
+
+
+    def __maintain_json(self):
+        '''
+        Command ribbon method.  Toggles whether the results of this session
+        are saved to the .json file when the program is exited.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        world.toggle_saved_on_exit()
+        self._draw_screen()
+        return True # Keep going
+
+
+    def __next_page(self):
+        if self.__current_pane == MainHandler.CHAR_DETAIL:
+            self._window.scroll_char_detail_down()
+        else:
+            self._window.scroll_char_list_down()
+        return True
+
+
+    def __notes(self,
+                notes_type  # 'short-notes' or 'notes'
+               ):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = self.__chars[self.__char_index]
+        if fighter is None:
+            return True # Keep fighting
+
+        # Now, get the notes for that person
+        lines, cols = self._window.getmaxyx()
+
+        if notes_type not in fighter.details:
+            notes = None
+        else:
+            notes = '\n'.join(fighter.details[notes_type])
+
+        notes = self._window_manager.edit_window(
+                    lines - 4,
+                    cols / 2, # arbitrary width
+                    notes,    # initial string (w/ \n) for the window
+                    'Notes',
+                    '^G to exit')
+
+        fighter.details[notes_type] = [x for x in notes.split('\n')]
+        self._draw_screen()
+
+        return True # Keep going
+
+
+    def __NPC_leaves_PCs(self, throw_away):
+        npc_name = self.__chars[self.__char_index].name
+        if npc_name not in self.__world.details['NPCs']:
+            self._window_manager.error(['"%s" not an NPC' % npc_name])
+            return True
+
+        if npc_name not in self.__world.details['PCs']:
+            self._window_manager.error(['"%s" not in PC list' % npc_name])
+            return True
+
+        del(self.__world.details['PCs'][npc_name])
+        self.__setup_PC_list(self.__current_display)
+        self._draw_screen()
+        return True
+
+
+    def __party(self):
+        sub_menu = [('NPC joins PCs',      {'doit': self.NPC_joins_PCs}),
+                    ('NPC leaves PCs',     {'doit': self.__NPC_leaves_PCs}),
+                    ('NPC joins Monsters', {'doit': self.NPC_joins_monsters}),
+                    ('npc list',           {'doit': self.__add_NPCs}),
+                    ('pc list',            {'doit': self.__add_PCs}),
+                    ('monster list',       {'doit': self.__add_monsters})]
+        self._window_manager.menu('Do what', sub_menu)
+        return True
+
+
+    def __prev_char(self):
+        if self.__char_index is None:
+            self.__char_index = len(self.__chars) - 1
+        else:
+            self.__char_index -= 1
+            if self.__char_index < 0:
+                self.__char_index = len(self.__chars) - 1
+        self._draw_screen()
+        return True
+
+
+    def __prev_page(self):
+        if self.__current_pane == MainHandler.CHAR_DETAIL:
+            self._window.scroll_char_detail_up()
+        else:
+            self._window.scroll_char_list_up()
+        return True
+
+
+    def __quit(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        self._window.close()
+        del self._window
+        self._window = None
+        return False # Leave
+
+
+    def __remove_equipment(self, throw_away):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = self.__chars[self.__char_index]
+        self.__equipment_manager.remove_equipment(fighter)
+        self._draw_screen()
+        return True # Keep going
+
+
+    def __remove_spell(self, throw_away):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = self.__chars[self.__char_index]
+
+        # Is the fighter a caster?
+        if 'spells' not in fighter.details:
+            self._window_manager.error(
+                ['Doesn\'t look like %s casts spells' % fighter.name])
+            return True
+
+        keep_asking_menu = [('yes', True), ('no', False)]
+        keep_asking = True
+        while keep_asking:
+            # Make the spell list again (since we've removed one)
+            spell_menu = [(spell['name'], spell['name'])
+                        for spell in sorted(fighter.details['spells'],
+                                            key=lambda x:x['name'])]
+            bad_spell_name = self._window_manager.menu('Spell to Remove',
+                                                       spell_menu)
+
+            if bad_spell_name is None:
+                return True
+
+            for index, spell in enumerate(fighter.details['spells']):
+                if spell['name'] == bad_spell_name:
+                    del fighter.details['spells'][index]
+                    self._draw_screen()
+                    break
+
+            keep_asking = self._window_manager.menu('Remove More Spells',
+                                                    keep_asking_menu)
+        return True # Keep going
+
+
+    def __resurrect_fight(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        # Ask which monster group to resurrect
+        fight_name_menu = []
+        for i, entry in enumerate(self.__world.details['dead-monsters']):
+            fight_name_menu.append((entry['name'], i))
+        monster_group_index = self._window_manager.menu('Resurrect Which Fight',
+                                                        fight_name_menu)
+        if monster_group_index is None:
+            return True
+
+        monster_group = self.__world.details['dead-monsters'][
+                                                        monster_group_index]
+
+        if self.__world.get_creatures(monster_group['name']) is not None:
+            self._window_manager.error(['Fight by name "%s" exists' %
+                                                    monster_group['name']])
+            return True
+
+        # Put fight into regular monster list
+        fights = self.__world.get_fights()
+        fights[monster_group['name']] = monster_group['fight']
+
+        # Remove fight from dead-monsters
+        del(self.__world.details['dead-monsters'][monster_group_index])
+        return True
+
+
+    def __right_pane(self):
+        self.__current_pane = MainHandler.CHAR_DETAIL
+        return True
+
 
     def __ruleset_ability(self,
                           param # string: ability name
@@ -8021,6 +8386,7 @@ class MainHandler(ScreenHandler):
                                                     keep_asking_menu)
         return None if 'text' not in param else param
 
+
     def __ruleset_ability_rm(self,
                              param # string: ability name
                             ):
@@ -8051,82 +8417,38 @@ class MainHandler(ScreenHandler):
                                         keep_asking_menu)
         return True # Keep going
 
-    def __short_notes(self, throw_away):
-        return self.__notes('short-notes')
 
-
-    def __full_notes(self, throw_away):
-        return self.__notes('notes')
-
-
-    def __notes(self,
-                notes_type  # 'short-notes' or 'notes'
-               ):
+    def __run_fight(self):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = self.__chars[self.__char_index]
-        if fighter is None:
-            return True # Keep fighting
+        monster_group = None
+        if not self._saved_fight['saved']:
+            fight_name_menu = [(name, name)
+                                       for name in self.__world.get_fights()]
+            # PP.pprint(fight_name_menu)
+            monster_group = self._window_manager.menu('Fights',
+                                                      fight_name_menu)
+            if monster_group is None:
+                return True
 
-        # Now, get the notes for that person
-        lines, cols = self._window.getmaxyx()
+        fight = FightHandler(self._window_manager,
+                             self.__world,
+                             monster_group,
+                             self.__ruleset,
+                             self._campaign_debug_json,
+                             self._input_filename)
 
-        if notes_type not in fighter.details:
-            notes = None
-        else:
-            notes = '\n'.join(fighter.details[notes_type])
+        fight.handle_user_input_until_done()
 
-        notes = self._window_manager.edit_window(
-                    lines - 4,
-                    cols / 2, # arbitrary width
-                    notes,    # initial string (w/ \n) for the window
-                    'Notes',
-                    '^G to exit')
-
-        fighter.details[notes_type] = [x for x in notes.split('\n')]
-        self._draw_screen()
+        self.__current_display = None
+        self.__setup_PC_list(self.__current_display) # The fight may have
+                                                     # changed the PC/NPC lists
+        self._draw_screen() # Redraw current screen when done with the fight.
 
         return True # Keep going
 
-
-    def __party(self):
-        sub_menu = [('NPC joins PCs',      {'doit': self.NPC_joins_PCs}),
-                    ('NPC leaves PCs',     {'doit': self.__NPC_leaves_PCs}),
-                    ('NPC joins Monsters', {'doit': self.NPC_joins_monsters}),
-                    ('npc list',           {'doit': self.__add_NPCs}),
-                    ('pc list',            {'doit': self.__add_PCs}),
-                    ('monster list',       {'doit': self.__add_monsters})]
-        self._window_manager.menu('Do what', sub_menu)
-        return True
-
-
-    def __heal(self):
-        '''
-        Command ribbon method.
-
-        Heals the selected creature.
-
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        self.__ruleset.heal_fighter(self.__chars[self.__char_index].details)
-        self._draw_screen()
-
-        return True
-
-
-    def __fully_heal(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        for name in self.__world.get_creatures('PCs'):
-            details = self.__world.get_creature_details(name, 'PCs')
-            if details is not None:
-                self.__ruleset.heal_fighter(details)
-        self._draw_screen()
-        return True
 
     def __search(self):
         lines, cols = self._window.getmaxyx()
@@ -8201,190 +8523,6 @@ class MainHandler(ScreenHandler):
 
         return True
 
-    # This is public to facilitate testing
-    def next_char(self,
-                  index=None  # Just for testing
-                 ):
-        if index is not None:
-            self.__char_index = index
-        elif self.__char_index is None:
-            self.__char_index = 0
-        else:
-            self.__char_index += 1
-            if self.__char_index >= len(self.__chars):
-                self.__char_index = 0
-        self._draw_screen()
-        return True
-
-    def __right_pane(self):
-        self.__current_pane = MainHandler.CHAR_DETAIL
-        return True
-
-    def __left_pane(self):
-        self.__current_pane = MainHandler.CHAR_LIST
-        return True
-
-    def __next_page(self):
-        if self.__current_pane == MainHandler.CHAR_DETAIL:
-            self._window.scroll_char_detail_down()
-        else:
-            self._window.scroll_char_list_down()
-        return True
-
-    def __first_page(self):
-        if self.__current_pane == MainHandler.CHAR_DETAIL:
-            self._window.char_detail_home()
-        else:
-            self.__char_index = 0
-            self._window.char_list_home()
-            self._draw_screen()
-        return True
-
-    # This is public for testing purposes
-    def NPC_joins_monsters(self, throw_away):
-        # Make sure the person is an NPC
-        npc_name = self.__chars[self.__char_index].name
-        if self.__chars[self.__char_index].group != 'NPCs':
-            self._window_manager.error(['"%s" not an NPC' % npc_name])
-            return True
-
-        # Select the fight
-        fight_menu = [(fight_name, fight_name)
-                                for fight_name in self.__world.get_fights()]
-        fight_name = self._window_manager.menu('Join Which Fight', fight_menu)
-
-        # Make sure the person isn't already in the fight
-        fight = self.__world.get_creatures(fight_name)
-        if npc_name in fight:
-            self._window_manager.error(['"%s" already in fight "%s"' %
-                                                    (npc_name, fight_name)])
-            return True
-
-        fight[npc_name] = {'redirect': 'NPCs'}
-        self.__setup_PC_list(self.__current_display)
-        self._draw_screen()
-        return True
-
-    # This is public for testing purposes
-    def NPC_joins_PCs(self, throw_away):
-        npc_name = self.__chars[self.__char_index].name
-        if self.__chars[self.__char_index].group != 'NPCs':
-            self._window_manager.error(['"%s" not an NPC' % npc_name])
-            return True
-
-        if npc_name in self.__world.details['PCs']:
-            self._window_manager.error(['"%s" already a PC' % npc_name])
-            return True
-
-        self.__world.details['PCs'][npc_name] = {'redirect': 'NPCs'}
-        self.__setup_PC_list(self.__current_display)
-        self._draw_screen()
-        return True
-
-    def __NPC_leaves_PCs(self, throw_away):
-        npc_name = self.__chars[self.__char_index].name
-        if npc_name not in self.__world.details['NPCs']:
-            self._window_manager.error(['"%s" not an NPC' % npc_name])
-            return True
-
-        if npc_name not in self.__world.details['PCs']:
-            self._window_manager.error(['"%s" not in PC list' % npc_name])
-            return True
-
-        del(self.__world.details['PCs'][npc_name])
-        self.__setup_PC_list(self.__current_display)
-        self._draw_screen()
-        return True
-
-    def __prev_char(self):
-        if self.__char_index is None:
-            self.__char_index = len(self.__chars) - 1
-        else:
-            self.__char_index -= 1
-            if self.__char_index < 0:
-                self.__char_index = len(self.__chars) - 1
-        self._draw_screen()
-        return True
-
-    def __prev_page(self):
-        if self.__current_pane == MainHandler.CHAR_DETAIL:
-            self._window.scroll_char_detail_up()
-        else:
-            self._window.scroll_char_list_up()
-        return True
-
-
-    def __quit(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        self._window.close()
-        del self._window
-        self._window = None
-        return False # Leave
-
-
-    def __resurrect_fight(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        # Ask which monster group to resurrect
-        fight_name_menu = []
-        for i, entry in enumerate(self.__world.details['dead-monsters']):
-            fight_name_menu.append((entry['name'], i))
-        monster_group_index = self._window_manager.menu('Resurrect Which Fight',
-                                                        fight_name_menu)
-        if monster_group_index is None:
-            return True
-
-        monster_group = self.__world.details['dead-monsters'][
-                                                        monster_group_index]
-
-        if self.__world.get_creatures(monster_group['name']) is not None:
-            self._window_manager.error(['Fight by name "%s" exists' %
-                                                    monster_group['name']])
-            return True
-
-        # Put fight into regular monster list
-        fights = self.__world.get_fights()
-        fights[monster_group['name']] = monster_group['fight']
-
-        # Remove fight from dead-monsters
-        del(self.__world.details['dead-monsters'][monster_group_index])
-        return True
-
-    def __run_fight(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        monster_group = None
-        if not self._saved_fight['saved']:
-            fight_name_menu = [(name, name)
-                                       for name in self.__world.get_fights()]
-            # PP.pprint(fight_name_menu)
-            monster_group = self._window_manager.menu('Fights',
-                                                      fight_name_menu)
-            if monster_group is None:
-                return True
-
-        fight = FightHandler(self._window_manager,
-                             self.__world,
-                             monster_group,
-                             self.__ruleset,
-                             self._campaign_debug_json,
-                             self._input_filename)
-
-        fight.handle_user_input_until_done()
-
-        self.__current_display = None
-        self.__setup_PC_list(self.__current_display) # The fight may have
-                                                     # changed the PC/NPC lists
-        self._draw_screen() # Redraw current screen when done with the fight.
-
-        return True # Keep going
 
     def __setup_PC_list(self,
                         group=None):
@@ -8450,6 +8588,42 @@ class MainHandler(ScreenHandler):
         self.__char_index = 0
 
 
+    def __short_notes(self, throw_away):
+        return self.__notes('short-notes')
+
+
+    def __toggle_Monster_PC_NPC_display(self):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        if self.__current_display is None:
+            group_menu = [(group_name, group_name)
+                            for group_name in self.__world.get_fights()]
+            self.__current_display = self._window_manager.menu(
+                                                    'Which Monster Group',
+                                                    group_menu)
+
+
+
+        else:
+            self.__current_display = None
+
+        self.__setup_PC_list(self.__current_display)
+        self._draw_screen()
+
+        # If this is a monster list, run a consistency check
+        #if self.__current_display is not None:
+        #    monsters = self.__world.get_creatures(self.__current_display)
+        #    for name in monsters:
+        #        creature = self.__world.get_creature_details(
+        #                                                name,
+        #                                                self.__current_display)
+        #        self.__ruleset.is_creature_consistent(name, creature)
+
+        return True
+
+
 class EquipmentManager(object):
     def __init__(self,
                  world,         # World object
@@ -8470,32 +8644,6 @@ class EquipmentManager(object):
         '''
         self.__world = world
         self.__window_manager = window_manager
-
-    def add_equipment(self,
-                      fighter,      # Fighter object
-                      item = None   # dict
-                     ):
-        '''
-        Transfer an item of equipment from the store to a fighter.  Ask the
-        user which item.
-        '''
-        if fighter is None:
-            return
-
-        # Pick an item off the shelf
-
-        # Rebuild this every time in case there are unique items in the
-        # equipment list
-        item_menu = [(item['name'], item)
-                            for item in self.__world.details['stuff']]
-        item = self.__window_manager.menu('Item to Add', item_menu)
-        if item is not None:
-            source = None
-            if item['owners'] is not None and len(item['owners']) == 0:
-                source = 'the store'
-
-            fighter.add_equipment(copy.deepcopy(item), source)
-
 
     @staticmethod
     def get_description(
@@ -8564,6 +8712,35 @@ class EquipmentManager(object):
             texts.append('%s' % '->'.join(item['owners']))
             char_detail.append([{'text': ''.join(texts),
                                  'mode': mode}])
+
+    #
+    # Public Methods
+    #
+
+    def add_equipment(self,
+                      fighter,      # Fighter object
+                      item = None   # dict
+                     ):
+        '''
+        Transfer an item of equipment from the store to a fighter.  Ask the
+        user which item.
+        '''
+        if fighter is None:
+            return
+
+        # Pick an item off the shelf
+
+        # Rebuild this every time in case there are unique items in the
+        # equipment list
+        item_menu = [(item['name'], item)
+                            for item in self.__world.details['stuff']]
+        item = self.__window_manager.menu('Item to Add', item_menu)
+        if item is not None:
+            source = None
+            if item['owners'] is not None and len(item['owners']) == 0:
+                source = 'the store'
+
+            fighter.add_equipment(copy.deepcopy(item), source)
 
 
     def remove_equipment(self,
