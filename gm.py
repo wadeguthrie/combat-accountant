@@ -2050,42 +2050,36 @@ class Notes(object):
                 ):
         pass
 
-
-class Fight(object):
-    name = '<< ARENA >>'    # Describes the FIGHT object
-    empty_fight = {
-        'stuff': [],
-        'notes': [],
-        'timers': []
-    }
+class ThingsInFight(object):
     def __init__(self,
+                 name,      # string, name of the thing
                  group,     # string to index into world['fights']
                  details,   # world.details['fights'][name] (world is
                             #   a World object)
                  ruleset    # Ruleset object
                 ):
-        self.name = Fight.name
+        self.name = name
         self.group = group
         self.details = details
-        self.__ruleset = ruleset
+        self._ruleset = ruleset
+
+        # Public to facilitate testing
         if 'stuff' not in self.details:
             self.details['stuff'] = []
+
         self.equipment = Equipment(self.details['stuff'])
 
 
-    def get_creatures(self):
-        '''
-        Returns dict of details: {name: {<details>}, name: ... }
-        '''
-        return self.details['monsters']
+    def add_equipment(self,
+                      new_item,   # dict describing new equipment
+                      source=None # string describing where equipment came from
+                      ):
+        return self.equipment.add(new_item, source)
 
 
-    def get_detail(self,
-                   char_detail, # recepticle for character detail.
-                                # [[{'text','mode'},...],  # line 0
-                                #  [...],               ]  # line 1...
-                   ):
-        self.__ruleset.get_fight_detail(self.details, char_detail)
+    def decrement_timers(self):
+        pass  # For now, we'll add timers, later
+
 
 
     def get_defenses_notes(self,
@@ -2106,10 +2100,6 @@ class Fight(object):
         return None 
 
 
-    def get_state(self):
-        return Fighter.FIGHT
-
-
     def get_short_summary_string(self):
         return '%s' % self.name
 
@@ -2122,15 +2112,67 @@ class Fight(object):
         pass
 
 
-    def decrement_timers(self):
-        pass  # For now, we'll add timers, later
-
+    def remove_equipment(self,
+                         item_index
+                        ):
+        return self.equipment.remove(item_index)
 
     def remove_expired_kill_dying_timers(self):
         pass  # For now, we'll add timers, later
 
+    def _explain_numbers(self):
+        '''
+        Explains how the stuff in the descriptions were calculated.
 
-class Fighter(object):
+        Returns [[{'text':x, 'mode':x}, {...}], [], [], ...]
+            where the outer array contains lines
+            each line is an array that contains a line-segment
+            each line segment has its own mode so, for example, only SOME of
+               the line is shown in bold
+        '''
+        return [[{'text': '(Nothing to explain)', 'mode': curses.A_NORMAL}]]
+
+
+
+class Fight(ThingsInFight):
+    name = '<< ARENA >>'    # Describes the FIGHT object
+    empty_fight = {
+        'stuff': [],
+        'notes': [],
+        'timers': []
+    }
+    def __init__(self,
+                 group,     # string to index into world['fights']
+                 details,   # world.details['fights'][name] (world is
+                            #   a World object)
+                 ruleset    # Ruleset object
+                ):
+        super(Fight, self).__init__(Fight.name, group, details, ruleset)
+        pass
+
+
+    def get_creatures(self):
+        '''
+        Returns dict of details: {name: {<details>}, name: ... }
+        '''
+        return self.details['monsters']
+
+
+    def get_detail(self,
+                   char_detail, # recepticle for character detail.
+                                # [[{'text','mode'},...],  # line 0
+                                #  [...],               ]  # line 1...
+                   ):
+        self._ruleset.get_fight_detail(self.details, char_detail)
+
+
+    def get_state(self):
+        return Fighter.FIGHT
+
+
+
+
+class Fighter(ThingsInFight):
     (ALIVE,
      UNCONSCIOUS,
      DEAD,
@@ -2154,16 +2196,8 @@ class Fighter(object):
                  ruleset,           # a Ruleset object
                  window_manager     # a GmWindowManager object
                 ):
-        self.name = name
-        self.group = group
-        self.details = fighter_details
-        self.__ruleset = ruleset
+        super(Fighter, self).__init__(name, group, fighter_details, ruleset)
         self.__window_manager = window_manager
-        # Public to facilitate testing
-        if 'stuff' not in self.details:
-            self.details['stuff'] = []
-
-        self.equipment = Equipment(self.details['stuff'])
 
     @staticmethod
     def get_fighter_state(details):
@@ -2239,7 +2273,7 @@ class Fighter(object):
 
 
     def end_turn(self):
-        self.__ruleset.end_turn(self)
+        self._ruleset.end_turn(self)
         self.remove_expired_kill_dying_timers()
 
 
@@ -2264,7 +2298,7 @@ class Fighter(object):
     def get_defenses_notes(self,
                            opponent # Fighter object
                           ):
-        defense_notes, defense_why = self.__ruleset.get_fighter_defenses_notes(
+        defense_notes, defense_why = self._ruleset.get_fighter_defenses_notes(
                                                                 self,
                                                                 opponent)
         return defense_notes, defense_why
@@ -2276,11 +2310,11 @@ class Fighter(object):
     def get_to_hit_damage_notes(self,
                                 opponent # Fighter object
                                ):
-        notes = self.__ruleset.get_fighter_to_hit_damage_notes(self, opponent)
+        notes = self._ruleset.get_fighter_to_hit_damage_notes(self, opponent)
         return notes
 
     def get_notes(self):
-        notes = self.__ruleset.get_fighter_notes(self)
+        notes = self._ruleset.get_fighter_notes(self)
         return notes
 
 
@@ -2400,7 +2434,7 @@ class Fighter(object):
                                 # [[{'text','mode'},...],  # line 0
                                 #  [...],               ]  # line 1...
                    ):
-        self.__ruleset.get_character_detail(self.details, char_detail)
+        self._ruleset.get_character_detail(self.details, char_detail)
 
     def start_fight(self):
         # NOTE: we're allowing health to still be messed-up, here
@@ -2413,11 +2447,11 @@ class Fighter(object):
         # NOTE: person may go around wearing armor -- no need to reset
         self.details['opponent'] = None
         self.start_turn()
-        self.__ruleset.start_fight(self)
+        self._ruleset.start_fight(self)
 
 
     def start_turn(self):
-        self.__ruleset.start_turn(self)
+        self._ruleset.start_turn(self)
         self.decrement_timers()
         self.remove_expired_keep_dying_timers()
 
@@ -5306,6 +5340,10 @@ class GurpsRuleset(Ruleset):
         sure that one or the other of the skills wasn't entered incorrectly.
         '''
         result = True
+
+        if 'skills' not in creature:
+            return result
+
         unarmed_skills = self.get_weapons_unarmed_skills(None)
 
         for item in creature['stuff']:
@@ -7282,6 +7320,58 @@ class FightHandler(ScreenHandler):
         return False # Leave the fight
 
 
+    def _explain_numbers(self):
+        '''
+        Returns [[{'text':x, 'mode':x}, {...}], [], [], ...]
+            where the outer array contains lines
+            each line is an array that contains a line-segment
+            each line segment has its own mode so, for example, only SOME of
+               the line is shown in bold
+        '''
+
+        why_opponent = self.get_opponent_for(why_target)
+        weapon, holding_weapon_index = why_target.get_current_weapon()
+
+        lines = []
+
+        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(weapon)
+
+        if unarmed_skills is not None:
+            unarmed_info = self.__ruleset.get_unarmed_info(why_target,
+                                                           why_opponent,
+                                                           weapon,
+                                                           unarmed_skills)
+            lines = [[{'text': x,
+                       'mode': curses.A_NORMAL}] for x in unarmed_info['why']]
+        else:
+            if weapon['skill'] in why_target.details['skills']:
+                ignore, to_hit_why = self.__ruleset.get_to_hit(why_target,
+                                                               why_opponent,
+                                                               weapon)
+                lines = [[{'text': x,
+                           'mode': curses.A_NORMAL}] for x in to_hit_why]
+
+                # Damage
+
+                ignore, damage_why = self.__ruleset.get_damage(why_target,
+                                                               weapon)
+                lines.extend([[{'text': x,
+                                'mode': curses.A_NORMAL}] for x in damage_why])
+
+            if 'notes' in weapon and len(weapon['notes']) != 0:
+                lines.extend([[{'text': 'Weapon: "%s"' % weapon['name'],
+                               'mode': curses.A_NORMAL}]])
+                lines.extend([[{'text': '  %s' % weapon['notes'],
+                               'mode': curses.A_NORMAL}]])
+
+        ignore, defense_why = why_target.get_defenses_notes(why_opponent)
+        if defense_why is not None:
+            lines = [[{'text': x,
+                       'mode': curses.A_NORMAL}] for x in defense_why] + lines
+
+        return lines
+
+
     def __select_fighter(self,
                          menu_title, # string: title of fighter/opponent menu
                          default_selection=0  # int: for menu:
@@ -7358,8 +7448,7 @@ class FightHandler(ScreenHandler):
         if info_about is None:
             return True # Keep fighting
 
-        self.__ruleset.get_character_detail(info_about.details,
-                                            char_info)
+        info_about.get_detail(char_info)
         self._window_manager.display_window('%s Information' % info_about.name,
                                             char_info)
         return True
@@ -7380,44 +7469,7 @@ class FightHandler(ScreenHandler):
         if why_target is None:
             return True # Keep fighting
 
-        lines = []
-
-        why_opponent = self.get_opponent_for(why_target)
-        weapon, holding_weapon_index = why_target.get_current_weapon()
-        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(weapon)
-
-        if unarmed_skills is not None:
-            unarmed_info = self.__ruleset.get_unarmed_info(why_target,
-                                                           why_opponent,
-                                                           weapon,
-                                                           unarmed_skills)
-            lines = [[{'text': x,
-                       'mode': curses.A_NORMAL}] for x in unarmed_info['why']]
-        else:
-            if weapon['skill'] in why_target.details['skills']:
-                ignore, to_hit_why = self.__ruleset.get_to_hit(why_target,
-                                                               why_opponent,
-                                                               weapon)
-                lines = [[{'text': x,
-                           'mode': curses.A_NORMAL}] for x in to_hit_why]
-
-                # Damage
-
-                ignore, damage_why = self.__ruleset.get_damage(why_target,
-                                                               weapon)
-                lines.extend([[{'text': x,
-                                'mode': curses.A_NORMAL}] for x in damage_why])
-
-            if 'notes' in weapon and len(weapon['notes']) != 0:
-                lines.extend([[{'text': 'Weapon: "%s"' % weapon['name'],
-                               'mode': curses.A_NORMAL}]])
-                lines.extend([[{'text': '  %s' % weapon['notes'],
-                               'mode': curses.A_NORMAL}]])
-
-        ignore, defense_why = why_target.get_defenses_notes(why_opponent)
-        if defense_why is not None:
-            lines = [[{'text': x,
-                       'mode': curses.A_NORMAL}] for x in defense_why] + lines
+        lines = why_target._explain_numbers()
 
         ignore = self._window_manager.display_window(
                     'How %s\'s Numbers Were Calculated' % why_target.name,
@@ -7569,6 +7621,7 @@ class MainHandler(ScreenHandler):
                                                     self._window_manager)
 
         # Check characters for consistency.
+        # TODO: can this be done where we have objects?
         for name in self.__world.get_creatures('PCs'):
             details = self.__world.get_creature_details(name, 'PCs')
             if details is not None:
@@ -7626,13 +7679,13 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
 
         # If this is a monster list, run a consistency check
-        if self.__current_display is not None:
-            monsters = self.__world.get_creatures(self.__current_display)
-            for name in monsters:
-                creature = self.__world.get_creature_details(
-                                                        name,
-                                                        self.__current_display)
-                self.__ruleset.is_creature_consistent(name, creature)
+        #if self.__current_display is not None:
+        #    monsters = self.__world.get_creatures(self.__current_display)
+        #    for name in monsters:
+        #        creature = self.__world.get_creature_details(
+        #                                                name,
+        #                                                self.__current_display)
+        #        self.__ruleset.is_creature_consistent(name, creature)
 
         return True
 
@@ -7699,6 +7752,7 @@ class MainHandler(ScreenHandler):
 
         # If this is a monster list, run a consistency check
 
+        # TODO: can be done on the way out of BuildFightHandler
         if self.__current_display is not None:
             monsters = self.__world.get_creatures(self.__current_display)
             for name in monsters:
