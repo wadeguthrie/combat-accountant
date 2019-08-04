@@ -920,7 +920,7 @@ class FightGmWindow(GmWindow):
                 line += 1
 
         # Timers
-        for timer in fighter.get_timers():
+        for timer in fighter.timers.get_all():
             round_count_string = self.__round_count_string % timer['rounds']
             if 'string' in timer:
                 if type(timer['string']) is list:
@@ -1823,7 +1823,8 @@ class World(object):
         if group_name in fights:
             fight = Fight(group_name,
                           self.details['fights'][group_name],
-                          self.__ruleset
+                          self.__ruleset,
+                          self.__window_manager
                           )
             return fight.get_creatures()
 
@@ -2027,73 +2028,100 @@ class Equipment(object):
 
 class Timers(object):
     def __init__(self,
-                 timers,
+                 timer_details, # List from JSON containing timers
+                 window_manager # For displaying error messages
                 ):
-        pass
+        self.__timers = timer_details
+        self.__window_manager = window_manager
 
 
     def add(self,
-            rounds,             # rounds until timer fires (3.0 rounds
-                                #   fires at end of 3 rounds; 2.9 rounds
-                                #   fires at beginning of 3 rounds.
-            text,               # string to display (in fighter's notes)
-                                #   while timer is running
-            announcement = None # string to display (in its own window)
-                                #   when timer fires
+            parent_name,            # string describing the thing calling the
+                                    #   timer
+            rounds,                 # rounds until timer fires (3.0 rounds
+                                    #   fires at end of 3 rounds; 2.9 rounds
+                                    #   fires at beginning of 3 rounds.
+            text,                   # string to display (in fighter's notes)
+                                    #   while timer is running
+            announcement = None,    # string to display (in its own window)
+                                    #   when timer fires
+            parent_details = None   # {'state':...} to receive state of fired
+                                    #   timer
            ):
-        timer = {'rounds': rounds,
-                 'string': text}
+        name = '<< Unknown Timer >>' if parent_name is None else parent_name
+        timer = {'name': name,
+                 'rounds': rounds,
+                 'string': text,
+                 'parent_details': parent_details}
         if announcement is not None:
             timer['announcement'] = announcement
 
-        self.details['timers'].append(timer)
+        self.__timers.append(timer)
 
 
-    def decrement(self):
-        for timer in self.details['timers']:
+    def clear_all(self):
+        self.__timers = []
+
+
+    def decrement_all(self):
+        ''' Decrements all timers. '''
+        for timer in self.__timers:
             timer['rounds'] -= 1
-
-
-    def fire(self, timer):
-        if 'state' in timer:
-            self.details['state'] = timer['state']
-        if 'announcement' in timer:
-            self.__window_manager.display_window(
-                                       ('Timer Fired for %s' % self.name),
-                                        [[{'text': timer['announcement'],
-                                           'mode': curses.A_NORMAL }]])
 
 
     def remove_expired_keep_dying(self):
         '''
-        Removes timers but keep the timers that are dying this round.  Call
+        Removes timers BUT KEEPS the timers that are dying this round.  Call
         this at the beginning of the round.  Standard timers that die this
         round are kept so that they're shown.
         '''
 
         remove_these = []
-        for index, timer in enumerate(self.details['timers']):
+        for index, timer in enumerate(self.__timers):
             if timer['rounds'] < 0:     # < keeps the timers dying this round
                 remove_these.insert(0, index) # largest indexes last
         for index in remove_these:
-            self.__fire_timer(self.details['timers'][index])
-            del self.details['timers'][index]
+            self.__fire_timer(self.__timers[index])
+            del self.__timers[index]
 
 
     def remove_expired_kill_dying(self):
         '''
-        Removes timers and kills the timers that are dying this round.  Call
+        Removes timers AND KILLS the timers that are dying this round.  Call
         this at the end of the round to scrape off the timers that expire this
         round.
         '''
-        # Remove any expired timers
+
         remove_these = []
-        for index, timer in enumerate(self.details['timers']):
+        for index, timer in enumerate(self.__timers):
             if timer['rounds'] <= 0:    # <= kills the timers dying this round
                 remove_these.insert(0, index) # largest indexes last
         for index in remove_these:
-            self.__fire_timer(self.details['timers'][index])
-            del self.details['timers'][index]
+            self.__fire_timer(self.__timers[index])
+            del self.__timers[index]
+
+    #
+    # Private methods
+    #
+
+    def __fire_timer(self, timer):
+        ''' Fires a specific timer. '''
+
+        if 'state' in timer:
+            if ('parent_details' not in timer or
+                                    timer['parent_details'] is None or
+                                    'state' not in timer['parent_details']):
+                self.__window_manager.error([
+                    'Timer "%s" contains no object to accept new state' %
+                    timer['name']])
+                return
+            timer['parent_details']['state'] = timer['state']
+        if 'announcement' in timer:
+            self.__window_manager.display_window(
+                                       ('Timer Fired for %s' % timer['name']),
+                                        [[{'text': timer['announcement'],
+                                           'mode': curses.A_NORMAL }]])
+
 
 
 class Notes(object):
@@ -2138,21 +2166,6 @@ class ThingsInFight(object):
                          item_index
                         ):
         return self.equipment.remove(item_index)
-
-    #
-    # Timers related methods
-    #
-
-    def decrement_timers(self):
-        pass  # For now, we'll add timers, later
-
-
-    def get_timers(self):
-        return []
-
-
-    def remove_expired_kill_dying_timers(self):
-        pass  # For now, we'll add timers, later
 
     #
     # Notes methods
@@ -2215,13 +2228,18 @@ class Fight(ThingsInFight):
         'timers': []
     }
     def __init__(self,
-                 group,     # string to index into world['fights']
-                 details,   # world.details['fights'][name] (world is
-                            #   a World object)
-                 ruleset    # Ruleset object
+                 group,         # string to index into world['fights']
+                 details,       # world.details['fights'][name] (world is
+                                #   a World object)
+                 ruleset,       # Ruleset object
+                 window_manager # GmWindowManager object for error reporting
                 ):
         super(Fight, self).__init__(Fight.name, group, details, ruleset)
         self.detailed_name = Fight.detailed_name % group
+        self.__window_manager = window_manager
+        if 'timers' not in details:
+            details['timers'] = []
+        self.timers = Timers(details['timers'], self.__window_manager)
         pass
 
 
@@ -2272,6 +2290,12 @@ class Fighter(ThingsInFight):
                 ):
         super(Fighter, self).__init__(name, group, fighter_details, ruleset)
         self.__window_manager = window_manager
+        if 'timers' not in self.details:
+            self._window_manager.error(
+                    ['fighter "%s" in "%s" has no timers' % (name, group)])
+
+        self.timers = Timers(self.details['timers'], self.__window_manager)
+
 
     @staticmethod
     def get_fighter_state(details):
@@ -2363,71 +2387,6 @@ class Fighter(ThingsInFight):
 
 
     #
-    # Timers related methods
-    #
-
-    def add_timer(self,
-                  rounds,           # rounds until timer fires (3.0 rounds
-                                    #   fires at end of 3 rounds; 2.9 rounds
-                                    #   fires at beginning of 3 rounds.
-                  text,             # string to display (in fighter's notes)
-                                    #   while timer is running
-                  announcement=None # string to display (in its own window)
-                                    #   when timer fires
-                 ):
-        # TODO: remove in favor of object
-        timer = {'rounds': rounds,
-                 'string': text}
-        if announcement is not None:
-            timer['announcement'] = announcement
-
-        self.details['timers'].append(timer)
-
-
-    def decrement_timers(self):
-        # TODO: remove in favor of object
-        for timer in self.details['timers']:
-            timer['rounds'] -= 1
-
-
-    def get_timers(self):
-        return self.details['timers']
-
-
-    def remove_expired_keep_dying_timers(self):
-        # TODO: remove in favor of object
-        '''
-        Removes timers but keep the timers that are dying this round.  Call
-        this at the beginning of the round.  Standard timers that die this
-        round are kept so that they're shown.
-        '''
-
-        remove_these = []
-        for index, timer in enumerate(self.details['timers']):
-            if timer['rounds'] < 0:     # < keeps the timers dying this round
-                remove_these.insert(0, index) # largest indexes last
-        for index in remove_these:
-            self.__fire_timer(self.details['timers'][index])
-            del self.details['timers'][index]
-
-
-    def remove_expired_kill_dying_timers(self):
-        # TODO: remove in favor of object
-        '''
-        Removes timers and kills the timers that are dying this round.  Call
-        this at the end of the round to scrape off the timers that expire this
-        round.
-        '''
-        # Remove any expired timers
-        remove_these = []
-        for index, timer in enumerate(self.details['timers']):
-            if timer['rounds'] <= 0:    # <= kills the timers dying this round
-                remove_these.insert(0, index) # largest indexes last
-        for index in remove_these:
-            self.__fire_timer(self.details['timers'][index])
-            del self.details['timers'][index]
-
-    #
     # Notes related methods
     #
 
@@ -2490,7 +2449,7 @@ class Fighter(ThingsInFight):
 
     def end_turn(self):
         self._ruleset.end_turn(self)
-        self.remove_expired_kill_dying_timers()
+        self.timers.remove_expired_kill_dying()
 
 
     def get_state(self):
@@ -2541,7 +2500,7 @@ class Fighter(ThingsInFight):
         self.details['state'] = 'alive'
         # TODO: we should allow timers to be here -- just delete them at the
         # end of the fight
-        self.details['timers'] = []
+        self.timers.clear_all()
         self.details['weapon-index'] = None
         # NOTE: person may go around wearing armor -- no need to reset
         self.details['opponent'] = None
@@ -2551,8 +2510,8 @@ class Fighter(ThingsInFight):
 
     def start_turn(self):
         self._ruleset.start_turn(self)
-        self.decrement_timers()
-        self.remove_expired_keep_dying_timers()
+        self.timers.decrement_all()
+        self.timers.remove_expired_keep_dying()
 
 
     def toggle_absent(self):
@@ -5568,13 +5527,14 @@ class GurpsRuleset(Ruleset):
             cost = 0
 
         fighter.details['current']['fp'] -= cost
-        fighter.add_timer(spell['time'] - 0.1,  # -0.1 so that it doesn't show
-                                                # up on the first round you
-                                                # can do something after you
-                                                # cast
-                          'Casting (%s) @ skill (%d): %s' % (spell['name'],
-                                                             spell['skill'],
-                                                             spell['notes']))
+        fighter.timers.add(('Spell for %s' % fighter.name),
+                            spell['time'] - 0.1,    # -0.1 so that it doesn't 
+                                                    # show up on the first
+                                                    # round you can do
+                                                    # something after you cast
+                            'Casting (%s) @ skill (%d): %s' % (spell['name'],
+                                                               spell['skill'],
+                                                               spell['notes']))
         return None if 'text' not in param else param
 
 
@@ -5663,7 +5623,10 @@ class GurpsRuleset(Ruleset):
             reload_time = weapon['reload']
             if 'fast-draw (ammo)' in param['fighter'].details['skills']:
                 reload_time -= 1
-            param['fighter'].add_timer(reload_time, 'RELOADING')
+            param['fighter'].timers.add(param['fighter'].name,
+                                        reload_time,
+                                        'RELOADING')
+
             param['fighter'].reset_aim()
             return True
 
@@ -5689,7 +5652,9 @@ class GurpsRuleset(Ruleset):
                     reload_time -= 1
                 weapon['ammo']['shots_left'] = weapon['ammo']['shots']
                 item['count'] -= 1
-                param['fighter'].add_timer(reload_time, 'RELOADING')
+                param['fighter'].timers.add(param['fighter'].name,
+                                            reload_time,
+                                            'RELOADING')
                 param['fighter'].reset_aim()
                 return None if 'text' not in param else param['text']
 
@@ -6268,11 +6233,13 @@ class BuildFightHandler(ScreenHandler):
                 self.__critters['data'][Fight.name] = Fight.empty_fight
                 fight = Fight(self.__group_name,
                               self.__world.details['fights'][self.__group_name],
-                              self.__ruleset)
+                              self.__ruleset,
+                              self._window_manager)
             else:
                 fight = Fight(self.__group_name,
                               the_fight_itself,
-                              self.__ruleset)
+                              self.__ruleset,
+                              self._window_manager)
 
             self.__critters['obj'].insert(0, fight)
 
@@ -6373,7 +6340,8 @@ class BuildFightHandler(ScreenHandler):
         self.__critters['data'][Fight.name] = Fight.empty_fight
         fight = Fight(self.__group_name,
                       self.__world.details['fights'][self.__group_name],
-                      self.__ruleset)
+                      self.__ruleset,
+                      self._window_manager)
         self.__critters['obj'].insert(0, fight)
 
         # Display our new state
@@ -6571,7 +6539,8 @@ class FightHandler(ScreenHandler):
         if the_fight_itself is not None:
             fight = Fight(monster_group,
                           the_fight_itself,
-                          self.__ruleset)
+                          self.__ruleset,
+                          self._window_manager)
 
             self.__fighters.insert(0, fight)
 
@@ -6695,8 +6664,8 @@ class FightHandler(ScreenHandler):
             # If we're skipping a fighter (due to his state), exercise his
             # timers, anyway
             if keep_going:
-                current_fighter.decrement_timers()
-                current_fighter.remove_expired_kill_dying_timers()
+                current_fighter.timers.decrement_all()
+                current_fighter.timers.remove_expired_kill_dying()
 
             # If we didn't change the index (for instance, if everyone's
             # dead), stop looking.  Otherwise, we're in an infinite loop.
@@ -7307,7 +7276,7 @@ class FightHandler(ScreenHandler):
         # a round count larger than 0 will get shown but less than 1 will
         # get deleted before the next round
 
-        current_fighter.add_timer(0.9, maneuver['text'])
+        current_fighter.timers.add(current_fighter.name, 0.9, maneuver['text'])
 
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
@@ -7648,9 +7617,10 @@ class FightHandler(ScreenHandler):
         # Instal the timer.
 
         if timer['string'] is not None and len(timer['string']) != 0:
-            timer_recipient.add_timer(timer['rounds'],
-                                      timer['string'],
-                                      announcement)
+            timer_recipient.timers.add(timer_recipient.name,
+                                       timer['rounds'],
+                                       timer['string'],
+                                       announcement)
 
         # Show stuff
 
@@ -8560,7 +8530,10 @@ class MainHandler(ScreenHandler):
                 #                   self.__ruleset)
 
                 elif the_fight_itself is not None:
-                    fight = Fight(group, the_fight_itself, self.__ruleset)
+                    fight = Fight(group,
+                                  the_fight_itself,
+                                  self.__ruleset,
+                                  self._window_manager)
                     self.__chars.insert(0, fight)
 
 

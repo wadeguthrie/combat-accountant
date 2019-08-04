@@ -10,6 +10,8 @@
             "Knife": 15
           }
         }, 
+        "timers": {"type": "value",
+                   "value": []},
         "permanent": {
           "fp": {
             "type": "value", 
@@ -146,6 +148,8 @@
             "Knife": 18
           }
         }, 
+        "timers": {"type": "value",
+                   "value": []},
         "permanent": {
           "fp": {
             "type": "value", 
@@ -318,7 +322,9 @@
             "type": "value", 
             "value": 5
           }
-        }
+        },
+        "timers": {"type": "value",
+                   "value": []}
       }, 
       "Bokor": {
         "permanent": {
@@ -373,6 +379,8 @@
             "Lwa (Mambo, Erzulie Freda)": 6
           }
         }, 
+        "timers": {"type": "value",
+                   "value": []},
         "spells": {
           "type": "value", 
           "value": [
@@ -508,6 +516,8 @@
             "Knife": 15
           }
         }, 
+        "timers": {"type": "value",
+                   "value": []},
         "permanent": {
           "fp": {
             "type": "value", 
@@ -653,7 +663,9 @@
             "type": "value", 
             "value": 5.75
           }
-        }
+        },
+        "timers": {"type": "value",
+                   "value": []},
       }, 
       "Zombie": {
         "skills": {
@@ -664,6 +676,8 @@
             "Knife": 15
           }
         }, 
+        "timers": {"type": "value",
+                   "value": []},
         "permanent": {
           "fp": {
             "type": "value", 
@@ -786,7 +800,9 @@
             "type": "value", 
             "value": 5.5
           }
-        }
+        },
+        "timers": {"type": "value",
+                   "value": []}
       }, 
       "bad guy: low level": {
         "skills": {
@@ -797,6 +813,8 @@
             "Knife": 14
           }
         }, 
+        "timers": {"type": "value",
+                   "value": []},
         "permanent": {
           "fp": {
             "type": "value", 
@@ -908,6 +926,8 @@
             "Knife": 17
           }
         }, 
+        "timers": {"type": "value",
+                   "value": []},
         "permanent": {
           "fp": {
             "type": "value", 

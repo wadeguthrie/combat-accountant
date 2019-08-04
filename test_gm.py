@@ -634,7 +634,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "st": { "type": "value", "value": 10 }, 
                   "dx": { "type": "value", "value": 11 }, 
                   "basic-speed": { "type": "value", "value": 5.5 }
-                }
+                },
+                "timers": {"type": "value", "value": []},
               }, 
             }
           },  # Templates
@@ -678,6 +679,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                     {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12},
                 "permanent":
                     {"fp":11,"iq":12,"wi":12,"hp":11,"ht":11,"st":10,"dx":12}, 
+                "timers": {"type": "value", "value": []},
             }, 
             "One More Guy": self.__one_more_guy
           }, # NPCs
@@ -2070,17 +2072,17 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         timer_id = 0
         round_count = 3
         timer_text = '%d' % timer_id
-        fighter.add_timer(round_count, timer_text)
+        fighter.timers.add(fighter.name, round_count, timer_text)
 
         for i in range(round_count):
             assert len(fighter.details['timers']) == 1
             assert fighter.details['timers'][0]['string'] == timer_text
             # At the _end_ of a fighter's turn, we remove all his expired
             # timers.  That causes the timer expiring this round to be shown.
-            fighter.remove_expired_kill_dying_timers()
-            fighter.decrement_timers()
+            fighter.timers.remove_expired_kill_dying()
+            fighter.timers.decrement_all()
 
-        fighter.remove_expired_kill_dying_timers()
+        fighter.timers.remove_expired_kill_dying()
         assert len(fighter.details['timers']) == 0
 
         # Test 3 timers simultaneously
@@ -2092,11 +2094,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         for i in range(timer_count):
             timer_text = '%d' % timer_id
             timer_id += 1
-            fighter.add_timer(round_count[i], timer_text)
+            fighter.timers.add(fighter.name, round_count[i], timer_text)
 
         # round 0
-        fighter.remove_expired_kill_dying_timers()
-        fighter.decrement_timers()
+        fighter.timers.remove_expired_kill_dying()
+        fighter.timers.decrement_all()
         assert len(fighter.details['timers']) == 3
         expected = ['0', '1', '2']
         for timer in fighter.details['timers']:
@@ -2104,8 +2106,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             expected.remove(timer['string'])
 
         # round 1
-        fighter.remove_expired_kill_dying_timers()
-        fighter.decrement_timers()
+        fighter.timers.remove_expired_kill_dying()
+        fighter.timers.decrement_all()
         assert len(fighter.details['timers']) == 2
         expected = ['1', '2']
         for timer in fighter.details['timers']:
@@ -2113,15 +2115,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             expected.remove(timer['string'])
 
         # round 2
-        fighter.remove_expired_kill_dying_timers()
-        fighter.decrement_timers()
+        fighter.timers.remove_expired_kill_dying()
+        fighter.timers.decrement_all()
         assert len(fighter.details['timers']) == 1
         expected = ['2']
         for timer in fighter.details['timers']:
             assert timer['string'] in expected
             expected.remove(timer['string'])
 
-        fighter.remove_expired_kill_dying_timers()
+        fighter.timers.remove_expired_kill_dying()
         assert len(fighter.details['timers']) == 0
 
 
@@ -2137,11 +2139,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         timer_id = 0
         round_count = 1
         timer0_text = '%d' % timer_id
-        fighter.add_timer(round_count, timer0_text)
+        fighter.timers.add(fighter.name, round_count, timer0_text)
 
         # start turn -- decrement 1-turn timer, timer = 0, keep it this turn
-        fighter.decrement_timers()
-        fighter.remove_expired_keep_dying_timers()
+        fighter.timers.decrement_all()
+        fighter.timers.remove_expired_keep_dying()
 
         # assert 1 timer -- didn't kill the 1-turn timer
         assert len(fighter.details['timers']) == 1
@@ -2151,7 +2153,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         timer_id = 1
         round_count = 0.9
         timer1_text = '%d' % timer_id
-        fighter.add_timer(round_count, timer1_text)
+        fighter.timers.add(fighter.name, round_count, timer1_text)
 
         # assert 2 timers -- right: both timers are there
         assert len(fighter.details['timers']) == 2
@@ -2161,15 +2163,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             expected.remove(timer['string'])
 
         # end turn -- kills 1 turn timer
-        fighter.remove_expired_kill_dying_timers()
+        fighter.timers.remove_expired_kill_dying()
 
         # assert 1 timer -- show that the 1-turn timer was killed
         assert len(fighter.details['timers']) == 1
         assert fighter.details['timers'][0]['string'] == timer1_text
 
         # start turn - kills 0.9 timer before the next turn's stuff is shown
-        fighter.decrement_timers()
-        fighter.remove_expired_keep_dying_timers()
+        fighter.timers.decrement_all()
+        fighter.timers.remove_expired_keep_dying()
 
         # assert 0 timers -- yup, 0.9 timer is now gone
         assert len(fighter.details['timers']) == 0
