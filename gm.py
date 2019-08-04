@@ -2132,23 +2132,32 @@ class Notes(object):
 
 class ThingsInFight(object):
     def __init__(self,
-                 name,      # string, name of the thing
-                 group,     # string to index into world['fights']
-                 details,   # world.details['fights'][name] (world is
-                            #   a World object)
-                 ruleset    # Ruleset object
+                 name,          # string, name of the thing
+                 group,         # string to index into world['fights']
+                 details,       # world.details['fights'][name] (world is
+                                #   a World object)
+                 ruleset,       # Ruleset object
+                 window_manager # GmWindowManager object for reporting errors
                 ):
         self.name = name
         self.detailed_name = self.name
         self.group = group
         self.details = details
         self._ruleset = ruleset
+        self._window_manager = window_manager
 
-        # Public to facilitate testing
-        if 'stuff' not in self.details:
+        # Equipment
+
+        if 'stuff' not in self.details: # Public to facilitate testing
             self.details['stuff'] = []
 
         self.equipment = Equipment(self.details['stuff'])
+
+        # Timers
+
+        if 'timers' not in details:
+            details['timers'] = []
+        self.timers = Timers(details['timers'], self._window_manager)
 
 
     #
@@ -2234,13 +2243,12 @@ class Fight(ThingsInFight):
                  ruleset,       # Ruleset object
                  window_manager # GmWindowManager object for error reporting
                 ):
-        super(Fight, self).__init__(Fight.name, group, details, ruleset)
+        super(Fight, self).__init__(Fight.name,
+                                    group,
+                                    details,
+                                    ruleset,
+                                    window_manager)
         self.detailed_name = Fight.detailed_name % group
-        self.__window_manager = window_manager
-        if 'timers' not in details:
-            details['timers'] = []
-        self.timers = Timers(details['timers'], self.__window_manager)
-        pass
 
 
     def get_creatures(self):
@@ -2288,13 +2296,16 @@ class Fighter(ThingsInFight):
                  ruleset,           # a Ruleset object
                  window_manager     # a GmWindowManager object
                 ):
-        super(Fighter, self).__init__(name, group, fighter_details, ruleset)
-        self.__window_manager = window_manager
+        super(Fighter, self).__init__(name,
+                                      group,
+                                      fighter_details,
+                                      ruleset,
+                                      window_manager)
         if 'timers' not in self.details:
             self._window_manager.error(
                     ['fighter "%s" in "%s" has no timers' % (name, group)])
 
-        self.timers = Timers(self.details['timers'], self.__window_manager)
+        self.timers = Timers(self.details['timers'], self._window_manager)
 
 
     @staticmethod
@@ -2520,23 +2531,6 @@ class Fighter(ThingsInFight):
             self.details['state'] = 'alive'
         else:
             self.details['state'] = 'absent'
-
-    #
-    # Private methods
-    #
-
-    def __fire_timer(self, timer):
-        # TODO: remove in favor of object
-
-        if 'state' in timer:
-            self.details['state'] = timer['state']
-        if 'announcement' in timer:
-            self.__window_manager.display_window(
-                                       ('Timer Fired for %s' % self.name),
-                                        [[{'text': timer['announcement'],
-                                           'mode': curses.A_NORMAL }]])
-
-
 
 
 class Ruleset(object):
