@@ -2157,7 +2157,9 @@ class ThingsInFight(object):
 
         if 'timers' not in details:
             details['timers'] = []
-        self.timers = Timers(details['timers'], self._window_manager)
+            #self._window_manager.error(
+            #        ['fighter "%s" in "%s" has no timers' % (name, group)])
+        self.timers = Timers(self.details['timers'], self._window_manager)
 
 
     #
@@ -2301,11 +2303,7 @@ class Fighter(ThingsInFight):
                                       fighter_details,
                                       ruleset,
                                       window_manager)
-        if 'timers' not in self.details:
-            self._window_manager.error(
-                    ['fighter "%s" in "%s" has no timers' % (name, group)])
-
-        self.timers = Timers(self.details['timers'], self._window_manager)
+        pass
 
 
     @staticmethod
