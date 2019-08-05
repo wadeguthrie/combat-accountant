@@ -665,7 +665,7 @@
           }
         },
         "timers": {"type": "value",
-                   "value": []},
+                   "value": []}
       }, 
       "Zombie": {
         "skills": {

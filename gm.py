@@ -272,6 +272,8 @@ class GmWindow(object):
         lines, cols = self.getmaxyx()
         choices_per_line = int((cols - 1)/max_width) # -1 for last '|'
         # Adding 0.9999 so last partial line doesn't get truncated by 'int'
+        # TODO: save lines_for_choices as self.command_ribbon_height for
+        #   use bg MainGmWindow::__init__
         lines_for_choices = int((len(choices) / (choices_per_line + 0.0))
                                                                 + 0.9999999)
 
@@ -1972,7 +1974,9 @@ class Equipment(object):
               ):
         # NOTE: This assumes that there won't be any placeholder items --
         # items with a count of 0 (or less).
-        # TODO: check item_index for validity
+        if item_index >= len(self.__equipment):
+            return None
+
         if ('count' in self.__equipment[item_index] and
                                 self.__equipment[item_index]['count'] > 1):
             item = copy.deepcopy(self.__equipment[item_index])
@@ -2069,6 +2073,10 @@ class Timers(object):
             timer['rounds'] -= 1
 
 
+    def get_all(self):
+        return self.__timers
+
+
     def remove_expired_keep_dying(self):
         '''
         Removes timers BUT KEEPS the timers that are dying this round.  Call
@@ -2122,13 +2130,6 @@ class Timers(object):
                                         [[{'text': timer['announcement'],
                                            'mode': curses.A_NORMAL }]])
 
-
-
-class Notes(object):
-    def __init__(self,
-                 notes
-                ):
-        pass
 
 class ThingsInFight(object):
     def __init__(self,
@@ -2505,11 +2506,6 @@ class Fighter(ThingsInFight):
 
     def start_fight(self):
         # NOTE: we're allowing health to still be messed-up, here
-        # TODO: should we allow the state to be absent?
-        self.details['state'] = 'alive'
-        # TODO: we should allow timers to be here -- just delete them at the
-        # end of the fight
-        self.timers.clear_all()
         self.details['weapon-index'] = None
         # NOTE: person may go around wearing armor -- no need to reset
         self.details['opponent'] = None
@@ -2833,10 +2829,15 @@ class Ruleset(object):
         '''
         Removes all injury (and their side-effects) from a fighter.
         '''
+        if 'permanent' not in fighter_details:
+            return
+
         for stat in fighter_details['permanent'].iterkeys():
             fighter_details['current'][stat] = (
                                         fighter_details['permanent'][stat])
-        fighter_details['state'] = 'alive'
+        if (fighter_details['state'] != 'absent' and
+                                        fighter_details['state'] != 'fight'):
+            fighter_details['state'] = 'alive'
 
 
     def make_empty_creature(self):
@@ -4590,6 +4591,19 @@ class GurpsRuleset(Ruleset):
 
         # TODO: maybe here and in get_character_detail, include timers.
         # notes
+        #for timer in fighter.timers.get_all():
+        #    round_count_string = self.__round_count_string % timer['rounds']
+        #    if 'string' in timer:
+        #        if type(timer['string']) is list:
+        #            for i, substring in enumerate(timer['string']):
+        #                string = substring if i != 0 else (
+        #                    '%s%s' % (round_count_string, substring))
+        #                window.addstr(line, 0, string, mode)
+        #                line += 1
+        #        else:
+        #            string = '%s%s' % (round_count_string, timer['string'])
+        #            window.addstr(line, 0, string, mode)
+        #            line += 1
 
         mode = curses.A_NORMAL 
         char_detail.append([{'text': 'Notes',
@@ -5602,8 +5616,6 @@ class GurpsRuleset(Ruleset):
         return None if 'text' not in param else param
 
 
-    # TODO: consolidate the two _do_reload functions
-
     def _do_reload(self,
                    param # {'fighter': Fighter object for attacker
                   ):
@@ -5623,34 +5635,6 @@ class GurpsRuleset(Ruleset):
             return True
 
         return
-
-
-    def _do_reload(self,
-                   param # {'fighter': Fighter object for attacker
-                  ):
-        '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
-        '''
-        weapon, weapon_index = param['fighter'].get_current_weapon()
-        if weapon is None or 'ammo' not in weapon:
-            return None if 'text' not in param else param['text']
-
-        clip_name = weapon['ammo']['name']
-        for item in param['fighter'].details['stuff']:
-            if item['name'] == clip_name and item['count'] > 0:
-                reload_time = weapon['reload']
-                if 'fast-draw (ammo)' in param['fighter'].details['skills']:
-                    reload_time -= 1
-                weapon['ammo']['shots_left'] = weapon['ammo']['shots']
-                item['count'] -= 1
-                param['fighter'].timers.add(param['fighter'].name,
-                                            reload_time,
-                                            'RELOADING')
-                param['fighter'].reset_aim()
-                return None if 'text' not in param else param['text']
-
-        return None if 'text' not in param else param
 
 
     def _draw_weapon(self,
@@ -7415,6 +7399,8 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
+        # Get the state of the monsters.
+
         ask_to_save = False # Ask to save if some monster is conscious
         ask_to_loot = False # Ask to loot if some monster is unconscious
         for fighter in self.__fighters:
@@ -7423,6 +7409,8 @@ class FightHandler(ScreenHandler):
                     ask_to_save = True
                 else:
                     ask_to_loot = True
+
+        # Ask: save or loot?
 
         while ask_to_save or ask_to_loot:
             quit_menu = [('quit -- really', {'doit': None})]
@@ -7443,6 +7431,10 @@ class FightHandler(ScreenHandler):
                 ask_to_loot = False
             else:
                 (result['doit'])()
+
+        if not self._saved_fight['saved']:
+            for fighter in self.__fighters:
+                fighter.timers.clear_all()
 
         self._window.close()
         return False # Leave the fight
