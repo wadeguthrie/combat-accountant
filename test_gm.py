@@ -102,6 +102,9 @@ class MockFightHandler(object):
     def add_to_history(self, action):
         pass
 
+    def pick_opponent(self):
+        pass
+
 class MockMainGmWindow(object):
     def __init__(self, window_manager=None):
         pass

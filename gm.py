@@ -2531,6 +2531,63 @@ class Fighter(ThingsInFight):
             self.details['state'] = 'absent'
 
 
+    #
+    # Protected and Private Methods
+    #
+
+    def _explain_numbers(self,
+                         fight_handler  # FightHandler object
+                        ):
+        '''
+        Returns [[{'text':x, 'mode':x}, {...}], [], [], ...]
+            where the outer array contains lines
+            each line is an array that contains a line-segment
+            each line segment has its own mode so, for example, only SOME of
+               the line is shown in bold
+        '''
+
+        why_opponent = fight_handler.get_opponent_for(self)
+        weapon, holding_weapon_index = self.get_current_weapon()
+
+        lines = []
+
+        unarmed_skills = self._ruleset.get_weapons_unarmed_skills(weapon)
+
+        if unarmed_skills is not None:
+            unarmed_info = self._ruleset.get_unarmed_info(self,
+                                                          why_opponent,
+                                                          weapon,
+                                                          unarmed_skills)
+            lines = [[{'text': x,
+                       'mode': curses.A_NORMAL}] for x in unarmed_info['why']]
+        else:
+            if weapon['skill'] in self.details['skills']:
+                ignore, to_hit_why = self._ruleset.get_to_hit(self,
+                                                              why_opponent,
+                                                              weapon)
+                lines = [[{'text': x,
+                           'mode': curses.A_NORMAL}] for x in to_hit_why]
+
+                # Damage
+
+                ignore, damage_why = self._ruleset.get_damage(self, weapon)
+                lines.extend([[{'text': x,
+                                'mode': curses.A_NORMAL}] for x in damage_why])
+
+            if 'notes' in weapon and len(weapon['notes']) != 0:
+                lines.extend([[{'text': 'Weapon: "%s"' % weapon['name'],
+                               'mode': curses.A_NORMAL}]])
+                lines.extend([[{'text': '  %s' % weapon['notes'],
+                               'mode': curses.A_NORMAL}]])
+
+        ignore, defense_why = self.get_defenses_notes(why_opponent)
+        if defense_why is not None:
+            lines = [[{'text': x,
+                       'mode': curses.A_NORMAL}] for x in defense_why] + lines
+
+        return lines
+
+
 class Ruleset(object):
     '''
     Any ruleset's character's dict is expected to include the following:
@@ -3962,7 +4019,8 @@ class GurpsRuleset(Ruleset):
 
         elif action['name'] == 'aim':
             self._do_aim({'fighter': fighter,
-                          'braced': action['braced']})
+                          'braced': action['braced'],
+                          'fight_handler': fight_handler})
             handled = True
 
         elif action['name'] == 'cast-spell':
@@ -3998,6 +4056,10 @@ class GurpsRuleset(Ruleset):
 
         elif action['name'] == 'nothing':
             handled = True # This is here just so that it's logged
+
+        elif action['name'] == 'pick-opponent':
+            fighter.reset_aim()
+            handled = True
 
         elif action['name'] == 'stunned':
             handled = True # This is here just so that it's logged
@@ -5603,6 +5665,9 @@ class GurpsRuleset(Ruleset):
         Returns: Nothing, return values for these functions are ignored.
         '''
 
+        if param['fighter'].details['opponent'] is None:
+            param['fight_handler'].pick_opponent()
+
         rounds = param['fighter'].details['aim']['rounds']
         if rounds == 0:
             param['fighter'].details['aim']['braced'] = param['braced']
@@ -6422,7 +6487,7 @@ class FightHandler(ScreenHandler):
         self.__equipment_manager = EquipmentManager(world,
                                                     self._window_manager)
 
-        # NOTE: 'h' and 'f' belong in Ruleset
+        # RULESET: 'h' and 'f' belong in Ruleset
         self._add_to_choice_dict({
             curses.KEY_UP:
                       {'name': 'prev character',
@@ -6452,7 +6517,7 @@ class FightHandler(ScreenHandler):
             ord('m'): {'name': 'maneuver',    'func': self.__maneuver},
             ord('n'): {'name': 'short notes', 'func': self.__short_notes},
             ord('N'): {'name': 'full Notes',  'func': self.__full_notes},
-            #ord('o'): {'name': 'opponent',    'func': self.pick_opponent},
+            ord('o'): {'name': 'opponent',    'func': self.pick_opponent},
             ord('P'): {'name': 'promote to NPC',
                                               'func': self.promote_to_NPC},
             ord('q'): {'name': 'quit',        'func': self.__quit},
@@ -6716,7 +6781,7 @@ class FightHandler(ScreenHandler):
         if opponent_name is None:
             return True # don't leave the fight
 
-        # Now, make reflect the selection in the code.
+        # Now, reflect the selection in the code.
 
         self.__ruleset.do_action(current_fighter,
                                  {'name': 'pick-opponent',
@@ -7071,58 +7136,6 @@ class FightHandler(ScreenHandler):
         self._window.status_ribbon(self._input_filename,
                                    ScreenHandler.maintainjson)
         self._window.command_ribbon(self._choices)
-
-
-    def _explain_numbers(self):
-        '''
-        Returns [[{'text':x, 'mode':x}, {...}], [], [], ...]
-            where the outer array contains lines
-            each line is an array that contains a line-segment
-            each line segment has its own mode so, for example, only SOME of
-               the line is shown in bold
-        '''
-
-        why_opponent = self.get_opponent_for(why_target)
-        weapon, holding_weapon_index = why_target.get_current_weapon()
-
-        lines = []
-
-        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(weapon)
-
-        if unarmed_skills is not None:
-            unarmed_info = self.__ruleset.get_unarmed_info(why_target,
-                                                           why_opponent,
-                                                           weapon,
-                                                           unarmed_skills)
-            lines = [[{'text': x,
-                       'mode': curses.A_NORMAL}] for x in unarmed_info['why']]
-        else:
-            if weapon['skill'] in why_target.details['skills']:
-                ignore, to_hit_why = self.__ruleset.get_to_hit(why_target,
-                                                               why_opponent,
-                                                               weapon)
-                lines = [[{'text': x,
-                           'mode': curses.A_NORMAL}] for x in to_hit_why]
-
-                # Damage
-
-                ignore, damage_why = self.__ruleset.get_damage(why_target,
-                                                               weapon)
-                lines.extend([[{'text': x,
-                                'mode': curses.A_NORMAL}] for x in damage_why])
-
-            if 'notes' in weapon and len(weapon['notes']) != 0:
-                lines.extend([[{'text': 'Weapon: "%s"' % weapon['name'],
-                               'mode': curses.A_NORMAL}]])
-                lines.extend([[{'text': '  %s' % weapon['notes'],
-                               'mode': curses.A_NORMAL}]])
-
-        ignore, defense_why = why_target.get_defenses_notes(why_opponent)
-        if defense_why is not None:
-            lines = [[{'text': x,
-                       'mode': curses.A_NORMAL}] for x in defense_why] + lines
-
-        return lines
 
 
     def __full_notes(self):
@@ -7559,7 +7572,7 @@ class FightHandler(ScreenHandler):
         if why_target is None:
             return True # Keep fighting
 
-        lines = why_target._explain_numbers()
+        lines = why_target._explain_numbers(self)
 
         ignore = self._window_manager.display_window(
                     'How %s\'s Numbers Were Calculated' % why_target.name,
