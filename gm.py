@@ -997,6 +997,7 @@ class OutfitCharactersGmWindow(GmWindow):
             self.__outfit_window.refresh()
 
 
+    '''
     def show_character(self,
                        character # dict: {'name': None, 'details': None}
                       ):
@@ -1075,6 +1076,7 @@ class OutfitCharactersGmWindow(GmWindow):
             line += 1
 
         self.refresh()
+    '''
 
 
     def touchwin(self):
@@ -2281,7 +2283,7 @@ class Fight(ThingsInFight):
                                 # [[{'text','mode'},...],  # line 0
                                 #  [...],               ]  # line 1...
                    ):
-        self._ruleset.get_fight_detail(self.details, char_detail)
+        self._ruleset.get_fight_detail(self, char_detail)
 
 
     def get_state(self):
@@ -2425,11 +2427,11 @@ class Fighter(ThingsInFight):
 
 
     def get_detail(self,
-                   char_detail, # recepticle for character detail.
-                                # [[{'text','mode'},...],  # line 0
-                                #  [...],               ]  # line 1...
+                   output, # recepticle for character detail.
+                           # [[{'text','mode'},...],  # line 0
+                           #  [...],               ]  # line 1...
                    ):
-        self._ruleset.get_character_detail(self.details, char_detail)
+        self._ruleset.get_character_detail(self, output)
 
 
     def get_long_summary_string(self):
@@ -4368,8 +4370,8 @@ class GurpsRuleset(Ruleset):
 
 
     def get_character_detail(self,
-                             character,   # dict as found in the JSON
-                             char_detail, # recepticle for character detail.
+                             character,   # Fighter object
+                             output,      # recepticle for character detail.
                                           # [[{'text','mode'},...],  # line 0
                                           #  [...],               ]  # line 1...
                             ):
@@ -4377,8 +4379,7 @@ class GurpsRuleset(Ruleset):
         # attributes
 
         mode = curses.A_NORMAL 
-        char_detail.append([{'text': 'Attributes',
-                             'mode': mode | curses.A_BOLD}])
+        output.append([{'text': 'Attributes', 'mode': mode | curses.A_BOLD}])
         found_one = False
         pieces = []
 
@@ -4386,17 +4387,17 @@ class GurpsRuleset(Ruleset):
         first_row_pieces = {}
         for row in range(2):
             found_one_this_row = False
-            for item_key in character['permanent'].iterkeys():
+            for item_key in character.details['permanent'].iterkeys():
                 in_first_row = item_key in first_row
                 if row == 0 and not in_first_row:
                     continue
                 if row != 0 and in_first_row:
                     continue
                 text = '%s:%d/%d' % (item_key,
-                                     character['current'][item_key],
-                                     character['permanent'][item_key])
-                if (character['current'][item_key] == 
-                                            character['permanent'][item_key]):
+                                     character.details['current'][item_key],
+                                     character.details['permanent'][item_key])
+                if (character.details['current'][item_key] == 
+                                     character.details['permanent'][item_key]):
                     mode = curses.A_NORMAL
                 else:
                     mode = (curses.color_pair(GmWindowManager.YELLOW_BLACK) |
@@ -4418,98 +4419,96 @@ class GurpsRuleset(Ruleset):
                         pieces.append(first_row_pieces[item_key])
 
                 pieces.insert(0, {'text': '  ', 'mode': curses.A_NORMAL})
-                char_detail.append(copy.deepcopy(pieces))
+                output.append(copy.deepcopy(pieces))
                 del pieces[:]
 
         if not found_one:
-            char_detail.append([{'text': '  (None)',
-                                 'mode': mode}])
+            output.append([{'text': '  (None)', 'mode': mode}])
 
         # stuff
 
         mode = curses.A_NORMAL 
-        char_detail.append([{'text': 'Equipment',
-                             'mode': mode | curses.A_BOLD}])
+        output.append([{'text': 'Equipment', 'mode': mode | curses.A_BOLD}])
+
+        in_use_items = []
+        armor_in_use, throw_away = character.get_current_armor()
+        if armor_in_use is not None:
+            in_use_items.append(armor_in_use)
+        weapon_in_use, throw_away = character.get_current_weapon()
+        if weapon_in_use is not None:
+            in_use_items.append(weapon_in_use)
 
         found_one = False
-        for item in sorted(character['stuff'], key=lambda x: x['name']):
+        for item in sorted(character.details['stuff'], key=lambda x: x['name']):
             found_one = True
-            EquipmentManager.get_description(item, char_detail)
+            EquipmentManager.get_description(item, in_use_items, output)
 
         if not found_one:
-            char_detail.append([{'text': '  (None)',
-                                 'mode': mode}])
+            output.append([{'text': '  (None)', 'mode': mode}])
 
         # advantages
 
         mode = curses.A_NORMAL 
-        char_detail.append([{'text': 'Advantages',
-                             'mode': mode | curses.A_BOLD}])
+        output.append([{'text': 'Advantages', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
-        for advantage, value in sorted(character['advantages'].iteritems(),
-                                       key=lambda (k,v): (k, v)):
+        for advantage, value in sorted(
+                                    character.details['advantages'].iteritems(),
+                                    key=lambda (k,v): (k, v)):
             found_one = True
-            char_detail.append([{'text': '  %s: %r' % (advantage, value),
-                                 'mode': mode}])
+            output.append([{'text': '  %s: %r' % (advantage, value),
+                            'mode': mode}])
 
         if not found_one:
-            char_detail.append([{'text': '  (None)',
-                                 'mode': mode}])
+            output.append([{'text': '  (None)', 'mode': mode}])
 
         # skills
 
         mode = curses.A_NORMAL 
-        char_detail.append([{'text': 'Skills',
-                             'mode': mode | curses.A_BOLD}])
+        output.append([{'text': 'Skills', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
-        for skill, value in sorted(character['skills'].iteritems(),
+        for skill, value in sorted(character.details['skills'].iteritems(),
                                    key=lambda (k,v): (k,v)):
             found_one = True
-            char_detail.append([{'text': '  %s: %d' % (skill, value),
-                                 'mode': mode}])
+            output.append([{'text': '  %s: %d' % (skill, value),
+                            'mode': mode}])
 
         if not found_one:
-            char_detail.append([{'text': '  (None)',
-                                 'mode': mode}])
+            output.append([{'text': '  (None)', 'mode': mode}])
 
         # spells
 
-        if 'spells' in character:
+        if 'spells' in character.details:
             mode = curses.A_NORMAL 
-            char_detail.append([{'text': 'Spells',
-                                 'mode': mode | curses.A_BOLD}])
+            output.append([{'text': 'Spells', 'mode': mode | curses.A_BOLD}])
 
             found_one = False
-            for spell in sorted(character['spells'], key=lambda(x): x['name']):
+            for spell in sorted(character.details['spells'],
+                                key=lambda(x): x['name']):
                 found_one = True
-                char_detail.append(
+                output.append(
                         [{'text': '  %s (%d): %s' % (spell['name'],
                                                      spell['skill'],
                                                      spell['notes']),
                           'mode': mode}])
 
             if not found_one:
-                char_detail.append([{'text': '  (None)',
-                                     'mode': mode}])
+                output.append([{'text': '  (None)', 'mode': mode}])
 
         # notes
 
         mode = curses.A_NORMAL 
-        char_detail.append([{'text': 'Notes',
-                             'mode': mode | curses.A_BOLD}])
+        output.append([{'text': 'Notes', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
-        if 'notes' in character:
-            for note in character['notes']:
+        if 'notes' in character.details:
+            for note in character.details['notes']:
                 found_one = True
-                char_detail.append([{'text': '  %s' % note,
-                                     'mode': mode}])
+                output.append([{'text': '  %s' % note, 'mode': mode}])
 
         if not found_one:
-            char_detail.append([{'text': '  (None)',
-                                 'mode': mode}])
+            output.append([{'text': '  (None)', 'mode': mode}])
 
 
     def get_creature_abilities(self):
@@ -4649,27 +4648,25 @@ class GurpsRuleset(Ruleset):
 
 
     def get_fight_detail(self,
-                         fight,       # dict as found in the JSON
-                         char_detail, # recepticle for fight detail.
-                                      # [[{'text','mode'},...],  # line 0
-                                      #  [...],               ]  # line 1...
+                         fight,     # Fight object
+                         output,    # recepticle for fight detail.
+                                    # [[{'text','mode'},...],  # line 0
+                                    #  [...],               ]  # line 1...
                         ):
 
         # stuff
 
         mode = curses.A_NORMAL 
-        char_detail.append([{'text': 'Equipment',
-                             'mode': mode | curses.A_BOLD}])
+        output.append([{'text': 'Equipment', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
-        if 'stuff' in fight:
-            for item in sorted(fight['stuff'], key=lambda x: x['name']):
+        if 'stuff' in fight.details:
+            for item in sorted(fight.details['stuff'], key=lambda x: x['name']):
                 found_one = True
-                EquipmentManager.get_description(item, char_detail)
+                EquipmentManager.get_description(item, [], output)
 
         if not found_one:
-            char_detail.append([{'text': '  (None)',
-                                 'mode': mode}])
+            output.append([{'text': '  (None)', 'mode': mode}])
 
         # TODO: maybe here and in get_character_detail, include timers.
         # notes
@@ -4688,19 +4685,16 @@ class GurpsRuleset(Ruleset):
         #            line += 1
 
         mode = curses.A_NORMAL 
-        char_detail.append([{'text': 'Notes',
-                             'mode': mode | curses.A_BOLD}])
+        output.append([{'text': 'Notes', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
-        if 'notes' in fight:
-            for note in fight['notes']:
+        if 'notes' in fight.details:
+            for note in fight.details['notes']:
                 found_one = True
-                char_detail.append([{'text': '  %s' % note,
-                                     'mode': mode}])
+                output.append([{'text': '  %s' % note, 'mode': mode}])
 
         if not found_one:
-            char_detail.append([{'text': '  (None)',
-                                 'mode': mode}])
+            output.append([{'text': '  (None)', 'mode': mode}])
 
 
     def get_fighter_defenses_notes(self,
@@ -7995,7 +7989,7 @@ class MainHandler(ScreenHandler):
 
     def __don_armor(self, throw_away):
         fighter = self.__chars[self.__char_index]
-        armor = fighter.get_current_armor()
+        armor, throw_away = fighter.get_current_armor()
         armor_index = None
         if armor is None:
             don_armor_menu = []
@@ -8005,7 +7999,7 @@ class MainHandler(ScreenHandler):
                         don_armor_menu.append((item['name'], index))
             don_armor_menu = sorted(don_armor_menu, key=lambda x: x[0].upper())
             if len(don_armor_menu) == 1:
-                armor_index
+                armor_index = don_armor_menu[0][1]
             else:
                 armor_index = self._window_manager.menu('Don Which Armor',
                                                         don_armor_menu)
@@ -8017,6 +8011,7 @@ class MainHandler(ScreenHandler):
                                   'armor-index': armor_index
                                  },
                                  None)
+        self._draw_screen()
 
 
     def _draw_screen(self, inverse=False):
@@ -8680,10 +8675,16 @@ class EquipmentManager(object):
 
     @staticmethod
     def get_description(
-                        item,        # Input: dict for a 'stuff' item from JSON
-                        char_detail  # Output: recepticle for character detail.
-                                     # [[{'text','mode'},...],  # line 0
-                                     #  [...],               ]  # line 1...
+                        item,           # Input: dict for a 'stuff' item from
+                                        #   JSON
+                        in_use_items,   # List of items that are in use.
+                                        #   These should be references so that
+                                        #   it will match identically to
+                                        #   'item' if it is in use.
+                        char_detail     # Output: recepticle for character
+                                        # detail.
+                                        # [[{'text','mode'},...],  # line 0
+                                        #  [...],               ]  # line 1...
                        ):
         '''
         This is kind-of messed up.  Each type of equipment should have its own
@@ -8692,7 +8693,10 @@ class EquipmentManager(object):
         '''
 
         mode = curses.A_NORMAL 
-        texts = ['  %s' % item['name']]
+
+        in_use_string = ' (in use)' if item in in_use_items else ''
+
+        texts = ['  %s%s' % (item['name'], in_use_string)]
         if 'count' in item and item['count'] != 1:
             texts.append(' (%d)' % item['count'])
 
