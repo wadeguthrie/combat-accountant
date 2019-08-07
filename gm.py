@@ -15,6 +15,10 @@ import sys
 import traceback
 
 # TODO:
+#   - should have some concept of time slots and activities that take up time
+#     slots.  Not sure if that'll require too much input (to give up the
+#     5-foot step slot in D&D if you don't use it).
+#
 #   - an item's type should be an array (so that a battle mech can be both
 #     armor and weapon.
 #
@@ -996,7 +1000,6 @@ class OutfitCharactersGmWindow(GmWindow):
     def show_character(self,
                        character # dict: {'name': None, 'details': None}
                       ):
-        # RULESET: this is ruleset specific
         self.__outfit_window.clear()
         if character['name'] is None:
             self.refresh()
@@ -1015,7 +1018,8 @@ class OutfitCharactersGmWindow(GmWindow):
         self.__outfit_window.addstr(line, 0, 'Equipment', mode | curses.A_BOLD)
         line += 1
         found_stuff = False
-        for item in character['details']['stuff']:
+        for item in sorted(character['details']['stuff'],
+                           key=lambda x: x['name']):
             found_stuff = True
 
             # TODO: equipment must have an object with a 'show me' method
@@ -2662,6 +2666,7 @@ class Ruleset(object):
                                          'action': { 'name': 'don-armor',
                                                      'armor-index': index}
                                         }))
+        don_armor_menu = sorted(don_armor_menu, key=lambda x: x[0].upper())
 
         # Armor menu
 
@@ -2755,6 +2760,8 @@ class Ruleset(object):
                                             'action': {'name': 'draw-weapon',
                                                        'weapon-index': index}
                                            }))
+            draw_weapon_menu = sorted(draw_weapon_menu,
+                                      key=lambda x: x[0].upper())
 
             # Draw menu
 
@@ -2801,6 +2808,8 @@ class Ruleset(object):
                                      'action': {'name': 'use-item',
                                                 'item-index': index}
                                     }))
+        use_menu = sorted(use_menu, key=lambda x: x[0].upper())
+
         # Use menu
 
         if len(use_menu) == 1:
@@ -4350,7 +4359,7 @@ class GurpsRuleset(Ruleset):
                              'mode': mode | curses.A_BOLD}])
 
         found_one = False
-        for item in character['stuff']:
+        for item in sorted(character['stuff'], key=lambda x: x['name']):
             found_one = True
             EquipmentManager.get_description(item, char_detail)
 
@@ -4581,7 +4590,7 @@ class GurpsRuleset(Ruleset):
 
         found_one = False
         if 'stuff' in fight:
-            for item in fight['stuff']:
+            for item in sorted(fight['stuff'], key=lambda x: x['name']):
                 found_one = True
                 EquipmentManager.get_description(item, char_detail)
 
@@ -5388,7 +5397,6 @@ class GurpsRuleset(Ruleset):
                    adj       # the number of HP to gain or lose
                   ):
         if adj < 0:
-
             # Hit location (just for flavor, not for special injury)
             table_lookup = (random.randint(1,6) +
                             random.randint(1,6) +
@@ -5401,10 +5409,23 @@ class GurpsRuleset(Ruleset):
                            ]
 
             # Adjust for armor
+            use_armor = False
             armor, armor_index = fighter.get_current_armor()
             if armor is not None:
+                use_armor_menu = [('yes', True), ('no', False)]
+                use_armor = self._window_manager.menu('Use Armor\'s DR?',
+                                                                use_armor_menu)
+            if use_armor:
                 if armor['dr'] >= -adj:
+                    window_text = [
+                        [{'text': 'The armor absorbed all the damage',
+                          'mode': curses.A_NORMAL}]
+                    ]
+                    self._window_manager.display_window(
+                                    ('Did *NO* damage to %s' % fighter.name),
+                                    window_text)
                     return
+
                 original_adj = adj
                 adj += armor['dr']
                 window_text.append([{'text':'', 'mode': curses.A_NORMAL}])
@@ -6886,6 +6907,9 @@ class FightHandler(ScreenHandler):
             else:
                 hp_recipient = opponent
 
+
+        # Reduce the HP
+
         title = 'Reduce (%s\'s) HP By...' % hp_recipient.name
         height = 1
         width = len(title)
@@ -7714,7 +7738,7 @@ class MainHandler(ScreenHandler):
                                                        self.__heal},
             ord('H'): {'name': 'Heal all PCs',        'func':
                                                        self.__fully_heal},
-            ord('M'): {'name': 'show MONSTERs or PC/NPC', 'func':
+            ord('m'): {'name': 'show MONSTERs or PC/NPC', 'func':
                                        self.__toggle_Monster_PC_NPC_display},
 
             ord('q'): {'name': 'quit',                'func':
@@ -8691,6 +8715,7 @@ class EquipmentManager(object):
         # equipment list
         item_menu = [(item['name'], item)
                             for item in self.__world.details['stuff']]
+        item_menu = sorted(item_menu, key=lambda x: x[0].upper())
         item = self.__window_manager.menu('Item to Add', item_menu)
         if item is not None:
             source = None

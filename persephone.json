@@ -12095,6 +12095,30 @@
   "stuff": [
     {
       "count": 1, 
+      "owners": ["Renata"], 
+      "name": "Armor, Light Street", 
+      "type": "armor", 
+      "notes": "Some combination of ballistic, ablative, and disruptor.", 
+      "dr": 3
+    },
+    {
+      "count": 1, 
+      "owners": ["Renata"], 
+      "name": "Armor, Medium Street", 
+      "type": "armor", 
+      "notes": "Some combination of ballistic, ablative, and disruptor.", 
+      "dr": 4
+    },
+    {
+      "count": 1, 
+      "owners": ["Renata"], 
+      "name": "Armor, Heavy Street", 
+      "type": "armor", 
+      "notes": "Some combination of ballistic, ablative, and disruptor.", 
+      "dr": 5
+    },
+    {
+      "count": 1, 
       "owners": [], 
       "name": "Tonfa", 
       "notes": "", 
