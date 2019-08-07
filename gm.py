@@ -3217,6 +3217,46 @@ class GurpsRuleset(Ruleset):
     # These are specific to the Persephone version of the GURPS ruleset
     spells = [
         {
+          "cost": 3, 
+          "name": "Phase", 
+          "notes": "M83, avoid an attack", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        },
+        {
+          "cost": None, 
+          "name": "Great Ward", 
+          "notes": "M122, cost: 1/person (min:4), instant", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        },
+        {
+          "cost": 5, 
+          "name": "Total Paralysis", 
+          "notes": "M40, cost: 2-6, duration 60", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 12
+        },
+        {
+          "cost": None, 
+          "name": "Madness", 
+          "notes": "M136, cost: 2-6", 
+          "maintain": 0, 
+          "time": 2, 
+          "skill": 12
+        },
+        {
+          "cost": 4, 
+          "name": "Animate Shadow", 
+          "notes": "M154, Subject's shadow attacks them, HT negates", 
+          "maintain": 4, 
+          "time": 2, 
+          "skill": 12
+        },
+        {
           "cost": 4, 
           "name": "Terror", 
           "notes": "M134, Area, Will negates", 
@@ -3592,6 +3632,22 @@ class GurpsRuleset(Ruleset):
           "time": 1, 
           "skill": 14
         }, 
+        {
+          "cost": None, 
+          "name": "Explosive Lightning", 
+          "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
+          "maintain": 0, 
+          "time": None, 
+          "skill": 18
+        },
+        {
+          "cost": None, 
+          "name": "Lightning Whip", 
+          "notes": "M196, duration 10, cost 1 per 2 yards reach", 
+          "maintain": 0, 
+          "time": 1, 
+          "skill": 18
+        },
         {
           "cost": None, 
           "name": "Lightning", 
