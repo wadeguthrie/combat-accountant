@@ -6028,8 +6028,11 @@ class BuildFightHandler(ScreenHandler):
             creature_menu = [(from_creature_name, from_creature_name)
                 for from_creature_name in
                         self.__world.details['Templates'][self.__template_name]]
+
+            creature_menu = sorted(creature_menu, key=lambda x: x[0].upper())
+
             from_creature_name = self._window_manager.menu('Monster',
-                                                          sorted(creature_menu))
+                                                           creature_menu)
             # TODO: maybe not
             if from_creature_name is None:
                 return True # Keep going
@@ -8327,12 +8330,14 @@ class MainHandler(ScreenHandler):
 
 
     def __party(self):
-        sub_menu = [('NPC joins PCs',      {'doit': self.NPC_joins_PCs}),
+        sub_menu = [
+                    ('monster list',       {'doit': self.__add_monsters}),
+                    ('npc list',           {'doit': self.__add_NPCs}),
+                    ('NPC joins PCs',      {'doit': self.NPC_joins_PCs}),
                     ('NPC leaves PCs',     {'doit': self.__NPC_leaves_PCs}),
                     ('NPC joins Monsters', {'doit': self.NPC_joins_monsters}),
-                    ('npc list',           {'doit': self.__add_NPCs}),
                     ('pc list',            {'doit': self.__add_PCs}),
-                    ('monster list',       {'doit': self.__add_monsters})]
+                    ]
         self._window_manager.menu('Do what', sub_menu)
         return True
 
