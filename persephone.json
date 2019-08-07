@@ -1532,7 +1532,7 @@
           "short-notes": [], 
           "armor-index": null, 
           "current": {
-            "fp": 11, 
+            "fp": 30, 
             "ht": 11, 
             "iq": 12, 
             "hp": 10, 
@@ -1546,7 +1546,7 @@
           "posture": "standing", 
           "state": "alive", 
           "permanent": {
-            "fp": 11, 
+            "fp": 30, 
             "ht": 11, 
             "iq": 12, 
             "hp": 10, 
@@ -2053,7 +2053,7 @@
           "short-notes": [], 
           "armor-index": null, 
           "current": {
-            "fp": 11, 
+            "fp": 30, 
             "ht": 11, 
             "iq": 12, 
             "hp": 10, 
@@ -2067,7 +2067,7 @@
           "posture": "standing", 
           "state": "alive", 
           "permanent": {
-            "fp": 11, 
+            "fp": 30, 
             "ht": 11, 
             "iq": 12, 
             "hp": 10, 
