@@ -338,8 +338,6 @@
           "value": {
             "Empathy": 5, 
             "Vodou Practitioner (Mambo 2)": 35, 
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }
         }, 
@@ -511,6 +509,118 @@
               "maintain": 2, 
               "time": 2, 
               "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Animate Shadow", 
+              "notes": "M154, Subject's shadow attacks them, HT negates", 
+              "maintain": 4, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Death Touch", 
+              "notes": "M41, 1-3, needs touch", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Explosive Lightning", 
+              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
+              "maintain": 0, 
+              "time": null, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning", 
+              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning Whip", 
+              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Madness", 
+              "notes": "M136, cost: 2-6", 
+              "maintain": 0, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Panic", 
+              "notes": "M134, vs. Will", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Strike Blind", 
+              "notes": "M38, vs HT", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Stun", 
+              "notes": "M37, B420, vs. HT", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 5, 
+              "name": "Total Paralysis", 
+              "notes": "M40, cost: 2-6, duration 60", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 8, 
+              "name": "Agonize", 
+              "notes": "M40, HT negates", 
+              "maintain": 6, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Blink", 
+              "notes": "M148", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Great Ward", 
+              "notes": "M122, cost: 1/person (min:4), instant", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 3, 
+              "name": "Phase", 
+              "notes": "M83, avoid an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
             }
           ]
         }
@@ -820,6 +930,303 @@
           "value": []
         }
       }, 
+      "Hypno-Slug Chattel": {
+        "skills": {
+          "type": "value", 
+          "value": {}
+        }, 
+        "permanent": {
+          "fp": {
+            "type": "value", 
+            "value": 30
+          }, 
+          "iq": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "hp": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "st": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "ht": {
+            "type": "value", 
+            "value": 11
+          }, 
+          "dx": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "basic-move": {
+            "type": "value", 
+            "value": 5
+          }, 
+          "basic-speed": {
+            "type": "value", 
+            "value": 5.25
+          }
+        }, 
+        "stuff": {
+          "type": "value", 
+          "value": []
+        }, 
+        "advantages": {
+          "type": "value", 
+          "value": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }
+        }, 
+        "spells": {
+          "type": "value", 
+          "value": [
+            {
+              "cost": 1, 
+              "name": "Awaken", 
+              "notes": "M90", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Communicate", 
+              "notes": "M48", 
+              "maintain": 4, 
+              "time": 4, 
+              "skill": 11
+            }, 
+            {
+              "cost": 3, 
+              "name": "Daze", 
+              "notes": "M134", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Far Hearing", 
+              "notes": "M173", 
+              "maintain": 2, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Foolishness", 
+              "notes": "M134", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Energy", 
+              "notes": "M89", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Vitality", 
+              "notes": "M89", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 2, 
+              "name": "Luck", 
+              "notes": "V2", 
+              "maintain": 1, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Major Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Minor Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Might", 
+              "notes": "M37", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 15, 
+              "name": "Restoration", 
+              "notes": "M93", 
+              "maintain": 0, 
+              "time": 60, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Sense Life", 
+              "notes": "M45, cost 1/2 per yard radius, see M11", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Sleep", 
+              "notes": "M135", 
+              "maintain": 0, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Wizard Eye", 
+              "notes": "M104", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Animate Shadow", 
+              "notes": "M154, Subject's shadow attacks them, HT negates", 
+              "maintain": 4, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Death Touch", 
+              "notes": "M41, 1-3, needs touch", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Explosive Lightning", 
+              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
+              "maintain": 0, 
+              "time": null, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning", 
+              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning Whip", 
+              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Madness", 
+              "notes": "M136, cost: 2-6", 
+              "maintain": 0, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Panic", 
+              "notes": "M134, vs. Will", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Strike Blind", 
+              "notes": "M38, vs HT", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Stun", 
+              "notes": "M37, B420, vs. HT", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 5, 
+              "name": "Total Paralysis", 
+              "notes": "M40, cost: 2-6, duration 60", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 8, 
+              "name": "Agonize", 
+              "notes": "M40, HT negates", 
+              "maintain": 6, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Blink", 
+              "notes": "M148", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Great Ward", 
+              "notes": "M122, cost: 1/person (min:4), instant", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 3, 
+              "name": "Phase", 
+              "notes": "M83, avoid an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }
+          ]
+        }
+      }, 
       "bad guy: low level": {
         "skills": {
           "type": "value", 
@@ -1068,6 +1475,1775 @@
     }
   }, 
   "fights": {
+    "Battle Of Persephone, Floor Level": {
+      "stuff": [], 
+      "timers": [], 
+      "monsters": {
+        "3 - Davidson": {
+          "stunned": 0, 
+          "did_action_this_turn": false, 
+          "short-notes": [], 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "weapon-index": null, 
+          "posture": "standing", 
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [], 
+          "skills": {}, 
+          "notes": [
+            "origin: haitian", 
+            "gender: male", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Pokes/taps others with finger", 
+            "instincts: To show them all", 
+            "hair: Pony-tail", 
+            "speech: Accented", 
+            "knack: A true name", 
+            "personality: Enigmatic"
+          ], 
+          "shock": 0, 
+          "armor-index": null, 
+          "current": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "spells": [
+            {
+              "cost": 1, 
+              "name": "Awaken", 
+              "notes": "M90", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Communicate", 
+              "notes": "M48", 
+              "maintain": 4, 
+              "time": 4, 
+              "skill": 11
+            }, 
+            {
+              "cost": 3, 
+              "name": "Daze", 
+              "notes": "M134", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Far Hearing", 
+              "notes": "M173", 
+              "maintain": 2, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Foolishness", 
+              "notes": "M134", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Energy", 
+              "notes": "M89", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Vitality", 
+              "notes": "M89", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 2, 
+              "name": "Luck", 
+              "notes": "V2", 
+              "maintain": 1, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Major Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Minor Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Might", 
+              "notes": "M37", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 15, 
+              "name": "Restoration", 
+              "notes": "M93", 
+              "maintain": 0, 
+              "time": 60, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Sense Life", 
+              "notes": "M45, cost 1/2 per yard radius, see M11", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Sleep", 
+              "notes": "M135", 
+              "maintain": 0, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Wizard Eye", 
+              "notes": "M104", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Animate Shadow", 
+              "notes": "M154, Subject's shadow attacks them, HT negates", 
+              "maintain": 4, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Death Touch", 
+              "notes": "M41, 1-3, needs touch", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Explosive Lightning", 
+              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
+              "maintain": 0, 
+              "time": null, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning", 
+              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning Whip", 
+              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Madness", 
+              "notes": "M136, cost: 2-6", 
+              "maintain": 0, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Panic", 
+              "notes": "M134, vs. Will", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Strike Blind", 
+              "notes": "M38, vs HT", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Stun", 
+              "notes": "M37, B420, vs. HT", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 5, 
+              "name": "Total Paralysis", 
+              "notes": "M40, cost: 2-6, duration 60", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 8, 
+              "name": "Agonize", 
+              "notes": "M40, HT negates", 
+              "maintain": 6, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Blink", 
+              "notes": "M148", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Great Ward", 
+              "notes": "M122, cost: 1/person (min:4), instant", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 3, 
+              "name": "Phase", 
+              "notes": "M83, avoid an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }
+          ], 
+          "opponent": null
+        }, 
+        "6 - Ricardo": {
+          "stunned": 0, 
+          "did_action_this_turn": false, 
+          "short-notes": [], 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "weapon-index": null, 
+          "posture": "standing", 
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [], 
+          "skills": {}, 
+          "notes": [
+            "origin: haitian", 
+            "gender: male", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Pathological liar", 
+            "instincts: To extinguish an evil forever", 
+            "hair: Streaked", 
+            "speech: Curt short", 
+            "knack: A heart", 
+            "personality: Temperamental"
+          ], 
+          "shock": 0, 
+          "armor-index": null, 
+          "current": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "spells": [
+            {
+              "cost": 1, 
+              "name": "Awaken", 
+              "notes": "M90", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Communicate", 
+              "notes": "M48", 
+              "maintain": 4, 
+              "time": 4, 
+              "skill": 11
+            }, 
+            {
+              "cost": 3, 
+              "name": "Daze", 
+              "notes": "M134", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Far Hearing", 
+              "notes": "M173", 
+              "maintain": 2, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Foolishness", 
+              "notes": "M134", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Energy", 
+              "notes": "M89", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Vitality", 
+              "notes": "M89", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 2, 
+              "name": "Luck", 
+              "notes": "V2", 
+              "maintain": 1, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Major Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Minor Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Might", 
+              "notes": "M37", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 15, 
+              "name": "Restoration", 
+              "notes": "M93", 
+              "maintain": 0, 
+              "time": 60, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Sense Life", 
+              "notes": "M45, cost 1/2 per yard radius, see M11", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Sleep", 
+              "notes": "M135", 
+              "maintain": 0, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Wizard Eye", 
+              "notes": "M104", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Animate Shadow", 
+              "notes": "M154, Subject's shadow attacks them, HT negates", 
+              "maintain": 4, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Death Touch", 
+              "notes": "M41, 1-3, needs touch", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Explosive Lightning", 
+              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
+              "maintain": 0, 
+              "time": null, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning", 
+              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning Whip", 
+              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Madness", 
+              "notes": "M136, cost: 2-6", 
+              "maintain": 0, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Panic", 
+              "notes": "M134, vs. Will", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Strike Blind", 
+              "notes": "M38, vs HT", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Stun", 
+              "notes": "M37, B420, vs. HT", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 5, 
+              "name": "Total Paralysis", 
+              "notes": "M40, cost: 2-6, duration 60", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 8, 
+              "name": "Agonize", 
+              "notes": "M40, HT negates", 
+              "maintain": 6, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Blink", 
+              "notes": "M148", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Great Ward", 
+              "notes": "M122, cost: 1/person (min:4), instant", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 3, 
+              "name": "Phase", 
+              "notes": "M83, avoid an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }
+          ], 
+          "opponent": null
+        }, 
+        "2 - Fabiola": {
+          "stunned": 0, 
+          "did_action_this_turn": false, 
+          "short-notes": [], 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "weapon-index": null, 
+          "posture": "standing", 
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [], 
+          "skills": {}, 
+          "notes": [
+            "origin: haitian", 
+            "gender: female", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Constantly asks for divine advice", 
+            "instincts: To be forgotten", 
+            "hair: Straight", 
+            "speech: Curt short", 
+            "knack: Metalworking", 
+            "personality: Spiteful"
+          ], 
+          "shock": 0, 
+          "armor-index": null, 
+          "current": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "spells": [
+            {
+              "cost": 1, 
+              "name": "Awaken", 
+              "notes": "M90", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Communicate", 
+              "notes": "M48", 
+              "maintain": 4, 
+              "time": 4, 
+              "skill": 11
+            }, 
+            {
+              "cost": 3, 
+              "name": "Daze", 
+              "notes": "M134", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Far Hearing", 
+              "notes": "M173", 
+              "maintain": 2, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Foolishness", 
+              "notes": "M134", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Energy", 
+              "notes": "M89", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Vitality", 
+              "notes": "M89", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 2, 
+              "name": "Luck", 
+              "notes": "V2", 
+              "maintain": 1, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Major Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Minor Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Might", 
+              "notes": "M37", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 15, 
+              "name": "Restoration", 
+              "notes": "M93", 
+              "maintain": 0, 
+              "time": 60, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Sense Life", 
+              "notes": "M45, cost 1/2 per yard radius, see M11", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Sleep", 
+              "notes": "M135", 
+              "maintain": 0, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Wizard Eye", 
+              "notes": "M104", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Animate Shadow", 
+              "notes": "M154, Subject's shadow attacks them, HT negates", 
+              "maintain": 4, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Death Touch", 
+              "notes": "M41, 1-3, needs touch", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Explosive Lightning", 
+              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
+              "maintain": 0, 
+              "time": null, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning", 
+              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning Whip", 
+              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Madness", 
+              "notes": "M136, cost: 2-6", 
+              "maintain": 0, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Panic", 
+              "notes": "M134, vs. Will", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Strike Blind", 
+              "notes": "M38, vs HT", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Stun", 
+              "notes": "M37, B420, vs. HT", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 5, 
+              "name": "Total Paralysis", 
+              "notes": "M40, cost: 2-6, duration 60", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 8, 
+              "name": "Agonize", 
+              "notes": "M40, HT negates", 
+              "maintain": 6, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Blink", 
+              "notes": "M148", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Great Ward", 
+              "notes": "M122, cost: 1/person (min:4), instant", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 3, 
+              "name": "Phase", 
+              "notes": "M83, avoid an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }
+          ], 
+          "opponent": null
+        }, 
+        "4 - Schneider": {
+          "stunned": 0, 
+          "did_action_this_turn": false, 
+          "short-notes": [], 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "weapon-index": null, 
+          "posture": "standing", 
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [], 
+          "skills": {}, 
+          "notes": [
+            "origin: haitian", 
+            "gender: male", 
+            "station history: staby (born on this station)", 
+            "characteristics: Interrupts others", 
+            "instincts: To do good", 
+            "hair: Frazzled", 
+            "speech: Quiet", 
+            "knack: Immunity from the law", 
+            "personality: Agreeable"
+          ], 
+          "shock": 0, 
+          "armor-index": null, 
+          "current": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "spells": [
+            {
+              "cost": 1, 
+              "name": "Awaken", 
+              "notes": "M90", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Communicate", 
+              "notes": "M48", 
+              "maintain": 4, 
+              "time": 4, 
+              "skill": 11
+            }, 
+            {
+              "cost": 3, 
+              "name": "Daze", 
+              "notes": "M134", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Far Hearing", 
+              "notes": "M173", 
+              "maintain": 2, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Foolishness", 
+              "notes": "M134", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Energy", 
+              "notes": "M89", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Vitality", 
+              "notes": "M89", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 2, 
+              "name": "Luck", 
+              "notes": "V2", 
+              "maintain": 1, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Major Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Minor Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Might", 
+              "notes": "M37", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 15, 
+              "name": "Restoration", 
+              "notes": "M93", 
+              "maintain": 0, 
+              "time": 60, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Sense Life", 
+              "notes": "M45, cost 1/2 per yard radius, see M11", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Sleep", 
+              "notes": "M135", 
+              "maintain": 0, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Wizard Eye", 
+              "notes": "M104", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Animate Shadow", 
+              "notes": "M154, Subject's shadow attacks them, HT negates", 
+              "maintain": 4, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Death Touch", 
+              "notes": "M41, 1-3, needs touch", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Explosive Lightning", 
+              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
+              "maintain": 0, 
+              "time": null, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning", 
+              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning Whip", 
+              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Madness", 
+              "notes": "M136, cost: 2-6", 
+              "maintain": 0, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Panic", 
+              "notes": "M134, vs. Will", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Strike Blind", 
+              "notes": "M38, vs HT", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Stun", 
+              "notes": "M37, B420, vs. HT", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 5, 
+              "name": "Total Paralysis", 
+              "notes": "M40, cost: 2-6, duration 60", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 8, 
+              "name": "Agonize", 
+              "notes": "M40, HT negates", 
+              "maintain": 6, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Blink", 
+              "notes": "M148", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Great Ward", 
+              "notes": "M122, cost: 1/person (min:4), instant", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 3, 
+              "name": "Phase", 
+              "notes": "M83, avoid an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }
+          ], 
+          "opponent": null
+        }, 
+        "5 - Jesula": {
+          "stunned": 0, 
+          "did_action_this_turn": false, 
+          "short-notes": [], 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "weapon-index": null, 
+          "posture": "standing", 
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [], 
+          "skills": {}, 
+          "notes": [
+            "origin: haitian", 
+            "gender: female", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Dandruff", 
+            "instincts: To reunite with a loved one", 
+            "hair: Braided", 
+            "speech: Accented", 
+            "knack: A one-of-a-kind item", 
+            "personality: Mournful"
+          ], 
+          "shock": 0, 
+          "armor-index": null, 
+          "current": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "spells": [
+            {
+              "cost": 1, 
+              "name": "Awaken", 
+              "notes": "M90", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Communicate", 
+              "notes": "M48", 
+              "maintain": 4, 
+              "time": 4, 
+              "skill": 11
+            }, 
+            {
+              "cost": 3, 
+              "name": "Daze", 
+              "notes": "M134", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Far Hearing", 
+              "notes": "M173", 
+              "maintain": 2, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Foolishness", 
+              "notes": "M134", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Energy", 
+              "notes": "M89", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Vitality", 
+              "notes": "M89", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 2, 
+              "name": "Luck", 
+              "notes": "V2", 
+              "maintain": 1, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Major Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Minor Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Might", 
+              "notes": "M37", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 15, 
+              "name": "Restoration", 
+              "notes": "M93", 
+              "maintain": 0, 
+              "time": 60, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Sense Life", 
+              "notes": "M45, cost 1/2 per yard radius, see M11", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Sleep", 
+              "notes": "M135", 
+              "maintain": 0, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Wizard Eye", 
+              "notes": "M104", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Animate Shadow", 
+              "notes": "M154, Subject's shadow attacks them, HT negates", 
+              "maintain": 4, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Death Touch", 
+              "notes": "M41, 1-3, needs touch", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Explosive Lightning", 
+              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
+              "maintain": 0, 
+              "time": null, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning", 
+              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning Whip", 
+              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Madness", 
+              "notes": "M136, cost: 2-6", 
+              "maintain": 0, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Panic", 
+              "notes": "M134, vs. Will", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Strike Blind", 
+              "notes": "M38, vs HT", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Stun", 
+              "notes": "M37, B420, vs. HT", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 5, 
+              "name": "Total Paralysis", 
+              "notes": "M40, cost: 2-6, duration 60", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 8, 
+              "name": "Agonize", 
+              "notes": "M40, HT negates", 
+              "maintain": 6, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Blink", 
+              "notes": "M148", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Great Ward", 
+              "notes": "M122, cost: 1/person (min:4), instant", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 3, 
+              "name": "Phase", 
+              "notes": "M83, avoid an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }
+          ], 
+          "opponent": null
+        }, 
+        "<< ROOM >>": {
+          "notes": [], 
+          "stuff": [], 
+          "timers": []
+        }, 
+        "1 - Gaelle": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [], 
+          "stunned": 0, 
+          "skills": {}, 
+          "notes": [
+            "origin: haitian", 
+            "gender: female", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Nervous muscle twitch", 
+            "instincts: To party", 
+            "hair: Messy", 
+            "speech: Breathless", 
+            "knack: A secret", 
+            "personality: Accusative"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "posture": "standing", 
+          "armor-index": null, 
+          "current": {
+            "fp": 30, 
+            "iq": 12, 
+            "hp": 10, 
+            "ht": 11, 
+            "st": 10, 
+            "per": 12, 
+            "wi": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "check_for_death": false, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 30, 
+            "iq": 12, 
+            "hp": 10, 
+            "ht": 11, 
+            "st": 10, 
+            "per": 12, 
+            "wi": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "did_action_this_turn": false, 
+          "weapon-index": null, 
+          "timers": [], 
+          "spells": [
+            {
+              "cost": 1, 
+              "name": "Awaken", 
+              "notes": "M90", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Communicate", 
+              "notes": "M48", 
+              "maintain": 4, 
+              "time": 4, 
+              "skill": 11
+            }, 
+            {
+              "cost": 3, 
+              "name": "Daze", 
+              "notes": "M134", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Far Hearing", 
+              "notes": "M173", 
+              "maintain": 2, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Foolishness", 
+              "notes": "M134", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Energy", 
+              "notes": "M89", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Vitality", 
+              "notes": "M89", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 2, 
+              "name": "Luck", 
+              "notes": "V2", 
+              "maintain": 1, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Major Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Minor Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Might", 
+              "notes": "M37", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 15, 
+              "name": "Restoration", 
+              "notes": "M93", 
+              "maintain": 0, 
+              "time": 60, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Sense Life", 
+              "notes": "M45, cost 1/2 per yard radius, see M11", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Sleep", 
+              "notes": "M135", 
+              "maintain": 0, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Wizard Eye", 
+              "notes": "M104", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Animate Shadow", 
+              "notes": "M154, Subject's shadow attacks them, HT negates", 
+              "maintain": 4, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Death Touch", 
+              "notes": "M41, 1-3, needs touch", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Explosive Lightning", 
+              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
+              "maintain": 0, 
+              "time": null, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning", 
+              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Lightning Whip", 
+              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Madness", 
+              "notes": "M136, cost: 2-6", 
+              "maintain": 0, 
+              "time": 2, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Panic", 
+              "notes": "M134, vs. Will", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 4, 
+              "name": "Strike Blind", 
+              "notes": "M38, vs HT", 
+              "maintain": 2, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Stun", 
+              "notes": "M37, B420, vs. HT", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 5, 
+              "name": "Total Paralysis", 
+              "notes": "M40, cost: 2-6, duration 60", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 8, 
+              "name": "Agonize", 
+              "notes": "M40, HT negates", 
+              "maintain": 6, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 2, 
+              "name": "Blink", 
+              "notes": "M148", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": null, 
+              "name": "Great Ward", 
+              "notes": "M122, cost: 1/person (min:4), instant", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }, 
+            {
+              "cost": 3, 
+              "name": "Phase", 
+              "notes": "M83, avoid an attack", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 16
+            }
+          ], 
+          "opponent": null
+        }
+      }
+    }, 
     "Dima's Crew": {
       "monsters": {
         "5: Dmitry": {
@@ -1524,7 +3700,7 @@
         }
       }
     }, 
-    "First Battle of Persephone": {
+    "Battle of Persephone, Marshals Office": {
       "monsters": {
         "2 - Lovelie": {
           "aim": {
@@ -2371,6 +4547,7 @@
           "did_action_this_turn": false, 
           "weapon-index": null, 
           "timers": [], 
+          "opponent": null, 
           "spells": [
             {
               "cost": 1, 
@@ -2492,8 +4669,7 @@
               "time": 2, 
               "skill": 11
             }
-          ], 
-          "opponent": null
+          ]
         }, 
         "1 - foo": {
           "aim": {
@@ -2552,6 +4728,7 @@
           "did_action_this_turn": false, 
           "weapon-index": null, 
           "timers": [], 
+          "opponent": null, 
           "spells": [
             {
               "cost": 1, 
@@ -2673,8 +4850,7 @@
               "time": 2, 
               "skill": 11
             }
-          ], 
-          "opponent": null
+          ]
         }, 
         "2 - bar": {
           "aim": {
@@ -2733,6 +4909,7 @@
           "did_action_this_turn": false, 
           "weapon-index": null, 
           "timers": [], 
+          "opponent": null, 
           "spells": [
             {
               "cost": 1, 
@@ -2854,8 +5031,7 @@
               "time": 2, 
               "skill": 11
             }
-          ], 
-          "opponent": null
+          ]
         }
       }
     }, 
@@ -4620,7 +6796,7 @@
       }, 
       "advantages": {
         "G-Experience": 1, 
-        "Empathy": 15, 
+        "Alcohol Intolerance": -1, 
         "Honest Face": 1, 
         "Wealth": -10, 
         "Extra Hit Points": 2, 
@@ -4628,7 +6804,7 @@
         "Nosy": -1, 
         "Like knick knacks": -1, 
         "Vodou Practitioner": 15, 
-        "Alcohol Intolerance": -1, 
+        "Empathy": 15, 
         "Impulsiveness": -10, 
         "Cultural Familiarity (Teraformers)": 1, 
         "Short Attention Span": -10, 
