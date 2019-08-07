@@ -997,88 +997,6 @@ class OutfitCharactersGmWindow(GmWindow):
             self.__outfit_window.refresh()
 
 
-    '''
-    def show_character(self,
-                       character # dict: {'name': None, 'details': None}
-                      ):
-        self.__outfit_window.clear()
-        if character['name'] is None:
-            self.refresh()
-            return
-
-        line = 0
-        mode = curses.color_pair(GmWindowManager.GREEN_BLACK) | curses.A_BOLD
-        self.__outfit_window.addstr(line, 0, '%s' % character['name'], mode)
-        line += 1
-
-        if character['details'] is None:
-            self.refresh()
-            return
-
-        mode = curses.A_NORMAL 
-        self.__outfit_window.addstr(line, 0, 'Equipment', mode | curses.A_BOLD)
-        line += 1
-        found_stuff = False
-
-        armor_in_use, throw_away = character.get_current_armor()
-        weapon_in_use, throw_away = character.get_current_weapon()
-
-        # TODO: shouldn't this use the 'show' methods?
-        for item in sorted(character['details']['stuff'],
-                           key=lambda x: x['name']):
-            found_stuff = True
-
-            # TODO: equipment must have an object with a 'show me' method
-            #   that method would give weapon and armor details
-            if item is armor_in_use:
-                texts = ['%s (worn)' % item['name']]
-            elif item is weapon_in_use:
-                texts = ['%s (wielded)' % item['name']]
-            else:
-                texts = ['%s' % item['name']]
-
-            if 'count' in item and item['count'] != 1:
-                texts.append(' (%d)' % item['count'])
-
-            if ('notes' in item and item['notes'] is not None and
-                                                    (len(item['notes']) > 0)):
-                texts.append(': %s' % item['notes'])
-
-            self.__outfit_window.addstr(line, 0, '  %s' % ''.join(texts), mode)
-            line += 1
-            if item['owners'] is not None and len(item['owners']) > 0:
-                texts = ['Owners: ']
-                texts.append('%s' % '->'.join(item['owners']))
-                self.__outfit_window.addstr(line,
-                                            0,
-                                            '    %s' % ''.join(texts),
-                                            mode)
-                line += 1
-
-        if not found_stuff:
-            self.__outfit_window.addstr(line, 0, '  (Nothing)', mode)
-            line += 1
-
-        mode = curses.A_NORMAL 
-        self.__outfit_window.addstr(line, 0, 'Skills', mode | curses.A_BOLD)
-        line += 1
-        found_skill = False
-        for skill, value in character['details']['skills'].iteritems():
-            found_skill = True
-            self.__outfit_window.addstr(line,
-                                        0,
-                                        '  %s: %d' % (skill, value),
-                                        mode)
-            line += 1
-
-        if not found_skill:
-            self.__outfit_window.addstr(line, 0, '  (Nothing)', mode)
-            line += 1
-
-        self.refresh()
-    '''
-
-
     def touchwin(self):
         super(OutfitCharactersGmWindow, self).touchwin()
         if self.__outfit_window is not None:
@@ -2227,6 +2145,9 @@ class ThingsInFight(object):
     # Miscellaneous methods
     #
 
+    def end_fight(self):
+        pass
+
     def start_fight(self):
         pass
 
@@ -2371,6 +2292,12 @@ class Fighter(ThingsInFight):
         self.details['weapon-index'] = index
 
 
+    def end_fight(self):
+        self.timers.clear_all() # TODO: move this to ThingsInFight when
+                                #   timers get moved there.
+        self.details['weapon-index'] = None
+
+
     def get_current_armor(self):
         if 'armor-index' not in self.details:
             return None, None
@@ -2409,7 +2336,6 @@ class Fighter(ThingsInFight):
         item = self.equipment.remove(item_index)
         self.details['weapon-index'] = None
         self.details['armor-index'] = None
-        #self._window.show_character(self.__character)
         return item
 
 
@@ -2523,7 +2449,6 @@ class Fighter(ThingsInFight):
 
     def start_fight(self):
         # NOTE: we're allowing health to still be messed-up, here
-        self.details['weapon-index'] = None
         # NOTE: person may go around wearing armor -- no need to reset
         self.details['opponent'] = None
         self.start_turn()
@@ -6902,7 +6827,7 @@ class FightHandler(ScreenHandler):
         return True
 
 
-    def simply_save(self):
+    def simply_save(self, throw_away):
         self._saved_fight['saved'] = True
 
     #
@@ -7472,11 +7397,11 @@ class FightHandler(ScreenHandler):
                 ask_to_save = False
                 ask_to_loot = False
             else:
-                (result['doit'])()
+                (result['doit'])(None)
 
         if not self._saved_fight['saved']:
             for fighter in self.__fighters:
-                fighter.timers.clear_all()
+                fighter.end_fight()
 
         self._window.close()
         return False # Leave the fight
@@ -8031,6 +7956,35 @@ class MainHandler(ScreenHandler):
         self._window.command_ribbon(self._choices)
 
 
+    def __draw_weapon(self, throw_away):
+        fighter = self.__chars[self.__char_index]
+        weapon, throw_away = fighter.get_current_weapon()
+        weapon_index = None
+        if weapon is None:
+            weapon_menu = []
+            for index, item in enumerate(fighter.details['stuff']):
+                if (item['type'] == 'melee weapon' or 
+                        item['type'] == 'ranged weapon' or
+                        item['type'] == 'shield'):
+                    if weapon_index != index:
+                        weapon_menu.append((item['name'], index))
+            weapon_menu = sorted(weapon_menu, key=lambda x: x[0].upper())
+            if len(weapon_menu) == 1:
+                weapon_index = weapon_menu[0][1]
+            else:
+                weapon_index = self._window_manager.menu('Draw Which Weapon',
+                                                         weapon_menu)
+                if weapon_index is None:
+                    return
+
+        self.__ruleset.do_action(fighter,
+                                 {'name': 'draw-weapon',
+                                  'weapon-index': weapon_index
+                                 },
+                                 None)
+        self._draw_screen()
+
+
     def __equip(self):
         sub_menu = [('equipment (add)',     {'doit': self.__add_equipment}),
                     ('Equipment (remove)',  {'doit': self.__remove_equipment}),
@@ -8055,6 +8009,7 @@ class MainHandler(ScreenHandler):
         sub_menu.append(('Notes (short)',   {'doit': self.__short_notes}))
 
         sub_menu.append(('Don/doff armor',  {'doit': self.__don_armor}))
+        sub_menu.append(('Draw/drop weapon',{'doit': self.__draw_weapon}))
 
 
         self._window_manager.menu('Do what', sub_menu)
