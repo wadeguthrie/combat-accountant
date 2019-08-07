@@ -2260,6 +2260,7 @@ class Fighter(ThingsInFight):
                 return name
         return '<unknown>'
 
+
     #
     # Equipment related methods
     #
@@ -2825,6 +2826,24 @@ class Ruleset(object):
                                  'menu': use_menu}))
 
         return # No need to return action menu since it was a parameter
+
+
+    def get_sections_in_template(self):
+        '''
+        This returns an array of the Fighter section headings that are
+        expected (well, not _expected_ but any headings that aren't in this
+        list should probably not be there) to be in a template.
+        '''
+
+        return ['stuff']  # permanent is handled specially
+
+        # Transitory sections, not used in template:
+        #   armor-index, state, weapon-index, opponent
+        #
+        # Not part of template:
+        #   notes, short-notes, current, timers
+
+        return sections
 
 
     def heal_fighter(self,
@@ -4882,6 +4901,22 @@ class GurpsRuleset(Ruleset):
                                             GurpsRuleset.posture[posture])
 
 
+    def get_sections_in_template(self):
+        '''
+        This returns an array of the Fighter section headings that are
+        expected (well, not _expected_ but any headings that aren't in this
+        list should probably not be there) to be in a template.
+        '''
+        sections = ['skills', 'advantages', 'spells']
+        sections.extend(super(GurpsRuleset, self).get_sections_in_template())
+
+        # Transitory sections, not used in template:
+        #   aim, stunned, shock, posture, check_for_death,
+        #   did_action_this_turn,
+
+        return sections
+
+
     def get_to_hit(self,
                    fighter,     # Fighter object
                    opponent,    # Fighter object
@@ -5858,6 +5893,7 @@ class BuildFightHandler(ScreenHandler):
             ord('G'): {'name': 'existing group',  'func':
                                                     self.__existing_group},
             ord('t'): {'name': 'change template', 'func': self.__new_template},
+            ord('T'): {'name': 'make template',   'func': self.__make_template},
             ord('q'): {'name': 'quit',            'func': self.__quit},
         })
         self._window = self._window_manager.get_build_fight_gm_window()
@@ -6165,7 +6201,7 @@ class BuildFightHandler(ScreenHandler):
             name_to_delete = self.__new_char_name
 
         else:
-            name_to_delete, ignore_body = self.__name_n_body_from_index(
+            name_to_delete, ignore_body = self.__name_and_obj_from_index(
                                                         self.__viewing_index)
 
         if name_to_delete is None:
@@ -6324,15 +6360,15 @@ class BuildFightHandler(ScreenHandler):
         return None
 
 
-    def __name_n_body_from_index(self,
-                                 index, # index into self.__critters['obj']
-                                ):
+    def __name_and_obj_from_index(self,
+                                  index, # index into self.__critters['obj']
+                                 ):
         if index is None:
             return None, None
 
         fighter = self.__critters['obj'][index]
 
-        return fighter.name, fighter.details
+        return fighter.name, fighter
 
 
     def __new_group(self):
@@ -6396,6 +6432,70 @@ class BuildFightHandler(ScreenHandler):
 
         self._draw_screen()
 
+        return True # Keep going
+
+
+    def __make_template(self):
+        '''
+        Creates a template from a creature.  Puts it in the same section.
+        '''
+
+        # A little error checking
+
+        if self.__template_name is None:
+            self._window_manager.error(
+                ['You must select a template list to which to',
+                 'add this template.'])
+            return True # Keep going
+
+        if self.__viewing_index is None:
+            return True # Keep going
+
+        ignore_name, from_creature  = self.__name_and_obj_from_index(
+                                                        self.__viewing_index)
+        if from_creature.name == Fight.name:
+            self._window_manager.error(['Can\'t make a template from a room'])
+            return True # Keep going
+
+        # Get the name of the new template
+
+        lines, cols = self._window.getmaxyx()
+        keep_asking = True
+        template_name = None
+        while keep_asking:
+            template_name = self._window_manager.input_box(1,      # height
+                                                           cols-4, # width
+                                                           'New Template Name')
+            if template_name is None or len(template_name) == 0:
+                return True
+            elif (template_name in
+                    self.__world.details['Templates'][self.__template_name]):
+                self._window_manager.error(
+                    ['Template name "%s" already exists' % template_name])
+                keep_asking = True
+            else:
+                keep_asking = False
+
+        # Copy current creature into the template
+
+        to_creature = {}
+        allowable_section_names = self.__ruleset.get_sections_in_template()
+
+        for section_name, section_body in from_creature.details.iteritems():
+            if section_name == 'permanent':
+                to_creature['permanent'] = {}
+                for stat_name, stat_body in section_body.iteritems():
+                    to_creature['permanent'][stat_name] = {
+                                                    'type': 'value',
+                                                    'value': stat_body}
+            elif section_name in allowable_section_names:
+                to_creature[section_name] = {'type': 'value',
+                                             'value': section_body}
+            else:
+                pass # We're ignoring these
+
+        template_list = self.__world.details['Templates'][self.__template_name]
+        template_list[template_name] = to_creature
         return True # Keep going
 
 
