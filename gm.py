@@ -1018,13 +1018,24 @@ class OutfitCharactersGmWindow(GmWindow):
         self.__outfit_window.addstr(line, 0, 'Equipment', mode | curses.A_BOLD)
         line += 1
         found_stuff = False
+
+        armor_in_use, throw_away = character.get_current_armor()
+        weapon_in_use, throw_away = character.get_current_weapon()
+
+        # TODO: shouldn't this use the 'show' methods?
         for item in sorted(character['details']['stuff'],
                            key=lambda x: x['name']):
             found_stuff = True
 
             # TODO: equipment must have an object with a 'show me' method
             #   that method would give weapon and armor details
-            texts = ['%s' % item['name']]
+            if item is armor_in_use:
+                texts = ['%s (worn)' % item['name']]
+            elif item is weapon_in_use:
+                texts = ['%s (wielded)' % item['name']]
+            else:
+                texts = ['%s' % item['name']]
+
             if 'count' in item and item['count'] != 1:
                 texts.append(' (%d)' % item['count'])
 
@@ -7982,6 +7993,32 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
 
+    def __don_armor(self, throw_away):
+        fighter = self.__chars[self.__char_index]
+        armor = fighter.get_current_armor()
+        armor_index = None
+        if armor is None:
+            don_armor_menu = []
+            for index, item in enumerate(fighter.details['stuff']):
+                if item['type'] == 'armor':
+                    if armor_index != index:
+                        don_armor_menu.append((item['name'], index))
+            don_armor_menu = sorted(don_armor_menu, key=lambda x: x[0].upper())
+            if len(don_armor_menu) == 1:
+                armor_index
+            else:
+                armor_index = self._window_manager.menu('Don Which Armor',
+                                                        don_armor_menu)
+                if armor_index is None:
+                    return
+
+        self.__ruleset.do_action(fighter,
+                                 {'name': 'don-armor',
+                                  'armor-index': armor_index
+                                 },
+                                 None)
+
+
     def _draw_screen(self, inverse=False):
         self._window.clear()
         self._window.status_ribbon(self._input_filename,
@@ -8021,6 +8058,8 @@ class MainHandler(ScreenHandler):
         sub_menu.append(('Spell (remove)',  {'doit': self.__remove_spell}))
         sub_menu.append(('notes',           {'doit': self.__full_notes}))
         sub_menu.append(('Notes (short)',   {'doit': self.__short_notes}))
+
+        sub_menu.append(('Don/doff armor',  {'doit': self.__don_armor}))
 
 
         self._window_manager.menu('Do what', sub_menu)
@@ -8763,6 +8802,39 @@ class MyArgumentParser(argparse.ArgumentParser):
 
 def timeStamped(fname, ext, fmt='{fname}-%Y-%m-%d-%H-%M-%S.{ext}'):
     return datetime.datetime.now().strftime(fmt).format(fname=fname, ext=ext)
+
+
+def are_equal(self, lhs, rhs):
+    if isinstance(lhs, dict):
+        if not isinstance(rhs, dict):
+            return False
+        for key in rhs.iterkeys():
+            if key not in lhs:
+                return False
+        are_equal = True
+        for key in lhs.iterkeys():
+            if key not in rhs:
+                are_equal = False
+            elif not self.__are_equal(lhs[key], rhs[key]):
+                are_equal = False
+        return are_equal
+            
+    elif isinstance(lhs, list):
+        if not isinstance(rhs, list):
+            return False
+        if len(lhs) != len(rhs):
+            return False
+        are_equal = True
+        for i in range(len(lhs)):
+            if not self.__are_equal(lhs[i], rhs[i]):
+                are_equal = False
+        return are_equal
+
+    else:
+        if lhs != rhs:
+            return False
+        else:
+            return True
 
 # Main
 if __name__ == '__main__':
