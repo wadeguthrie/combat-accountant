@@ -6028,7 +6028,6 @@ class BuildFightHandler(ScreenHandler):
             creature_menu = [(from_creature_name, from_creature_name)
                 for from_creature_name in
                         self.__world.details['Templates'][self.__template_name]]
-
             creature_menu = sorted(creature_menu, key=lambda x: x[0].upper())
 
             from_creature_name = self._window_manager.menu('Monster',
@@ -7940,8 +7939,14 @@ class MainHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         fighter = self.__chars[self.__char_index]
-        self.__equipment_manager.add_equipment(fighter)
-        self._draw_screen()
+
+        keep_asking = True
+        keep_asking_menu = [('yes', True), ('no', False)]
+        while keep_asking:
+            self.__equipment_manager.add_equipment(fighter)
+            self._draw_screen()
+            keep_asking = self._window_manager.menu('Add More Equipment',
+                                                    keep_asking_menu)
         return True # Keep going
 
 
@@ -8145,31 +8150,56 @@ class MainHandler(ScreenHandler):
 
 
     def __equip(self):
-        sub_menu = [('equipment (add)',     {'doit': self.__add_equipment}),
-                    ('Equipment (remove)',  {'doit': self.__remove_equipment}),
-                    ('give equipment',      {'doit': self.__give_equipment}),
-                    # TODO: attributes - needs ruleset support
-                    ]
+        fighter = self.__chars[self.__char_index]
+
+        sub_menu = []
+        # TODO: modification of attributes - needs ruleset support
+        if 'stuff' in fighter.details:
+            sub_menu.extend([
+                ('equipment (add)',     {'doit': self.__add_equipment}),
+                ('Equipment (remove)',  {'doit': self.__remove_equipment}),
+                ('give equipment',      {'doit': self.__give_equipment}),
+            ])
 
         self.__ruleset_abilities = self.__ruleset.get_creature_abilities()
         for ability in self.__ruleset_abilities:
-            sub_menu.append(('%s (add)' % ability,
-                                            {'doit': self.__ruleset_ability,
-                                             'param': ability}))
-            sub_menu.append(('%s (remove)' % ability.capitalize(),
+            if ability in fighter.details:
+                sub_menu.extend([
+                    ('%s (add)' % ability, {'doit': self.__ruleset_ability,
+                                             'param': ability}),
+                    ('%s (remove)' % ability.capitalize(),
                                             {'doit': self.__ruleset_ability_rm,
-                                             'param': ability}))
+                                             'param': ability})
+                ])
 
         # Add these at the end since they're less likely to be used (I'm
         # guessing) than the abilities from the ruleset
-        sub_menu.append(('spell (add)',     {'doit': self.__add_spell}))
-        sub_menu.append(('Spell (remove)',  {'doit': self.__remove_spell}))
-        sub_menu.append(('notes',           {'doit': self.__full_notes}))
-        sub_menu.append(('Notes (short)',   {'doit': self.__short_notes}))
+        if 'spells' in fighter.details:
+            sub_menu.extend([
+                ('magic spell (add)',       {'doit': self.__add_spell}),
+                ('Magic spell (remove)',    {'doit': self.__remove_spell})
+            ])
 
-        sub_menu.append(('Don/doff armor',  {'doit': self.__don_armor}))
-        sub_menu.append(('Draw/drop weapon',{'doit': self.__draw_weapon}))
+        if 'notes' in fighter.details:
+            sub_menu.extend([
+                ('notes',           {'doit': self.__full_notes})
+            ])
 
+        if 'short-notes' in fighter.details:
+            sub_menu.extend([
+                ('Notes (short)',   {'doit': self.__short_notes})
+            ])
+
+
+        if 'armor-index' in fighter.details:
+            sub_menu.extend([
+                        ('Don/doff armor',  {'doit': self.__don_armor})
+            ])
+
+        if 'weapon-index' in fighter.details:
+            sub_menu.extend([
+                    ('Draw/drop weapon',    {'doit': self.__draw_weapon})
+            ])
 
         self._window_manager.menu('Do what', sub_menu)
 
@@ -8461,6 +8491,11 @@ class MainHandler(ScreenHandler):
                          ):
         fighter = self.__chars[self.__char_index]
 
+        if param not in fighter.details:
+            self._window_manager.error(['%s doesn\'t support' % (fighter.name,
+                                                                 param)])
+            return True
+
         #   { 
         #       'Skills':     { 'Axe/Mace': 8,      'Climbing': 8, },
         #       'Advantages': { 'Bad Tempter': -10, 'Nosy': -1, },
@@ -8478,13 +8513,6 @@ class MainHandler(ScreenHandler):
                                                           sorted(ability_menu))
             if new_ability is None:
                 return True
-
-            # There are a couple options, here: if this category of abilities
-            # isn't already in the character either a) ignore it or b) add it.
-            # We'll be permissive, here.
-
-            if param not in fighter.details:
-                fighter.details[param] = {}
 
             # The predicate will take one of several forms...
             # 'name': {'ask': 'number' | 'string' }
