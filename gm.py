@@ -15,29 +15,26 @@ import sys
 import traceback
 
 # TODO:
+#   - Need warning if trying to do something while doing a multi-round cast
+#   - Need spell duration
+#   - Need maintain spell
+#
+#   - add laser sights to weapons
+#   - Add playback of actions, like from: self._saved_fight['history']
+#   - need a test for each action (do_action)
+#   - Need equipment containers
+#
+# TODO (eventually):
 #   - should have some concept of time slots and activities that take up time
 #     slots.  Not sure if that'll require too much input (to give up the
 #     5-foot step slot in D&D if you don't use it).
-#
+#       * should warn when trying to do a second action (take note of fastdraw)
+#   - Multiple weapons
 #   - an item's type should be an array (so that a battle mech can be both
 #     armor and weapon.
-#
 #   - can't attack if reloading (stored in the weapon)
 #       weapon['ready-in'] -- if >0, can't use - reloading sets this, count
 #       down each round.  Timer?
-#
-#   - clone monster
-#   - need a test for each action (do_action)
-#   - Multiple weapons
-#   - Need equipment containers
-#   - Need maintain spell
-#   - add laser sights to weapons
-#   - should warn when trying to do a second action (take note of fastdraw)
-#   - Adding Skills/Advantages that already exist should just change the
-#     right-hand side, not add a second entry
-#   - Add playback of actions, like from: self._saved_fight['history']
-#
-# TODO (eventually):
 #   - Rules-specific equipment support
 #       o Equipping item should ask to add ammo for item
 #       o Equipping item should ask to add skills if they aren't there
@@ -2395,10 +2392,7 @@ class Fighter(ThingsInFight):
     #
 
     def can_finish_turn(self):
-        # RULESET: actions are ruleset-based.
-        if self.details['did_action_this_turn'] or not self.is_conscious():
-            return True
-        return False
+        return self._ruleset.can_finish_turn(self)
 
 
     def end_turn(self):
@@ -2421,17 +2415,6 @@ class Fighter(ThingsInFight):
 
     def is_absent(self):
         return True if self.details['state'] == 'absent' else False
-
-
-    def perform_action_this_turn(self):
-        # RULESET: actions are ruleset-based.
-        self.details['did_action_this_turn'] = True
-
-
-    def reset_aim(self):
-        # RULESET: do_aim is ruleset-based.
-        self.details['aim']['rounds'] = 0
-        self.details['aim']['braced'] = False
 
 
     def set_consciousness(self, conscious_number):
@@ -2564,6 +2547,13 @@ class Ruleset(object):
     #
     # Public Methods
     #
+
+
+    def can_finish_turn(self,
+                        fighter # Fighter object
+                       ):
+        return True
+
 
     def do_action(self,
                   fighter,      # Fighter object
@@ -3999,6 +3989,18 @@ class GurpsRuleset(Ruleset):
     # Public Methods
     #
 
+
+    def can_finish_turn(self,
+                        fighter # Fighter object
+                       ):
+        if fighter.details['did_action_this_turn']:
+            return True
+
+        if not fighter.is_conscious():
+            return True
+
+        return False
+
     def damage_to_string(self,
                          damages # list of dict -- returned by 'get_damage'
                         ):
@@ -4074,7 +4076,7 @@ class GurpsRuleset(Ruleset):
             handled = True # This is here just so that it's logged
 
         elif action['name'] == 'pick-opponent':
-            fighter.reset_aim()
+            self.reset_aim(fighter)
             handled = True
 
         elif action['name'] == 'stunned':
@@ -4084,7 +4086,7 @@ class GurpsRuleset(Ruleset):
             handled = True # This is here just so that it's logged
 
         if handled:
-            fighter.perform_action_this_turn()
+            fighter.details['did_action_this_turn'] = True
         else:
             self._window_manager.error(
                             ['action "%s" is not handled by any ruleset' %
@@ -5387,6 +5389,14 @@ class GurpsRuleset(Ruleset):
         return to_monster
 
 
+    def reset_aim(self,
+                  fighter # Fighter object
+                 ):
+        # Public to support testing
+        fighter.details['aim']['rounds'] = 0
+        fighter.details['aim']['braced'] = False
+
+
     def search_one_creature(self,
                             name,       # string containing the name
                             group,      # string containing the group
@@ -5431,7 +5441,7 @@ class GurpsRuleset(Ruleset):
         fighter.details['stunned'] = 0
         fighter.details['check_for_death'] = False
         fighter.details['posture'] = 'standing'
-        fighter.reset_aim()
+        self.reset_aim(fighter)
 
 
     def start_turn(self, fighter):
@@ -5627,7 +5637,7 @@ class GurpsRuleset(Ruleset):
                                             fighter.details['current']['wi']),
                 aim_menu)
             if not made_will_roll:
-                fighter.reset_aim()
+                self.reset_aim(fighter)
 
         super(GurpsRuleset, self)._adjust_hp(fighter, adj)
 
@@ -5688,7 +5698,7 @@ class GurpsRuleset(Ruleset):
         Returns: Nothing, return values for these functions are ignored.
         '''
         param['fighter'].details['posture'] = param['posture']
-        param['fighter'].reset_aim()
+        self.reset_aim(param['fighter'])
         return None if 'text' not in param else param
 
 
@@ -5739,7 +5749,7 @@ class GurpsRuleset(Ruleset):
         Returns: Nothing, return values for these functions are ignored.
         '''
         to_monster = super(GurpsRuleset, self)._do_attack(param)
-        param['fighter'].reset_aim()
+        self.reset_aim(param['fighter'])
         return
 
 
@@ -5750,7 +5760,7 @@ class GurpsRuleset(Ruleset):
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        param['fighter'].reset_aim()
+        self.reset_aim(param['fighter'])
         return None if 'text' not in param else param
 
 
@@ -5769,7 +5779,7 @@ class GurpsRuleset(Ruleset):
                                         reload_time,
                                         'RELOADING')
 
-            param['fighter'].reset_aim()
+            self.reset_aim(param['fighter'])
             return True
 
         return
@@ -5783,7 +5793,7 @@ class GurpsRuleset(Ruleset):
         Returns: Nothing, return values for these functions are ignored.
         '''
         super(GurpsRuleset, self)._draw_weapon(param)
-        param['fighter'].reset_aim()
+        self.reset_aim(param['fighter'])
         return
 
 
@@ -5797,8 +5807,6 @@ class GurpsRuleset(Ruleset):
         else:
             damage_type_str = '%s' % damage_type
         return damage_type_str
-
-
 
 
 class ScreenHandler(object):
@@ -8626,7 +8634,8 @@ class MainHandler(ScreenHandler):
         if not self._saved_fight['saved']:
             fight_name_menu = [(name, name)
                                        for name in self.__world.get_fights()]
-            # PP.pprint(fight_name_menu)
+            fight_name_menu = sorted(fight_name_menu,
+                                     key=lambda x: x[0].upper())
             monster_group = self._window_manager.menu('Fights',
                                                       fight_name_menu)
             if monster_group is None:
@@ -8802,6 +8811,7 @@ class MainHandler(ScreenHandler):
         if self.__current_display is None:
             group_menu = [(group_name, group_name)
                             for group_name in self.__world.get_fights()]
+            group_menu = sorted(group_menu, key=lambda x: x[0].upper())
             self.__current_display = self._window_manager.menu(
                                                     'Which Monster Group',
                                                     group_menu)

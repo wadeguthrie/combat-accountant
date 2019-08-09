@@ -4612,7 +4612,7 @@
               "notes": "M90", 
               "maintain": 0, 
               "time": 1, 
-              "skill": 12
+              "skill": 18
             }, 
             {
               "cost": 4, 
@@ -4620,7 +4620,7 @@
               "notes": "M48", 
               "maintain": 4, 
               "time": 4, 
-              "skill": 11
+              "skill": 18
             }, 
             {
               "cost": 3, 
@@ -4628,7 +4628,7 @@
               "notes": "M134", 
               "maintain": 2, 
               "time": 2, 
-              "skill": 11
+              "skill": 18
             }, 
             {
               "cost": 4, 
@@ -4636,7 +4636,7 @@
               "notes": "M173", 
               "maintain": 2, 
               "time": 3, 
-              "skill": 11
+              "skill": 18
             }, 
             {
               "cost": null, 
@@ -4644,7 +4644,7 @@
               "notes": "M134", 
               "maintain": null, 
               "time": 1, 
-              "skill": 11
+              "skill": 18
             }, 
             {
               "cost": null, 
@@ -4652,7 +4652,7 @@
               "notes": "M89", 
               "maintain": 0, 
               "time": 1, 
-              "skill": 12
+              "skill": 18
             }, 
             {
               "cost": null, 
@@ -4660,7 +4660,7 @@
               "notes": "M89", 
               "maintain": null, 
               "time": 1, 
-              "skill": 12
+              "skill": 18
             }, 
             {
               "cost": 2, 
@@ -4668,7 +4668,7 @@
               "notes": "V2", 
               "maintain": 1, 
               "time": 1, 
-              "skill": 11
+              "skill": 18
             }, 
             {
               "cost": null, 
@@ -4676,7 +4676,7 @@
               "notes": "M91", 
               "maintain": null, 
               "time": 1, 
-              "skill": 11
+              "skill": 18
             }, 
             {
               "cost": null, 
@@ -4684,7 +4684,7 @@
               "notes": "M91", 
               "maintain": null, 
               "time": 1, 
-              "skill": 12
+              "skill": 18
             }, 
             {
               "cost": null, 
@@ -4692,7 +4692,7 @@
               "notes": "M37", 
               "maintain": null, 
               "time": 1, 
-              "skill": 12
+              "skill": 18
             }, 
             {
               "cost": 15, 
@@ -4700,7 +4700,7 @@
               "notes": "M93", 
               "maintain": 0, 
               "time": 60, 
-              "skill": 11
+              "skill": 18
             }, 
             {
               "cost": null, 
@@ -4708,7 +4708,7 @@
               "notes": "M45, cost 1/2 per yard radius, see M11", 
               "maintain": null, 
               "time": 1, 
-              "skill": 12
+              "skill": 18
             }, 
             {
               "cost": 4, 
@@ -4716,7 +4716,7 @@
               "notes": "M135", 
               "maintain": 0, 
               "time": 3, 
-              "skill": 11
+              "skill": 18
             }, 
             {
               "cost": 4, 
@@ -4724,7 +4724,7 @@
               "notes": "M104", 
               "maintain": 2, 
               "time": 2, 
-              "skill": 11
+              "skill": 18
             }, 
             {
               "name": "Agonize", 
@@ -4732,7 +4732,7 @@
               "maintain": 6, 
               "cost": 8, 
               "time": 1, 
-              "skill": 12
+              "skill": 18
             }, 
             {
               "name": "Fear", 
@@ -4740,7 +4740,7 @@
               "maintain": null, 
               "cost": 1, 
               "time": 1, 
-              "skill": 12
+              "skill": 18
             }, 
             {
               "name": "Pain", 
@@ -4764,7 +4764,7 @@
               "maintain": 0, 
               "cost": 20, 
               "time": 300, 
-              "skill": 16
+              "skill": 18
             }, 
             {
               "name": "Mind-Sending", 
@@ -4772,7 +4772,7 @@
               "maintain": 4, 
               "cost": 4, 
               "time": 4, 
-              "skill": 12
+              "skill": 18
             }, 
             {
               "name": "Terror", 
@@ -4780,7 +4780,7 @@
               "maintain": 0, 
               "cost": 4, 
               "time": 1, 
-              "skill": 12
+              "skill": 18
             }, 
             {
               "name": "Wall Of Lightning", 
@@ -4796,7 +4796,7 @@
               "maintain": null, 
               "cost": 8, 
               "time": 60, 
-              "skill": 16
+              "skill": 18
             }
           ]
         }, 
