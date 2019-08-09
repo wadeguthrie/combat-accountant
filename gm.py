@@ -498,7 +498,8 @@ class MainGmWindow(GmWindow):
                                        current_index != line
                                     else curses.A_STANDOUT)
 
-            self.__char_list.append([{'text': char.name, 'mode': mode}])
+            self.__char_list.append([{'text': char.detailed_name,
+                                      'mode': mode}])
 
         self.__char_list_window.draw_window()
         self.refresh()
@@ -612,7 +613,8 @@ class BuildFightGmWindow(GmWindow):
                     mode |= curses.A_REVERSE
                     highlighted_creature = char
 
-            self.__char_list.append([{'text': char.name, 'mode': mode}])
+            self.__char_list.append([{'text': char.detailed_name,
+                                      'mode': mode}])
 
         # ...and show the screen
 
@@ -6311,6 +6313,8 @@ class BuildFightHandler(ScreenHandler):
         if creature_type == BuildFightHandler.MONSTERs:
             group_menu = [(group_name, group_name)
                             for group_name in self.__world.get_fights()]
+            # TODO: put sort in 'menu'
+            group_menu = sorted(group_menu, key=lambda x: x[0].upper())
             group_answer = self._window_manager.menu('To Which Group',
                                                      group_menu)
 
@@ -6614,7 +6618,7 @@ class FightHandler(ScreenHandler):
         self.__equipment_manager = EquipmentManager(world,
                                                     self._window_manager)
 
-        # RULESET: 'h' and 'f' belong in Ruleset
+        # RULESET: 'f' belongs in Ruleset
         self._add_to_choice_dict({
             curses.KEY_UP:
                       {'name': 'prev character',
@@ -8815,9 +8819,6 @@ class MainHandler(ScreenHandler):
             self.__current_display = self._window_manager.menu(
                                                     'Which Monster Group',
                                                     group_menu)
-
-
-
         else:
             self.__current_display = None
 
