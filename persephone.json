@@ -4588,9 +4588,9 @@
             "basic-speed": 8.25
           }, 
           "advantages": {
-            "Affliction (Vomiting Blood, Others; vs. HT-2; Stunned)": 20, 
+            "Affliction (B35; Others Vomit Blood; vs HT-2; Stunned)": 20, 
             "Empathy": 5, 
-            "Innate Attack (Immolation, 3d damage)": 20, 
+            "Innate Attack (B61; Immolation; 3d damage)": 20, 
             "Cannot Harm Innocents": -5, 
             "High Pain Threshold": 10, 
             "Night Vision 5": 5, 
@@ -4598,7 +4598,7 @@
             "Immunity to Mind-Affecting Magic": 30, 
             "Vodou Practitioner (Lwa 5)": 140, 
             "Combat Reflexes": 15, 
-            "DR 5": 25
+            "Damage Resistance": 25
           }, 
           "opponent": null, 
           "weapon-index": null, 

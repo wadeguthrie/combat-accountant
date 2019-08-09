@@ -2759,6 +2759,8 @@ class Ruleset(object):
             draw_weapon_menu = sorted(draw_weapon_menu,
                                       key=lambda x: x[0].upper())
 
+            #PP.pprint(draw_weapon_menu) # TODO: remove
+
             # Draw menu
 
             if len(draw_weapon_menu) == 1:
@@ -2770,7 +2772,7 @@ class Ruleset(object):
                                ' Move: step'],
                       'action': {'name': 'draw-weapon',
                                  'weapon-index': 
-                                    draw_weapon_menu[0][1]['param']['weapon']}
+                            draw_weapon_menu[0][1]['action']['weapon-index']}
                      }))
 
             elif len(draw_weapon_menu) > 1:
@@ -2815,7 +2817,8 @@ class Ruleset(object):
                            ' Defense: (depends)',
                            ' Move: (depends)'],
                   'action': {'name':       'use-item',
-                             'item-index': use_menu[0][1]['param']['item']}
+                             'item-index':
+                                use_menu[0][1]['action']['item-index']}
                  }))
 
         elif len(use_menu) > 1:
@@ -4738,11 +4741,26 @@ class GurpsRuleset(Ruleset):
 
         # Armor
 
+
+        dr = 0
+        dr_text_array = []
         armor, armor_index = fighter.get_current_armor()
         if armor is not None:
-            notes.append('Armor: "%s", DR: %d' % (armor['name'], armor['dr']))
-            if 'notes' in armor and len(armor['notes']) != 0:
-                why.append('Armor: "%s", DR: %d' % (armor['name'], armor['dr']))
+            dr += armor['dr']
+            dr_text_array.append(armor['name'])
+
+        if 'Damage Resistance' in fighter.details['advantages']:
+            # GURPS rules, B46, 5 points per level of DR advantage
+            dr += (fighter.details['advantages']['Damage Resistance']/5)
+            dr_text_array.append('DR Advantage')
+
+        dr_text = ' + '.join(dr_text_array)
+
+        if dr > 0:
+            notes.append('Armor: "%s", DR: %d' % (dr_text, dr))
+            why.append('Armor: "%s", DR: %d' % (dr_text, dr))
+            if (armor is not None and 'notes' in armor and
+                                                    len(armor['notes']) != 0):
                 why.append('  %s' % armor['notes'])
 
 
@@ -5492,14 +5510,25 @@ class GurpsRuleset(Ruleset):
                            ]
 
             # Adjust for armor
+            dr = 0
+            dr_text_array = []
             use_armor = False
             armor, armor_index = fighter.get_current_armor()
             if armor is not None:
+                dr += armor['dr']
+                dr_text_array.append(armor['name'])
+
+            if 'Damage Resistance' in fighter.details['advantages']:
+                # GURPS rules, B46, 5 points per level of DR advantage
+                dr += (fighter.details['advantages']['Damage Resistance']/5)
+                dr_text_array.append('DR Advantage')
+
+            if dr != 0:
                 use_armor_menu = [('yes', True), ('no', False)]
                 use_armor = self._window_manager.menu('Use Armor\'s DR?',
                                                                 use_armor_menu)
             if use_armor:
-                if armor['dr'] >= -adj:
+                if dr >= -adj:
                     window_text = [
                         [{'text': 'The armor absorbed all the damage',
                           'mode': curses.A_NORMAL}]
@@ -5510,18 +5539,20 @@ class GurpsRuleset(Ruleset):
                     return
 
                 original_adj = adj
-                adj += armor['dr']
+                adj += dr
+                dr_text = '; '.join(dr_text_array)
                 window_text.append([{'text':'', 'mode': curses.A_NORMAL}])
                 window_text.append(
-                    [{'text': ('%s was wearing %s (dr:%d)' % (fighter.name,
-                                                              armor['name'],
-                                                              armor['dr'])),
+                    [{'text': ('%s was wearing %s (total dr:%d)' % (
+                                                              fighter.name,
+                                                              dr_text,
+                                                              dr)),
                       'mode': curses.A_NORMAL}]
                                   )
                 window_text.append(
                     [{'text': ('so adj(%d) - dr(%d) = damage (%d)' % (
                                                               -original_adj,
-                                                              armor['dr'],
+                                                              dr,
                                                               -adj)),
                       'mode': curses.A_NORMAL}]
                                   )
@@ -7059,7 +7090,6 @@ class FightHandler(ScreenHandler):
                 hp_recipient = current_fighter
             else:
                 hp_recipient = opponent
-
 
         # Reduce the HP
 
