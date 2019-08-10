@@ -27,13 +27,17 @@
             "type": "value", 
             "value": 11
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 10
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -50,10 +54,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 12
           }
         }, 
         "advantages": {
@@ -243,13 +243,17 @@
             "type": "value", 
             "value": 16
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 16
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -266,10 +270,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 6.25
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 12
           }
         }, 
         "timers": {
@@ -298,11 +298,15 @@
             "type": "value", 
             "value": 10
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 10
           }, 
           "st": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "wi": {
             "type": "value", 
             "value": 10
           }, 
@@ -321,10 +325,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 10
           }
         }, 
         "timers": {
@@ -354,13 +354,17 @@
             "type": "value", 
             "value": 10
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 10
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -377,10 +381,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.25
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 12
           }
         }, 
         "timers": {
@@ -651,13 +651,17 @@
             "type": "value", 
             "value": 11
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 10
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -674,10 +678,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 12
           }
         }, 
         "advantages": {
@@ -755,13 +755,17 @@
             "type": "value", 
             "value": 12
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 10
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -778,10 +782,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 12
           }
         }, 
         "timers": {
@@ -840,13 +840,17 @@
             "type": "value", 
             "value": 16
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
-            "value": 10
+            "value": 8
           }, 
           "st": {
             "type": "value", 
             "value": 12
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 10
           }, 
           "ht": {
             "type": "value", 
@@ -863,10 +867,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.0
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 8
           }
         }, 
         "timers": {
@@ -896,13 +896,17 @@
             "type": "value", 
             "value": 10
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 13
           }, 
           "st": {
             "type": "value", 
             "value": 10
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 13
           }, 
           "ht": {
             "type": "value", 
@@ -919,10 +923,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.5
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 13
           }
         }, 
         "timers": {
@@ -934,6 +934,60 @@
         "skills": {
           "type": "value", 
           "value": {}
+        }, 
+        "permanent": {
+          "fp": {
+            "type": "value", 
+            "value": 30
+          }, 
+          "iq": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "hp": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "st": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "ht": {
+            "type": "value", 
+            "value": 11
+          }, 
+          "dx": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "basic-move": {
+            "type": "value", 
+            "value": 5
+          }, 
+          "basic-speed": {
+            "type": "value", 
+            "value": 5.25
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 12
+          }
+        }, 
+        "stuff": {
+          "type": "value", 
+          "value": []
+        }, 
+        "advantages": {
+          "type": "value", 
+          "value": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }
         }, 
         "spells": {
           "type": "value", 
@@ -1171,60 +1225,6 @@
               "skill": 16
             }
           ]
-        }, 
-        "permanent": {
-          "fp": {
-            "type": "value", 
-            "value": 30
-          }, 
-          "iq": {
-            "type": "value", 
-            "value": 12
-          }, 
-          "hp": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 12
-          }, 
-          "st": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "wi": {
-            "type": "value", 
-            "value": 12
-          }, 
-          "ht": {
-            "type": "value", 
-            "value": 11
-          }, 
-          "dx": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "basic-move": {
-            "type": "value", 
-            "value": 5
-          }, 
-          "basic-speed": {
-            "type": "value", 
-            "value": 5.25
-          }
-        }, 
-        "advantages": {
-          "type": "value", 
-          "value": {
-            "Empathy": 5, 
-            "Vodou Practitioner (Mambo 2)": 35, 
-            "Lwa (Mambo, Erzulie Freda)": 6
-          }
-        }, 
-        "stuff": {
-          "type": "value", 
-          "value": []
         }
       }, 
       "bad guy: low level": {
@@ -1253,13 +1253,17 @@
             "type": "value", 
             "value": 12
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 8
           }, 
           "st": {
             "type": "value", 
             "value": 12
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 8
           }, 
           "ht": {
             "type": "value", 
@@ -1276,10 +1280,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 4.75
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 8
           }
         }, 
         "advantages": {
@@ -1431,13 +1431,17 @@
             "type": "value", 
             "value": 15
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 9
           }, 
           "st": {
             "type": "value", 
             "value": 15
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 9
           }, 
           "ht": {
             "type": "value", 
@@ -1454,10 +1458,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.25
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 9
           }
         }, 
         "timers": {
@@ -1484,9 +1484,26 @@
             "braced": false, 
             "rounds": 0
           }, 
-          "stuff": [], 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Whip (Lightning)", 
+              "notes": "M196, B406; spell-made; HT @-1/2pts. or stunned", 
+              "damage": {
+                "sw": {
+                  "plus": 0, 
+                  "type": "burn"
+                }
+              }, 
+              "skill": "Whip", 
+              "type": "melee weapon"
+            }
+          ], 
           "stunned": 0, 
-          "skills": {}, 
+          "skills": {
+            "Whip": 15
+          }, 
           "notes": [
             "origin: haitian", 
             "gender: male", 
@@ -1500,30 +1517,31 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
+          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
-            "dx": 10, 
+            "wi": 12, 
+            "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "posture": "standing", 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
-            "dx": 10, 
+            "wi": 12, 
+            "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
@@ -1532,11 +1550,10 @@
             "Vodou Practitioner (Mambo 2)": 35, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "opponent": null, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
           "did_action_this_turn": false, 
+          "weapon-index": null, 
+          "timers": [], 
+          "opponent": null, 
           "spells": [
             {
               "cost": 1, 
@@ -1777,9 +1794,26 @@
             "braced": false, 
             "rounds": 0
           }, 
-          "stuff": [], 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Whip (Lightning)", 
+              "notes": "M196, B406; spell-made; HT @-1/2pts. or stunned", 
+              "damage": {
+                "sw": {
+                  "plus": 0, 
+                  "type": "burn"
+                }
+              }, 
+              "skill": "Whip", 
+              "type": "melee weapon"
+            }
+          ], 
           "stunned": 0, 
-          "skills": {}, 
+          "skills": {
+            "Whip": 15
+          }, 
           "notes": [
             "origin: haitian", 
             "gender: male", 
@@ -1793,30 +1827,31 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
+          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
-            "dx": 10, 
+            "wi": 12, 
+            "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "posture": "standing", 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
-            "dx": 10, 
+            "wi": 12, 
+            "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
@@ -1825,11 +1860,10 @@
             "Vodou Practitioner (Mambo 2)": 35, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "opponent": null, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
           "did_action_this_turn": false, 
+          "weapon-index": null, 
+          "timers": [], 
+          "opponent": null, 
           "spells": [
             {
               "cost": 1, 
@@ -2086,29 +2120,30 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
+          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "posture": "standing", 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -2118,11 +2153,10 @@
             "Vodou Practitioner (Mambo 2)": 35, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "opponent": null, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
           "did_action_this_turn": false, 
+          "weapon-index": null, 
+          "timers": [], 
+          "opponent": null, 
           "spells": [
             {
               "cost": 1, 
@@ -2379,30 +2413,29 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "check_for_death": false, 
+          "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -2412,10 +2445,11 @@
             "Vodou Practitioner (Mambo 2)": 35, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "did_action_this_turn": false, 
-          "weapon-index": null, 
-          "timers": [], 
           "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
           "spells": [
             {
               "cost": 1, 
@@ -2672,29 +2706,30 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
+          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "posture": "standing", 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -2704,11 +2739,10 @@
             "Vodou Practitioner (Mambo 2)": 35, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "opponent": null, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
           "did_action_this_turn": false, 
+          "weapon-index": null, 
+          "timers": [], 
+          "opponent": null, 
           "spells": [
             {
               "cost": 1, 
@@ -2965,29 +2999,30 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
+          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "posture": "standing", 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -2997,11 +3032,10 @@
             "Vodou Practitioner (Mambo 2)": 35, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "opponent": null, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
           "did_action_this_turn": false, 
+          "weapon-index": null, 
+          "timers": [], 
+          "opponent": null, 
           "spells": [
             {
               "cost": 1, 
@@ -3266,25 +3300,25 @@
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "wi": 11, 
+            "per": 11, 
             "st": 12, 
+            "wi": 11, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
+            "basic-speed": 5.75
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "wi": 11, 
+            "per": 11, 
             "st": 12, 
+            "wi": 11, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "stuff": [
@@ -3348,14 +3382,14 @@
             }
           ], 
           "timers": [], 
-          "did_action_this_turn": false, 
           "weapon-index": null, 
+          "did_action_this_turn": false, 
+          "check_for_death": false, 
           "advantages": {
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
           "posture": "standing", 
-          "check_for_death": false, 
           "opponent": null
         }, 
         "4: Andre": {
@@ -3379,25 +3413,25 @@
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "wi": 11, 
+            "per": 11, 
             "st": 12, 
+            "wi": 11, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
+            "basic-speed": 5.75
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "wi": 11, 
+            "per": 11, 
             "st": 12, 
+            "wi": 11, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "stuff": [
@@ -3461,14 +3495,14 @@
             }
           ], 
           "timers": [], 
-          "did_action_this_turn": false, 
           "weapon-index": null, 
+          "did_action_this_turn": false, 
+          "check_for_death": false, 
           "advantages": {
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
           "posture": "standing", 
-          "check_for_death": false, 
           "opponent": null
         }, 
         "Dima - Bratva": {
@@ -3494,25 +3528,25 @@
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "wi": 11, 
+            "per": 11, 
             "st": 12, 
+            "wi": 11, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
+            "basic-speed": 5.75
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "wi": 11, 
+            "per": 11, 
             "st": 12, 
+            "wi": 11, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "stuff": [
@@ -3576,14 +3610,14 @@
             }
           ], 
           "timers": [], 
-          "did_action_this_turn": false, 
           "weapon-index": null, 
+          "did_action_this_turn": false, 
+          "check_for_death": false, 
           "advantages": {
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
           "posture": "standing", 
-          "check_for_death": false, 
           "opponent": null
         }, 
         "2: Nikita": {
@@ -3606,25 +3640,25 @@
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "wi": 11, 
+            "per": 11, 
             "st": 12, 
+            "wi": 11, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
+            "basic-speed": 5.75
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "wi": 11, 
+            "per": 11, 
             "st": 12, 
+            "wi": 11, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "stuff": [
@@ -3688,14 +3722,14 @@
             }
           ], 
           "timers": [], 
-          "did_action_this_turn": false, 
           "weapon-index": null, 
+          "did_action_this_turn": false, 
+          "check_for_death": false, 
           "advantages": {
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
           "posture": "standing", 
-          "check_for_death": false, 
           "opponent": null
         }
       }
@@ -3728,30 +3762,29 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "check_for_death": false, 
+          "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -3763,10 +3796,11 @@
             "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "did_action_this_turn": false, 
-          "weapon-index": null, 
-          "timers": [], 
           "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
           "spells": [
             {
               "cost": 1, 
@@ -3909,30 +3943,29 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "check_for_death": false, 
+          "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -3944,10 +3977,11 @@
             "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "did_action_this_turn": false, 
-          "weapon-index": null, 
-          "timers": [], 
           "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
           "spells": [
             {
               "cost": 1, 
@@ -4090,30 +4124,29 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "check_for_death": false, 
+          "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -4125,10 +4158,11 @@
             "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "did_action_this_turn": false, 
-          "weapon-index": null, 
-          "timers": [], 
           "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
           "spells": [
             {
               "cost": 1, 
@@ -4258,22 +4292,18 @@
       "stuff": [], 
       "timers": [], 
       "monsters": {
-        "4 - Lovelie": {
-          "stunned": 0, 
-          "did_action_this_turn": false, 
-          "short-notes": [], 
-          "advantages": {
-            "Empathy": 5, 
-            "Vodou Practitioner (Mambo 2)": 35, 
-            "Lwa (Mambo, Erzulie Freda)": 6
-          }, 
-          "weapon-index": null, 
-          "posture": "standing", 
+        "<< ROOM >>": {
+          "notes": [], 
+          "stuff": [], 
+          "timers": []
+        }, 
+        "2 - Lovelie - Summoner": {
           "aim": {
             "braced": false, 
             "rounds": 0
           }, 
           "stuff": [], 
+          "stunned": 0, 
           "skills": {}, 
           "notes": [
             "station history: staby (born on this station)", 
@@ -4285,34 +4315,43 @@
             "personality: Harsh"
           ], 
           "shock": 0, 
+          "short-notes": [], 
+          "posture": "standing", 
           "armor-index": null, 
           "current": {
-            "fp": 30, 
-            "ht": 11, 
+            "fp": 10, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "did_action_this_turn": false, 
+          "weapon-index": null, 
           "timers": [], 
-          "check_for_death": false, 
           "spells": [
             {
               "cost": 1, 
@@ -4549,12 +4588,7 @@
           ], 
           "opponent": null
         }, 
-        "<< ROOM >>": {
-          "notes": [], 
-          "stuff": [], 
-          "timers": []
-        }, 
-        "3 - Erzulie Dantor - Lwa": {
+        "1 - Erzulie Dantor - Lwa": {
           "aim": {
             "braced": false, 
             "rounds": 0
@@ -4600,30 +4634,29 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 70, 
+            "ht": 18, 
             "iq": 17, 
             "hp": 25, 
-            "ht": 18, 
+            "wi": 18, 
             "st": 25, 
             "per": 17, 
-            "wi": 18, 
             "dx": 15, 
             "basic-move": 8, 
             "basic-speed": 8.25
           }, 
-          "check_for_death": false, 
+          "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 70, 
+            "ht": 18, 
             "iq": 17, 
             "hp": 25, 
-            "ht": 18, 
+            "wi": 18, 
             "st": 25, 
             "per": 17, 
-            "wi": 18, 
             "dx": 15, 
             "basic-move": 8, 
             "basic-speed": 8.25
@@ -4641,10 +4674,11 @@
             "Vodou Practitioner (Lwa 5)": 140, 
             "Combat Reflexes": 15
           }, 
-          "did_action_this_turn": false, 
-          "weapon-index": null, 
-          "timers": [], 
           "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
           "spells": [
             {
               "cost": 1, 
@@ -4840,22 +4874,13 @@
             }
           ]
         }, 
-        "5 - Judaline": {
-          "stunned": 0, 
-          "did_action_this_turn": false, 
-          "short-notes": [], 
-          "advantages": {
-            "Empathy": 5, 
-            "Vodou Practitioner (Mambo 2)": 35, 
-            "Lwa (Mambo, Erzulie Freda)": 6
-          }, 
-          "weapon-index": null, 
-          "posture": "standing", 
+        "3 - Judaline": {
           "aim": {
             "braced": false, 
             "rounds": 0
           }, 
           "stuff": [], 
+          "stunned": 0, 
           "skills": {}, 
           "notes": [
             "station history: lifer (born on Earth, this is 1st station)", 
@@ -4867,34 +4892,43 @@
             "personality: Wanton"
           ], 
           "shock": 0, 
+          "short-notes": [], 
+          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "did_action_this_turn": false, 
+          "weapon-index": null, 
           "timers": [], 
-          "check_for_death": false, 
           "spells": [
             {
               "cost": 1, 
@@ -5129,851 +5163,6 @@
               "skill": 16
             }
           ], 
-          "opponent": null
-        }
-      }
-    }, 
-    "Baz for Sphere": {
-      "monsters": {
-        "3 - Joseph - Mambo/Medic": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 1, 
-              "count": 1, 
-              "owners": [
-                "the store"
-              ], 
-              "name": "zip tazer, nice", 
-              "notes": "hand built", 
-              "damage": {
-                "dice": {
-                  "type": "fp", 
-                  "num_dice": 1, 
-                  "plus": 3
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Guns (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "Zip Clip", 
-                "shots": 6, 
-                "shots_left": 6
-              }
-            }, 
-            {
-              "count": 2, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": [
-                "the store"
-              ], 
-              "name": "Zip Clip"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Tonfa", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "type": "cr", 
-                  "plus": 0
-                }, 
-                "thr": {
-                  "type": "cr", 
-                  "plus": 1
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Tonfa", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 2, 
-              "notes": "1d for HT+1d hrs unless other healing", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Patch: light heal"
-            }, 
-            {
-              "count": 2, 
-              "notes": "unconscious but not dead for HT+1d hrs unless other healing", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Patch: stabilize"
-            }, 
-            {
-              "count": 1, 
-              "notes": "M91, cost eR3570", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Fingerbone of major heal (8)"
-            }, 
-            {
-              "count": 1, 
-              "notes": "M91, cost eR?", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "Fingerbone of minor heal (4)"
-            }
-          ], 
-          "stunned": 0, 
-          "skills": {
-            "Guns (Pistol)": 11, 
-            "Physician": 14, 
-            "Brawling": 11, 
-            "Tonfa": 11
-          }, 
-          "notes": [
-            "origin: haitian", 
-            "gender: male", 
-            "station history: staby (born on this station)", 
-            "characteristics: Talks about self in third-person", 
-            "instincts: To explore a mysterious place", 
-            "hair: Streaked", 
-            "speech: Jovial / booming", 
-            "knack: A plan for the perfect crime", 
-            "personality: Stingy"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "posture": "standing", 
-          "armor-index": null, 
-          "current": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 10, 
-            "ht": 11, 
-            "st": 10, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "check_for_death": false, 
-          "state": "alive", 
-          "permanent": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 10, 
-            "ht": 11, 
-            "st": 10, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "advantages": {
-            "Empathy": 5, 
-            "Vodou Practitioner (Mambo 2)": 35, 
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10, 
-            "Lwa (Mambo, Erzulie Freda)": 6
-          }, 
-          "did_action_this_turn": false, 
-          "weapon-index": null, 
-          "timers": [], 
-          "opponent": null, 
-          "spells": [
-            {
-              "cost": 1, 
-              "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
-              "skill": 12
-            }, 
-            {
-              "cost": 4, 
-              "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
-              "skill": 11
-            }, 
-            {
-              "cost": 3, 
-              "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
-              "skill": 11
-            }, 
-            {
-              "cost": 4, 
-              "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
-              "skill": 11
-            }, 
-            {
-              "cost": null, 
-              "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
-              "skill": 11
-            }, 
-            {
-              "cost": null, 
-              "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
-              "skill": 12
-            }, 
-            {
-              "cost": null, 
-              "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
-              "skill": 12
-            }, 
-            {
-              "cost": 2, 
-              "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
-              "skill": 11
-            }, 
-            {
-              "cost": null, 
-              "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
-              "skill": 11
-            }, 
-            {
-              "cost": null, 
-              "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
-              "skill": 12
-            }, 
-            {
-              "cost": null, 
-              "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
-              "skill": 12
-            }, 
-            {
-              "cost": 15, 
-              "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
-              "skill": 11
-            }, 
-            {
-              "cost": null, 
-              "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
-              "skill": 12
-            }, 
-            {
-              "cost": 4, 
-              "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
-              "skill": 11
-            }, 
-            {
-              "cost": 4, 
-              "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
-              "skill": 11
-            }
-          ]
-        }, 
-        "5 - Watson": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "count": 2, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": [], 
-              "name": "Zip Clip"
-            }, 
-            {
-              "acc": 1, 
-              "count": 1, 
-              "owners": [
-                "the store"
-              ], 
-              "name": "zip tazer, nice", 
-              "notes": "hand built", 
-              "damage": {
-                "dice": {
-                  "type": "fp", 
-                  "num_dice": 1, 
-                  "plus": 3
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Guns (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "Zip Clip", 
-                "shots": 6, 
-                "shots_left": 6
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Tonfa", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "type": "cr", 
-                  "plus": 0
-                }, 
-                "thr": {
-                  "type": "cr", 
-                  "plus": 1
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Tonfa", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }
-          ], 
-          "stunned": 0, 
-          "skills": {
-            "Guns (Pistol)": 15, 
-            "Brawling": 15, 
-            "Tonfa": 15
-          }, 
-          "notes": [
-            "origin: haitian", 
-            "gender: male", 
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Perfumed", 
-            "instincts: To prove a point", 
-            "hair: Wavy", 
-            "speech: Monotone", 
-            "knack: A plan for the perfect crime", 
-            "personality: Reserved"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": null, 
-          "current": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "ht": 11, 
-            "st": 10, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75
-          }, 
-          "posture": "standing", 
-          "state": "alive", 
-          "permanent": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "ht": 11, 
-            "st": 10, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75
-          }, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
-          "did_action_this_turn": false, 
-          "opponent": null
-        }, 
-        "2 - James": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 1, 
-              "count": 1, 
-              "owners": [
-                "the store"
-              ], 
-              "name": "zip tazer, nice", 
-              "notes": "hand built", 
-              "damage": {
-                "dice": {
-                  "type": "fp", 
-                  "num_dice": 1, 
-                  "plus": 3
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Guns (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "Zip Clip", 
-                "shots": 6, 
-                "shots_left": 6
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Tonfa", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "type": "cr", 
-                  "plus": 0
-                }, 
-                "thr": {
-                  "type": "cr", 
-                  "plus": 1
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Tonfa", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 2, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": [], 
-              "name": "Zip Clip"
-            }
-          ], 
-          "stunned": 0, 
-          "skills": {
-            "Guns (Pistol)": 15, 
-            "Brawling": 15, 
-            "Tonfa": 15
-          }, 
-          "notes": [
-            "origin: haitian", 
-            "gender: female", 
-            "station history: staby (born on this station)", 
-            "characteristics: Swears profusely", 
-            "instincts: To destroy an artifact", 
-            "hair: Thick", 
-            "speech: Trails-off", 
-            "knack: A way with knots", 
-            "personality: Likable"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": null, 
-          "current": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "ht": 11, 
-            "st": 10, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 6
-          }, 
-          "posture": "standing", 
-          "state": "alive", 
-          "permanent": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "ht": 11, 
-            "st": 10, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 6
-          }, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
-          "did_action_this_turn": false, 
-          "opponent": null
-        }, 
-        "6 - Mirlande - Leader": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "count": 2, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": [], 
-              "name": "Zip Clip"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Tonfa", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "type": "cr", 
-                  "plus": 0
-                }, 
-                "thr": {
-                  "type": "cr", 
-                  "plus": 1
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Tonfa", 
-              "type": "melee weapon"
-            }, 
-            {
-              "acc": 1, 
-              "count": 1, 
-              "owners": [
-                "the store"
-              ], 
-              "name": "zip tazer, nice", 
-              "notes": "hand built", 
-              "damage": {
-                "dice": {
-                  "type": "fp", 
-                  "num_dice": 1, 
-                  "plus": 3
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Guns (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "Zip Clip", 
-                "shots": 6, 
-                "shots_left": 6
-              }
-            }
-          ], 
-          "stunned": 0, 
-          "skills": {
-            "Guns (Pistol)": 15, 
-            "Brawling": 15, 
-            "Tonfa": 15
-          }, 
-          "notes": [
-            "origin: haitian", 
-            "gender: male", 
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Warts", 
-            "instincts: To become a terror to criminals", 
-            "hair: Curly", 
-            "speech: Breathless", 
-            "knack: Brewing", 
-            "personality: Elitist"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": null, 
-          "current": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "ht": 11, 
-            "st": 10, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 6
-          }, 
-          "posture": "standing", 
-          "state": "alive", 
-          "permanent": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "ht": 11, 
-            "st": 10, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 6
-          }, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
-          "did_action_this_turn": false, 
-          "opponent": null
-        }, 
-        "1 - Nephtalie": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "count": 2, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": [], 
-              "name": "Zip Clip"
-            }, 
-            {
-              "acc": 1, 
-              "count": 1, 
-              "owners": [
-                "the store"
-              ], 
-              "name": "zip tazer, nice", 
-              "notes": "hand built", 
-              "damage": {
-                "dice": {
-                  "type": "fp", 
-                  "num_dice": 1, 
-                  "plus": 3
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Guns (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "Zip Clip", 
-                "shots": 6, 
-                "shots_left": 6
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Tonfa", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "type": "cr", 
-                  "plus": 0
-                }, 
-                "thr": {
-                  "type": "cr", 
-                  "plus": 1
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Tonfa", 
-              "type": "melee weapon"
-            }
-          ], 
-          "stunned": 0, 
-          "skills": {
-            "Guns (Pistol)": 15, 
-            "Brawling": 15, 
-            "Tonfa": 15
-          }, 
-          "notes": [
-            "origin: haitian", 
-            "gender: female", 
-            "station history: roo (bounce between stations)", 
-            "characteristics: Short attention span", 
-            "instincts: To recover a lost memory", 
-            "hair: Streaked", 
-            "speech: Accented", 
-            "knack: A trained wolf", 
-            "personality: Obnoxious"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": null, 
-          "current": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "ht": 11, 
-            "st": 10, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "posture": "standing", 
-          "state": "alive", 
-          "permanent": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 11, 
-            "ht": 11, 
-            "st": 10, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
-          "did_action_this_turn": false, 
-          "opponent": null
-        }, 
-        "4 - Islande - Sniper": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Tonfa", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "type": "cr", 
-                  "plus": 0
-                }, 
-                "thr": {
-                  "type": "cr", 
-                  "plus": 1
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Tonfa", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 2, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": [], 
-              "name": "Zip Clip C"
-            }, 
-            {
-              "acc": 8, 
-              "count": 1, 
-              "owners": [
-                "the store"
-              ], 
-              "name": "zip tazer rifle, nice", 
-              "notes": "hand built", 
-              "damage": {
-                "dice": {
-                  "type": "fp", 
-                  "num_dice": 3, 
-                  "plus": 0
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Guns (Rifle)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "Zip Clip C", 
-                "shots": 6, 
-                "shots_left": 6
-              }
-            }
-          ], 
-          "stunned": 0, 
-          "skills": {
-            "Fast-Draw (Ammo)": 15, 
-            "Tonfa": 15, 
-            "Guns (Rifle)": 18
-          }, 
-          "notes": [
-            "origin: haitian", 
-            "gender: female", 
-            "station history: staby (born on this station)", 
-            "characteristics: Believes all animals can talk to each other", 
-            "instincts: To save someone from a monstrosity", 
-            "hair: Long", 
-            "speech: Halting", 
-            "knack: A way with knots", 
-            "personality: Humble"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": null, 
-          "current": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 12, 
-            "ht": 11, 
-            "st": 10, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 15, 
-            "basic-move": 5, 
-            "basic-speed": 5
-          }, 
-          "posture": "standing", 
-          "state": "alive", 
-          "permanent": {
-            "fp": 11, 
-            "iq": 12, 
-            "hp": 12, 
-            "ht": 11, 
-            "st": 10, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 15, 
-            "basic-move": 5, 
-            "basic-speed": 5
-          }, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
-          "did_action_this_turn": false, 
           "opponent": null
         }
       }
@@ -6220,7 +5409,6 @@
         "Holdout": 11, 
         "Law (Conglomerate)": 10
       }, 
-      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "short-notes": [
@@ -6230,26 +5418,27 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
+      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "advantages": {
         "G-Experience": 3, 
@@ -6264,8 +5453,8 @@
         "Night Vision": 4, 
         "Combat Reflexes": 15
       }, 
+      "did_action_this_turn": false, 
       "weapon-index": null, 
-      "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
@@ -6490,13 +5679,13 @@
         "fp": 13, 
         "iq": 11, 
         "hp": 12, 
-        "wi": 11, 
+        "per": 11, 
         "st": 12, 
+        "wi": 11, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 11
+        "basic-speed": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -6504,13 +5693,13 @@
         "fp": 13, 
         "iq": 11, 
         "hp": 12, 
-        "wi": 11, 
+        "per": 11, 
         "st": 12, 
+        "wi": 11, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 11
+        "basic-speed": 6
       }, 
       "advantages": {
         "G-Experience": 1, 
@@ -6525,31 +5714,11 @@
         "Flashbacks, Mild": -5, 
         "Combat Reflexes": 15
       }, 
-      "weapon-index": 6, 
+      "weapon-index": null, 
       "check_for_death": false, 
-      "timers": [
-        {
-          "rounds": 0.9, 
-          "string": [
-            "draw Laser Pistol - Stats unknown (from Austin)", 
-            " Defense: any", 
-            " Move: step"
-          ]
-        }, 
-        {
-          "rounds": 0.9, 
-          "string": [
-            "Attack", 
-            " Defense: any", 
-            " Move: step"
-          ]
-        }
-      ], 
-      "did_action_this_turn": true, 
-      "opponent": {
-        "group": "Panama Hat", 
-        "name": "11 - Panama Hat"
-      }
+      "timers": [], 
+      "did_action_this_turn": false, 
+      "opponent": null
     }, 
     "deri - Chelsea": {
       "aim": {
@@ -6864,57 +6033,57 @@
         "Piloting (Low-Performance Spacecraft)": 9, 
         "Area Knowledge (Space Station)": 16
       }, 
-      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "current": {
         "fp": 11, 
         "iq": 14, 
         "hp": 10, 
-        "wi": 14, 
+        "per": 14, 
         "st": 9, 
+        "wi": 14, 
         "ht": 11, 
         "dx": 9, 
         "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 14
+        "basic-speed": 5
       }, 
+      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
         "iq": 14, 
         "hp": 10, 
-        "wi": 14, 
+        "per": 14, 
         "st": 9, 
+        "wi": 14, 
         "ht": 11, 
         "dx": 9, 
         "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 14
+        "basic-speed": 5
       }, 
       "advantages": {
         "G-Experience": 1, 
+        "Alcohol Intolerance": -1, 
         "Honest Face": 1, 
         "Wealth": -10, 
         "Extra Hit Points": 2, 
         "Habit": -1, 
         "Nosy": -1, 
         "Like knick knacks": -1, 
-        "Impulsiveness": -10, 
         "Vodou Practitioner": 15, 
-        "Alcohol Intolerance": -1, 
-        "Versatile": 5, 
+        "Empathy": 15, 
+        "Impulsiveness": -10, 
         "Cultural Familiarity (Teraformers)": 1, 
         "Short Attention Span": -10, 
         "Curious": -5, 
         "Bad Temper": -10, 
         "Deep Sleeper": 1, 
         "Combat Reflexes": 15, 
-        "Empathy": 15, 
+        "Versatile": 5, 
         "Dreamer": -1
       }, 
+      "did_action_this_turn": false, 
       "weapon-index": null, 
-      "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
@@ -7011,7 +6180,6 @@
         "Electronics Operation (Security)": 14, 
         "Piloting (Loader Mech)": 13
       }, 
-      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "short-notes": [
@@ -7022,26 +6190,27 @@
         "fp": 10, 
         "iq": 14, 
         "hp": 12, 
-        "wi": 14, 
+        "per": 14, 
         "st": 10, 
+        "wi": 14, 
         "ht": 9, 
         "dx": 12, 
         "basic-move": 5, 
-        "basic-speed": 5.25, 
-        "per": 14
+        "basic-speed": 5.25
       }, 
+      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 10, 
         "iq": 14, 
         "hp": 12, 
-        "wi": 14, 
+        "per": 14, 
         "st": 10, 
+        "wi": 14, 
         "ht": 9, 
         "dx": 12, 
         "basic-move": 5, 
-        "basic-speed": 5.25, 
-        "per": 14
+        "basic-speed": 5.25
       }, 
       "advantages": {
         "G-Experience": 1, 
@@ -7053,8 +6222,8 @@
         "Cannot Speak (Mute) - Computer Voice Synthesizer": -10, 
         "Secret (Turned in evidence on brutal mob hit)": -30
       }, 
+      "did_action_this_turn": false, 
       "weapon-index": null, 
-      "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
@@ -7297,33 +6466,33 @@
         "First Aid": 17, 
         "Beam Weapons (Pistol)": 14
       }, 
-      "did_action_this_turn": false, 
       "shock": 0, 
       "armor-index": null, 
       "current": {
         "fp": 18, 
         "iq": 16, 
         "hp": 19, 
-        "wi": 16, 
+        "per": 16, 
         "st": 9, 
+        "wi": 16, 
         "ht": 8, 
         "dx": 8, 
         "basic-move": 5, 
-        "basic-speed": 4, 
-        "per": 16
+        "basic-speed": 4
       }, 
+      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 18, 
         "iq": 16, 
         "hp": 19, 
-        "wi": 16, 
+        "per": 16, 
         "st": 9, 
+        "wi": 16, 
         "ht": 8, 
         "dx": 8, 
         "basic-move": 5, 
-        "basic-speed": 4, 
-        "per": 16
+        "basic-speed": 4
       }, 
       "advantages": {
         "Ailurophobia (Cats)": -5, 
@@ -7341,8 +6510,8 @@
         "Impulsiveness": -10, 
         "Lwa (Bokor)": 8
       }, 
+      "did_action_this_turn": false, 
       "weapon-index": null, 
-      "check_for_death": false, 
       "timers": [], 
       "posture": "standing", 
       "opponent": null
@@ -7361,39 +6530,39 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -7406,39 +6575,39 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -7451,39 +6620,39 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -7496,40 +6665,40 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -7542,39 +6711,39 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 12
+            "basic-speed": 5.25
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 12
+            "basic-speed": 5.25
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -7587,39 +6756,39 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "wi": 13, 
+            "per": 13, 
             "st": 10, 
+            "wi": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5, 
-            "per": 13
+            "basic-speed": 5.5
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "wi": 13, 
+            "per": 13, 
             "st": 10, 
+            "wi": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5, 
-            "per": 13
+            "basic-speed": 5.5
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -7632,39 +6801,39 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -7677,40 +6846,40 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -7729,39 +6898,39 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -7774,39 +6943,39 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -7819,39 +6988,39 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -7864,40 +7033,40 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -7910,39 +7079,39 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -7955,39 +7124,39 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -8000,39 +7169,39 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -8045,40 +7214,40 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -8146,39 +7315,39 @@
             "Brawling": 16, 
             "Axe/Mace": 14
           }, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -8224,39 +7393,39 @@
             "Beam Weapons (Pistol)": 15, 
             "Brawling": 12
           }, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "wi": 13, 
+            "per": 13, 
             "st": 10, 
+            "wi": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5, 
-            "per": 13
+            "basic-speed": 5.5
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "wi": 13, 
+            "per": 13, 
             "st": 10, 
+            "wi": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5, 
-            "per": 13
+            "basic-speed": 5.5
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -8318,39 +7487,39 @@
             "Brawling": 16, 
             "Axe/Mace": 14
           }, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -8416,39 +7585,39 @@
             "Brawling": 14, 
             "Knife": 15
           }, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "High Pain Threshold": 10
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -8494,40 +7663,40 @@
             "Beam Weapons (Pistol)": 13, 
             "Brawling": 12
           }, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 12
+            "basic-speed": 5.25
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 12
+            "basic-speed": 5.25
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -8589,39 +7758,39 @@
             "Brawling": 16, 
             "Axe/Mace": 14
           }, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -8683,39 +7852,39 @@
             "Brawling": 16, 
             "Axe/Mace": 14
           }, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -8781,39 +7950,39 @@
             "Brawling": 14, 
             "Knife": 15
           }, 
-          "did_action_this_turn": false, 
           "shock": 0, 
           "armor-index": null, 
           "current": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "High Pain Threshold": 10
           }, 
+          "did_action_this_turn": false, 
           "weapon-index": null, 
-          "check_for_death": false, 
           "timers": [], 
           "posture": "standing", 
           "opponent": null
@@ -8837,34 +8006,34 @@
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "wi": 13, 
+            "per": 13, 
             "st": 10, 
+            "wi": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5, 
-            "per": 13
+            "basic-speed": 5.5
           }, 
           "permanent": {
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "wi": 13, 
+            "per": 13, 
             "st": 10, 
+            "wi": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5, 
-            "per": 13
+            "basic-speed": 5.5
           }, 
           "state": "alive", 
           "stuff": [], 
           "timers": [], 
-          "did_action_this_turn": false, 
           "weapon-index": null, 
+          "did_action_this_turn": false, 
+          "check_for_death": false, 
           "advantages": {}, 
           "posture": "standing", 
-          "check_for_death": false, 
           "opponent": null
         }, 
         "Dude": {
@@ -8884,25 +8053,25 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "stuff": [
@@ -8956,14 +8125,14 @@
             }
           ], 
           "timers": [], 
-          "did_action_this_turn": false, 
           "weapon-index": null, 
+          "did_action_this_turn": false, 
+          "check_for_death": false, 
           "advantages": {
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
           "posture": "standing", 
-          "check_for_death": false, 
           "opponent": null
         }
       }
@@ -9001,13 +8170,13 @@
             "fp": 9, 
             "iq": 8, 
             "hp": -9, 
-            "wi": 8, 
+            "per": 8, 
             "st": 12, 
+            "wi": 8, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75, 
-            "per": 8
+            "basic-speed": 4.75
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -9015,13 +8184,13 @@
             "fp": 9, 
             "iq": 8, 
             "hp": 12, 
-            "wi": 8, 
+            "per": 8, 
             "st": 12, 
+            "wi": 8, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75, 
-            "per": 8
+            "basic-speed": 4.75
           }, 
           "advantages": {
             "High Pain Threshold": 10
@@ -9064,13 +8233,13 @@
             "fp": 9, 
             "iq": 8, 
             "hp": -3, 
-            "wi": 8, 
+            "per": 8, 
             "st": 12, 
+            "wi": 8, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75, 
-            "per": 8
+            "basic-speed": 4.75
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -9078,13 +8247,13 @@
             "fp": 9, 
             "iq": 8, 
             "hp": 12, 
-            "wi": 8, 
+            "per": 8, 
             "st": 12, 
+            "wi": 8, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75, 
-            "per": 8
+            "basic-speed": 4.75
           }, 
           "advantages": {
             "High Pain Threshold": 10
@@ -9135,13 +8304,13 @@
             "fp": 11, 
             "iq": 9, 
             "hp": -6, 
-            "wi": 9, 
+            "per": 9, 
             "st": 15, 
+            "wi": 9, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 9
+            "basic-speed": 5.25
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -9149,13 +8318,13 @@
             "fp": 11, 
             "iq": 9, 
             "hp": 15, 
-            "wi": 9, 
+            "per": 9, 
             "st": 15, 
+            "wi": 9, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 9
+            "basic-speed": 5.25
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -9210,13 +8379,13 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -9224,13 +8393,13 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -9295,12 +8464,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": -4, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -9309,12 +8478,12 @@
           "state": "unconscious", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -9389,12 +8558,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": -7, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -9403,12 +8572,12 @@
           "state": "dead", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -9474,12 +8643,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -9488,12 +8657,12 @@
           "state": "dead", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -9556,12 +8725,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -9570,12 +8739,12 @@
           "state": "dead", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -9638,12 +8807,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 0, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -9652,12 +8821,12 @@
           "state": "unconscious", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -9723,12 +8892,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": -4, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -9737,12 +8906,12 @@
           "state": "dead", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -9814,12 +8983,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -9828,12 +8997,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -9896,12 +9065,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": -17, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -9910,12 +9079,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -10124,25 +9293,26 @@
           "armor-index": null, 
           "current": {
             "fp": 20, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 20, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -10152,11 +9322,10 @@
             "Wealth": 0, 
             "High Pain Threshold": 10
           }, 
-          "opponent": null, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
           "did_action_this_turn": false, 
+          "weapon-index": null, 
+          "timers": [], 
+          "opponent": null, 
           "posture": "standing"
         }, 
         "5 - zombie": {
@@ -10206,12 +9375,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 6, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.5
@@ -10220,12 +9389,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.5
@@ -10288,12 +9457,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": -13, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 11, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10302,12 +9471,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 11, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10516,25 +9685,26 @@
           "armor-index": null, 
           "current": {
             "fp": 20, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
           }, 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
             "fp": 20, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -10544,11 +9714,10 @@
             "Wealth": 0, 
             "High Pain Threshold": 10
           }, 
-          "opponent": null, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
           "did_action_this_turn": false, 
+          "weapon-index": null, 
+          "timers": [], 
+          "opponent": null, 
           "posture": "standing"
         }, 
         "11 - Panama Hat": {
@@ -10601,12 +9770,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -10615,12 +9784,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -10683,12 +9852,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": -7, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -10697,12 +9866,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -10765,12 +9934,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 10, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -10779,12 +9948,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -10847,12 +10016,12 @@
           "armor-index": null, 
           "current": {
             "fp": 7, 
+            "ht": 10, 
             "iq": 8, 
             "hp": -1, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.5
@@ -10861,12 +10030,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.5
@@ -10909,25 +10078,25 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "stuff": [
@@ -11069,25 +10238,25 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "stuff": [
@@ -11271,13 +10440,13 @@
             "fp": 11, 
             "iq": 9, 
             "hp": 15, 
-            "wi": 9, 
+            "per": 9, 
             "st": 15, 
+            "wi": 9, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 9
+            "basic-speed": 5.25
           }, 
           "posture": "standing", 
           "state": "alive", 
@@ -11285,13 +10454,13 @@
             "fp": 11, 
             "iq": 9, 
             "hp": 15, 
-            "wi": 9, 
+            "per": 9, 
             "st": 15, 
+            "wi": 9, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 9
+            "basic-speed": 5.25
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -11388,12 +10557,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -11402,12 +10571,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -11452,12 +10621,12 @@
           "armor-index": null, 
           "current": {
             "fp": 10, 
+            "ht": 10, 
             "iq": 10, 
             "hp": 10, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 10, 
             "per": 10, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5
@@ -11466,12 +10635,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 10, 
+            "ht": 10, 
             "iq": 10, 
             "hp": 10, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 10, 
             "per": 10, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5
@@ -11504,30 +10673,29 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "check_for_death": false, 
+          "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -11539,10 +10707,11 @@
             "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "did_action_this_turn": false, 
-          "weapon-index": null, 
-          "timers": [], 
           "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
           "spells": [
             {
               "cost": 1, 
@@ -11676,27 +10845,894 @@
           "redirect": "NPCs"
         }
       }
+    }, 
+    {
+      "date": "2019-08-10-13-23-45", 
+      "name": "Baz for Sphere", 
+      "fight": {
+        "3 - Joseph - Mambo/Medic": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 1, 
+              "count": 1, 
+              "owners": [
+                "the store"
+              ], 
+              "name": "zip tazer, nice", 
+              "notes": "hand built", 
+              "damage": {
+                "dice": {
+                  "type": "fp", 
+                  "num_dice": 1, 
+                  "plus": 3
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Guns (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "Zip Clip", 
+                "shots": 6, 
+                "shots_left": 6
+              }
+            }, 
+            {
+              "count": 2, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": [
+                "the store"
+              ], 
+              "name": "Zip Clip"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Tonfa", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "type": "cr", 
+                  "plus": 0
+                }, 
+                "thr": {
+                  "type": "cr", 
+                  "plus": 1
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Tonfa", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 2, 
+              "notes": "1d for HT+1d hrs unless other healing", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Patch: light heal"
+            }, 
+            {
+              "count": 2, 
+              "notes": "unconscious but not dead for HT+1d hrs unless other healing", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Patch: stabilize"
+            }, 
+            {
+              "count": 1, 
+              "notes": "M91, cost eR3570", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Fingerbone of major heal (8)"
+            }, 
+            {
+              "count": 1, 
+              "notes": "M91, cost eR?", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "Fingerbone of minor heal (4)"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Guns (Pistol)": 11, 
+            "Physician": 14, 
+            "Brawling": 11, 
+            "Tonfa": 11
+          }, 
+          "notes": [
+            "origin: haitian", 
+            "gender: male", 
+            "station history: staby (born on this station)", 
+            "characteristics: Talks about self in third-person", 
+            "instincts: To explore a mysterious place", 
+            "hair: Streaked", 
+            "speech: Jovial / booming", 
+            "knack: A plan for the perfect crime", 
+            "personality: Stingy"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": null, 
+          "current": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "spells": [
+            {
+              "cost": 1, 
+              "name": "Awaken", 
+              "notes": "M90", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Communicate", 
+              "notes": "M48", 
+              "maintain": 4, 
+              "time": 4, 
+              "skill": 11
+            }, 
+            {
+              "cost": 3, 
+              "name": "Daze", 
+              "notes": "M134", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Far Hearing", 
+              "notes": "M173", 
+              "maintain": 2, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Foolishness", 
+              "notes": "M134", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Energy", 
+              "notes": "M89", 
+              "maintain": 0, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Lend Vitality", 
+              "notes": "M89", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 2, 
+              "name": "Luck", 
+              "notes": "V2", 
+              "maintain": 1, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Major Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Minor Heal", 
+              "notes": "M91", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": null, 
+              "name": "Might", 
+              "notes": "M37", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 15, 
+              "name": "Restoration", 
+              "notes": "M93", 
+              "maintain": 0, 
+              "time": 60, 
+              "skill": 11
+            }, 
+            {
+              "cost": null, 
+              "name": "Sense Life", 
+              "notes": "M45, cost 1/2 per yard radius, see M11", 
+              "maintain": null, 
+              "time": 1, 
+              "skill": 12
+            }, 
+            {
+              "cost": 4, 
+              "name": "Sleep", 
+              "notes": "M135", 
+              "maintain": 0, 
+              "time": 3, 
+              "skill": 11
+            }, 
+            {
+              "cost": 4, 
+              "name": "Wizard Eye", 
+              "notes": "M104", 
+              "maintain": 2, 
+              "time": 2, 
+              "skill": 11
+            }
+          ]
+        }, 
+        "5 - Watson": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "count": 2, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": [], 
+              "name": "Zip Clip"
+            }, 
+            {
+              "acc": 1, 
+              "count": 1, 
+              "owners": [
+                "the store"
+              ], 
+              "name": "zip tazer, nice", 
+              "notes": "hand built", 
+              "damage": {
+                "dice": {
+                  "type": "fp", 
+                  "num_dice": 1, 
+                  "plus": 3
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Guns (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "Zip Clip", 
+                "shots": 6, 
+                "shots_left": 6
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Tonfa", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "type": "cr", 
+                  "plus": 0
+                }, 
+                "thr": {
+                  "type": "cr", 
+                  "plus": 1
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Tonfa", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Guns (Pistol)": 15, 
+            "Brawling": 15, 
+            "Tonfa": 15
+          }, 
+          "notes": [
+            "origin: haitian", 
+            "gender: male", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Perfumed", 
+            "instincts: To prove a point", 
+            "hair: Wavy", 
+            "speech: Monotone", 
+            "knack: A plan for the perfect crime", 
+            "personality: Reserved"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": null, 
+          "current": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "2 - James": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 1, 
+              "count": 1, 
+              "owners": [
+                "the store"
+              ], 
+              "name": "zip tazer, nice", 
+              "notes": "hand built", 
+              "damage": {
+                "dice": {
+                  "type": "fp", 
+                  "num_dice": 1, 
+                  "plus": 3
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Guns (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "Zip Clip", 
+                "shots": 6, 
+                "shots_left": 6
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Tonfa", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "type": "cr", 
+                  "plus": 0
+                }, 
+                "thr": {
+                  "type": "cr", 
+                  "plus": 1
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Tonfa", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 2, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": [], 
+              "name": "Zip Clip"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Guns (Pistol)": 15, 
+            "Brawling": 15, 
+            "Tonfa": 15
+          }, 
+          "notes": [
+            "origin: haitian", 
+            "gender: female", 
+            "station history: staby (born on this station)", 
+            "characteristics: Swears profusely", 
+            "instincts: To destroy an artifact", 
+            "hair: Thick", 
+            "speech: Trails-off", 
+            "knack: A way with knots", 
+            "personality: Likable"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": null, 
+          "current": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 6
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 6
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "6 - Mirlande - Leader": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "count": 2, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": [], 
+              "name": "Zip Clip"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Tonfa", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "type": "cr", 
+                  "plus": 0
+                }, 
+                "thr": {
+                  "type": "cr", 
+                  "plus": 1
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Tonfa", 
+              "type": "melee weapon"
+            }, 
+            {
+              "acc": 1, 
+              "count": 1, 
+              "owners": [
+                "the store"
+              ], 
+              "name": "zip tazer, nice", 
+              "notes": "hand built", 
+              "damage": {
+                "dice": {
+                  "type": "fp", 
+                  "num_dice": 1, 
+                  "plus": 3
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Guns (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "Zip Clip", 
+                "shots": 6, 
+                "shots_left": 6
+              }
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Guns (Pistol)": 15, 
+            "Brawling": 15, 
+            "Tonfa": 15
+          }, 
+          "notes": [
+            "origin: haitian", 
+            "gender: male", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Warts", 
+            "instincts: To become a terror to criminals", 
+            "hair: Curly", 
+            "speech: Breathless", 
+            "knack: Brewing", 
+            "personality: Elitist"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": null, 
+          "current": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 6
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 6
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "1 - Nephtalie": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "count": 2, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": [], 
+              "name": "Zip Clip"
+            }, 
+            {
+              "acc": 1, 
+              "count": 1, 
+              "owners": [
+                "the store"
+              ], 
+              "name": "zip tazer, nice", 
+              "notes": "hand built", 
+              "damage": {
+                "dice": {
+                  "type": "fp", 
+                  "num_dice": 1, 
+                  "plus": 3
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Guns (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "Zip Clip", 
+                "shots": 6, 
+                "shots_left": 6
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Tonfa", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "type": "cr", 
+                  "plus": 0
+                }, 
+                "thr": {
+                  "type": "cr", 
+                  "plus": 1
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Tonfa", 
+              "type": "melee weapon"
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Guns (Pistol)": 15, 
+            "Brawling": 15, 
+            "Tonfa": 15
+          }, 
+          "notes": [
+            "origin: haitian", 
+            "gender: female", 
+            "station history: roo (bounce between stations)", 
+            "characteristics: Short attention span", 
+            "instincts: To recover a lost memory", 
+            "hair: Streaked", 
+            "speech: Accented", 
+            "knack: A trained wolf", 
+            "personality: Obnoxious"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": null, 
+          "current": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 11, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }, 
+        "4 - Islande - Sniper": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Tonfa", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "type": "cr", 
+                  "plus": 0
+                }, 
+                "thr": {
+                  "type": "cr", 
+                  "plus": 1
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Tonfa", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 2, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": [], 
+              "name": "Zip Clip C"
+            }, 
+            {
+              "acc": 8, 
+              "count": 1, 
+              "owners": [
+                "the store"
+              ], 
+              "name": "zip tazer rifle, nice", 
+              "notes": "hand built", 
+              "damage": {
+                "dice": {
+                  "type": "fp", 
+                  "num_dice": 3, 
+                  "plus": 0
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Guns (Rifle)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "Zip Clip C", 
+                "shots": 6, 
+                "shots_left": 6
+              }
+            }
+          ], 
+          "stunned": 0, 
+          "skills": {
+            "Fast-Draw (Ammo)": 15, 
+            "Tonfa": 15, 
+            "Guns (Rifle)": 18
+          }, 
+          "notes": [
+            "origin: haitian", 
+            "gender: female", 
+            "station history: staby (born on this station)", 
+            "characteristics: Believes all animals can talk to each other", 
+            "instincts: To save someone from a monstrosity", 
+            "hair: Long", 
+            "speech: Halting", 
+            "knack: A way with knots", 
+            "personality: Humble"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": null, 
+          "current": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 12, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 15, 
+            "basic-move": 5, 
+            "basic-speed": 5
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 11, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 12, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 15, 
+            "basic-move": 5, 
+            "basic-speed": 5
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": false, 
+          "opponent": null
+        }
+      }
     }
   ], 
   "current-fight": {
-    "index": 1, 
-    "monsters": "Panama Hat", 
+    "index": 0, 
+    "monsters": "Baz for Sphere", 
     "fighters": [
       {
         "group": "PCs", 
         "name": "samuel - Erik"
       }, 
       {
-        "group": "Panama Hat", 
-        "name": "11 - Panama Hat"
-      }, 
-      {
         "group": "PCs", 
         "name": "lawerence - Spenser"
       }, 
       {
+        "group": "Baz for Sphere", 
+        "name": "2 - James"
+      }, 
+      {
+        "group": "Baz for Sphere", 
+        "name": "6 - Mirlande - Leader"
+      }, 
+      {
+        "group": "Baz for Sphere", 
+        "name": "5 - Watson"
+      }, 
+      {
+        "group": "Baz for Sphere", 
+        "name": "1 - Nephtalie"
+      }, 
+      {
         "group": "PCs", 
         "name": "vasilis - Alan"
+      }, 
+      {
+        "group": "Baz for Sphere", 
+        "name": "3 - Joseph - Mambo/Medic"
+      }, 
+      {
+        "group": "Baz for Sphere", 
+        "name": "4 - Islande - Sniper"
       }, 
       {
         "group": "PCs", 
@@ -11712,43 +11748,6 @@
     "history": [
       {
         "comment": "--- Round 0 ---"
-      }, 
-      {
-        "comment": "(samuel - Erik) did (draw Laser Pistol - Stats unknown (from Austin)) maneuver", 
-        "group": "PCs", 
-        "fighter": "samuel - Erik", 
-        "name": "draw-weapon", 
-        "weapon-index": 6
-      }, 
-      {
-        "comment": "(samuel - Erik) did (Attack) maneuver", 
-        "group": "PCs", 
-        "fighter": "samuel - Erik", 
-        "name": "attack"
-      }, 
-      {
-        "comment": "(samuel - Erik) picked (11 - Panama Hat) as opponent", 
-        "opponent-name": "11 - Panama Hat", 
-        "name": "pick-opponent", 
-        "opponent-group": "Panama Hat"
-      }, 
-      {
-        "comment": "(11 - Panama Hat) picked (samuel - Erik) as opponent right back", 
-        "opponent-name": "samuel - Erik", 
-        "name": "pick-opponent", 
-        "opponent-group": "PCs"
-      }, 
-      {
-        "comment": "(samuel - Erik) did 9 HP to (11 - Panama Hat)", 
-        "adj": -9, 
-        "name": "adjust-hp"
-      }, 
-      {
-        "comment": "(11 - Panama Hat) did (Cast (Teleport)) maneuver", 
-        "group": "Panama Hat", 
-        "spell-index": 1, 
-        "fighter": "11 - Panama Hat", 
-        "name": "cast-spell"
       }
     ]
   }, 
@@ -11777,13 +11776,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -11791,13 +11790,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -11830,12 +11829,12 @@
       "armor-index": null, 
       "current": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -11844,12 +11843,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -11882,13 +11881,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -11896,13 +11895,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -11939,13 +11938,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -11953,13 +11952,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -11995,13 +11994,13 @@
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "per": 10, 
         "st": 10, 
+        "wi": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 10
+        "basic-speed": 5
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -12009,13 +12008,13 @@
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "per": 10, 
         "st": 10, 
+        "wi": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 10
+        "basic-speed": 5
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -12171,37 +12170,37 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 10, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25, 
-        "per": 12
+        "basic-speed": 5.25
       }, 
-      "check_for_death": false, 
       "state": "absent", 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
         "hp": 10, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25, 
-        "per": 12
+        "basic-speed": 5.25
       }, 
       "advantages": {
         "Empathy": 5, 
         "Lwa (Mambo, Erzulie Freda)": 6, 
         "Vodou Practitioner (Mambo/Hougan 2)": 35
       }, 
-      "did_action_this_turn": false, 
-      "weapon-index": null, 
-      "timers": [], 
       "opponent": null, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "did_action_this_turn": false, 
       "posture": "standing"
     }, 
     "Samantha - (party) Mambo on Tereshkova": {
@@ -12225,43 +12224,43 @@
       ], 
       "shock": 0, 
       "short-notes": [], 
+      "posture": "standing", 
       "armor-index": null, 
       "current": {
         "fp": 11, 
         "iq": 13, 
         "hp": 10, 
-        "wi": 13, 
+        "per": 13, 
         "st": 10, 
+        "wi": 13, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25, 
-        "per": 13
+        "basic-speed": 5.25
       }, 
-      "posture": "standing", 
+      "check_for_death": false, 
       "state": "alive", 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
         "hp": 10, 
-        "wi": 12, 
+        "per": 13, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25, 
-        "per": 13
+        "basic-speed": 5.25
       }, 
       "advantages": {
         "Empathy": 5, 
         "Primary Lwa (Erzulie Freda)": 6, 
         "Vodou Practitioner (Mambo/Hougan 2)": 35
       }, 
-      "opponent": null, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
       "did_action_this_turn": false, 
+      "weapon-index": null, 
+      "timers": [], 
+      "opponent": null, 
       "spells": [
         {
           "cost": 1, 
@@ -12424,13 +12423,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -12438,13 +12437,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -12530,12 +12529,12 @@
       "armor-index": null, 
       "current": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12544,12 +12543,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12589,13 +12588,13 @@
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "per": 10, 
         "st": 10, 
+        "wi": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 10
+        "basic-speed": 5
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -12603,13 +12602,13 @@
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "per": 10, 
         "st": 10, 
+        "wi": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 10
+        "basic-speed": 5
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -12621,12 +12620,12 @@
     "Amelia - Deputy Marshal (Stoddard)": {
       "current": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12706,12 +12705,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12789,13 +12788,13 @@
         "fp": 10, 
         "iq": 12, 
         "hp": 16, 
-        "wi": 12, 
+        "per": 12, 
         "st": 16, 
+        "wi": 12, 
         "ht": 10, 
         "dx": 11, 
         "basic-move": 6, 
-        "basic-speed": 6.25, 
-        "per": 12
+        "basic-speed": 6.25
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -12803,13 +12802,13 @@
         "fp": 10, 
         "iq": 12, 
         "hp": 16, 
-        "wi": 12, 
+        "per": 12, 
         "st": 16, 
+        "wi": 12, 
         "ht": 10, 
         "dx": 11, 
         "basic-move": 6, 
-        "basic-speed": 6.25, 
-        "per": 12
+        "basic-speed": 6.25
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -12838,13 +12837,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -12852,13 +12851,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -12891,12 +12890,12 @@
       "armor-index": null, 
       "current": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -12905,12 +12904,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -12962,13 +12961,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -12976,13 +12975,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -12994,12 +12993,12 @@
     "William - Deputy Marshal (Stoddard)": {
       "current": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -13107,12 +13106,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -13131,12 +13130,12 @@
     "Olivia - Special Deputy Marshal (Stoddard)": {
       "current": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -13251,12 +13250,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -13332,13 +13331,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -13346,13 +13345,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -13385,12 +13384,12 @@
       "armor-index": null, 
       "current": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13399,12 +13398,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13445,13 +13444,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -13459,13 +13458,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -13550,12 +13549,12 @@
       "armor-index": null, 
       "current": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -13564,12 +13563,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -13692,13 +13691,13 @@
         "fp": 12, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 13, 
+        "wi": 12, 
         "ht": 12, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6.25, 
-        "per": 12
+        "basic-speed": 6.25
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -13706,13 +13705,13 @@
         "fp": 12, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 13, 
+        "wi": 12, 
         "ht": 12, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6.25, 
-        "per": 12
+        "basic-speed": 6.25
       }, 
       "advantages": {
         "Combat Reflexes": 15, 
@@ -13761,13 +13760,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -13775,13 +13774,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -13814,12 +13813,12 @@
       "armor-index": null, 
       "current": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13828,12 +13827,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13871,13 +13870,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -13885,13 +13884,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -13918,13 +13917,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -13932,13 +13931,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -13971,12 +13970,12 @@
       "armor-index": null, 
       "current": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13985,12 +13984,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -14007,16 +14006,15 @@
         "fp": 30, 
         "iq": 12, 
         "hp": 10, 
-        "per": 8, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 5, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 8
       }, 
       "stunned": false, 
-      "posture": "standing", 
       "skills": {}, 
       "notes": [
         "station history: staby (born on this station)", 
@@ -14029,7 +14027,7 @@
       ], 
       "shock": 0, 
       "short-notes": [], 
-      "did_action_this_turn": true, 
+      "posture": "standing", 
       "armor-index": null, 
       "aim": {
         "braced": false, 
@@ -14039,13 +14037,13 @@
         "fp": 30, 
         "iq": 12, 
         "hp": 10, 
-        "per": 8, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 5, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 8
       }, 
       "state": "alive", 
       "stuff": [], 
@@ -14057,6 +14055,7 @@
         "Lwa (Mambo, Erzulie Freda)": 6
       }, 
       "weapon-index": null, 
+      "did_action_this_turn": true, 
       "check_for_death": false, 
       "timers": [
         {
@@ -14191,12 +14190,12 @@
       "armor-index": null, 
       "current": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -14205,12 +14204,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -14297,12 +14296,12 @@
       "armor-index": null, 
       "current": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -14311,12 +14310,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -14355,12 +14354,12 @@
       "armor-index": null, 
       "current": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -14369,12 +14368,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5

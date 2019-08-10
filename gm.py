@@ -15,9 +15,16 @@ import sys
 import traceback
 
 # TODO:
+#   - Overhaul of spell casting
+#       o 'time' is now 'casting time'
+#       o add 'duration' and timers stating XXX is active
+#       o spells in GurpsRuleset should be a dict, skill should be removed
+#       o spells in Fighter should be name & skill, use name to lookup in
+#         ruleset
+#       o Spell stuff should all be in GurpsRuleset
+#       o Need maintain spell action
+#
 #   - Need warning if trying to do something while doing a multi-round cast
-#   - Need spell duration
-#   - Need maintain spell
 #
 #   - add laser sights to weapons
 #   - Add playback of actions, like from: self._saved_fight['history']
@@ -2154,7 +2161,9 @@ class ThingsInFight(object):
     # Protected
     #
 
-    def _explain_numbers(self):
+    def _explain_numbers(self,
+                         fight_handler  # FightHandler object, ignored
+                        ):
         '''
         Explains how the stuff in the descriptions were calculated.
 
@@ -5657,6 +5666,8 @@ class GurpsRuleset(Ruleset):
         spell_index = param['spell']
         spell = fighter.details['spells'][spell_index]
 
+        # Cost
+
         if spell['cost'] is None:
             title = 'Cost to cast (%s) - see (%s) ' % (spell['name'],
                                                        spell['notes'])
@@ -5671,6 +5682,23 @@ class GurpsRuleset(Ruleset):
         else:
             cost = spell['cost']
 
+        # Casting time
+
+        if spell['time'] is None or spell['time'] == 0:
+            title = 'Seconds to cast (%s) - see (%s) ' % (spell['name'],
+                                                          spell['notes'])
+            height = 1
+            width = len(title)
+            casting_time_string = ''
+            while len(casting_time_string) <= 0:
+                casting_time_string = self._window_manager.input_box(height,
+                                                                     width,
+                                                                     title)
+            casting_time = int(casting_time_string)
+        else:
+            casting_time = spell['time']
+
+
         # M8 - High skill level costs less
         skill = spell['skill'] - 15
         while skill >= 0:
@@ -5681,10 +5709,10 @@ class GurpsRuleset(Ruleset):
 
         fighter.details['current']['fp'] -= cost
         fighter.timers.add(('Spell for %s' % fighter.name),
-                            spell['time'] - 0.1,    # -0.1 so that it doesn't 
-                                                    # show up on the first
-                                                    # round you can do
-                                                    # something after you cast
+                            casting_time - 0.1, # -0.1 so that it doesn't 
+                                                # show up on the first
+                                                # round you can do
+                                                # something after you cast
                             'Casting (%s) @ skill (%d): %s' % (spell['name'],
                                                                spell['skill'],
                                                                spell['notes']))
