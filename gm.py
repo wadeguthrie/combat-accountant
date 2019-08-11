@@ -8665,7 +8665,11 @@ class MainHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         monster_group = None
-        if not self._saved_fight['saved']:
+        if self._saved_fight['saved']:
+            pass
+        elif self.__current_display is not None:
+            monster_group = self.__current_display
+        else:
             fight_name_menu = [(name, name)
                                        for name in self.__world.get_fights()]
             fight_name_menu = sorted(fight_name_menu,
