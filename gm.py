@@ -16,7 +16,6 @@ import traceback
 
 # TODO:
 #   - Overhaul of spell casting
-#       o add 'duration' and timers stating XXX is active
 #       o Spell stuff should all be in GurpsRuleset
 #       o Need maintain spell action
 #
@@ -1965,6 +1964,10 @@ class Equipment(object):
             return False if lhs != rhs else True
 
 
+# TODO: should have timer object that has methods:
+#   - get_description
+#   - add_action (or add_timer_action, I dunno)
+
 class Timers(object):
     def __init__(self,
                  timer_details, # List from JSON containing timers
@@ -2797,8 +2800,6 @@ class Ruleset(object):
                                            }))
             draw_weapon_menu = sorted(draw_weapon_menu,
                                       key=lambda x: x[0].upper())
-
-            #PP.pprint(draw_weapon_menu) # TODO: remove
 
             # Draw menu
 
@@ -5688,7 +5689,6 @@ class GurpsRuleset(Ruleset):
             cost = 0
 
         fighter.details['current']['fp'] -= cost
-        print 'Adding timer to %s' % fighter.name # TODO: remove
         timer = fighter.timers.create_and_add(
                     ('Spell for %s' % fighter.name),
                     casting_time - 0.1, # -0.1 so that it doesn't 
@@ -5703,7 +5703,6 @@ class GurpsRuleset(Ruleset):
         # that it's active
         if (complete_spell['duration'] is not None and
                                             complete_spell['duration'] > 1):
-            print 'Adding duration timer for %d rounds' % complete_spell['duration'] # TODO: remove
             duration_timer = fighter.timers.create(
                             ('Spell Duration Timer for %s' % fighter.name),
                             complete_spell['duration'],

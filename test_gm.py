@@ -2075,7 +2075,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         timer_id = 0
         round_count = 3
         timer_text = '%d' % timer_id
-        fighter.timers.add(fighter.name, round_count, timer_text)
+        fighter.timers.create_and_add(fighter.name, round_count, timer_text)
 
         for i in range(round_count):
             assert len(fighter.details['timers']) == 1
@@ -2097,7 +2097,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         for i in range(timer_count):
             timer_text = '%d' % timer_id
             timer_id += 1
-            fighter.timers.add(fighter.name, round_count[i], timer_text)
+            fighter.timers.create_and_add(fighter.name,
+                                          round_count[i],
+                                          timer_text)
 
         # round 0
         fighter.timers.remove_expired_kill_dying()
@@ -2142,7 +2144,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         timer_id = 0
         round_count = 1
         timer0_text = '%d' % timer_id
-        fighter.timers.add(fighter.name, round_count, timer0_text)
+        fighter.timers.create_and_add(fighter.name, round_count, timer0_text)
 
         # start turn -- decrement 1-turn timer, timer = 0, keep it this turn
         fighter.timers.decrement_all()
@@ -2156,7 +2158,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         timer_id = 1
         round_count = 0.9
         timer1_text = '%d' % timer_id
-        fighter.timers.add(fighter.name, round_count, timer1_text)
+        fighter.timers.create_and_add(fighter.name, round_count, timer1_text)
 
         # assert 2 timers -- right: both timers are there
         assert len(fighter.details['timers']) == 2
