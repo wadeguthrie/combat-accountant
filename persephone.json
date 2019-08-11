@@ -2875,6 +2875,18 @@
           "did_action_this_turn": false, 
           "spells": [
             {
+              "name": "Animate Shadow", 
+              "skill": 12
+            },
+            {
+              "name": "Alarm", 
+              "skill": 12
+            },
+            {
+              "name": "Death Vision", 
+              "skill": 12
+            },
+            {
               "name": "Awaken", 
               "skill": 12
             }, 

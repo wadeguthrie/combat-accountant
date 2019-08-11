@@ -16,11 +16,7 @@ import traceback
 
 # TODO:
 #   - Overhaul of spell casting
-#       o 'time' is now 'casting time'
 #       o add 'duration' and timers stating XXX is active
-#       o spells in GurpsRuleset should be a dict, skill should be removed
-#       o spells in Fighter should be name & skill, use name to lookup in
-#         ruleset
 #       o Spell stuff should all be in GurpsRuleset
 #       o Need maintain spell action
 #
@@ -1969,8 +1965,6 @@ class Equipment(object):
             return False if lhs != rhs else True
 
 
-
-
 class Timers(object):
     def __init__(self,
                  timer_details, # List from JSON containing timers
@@ -1981,11 +1975,22 @@ class Timers(object):
 
 
     def add(self,
+            timer   # dict {'name': xxx, 'rounds': xxx, 'text': xxx, ...}
+           ):
+        self.__timers.append(timer)
+        return timer
+
+
+    def clear_all(self):
+        self.__timers = []
+
+
+    def create(self,
             parent_name,            # string describing the thing calling the
                                     #   timer
             rounds,                 # rounds until timer fires (3.0 rounds
                                     #   fires at end of 3 rounds; 2.9 rounds
-                                    #   fires at beginning of 3 rounds.
+                                    #   fires at beginning of 3 rounds).
             text,                   # string to display (in fighter's notes)
                                     #   while timer is running
             announcement = None,    # string to display (in its own window)
@@ -1997,15 +2002,40 @@ class Timers(object):
         timer = {'name': name,
                  'rounds': rounds,
                  'string': text,
-                 'parent_details': parent_details}
+                 'actions': {}}
+
+        # TODO: add state changes to timers
+        #if parent_details is not None:
+        #    timer['actions']['parent_details'] = parent_details
+
         if announcement is not None:
-            timer['announcement'] = announcement
+            timer['actions']['announcement'] = announcement
 
-        self.__timers.append(timer)
+        return timer
 
 
-    def clear_all(self):
-        self.__timers = []
+    def create_and_add(
+            self,
+            parent_name,            # string describing the thing calling the
+                                    #   timer
+            rounds,                 # rounds until timer fires (3.0 rounds
+                                    #   fires at end of 3 rounds; 2.9 rounds
+                                    #   fires at beginning of 3 rounds).
+            text,                   # string to display (in fighter's notes)
+                                    #   while timer is running
+            announcement = None,    # string to display (in its own window)
+                                    #   when timer fires
+            parent_details = None   # {'state':...} to receive state of fired
+                                    #   timer
+           ):
+
+        timer = self.create(parent_name,
+                            rounds,
+                            text,
+                            announcement,
+                            parent_details)
+        self.add(timer)
+        return timer
 
 
     def decrement_all(self):
@@ -2056,20 +2086,28 @@ class Timers(object):
     def __fire_timer(self, timer):
         ''' Fires a specific timer. '''
 
-        if 'state' in timer:
-            if ('parent_details' not in timer or
-                                    timer['parent_details'] is None or
-                                    'state' not in timer['parent_details']):
-                self.__window_manager.error([
-                    'Timer "%s" contains no object to accept new state' %
-                    timer['name']])
-                return
-            timer['parent_details']['state'] = timer['state']
-        if 'announcement' in timer:
+        # TODO:
+        #if parent_details is not None:
+        #    timer['actions']['parent_details'] = parent_details
+        #if 'state' in timer:
+        #    if ('parent_details' not in timer or
+        #                            timer['parent_details'] is None or
+        #                            'state' not in timer['parent_details']):
+        #        self.__window_manager.error([
+        #            'Timer "%s" contains no object to accept new state' %
+        #            timer['name']])
+        #        return
+        #    timer['parent_details']['state'] = timer['state']
+
+        if 'announcement' in timer['actions']:
             self.__window_manager.display_window(
-                                       ('Timer Fired for %s' % timer['name']),
-                                        [[{'text': timer['announcement'],
-                                           'mode': curses.A_NORMAL }]])
+                               ('Timer Fired for %s' % timer['name']),
+                                [[{'text': timer['actions']['announcement'],
+                                   'mode': curses.A_NORMAL }]])
+
+        if 'timer' in timer['actions']:
+            self.add(timer['actions']['timer'])
+
 
 
 class ThingsInFight(object):
@@ -3246,541 +3284,631 @@ class GurpsRuleset(Ruleset):
           "cost": 8, 
           "notes": "M40, HT negates", 
           "maintain": 6, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         }, 
         "Alarm": {
           "cost": 1, 
           "notes": "M100", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 604800,   # one week
         }, 
         "Alter Visage": {
           "cost": 4, 
           "notes": "M41", 
           "maintain": 0, 
-          "time": 60, 
+          "casting time": 60, 
+          "duration": 3600,
         }, 
         "Analyze Magic": {
           "cost": 8, 
           "notes": "M102", 
           "maintain": None, 
-          "time": 3600, 
+          "casting time": 3600, 
+          "duration": 0,    # Instant
         }, 
         "Animate Shadow": {
           "cost": 4, 
           "notes": "M154, Subject's shadow attacks them, HT negates", 
           "maintain": 4, 
-          "time": 2, 
+          "casting time": 2, 
+          "duration": 5,
         },
         "Armor": {
           "cost": None, 
           "notes": "M167, 2xDR, lasts 1 minute", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         }, 
         "Awaken": {
           "cost": 1, 
           "notes": "M90", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Bless Plants": {
           "cost": 1, 
           "notes": "M161", 
           "maintain": 4, 
-          "time": 300, 
+          "casting time": 300, 
+          "duration": 0,    # One season - no need to keep track
         }, 
         "Blink": {
           "cost": 2, 
           "notes": "M148", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Boost Dexterity": {
           "cost": 1, 
           "notes": "M37", 
           "maintain": 2, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Bravery": {
           "cost": 2, 
           "notes": "M134", 
           "maintain": 2, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 3600,
         }, 
         "Charm": {
           "cost": 6, 
           "notes": "M139, vs. Will", 
           "maintain": 3, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         }, 
         "Choke": {
           "cost": 4, 
           "notes": "M40, vs. HT", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 30,
         }, 
         "Climbing": {
           "cost": 1, 
           "notes": "M35", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         }, 
         "Clumsiness": {
           "cost": 1, 
           "notes": "M36", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         }, 
         "Command": {
           "cost": 4, 
           "notes": "M136, vs. Will", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Communicate": {
           "cost": 4, 
           "notes": "M48", 
           "maintain": 4, 
-          "time": 4, 
+          "casting time": 4, 
+          "duration": 60,
         }, 
         "Conceal Magic": {
           "cost": 1, 
           "notes": "M122", 
           "maintain": None, 
-          "time": 3, 
+          "casting time": 3, 
+          "duration": 36000,    # 10 hours
         }, 
         "Cure Disease": {
           "cost": 4, 
           "notes": "M91", 
           "maintain": 2, 
-          "time": 600, 
+          "casting time": 600, 
+          "duration": 0,
         }, 
         "Daze": {
           "cost": 3, 
           "notes": "M134", 
           "maintain": 2, 
-          "time": 2, 
+          "casting time": 2, 
+          "duration": 60,
         }, 
         "Death Touch": {
           "cost": None, 
           "notes": "M41, 1-3, needs touch", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Death Vision": {
           "cost": 2, 
           "notes": "M149, vs. IQ", 
           "maintain": None, 
-          "time": 3, 
+          "casting time": 3, 
+          "duration": 1,
         }, 
         "Detect Magic": {
           "cost": 2, 
           "notes": "M101", 
           "maintain": None, 
-          "time": 300, 
+          "casting time": 300, 
+          "duration": 0,
         }, 
         "Emotion Control": {
           "cost": 2, 
           "notes": "M137", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 3600,
         }, 
         "Enchant": {
           "cost": None, 
           "notes": "M56", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,    # Permanent - no need to track
         }, 
         "Enslave": {
           "cost": 30, 
           "notes": "M141, vs. Will", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,    # Permanent - no need to track
         }, 
         "Evisceration": {
           "cost": 10, 
           "notes": "M154, HT/IQ negates, Magery 3", 
           "maintain": 0, 
-          "time": 5, 
+          "casting time": 5, 
+          "duration": 0,
         }, 
         "Explosive Lightning": {
           "cost": None, 
           "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
           "maintain": 0, 
-          "time": None, 
+          "casting time": None, 
+          "duration": 0,
         },
         "False Memory": {
           "cost": 3, 
           "notes": "M139, vs. Will", 
           "maintain": 0, 
-          "time": 5, 
+          "casting time": 5, 
+          "duration": None, # Ask
         }, 
         "Far Hearing": {
           "cost": 4, 
           "notes": "M173", 
           "maintain": 2, 
-          "time": 3, 
+          "casting time": 3, 
+          "duration": 60,
         }, 
         "Fear": {
           "cost": 1, 
           "notes": "M134", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 36000,    # 10 minutes
         }, 
         "Fog": {
           "cost": None, 
           "notes": "M193, cost: 2/yard radius, lasts 1 minute", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         }, 
         "Foolishness": {
           "cost": None, 
           "notes": "M134", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         }, 
         "Fumble": {
           "cost": 3, 
           "notes": "M38", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Golem": {
           "cost": 250, 
           "notes": "M59", 
           "maintain": 0, 
-          "time": 0, 
+          "casting time": 0, 
+          "duration": 0,    # Permanent -- no need to track
         }, 
         "Grace": {
           "cost": 4, 
           "notes": "M37", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         }, 
         "Great Ward": {
           "cost": None, 
-          "notes": "M122, cost: 1/person (min:4), instant", 
+          "notes": "M122, cost: 1/person (min:4)", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         },
         "Hair Growth": {
           "cost": 1, 
           "notes": "M39", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 5,
         }, 
         "Haircut": {
           "cost": 2, 
           "notes": "M39", 
           "maintain": None, 
-          "time": 2, 
+          "casting time": 2, 
+          "duration": 0,
         }, 
         "Heal Plant": {
           "cost": 3, 
           "notes": "M161", 
           "maintain": None, 
-          "time": 60, 
+          "casting time": 60, 
+          "duration": 0,    # Permanent -- no need to track
         }, 
         "Identify Plant": {
           "cost": 2, 
           "notes": "M161", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Identify Spell": {
           "cost": 2, 
           "notes": "M102", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Itch": {
           "cost": 2, 
           "notes": "M35", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": None, # Ask
         }, 
         "Lend Energy": {
           "cost": None, 
           "notes": "M89", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,    # Permanent -- no need to track
         }, 
         "Lend Vitality": {
           "cost": None, 
           "notes": "M89", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 3600,
         }, 
         "Lesser Geas": {
           "cost": 12, 
           "notes": "M140, vs. Will ", 
           "maintain": 0, 
-          "time": 30, 
+          "casting time": 30, 
+          "duration": 0,    # Permanent -- no need to track
         }, 
         "Light": {
           "cost": 1, 
           "notes": "M110", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         }, 
         "Lightning": {
           "cost": None, 
           "notes": "M196, cost 1-3, cast=cost, needs an attack", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Lightning Whip": {
           "cost": None, 
-          "notes": "M196, duration 10, cost 1 per 2 yards reach", 
+          "notes": "M196, cost 1 per 2 yards reach", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 10,
         },
         "Loyalty": {
           "cost": 2, 
           "notes": "M136", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 3600,
         }, 
         "Luck": {
           "cost": 2, 
           "notes": "V2", 
           "maintain": 1, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Lure": {
           "cost": 1, 
           "notes": "M137", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 3600,
         }, 
         "Madness": {
           "cost": None, 
           "notes": "M136, cost: 2-6", 
           "maintain": 0, 
-          "time": 2, 
+          "casting time": 2, 
+          "duration": 60,
         },
         "Major Heal": {
           "cost": None, 
           "notes": "M91", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,    # Permanent -- no need to track
         }, 
         "Malfunction": {
           "cost": 5, 
           "notes": "M177, touch", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         }, 
         "Manastone": {
           "cost": None, 
           "notes": "M70", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,    # Indefinite -- no need to track
         }, 
         "Might": {
           "cost": None, 
           "notes": "M37", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         }, 
         "Mind-Sending": {
           "cost": 4, 
           "notes": "M47", 
           "maintain": 4, 
-          "time": 4, 
+          "casting time": 4, 
+          "duration": 60,
         }, 
         "Minor Heal": {
           "cost": None, 
           "notes": "M91", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,    # Permanent -- no need to track
         }, 
         "Pain": {
           "cost": 2, 
           "notes": "M36, vs. HT", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 1,
         }, 
         "Panic": {
           "cost": 4, 
           "notes": "M134, vs. Will", 
           "maintain": 2, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         }, 
         "Phase": {
           "cost": 3, 
           "notes": "M83, avoid an attack", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         },
         "Planar Summons": {
           "cost": None, 
           "notes": "M82", 
           "maintain": 0, 
-          "time": 300, 
+          "casting time": 300, 
+          "duration": 3600,
         }, 
         "Powerstone": {
           "cost": 20, 
           "notes": "M69", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,    # Permanent -- no need to track
         }, 
         "Relieve Sickness": {
           "cost": 2, 
           "notes": "M90", 
           "maintain": 2, 
-          "time": 10, 
+          "casting time": 10, 
+          "duration": 600,  # 10 minutes
         }, 
         "Repair": {
           "cost": None, 
           "notes": "M118", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,    # Permanent -- no need to track
         }, 
         "Restoration": {
           "cost": 15, 
           "notes": "M93", 
           "maintain": 0, 
-          "time": 60, 
+          "casting time": 60, 
+          "duration": 0,    # Permanent -- no need to track
         }, 
         "Rotting Death": {
           "cost": 3, 
           "notes": "M154 vs. HT, needs touch", 
           "maintain": 2, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 1,
         }, 
         "Seek Machine": {
           "cost": 3, 
           "notes": "M175", 
           "maintain": None, 
-          "time": 10, 
+          "casting time": 10, 
+          "duration": 0,
         }, 
         "Seek Plant": {
           "cost": 2, 
           "notes": "M161", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Sense Emotion": {
           "cost": 2, 
           "notes": "M45", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Sense Foes": {
           "cost": 2, 
           "notes": "M45", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Sense Life": {
           "cost": None, 
           "notes": "M45, cost 1/2 per yard radius, see M11", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Shapeshifting": {
           "cost": None, 
           "notes": "M32", 
           "maintain": None, 
-          "time": 3, 
+          "casting time": 3, 
+          "duration": 3600,
         }, 
         "Shield": {
           "cost": 2, 
           "notes": "M167", 
           "maintain": None, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         }, 
         "Sleep": {
           "cost": 4, 
           "notes": "M135", 
           "maintain": 0, 
-          "time": 3, 
+          "casting time": 3, 
+          "duration": 0,
         }, 
         "Spasm": {
           "cost": 2, 
           "notes": "M35", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Stop Power": {
           "cost": None, 
           "notes": "M179, 3 pts /1.5 yard radius", 
           "maintain": 0, 
-          "time": 3, 
+          "casting time": 3, 
+          "duration": 60,
         }, 
         "Strike Blind": {
           "cost": 4, 
           "notes": "M38, vs HT", 
           "maintain": 2, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 10,
         }, 
         "Stun": {
           "cost": 2, 
           "notes": "M37, B420, vs. HT", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Summon Demon": {
           "cost": 20, 
           "notes": "M155", 
           "maintain": 0, 
-          "time": 300, 
+          "casting time": 300, 
+          "duration": 3600,
         }, 
         "Summon Spirit": {
           "cost": 20, 
           "notes": "M150", 
           "maintain": 0, 
-          "time": 300, 
+          "casting time": 300, 
+          "duration": 60,
         }, 
         "Teleport": {
           "cost": None, 
           "notes": "M147, cost: 5 for 100 yards", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Terror": {
           "cost": 4, 
           "notes": "M134, Area, Will negates", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Tell Time": {
           "cost": 1, 
           "notes": "M100", 
           "maintain": 2, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,
         }, 
         "Throw Spell": {
           "cost": 3, 
           "notes": "M128", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 0,    # Indefinite -- no need to track
         }, 
         "Total Paralysis": {
-          "cost": 5, 
-          "notes": "M40, cost: 2-6, duration 60", 
+          "cost": None, 
+          "notes": "M40, cost: 2-6", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         },
         "Wall Of Lightning": {
           "cost": None, 
           "notes": "M197", 
           "maintain": 0, 
-          "time": 1, 
+          "casting time": 1, 
+          "duration": 60,
         }, 
         "Wizard Eye": {
           "cost": 4, 
           "notes": "M104", 
           "maintain": 2, 
-          "time": 2, 
+          "casting time": 2, 
+          "duration": 60,
         }, 
         "Zombie": {
           "cost": 8, 
           "notes": "M151", 
           "maintain": None, 
-          "time": 60, 
+          "casting time": 60, 
+          "duration": 0,    # Permanent -- no need to track
         }
     }
 
@@ -4064,7 +4192,7 @@ class GurpsRuleset(Ruleset):
 
                 cast_text_array = ['%s -' % complete_spell['name']]
 
-                for piece in ['cost', 'skill', 'time', 'notes']:
+                for piece in ['cost', 'skill', 'casting time', 'notes']:
                     if piece in complete_spell:
                         cast_text_array.append('%s:%r' % (piece,
                                                          complete_spell[piece]))
@@ -5534,7 +5662,8 @@ class GurpsRuleset(Ruleset):
 
         # Casting time
 
-        if complete_spell['time'] is None or complete_spell['time'] == 0:
+        if (complete_spell['casting time'] is None or
+                                        complete_spell['casting time'] == 0):
             title = 'Seconds to cast (%s) - see (%s) ' % (
                                                     complete_spell['name'],
                                                     complete_spell['notes'])
@@ -5547,7 +5676,7 @@ class GurpsRuleset(Ruleset):
                                                                      title)
             casting_time = int(casting_time_string)
         else:
-            casting_time = complete_spell['time']
+            casting_time = complete_spell['casting time']
 
 
         # M8 - High skill level costs less
@@ -5559,7 +5688,9 @@ class GurpsRuleset(Ruleset):
             cost = 0
 
         fighter.details['current']['fp'] -= cost
-        fighter.timers.add(('Spell for %s' % fighter.name),
+        print 'Adding timer to %s' % fighter.name # TODO: remove
+        timer = fighter.timers.create_and_add(
+                    ('Spell for %s' % fighter.name),
                     casting_time - 0.1, # -0.1 so that it doesn't 
                                         # show up on the first
                                         # round you can do
@@ -5567,6 +5698,18 @@ class GurpsRuleset(Ruleset):
                     'Casting (%s) @ skill (%d): %s' % (complete_spell['name'],
                                                        complete_spell['skill'],
                                                        complete_spell['notes']))
+
+        # If the spell lasts any time at all, put a timer up so that we see
+        # that it's active
+        if (complete_spell['duration'] is not None and
+                                            complete_spell['duration'] > 1):
+            print 'Adding duration timer for %d rounds' % complete_spell['duration'] # TODO: remove
+            duration_timer = fighter.timers.create(
+                            ('Spell Duration Timer for %s' % fighter.name),
+                            complete_spell['duration'],
+                            'SPELL ACTIVE: %s' % complete_spell['name'])
+            timer['actions']['timer'] = duration_timer
+
         return None if 'text' not in param else param
 
 
@@ -5656,9 +5799,9 @@ class GurpsRuleset(Ruleset):
             reload_time = weapon['reload']
             if 'fast-draw (ammo)' in param['fighter'].details['skills']:
                 reload_time -= 1
-            param['fighter'].timers.add(param['fighter'].name,
-                                        reload_time,
-                                        'RELOADING')
+            param['fighter'].timers.create_and_add(param['fighter'].name,
+                                                   reload_time,
+                                                   'RELOADING')
 
             self.reset_aim(param['fighter'])
             return True
@@ -7298,7 +7441,9 @@ class FightHandler(ScreenHandler):
         # a round count larger than 0 will get shown but less than 1 will
         # get deleted before the next round
 
-        current_fighter.timers.add(current_fighter.name, 0.9, maneuver['text'])
+        current_fighter.timers.create_and_add(current_fighter.name,
+                                              0.9,
+                                              maneuver['text'])
 
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
@@ -7647,10 +7792,10 @@ class FightHandler(ScreenHandler):
         # Instal the timer.
 
         if timer['string'] is not None and len(timer['string']) != 0:
-            timer_recipient.timers.add(timer_recipient.name,
-                                       timer['rounds'],
-                                       timer['string'],
-                                       announcement)
+            timer_recipient.timers.create_and_add(timer_recipient.name,
+                                                  timer['rounds'],
+                                                  timer['string'],
+                                                  announcement)
 
         # Show stuff
 
