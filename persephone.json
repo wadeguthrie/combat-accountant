@@ -391,235 +391,119 @@
           "type": "value", 
           "value": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Animate Shadow", 
-              "notes": "M154, Subject's shadow attacks them, HT negates", 
-              "maintain": 4, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Death Touch", 
-              "notes": "M41, 1-3, needs touch", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Explosive Lightning", 
-              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
-              "maintain": 0, 
-              "time": null, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning", 
-              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning Whip", 
-              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Madness", 
-              "notes": "M136, cost: 2-6", 
-              "maintain": 0, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Panic", 
-              "notes": "M134, vs. Will", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Strike Blind", 
-              "notes": "M38, vs HT", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Stun", 
-              "notes": "M37, B420, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 5, 
               "name": "Total Paralysis", 
-              "notes": "M40, cost: 2-6, duration 60", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 8, 
               "name": "Agonize", 
-              "notes": "M40, HT negates", 
-              "maintain": 6, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Blink", 
-              "notes": "M148", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Great Ward", 
-              "notes": "M122, cost: 1/person (min:4), instant", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 3, 
               "name": "Phase", 
-              "notes": "M83, avoid an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }
           ]
@@ -993,235 +877,119 @@
           "type": "value", 
           "value": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Animate Shadow", 
-              "notes": "M154, Subject's shadow attacks them, HT negates", 
-              "maintain": 4, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Death Touch", 
-              "notes": "M41, 1-3, needs touch", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Explosive Lightning", 
-              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
-              "maintain": 0, 
-              "time": null, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning", 
-              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning Whip", 
-              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Madness", 
-              "notes": "M136, cost: 2-6", 
-              "maintain": 0, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Panic", 
-              "notes": "M134, vs. Will", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Strike Blind", 
-              "notes": "M38, vs HT", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Stun", 
-              "notes": "M37, B420, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 5, 
               "name": "Total Paralysis", 
-              "notes": "M40, cost: 2-6, duration 60", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 8, 
               "name": "Agonize", 
-              "notes": "M40, HT negates", 
-              "maintain": 6, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Blink", 
-              "notes": "M148", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Great Ward", 
-              "notes": "M122, cost: 1/person (min:4), instant", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 3, 
               "name": "Phase", 
-              "notes": "M83, avoid an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }
           ]
@@ -1556,235 +1324,119 @@
           "opponent": null, 
           "spells": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Animate Shadow", 
-              "notes": "M154, Subject's shadow attacks them, HT negates", 
-              "maintain": 4, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Death Touch", 
-              "notes": "M41, 1-3, needs touch", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Explosive Lightning", 
-              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
-              "maintain": 0, 
-              "time": null, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning", 
-              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning Whip", 
-              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Madness", 
-              "notes": "M136, cost: 2-6", 
-              "maintain": 0, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Panic", 
-              "notes": "M134, vs. Will", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Strike Blind", 
-              "notes": "M38, vs HT", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Stun", 
-              "notes": "M37, B420, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 5, 
               "name": "Total Paralysis", 
-              "notes": "M40, cost: 2-6, duration 60", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 8, 
               "name": "Agonize", 
-              "notes": "M40, HT negates", 
-              "maintain": 6, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Blink", 
-              "notes": "M148", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Great Ward", 
-              "notes": "M122, cost: 1/person (min:4), instant", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 3, 
               "name": "Phase", 
-              "notes": "M83, avoid an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }
           ]
@@ -1866,235 +1518,119 @@
           "opponent": null, 
           "spells": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Animate Shadow", 
-              "notes": "M154, Subject's shadow attacks them, HT negates", 
-              "maintain": 4, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Death Touch", 
-              "notes": "M41, 1-3, needs touch", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Explosive Lightning", 
-              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
-              "maintain": 0, 
-              "time": null, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning", 
-              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning Whip", 
-              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Madness", 
-              "notes": "M136, cost: 2-6", 
-              "maintain": 0, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Panic", 
-              "notes": "M134, vs. Will", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Strike Blind", 
-              "notes": "M38, vs HT", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Stun", 
-              "notes": "M37, B420, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 5, 
               "name": "Total Paralysis", 
-              "notes": "M40, cost: 2-6, duration 60", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 8, 
               "name": "Agonize", 
-              "notes": "M40, HT negates", 
-              "maintain": 6, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Blink", 
-              "notes": "M148", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Great Ward", 
-              "notes": "M122, cost: 1/person (min:4), instant", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 3, 
               "name": "Phase", 
-              "notes": "M83, avoid an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }
           ]
@@ -2159,235 +1695,119 @@
           "opponent": null, 
           "spells": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Animate Shadow", 
-              "notes": "M154, Subject's shadow attacks them, HT negates", 
-              "maintain": 4, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Death Touch", 
-              "notes": "M41, 1-3, needs touch", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Explosive Lightning", 
-              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
-              "maintain": 0, 
-              "time": null, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning", 
-              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning Whip", 
-              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Madness", 
-              "notes": "M136, cost: 2-6", 
-              "maintain": 0, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Panic", 
-              "notes": "M134, vs. Will", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Strike Blind", 
-              "notes": "M38, vs HT", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Stun", 
-              "notes": "M37, B420, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 5, 
               "name": "Total Paralysis", 
-              "notes": "M40, cost: 2-6, duration 60", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 8, 
               "name": "Agonize", 
-              "notes": "M40, HT negates", 
-              "maintain": 6, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Blink", 
-              "notes": "M148", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Great Ward", 
-              "notes": "M122, cost: 1/person (min:4), instant", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 3, 
               "name": "Phase", 
-              "notes": "M83, avoid an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }
           ]
@@ -2452,235 +1872,119 @@
           "did_action_this_turn": false, 
           "spells": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Animate Shadow", 
-              "notes": "M154, Subject's shadow attacks them, HT negates", 
-              "maintain": 4, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Death Touch", 
-              "notes": "M41, 1-3, needs touch", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Explosive Lightning", 
-              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
-              "maintain": 0, 
-              "time": null, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning", 
-              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning Whip", 
-              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Madness", 
-              "notes": "M136, cost: 2-6", 
-              "maintain": 0, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Panic", 
-              "notes": "M134, vs. Will", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Strike Blind", 
-              "notes": "M38, vs HT", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Stun", 
-              "notes": "M37, B420, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 5, 
               "name": "Total Paralysis", 
-              "notes": "M40, cost: 2-6, duration 60", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 8, 
               "name": "Agonize", 
-              "notes": "M40, HT negates", 
-              "maintain": 6, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Blink", 
-              "notes": "M148", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Great Ward", 
-              "notes": "M122, cost: 1/person (min:4), instant", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 3, 
               "name": "Phase", 
-              "notes": "M83, avoid an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }
           ]
@@ -2745,235 +2049,119 @@
           "opponent": null, 
           "spells": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Animate Shadow", 
-              "notes": "M154, Subject's shadow attacks them, HT negates", 
-              "maintain": 4, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Death Touch", 
-              "notes": "M41, 1-3, needs touch", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Explosive Lightning", 
-              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
-              "maintain": 0, 
-              "time": null, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning", 
-              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning Whip", 
-              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Madness", 
-              "notes": "M136, cost: 2-6", 
-              "maintain": 0, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Panic", 
-              "notes": "M134, vs. Will", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Strike Blind", 
-              "notes": "M38, vs HT", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Stun", 
-              "notes": "M37, B420, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 5, 
               "name": "Total Paralysis", 
-              "notes": "M40, cost: 2-6, duration 60", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 8, 
               "name": "Agonize", 
-              "notes": "M40, HT negates", 
-              "maintain": 6, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Blink", 
-              "notes": "M148", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Great Ward", 
-              "notes": "M122, cost: 1/person (min:4), instant", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 3, 
               "name": "Phase", 
-              "notes": "M83, avoid an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }
           ]
@@ -3038,235 +2226,119 @@
           "opponent": null, 
           "spells": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Animate Shadow", 
-              "notes": "M154, Subject's shadow attacks them, HT negates", 
-              "maintain": 4, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Death Touch", 
-              "notes": "M41, 1-3, needs touch", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Explosive Lightning", 
-              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
-              "maintain": 0, 
-              "time": null, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning", 
-              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning Whip", 
-              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Madness", 
-              "notes": "M136, cost: 2-6", 
-              "maintain": 0, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Panic", 
-              "notes": "M134, vs. Will", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Strike Blind", 
-              "notes": "M38, vs HT", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Stun", 
-              "notes": "M37, B420, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 5, 
               "name": "Total Paralysis", 
-              "notes": "M40, cost: 2-6, duration 60", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 8, 
               "name": "Agonize", 
-              "notes": "M40, HT negates", 
-              "maintain": 6, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Blink", 
-              "notes": "M148", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Great Ward", 
-              "notes": "M122, cost: 1/person (min:4), instant", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 3, 
               "name": "Phase", 
-              "notes": "M83, avoid an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }
           ]
@@ -3803,123 +2875,63 @@
           "did_action_this_turn": false, 
           "spells": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }
           ]
@@ -3984,123 +2996,63 @@
           "did_action_this_turn": false, 
           "spells": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }
           ]
@@ -4165,123 +3117,63 @@
           "did_action_this_turn": false, 
           "spells": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }
           ]
@@ -4354,235 +3246,119 @@
           "timers": [], 
           "spells": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Animate Shadow", 
-              "notes": "M154, Subject's shadow attacks them, HT negates", 
-              "maintain": 4, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Death Touch", 
-              "notes": "M41, 1-3, needs touch", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Explosive Lightning", 
-              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
-              "maintain": 0, 
-              "time": null, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning", 
-              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning Whip", 
-              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Madness", 
-              "notes": "M136, cost: 2-6", 
-              "maintain": 0, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Panic", 
-              "notes": "M134, vs. Will", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Strike Blind", 
-              "notes": "M38, vs HT", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Stun", 
-              "notes": "M37, B420, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 5, 
               "name": "Total Paralysis", 
-              "notes": "M40, cost: 2-6, duration 60", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 8, 
               "name": "Agonize", 
-              "notes": "M40, HT negates", 
-              "maintain": 6, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Blink", 
-              "notes": "M148", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Great Ward", 
-              "notes": "M122, cost: 1/person (min:4), instant", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 3, 
               "name": "Phase", 
-              "notes": "M83, avoid an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }
           ], 
@@ -4681,195 +3457,99 @@
           "did_action_this_turn": false, 
           "spells": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 18
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 18
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 18
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 18
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 18
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 18
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 18
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 18
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 18
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 18
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 18
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 18
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 18
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 18
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 18
             }, 
             {
               "name": "Agonize", 
-              "notes": "M40, HT negates", 
-              "maintain": 6, 
-              "cost": 8, 
-              "time": 1, 
               "skill": 18
             }, 
             {
               "name": "Fear", 
-              "notes": "M134", 
-              "maintain": null, 
-              "cost": 1, 
-              "time": 1, 
               "skill": 18
             }, 
             {
               "name": "Pain", 
-              "notes": "M36, vs. HT", 
-              "maintain": 0, 
-              "cost": 2, 
-              "time": 1, 
               "skill": 18
             }, 
             {
               "name": "Panic", 
-              "notes": "M134, vs. Will", 
-              "maintain": 2, 
-              "cost": 4, 
-              "time": 1, 
               "skill": 18
             }, 
             {
               "name": "Summon Demon", 
-              "notes": "M155", 
-              "maintain": 0, 
-              "cost": 20, 
-              "time": 300, 
               "skill": 18
             }, 
             {
               "name": "Mind-Sending", 
-              "notes": "M47", 
-              "maintain": 4, 
-              "cost": 4, 
-              "time": 4, 
               "skill": 18
             }, 
             {
               "name": "Terror", 
-              "notes": "M134, Area, Will negates", 
-              "maintain": 0, 
-              "cost": 4, 
-              "time": 1, 
               "skill": 18
             }, 
             {
               "name": "Wall Of Lightning", 
-              "notes": "M197", 
-              "maintain": 0, 
-              "cost": null, 
-              "time": 1, 
               "skill": 18
             }, 
             {
               "name": "Zombie", 
-              "notes": "M151", 
-              "maintain": null, 
-              "cost": 8, 
-              "time": 60, 
               "skill": 18
             }
           ]
@@ -4931,235 +3611,119 @@
           "timers": [], 
           "spells": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Animate Shadow", 
-              "notes": "M154, Subject's shadow attacks them, HT negates", 
-              "maintain": 4, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Death Touch", 
-              "notes": "M41, 1-3, needs touch", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Explosive Lightning", 
-              "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
-              "maintain": 0, 
-              "time": null, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning", 
-              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning Whip", 
-              "notes": "M196, duration 10, cost 1 per 2 yards reach", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Madness", 
-              "notes": "M136, cost: 2-6", 
-              "maintain": 0, 
-              "time": 2, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Panic", 
-              "notes": "M134, vs. Will", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Strike Blind", 
-              "notes": "M38, vs HT", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Stun", 
-              "notes": "M37, B420, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 5, 
               "name": "Total Paralysis", 
-              "notes": "M40, cost: 2-6, duration 60", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 8, 
               "name": "Agonize", 
-              "notes": "M40, HT negates", 
-              "maintain": 6, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Blink", 
-              "notes": "M148", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Great Ward", 
-              "notes": "M122, cost: 1/person (min:4), instant", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 3, 
               "name": "Phase", 
-              "notes": "M83, avoid an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }
           ], 
@@ -5727,195 +4291,99 @@
       }, 
       "spells": [
         {
-          "cost": 1, 
           "name": "Alarm", 
-          "notes": "M100", 
-          "maintain": 0, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 4, 
           "name": "Alter Visage", 
-          "notes": "M41", 
-          "maintain": 0, 
-          "time": 60, 
           "skill": 13
         }, 
         {
-          "cost": 1, 
           "name": "Bless Plants", 
-          "notes": "M161", 
-          "maintain": 4, 
-          "time": 300, 
           "skill": 13
         }, 
         {
-          "cost": 1, 
           "name": "Boost Dexterity", 
-          "notes": "M37", 
-          "maintain": 2, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 2, 
           "name": "Bravery", 
-          "notes": "M134", 
-          "maintain": 2, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 1, 
           "name": "Clumsiness", 
-          "notes": "M36", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 2, 
           "name": "Emotion Control", 
-          "notes": "M137", 
-          "maintain": 0, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 1, 
           "name": "Fear", 
-          "notes": "M134", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 3, 
           "name": "Fumble", 
-          "notes": "M38", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 4, 
           "name": "Grace", 
-          "notes": "M37", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 1, 
           "name": "Hair Growth", 
-          "notes": "M39", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 2, 
           "name": "Haircut", 
-          "notes": "M39", 
-          "maintain": null, 
-          "time": 2, 
           "skill": 12
         }, 
         {
-          "cost": 3, 
           "name": "Heal Plant", 
-          "notes": "M161", 
-          "maintain": null, 
-          "time": 60, 
           "skill": 12
         }, 
         {
-          "cost": 2, 
           "name": "Identify Plant", 
-          "notes": "M161", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 2, 
           "name": "Itch", 
-          "notes": "M35", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 2, 
           "name": "Loyalty", 
-          "notes": "M136", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 2, 
           "name": "Luck", 
-          "notes": "V2", 
-          "maintain": 1, 
-          "time": 1, 
           "skill": 14
         }, 
         {
-          "cost": 1, 
           "name": "Lure", 
-          "notes": "M137", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 2, 
           "name": "Seek Plant", 
-          "notes": "M161", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 2, 
           "name": "Sense Emotion", 
-          "notes": "M45", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 2, 
           "name": "Sense Foes", 
-          "notes": "M45", 
-          "maintain": 0, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": null, 
-          "name": "Shapeshifting (rat)", 
-          "notes": "M32", 
-          "maintain": null, 
-          "time": 3, 
+          "name": "Shapeshifting", 
           "skill": 13
         }, 
         {
-          "cost": 2, 
           "name": "Spasm", 
-          "notes": "M35", 
-          "maintain": 0, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 1, 
           "name": "Tell Time", 
-          "notes": "M100", 
-          "maintain": 2, 
-          "time": 1, 
           "skill": 12
         }
       ], 
@@ -6235,171 +4703,87 @@
       }, 
       "spells": [
         {
-          "cost": 1, 
           "name": "Climbing", 
-          "notes": "M35", 
-          "maintain": 0, 
-          "time": 1, 
           "skill": 15
         }, 
         {
-          "cost": null, 
           "name": "Lend Energy", 
-          "notes": "M89", 
-          "maintain": 0, 
-          "time": 1, 
           "skill": 15
         }, 
         {
-          "cost": null, 
           "name": "Lend Vitality", 
-          "notes": "M89", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 15
         }, 
         {
-          "cost": null, 
-          "name": "Minor Healing", 
-          "notes": "M91", 
-          "maintain": null, 
-          "time": 1, 
+          "name": "Minor Heal", 
           "skill": 15
         }, 
         {
-          "cost": 1, 
-          "name": "Major Healing", 
-          "notes": "M91", 
-          "maintain": 4, 
-          "time": 1, 
+          "name": "Major Heal", 
           "skill": 14
         }, 
         {
-          "cost": 2, 
           "name": "Relieve Sickness", 
-          "notes": "M90", 
-          "maintain": 2, 
-          "time": 10, 
           "skill": 15
         }, 
         {
-          "cost": 4, 
           "name": "Cure Disease", 
-          "notes": "M91", 
-          "maintain": 2, 
-          "time": 600, 
           "skill": 15
         }, 
         {
-          "cost": 2, 
           "name": "Death Vision", 
-          "notes": "M149", 
-          "maintain": null, 
-          "time": 3, 
           "skill": 16
         }, 
         {
-          "cost": 20, 
           "name": "Summon Spirit", 
-          "notes": "M150", 
-          "maintain": 0, 
-          "time": 300, 
           "skill": 16
         }, 
         {
-          "cost": 8, 
           "name": "Zombie", 
-          "notes": "M151", 
-          "maintain": null, 
-          "time": 60, 
           "skill": 16
         }, 
         {
-          "cost": 2, 
           "name": "Detect Magic", 
-          "notes": "M101", 
-          "maintain": null, 
-          "time": 300, 
           "skill": 14
         }, 
         {
-          "cost": 2, 
           "name": "Identify Spell", 
-          "notes": "M102", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 14
         }, 
         {
-          "cost": 8, 
           "name": "Analyze Magic", 
-          "notes": "M102", 
-          "maintain": null, 
-          "time": 3600, 
           "skill": 14
         }, 
         {
-          "cost": 1, 
           "name": "Conceal Magic", 
-          "notes": "M122", 
-          "maintain": null, 
-          "time": 3, 
           "skill": 14
         }, 
         {
-          "cost": null, 
           "name": "Foolishness", 
-          "notes": "M134", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 14
         }, 
         {
-          "cost": 2, 
           "name": "Seek Plant", 
-          "notes": "M161", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 14
         }, 
         {
-          "cost": 2, 
           "name": "Shield", 
-          "notes": "M167", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 14
         }, 
         {
-          "cost": 3, 
           "name": "Seek Machine", 
-          "notes": "M175", 
-          "maintain": null, 
-          "time": 10, 
           "skill": 14
         }, 
         {
-          "cost": 1, 
           "name": "Light", 
-          "notes": "M110", 
-          "maintain": 0, 
-          "time": 1, 
           "skill": 14
         }, 
         {
-          "cost": null, 
           "name": "Enchant", 
-          "notes": "M56", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 13
         }, 
         {
-          "cost": 20, 
           "name": "Powerstone", 
-          "notes": "M69", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 14
         }
       ], 
@@ -9107,147 +7491,75 @@
           }, 
           "spells": [
             {
-              "cost": 3, 
               "name": "Throw Spell", 
-              "notes": "M128", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning", 
-              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Stop Power", 
-              "notes": "M179, 3 pts /1.5 yard radius ", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 16
             }, 
             {
-              "cost": 5, 
               "name": "Malfunction", 
-              "notes": "M177, touch", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Armor", 
-              "notes": "M167, 2xDR, lasts 1 minute", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 3, 
               "name": "Rotting Death", 
-              "notes": "M154 vs. HT, needs touch", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Death Vision", 
-              "notes": "M149, vs. IQ", 
-              "maintain": null, 
-              "time": 3, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Blink", 
-              "notes": "M148", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Command", 
-              "notes": "M136, vs. Will", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Panic", 
-              "notes": "M134, vs. Will", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Death Touch", 
-              "notes": "M41, 1-3, needs touch", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Choke", 
-              "notes": "M40, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Strike Blind", 
-              "notes": "M38, vs HT", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Pain", 
-              "notes": "M36, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Stun", 
-              "notes": "M37, B420, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Fog", 
-              "notes": "M193, cost: 2/yard radius, lasts 1 minute", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }
           ], 
@@ -9499,147 +7811,75 @@
           }, 
           "spells": [
             {
-              "cost": 3, 
               "name": "Throw Spell", 
-              "notes": "M128", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Lightning", 
-              "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Stop Power", 
-              "notes": "M179, 3 pts /1.5 yard radius ", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 16
             }, 
             {
-              "cost": 5, 
               "name": "Malfunction", 
-              "notes": "M177, touch", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Armor", 
-              "notes": "M167, 2xDR, lasts 1 minute", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 3, 
               "name": "Rotting Death", 
-              "notes": "M154 vs. HT, needs touch", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Death Vision", 
-              "notes": "M149, vs. IQ", 
-              "maintain": null, 
-              "time": 3, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Blink", 
-              "notes": "M148", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Command", 
-              "notes": "M136, vs. Will", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Panic", 
-              "notes": "M134, vs. Will", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Death Touch", 
-              "notes": "M41, 1-3, needs touch", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Choke", 
-              "notes": "M40, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 4, 
               "name": "Strike Blind", 
-              "notes": "M38, vs HT", 
-              "maintain": 2, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Pain", 
-              "notes": "M36, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Stun", 
-              "notes": "M37, B420, vs. HT", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 16
             }, 
             {
-              "cost": null, 
               "name": "Fog", 
-              "notes": "M193, cost: 2/yard radius, lasts 1 minute", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 16
             }
           ], 
@@ -10714,123 +8954,63 @@
           "did_action_this_turn": false, 
           "spells": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }
           ]
@@ -10998,123 +9178,63 @@
           "did_action_this_turn": false, 
           "spells": [
             {
-              "cost": 1, 
               "name": "Awaken", 
-              "notes": "M90", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Communicate", 
-              "notes": "M48", 
-              "maintain": 4, 
-              "time": 4, 
               "skill": 11
             }, 
             {
-              "cost": 3, 
               "name": "Daze", 
-              "notes": "M134", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Far Hearing", 
-              "notes": "M173", 
-              "maintain": 2, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Foolishness", 
-              "notes": "M134", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Lend Energy", 
-              "notes": "M89", 
-              "maintain": 0, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Lend Vitality", 
-              "notes": "M89", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 2, 
               "name": "Luck", 
-              "notes": "V2", 
-              "maintain": 1, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Major Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Minor Heal", 
-              "notes": "M91", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": null, 
               "name": "Might", 
-              "notes": "M37", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 15, 
               "name": "Restoration", 
-              "notes": "M93", 
-              "maintain": 0, 
-              "time": 60, 
               "skill": 11
             }, 
             {
-              "cost": null, 
               "name": "Sense Life", 
-              "notes": "M45, cost 1/2 per yard radius, see M11", 
-              "maintain": null, 
-              "time": 1, 
               "skill": 12
             }, 
             {
-              "cost": 4, 
               "name": "Sleep", 
-              "notes": "M135", 
-              "maintain": 0, 
-              "time": 3, 
               "skill": 11
             }, 
             {
-              "cost": 4, 
               "name": "Wizard Eye", 
-              "notes": "M104", 
-              "maintain": 2, 
-              "time": 2, 
               "skill": 11
             }
           ]
@@ -12030,123 +10150,63 @@
       }, 
       "spells": [
         {
-          "cost": 1, 
           "name": "Awaken", 
-          "notes": "M90", 
-          "maintain": 0, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 4, 
           "name": "Communicate", 
-          "notes": "M48", 
-          "maintain": 4, 
-          "time": 4, 
           "skill": 11
         }, 
         {
-          "cost": 3, 
           "name": "Daze", 
-          "notes": "M134", 
-          "maintain": 2, 
-          "time": 2, 
           "skill": 11
         }, 
         {
-          "cost": 4, 
           "name": "Far Hearing", 
-          "notes": "M173", 
-          "maintain": 2, 
-          "time": 3, 
           "skill": 11
         }, 
         {
-          "cost": null, 
           "name": "Foolishness", 
-          "notes": "M134", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 11
         }, 
         {
-          "cost": null, 
           "name": "Lend Energy", 
-          "notes": "M89", 
-          "maintain": 0, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": null, 
           "name": "Lend Vitality", 
-          "notes": "M89", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 2, 
           "name": "Luck", 
-          "notes": "V2", 
-          "maintain": 1, 
-          "time": 1, 
           "skill": 11
         }, 
         {
-          "cost": null, 
           "name": "Major Heal", 
-          "notes": "M91", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 11
         }, 
         {
-          "cost": null, 
           "name": "Minor Heal", 
-          "notes": "M91", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": null, 
           "name": "Might", 
-          "notes": "M37", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 15, 
           "name": "Restoration", 
-          "notes": "M93", 
-          "maintain": 0, 
-          "time": 60, 
           "skill": 11
         }, 
         {
-          "cost": null, 
           "name": "Sense Life", 
-          "notes": "M45, cost 1/2 per yard radius, see M11", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 4, 
           "name": "Sleep", 
-          "notes": "M135", 
-          "maintain": 0, 
-          "time": 3, 
           "skill": 11
         }, 
         {
-          "cost": 4, 
           "name": "Wizard Eye", 
-          "notes": "M104", 
-          "maintain": 2, 
-          "time": 2, 
           "skill": 11
         }
       ], 
@@ -12263,123 +10323,63 @@
       "opponent": null, 
       "spells": [
         {
-          "cost": 1, 
           "name": "Awaken", 
-          "notes": "M90", 
-          "maintain": 0, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 4, 
           "name": "Communicate", 
-          "notes": "M48", 
-          "maintain": 4, 
-          "time": 4, 
           "skill": 11
         }, 
         {
-          "cost": 3, 
           "name": "Daze", 
-          "notes": "M134", 
-          "maintain": 2, 
-          "time": 2, 
           "skill": 11
         }, 
         {
-          "cost": 4, 
           "name": "Far Hearing", 
-          "notes": "M173", 
-          "maintain": 2, 
-          "time": 3, 
           "skill": 11
         }, 
         {
-          "cost": null, 
           "name": "Foolishness", 
-          "notes": "M134", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 11
         }, 
         {
-          "cost": null, 
           "name": "Lend Energy", 
-          "notes": "M89", 
-          "maintain": 0, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": null, 
           "name": "Lend Vitality", 
-          "notes": "M89", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 2, 
           "name": "Luck", 
-          "notes": "V2", 
-          "maintain": 1, 
-          "time": 1, 
           "skill": 11
         }, 
         {
-          "cost": null, 
           "name": "Major Heal", 
-          "notes": "M91", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 11
         }, 
         {
-          "cost": null, 
           "name": "Minor Heal", 
-          "notes": "M91", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": null, 
           "name": "Might", 
-          "notes": "M37", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 15, 
           "name": "Restoration", 
-          "notes": "M93", 
-          "maintain": 0, 
-          "time": 60, 
           "skill": 11
         }, 
         {
-          "cost": null, 
           "name": "Sense Life", 
-          "notes": "M45, cost 1/2 per yard radius, see M11", 
-          "maintain": null, 
-          "time": 1, 
           "skill": 12
         }, 
         {
-          "cost": 4, 
           "name": "Sleep", 
-          "notes": "M135", 
-          "maintain": 0, 
-          "time": 3, 
           "skill": 11
         }, 
         {
-          "cost": 4, 
           "name": "Wizard Eye", 
-          "notes": "M104", 
-          "maintain": 2, 
-          "time": 2, 
           "skill": 11
         }
       ]
@@ -14078,98 +12078,50 @@
       "spells": [
         {
           "name": "Charm", 
-          "notes": "M139, vs. Will", 
-          "maintain": 3, 
-          "cost": 6, 
-          "time": 1, 
           "skill": 18
         }, 
         {
           "name": "Teleport", 
-          "notes": "M147, cost: 5 for 100 yards", 
-          "maintain": 0, 
-          "cost": null, 
-          "time": 1, 
           "skill": 18
         }, 
         {
           "name": "Enslave", 
-          "notes": "M141, vs. Will", 
-          "maintain": 0, 
-          "cost": 30, 
-          "time": 1, 
           "skill": 18
         }, 
         {
           "name": "Lesser Geas", 
-          "notes": "M140, vs. Will ", 
-          "maintain": 0, 
-          "cost": 12, 
-          "time": 30, 
           "skill": 18
         }, 
         {
           "name": "False Memory", 
-          "notes": "M139, vs. Will", 
-          "maintain": 0, 
-          "cost": 3, 
-          "time": 5, 
           "skill": 18
         }, 
         {
           "name": "Manastone", 
-          "notes": "M70", 
-          "maintain": 0, 
-          "cost": null, 
-          "time": 1, 
           "skill": 18
         }, 
         {
           "name": "Repair", 
-          "notes": "M118", 
-          "maintain": 0, 
-          "cost": null, 
-          "time": 1, 
           "skill": 18
         }, 
         {
           "name": "Planar Summons", 
-          "notes": "M82", 
-          "maintain": 0, 
-          "cost": null, 
-          "time": 300, 
           "skill": 18
         }, 
         {
           "name": "Agonize", 
-          "notes": "M40, HT negates", 
-          "maintain": 6, 
-          "cost": 8, 
-          "time": 1, 
           "skill": 18
         }, 
         {
           "name": "Armor", 
-          "notes": "M167, 2xDR, lasts 1 minute", 
-          "maintain": 0, 
-          "cost": null, 
-          "time": 1, 
           "skill": 18
         }, 
         {
           "name": "Blink", 
-          "notes": "M148", 
-          "maintain": 0, 
-          "cost": 2, 
-          "time": 1, 
           "skill": 18
         }, 
         {
           "name": "Stun", 
-          "notes": "M37, B420, vs. HT", 
-          "maintain": 0, 
-          "cost": 2, 
-          "time": 1, 
           "skill": 18
         }
       ]

@@ -3238,728 +3238,551 @@ class GurpsRuleset(Ruleset):
     }
 
     # These are specific to the Persephone version of the GURPS ruleset
-    spells = [
-        {
-          "cost": 3, 
-          "name": "Phase", 
-          "notes": "M83, avoid an attack", 
-          "maintain": 0, 
-          "time": 1, 
-          "skill": 12
-        },
-        {
-          "cost": None, 
-          "name": "Great Ward", 
-          "notes": "M122, cost: 1/person (min:4), instant", 
-          "maintain": 0, 
-          "time": 1, 
-          "skill": 12
-        },
-        {
-          "cost": 5, 
-          "name": "Total Paralysis", 
-          "notes": "M40, cost: 2-6, duration 60", 
-          "maintain": 0, 
-          "time": 1, 
-          "skill": 12
-        },
-        {
-          "cost": None, 
-          "name": "Madness", 
-          "notes": "M136, cost: 2-6", 
-          "maintain": 0, 
-          "time": 2, 
-          "skill": 12
-        },
-        {
-          "cost": 4, 
-          "name": "Animate Shadow", 
-          "notes": "M154, Subject's shadow attacks them, HT negates", 
-          "maintain": 4, 
-          "time": 2, 
-          "skill": 12
-        },
-        {
-          "cost": 4, 
-          "name": "Terror", 
-          "notes": "M134, Area, Will negates", 
-          "maintain": 0, 
-          "time": 1, 
-          "skill": 12
-        }, 
-        {
-          "cost": None, 
-          "name": "Wall Of Lightning", 
-          "notes": "M197", 
-          "maintain": 0, 
-          "time": 1, 
-          "skill": 18
-        }, 
-        {
-          "cost": 10, 
-          "name": "Evisceration", 
-          "notes": "M154, HT/IQ negates, Magery 3", 
-          "maintain": 0, 
-          "time": 5, 
-          "skill": 12
-        }, 
-        {
-          "cost": 250, 
-          "name": "Golem", 
-          "notes": "M59", 
-          "maintain": 0, 
-          "time": 0, 
-          "skill": 12
-        }, 
-        {
-          "cost": 4, 
-          "name": "Mind-Sending", 
-          "notes": "M47", 
-          "maintain": 4, 
-          "time": 4, 
-          "skill": 12
-        }, 
-        {
+    spells = {
+
+        # Alphabetized for conevenience
+
+        "Agonize": {
           "cost": 8, 
-          "name": "Agonize", 
           "notes": "M40, HT negates", 
           "maintain": 6, 
           "time": 1, 
-          "skill": 12
         }, 
-        {
+        "Alarm": {
           "cost": 1, 
-          "name": "Alarm", 
           "notes": "M100", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 12
         }, 
-        {
+        "Alter Visage": {
           "cost": 4, 
-          "name": "Alter Visage", 
           "notes": "M41", 
           "maintain": 0, 
           "time": 60, 
-          "skill": 13
         }, 
-        {
+        "Analyze Magic": {
           "cost": 8, 
-          "name": "Analyze Magic", 
           "notes": "M102", 
           "maintain": None, 
           "time": 3600, 
-          "skill": 14
         }, 
-        {
+        "Animate Shadow": {
+          "cost": 4, 
+          "notes": "M154, Subject's shadow attacks them, HT negates", 
+          "maintain": 4, 
+          "time": 2, 
+        },
+        "Armor": {
           "cost": None, 
-          "name": "Armor", 
           "notes": "M167, 2xDR, lasts 1 minute", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 18
         }, 
-        {
+        "Awaken": {
           "cost": 1, 
-          "name": "Awaken", 
           "notes": "M90", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 12
         }, 
-        {
+        "Bless Plants": {
           "cost": 1, 
-          "name": "Bless Plants", 
           "notes": "M161", 
           "maintain": 4, 
           "time": 300, 
-          "skill": 13
         }, 
-        {
+        "Blink": {
           "cost": 2, 
-          "name": "Blink", 
           "notes": "M148", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 18
         }, 
-        {
+        "Boost Dexterity": {
           "cost": 1, 
-          "name": "Boost Dexterity", 
           "notes": "M37", 
           "maintain": 2, 
           "time": 1, 
-          "skill": 12
         }, 
-        {
+        "Bravery": {
           "cost": 2, 
-          "name": "Bravery", 
           "notes": "M134", 
           "maintain": 2, 
           "time": 1, 
-          "skill": 12
         }, 
-        {
+        "Charm": {
           "cost": 6, 
-          "name": "Charm", 
           "notes": "M139, vs. Will", 
           "maintain": 3, 
           "time": 1, 
-          "skill": 18
         }, 
-        {
+        "Choke": {
           "cost": 4, 
-          "name": "Choke", 
           "notes": "M40, vs. HT", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 18
         }, 
-        {
+        "Climbing": {
           "cost": 1, 
-          "name": "Climbing", 
           "notes": "M35", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 15
         }, 
-        {
+        "Clumsiness": {
           "cost": 1, 
-          "name": "Clumsiness", 
           "notes": "M36", 
           "maintain": None, 
           "time": 1, 
-          "skill": 12
         }, 
-        {
+        "Command": {
           "cost": 4, 
-          "name": "Command", 
           "notes": "M136, vs. Will", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 18
         }, 
-        {
+        "Communicate": {
           "cost": 4, 
-          "name": "Communicate", 
           "notes": "M48", 
           "maintain": 4, 
           "time": 4, 
-          "skill": 11
         }, 
-        {
+        "Conceal Magic": {
           "cost": 1, 
-          "name": "Conceal Magic", 
           "notes": "M122", 
           "maintain": None, 
           "time": 3, 
-          "skill": 14
         }, 
-        {
+        "Cure Disease": {
           "cost": 4, 
-          "name": "Cure Disease", 
           "notes": "M91", 
           "maintain": 2, 
           "time": 600, 
-          "skill": 15
         }, 
-        {
+        "Daze": {
           "cost": 3, 
-          "name": "Daze", 
           "notes": "M134", 
           "maintain": 2, 
           "time": 2, 
-          "skill": 11
         }, 
-        {
+        "Death Touch": {
           "cost": None, 
-          "name": "Death Touch", 
           "notes": "M41, 1-3, needs touch", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 18
         }, 
-        {
+        "Death Vision": {
           "cost": 2, 
-          "name": "Death Vision", 
           "notes": "M149, vs. IQ", 
           "maintain": None, 
           "time": 3, 
-          "skill": 16
         }, 
-        {
+        "Detect Magic": {
           "cost": 2, 
-          "name": "Detect Magic", 
           "notes": "M101", 
           "maintain": None, 
           "time": 300, 
-          "skill": 14
         }, 
-        {
+        "Emotion Control": {
           "cost": 2, 
-          "name": "Emotional Control", 
           "notes": "M137", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 12
         }, 
-        {
+        "Enchant": {
           "cost": None, 
-          "name": "Enchant", 
           "notes": "M56", 
           "maintain": None, 
           "time": 1, 
-          "skill": 13
         }, 
-        {
+        "Enslave": {
           "cost": 30, 
-          "name": "Enslave", 
           "notes": "M141, vs. Will", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 18
         }, 
-        {
-          "cost": 3, 
-          "name": "False Memory", 
-          "notes": "M139, vs. Will", 
+        "Evisceration": {
+          "cost": 10, 
+          "notes": "M154, HT/IQ negates, Magery 3", 
           "maintain": 0, 
           "time": 5, 
-          "skill": 18
         }, 
-        {
-          "cost": 4, 
-          "name": "Far Hearing", 
-          "notes": "M173", 
-          "maintain": 2, 
-          "time": 3, 
-          "skill": 11
-        }, 
-        {
-          "cost": 1, 
-          "name": "Fear", 
-          "notes": "M134", 
-          "maintain": None, 
-          "time": 1, 
-          "skill": 12
-        }, 
-        {
+        "Explosive Lightning": {
           "cost": None, 
-          "name": "Fog", 
-          "notes": "M193, cost: 2/yard radius, lasts 1 minute", 
-          "maintain": 0, 
-          "time": 1, 
-          "skill": 18
-        }, 
-        {
-          "cost": None, 
-          "name": "Foolishness", 
-          "notes": "M134", 
-          "maintain": None, 
-          "time": 1, 
-          "skill": 11
-        }, 
-        {
-          "cost": 3, 
-          "name": "Fumble", 
-          "notes": "M38", 
-          "maintain": None, 
-          "time": 1, 
-          "skill": 12
-        }, 
-        {
-          "cost": 4, 
-          "name": "Grace", 
-          "notes": "M37", 
-          "maintain": None, 
-          "time": 1, 
-          "skill": 12
-        }, 
-        {
-          "cost": 1, 
-          "name": "Hair Growth", 
-          "notes": "M39", 
-          "maintain": None, 
-          "time": 1, 
-          "skill": 12
-        }, 
-        {
-          "cost": 2, 
-          "name": "Haircut", 
-          "notes": "M39", 
-          "maintain": None, 
-          "time": 2, 
-          "skill": 12
-        }, 
-        {
-          "cost": 3, 
-          "name": "Heal Plant", 
-          "notes": "M161", 
-          "maintain": None, 
-          "time": 60, 
-          "skill": 12
-        }, 
-        {
-          "cost": 2, 
-          "name": "Identify Plant", 
-          "notes": "M161", 
-          "maintain": None, 
-          "time": 1, 
-          "skill": 12
-        }, 
-        {
-          "cost": 2, 
-          "name": "Identify Spell", 
-          "notes": "M102", 
-          "maintain": None, 
-          "time": 1, 
-          "skill": 14
-        }, 
-        {
-          "cost": 2, 
-          "name": "Itch", 
-          "notes": "M35", 
-          "maintain": None, 
-          "time": 1, 
-          "skill": 12
-        }, 
-        {
-          "cost": None, 
-          "name": "Lend Energy", 
-          "notes": "M89", 
-          "maintain": 0, 
-          "time": 1, 
-          "skill": 15
-        }, 
-        {
-          "cost": None, 
-          "name": "Lend Vitality", 
-          "notes": "M89", 
-          "maintain": None, 
-          "time": 1, 
-          "skill": 15
-        }, 
-        {
-          "cost": 12, 
-          "name": "Lesser Geas", 
-          "notes": "M140, vs. Will ", 
-          "maintain": 0, 
-          "time": 30, 
-          "skill": 18
-        }, 
-        {
-          "cost": 1, 
-          "name": "Light", 
-          "notes": "M110", 
-          "maintain": 0, 
-          "time": 1, 
-          "skill": 14
-        }, 
-        {
-          "cost": None, 
-          "name": "Explosive Lightning", 
           "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
           "maintain": 0, 
           "time": None, 
-          "skill": 18
         },
-        {
-          "cost": None, 
-          "name": "Lightning Whip", 
-          "notes": "M196, duration 10, cost 1 per 2 yards reach", 
+        "False Memory": {
+          "cost": 3, 
+          "notes": "M139, vs. Will", 
           "maintain": 0, 
-          "time": 1, 
-          "skill": 18
-        },
-        {
-          "cost": None, 
-          "name": "Lightning", 
-          "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-          "maintain": 0, 
-          "time": 1, 
-          "skill": 18
+          "time": 5, 
         }, 
-        {
-          "cost": 2, 
-          "name": "Loyalty", 
-          "notes": "M136", 
-          "maintain": None, 
-          "time": 1, 
-          "skill": 12
+        "Far Hearing": {
+          "cost": 4, 
+          "notes": "M173", 
+          "maintain": 2, 
+          "time": 3, 
         }, 
-        {
-          "cost": 2, 
-          "name": "Luck", 
-          "notes": "V2", 
-          "maintain": 1, 
-          "time": 1, 
-          "skill": 11
-        }, 
-        {
+        "Fear": {
           "cost": 1, 
-          "name": "Lure", 
-          "notes": "M137", 
+          "notes": "M134", 
           "maintain": None, 
           "time": 1, 
-          "skill": 12
         }, 
-        {
+        "Fog": {
           "cost": None, 
-          "name": "Major Heal", 
-          "notes": "M91", 
+          "notes": "M193, cost: 2/yard radius, lasts 1 minute", 
+          "maintain": 0, 
+          "time": 1, 
+        }, 
+        "Foolishness": {
+          "cost": None, 
+          "notes": "M134", 
           "maintain": None, 
           "time": 1, 
-          "skill": 11
         }, 
-        {
-          "cost": 5, 
-          "name": "Malfunction", 
-          "notes": "M177, touch", 
-          "maintain": 0, 
+        "Fumble": {
+          "cost": 3, 
+          "notes": "M38", 
+          "maintain": None, 
           "time": 1, 
-          "skill": 18
         }, 
-        {
-          "cost": None, 
-          "name": "Manastone", 
-          "notes": "M70", 
+        "Golem": {
+          "cost": 250, 
+          "notes": "M59", 
           "maintain": 0, 
-          "time": 1, 
-          "skill": 18
+          "time": 0, 
         }, 
-        {
-          "cost": None, 
-          "name": "Might", 
+        "Grace": {
+          "cost": 4, 
           "notes": "M37", 
           "maintain": None, 
           "time": 1, 
-          "skill": 12
         }, 
-        {
+        "Great Ward": {
           "cost": None, 
-          "name": "Minor Heal", 
-          "notes": "M91", 
+          "notes": "M122, cost: 1/person (min:4), instant", 
+          "maintain": 0, 
+          "time": 1, 
+        },
+        "Hair Growth": {
+          "cost": 1, 
+          "notes": "M39", 
           "maintain": None, 
           "time": 1, 
-          "skill": 12
         }, 
-        {
+        "Haircut": {
           "cost": 2, 
-          "name": "Pain", 
-          "notes": "M36, vs. HT", 
-          "maintain": 0, 
-          "time": 1, 
-          "skill": 18
-        }, 
-        {
-          "cost": 4, 
-          "name": "Panic", 
-          "notes": "M134, vs. Will", 
-          "maintain": 2, 
-          "time": 1, 
-          "skill": 18
-        }, 
-        {
-          "cost": None, 
-          "name": "Planar Summons", 
-          "notes": "M82", 
-          "maintain": 0, 
-          "time": 300, 
-          "skill": 18
-        }, 
-        {
-          "cost": 20, 
-          "name": "Powerstone", 
-          "notes": "M69", 
+          "notes": "M39", 
           "maintain": None, 
-          "time": 1, 
-          "skill": 14
+          "time": 2, 
         }, 
-        {
-          "cost": 2, 
-          "name": "Relieve Sickness", 
-          "notes": "M90", 
-          "maintain": 2, 
-          "time": 10, 
-          "skill": 15
-        }, 
-        {
-          "cost": None, 
-          "name": "Repair", 
-          "notes": "M118", 
-          "maintain": 0, 
-          "time": 1, 
-          "skill": 18
-        }, 
-        {
-          "cost": 15, 
-          "name": "Restoration", 
-          "notes": "M93", 
-          "maintain": 0, 
+        "Heal Plant": {
+          "cost": 3, 
+          "notes": "M161", 
+          "maintain": None, 
           "time": 60, 
-          "skill": 11
         }, 
-        {
-          "cost": 3, 
-          "name": "Rotting Death", 
-          "notes": "M154 vs. HT, needs touch", 
-          "maintain": 2, 
-          "time": 1, 
-          "skill": 18
-        }, 
-        {
-          "cost": 3, 
-          "name": "Seek Machine", 
-          "notes": "M175", 
-          "maintain": None, 
-          "time": 10, 
-          "skill": 14
-        }, 
-        {
+        "Identify Plant": {
           "cost": 2, 
-          "name": "Seek Plant", 
           "notes": "M161", 
           "maintain": None, 
           "time": 1, 
-          "skill": 14
         }, 
-        {
+        "Identify Spell": {
           "cost": 2, 
-          "name": "Sense Emotion", 
+          "notes": "M102", 
+          "maintain": None, 
+          "time": 1, 
+        }, 
+        "Itch": {
+          "cost": 2, 
+          "notes": "M35", 
+          "maintain": None, 
+          "time": 1, 
+        }, 
+        "Lend Energy": {
+          "cost": None, 
+          "notes": "M89", 
+          "maintain": 0, 
+          "time": 1, 
+        }, 
+        "Lend Vitality": {
+          "cost": None, 
+          "notes": "M89", 
+          "maintain": None, 
+          "time": 1, 
+        }, 
+        "Lesser Geas": {
+          "cost": 12, 
+          "notes": "M140, vs. Will ", 
+          "maintain": 0, 
+          "time": 30, 
+        }, 
+        "Light": {
+          "cost": 1, 
+          "notes": "M110", 
+          "maintain": 0, 
+          "time": 1, 
+        }, 
+        "Lightning": {
+          "cost": None, 
+          "notes": "M196, cost 1-3, cast=cost, needs an attack", 
+          "maintain": 0, 
+          "time": 1, 
+        }, 
+        "Lightning Whip": {
+          "cost": None, 
+          "notes": "M196, duration 10, cost 1 per 2 yards reach", 
+          "maintain": 0, 
+          "time": 1, 
+        },
+        "Loyalty": {
+          "cost": 2, 
+          "notes": "M136", 
+          "maintain": None, 
+          "time": 1, 
+        }, 
+        "Luck": {
+          "cost": 2, 
+          "notes": "V2", 
+          "maintain": 1, 
+          "time": 1, 
+        }, 
+        "Lure": {
+          "cost": 1, 
+          "notes": "M137", 
+          "maintain": None, 
+          "time": 1, 
+        }, 
+        "Madness": {
+          "cost": None, 
+          "notes": "M136, cost: 2-6", 
+          "maintain": 0, 
+          "time": 2, 
+        },
+        "Major Heal": {
+          "cost": None, 
+          "notes": "M91", 
+          "maintain": None, 
+          "time": 1, 
+        }, 
+        "Malfunction": {
+          "cost": 5, 
+          "notes": "M177, touch", 
+          "maintain": 0, 
+          "time": 1, 
+        }, 
+        "Manastone": {
+          "cost": None, 
+          "notes": "M70", 
+          "maintain": 0, 
+          "time": 1, 
+        }, 
+        "Might": {
+          "cost": None, 
+          "notes": "M37", 
+          "maintain": None, 
+          "time": 1, 
+        }, 
+        "Mind-Sending": {
+          "cost": 4, 
+          "notes": "M47", 
+          "maintain": 4, 
+          "time": 4, 
+        }, 
+        "Minor Heal": {
+          "cost": None, 
+          "notes": "M91", 
+          "maintain": None, 
+          "time": 1, 
+        }, 
+        "Pain": {
+          "cost": 2, 
+          "notes": "M36, vs. HT", 
+          "maintain": 0, 
+          "time": 1, 
+        }, 
+        "Panic": {
+          "cost": 4, 
+          "notes": "M134, vs. Will", 
+          "maintain": 2, 
+          "time": 1, 
+        }, 
+        "Phase": {
+          "cost": 3, 
+          "notes": "M83, avoid an attack", 
+          "maintain": 0, 
+          "time": 1, 
+        },
+        "Planar Summons": {
+          "cost": None, 
+          "notes": "M82", 
+          "maintain": 0, 
+          "time": 300, 
+        }, 
+        "Powerstone": {
+          "cost": 20, 
+          "notes": "M69", 
+          "maintain": None, 
+          "time": 1, 
+        }, 
+        "Relieve Sickness": {
+          "cost": 2, 
+          "notes": "M90", 
+          "maintain": 2, 
+          "time": 10, 
+        }, 
+        "Repair": {
+          "cost": None, 
+          "notes": "M118", 
+          "maintain": 0, 
+          "time": 1, 
+        }, 
+        "Restoration": {
+          "cost": 15, 
+          "notes": "M93", 
+          "maintain": 0, 
+          "time": 60, 
+        }, 
+        "Rotting Death": {
+          "cost": 3, 
+          "notes": "M154 vs. HT, needs touch", 
+          "maintain": 2, 
+          "time": 1, 
+        }, 
+        "Seek Machine": {
+          "cost": 3, 
+          "notes": "M175", 
+          "maintain": None, 
+          "time": 10, 
+        }, 
+        "Seek Plant": {
+          "cost": 2, 
+          "notes": "M161", 
+          "maintain": None, 
+          "time": 1, 
+        }, 
+        "Sense Emotion": {
+          "cost": 2, 
           "notes": "M45", 
           "maintain": None, 
           "time": 1, 
-          "skill": 12
         }, 
-        {
+        "Sense Foes": {
           "cost": 2, 
-          "name": "Sense Foes", 
           "notes": "M45", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 12
         }, 
-        {
+        "Sense Life": {
           "cost": None, 
-          "name": "Sense Life", 
           "notes": "M45, cost 1/2 per yard radius, see M11", 
           "maintain": None, 
           "time": 1, 
-          "skill": 12
         }, 
-        {
+        "Shapeshifting": {
           "cost": None, 
-          "name": "Shapeshifting (Rat)", 
           "notes": "M32", 
           "maintain": None, 
           "time": 3, 
-          "skill": 13
         }, 
-        {
+        "Shield": {
           "cost": 2, 
-          "name": "Shield", 
           "notes": "M167", 
           "maintain": None, 
           "time": 1, 
-          "skill": 14
         }, 
-        {
+        "Sleep": {
           "cost": 4, 
-          "name": "Sleep", 
           "notes": "M135", 
           "maintain": 0, 
           "time": 3, 
-          "skill": 11
         }, 
-        {
+        "Spasm": {
           "cost": 2, 
-          "name": "Spasm", 
           "notes": "M35", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 12
         }, 
-        {
+        "Stop Power": {
           "cost": None, 
-          "name": "Stop Power", 
           "notes": "M179, 3 pts /1.5 yard radius", 
           "maintain": 0, 
           "time": 3, 
-          "skill": 18
         }, 
-        {
+        "Strike Blind": {
           "cost": 4, 
-          "name": "Strike Blind", 
           "notes": "M38, vs HT", 
           "maintain": 2, 
           "time": 1, 
-          "skill": 18
         }, 
-        {
+        "Stun": {
           "cost": 2, 
-          "name": "Stun", 
           "notes": "M37, B420, vs. HT", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 18
         }, 
-        {
+        "Summon Demon": {
           "cost": 20, 
-          "name": "Summon Demon", 
           "notes": "M155", 
           "maintain": 0, 
           "time": 300, 
-          "skill": 16
         }, 
-        {
+        "Summon Spirit": {
           "cost": 20, 
-          "name": "Summon Spirit", 
           "notes": "M150", 
           "maintain": 0, 
           "time": 300, 
-          "skill": 16
         }, 
-        {
-          "cost": 1, 
-          "name": "Tell Time", 
-          "notes": "M100", 
-          "maintain": 2, 
-          "time": 1, 
-          "skill": 12
-        }, 
-        {
+        "Teleport": {
           "cost": None, 
-          "name": "Teleport", 
           "notes": "M147, cost: 5 for 100 yards", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 18
         }, 
-        {
+        "Terror": {
+          "cost": 4, 
+          "notes": "M134, Area, Will negates", 
+          "maintain": 0, 
+          "time": 1, 
+        }, 
+        "Tell Time": {
+          "cost": 1, 
+          "notes": "M100", 
+          "maintain": 2, 
+          "time": 1, 
+        }, 
+        "Throw Spell": {
           "cost": 3, 
-          "name": "Throw Spell", 
           "notes": "M128", 
           "maintain": 0, 
           "time": 1, 
-          "skill": 18
         }, 
-        {
+        "Total Paralysis": {
+          "cost": 5, 
+          "notes": "M40, cost: 2-6, duration 60", 
+          "maintain": 0, 
+          "time": 1, 
+        },
+        "Wall Of Lightning": {
+          "cost": None, 
+          "notes": "M197", 
+          "maintain": 0, 
+          "time": 1, 
+        }, 
+        "Wizard Eye": {
           "cost": 4, 
-          "name": "Wizard Eye", 
           "notes": "M104", 
           "maintain": 2, 
           "time": 2, 
-          "skill": 11
         }, 
-        {
+        "Zombie": {
           "cost": 8, 
-          "name": "Zombie", 
           "notes": "M151", 
           "maintain": None, 
           "time": 60, 
-          "skill": 16
         }
-    ]
+    }
 
     # Posture: B551; 'attack' is melee, 'target' is ranged
     posture = {
@@ -4230,14 +4053,25 @@ class GurpsRuleset(Ruleset):
         if 'spells' in fighter.details:
             spell_menu = []
             for index, spell in enumerate(fighter.details['spells']):
-                cast_text_array = ['%s -' % spell['name']]
+                if spell['name'] not in GurpsRuleset.spells:
+                    self._window_manager.error(
+                        ['Spell "%s" not in GurpsRuleset.spells' %
+                                                                spell['name']]
+                    )
+                    continue
+                complete_spell = copy.deepcopy(spell)
+                complete_spell.update(GurpsRuleset.spells[spell['name']])
+
+                cast_text_array = ['%s -' % complete_spell['name']]
+
                 for piece in ['cost', 'skill', 'time', 'notes']:
-                    if piece in spell:
-                        cast_text_array.append('%s:%r' % (piece, spell[piece]))
+                    if piece in complete_spell:
+                        cast_text_array.append('%s:%r' % (piece,
+                                                         complete_spell[piece]))
                 cast_text = ' '.join(cast_text_array)
                 spell_menu.append(  
                     (cast_text,
-                    {'text': [('Cast (%s)' % spell['name']),
+                    {'text': [('Cast (%s)' % complete_spell['name']),
                               ' Defense: none',
                               ' Move: none'],
 
@@ -4502,11 +4336,19 @@ class GurpsRuleset(Ruleset):
             found_one = False
             for spell in sorted(character.details['spells'],
                                 key=lambda(x): x['name']):
+                if spell['name'] not in GurpsRuleset.spells:
+                    self._window_manager.error(
+                        ['Spell "%s" not in GurpsRuleset.spells' %
+                                                                spell['name']]
+                    )
+                    continue
+                complete_spell = copy.deepcopy(spell)
+                complete_spell.update(GurpsRuleset.spells[spell['name']])
                 found_one = True
                 output.append(
-                        [{'text': '  %s (%d): %s' % (spell['name'],
-                                                     spell['skill'],
-                                                     spell['notes']),
+                        [{'text': '  %s (%d): %s' % (complete_spell['name'],
+                                                     complete_spell['skill'],
+                                                     complete_spell['notes']),
                           'mode': mode}])
 
             if not found_one:
@@ -5666,11 +5508,19 @@ class GurpsRuleset(Ruleset):
         spell_index = param['spell']
         spell = fighter.details['spells'][spell_index]
 
+        if spell['name'] not in GurpsRuleset.spells:
+            self._window_manager.error(
+                ['Spell "%s" not in GurpsRuleset.spells' % spell['name']]
+            )
+            return True
+        complete_spell = copy.deepcopy(spell)
+        complete_spell.update(GurpsRuleset.spells[spell['name']])
+
         # Cost
 
-        if spell['cost'] is None:
-            title = 'Cost to cast (%s) - see (%s) ' % (spell['name'],
-                                                       spell['notes'])
+        if complete_spell['cost'] is None:
+            title = 'Cost to cast (%s) - see (%s) ' % (complete_spell['name'],
+                                                       complete_spell['notes'])
             height = 1
             width = len(title)
             cost_string = ''
@@ -5680,13 +5530,14 @@ class GurpsRuleset(Ruleset):
                                                              title)
             cost = int(cost_string)
         else:
-            cost = spell['cost']
+            cost = complete_spell['cost']
 
         # Casting time
 
-        if spell['time'] is None or spell['time'] == 0:
-            title = 'Seconds to cast (%s) - see (%s) ' % (spell['name'],
-                                                          spell['notes'])
+        if complete_spell['time'] is None or complete_spell['time'] == 0:
+            title = 'Seconds to cast (%s) - see (%s) ' % (
+                                                    complete_spell['name'],
+                                                    complete_spell['notes'])
             height = 1
             width = len(title)
             casting_time_string = ''
@@ -5696,11 +5547,11 @@ class GurpsRuleset(Ruleset):
                                                                      title)
             casting_time = int(casting_time_string)
         else:
-            casting_time = spell['time']
+            casting_time = complete_spell['time']
 
 
         # M8 - High skill level costs less
-        skill = spell['skill'] - 15
+        skill = complete_spell['skill'] - 15
         while skill >= 0:
             cost -= 1
             skill -= 5
@@ -5709,13 +5560,13 @@ class GurpsRuleset(Ruleset):
 
         fighter.details['current']['fp'] -= cost
         fighter.timers.add(('Spell for %s' % fighter.name),
-                            casting_time - 0.1, # -0.1 so that it doesn't 
-                                                # show up on the first
-                                                # round you can do
-                                                # something after you cast
-                            'Casting (%s) @ skill (%d): %s' % (spell['name'],
-                                                               spell['skill'],
-                                                               spell['notes']))
+                    casting_time - 0.1, # -0.1 so that it doesn't 
+                                        # show up on the first
+                                        # round you can do
+                                        # something after you cast
+                    'Casting (%s) @ skill (%d): %s' % (complete_spell['name'],
+                                                       complete_spell['skill'],
+                                                       complete_spell['notes']))
         return None if 'text' not in param else param
 
 
@@ -8109,34 +7960,41 @@ class MainHandler(ScreenHandler):
         # Pick from the spell list
         keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
-        spell_menu = [(spell['name'], spell)
-                                for spell in sorted(self.__ruleset.spells,
-                                                    key=lambda x:x['name'])]
+        spell_menu = [(spell_name, spell_name)
+                                for spell_name in
+                                    sorted(self.__ruleset.spells.iterkeys())]
         while keep_asking:
-            new_spell = self._window_manager.menu('Spell to Add', spell_menu)
-            if new_spell is None:
+            new_spell_name = self._window_manager.menu('Spell to Add',
+                                                       spell_menu)
+            if new_spell_name is None:
                 return True
 
             # Check if spell is already there
             for spell in fighter.details['spells']:
-                if spell['name'] == new_spell['name']:
+                if spell['name'] == new_spell_name:
                     self._window_manager.error(
-                        ['%s already has spell "%s"' % (fighter.name,
-                                                        spell['name'])])
-                    new_spell = None
+                            ['%s already has spell "%s"' % (fighter.name,
+                                                            spell['name'])])
+                    new_spell_name = None
                     break
 
-            if new_spell is not None:
-                my_copy = copy.deepcopy(new_spell)
+            if new_spell_name is not None:
+                my_copy = {'name': new_spell_name}
 
                 title = 'At What Skill Level...'
                 height = 1
                 width = len(title) + 2
-                skill_string = self._window_manager.input_box(height,
-                                                              width,
-                                                              title)
-                if skill_string is not None and len(skill_string) > 0:
-                    my_copy['skill'] = int(skill_string)
+                keep_ask_skill = True
+                while keep_ask_skill:
+                    skill_string = self._window_manager.input_box(height,
+                                                                  width,
+                                                                  title)
+                    if skill_string is not None and len(skill_string) > 0:
+                        my_copy['skill'] = int(skill_string)
+                        keep_ask_skill = False
+                    else:
+                        self._window_manager.error(
+                                                ['You must specify a skill'])
 
                 fighter.details['spells'].append(my_copy)
                 self._draw_screen()
