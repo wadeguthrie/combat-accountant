@@ -15,6 +15,8 @@ import sys
 import traceback
 
 # TODO:
+#   - first and last names
+#   - names, maybe, in a different file
 #   - Overhaul of spell casting
 #       o Spell stuff should all be in GurpsRuleset
 #       o Need maintain spell action
@@ -53,6 +55,7 @@ import traceback
 #   - Optimize the way I'm using curses.  I'm willy-nilly touching and
 #     redrawing everything way more often than I should.  Turns out, it's not
 #     costing me much but it's ugly, none-the-less
+#   - need a way to generate equipment
 
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
@@ -393,7 +396,9 @@ class MainGmWindow(GmWindow):
                                 #  [...],                  ]  # line 1...
 
         top_line = 1
-        # TODO: get the actual size of the command ribbon
+        # TODO: get the actual size of the command ribbon.  The problem is
+        # that the window is created before the command ribbon is added so the
+        # window has no way to know how big the command ribbon will be.
         height = (lines                 # The whole window height, except...
             - top_line                  # ...a block at the top, and...
             - 5)                        # ...a space for the command ribbon.
@@ -2739,7 +2744,7 @@ class Ruleset(object):
         ### Attack ###
 
 
-        # TODO: Move (and, in fact, all of the 'text') is GurpsRuleset-based
+        # TODO: 'Move' (and, in fact, all of the 'text') is GurpsRuleset-based
         move = fighter.details['current']['basic-move']
 
         if holding_ranged:
@@ -3212,6 +3217,7 @@ class GurpsRuleset(Ruleset):
             "Theology (Vodun)": {'ask': 'number'}, 
             "Throwing": {'ask': 'number'}, 
             "Thrown Weapon (Knife)": {'ask': 'number'}, 
+            "Tonfa": {'ask': 'number'}, 
             "Traps": {'ask': 'number'}, 
             "Urban Survival": {'ask': 'number'}, 
         },
@@ -5966,8 +5972,9 @@ class BuildFightHandler(ScreenHandler):
                                     # new creatures.
 
         self.__critters = None # dict of parallel arrays:
-                               #    {'data': <from json>,
-                               #     'obj': <Fighter> obj or <Fight> obj}
+                               #    {'data': <dict from json>,
+                               #     'obj': array of <Fighter> obj or <Fight>
+                               #        obj in display order}
 
         self.__deleted_critter_count = 0
         self.__equipment_manager = EquipmentManager(world, window_manager)
@@ -6594,6 +6601,9 @@ class BuildFightHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+
+        for name, creature in self.__critters['data'].iteritems():
+            self.__ruleset.is_creature_consistent(name, creature)
 
         # TODO: do I need to del self._window?
         self._window.close()
@@ -7924,7 +7934,6 @@ class MainHandler(ScreenHandler):
                                                     self._window_manager)
 
         # Check characters for consistency.
-        # TODO: can this be done where we have objects?
         for name in self.__world.get_creatures('PCs'):
             details = self.__world.get_creature_details(name, 'PCs')
             if details is not None:
@@ -8039,16 +8048,6 @@ class MainHandler(ScreenHandler):
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
 
-        # If this is a monster list, run a consistency check
-
-        # TODO: can be done on the way out of BuildFightHandler
-        if self.__current_display is not None:
-            monsters = self.__world.get_creatures(self.__current_display)
-            for name in monsters:
-                creature = self.__world.get_creature_details(
-                                                        name,
-                                                        self.__current_display)
-                self.__ruleset.is_creature_consistent(name, creature)
         return True # Keep going
 
 
@@ -8238,7 +8237,7 @@ class MainHandler(ScreenHandler):
             if ability in fighter.details:
                 sub_menu.extend([
                     ('%s (add)' % ability, {'doit': self.__ruleset_ability,
-                                             'param': ability}),
+                                            'param': ability}),
                     ('%s (remove)' % ability.capitalize(),
                                             {'doit': self.__ruleset_ability_rm,
                                              'param': ability})
@@ -8275,14 +8274,8 @@ class MainHandler(ScreenHandler):
 
         self._window_manager.menu('Do what', sub_menu)
 
-        # TODO: Do a consistency check once you're done equipping
-        #if self.__current_display is not None:
-        #    monsters = self.__world.get_creatures(self.__current_display)
-        #    for name in monsters:
-        #        creature = self.__world.get_creature_details(
-        #                                                name,
-        #                                                self.__current_display)
-        #        self.__ruleset.is_creature_consistent(name, creature)
+        # Do a consistency check once you're done equipping
+        self.__ruleset.is_creature_consistent(fighter.name, fighter.details)
 
         return True # Keep going
 
