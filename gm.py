@@ -2183,6 +2183,10 @@ class ThingsInFight(object):
         return self.equipment.add(new_item, source)
 
 
+    def end_fight(self):
+        self.timers.clear_all()
+
+
     def remove_equipment(self,
                          item_index
                         ):
@@ -2370,8 +2374,7 @@ class Fighter(ThingsInFight):
 
 
     def end_fight(self):
-        self.timers.clear_all() # TODO: move this to ThingsInFight when
-                                #   timers get moved there.
+        super(Fighter, self).end_fight()
         self.details['weapon-index'] = None
 
 
@@ -8200,6 +8203,59 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
 
+    def __change_attributes(self, throw_away):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = self.__chars[self.__char_index]
+        keep_asking_menu = [('yes', True), ('no', False)]
+        keep_asking = True
+        while keep_asking:
+            perm_current_menu = [('current', 'current'),
+                                 ('permanent', 'permanent')]
+            attr_type = self._window_manager.menu('What Type Of Attribute',
+                                                           perm_current_menu)
+            if attr_type is None:
+                return True
+
+            attr_menu = [(attr, attr) 
+                                for attr in fighter.details[attr_type].keys()]
+
+            attr = self._window_manager.menu('Attr To Modify', attr_menu)
+            if attr is None:
+                return True
+
+            title = 'New Value'
+            height = 1
+            width = len(title) + 2
+            keep_ask_attr = True
+            while keep_ask_attr:
+                attr_string = self._window_manager.input_box(height,
+                                                              width,
+                                                              title)
+                if attr_string is not None and len(attr_string) > 0:
+                    fighter.details[attr_type][attr] = int(attr_string)
+                    keep_ask_attr = False
+                else:
+                    self._window_manager.error(
+                                    ['You must specify an attribute value'])
+
+            if attr_type == 'permanent':
+                both_menu = [('yes', True), ('no', False)]
+                both = self._window_manager.menu(
+                                            'Change "current" Value To Match ',
+                                            both_menu)
+                if both:
+                    fighter.details['current'][attr] = (
+                                            fighter.details['permanent'][attr])
+
+            self._draw_screen()
+            keep_asking = self._window_manager.menu('Change More Attributes',
+                                                    keep_asking_menu)
+        return True # Keep going
+
+
     def __don_armor(self, throw_away):
         fighter = self.__chars[self.__char_index]
         armor, throw_away = fighter.get_current_armor()
@@ -8277,9 +8333,9 @@ class MainHandler(ScreenHandler):
         fighter = self.__chars[self.__char_index]
 
         sub_menu = []
-        # TODO: modification of attributes - needs ruleset support
         if 'stuff' in fighter.details:
             sub_menu.extend([
+                ('attributes (change)', {'doit': self.__change_attributes}),
                 ('equipment (add)',     {'doit': self.__add_equipment}),
                 ('Equipment (remove)',  {'doit': self.__remove_equipment}),
                 ('give equipment',      {'doit': self.__give_equipment}),
