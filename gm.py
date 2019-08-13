@@ -2107,7 +2107,7 @@ class Timers(object):
             if timer['rounds'] < 0:     # < keeps the timers dying this round
                 remove_these.insert(0, index) # largest indexes last
         for index in remove_these:
-            self.__timers['obj'][index].fire(self.__window_manager)
+            self.__fire_timer(self.__timers['obj'][index])
             del self.__timers['data'][index]
             del self.__timers['obj'][index]
 
@@ -2124,7 +2124,7 @@ class Timers(object):
             if timer['rounds'] <= 0:    # <= kills the timers dying this round
                 remove_these.insert(0, index) # largest indexes last
         for index in remove_these:
-            self.__timers['obj'][index].fire(self.__window_manager)
+            self.__fire_timer(self.__timers['obj'][index])
             del self.__timers['data'][index]
             del self.__timers['obj'][index]
 
@@ -2132,7 +2132,12 @@ class Timers(object):
     # Private methods
     #
 
-
+    def __fire_timer(self,
+                     timer  # Timer object
+                    ):
+        new_timer = timer.fire(self.__window_manager)
+        if new_timer is not None:
+            self.add(new_timer)
 
 
 class ThingsInFight(object):
@@ -4216,7 +4221,11 @@ class GurpsRuleset(Ruleset):
 
                 cast_text_array = ['%s -' % complete_spell['name']]
 
-                for piece in ['cost', 'skill', 'casting time', 'notes']:
+                for piece in ['cost',
+                              'skill',
+                              'casting time',
+                              'duration',
+                              'notes']:
                     if piece in complete_spell:
                         cast_text_array.append('%s:%r' % (piece,
                                                          complete_spell[piece]))
@@ -5723,10 +5732,12 @@ class GurpsRuleset(Ruleset):
         # that it's active
         if (complete_spell['duration'] is not None and
                                             complete_spell['duration'] > 1):
+            print 'creating duration timer' # TODO: remove
             duration_timer = Timer(
                                 ('Spell Duration Timer for %s' % fighter.name),
                                 complete_spell['duration'],
                                 'SPELL ACTIVE: %s' % complete_spell['name'])
+            PP.pprint(duration_timer.details) # TODO: remove
             timer.details['actions']['timer'] = duration_timer
 
         return None if 'text' not in param else param
@@ -5815,6 +5826,10 @@ class GurpsRuleset(Ruleset):
         Returns: Nothing, return values for these functions are ignored.
         '''
         if super(GurpsRuleset, self)._do_reload(param):
+            weapon, weapon_index = param['fighter'].get_current_weapon()
+            if weapon is None or 'ammo' not in weapon:
+                return False
+
             reload_time = weapon['reload']
             if 'fast-draw (ammo)' in param['fighter'].details['skills']:
                 reload_time -= 1
