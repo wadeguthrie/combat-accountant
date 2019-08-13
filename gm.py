@@ -4515,6 +4515,25 @@ class GurpsRuleset(Ruleset):
             if not found_one:
                 output.append([{'text': '  (None)', 'mode': mode}])
 
+        # timers
+
+        mode = curses.A_NORMAL 
+        output.append([{'text': 'Timers', 'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        timers = character.timers.get_all() # objects
+        for timer in timers:
+            found_one = True
+            text = timer.get_description()
+            leader = '  '
+            for line in text:
+                output.append([{'text': '%s%s' % (leader, line),
+                                'mode': mode}])
+                leader = '    '
+
+        if not found_one:
+            output.append([{'text': '  (None)', 'mode': mode}])
+
         # notes
 
         mode = curses.A_NORMAL 
@@ -4687,17 +4706,26 @@ class GurpsRuleset(Ruleset):
         if not found_one:
             output.append([{'text': '  (None)', 'mode': mode}])
 
-        # TODO: maybe here and in get_character_detail, include timers.
-        # notes
-
         # Timers
-        #for timer in fight.timers.get_all():
-        #    strings = timer.get_description()
-        #    leader = ''
-        #    for string in strings:
-        #        output.append([{('text': '%s%s' % (leader, string)),
-        #                         'mode': mode}])
-        #        leader = '  '
+
+        mode = curses.A_NORMAL 
+        output.append([{'text': 'Timers', 'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        timers = fight.timers.get_all() # objects
+        for timer in timers:
+            found_one = True
+            text = timer.get_description()
+            leader = '  '
+            for line in text:
+                output.append([{'text': '%s%s' % (leader, line),
+                                'mode': mode}])
+                leader = '    '
+
+        if not found_one:
+            output.append([{'text': '  (None)', 'mode': mode}])
+
+        # Notes
 
         mode = curses.A_NORMAL 
         output.append([{'text': 'Notes', 'mode': mode | curses.A_BOLD}])
@@ -5732,12 +5760,10 @@ class GurpsRuleset(Ruleset):
         # that it's active
         if (complete_spell['duration'] is not None and
                                             complete_spell['duration'] > 1):
-            print 'creating duration timer' # TODO: remove
             duration_timer = Timer(
                                 ('Spell Duration Timer for %s' % fighter.name),
                                 complete_spell['duration'],
                                 'SPELL ACTIVE: %s' % complete_spell['name'])
-            PP.pprint(duration_timer.details) # TODO: remove
             timer.details['actions']['timer'] = duration_timer
 
         return None if 'text' not in param else param
