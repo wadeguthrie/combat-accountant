@@ -118,9 +118,9 @@ class MockMainGmWindow(object):
     def status_ribbon(self, input_filename, maintain_json):
         pass
 
-    def show_detail(self,
-                    character # Fighter or Fight object
-                   ):
+    def show_description(self,
+                         character # Fighter or Fight object
+                        ):
         pass
 
     def show_creatures(self,

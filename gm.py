@@ -323,16 +323,16 @@ class GmWindow(object):
         self._window.refresh()
 
 
-    def show_detail(self,
-                    character # Fighter or Fight object
-                   ):
+    def show_description(self,
+                         character # Fighter or Fight object
+                        ):
         self._char_detail_window.clear()
         if character is None:
             self.refresh()
             return
 
         del self._char_detail[:]
-        character.get_detail(self._char_detail)
+        character.get_description(self._char_detail)
 
         # ...and show the screen
 
@@ -630,7 +630,7 @@ class BuildFightGmWindow(GmWindow):
 
         # show the detail of the selected guy
 
-        self.show_detail(highlighted_creature)
+        self.show_description(highlighted_creature)
 
         self.refresh() # TODO: needed?
 
@@ -2275,12 +2275,12 @@ class Fight(ThingsInFight):
         return self.details['monsters']
 
 
-    def get_detail(self,
-                   char_detail, # recepticle for character detail.
-                                # [[{'text','mode'},...],  # line 0
-                                #  [...],               ]  # line 1...
-                   ):
-        self._ruleset.get_fight_detail(self, char_detail)
+    def get_description(self,
+                        char_detail, # recepticle for character detail.
+                                     # [[{'text','mode'},...],  # line 0
+                                     #  [...],               ]  # line 1...
+                        ):
+        self._ruleset.get_fight_description(self, char_detail)
 
 
     def get_state(self):
@@ -2429,12 +2429,12 @@ class Fighter(ThingsInFight):
         return defense_notes, defense_why
 
 
-    def get_detail(self,
-                   output, # recepticle for character detail.
-                           # [[{'text','mode'},...],  # line 0
-                           #  [...],               ]  # line 1...
-                   ):
-        self._ruleset.get_character_detail(self, output)
+    def get_description(self,
+                        output, # recepticle for character detail.
+                                # [[{'text','mode'},...],  # line 0
+                                #  [...],               ]  # line 1...
+                        ):
+        self._ruleset.get_character_description(self, output)
 
 
     def get_long_summary_string(self):
@@ -4380,12 +4380,12 @@ class GurpsRuleset(Ruleset):
     #   }
 
 
-    def get_character_detail(self,
-                             character,   # Fighter object
-                             output,      # recepticle for character detail.
-                                          # [[{'text','mode'},...],  # line 0
-                                          #  [...],               ]  # line 1...
-                            ):
+    def get_character_description(self,
+                                  character,   # Fighter object
+                                  output,      # recepticle for character data.
+                                               # [[{'text','mode'},...], #line 0
+                                               #  [...],               ] #line 1
+                                 ):
 
         # attributes
 
@@ -4685,12 +4685,12 @@ class GurpsRuleset(Ruleset):
         return dodge_skill, dodge_why
 
 
-    def get_fight_detail(self,
-                         fight,     # Fight object
-                         output,    # recepticle for fight detail.
-                                    # [[{'text','mode'},...],  # line 0
-                                    #  [...],               ]  # line 1...
-                        ):
+    def get_fight_description(self,
+                              fight,     # Fight object
+                              output,    # recepticle for fight detail.
+                                         # [[{'text','mode'},...],  # line 0
+                                         #  [...],               ]  # line 1...
+                             ):
 
         # stuff
 
@@ -6117,7 +6117,7 @@ class BuildFightHandler(ScreenHandler):
         if (self.__new_char_name is not None and
                             self.__new_char_name in self.__critters['data']):
             critter = self.__get_fighter_object_from_name(self.__new_char_name)
-            self._window.show_detail(critter)
+            self._window.show_description(critter)
 
     #
     # Private Methods
@@ -7772,7 +7772,7 @@ class FightHandler(ScreenHandler):
         if info_about is None:
             return True # Keep fighting
 
-        info_about.get_detail(char_info)
+        info_about.get_description(char_info)
         self._window_manager.display_window('%s Information' % info_about.name,
                                             char_info)
         return True
@@ -8239,7 +8239,7 @@ class MainHandler(ScreenHandler):
 
         person = (None if self.__char_index is None
                        else self.__chars[self.__char_index])
-        self._window.show_detail(person)
+        self._window.show_description(person)
 
         self._window.command_ribbon(self._choices)
 
