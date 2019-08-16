@@ -1966,6 +1966,9 @@ class Equipment(object):
 class Timer(object):
     round_count_string = '%d Rnds: ' # assume rounds takes same space as '%d' 
     len_timer_leader = len(round_count_string)
+    announcement_margin = 0.1 # time removed from an announcement timer so that
+                              #   it'll go off at the beginning of a round
+                              #   rather than the end
 
     def __init__(self,
                  details    # dict from the JSON, contains timer's info
@@ -2027,12 +2030,17 @@ class Timer(object):
                     parent_details = None  # {'state':...} to receive
                                            #   state of fired timer
            ):
+        '''
+        Creates a new timer from scratch (rather than from data that's already
+        in the JSON).
+        '''
 
         name = '<< Unknown Timer >>' if parent_name is None else parent_name
         self.details = {'name': name,
                         'rounds': rounds,
                         'string': text,
                         'actions': {}}
+
         # TODO: add state changes to timers
         #if parent_details is not None:
         #    self.details['actions']['parent_details'] = parent_details
@@ -2045,7 +2053,16 @@ class Timer(object):
         result = [] # List of strings, one per line of output
         this_line = []
 
-        round_count_string = Timer.round_count_string % self.details['rounds']
+        rounds = self.details['rounds']
+
+        if ('announcement' in self.details['actions'] and
+                        self.details['actions']['announcement'] is not None):
+            # Add back in the little bit we shave off of an announcement so
+            # that the timer will announce as the creature's round starts
+            # rather than at the end.
+            rounds += Timer.announcement_margin
+
+        round_count_string = Timer.round_count_string % rounds
         this_line.append(round_count_string)
         if 'announcement' in self.details['actions']:
             this_line.append('[%s]' % self.details['actions']['announcement'])
@@ -2065,7 +2082,7 @@ class Timer(object):
                 this_line = []
 
         if len(this_line) > 0:
-            this_line.append(' - <SOME TIMER>')
+            this_line.append('<<UNNAMED TIMER>>')
             result.append(''.join(this_line))
 
         return result
@@ -2123,10 +2140,11 @@ class TimersWidget(object):
 
         if announcement is not None and len(announcement) <= 0:
             announcement = None
-        #else:
-        #    # Shave a little off the time so that the timer will announce
-        #    # as his round starts rather than at the end.
-        #    rounds -= 0.1
+
+        if announcement is not None:
+            # Shave a little off the time so that the timer will announce
+            # as his round starts rather than at the end.
+            rounds -= Timer.announcement_margin
 
         # Instal the timer.
 
@@ -2602,7 +2620,6 @@ class Fighter(ThingsInFight):
         # NOTE: we're allowing health to still be messed-up, here
         # NOTE: person may go around wearing armor -- no need to reset
         self.details['opponent'] = None
-        self.start_turn()
         self._ruleset.start_fight(self)
 
 
@@ -6850,10 +6867,6 @@ class FightHandler(ScreenHandler):
 
         # TODO: keep the fighter objects for the PCs and NPCs in the World
         #   object .
-        self.__fighters = [] # This is a parallel array to
-                             # self._saved_fight['fighters'] but the contents
-                             # are: {'group': <groupname>,
-                             #       'info': <Fighter object>}
 
         if self._saved_fight['saved']:
             monster_group = self._saved_fight['monsters']
@@ -6871,7 +6884,10 @@ class FightHandler(ScreenHandler):
         # Rebuild the fighter list (even if the fight was saved since monsters
         # or characters could have been added since the save happened).
 
-        self.__fighters = []    # contains objects
+        self.__fighters = [] # This is a parallel array to
+                             # self._saved_fight['fighters'] but the contents
+                             # are: {'group': <groupname>,
+                             #       'info': <Fighter object>}
 
         for name in self.__world.get_creatures('PCs'):
             details = self.__world.get_creature_details(name, 'PCs')
