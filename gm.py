@@ -15,8 +15,6 @@ import sys
 import traceback
 
 # TODO:
-#   - timer GUI should be in TimerGUI object that knows about 'Timers'.  
-#
 #   - first and last names
 #   - names, maybe, in a different file
 #   - Overhaul of spell casting
@@ -1970,31 +1968,9 @@ class Timer(object):
     len_timer_leader = len(round_count_string)
 
     def __init__(self,
-                 parent_name,           # string describing the thing calling
-                                        #   the timer
-                 rounds,                # rounds until timer fires (3.0 rounds
-                                        #   fires at end of 3 rounds; 2.9 rounds
-                                        #   fires at beginning of 3 rounds).
-                 text,                  # string to display (in fighter's notes)
-                                        #   while timer is running
-                 announcement = None,   # string to display (in its own window)
-                                        #   when timer fires
-                 parent_details = None  # {'state':...} to receive state of
-                                        # fired timer
+                 details    # dict from the JSON, contains timer's info
            ):
-
-        name = '<< Unknown Timer >>' if parent_name is None else parent_name
-        self.details = {'name': name,
-                        'rounds': rounds,
-                        'string': text,
-                        'actions': {}}
-
-        # TODO: add state changes to timers
-        #if parent_details is not None:
-        #    self.__details['actions']['parent_details'] = parent_details
-
-        if announcement is not None:
-            self.details['actions']['announcement'] = announcement
+        self.details = details  # This need to actually be from the JSON
 
 
     def decrement(self):
@@ -2034,32 +2010,71 @@ class Timer(object):
         return result
 
 
-    def from_details(self,
-                     details    # dict as from the JSON
-                    ):
-        ''' Creates an object from JSON data '''
-        for name, data in details.iteritems():
-            self.details[name] = data
+    def from_pieces(self,
+                    parent_name,           # string describing the thing
+                                           #   calling the timer
+                    rounds,                # rounds until timer fires
+                                           #   (3.0 rounds fires at end
+                                           #   of 3 rounds; 2.9 rounds
+                                           #   fires at beginning of 3
+                                           #   rounds).
+                    text,                  # string to display (in
+                                           #   fighter's notes) while
+                                           #   timer is running
+                    announcement = None,   # string to display (in its
+                                           #   own window) when timer
+                                           #   fires
+                    parent_details = None  # {'state':...} to receive
+                                           #   state of fired timer
+           ):
+
+        name = '<< Unknown Timer >>' if parent_name is None else parent_name
+        self.details = {'name': name,
+                        'rounds': rounds,
+                        'string': text,
+                        'actions': {}}
+        # TODO: add state changes to timers
+        #if parent_details is not None:
+        #    self.details['actions']['parent_details'] = parent_details
+
+        if announcement is not None:
+            self.details['actions']['announcement'] = announcement
 
 
     def get_description(self):
         result = [] # List of strings, one per line of output
+        this_line = []
 
         round_count_string = Timer.round_count_string % self.details['rounds']
-        if 'string' in self.details:
+        this_line.append(round_count_string)
+        if 'announcement' in self.details['actions']:
+            this_line.append('[%s]' % self.details['actions']['announcement'])
+            result.append(''.join(this_line))
+            this_line = []
+
+        if 'string' in self.details and self.details['string'] is not None:
             if type(self.details['string']) is list:
-                for i, substring in enumerate(self.details['string']):
-                    string = substring if i != 0 else (
-                        '%s%s' % (round_count_string, substring))
-                    result.append(string)
+                for substring in self.details['string']:
+                    this_line.append('%s' % (substring))
+                    result.append(''.join(this_line))
+                    this_line = []
             else:
-                string = '%s%s' % (round_count_string, self.details['string'])
-                result.append(string)
+                this_line.append('%s' % (self.details['string']))
+                result.append(''.join(this_line))
+                this_line = []
+
+        if len(this_line) > 0:
+            this_line.append(' - <SOME TIMER>')
+            result.append(''.join(this_line))
 
         return result
 
 
 class TimersWidget(object):
+    '''
+    Consolodated GUI widget for creating timers.
+    '''
+
     def __init__(self,
                  timers,        # Timers object
                  window_manager # GmWindowManager object
@@ -2114,12 +2129,12 @@ class TimersWidget(object):
 
         # Instal the timer.
 
-        if string is not None and len(string) != 0:
-            timer_obj = Timer(timer_recipient_name,
+        timer_obj = Timer(None)
+        timer_obj.from_pieces(timer_recipient_name,
                               rounds,
                               string,
                               announcement)
-            self.__timers.add(timer_obj)
+        self.__timers.add(timer_obj)
 
 
 class Timers(object):
@@ -2135,8 +2150,7 @@ class Timers(object):
                          'obj': []}
 
         for timer_data in timer_details:
-            timer_obj = Timer('', 0, '')
-            timer_obj.from_details(timer_data)
+            timer_obj = Timer(timer_data)
             self.__timers['obj'].append(timer_obj)
 
         self.__window_manager = window_manager
@@ -2162,6 +2176,12 @@ class Timers(object):
 
 
     def get_all(self):
+        print '\n== get_all ==' # TODO: remove
+        print '-- data --' # TODO: remove
+        PP.pprint(self.__timers['data'])    # TODO: remove
+        print '-- objects --' # TODO: remove
+        PP.pprint(self.__timers['obj'])    # TODO: remove
+
         return self.__timers['obj']
 
 
@@ -2172,10 +2192,15 @@ class Timers(object):
         round are kept so that they're shown.
         '''
 
+        print '\n== remove_expired_keep_dying ==' # TODO: remove
         remove_these = []
-        for index, timer in enumerate(self.__timers['data']):
-            if timer['rounds'] < 0:     # < keeps the timers dying this round
-                remove_these.insert(0, index) # largest indexes last
+        for index, timer in enumerate(self.__timers['obj']):
+            print 'Checking timer:' # TODO: remove
+            timer.get_description() # TODO: remove
+
+            if timer.details['rounds'] < 0:     # < keeps the timers dying
+                                                #   this round
+                remove_these.insert(0, index)   # largest indexes last
         for index in remove_these:
             self.__fire_timer(self.__timers['obj'][index])
             del self.__timers['data'][index]
@@ -2189,10 +2214,12 @@ class Timers(object):
         round.
         '''
 
+        print '\n== remove_expired_kill_dying ==' # TODO: remove
         remove_these = []
-        for index, timer in enumerate(self.__timers['data']):
-            if timer['rounds'] <= 0:    # <= kills the timers dying this round
-                remove_these.insert(0, index) # largest indexes last
+        for index, timer in enumerate(self.__timers['obj']):
+            if timer.details['rounds'] <= 0:    # <= kills the timers dying
+                                                #   this round
+                remove_these.insert(0, index)   # largest indexes last
         for index in remove_these:
             self.__fire_timer(self.__timers['obj'][index])
             del self.__timers['data'][index]
@@ -5826,12 +5853,14 @@ class GurpsRuleset(Ruleset):
             cost = 0
 
         fighter.details['current']['fp'] -= cost
-        timer = Timer(('Spell for %s' % fighter.name),
-                       casting_time - 0.1, # -0.1 so that it doesn't 
-                                           # show up on the first
-                                           # round you can do
-                                           # something after you cast
-                       'Casting (%s) @ skill (%d): %s' % (
+
+        timer = Timer(None)
+        timer.from_pieces(('Spell for %s' % fighter.name),
+                          casting_time - 0.1, # -0.1 so that it doesn't 
+                                              # show up on the first
+                                              # round you can do
+                                              # something after you cast
+                          'Casting (%s) @ skill (%d): %s' % (
                                                     complete_spell['name'],
                                                     complete_spell['skill'],
                                                     complete_spell['notes']))
@@ -5841,7 +5870,8 @@ class GurpsRuleset(Ruleset):
         # that it's active
         if (complete_spell['duration'] is not None and
                                             complete_spell['duration'] > 1):
-            duration_timer = Timer(
+            duration_timer = Timer(None)
+            duration_timer.from_pieces(
                                 ('Spell Duration Timer for %s' % fighter.name),
                                 complete_spell['duration'],
                                 'SPELL ACTIVE: %s' % complete_spell['name'])
@@ -5940,7 +5970,8 @@ class GurpsRuleset(Ruleset):
             reload_time = weapon['reload']
             if 'fast-draw (ammo)' in param['fighter'].details['skills']:
                 reload_time -= 1
-            timer = Timer(param['fighter'].name, reload_time, 'RELOADING')
+            timer = Timer(None)
+            timer.from_pieces(param['fighter'].name, reload_time, 'RELOADING')
             param['fighter'].timers.add(timer)
 
             self.reset_aim(param['fighter'])
@@ -6431,14 +6462,6 @@ class BuildFightHandler(ScreenHandler):
                 self._window_manager.error(
                     ['Deleting monster "%s" who is not in object list' %
                                                             name_to_delete])
-                print '\n--- BFH.__delete_creature ---'
-                print '\nData list:'
-                name_list = [x for x in self.__critters['data'].keys()]
-                PP.pprint(name_list)
-                print '\nObj list:'
-                name_list = [x.name for x in self.__critters['obj']]
-                PP.pprint(name_list)
-
             self.__new_char_name = None
             del(self.__critters['data'][name_to_delete])
             self.__deleted_critter_count += 1
@@ -7585,7 +7608,8 @@ class FightHandler(ScreenHandler):
         # a round count larger than 0 will get shown but less than 1 will
         # get deleted before the next round
 
-        timer = Timer(current_fighter.name, 0.9, maneuver['text'])
+        timer = Timer(None)
+        timer.from_pieces(current_fighter.name, 0.9, maneuver['text'])
         current_fighter.timers.add(timer)
 
         opponent = self.get_opponent_for(current_fighter)
@@ -8234,6 +8258,25 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
 
+    def __add_timer(self, throw_away):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = self.__chars[self.__char_index]
+        lines, cols = self._window.getmaxyx()
+        timers_widget = TimersWidget(fighter.timers, self._window_manager)
+
+        keep_asking_menu = [('yes', True), ('no', False)]
+        keep_asking = True
+        while keep_asking:
+            timers_widget.make_timer(fighter.name, cols)
+            self._draw_screen()
+            keep_asking = self._window_manager.menu('Add More Timers',
+                                                    keep_asking_menu)
+        return True # Keep going
+
+
     def __change_attributes(self, throw_away):
         '''
         Command ribbon method.
@@ -8391,7 +8434,16 @@ class MainHandler(ScreenHandler):
                 ('Magic spell (remove)',    {'doit': self.__remove_spell})
             ])
 
-        # TODO: add timers
+        if 'timers' in fighter.details:
+            sub_menu.extend([
+                ('timers (add)',           {'doit': self.__add_timer})
+            ])
+
+        # TODO: remove timers
+        #if 'notes' in fighter.details:
+        #    sub_menu.extend([
+        #        ('Timers (remove)',           {'doit': self.__remove_timer})
+        #    ])
 
         if 'notes' in fighter.details:
             sub_menu.extend([
