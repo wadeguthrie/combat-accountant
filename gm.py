@@ -2052,7 +2052,8 @@ class Timer(object):
             result.append(''.join(this_line))
             this_line = []
 
-        if 'string' in self.details and self.details['string'] is not None:
+        if ('string' in self.details and self.details['string'] is not None
+                                        and len(self.details['string']) > 0):
             if type(self.details['string']) is list:
                 for substring in self.details['string']:
                     this_line.append('%s' % (substring))
@@ -2122,10 +2123,10 @@ class TimersWidget(object):
 
         if announcement is not None and len(announcement) <= 0:
             announcement = None
-        else:
-            # Shave a little off the time so that the timer will announce
-            # as his round starts rather than at the end.
-            rounds -= 0.1
+        #else:
+        #    # Shave a little off the time so that the timer will announce
+        #    # as his round starts rather than at the end.
+        #    rounds -= 0.1
 
         # Instal the timer.
 
@@ -2176,12 +2177,6 @@ class Timers(object):
 
 
     def get_all(self):
-        print '\n== get_all ==' # TODO: remove
-        print '-- data --' # TODO: remove
-        PP.pprint(self.__timers['data'])    # TODO: remove
-        print '-- objects --' # TODO: remove
-        PP.pprint(self.__timers['obj'])    # TODO: remove
-
         return self.__timers['obj']
 
 
@@ -2192,12 +2187,8 @@ class Timers(object):
         round are kept so that they're shown.
         '''
 
-        print '\n== remove_expired_keep_dying ==' # TODO: remove
         remove_these = []
         for index, timer in enumerate(self.__timers['obj']):
-            print 'Checking timer:' # TODO: remove
-            timer.get_description() # TODO: remove
-
             if timer.details['rounds'] < 0:     # < keeps the timers dying
                                                 #   this round
                 remove_these.insert(0, index)   # largest indexes last
@@ -2214,7 +2205,6 @@ class Timers(object):
         round.
         '''
 
-        print '\n== remove_expired_kill_dying ==' # TODO: remove
         remove_these = []
         for index, timer in enumerate(self.__timers['obj']):
             if timer.details['rounds'] <= 0:    # <= kills the timers dying
