@@ -8,7 +8,7 @@ import unittest
 
 # Save a fight
 # TODO: test that saving a fight and starting up again doesn't change the
-#       fight (pending actions, injuries, fight order)
+#       fight (pending actions, injuries, fight order) -- check out test_save
 
 # Opponents
 # TODO: test that pick opponent gives you all of the other side and none of

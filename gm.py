@@ -15,6 +15,8 @@ import sys
 import traceback
 
 # TODO:
+#   - timer GUI should be in TimerGUI object that knows about 'Timers'.  
+#
 #   - first and last names
 #   - names, maybe, in a different file
 #   - Overhaul of spell casting
@@ -1534,7 +1536,7 @@ class GmWindowManager(object):
 
     def __centered_boxed_window(self,
                                 height, # height of INSIDE window
-                                width, # width of INSIDE window
+                                width,  # width of INSIDE window
                                 title,
                                 mode=curses.A_NORMAL,
                                 data_for_scrolling=None
@@ -1544,6 +1546,11 @@ class GmWindowManager(object):
         centered and has a box around it.
         '''
         box_margin = 2
+
+        if title is not None:
+            title = ' %s ' % title  # Add some space around the title
+            if width < len(title):
+                width = len(title)
 
         # make sure we're not bigger than the screen
         if height > (curses.LINES - box_margin):
@@ -1563,10 +1570,10 @@ class GmWindowManager(object):
                                    begin_y-1,
                                    begin_x-1)
         border_win.border()
-
         if title is not None:
             title_start = ((width+box_margin) - (len(title))) / 2
             border_win.addstr(0, title_start, title)
+
         border_win.refresh()
 
         if data_for_scrolling is not None:
@@ -1987,7 +1994,7 @@ class Timer(object):
         #    self.__details['actions']['parent_details'] = parent_details
 
         if announcement is not None:
-            self.__details['actions']['announcement'] = announcement
+            self.details['actions']['announcement'] = announcement
 
 
     def decrement(self):
@@ -2050,6 +2057,69 @@ class Timer(object):
                 result.append(string)
 
         return result
+
+
+class TimersWidget(object):
+    def __init__(self,
+                 timers,        # Timers object
+                 window_manager # GmWindowManager object
+                ):
+        self.__timers = timers
+        self.__window_manager = window_manager
+
+
+    def make_timer(self,
+                   timer_recipient_name,    # string
+                   parent_window_width      # integer
+                   ):
+
+        # How long is the timer?
+
+        title = 'Rounds To Wait...'
+        height = 1
+        width = len(title)
+        adj_string = self.__window_manager.input_box(height, width, title)
+        if adj_string is None or len(adj_string) <= 0:
+            return
+        rounds = int(adj_string)
+        if rounds <= 0:
+            return
+
+        # What is the timer's message?
+
+        title = 'What happens in %d rounds?' % rounds
+        height = 1
+        width = curses.COLS - 4
+        string = self.__window_manager.input_box(
+                                height,
+                                parent_window_width - Timer.len_timer_leader,
+                                title)
+
+        # What is the timer's announcement?
+
+        title = 'Enter an announcement if you want one...'
+        height = 1
+        width = curses.COLS - 4
+        announcement = self.__window_manager.input_box(
+                                height,
+                                parent_window_width - Timer.len_timer_leader,
+                                title)
+
+        if announcement is not None and len(announcement) <= 0:
+            announcement = None
+        else:
+            # Shave a little off the time so that the timer will announce
+            # as his round starts rather than at the end.
+            rounds -= 0.1
+
+        # Instal the timer.
+
+        if string is not None and len(string) != 0:
+            timer_obj = Timer(timer_recipient_name,
+                              rounds,
+                              string,
+                              announcement)
+            self.__timers.add(timer_obj)
 
 
 class Timers(object):
@@ -2158,7 +2228,7 @@ class ThingsInFight(object):
 
         # Equipment
 
-        if 'stuff' not in self.details: # Public to facilitate testing
+        if 'stuff' not in self.details:     # Public to facilitate testing
             self.details['stuff'] = []
 
         self.equipment = Equipment(self.details['stuff'])
@@ -2167,8 +2237,6 @@ class ThingsInFight(object):
 
         if 'timers' not in details:
             details['timers'] = []
-            #self._window_manager.error(
-            #        ['fighter "%s" in "%s" has no timers' % (name, group)])
         self.timers = Timers(self.details['timers'], self._window_manager)
 
 
@@ -2937,13 +3005,13 @@ class Ruleset(object):
 
 
     def make_empty_creature(self):
-        return {'stuff': [], 
+        return {'stuff': [],
                 'weapon-index': None,
                 'armor-index': None,
                 'permanent': {},
                 'current': {},
-                'state': 'alive', 
-                'timers': [], 
+                'state': 'alive',
+                'timers': [],
                 'opponent': None,
                 'notes': [],
                 'short-notes': [],
@@ -5419,21 +5487,31 @@ class GurpsRuleset(Ruleset):
 
     def make_empty_creature(self):
         to_monster = super(GurpsRuleset, self).make_empty_creature()
-        to_monster.update({'aim': { 'braced': False, 'rounds': 0 }, 
-                           'skills': { }, 
-                           'shock': 0, 
+        to_monster.update({'aim': { 'braced': False, 'rounds': 0 },
+                           'skills': { },
+                           'shock': 0,
                            'stunned': 0,
-                           'advantages': { }, 
+                           'advantages': { },
                            'did_action_this_turn': False,
-                           'check_for_death': False, 
+                           'check_for_death': False,
                            'posture': 'standing'})
+        to_monster['permanent'] = copy.deepcopy({'fp': 10, 
+                                                 'iq': 10, 
+                                                 'hp': 10, 
+                                                 'wi': 10, 
+                                                 'st': 10, 
+                                                 'ht': 10, 
+                                                 'dx': 10, 
+                                                 'basic-move': 5, 
+                                                 'basic-speed': 5, 
+                                                 'per': 10})
+        to_monster['current'] = copy.deepcopy(to_monster['permanent'])
         return to_monster
 
 
-    def reset_aim(self,
+    def reset_aim(self,                         # Public to support testing
                   fighter # Fighter object
                  ):
-        # Public to support testing
         fighter.details['aim']['rounds'] = 0
         fighter.details['aim']['braced'] = False
 
@@ -6072,12 +6150,10 @@ class BuildFightHandler(ScreenHandler):
     # Public Methods
     #
 
-    def change_viewing_index(self,
+    def change_viewing_index(self,              # Public to support testing.
                              adj  # integer adjustment to viewing index
                             ):
         '''
-        This is public to facilitate testing.
-
         NOTE: this breaks if |adj| is > len(self.__critters['data'])
         '''
 
@@ -6149,6 +6225,9 @@ class BuildFightHandler(ScreenHandler):
             # Get a template
             if self.__template_name is None:
                 self.__new_template()
+
+            # TODO: allow just a blank creature made by:
+            # to_creature = self.__ruleset.make_empty_creature()
 
             # Based on which creature from the template
             creature_menu = [(from_creature_name, from_creature_name)
@@ -6857,7 +6936,7 @@ class FightHandler(ScreenHandler):
         return True
 
 
-    def get_current_fighter(self):              # Public to aid in testing
+    def get_current_fighter(self):              # Public to support testing
         '''
         Returns the Fighter object of the current fighter.
         '''
@@ -6865,8 +6944,8 @@ class FightHandler(ScreenHandler):
         return result
 
 
-    def get_fighters(self):
-        ''' Visibility for testing. '''
+    def get_fighters(self):                     # Public to support testing
+        '''  '''
         return [{'name': fighter.name,
                  'group': fighter.group,
                  'details': fighter.details} for fighter in self.__fighters]
@@ -6905,7 +6984,7 @@ class FightHandler(ScreenHandler):
             del fights[fight_group]
 
 
-    def modify_index(self,                      # Public to assist testing
+    def modify_index(self,                      # Public to support testing
                      adj      # 1 or -1, adjust the index by this
                     ):
         '''
@@ -7038,7 +7117,7 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
 
-    def promote_to_NPC(self):                       # Public to enable testing
+    def promote_to_NPC(self):                       # Public to support testing
         if self.__viewing_index is not None:
             new_NPC = self.__fighters[self.__viewing_index]
         else:
@@ -7811,58 +7890,10 @@ class FightHandler(ScreenHandler):
         if timer_recipient is None:
             return True # Keep fighting
 
-        # How long is the timer?
-
-        timer = {'rounds': 0, 'string': None}
-        title = 'Rounds To Wait...'
-        height = 1
-        width = len(title)
-        adj_string = self._window_manager.input_box(height, width, title)
-        if adj_string is None or len(adj_string) <= 0:
-            return True
-        timer['rounds'] = int(adj_string)
-        if timer['rounds'] <= 0:
-            return True # Keep fighting (even without installing the timer)
-
-        # What is the timer's message?
-
-        title = 'What happens in %d rounds?' % timer['rounds']
-        height = 1
-        width = curses.COLS - 4
-        timer['string'] = self._window_manager.input_box(
-                                        height,
-                                        self._window.fighter_win_width - 
-                                                    Timer.len_timer_leader,
-                                        title)
-
-        # What is the timer's announcement?
-
-        title = 'Enter an announcement if you want one...'
-        height = 1
-        width = curses.COLS - 4
-        announcement = self._window_manager.input_box(
-                                        height,
-                                        self._window.fighter_win_width - 
-                                                    Timer.len_timer_leader,
-                                        title)
-
-        if announcement is not None and len(announcement) <= 0:
-            announcement = None
-        else:
-            # Shave a little off the time so that the timer will announce
-            # as his round starts rather than at the end.
-            timer['rounds'] -= 0.1
-
-        # Instal the timer.
-
-        if timer['string'] is not None and len(timer['string']) != 0:
-            timer_obj = Timer(timer_recipient.name,
-                              timer['rounds'],
-                              timer['string'],
-                              announcement)
-            timer_recipient.timers.add(timer_obj)
-
-        # Show stuff
+        timers_widget = TimersWidget(timer_recipient.timers,
+                                     self._window_manager)
+        timers_widget.make_timer(timer_recipient.name,
+                                 self._window.fighter_win_width)
 
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
@@ -7999,11 +8030,11 @@ class MainHandler(ScreenHandler):
     # Public Methods
     #
 
-    def get_fighter_from_char_index(self): # Public to facilitate testing
+    def get_fighter_from_char_index(self):      # Public to support testing
         return self.__chars[self.__char_index]
 
 
-    def next_char(self,                     # Public to facilitate testing
+    def next_char(self,                         # Public to support testing
                   index=None  # Just for testing
                  ):
         if index is not None:
@@ -8018,7 +8049,7 @@ class MainHandler(ScreenHandler):
         return True
 
 
-    def NPC_joins_monsters(self, throw_away): # Public for testing purposes
+    def NPC_joins_monsters(self, throw_away):   # Public to support testing
         # Make sure the person is an NPC
         npc_name = self.__chars[self.__char_index].name
         if self.__chars[self.__char_index].group != 'NPCs':
@@ -8043,7 +8074,7 @@ class MainHandler(ScreenHandler):
         return True
 
 
-    def NPC_joins_PCs(self,                 # Public for testing purposes
+    def NPC_joins_PCs(self,                     # Public to support testing
                       throw_away):
         npc_name = self.__chars[self.__char_index].name
         if self.__chars[self.__char_index].group != 'NPCs':
@@ -8359,6 +8390,8 @@ class MainHandler(ScreenHandler):
                 ('magic spell (add)',       {'doit': self.__add_spell}),
                 ('Magic spell (remove)',    {'doit': self.__remove_spell})
             ])
+
+        # TODO: add timers
 
         if 'notes' in fighter.details:
             sub_menu.extend([
