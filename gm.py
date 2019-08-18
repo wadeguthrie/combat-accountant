@@ -2772,7 +2772,7 @@ class Ruleset(object):
             fighter.set_consciousness(action['level'])
             handled = True
 
-        elif action['name'] == 'custom':
+        elif action['name'] == 'user-defined':
             self._do_custom_action(action)
             handled = True
 
@@ -2907,12 +2907,6 @@ class Ruleset(object):
                                         })
             ])
 
-        ### Custom (user-supplied) ###
-
-        action_menu.append(('custom', {'text': ['User-defined action'],
-                                       'action': {'name': 'custom'}}
-                          ))
-
         ### Draw or Holster weapon ###
 
         if weapon is not None:
@@ -3008,6 +3002,12 @@ class Ruleset(object):
                                           ' Defense: (depends)',
                                           ' Move: (depends)'],
                                  'menu': use_menu}))
+
+        ### User-defined ###
+
+        action_menu.append(('User-defined', {'text': ['User-defined action'],
+                                             'action': {'name': 'user-defined'}}
+                          ))
 
         return # No need to return action menu since it was a parameter
 
@@ -3141,11 +3141,9 @@ class Ruleset(object):
     def _do_custom_action(self,
                           action       # {'name': <action>, parameters...}
                          ):
-        self._window_manager
-
         height = 1
         title = 'What Action Is Performed'
-        width = len(title)
+        width = self._window_manager.getmaxyx()
         comment_string = self._window_manager.input_box(height, width, title)
         action['comment'] += ' -- %s' % comment_string
         return True
@@ -9334,10 +9332,35 @@ if __name__ == '__main__':
                                         % filename])
                 sys.exit(2)
 
-            # Save the JSON for debugging, later
+            ### JSON Files for Debugging ###
+
+            # TODO: put the debugging file stuff in 'World' and add a
+            # 'take-snapshot' method that appends a string to the filename.
+            # Every fight should take a snapshot as part of starting the fight
+            # and the string appended should be <fight-monster group>.
+
             debug_directory = 'debug'
             if not os.path.exists(debug_directory):
                 os.makedirs(debug_directory)
+
+            # Get rid of old debugging JSON files.
+             
+            entries = (os.path.join(debug_directory, fn)
+                                        for fn in os.listdir(debug_directory))
+            entries = (
+                    (datetime.datetime.fromtimestamp(os.path.getctime(fpath)),
+                     fpath) for fpath in entries)
+            entries = sorted(entries, key=lambda x: x[0], reverse=True)
+
+            # Keep files that are less than 2 days (an arbitrary number) old.
+            two_days_ago = datetime.datetime.now() - datetime.timedelta(days=2)
+
+            if len(entries) > 10: # Arbitrarily decide to save 10 files, min.
+                for mod_date, path in entries[10:]:
+                    if mod_date < two_days_ago:
+                        PP.pprint(mod_date)
+
+            # Save the current JSON for debugging, later
             campaign_debug_json = os.path.join(debug_directory,
                                                timeStamped('debug_json','txt'))
             with open(campaign_debug_json, 'w') as f:
