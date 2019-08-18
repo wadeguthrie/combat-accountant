@@ -5777,9 +5777,10 @@ class GurpsRuleset(Ruleset):
                     fighter.details['stunned'] = True
 
         if 'High Pain Threshold' not in fighter.details['advantages']: # B59
-            shock_amount = -4 if adj <= -4 else adj
-            if fighter.details['shock'] > shock_amount:
-                fighter.details['shock'] = shock_amount
+            # Shock (B419) is cumulative but only to a maximum of -4
+            fighter.details['shock'] += adj    # 'shock' is negative
+            if fighter.details['shock'] < -4:
+                fighter.details['shock'] = -4
 
         # WILL roll or lose aim
         if fighter.details['aim']['rounds'] > 0:
