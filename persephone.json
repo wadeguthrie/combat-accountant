@@ -1,8 +1,4 @@
 {
-  "Options": {
-    "reload-after-fight": true,
-    "reload-on-heal": true
-  },
   "Templates": {
     "Bad Guys": {
       "Tank": {
@@ -823,10 +819,6 @@
           "type": "value", 
           "value": {}
         }, 
-        "stuff": {
-          "type": "value", 
-          "value": []
-        }, 
         "permanent": {
           "fp": {
             "type": "value", 
@@ -868,6 +860,10 @@
             "type": "value", 
             "value": 5.25
           }
+        }, 
+        "stuff": {
+          "type": "value", 
+          "value": []
         }, 
         "advantages": {
           "type": "value", 
@@ -1247,1135 +1243,468 @@
     }
   }, 
   "fights": {
-    "Battle Of Persephone, Floor Level": {
+    "BLAH": {
       "stuff": [], 
       "timers": [], 
       "monsters": {
-        "3 - Davidson": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Whip (Lightning)", 
-              "notes": "M196, B406; spell-made; HT @-1/2pts. or stunned", 
-              "damage": {
-                "sw": {
-                  "plus": 0, 
-                  "type": "burn"
-                }
-              }, 
-              "skill": "Whip", 
-              "type": "melee weapon"
-            }
-          ], 
-          "stunned": 0, 
-          "skills": {
-            "Whip": 15
-          }, 
-          "notes": [
-            "origin: haitian", 
-            "gender: male", 
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Pokes/taps others with finger", 
-            "instincts: To show them all", 
-            "hair: Pony-tail", 
-            "speech: Accented", 
-            "knack: A true name", 
-            "personality: Enigmatic"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": null, 
-          "current": {
-            "fp": 27, 
-            "ht": 11, 
-            "iq": 12, 
-            "hp": 10, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "dx": 13, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "posture": "standing", 
-          "state": "alive", 
-          "permanent": {
-            "fp": 30, 
-            "ht": 11, 
-            "iq": 12, 
-            "hp": 10, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "dx": 13, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "advantages": {
-            "Empathy": 5, 
-            "Vodou Practitioner (Mambo 2)": 35, 
-            "Lwa (Mambo, Erzulie Freda)": 6
-          }, 
-          "opponent": {
-            "group": "PCs", 
-            "name": "samuel - Erik"
-          }, 
-          "weapon-index": null, 
-          "check_for_death": false, 
+        "<< ROOM >>": {
+          "notes": [], 
+          "stuff": [], 
           "timers": [
             {
               "actions": {
-                "timer": {
-                  "actions": {}, 
-                  "name": "Spell Duration Timer for 3 - Davidson", 
-                  "string": "SPELL ACTIVE: Animate Shadow", 
-                  "rounds": 5
-                }
+                "announcement": "TWO"
               }, 
-              "name": "Spell for 3 - Davidson", 
-              "string": "Casting (Animate Shadow) @ skill (16): M154, Subject's shadow attacks them, HT negates", 
+              "name": "<< ROOM >>", 
+              "string": "two", 
               "rounds": 1.9
             }, 
             {
               "actions": {}, 
-              "name": "3 - Davidson", 
-              "string": [
-                "Cast (Animate Shadow)", 
-                " Defense: none", 
-                " Move: none"
-              ], 
-              "rounds": 0.9
-            }
-          ], 
-          "did_action_this_turn": true, 
-          "spells": [
-            {
-              "skill": 12, 
-              "name": "Awaken"
+              "name": "<< ROOM >>", 
+              "string": "three", 
+              "rounds": 3
             }, 
             {
-              "skill": 11, 
-              "name": "Communicate"
+              "actions": {
+                "announcement": "FOUR"
+              }, 
+              "name": "<< ROOM >>", 
+              "string": "", 
+              "rounds": 3.9
             }, 
             {
-              "skill": 11, 
-              "name": "Daze"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Far Hearing"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Foolishness"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Lend Energy"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Lend Vitality"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Luck"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Major Heal"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Minor Heal"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Might"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Restoration"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Sense Life"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Sleep"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Wizard Eye"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Animate Shadow"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Death Touch"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Explosive Lightning"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Lightning"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Lightning Whip"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Madness"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Panic"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Strike Blind"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Stun"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Total Paralysis"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Agonize"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Blink"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Great Ward"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Phase"
+              "actions": {}, 
+              "name": "<< ROOM >>", 
+              "string": "", 
+              "rounds": 5
             }
           ]
         }, 
-        "6 - Ricardo": {
+        "1 - manny": {
           "aim": {
             "braced": false, 
             "rounds": 0
           }, 
           "stuff": [
             {
+              "acc": 4, 
               "count": 1, 
-              "owners": null, 
-              "name": "Whip (Lightning)", 
-              "notes": "M196, B406; spell-made; HT @-1/2pts. or stunned", 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
               "damage": {
-                "sw": {
-                  "plus": 0, 
-                  "type": "burn"
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
                 }
               }, 
-              "skill": "Whip", 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
               "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
             }
           ], 
-          "stunned": 0, 
+          "stunned": false, 
           "skills": {
-            "Whip": 15
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
           }, 
           "notes": [
-            "origin: haitian", 
-            "gender: male", 
             "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Pathological liar", 
-            "instincts: To extinguish an evil forever", 
-            "hair: Streaked", 
-            "speech: Curt short", 
-            "knack: A heart", 
-            "personality: Temperamental"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": null, 
-          "current": {
-            "fp": 30, 
-            "ht": 11, 
-            "iq": 12, 
-            "hp": 10, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "dx": 13, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "posture": "standing", 
-          "state": "alive", 
-          "permanent": {
-            "fp": 30, 
-            "ht": 11, 
-            "iq": 12, 
-            "hp": 10, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "dx": 13, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "advantages": {
-            "Empathy": 5, 
-            "Vodou Practitioner (Mambo 2)": 35, 
-            "Lwa (Mambo, Erzulie Freda)": 6
-          }, 
-          "opponent": {
-            "group": "PCs", 
-            "name": "lawerence - Spenser"
-          }, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
-          "did_action_this_turn": false, 
-          "spells": [
-            {
-              "skill": 12, 
-              "name": "Awaken"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Communicate"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Daze"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Far Hearing"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Foolishness"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Lend Energy"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Lend Vitality"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Luck"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Major Heal"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Minor Heal"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Might"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Restoration"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Sense Life"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Sleep"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Wizard Eye"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Animate Shadow"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Death Touch"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Explosive Lightning"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Lightning"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Lightning Whip"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Madness"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Panic"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Strike Blind"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Stun"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Total Paralysis"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Agonize"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Blink"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Great Ward"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Phase"
-            }
-          ]
-        }, 
-        "2 - Fabiola": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [], 
-          "stunned": 0, 
-          "skills": {}, 
-          "notes": [
-            "origin: haitian", 
-            "gender: female", 
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Constantly asks for divine advice", 
-            "instincts: To be forgotten", 
-            "hair: Straight", 
-            "speech: Curt short", 
-            "knack: Metalworking", 
-            "personality: Spiteful"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": null, 
-          "current": {
-            "fp": 30, 
-            "ht": 11, 
-            "iq": 12, 
-            "hp": 10, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "posture": "standing", 
-          "state": "alive", 
-          "permanent": {
-            "fp": 30, 
-            "ht": 11, 
-            "iq": 12, 
-            "hp": 10, 
-            "wi": 12, 
-            "st": 10, 
-            "per": 12, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "advantages": {
-            "Empathy": 5, 
-            "Vodou Practitioner (Mambo 2)": 35, 
-            "Lwa (Mambo, Erzulie Freda)": 6
-          }, 
-          "opponent": null, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
-          "did_action_this_turn": false, 
-          "spells": [
-            {
-              "skill": 12, 
-              "name": "Awaken"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Communicate"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Daze"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Far Hearing"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Foolishness"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Lend Energy"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Lend Vitality"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Luck"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Major Heal"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Minor Heal"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Might"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Restoration"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Sense Life"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Sleep"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Wizard Eye"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Animate Shadow"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Death Touch"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Explosive Lightning"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Lightning"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Lightning Whip"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Madness"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Panic"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Strike Blind"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Stun"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Total Paralysis"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Agonize"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Blink"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Great Ward"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Phase"
-            }
-          ]
-        }, 
-        "1 - Gaelle": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [], 
-          "stunned": 0, 
-          "skills": {}, 
-          "notes": [
-            "origin: haitian", 
-            "gender: female", 
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Nervous muscle twitch", 
-            "instincts: To party", 
-            "hair: Messy", 
-            "speech: Breathless", 
-            "knack: A secret", 
-            "personality: Accusative"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "posture": "standing", 
-          "armor-index": null, 
-          "current": {
-            "fp": 30, 
-            "iq": 12, 
-            "hp": 10, 
-            "ht": 11, 
-            "st": 10, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "check_for_death": false, 
-          "state": "alive", 
-          "permanent": {
-            "fp": 30, 
-            "iq": 12, 
-            "hp": 10, 
-            "ht": 11, 
-            "st": 10, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
-          }, 
-          "advantages": {
-            "Empathy": 5, 
-            "Vodou Practitioner (Mambo 2)": 35, 
-            "Lwa (Mambo, Erzulie Freda)": 6
-          }, 
-          "did_action_this_turn": false, 
-          "weapon-index": null, 
-          "timers": [], 
-          "opponent": null, 
-          "spells": [
-            {
-              "skill": 12, 
-              "name": "Awaken"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Communicate"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Daze"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Far Hearing"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Foolishness"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Lend Energy"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Lend Vitality"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Luck"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Major Heal"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Minor Heal"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Might"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Restoration"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Sense Life"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Sleep"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Wizard Eye"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Animate Shadow"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Death Touch"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Explosive Lightning"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Lightning"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Lightning Whip"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Madness"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Panic"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Strike Blind"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Stun"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Total Paralysis"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Agonize"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Blink"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Great Ward"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Phase"
-            }
-          ]
-        }, 
-        "4 - Schneider": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [], 
-          "stunned": 0, 
-          "skills": {}, 
-          "notes": [
-            "origin: haitian", 
-            "gender: male", 
-            "station history: staby (born on this station)", 
-            "characteristics: Interrupts others", 
-            "instincts: To do good", 
+            "characteristics: Rolls eyes when bored/annoyed", 
+            "instincts: To find the one", 
             "hair: Frazzled", 
-            "speech: Quiet", 
-            "knack: Immunity from the law", 
-            "personality: Agreeable"
+            "speech: Um Uh", 
+            "knack: Endurance", 
+            "personality: Organized"
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "armor-index": null, 
+          "armor-index": 4, 
           "current": {
-            "fp": 30, 
-            "ht": 11, 
+            "fp": 10, 
             "iq": 12, 
-            "hp": 10, 
-            "wi": 12, 
-            "st": 10, 
+            "hp": 16, 
             "per": 12, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
+            "st": 16, 
+            "wi": 12, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
           }, 
-          "posture": "standing", 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
-            "fp": 30, 
-            "ht": 11, 
+            "fp": 10, 
             "iq": 12, 
-            "hp": 10, 
-            "wi": 12, 
-            "st": 10, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
             "per": 12, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
+            "wi": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
           }, 
           "advantages": {
-            "Empathy": 5, 
-            "Vodou Practitioner (Mambo 2)": 35, 
-            "Lwa (Mambo, Erzulie Freda)": 6
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
           }, 
-          "opponent": null, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
           "did_action_this_turn": false, 
-          "spells": [
+          "weapon-index": null, 
+          "timers": [
             {
-              "skill": 12, 
-              "name": "Awaken"
+              "actions": {
+                "announcement": "TWO"
+              }, 
+              "name": "1 - manny", 
+              "string": "two", 
+              "rounds": 1.9
             }, 
             {
-              "skill": 11, 
-              "name": "Communicate"
+              "actions": {}, 
+              "name": "1 - manny", 
+              "string": "three", 
+              "rounds": 3
             }, 
             {
-              "skill": 11, 
-              "name": "Daze"
+              "actions": {
+                "announcement": "FOUR"
+              }, 
+              "name": "1 - manny", 
+              "string": "", 
+              "rounds": 3.9
             }, 
             {
-              "skill": 11, 
-              "name": "Far Hearing"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Foolishness"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Lend Energy"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Lend Vitality"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Luck"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Major Heal"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Minor Heal"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Might"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Restoration"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Sense Life"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Sleep"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Wizard Eye"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Animate Shadow"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Death Touch"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Explosive Lightning"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Lightning"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Lightning Whip"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Madness"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Panic"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Strike Blind"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Stun"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Total Paralysis"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Agonize"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Blink"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Great Ward"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Phase"
+              "actions": {}, 
+              "name": "1 - manny", 
+              "string": "", 
+              "rounds": 5
             }
-          ]
+          ], 
+          "posture": "standing", 
+          "opponent": null
         }, 
-        "5 - Jesula": {
+        "3 - jack": {
           "aim": {
             "braced": false, 
             "rounds": 0
           }, 
-          "stuff": [], 
-          "stunned": 0, 
-          "skills": {}, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "stunned": false, 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
           "notes": [
-            "origin: haitian", 
-            "gender: female", 
             "station history: lifer (born on Earth, this is 1st station)", 
             "characteristics: Dandruff", 
-            "instincts: To reunite with a loved one", 
-            "hair: Braided", 
-            "speech: Accented", 
-            "knack: A one-of-a-kind item", 
-            "personality: Mournful"
+            "instincts: To be a champion", 
+            "hair: Bald", 
+            "speech: High-pitched", 
+            "knack: Smelting", 
+            "personality: Truthful"
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "armor-index": null, 
+          "armor-index": 4, 
           "current": {
-            "fp": 30, 
-            "ht": 11, 
+            "fp": 10, 
             "iq": 12, 
-            "hp": 10, 
-            "wi": 12, 
-            "st": 10, 
+            "hp": 16, 
             "per": 12, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
+            "st": 16, 
+            "wi": 12, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
           }, 
-          "posture": "standing", 
+          "check_for_death": false, 
           "state": "alive", 
           "permanent": {
-            "fp": 30, 
-            "ht": 11, 
+            "fp": 10, 
             "iq": 12, 
-            "hp": 10, 
-            "wi": 12, 
-            "st": 10, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
             "per": 12, 
-            "dx": 10, 
-            "basic-move": 5, 
-            "basic-speed": 5.25
+            "wi": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
           }, 
           "advantages": {
-            "Empathy": 5, 
-            "Vodou Practitioner (Mambo 2)": 35, 
-            "Lwa (Mambo, Erzulie Freda)": 6
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
           }, 
-          "opponent": null, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
           "did_action_this_turn": false, 
-          "spells": [
+          "weapon-index": null, 
+          "timers": [], 
+          "posture": "standing", 
+          "opponent": null
+        }, 
+        "2 - moe": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
             {
-              "skill": 12, 
-              "name": "Awaken"
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
             }, 
             {
-              "skill": 11, 
-              "name": "Communicate"
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
             }, 
             {
-              "skill": 11, 
-              "name": "Daze"
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
             }, 
             {
-              "skill": 11, 
-              "name": "Far Hearing"
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
             }, 
             {
-              "skill": 11, 
-              "name": "Foolishness"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Lend Energy"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Lend Vitality"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Luck"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Major Heal"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Minor Heal"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Might"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Restoration"
-            }, 
-            {
-              "skill": 12, 
-              "name": "Sense Life"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Sleep"
-            }, 
-            {
-              "skill": 11, 
-              "name": "Wizard Eye"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Animate Shadow"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Death Touch"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Explosive Lightning"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Lightning"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Lightning Whip"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Madness"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Panic"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Strike Blind"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Stun"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Total Paralysis"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Agonize"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Blink"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Great Ward"
-            }, 
-            {
-              "skill": 16, 
-              "name": "Phase"
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
             }
-          ]
+          ], 
+          "stunned": false, 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Cracks knuckles", 
+            "instincts: To establish a dynasty", 
+            "hair: Streaked", 
+            "speech: Whispery", 
+            "knack: Heroic self-sacrifice", 
+            "personality: Cautious"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": 4, 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "per": 12, 
+            "st": 16, 
+            "wi": 12, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "check_for_death": false, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
+            "per": 12, 
+            "wi": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "did_action_this_turn": false, 
+          "weapon-index": null, 
+          "timers": [], 
+          "posture": "standing", 
+          "opponent": null
         }
       }
     }, 
@@ -3612,7 +2941,7 @@
           "name": "Fingerbone of fog"
         }
       ], 
-      "stunned": 0, 
+      "stunned": false, 
       "skills": {
         "Stealth": 14, 
         "Brawling": 13, 
@@ -3687,21 +3016,18 @@
       "check_for_death": false, 
       "timers": [
         {
-          "actions": {}, 
+          "rounds": 0.9, 
           "name": "lawerence - Spenser", 
+          "actions": {}, 
           "string": [
             "Attack", 
             " Defense: any", 
             " Move: step"
-          ], 
-          "rounds": 0.9
+          ]
         }
       ], 
       "posture": "standing", 
-      "opponent": {
-        "group": "Battle Of Persephone, Floor Level", 
-        "name": "6 - Ricardo"
-      }
+      "opponent": null
     }, 
     "samuel - Erik": {
       "aim": {
@@ -3820,7 +3146,7 @@
           }
         }
       ], 
-      "stunned": 0, 
+      "stunned": false, 
       "skills": {
         "Camouflage": 11, 
         "Stealth": 12, 
@@ -3962,21 +3288,18 @@
       "check_for_death": false, 
       "timers": [
         {
-          "actions": {}, 
+          "rounds": 0.9, 
           "name": "samuel - Erik", 
+          "actions": {}, 
           "string": [
             "Attack", 
             " Defense: any", 
             " Move: step"
-          ], 
-          "rounds": 0.9
+          ]
         }
       ], 
       "did_action_this_turn": true, 
-      "opponent": {
-        "group": "Battle Of Persephone, Floor Level", 
-        "name": "3 - Davidson"
-      }
+      "opponent": null
     }, 
     "deri - Chelsea": {
       "aim": {
@@ -4165,7 +3488,7 @@
           "type": "melee weapon"
         }
       ], 
-      "stunned": 0, 
+      "stunned": false, 
       "skills": {
         "Law (Conglomorate, trans-territorial/the void)": 13, 
         "Forgery": 12, 
@@ -4195,7 +3518,7 @@
         "Piloting (Low-Performance Spacecraft)": 9, 
         "Area Knowledge (Space Station)": 16
       }, 
-      "did_action_this_turn": false, 
+      "did_action_this_turn": true, 
       "shock": 0, 
       "armor-index": null, 
       "current": {
@@ -4225,7 +3548,7 @@
       }, 
       "advantages": {
         "G-Experience": 1, 
-        "Empathy": 15, 
+        "Alcohol Intolerance": -1, 
         "Honest Face": 1, 
         "Wealth": -10, 
         "Extra Hit Points": 2, 
@@ -4233,7 +3556,7 @@
         "Nosy": -1, 
         "Like knick knacks": -1, 
         "Vodou Practitioner": 15, 
-        "Alcohol Intolerance": -1, 
+        "Empathy": 15, 
         "Impulsiveness": -10, 
         "Cultural Familiarity (Teraformers)": 1, 
         "Short Attention Span": -10, 
@@ -4315,7 +3638,7 @@
           "name": "Hacking Equipment +1"
         }
       ], 
-      "stunned": 0, 
+      "stunned": false, 
       "skills": {
         "Engineer (Starships)": 12, 
         "Brawling": 12, 
@@ -4342,7 +3665,7 @@
         "Electronics Operation (Security)": 14, 
         "Piloting (Loader Mech)": 13
       }, 
-      "did_action_this_turn": false, 
+      "did_action_this_turn": true, 
       "shock": 0, 
       "armor-index": null, 
       "short-notes": [
@@ -4534,7 +3857,7 @@
           "name": "C Cell"
         }
       ], 
-      "stunned": 0, 
+      "stunned": false, 
       "skills": {
         "Physician": 14, 
         "Axe/Mace": 7, 
@@ -4544,7 +3867,7 @@
         "First Aid": 17, 
         "Beam Weapons (Pistol)": 14
       }, 
-      "did_action_this_turn": false, 
+      "did_action_this_turn": true, 
       "shock": 0, 
       "armor-index": null, 
       "current": {
@@ -9895,6 +9218,1132 @@
           ]
         }
       }
+    }, 
+    {
+      "date": "2019-08-18-15-22-34", 
+      "name": "Battle Of Persephone, Floor Level", 
+      "fight": {
+        "3 - Davidson": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Whip (Lightning)", 
+              "notes": "M196, B406; spell-made; HT @-1/2pts. or stunned", 
+              "damage": {
+                "sw": {
+                  "plus": 0, 
+                  "type": "burn"
+                }
+              }, 
+              "skill": "Whip", 
+              "type": "melee weapon"
+            }
+          ], 
+          "stunned": false, 
+          "skills": {
+            "Whip": 15
+          }, 
+          "notes": [
+            "origin: haitian", 
+            "gender: male", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Pokes/taps others with finger", 
+            "instincts: To show them all", 
+            "hair: Pony-tail", 
+            "speech: Accented", 
+            "knack: A true name", 
+            "personality: Enigmatic"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": null, 
+          "current": {
+            "fp": 27, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 13, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 13, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [
+            {
+              "rounds": 1.9, 
+              "name": "Spell for 3 - Davidson", 
+              "actions": {
+                "timer": {
+                  "rounds": 5, 
+                  "name": "Spell Duration Timer for 3 - Davidson", 
+                  "actions": {}, 
+                  "string": "SPELL ACTIVE: Animate Shadow"
+                }
+              }, 
+              "string": "Casting (Animate Shadow) @ skill (16): M154, Subject's shadow attacks them, HT negates"
+            }, 
+            {
+              "rounds": 0.9, 
+              "name": "3 - Davidson", 
+              "actions": {}, 
+              "string": [
+                "Cast (Animate Shadow)", 
+                " Defense: none", 
+                " Move: none"
+              ]
+            }
+          ], 
+          "did_action_this_turn": true, 
+          "spells": [
+            {
+              "skill": 12, 
+              "name": "Awaken"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Communicate"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Daze"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Far Hearing"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Foolishness"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Lend Energy"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Lend Vitality"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Luck"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Major Heal"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Minor Heal"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Might"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Restoration"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Sense Life"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Sleep"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Wizard Eye"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Animate Shadow"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Death Touch"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Explosive Lightning"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Lightning"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Lightning Whip"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Madness"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Panic"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Strike Blind"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Stun"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Total Paralysis"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Agonize"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Blink"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Great Ward"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Phase"
+            }
+          ]
+        }, 
+        "6 - Ricardo": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Whip (Lightning)", 
+              "notes": "M196, B406; spell-made; HT @-1/2pts. or stunned", 
+              "damage": {
+                "sw": {
+                  "plus": 0, 
+                  "type": "burn"
+                }
+              }, 
+              "skill": "Whip", 
+              "type": "melee weapon"
+            }
+          ], 
+          "stunned": false, 
+          "skills": {
+            "Whip": 15
+          }, 
+          "notes": [
+            "origin: haitian", 
+            "gender: male", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Pathological liar", 
+            "instincts: To extinguish an evil forever", 
+            "hair: Streaked", 
+            "speech: Curt short", 
+            "knack: A heart", 
+            "personality: Temperamental"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": null, 
+          "current": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 13, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 13, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": true, 
+          "spells": [
+            {
+              "skill": 12, 
+              "name": "Awaken"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Communicate"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Daze"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Far Hearing"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Foolishness"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Lend Energy"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Lend Vitality"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Luck"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Major Heal"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Minor Heal"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Might"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Restoration"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Sense Life"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Sleep"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Wizard Eye"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Animate Shadow"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Death Touch"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Explosive Lightning"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Lightning"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Lightning Whip"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Madness"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Panic"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Strike Blind"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Stun"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Total Paralysis"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Agonize"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Blink"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Great Ward"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Phase"
+            }
+          ]
+        }, 
+        "2 - Fabiola": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [], 
+          "stunned": false, 
+          "skills": {}, 
+          "notes": [
+            "origin: haitian", 
+            "gender: female", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Constantly asks for divine advice", 
+            "instincts: To be forgotten", 
+            "hair: Straight", 
+            "speech: Curt short", 
+            "knack: Metalworking", 
+            "personality: Spiteful"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": null, 
+          "current": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": true, 
+          "spells": [
+            {
+              "skill": 12, 
+              "name": "Awaken"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Communicate"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Daze"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Far Hearing"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Foolishness"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Lend Energy"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Lend Vitality"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Luck"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Major Heal"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Minor Heal"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Might"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Restoration"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Sense Life"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Sleep"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Wizard Eye"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Animate Shadow"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Death Touch"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Explosive Lightning"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Lightning"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Lightning Whip"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Madness"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Panic"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Strike Blind"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Stun"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Total Paralysis"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Agonize"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Blink"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Great Ward"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Phase"
+            }
+          ]
+        }, 
+        "1 - Gaelle": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [], 
+          "stunned": false, 
+          "skills": {}, 
+          "notes": [
+            "origin: haitian", 
+            "gender: female", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Nervous muscle twitch", 
+            "instincts: To party", 
+            "hair: Messy", 
+            "speech: Breathless", 
+            "knack: A secret", 
+            "personality: Accusative"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "posture": "standing", 
+          "armor-index": null, 
+          "current": {
+            "fp": 30, 
+            "iq": 12, 
+            "hp": 10, 
+            "ht": 11, 
+            "st": 10, 
+            "per": 12, 
+            "wi": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "check_for_death": false, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 30, 
+            "iq": 12, 
+            "hp": 10, 
+            "ht": 11, 
+            "st": 10, 
+            "per": 12, 
+            "wi": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "did_action_this_turn": true, 
+          "weapon-index": null, 
+          "timers": [], 
+          "opponent": null, 
+          "spells": [
+            {
+              "skill": 12, 
+              "name": "Awaken"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Communicate"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Daze"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Far Hearing"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Foolishness"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Lend Energy"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Lend Vitality"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Luck"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Major Heal"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Minor Heal"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Might"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Restoration"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Sense Life"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Sleep"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Wizard Eye"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Animate Shadow"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Death Touch"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Explosive Lightning"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Lightning"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Lightning Whip"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Madness"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Panic"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Strike Blind"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Stun"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Total Paralysis"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Agonize"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Blink"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Great Ward"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Phase"
+            }
+          ]
+        }, 
+        "4 - Schneider": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [], 
+          "stunned": false, 
+          "skills": {}, 
+          "notes": [
+            "origin: haitian", 
+            "gender: male", 
+            "station history: staby (born on this station)", 
+            "characteristics: Interrupts others", 
+            "instincts: To do good", 
+            "hair: Frazzled", 
+            "speech: Quiet", 
+            "knack: Immunity from the law", 
+            "personality: Agreeable"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": null, 
+          "current": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": true, 
+          "spells": [
+            {
+              "skill": 12, 
+              "name": "Awaken"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Communicate"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Daze"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Far Hearing"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Foolishness"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Lend Energy"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Lend Vitality"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Luck"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Major Heal"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Minor Heal"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Might"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Restoration"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Sense Life"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Sleep"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Wizard Eye"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Animate Shadow"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Death Touch"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Explosive Lightning"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Lightning"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Lightning Whip"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Madness"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Panic"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Strike Blind"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Stun"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Total Paralysis"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Agonize"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Blink"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Great Ward"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Phase"
+            }
+          ]
+        }, 
+        "5 - Jesula": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [], 
+          "stunned": false, 
+          "skills": {}, 
+          "notes": [
+            "origin: haitian", 
+            "gender: female", 
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Dandruff", 
+            "instincts: To reunite with a loved one", 
+            "hair: Braided", 
+            "speech: Accented", 
+            "knack: A one-of-a-kind item", 
+            "personality: Mournful"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": null, 
+          "current": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 30, 
+            "ht": 11, 
+            "iq": 12, 
+            "hp": 10, 
+            "wi": 12, 
+            "st": 10, 
+            "per": 12, 
+            "dx": 10, 
+            "basic-move": 5, 
+            "basic-speed": 5.25
+          }, 
+          "advantages": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }, 
+          "opponent": null, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "did_action_this_turn": true, 
+          "spells": [
+            {
+              "skill": 12, 
+              "name": "Awaken"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Communicate"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Daze"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Far Hearing"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Foolishness"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Lend Energy"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Lend Vitality"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Luck"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Major Heal"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Minor Heal"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Might"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Restoration"
+            }, 
+            {
+              "skill": 12, 
+              "name": "Sense Life"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Sleep"
+            }, 
+            {
+              "skill": 11, 
+              "name": "Wizard Eye"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Animate Shadow"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Death Touch"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Explosive Lightning"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Lightning"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Lightning Whip"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Madness"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Panic"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Strike Blind"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Stun"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Total Paralysis"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Agonize"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Blink"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Great Ward"
+            }, 
+            {
+              "skill": 16, 
+              "name": "Phase"
+            }
+          ]
+        }
+      }
     }
   ], 
   "current-fight": {
@@ -9903,11 +10352,11 @@
     "fighters": [
       {
         "group": "PCs", 
-        "name": "samuel - Erik"
+        "name": "lawerence - Spenser"
       }, 
       {
         "group": "PCs", 
-        "name": "lawerence - Spenser"
+        "name": "samuel - Erik"
       }, 
       {
         "group": "Battle Of Persephone, Floor Level", 
@@ -9946,7 +10395,7 @@
         "name": "mama V - Karen"
       }
     ], 
-    "saved": true, 
+    "saved": false, 
     "round": 0, 
     "history": [
       {
@@ -9994,6 +10443,39 @@
         "spell-index": 15, 
         "fighter": "3 - Davidson", 
         "name": "cast-spell"
+      }, 
+      {
+        "name": "reload"
+      }, 
+      {
+        "name": "reload"
+      }, 
+      {
+        "name": "reload"
+      }, 
+      {
+        "name": "reload"
+      }, 
+      {
+        "name": "reload"
+      }, 
+      {
+        "name": "reload"
+      }, 
+      {
+        "name": "reload"
+      }, 
+      {
+        "name": "reload"
+      }, 
+      {
+        "name": "reload"
+      }, 
+      {
+        "name": "reload"
+      }, 
+      {
+        "name": "reload"
       }
     ]
   }, 
@@ -13403,5 +13885,9 @@
         "Widelene"
       ]
     }
+  }, 
+  "Options": {
+    "reload-after-fight": true, 
+    "reload-on-heal": true
   }
 }

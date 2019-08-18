@@ -2243,6 +2243,7 @@ class Timers(object):
 
     def decrement_all(self):
         ''' Decrements all timers. '''
+        print 'DECRMENTING TIMERS' # TODO: remove
         for timer_obj in self.__timers['obj']:
             timer_obj.decrement()
 
@@ -2684,6 +2685,7 @@ class Fighter(ThingsInFight):
 
     def start_turn(self):
         self._ruleset.start_turn(self)
+        print 'Fighter::start_turn -> decrmenting_all() for "%s"' % self.name # TODO: remove
         self.timers.decrement_all()
         self.timers.remove_expired_keep_dying()
 
@@ -6955,6 +6957,7 @@ class FightHandler(ScreenHandler):
             monster_group = self._saved_fight['monsters']
 
         self.__world.do_debug_snapshot('fight-%s' % monster_group)
+        print '\n--- NEW FIGHT: %s ---' % monster_group # TODO: remove
 
         # Now we can go off and change the JSON file data
 
@@ -7037,7 +7040,11 @@ class FightHandler(ScreenHandler):
         self._saved_fight['saved'] = False
 
         if not self.should_we_show_current_fighter():
+            print 'we are not showing the current fighter' # TODO: remove
             self.modify_index(1)
+
+        first_fighter = self.get_current_fighter()
+        first_fighter.start_turn()
 
         self._window.start_fight()
 
@@ -7107,6 +7114,10 @@ class FightHandler(ScreenHandler):
         Increment or decrement the index.  Only stop on living creatures.
         '''
 
+        cf = self.get_current_fighter()    # TODO: remove
+        print 'modifying index by %d:' % adj # TODO: remove
+        print '  before: "%s"' % cf.name # TODO: remove
+
         first_index = self._saved_fight['index']
 
         round_before = self._saved_fight['round']
@@ -7139,8 +7150,9 @@ class FightHandler(ScreenHandler):
             # If we're skipping a fighter (due to his state), exercise his
             # timers, anyway
             if keep_going:
-                current_fighter.timers.decrement_all()
-                current_fighter.timers.remove_expired_kill_dying()
+                print 'FighterHandler::modify_index -> hfba -> decrmenting_all() ' # TODO: remove
+                print '  for "%s"' % current_fighter.name # TODO: remove
+                self.__handle_fighter_background_actions(current_fighter)
 
             # If we didn't change the index (for instance, if everyone's
             # dead), stop looking.  Otherwise, we're in an infinite loop.
@@ -7151,6 +7163,9 @@ class FightHandler(ScreenHandler):
             # Allowed add_to_history.
             self.add_to_history({'comment': '--- Round %d ---' %
                                                 self._saved_fight['round']})
+
+        cf = self.get_current_fighter()    # TODO: remove
+        print '  after: "%s"' % cf.name # TODO: remove
 
 
     def pick_opponent(self):
@@ -7298,17 +7313,27 @@ class FightHandler(ScreenHandler):
 
 
     def should_we_show_current_fighter(self):
+        '''
+        Only called when the fight starts to see if the first creature (or the
+        Fight) should be displayed.
+        '''
+        show_fighter = True
         current_fighter = self.get_current_fighter()
         if current_fighter.name == Fight.name:
-            return False
+            show_fighter = False
 
-        if current_fighter.is_dead():
-            return False
+        elif current_fighter.is_dead():
+            show_fighter = False
 
-        if current_fighter.is_absent():
-            return False
+        elif current_fighter.is_absent():
+            show_fighter = False
 
-        return True
+        if not show_fighter:
+            print 'FighterHandler::should_we_show_current_fighter -> hfba -> decrmenting_all() ' # TODO: remove
+            print '  for "%s"' % current_fighter.name # TODO: remove
+            self.__handle_fighter_background_actions(current_fighter)
+
+        return show_fighter
 
 
     def simply_save(self, throw_away):
@@ -7600,6 +7625,19 @@ class FightHandler(ScreenHandler):
 
         to_fighter.add_equipment(item, from_fighter.detailed_name)
         return True # Keep going
+
+
+    def __handle_fighter_background_actions(
+                                    self,
+                                    out_of_commision_fighter # Fighter object
+                                    ):
+        '''
+        Called when a fighter is being skipped (because, for example, he's
+        unconscious).  Handles background stuff that happens for the fighter
+        even if he's not able to do anything overtly.
+        '''
+        out_of_commision_fighter.timers.decrement_all()
+        out_of_commision_fighter.timers.remove_expired_kill_dying()
 
 
     def __loot_bodies(self):
