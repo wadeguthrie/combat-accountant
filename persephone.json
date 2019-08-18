@@ -1,4 +1,8 @@
 {
+  "Options": {
+    "reload-after-fight": true,
+    "reload-on-heal": true
+  },
   "Templates": {
     "Bad Guys": {
       "Tank": {

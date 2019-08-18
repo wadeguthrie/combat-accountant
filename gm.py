@@ -2339,10 +2339,6 @@ class ThingsInFight(object):
         return self.equipment.add(new_item, source)
 
 
-    def end_fight(self):
-        self.timers.clear_all()
-
-
     def remove_equipment(self,
                          item_index
                         ):
@@ -2379,8 +2375,11 @@ class ThingsInFight(object):
     # Miscellaneous methods
     #
 
-    def end_fight(self):
-        pass
+    def end_fight(self,
+                  world,          # World object
+                  fight_handler   # FightHandler object
+                 ):
+        self.timers.clear_all()
 
     def start_fight(self):
         pass
@@ -2529,8 +2528,15 @@ class Fighter(ThingsInFight):
         self.details['weapon-index'] = index
 
 
-    def end_fight(self):
-        super(Fighter, self).end_fight()
+    def end_fight(self,
+                  world,          # World object (for options)
+                  fight_handler   # FightHandler object (for do_action)
+                 ):
+        super(Fighter, self).end_fight(world, fight_handler)
+        # TODO: only if group is PC
+        if ('reload-after-fight' in world.details['Options'] and 
+                            world.details['Options']['reload-after-fight']):
+            self._ruleset.do_action(self, {'name': 'reload'}, fight_handler)
         self.details['weapon-index'] = None
 
 
@@ -7880,7 +7886,7 @@ class FightHandler(ScreenHandler):
 
         if not self._saved_fight['saved']:
             for fighter in self.__fighters:
-                fighter.end_fight()
+                fighter.end_fight(self.__world, self)
 
         self._window.close()
         return False # Leave the fight
@@ -9298,7 +9304,7 @@ class MyArgumentParser(argparse.ArgumentParser):
         sys.exit(2) 
 
 
-def timeStamped(fname, tag, ext, fmt='{fname}{tag}-%Y-%m-%d-%H-%M-%S.{ext}'):
+def timeStamped(fname, tag, ext, fmt='{fname}-%Y-%m-%d-%H-%M-%S{tag}.{ext}'):
     tag = '' if tag is None else ('-%s' % tag)
     return datetime.datetime.now().strftime(fmt).format(fname=fname,
                                                         tag=tag,
