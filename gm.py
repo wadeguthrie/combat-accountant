@@ -5524,7 +5524,7 @@ class GurpsRuleset(Ruleset):
         to_monster.update({'aim': { 'braced': False, 'rounds': 0 },
                            'skills': { },
                            'shock': 0,
-                           'stunned': 0,
+                           'stunned': False,
                            'advantages': { },
                            'did_action_this_turn': False,
                            'check_for_death': False,
@@ -5591,7 +5591,7 @@ class GurpsRuleset(Ruleset):
         Removes all the ruleset-related stuff from the old fight except injury.
         '''
         fighter.details['shock'] = 0
-        fighter.details['stunned'] = 0
+        fighter.details['stunned'] = False
         fighter.details['check_for_death'] = False
         fighter.details['posture'] = 'standing'
         self.reset_aim(fighter)
