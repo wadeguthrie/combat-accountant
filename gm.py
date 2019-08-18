@@ -4273,12 +4273,13 @@ class GurpsRuleset(Ruleset):
     def end_turn(self, fighter):
         fighter.details['shock'] = 0
         if fighter.details['stunned']:
-            stunned_menu = [('Succeeded (roll <= HT)', True),
-                            ('Missed roll', False),]
+            stunned_menu = [
+                (('Succeeded (roll <= HT (%d))' %
+                            fighter.details['current']['ht']), True),
+                ('Missed roll', False),]
             recovered_from_stun = self._window_manager.menu(
-                            'Stunned: Roll <= HT (%d) to recover' % 
-                                            fighter.details['current']['ht'],
-                            stunned_menu)
+                                            'Stunned: Roll <= HT to recover',
+                                            stunned_menu)
             if recovered_from_stun:
                 fighter.details['stunned'] = False
 
@@ -5681,22 +5682,22 @@ class GurpsRuleset(Ruleset):
 
         if fighter.is_conscious():
             if fighter.details['current']['fp'] <= 0:
-                pass_out_menu = [('made WILL roll (or did nothing)', True),
+                pass_out_menu = [(('roll <= WILL (%s), or did nothing' %
+                                    fighter.details['current']['wi']), True),
                                  ('did NOT make WILL roll', False)]
                 made_will_roll = self._window_manager.menu(
-                    ('On Action: roll <= WILL (%d) or pass out' %
-                                            fighter.details['current']['wi']),
-                    pass_out_menu)
+                                    'On Action: roll <= WILL or pass out',
+                                    pass_out_menu)
                 if not made_will_roll:
                     fighter.details['state'] = 'unconscious'
 
         # B327 -- immediate check for death
         if fighter.is_conscious() and fighter.details['check_for_death']:
-            dead_menu = [('made HT roll', True),
-                         ('did NOT make HT roll', False)]
+            dead_menu = [
+                (('roll <= HT (%d)' % fighter.details['current']['ht']), True),
+                ('did NOT make HT roll', False)]
             made_ht_roll = self._window_manager.menu(
-                ('%s: roll <= HT (%d) or DIE (B327)' %
-                            (fighter.name, fighter.details['current']['ht'])),
+                ('%s: roll <= HT or DIE (B327)' % fighter.name), 
                  dead_menu)
 
             if not made_ht_roll:
