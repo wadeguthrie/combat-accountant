@@ -2752,19 +2752,14 @@ class Ruleset(object):
         weapons and such.
         '''
 
-        if fight_handler is not None:
-            # Allowed add_to_history.
-            fight_handler.add_to_history(action)
-
-        if 'name' not in action:
-            return True # It's just a comment, ignore (but mark it 'handled')
-
         # Actions
-
 
         handled = False
 
-        if action['name'] == 'adjust-hp':
+        if 'name' not in action:
+            handled = True # It's just a comment, ignore (but mark it 'handled')
+
+        elif action['name'] == 'adjust-hp':
             self._adjust_hp(fighter, action['adj'])
             handled = True
 
@@ -2775,6 +2770,10 @@ class Ruleset(object):
 
         elif action['name'] == 'set-consciousness':
             fighter.set_consciousness(action['level'])
+            handled = True
+
+        elif action['name'] == 'custom':
+            self._do_custom_action(action)
             handled = True
 
         elif action['name'] == 'draw-weapon':
@@ -2800,6 +2799,10 @@ class Ruleset(object):
             self._use_item({'fighter': fighter,
                             'item': action['item-index']})
             handled = True
+
+        if fight_handler is not None:
+            # Allowed add_to_history.
+            fight_handler.add_to_history(action)
 
         return handled
 
@@ -2903,6 +2906,12 @@ class Ruleset(object):
                                          'action': {'name': 'all-out-attack'}
                                         })
             ])
+
+        ### Custom (user-supplied) ###
+
+        action_menu.append(('custom', {'text': ['User-defined action'],
+                                       'action': {'name': 'custom'}}
+                          ))
 
         ### Draw or Holster weapon ###
 
@@ -3127,6 +3136,19 @@ class Ruleset(object):
 
         weapon['ammo']['shots_left'] -= 1
         return
+
+
+    def _do_custom_action(self,
+                          action       # {'name': <action>, parameters...}
+                         ):
+        self._window_manager
+
+        height = 1
+        title = 'What Action Is Performed'
+        width = len(title)
+        comment_string = self._window_manager.input_box(height, width, title)
+        action['comment'] += ' -- %s' % comment_string
+        return True
 
 
     def _do_reload(self,
@@ -4337,7 +4359,7 @@ class GurpsRuleset(Ruleset):
                 cast_text = ' '.join(cast_text_array)
                 spell_menu.append(  
                     (cast_text,
-                    {'text': [('Cast (%s)' % complete_spell['name']),
+                    {'text': [('Cast "%s"' % complete_spell['name']),
                               ' Defense: none',
                               ' Move: none'],
 
