@@ -1722,6 +1722,8 @@ class GmScrollableWindow(object):
 
 
 class World(object):
+    debug_directory = 'debug'
+
     def __init__(self,
                  world_details,  # GmJson object
                  ruleset,        # Ruleset object
@@ -1732,6 +1734,24 @@ class World(object):
         self.details = world_details.read_data # entire dict from JSON
         self.__ruleset = ruleset
         self.__window_manager = window_manager
+        self.__delete_old_debug_files()
+        self.campaign_debug_json = self.do_debug_snapshot('startup')
+
+
+    def do_debug_snapshot(self,
+                          tag,  # String with which to tag the debug filename
+                         ):
+        '''
+        Saves a copy of the master JSON file to a debug directory.
+        '''
+
+        # Save the current JSON for debugging, later
+        debug_filename = os.path.join(World.debug_directory,
+                                      timeStamped('debug_json', tag, 'txt'))
+        with open(debug_filename, 'w') as f:
+            json.dump(self.details, f, indent=2)
+
+        return debug_filename
 
 
     def dont_save_on_exit(self):
@@ -1856,6 +1876,39 @@ class World(object):
             self.dont_save_on_exit()
         else:
             self.do_save_on_exit()
+
+    #
+    # Private and Protected
+    #
+
+    def __delete_old_debug_files(self):
+        '''
+        Delete debug files that are older than a couple of days old but remove
+        no more than the last 10 files.  This is all pretty arbitrary but it
+        seems like a reasonable amount to keep on hand.
+        '''
+
+        minimum_files_to_keep = 10  # Arbitrary
+
+        if not os.path.exists(World.debug_directory):
+            os.makedirs(World.debug_directory)
+
+        # Get rid of old debugging JSON files.
+         
+        entries = (os.path.join(World.debug_directory, fn)
+                                    for fn in os.listdir(World.debug_directory))
+        entries = (
+                (datetime.datetime.fromtimestamp(os.path.getctime(fpath)),
+                 fpath) for fpath in entries)
+        entries = sorted(entries, key=lambda x: x[0], reverse=True)
+
+        # Keep files that are less than 2 days (an arbitrary number) old.
+        two_days_ago = datetime.datetime.now() - datetime.timedelta(days=2)
+
+        if len(entries) > minimum_files_to_keep:
+            for mod_date, path in entries[minimum_files_to_keep:]:
+                if mod_date < two_days_ago: # '<' means 'earlier than'
+                    os.remove(path)
 
 class Equipment(object):
     def __init__(self,
@@ -6118,7 +6171,7 @@ class ScreenHandler(object):
             'report'  : report
         }
 
-        bug_report_json = timeStamped('bug_report', 'txt')
+        bug_report_json = timeStamped('bug_report', None, 'txt')
         with open(bug_report_json, 'w') as f:
             json.dump(bug_report, f, indent=2)
 
@@ -6821,7 +6874,7 @@ class FightHandler(ScreenHandler):
                  world,
                  monster_group,
                  ruleset,
-                 campaign_debug_json,
+                 campaign_debug_json,   # TODO: we can get this from 'world'
                  filename # JSON file containing the world
                 ):
         super(FightHandler, self).__init__(window_manager,
@@ -6889,11 +6942,17 @@ class FightHandler(ScreenHandler):
         # TODO: keep the fighter objects for the PCs and NPCs in the World
         #   object .
 
+        # Do the debug file snapshot before anything in the JSON file data is
+        # changed.
+
         if self._saved_fight['saved']:
             monster_group = self._saved_fight['monsters']
-        else:
-            # TODO: when the history is reset (here), the JSON should be
-            # rewritten
+
+        self.__world.do_debug_snapshot('fight-%s' % monster_group)
+
+        # Now we can go off and change the JSON file data
+
+        if not self._saved_fight['saved']:
             self.clear_history()
             # Allowed add_to_history.
             self.add_to_history({'comment': '--- Round 0 ---'})
@@ -6901,6 +6960,7 @@ class FightHandler(ScreenHandler):
             self._saved_fight['round'] = 0
             self._saved_fight['index'] = 0
             self._saved_fight['monsters'] = monster_group
+
 
         # Rebuild the fighter list (even if the fight was saved since monsters
         # or characters could have been added since the save happened).
@@ -8173,7 +8233,7 @@ class MainHandler(ScreenHandler):
                                         self.__world,
                                         self.__ruleset,
                                         BuildFightHandler.MONSTERs,
-                                        campaign_debug_json,
+                                        self.__world.campaign_debug_json,
                                         self._input_filename)
         build_fight.handle_user_input_until_done()
 
@@ -8200,7 +8260,7 @@ class MainHandler(ScreenHandler):
                                         self.__world,
                                         self.__ruleset,
                                         BuildFightHandler.NPCs,
-                                        campaign_debug_json,
+                                        self.__world.campaign_debug_json,
                                         self._input_filename)
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list(self.__current_display) # Since it may have changed
@@ -8218,7 +8278,7 @@ class MainHandler(ScreenHandler):
                                         self.__world,
                                         self.__ruleset,
                                         BuildFightHandler.PCs,
-                                        campaign_debug_json,
+                                        self.__world.campaign_debug_json,
                                         self._input_filename)
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list(self.__current_display) # Since it may have changed
@@ -9238,8 +9298,11 @@ class MyArgumentParser(argparse.ArgumentParser):
         sys.exit(2) 
 
 
-def timeStamped(fname, ext, fmt='{fname}-%Y-%m-%d-%H-%M-%S.{ext}'):
-    return datetime.datetime.now().strftime(fmt).format(fname=fname, ext=ext)
+def timeStamped(fname, tag, ext, fmt='{fname}{tag}-%Y-%m-%d-%H-%M-%S.{ext}'):
+    tag = '' if tag is None else ('-%s' % tag)
+    return datetime.datetime.now().strftime(fmt).format(fname=fname,
+                                                        tag=tag,
+                                                        ext=ext)
 
 
 def are_equal(self, lhs, rhs):
@@ -9332,40 +9395,6 @@ if __name__ == '__main__':
                                         % filename])
                 sys.exit(2)
 
-            ### JSON Files for Debugging ###
-
-            # TODO: put the debugging file stuff in 'World' and add a
-            # 'take-snapshot' method that appends a string to the filename.
-            # Every fight should take a snapshot as part of starting the fight
-            # and the string appended should be <fight-monster group>.
-
-            debug_directory = 'debug'
-            if not os.path.exists(debug_directory):
-                os.makedirs(debug_directory)
-
-            # Get rid of old debugging JSON files.
-             
-            entries = (os.path.join(debug_directory, fn)
-                                        for fn in os.listdir(debug_directory))
-            entries = (
-                    (datetime.datetime.fromtimestamp(os.path.getctime(fpath)),
-                     fpath) for fpath in entries)
-            entries = sorted(entries, key=lambda x: x[0], reverse=True)
-
-            # Keep files that are less than 2 days (an arbitrary number) old.
-            two_days_ago = datetime.datetime.now() - datetime.timedelta(days=2)
-
-            if len(entries) > 10: # Arbitrarily decide to save 10 files, min.
-                for mod_date, path in entries[10:]:
-                    if mod_date < two_days_ago:
-                        PP.pprint(mod_date)
-
-            # Save the current JSON for debugging, later
-            campaign_debug_json = os.path.join(debug_directory,
-                                               timeStamped('debug_json','txt'))
-            with open(campaign_debug_json, 'w') as f:
-                json.dump(campaign.read_data, f, indent=2)
-
             # Error check the JSON
             if 'PCs' not in campaign.read_data:
                 window_manager.error(['No "PCs" in %s' % filename])
@@ -9385,7 +9414,7 @@ if __name__ == '__main__':
                                              world,
                                              None,
                                              ruleset,
-                                             campaign_debug_json,
+                                             world.campaign_debug_json,
                                              filename)
                 fight_handler.handle_user_input_until_done()
 
@@ -9393,7 +9422,7 @@ if __name__ == '__main__':
             main_handler = MainHandler(window_manager,
                                        world,
                                        ruleset,
-                                       campaign_debug_json,
+                                       world.campaign_debug_json,
                                        filename)
 
             main_handler.handle_user_input_until_done()
