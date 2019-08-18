@@ -2242,7 +2242,7 @@ class Timers(object):
                     ):
         new_timer = timer.fire(self.__window_manager)
         if new_timer is not None:
-            self.add(new_timer)
+            self.add(Timer(new_timer))
 
 
 class ThingsInFight(object):
@@ -5882,7 +5882,7 @@ class GurpsRuleset(Ruleset):
                                 ('Spell Duration Timer for %s' % fighter.name),
                                 complete_spell['duration'],
                                 'SPELL ACTIVE: %s' % complete_spell['name'])
-            timer.details['actions']['timer'] = duration_timer
+            timer.details['actions']['timer'] = duration_timer.details
 
         return None if 'text' not in param else param
 
@@ -7082,7 +7082,8 @@ class FightHandler(ScreenHandler):
         opponent_menu = []
         default_selection = None
         for fighter in self.__fighters:
-            if fighter.group != current_fighter.group:
+            if (fighter.group != current_fighter.group and
+                                                fighter.name != Fight.name):
                 opponent_group = fighter.group
                 if fighter.is_conscious():
                     if fighter.details['opponent'] is None:
