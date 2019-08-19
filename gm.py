@@ -8714,12 +8714,9 @@ class MainHandler(ScreenHandler):
             sub_menu.extend([
                 ('timers (add)',           {'doit': self.__add_timer})
             ])
-
-        # TODO: remove timers
-        #if 'notes' in fighter.details:
-        #    sub_menu.extend([
-        #        ('Timers (remove)',           {'doit': self.__remove_timer})
-        #    ])
+            sub_menu.extend([
+                ('Timers (remove)',           {'doit': self.__timer_cancel})
+            ])
 
         if 'notes' in fighter.details:
             sub_menu.extend([
@@ -9302,6 +9299,34 @@ class MainHandler(ScreenHandler):
 
     def __short_notes(self, throw_away):
         return self.__notes('short-notes')
+
+
+    def __timer_cancel(self, throw_away):
+        '''
+        Command ribbon method.
+        Asks user for information for timer to add to a fighter.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        timer_recipient = self.__chars[self.__char_index]
+
+        # Select a timer
+
+        timers = timer_recipient.timers.get_all()
+        timer_menu = [(timer.get_one_line_description(), index)
+                                for index, timer in enumerate(timers)]
+        index = self._window_manager.menu('Remove Which Timer', timer_menu)
+        if index is None:
+            return True # Keep fighting
+
+        # Delete the timer
+
+        timer_recipient.timers.remove_timer_by_index(index)
+
+        self._draw_screen()
+
+        return True # Keep fighting
 
 
     def __toggle_Monster_PC_NPC_display(self):
