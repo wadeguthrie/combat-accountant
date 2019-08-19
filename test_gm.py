@@ -109,6 +109,12 @@ class MockMainGmWindow(object):
     def __init__(self, window_manager=None):
         pass
 
+    def char_detail_home(self):
+        pass
+
+    def char_list_home(self):
+        pass
+
     def clear(self):
         pass
 

@@ -8251,7 +8251,8 @@ class FightHandler(ScreenHandler):
 
 class MainHandler(ScreenHandler):
     (CHAR_LIST,
-     CHAR_DETAIL) = range(2)
+     CHAR_DETAIL) = (1, 2)  # These are intended to be bits so they can be ored
+                            # together
 
     def __init__(self,
                  window_manager,
@@ -8344,6 +8345,7 @@ class MainHandler(ScreenHandler):
             self.__char_index += 1
             if self.__char_index >= len(self.__chars):
                 self.__char_index = 0
+        self.__first_page(MainHandler.CHAR_DETAIL)
         self._draw_screen()
         return True
 
@@ -8746,10 +8748,17 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
 
-    def __first_page(self):
-        if self.__current_pane == MainHandler.CHAR_DETAIL:
+    def __first_page(self,
+                     pane = None, # CHAR_LIST, CHAR_DETAIL,
+                                  # CHAR_LIST|CHAR_DETAIL
+                    ):
+        if pane is None:
+            pane = self.__current_pane
+
+        if (pane & MainHandler.CHAR_DETAIL) != 0:
             self._window.char_detail_home()
-        else:
+
+        if (pane & MainHandler.CHAR_LIST) != 0:
             self.__char_index = 0
             self._window.char_list_home()
             self._draw_screen()
@@ -8910,6 +8919,7 @@ class MainHandler(ScreenHandler):
             self.__char_index -= 1
             if self.__char_index < 0:
                 self.__char_index = len(self.__chars) - 1
+        self.__first_page(MainHandler.CHAR_DETAIL)
         self._draw_screen()
         return True
 
@@ -9150,6 +9160,7 @@ class MainHandler(ScreenHandler):
         self.__current_display = None
         self.__setup_PC_list(self.__current_display) # The fight may have
                                                      # changed the PC/NPC lists
+        self.__first_page(MainHandler.CHAR_LIST | MainHandler.CHAR_DETAIL)
         self._draw_screen() # Redraw current screen when done with the fight.
 
         return True # Keep going
