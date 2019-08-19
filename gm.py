@@ -4238,7 +4238,8 @@ class GurpsRuleset(Ruleset):
 
         elif action['name'] == 'cast-spell':
             self._cast_spell({'fighter': fighter,
-                              'spell': action['spell-index']})
+                              'spell': action['spell-index'],
+                              'fight_handler': fight_handler})
             handled = True
 
         elif action['name'] == 'change-posture':
@@ -5899,7 +5900,8 @@ class GurpsRuleset(Ruleset):
 
     def _cast_spell(self,
                     param, # dict {'fighter': <Fighter object>,
-                           #       'spell': <index in 'spells'>}
+                           #       'spell': <index in 'spells'>,
+                           #       'fight_handler': <FightHandler object>}
                    ):
         '''
         Called to handle a menu selection.
@@ -5964,11 +5966,10 @@ class GurpsRuleset(Ruleset):
         fighter.details['current']['fp'] -= cost
 
         timer = Timer(None)
+        casting_time -= 0.1 # -0.1 so that it doesn't show up on the first
+                            # round you can do something after you cast
         timer.from_pieces(('Spell for %s' % fighter.name),
-                          casting_time - 0.1, # -0.1 so that it doesn't 
-                                              # show up on the first
-                                              # round you can do
-                                              # something after you cast
+                          casting_time,
                           'Casting (%s) @ skill (%d): %s' % (
                                                     complete_spell['name'],
                                                     complete_spell['skill'],
@@ -5986,6 +5987,39 @@ class GurpsRuleset(Ruleset):
                                 complete_spell['duration'],
                                 'SPELL ACTIVE: %s' % complete_spell['name'])
             timer.details['actions']['timer'] = duration_timer.details
+
+            # Opponent?
+
+            opponent = None
+            if 'fight_handler' in param and param['fight_handler'] is not None:
+                fight_handler = param['fight_handler']
+                opponent = fight_handler.get_opponent_for(fighter)
+
+            if opponent is not None:
+                opponent_timer_menu = [('yes', True), ('no', False)]
+                timer_for_opponent = self._window_manager.menu(
+                                    ('Mark %s with spell' % opponent.name),
+                                    opponent_timer_menu)
+                if not timer_for_opponent:
+                    opponent = None
+
+            if opponent:
+                delay_timer = Timer(None)
+                delay_timer.from_pieces(
+                        ('Waiting for "%s" spell to take affect' %
+                                                    complete_spell['name']),
+                        casting_time,
+                        ('Waiting for "%s" spell to take affect' %
+                                                    complete_spell['name']))
+
+                spell_timer = Timer(None)
+                spell_timer.from_pieces(
+                        ('Spell cast from %s against %s' % (fighter.name,
+                                                            opponent.name)),
+                        complete_spell['duration'],
+                        'SPELL "%s" AGAINST ME' % complete_spell['name'])
+                delay_timer.details['actions']['timer'] = spell_timer.details
+                opponent.timers.add(delay_timer)
 
         return None if 'text' not in param else param
 
