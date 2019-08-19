@@ -20,9 +20,6 @@ import traceback
 #   - Overhaul of spell casting
 #       o Spell stuff should all be in GurpsRuleset
 #       o Need maintain spell action
-#
-#   - Need warning if trying to do something while doing a multi-round cast
-#
 #   - add laser sights to weapons
 #   - Add playback of actions, like from: self._saved_fight['history']
 #   - need a test for each action (do_action)
@@ -36,9 +33,6 @@ import traceback
 #   - Multiple weapons
 #   - an item's type should be an array (so that a battle mech can be both
 #     armor and weapon.
-#   - can't attack if reloading (stored in the weapon)
-#       weapon['ready-in'] -- if >0, can't use - reloading sets this, count
-#       down each round.  Timer?
 #   - Rules-specific equipment support
 #       o Equipping item should ask to add ammo for item
 #       o Equipping item should ask to add skills if they aren't there
@@ -2141,6 +2135,43 @@ class Timer(object):
         return result
 
 
+    def get_one_line_description(self):
+        '''
+        '''
+        this_line = []
+
+        rounds = self.details['rounds']
+
+        if ('announcement' in self.details['actions'] and
+                        self.details['actions']['announcement'] is not None):
+            # Add back in the little bit we shave off of an announcement so
+            # that the timer will announce as the creature's round starts
+            # rather than at the end.
+            rounds += Timer.announcement_margin
+
+        round_count_string = Timer.round_count_string % rounds
+        this_line.append(round_count_string)
+
+        needs_headline = True
+        if 'announcement' in self.details['actions']:
+            this_line.append('[%s]' %
+                                    self.details['actions']['announcement'][0])
+            needs_headline = False
+
+        if ('string' in self.details and self.details['string'] is not None
+                                        and len(self.details['string']) > 0):
+            if type(self.details['string']) is list:
+                this_line.append('%s' % (self.details['string'][0]))
+            else:
+                this_line.append('%s' % (self.details['string']))
+            needs_headline = False
+
+        if needs_headline:
+            this_line.append('<<UNNAMED TIMER>>')
+
+        return ' '.join(this_line)
+
+
     def mark_owner_as_busy(self,
                            is_busy = True):
         self.details['busy'] = is_busy
@@ -2270,8 +2301,7 @@ class Timers(object):
                 remove_these.insert(0, index)   # largest indexes last
         for index in remove_these:
             self.__fire_timer(self.__timers['obj'][index])
-            del self.__timers['data'][index]
-            del self.__timers['obj'][index]
+            self.remove_timer_by_index(index)
 
 
     def remove_expired_kill_dying(self):
@@ -2288,8 +2318,14 @@ class Timers(object):
                 remove_these.insert(0, index)   # largest indexes last
         for index in remove_these:
             self.__fire_timer(self.__timers['obj'][index])
-            del self.__timers['data'][index]
-            del self.__timers['obj'][index]
+            self.remove_timer_by_index(index)
+
+
+    def remove_timer_by_index(self,
+                              index
+                             ):
+        del self.__timers['data'][index]
+        del self.__timers['obj'][index]
 
     #
     # Private methods
@@ -6987,7 +7023,8 @@ class FightHandler(ScreenHandler):
                                               'func': self.promote_to_NPC},
             ord('q'): {'name': 'quit',        'func': self.__quit},
             ord('s'): {'name': 'save',        'func': self.__save},
-            ord('t'): {'name': 'timer',       'func': self.__timer}
+            ord('t'): {'name': 'timer',       'func': self.__timer},
+            ord('T'): {'name': 'Timer cancel','func': self.__timer_cancel},
         })
 
         self.__world = world
@@ -8120,6 +8157,43 @@ class FightHandler(ScreenHandler):
                                      self._window_manager)
         timers_widget.make_timer(timer_recipient.name,
                                  self._window.fighter_win_width)
+
+        opponent = self.get_opponent_for(current_fighter)
+        self._window.show_fighters(current_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
+        return True # Keep fighting
+
+
+    def __timer_cancel(self):
+        '''
+        Command ribbon method.
+        Asks user for information for timer to add to a fighter.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        timer_recipient, current_fighter = self.__select_fighter(
+                                                    'Whose Timer To Cancel')
+        if timer_recipient is None:
+            return True # Keep fighting
+
+        # Select a timer
+
+        timers = timer_recipient.timers.get_all()
+        timer_menu = [(timer.get_one_line_description(), index)
+                                for index, timer in enumerate(timers)]
+        index = self._window_manager.menu('Remove Which Timer', timer_menu)
+        if index is None:
+            return True # Keep fighting
+
+        # Delete the timer
+
+        timer_recipient.timers.remove_timer_by_index(index)
+
+        # Display the results
 
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
