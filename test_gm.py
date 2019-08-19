@@ -393,7 +393,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__vodou_priest_fighter = {
             "shock": 0, 
             "stunned": False,
-            "did_action_this_turn": False,
+            "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
@@ -436,7 +436,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__one_more_guy = {
             "shock": 0, 
             "stunned": False,
-            "did_action_this_turn": False,
+            "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
@@ -474,7 +474,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__bokor_fighter = {
             "shock": 0, 
             "stunned": False,
-            "did_action_this_turn": False,
+            "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
@@ -516,7 +516,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__tank_fighter = {
             "shock": 0, 
             "stunned": False,
-            "did_action_this_turn": False,
+            "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [
@@ -566,7 +566,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__thief_fighter = {
             "shock": 0, 
             "stunned": False,
-            "did_action_this_turn": False,
+            "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index" : None,
             "stuff": [

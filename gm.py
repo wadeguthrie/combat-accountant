@@ -4168,7 +4168,7 @@ class GurpsRuleset(Ruleset):
     def can_finish_turn(self,
                         fighter # Fighter object
                        ):
-        if fighter.details['did_action_this_turn']:
+        if len(fighter.details['actions_this_turn']) > 0:
             return True
 
         if not fighter.is_conscious():
@@ -4260,8 +4260,9 @@ class GurpsRuleset(Ruleset):
         elif action['name'] == 'wait':
             handled = True # This is here just so that it's logged
 
+        # TODO: put this in Ruleset as post_action_accounting()
         if handled:
-            fighter.details['did_action_this_turn'] = True
+            fighter.details['actions_this_turn'].append(action['name'])
         else:
             self._window_manager.error(
                             ['action "%s" is not handled by any ruleset' %
@@ -5155,7 +5156,7 @@ class GurpsRuleset(Ruleset):
 
         # Transitory sections, not used in template:
         #   aim, stunned, shock, posture, check_for_death,
-        #   did_action_this_turn,
+        #   actions_this_turn,
 
         return sections
 
@@ -5606,7 +5607,7 @@ class GurpsRuleset(Ruleset):
                            'shock': 0,
                            'stunned': False,
                            'advantages': { },
-                           'did_action_this_turn': False,
+                           'actions_this_turn': [],
                            'check_for_death': False,
                            'posture': 'standing'})
         to_monster['permanent'] = copy.deepcopy({'fp': 10, 
@@ -5678,7 +5679,7 @@ class GurpsRuleset(Ruleset):
 
 
     def start_turn(self, fighter):
-        fighter.details['did_action_this_turn'] = False
+        fighter.details['actions_this_turn'] = []
 
         if fighter.is_conscious():
             if fighter.details['current']['fp'] <= 0:

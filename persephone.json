@@ -1407,7 +1407,7 @@
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "timers": [
             {
@@ -1568,7 +1568,7 @@
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "timers": [], 
           "posture": "standing", 
@@ -1700,7 +1700,7 @@
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "timers": [], 
           "posture": "standing", 
@@ -1812,7 +1812,7 @@
             }
           ], 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -1925,7 +1925,7 @@
             }
           ], 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -2040,7 +2040,7 @@
             }
           ], 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -2152,7 +2152,7 @@
             }
           ], 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -2223,7 +2223,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "spells": [
             {
               "skill": 12, 
@@ -2438,7 +2438,7 @@
             "Vodou Practitioner (Lwa 5)": 140, 
             "Combat Reflexes": 15
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "timers": [], 
           "opponent": null, 
@@ -2596,7 +2596,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "spells": [
             {
               "skill": 12, 
@@ -2968,7 +2968,7 @@
         "Holdout": 11, 
         "Law (Conglomerate)": 10
       }, 
-      "did_action_this_turn": true, 
+      "actions_this_turn": [], 
       "shock": 0, 
       "armor-index": null, 
       "short-notes": [
@@ -3298,7 +3298,7 @@
           ]
         }
       ], 
-      "did_action_this_turn": true, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "deri - Chelsea": {
@@ -3518,7 +3518,7 @@
         "Piloting (Low-Performance Spacecraft)": 9, 
         "Area Knowledge (Space Station)": 16
       }, 
-      "did_action_this_turn": true, 
+      "actions_this_turn": [], 
       "shock": 0, 
       "armor-index": null, 
       "current": {
@@ -3665,7 +3665,7 @@
         "Electronics Operation (Security)": 14, 
         "Piloting (Loader Mech)": 13
       }, 
-      "did_action_this_turn": true, 
+      "actions_this_turn": [], 
       "shock": 0, 
       "armor-index": null, 
       "short-notes": [
@@ -3867,7 +3867,7 @@
         "First Aid": 17, 
         "Beam Weapons (Pistol)": 14
       }, 
-      "did_action_this_turn": true, 
+      "actions_this_turn": [], 
       "shock": 0, 
       "armor-index": null, 
       "current": {
@@ -3931,7 +3931,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -3976,7 +3976,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4021,7 +4021,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4066,7 +4066,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4112,7 +4112,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4157,7 +4157,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4202,7 +4202,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4247,7 +4247,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4299,7 +4299,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4344,7 +4344,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4389,7 +4389,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4434,7 +4434,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4480,7 +4480,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4525,7 +4525,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4570,7 +4570,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4615,7 +4615,7 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4716,7 +4716,7 @@
             "Brawling": 16, 
             "Axe/Mace": 14
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4794,7 +4794,7 @@
             "Beam Weapons (Pistol)": 15, 
             "Brawling": 12
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4888,7 +4888,7 @@
             "Brawling": 16, 
             "Axe/Mace": 14
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -4986,7 +4986,7 @@
             "Brawling": 14, 
             "Knife": 15
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -5064,7 +5064,7 @@
             "Beam Weapons (Pistol)": 13, 
             "Brawling": 12
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -5159,7 +5159,7 @@
             "Brawling": 16, 
             "Axe/Mace": 14
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -5253,7 +5253,7 @@
             "Brawling": 16, 
             "Axe/Mace": 14
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -5351,7 +5351,7 @@
             "Brawling": 14, 
             "Knife": 15
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
           "current": {
@@ -5430,7 +5430,7 @@
           "state": "alive", 
           "stuff": [], 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "advantages": {}, 
           "posture": "standing", 
@@ -5526,7 +5526,7 @@
             }
           ], 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -5599,7 +5599,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": {
             "group": "PCs", 
             "name": "lawerence - Spenser"
@@ -5671,7 +5671,7 @@
               ]
             }
           ], 
-          "did_action_this_turn": true, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "Alexander - Journeyman Deputy Marshal": {
@@ -5743,7 +5743,7 @@
               ]
             }
           ], 
-          "did_action_this_turn": true, 
+          "actions_this_turn": [], 
           "opponent": {
             "group": "PCs", 
             "name": "vasilis - Alan"
@@ -5809,7 +5809,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }
       }
@@ -5906,7 +5906,7 @@
               ]
             }
           ], 
-          "did_action_this_turn": true, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "Maia Thompson - Operations manager on Tereshkova": {
@@ -5991,7 +5991,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": true, 
+          "actions_this_turn": [], 
           "opponent": {
             "group": "PCs", 
             "name": "samuel - Erik"
@@ -6076,7 +6076,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "6 - zombie": {
@@ -6158,7 +6158,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "4 - zombie": {
@@ -6240,7 +6240,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": {
             "group": "PCs", 
             "name": "samuel - Erik"
@@ -6325,7 +6325,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": {
             "group": "PCs", 
             "name": "vasilis - Alan"
@@ -6416,7 +6416,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "2 - zombie": {
@@ -6498,7 +6498,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "10 - Wight": {
@@ -6654,7 +6654,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "posture": "standing"
         }, 
         "5 - zombie": {
@@ -6736,7 +6736,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "6 - zombie": {
@@ -6818,7 +6818,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "9 - Wight": {
@@ -6974,7 +6974,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "posture": "standing"
         }, 
         "11 - Panama Hat": {
@@ -7059,7 +7059,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "7 - zombie": {
@@ -7141,7 +7141,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "4 - zombie": {
@@ -7223,7 +7223,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "3 - zombie": {
@@ -7305,7 +7305,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }
       }
@@ -7462,7 +7462,7 @@
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "William - Deputy Marshal (Stoddard)": {
@@ -7608,7 +7608,7 @@
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "6: Matthew": {
@@ -7726,7 +7726,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }
       }
@@ -7845,7 +7845,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }
       }
@@ -7906,7 +7906,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "1 - Guerlande": {
@@ -7965,7 +7965,7 @@
             "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "timers": [], 
           "opponent": null, 
@@ -8189,7 +8189,7 @@
             "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "timers": [], 
           "opponent": null, 
@@ -8373,7 +8373,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "2 - James": {
@@ -8486,7 +8486,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "6 - Mirlande - Leader": {
@@ -8599,7 +8599,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "1 - Nephtalie": {
@@ -8712,7 +8712,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }, 
         "4 - Islande - Sniper": {
@@ -8825,7 +8825,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "opponent": null
         }
       }
@@ -8893,7 +8893,7 @@
             "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "timers": [], 
           "opponent": null, 
@@ -9026,7 +9026,7 @@
             "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "did_action_this_turn": true, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "timers": [], 
           "opponent": {
@@ -9150,7 +9150,7 @@
             "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "did_action_this_turn": false, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "timers": [], 
           "opponent": null, 
@@ -9321,7 +9321,7 @@
               ]
             }
           ], 
-          "did_action_this_turn": true, 
+          "actions_this_turn": [], 
           "spells": [
             {
               "skill": 12, 
@@ -9515,7 +9515,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": true, 
+          "actions_this_turn": [], 
           "spells": [
             {
               "skill": 12, 
@@ -9692,7 +9692,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": true, 
+          "actions_this_turn": [], 
           "spells": [
             {
               "skill": 12, 
@@ -9866,7 +9866,7 @@
             "Vodou Practitioner (Mambo 2)": 35, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "did_action_this_turn": true, 
+          "actions_this_turn": [], 
           "weapon-index": null, 
           "timers": [], 
           "opponent": null, 
@@ -10046,7 +10046,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": true, 
+          "actions_this_turn": [], 
           "spells": [
             {
               "skill": 12, 
@@ -10223,7 +10223,7 @@
           "weapon-index": null, 
           "check_for_death": false, 
           "timers": [], 
-          "did_action_this_turn": true, 
+          "actions_this_turn": [], 
           "spells": [
             {
               "skill": 12, 
@@ -10530,7 +10530,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Catherine - tereshkova mechanic": {
@@ -10585,7 +10585,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Lady Shenice - Bokor": {
@@ -10635,7 +10635,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Stoddard, Leland (Chief Deputy Marshal)": {
@@ -10692,7 +10692,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Savannah - Deri's Horticulture Contact": {
@@ -10748,7 +10748,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Anaica - (party friend) Mambo on Tereshkova": {
@@ -10865,7 +10865,7 @@
         "Lwa (Mambo, Erzulie Freda)": 6, 
         "Vodou Practitioner (Mambo/Hougan 2)": 35
       }, 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "weapon-index": null, 
       "timers": [], 
       "opponent": null, 
@@ -10928,7 +10928,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "spells": [
         {
           "skill": 12, 
@@ -11057,7 +11057,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Owen Martin - Journeyman deputy marshal (party's boss)": {
@@ -11168,7 +11168,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Oscar": {
@@ -11222,7 +11222,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Dr. Zoya Krovopushkova - Medical Examiner": {
@@ -11277,7 +11277,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Amelia - Deputy Marshal (Stoddard)": {
@@ -11386,7 +11386,7 @@
         "Combat Reflexes": 15, 
         "High Pain Threshold": 10
       }, 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "posture": "standing"
     }, 
     "David - Master Weaponsmith": {
@@ -11477,7 +11477,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Celeline Fermine - Pilot (dead)": {
@@ -11526,7 +11526,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Dmitriy - radio operator on Tereshkova": {
@@ -11581,7 +11581,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Mama Cedella - Bokor": {
@@ -11648,7 +11648,7 @@
         "per": 12
       }, 
       "advantages": {}, 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "weapon-index": null, 
       "timers": [], 
       "posture": "standing", 
@@ -11788,7 +11788,7 @@
         "Combat Reflexes": 15, 
         "High Pain Threshold": 10
       }, 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "posture": "standing"
     }, 
     "Olivia - Special Deputy Marshal (Stoddard)": {
@@ -11932,7 +11932,7 @@
         "Combat Reflexes": 15, 
         "High Pain Threshold": 10
       }, 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "posture": "standing"
     }, 
     "Queen Clio - Bokor": {
@@ -12021,7 +12021,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Ryder - marshal intern": {
@@ -12076,7 +12076,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Papa Jorge - Bokor": {
@@ -12134,7 +12134,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Jessica - Tereshkova security": {
@@ -12244,7 +12244,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Dima - Bratva": {
@@ -12384,7 +12384,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Mackenzie - Marshal's Intern": {
@@ -12450,7 +12450,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Lucy - Director of Operations": {
@@ -12505,7 +12505,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Hurley, Mitchell (Chief Deputy Marshal)": {
@@ -12560,7 +12560,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Mambo Iriye - Bokor": {
@@ -12607,7 +12607,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Arseniy - Xenobiologist in tiger team": {
@@ -12662,7 +12662,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "11 - Panama Hat": {
@@ -12692,7 +12692,7 @@
       ], 
       "shock": 0, 
       "short-notes": [], 
-      "did_action_this_turn": true, 
+      "actions_this_turn": [], 
       "armor-index": null, 
       "aim": {
         "braced": false, 
@@ -12821,7 +12821,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Isaac Harris - Tiger team leader": {
@@ -12930,7 +12930,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Anel - control tower, tereshkova": {
@@ -12985,7 +12985,7 @@
       "weapon-index": null, 
       "check_for_death": false, 
       "timers": [], 
-      "did_action_this_turn": false, 
+      "actions_this_turn": [], 
       "opponent": null
     }
   }, 
