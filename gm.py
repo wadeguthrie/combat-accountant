@@ -2044,13 +2044,13 @@ class Timer(object):
         #                            'state' not in timer['parent_details']):
         #        self.__window_manager.error([
         #            'Timer "%s" contains no object to accept new state' %
-        #            timer['name']])
+        #            timer['parent-name']])
         #        return
         #    timer['parent_details']['state'] = timer['state']
 
         if 'announcement' in self.details['actions']:
             window_manager.display_window(
-                           ('Timer Fired for %s' % self.details['name']),
+                           ('Timer Fired for %s' % self.details['parent-name']),
                             [[{'text': self.details['actions']['announcement'],
                                'mode': curses.A_NORMAL }]])
 
@@ -2082,8 +2082,8 @@ class Timer(object):
         in the JSON).
         '''
 
-        name = '<< Unknown Timer >>' if parent_name is None else parent_name
-        self.details = {'name': name,
+        name = '<< Unknown Parent >>' if parent_name is None else parent_name
+        self.details = {'parent-name': name,
                         'rounds': rounds,
                         'string': text,
                         'actions': {}}
@@ -2273,7 +2273,8 @@ class Timers(object):
 
 
     def clear_all(self):
-        self.__timers['data'] = []
+        while len(self.__timers['data']) > 0:
+            self.__timers['data'].pop()
         self.__timers['obj'] = []
 
 
@@ -6004,7 +6005,7 @@ class GurpsRuleset(Ruleset):
         timer = Timer(None)
         casting_time -= 0.1 # -0.1 so that it doesn't show up on the first
                             # round you can do something after you cast
-        timer.from_pieces(('Spell for %s' % fighter.name),
+        timer.from_pieces(fighter.name,
                           casting_time,
                           'Casting (%s) @ skill (%d): %s' % (
                                                     complete_spell['name'],
@@ -6019,7 +6020,7 @@ class GurpsRuleset(Ruleset):
                                             complete_spell['duration'] > 1):
             duration_timer = Timer(None)
             duration_timer.from_pieces(
-                                ('Spell Duration Timer for %s' % fighter.name),
+                                fighter.name,
                                 complete_spell['duration'],
                                 'SPELL ACTIVE: %s' % complete_spell['name'])
             timer.details['actions']['timer'] = duration_timer.details
@@ -6042,16 +6043,14 @@ class GurpsRuleset(Ruleset):
             if opponent:
                 delay_timer = Timer(None)
                 delay_timer.from_pieces(
-                        ('Waiting for "%s" spell to take affect' %
-                                                    complete_spell['name']),
+                        opponent.name,
                         casting_time,
                         ('Waiting for "%s" spell to take affect' %
                                                     complete_spell['name']))
 
                 spell_timer = Timer(None)
                 spell_timer.from_pieces(
-                        ('Spell cast from %s against %s' % (fighter.name,
-                                                            opponent.name)),
+                        opponent.name,
                         complete_spell['duration'],
                         'SPELL "%s" AGAINST ME' % complete_spell['name'])
                 delay_timer.details['actions']['timer'] = spell_timer.details
