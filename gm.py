@@ -2141,6 +2141,11 @@ class Timer(object):
         return result
 
 
+    def mark_owner_as_busy(self,
+                           is_busy = True):
+        self.details['busy'] = is_busy
+
+
 class TimersWidget(object):
     '''
     Consolodated GUI widget for creating timers.
@@ -2686,6 +2691,20 @@ class Fighter(ThingsInFight):
         self._ruleset.start_turn(self)
         self.timers.decrement_all()
         self.timers.remove_expired_keep_dying()
+        for timer in self.timers.get_all():
+            if 'busy' in timer.details and timer.details['busy']:
+                window_text = []
+                lines = timer.get_description()
+                for line in lines:
+                    window_text.append([{'text': line,
+                                         'mode': curses.A_NORMAL}])
+                self._window_manager.display_window(
+                                                ('%s is busy' % self.name),
+                                                window_text)
+
+                # Allow the fighter to continue without doing anything since
+                # s/he's already busy
+                self.details['actions_this_turn'].append('busy')
 
 
     def toggle_absent(self):
@@ -2770,6 +2789,7 @@ class Ruleset(object):
     {
         'rounds': rounds,
         'string': text
+        'busy': true | false
     }
     '''
 
@@ -5953,6 +5973,7 @@ class GurpsRuleset(Ruleset):
                                                     complete_spell['name'],
                                                     complete_spell['skill'],
                                                     complete_spell['notes']))
+        timer.mark_owner_as_busy()  # When casting, the owner is busy
         fighter.timers.add(timer)
 
         # If the spell lasts any time at all, put a timer up so that we see
@@ -6061,6 +6082,7 @@ class GurpsRuleset(Ruleset):
                 reload_time -= 1
             timer = Timer(None)
             timer.from_pieces(param['fighter'].name, reload_time, 'RELOADING')
+            timer.mark_owner_as_busy()  # When reloading, the owner is busy
             param['fighter'].timers.add(timer)
 
             self.reset_aim(param['fighter'])
