@@ -7385,17 +7385,22 @@ class FightHandler(ScreenHandler):
 
         # Figure out who loses the hit points
 
+        attacker = None
         if self.__viewing_index is not None:
             current_fighter = self.__fighters[self.__viewing_index]
             opponent = self.get_opponent_for(current_fighter)
             hp_recipient = current_fighter
+            attacker = None # Not going to do an 'attack' action when the HP
+                            #   was modified through an index
         else:
             current_fighter = self.get_current_fighter()
             opponent = self.get_opponent_for(current_fighter)
             if opponent is None:
                 hp_recipient = current_fighter
+                attacker = None
             else:
                 hp_recipient = opponent
+                attacker = current_fighter
 
         # Reduce the HP
 
@@ -7422,6 +7427,29 @@ class FightHandler(ScreenHandler):
             else:
                 action['comment'] = '(%s) regained %d HP' % (opponent.name,
                                                              adj)
+
+            # Did attacker already attack
+
+            if attacker is None:
+                ask_to_attack = False
+            elif 'attack' in attacker.details['actions_this_turn']:
+                ask_to_attack = False
+            elif 'all-out-attack' in attacker.details['actions_this_turn']:
+                ask_to_attack = False
+            else:
+                ask_to_attack = True
+
+            if ask_to_attack:
+                attack_menu = [('yes', True), ('no', False)]
+                should_attack = self._window_manager.menu(
+                                    ('Should %s Attack?' % attacker.name),
+                                    attack_menu)
+                if should_attack:
+                    comment = '(%s) did (Attack) maneuver' % attacker.name
+                    self.__ruleset.do_action(attacker,
+                                             {'name': 'attack',
+                                              'comment': comment},
+                                             self)
         else:
             if adj < 0:
                 action['comment'] = '%d HP was done to (%s)' % (
