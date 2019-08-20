@@ -15,8 +15,6 @@ import sys
 import traceback
 
 # TODO:
-#   - first and last names
-#   - names, maybe, in a different file
 #   - Overhaul of spell casting
 #       o Spell stuff should all be in GurpsRuleset
 #       o Need maintain spell action
@@ -50,6 +48,7 @@ import traceback
 #     redrawing everything way more often than I should.  Turns out, it's not
 #     costing me much but it's ugly, none-the-less
 #   - need a way to generate equipment
+#   - names, maybe, in a different file
 
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
@@ -1833,32 +1832,42 @@ class World(object):
 
 
     def get_random_name(self):
+        randomly_generate = False
+
         if self.details['Names'] is None:
             self.__window_manager.error(
                                     ['There are no "Names" in the database'])
             return None, None, None
 
-        type_menu = [(x, x) for x in self.details['Names']]
-        type_name = self.__window_manager.menu('What kind of name', type_menu)
-        if type_name is None:
-            type_name = random.choice(self.details['Names'].keys())
-            gender_name = random.choice(
-                            self.details['Names'][type_name].keys())
+        # Country
 
-        else:
-            gender_menu = [(x, x)
-                   for x in self.details['Names'][type_name]]
-            gender_name = self.__window_manager.menu('What Gender', gender_menu)
-            if gender_name is None:
-                gender_name = random.choice(
-                                self.details['Names'][type_name].keys())
+        country_menu = [(x, x) for x in self.details['Names']]
+        country_name = self.__window_manager.menu('What kind of name',
+                                               country_menu)
+        if country_name is None:
+            randomly_generate = True
+            country_name = random.choice(self.details['Names'].keys())
 
-        index = random.randint(0,
-            len(self.details['Names'][type_name][gender_name]) - 1)
+        # Gender
 
-        return (self.details['Names'][type_name][gender_name][index],
-                type_name,
-                gender_name)
+        gender_list = ['male', 'female']
+        if not randomly_generate:
+            gender_menu = [(x, x) for x in gender_list]
+            gender = self.__window_manager.menu('What Gender',
+                                                     gender_menu)
+            if gender is None:
+                randomly_generate = True
+
+        if randomly_generate:
+            gender = random.choice(gender_list)
+
+        # Name
+
+        first_name = random.choice(self.details['Names'][country_name][gender])
+        last_name = random.choice(self.details['Names'][country_name]['last'])
+        name = '%s %s' % (first_name, last_name)
+
+        return (name, country_name, gender)
 
 
     def is_saved_on_exit(self):
