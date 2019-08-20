@@ -7627,6 +7627,8 @@ class FightHandler(ScreenHandler):
 
     def __defend(self):
         '''
+        Performed on the opponent of the current fighter.
+
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
