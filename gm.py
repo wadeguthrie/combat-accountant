@@ -15,6 +15,21 @@ import sys
 import traceback
 
 # TODO:
+#   - Fighter objects should be saved and passed around rather than re-created
+#   - campaign_debug_json doesn't need to be passed around since it's in
+#     World.
+#   - Redo TimersWidget to have a menu of all the actions and a 'keep_going'
+#     to allow more than one action to a timer.  That's also a reasonable
+#     place to document all of the actions.
+#   - Need to re-add 'state' as an action for a timer.
+#   - FightHandler should have a way to stun a figher.  This may need the
+#     modifications required to put FP in the Ruleset.
+#   - Monsters should have a way to get pocket lint.
+#   - Need to be able to generate a blank creature (maybe it's a default
+#     Template).
+#   - Should have a 'post-action-accounting' method where an action can be
+#     augmented. (?)  Need to save to history first.  Also need to append to
+#     actions this round.
 #   - Overhaul of spell casting
 #       o Spell stuff should all be in GurpsRuleset
 #       o Need maintain spell action
@@ -5240,7 +5255,7 @@ class GurpsRuleset(Ruleset):
             'why'   is an array of strings describing why the to-hit numbers
                     are what they are.
         '''
-        # TODO: need convenient defaults
+        # TODO: need convenient defaults -- maybe as an entry to the skill
         if weapon['skill'] not in fighter.details['skills']:
             return None
 
