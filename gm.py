@@ -1,5 +1,8 @@
 #! /usr/bin/python
 
+            # NOTE: this won't work because some choices (__show_why, for
+            # example) don't want the screen to be redrawn
+
 import argparse
 import copy
 import curses
@@ -3014,7 +3017,7 @@ class Ruleset(object):
         ### Attack ###
 
 
-        # TODO: 'Move' (and, in fact, all of the 'text') is GurpsRuleset-based
+        # RULESET: All of the 'text', below, is GurpsRuleset-based
         move = fighter.details['current']['basic-move']
 
         if holding_ranged:
@@ -3185,6 +3188,7 @@ class Ruleset(object):
         if (fighter_details['state'] != 'absent' and
                                         fighter_details['state'] != 'fight'):
             fighter_details['state'] = 'alive'
+        # TODO: if ['Options']['reload-on-heal']: reload
 
 
     def make_empty_creature(self):
@@ -4257,6 +4261,7 @@ class GurpsRuleset(Ruleset):
 
         return False
 
+
     def damage_to_string(self,
                          damages # list of dict -- returned by 'get_damage'
                         ):
@@ -4603,6 +4608,8 @@ class GurpsRuleset(Ruleset):
         return action_menu
 
 
+    # TODO: should this be public?  Seems rule-specific to be in public
+    # interface.
     def get_block_skill(self,
                         fighter,    # Fighter object
                         weapon      # dict
@@ -4897,6 +4904,7 @@ class GurpsRuleset(Ruleset):
         return results, why
 
 
+    # TODO: should this rules-specific thing be in the public interface?
     def get_dodge_skill(self,
                         fighter # Fighter object
                        ): # B326
@@ -5176,6 +5184,7 @@ class GurpsRuleset(Ruleset):
         return notes
 
 
+    # TODO: should this rules-specific thing be in the public interface?
     def get_parry_skill(self,
                         fighter,    # Fighter object
                         weapon      # dict
@@ -5226,6 +5235,12 @@ class GurpsRuleset(Ruleset):
         return (None if posture not in GurpsRuleset.posture else
                                             GurpsRuleset.posture[posture])
 
+
+    def get_rules_specific_fight_commands(self):
+        return { 
+            ord('f'): {'name': 'FP damage',
+                       'func_view_opponent_current': self.__damage_FP}
+            }
 
     def get_sections_in_template(self):
         '''
@@ -6094,6 +6109,32 @@ class GurpsRuleset(Ruleset):
         param['fighter'].details['posture'] = param['posture']
         self.reset_aim(param['fighter'])
         return None if 'text' not in param else param
+
+
+    def __damage_FP(self,
+                    fp_recipient    # Fighter object
+                   ):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        title = 'Reduce (%s\'s) FP By...' % fp_recipient.name
+        height = 1
+        width = len(title)
+        adj_string = self._window_manager.input_box(height, width, title)
+        if len(adj_string) <= 0:
+            return True
+        adj = -int(adj_string)  # NOTE: SUBTRACTING the adjustment
+
+        if adj < 0:
+            comment = '(%s) lost %d FP' % (fp_recipient.name, -adj)
+        else:
+            comment = '(%s) regained %d FP' % (fp_recipient.name, adj)
+        action = {'name': 'adjust-fp', 'adj': adj, 'comment': comment}
+        self.do_action(fp_recipient, action, self)
+
+        return True # Keep going
 
 
     def _do_adjust_fp(self,
@@ -7011,7 +7052,6 @@ class FightHandler(ScreenHandler):
         self.__equipment_manager = EquipmentManager(world,
                                                     self._window_manager)
 
-        # RULESET: 'f' belongs in Ruleset
         self._add_to_choice_dict({
             curses.KEY_UP:
                       {'name': 'prev character',
@@ -7029,7 +7069,6 @@ class FightHandler(ScreenHandler):
             ord('d'): {'name': 'defend',      'func': self.__defend},
             ord('D'): {'name': 'dead/unconscious',
                                               'func': self.__dead},
-            ord('f'): {'name': 'FP damage',   'func': self.__damage_FP},
             ord('g'): {'name': 'give equip',  'func': self.__give_equipment},
             ord('h'): {'name': 'History',     'func': self.__show_history},
             ord('i'): {'name': 'character info',
@@ -7049,6 +7088,9 @@ class FightHandler(ScreenHandler):
             ord('t'): {'name': 'timer',       'func': self.__timer},
             ord('T'): {'name': 'Timer cancel','func': self.__timer_cancel},
         })
+
+        self._add_to_choice_dict(
+                        self.__ruleset.get_rules_specific_fight_commands())
 
         self.__world = world
         self.__viewing_index = None
@@ -7084,7 +7126,6 @@ class FightHandler(ScreenHandler):
             self._saved_fight['round'] = 0
             self._saved_fight['index'] = 0
             self._saved_fight['monsters'] = monster_group
-
 
         # Rebuild the fighter list (even if the fight was saved since monsters
         # or characters could have been added since the save happened).
@@ -7203,7 +7244,53 @@ class FightHandler(ScreenHandler):
 
 
     def handle_user_input_until_done(self):
-        super(FightHandler, self).handle_user_input_until_done()
+        '''
+        Draws the screen and does event loop (gets input, responds to input)
+        '''
+        self._draw_screen()
+
+        keep_going = True
+        while keep_going:
+            string = self._window_manager.get_one_character()
+            if string in self._choices:
+                if 'func' in self._choices['string']:
+                    keep_going = self._choices[string]['func']()
+
+                elif 'func_view_opponent_current' in self._choices['string']:
+                    if self.__viewing_index is None:
+                        current_fighter = self.get_current_fighter()
+                        opponent = self.get_opponent_for(current_fighter)
+
+                        target = (current_fighter if opponent is None
+                                                               else opponent)
+                    else:
+                        target = self.__fighters[self.__viewing_index]
+
+                    keep_going = self._choices[string][
+                            'func_view_opponent_current'](target)
+                else:
+                keep_going = self._choices[string]['func']()
+                self.__command_post_callback()
+            else:
+                self._window_manager.error(
+                                    ['Invalid command: "%c" ' % chr(string)])
+
+            # Display stuff when we're done.
+
+            # NOTE: this won't work because some choices (__show_why, for
+            # example) don't want the screen to be redrawn
+            if keep_going:
+                if self.__viewing_index is None:
+                    current_fighter = self.get_current_fighter()
+                else:
+                    current_fighter = self.__fighters[self.__viewing_index]
+                opponent = self.get_opponent_for(current_fighter)
+
+                self._window.show_fighters(current_fighter,
+                                           opponent,
+                                           self.__fighters,
+                                           self._saved_fight['index'],
+                                           self.__viewing_index)
 
         # When done, move current fight to 'dead-monsters'
         if (not self._saved_fight['saved'] and
@@ -7454,12 +7541,8 @@ class FightHandler(ScreenHandler):
         elif self.__viewing_index < 0:
             self.__viewing_index = len(self._saved_fight['fighters']) - 1
 
-    # RULESET: all of FP belongs in Ruleset
-    def __damage_FP(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
+
+    def __command_pre_callback(self):
         # Figure out who loses the FP points
         if self.__viewing_index is not None:
             current_fighter = self.__fighters[self.__viewing_index]
@@ -7470,27 +7553,18 @@ class FightHandler(ScreenHandler):
             opponent = self.get_opponent_for(current_fighter)
             fp_recipient = current_fighter if opponent is None else opponent
 
-        title = 'Reduce (%s\'s) FP By...' % fp_recipient.name
-        height = 1
-        width = len(title)
-        adj_string = self._window_manager.input_box(height, width, title)
-        if len(adj_string) <= 0:
-            return True
-        adj = -int(adj_string)  # NOTE: SUBTRACTING the adjustment
+        return fp_recipient
 
-        if adj < 0:
-            comment = '(%s) lost %d FP' % (current_fighter.name, -adj)
-        else:
-            comment = '(%s) regained %d FP' % (current_fighter.name, adj)
-        action = {'name': 'adjust-fp', 'adj': adj, 'comment': comment}
-        self.__ruleset.do_action(fp_recipient, action, self)
+
+    def __command_post_callback(self):
+        current_fighter = self.__fighters[self.__viewing_index]
+        opponent = self.get_opponent_for(current_fighter)
 
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
                                    self._saved_fight['index'],
                                    self.__viewing_index)
-        return True # Keep going
 
 
     def __damage_HP(self):
@@ -7895,10 +7969,6 @@ class FightHandler(ScreenHandler):
         # Finish off previous guy
         prev_fighter = self.get_current_fighter()
         if not prev_fighter.can_finish_turn():
-            # RULESET: This should _so_ be in the ruleset but
-            # I'm not sure how to achieve that.  It also makes the assumption
-            # that you can't move on to the next fighter _because_ no
-            # maneuver/action has been performed.
             return self.__maneuver()
         elif not prev_fighter.is_conscious():
             # Allowed add_to_history.
@@ -7920,13 +7990,6 @@ class FightHandler(ScreenHandler):
                                   next_PC_name,
                                   self._input_filename,
                                   ScreenHandler.maintainjson)
-
-        opponent = self.get_opponent_for(current_fighter)
-        self._window.show_fighters(current_fighter,
-                                   opponent,
-                                   self.__fighters,
-                                   self._saved_fight['index'],
-                                   self.__viewing_index)
         return True # Keep going
 
 
@@ -8005,13 +8068,6 @@ class FightHandler(ScreenHandler):
                                   next_PC_name,
                                   self._input_filename,
                                   ScreenHandler.maintainjson)
-        current_fighter = self.get_current_fighter()
-        opponent = self.get_opponent_for(current_fighter)
-        self._window.show_fighters(current_fighter,
-                                   opponent,
-                                   self.__fighters,
-                                   self._saved_fight['index'],
-                                   self.__viewing_index)
         return True # Keep going
 
 
@@ -8229,19 +8285,14 @@ class FightHandler(ScreenHandler):
         return True # Keep fighting
 
 
-    def __view_init(self): # look at initiative character (back to fight)
+    def __view_init(self):
+        ''' look at initiative character (back to fight) '''
         self.__viewing_index = None
-        current_fighter = self.get_current_fighter()
-        opponent = self.get_opponent_for(current_fighter)
-        self._window.show_fighters(current_fighter,
-                                   opponent,
-                                   self.__fighters,
-                                   self._saved_fight['index'],
-                                   self.__viewing_index)
         return True # Keep going
 
 
-    def __view_prev(self): # look at previous character, don't change init
+    def __view_prev(self):
+        ''' look at previous character, don't change init '''
         if self.__viewing_index is None:
             self.__viewing_index = self._saved_fight['index']
         self.__change_viewing_index(-1)
@@ -8249,15 +8300,11 @@ class FightHandler(ScreenHandler):
         opponent = self.get_opponent_for(viewing_fighter)
         if self.__viewing_index == self._saved_fight['index']:
             self.__viewing_index = None
-        self._window.show_fighters(viewing_fighter,
-                                   opponent,
-                                   self.__fighters,
-                                   self._saved_fight['index'],
-                                   self.__viewing_index)
         return True # Keep going
 
 
-    def __view_next(self): # look at next character, don't change init
+    def __view_next(self):
+        ''' look at next character, don't change init '''
         if self.__viewing_index is None:
             self.__viewing_index = self._saved_fight['index']
         self.__change_viewing_index(1)
@@ -8265,14 +8312,7 @@ class FightHandler(ScreenHandler):
         opponent = self.get_opponent_for(viewing_fighter)
         if self.__viewing_index == self._saved_fight['index']:
             self.__viewing_index = None
-        self._window.show_fighters(viewing_fighter,
-                                   opponent,
-                                   self.__fighters,
-                                   self._saved_fight['index'],
-                                   self.__viewing_index)
         return True # Keep going
-
-
 
 
 class MainHandler(ScreenHandler):
