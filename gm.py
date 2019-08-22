@@ -2940,7 +2940,6 @@ class Ruleset(object):
             handled = True
 
         if fight_handler is not None:
-            # Allowed add_to_history.
             fight_handler.add_to_history(action)
 
         return handled
@@ -5232,7 +5231,9 @@ class GurpsRuleset(Ruleset):
                                             GurpsRuleset.posture[posture])
 
 
-    def get_rules_specific_fight_commands(self):
+    def get_rules_specific_fight_commands(self,
+                                          fight_handler
+                                         ):
         return { 
             ord('f'): {'name': 'FP damage',
                        'func': self.__damage_FP,
@@ -5240,8 +5241,9 @@ class GurpsRuleset(Ruleset):
                             'view': None,
                             'current-opponent': None,
                             'current': None,
+                            'fight_handler': fight_handler
                        },
-                       'show': True
+                       'show': True,
                       }
             }
 
@@ -6116,7 +6118,8 @@ class GurpsRuleset(Ruleset):
 
     def __damage_FP(self,
                     param    # {'view': xxx, 'view-opponent': xxx,
-                             #  'current': xxx, 'current-opponent': xxx} where
+                             #  'current': xxx, 'current-opponent': xxx,
+                             #  'fight_handler': <fight handler> } where
                              # xxx are Fighter objects
                    ):
         '''
@@ -6148,7 +6151,10 @@ class GurpsRuleset(Ruleset):
         else:
             comment = '(%s) regained %d FP' % (fp_recipient.name, adj)
         action = {'name': 'adjust-fp', 'adj': adj, 'comment': comment}
-        self.do_action(fp_recipient, action, None) # TODO: s.b. fight_handler
+
+        fight_handler = (None if 'fight_handler' not in param
+                                                else param['fight_handler'])
+        self.do_action(fp_recipient, action, fight_handler)
 
         return True # Keep going
 
@@ -7106,7 +7112,7 @@ class FightHandler(ScreenHandler):
         })
 
         self._add_to_choice_dict(
-                        self.__ruleset.get_rules_specific_fight_commands())
+                        self.__ruleset.get_rules_specific_fight_commands(self))
 
         self.__world = world
         self.__viewing_index = None
