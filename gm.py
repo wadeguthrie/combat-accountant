@@ -7997,6 +7997,13 @@ class FightHandler(ScreenHandler):
                                   next_PC_name,
                                   self._input_filename,
                                   ScreenHandler.maintainjson)
+
+        opponent = self.get_opponent_for(current_fighter)
+        self._window.show_fighters(current_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
         return True # Keep going
 
 
@@ -8075,6 +8082,13 @@ class FightHandler(ScreenHandler):
                                   next_PC_name,
                                   self._input_filename,
                                   ScreenHandler.maintainjson)
+        current_fighter = self.get_current_fighter()
+        opponent = self.get_opponent_for(current_fighter)
+        self._window.show_fighters(current_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
         return True # Keep going
 
 
@@ -8295,6 +8309,13 @@ class FightHandler(ScreenHandler):
     def __view_init(self):
         ''' look at initiative character (back to fight) '''
         self.__viewing_index = None
+        current_fighter = self.get_current_fighter()
+        opponent = self.get_opponent_for(current_fighter)
+        self._window.show_fighters(current_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
         return True # Keep going
 
 
@@ -8307,6 +8328,11 @@ class FightHandler(ScreenHandler):
         opponent = self.get_opponent_for(viewing_fighter)
         if self.__viewing_index == self._saved_fight['index']:
             self.__viewing_index = None
+        self._window.show_fighters(viewing_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
         return True # Keep going
 
 
@@ -8319,6 +8345,11 @@ class FightHandler(ScreenHandler):
         opponent = self.get_opponent_for(viewing_fighter)
         if self.__viewing_index == self._saved_fight['index']:
             self.__viewing_index = None
+        self._window.show_fighters(viewing_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
         return True # Keep going
 
 
