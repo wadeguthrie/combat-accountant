@@ -1,8 +1,5 @@
 #! /usr/bin/python
 
-            # NOTE: this won't work because some choices (__show_why, for
-            # example) don't want the screen to be redrawn
-
 import argparse
 import copy
 import curses
@@ -1871,8 +1868,7 @@ class World(object):
         gender_list = ['male', 'female']
         if not randomly_generate:
             gender_menu = [(x, x) for x in gender_list]
-            gender = self.__window_manager.menu('What Gender',
-                                                     gender_menu)
+            gender = self.__window_manager.menu('What Gender', gender_menu)
             if gender is None:
                 randomly_generate = True
 
@@ -5239,7 +5235,14 @@ class GurpsRuleset(Ruleset):
     def get_rules_specific_fight_commands(self):
         return { 
             ord('f'): {'name': 'FP damage',
-                       'func_view_opponent_current': self.__damage_FP}
+                       'func': self.__damage_FP,
+                       'param': {
+                            'view': None,
+                            'current-opponent': None,
+                            'current': None,
+                       },
+                       'show': True
+                      }
             }
 
     def get_sections_in_template(self):
@@ -6112,12 +6115,25 @@ class GurpsRuleset(Ruleset):
 
 
     def __damage_FP(self,
-                    fp_recipient    # Fighter object
+                    param    # {'view': xxx, 'view-opponent': xxx,
+                             #  'current': xxx, 'current-opponent': xxx} where
+                             # xxx are Fighter objects
                    ):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+
+        if param is None:
+            return True
+        elif param['view'] is not None:
+            fp_recipient = param['view']
+        elif param['current-opponent'] is not None:
+            fp_recipient = param['current-opponent']
+        elif param['current'] is not None:
+            fp_recipient = param['current']
+        else:
+            return True
 
         title = 'Reduce (%s\'s) FP By...' % fp_recipient.name
         height = 1
@@ -6132,7 +6148,7 @@ class GurpsRuleset(Ruleset):
         else:
             comment = '(%s) regained %d FP' % (fp_recipient.name, adj)
         action = {'name': 'adjust-fp', 'adj': adj, 'comment': comment}
-        self.do_action(fp_recipient, action, self)
+        self.do_action(fp_recipient, action, None) # TODO: s.b. fight_handler
 
         return True # Keep going
 
@@ -7253,24 +7269,40 @@ class FightHandler(ScreenHandler):
         while keep_going:
             string = self._window_manager.get_one_character()
             if string in self._choices:
-                if 'func' in self._choices['string']:
+                choice = self._choices[string]
+
+                viewed_fighter = (None if self.__viewing_index is None
+                        else self.__fighters[self.__viewing_index])
+                viewed_opponent = self.get_opponent_for(viewed_fighter)
+                current_fighter = self.get_current_fighter()
+                current_opponent = self.get_opponent_for(current_fighter)
+
+
+                if 'param' not in choice or choice['param'] is None:
                     keep_going = self._choices[string]['func']()
 
-                elif 'func_view_opponent_current' in self._choices['string']:
-                    if self.__viewing_index is None:
-                        current_fighter = self.get_current_fighter()
-                        opponent = self.get_opponent_for(current_fighter)
-
-                        target = (current_fighter if opponent is None
-                                                               else opponent)
-                    else:
-                        target = self.__fighters[self.__viewing_index]
-
-                    keep_going = self._choices[string][
-                            'func_view_opponent_current'](target)
                 else:
-                keep_going = self._choices[string]['func']()
-                self.__command_post_callback()
+                    param = choice['param']
+                    if 'view' in param:
+                        param['view'] = viewed_fighter
+                    if 'view-opponent' in param:
+                        param['view-opponent'] = viewed_opponent
+                    if 'current' in param:
+                        param['current'] = current_fighter
+                    if 'current-opponent' in param:
+                        param['current-opponent'] = current_opponent
+
+                    keep_going = self._choices[string]['func'](param)
+
+                if 'show' in choice and choice['show']:
+                    show_fighter = (current_fighter if viewed_fighter is None
+                                                        else viewed_fighter)
+                    show_opponent = self.get_opponent_for(show_fighter)
+                    self._window.show_fighters(show_fighter,
+                                               show_opponent,
+                                               self.__fighters,
+                                               self._saved_fight['index'],
+                                               self.__viewing_index)
             else:
                 self._window_manager.error(
                                     ['Invalid command: "%c" ' % chr(string)])
@@ -7540,31 +7572,6 @@ class FightHandler(ScreenHandler):
             self.__viewing_index = 0
         elif self.__viewing_index < 0:
             self.__viewing_index = len(self._saved_fight['fighters']) - 1
-
-
-    def __command_pre_callback(self):
-        # Figure out who loses the FP points
-        if self.__viewing_index is not None:
-            current_fighter = self.__fighters[self.__viewing_index]
-            opponent = self.get_opponent_for(current_fighter)
-            fp_recipient = current_fighter
-        else:
-            current_fighter = self.get_current_fighter()
-            opponent = self.get_opponent_for(current_fighter)
-            fp_recipient = current_fighter if opponent is None else opponent
-
-        return fp_recipient
-
-
-    def __command_post_callback(self):
-        current_fighter = self.__fighters[self.__viewing_index]
-        opponent = self.get_opponent_for(current_fighter)
-
-        self._window.show_fighters(current_fighter,
-                                   opponent,
-                                   self.__fighters,
-                                   self._saved_fight['index'],
-                                   self.__viewing_index)
 
 
     def __damage_HP(self):
