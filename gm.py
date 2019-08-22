@@ -5231,9 +5231,10 @@ class GurpsRuleset(Ruleset):
                                             GurpsRuleset.posture[posture])
 
 
-    def get_rules_specific_fight_commands(self,
-                                          fight_handler
-                                         ):
+    def get_fight_commands(self,
+                           fight_handler    # FightHandler object
+                          ):
+        ''' Returns fight commands that are specific to the GURPS ruleset. '''
         return { 
             ord('f'): {'name': 'FP damage',
                        'func': self.__damage_FP,
@@ -7111,8 +7112,7 @@ class FightHandler(ScreenHandler):
             ord('T'): {'name': 'Timer cancel','func': self.__timer_cancel},
         })
 
-        self._add_to_choice_dict(
-                        self.__ruleset.get_rules_specific_fight_commands(self))
+        self._add_to_choice_dict( self.__ruleset.get_fight_commands(self) )
 
         self.__world = world
         self.__viewing_index = None
