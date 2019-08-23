@@ -21,7 +21,6 @@ import traceback
 #   - Redo TimersWidget to have a menu of all the actions and a 'keep_going'
 #     to allow more than one action to a timer.  That's also a reasonable
 #     place to document all of the actions.
-#   - Need to re-add 'state' as an action for a timer.
 #   - Monsters should have a way to get pocket lint.
 #   - Need to be able to generate a blank creature (maybe it's a default
 #     Template).
@@ -2048,26 +2047,17 @@ class Timer(object):
         self.details['rounds'] -= 1
 
 
-    def fire(
-             self,
+    def fire(self,
+             owner,         # ThingsInFight object to receive timer action
              window_manager # GmWindowManager object -- for display
             ):
         ''' Fires the timer. '''
 
         result = None   # If there's a timer to be added back into the list,
                         #   this will be used to return it
-        # TODO:
-        #if parent_details is not None:
-        #    timer['actions']['parent_details'] = parent_details
-        #if 'state' in timer:
-        #    if ('parent_details' not in timer or
-        #                            timer['parent_details'] is None or
-        #                            'state' not in timer['parent_details']):
-        #        self.__window_manager.error([
-        #            'Timer "%s" contains no object to accept new state' %
-        #            timer['parent-name']])
-        #        return
-        #    timer['parent_details']['state'] = timer['state']
+
+        if 'state' in self.details['actions']:
+            owner.details['state'] = self.details['actions']['state']
 
         if 'announcement' in self.details['actions']:
             window_manager.display_window(
@@ -2095,8 +2085,9 @@ class Timer(object):
                     announcement = None,   # string to display (in its
                                            #   own window) when timer
                                            #   fires
-                    parent_details = None  # {'state':...} to receive
-                                           #   state of fired timer
+                    state = None           # string describing new state of
+                                           #   fighter (see
+                                           #   Fighter.conscious_map)
            ):
         '''
         Creates a new timer from scratch (rather than from data that's already
@@ -2109,9 +2100,8 @@ class Timer(object):
                         'string': text,
                         'actions': {}}
 
-        # TODO: add state changes to timers
-        #if parent_details is not None:
-        #    self.details['actions']['parent_details'] = parent_details
+        if state is not None:
+            self.details['actions']['state'] = state
 
         if announcement is not None:
             self.details['actions']['announcement'] = announcement
@@ -2212,8 +2202,7 @@ class TimersWidget(object):
 
 
     def make_timer(self,
-                   timer_recipient_name,    # string
-                   parent_window_width      # integer
+                   timer_recipient_name # string
                    ):
 
         # How long is the timer?
@@ -2228,47 +2217,79 @@ class TimersWidget(object):
         if rounds <= 0:
             return
 
-        # What is the timer's message?
+        # What does the timer do?
 
-        title = 'What happens in %d rounds?' % rounds
-        height = 1
-        width = curses.COLS - 4
-        string = self.__window_manager.input_box(
-                                height,
-                                parent_window_width - Timer.len_timer_leader,
-                                title)
+        keep_asking = True
+        keep_asking_menu = [('yes', True), ('no', False)]
+        param = {'announcement': None,
+                 'continuous_message': None,
+                 'state': None}
+        actions_menu = [('Continuous Message', 
+                                {'doit': self.__continuous_message_action,
+                                 'param': param}),
+                        ('Announcement',       
+                                {'doit': self.__announcement_action,
+                                 'param': param}),
+                        ('New State',          
+                                {'doit': self.__new_state_action,
+                                 'param': param})]
+        while keep_asking:
+            self.__window_manager.menu('Timer Action', actions_menu)
+            keep_asking = self.__window_manager.menu('Pick More Actions',
+                                                     keep_asking_menu)
 
-        # What is the timer's announcement?
+        # Install the timer.
 
-        title = 'Enter an announcement if you want one...'
-        height = 1
-        width = curses.COLS - 4
-        announcement = self.__window_manager.input_box(
-                                height,
-                                parent_window_width - Timer.len_timer_leader,
-                                title)
-
-        if announcement is not None and len(announcement) <= 0:
-            announcement = None
-
-        if announcement is not None:
+        if 'announcement' in param and param['announcement'] is not None:
             # Shave a little off the time so that the timer will announce
             # as his round starts rather than at the end.
             rounds -= Timer.announcement_margin
 
-        # Instal the timer.
-
         timer_obj = Timer(None)
         timer_obj.from_pieces(timer_recipient_name,
                               rounds,
-                              string,
-                              announcement)
+                              param['continuous_message'],
+                              param['announcement'])
         self.__timers.add(timer_obj)
+
+
+    # Private and Protected Methods
+
+    def __continuous_message_action(self,
+                                    param
+                                   ):
+        title = 'Enter the Continuous Message'
+        height = 1
+        width = (curses.COLS - 4) - Timer.len_timer_leader
+        string = self.__window_manager.input_box(height, width, title)
+        if string is not None and len(string) <= 0:
+            string = None
+        param['continuous_message'] = string
+
+
+    def __announcement_action(self,
+                              param
+                             ):
+        title = 'Enter the Announcement'
+        height = 1
+        width = (curses.COLS - 4) - Timer.len_timer_leader
+        announcement = self.__window_manager.input_box(height, width, title)
+        if announcement is not None and len(announcement) <= 0:
+            announcement = None
+        param['announcement'] = announcement
+
+
+    def __new_state_action(self,
+                           param
+                          ):
+        pass
 
 
 class Timers(object):
     def __init__(self,
                  timer_details, # List from JSON containing timers
+                 owner,         # ThingsInFight object to receive timer
+                                #   actions.
                  window_manager # For displaying error messages
                 ):
 
@@ -2277,6 +2298,8 @@ class Timers(object):
         # Timer object from that data.
         self.__timers = {'data': timer_details,
                          'obj': []}
+
+        self.__owner = owner
 
         for timer_data in timer_details:
             timer_obj = Timer(timer_data)
@@ -2356,7 +2379,7 @@ class Timers(object):
     def __fire_timer(self,
                      timer  # Timer object
                     ):
-        new_timer = timer.fire(self.__window_manager)
+        new_timer = timer.fire(self.__owner, self.__window_manager)
         if new_timer is not None:
             self.add(Timer(new_timer))
 
@@ -2388,7 +2411,9 @@ class ThingsInFight(object):
 
         if 'timers' not in details:
             details['timers'] = []
-        self.timers = Timers(self.details['timers'], self._window_manager)
+        self.timers = Timers(self.details['timers'],
+                             self,
+                             self._window_manager)
 
 
     #
@@ -8283,8 +8308,7 @@ class FightHandler(ScreenHandler):
 
         timers_widget = TimersWidget(timer_recipient.timers,
                                      self._window_manager)
-        timers_widget.make_timer(timer_recipient.name,
-                                 self._window.fighter_win_width)
+        timers_widget.make_timer(timer_recipient.name)
 
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
@@ -8677,7 +8701,7 @@ class MainHandler(ScreenHandler):
         keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
         while keep_asking:
-            timers_widget.make_timer(fighter.name, cols)
+            timers_widget.make_timer(fighter.name)
             self._draw_screen()
             keep_asking = self._window_manager.menu('Add More Timers',
                                                     keep_asking_menu)
