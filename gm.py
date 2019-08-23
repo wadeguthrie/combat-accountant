@@ -22,8 +22,6 @@ import traceback
 #     to allow more than one action to a timer.  That's also a reasonable
 #     place to document all of the actions.
 #   - Need to re-add 'state' as an action for a timer.
-#   - FightHandler should have a way to stun a figher.  This may need the
-#     modifications required to put FP in the Ruleset.
 #   - Monsters should have a way to get pocket lint.
 #   - Need to be able to generate a blank creature (maybe it's a default
 #     Template).
@@ -4336,11 +4334,9 @@ class GurpsRuleset(Ruleset):
             self.reset_aim(fighter)
             handled = True
 
-        elif action['name'] == 'stunned':
-            handled = True # This is here just so that it's logged
-
-        elif action['name'] == 'wait':
-            handled = True # This is here just so that it's logged
+        elif action['name'] == 'stun':
+            fighter.details['stunned'] = True
+            handled = True
 
         # TODO: put this in Ruleset as post_action_accounting()
         if handled:
@@ -4382,7 +4378,7 @@ class GurpsRuleset(Ruleset):
                 ('do nothing (stunned)', {'text': ['Do Nothing (Stunned)',
                                                    ' Defense: any @-4',
                                                    ' Move: none'],
-                                          'action': {'name': 'stunned'}}
+                                          'action': {'name': 'nothing'}}
                 )
             )
             return action_menu # No other actions permitted
@@ -4583,18 +4579,6 @@ class GurpsRuleset(Ruleset):
                                         'action': {'name': 'nothing'}}),
         ])
 
-        action_menu.extend([
-            ('stun/surprise (do nothing)',
-                               {'text': ['Stun/Surprised',
-                                         ' Defense: any @-4',
-                                         ' Move: none'],
-                                'action': {'name': 'stunned'}}),
-            ('wait (B366)',    {'text': ['Wait',
-                                         ' Defense: any, no All Out Attack',
-                                         ' Move: none'],
-                                'action': {'name': 'wait'}}),
-        ])
-
         super(GurpsRuleset, self).get_action_menu(action_menu,
                                                   fighter,
                                                   opponent)
@@ -4603,9 +4587,7 @@ class GurpsRuleset(Ruleset):
         return action_menu
 
 
-    # TODO: should this be public?  Seems rule-specific to be in public
-    # interface.
-    def get_block_skill(self,
+    def get_block_skill(self,                       # Public to aid in testing.
                         fighter,    # Fighter object
                         weapon      # dict
                        ):
@@ -4899,8 +4881,7 @@ class GurpsRuleset(Ruleset):
         return results, why
 
 
-    # TODO: should this rules-specific thing be in the public interface?
-    def get_dodge_skill(self,
+    def get_dodge_skill(self,                       # Public to aid in testing
                         fighter # Fighter object
                        ): # B326
         dodge_why = []
@@ -5179,8 +5160,7 @@ class GurpsRuleset(Ruleset):
         return notes
 
 
-    # TODO: should this rules-specific thing be in the public interface?
-    def get_parry_skill(self,
+    def get_parry_skill(self,                       # Public to aid in testing
                         fighter,    # Fighter object
                         weapon      # dict
                        ):
@@ -5195,7 +5175,6 @@ class GurpsRuleset(Ruleset):
                                                                 weapon['name'],
                                                                 skill,
                                                                 parry_skill))
-
 
         if fighter.details['stunned']:
             dodge_skill -= 4
@@ -5245,7 +5224,17 @@ class GurpsRuleset(Ruleset):
                             'fight_handler': fight_handler
                        },
                        'show': True,
-                      }
+                      },
+            ord('S'): {'name': 'Stun',
+                       'func': self.__stun,
+                       'param': {
+                            'view': None,
+                            'current-opponent': None,
+                            'current': None,
+                            'fight_handler': fight_handler
+                       },
+                       'show': True,
+                      },
             }
 
     def get_sections_in_template(self):
@@ -6270,6 +6259,37 @@ class GurpsRuleset(Ruleset):
         else:
             damage_type_str = '%s' % damage_type
         return damage_type_str
+
+
+    def __stun(self,
+               param    # {'view': xxx, 'view-opponent': xxx,
+                        #  'current': xxx, 'current-opponent': xxx,
+                        #  'fight_handler': <fight handler> } where
+                        # xxx are Fighter objects
+              ):
+        '''
+        Command ribbon method.
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        if param is None:
+            return True
+        elif param['view'] is not None:
+            stunned_dude = param['view']
+        elif param['current-opponent'] is not None:
+            stunned_dude = param['current-opponent']
+        elif param['current'] is not None:
+            stunned_dude = param['current']
+        else:
+            return True
+
+        action = {'name': 'stun',
+                  'comment': ('(%s) got stunned' % stunned_dude.name)}
+        fight_handler = (None if 'fight_handler' not in param
+                                                else param['fight_handler'])
+        self.do_action(stunned_dude, action, fight_handler)
+
+        return True # Keep going
 
 
 class ScreenHandler(object):
