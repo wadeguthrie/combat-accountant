@@ -213,7 +213,7 @@ class GmWindow(object):
             'lines_for_choices': 0,
         }
         if command_ribbon_choices is not None:
-            self.build_command_ribbon(height, width, command_ribbon_choices)
+            self.__build_command_ribbon(height, width, command_ribbon_choices)
 
         # Don't need to save the window location and size because:
         #   window.getbegyx()
@@ -224,64 +224,6 @@ class GmWindow(object):
                                                               top_line,
                                                               left_column)
         self._window_manager.push_gm_window(self)
-
-
-    def build_command_ribbon(self,
-                             lines,     # from lines, cols = self.getmaxyx()
-                             cols,
-                             choices,   # hash: ord('f'): {'name': 'xxx',
-                                        #                  'func': self.func}
-                            ):
-        # Build the choice strings
-
-        self._command_ribbon = {
-            'lines': lines,
-            'cols': cols,
-            'max_width': 0,
-            'choice_strings': []
-        }
-        for command, body in choices.iteritems():
-            if command == ord(' '):
-                command_string = '" "'
-            elif command == curses.KEY_HOME:
-                command_string = '<HOME>'
-            elif command == curses.KEY_UP:
-                command_string = '<UP>'
-            elif command == curses.KEY_DOWN:
-                command_string = '<DN>'
-            elif command == curses.KEY_PPAGE:
-                command_string = '<PGUP>'
-            elif command == curses.KEY_NPAGE:
-                command_string = '<PGDN>'
-            elif command == curses.KEY_LEFT:
-                command_string = '<LEFT>'
-            elif command == curses.KEY_RIGHT:
-                command_string = '<RIGHT>'
-            else:
-                command_string = '%c' % chr(command)
-
-            choice_text = {'bar': '| ',
-                           'command': ('%s' % command_string),
-                           'body': (' %s ' % body['name'])
-                          }
-            self._command_ribbon['choice_strings'].append(choice_text)
-            choice_string = '%s%s%s' % (choice_text['bar'],
-                                        choice_text['command'],
-                                        choice_text['body'])
-            if self._command_ribbon['max_width'] < len(choice_string):
-                self._command_ribbon['max_width'] = len(choice_string)
-
-        # Calculate the number of rows needed for all the commands
-
-        self._command_ribbon['choices_per_line'] = int((cols - 1)/
-                        self._command_ribbon['max_width']) # -1 for last '|'
-        self._command_ribbon['lines_for_choices'] = int(
-            (len(choices) /
-            (self._command_ribbon['choices_per_line'] + 0.0))
-            + 0.9999999) # +0.9999 so 'int' won't truncate last partial line
-
-        self._command_ribbon['choice_strings'].sort(reverse=True,
-                                        key=lambda s: s['command'].lower())
 
 
     def clear(self):
@@ -404,6 +346,70 @@ class GmWindow(object):
         return True
 
 
+    #
+    # Protected and Private Members
+    #
+
+    def __build_command_ribbon(self,
+                               lines,     # from lines, cols = self.getmaxyx()
+                               cols,
+                               choices,   # hash: ord('f'): {'name': 'xxx',
+                                          #                  'func': self.func}
+                              ):
+        # Build the choice strings
+
+        self._command_ribbon = {
+            'lines': lines,
+            'cols': cols,
+            'max_width': 0,
+            'choice_strings': []
+        }
+        for command, body in choices.iteritems():
+            if command == ord(' '):
+                command_string = '" "'
+            elif command == curses.KEY_HOME:
+                command_string = '<HOME>'
+            elif command == curses.KEY_UP:
+                command_string = '<UP>'
+            elif command == curses.KEY_DOWN:
+                command_string = '<DN>'
+            elif command == curses.KEY_PPAGE:
+                command_string = '<PGUP>'
+            elif command == curses.KEY_NPAGE:
+                command_string = '<PGDN>'
+            elif command == curses.KEY_LEFT:
+                command_string = '<LEFT>'
+            elif command == curses.KEY_RIGHT:
+                command_string = '<RIGHT>'
+            else:
+                command_string = '%c' % chr(command)
+
+            choice_text = {'bar': '| ',
+                           'command': ('%s' % command_string),
+                           'body': (' %s ' % body['name'])
+                          }
+            self._command_ribbon['choice_strings'].append(choice_text)
+            choice_string = '%s%s%s' % (choice_text['bar'],
+                                        choice_text['command'],
+                                        choice_text['body'])
+            if self._command_ribbon['max_width'] < len(choice_string):
+                self._command_ribbon['max_width'] = len(choice_string)
+
+        # Calculate the number of rows needed for all the commands
+
+        self._command_ribbon['choices_per_line'] = int((cols - 1)/
+                        self._command_ribbon['max_width']) # -1 for last '|'
+        self._command_ribbon['lines_for_choices'] = int(
+            (len(choices) /
+            (self._command_ribbon['choices_per_line'] + 0.0))
+            + 0.9999999) # +0.9999 so 'int' won't truncate last partial line
+
+        self._command_ribbon['choice_strings'].sort(reverse=True,
+                                        key=lambda s: s['command'].lower())
+
+
+
+
 class MainGmWindow(GmWindow):
     def __init__(self,
                  window_manager,
@@ -424,13 +430,11 @@ class MainGmWindow(GmWindow):
                                 #  [...],                  ]  # line 1...
 
         top_line = 1
-        # TODO: get the actual size of the command ribbon.  The problem is
-        # that the window is created before the command ribbon is added so the
-        # window has no way to know how big the command ribbon will be.
-        height = (lines                 # The whole window height, except...
-            - top_line                  # ...a block at the top, and...
-            - 5)                        # ...a space for the command ribbon.
-        
+        height = (lines         # The whole window height, except...
+                    - top_line  # ...a block at the top, and...
+                    - (self._command_ribbon['lines_for_choices'] + 1))
+                                # ...a space for the command ribbon + margin
+               
         width = (cols / 2) - 1 # -1 for margin
 
         self.__char_list_window = GmScrollableWindow(
