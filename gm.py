@@ -203,8 +203,18 @@ class GmWindow(object):
                  height,
                  width,
                  top_line,
-                 left_column):
+                 left_column,
+                 command_ribbon_choices = None
+                ):
         self._window_manager = window_manager
+
+        self._command_ribbon = {
+            'choices_per_line': 0,
+            'lines_for_choices': 0,
+        }
+        if command_ribbon_choices is not None:
+            self.build_command_ribbon(height, width, command_ribbon_choices)
+
         # Don't need to save the window location and size because:
         #   window.getbegyx()
         #   window.getmaxyx()
@@ -216,34 +226,20 @@ class GmWindow(object):
         self._window_manager.push_gm_window(self)
 
 
-    def clear(self):
-        '''Clears the screen.'''
-        self._window.clear()
-
-
-    def close(self):
-        '''
-        Explicit destructor because Python is broken when it comes to
-        destructors.
-        '''
-        self._window_manager.pop_gm_window(self)
-        del self._window                   # kill ourselves
-        self._window_manager.refresh_all() # refresh everything else
-        return True
-
-
-    def command_ribbon(
-            self,
-            choices # hash: ord('f'): {'name': 'xxx', 'func': self.func}
-           ):
-        '''
-        Draws a list of commands across the bottom of the screen
-        '''
-
+    def build_command_ribbon(self,
+                             lines,     # from lines, cols = self.getmaxyx()
+                             cols,
+                             choices,   # hash: ord('f'): {'name': 'xxx',
+                                        #                  'func': self.func}
+                            ):
         # Build the choice strings
 
-        max_width = 0
-        choice_strings = []
+        self._command_ribbon = {
+            'lines': lines,
+            'cols': cols,
+            'max_width': 0,
+            'choice_strings': []
+        }
         for command, body in choices.iteritems():
             if command == ord(' '):
                 command_string = '" "'
@@ -268,31 +264,57 @@ class GmWindow(object):
                            'command': ('%s' % command_string),
                            'body': (' %s ' % body['name'])
                           }
-            choice_strings.append(choice_text)
+            self._command_ribbon['choice_strings'].append(choice_text)
             choice_string = '%s%s%s' % (choice_text['bar'],
                                         choice_text['command'],
                                         choice_text['body'])
-            if max_width < len(choice_string):
-                max_width = len(choice_string)
+            if self._command_ribbon['max_width'] < len(choice_string):
+                self._command_ribbon['max_width'] = len(choice_string)
 
         # Calculate the number of rows needed for all the commands
 
-        lines, cols = self.getmaxyx()
-        choices_per_line = int((cols - 1)/max_width) # -1 for last '|'
-        # Adding 0.9999 so last partial line doesn't get truncated by 'int'
-        # TODO: save lines_for_choices as self.command_ribbon_height for
-        #   use bg MainGmWindow::__init__
-        lines_for_choices = int((len(choices) / (choices_per_line + 0.0))
-                                                                + 0.9999999)
+        self._command_ribbon['choices_per_line'] = int((cols - 1)/
+                        self._command_ribbon['max_width']) # -1 for last '|'
+        self._command_ribbon['lines_for_choices'] = int(
+            (len(choices) /
+            (self._command_ribbon['choices_per_line'] + 0.0))
+            + 0.9999999) # +0.9999 so 'int' won't truncate last partial line
 
-        # Print stuff out
+        self._command_ribbon['choice_strings'].sort(reverse=True,
+                                        key=lambda s: s['command'].lower())
 
-        choice_strings.sort(reverse=True, key=lambda s: s['command'].lower())
+
+    def clear(self):
+        '''Clears the screen.'''
+        self._window.clear()
+
+
+    def close(self):
+        '''
+        Explicit destructor because Python is broken when it comes to
+        destructors.
+        '''
+        self._window_manager.pop_gm_window(self)
+        del self._window                   # kill ourselves
+        self._window_manager.refresh_all() # refresh everything else
+        return True
+
+
+    def command_ribbon(self):
+        '''
+        Draws a list of commands across the bottom of the screen.  Uses
+        information gathered through |build_command_ribbon|.
+        '''
+        choice_strings = copy.deepcopy(self._command_ribbon['choice_strings'])
+        lines = self._command_ribbon['lines']
+        cols = self._command_ribbon['cols']
+
         line = lines - 1 # -1 because last line is lines-1
-        for subline in reversed(range(lines_for_choices)):
+        for subline in reversed(range(
+                            self._command_ribbon['lines_for_choices'])):
             line = lines - (subline + 1) # -1 because last line is lines-1
             left = 0
-            for i in range(choices_per_line):
+            for i in range(self._command_ribbon['choices_per_line']):
                 if len(choice_strings) == 0:
                     self._window.addstr(line, left, '|', curses.A_NORMAL)
                 else:
@@ -312,7 +334,7 @@ class GmWindow(object):
                                         my_left,
                                         choice_text['body'],
                                         curses.A_BOLD)
-                left += max_width
+                left += self._command_ribbon['max_width']
             self._window.addstr(line, left, '|', curses.A_NORMAL)
         self.refresh()
 
@@ -383,12 +405,16 @@ class GmWindow(object):
 
 
 class MainGmWindow(GmWindow):
-    def __init__(self, window_manager):
+    def __init__(self,
+                 window_manager,
+                 command_ribbon_choices
+                ):
         super(MainGmWindow, self).__init__(window_manager,
                                            curses.LINES,
                                            curses.COLS,
                                            0,
-                                           0)
+                                           0,
+                                           command_ribbon_choices)
 
         lines, cols = self._window.getmaxyx()
         self._char_detail = [] # [[{'text', 'mode'}, ...],   # line 0
@@ -524,12 +550,16 @@ class MainGmWindow(GmWindow):
 
 
 class BuildFightGmWindow(GmWindow):
-    def __init__(self, window_manager):
+    def __init__(self,
+                 window_manager,
+                 command_ribbon_choices
+                ):
         super(BuildFightGmWindow, self).__init__(window_manager,
                                                  curses.LINES,
                                                  curses.COLS,
                                                  0,
-                                                 0)
+                                                 0,
+                                                 command_ribbon_choices)
         lines, cols = self._window.getmaxyx()
         # TODO: should _char_detail be in GmWindow?
         self._char_detail = []  # [[{'text', 'mode'}, ...],   # line 0
@@ -562,7 +592,6 @@ class BuildFightGmWindow(GmWindow):
 
 
     def close(self):
-        #print '  BuildFightGmWindow::close'
         # Kill my subwindows, first
         if self.__char_list_window is not None:
             del self.__char_list_window
@@ -574,7 +603,6 @@ class BuildFightGmWindow(GmWindow):
 
 
     def refresh(self):
-        #print '  BuildFightGmWindow::refresh'
         super(BuildFightGmWindow, self).refresh()
         if self.__char_list_window is not None:
             self.__char_list_window.refresh()
@@ -583,14 +611,12 @@ class BuildFightGmWindow(GmWindow):
 
 
     def scroll_char_detail_down(self):
-        #print '  ** BuildFightGmWindow::scroll_char_detail_down'
         self._char_detail_window.scroll_down()
         self._char_detail_window.draw_window()
         self._char_detail_window.refresh()
 
 
     def scroll_char_detail_up(self):
-        #print '  ** BuildFightGmWindow::scroll_char_detail_up'
         self._char_detail_window.scroll_up()
         self._char_detail_window.draw_window()
         self._char_detail_window.refresh()
@@ -679,12 +705,18 @@ class BuildFightGmWindow(GmWindow):
 
 
 class FightGmWindow(GmWindow):
-    def __init__(self, window_manager, ruleset):
+    def __init__(self,
+                 window_manager,        # GmWindowManager object
+                 ruleset,               # Ruleset object
+                 command_ribbon_choices # dict: ord('T'): {'name': xxx,
+                                        #                  'func': yyy}, ...
+                ):
         super(FightGmWindow, self).__init__(window_manager,
-                                           curses.LINES,
-                                           curses.COLS,
-                                           0,
-                                           0)
+                                            curses.LINES,
+                                            curses.COLS,
+                                            0,
+                                            0,
+                                            command_ribbon_choices)
         self.__ruleset = ruleset
         self.__pane_width = curses.COLS / 3 # includes margin
         self.__margin_width = 2
@@ -1258,12 +1290,20 @@ class GmWindowManager(object):
         return string
 
 
-    def get_build_fight_gm_window(self):
-        return BuildFightGmWindow(self)
+    def get_build_fight_gm_window(self,
+                                  command_ribbon_choices
+                                 ):
+                                  
+        return BuildFightGmWindow(self, command_ribbon_choices)
 
 
-    def get_fight_gm_window(self, ruleset):
-        return FightGmWindow(self, ruleset)
+    def get_fight_gm_window(self,
+                            ruleset,                # Ruleset object
+                            command_ribbon_choices  # dict: ord('T'):
+                                                    #   {'name': xxx,
+                                                    #    'func': yyy}, ...
+                           ):
+        return FightGmWindow(self, ruleset, command_ribbon_choices)
 
 
     def get_mode_from_fighter_state(self,
@@ -1272,8 +1312,9 @@ class GmWindowManager(object):
         return self.STATE_COLOR[state]
 
 
-    def get_main_gm_window(self):
-        return MainGmWindow(self)
+    def get_main_gm_window(self,
+                           command_ribbon_choices):
+        return MainGmWindow(self, command_ribbon_choices)
 
 
     def getmaxyx(self):
@@ -6456,7 +6497,8 @@ class BuildFightHandler(ScreenHandler):
             ord('T'): {'name': 'make template',   'func': self.__make_template},
             ord('q'): {'name': 'quit',            'func': self.__quit},
         })
-        self._window = self._window_manager.get_build_fight_gm_window()
+        self._window = self._window_manager.get_build_fight_gm_window(
+                                                                self._choices)
 
         self.__world = world
         self.__ruleset = ruleset
@@ -6545,7 +6587,7 @@ class BuildFightHandler(ScreenHandler):
                                    self.__template_name,
                                    self._input_filename,
                                    ScreenHandler.maintainjson)
-        self._window.command_ribbon(self._choices)
+        self._window.command_ribbon()
         # BuildFightGmWindow
         self._window.show_creatures(self.__critters['obj'],
                                     self.__new_char_name,
@@ -7126,7 +7168,6 @@ class FightHandler(ScreenHandler):
                                            campaign_debug_json,
                                            filename,
                                            world.details['current-fight'])
-        self._window = self._window_manager.get_fight_gm_window(ruleset)
         self.__ruleset = ruleset
         self.__bodies_looted = False
         self.__keep_monsters = False # Move monsters to 'dead' after fight
@@ -7171,6 +7212,8 @@ class FightHandler(ScreenHandler):
         })
 
         self._add_to_choice_dict( self.__ruleset.get_fight_commands(self) )
+        self._window = self._window_manager.get_fight_gm_window(self.__ruleset,
+                                                                self._choices)
 
         self.__world = world
         self.__viewing_index = None
@@ -7850,7 +7893,7 @@ class FightHandler(ScreenHandler):
                                    self.__viewing_index)
         self._window.status_ribbon(self._input_filename,
                                    ScreenHandler.maintainjson)
-        self._window.command_ribbon(self._choices)
+        self._window.command_ribbon()
 
 
     def __full_notes(self):
@@ -8480,10 +8523,12 @@ class MainHandler(ScreenHandler):
             ord('/'): {'name': 'search',              'func':
                                                        self.__search}
         })
+        self._window = self._window_manager.get_main_gm_window(self._choices)
+
         self.__current_display = None   # name of monster group or 'None' for
                                         # PC/NPC list
         self.__setup_PC_list(self.__current_display)
-        self._window = self._window_manager.get_main_gm_window()
+
         self.__equipment_manager = EquipmentManager(self.__world,
                                                     self._window_manager)
 
@@ -8815,7 +8860,7 @@ class MainHandler(ScreenHandler):
                        else self.__chars[self.__char_index])
         self._window.show_description(person)
 
-        self._window.command_ribbon(self._choices)
+        self._window.command_ribbon()
 
 
     def __draw_weapon(self, throw_away):
