@@ -118,7 +118,7 @@ class MockMainGmWindow(object):
     def clear(self):
         pass
 
-    def command_ribbon(self, choices):
+    def command_ribbon(self):
         pass
 
     def status_ribbon(self, input_filename, maintain_json):
@@ -146,7 +146,7 @@ class MockGmWindow(object):
     def close(self):
         pass
 
-    def command_ribbon(self, choices):
+    def command_ribbon(self):
         pass
 
     def getmaxyx(self):
@@ -255,7 +255,7 @@ class MockWindowManager(object):
             print '\n** Found another error:'
             PP.pprint(string_array)
 
-    def get_build_fight_gm_window(self):
+    def get_build_fight_gm_window(self, command_ribbon_choices):
         return MockBuildFightGmWindow()
 
     def display_window(self,
@@ -353,10 +353,10 @@ class MockWindowManager(object):
         return result
         
 
-    def get_fight_gm_window(self, ruleset):
+    def get_fight_gm_window(self, ruleset, command_ribbon_choices):
         return MockFightGmWindow(ruleset)
 
-    def get_main_gm_window(self):
+    def get_main_gm_window(self, command_ribbon_choices):
         return MockMainGmWindow() # it takes a 'window manager' param
 
     def set_char_response(self,
