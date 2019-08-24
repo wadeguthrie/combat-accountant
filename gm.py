@@ -408,8 +408,6 @@ class GmWindow(object):
                                         key=lambda s: s['command'].lower())
 
 
-
-
 class MainGmWindow(GmWindow):
     def __init__(self,
                  window_manager,
@@ -575,7 +573,8 @@ class BuildFightGmWindow(GmWindow):
         top_line = 1
         height = (lines                 # The whole window height, except...
             - top_line                  # ...a block at the top, and...
-            - 4)                        # ...a space for the command ribbon.
+            - (self._command_ribbon['lines_for_choices'] + 1))
+                                        # ...a space for the command ribbon.
         
         width = (cols / 2) - 2 # -1 for margin
 
