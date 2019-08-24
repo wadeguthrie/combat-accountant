@@ -2124,6 +2124,12 @@ class Timer(object):
             result.append(''.join(this_line))
             this_line = []
 
+        if ('state' in self.details['actions'] and
+                            self.details['actions']['state'] is not None):
+            this_line.append('<%s>' % self.details['actions']['state'])
+            result.append(''.join(this_line))
+            this_line = []
+
         if ('string' in self.details and self.details['string'] is not None
                                         and len(self.details['string']) > 0):
             if type(self.details['string']) is list:
@@ -2221,19 +2227,23 @@ class TimersWidget(object):
         param = {'announcement': None,
                  'continuous_message': None,
                  'state': None}
-        actions_menu = [('Continuous Message', 
+        actions_menu = [('message (continuous)', 
                                 {'doit': self.__continuous_message_action,
                                  'param': param}),
-                        ('Announcement',       
+                        ('announcement',       
                                 {'doit': self.__announcement_action,
                                  'param': param}),
-                        ('New State',          
+                        ('state change',          
                                 {'doit': self.__new_state_action,
                                  'param': param})]
         while keep_asking:
-            self.__window_manager.menu('Timer Action', actions_menu)
+            result = self.__window_manager.menu('Timer Action', actions_menu)
+            if result is None:
+                return
             keep_asking = self.__window_manager.menu('Pick More Actions',
                                                      keep_asking_menu)
+            if keep_asking is None:
+                keep_asking = True
 
         # Install the timer.
 
