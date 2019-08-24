@@ -848,7 +848,8 @@ class FightGmWindow(GmWindow):
         lines, cols = self._window.getmaxyx()
         height = (lines                 # The whole window height, except...
             - (self.__FIGHTER_LINE+1)   # ...a block at the top, and...
-            - 4)                        # ...a space for the command ribbon.
+            - (self._command_ribbon['lines_for_choices'] + 1))
+                                        # ...a space for the command ribbon.
         
         self.fighter_win_width = self.__pane_width - self.__margin_width
 
