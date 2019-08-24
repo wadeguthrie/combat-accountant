@@ -18,9 +18,6 @@ import traceback
 #   - Fighter objects should be saved and passed around rather than re-created
 #   - campaign_debug_json doesn't need to be passed around since it's in
 #     World.
-#   - Redo TimersWidget to have a menu of all the actions and a 'keep_going'
-#     to allow more than one action to a timer.  That's also a reasonable
-#     place to document all of the actions.
 #   - Monsters should have a way to get pocket lint.
 #   - Need to be able to generate a blank creature (maybe it's a default
 #     Template).
@@ -2249,7 +2246,8 @@ class TimersWidget(object):
         timer_obj.from_pieces(timer_recipient_name,
                               rounds,
                               param['continuous_message'],
-                              param['announcement'])
+                              param['announcement'],
+                              param['state'])
         self.__timers.add(timer_obj)
 
 
@@ -2282,7 +2280,12 @@ class TimersWidget(object):
     def __new_state_action(self,
                            param
                           ):
-        pass
+        state_menu = [(x, x) for x in Fighter.conscious_map.keys() 
+                                                            if x != 'fight']
+        state_menu = sorted(state_menu, key=lambda x: x[0].upper())
+        state = self.__window_manager.menu('Which State', state_menu)
+        if state is not None:
+            param['state'] = state
 
 
 class Timers(object):
