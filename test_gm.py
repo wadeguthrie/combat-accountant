@@ -897,8 +897,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(vodou_priest)
         assert dodge_skill == 9
 
-        self.__ruleset._change_posture({'fighter': vodou_priest,
-                                        'posture': 'crawling'})
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'change-posture',
+                                  'posture': 'crawling'},
+                                 mock_fight_handler)
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(vodou_priest)
         assert dodge_skill == (9 + self.__crawling_defense_mod)
 
@@ -910,13 +912,17 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    self.__ruleset,
                                    self.__window_manager)
 
-        self.__ruleset._change_posture({'fighter': bokor_fighter,
-                                        'posture': 'standing'})
+        self.__ruleset.do_action(bokor_fighter,
+                                 {'name': 'change-posture',
+                                  'posture': 'standing'},
+                                 mock_fight_handler)
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(bokor_fighter)
         assert dodge_skill == 9
 
-        self.__ruleset._change_posture({'fighter': bokor_fighter,
-                                        'posture': 'crawling'})
+        self.__ruleset.do_action(bokor_fighter,
+                                 {'name': 'change-posture',
+                                  'posture': 'crawling'},
+                                 mock_fight_handler)
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(bokor_fighter)
         assert dodge_skill == (9 + self.__crawling_defense_mod)
 
@@ -985,6 +991,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         # Unarmed
         weapon = None
+        mock_fight_handler = MockFightHandler()
         vodou_priest_fighter = gm.Fighter(
                                     'Vodou Priest',
                                     'group',
@@ -1027,14 +1034,18 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         weapon_index, weapon  = tank_fighter.get_weapon_by_name('sick stick')
         tank_fighter.draw_weapon_by_index(weapon_index)
 
-        self.__ruleset._change_posture({'fighter': tank_fighter,
-                                        'posture': 'standing'})
+        self.__ruleset.do_action(tank_fighter,
+                                 {'name': 'change-posture',
+                                  'posture': 'standing'},
+                                 mock_fight_handler)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(tank_fighter,
                                                                 weapon)
         assert parry_skill == 11
 
-        self.__ruleset._change_posture({'fighter': tank_fighter,
-                                        'posture': 'crawling'})
+        self.__ruleset.do_action(tank_fighter,
+                                 {'name': 'change-posture',
+                                  'posture': 'crawling'},
+                                 mock_fight_handler)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(tank_fighter,
                                                                 weapon)
         assert parry_skill == (11 + self.__crawling_defense_mod)
