@@ -883,14 +883,17 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         GURPS-specific test
         '''
         # Deepcopy so that we don't taint the original
+        mock_fight_handler = MockFightHandler()
         vodou_priest = gm.Fighter('Priest',
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
                                   self.__window_manager)
 
-        self.__ruleset._change_posture({'fighter': vodou_priest,
-                                        'posture': 'standing'})
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'change-posture',
+                                  'posture': 'standing'},
+                                 mock_fight_handler)
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(vodou_priest)
         assert dodge_skill == 9
 
@@ -2063,6 +2066,32 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
         assert to_hit == expected_to_hit
+
+    '''
+        action['name'] == 'adjust-fp':
+        action['name'] == 'adjust-hp':
+        # DONE: action['name'] == 'aim':
+        action['name'] == 'attack' or action['name'] == 'all-out-attack':
+        action['name'] == 'cast-spell':
+        action['name'] == 'change-posture':
+        action['name'] == 'concentrate':
+        action['name'] == 'defend':
+        action['name'] == 'don-armor': # or doff armor
+        action['name'] == 'draw-weapon':
+        action['name'] == 'evaluate':
+        action['name'] == 'feint':
+        action['name'] == 'move':
+        action['name'] == 'move-and-attack':
+        action['name'] == 'nothing':
+        action['name'] == 'pick-opponent':
+        action['name'] == 'pick-opponent':
+        action['name'] == 'reload': # or doff armor
+        action['name'] == 'set-consciousness':
+        action['name'] == 'stun':
+        action['name'] == 'use-item':
+        action['name'] == 'user-defined':
+
+    '''
 
     def test_timers(self):
         '''

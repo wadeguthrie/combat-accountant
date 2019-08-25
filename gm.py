@@ -6608,6 +6608,9 @@ class BuildFightHandler(ScreenHandler):
     def __add_creature(self):
         '''
         Command ribbon method.
+
+        Creates new creatures from user specifications.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
