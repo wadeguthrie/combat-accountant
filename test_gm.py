@@ -1838,8 +1838,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
         self.__ruleset.reset_aim(vodou_priest)
-        self.__ruleset._change_posture({'fighter': vodou_priest,
-                                        'posture': 'standing'})
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'change-posture',
+                                  'posture': 'standing'},
+                                 mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
@@ -1974,8 +1976,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # Change posture
-        self.__ruleset._change_posture({'fighter': vodou_priest,
-                                        'posture': 'lying'})
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'change-posture',
+                                  'posture': 'lying'},
+                                 mock_fight_handler)
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest, 
@@ -1987,8 +1991,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Defense ruins aim
 
         self.__ruleset.reset_aim(vodou_priest)
-        self.__ruleset._change_posture({'fighter': vodou_priest,
-                                        'posture': 'standing'})
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'change-posture',
+                                  'posture': 'standing'},
+                                 mock_fight_handler)
 
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
@@ -2021,8 +2027,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
         self.__ruleset.reset_aim(vodou_priest)
-        self.__ruleset._change_posture({'fighter': vodou_priest,
-                                        'posture': 'standing'})
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'change-posture',
+                                  'posture': 'standing'},
+                                 mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
@@ -2049,16 +2057,20 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # no posture
         expected_to_hit = self.__thief_knife_skill
-        self.__ruleset._change_posture({'fighter': thief,
-                                        'posture': 'standing'})
+        self.__ruleset.do_action(thief,
+                                 {'name': 'change-posture',
+                                  'posture': 'standing'},
+                                 mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
         assert to_hit == expected_to_hit
 
         # posture
         expected_to_hit = (self.__thief_knife_skill
                                                 + self.__crawling_attack_mod)
-        self.__ruleset._change_posture({'fighter': thief,
-                                        'posture': 'crawling'})
+        self.__ruleset.do_action(thief,
+                                 {'name': 'change-posture',
+                                  'posture': 'crawling'},
+                                 mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
         assert to_hit == expected_to_hit
 
@@ -2070,25 +2082,33 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   self.__ruleset,
                                   self.__window_manager)
 
-        self.__ruleset._change_posture({'fighter': thief,
-                                        'posture': 'standing'})
+        self.__ruleset.do_action(thief,
+                                 {'name': 'change-posture',
+                                  'posture': 'standing'},
+                                 mock_fight_handler)
 
         # Picking opponent doesn't change things
         expected_to_hit = self.__thief_knife_skill
-        self.__ruleset._change_posture({'fighter': tank_fighter,
-                                        'posture': 'standing'})
+        self.__ruleset.do_action(tank_fighter,
+                                 {'name': 'change-posture',
+                                  'posture': 'standing'},
+                                 mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
         assert to_hit == expected_to_hit
 
         # change posture of tank (opponent)
-        self.__ruleset._change_posture({'fighter': tank_fighter,
-                                        'posture': 'crawling'}) # -2
+        self.__ruleset.do_action(tank_fighter,
+                                 {'name': 'change-posture',
+                                  'posture': 'crawling'}, # -2
+                                 mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
         assert to_hit == expected_to_hit
 
         # change posture of thief (back to standing)
-        self.__ruleset._change_posture({'fighter': tank_fighter,
-                                        'posture': 'standing'})
+        self.__ruleset.do_action(tank_fighter,
+                                 {'name': 'change-posture',
+                                  'posture': 'standing'},
+                                 mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
         assert to_hit == expected_to_hit
 
@@ -2118,7 +2138,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # DONE: action['name'] == 'aim':
         action['name'] == 'attack' or action['name'] == 'all-out-attack':
         action['name'] == 'cast-spell':
-        action['name'] == 'change-posture':
+        # DONE action['name'] == 'change-posture':
         action['name'] == 'concentrate':
         action['name'] == 'defend':
         action['name'] == 'don-armor': # or doff armor
