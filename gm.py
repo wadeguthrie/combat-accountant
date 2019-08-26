@@ -2687,6 +2687,9 @@ class Fighter(ThingsInFight):
 
 
     def get_current_armor(self):
+        '''
+        Returns a dict (from the JSON)
+        '''
         if 'armor-index' not in self.details:
             return None, None
         armor_index = self.details['armor-index']
@@ -2697,6 +2700,9 @@ class Fighter(ThingsInFight):
 
 
     def get_current_weapon(self):
+        '''
+        Returns a dict (from the JSON)
+        '''
         weapon_index = self.details['weapon-index']
         if weapon_index is None:
             return None, None
@@ -3011,7 +3017,7 @@ class Ruleset(object):
                                            'name': action['opponent-name']}
             handled = True
 
-        elif action['name'] == 'reload': # or doff armor
+        elif action['name'] == 'reload':
             self._do_reload({'fighter': fighter})
             handled = True
 

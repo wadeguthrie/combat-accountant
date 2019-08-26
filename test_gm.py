@@ -23,8 +23,8 @@ action['name'] == 'feint':
 action['name'] == 'move':
 action['name'] == 'move-and-attack':
 action['name'] == 'nothing':
-action['name'] == 'pick-opponent':
-action['name'] == 'reload': # or doff armor
+# DONE (except for 'aim') action['name'] == 'pick-opponent':
+action['name'] == 'reload':
 action['name'] == 'set-consciousness':
 action['name'] == 'stun':
 action['name'] == 'use-item':
@@ -440,7 +440,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "notes": None
                  },
                  {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
-                  "owners": None }
+                  "owners": None },
+                 {
+                   "count": 1, 
+                   "type": "armor", 
+                   "notes": "Enchanted w/fortify spell [M66]", 
+                   "dr": 3, 
+                   "name": "Sport coat/Jeans"
+                 }
             ],
             "skills": {"Guns (Pistol)":
                                     self.__vodou_priest_fighter_pistol_skill,
@@ -2170,6 +2177,68 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit
 
 
+    def test_adjust_hp(self):
+        '''
+        GURPS-specific test
+        '''
+
+        self.__window_manager = MockWindowManager()
+        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        mock_fight_handler = MockFightHandler()
+
+        vodou_priest = gm.Fighter('Priest',
+                                  'group',
+                                  copy.deepcopy(self.__vodou_priest_fighter),
+                                  self.__ruleset,
+                                  self.__window_manager)
+
+        requested_weapon_index = 0
+        vodou_priest.draw_weapon_by_index(requested_weapon_index)
+        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        assert actual_weapon_index == requested_weapon_index
+        assert weapon['name'] == "pistol, Colt 170D"
+
+        requested_armor_index = 2
+        vodou_priest.don_armor_by_index(requested_armor_index)
+        armor, actual_armor_index = vodou_priest.get_current_armor()
+        assert actual_armor_index == requested_armor_index
+        assert armor['name'] == "Sport coat/Jeans"
+
+        # Test that the HP are reduced withOUT DR adjustment
+
+        damage = -1
+        self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
+        original_hp = vodou_priest.details['current']['hp']
+
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'adjust-hp', 'adj': damage},
+                                 mock_fight_handler)
+
+        modified_hp = vodou_priest.details['current']['hp']
+        assert modified_hp == original_hp + damage
+
+        
+        # TODO: test that the HP are reduced WITH DR adjustment
+        #           (no damage)
+        #           (some damage)
+        #        use_armor_menu = [('yes', True), ('no', False)]
+        #        use_armor = self._window_manager.menu('Use Armor\'s DR?',
+
+        # TODO: if adjusted_hp <= -(5 * fighter.details['permanent']['hp']):
+        #        fighter.details['state'] = 'dead'
+
+        # TODO: high pain threshold
+        # TODO: low pain threshold
+        # TODO: with major wound (simple fail)
+        # TODO: with major wound (bad fail)
+        # TODO: without major wound
+        # TODO: shock
+
+        # TODO: lose aim (fail will roll)
+        # TODO: not lose aim (succeed will roll)
+
+
+
     def test_timers(self):
         '''
         Basic test
@@ -2929,6 +2998,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         creatures = world.get_creatures(group)
         assert 'Stinky' in creatures
+
+
 
 
 if __name__ == '__main__':
