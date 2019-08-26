@@ -6,6 +6,31 @@ import pprint
 import random
 import unittest
 
+'''
+action['name'] == 'adjust-fp':
+action['name'] == 'adjust-hp':
+# DONE: action['name'] == 'aim':
+action['name'] == 'attack'
+action['name'] == 'all-out-attack':
+action['name'] == 'cast-spell':
+# DONE action['name'] == 'change-posture':
+action['name'] == 'concentrate':
+action['name'] == 'defend':
+action['name'] == 'don-armor': # or doff armor
+action['name'] == 'draw-weapon':
+action['name'] == 'evaluate':
+action['name'] == 'feint':
+action['name'] == 'move':
+action['name'] == 'move-and-attack':
+action['name'] == 'nothing':
+action['name'] == 'pick-opponent':
+action['name'] == 'reload': # or doff armor
+action['name'] == 'set-consciousness':
+action['name'] == 'stun':
+action['name'] == 'use-item':
+action['name'] == 'user-defined':
+'''
+
 # Save a fight
 # TODO: test that saving a fight and starting up again doesn't change the
 #       fight (pending actions, injuries, fight order) -- check out test_save
@@ -1506,7 +1531,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert world_data.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         # Make fighter 0 fight figher 2
-        current_fighter.details['opponent'] = {'group': 'PCs', 'name': 'Moe'}
+
+        self.__ruleset.do_action(current_fighter,
+                                 {'name': 'pick-opponent',
+                                  'opponent-name': 'Moe',
+                                  'opponent-group': 'PCs'},
+                                 fight_handler)
 
         # Move ahead to fighter 1
         fight_handler.modify_index(1)
@@ -1567,6 +1597,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             copy.deepcopy(self.__vodou_priest_fighter),
             copy.deepcopy(self.__bokor_fighter)]
         expected_fighters[0]['opponent']    = {'group': 'PCs', 'name': 'Jack'}
+        expected_fighters[0]['actions_this_turn'] = ['pick-opponent']
         expected_fighters[injured_index]['current']['hp'] -= injured_hp
 
         # Check that everything is as it should be
@@ -1867,6 +1898,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # adjust_hp but MADE Will roll
+        # action['name'] == 'adjust-hp':
         damage = -1
         self.__window_manager.set_menu_response('roll <= WILL (13) or lose aim',
                                                 True)
@@ -2132,31 +2164,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
         assert to_hit == expected_to_hit
 
-    '''
-        action['name'] == 'adjust-fp':
-        action['name'] == 'adjust-hp':
-        # DONE: action['name'] == 'aim':
-        action['name'] == 'attack' or action['name'] == 'all-out-attack':
-        action['name'] == 'cast-spell':
-        # DONE action['name'] == 'change-posture':
-        action['name'] == 'concentrate':
-        action['name'] == 'defend':
-        action['name'] == 'don-armor': # or doff armor
-        action['name'] == 'draw-weapon':
-        action['name'] == 'evaluate':
-        action['name'] == 'feint':
-        action['name'] == 'move':
-        action['name'] == 'move-and-attack':
-        action['name'] == 'nothing':
-        action['name'] == 'pick-opponent':
-        action['name'] == 'pick-opponent':
-        action['name'] == 'reload': # or doff armor
-        action['name'] == 'set-consciousness':
-        action['name'] == 'stun':
-        action['name'] == 'use-item':
-        action['name'] == 'user-defined':
-
-    '''
 
     def test_timers(self):
         '''
