@@ -421,6 +421,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         self.__colt_pistol_acc = 3
         self.__vodou_priest_fighter_pistol_skill = 15
+        self.__vodou_priest_armor_dr = 3
         self.__vodou_priest_fighter = {
             "shock": 0, 
             "stunned": False,
@@ -445,7 +446,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                    "count": 1, 
                    "type": "armor", 
                    "notes": "Enchanted w/fortify spell [M66]", 
-                   "dr": 3, 
+                   "dr": self.__vodou_priest_armor_dr, 
                    "name": "Sport coat/Jeans"
                  }
             ],
@@ -2216,13 +2217,33 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         modified_hp = vodou_priest.details['current']['hp']
         assert modified_hp == original_hp + damage
-
         
-        # TODO: test that the HP are reduced WITH DR adjustment
-        #           (no damage)
-        #           (some damage)
-        #        use_armor_menu = [('yes', True), ('no', False)]
-        #        use_armor = self._window_manager.menu('Use Armor\'s DR?',
+        # Test that the HP are NOT reduced WITH DR adjustment
+
+        damage = -1
+        self.__window_manager.set_menu_response('Use Armor\'s DR?', True)
+        original_hp = vodou_priest.details['current']['hp']
+
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'adjust-hp', 'adj': damage},
+                                 mock_fight_handler)
+
+        modified_hp = vodou_priest.details['current']['hp']
+        assert modified_hp == original_hp # No damage because of DR
+
+        # Test that the HP ARE reduced WITH DR adjustment
+        
+        expected_damage = -2
+        pre_armor_damage = expected_damage - self.__vodou_priest_armor_dr
+        self.__window_manager.set_menu_response('Use Armor\'s DR?', True)
+        original_hp = vodou_priest.details['current']['hp']
+
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'adjust-hp', 'adj': pre_armor_damage},
+                                 mock_fight_handler)
+
+        modified_hp = vodou_priest.details['current']['hp']
+        assert modified_hp == original_hp + expected_damage
 
         # TODO: if adjusted_hp <= -(5 * fighter.details['permanent']['hp']):
         #        fighter.details['state'] = 'dead'
