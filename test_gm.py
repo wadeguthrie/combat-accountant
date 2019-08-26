@@ -1576,7 +1576,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # (in this case, fighter 2/Moe) to a different fighter (in this case,
         # fighter 1/Jack) caused the damage to be transferred to the new
         # opponent.
-        current_fighter.details['opponent'] = {'group': 'PCs', 'name': 'Jack'}
+        self.__ruleset.do_action(current_fighter,
+                                 {'name': 'pick-opponent',
+                                  'opponent-name': 'Jack',
+                                  'opponent-group': 'PCs'},
+                                 fight_handler)
 
         # cycle completely around to fighter 1
         fight_handler.modify_index(1) # index 1
@@ -1597,7 +1601,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             copy.deepcopy(self.__vodou_priest_fighter),
             copy.deepcopy(self.__bokor_fighter)]
         expected_fighters[0]['opponent']    = {'group': 'PCs', 'name': 'Jack'}
-        expected_fighters[0]['actions_this_turn'] = ['pick-opponent']
+        expected_fighters[0]['actions_this_turn'] = ['pick-opponent',
+                                                     'pick-opponent']
         expected_fighters[injured_index]['current']['hp'] -= injured_hp
 
         # Check that everything is as it should be
