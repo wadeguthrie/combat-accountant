@@ -2443,7 +2443,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         GURPS-specific test
         '''
 
-        '''
         # Setup
 
         self.__window_manager = MockWindowManager()
@@ -2455,6 +2454,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
                                   self.__window_manager)
+
+        del vodou_priest.details['advantages']['Combat Reflexes']
 
         requested_weapon_index = 0
         vodou_priest.draw_weapon_by_index(requested_weapon_index)
@@ -2483,6 +2484,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         original_dodge_skill, ignore = self.__ruleset.get_dodge_skill(
                                                             vodou_priest)
 
+        '''
         # Test that the HP are reduced withOUT DR adjustment
 
         damage_1st = -3
@@ -2694,6 +2696,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                  mock_fight_handler)
 
         assert not vodou_priest.is_conscious()
+        '''
 
         # TODO: high/low pain threshold (B59/B142)
         # - no shock / +3 to HT roll for knockdown and stunning
@@ -2704,21 +2707,23 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # vodou_priest.details['advantages']['Low Pain Threshold'] = -10
         # del vodou_priest.details['advantages']['Low Pain Threshold']
 
-        # Start with a heal
-
-        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
-        vodou_priest.start_turn() # Check for death, check for unconscious
-        vodou_priest.details['current']['hp'] = (
-                                    vodou_priest.details['permanent']['hp'])
-
-        vodou_priest.set_consciousness(gm.Fighter.ALIVE)
-        assert vodou_priest.details['state'] == 'alive'
-
         # Give him high pain threshold
 
-        vodou_priest.details['advantages']['High Pain Threshold'] = 10
+
+        '''
+        There's:
+            Any damage (NONE for high pain threshold):
+            - shock: -damage (-4 max), DX-based skills, NOT defense, 1 round
+
+            Major wound damage (over 1/2 permanent HP)
+            - stunning: -4 defense, do nothing, roll at end of turn
+            - knockdown
+
+        '''
 
         # Test High Pain Threshold
+
+        vodou_priest.details['advantages']['High Pain Threshold'] = 10
 
         self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
         high_pain_thrshold_margin = 3
@@ -2728,6 +2733,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                                 stun_roll),
             gm.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
 
+        # failed the high stun roll so knockdown & stun is still in effect
+
+        # +1 to make sure that the damage is more than half
+        major_damage = - ((vodou_priest.details['permanent']['hp'] / 2) + 1)
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'adjust-hp', 'adj': major_damage},
                                  mock_fight_handler)
@@ -2737,16 +2746,18 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                             None,
                                                             unarmed_skills)
 
+        attack_lying_penalty = -4   # B551
+        defense_lying_penalty = -3  # B551
+
         assert (hand_to_hand_info['punch_skill'] == 
-                    original_hand_to_hand_info['punch_skill']) # no shock
+            original_hand_to_hand_info['punch_skill'] + attack_lying_penalty)
         assert (hand_to_hand_info['kick_skill'] == 
-                    original_hand_to_hand_info['kick_skill']) # no shock
+            original_hand_to_hand_info['kick_skill'] + attack_lying_penalty)
 
         # Defense is at -4 (stun); shock is the HP stuff
 
         stun_penalty = -4
-        posture_penalty = -3
-        total_penalty = stun_penalty + posture_penalty
+        total_penalty = stun_penalty + defense_lying_penalty
 
         assert (hand_to_hand_info['parry_skill'] == 
                     original_hand_to_hand_info['parry_skill'] + total_penalty)
@@ -2764,7 +2775,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # B327
         # TODO: if adjusted_hp <= -(5 * fighter.details['permanent']['hp']):
         #        fighter.details['state'] = 'dead'
-        '''
 
 
 

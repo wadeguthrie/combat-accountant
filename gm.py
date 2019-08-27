@@ -4424,6 +4424,7 @@ class GurpsRuleset(Ruleset):
             handled = True
 
         elif action['name'] == 'stun':
+            # TODO: high pain threshold may mitigate this
             fighter.details['stunned'] = True
             handled = True
 
