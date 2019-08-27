@@ -2437,6 +2437,121 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         assert not vodou_priest.is_conscious()
 
+        ################
+
+        # Aim (B324) on injury, will roll or lose aim
+
+        ## fail will roll ##
+
+        # Start by healing him up
+
+        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
+        vodou_priest.start_turn() # Check for death, check for unconscious
+        vodou_priest.details['current']['hp'] = (
+                                    vodou_priest.details['permanent']['hp'])
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'change-posture',
+                                  'posture': 'standing'},
+                                 mock_fight_handler)
+
+        #
+
+        self.__ruleset.reset_aim(vodou_priest)
+
+        # 1 round
+        expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
+            + self.__colt_pistol_acc
+            + 1) # braced
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'aim', 'braced': True},
+                                 mock_fight_handler)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit
+
+        # 2 rounds
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'aim', 'braced': True},
+                                 mock_fight_handler)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
+
+        # Take damage, fail will roll
+
+        self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
+        self.__window_manager.set_menu_response(
+                                    "roll <= WILL (13) or lose aim", False)
+
+        damage = -1
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'adjust-hp', 'adj': damage},
+                                 mock_fight_handler)
+
+        # 3 rounds
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'aim', 'braced': True},
+                                 mock_fight_handler)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit + damage # aiming for 1 round + shock
+
+        ## make will roll ##
+
+        # Start by healing him up
+
+        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
+        vodou_priest.start_turn() # Check for death, check for unconscious
+        vodou_priest.details['current']['hp'] = (
+                                    vodou_priest.details['permanent']['hp'])
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'change-posture',
+                                  'posture': 'standing'},
+                                 mock_fight_handler)
+
+        self.__ruleset.reset_aim(vodou_priest)
+
+        # 1 round
+        expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
+            + self.__colt_pistol_acc
+            + 1) # braced
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'aim', 'braced': True},
+                                 mock_fight_handler)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit
+
+        # 2 rounds
+        expected_to_hit += 1 # aiming for 2 rounds
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'aim', 'braced': True},
+                                 mock_fight_handler)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit
+
+        # Take damage, make will roll
+
+        expected_to_hit += 1 # aiming for 3 rounds
+        self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
+        self.__window_manager.set_menu_response(
+                                    "roll <= WILL (13) or lose aim", True)
+
+        damage = -1
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'adjust-hp', 'adj': damage},
+                                 mock_fight_handler)
+
+        # 3 rounds
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'aim', 'braced': True},
+                                 mock_fight_handler)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit + damage # aiming for 1 round + shock
+
+
+
+
+        # B327
+        # TODO: if adjusted_hp <= -(5 * fighter.details['permanent']['hp']):
+        #        fighter.details['state'] = 'dead'
+
 
     def test_adjust_hp_2(self):
         '''
@@ -2484,230 +2599,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         original_dodge_skill, ignore = self.__ruleset.get_dodge_skill(
                                                             vodou_priest)
 
-        '''
-        # Test that the HP are reduced withOUT DR adjustment
-
-        damage_1st = -3
-        self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
-        original_hp = vodou_priest.details['current']['hp']
-
-        self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': damage_1st},
-                                 mock_fight_handler)
-
-        modified_hp = vodou_priest.details['current']['hp']
-        assert modified_hp == original_hp + damage_1st
-
-        # Shock (B419)
-
-        to_hit, ignore = self.__ruleset.get_to_hit(vodou_priest,
-                                                   None,
-                                                   weapon)
-        assert to_hit == original_to_hit + damage_1st # damage is less than 4
-
-        hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
-                                                            None,
-                                                            None,
-                                                            unarmed_skills)
-        assert (hand_to_hand_info['punch_skill'] == 
-                    original_hand_to_hand_info['punch_skill'] + damage_1st)
-        assert (hand_to_hand_info['kick_skill'] == 
-                    original_hand_to_hand_info['kick_skill'] + damage_1st)
-        assert (hand_to_hand_info['parry_skill'] == 
-                    original_hand_to_hand_info['parry_skill']) # no shock
-
-        # Test that the HP are NOT reduced WITH DR adjustment
-
-        damage_2nd = -1
-        self.__window_manager.set_menu_response('Use Armor\'s DR?', True)
-        original_hp = vodou_priest.details['current']['hp']
-
-        self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': damage_2nd},
-                                 mock_fight_handler)
-
-        modified_hp = vodou_priest.details['current']['hp']
-        assert modified_hp == original_hp # No damage because of DR
-
-        # Shock (B419) is only from the 1st attack since this did no damage
-        # -hp to DX/IQ (not defense) on your next turn
-
-        to_hit, ignore = self.__ruleset.get_to_hit(vodou_priest,
-                                                   None,
-                                                   weapon)
-        assert to_hit == original_to_hit + damage_1st # damage is less than 4
-
-        hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
-                                                            None,
-                                                            None,
-                                                            unarmed_skills)
-        assert (hand_to_hand_info['punch_skill'] == 
-                    original_hand_to_hand_info['punch_skill'] + damage_1st)
-        assert (hand_to_hand_info['kick_skill'] == 
-                    original_hand_to_hand_info['kick_skill'] + damage_1st)
-        assert (hand_to_hand_info['parry_skill'] == 
-                    original_hand_to_hand_info['parry_skill']) # no shock
-
-        # Test that the HP ARE reduced WITH DR adjustment
-        
-        expected_damage = -2
-        pre_armor_damage = expected_damage - self.__vodou_priest_armor_dr
-        self.__window_manager.set_menu_response('Use Armor\'s DR?', True)
-        original_hp = vodou_priest.details['current']['hp']
-
-        self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': pre_armor_damage},
-                                 mock_fight_handler)
-
-        modified_hp = vodou_priest.details['current']['hp']
-        assert modified_hp == original_hp + expected_damage
-
-        # Shock is capped at -4
-
-        max_shock = -4
-
-        to_hit, ignore = self.__ruleset.get_to_hit(vodou_priest,
-                                                   None,
-                                                   weapon)
-        assert to_hit == original_to_hit + max_shock
-
-        hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
-                                                            None,
-                                                            None,
-                                                            unarmed_skills)
-        assert (hand_to_hand_info['punch_skill'] == 
-                    original_hand_to_hand_info['punch_skill'] + max_shock)
-        assert (hand_to_hand_info['kick_skill'] == 
-                    original_hand_to_hand_info['kick_skill'] + max_shock)
-        assert (hand_to_hand_info['parry_skill'] == 
-                    original_hand_to_hand_info['parry_skill']) # no shock
-        
-        #
-        # Let's heal the guy
-        #
-
-        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
-        vodou_priest.start_turn() # Check for death, check for unconscious
-        vodou_priest.details['current']['hp'] = (
-                                    vodou_priest.details['permanent']['hp'])
-
-        # Major wound (B420) - Make HT roll (no knockdown or stun)
-
-        # +1 to make sure that the damage is more than half
-        major_damage = - ((vodou_priest.details['permanent']['hp'] / 2) + 1)
-
-        self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
-        self.__window_manager.set_menu_response(
-            ('Major Wound (B420): Roll vs. HT (%d) or be stunned' % 
-                                                    self.__vodou_priest_ht), 
-            gm.GurpsRuleset.MAJOR_WOUND_SUCCESS)
-
-        self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': major_damage},
-                                 mock_fight_handler)
-
-        hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
-                                                            None,
-                                                            None,
-                                                            unarmed_skills)
-        assert (hand_to_hand_info['parry_skill'] == 
-                    original_hand_to_hand_info['parry_skill']) # no shock
-
-        dodge_skill, ignore = self.__ruleset.get_dodge_skill(vodou_priest)
-
-        assert dodge_skill == original_dodge_skill # shock
-        assert vodou_priest.details['posture'] == 'standing'
-
-        # Major wound (B420) - miss HT roll (knockdown and stunned)
-
-        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
-        vodou_priest.start_turn() # Check for death, check for unconscious
-        vodou_priest.details['current']['hp'] = (
-                                    vodou_priest.details['permanent']['hp'])
-
-        self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
-        self.__window_manager.set_menu_response(
-            ('Major Wound (B420): Roll vs. HT (%d) or be stunned' % 
-                                                    self.__vodou_priest_ht), 
-            gm.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
-
-        self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': major_damage},
-                                 mock_fight_handler)
-
-        hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
-                                                            None,
-                                                            None,
-                                                            unarmed_skills)
-        stun_penalty = -4
-        posture_penalty = -3
-        total_penalty = stun_penalty + posture_penalty
-
-        assert (hand_to_hand_info['parry_skill'] == 
-                    original_hand_to_hand_info['parry_skill'] + total_penalty)
-
-        dodge_skill, ignore = self.__ruleset.get_dodge_skill(vodou_priest)
-
-        assert dodge_skill == original_dodge_skill + total_penalty
-        assert vodou_priest.details['posture'] == 'lying'
-
-        # End of the turn -- check for stun (B420) to be over
-
-        self.__window_manager.set_menu_response(
-                                            'Stunned: Roll <= HT to recover',
-                                            True)
-
-        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
-
-        hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
-                                                            None,
-                                                            None,
-                                                            unarmed_skills)
-
-        # Stun should be over -- now there's only the posture penalty
-
-        posture_penalty = -3
-        total_penalty = posture_penalty
-
-        assert (hand_to_hand_info['parry_skill'] == 
-                    original_hand_to_hand_info['parry_skill'] + total_penalty)
-
-        dodge_skill, ignore = self.__ruleset.get_dodge_skill(vodou_priest)
-
-        assert dodge_skill == original_dodge_skill + total_penalty
-        assert vodou_priest.details['posture'] == 'lying'
-
-        vodou_priest.start_turn() # Check for death, check for unconscious
-
-        # Major wound (B420) - bad fail (unconscious)
-
-        vodou_priest.details['current']['hp'] = (
-                                    vodou_priest.details['permanent']['hp'])
-
-
-        self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
-        self.__window_manager.set_menu_response(
-            ('Major Wound (B420): Roll vs. HT (%d) or be stunned' % 
-                                                    self.__vodou_priest_ht), 
-            gm.GurpsRuleset.MAJOR_WOUND_BAD_FAIL)
-
-        self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': major_damage},
-                                 mock_fight_handler)
-
-        assert not vodou_priest.is_conscious()
-        '''
-
-        # TODO: high/low pain threshold (B59/B142)
+        # high pain threshold (B59)
         # - no shock / +3 to HT roll for knockdown and stunning
-        # - 2x shock / -4 to HT roll for knockdown and stunning
-        # 
-        # vodou_priest.details['advantages']['High Pain Threshold'] = 10
-        # del vodou_priest.details['advantages']['High Pain Threshold']
-        # vodou_priest.details['advantages']['Low Pain Threshold'] = -10
-        # del vodou_priest.details['advantages']['Low Pain Threshold']
-
-        # Give him high pain threshold
 
 
         '''
@@ -2767,14 +2660,71 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert dodge_skill == original_dodge_skill + total_penalty
         assert vodou_priest.details['posture'] == 'lying'
 
+        ## low pain threshold (B142)
+        ## - 2x shock / -4 to HT roll for knockdown and stunning
+        ## - according to KROMM, the max is -8 for LPT
 
+        #del vodou_priest.details['advantages']['High Pain Threshold']
+        #vodou_priest.details['advantages']['Low Pain Threshold'] = -10
 
-        # TODO: lose aim (fail will roll)
-        # TODO: not lose aim (succeed will roll)
+        #'''
+        #There's:
+        #    Any damage (x2 for Low Pain threshold -- According to KROMM, the
+        #    max is -8)
+        #    - shock: -damage (-4 max), DX-based skills, NOT defense, 1 round
 
-        # B327
-        # TODO: if adjusted_hp <= -(5 * fighter.details['permanent']['hp']):
-        #        fighter.details['state'] = 'dead'
+        #    Major wound damage (over 1/2 permanent HP)
+        #    - stunning: -4 defense, do nothing, roll at end of turn
+        #    - knockdown
+
+        #'''
+
+        # Test High Pain Threshold
+
+        #vodou_priest.details['advantages']['High Pain Threshold'] = 10
+
+        #self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
+        #high_pain_thrshold_margin = 3
+        #stun_roll = self.__vodou_priest_ht + high_pain_thrshold_margin
+        #self.__window_manager.set_menu_response(
+        #    ('Major Wound (B420): Roll vs. HT+3 (%d) or be stunned' %
+        #                                                        stun_roll),
+        #    gm.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
+
+        ## failed the high stun roll so knockdown & stun is still in effect
+
+        ## +1 to make sure that the damage is more than half
+        #major_damage = - ((vodou_priest.details['permanent']['hp'] / 2) + 1)
+        #self.__ruleset.do_action(vodou_priest,
+        #                         {'name': 'adjust-hp', 'adj': major_damage},
+        #                         mock_fight_handler)
+
+        #hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
+        #                                                    None,
+        #                                                    None,
+        #                                                    unarmed_skills)
+
+        #attack_lying_penalty = -4   # B551
+        #defense_lying_penalty = -3  # B551
+
+        #assert (hand_to_hand_info['punch_skill'] == 
+        #    original_hand_to_hand_info['punch_skill'] + attack_lying_penalty)
+        #assert (hand_to_hand_info['kick_skill'] == 
+        #    original_hand_to_hand_info['kick_skill'] + attack_lying_penalty)
+
+        ## Defense is at -4 (stun); shock is the HP stuff
+
+        #stun_penalty = -4
+        #total_penalty = stun_penalty + defense_lying_penalty
+
+        #assert (hand_to_hand_info['parry_skill'] == 
+        #            original_hand_to_hand_info['parry_skill'] + total_penalty)
+
+        #dodge_skill, ignore = self.__ruleset.get_dodge_skill(vodou_priest)
+
+        #assert dodge_skill == original_dodge_skill + total_penalty
+        #assert vodou_priest.details['posture'] == 'lying'
+
 
 
 

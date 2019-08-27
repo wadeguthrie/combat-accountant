@@ -6008,11 +6008,11 @@ class GurpsRuleset(Ruleset):
                     menu_title = (
                         'Major Wound (B420): Roll vs. HT+3 (%d) or be stunned' %
                                                                         total)
-                elif 'Low Pain Threshold' in fighter.details['advantages']:
-                    total = fighter.details['current']['ht'] - 4
-                    menu_title = (
-                        'Major Wound (B420): Roll vs. HT-4 (%d) or be stunned' %
-                                                                        total)
+                #elif 'Low Pain Threshold' in fighter.details['advantages']:
+                #    total = fighter.details['current']['ht'] - 4
+                #    menu_title = (
+                #       'Major Wound (B420): Roll vs. HT-4 (%d) or be stunned' %
+                #                                                        total)
                 else:
                     total = fighter.details['current']['ht']
                     menu_title = (
