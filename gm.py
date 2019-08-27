@@ -5356,7 +5356,7 @@ class GurpsRuleset(Ruleset):
         '''
         # TODO: need convenient defaults -- maybe as an entry to the skill
         if weapon['skill'] not in fighter.details['skills']:
-            return None
+            return None, None
 
         why = []
         skill = fighter.details['skills'][weapon['skill']]
@@ -5719,14 +5719,14 @@ class GurpsRuleset(Ruleset):
             return all_unarmed_skills
 
         if weapon['skill'] not in all_unarmed_skills:
-            return None
+            return ['dx']
 
         for i, skill in enumerate(all_unarmed_skills):
             if weapon['skill'] == skill:
                 # Returns all of the skills through the matched one
                 return all_unarmed_skills[:i+1]
 
-        return None # Camel in Cairo -- should never get here
+        return ['dx'] # Camel in Cairo -- should never get here
 
 
     def heal_fighter(self,
@@ -5985,8 +5985,6 @@ class GurpsRuleset(Ruleset):
             self._window_manager.display_window(
                                     ('Did %d hp damage to...' % -adj),
                                     window_text)
-
-
 
             # Check for Death (B327)
             adjusted_hp = fighter.details['current']['hp'] + adj

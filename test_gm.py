@@ -2183,6 +2183,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         GURPS-specific test
         '''
 
+        # Setup
+
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
@@ -2205,31 +2207,79 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert actual_armor_index == requested_armor_index
         assert armor['name'] == "Sport coat/Jeans"
 
+        original_to_hit, ignore = self.__ruleset.get_to_hit(vodou_priest,
+                                                            None,
+                                                            weapon)
+
+        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(weapon)
+
+        original_hand_to_hand_info = self.__ruleset.get_unarmed_info(
+                                                            vodou_priest,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
+
         # Test that the HP are reduced withOUT DR adjustment
 
-        damage = -1
+        damage_1st = -3
         self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
         original_hp = vodou_priest.details['current']['hp']
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': damage},
+                                 {'name': 'adjust-hp', 'adj': damage_1st},
                                  mock_fight_handler)
 
         modified_hp = vodou_priest.details['current']['hp']
-        assert modified_hp == original_hp + damage
-        
+        assert modified_hp == original_hp + damage_1st
+
+        # Shock
+
+        to_hit, ignore = self.__ruleset.get_to_hit(vodou_priest,
+                                                   None,
+                                                   weapon)
+        assert to_hit == original_to_hit + damage_1st # damage is less than 4
+
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
+        assert (hand_to_hand_info['punch_skill'] == 
+                    original_hand_to_hand_info['punch_skill'] + damage_1st)
+        assert (hand_to_hand_info['kick_skill'] == 
+                    original_hand_to_hand_info['kick_skill'] + damage_1st)
+        assert (hand_to_hand_info['parry_skill'] == 
+                    original_hand_to_hand_info['parry_skill']) # no shock
+
         # Test that the HP are NOT reduced WITH DR adjustment
 
-        damage = -1
+        damage_2nd = -1
         self.__window_manager.set_menu_response('Use Armor\'s DR?', True)
         original_hp = vodou_priest.details['current']['hp']
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': damage},
+                                 {'name': 'adjust-hp', 'adj': damage_2nd},
                                  mock_fight_handler)
 
         modified_hp = vodou_priest.details['current']['hp']
         assert modified_hp == original_hp # No damage because of DR
+
+        # Shock is only from the 1st attack since this did no damage
+
+        to_hit, ignore = self.__ruleset.get_to_hit(vodou_priest,
+                                                   None,
+                                                   weapon)
+        assert to_hit == original_to_hit + damage_1st # damage is less than 4
+
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
+        assert (hand_to_hand_info['punch_skill'] == 
+                    original_hand_to_hand_info['punch_skill'] + damage_1st)
+        assert (hand_to_hand_info['kick_skill'] == 
+                    original_hand_to_hand_info['kick_skill'] + damage_1st)
+        assert (hand_to_hand_info['parry_skill'] == 
+                    original_hand_to_hand_info['parry_skill']) # no shock
 
         # Test that the HP ARE reduced WITH DR adjustment
         
@@ -2245,18 +2295,48 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         modified_hp = vodou_priest.details['current']['hp']
         assert modified_hp == original_hp + expected_damage
 
-        # TODO: if adjusted_hp <= -(5 * fighter.details['permanent']['hp']):
-        #        fighter.details['state'] = 'dead'
+        # Shock is capped at -4
+
+        max_shock = -4
+
+        to_hit, ignore = self.__ruleset.get_to_hit(vodou_priest,
+                                                   None,
+                                                   weapon)
+        assert to_hit == original_to_hit + max_shock
+
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
+        assert (hand_to_hand_info['punch_skill'] == 
+                    original_hand_to_hand_info['punch_skill'] + max_shock)
+        assert (hand_to_hand_info['kick_skill'] == 
+                    original_hand_to_hand_info['kick_skill'] + max_shock)
+        assert (hand_to_hand_info['parry_skill'] == 
+                    original_hand_to_hand_info['parry_skill']) # no shock
+        
+        # Start a new round
+
+        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
+        vodou_priest.start_turn() # Check for death, check for unconscious
+
+
 
         # TODO: high pain threshold
+        #    "advantages": {"Combat Reflexes": 15},
+        #    "High Pain Threshold": 10
+        #    "Low Pain Threshold": -10
         # TODO: low pain threshold
         # TODO: with major wound (simple fail)
         # TODO: with major wound (bad fail)
         # TODO: without major wound
-        # TODO: shock
 
         # TODO: lose aim (fail will roll)
         # TODO: not lose aim (succeed will roll)
+
+        # B327
+        # TODO: if adjusted_hp <= -(5 * fighter.details['permanent']['hp']):
+        #        fighter.details['state'] = 'dead'
 
 
 
