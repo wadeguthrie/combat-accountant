@@ -422,6 +422,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__colt_pistol_acc = 3
         self.__vodou_priest_fighter_pistol_skill = 15
         self.__vodou_priest_armor_dr = 3
+        self.__vodou_priest_ht = 11
         self.__vodou_priest_fighter = {
             "shock": 0, 
             "stunned": False,
@@ -457,11 +458,13 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "state" : "alive",
             "posture" : "standing",
             "current": {
-                "fp": 12, "iq": 13, "wi": 13, "hp": 10, "ht": 11, "st": 10,
+                "fp": 12, "iq": 13, "wi": 13, "hp": 10,
+                "ht": self.__vodou_priest_ht, "st": 10,
                 "dx": 11, "basic-speed": 5.5
             }, 
             "permanent": {
-                "fp": 12, "iq": 13, "wi": 13, "hp": 10, "ht": 11, "st": 10,
+                "fp": 12, "iq": 13, "wi": 13, "hp": 10,
+                "ht": self.__vodou_priest_ht, "st": 10,
                 "dx": 11, "basic-speed": 5.5
             }, 
             "timers": [], 
@@ -2219,6 +2222,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                             None,
                                                             unarmed_skills)
 
+        original_dodge_skill, ignore = self.__ruleset.get_dodge_skill(
+                                                            vodou_priest)
+
         # Test that the HP are reduced withOUT DR adjustment
 
         damage_1st = -3
@@ -2232,7 +2238,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         modified_hp = vodou_priest.details['current']['hp']
         assert modified_hp == original_hp + damage_1st
 
-        # Shock
+        # Shock (B419)
 
         to_hit, ignore = self.__ruleset.get_to_hit(vodou_priest,
                                                    None,
@@ -2315,21 +2321,130 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert (hand_to_hand_info['parry_skill'] == 
                     original_hand_to_hand_info['parry_skill']) # no shock
         
-        # Start a new round
+        #
+        # Let's heal the guy
+        #
 
         vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
         vodou_priest.start_turn() # Check for death, check for unconscious
+        vodou_priest.details['current']['hp'] = (
+                                    vodou_priest.details['permanent']['hp'])
+
+        # Major wound - Make HT roll (no knockdown or stun)
+
+        # +1 to make sure that the damage is more than half
+        major_damage = - ((vodou_priest.details['permanent']['hp'] / 2) + 1)
+
+        self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
+        self.__window_manager.set_menu_response(
+            ('Major Wound (B420): Roll vs. HT (%d) or be stunned' % 
+                                                    self.__vodou_priest_ht), 
+            gm.GurpsRuleset.MAJOR_WOUND_SUCCESS)
+
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'adjust-hp', 'adj': major_damage},
+                                 mock_fight_handler)
+
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
+        assert (hand_to_hand_info['parry_skill'] == 
+                    original_hand_to_hand_info['parry_skill']) # no stun
+
+        dodge_skill, ignore = self.__ruleset.get_dodge_skill(vodou_priest)
+
+        assert dodge_skill == original_dodge_skill # stun
+        assert vodou_priest.details['posture'] == 'standing'
+
+        # Major wound - miss HT roll (knockdown and stunned)
+
+        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
+        vodou_priest.start_turn() # Check for death, check for unconscious
+        vodou_priest.details['current']['hp'] = (
+                                    vodou_priest.details['permanent']['hp'])
 
 
+        self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
+        self.__window_manager.set_menu_response(
+            ('Major Wound (B420): Roll vs. HT (%d) or be stunned' % 
+                                                    self.__vodou_priest_ht), 
+            gm.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
+            # gm.GurpsRuleset.MAJOR_WOUND_BAD_FAIL),
 
-        # TODO: high pain threshold
-        #    "advantages": {"Combat Reflexes": 15},
-        #    "High Pain Threshold": 10
-        #    "Low Pain Threshold": -10
-        # TODO: low pain threshold
-        # TODO: with major wound (simple fail)
-        # TODO: with major wound (bad fail)
-        # TODO: without major wound
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'adjust-hp', 'adj': major_damage},
+                                 mock_fight_handler)
+
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
+        stun_penalty = -4
+        posture_penalty = -3
+        total_penalty = stun_penalty + posture_penalty
+
+        assert (hand_to_hand_info['parry_skill'] == 
+                    original_hand_to_hand_info['parry_skill'] + total_penalty)
+
+        dodge_skill, ignore = self.__ruleset.get_dodge_skill(vodou_priest)
+
+        assert dodge_skill == original_dodge_skill + total_penalty
+        assert vodou_priest.details['posture'] == 'lying'
+
+        # End of the turn -- check for stun to be over
+
+        self.__window_manager.set_menu_response(
+                                            'Stunned: Roll <= HT to recover',
+                                            True)
+
+        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
+
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
+
+        # Stun should be over -- now there's only the posture penalty
+
+        posture_penalty = -3
+        total_penalty = posture_penalty
+
+        assert (hand_to_hand_info['parry_skill'] == 
+                    original_hand_to_hand_info['parry_skill'] + total_penalty)
+
+        dodge_skill, ignore = self.__ruleset.get_dodge_skill(vodou_priest)
+
+        assert dodge_skill == original_dodge_skill + total_penalty
+        assert vodou_priest.details['posture'] == 'lying'
+
+        vodou_priest.start_turn() # Check for death, check for unconscious
+
+        # Major wound - bad fail (unconscious)
+
+        vodou_priest.details['current']['hp'] = (
+                                    vodou_priest.details['permanent']['hp'])
+
+
+        self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
+        self.__window_manager.set_menu_response(
+            ('Major Wound (B420): Roll vs. HT (%d) or be stunned' % 
+                                                    self.__vodou_priest_ht), 
+            gm.GurpsRuleset.MAJOR_WOUND_BAD_FAIL)
+
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'adjust-hp', 'adj': major_damage},
+                                 mock_fight_handler)
+
+        assert vodou_priest.details['state'] == 'unconscious'
+
+        # TODO: high/low pain threshold
+        # 
+        # vodou_priest.details['advantages']['High Pain Threshold'] = 10
+        # del vodou_priest.details['advantages']['High Pain Threshold']
+        # vodou_priest.details['advantages']['Low Pain Threshold'] = -10
+        # del vodou_priest.details['advantages']['Low Pain Threshold']
+        #
 
         # TODO: lose aim (fail will roll)
         # TODO: not lose aim (succeed will roll)
