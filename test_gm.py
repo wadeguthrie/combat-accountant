@@ -68,7 +68,6 @@ class TestBuildFightHandler(gm.BuildFightHandler):
                  world,
                  ruleset,
                  creature_type, # one of: NPCs, PCs, or MONSTERs
-                 "campaign_debug_json", # 
                  "filename" # JSON file containing the world
                 )
         self.__command_ribbon_input = []
@@ -1319,8 +1318,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Partially GURPS-specific test
         '''
-        random_debug_filename = 'foo'
-
         world_data = WorldData(self.init_world_dict)
         world = gm.World(world_data, self.__ruleset, self.__window_manager)
 
@@ -1340,7 +1337,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                             world,
                                             'horsemen',
                                             self.__ruleset,
-                                            random_debug_filename,
                                             filename='*INTERNAL*'
                                            )
             fighters = fight_handler.get_fighters()
@@ -1481,9 +1477,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         This is just like test_initiative_order_again except the fighters are
         reordered randomly and a different random seed is used.
         '''
-
-        random_debug_filename = 'foo'
-
         world_data = WorldData(self.init_world_dict_2)
         world = gm.World(world_data, self.__ruleset, self.__window_manager)
 
@@ -1505,7 +1498,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                             world,
                                             'marx',
                                             self.__ruleset,
-                                            random_debug_filename,
                                             filename='*INTERNAL*'
                                            )
             fighters = fight_handler.get_fighters()
@@ -1522,8 +1514,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         any of the fighters (except that the opponent was changed).  This
         mirrors a bug that I thought I saw a while ago.
         '''
-
-        random_debug_filename = 'foo'
         world_data = WorldData(self.init_world_dict)
 
         world = gm.World(world_data, self.__ruleset, self.__window_manager)
@@ -1544,7 +1534,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         world,
                                         'horsemen',
                                         self.__ruleset,
-                                        random_debug_filename,
                                         filename='*INTERNAL*'
                                        )
         fighters = fight_handler.get_fighters()
@@ -2962,12 +2951,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         world_data = WorldData(self.init_world_dict)
         world = gm.World(world_data, self.__ruleset, self.__window_manager)
-        random_debug_filename = 'foo'
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
                                         'horsemen',
                                         self.__ruleset,
-                                        random_debug_filename,
                                         filename='*INTERNAL*'
                                        )
         current_fighter = fight_handler.get_current_fighter()
@@ -3249,7 +3236,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         world,
                                         "Dima's Crew", 
                                         self.__ruleset,
-                                        "None", # used for bug reporting
                                         "filename") # used for display
 
         assert "Dima's Crew" in world_data.read_data['fights']
@@ -3279,7 +3265,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         world,
                                         "Dima's Crew", 
                                         self.__ruleset,
-                                        "None", # used for bug reporting
                                         "filename") # used for display
 
         assert "Dima's Crew" in world_data.read_data['fights']
@@ -3311,7 +3296,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         world,
                                         "Dima's Crew", 
                                         self.__ruleset,
-                                        "None", # used for bug reporting
                                         "filename") # used for display
 
         assert "Dima's Crew" in world_data.read_data['fights']
@@ -3520,7 +3504,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         world,
                                         "horsemen",
                                         self.__ruleset,
-                                        "None", # used for bug reporting
                                         "filename") # used for display
 
         ### FightHandler.promote_to_NPC - check good change ###
@@ -3584,9 +3567,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         main_handler = gm.MainHandler(self.__window_manager,
                                       world,
                                       self.__ruleset,
-                                      "None", # used for bug reporting
                                       "filename") # used for display
-
 
         ### MainHandler.NPC_joins_monsters - not an NPC ###
 

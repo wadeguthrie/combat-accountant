@@ -15,11 +15,7 @@ import sys
 import traceback
 
 # TODO:
-#   - Combat reflexes adds 1 to fast-draw
-#
 #   - Fighter objects should be saved and passed around rather than re-created
-#   - campaign_debug_json doesn't need to be passed around since it's in
-#     World.
 #   - Monsters should have a way to get pocket lint.
 #   - Need to be able to generate a blank creature (maybe it's a default
 #     Template).
@@ -60,6 +56,7 @@ import traceback
 #     costing me much but it's ugly, none-the-less
 #   - need a way to generate equipment
 #   - names, maybe, in a different file
+#   - equipment into equipment-specific objects (maybe?)
 
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
@@ -6376,6 +6373,18 @@ class GurpsRuleset(Ruleset):
         Returns: Nothing, return values for these functions are ignored.
         '''
         super(GurpsRuleset, self)._draw_weapon(param)
+
+        #if 'Fast-Draw (Pistol)' in fighter.details['skills']:
+        #    skill_menu = [('made SKILL roll', True),
+        #                  ('did NOT make SKILL roll', False)]
+        #    made_skill_roll = self._window_manager.menu(
+        #        ('roll <= fast-draw skill (%d)' %
+        #                fighter.details['skills']['Fast-Draw (Ammo)']),
+        #        skill_menu)
+        #
+        #    if made_skill_roll:
+        #        ...
+
         self.reset_aim(param['fighter'])
         return
 
@@ -6526,12 +6535,11 @@ class BuildFightHandler(ScreenHandler):
                  world,
                  ruleset,
                  creature_type, # one of: NPCs, PCs, or MONSTERs
-                 campaign_debug_json,
                  filename # JSON file containing the world
                 ):
         super(BuildFightHandler, self).__init__(
                                             window_manager,
-                                            campaign_debug_json,
+                                            world.campaign_debug_json,
                                             filename,
                                             world.details['current-fight'])
         self._add_to_choice_dict({
@@ -7215,11 +7223,10 @@ class FightHandler(ScreenHandler):
                  world,
                  monster_group,
                  ruleset,
-                 campaign_debug_json,   # TODO: we can get this from 'world'
                  filename # JSON file containing the world
                 ):
         super(FightHandler, self).__init__(window_manager,
-                                           campaign_debug_json,
+                                           world.campaign_debug_json,
                                            filename,
                                            world.details['current-fight'])
         self.__ruleset = ruleset
@@ -8522,11 +8529,10 @@ class MainHandler(ScreenHandler):
                  window_manager,
                  world,
                  ruleset,
-                 campaign_debug_json, # For Debugging only
                  filename # For Debugging Only: JSON file containing the world
                 ):
         super(MainHandler, self).__init__(window_manager,
-                                          campaign_debug_json,
+                                          world.campaign_debug_json,
                                           filename,
                                           world.details['current-fight'])
         self.__world = world
@@ -8688,7 +8694,6 @@ class MainHandler(ScreenHandler):
                                         self.__world,
                                         self.__ruleset,
                                         BuildFightHandler.MONSTERs,
-                                        self.__world.campaign_debug_json,
                                         self._input_filename)
         build_fight.handle_user_input_until_done()
 
@@ -8715,7 +8720,6 @@ class MainHandler(ScreenHandler):
                                         self.__world,
                                         self.__ruleset,
                                         BuildFightHandler.NPCs,
-                                        self.__world.campaign_debug_json,
                                         self._input_filename)
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list(self.__current_display) # Since it may have changed
@@ -8733,7 +8737,6 @@ class MainHandler(ScreenHandler):
                                         self.__world,
                                         self.__ruleset,
                                         BuildFightHandler.PCs,
-                                        self.__world.campaign_debug_json,
                                         self._input_filename)
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list(self.__current_display) # Since it may have changed
@@ -9418,7 +9421,6 @@ class MainHandler(ScreenHandler):
                              self.__world,
                              monster_group,
                              self.__ruleset,
-                             self._campaign_debug_json,
                              self._input_filename)
 
         fight.handle_user_input_until_done()
@@ -9689,7 +9691,6 @@ class EquipmentManager(object):
         char_detail.append([{'text': ''.join(texts),
                              'mode': mode}])
 
-        # TODO: this should be brought out into type-specific objects
         if item['type'] == 'ranged weapon':
             texts = []
             texts.append('acc: %d' % item['acc'])
@@ -9903,7 +9904,6 @@ if __name__ == '__main__':
                                              world,
                                              None,
                                              ruleset,
-                                             world.campaign_debug_json,
                                              filename)
                 fight_handler.handle_user_input_until_done()
 
@@ -9911,7 +9911,6 @@ if __name__ == '__main__':
             main_handler = MainHandler(window_manager,
                                        world,
                                        ruleset,
-                                       world.campaign_debug_json,
                                        filename)
 
             main_handler.handle_user_input_until_done()
