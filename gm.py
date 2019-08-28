@@ -3429,7 +3429,8 @@ class Ruleset(object):
         fighter = param['fighter']
         item_index = param['item']
         item = fighter.details['stuff'][item_index]
-        item['count'] -= 1
+        if 'count' in item:
+            item['count'] -= 1
         return
 
 

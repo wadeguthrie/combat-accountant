@@ -13,9 +13,6 @@ action['name'] == 'attack'
 action['name'] == 'cast-spell':
 action['name'] == 'defend':
 action['name'] == 'move-and-attack':
-action['name'] == 'set-consciousness':
-action['name'] == 'stun':
-action['name'] == 'use-item':
 
 # DONE (except for 'aim') 'pick-opponent':
 # DONE: 'adjust-hp':
@@ -24,12 +21,15 @@ action['name'] == 'use-item':
 # DONE: 'don-armor': # or doff armor
 # DONE: 'draw-weapon':
 # DONE: 'reload':
+# DONE: 'set-consciousness':
+# DONE: 'stun':
 # NOTHING: 'concentrate':
 # NOTHING: 'evaluate':
 # NOTHING: 'feint':
 # NOTHING: 'move':
 # NOTHING: 'nothing':
 # NOTHING: 'user-defined':
+# DON'T BOTHER: 'use-item':
 '''
 
 # Save a fight
@@ -2940,6 +2940,98 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert (weapon['ammo']['shots_left'] == 
                             (self.__vodou_priest_initial_shots - shots_taken))
         assert ammo['count'] == 0
+
+
+    def test_stun_and_consciousness(self):
+        '''
+        MIXED test
+        '''
+
+        # Setup
+
+        self.__window_manager = MockWindowManager()
+        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+
+        world_data = WorldData(self.init_world_dict)
+        world = gm.World(world_data, self.__ruleset, self.__window_manager)
+        random_debug_filename = 'foo'
+        fight_handler = gm.FightHandler(self.__window_manager,
+                                        world,
+                                        'horsemen',
+                                        self.__ruleset,
+                                        random_debug_filename,
+                                        filename='*INTERNAL*'
+                                       )
+        current_fighter = fight_handler.get_current_fighter()
+
+        # Consciousness
+
+        # check consciousness level
+
+        state_number = gm.Fighter.get_fighter_state(current_fighter.details)
+        assert state_number == gm.Fighter.ALIVE
+
+        self.__ruleset.do_action(current_fighter,
+                                 {'name': 'pick-opponent',
+                                  'opponent-name': 'Moe',
+                                  'opponent-group': 'PCs'},
+                                 fight_handler)
+
+        # Test
+
+        new_state = gm.Fighter.ALIVE
+        self.__ruleset.do_action(current_fighter, 
+                                {'name': 'set-consciousness',
+                                 'level': new_state},
+                                 fight_handler)
+        state_number = gm.Fighter.get_fighter_state(current_fighter.details)
+        assert state_number == new_state
+        opponent = fight_handler.get_opponent_for(current_fighter)
+        assert opponent.name == 'Moe'
+        assert opponent.group == 'PCs'
+
+        new_state = gm.Fighter.UNCONSCIOUS
+        self.__ruleset.do_action(current_fighter, 
+                                {'name': 'set-consciousness',
+                                 'level': new_state},
+                                 fight_handler)
+        state_number = gm.Fighter.get_fighter_state(current_fighter.details)
+        assert state_number == new_state
+        opponent = fight_handler.get_opponent_for(current_fighter)
+        assert opponent is None
+
+        # Setup Stun Test
+
+        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
+        original_hand_to_hand_info = self.__ruleset.get_unarmed_info(
+                                                            current_fighter,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
+        original_dodge_skill, ignore = self.__ruleset.get_dodge_skill(
+                                                            current_fighter)
+
+        # Stun
+
+        self.__ruleset.do_action(current_fighter, 
+                                 {'name': 'stun'},
+                                 fight_handler)
+
+        # Check whether stunned
+
+        hand_to_hand_info = self.__ruleset.get_unarmed_info(current_fighter,
+                                                            None,
+                                                            None,
+                                                            unarmed_skills)
+        stun_penalty = -4
+        total_penalty = stun_penalty
+
+        assert (hand_to_hand_info['parry_skill'] == 
+                    original_hand_to_hand_info['parry_skill'] + total_penalty)
+
+        dodge_skill, ignore = self.__ruleset.get_dodge_skill(current_fighter)
+
+        assert dodge_skill == original_dodge_skill + total_penalty
 
 
     def test_timers(self):
