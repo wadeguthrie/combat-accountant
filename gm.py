@@ -15,6 +15,8 @@ import sys
 import traceback
 
 # TODO:
+#   - Combat reflexes adds 1 to fast-draw
+#
 #   - Fighter objects should be saved and passed around rather than re-created
 #   - campaign_debug_json doesn't need to be passed around since it's in
 #     World.
@@ -6313,7 +6315,10 @@ class GurpsRuleset(Ruleset):
 
             reload_time = weapon['reload']
             if 'fast-draw (ammo)' in param['fighter'].details['skills']:
+                # TODO: need to roll vs. the skill
                 reload_time -= 1
+                # TODO: combat reflexes removes another one (reload_time
+                # should never go below 0)
             timer = Timer(None)
             timer.from_pieces(param['fighter'].name, reload_time, 'RELOADING')
             timer.mark_owner_as_busy()  # When reloading, the owner is busy

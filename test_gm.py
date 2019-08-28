@@ -13,23 +13,23 @@ action['name'] == 'attack'
 action['name'] == 'cast-spell':
 action['name'] == 'defend':
 action['name'] == 'move-and-attack':
-action['name'] == 'reload':
 action['name'] == 'set-consciousness':
 action['name'] == 'stun':
 action['name'] == 'use-item':
-action['name'] == 'user-defined':
 
-# DONE (except for 'aim') action['name'] == 'pick-opponent':
-# DONE: action['name'] == 'adjust-hp':
-# DONE: action['name'] == 'aim':
-# DONE: action['name'] == 'change-posture':
-# DONE: action['name'] == 'don-armor': # or doff armor
-# DONE: action['name'] == 'draw-weapon':
-# NOTHING: action['name'] == 'concentrate':
-# NOTHING: action['name'] == 'evaluate':
-# NOTHING: action['name'] == 'feint':
-# NOTHING: action['name'] == 'move':
-# NOTHING: action['name'] == 'nothing':
+# DONE (except for 'aim') 'pick-opponent':
+# DONE: 'adjust-hp':
+# DONE: 'aim':
+# DONE: 'change-posture':
+# DONE: 'don-armor': # or doff armor
+# DONE: 'draw-weapon':
+# DONE: 'reload':
+# NOTHING: 'concentrate':
+# NOTHING: 'evaluate':
+# NOTHING: 'feint':
+# NOTHING: 'move':
+# NOTHING: 'nothing':
+# NOTHING: 'user-defined':
 '''
 
 # Save a fight
@@ -425,6 +425,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__vodou_priest_armor_dr = 3
         self.__vodou_priest_ht = 11
         self.__vodou_armor_index = 2
+        self.__vodou_priest_ammo_index = 1
+        self.__vodou_priest_ammo_count = 5
+        self.__vodou_priest_initial_shots = 9
         self.__vodou_priest_fighter = {
             "shock": 0, 
             "stunned": False,
@@ -436,14 +439,19 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "type": "ranged weapon",
                   "damage": {"dice": "1d+4"},
                   "acc": self.__colt_pistol_acc,
-                  "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
+                  "ammo": {"name": "C Cell", 
+                           "shots_left": self.__vodou_priest_initial_shots, 
+                           "shots": self.__vodou_priest_initial_shots},
                   "reload": 3,
                   "skill": "Guns (Pistol)",
                   "count": 1,
                   "owners": 1,
                   "notes": None
                  }, # index 0
-                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
+                 {"name": "C Cell", 
+                  "type": "misc", 
+                  "count": self.__vodou_priest_ammo_count, 
+                  "notes": "",
                   "owners": None
                  }, # index 1
                  {"count": 1, 
@@ -2847,6 +2855,65 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert actual_weapon_index == requested_weapon_index
 
         ### The effect of the weapon is tested throughout the testing
+
+
+    def test_reload(self):
+        '''
+        General test
+        '''
+
+        # Setup
+
+        self.__window_manager = MockWindowManager()
+        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        mock_fight_handler = MockFightHandler()
+
+        vodou_priest = gm.Fighter('Priest',
+                                  'group',
+                                  copy.deepcopy(self.__vodou_priest_fighter),
+                                  self.__ruleset,
+                                  self.__window_manager)
+
+        # Draw Weapon
+
+        requested_weapon_index = 0
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'draw-weapon',
+                                  'weapon-index': requested_weapon_index},
+                                 mock_fight_handler)
+        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        assert actual_weapon_index == requested_weapon_index
+        assert weapon['name'] == "pistol, Colt 170D"
+        assert (weapon['ammo']['shots_left'] == 
+                                        self.__vodou_priest_initial_shots)
+
+        ammo = vodou_priest.equipment.get_item_by_index(
+                                                self.__vodou_priest_ammo_index)
+        # check the number of clips/batteries
+
+        assert ammo['count'] == self.__vodou_priest_ammo_count
+
+        # Fire twice and verify that the shots left went down
+
+        shots_taken = 2
+
+        for shot in range(shots_taken):
+            self.__ruleset.do_action(vodou_priest, 
+                                     {'name': 'attack'},
+                                     mock_fight_handler)
+
+        assert (weapon['ammo']['shots_left'] == 
+                            (self.__vodou_priest_initial_shots - shots_taken))
+
+        # Now, reload
+
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'reload'},
+                                 mock_fight_handler)
+
+        assert (weapon['ammo']['shots_left'] == 
+                                            self.__vodou_priest_initial_shots)
+        assert ammo['count'] == (self.__vodou_priest_ammo_count - 1)
 
 
     def test_timers(self):
