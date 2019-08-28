@@ -8,21 +8,21 @@ import unittest
 
 '''
 action['name'] == 'adjust-fp':
-action['name'] == 'adjust-hp':
+# DONE: action['name'] == 'adjust-hp':
 # DONE: action['name'] == 'aim':
 action['name'] == 'attack'
 action['name'] == 'all-out-attack':
 action['name'] == 'cast-spell':
-# DONE action['name'] == 'change-posture':
-action['name'] == 'concentrate':
+# DONE: action['name'] == 'change-posture':
+# NOTHING: action['name'] == 'concentrate':
 action['name'] == 'defend':
 action['name'] == 'don-armor': # or doff armor
 action['name'] == 'draw-weapon':
-action['name'] == 'evaluate':
-action['name'] == 'feint':
-action['name'] == 'move':
+# NOTHING: action['name'] == 'evaluate':
+# NOTHING: action['name'] == 'feint':
+# NOTHING: action['name'] == 'move':
 action['name'] == 'move-and-attack':
-action['name'] == 'nothing':
+# NOTHING: action['name'] == 'nothing':
 # DONE (except for 'aim') action['name'] == 'pick-opponent':
 action['name'] == 'reload':
 action['name'] == 'set-consciousness':
@@ -423,6 +423,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__vodou_priest_fighter_pistol_skill = 15
         self.__vodou_priest_armor_dr = 3
         self.__vodou_priest_ht = 11
+        self.__vodou_armor_index = 2
         self.__vodou_priest_fighter = {
             "shock": 0, 
             "stunned": False,
@@ -440,16 +441,16 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "count": 1,
                   "owners": 1,
                   "notes": None
-                 },
+                 }, # index 0
                  {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
-                  "owners": None },
-                 {
-                   "count": 1, 
-                   "type": "armor", 
-                   "notes": "Enchanted w/fortify spell [M66]", 
-                   "dr": self.__vodou_priest_armor_dr, 
-                   "name": "Sport coat/Jeans"
-                 }
+                  "owners": None
+                 }, # index 1
+                 {"count": 1, 
+                  "type": "armor", 
+                  "notes": "Enchanted w/fortify spell [M66]", 
+                  "dr": self.__vodou_priest_armor_dr, 
+                  "name": "Sport coat/Jeans"
+                 }  # index 2
             ],
             "skills": {"Guns (Pistol)":
                                     self.__vodou_priest_fighter_pistol_skill,
@@ -1068,7 +1069,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   self.__ruleset,
                                   self.__window_manager)
         weapon_index, weapon  = tank_fighter.get_weapon_by_name('sick stick')
-        tank_fighter.draw_weapon_by_index(weapon_index)
+        self.__ruleset.do_action(tank_fighter, 
+                                 {'name': 'draw-weapon',
+                                  'weapon-index': weapon_index},
+                                 mock_fight_handler)
 
         self.__ruleset.do_action(tank_fighter,
                                  {'name': 'change-posture',
@@ -1104,8 +1108,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    self.__ruleset,
                                    self.__window_manager)
         weapon_index, weapon = thief_fighter.get_weapon_by_name('Large Knife')
-        thief_fighter.draw_weapon_by_index(weapon_index)
-
+        self.__ruleset.do_action(tank_fighter, 
+                                 {'name': 'draw-weapon',
+                                  'weapon-index': weapon_index},
+                                 mock_fight_handler)
         self.__ruleset.do_action(thief_fighter,
                                  {'name': 'change-posture',
                                   'posture': 'standing'},
@@ -1632,6 +1638,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        mock_fight_handler = MockFightHandler()
 
         vodou_priest = gm.Fighter('Priest',
                                   'group',
@@ -1639,10 +1646,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   self.__ruleset,
                                   self.__window_manager)
         requested_weapon_index = 0
-        vodou_priest.draw_weapon_by_index(requested_weapon_index)
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'draw-weapon',
+                                  'weapon-index': requested_weapon_index},
+                                 mock_fight_handler)
         weapon, actual_weapon_index = vodou_priest.get_current_weapon()
         assert actual_weapon_index == requested_weapon_index
-        mock_fight_handler = MockFightHandler()
 
         # ranged to-hit should be skill + acc (if aimed) + 1 (if braced)
         #   + size modifier + range/speed modifier + special conditions
@@ -1877,7 +1886,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   self.__ruleset,
                                   self.__window_manager)
         requested_weapon_index = 0
-        vodou_priest.draw_weapon_by_index(requested_weapon_index)
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'draw-weapon',
+                                  'weapon-index': requested_weapon_index},
+                                 mock_fight_handler)
         weapon, actual_weapon_index = vodou_priest.get_current_weapon()
         assert actual_weapon_index == requested_weapon_index
 
@@ -2097,7 +2109,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                            self.__ruleset,
                            self.__window_manager)
         requested_weapon_index = 1 # Knife
-        thief.draw_weapon_by_index(requested_weapon_index)
+        self.__ruleset.do_action(thief, 
+                                 {'name': 'draw-weapon',
+                                  'weapon-index': requested_weapon_index},
+                                 mock_fight_handler)
         weapon, actual_weapon_index = thief.get_current_weapon()
         assert actual_weapon_index == requested_weapon_index
 
@@ -2199,13 +2214,20 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   self.__window_manager)
 
         requested_weapon_index = 0
-        vodou_priest.draw_weapon_by_index(requested_weapon_index)
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'draw-weapon',
+                                  'weapon-index': requested_weapon_index},
+                                 mock_fight_handler)
         weapon, actual_weapon_index = vodou_priest.get_current_weapon()
         assert actual_weapon_index == requested_weapon_index
         assert weapon['name'] == "pistol, Colt 170D"
 
         requested_armor_index = 2
-        vodou_priest.don_armor_by_index(requested_armor_index)
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'don-armor',
+                                  'armor-index': requested_armor_index},
+                                 mock_fight_handler)
+
         armor, actual_armor_index = vodou_priest.get_current_armor()
         assert actual_armor_index == requested_armor_index
         assert armor['name'] == "Sport coat/Jeans"
@@ -2545,12 +2567,22 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + damage # aiming for 1 round + shock
 
-
-
-
         # B327
         # TODO: if adjusted_hp <= -(5 * fighter.details['permanent']['hp']):
         #        fighter.details['state'] = 'dead'
+
+        # Start by healing him up
+
+        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
+        vodou_priest.start_turn() # Check for death, check for unconscious
+        vodou_priest.details['current']['hp'] = (
+                                    vodou_priest.details['permanent']['hp'])
+        self.__ruleset.do_action(vodou_priest,
+                                 {'name': 'change-posture',
+                                  'posture': 'standing'},
+                                 mock_fight_handler)
+
+        self.__ruleset.reset_aim(vodou_priest)
 
 
     def test_adjust_hp_2(self):
@@ -2573,13 +2605,19 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         del vodou_priest.details['advantages']['Combat Reflexes']
 
         requested_weapon_index = 0
-        vodou_priest.draw_weapon_by_index(requested_weapon_index)
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'draw-weapon',
+                                  'weapon-index': requested_weapon_index},
+                                 mock_fight_handler)
         weapon, actual_weapon_index = vodou_priest.get_current_weapon()
         assert actual_weapon_index == requested_weapon_index
         assert weapon['name'] == "pistol, Colt 170D"
 
         requested_armor_index = 2
-        vodou_priest.don_armor_by_index(requested_armor_index)
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'don-armor',
+                                  'armor-index': requested_armor_index},
+                                 mock_fight_handler)
         armor, actual_armor_index = vodou_priest.get_current_armor()
         assert actual_armor_index == requested_armor_index
         assert armor['name'] == "Sport coat/Jeans"
@@ -2726,6 +2764,70 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         #assert vodou_priest.details['posture'] == 'lying'
 
 
+    def test_don_doff_armor(self):
+        '''
+        General test
+        '''
+
+        # Setup
+
+        self.__window_manager = MockWindowManager()
+        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        mock_fight_handler = MockFightHandler()
+
+        vodou_priest = gm.Fighter('Priest',
+                                  'group',
+                                  copy.deepcopy(self.__vodou_priest_fighter),
+                                  self.__ruleset,
+                                  self.__window_manager)
+
+        # Don armor
+
+        requested_armor_index = self.__vodou_armor_index
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'don-armor',
+                                  'armor-index': requested_armor_index},
+                                 mock_fight_handler)
+
+        armor, actual_armor_index = vodou_priest.get_current_armor()
+        assert actual_armor_index == requested_armor_index
+        assert armor['name'] == "Sport coat/Jeans"
+
+        # Doff armor
+
+        requested_armor_index = None
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'don-armor',
+                                  'armor-index': None},
+                                 mock_fight_handler)
+
+        armor, actual_armor_index = vodou_priest.get_current_armor()
+        assert actual_armor_index == requested_armor_index
+
+        ### The effect of the armor is tested in 'hp'
+
+
+    def test_draw_sheathe_weapon(self):
+        '''
+        General test
+        '''
+
+        # Setup
+
+        self.__window_manager = MockWindowManager()
+        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        mock_fight_handler = MockFightHandler()
+
+        vodou_priest = gm.Fighter('Priest',
+                                  'group',
+                                  copy.deepcopy(self.__vodou_priest_fighter),
+                                  self.__ruleset,
+                                  self.__window_manager)
+
+        # Don armor
+
+
+        ### The effect of the armor is tested in 'hp'
 
 
     def test_timers(self):
