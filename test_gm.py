@@ -8,27 +8,28 @@ import unittest
 
 '''
 action['name'] == 'adjust-fp':
-# DONE: action['name'] == 'adjust-hp':
-# DONE: action['name'] == 'aim':
-action['name'] == 'attack'
 action['name'] == 'all-out-attack':
+action['name'] == 'attack'
 action['name'] == 'cast-spell':
-# DONE: action['name'] == 'change-posture':
-# NOTHING: action['name'] == 'concentrate':
 action['name'] == 'defend':
-action['name'] == 'don-armor': # or doff armor
-action['name'] == 'draw-weapon':
-# NOTHING: action['name'] == 'evaluate':
-# NOTHING: action['name'] == 'feint':
-# NOTHING: action['name'] == 'move':
 action['name'] == 'move-and-attack':
-# NOTHING: action['name'] == 'nothing':
-# DONE (except for 'aim') action['name'] == 'pick-opponent':
 action['name'] == 'reload':
 action['name'] == 'set-consciousness':
 action['name'] == 'stun':
 action['name'] == 'use-item':
 action['name'] == 'user-defined':
+
+# DONE (except for 'aim') action['name'] == 'pick-opponent':
+# DONE: action['name'] == 'adjust-hp':
+# DONE: action['name'] == 'aim':
+# DONE: action['name'] == 'change-posture':
+# DONE: action['name'] == 'don-armor': # or doff armor
+# DONE: action['name'] == 'draw-weapon':
+# NOTHING: action['name'] == 'concentrate':
+# NOTHING: action['name'] == 'evaluate':
+# NOTHING: action['name'] == 'feint':
+# NOTHING: action['name'] == 'move':
+# NOTHING: action['name'] == 'nothing':
 '''
 
 # Save a fight
@@ -2824,10 +2825,28 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   self.__ruleset,
                                   self.__window_manager)
 
-        # Don armor
+        # Draw Weapon
 
+        requested_weapon_index = 0
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'draw-weapon',
+                                  'weapon-index': requested_weapon_index},
+                                 mock_fight_handler)
+        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        assert actual_weapon_index == requested_weapon_index
+        assert weapon['name'] == "pistol, Colt 170D"
 
-        ### The effect of the armor is tested in 'hp'
+        # Sheathe Weapon
+
+        requested_weapon_index = None
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'draw-weapon',
+                                  'weapon-index': requested_weapon_index},
+                                 mock_fight_handler)
+        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        assert actual_weapon_index == requested_weapon_index
+
+        ### The effect of the weapon is tested throughout the testing
 
 
     def test_timers(self):
