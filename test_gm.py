@@ -2915,6 +2915,32 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                             self.__vodou_priest_initial_shots)
         assert ammo['count'] == (self.__vodou_priest_ammo_count - 1)
 
+        # Empty out the ammo and fire a couple of times
+
+        for reload_count in range(self.__vodou_priest_ammo_count):
+            self.__ruleset.do_action(vodou_priest, 
+                                     {'name': 'reload'},
+                                     mock_fight_handler)
+        shots_taken = 2
+
+        for shot in range(shots_taken):
+            self.__ruleset.do_action(vodou_priest, 
+                                     {'name': 'attack'},
+                                     mock_fight_handler)
+
+        assert (weapon['ammo']['shots_left'] == 
+                            (self.__vodou_priest_initial_shots - shots_taken))
+
+        # Reload when there's nothing left with which to reload
+
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'reload'},
+                                 mock_fight_handler)
+
+        assert (weapon['ammo']['shots_left'] == 
+                            (self.__vodou_priest_initial_shots - shots_taken))
+        assert ammo['count'] == 0
+
 
     def test_timers(self):
         '''
