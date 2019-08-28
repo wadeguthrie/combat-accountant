@@ -2988,7 +2988,8 @@ class Ruleset(object):
             handled = True # It's just a comment, ignore (but mark it 'handled')
 
         elif action['name'] == 'adjust-hp':
-            self._adjust_hp(fighter, action['adj'])
+            quiet = False if 'quiet' not in action else action['quiet']
+            self._adjust_hp(fighter, action['adj'], quiet)
             handled = True
 
         elif action['name'] == 'attack' or action['name'] == 'all-out-attack':
@@ -3340,8 +3341,10 @@ class Ruleset(object):
 
 
     def _adjust_hp(self,
-                   fighter,  # Fighter object
-                   adj       # the number of HP to gain or lose
+                   fighter,         # Fighter object
+                   adj,             # the number of HP to gain or lose
+                   quiet = False    # Boolean (whether to ask/tell the user
+                                    #   anything)
                   ):
         fighter.details['current']['hp'] += adj
 
@@ -4378,7 +4381,7 @@ class GurpsRuleset(Ruleset):
             return # It's just a comment
 
         if action['name'] == 'adjust-fp':
-            self._do_adjust_fp(fighter, action['adj'])
+            self._do_adjust_fp(fighter, action['adj'], fight_handler)
             handled = True
 
         elif action['name'] == 'aim':
@@ -4624,6 +4627,7 @@ class GurpsRuleset(Ruleset):
                                     'action': {'name': 'feint'}
                                    }))
         
+        # FP: B426
         if (fighter.details['current']['fp'] <
                         (fighter.details['permanent']['fp'] / 3)):
             move_string = 'half=%d (FP:B426)' % (move/2)
@@ -5237,18 +5241,13 @@ class GurpsRuleset(Ruleset):
         if fighter.details['posture'] != 'standing':
             notes.append('Posture: %s' % fighter.details['posture'])
         if fighter.details['shock'] != 0:
-            notes.append('DX and IQ are at %d' % fighter.details['shock'])
+            notes.append('DX and IQ are at %d (shock)' %
+                                                    fighter.details['shock'])
 
         if (fighter.details['current']['hp'] <
                                     fighter.details['permanent']['hp']/3.0):
             # Already incorporated into Dodge
             notes.append('Dodge/Move are at 1/2')
-
-        if (fighter.details['current']['fp'] <=
-                                        -fighter.details['permanent']['fp']):
-            fighter.details['state'] = 'unconscious'
-            notes.append('*UNCONSCIOUS*')
-
 
         return notes
 
@@ -5923,8 +5922,10 @@ class GurpsRuleset(Ruleset):
     #
 
     def _adjust_hp(self,
-                   fighter,  # Fighter object
-                   adj       # the number of HP to gain or lose
+                   fighter,         # Fighter object
+                   adj,             # number (usually negative) HP change
+                   quiet = False    # Boolean (whether to ask/tell the user
+                                    #   anything)
                   ):
         if adj < 0:
             # Hit location (just for flavor, not for special injury)
@@ -5952,7 +5953,7 @@ class GurpsRuleset(Ruleset):
                 dr += (fighter.details['advantages']['Damage Resistance']/5)
                 dr_text_array.append('DR Advantage')
 
-            if dr != 0:
+            if not quiet and dr != 0:
                 use_armor_menu = [('yes', True), ('no', False)]
                 use_armor = self._window_manager.menu('Use Armor\'s DR?',
                                                                 use_armor_menu)
@@ -5986,7 +5987,7 @@ class GurpsRuleset(Ruleset):
                       'mode': curses.A_NORMAL}]
                                   )
 
-            self._window_manager.display_window(
+                self._window_manager.display_window(
                                     ('Did %d hp damage to...' % -adj),
                                     window_text)
 
@@ -6125,6 +6126,7 @@ class GurpsRuleset(Ruleset):
         if cost < 0:
             cost = 0
 
+        # TODO: do_action
         fighter.details['current']['fp'] -= cost
 
         timer = Timer(None)
@@ -6241,9 +6243,13 @@ class GurpsRuleset(Ruleset):
 
 
     def _do_adjust_fp(self,
-                      fighter,  # Fighter object
-                      adj       # number: amount to adjust FP
+                      fighter,      # Fighter object
+                      adj,          # number (probably negative): amount to
+                                    #   adjust FP
+                      fight_handler # FightHandler object (for logging)
                      ):
+        # See B426 for consequences of loss of FP
+
         # If FP go below zero, you lose HP along with FP
         hp_adj = 0
         if adj < 0  and -adj > fighter.details['current']['fp']:
@@ -6251,8 +6257,18 @@ class GurpsRuleset(Ruleset):
             if fighter.details['current']['fp'] > 0:
                 hp_adj += fighter.details['current']['fp']
 
-        fighter.details['current']['hp'] += hp_adj
+        self.do_action(fighter,
+                       {'name': 'adjust-hp', 'adj': hp_adj, 'quiet': True},
+                       fight_handler)
+
         fighter.details['current']['fp'] += adj
+
+        if (fighter.details['current']['fp'] <=
+                                        -fighter.details['permanent']['fp']):
+            self.do_action(fighter,
+                           {'name': 'set-consciousness',
+                            'level': Fighter.UNCONSCIOUS},
+                           fight_handler)
         return
 
 

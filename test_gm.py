@@ -8,10 +8,7 @@ import unittest
 
 '''
 action['name'] == 'adjust-fp':
-action['name'] == 'all-out-attack':
-action['name'] == 'attack'
 action['name'] == 'cast-spell':
-action['name'] == 'move-and-attack':
 
 # DONE (except for 'aim') 'pick-opponent':
 # DONE: 'adjust-hp':
@@ -29,6 +26,9 @@ action['name'] == 'move-and-attack':
 # NOTHING: 'move':
 # NOTHING: 'nothing':
 # NOTHING: 'user-defined':
+# DON'T BOTHER: 'all-out-attack':
+# DON'T BOTHER: 'attack'
+# DON'T BOTHER: 'move-and-attack':
 # DON'T BOTHER: 'use-item':
 '''
 
