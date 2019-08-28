@@ -36,13 +36,6 @@ action['name'] == 'cast-spell':
 # TODO: test that saving a fight and starting up again doesn't change the
 #       fight (pending actions, injuries, fight order) -- check out test_save
 
-# Opponents
-# TODO: test that pick opponent gives you all of the other side and none of
-#       the current side
-# TODO: test that pick opponent actually selects the opponent that you want
-# TODO: test that a non-engaged opponent asks for a two-way and that an
-#       engaged one does not
-
 # Looting bodies
 # TODO: test that looting bodies works:
 #           * moving something from one body to another works properly
@@ -1567,6 +1560,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'opponent-group': 'PCs'},
                                  fight_handler)
 
+        # Make sure pick opponent worked as advertised
+        opponent = fight_handler.get_opponent_for(current_fighter)
+        assert opponent is not None
+        assert opponent.name == 'Moe'
+        assert opponent.group == 'PCs'
+
         # Move ahead to fighter 1
         fight_handler.modify_index(1)
         expected_index = 1
@@ -1610,6 +1609,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'opponent-name': 'Jack',
                                   'opponent-group': 'PCs'},
                                  fight_handler)
+
+        # Make sure pick opponent worked as advertised
+        opponent = fight_handler.get_opponent_for(current_fighter)
+        assert opponent is not None
+        assert opponent.name == 'Jack'
+        assert opponent.group == 'PCs'
 
         # cycle completely around to fighter 1
         fight_handler.modify_index(1) # index 1
@@ -3100,9 +3105,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        # TODO: timers should get their own class separated from the Fighter
-        #       class.
-
         fighter = gm.Fighter('Tank',
                              'group',
                              copy.deepcopy(self.__tank_fighter),
@@ -3479,7 +3481,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        #print '\n=== %s ===' % 'test_redirects' # TODO: remove
         base_world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(base_world_dict)
         world = gm.World(world_data, self.__ruleset, self.__window_manager)
@@ -3496,7 +3497,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        #print '\n=== %s ===' % 'test_redirects_promote_to_NPC' # TODO: remove
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
         world = gm.World(world_data, self.__ruleset, self.__window_manager)
@@ -3548,17 +3548,16 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
     def test_NPC_joins(self):
-        #print '\n=== %s ===' % 'test_NPC_joins' # TODO: remove
         '''
         Basic test
         '''
         # NOTE: These indexes assume that we're NOT creating a fight.  When we
-        # create a fight, a Fight object '<< ARENA >>' will be created and
+        # create a fight, a Fight object '<< ROOM >>' will be created and
         # added to the beginning of the fight.  The indexes, in that case,
         # will be increased by 1 since the Fight will have index 0.  These
         # indexes, however, are not used in the tests that create a new fight.
 
-        # << ARENA >> -- not in the tests that use indexes
+        # << ROOM >> -- not in the tests that use indexes
 
         # {'name': 'Jack',       'group': 'PCs'},      # 5.75, 12, 2
         pc_jack_index = 0
@@ -3685,7 +3684,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
 
     def test_new_fight_new_creatures(self):
-        #print '\n=== %s ===' % 'test_new_fight_new_creatures' # TODO: remove
         '''
         Basic test
         '''
