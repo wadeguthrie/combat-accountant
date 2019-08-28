@@ -4430,7 +4430,6 @@ class GurpsRuleset(Ruleset):
             handled = True
 
         elif action['name'] == 'stun':
-            # TODO: high pain threshold may mitigate this
             fighter.details['stunned'] = True
             handled = True
 
@@ -6099,6 +6098,20 @@ class GurpsRuleset(Ruleset):
         else:
             cost = complete_spell['cost']
 
+        # M8 - High skill level costs less
+        skill = complete_spell['skill'] - 15
+        while skill >= 0:
+            cost -= 1
+            skill -= 5
+        if cost <= 0:
+            cost = 0
+        else:
+            fight_handler = (None if 'fight_handler' not in param 
+                                                else param['fight_handler'])
+            self.do_action(fighter, 
+                           {'name': 'adjust-fp', 'adj': -cost},
+                           fight_handler)
+
         # Casting time
 
         if (complete_spell['casting time'] is None or
@@ -6116,18 +6129,6 @@ class GurpsRuleset(Ruleset):
             casting_time = int(casting_time_string)
         else:
             casting_time = complete_spell['casting time']
-
-
-        # M8 - High skill level costs less
-        skill = complete_spell['skill'] - 15
-        while skill >= 0:
-            cost -= 1
-            skill -= 5
-        if cost < 0:
-            cost = 0
-
-        # TODO: do_action
-        fighter.details['current']['fp'] -= cost
 
         timer = Timer(None)
         casting_time -= 0.1 # -0.1 so that it doesn't show up on the first
@@ -7186,7 +7187,6 @@ class BuildFightHandler(ScreenHandler):
                                     self.__new_char_name,
                                     self.__viewing_index)
         return True # Keep going
-
 
 
 class FightHandler(ScreenHandler):
