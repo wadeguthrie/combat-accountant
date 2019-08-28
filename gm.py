@@ -2684,7 +2684,9 @@ class Fighter(ThingsInFight):
         # TODO: only if group is PC
         if ('reload-after-fight' in world.details['Options'] and 
                             world.details['Options']['reload-after-fight']):
-            self._ruleset.do_action(self, {'name': 'reload'}, fight_handler)
+            self._ruleset.do_action(self,
+                                    {'name': 'reload', 'quiet': True},
+                                    fight_handler)
         self.details['weapon-index'] = None
 
 
@@ -3021,7 +3023,8 @@ class Ruleset(object):
             handled = True
 
         elif action['name'] == 'reload':
-            self._do_reload({'fighter': fighter})
+            quiet = False if 'quiet' not in action else action['quiet']
+            self._do_reload(fighter, quiet)
             handled = True
 
         elif action['name'] == 'use-item':
@@ -3381,18 +3384,19 @@ class Ruleset(object):
 
 
     def _do_reload(self,
-                   param # {'fighter': Fighter object for attacker
+                   fighter,     # Fighter object for attacker
+                   quiet = False
                   ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        weapon, weapon_index = param['fighter'].get_current_weapon()
+        weapon, weapon_index = fighter.get_current_weapon()
         if weapon is None or 'ammo' not in weapon:
             return False
 
         clip_name = weapon['ammo']['name']
-        for item in param['fighter'].details['stuff']:
+        for item in fighter.details['stuff']:
             if item['name'] == clip_name and item['count'] > 0:
                 weapon['ammo']['shots_left'] = weapon['ammo']['shots']
                 item['count'] -= 1
@@ -6320,32 +6324,48 @@ class GurpsRuleset(Ruleset):
 
 
     def _do_reload(self,
-                   param # {'fighter': Fighter object for attacker
+                   fighter,     # Fighter object for attacker
+                   quiet = False
                   ):
         '''
         Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Returns: 
         '''
-        if super(GurpsRuleset, self)._do_reload(param):
-            weapon, weapon_index = param['fighter'].get_current_weapon()
+        if super(GurpsRuleset, self)._do_reload(fighter, quiet):
+            weapon, weapon_index = fighter.get_current_weapon()
             if weapon is None or 'ammo' not in weapon:
                 return False
 
-            reload_time = weapon['reload']
-            if 'fast-draw (ammo)' in param['fighter'].details['skills']:
-                # TODO: need to roll vs. the skill
-                reload_time -= 1
-                # TODO: combat reflexes removes another one (reload_time
-                # should never go below 0)
-            timer = Timer(None)
-            timer.from_pieces(param['fighter'].name, reload_time, 'RELOADING')
-            timer.mark_owner_as_busy()  # When reloading, the owner is busy
-            param['fighter'].timers.add(timer)
+            if quiet:
+                return True
 
-            self.reset_aim(param['fighter'])
+            reload_time = weapon['reload']
+            if 'Fast-Draw (Ammo)' in fighter.details['skills']:
+                skill_menu = [('made SKILL roll', True),
+                              ('did NOT make SKILL roll', False)]
+                made_skill_roll = self._window_manager.menu(
+                    ('roll <= fast-draw skill (%d)' %
+                            fighter.details['skills']['Fast-Draw (Ammo)']),
+                    skill_menu)
+
+                if made_skill_roll:
+                    reload_time -= 1
+
+                    if 'Combat Reflexes' in fighter.details['advantages']:
+                        reload_time -= 1
+                    
+            if reload_time <= 0:
+                reload_time = 0
+            else:
+                timer = Timer(None)
+                timer.from_pieces(fighter.name, reload_time, 'RELOADING')
+                timer.mark_owner_as_busy()  # When reloading, the owner is busy
+                fighter.timers.add(timer)
+
+            self.reset_aim(fighter)
             return True
 
-        return
+        return True
 
 
     def _draw_weapon(self,
