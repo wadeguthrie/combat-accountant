@@ -11,18 +11,18 @@ action['name'] == 'adjust-fp':
 action['name'] == 'all-out-attack':
 action['name'] == 'attack'
 action['name'] == 'cast-spell':
-action['name'] == 'defend':
 action['name'] == 'move-and-attack':
 
 # DONE (except for 'aim') 'pick-opponent':
 # DONE: 'adjust-hp':
 # DONE: 'aim':
 # DONE: 'change-posture':
+# DONE: 'defend':
 # DONE: 'don-armor': # or doff armor
 # DONE: 'draw-weapon':
 # DONE: 'reload':
 # DONE: 'set-consciousness':
-# DONE: 'stun':
+# DONE: (except for combat reflexes) 'stun':
 # NOTHING: 'concentrate':
 # NOTHING: 'evaluate':
 # NOTHING: 'feint':
@@ -424,8 +424,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__vodou_priest_fighter_pistol_skill = 15
         self.__vodou_priest_armor_dr = 3
         self.__vodou_priest_ht = 11
-        self.__vodou_armor_index = 2
+
+        self.__vodou_pistol_index = 0
         self.__vodou_priest_ammo_index = 1
+        self.__vodou_armor_index = 2
+
         self.__vodou_priest_ammo_count = 5
         self.__vodou_priest_initial_shots = 9
         self.__vodou_priest_fighter = {
@@ -1654,7 +1657,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
                                   self.__window_manager)
-        requested_weapon_index = 0
+        requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest, 
                                  {'name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
@@ -1894,7 +1897,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
                                   self.__window_manager)
-        requested_weapon_index = 0
+        requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest, 
                                  {'name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
@@ -2222,7 +2225,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   self.__ruleset,
                                   self.__window_manager)
 
-        requested_weapon_index = 0
+        requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest, 
                                  {'name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
@@ -2613,7 +2616,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         del vodou_priest.details['advantages']['Combat Reflexes']
 
-        requested_weapon_index = 0
+        requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest, 
                                  {'name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
@@ -2835,7 +2838,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Draw Weapon
 
-        requested_weapon_index = 0
+        requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest, 
                                  {'name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
@@ -2876,7 +2879,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Draw Weapon
 
-        requested_weapon_index = 0
+        requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest, 
                                  {'name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
@@ -3032,6 +3035,65 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         dodge_skill, ignore = self.__ruleset.get_dodge_skill(current_fighter)
 
         assert dodge_skill == original_dodge_skill + total_penalty
+
+
+    def test_defend(self):
+        '''
+        GURPS test
+        '''
+
+        # Setup
+
+        self.__window_manager = MockWindowManager()
+        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        mock_fight_handler = MockFightHandler()
+
+        vodou_priest = gm.Fighter('Priest',
+                                  'group',
+                                  copy.deepcopy(self.__vodou_priest_fighter),
+                                  self.__ruleset,
+                                  self.__window_manager)
+        requested_weapon_index = self.__vodou_pistol_index
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'draw-weapon',
+                                  'weapon-index': requested_weapon_index},
+                                 mock_fight_handler)
+        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        assert actual_weapon_index == requested_weapon_index
+
+        # The only way you can see a 'defend' action is because aim is lost.
+
+        # 1 round
+        expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
+            + self.__colt_pistol_acc
+            + 1) # braced
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'aim', 'braced': True},
+                                 mock_fight_handler)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit
+
+        # 2 rounds
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'aim', 'braced': True},
+                                 mock_fight_handler)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
+
+        ### Defend, lose aim ###
+
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'defend'},
+                                 mock_fight_handler)
+
+        # 3 rounds
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'aim', 'braced': True},
+                                 mock_fight_handler)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        assert to_hit == expected_to_hit # aiming for 1 round
+
+
 
 
     def test_timers(self):
