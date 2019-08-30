@@ -1319,7 +1319,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         Partially GURPS-specific test
         '''
         world_data = WorldData(self.init_world_dict)
-        world = gm.World(world_data, self.__ruleset, self.__window_manager)
+        world = gm.World(world_data,
+                         self.__ruleset,
+                         self.__window_manager,
+                         save_snapshot=False
+                         )
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
         # Pestilence and Moe have same basic speed but different dx
@@ -1337,7 +1341,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                             world,
                                             'horsemen',
                                             self.__ruleset,
-                                            filename='*INTERNAL*'
+                                            filename='*INTERNAL*',
+                                            save_snapshot=False
                                            )
             fighters = fight_handler.get_fighters()
 
@@ -1478,7 +1483,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         reordered randomly and a different random seed is used.
         '''
         world_data = WorldData(self.init_world_dict_2)
-        world = gm.World(world_data, self.__ruleset, self.__window_manager)
+        world = gm.World(world_data,
+                         self.__ruleset,
+                         self.__window_manager,
+                         save_snapshot=False
+                        )
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
         # Pestilence and Moe have same basic speed but different dx
@@ -1498,7 +1507,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                             world,
                                             'marx',
                                             self.__ruleset,
-                                            filename='*INTERNAL*'
+                                            filename='*INTERNAL*',
+                                            save_snapshot=False
                                            )
             fighters = fight_handler.get_fighters()
 
@@ -1516,7 +1526,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         world_data = WorldData(self.init_world_dict)
 
-        world = gm.World(world_data, self.__ruleset, self.__window_manager)
+        world = gm.World(world_data,
+                         self.__ruleset,
+                         self.__window_manager,
+                         save_snapshot=False
+                        )
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
         # Pestilence and Moe have same basic speed but different dx
@@ -1534,7 +1548,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         world,
                                         'horsemen',
                                         self.__ruleset,
-                                        filename='*INTERNAL*'
+                                        filename='*INTERNAL*',
+                                        save_snapshot=False
                                        )
         fighters = fight_handler.get_fighters()
 
@@ -2950,12 +2965,17 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
 
         world_data = WorldData(self.init_world_dict)
-        world = gm.World(world_data, self.__ruleset, self.__window_manager)
+        world = gm.World(world_data,
+                         self.__ruleset,
+                         self.__window_manager,
+                         save_snapshot=False
+                        )
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
                                         'horsemen',
                                         self.__ruleset,
-                                        filename='*INTERNAL*'
+                                        filename='*INTERNAL*',
+                                        save_snapshot=False
                                        )
         current_fighter = fight_handler.get_current_fighter()
 
@@ -3230,13 +3250,18 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # print '\n----------- LEAVE FIGHT -----------\n'
 
         world_data = WorldData(base_world_dict)
-        world = gm.World(world_data, self.__ruleset, self.__window_manager)
+        world = gm.World(world_data,
+                         self.__ruleset,
+                         self.__window_manager,
+                         save_snapshot=False
+                        )
 
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
                                         "Dima's Crew", 
                                         self.__ruleset,
-                                        "filename") # used for display
+                                        "filename", # used for display,
+                                        save_snapshot=False)
 
         assert "Dima's Crew" in world_data.read_data['fights']
         assert not self.__is_in_dead_monsters(world_data, "Dima's Crew")
@@ -3257,7 +3282,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # print '\n----------- SAVE FIGHT -----------\n'
 
         world_data = WorldData(base_world_dict)
-        world = gm.World(world_data, self.__ruleset, self.__window_manager)
+        world = gm.World(world_data,
+                         self.__ruleset,
+                         self.__window_manager,
+                         save_snapshot=False
+                        )
 
         assert world_data.read_data['current-fight']['monsters'] != "Dima's Crew"
 
@@ -3265,7 +3294,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         world,
                                         "Dima's Crew", 
                                         self.__ruleset,
-                                        "filename") # used for display
+                                        "filename", # used for display
+                                        save_snapshot=False)
 
         assert "Dima's Crew" in world_data.read_data['fights']
         assert not self.__is_in_dead_monsters(world_data, "Dima's Crew")
@@ -3290,13 +3320,18 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # print '\n----------- KEEP FIGHT -----------\n'
 
         world_data = WorldData(base_world_dict)
-        world = gm.World(world_data, self.__ruleset, self.__window_manager)
+        world = gm.World(world_data,
+                         self.__ruleset,
+                         self.__window_manager,
+                         save_snapshot=False
+                        )
 
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
                                         "Dima's Crew", 
                                         self.__ruleset,
-                                        "filename") # used for display
+                                        "filename", # used for display
+                                        save_snapshot=False)
 
         assert "Dima's Crew" in world_data.read_data['fights']
         assert not self.__is_in_dead_monsters(world_data, "Dima's Crew")
@@ -3467,7 +3502,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         base_world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(base_world_dict)
-        world = gm.World(world_data, self.__ruleset, self.__window_manager)
+        world = gm.World(world_data,
+                         self.__ruleset,
+                         self.__window_manager,
+                         save_snapshot=False
+                        )
 
         # Verify that redirect that's in the World object works the way I
         # expect it to.
@@ -3483,7 +3522,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
-        world = gm.World(world_data, self.__ruleset, self.__window_manager)
+        world = gm.World(world_data,
+                         self.__ruleset,
+                         self.__window_manager,
+                         save_snapshot=False
+                        )
         self.__window_manager.reset_error_state()
 
         # random.randint(1, 6) should generate: 1 2 4 4 4 4 5 6 4 4
@@ -3504,7 +3547,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         world,
                                         "horsemen",
                                         self.__ruleset,
-                                        "filename") # used for display
+                                        "filename", # used for display
+                                        save_snapshot=False)
 
         ### FightHandler.promote_to_NPC - check good change ###
 
@@ -3563,7 +3607,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
-        world = gm.World(world_data, self.__ruleset, self.__window_manager)
+        world = gm.World(world_data,
+                         self.__ruleset,
+                         self.__window_manager,
+                         save_snapshot=False
+                        )
         main_handler = gm.MainHandler(self.__window_manager,
                                       world,
                                       self.__ruleset,
@@ -3674,7 +3722,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(world_dict)
-        world = gm.World(world_data, self.__ruleset, self.__window_manager)
+        world = gm.World(world_data,
+                         self.__ruleset,
+                         self.__window_manager,
+                         save_snapshot=False
+                        )
 
         self.__window_manager.clear_menu_responses()
         self.__window_manager.set_menu_response(

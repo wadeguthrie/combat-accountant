@@ -1773,7 +1773,8 @@ class World(object):
     def __init__(self,
                  world_details,  # GmJson object
                  ruleset,        # Ruleset object
-                 window_manager  # a GmWindowManager object to handle I/O
+                 window_manager, # a GmWindowManager object to handle I/O
+                 save_snapshot = True   # Here so tests can disable it
                 ):
         self.__gm_json = world_details # only used for toggling whether the
                                        # data is saved on exit of the program.
@@ -1781,7 +1782,9 @@ class World(object):
         self.__ruleset = ruleset
         self.__window_manager = window_manager
         self.__delete_old_debug_files()
-        self.campaign_debug_json = self.do_debug_snapshot('startup')
+        self.campaign_debug_json = None
+        if save_snapshot:
+            self.do_debug_snapshot('startup')
 
 
     def do_debug_snapshot(self,
@@ -1790,6 +1793,9 @@ class World(object):
         '''
         Saves a copy of the master JSON file to a debug directory.
         '''
+
+        if tag is None:
+            return None
 
         # Save the current JSON for debugging, later
         debug_filename = os.path.join(World.debug_directory,
@@ -7223,7 +7229,8 @@ class FightHandler(ScreenHandler):
                  world,
                  monster_group,
                  ruleset,
-                 filename # JSON file containing the world
+                 filename, # JSON file containing the world
+                 save_snapshot = True   # Here so tests can disable it
                 ):
         super(FightHandler, self).__init__(window_manager,
                                            world.campaign_debug_json,
@@ -7298,11 +7305,12 @@ class FightHandler(ScreenHandler):
         if self._saved_fight['saved']:
             monster_group = self._saved_fight['monsters']
 
-        self.__world.do_debug_snapshot('fight-%s' % monster_group)
-
         # Now we can go off and change the JSON file data
 
-        if not self._saved_fight['saved']:
+        if self._saved_fight['saved']:
+            if save_snapshot:
+                self.__world.do_debug_snapshot('fight-%s' % monster_group)
+        else:
             self.clear_history()
             # Allowed add_to_history.
             self.add_to_history({'comment': '--- Round 0 ---'})
@@ -7385,7 +7393,15 @@ class FightHandler(ScreenHandler):
         first_fighter = self.get_current_fighter()
         first_fighter.start_turn()
 
+        if save_snapshot and not self._saved_fight['saved']:
+            # This will do the debug snapshot in a way that it'll come
+            # right to the fight when started.
+            self._saved_fight['saved'] = True
+            self.__world.do_debug_snapshot('fight-%s' % monster_group)
+            self._saved_fight['saved'] = False
+
         self._window.start_fight()
+
 
     #
     # Public Methods
