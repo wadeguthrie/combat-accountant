@@ -68,7 +68,6 @@ class TestBuildFightHandler(gm.BuildFightHandler):
                  world,
                  ruleset,
                  creature_type, # one of: NPCs, PCs, or MONSTERs
-                 "filename" # JSON file containing the world
                 )
         self.__command_ribbon_input = []
 
@@ -1319,7 +1318,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         Partially GURPS-specific test
         '''
         world_data = WorldData(self.init_world_dict)
-        world = gm.World(world_data,
+        world = gm.World("internal_source_file",
+                         world_data,
                          self.__ruleset,
                          self.__window_manager,
                          save_snapshot=False
@@ -1341,7 +1341,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                             world,
                                             'horsemen',
                                             self.__ruleset,
-                                            filename='*INTERNAL*',
                                             save_snapshot=False
                                            )
             fighters = fight_handler.get_fighters()
@@ -1483,7 +1482,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         reordered randomly and a different random seed is used.
         '''
         world_data = WorldData(self.init_world_dict_2)
-        world = gm.World(world_data,
+        world = gm.World("internal_source_file",
+                         world_data,
                          self.__ruleset,
                          self.__window_manager,
                          save_snapshot=False
@@ -1507,7 +1507,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                             world,
                                             'marx',
                                             self.__ruleset,
-                                            filename='*INTERNAL*',
                                             save_snapshot=False
                                            )
             fighters = fight_handler.get_fighters()
@@ -1526,7 +1525,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         world_data = WorldData(self.init_world_dict)
 
-        world = gm.World(world_data,
+        world = gm.World("internal_source_file",
+                         world_data,
                          self.__ruleset,
                          self.__window_manager,
                          save_snapshot=False
@@ -1548,7 +1548,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         world,
                                         'horsemen',
                                         self.__ruleset,
-                                        filename='*INTERNAL*',
                                         save_snapshot=False
                                        )
         fighters = fight_handler.get_fighters()
@@ -2965,7 +2964,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
 
         world_data = WorldData(self.init_world_dict)
-        world = gm.World(world_data,
+        world = gm.World('internal source file',
+                         world_data,
                          self.__ruleset,
                          self.__window_manager,
                          save_snapshot=False
@@ -2974,7 +2974,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         world,
                                         'horsemen',
                                         self.__ruleset,
-                                        filename='*INTERNAL*',
                                         save_snapshot=False
                                        )
         current_fighter = fight_handler.get_current_fighter()
@@ -3250,7 +3249,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # print '\n----------- LEAVE FIGHT -----------\n'
 
         world_data = WorldData(base_world_dict)
-        world = gm.World(world_data,
+        world = gm.World('internal source file',
+                         world_data,
                          self.__ruleset,
                          self.__window_manager,
                          save_snapshot=False
@@ -3260,7 +3260,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         world,
                                         "Dima's Crew", 
                                         self.__ruleset,
-                                        "filename", # used for display,
                                         save_snapshot=False)
 
         assert "Dima's Crew" in world_data.read_data['fights']
@@ -3282,7 +3281,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # print '\n----------- SAVE FIGHT -----------\n'
 
         world_data = WorldData(base_world_dict)
-        world = gm.World(world_data,
+        world = gm.World('internal source file',
+                         world_data,
                          self.__ruleset,
                          self.__window_manager,
                          save_snapshot=False
@@ -3294,7 +3294,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         world,
                                         "Dima's Crew", 
                                         self.__ruleset,
-                                        "filename", # used for display
                                         save_snapshot=False)
 
         assert "Dima's Crew" in world_data.read_data['fights']
@@ -3320,7 +3319,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # print '\n----------- KEEP FIGHT -----------\n'
 
         world_data = WorldData(base_world_dict)
-        world = gm.World(world_data,
+        world = gm.World('internal source file',
+                         world_data,
                          self.__ruleset,
                          self.__window_manager,
                          save_snapshot=False
@@ -3330,7 +3330,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         world,
                                         "Dima's Crew", 
                                         self.__ruleset,
-                                        "filename", # used for display
                                         save_snapshot=False)
 
         assert "Dima's Crew" in world_data.read_data['fights']
@@ -3502,7 +3501,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         base_world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(base_world_dict)
-        world = gm.World(world_data,
+        world = gm.World('internal source file',
+                         world_data,
                          self.__ruleset,
                          self.__window_manager,
                          save_snapshot=False
@@ -3522,7 +3522,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
-        world = gm.World(world_data,
+        world = gm.World('internal source file',
+                         world_data,
                          self.__ruleset,
                          self.__window_manager,
                          save_snapshot=False
@@ -3547,7 +3548,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         world,
                                         "horsemen",
                                         self.__ruleset,
-                                        "filename", # used for display
                                         save_snapshot=False)
 
         ### FightHandler.promote_to_NPC - check good change ###
@@ -3607,15 +3607,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
-        world = gm.World(world_data,
+        world = gm.World('internal source file',
+                         world_data,
                          self.__ruleset,
                          self.__window_manager,
                          save_snapshot=False
                         )
         main_handler = gm.MainHandler(self.__window_manager,
                                       world,
-                                      self.__ruleset,
-                                      "filename") # used for display
+                                      self.__ruleset)
 
         ### MainHandler.NPC_joins_monsters - not an NPC ###
 
@@ -3722,7 +3722,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(world_dict)
-        world = gm.World(world_data,
+        world = gm.World('internal source file',
+                         world_data,
                          self.__ruleset,
                          self.__window_manager,
                          save_snapshot=False
