@@ -1768,23 +1768,41 @@ class GmScrollableWindow(object):
 
 
 class World(object):
+    '''
+    Manages the data in the JSON. This contains the base information for the
+    entire world.
+
+    As part of that, it manages the debug files (which are really just
+    snapshots of the JSON).
+    '''
     debug_directory = 'debug'
 
     def __init__(self,
-                 world_details,  # GmJson object
-                 ruleset,        # Ruleset object
-                 window_manager, # a GmWindowManager object to handle I/O
-                 save_snapshot = True   # Here so tests can disable it
+                 source_filename,     # Name of file that contains the JSON
+                 world_details,       # GmJson object
+                 ruleset,             # Ruleset object
+                 window_manager,      # a GmWindowManager object to handle I/O
+                 save_snapshot = True # Here so tests can disable it
                 ):
+        self.source_filename = source_filename
         self.__gm_json = world_details # only used for toggling whether the
                                        # data is saved on exit of the program.
         self.details = world_details.read_data # entire dict from JSON
         self.__ruleset = ruleset
         self.__window_manager = window_manager
         self.__delete_old_debug_files()
-        self.campaign_debug_json = None
+
         if save_snapshot:
             self.do_debug_snapshot('startup')
+
+    def add_to_history(self,
+                       action # {'name':xxx, ...} - see Ruleset::do_action()
+                      ):
+        self.details['current-fight']['history'].append(action)
+
+
+    def clear_history(self):
+        self.details['current-fight']['history'] = []
 
 
     def do_debug_snapshot(self,
@@ -1816,6 +1834,7 @@ class World(object):
         ScreenHandler.maintainjson = False
 
 
+    # TODO: should be get_creatures_detail
     def get_creatures(self,
                       group_name  # 'PCs', 'NPCs', or a monster group
                      ):
@@ -6446,14 +6465,13 @@ class ScreenHandler(object):
     maintainjson = False
 
     def __init__(self,
-                 window_manager,
-                 campaign_debug_json,
-                 filename,
-                 saved_fight):
+                 window_manager,    # GmWindowManager object
+                 world,             # World object
+                 ):
         self._window_manager = window_manager
-        self._campaign_debug_json = campaign_debug_json
-        self._input_filename = filename
-        self._saved_fight = saved_fight
+        self._world = world
+
+        self._saved_fight = self._world.details['current-fight']
 
         self._choices = {
             ord('B'): {'name': 'Bug Report', 'func': self._make_bug_report},
@@ -6463,11 +6481,11 @@ class ScreenHandler(object):
     def add_to_history(self,
                        action # {'name':xxx, ...} - see Ruleset::do_action()
                       ):
-        self._saved_fight['history'].append(action)
+        self._world.add_to_history(action)
 
 
     def clear_history(self):
-        self._saved_fight['history'] = []
+        self._world.clear_history()
 
 
     def handle_user_input_until_done(self):
@@ -6519,7 +6537,7 @@ class ScreenHandler(object):
                     '^G to exit')
 
         bug_report = {
-            'world'   : self._campaign_debug_json,
+            'world'   : self._world.source_filename,
             'history' : self._saved_fight['history'],
             'report'  : report
         }
@@ -6527,6 +6545,11 @@ class ScreenHandler(object):
         bug_report_json = timeStamped('bug_report', None, 'txt')
         with open(bug_report_json, 'w') as f:
             json.dump(bug_report, f, indent=2)
+
+        self._window_manager.display_window(
+               'Bug Reported',
+                [[{'text': ('Output file "%s"' % bug_report_json),
+                   'mode': curses.A_NORMAL }]])
 
         return True # Keep doing whatever you were doing.
 
@@ -6537,17 +6560,12 @@ class BuildFightHandler(ScreenHandler):
      MONSTERs) = range(3)
 
     def __init__(self,
-                 window_manager,
-                 world,
-                 ruleset,
-                 creature_type, # one of: NPCs, PCs, or MONSTERs
-                 filename # JSON file containing the world
+                 window_manager,    # GmWindowManager object
+                 world,             # World object
+                 ruleset,           # Ruleset object
+                 creature_type,     # one of: NPCs, PCs, or MONSTERs
                 ):
-        super(BuildFightHandler, self).__init__(
-                                            window_manager,
-                                            world.campaign_debug_json,
-                                            filename,
-                                            world.details['current-fight'])
+        super(BuildFightHandler, self).__init__(window_manager, world)
         self._add_to_choice_dict({
             curses.KEY_UP:
                       {'name': 'prev character',  'func': self.__view_prev},
@@ -6566,7 +6584,6 @@ class BuildFightHandler(ScreenHandler):
         self._window = self._window_manager.get_build_fight_gm_window(
                                                                 self._choices)
 
-        self.__world = world
         self.__ruleset = ruleset
         self.__template_name = None # Name of templates we'll use to create
                                     # new creatures.
@@ -6577,7 +6594,7 @@ class BuildFightHandler(ScreenHandler):
                                #        obj in display order}
 
         self.__deleted_critter_count = 0
-        self.__equipment_manager = EquipmentManager(world, window_manager)
+        self.__equipment_manager = EquipmentManager(self._world, window_manager)
 
         self.__new_char_name = None
         self.__viewing_index = None # integer index into self.__critters
@@ -6651,7 +6668,7 @@ class BuildFightHandler(ScreenHandler):
         self._window.clear()
         self._window.status_ribbon(self.__group_name,
                                    self.__template_name,
-                                   self._input_filename,
+                                   self._world.source_filename,
                                    ScreenHandler.maintainjson)
         self._window.command_ribbon()
         # BuildFightGmWindow
@@ -6700,7 +6717,7 @@ class BuildFightHandler(ScreenHandler):
             # Based on which creature from the template
             creature_menu = [(from_creature_name, from_creature_name)
                 for from_creature_name in
-                        self.__world.details['Templates'][self.__template_name]]
+                        self._world.details['Templates'][self.__template_name]]
             creature_menu = sorted(creature_menu, key=lambda x: x[0].upper())
 
             from_creature_name = self._window_manager.menu('Monster',
@@ -6711,7 +6728,7 @@ class BuildFightHandler(ScreenHandler):
 
             # Generate the creature for the template
 
-            from_creature = (self.__world.details[
+            from_creature = (self._world.details[
                         'Templates'][self.__template_name][from_creature_name])
             to_creature = self.__ruleset.make_empty_creature()
 
@@ -6745,7 +6762,7 @@ class BuildFightHandler(ScreenHandler):
                                                            cols-4, # width
                                                            'Monster Name')
                 if base_name is None or len(base_name) == 0:
-                    base_name, where, gender = self.__world.get_random_name()
+                    base_name, where, gender = self._world.get_random_name()
                     if base_name is None:
                         self._window_manager.error(['Monster needs a name'])
                         keep_asking = True
@@ -6925,7 +6942,7 @@ class BuildFightHandler(ScreenHandler):
 
         lines, cols = self._window.getmaxyx()
         template_menu = [(template_name, template_name)
-                    for template_name in self.__world.details['Templates']]
+                    for template_name in self._world.details['Templates']]
         template_name = self._window_manager.menu('From Which Template',
                                                          template_menu)
         if template_name is None:
@@ -6936,7 +6953,7 @@ class BuildFightHandler(ScreenHandler):
 
         if creature_type == BuildFightHandler.MONSTERs:
             group_menu = [(group_name, group_name)
-                            for group_name in self.__world.get_fights()]
+                            for group_name in self._world.get_fights()]
             group_menu = sorted(group_menu, key=lambda x: x[0].upper())
             group_answer = self._window_manager.menu('To Which Group',
                                                      group_menu)
@@ -6954,7 +6971,7 @@ class BuildFightHandler(ScreenHandler):
 
         self.__group_name = group_answer
         self.__critters = {
-                    'data': self.__world.get_creatures(self.__group_name),
+                    'data': self._world.get_creatures(self.__group_name),
                     'obj': []}
 
         # Build the Fighter object array
@@ -6969,7 +6986,7 @@ class BuildFightHandler(ScreenHandler):
                             self.__group_name,
                             # Calls 'get_creature_details' in case 'details'
                             # is a redirect.
-                            self.__world.get_creature_details(
+                            self._world.get_creature_details(
                                                     name, self.__group_name),
                             self.__ruleset,
                             self._window_manager)
@@ -6984,7 +7001,7 @@ class BuildFightHandler(ScreenHandler):
             if the_fight_itself is None:
                 self.__critters['data'][Fight.name] = Fight.empty_fight
                 fight = Fight(self.__group_name,
-                              self.__world.details['fights'][self.__group_name],
+                              self._world.details['fights'][self.__group_name],
                               self.__ruleset,
                               self._window_manager)
             else:
@@ -7052,7 +7069,7 @@ class BuildFightHandler(ScreenHandler):
 
         lines, cols = self._window.getmaxyx()
         template_menu = [(template_name, template_name)
-                    for template_name in self.__world.details['Templates']]
+                    for template_name in self._world.details['Templates']]
         template_name = self._window_manager.menu('From Which Template',
                                                          template_menu)
         if template_name is None:
@@ -7070,7 +7087,7 @@ class BuildFightHandler(ScreenHandler):
             if group_name is None or len(group_name) == 0:
                 self._window_manager.error(['You have to name your fight'])
                 keep_asking = True
-            elif self.__world.get_creatures(group_name) is not None:
+            elif self._world.get_creatures(group_name) is not None:
                 self._window_manager.error(
                     ['Fight name "%s" already exists' % group_name])
                 keep_asking = True
@@ -7080,7 +7097,7 @@ class BuildFightHandler(ScreenHandler):
         # Set the name and group of the new group
 
         self.__group_name = group_name
-        fights = self.__world.get_fights() # New groups can
+        fights = self._world.get_fights() # New groups can
                                            # only be in fights.
 
         fights[group_name] = {'monsters': {}}
@@ -7091,7 +7108,7 @@ class BuildFightHandler(ScreenHandler):
 
         self.__critters['data'][Fight.name] = Fight.empty_fight
         fight = Fight(self.__group_name,
-                      self.__world.details['fights'][self.__group_name],
+                      self._world.details['fights'][self.__group_name],
                       self.__ruleset,
                       self._window_manager)
         self.__critters['obj'].insert(0, fight)
@@ -7137,7 +7154,7 @@ class BuildFightHandler(ScreenHandler):
             if template_name is None or len(template_name) == 0:
                 return True
             elif (template_name in
-                    self.__world.details['Templates'][self.__template_name]):
+                    self._world.details['Templates'][self.__template_name]):
                 self._window_manager.error(
                     ['Template name "%s" already exists' % template_name])
                 keep_asking = True
@@ -7162,7 +7179,7 @@ class BuildFightHandler(ScreenHandler):
             else:
                 pass # We're ignoring these
 
-        template_list = self.__world.details['Templates'][self.__template_name]
+        template_list = self._world.details['Templates'][self.__template_name]
         template_list[template_name] = to_creature
         return True # Keep going
 
@@ -7177,7 +7194,7 @@ class BuildFightHandler(ScreenHandler):
         # Get the template
         lines, cols = self._window.getmaxyx()
         template_menu = [(template_name, template_name)
-                    for template_name in self.__world.details['Templates']]
+                    for template_name in self._world.details['Templates']]
         template_name = self._window_manager.menu('From Which Template',
                                                   template_menu)
         if template_name is None:
@@ -7225,21 +7242,17 @@ class BuildFightHandler(ScreenHandler):
 
 class FightHandler(ScreenHandler):
     def __init__(self,
-                 window_manager,
-                 world,
-                 monster_group,
-                 ruleset,
-                 filename, # JSON file containing the world
+                 window_manager,        # GmWindowManager object
+                 world,                 # World object
+                 monster_group,         # string
+                 ruleset,               # Ruleset object
                  save_snapshot = True   # Here so tests can disable it
                 ):
-        super(FightHandler, self).__init__(window_manager,
-                                           world.campaign_debug_json,
-                                           filename,
-                                           world.details['current-fight'])
+        super(FightHandler, self).__init__(window_manager, world)
         self.__ruleset = ruleset
         self.__bodies_looted = False
         self.__keep_monsters = False # Move monsters to 'dead' after fight
-        self.__equipment_manager = EquipmentManager(world,
+        self.__equipment_manager = EquipmentManager(self._world,
                                                     self._window_manager)
 
         self._add_to_choice_dict({
@@ -7283,7 +7296,6 @@ class FightHandler(ScreenHandler):
         self._window = self._window_manager.get_fight_gm_window(self.__ruleset,
                                                                 self._choices)
 
-        self.__world = world
         self.__viewing_index = None
 
         # self._saved_fight takes the form:
@@ -7309,7 +7321,7 @@ class FightHandler(ScreenHandler):
 
         if self._saved_fight['saved']:
             if save_snapshot:
-                self.__world.do_debug_snapshot('fight-%s' % monster_group)
+                self._world.do_debug_snapshot('fight-%s' % monster_group)
         else:
             self.clear_history()
             # Allowed add_to_history.
@@ -7327,8 +7339,8 @@ class FightHandler(ScreenHandler):
                              # are: {'group': <groupname>,
                              #       'info': <Fighter object>}
 
-        for name in self.__world.get_creatures('PCs'):
-            details = self.__world.get_creature_details(name, 'PCs')
+        for name in self._world.get_creatures('PCs'):
+            details = self._world.get_creature_details(name, 'PCs')
             if details is not None:
                 fighter = Fighter(name,
                                   'PCs',
@@ -7339,8 +7351,8 @@ class FightHandler(ScreenHandler):
 
         the_fight_itself = None
         if monster_group is not None:
-            for name in self.__world.get_creatures(monster_group):
-                details = self.__world.get_creature_details(name,
+            for name in self._world.get_creatures(monster_group):
+                details = self._world.get_creature_details(name,
                                                             monster_group)
                 if details is None:
                     continue
@@ -7379,8 +7391,8 @@ class FightHandler(ScreenHandler):
                                                    'name': fighter.name})
 
         if monster_group is not None:
-            for name in self.__world.get_creatures(monster_group):
-                details = self.__world.get_creature_details(name,
+            for name in self._world.get_creatures(monster_group):
+                details = self._world.get_creature_details(name,
                                                             monster_group)
                 if details is not None:
                     self.__ruleset.is_creature_consistent(name, details)
@@ -7397,7 +7409,7 @@ class FightHandler(ScreenHandler):
             # This will do the debug snapshot in a way that it'll come
             # right to the fight when started.
             self._saved_fight['saved'] = True
-            self.__world.do_debug_snapshot('fight-%s' % monster_group)
+            self._world.do_debug_snapshot('fight-%s' % monster_group)
             self._saved_fight['saved'] = False
 
         self._window.start_fight()
@@ -7513,14 +7525,14 @@ class FightHandler(ScreenHandler):
                                 self._saved_fight['monsters'] is not None and
                                 self.__keep_monsters == False):
             fight_group = self._saved_fight['monsters']
-            fight = self.__world.get_creatures(fight_group)
+            fight = self._world.get_creatures(fight_group)
 
             fmt='%Y-%m-%d-%H-%M-%S'
             date = datetime.datetime.now().strftime(fmt).format()
-            self.__world.details['dead-monsters'].append({'name': fight_group,
+            self._world.details['dead-monsters'].append({'name': fight_group,
                                                           'date': date,
                                                           'fight': fight})
-            fights = self.__world.get_fights()
+            fights = self._world.get_fights()
             del fights[fight_group]
 
 
@@ -7679,7 +7691,7 @@ class FightHandler(ScreenHandler):
 
         # Make the NPC entry
 
-        if new_NPC.name in self.__world.details['NPCs']:
+        if new_NPC.name in self._world.details['NPCs']:
             self._window_manager.error(['There\'s already an NPC named %s' %
                                         new_NPC.name])
             return True
@@ -7688,11 +7700,11 @@ class FightHandler(ScreenHandler):
         #   is a redirect?
 
         details_copy = copy.deepcopy(new_NPC.details)
-        self.__world.details['NPCs'][new_NPC.name] = details_copy
+        self._world.details['NPCs'][new_NPC.name] = details_copy
 
         # Make the redirect entry
 
-        group = self.__world.get_creatures(new_NPC.group)
+        group = self._world.get_creatures(new_NPC.group)
         group[new_NPC.name] = { "redirect": "NPCs" }
 
         # Replace fighter information with new fighter information
@@ -7947,7 +7959,7 @@ class FightHandler(ScreenHandler):
                                   self._saved_fight['saved'],
                                   self.__keep_monsters,
                                   next_PC_name,
-                                  self._input_filename,
+                                  self._world.source_filename,
                                   ScreenHandler.maintainjson)
         return True # Keep going
 
@@ -7961,14 +7973,14 @@ class FightHandler(ScreenHandler):
                                   self._saved_fight['saved'],
                                   self.__keep_monsters,
                                   next_PC_name,
-                                  self._input_filename,
+                                  self._world.source_filename,
                                   ScreenHandler.maintainjson)
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
                                    self._saved_fight['index'],
                                    self.__viewing_index)
-        self._window.status_ribbon(self._input_filename,
+        self._window.status_ribbon(self._world.source_filename,
                                    ScreenHandler.maintainjson)
         self._window.command_ribbon()
 
@@ -7982,7 +7994,7 @@ class FightHandler(ScreenHandler):
                               group     # string
                              ):
         ''' Used for constructing a Fighter from the JSON information. '''
-        return self.__world.get_creature_details(name, group)
+        return self._world.get_creature_details(name, group)
 
 
     def __get_fighter_object(self,
@@ -8007,7 +8019,7 @@ class FightHandler(ScreenHandler):
             return True # Keep going
 
 
-        character_list = self.__world.get_creatures(from_fighter.group)
+        character_list = self._world.get_creatures(from_fighter.group)
         character_menu = [(dude, dude) for dude in character_list]
         to_fighter_name = self._window_manager.menu(
                                         'Give "%s" to whom?' % item['name'],
@@ -8179,7 +8191,7 @@ class FightHandler(ScreenHandler):
                                   self._saved_fight['saved'],
                                   self.__keep_monsters,
                                   next_PC_name,
-                                  self._input_filename,
+                                  self._world.source_filename,
                                   ScreenHandler.maintainjson)
 
         opponent = self.get_opponent_for(current_fighter)
@@ -8264,7 +8276,7 @@ class FightHandler(ScreenHandler):
                                   self._saved_fight['saved'],
                                   self.__keep_monsters,
                                   next_PC_name,
-                                  self._input_filename,
+                                  self._world.source_filename,
                                   ScreenHandler.maintainjson)
         current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
@@ -8317,7 +8329,7 @@ class FightHandler(ScreenHandler):
 
         if not self._saved_fight['saved']:
             for fighter in self.__fighters:
-                fighter.end_fight(self.__world, self)
+                fighter.end_fight(self._world, self)
 
         self._window.close()
         return False # Leave the fight
@@ -8339,7 +8351,7 @@ class FightHandler(ScreenHandler):
                                   self._saved_fight['saved'],
                                   self.__keep_monsters,
                                   next_PC_name,
-                                  self._input_filename,
+                                  self._world.source_filename,
                                   ScreenHandler.maintainjson)
         return True # Keep going
 
@@ -8542,16 +8554,11 @@ class MainHandler(ScreenHandler):
                             # together
 
     def __init__(self,
-                 window_manager,
-                 world,
-                 ruleset,
-                 filename # For Debugging Only: JSON file containing the world
+                 window_manager,    # GmWindowManager object
+                 world,             # World object
+                 ruleset,           # Ruleset object
                 ):
-        super(MainHandler, self).__init__(window_manager,
-                                          world.campaign_debug_json,
-                                          filename,
-                                          world.details['current-fight'])
-        self.__world = world
+        super(MainHandler, self).__init__(window_manager, world)
         self.__ruleset = ruleset
         self.__current_pane = MainHandler.CHAR_DETAIL
         self._add_to_choice_dict({
@@ -8605,12 +8612,12 @@ class MainHandler(ScreenHandler):
                                         # PC/NPC list
         self.__setup_PC_list(self.__current_display)
 
-        self.__equipment_manager = EquipmentManager(self.__world,
+        self.__equipment_manager = EquipmentManager(self._world,
                                                     self._window_manager)
 
         # Check characters for consistency.
-        for name in self.__world.get_creatures('PCs'):
-            details = self.__world.get_creature_details(name, 'PCs')
+        for name in self._world.get_creatures('PCs'):
+            details = self._world.get_creature_details(name, 'PCs')
             if details is not None:
                 self.__ruleset.is_creature_consistent(name, details)
 
@@ -8647,11 +8654,11 @@ class MainHandler(ScreenHandler):
 
         # Select the fight
         fight_menu = [(fight_name, fight_name)
-                                for fight_name in self.__world.get_fights()]
+                                for fight_name in self._world.get_fights()]
         fight_name = self._window_manager.menu('Join Which Fight', fight_menu)
 
         # Make sure the person isn't already in the fight
-        fight = self.__world.get_creatures(fight_name)
+        fight = self._world.get_creatures(fight_name)
         if npc_name in fight:
             self._window_manager.error(['"%s" already in fight "%s"' %
                                                     (npc_name, fight_name)])
@@ -8670,11 +8677,11 @@ class MainHandler(ScreenHandler):
             self._window_manager.error(['"%s" not an NPC' % npc_name])
             return True
 
-        if npc_name in self.__world.details['PCs']:
+        if npc_name in self._world.details['PCs']:
             self._window_manager.error(['"%s" already a PC' % npc_name])
             return True
 
-        self.__world.details['PCs'][npc_name] = {'redirect': 'NPCs'}
+        self._world.details['PCs'][npc_name] = {'redirect': 'NPCs'}
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
         return True
@@ -8707,10 +8714,9 @@ class MainHandler(ScreenHandler):
         '''
 
         build_fight = BuildFightHandler(self._window_manager,
-                                        self.__world,
+                                        self._world,
                                         self.__ruleset,
-                                        BuildFightHandler.MONSTERs,
-                                        self._input_filename)
+                                        BuildFightHandler.MONSTERs)
         build_fight.handle_user_input_until_done()
 
         # Display the last fight on the main screen
@@ -8733,10 +8739,9 @@ class MainHandler(ScreenHandler):
         '''
 
         build_fight = BuildFightHandler(self._window_manager,
-                                        self.__world,
+                                        self._world,
                                         self.__ruleset,
-                                        BuildFightHandler.NPCs,
-                                        self._input_filename)
+                                        BuildFightHandler.NPCs)
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list(self.__current_display) # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
@@ -8750,10 +8755,9 @@ class MainHandler(ScreenHandler):
         '''
 
         build_fight = BuildFightHandler(self._window_manager,
-                                        self.__world,
+                                        self._world,
                                         self.__ruleset,
-                                        BuildFightHandler.PCs,
-                                        self._input_filename)
+                                        BuildFightHandler.PCs)
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list(self.__current_display) # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
@@ -8921,7 +8925,7 @@ class MainHandler(ScreenHandler):
 
     def _draw_screen(self, inverse=False):
         self._window.clear()
-        self._window.status_ribbon(self._input_filename,
+        self._window.status_ribbon(self._world.source_filename,
                                    ScreenHandler.maintainjson)
 
         # MainGmWindow
@@ -9059,8 +9063,8 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        for name in self.__world.get_creatures('PCs'):
-            details = self.__world.get_creature_details(name, 'PCs')
+        for name in self._world.get_creatures('PCs'):
+            details = self._world.get_creature_details(name, 'PCs')
             if details is not None:
                 self.__ruleset.heal_fighter(details)
         self._draw_screen()
@@ -9074,7 +9078,7 @@ class MainHandler(ScreenHandler):
         if item is None:
             return True # Keep going
 
-        character_list = self.__world.get_creatures('PCs')
+        character_list = self._world.get_creatures('PCs')
         character_menu = [(dude, dude) for dude in character_list]
         to_fighter_info = self._window_manager.menu(
                                         'Give "%s" to whom?' % item['name'],
@@ -9123,7 +9127,7 @@ class MainHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
-        world.toggle_saved_on_exit()
+        self._world.toggle_saved_on_exit()
         self._draw_screen()
         return True # Keep going
 
@@ -9170,15 +9174,15 @@ class MainHandler(ScreenHandler):
 
     def __NPC_leaves_PCs(self, throw_away):
         npc_name = self.__chars[self.__char_index].name
-        if npc_name not in self.__world.details['NPCs']:
+        if npc_name not in self._world.details['NPCs']:
             self._window_manager.error(['"%s" not an NPC' % npc_name])
             return True
 
-        if npc_name not in self.__world.details['PCs']:
+        if npc_name not in self._world.details['PCs']:
             self._window_manager.error(['"%s" not in PC list' % npc_name])
             return True
 
-        del(self.__world.details['PCs'][npc_name])
+        del(self._world.details['PCs'][npc_name])
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
         return True
@@ -9283,27 +9287,27 @@ class MainHandler(ScreenHandler):
         '''
         # Ask which monster group to resurrect
         fight_name_menu = []
-        for i, entry in enumerate(self.__world.details['dead-monsters']):
+        for i, entry in enumerate(self._world.details['dead-monsters']):
             fight_name_menu.append((entry['name'], i))
         monster_group_index = self._window_manager.menu('Resurrect Which Fight',
                                                         fight_name_menu)
         if monster_group_index is None:
             return True
 
-        monster_group = self.__world.details['dead-monsters'][
+        monster_group = self._world.details['dead-monsters'][
                                                         monster_group_index]
 
-        if self.__world.get_creatures(monster_group['name']) is not None:
+        if self._world.get_creatures(monster_group['name']) is not None:
             self._window_manager.error(['Fight by name "%s" exists' %
                                                     monster_group['name']])
             return True
 
         # Put fight into regular monster list
-        fights = self.__world.get_fights()
+        fights = self._world.get_fights()
         fights[monster_group['name']] = monster_group['fight']
 
         # Remove fight from dead-monsters
-        del(self.__world.details['dead-monsters'][monster_group_index])
+        del(self._world.details['dead-monsters'][monster_group_index])
         return True
 
 
@@ -9425,7 +9429,7 @@ class MainHandler(ScreenHandler):
             monster_group = self.__current_display
         else:
             fight_name_menu = [(name, name)
-                                       for name in self.__world.get_fights()]
+                                       for name in self._world.get_fights()]
             fight_name_menu = sorted(fight_name_menu,
                                      key=lambda x: x[0].upper())
             monster_group = self._window_manager.menu('Fights',
@@ -9434,10 +9438,9 @@ class MainHandler(ScreenHandler):
                 return True
 
         fight = FightHandler(self._window_manager,
-                             self.__world,
+                             self._world,
                              monster_group,
-                             self.__ruleset,
-                             self._input_filename)
+                             self.__ruleset)
 
         fight.handle_user_input_until_done()
 
@@ -9461,8 +9464,8 @@ class MainHandler(ScreenHandler):
         look_for_re = re.compile(look_for_string)
 
         all_results = []
-        for name in self.__world.get_creatures('PCs'):
-            creature = self.__world.get_creature_details(name, 'PCs')
+        for name in self._world.get_creatures('PCs'):
+            creature = self._world.get_creature_details(name, 'PCs')
             result = self.__ruleset.search_one_creature(name,
                                                         'PCs',
                                                         creature,
@@ -9470,8 +9473,8 @@ class MainHandler(ScreenHandler):
             if result is not None and len(result) > 0:
                 all_results.extend(result)
 
-        for name in self.__world.get_creatures('NPCs'):
-            creature = self.__world.get_creature_details(name, 'NPCs')
+        for name in self._world.get_creatures('NPCs'):
+            creature = self._world.get_creature_details(name, 'NPCs')
             result = self.__ruleset.search_one_creature(name,
                                                         'NPCs',
                                                         creature,
@@ -9479,9 +9482,9 @@ class MainHandler(ScreenHandler):
             if result is not None and len(result) > 0:
                 all_results.extend(result)
 
-        for fight_name in self.__world.get_fights():
-            for name in self.__world.get_creatures(fight_name):
-                creature = self.__world.get_creature_details(name, fight_name)
+        for fight_name in self._world.get_fights():
+            for name in self._world.get_creatures(fight_name):
+                creature = self._world.get_creature_details(name, fight_name)
                 result = self.__ruleset.search_one_creature(name,
                                                             '%s' % fight_name,
                                                             creature,
@@ -9528,7 +9531,7 @@ class MainHandler(ScreenHandler):
                         group=None):
         if group is not None:
             self.__chars = []
-            monsters = self.__world.get_creatures(group)
+            monsters = self._world.get_creatures(group)
             if monsters is not None:
                 the_fight_itself = None
                 for name, details in monsters.iteritems():
@@ -9538,7 +9541,7 @@ class MainHandler(ScreenHandler):
                         fighter = Fighter(
                                     name,
                                     group,
-                                    self.__world.get_creature_details(name,
+                                    self._world.get_creature_details(name,
                                                                       group),
                                     self.__ruleset,
                                     self._window_manager)
@@ -9556,7 +9559,7 @@ class MainHandler(ScreenHandler):
                 #
                 #elif the_fight_itself is None:
                 #    fight =  Fight(group,
-                #                   self.__world.details['fights'][group],
+                #                   self._world.details['fights'][group],
                 #                   self.__ruleset)
 
                 elif the_fight_itself is not None:
@@ -9571,20 +9574,20 @@ class MainHandler(ScreenHandler):
             self.__chars = [
                     Fighter(x,
                             'PCs',
-                            self.__world.get_creature_details(x, 'PCs'),
+                            self._world.get_creature_details(x, 'PCs'),
                             self.__ruleset,
                             self._window_manager)
-                    for x in sorted(self.__world.get_creatures('PCs'))]
+                    for x in sorted(self._world.get_creatures('PCs'))]
 
-            npcs = self.__world.get_creatures('NPCs')
+            npcs = self._world.get_creatures('NPCs')
             if npcs is not None:
                 self.__chars.extend([
                         Fighter(x,
                                 'NPCs',
-                                self.__world.get_creature_details(x, 'NPCs'),
+                                self._world.get_creature_details(x, 'NPCs'),
                                 self.__ruleset,
                                 self._window_manager)
-                        for x in sorted(self.__world.get_creatures('NPCs'))])
+                        for x in sorted(self._world.get_creatures('NPCs'))])
         else:
             pass
 
@@ -9630,7 +9633,7 @@ class MainHandler(ScreenHandler):
         '''
         if self.__current_display is None:
             group_menu = [(group_name, group_name)
-                            for group_name in self.__world.get_fights()]
+                            for group_name in self._world.get_fights()]
             group_menu = sorted(group_menu, key=lambda x: x[0].upper())
             self.__current_display = self._window_manager.menu(
                                                     'Which Monster Group',
@@ -9643,9 +9646,9 @@ class MainHandler(ScreenHandler):
 
         # If this is a monster list, run a consistency check
         #if self.__current_display is not None:
-        #    monsters = self.__world.get_creatures(self.__current_display)
+        #    monsters = self._world.get_creatures(self.__current_display)
         #    for name in monsters:
-        #        creature = self.__world.get_creature_details(
+        #        creature = self._world.get_creature_details(
         #                                                name,
         #                                                self.__current_display)
         #        self.__ruleset.is_creature_consistent(name, creature)
@@ -9906,7 +9909,7 @@ if __name__ == '__main__':
                 window_manager.error(['No "PCs" in %s' % filename])
                 sys.exit(2)
 
-            world = World(campaign, ruleset, window_manager)
+            world = World(filename, campaign, ruleset, window_manager)
 
             # Save the state of things when we leave since there wasn't a
             # horrible crash while reading the data.
@@ -9919,15 +9922,13 @@ if __name__ == '__main__':
                 fight_handler = FightHandler(window_manager,
                                              world,
                                              None,
-                                             ruleset,
-                                             filename)
+                                             ruleset)
                 fight_handler.handle_user_input_until_done()
 
             # Enter into the mainloop
             main_handler = MainHandler(window_manager,
                                        world,
-                                       ruleset,
-                                       filename)
+                                       ruleset)
 
             main_handler.handle_user_input_until_done()
 
