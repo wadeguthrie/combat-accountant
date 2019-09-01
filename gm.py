@@ -41,7 +41,6 @@ import traceback
 #   - Rules-specific equipment support
 #       o Equipping item should ask to add ammo for item
 #       o Equipping item should ask to add skills if they aren't there
-#   - anything with 'RULESET' comment should be moved to the ruleset
 #   - should only be able to ready an unready weapon.
 #   - Allow for markdown in 'notes' and 'short-notes'
 #   - On startup, check each of the characters
@@ -1791,6 +1790,7 @@ class World(object):
         self.__ruleset = ruleset
         self.__window_manager = window_manager
         self.__delete_old_debug_files()
+        self.snapshots = {'startup': self.source_filename}
 
         if save_snapshot:
             self.do_debug_snapshot('startup')
@@ -1812,6 +1812,8 @@ class World(object):
         Saves a copy of the master JSON file to a debug directory.
         '''
 
+        # TODO: do unique numbers if there's already a file with the same name
+
         if tag is None:
             return None
 
@@ -1820,6 +1822,8 @@ class World(object):
                                       timeStamped('debug_json', tag, 'txt'))
         with open(debug_filename, 'w') as f:
             json.dump(self.details, f, indent=2)
+
+        self.snapshots[tag] = debug_filename
 
         return debug_filename
 
@@ -6536,11 +6540,17 @@ class ScreenHandler(object):
                     'Bug Report',
                     '^G to exit')
 
+        self._world.do_debug_snapshot('bug')
+
         bug_report = {
-            'world'   : self._world.source_filename,
-            'history' : self._saved_fight['history'],
-            'report'  : report
+            'world'     : self._world.source_filename,
+            'history'   : self._saved_fight['history'],
+            'report'    : report,
+            'snapshots' : []
         }
+
+        for tag in self._world.snapshots.iterkeys():
+            bug_report['snapshots'].append(self._world.snapshots[tag])
 
         bug_report_json = timeStamped('bug_report', None, 'txt')
         with open(bug_report_json, 'w') as f:
@@ -7287,7 +7297,7 @@ class FightHandler(ScreenHandler):
             ord('P'): {'name': 'promote to NPC',
                                               'func': self.promote_to_NPC},
             ord('q'): {'name': 'quit',        'func': self.__quit},
-            ord('s'): {'name': 'save',        'func': self.__save},
+            #ord('s'): {'name': 'save',        'func': self.__save},
             ord('t'): {'name': 'timer',       'func': self.__timer},
             ord('T'): {'name': 'Timer cancel','func': self.__timer_cancel},
         })
@@ -8339,21 +8349,21 @@ class FightHandler(ScreenHandler):
         return self.__notes('short-notes')
 
 
-    def __save(self):
-        '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        self._saved_fight['saved'] = True
-        self.__keep_monsters = False # Don't move monsters to dead after fight
-        next_PC_name = self.__next_PC_name()
-        self._window.round_ribbon(self._saved_fight['round'],
-                                  self._saved_fight['saved'],
-                                  self.__keep_monsters,
-                                  next_PC_name,
-                                  self._world.source_filename,
-                                  ScreenHandler.maintainjson)
-        return True # Keep going
+    #def __save(self):
+    #    '''
+    #    Command ribbon method.
+    #    Returns: False to exit the current ScreenHandler, True to stay.
+    #    '''
+    #    self._saved_fight['saved'] = True
+    #    self.__keep_monsters = False # Don't move monsters to dead after fight
+    #    next_PC_name = self.__next_PC_name()
+    #    self._window.round_ribbon(self._saved_fight['round'],
+    #                              self._saved_fight['saved'],
+    #                              self.__keep_monsters,
+    #                              next_PC_name,
+    #                              self._world.source_filename,
+    #                              ScreenHandler.maintainjson)
+    #    return True # Keep going
 
 
     def __select_fighter(self,
