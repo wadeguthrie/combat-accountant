@@ -212,8 +212,6 @@ class MockFightGmWindow(MockGmWindow):
 
     def round_ribbon(self,
                      fight_round,
-                     saved,
-                     keep_monsters,
                      next_PC_name,
                      input_filename,
                      maintain_json):
@@ -316,17 +314,28 @@ class MockWindowManager(object):
             assert False
 
         # FIFO queue
-        result = self.__menu_responses[title].pop(0)
+        menu_result = self.__menu_responses[title].pop(0)
+
+        if isinstance(menu_result, dict):
+            while 'menu' in menu_result:
+                menu_result = self.menu('Which', menu_result['menu'])
+                if menu_result is None: # Bail out regardless of nesting level
+                    return None         # Keep going
+
+            if 'doit' in menu_result and menu_result['doit'] is not None:
+                param = (None if 'param' not in menu_result 
+                              else menu_result['param'])
+                menu_result = (menu_result['doit'])(param)
 
         ### (Debugging Block ###
         # print '\nmenu: title: %s, returning:' % title,
-        # PP.pprint(result)
+        # PP.pprint(menu_result)
         # print '  gives us a response queue of:'
         # print '    ',
         # PP.pprint(self.__menu_responses)
         ### Debugging Block) ###
 
-        return result
+        return menu_result
 
     def set_input_box_response(self,
                                title,
@@ -3264,10 +3273,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         assert "Dima's Crew" in world_data.read_data['fights']
         assert not self.__is_in_dead_monsters(world_data, "Dima's Crew")
-        assert world_data.read_data['current-fight']['saved'] == False
+        #assert world_data.read_data['current-fight']['saved'] == False
 
         self.__window_manager.set_char_response(ord('q'))
-        self.__window_manager.set_menu_response('Leaving Fight', {'doit':None})
+        self.__window_manager.set_menu_response('Leaving Fight', False)
 
         fight_handler.handle_user_input_until_done()
                                      
@@ -3298,12 +3307,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         assert "Dima's Crew" in world_data.read_data['fights']
         assert not self.__is_in_dead_monsters(world_data, "Dima's Crew")
-        assert world_data.read_data['current-fight']['saved'] == False
+        #assert world_data.read_data['current-fight']['saved'] == False
 
         self.__window_manager.set_char_response(ord('q'))
         self.__window_manager.set_menu_response(
-                    'Leaving Fight', {'doit': fight_handler.simply_save})
-        self.__window_manager.set_menu_response('Leaving Fight', {'doit':None})
+                    'Leaving Fight', {'doit': fight_handler.save_fight})
+        self.__window_manager.set_menu_response('Leaving Fight', False)
 
 
         fight_handler.handle_user_input_until_done()
@@ -3334,12 +3343,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         assert "Dima's Crew" in world_data.read_data['fights']
         assert not self.__is_in_dead_monsters(world_data, "Dima's Crew")
-        assert world_data.read_data['current-fight']['saved'] == False
+        #assert world_data.read_data['current-fight']['saved'] == False
 
-        # It's a stack so I'm putting things in reverse order
         self.__window_manager.set_char_response(ord('q'))
-        self.__window_manager.set_char_response(ord('k'))
-        self.__window_manager.set_menu_response('Leaving Fight', {'doit':None})
+        self.__window_manager.set_menu_response(
+                    'Leaving Fight', {'doit': fight_handler.keep_fight})
+        self.__window_manager.set_menu_response('Leaving Fight', False)
 
         fight_handler.handle_user_input_until_done()
                                      
