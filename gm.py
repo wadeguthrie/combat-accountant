@@ -96,9 +96,11 @@ class GmJson(object):
                         self.__window_manager.error(error_array)
 
         except:
-            if self.__window_manager is not None:
-                self.__window_manager.error(['Could not read JSON file "%s"' %
-                                                self.__filename])
+            message = 'Could not read JSON file "%s"' % self.__filename
+            if self.__window_manager is None:
+                print message
+            else:
+                self.__window_manager.error([message])
             self.read_data = None
         return self
 
@@ -1817,7 +1819,7 @@ class World(object):
 
         # Save the current JSON for debugging, later
         debug_filename = os.path.join(World.debug_directory,
-                                      timeStamped('debug_json', tag, 'txt'))
+                                      timeStamped('debug_json', tag, 'json'))
         with open(debug_filename, 'w') as f:
             json.dump(self.details, f, indent=2)
 
@@ -3023,10 +3025,6 @@ class Ruleset(object):
                              'fight_handler': fight_handler})
             handled = True
 
-        elif action['name'] == 'set-consciousness':
-            fighter.set_consciousness(action['level'])
-            handled = True
-
         elif action['name'] == 'user-defined':
             self._do_custom_action(action)
             handled = True
@@ -3041,6 +3039,15 @@ class Ruleset(object):
                              'armor': action['armor-index']})
             handled = True
 
+        elif action['name'] == 'end-turn': # or doff armor
+            fighter.end_turn()
+            fight_handler.modify_index(1)
+            handled = True
+
+        elif action['name'] == 'start-turn': # or doff armor
+            fighter.start_turn()
+            handled = True
+
         elif action['name'] == 'pick-opponent':
             fighter.details['opponent'] = {'group': action['opponent-group'],
                                            'name': action['opponent-name']}
@@ -3049,6 +3056,10 @@ class Ruleset(object):
         elif action['name'] == 'reload':
             quiet = False if 'quiet' not in action else action['quiet']
             self._do_reload(fighter, quiet)
+            handled = True
+
+        elif action['name'] == 'set-consciousness':
+            fighter.set_consciousness(action['level'])
             handled = True
 
         elif action['name'] == 'use-item':
@@ -4365,12 +4376,13 @@ class GurpsRuleset(Ruleset):
     # Public Methods
     #
 
-
     def can_finish_turn(self,
                         fighter # Fighter object
                        ):
-        if len(fighter.details['actions_this_turn']) > 0:
-            return True
+
+        for action in fighter.details['actions_this_turn']:
+            if action != 'start-turn':
+                return True
 
         if not fighter.is_conscious():
             return True
@@ -6544,13 +6556,11 @@ class ScreenHandler(object):
             'world'     : self._world.source_filename,
             'history'   : self._saved_fight['history'],
             'report'    : report,
-            'snapshots' : []
+            'snapshots' : self._world.snapshots
         }
 
-        for tag in self._world.snapshots.iterkeys():
-            bug_report['snapshots'].append(self._world.snapshots[tag])
 
-        bug_report_json = timeStamped('bug_report', None, 'txt')
+        bug_report_json = timeStamped('bug_report', None, 'json')
         with open(bug_report_json, 'w') as f:
             json.dump(bug_report, f, indent=2)
 
@@ -7254,6 +7264,7 @@ class FightHandler(ScreenHandler):
                  world,                 # World object
                  monster_group,         # string
                  ruleset,               # Ruleset object
+                 playback_history,      # dict from bug report (usually None)
                  save_snapshot = True   # Here so tests can disable it
                 ):
         super(FightHandler, self).__init__(window_manager, world)
@@ -7262,6 +7273,7 @@ class FightHandler(ScreenHandler):
         self.__keep_monsters = False # Move monsters to 'dead' after fight
         self.__equipment_manager = EquipmentManager(self._world,
                                                     self._window_manager)
+        self.__saved_history = None
 
         self._add_to_choice_dict({
             curses.KEY_UP:
@@ -7300,6 +7312,12 @@ class FightHandler(ScreenHandler):
             ord('T'): {'name': 'Timer cancel','func': self.__timer_cancel},
         })
 
+        if playback_history is not None:
+            self._add_to_choice_dict({
+                                ord('H'): {'name': 'History playback',
+                                           'func': self.__playback_history}
+                                    })
+
         self._add_to_choice_dict( self.__ruleset.get_fight_commands(self) )
         self._window = self._window_manager.get_fight_gm_window(self.__ruleset,
                                                                 self._choices)
@@ -7319,76 +7337,27 @@ class FightHandler(ScreenHandler):
         # TODO: keep the fighter objects for the PCs and NPCs in the World
         #   object .
 
-        # Do the debug file snapshot before anything in the JSON file data is
-        # changed.
-
         if self._saved_fight['saved']:
+            if save_snapshot:   # True, except for tests
+                self._world.do_debug_snapshot('fight')
             monster_group = self._saved_fight['monsters']
 
-        # Now we can go off and change the JSON file data
+            if playback_history is not None:
+                # Make a copy of the history so I can play it back
+                self.__saved_history = playback_history
 
-        if self._saved_fight['saved']:
-            if save_snapshot:
-                self._world.do_debug_snapshot('fight-%s' % monster_group)
+                # Clean out the history so we can start over
+                self.clear_history()
+
         else:
             self.clear_history()
-            # Allowed add_to_history.
             self.add_to_history({'comment': '--- Round 0 ---'})
 
             self._saved_fight['round'] = 0
             self._saved_fight['index'] = 0
             self._saved_fight['monsters'] = monster_group
 
-        # Rebuild the fighter list (even if the fight was saved since monsters
-        # or characters could have been added since the save happened).
-
-        self.__fighters = [] # This is a parallel array to
-                             # self._saved_fight['fighters'] but the contents
-                             # are: {'group': <groupname>,
-                             #       'info': <Fighter object>}
-
-        for name in self._world.get_creatures('PCs'):
-            details = self._world.get_creature_details(name, 'PCs')
-            if details is not None:
-                fighter = Fighter(name,
-                                  'PCs',
-                                  details,
-                                  self.__ruleset,
-                                  self._window_manager)
-                self.__fighters.append(fighter)
-
-        the_fight_itself = None
-        if monster_group is not None:
-            for name in self._world.get_creatures(monster_group):
-                details = self._world.get_creature_details(name,
-                                                            monster_group)
-                if details is None:
-                    continue
-
-                if name == Fight.name:
-                    the_fight_itself = details
-                else:
-                    fighter = Fighter(name,
-                                      monster_group,
-                                      details,
-                                      self.__ruleset,
-                                      self._window_manager)
-                    self.__fighters.append(fighter)
-
-        # Sort by initiative = basic-speed followed by DEX followed by
-        # random
-        self.__fighters.sort(
-                key=lambda fighter:
-                    self.__ruleset.initiative(fighter), reverse=True)
-
-        # Put the fight info (if any) at the top of the list.
-        if the_fight_itself is not None:
-            fight = Fight(monster_group,
-                          the_fight_itself,
-                          self.__ruleset,
-                          self._window_manager)
-
-            self.__fighters.insert(0, fight)
+        self.__build_fighter_list(monster_group)
 
         # Copy the fighter information into the saved_fight.  Also, make
         # sure this looks like a _NEW_ fight.
@@ -7405,21 +7374,26 @@ class FightHandler(ScreenHandler):
                 if details is not None:
                     self.__ruleset.is_creature_consistent(name, details)
 
+        # TODO: I may want to take the snapshot here instead of below
+
         if not self.should_we_show_current_fighter():
             self.modify_index(1)
 
         first_fighter = self.get_current_fighter()
         first_fighter.start_turn()
 
-        if save_snapshot:
-            # This will do the debug snapshot in a way that it'll come
-            # right to the fight when started.
-            self._world.do_debug_snapshot('fight-%s' % monster_group)
+        # Save a snapshot -- if the fight is saved or there's a crash, we'll
+        # end up right back here.
 
         # Save the fight so that debugging a crash will come back to the
         # fight.  We'll unsave the fight right at the end and let the user
         # decide whether to save it for real on exit.
         self._saved_fight['saved'] = True
+
+        if save_snapshot:
+            # This will do the debug snapshot in a way that it'll come
+            # right to the fight when started.
+            self._world.do_debug_snapshot('fight-%s' % monster_group)
 
         self._window.start_fight()
 
@@ -7569,11 +7543,9 @@ class FightHandler(ScreenHandler):
             if current_fighter.name == Fight.name:
                 pass
             elif current_fighter.is_dead():
-                # Allowed add_to_history
                 self.add_to_history({'comment': ' (%s) did nothing (dead)' %
                                                         current_fighter.name})
             elif current_fighter.is_absent():
-                # Allowed add_to_history.
                 self.add_to_history({'comment': ' (%s) did nothing (absent)' %
                                                         current_fighter.name})
 
@@ -7591,7 +7563,6 @@ class FightHandler(ScreenHandler):
                 keep_going = False
 
         if round_before != self._saved_fight['round']:
-            # Allowed add_to_history.
             self.add_to_history({'comment': '--- Round %d ---' %
                                                 self._saved_fight['round']})
 
@@ -7774,6 +7745,62 @@ class FightHandler(ScreenHandler):
     #
     # Private Methods
     #
+
+    def __build_fighter_list(self,
+                             monster_group  # String
+                            ):
+
+        # Build the fighter list (even if the fight was saved since monsters
+        # or characters could have been added since the save happened).
+
+        self.__fighters = [] # This is a parallel array to
+                             # self._saved_fight['fighters'] but the contents
+                             # are: {'group': <groupname>,
+                             #       'info': <Fighter object>}
+
+        for name in self._world.get_creatures('PCs'):
+            details = self._world.get_creature_details(name, 'PCs')
+            if details is not None:
+                fighter = Fighter(name,
+                                  'PCs',
+                                  details,
+                                  self.__ruleset,
+                                  self._window_manager)
+                self.__fighters.append(fighter)
+
+        the_fight_itself = None
+        if monster_group is not None:
+            for name in self._world.get_creatures(monster_group):
+                details = self._world.get_creature_details(name,
+                                                            monster_group)
+                if details is None:
+                    continue
+
+                if name == Fight.name:
+                    the_fight_itself = details
+                else:
+                    fighter = Fighter(name,
+                                      monster_group,
+                                      details,
+                                      self.__ruleset,
+                                      self._window_manager)
+                    self.__fighters.append(fighter)
+
+        # Sort by initiative = basic-speed followed by DEX followed by
+        # random
+        self.__fighters.sort(
+                key=lambda fighter:
+                    self.__ruleset.initiative(fighter), reverse=True)
+
+        # Put the fight info (if any) at the top of the list.
+        if the_fight_itself is not None:
+            fight = Fight(monster_group,
+                          the_fight_itself,
+                          self.__ruleset,
+                          self._window_manager)
+
+            self.__fighters.insert(0, fight)
+
 
     def __change_viewing_index(self,
                                adj  # integer adjustment to viewing index
@@ -8182,16 +8209,20 @@ class FightHandler(ScreenHandler):
         if not prev_fighter.can_finish_turn():
             return self.__maneuver()
         elif not prev_fighter.is_conscious():
-            # Allowed add_to_history.
             self.add_to_history({'comment': '(%s) did nothing (unconscious)' %
                                                     prev_fighter.name})
 
-        prev_fighter.end_turn()
-
-        # Start the new guy
-        self.modify_index(1)
+        self.__ruleset.do_action(prev_fighter,
+                                 {'name': 'end-turn',
+                                  'fighter': prev_fighter.name,
+                                  'group': prev_fighter.group},
+                                 self)
         current_fighter = self.get_current_fighter()
-        current_fighter.start_turn()
+        self.__ruleset.do_action(current_fighter,
+                                 {'name': 'start-turn',
+                                  'fighter': current_fighter.name,
+                                  'group': current_fighter.group},
+                                 self)
 
         # Show all the displays
         next_PC_name = self.__next_PC_name()
@@ -8263,6 +8294,29 @@ class FightHandler(ScreenHandler):
                                    self.__fighters,
                                    self._saved_fight['index'],
                                    self.__viewing_index)
+        return True # Keep going
+
+
+    def __playback_history(self):
+        next_fighter = self.get_current_fighter()
+        for action in self.__saved_history:
+            current_fighter = next_fighter
+            self.__ruleset.do_action(current_fighter, action, self)
+            next_fighter = self.get_current_fighter()
+            if next_fighter != current_fighter:
+                # Update the display
+                next_PC_name = self.__next_PC_name()
+                self._window.round_ribbon(self._saved_fight['round'],
+                                          next_PC_name,
+                                          self._world.source_filename,
+                                          ScreenHandler.maintainjson)
+
+                opponent = self.get_opponent_for(next_fighter)
+                self._window.show_fighters(next_fighter,
+                                           opponent,
+                                           self.__fighters,
+                                           self._saved_fight['index'],
+                                           self.__viewing_index)
         return True # Keep going
 
 
@@ -9872,6 +9926,8 @@ if __name__ == '__main__':
              help='Don\'t overwrite the input JSON.  Only for debugging.',
              action='store_true',
              default=False)
+    parser.add_argument('-p', '--playback',
+             help='Play the saved history back.  Only for debugging.')
 
     ARGS = parser.parse_args()
 
@@ -9879,6 +9935,7 @@ if __name__ == '__main__':
     # sys.exit(2)
 
     PP = pprint.PrettyPrinter(indent=3, width=150)
+    playback_history = None
 
     with GmWindowManager() as window_manager:
         ruleset = GurpsRuleset(window_manager)
@@ -9887,29 +9944,34 @@ if __name__ == '__main__':
         # NOTE: When other things find their way into the prefs, the scope
         # of the read_prefs GmJson will have to be larger
         prefs = {}
-        with GmJson('gm.txt') as read_prefs:
-            prefs = read_prefs.read_data
+        if ARGS.playback is not None:
+            with GmJson(ARGS.playback) as bug_report:
+                filename = bug_report.read_data['snapshots']['fight']
+                playback_history = bug_report.read_data['history']
+        else:
+            with GmJson('gm.json') as read_prefs:
+                prefs = read_prefs.read_data
 
-            # Get the Campaign's Name
-            filename = ARGS.filename
-            if filename is not None:
-                read_prefs.write_data = prefs
-                prefs['campaign'] = filename
+                # Get the Campaign's Name
+                filename = ARGS.filename
+                if filename is not None:
+                    read_prefs.write_data = prefs
+                    prefs['campaign'] = filename
 
-            elif 'campaign' in prefs:
-                filename = prefs['campaign']
+                elif 'campaign' in prefs:
+                    filename = prefs['campaign']
 
-            if filename is None:
-                filename_menu = [
-                    (x, x) for x in os.listdir('.') if x.endswith('.json')]
-
-                filename = window_manager.menu('Which File', filename_menu)
                 if filename is None:
-                    window_manager.error(['Need to specify a JSON file'])
-                    sys.exit(2)
+                    filename_menu = [
+                        (x, x) for x in os.listdir('.') if x.endswith('.json')]
 
-                read_prefs.write_data = prefs
-                prefs['campaign'] = filename
+                    filename = window_manager.menu('Which File', filename_menu)
+                    if filename is None:
+                        window_manager.error(['Need to specify a JSON file'])
+                        sys.exit(2)
+
+                    read_prefs.write_data = prefs
+                    prefs['campaign'] = filename
 
         # Read the Campaign Data
         with GmJson(filename, window_manager) as campaign:
@@ -9936,7 +9998,8 @@ if __name__ == '__main__':
                 fight_handler = FightHandler(window_manager,
                                              world,
                                              None,
-                                             ruleset)
+                                             ruleset,
+                                             playback_history)
                 fight_handler.handle_user_input_until_done()
 
             # Enter into the mainloop
