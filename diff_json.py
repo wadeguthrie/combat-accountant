@@ -109,6 +109,7 @@ class GmJson(object):
 def are_equal(lhs, rhs):
     if isinstance(lhs, dict):
         if not isinstance(rhs, dict):
+            print '\n---------------------'
             print '** lhs is a dict but rhs is not'
             print '\nlhs'
             PP.pprint(lhs)
@@ -117,6 +118,7 @@ def are_equal(lhs, rhs):
             return False
         for key in rhs.iterkeys():
             if key not in lhs:
+                print '\n---------------------'
                 print '** KEY "%s" not in lhs' % key
                 print '\nlhs'
                 PP.pprint(lhs)
@@ -126,6 +128,7 @@ def are_equal(lhs, rhs):
         result = True
         for key in lhs.iterkeys():
             if key not in rhs:
+                print '\n---------------------'
                 print '** KEY "%s" not in rhs' % key
                 print '\nlhs'
                 PP.pprint(lhs)
@@ -133,7 +136,7 @@ def are_equal(lhs, rhs):
                 PP.pprint(rhs)
                 result = False
             elif not are_equal(lhs[key], rhs[key]):
-                print 'lhs[%r] != rhs[%r]' % (key, key)
+                print '\nSo, lhs[%r] != rhs[%r]' % (key, key)
                 print '\nlhs'
                 PP.pprint(lhs)
                 print '\nrhs'
@@ -143,6 +146,7 @@ def are_equal(lhs, rhs):
             
     elif isinstance(lhs, list):
         if not isinstance(rhs, list):
+            print '\n---------------------'
             print '** lhs is a list but rhs is not'
             print '\nlhs'
             PP.pprint(lhs)
@@ -150,6 +154,7 @@ def are_equal(lhs, rhs):
             PP.pprint(rhs)
             return False
         if len(lhs) != len(rhs):
+            print '\n---------------------'
             print '** length lhs=%d != len rhs=%d' % (len(lhs), len(rhs))
             print '\nlhs'
             PP.pprint(lhs)
@@ -159,7 +164,7 @@ def are_equal(lhs, rhs):
         result = True
         for i in range(len(lhs)):
             if not are_equal(lhs[i], rhs[i]):
-                print '** lhs[%d] != rhs[%d]' % (i, i)
+                print '\nSo, lhs[%d] != rhs[%d]' % (i, i)
                 print '\nlhs'
                 PP.pprint(lhs)
                 print '\nrhs'
@@ -169,6 +174,7 @@ def are_equal(lhs, rhs):
 
     else:
         if lhs != rhs:
+            print '\n---------------------'
             print '** lhs=%r != rhs=%r' % (lhs, rhs)
             print '\nlhs'
             PP.pprint(lhs)
