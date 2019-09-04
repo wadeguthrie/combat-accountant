@@ -4436,60 +4436,34 @@ class GurpsRuleset(Ruleset):
         if 'name' not in action:
             return # It's just a comment
 
-        if action['name'] == 'adjust-fp':
-            # Done
-            self._do_adjust_fp(fighter, action, fight_handler)
+        actions = {
+            'adjust-fp':       {'doit': self._do_adjust_fp,   'time': 0},
+            'aim':             {'doit': self._do_aim,         'time': 0.9},
+            'cast-spell':      {'doit': self._cast_spell,     'time': 0.9},
+            'change-posture':  {'doit': self._change_posture, 'time': 0.9},
+            'concentrate':     {'doit': None,                 'time': 0.9},
+            'defend':          {'doit': self._do_defense,     'time': 0.9},
+            'evaluate':        {'doit': None,                 'time': 0.9},
+            'feint':           {'doit': None,                 'time': 0.9},
+            'move':            {'doit': None,                 'time': 0.9},
+            'move-and-attack': {'doit': self._do_attack,      'time': 0.9},
+            'nothing':         {'doit': None,                 'time': 0.9},
+            'pick-opponent':   {'doit': self.reset_aim,       'time': 0},
+            'stun':            {'doit': self.__stun_action,   'time': 0},
+        }
+
+        if action['name'] in actions:
+            action_info = actions[action['name']]
+            if action_info['doit'] is not None:
+                action_info['doit'](fighter, action, fight_handler)
             handled = True
 
-        elif action['name'] == 'aim':
-            # Done
-            self._do_aim(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'cast-spell':
-            # Done
-            self._cast_spell(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'change-posture':
-            # Done
-            self._change_posture(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'concentrate':
-            handled = True # This is here just so that it's logged
-
-        elif action['name'] == 'defend':
-            # Done
-            self._do_defense(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'evaluate':
-            handled = True # This is here just so that it's logged
-
-        elif action['name'] == 'feint':
-            handled = True # This is here just so that it's logged
-        
-        elif action['name'] == 'move':
-            handled = True # This is here just so that it's logged
-
-        elif action['name'] == 'move-and-attack':
-            # Done
-            self._do_attack(fighter, action, fight_handler)
-            handled = True # This is here just so that it's logged
-
-        elif action['name'] == 'nothing':
-            handled = True # This is here just so that it's logged
-
-        elif action['name'] == 'pick-opponent':
-            # Done
-            self.reset_aim(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'stun':
-            # Done
-            self.__stun_action(fighter, action, fight_handler)
-            handled = True
+            # TODO: figure out how to get maneuver['text'] into the action
+            #if logit and action_info['time'] > 0:
+            #    timer = Timer(None)
+            #    text = '' if 'text' not in action else action['text']
+            #    timer.from_pieces(fighter.name, action_info['time'], text)
+            #    fighter.timers.add(timer)
 
         # TODO: put this in Ruleset as post_action_accounting()
         if handled:
