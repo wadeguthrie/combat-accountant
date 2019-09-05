@@ -3142,7 +3142,7 @@ class Ruleset(object):
         ### Attack ###
 
 
-        # RULESET: All of the 'text', below, is GurpsRuleset-based
+        # RULESET: All of the 'text', above and below, is GurpsRuleset-based
         move = fighter.details['current']['basic-move']
 
         if holding_ranged:
@@ -3450,7 +3450,6 @@ class Ruleset(object):
         Returns: Nothing, return values for these functions are ignored.
         '''
         param['fighter'].don_armor_by_index(param['armor'])
-        return None if 'text' not in param else param
 
 
     def _draw_weapon(self,
@@ -3461,7 +3460,6 @@ class Ruleset(object):
         Returns: Nothing, return values for these functions are ignored.
         '''
         param['fighter'].draw_weapon_by_index(param['weapon'])
-        return
 
 
     def _use_item(self,
@@ -6101,7 +6099,7 @@ class GurpsRuleset(Ruleset):
     def _cast_spell(self,
                     fighter,      # Fighter object
                     action,       # {'name': <action>,
-                                  #  'spell': <index in 'spells'>, ...
+                                  #  'spell-index': <index in 'spells'>, ...
                     fight_handler # FightHandler object
                    ):
         '''
@@ -6109,7 +6107,7 @@ class GurpsRuleset(Ruleset):
         Returns: Nothing, return values for these functions are ignored.
         '''
 
-        spell_index = action['spell']
+        spell_index = action['spell-index']
         spell = fighter.details['spells'][spell_index]
 
         if spell['name'] not in GurpsRuleset.spells:
@@ -6218,8 +6216,6 @@ class GurpsRuleset(Ruleset):
                         'SPELL "%s" AGAINST ME' % complete_spell['name'])
                 delay_timer.details['actions']['timer'] = spell_timer.details
                 opponent.timers.add(delay_timer)
-
-        return None if 'text' not in param else param
 
 
     def _change_posture(self,
@@ -9460,7 +9456,6 @@ class MainHandler(ScreenHandler):
 
             keep_asking = self._window_manager.menu(('Add More %s' % param),
                                                     keep_asking_menu)
-        return None if 'text' not in param else param
 
 
     def __ruleset_ability_rm(self,
@@ -9517,7 +9512,8 @@ class MainHandler(ScreenHandler):
         fight = FightHandler(self._window_manager,
                              self._world,
                              monster_group,
-                             self.__ruleset)
+                             self.__ruleset,
+                             None)  # Playback history
 
         fight.handle_user_input_until_done()
 
@@ -9784,8 +9780,7 @@ class EquipmentManager(object):
         if ('notes' in item and item['notes'] is not None and
                                                 (len(item['notes']) > 0)):
             texts.append(': %s' % item['notes'])
-        char_detail.append([{'text': ''.join(texts),
-                             'mode': mode}])
+        char_detail.append([{'text': ''.join(texts), 'mode': mode}])
 
         if item['type'] == 'ranged weapon':
             texts = []
