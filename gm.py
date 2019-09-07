@@ -3011,60 +3011,31 @@ class Ruleset(object):
         weapons and such.
         '''
 
-        # Actions
+        actions = {
+            'adjust-hp':            {'doit': self._adjust_hp},
+            'all-out-attack':       {'doit': self.__do_attack}, # TODO: aim?
+            'attack':               {'doit': self.__do_attack}, # TODO: aim?
+            'don-armor':            {'doit': self.__don_armor}, # TODO: aim?
+            'draw-weapon':          {'doit': self.__draw_weapon},
+            'end-turn':             {'doit': self.__end_turn},
+            'pick-opponent':        {'doit': self.__pick_opponent},
+            'reload':               {'doit': self.__do_reload}, # TODO: aim?
+            'set-consciousness':    {'doit':
+                                     self.__set_consciousness}, # TODO: aim?
+            'start-turn':           {'doit': self.__start_turn},
+            'use-item':             {'doit': self.__use_item},
+            'user-defined':         {'doit': self.__do_custom_action},
+        }
 
         handled = False
-
-        if 'name' not in action:
-            handled = True # It's just a comment, ignore (but mark it 'handled')
-
-        elif action['name'] == 'adjust-hp':
-            self._adjust_hp(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'attack' or action['name'] == 'all-out-attack':
-            # TODO: shouldn't this disturb aim in child class?
-            self.__do_attack(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'user-defined':
-            self._do_custom_action(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'draw-weapon':
-            self.__draw_weapon(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'don-armor': # or doff armor
-            # TODO: shouldn't this disturb aim in child class?
-            self.__don_armor(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'end-turn': # or doff armor
-            self.__end_turn(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'start-turn': # or doff armor
-            self.__start_turn(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'pick-opponent':
-            self.__pick_opponent(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'reload':
-            # TODO: shouldn't this disturb aim in child class?
-            self.__do_reload(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'set-consciousness':
-            # TODO: shouldn't this disturb aim in child class?
-            self.__set_consciousness(fighter, action, fight_handler)
-            handled = True
-
-        elif action['name'] == 'use-item':
-            self.__use_item(fighter, action, fight_handler)
-            handled = True
+        if 'name' in action:
+            if action['name'] in actions:
+                action_info = actions[action['name']]
+                if action_info['doit'] is not None:
+                    action_info['doit'](fighter, action, fight_handler)
+                handled = True
+        else:
+            handled = True  # It's just a comment, ignore (mark it 'handled')
 
         if fight_handler is not None and logit:
             fight_handler.add_to_history(action)
@@ -3407,11 +3378,11 @@ class Ruleset(object):
         return
 
 
-    def _do_custom_action(self,
-                          fighter,          # Fighter object
-                          action,           # {'name': <action>, parameters...}
-                          fight_handler,    # FightHandler object
-                         ):
+    def __do_custom_action(self,
+                           fighter,          # Fighter object
+                           action,           # {'name': <action>, parameters...}
+                           fight_handler,    # FightHandler object
+                          ):
         height = 1
         title = 'What Action Is Performed'
         width = self._window_manager.getmaxyx()
