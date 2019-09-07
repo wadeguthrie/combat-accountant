@@ -3011,35 +3011,28 @@ class Ruleset(object):
         weapons and such.
         '''
 
-        # Actions
+        '''
+        quiet = False if 'quiet' not in action else action['quiet']
 
-        handled = False
-
-        if 'name' not in action:
-            handled = True # It's just a comment, ignore (but mark it 'handled')
+        actions = {
+            'adjust-fp':       {'doit': self.__do_adjust_fp,   'time': 0},
 
         elif action['name'] == 'adjust-hp':
-            quiet = False if 'quiet' not in action else action['quiet']
             self._adjust_hp(fighter, action['adj'], quiet)
-            handled = True
 
         elif action['name'] == 'attack' or action['name'] == 'all-out-attack':
-            self._do_attack(fighter, action, fight_handler)
-            handled = True
+            self.__do_attack(fighter, action, fight_handler)
 
         elif action['name'] == 'user-defined':
             self._do_custom_action(action)
-            handled = True
 
         elif action['name'] == 'draw-weapon':
             self._draw_weapon({'fighter': fighter,
                                'weapon':  action['weapon-index']})
-            handled = True
 
         elif action['name'] == 'don-armor': # or doff armor
             self._don_armor({'fighter': fighter,
                              'armor': action['armor-index']})
-            handled = True
 
         elif action['name'] == 'end-turn': # or doff armor
             fighter.end_turn()
@@ -3056,11 +3049,79 @@ class Ruleset(object):
             handled = True
 
         elif action['name'] == 'reload':
+            self._do_reload(fighter, quiet)
+
+        elif action['name'] == 'set-consciousness':
+            fighter.set_consciousness(action['level'])
+
+        elif action['name'] == 'use-item':
+            self._use_item({'fighter': fighter,
+                            'item': action['item-index']})
+        '''
+
+        # Actions
+
+        handled = False
+        quiet = False if 'quiet' not in action else action['quiet']
+
+        if 'name' not in action:
+            handled = True # It's just a comment, ignore (but mark it 'handled')
+
+        elif action['name'] == 'adjust-hp':
+            self._adjust_hp(fighter, action, fight_handler, quiet)
+            
+                   #quiet = False    # Boolean (whether to ask/tell the user
+                   #                 #   anything)
+
+
+
+
+            handled = True
+
+        elif action['name'] == 'attack' or action['name'] == 'all-out-attack':
+            # TODO: shouldn't this disturb aim in child class?
+            self.__do_attack(fighter, action, fight_handler)
+            handled = True
+
+        elif action['name'] == 'user-defined':
+            self._do_custom_action(action)
+            handled = True
+
+        elif action['name'] == 'draw-weapon':
+            # TODO: shouldn't this disturb aim in child class?
+            self._draw_weapon({'fighter': fighter,
+                               'weapon':  action['weapon-index']})
+            handled = True
+
+        elif action['name'] == 'don-armor': # or doff armor
+            # TODO: shouldn't this disturb aim in child class?
+            self._don_armor({'fighter': fighter,
+                             'armor': action['armor-index']})
+            handled = True
+
+        elif action['name'] == 'end-turn': # or doff armor
+            fighter.end_turn()
+            fight_handler.modify_index(1)
+            handled = True
+
+        elif action['name'] == 'start-turn': # or doff armor
+            fighter.start_turn()
+            handled = True
+
+        elif action['name'] == 'pick-opponent':
+            # TODO: shouldn't this disturb aim in child class?
+            fighter.details['opponent'] = {'group': action['opponent-group'],
+                                           'name': action['opponent-name']}
+            handled = True
+
+        elif action['name'] == 'reload':
+            # TODO: shouldn't this disturb aim in child class?
             quiet = False if 'quiet' not in action else action['quiet']
             self._do_reload(fighter, quiet)
             handled = True
 
         elif action['name'] == 'set-consciousness':
+            # TODO: shouldn't this disturb aim in child class?
             fighter.set_consciousness(action['level'])
             handled = True
 
@@ -3381,19 +3442,20 @@ class Ruleset(object):
 
 
     def _adjust_hp(self,
-                   fighter,         # Fighter object
-                   adj,             # the number of HP to gain or lose
-                   quiet = False    # Boolean (whether to ask/tell the user
-                                    #   anything)
-                  ):
-        fighter.details['current']['hp'] += adj
-
-
-    def _do_attack(self,
                    fighter,          # Fighter object
                    action,           # {'name': <action>, parameters...}
-                   fight_handler     # FightHandler object
+                   fight_handler,    # FightHandler object
+                   quiet
                   ):
+                  
+        fighter.details['current']['hp'] += action['adj']
+
+
+    def __do_attack(self,
+                    fighter,          # Fighter object
+                    action,           # {'name': <action>, parameters...}
+                    fight_handler     # FightHandler object
+                   ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -4435,18 +4497,18 @@ class GurpsRuleset(Ruleset):
             return # It's just a comment
 
         actions = {
-            'adjust-fp':       {'doit': self._do_adjust_fp,   'time': 0},
-            'aim':             {'doit': self._do_aim,         'time': 0.9},
-            'cast-spell':      {'doit': self._cast_spell,     'time': 0.9},
-            'change-posture':  {'doit': self._change_posture, 'time': 0.9},
-            'concentrate':     {'doit': None,                 'time': 0.9},
-            'defend':          {'doit': self._do_defense,     'time': 0.9},
-            'evaluate':        {'doit': None,                 'time': 0.9},
-            'feint':           {'doit': None,                 'time': 0.9},
-            'move':            {'doit': None,                 'time': 0.9},
-            'move-and-attack': {'doit': self._do_attack,      'time': 0.9},
-            'nothing':         {'doit': None,                 'time': 0.9},
-            'pick-opponent':   {'doit': self.reset_aim,       'time': 0},
+            'adjust-fp':       {'doit': self.__do_adjust_fp,   'time': 0},
+            'aim':             {'doit': self.__do_aim,         'time': 0.9},
+            'cast-spell':      {'doit': self.__cast_spell,     'time': 0.9},
+            'change-posture':  {'doit': self.__change_posture, 'time': 0.9},
+            'concentrate':     {'doit': None,                  'time': 0.9},
+            'defend':          {'doit': self.__do_defense,     'time': 0.9},
+            'evaluate':        {'doit': None,                  'time': 0.9},
+            'feint':           {'doit': None,                  'time': 0.9},
+            'move':            {'doit': None,                  'time': 0.9},
+            'move-and-attack': {'doit': self.__do_attack,      'time': 0.9},
+            'nothing':         {'doit': None,                  'time': 0.9},
+            'pick-opponent':   {'doit': self.reset_aim,        'time': 0},
             'stun':            {'doit': self.__stun_action,   'time': 0},
         }
 
@@ -5955,10 +6017,12 @@ class GurpsRuleset(Ruleset):
 
     def _adjust_hp(self,
                    fighter,         # Fighter object
-                   adj,             # number (usually negative) HP change
+                   action,          # number (usually negative) HP change
+                   fight_handler,
                    quiet = False    # Boolean (whether to ask/tell the user
                                     #   anything)
                   ):
+        adj = action['adj']
         if adj < 0:
             # Hit location (just for flavor, not for special injury)
             table_lookup = (random.randint(1,6) +
@@ -6001,7 +6065,10 @@ class GurpsRuleset(Ruleset):
                     return
 
                 original_adj = adj
+
                 adj += dr
+                action['adj'] = adj
+
                 dr_text = '; '.join(dr_text_array)
                 window_text.append([{'text':'', 'mode': curses.A_NORMAL}])
                 window_text.append(
@@ -6093,15 +6160,18 @@ class GurpsRuleset(Ruleset):
             if not made_will_roll:
                 self.reset_aim(fighter, {}, None)
 
-        super(GurpsRuleset, self)._adjust_hp(fighter, adj)
+        super(GurpsRuleset, self)._adjust_hp(fighter,
+                                             action,
+                                             fight_handler,
+                                             quiet)
 
 
-    def _cast_spell(self,
-                    fighter,      # Fighter object
-                    action,       # {'name': <action>,
-                                  #  'spell-index': <index in 'spells'>, ...
-                    fight_handler # FightHandler object
-                   ):
+    def __cast_spell(self,
+                     fighter,      # Fighter object
+                     action,       # {'name': <action>,
+                                   #  'spell-index': <index in 'spells'>, ...
+                     fight_handler # FightHandler object
+                    ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -6218,11 +6288,11 @@ class GurpsRuleset(Ruleset):
                 opponent.timers.add(delay_timer)
 
 
-    def _change_posture(self,
-                        fighter,          # Fighter object
-                        action,           # {'name': <action>, parameters...}
-                        fight_handler     # FightHandler object
-                       ):
+    def __change_posture(self,
+                         fighter,          # Fighter object
+                         action,           # {'name': <action>, parameters...}
+                         fight_handler     # FightHandler object
+                        ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -6274,11 +6344,11 @@ class GurpsRuleset(Ruleset):
         return True # Keep going
 
 
-    def _do_adjust_fp(self,
-                      fighter,      # Fighter object
-                      action,       # {'name': <action>, parameters...}
-                      fight_handler # FightHandler object (for logging)
-                     ):
+    def __do_adjust_fp(self,
+                       fighter,      # Fighter object
+                       action,       # {'name': <action>, parameters...}
+                       fight_handler # FightHandler object (for logging)
+                      ):
         # See B426 for consequences of loss of FP
         adj = action['adj'] # Adj is likely negative
 
@@ -6304,11 +6374,11 @@ class GurpsRuleset(Ruleset):
         return
 
 
-    def _do_aim(self,
-                fighter,      # Fighter object
-                action,       # {'name': <action>, 'braced': True | False...
-                fight_handler # FightHandler object
-               ):
+    def __do_aim(self,
+                 fighter,      # Fighter object
+                 action,       # {'name': <action>, 'braced': True | False...
+                 fight_handler # FightHandler object
+                ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
@@ -6327,7 +6397,7 @@ class GurpsRuleset(Ruleset):
         return
 
 
-    def _do_attack(self,
+    def __do_attack(self,
                    fighter,          # Fighter object
                    action,           # {'name': <action>, parameters...}
                    fight_handler     # FightHandler object
@@ -6336,18 +6406,18 @@ class GurpsRuleset(Ruleset):
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        to_monster = super(GurpsRuleset, self)._do_attack(fighter,
-                                                          action,
-                                                          fight_handler)
+        #to_monster = super(GurpsRuleset, self).__do_attack(fighter,
+        #                                                   action,
+        #                                                   fight_handler)
         self.reset_aim(fighter, {}, fight_handler)
         return
 
 
-    def _do_defense(self,
-                    fighter,          # Fighter object
-                    action,           # {'name': <action>, parameters...}
-                    fight_handler     # FightHandler object
-                   ):
+    def __do_defense(self,
+                     fighter,          # Fighter object
+                     action,           # {'name': <action>, parameters...}
+                     fight_handler     # FightHandler object
+                    ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
