@@ -2037,8 +2037,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # Draw weapon
-        self.__ruleset._draw_weapon({'fighter': vodou_priest,
-                                     'weapon':  requested_weapon_index})
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'draw-weapon',
+                                  'weapon-index': requested_weapon_index},
+                                 mock_fight_handler)
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest, 

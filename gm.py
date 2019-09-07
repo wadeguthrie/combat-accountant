@@ -3011,71 +3011,15 @@ class Ruleset(object):
         weapons and such.
         '''
 
-        '''
-        quiet = False if 'quiet' not in action else action['quiet']
-
-        actions = {
-            'adjust-fp':       {'doit': self.__do_adjust_fp,   'time': 0},
-
-        elif action['name'] == 'adjust-hp':
-            self._adjust_hp(fighter, action['adj'], quiet)
-
-        elif action['name'] == 'attack' or action['name'] == 'all-out-attack':
-            self.__do_attack(fighter, action, fight_handler)
-
-        elif action['name'] == 'user-defined':
-            self._do_custom_action(action)
-
-        elif action['name'] == 'draw-weapon':
-            self._draw_weapon({'fighter': fighter,
-                               'weapon':  action['weapon-index']})
-
-        elif action['name'] == 'don-armor': # or doff armor
-            self._don_armor({'fighter': fighter,
-                             'armor': action['armor-index']})
-
-        elif action['name'] == 'end-turn': # or doff armor
-            fighter.end_turn()
-            fight_handler.modify_index(1)
-            handled = True
-
-        elif action['name'] == 'start-turn': # or doff armor
-            fighter.start_turn()
-            handled = True
-
-        elif action['name'] == 'pick-opponent':
-            fighter.details['opponent'] = {'group': action['opponent-group'],
-                                           'name': action['opponent-name']}
-            handled = True
-
-        elif action['name'] == 'reload':
-            self._do_reload(fighter, quiet)
-
-        elif action['name'] == 'set-consciousness':
-            fighter.set_consciousness(action['level'])
-
-        elif action['name'] == 'use-item':
-            self._use_item({'fighter': fighter,
-                            'item': action['item-index']})
-        '''
-
         # Actions
 
         handled = False
-        quiet = False if 'quiet' not in action else action['quiet']
 
         if 'name' not in action:
             handled = True # It's just a comment, ignore (but mark it 'handled')
 
         elif action['name'] == 'adjust-hp':
-            self._adjust_hp(fighter, action, fight_handler, quiet)
-            
-                   #quiet = False    # Boolean (whether to ask/tell the user
-                   #                 #   anything)
-
-
-
-
+            self._adjust_hp(fighter, action, fight_handler)
             handled = True
 
         elif action['name'] == 'attack' or action['name'] == 'all-out-attack':
@@ -3084,50 +3028,42 @@ class Ruleset(object):
             handled = True
 
         elif action['name'] == 'user-defined':
-            self._do_custom_action(action)
+            self._do_custom_action(fighter, action, fight_handler)
             handled = True
 
         elif action['name'] == 'draw-weapon':
-            # TODO: shouldn't this disturb aim in child class?
-            self._draw_weapon({'fighter': fighter,
-                               'weapon':  action['weapon-index']})
+            self.__draw_weapon(fighter, action, fight_handler)
             handled = True
 
         elif action['name'] == 'don-armor': # or doff armor
             # TODO: shouldn't this disturb aim in child class?
-            self._don_armor({'fighter': fighter,
-                             'armor': action['armor-index']})
+            self.__don_armor(fighter, action, fight_handler)
             handled = True
 
         elif action['name'] == 'end-turn': # or doff armor
-            fighter.end_turn()
-            fight_handler.modify_index(1)
+            self.__end_turn(fighter, action, fight_handler)
             handled = True
 
         elif action['name'] == 'start-turn': # or doff armor
-            fighter.start_turn()
+            self.__start_turn(fighter, action, fight_handler)
             handled = True
 
         elif action['name'] == 'pick-opponent':
-            # TODO: shouldn't this disturb aim in child class?
-            fighter.details['opponent'] = {'group': action['opponent-group'],
-                                           'name': action['opponent-name']}
+            self.__pick_opponent(fighter, action, fight_handler)
             handled = True
 
         elif action['name'] == 'reload':
             # TODO: shouldn't this disturb aim in child class?
-            quiet = False if 'quiet' not in action else action['quiet']
-            self._do_reload(fighter, quiet)
+            self.__do_reload(fighter, action, fight_handler)
             handled = True
 
         elif action['name'] == 'set-consciousness':
             # TODO: shouldn't this disturb aim in child class?
-            fighter.set_consciousness(action['level'])
+            self.__set_consciousness(fighter, action, fight_handler)
             handled = True
 
         elif action['name'] == 'use-item':
-            self._use_item({'fighter': fighter,
-                            'item': action['item-index']})
+            self.__use_item(fighter, action, fight_handler)
             handled = True
 
         if fight_handler is not None and logit:
@@ -3447,7 +3383,6 @@ class Ruleset(object):
                    fight_handler,    # FightHandler object
                    quiet
                   ):
-                  
         fighter.details['current']['hp'] += action['adj']
 
 
@@ -3473,7 +3408,9 @@ class Ruleset(object):
 
 
     def _do_custom_action(self,
-                          action       # {'name': <action>, parameters...}
+                          fighter,          # Fighter object
+                          action,           # {'name': <action>, parameters...}
+                          fight_handler,    # FightHandler object
                          ):
         height = 1
         title = 'What Action Is Performed'
@@ -3483,9 +3420,10 @@ class Ruleset(object):
         return True
 
 
-    def _do_reload(self,
-                   fighter,     # Fighter object for attacker
-                   quiet = False
+    def __do_reload(self,
+                    fighter,          # Fighter object
+                    action,           # {'name': <action>, parameters...}
+                    fight_handler,    # FightHandler object
                   ):
         '''
         Called to handle a menu selection.
@@ -3504,37 +3442,91 @@ class Ruleset(object):
         return False
 
 
-    def _don_armor(self,
-                  param # dict: {'armor': index, 'fighter': Fighter obj}
-                 ):
-        '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
-        '''
-        param['fighter'].don_armor_by_index(param['armor'])
-
-
-    def _draw_weapon(self,
-                    param # dict: {'weapon': index, 'fighter': Fighter obj}
+    def __don_armor(self,
+                    fighter,          # Fighter object
+                    action,           # {'name': <action>, parameters...}
+                    fight_handler,    # FightHandler object
                    ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        param['fighter'].draw_weapon_by_index(param['weapon'])
+        fighter.don_armor_by_index(action['armor-index'])
 
 
-    def _use_item(self,
-                  param # dict: {'item': index, 'fighter': Fighter obj}
-                 ):
+    def __draw_weapon(self,
+                      fighter,          # Fighter object
+                      action,           # {'name': <action>, parameters...}
+                      fight_handler,    # FightHandler object
+                     ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        fighter = param['fighter']
-        item_index = param['item']
-        item = fighter.details['stuff'][item_index]
-        if 'count' in item:
+        fighter.draw_weapon_by_index(action['weapon-index'])
+
+
+    def __end_turn(self,
+                   fighter,          # Fighter object
+                   action,           # {'name': <action>, parameters...}
+                   fight_handler,    # FightHandler object
+                  ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        fighter.end_turn()
+        fight_handler.modify_index(1)
+
+
+    def __pick_opponent(self,
+                        fighter,          # Fighter object
+                        action,           # {'name': <action>, parameters...}
+                        fight_handler,    # FightHandler object
+                       ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        fighter.details['opponent'] = {'group': action['opponent-group'],
+                                       'name': action['opponent-name']}
+
+
+    def __set_consciousness(self,
+                            fighter,          # Fighter object
+                            action,           # {'name': <action>, params...}
+                            fight_handler,    # FightHandler object
+                           ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        fighter.set_consciousness(action['level'])
+
+
+    def __start_turn(self,
+                     fighter,          # Fighter object
+                     action,           # {'name': <action>, parameters...}
+                     fight_handler,    # FightHandler object
+                    ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        fighter.start_turn()
+
+
+    def __use_item(self,
+                   fighter,          # Fighter object
+                   action,           # {'name': <action>, parameters...}
+                   fight_handler,    # FightHandler object
+                  ):
+        '''
+        Called to handle a menu selection.
+        Returns: Nothing, return values for these functions are ignored.
+        '''
+        item = fighter.equipment.get_item_by_index(action['item-index'])
+        if item is not None and 'count' in item:
             item['count'] -= 1
         return
 
@@ -4503,13 +4495,14 @@ class GurpsRuleset(Ruleset):
             'change-posture':  {'doit': self.__change_posture, 'time': 0.9},
             'concentrate':     {'doit': None,                  'time': 0.9},
             'defend':          {'doit': self.__do_defense,     'time': 0.9},
+            'draw-weapon':     {'doit': self.__draw_weapon,    'time': 0.9},
             'evaluate':        {'doit': None,                  'time': 0.9},
             'feint':           {'doit': None,                  'time': 0.9},
             'move':            {'doit': None,                  'time': 0.9},
             'move-and-attack': {'doit': self.__do_attack,      'time': 0.9},
             'nothing':         {'doit': None,                  'time': 0.9},
             'pick-opponent':   {'doit': self.reset_aim,        'time': 0},
-            'stun':            {'doit': self.__stun_action,   'time': 0},
+            'stun':            {'doit': self.__stun_action,    'time': 0},
         }
 
         if action['name'] in actions:
@@ -6022,7 +6015,20 @@ class GurpsRuleset(Ruleset):
                    quiet = False    # Boolean (whether to ask/tell the user
                                     #   anything)
                   ):
+        '''
+        NOTE: adjust-hp is handled differently than the rest of the actions.
+        Normally, there's a Ruleset.__xxx and a GurpsRuleset.__xxx and they're
+        called separately.  This facilitiates keeping track of actions this
+        turn for actions that require time for the actor to do.  Here, we have
+        virtual functions that are called through Ruleset.do_action and the
+        child class' adjust_hp calls the parent class.  This is because a) the
+        child class modifies the adj (in the case of armor) and b) we don't
+        have to keep track of the time spent because taking damage is a free
+        action.
+        '''
         adj = action['adj']
+        quiet = False if 'quiet' not in action else action['quiet']
+
         if adj < 0:
             # Hit location (just for flavor, not for special injury)
             table_lookup = (random.randint(1,6) +
@@ -6433,6 +6439,8 @@ class GurpsRuleset(Ruleset):
         Called to handle a menu selection.
         Returns: 
         '''
+        quiet = False if 'quiet' not in action else action['quiet']
+
         if super(GurpsRuleset, self)._do_reload(fighter, quiet):
             weapon, weapon_index = fighter.get_current_weapon()
             if weapon is None or 'ammo' not in weapon:
@@ -6470,15 +6478,15 @@ class GurpsRuleset(Ruleset):
         return True
 
 
-    def _draw_weapon(self,
-                    param # dict: {'weapon': index, 'fighter': Fighter obj}
-                   ):
+    def __draw_weapon(self,
+                      fighter,          # Fighter object
+                      action,           # {'name': <action>, parameters...}
+                      fight_handler,    # FightHandler object
+                     ):
         '''
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        super(GurpsRuleset, self)._draw_weapon(param)
-
         #if 'Fast-Draw (Pistol)' in fighter.details['skills']:
         #    skill_menu = [('made SKILL roll', True),
         #                  ('did NOT make SKILL roll', False)]
@@ -6490,7 +6498,7 @@ class GurpsRuleset(Ruleset):
         #    if made_skill_roll:
         #        ...
 
-        self.reset_aim(param['fighter'], {}, None)
+        self.reset_aim(fighter, action, fight_handler)
         return
 
 
