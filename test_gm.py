@@ -473,12 +473,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             "current": {
                 "fp": 12, "iq": 13, "wi": 13, "hp": 10,
                 "ht": self.__vodou_priest_ht, "st": 10,
-                "dx": 11, "basic-speed": 5.5
+                "dx": 11, "basic-speed": 5.5, "basic-move": 5
             }, 
             "permanent": {
                 "fp": 12, "iq": 13, "wi": 13, "hp": 10,
                 "ht": self.__vodou_priest_ht, "st": 10,
-                "dx": 11, "basic-speed": 5.5
+                "dx": 11, "basic-speed": 5.5, "basic-move": 5
             }, 
             "timers": [], 
             "check_for_death": False, 
