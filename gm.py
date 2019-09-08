@@ -2707,11 +2707,13 @@ class Fighter(ThingsInFight):
                   fight_handler   # FightHandler object (for do_action)
                  ):
         super(Fighter, self).end_fight(world, fight_handler)
-        # TODO: only if group is PC
         if ('reload-after-fight' in world.details['Options'] and 
-                            world.details['Options']['reload-after-fight']):
+                            world.details['Options']['reload-after-fight'] and
+                            self.group == 'PCs'):
             self._ruleset.do_action(self,
-                                    {'name': 'reload', 'quiet': True},
+                                    {'name': 'reload',
+                                     'comment': 'Reloading after fight',
+                                     'quiet': True},
                                     fight_handler)
         self.details['weapon-index'] = None
 
