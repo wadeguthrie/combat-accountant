@@ -2640,28 +2640,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         del vodou_priest.details['advantages']['Combat Reflexes']
 
-        requested_weapon_index = self.__vodou_pistol_index
-        self.__ruleset.do_action(vodou_priest, 
-                                 {'name': 'draw-weapon',
-                                  'weapon-index': requested_weapon_index},
-                                 mock_fight_handler)
-        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
-        assert actual_weapon_index == requested_weapon_index
-        assert weapon['name'] == "pistol, Colt 170D"
-
-        requested_armor_index = 2
-        self.__ruleset.do_action(vodou_priest, 
-                                 {'name': 'don-armor',
-                                  'armor-index': requested_armor_index},
-                                 mock_fight_handler)
-        armor, actual_armor_index = vodou_priest.get_current_armor()
-        assert actual_armor_index == requested_armor_index
-        assert armor['name'] == "Sport coat/Jeans"
-
-        original_to_hit, ignore = self.__ruleset.get_to_hit(vodou_priest,
-                                                            None,
-                                                            weapon)
-
         unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
 
         original_hand_to_hand_info = self.__ruleset.get_unarmed_info(
