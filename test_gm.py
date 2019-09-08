@@ -2272,7 +2272,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                             None,
                                                             weapon)
 
-        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(weapon)
+        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
 
         original_hand_to_hand_info = self.__ruleset.get_unarmed_info(
                                                             vodou_priest,
@@ -2662,7 +2662,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                             None,
                                                             weapon)
 
-        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(weapon)
+        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
 
         original_hand_to_hand_info = self.__ruleset.get_unarmed_info(
                                                             vodou_priest,

@@ -5643,7 +5643,7 @@ class GurpsRuleset(Ruleset):
             return all_unarmed_skills
 
         if weapon['skill'] not in all_unarmed_skills:
-            return ['dx']
+            return None
 
         for i, skill in enumerate(all_unarmed_skills):
             if weapon['skill'] == skill:
