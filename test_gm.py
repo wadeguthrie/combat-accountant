@@ -1650,8 +1650,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             copy.deepcopy(self.__vodou_priest_fighter),
             copy.deepcopy(self.__bokor_fighter)]
         expected_fighters[0]['opponent']    = {'group': 'PCs', 'name': 'Jack'}
-        expected_fighters[0]['actions_this_turn'] = ['pick-opponent',
-                                                     'pick-opponent']
+        expected_fighters[0]['actions_this_turn'] = []
         expected_fighters[injured_index]['current']['hp'] -= injured_hp
 
         # Check that everything is as it should be

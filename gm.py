@@ -2970,6 +2970,8 @@ class Ruleset(object):
     }
     '''
 
+    (HANDLED_OK, HANDLED_ERROR, UNHANDLED) = range(3)
+
     def __init__(self, window_manager):
         self._window_manager = window_manager
 
@@ -3013,29 +3015,31 @@ class Ruleset(object):
 
         actions = {
             'adjust-hp':            {'doit': self._adjust_hp},
-            'all-out-attack':       {'doit': self.__do_attack}, # TODO: aim?
-            'attack':               {'doit': self.__do_attack}, # TODO: aim?
-            'don-armor':            {'doit': self.__don_armor}, # TODO: aim?
+            'all-out-attack':       {'doit': self.__do_attack},
+            'attack':               {'doit': self.__do_attack},
+            'don-armor':            {'doit': self.__don_armor},
             'draw-weapon':          {'doit': self.__draw_weapon},
             'end-turn':             {'doit': self.__end_turn},
             'pick-opponent':        {'doit': self.__pick_opponent},
-            'reload':               {'doit': self.__do_reload}, # TODO: aim?
-            'set-consciousness':    {'doit':
-                                     self.__set_consciousness}, # TODO: aim?
+            'reload':               {'doit': self.__do_reload},
+            'set-consciousness':    {'doit': self.__set_consciousness},
             'start-turn':           {'doit': self.__start_turn},
             'use-item':             {'doit': self.__use_item},
             'user-defined':         {'doit': self.__do_custom_action},
         }
 
-        handled = False
+        handled = Ruleset.UNHANDLED
         if 'name' in action:
             if action['name'] in actions:
                 action_info = actions[action['name']]
                 if action_info['doit'] is not None:
-                    action_info['doit'](fighter, action, fight_handler)
-                handled = True
+                    handled = action_info['doit'](fighter, 
+                                                  action, 
+                                                  fight_handler)
         else:
-            handled = True  # It's just a comment, ignore (mark it 'handled')
+            handled = Ruleset.HANDLED_OK  # It's just a comment
+
+        # Log the action into the history
 
         if fight_handler is not None and logit:
             fight_handler.add_to_history(action)
@@ -3355,6 +3359,7 @@ class Ruleset(object):
                    quiet
                   ):
         fighter.details['current']['hp'] += action['adj']
+        return Ruleset.HANDLED_OK
 
 
     def __do_attack(self,
@@ -3372,10 +3377,10 @@ class Ruleset(object):
 
         weapon, weapon_index = fighter.get_current_weapon()
         if weapon is None or 'ammo' not in weapon:
-            return
+            return Ruleset.HANDLED_OK
 
         weapon['ammo']['shots_left'] -= 1
-        return
+        return Ruleset.HANDLED_OK 
 
 
     def __do_custom_action(self,
@@ -3388,7 +3393,7 @@ class Ruleset(object):
         width = self._window_manager.getmaxyx()
         comment_string = self._window_manager.input_box(height, width, title)
         action['comment'] += ' -- %s' % comment_string
-        return True
+        return Ruleset.HANDLED_OK
 
 
     def __do_reload(self,
@@ -3402,15 +3407,15 @@ class Ruleset(object):
         '''
         weapon, weapon_index = fighter.get_current_weapon()
         if weapon is None or 'ammo' not in weapon:
-            return False
+            return Ruleset.HANDLED_ERROR
 
         clip_name = weapon['ammo']['name']
         for item in fighter.details['stuff']:
             if item['name'] == clip_name and item['count'] > 0:
                 weapon['ammo']['shots_left'] = weapon['ammo']['shots']
                 item['count'] -= 1
-                return True
-        return False
+                return Ruleset.HANDLED_OK
+        return Ruleset.HANDLED_ERROR
 
 
     def __don_armor(self,
@@ -3423,6 +3428,7 @@ class Ruleset(object):
         Returns: Nothing, return values for these functions are ignored.
         '''
         fighter.don_armor_by_index(action['armor-index'])
+        return Ruleset.HANDLED_OK
 
 
     def __draw_weapon(self,
@@ -3435,6 +3441,7 @@ class Ruleset(object):
         Returns: Nothing, return values for these functions are ignored.
         '''
         fighter.draw_weapon_by_index(action['weapon-index'])
+        return Ruleset.HANDLED_OK
 
 
     def __end_turn(self,
@@ -3448,6 +3455,7 @@ class Ruleset(object):
         '''
         fighter.end_turn()
         fight_handler.modify_index(1)
+        return Ruleset.HANDLED_OK
 
 
     def __pick_opponent(self,
@@ -3461,6 +3469,7 @@ class Ruleset(object):
         '''
         fighter.details['opponent'] = {'group': action['opponent-group'],
                                        'name': action['opponent-name']}
+        return Ruleset.HANDLED_OK
 
 
     def __set_consciousness(self,
@@ -3473,6 +3482,7 @@ class Ruleset(object):
         Returns: Nothing, return values for these functions are ignored.
         '''
         fighter.set_consciousness(action['level'])
+        return Ruleset.HANDLED_OK
 
 
     def __start_turn(self,
@@ -3485,6 +3495,7 @@ class Ruleset(object):
         Returns: Nothing, return values for these functions are ignored.
         '''
         fighter.start_turn()
+        return Ruleset.HANDLED_OK
 
 
     def __use_item(self,
@@ -3499,7 +3510,7 @@ class Ruleset(object):
         item = fighter.equipment.get_item_by_index(action['item-index'])
         if item is not None and 'count' in item:
             item['count'] -= 1
-        return
+        return Ruleset.HANDLED_OK
 
 
 class GurpsRuleset(Ruleset):
@@ -4446,26 +4457,17 @@ class GurpsRuleset(Ruleset):
                                                       action,
                                                       fight_handler)
 
-
-        # TODO: there needs to be a table, here, that converts each action to
-        # a function call.  That table needs to have info on how many rounds
-        # the action takes and generate a timer for non-zero rounds.  It
-        # should also add to fighter.details['actions_this_turn'].  All the
-        # functions need to take the same parameters.
-
-        # TODO: need quiet that keeps the action from going into the history
-        # or fighter.details['actions_this_turn'].
-
-        if 'name' not in action:
-            return # It's just a comment
-
+        # TODO: each should return a timer or None
         actions = {
             'adjust-fp':       {'doit': self.__do_adjust_fp,   'time': 0},
             'aim':             {'doit': self.__do_aim,         'time': 0.9},
+            'all-out-attack':  {'doit': self.reset_aim,        'time': 0.9},
+            'attack':          {'doit': self.reset_aim,        'time': 0.9},
             'cast-spell':      {'doit': self.__cast_spell,     'time': 0.9},
             'change-posture':  {'doit': self.__change_posture, 'time': 0.9},
             'concentrate':     {'doit': None,                  'time': 0.9},
             'defend':          {'doit': self.__do_defense,     'time': 0.9},
+            'don-armor':       {'doit': self.reset_aim,        'time': 0.9},
             'draw-weapon':     {'doit': self.__draw_weapon,    'time': 0.9},
             'evaluate':        {'doit': None,                  'time': 0.9},
             'feint':           {'doit': None,                  'time': 0.9},
@@ -4473,9 +4475,18 @@ class GurpsRuleset(Ruleset):
             'move-and-attack': {'doit': self.__do_attack,      'time': 0.9},
             'nothing':         {'doit': None,                  'time': 0.9},
             'pick-opponent':   {'doit': self.reset_aim,        'time': 0},
+            'reload':          {'doit': self.reset_aim,        'time': 0.9},
+            'set-consciousness':
+                               {'doit': self.reset_aim,        'time': 0},
             'stun':            {'doit': self.__stun_action,    'time': 0},
         }
 
+        if 'name' not in action:
+            return # It's just a comment
+
+        if handled == Ruleset.HANDLED_ERROR:
+            return  # Don't log it, no further action required
+        
         if action['name'] in actions:
             action_info = actions[action['name']]
             if action_info['doit'] is not None:
@@ -4490,13 +4501,14 @@ class GurpsRuleset(Ruleset):
             #    fighter.timers.add(timer)
 
         # TODO: put this in Ruleset as post_action_accounting()
-        if handled:
+        if handled == Ruleset.HANDLED_OK:
             if logit:
                 fighter.details['actions_this_turn'].append(action['name'])
-        else:
+        elif handled == Ruleset.UNHANDLED:
             self._window_manager.error(
                             ['action "%s" is not handled by any ruleset' %
                                                             action['name']])
+        # Don't deal with HANDLED_ERROR
 
         return # Nothing to return
 
@@ -6402,10 +6414,12 @@ class GurpsRuleset(Ruleset):
         self.reset_aim(fighter, {}, fight_handler)
 
 
-    def _do_reload(self,
-                   fighter,     # Fighter object for attacker
-                   quiet = False
+    def __do_reload(self,
+                    fighter,          # Fighter object
+                    action,           # {'name': <action>, parameters...}
+                    fight_handler,    # FightHandler object
                   ):
+        # TODO: this needs to be called due to an action
         '''
         Called to handle a menu selection.
         Returns: 
