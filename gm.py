@@ -8366,11 +8366,10 @@ class FightHandler(ScreenHandler):
             maneuver['action']['comment'] = '(%s) did (%s) maneuver' % (
                                                   current_fighter.name,
                                                   maneuver['action']['name'])
-            maneuver['action']['fighter'] = current_fighter.name
-            maneuver['action']['group'] = current_fighter.group
-            self.__ruleset.do_action(current_fighter,
-                                     maneuver['action'],
-                                     self)
+            maneuver['action']['fighter'] = {'name': current_fighter.name,
+                                             'group': current_fighter.group}
+
+            self.__ruleset.do_action(current_fighter, maneuver['action'], self)
 
         # a round count larger than 0 will get shown but less than 1 will
         # get deleted before the next round
@@ -8491,6 +8490,8 @@ class FightHandler(ScreenHandler):
         for action in self.__saved_history:
             current_fighter = next_fighter
 
+            print '\n--- __playback_history'    # TODO: remove
+            PP.pprint(action)   # TODO: remove
             if 'fighter' in action:
                 name = action['fighter']['name']
                 group = action['fighter']['group']
