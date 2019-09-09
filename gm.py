@@ -420,7 +420,7 @@ class MainGmWindow(GmWindow):
                                            command_ribbon_choices)
 
         lines, cols = self._window.getmaxyx()
-        self._char_detail = [] # [[{'text', 'mode'}, ...],   # line 0
+        self._char_detail = []  # [[{'text', 'mode'}, ...],   # line 0
                                 #  [...],                  ]  # line 1...
 
         self.__char_list = []   # [[{'text', 'mode'}, ...],   # line 0
@@ -2711,6 +2711,8 @@ class Fighter(ThingsInFight):
                             self.group == 'PCs'):
             self._ruleset.do_action(self,
                                     {'name': 'reload',
+                                     'fighter': {'name': self.name,
+                                                 'group': self.group},
                                      'comment': 'Reloading after fight',
                                      'quiet': True},
                                     fight_handler)
@@ -5979,6 +5981,8 @@ class GurpsRuleset(Ruleset):
                 elif stunned_results == GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL:
                     self.do_action(fighter,
                                    {'name': 'change-posture',
+                                    'fighter': {'name': fighter.name,
+                                                'group': fighter.group},
                                     'posture': 'lying'},
                                    None,    # FightHandler
                                    logit=False)
@@ -6055,7 +6059,10 @@ class GurpsRuleset(Ruleset):
             cost = 0
         else:
             self.do_action(fighter, 
-                           {'name': 'adjust-fp', 'adj': -cost},
+                           {'name': 'adjust-fp', 
+                            'fighter': {'name': fighter.name,
+                                        'group': fighter.group},
+                            'adj': -cost},
                            fight_handler)
 
         # Casting time
@@ -6192,7 +6199,11 @@ class GurpsRuleset(Ruleset):
             comment = '(%s) lost %d FP' % (fp_recipient.name, -adj)
         else:
             comment = '(%s) regained %d FP' % (fp_recipient.name, adj)
-        action = {'name': 'adjust-fp', 'adj': adj, 'comment': comment}
+        action = {'name': 'adjust-fp',
+                  'fighter': {'name': fp_recipient.name,
+                              'group': fp_recipient.group},
+                  'adj': adj,
+                  'comment': comment}
 
         fight_handler = (None if 'fight_handler' not in param
                                                 else param['fight_handler'])
@@ -6218,7 +6229,11 @@ class GurpsRuleset(Ruleset):
 
         if hp_adj < 0:
             self.do_action(fighter,
-                           {'name': 'adjust-hp', 'adj': hp_adj, 'quiet': True},
+                           {'name': 'adjust-hp',
+                            'fighter': {'name': fighter.name,
+                                        'group': fighter.group},
+                            'adj': hp_adj,
+                            'quiet': True},
                            fight_handler)
 
         fighter.details['current']['fp'] += adj
@@ -6227,6 +6242,8 @@ class GurpsRuleset(Ruleset):
                                         -fighter.details['permanent']['fp']):
             self.do_action(fighter,
                            {'name': 'set-consciousness',
+                            'fighter': {'name': fighter.name,
+                                        'group': fighter.group},
                             'level': Fighter.UNCONSCIOUS},
                            fight_handler)
         return None  # No timer
@@ -6594,6 +6611,8 @@ class GurpsRuleset(Ruleset):
             return True
 
         action = {'name': 'stun',
+                  'fighter': {'name': stunned_dude.name,
+                              'group': stunned_dude.group},
                   'comment': ('(%s) got stunned' % stunned_dude.name)}
         fight_handler = (None if 'fight_handler' not in param
                                                 else param['fight_handler'])
@@ -7761,6 +7780,8 @@ class FightHandler(ScreenHandler):
 
         self.__ruleset.do_action(current_fighter,
                                  {'name': 'pick-opponent',
+                                  'fighter': {'name': current_fighter.name,
+                                              'group': current_fighter.group},
                                   'opponent-name': opponent_name,
                                   'opponent-group': opponent_group,
                                   'comment': '(%s) picked (%s) as opponent' % 
@@ -7780,6 +7801,8 @@ class FightHandler(ScreenHandler):
                 self.__ruleset.do_action(
                     opponent,
                     {'name': 'pick-opponent',
+                     'fighter': {'name': opponent.name,
+                                 'group': opponent.group},
                      'opponent-name': current_fighter.name,
                      'opponent-group': current_fighter.group,
                      'comment': '(%s) picked (%s) as opponent right back' % 
@@ -8006,7 +8029,10 @@ class FightHandler(ScreenHandler):
         if adj == 0:
             return True # Keep fighting
 
-        action = {'name': 'adjust-hp', 'adj': adj}
+        action = {'name': 'adjust-hp', 
+                  'fighter': {'name': hp_recipient.name,
+                              'group': hp_recipient.group},
+                  'adj': adj}
 
         # Record for posterity
         if hp_recipient is opponent:
@@ -8039,10 +8065,13 @@ class FightHandler(ScreenHandler):
                                     attack_menu)
                 if should_attack:
                     comment = '(%s) did (Attack) maneuver' % attacker.name
-                    self.__ruleset.do_action(attacker,
-                                             {'name': 'attack',
-                                              'comment': comment},
-                                             self)
+                    self.__ruleset.do_action(
+                                        attacker,
+                                        {'name': 'attack',
+                                         'fighter': {'name': attacker.name,
+                                                     'group': attacker.group},
+                                         'comment': comment},
+                                        self)
         else:
             if adj < 0:
                 action['comment'] = '%d HP was done to (%s)' % (
@@ -8086,6 +8115,8 @@ class FightHandler(ScreenHandler):
                 now_dead,
                 {
                     'name': 'set-consciousness',
+                    'fighter': {'name': now_dead.name,
+                                'group': now_dead.group},
                     'level': new_state_number,
                     'comment': '(%s) is now (%s)' % (
                         dead_name,
@@ -8136,6 +8167,8 @@ class FightHandler(ScreenHandler):
             defender,
             {
                 'name': 'defend',
+                'fighter': {'name': defender.name,
+                            'group': defender.group},
                 'comment': '(%s) defended (and lost aim)' % defender.name
             },
             self)
@@ -8368,14 +8401,16 @@ class FightHandler(ScreenHandler):
 
         self.__ruleset.do_action(prev_fighter,
                                  {'name': 'end-turn',
-                                  'fighter': prev_fighter.name,
-                                  'group': prev_fighter.group},
+                                  'fighter': {'name': prev_fighter.name,
+                                              'group': prev_fighter.group}
+                                 },
                                  self)
         current_fighter = self.get_current_fighter()
         self.__ruleset.do_action(current_fighter,
                                  {'name': 'start-turn',
-                                  'fighter': current_fighter.name,
-                                  'group': current_fighter.group},
+                                  'fighter': {'name': current_fighter.name,
+                                              'group': current_fighter.group}
+                                 },
                                  self)
 
         # Show all the displays
@@ -8455,7 +8490,14 @@ class FightHandler(ScreenHandler):
         next_fighter = self.get_current_fighter()
         for action in self.__saved_history:
             current_fighter = next_fighter
-            self.__ruleset.do_action(current_fighter, action, self)
+
+            if 'fighter' in action:
+                name = action['fighter']['name']
+                group = action['fighter']['group']
+                fighter = self.__get_fighter_object(name, group)
+            else:
+                fighter = current_fighter
+            self.__ruleset.do_action(fighter, action, self)
             next_fighter = self.get_current_fighter()
             if next_fighter != current_fighter:
                 # Update the display
@@ -9139,6 +9181,8 @@ class MainHandler(ScreenHandler):
 
         self.__ruleset.do_action(fighter,
                                  {'name': 'don-armor',
+                                  'fighter': {'name': fighter.name,
+                                              'group': fighter.group},
                                   'armor-index': armor_index
                                  },
                                  None)
@@ -9185,6 +9229,8 @@ class MainHandler(ScreenHandler):
 
         self.__ruleset.do_action(fighter,
                                  {'name': 'draw-weapon',
+                                  'fighter': {'name': fighter.name,
+                                              'group': fighter.group},
                                   'weapon-index': weapon_index
                                  },
                                  None)
