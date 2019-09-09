@@ -115,11 +115,21 @@ class WorldData(object):
     def __init__(self, world_dict):
         self.read_data = copy.deepcopy(world_dict)
 
+class MockWorld(object):
+    def __init__(self):
+        self.playing_back = False
+
 class MockFightHandler(object):
+    def __init__(self):
+        self.world = MockWorld()
+
     def add_to_history(self, action):
         pass
 
     def pick_opponent(self):
+        pass
+
+    def modify_index(self, adjustment):
         pass
 
 class MockMainGmWindow(object):
@@ -1975,7 +1985,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # aiming for 3 rounds + shock
         assert to_hit == expected_to_hit + 2 + damage
 
-        self.__ruleset.end_turn(vodou_priest) # to clear out shock
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'end-turn'},
+                                 mock_fight_handler)  # clear out shock
 
         # Damage ruins aim -- miss will roll
 
@@ -2013,7 +2025,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + damage # aiming for 1 round + shock
 
-        self.__ruleset.end_turn(vodou_priest) # to clear out shock
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'end-turn'},
+                                 mock_fight_handler)  # clear out shock
 
         # Draw weapon ruins aim
 
@@ -2384,8 +2398,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Let's heal the guy
         #
 
-        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
-        vodou_priest.start_turn() # Check for death, check for unconscious
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'end-turn'},
+                                 mock_fight_handler)  # clear out shock
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'start-turn'},
+                                 mock_fight_handler)    # Check for death,
+                                                        # check for unconscious
+
         vodou_priest.details['current']['hp'] = (
                                     vodou_priest.details['permanent']['hp'])
 
@@ -2418,8 +2438,13 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Major wound (B420) - miss HT roll (knockdown and stunned)
 
-        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
-        vodou_priest.start_turn() # Check for death, check for unconscious
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'end-turn'},
+                                 mock_fight_handler)  # clear out shock
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'start-turn'},
+                                 mock_fight_handler)    # Check for death,
+                                                        # check for unconscious
         vodou_priest.details['current']['hp'] = (
                                     vodou_priest.details['permanent']['hp'])
 
@@ -2455,7 +2480,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                             'Stunned: Roll <= HT to recover',
                                             True)
 
-        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'end-turn'},
+                                 mock_fight_handler)  # clear out shock
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
                                                             None,
@@ -2475,7 +2502,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert dodge_skill == original_dodge_skill + total_penalty
         assert vodou_priest.details['posture'] == 'lying'
 
-        vodou_priest.start_turn() # Check for death, check for unconscious
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'start-turn'},
+                                 mock_fight_handler)    # Check for death,
+                                                        # check for unconscious
 
         # Major wound (B420) - bad fail (unconscious)
 
@@ -2503,8 +2533,13 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Start by healing him up
 
-        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
-        vodou_priest.start_turn() # Check for death, check for unconscious
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'end-turn'},
+                                 mock_fight_handler)  # clear out shock
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'start-turn'},
+                                 mock_fight_handler)    # Check for death,
+                                                        # check for unconscious
         vodou_priest.details['current']['hp'] = (
                                     vodou_priest.details['permanent']['hp'])
         self.__ruleset.do_action(vodou_priest,
@@ -2555,8 +2590,13 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Start by healing him up
 
-        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
-        vodou_priest.start_turn() # Check for death, check for unconscious
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'end-turn'},
+                                 mock_fight_handler)  # clear out shock
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'start-turn'},
+                                 mock_fight_handler)    # Check for death,
+                                                        # check for unconscious
         vodou_priest.details['current']['hp'] = (
                                     vodou_priest.details['permanent']['hp'])
         self.__ruleset.do_action(vodou_priest,
@@ -2609,8 +2649,13 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Start by healing him up
 
-        vodou_priest.end_turn() # Removes shock, chance to end 'stunned'
-        vodou_priest.start_turn() # Check for death, check for unconscious
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'end-turn'},
+                                 mock_fight_handler)  # clear out shock
+        self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'start-turn'},
+                                 mock_fight_handler)    # Check for death,
+                                                        # check for unconscious
         vodou_priest.details['current']['hp'] = (
                                     vodou_priest.details['permanent']['hp'])
         self.__ruleset.do_action(vodou_priest,
@@ -3023,7 +3068,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Stun
 
         self.__ruleset.do_action(current_fighter, 
-                                 {'name': 'stun'},
+                                 {'name': 'stun', 'stun': True},
                                  fight_handler)
 
         # Check whether stunned
