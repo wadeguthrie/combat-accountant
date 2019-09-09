@@ -27,7 +27,6 @@ import traceback
 #       o Need maintain spell action
 #   - add laser sights to weapons
 #   - Add playback of actions, like from: self._saved_fight['history']
-#   - need a test for each action (do_action)
 #   - Need equipment containers
 #
 # TODO (eventually):
@@ -3039,7 +3038,7 @@ class Ruleset(object):
                                                   action, 
                                                   fight_handler)
         else:
-            handled = Ruleset.HANDLED_OK  # It's just a comment
+            handled = Ruleset.HANDLED_OK  # No name? It's just a comment.
 
         # Log the action into the history
 
@@ -4399,6 +4398,7 @@ class GurpsRuleset(Ruleset):
         # Call base class' do_action FIRST because GurpsRuleset depends on
         # the actions of the base class.  It make no sense for the base class'
         # actions to depend on the child class'.
+
         handled = super(GurpsRuleset, self).do_action(fighter,
                                                       action,
                                                       fight_handler)
@@ -7477,10 +7477,18 @@ class FightHandler(ScreenHandler):
         # TODO: keep the fighter objects for the PCs and NPCs in the World
         #   object .
 
+        fight_order = None
         if self._saved_fight['saved']:
             if save_snapshot:   # True, except for tests
                 self._world.do_debug_snapshot('fight')
             monster_group = self._saved_fight['monsters']
+
+            fight_order = {}
+            for index, fighter in enumerate(self._saved_fight['fighters']):
+                if fighter['name'] not in fight_order:
+                    fight_order[fighter['name']] = {fighter['group']: index}
+                else:
+                    fight_order[fighter['name']][fighter['group']] = index
 
             if playback_history is not None:
                 # Make a copy of the history so I can play it back
@@ -7497,7 +7505,7 @@ class FightHandler(ScreenHandler):
             self._saved_fight['index'] = 0
             self._saved_fight['monsters'] = monster_group
 
-        self.__build_fighter_list(monster_group)
+        self.__build_fighter_list(monster_group, fight_order)
 
         # Copy the fighter information into the saved_fight.  Also, make
         # sure this looks like a _NEW_ fight.
@@ -7533,7 +7541,7 @@ class FightHandler(ScreenHandler):
         if save_snapshot:
             # This will do the debug snapshot in a way that it'll come
             # right to the fight when started.
-            self._world.do_debug_snapshot('fight-%s' % monster_group)
+            self._world.do_debug_snapshot('fight')
 
         self._window.start_fight()
 
@@ -7887,7 +7895,8 @@ class FightHandler(ScreenHandler):
     #
 
     def __build_fighter_list(self,
-                             monster_group  # String
+                             monster_group, # String
+                             fight_order    # {name: {group: index, ...}, ...
                             ):
 
         # Build the fighter list (even if the fight was saved since monsters
@@ -7926,11 +7935,18 @@ class FightHandler(ScreenHandler):
                                       self._window_manager)
                     self.__fighters.append(fighter)
 
-        # Sort by initiative = basic-speed followed by DEX followed by
-        # random
-        self.__fighters.sort(
-                key=lambda fighter:
-                    self.__ruleset.initiative(fighter), reverse=True)
+        if fight_order is None:
+            # Sort by initiative = basic-speed followed by DEX followed by
+            # random
+            self.__fighters.sort(
+                    key=lambda fighter:
+                        self.__ruleset.initiative(fighter), reverse=True)
+        else:
+            # Put them in the same order they were in, before (this is a saved
+            # fight).
+            self.__fighters.sort(
+                    key=lambda fighter:
+                        fight_order[fighter.name][fighter.group])
 
         # Put the fight info (if any) at the top of the list.
         if the_fight_itself is not None:
@@ -10131,7 +10147,7 @@ if __name__ == '__main__':
             else:
                 world.do_save_on_exit()
 
-            if campaign.read_data['current-fight']['saved']:
+            if world.details['current-fight']['saved']:
                 fight_handler = FightHandler(window_manager,
                                              world,
                                              None,
