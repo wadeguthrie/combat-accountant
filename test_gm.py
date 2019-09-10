@@ -1581,8 +1581,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         self.__ruleset.do_action(current_fighter,
                                  {'name': 'pick-opponent',
-                                  'opponent-name': 'Moe',
-                                  'opponent-group': 'PCs'},
+                                  'opponent': {'name': 'Moe', 'group': 'PCs'}},
                                  fight_handler)
 
         # Make sure pick opponent worked as advertised
@@ -1631,8 +1630,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # opponent.
         self.__ruleset.do_action(current_fighter,
                                  {'name': 'pick-opponent',
-                                  'opponent-name': 'Jack',
-                                  'opponent-group': 'PCs'},
+                                  'opponent': {'name': 'Jack', 'group': 'PCs'}},
                                  fight_handler)
 
         # Make sure pick opponent worked as advertised
@@ -1982,7 +1980,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                  {'name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
-        # aiming for 3 rounds + shock
+
+        # aiming for 3 rounds (1st round+brace already in expected_to_hit)
+        #   + shock
         assert to_hit == expected_to_hit + 2 + damage
 
         self.__ruleset.do_action(vodou_priest, 
@@ -2378,9 +2378,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         max_shock = -4
 
-        to_hit, ignore = self.__ruleset.get_to_hit(vodou_priest,
-                                                   None,
-                                                   weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+
         assert to_hit == original_to_hit + max_shock
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
@@ -3027,8 +3026,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         self.__ruleset.do_action(current_fighter,
                                  {'name': 'pick-opponent',
-                                  'opponent-name': 'Moe',
-                                  'opponent-group': 'PCs'},
+                                  'opponent': {'name': 'Moe', 'group': 'PCs'}},
                                  fight_handler)
 
         # Test
