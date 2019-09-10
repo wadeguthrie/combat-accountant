@@ -4452,7 +4452,8 @@ class GurpsRuleset(Ruleset):
             'move':                 {'doit': self.__do_nothing},
             'move-and-attack':      {'doit': self.__do_attack},
             'nothing':              {'doit': self.__do_nothing},
-            'pick-opponent':        {'doit': self.__reset_aim},
+            #'pick-opponent':        {'doit': self.__reset_aim},
+            'pick-opponent':        {'doit': self.__do_nothing},
             'reload':               {'doit': self.__do_reload},
             'reload-really':        {'doit': self.__do_reload_really},
             'reset-aim':            {'doit': self.__reset_aim},
@@ -6160,6 +6161,8 @@ class GurpsRuleset(Ruleset):
         Returns: Nothing, return values for these functions are ignored.
         '''
 
+        # TODO: break into cast-spell and cast-spell-really (ala reload).
+
         spell_index = action['spell-index']
         spell = fighter.details['spells'][spell_index]
 
@@ -6410,6 +6413,8 @@ class GurpsRuleset(Ruleset):
 
         if fight_handler is None or not fight_handler.world.playing_back:
             if fighter.details['opponent'] is None:
+                # NOTE: if picking a new opponent spoils an aim, this would
+                # spoil the aim on playback.
                 fight_handler.pick_opponent()
 
         rounds = fighter.details['aim']['rounds']
@@ -6591,6 +6596,9 @@ class GurpsRuleset(Ruleset):
 
         elif action['name'] == 'user-defined':
             text = ['User-defined action']
+
+        elif action['name'] == 'pick-opponent':
+            return None
 
         else:
             text = ['<<UNHANDLED ACTION: %s' % action['name']]
@@ -8700,10 +8708,10 @@ class FightHandler(ScreenHandler):
 
             if not saved_or_kept and ask_to_save:
                 quit_menu.append(
-                        ('save (and quit) the fight as next fight to run',
+                        ('save this fight as next fight to run',
                          {'doit': self.save_fight}))
                 quit_menu.append(
-                        ('keep (and quit) the fight in available fight list',
+                        ('keep this fight in available fight list',
                          {'doit': self.keep_fight}))
 
             result = self._window_manager.menu('Leaving Fight', quit_menu)
