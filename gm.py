@@ -3043,7 +3043,7 @@ class Ruleset(object):
             'draw-weapon':          {'doit': self.__draw_weapon},
             'end-turn':             {'doit': self.__end_turn},
             'pick-opponent':        {'doit': self.__pick_opponent},
-            'reload':               {'doit': self.__do_reload},
+            'reload-really':        {'doit': self.__do_reload},
             'set-consciousness':    {'doit': self.__set_consciousness},
             'start-turn':           {'doit': self.__start_turn},
             'use-item':             {'doit': self.__use_item},
@@ -4454,6 +4454,7 @@ class GurpsRuleset(Ruleset):
             'nothing':              {'doit': self.__do_nothing},
             'pick-opponent':        {'doit': self.__reset_aim},
             'reload':               {'doit': self.__do_reload},
+            'reload-really':        {'doit': self.__do_reload_really},
             'reset-aim':            {'doit': self.__reset_aim},
             'set-consciousness':    {'doit': self.__reset_aim},
             'shock':                {'doit': self.__do_adjust_shock},
@@ -6602,45 +6603,77 @@ class GurpsRuleset(Ruleset):
 
     def __do_reload(self,
                     fighter,          # Fighter object
-                    action,           # {'name': <action>, parameters...}
+                    action,           # {'name': 'reload', parameters...}
                     fight_handler,    # FightHandler object
                   ):
         '''
         Called to handle a menu selection.
+
+        This is the 1st part of a 2-part action.  This action ('reload') asks
+        questions of the user and sends the second part ('reload-really').
+        The 1st part isn't executed when playing back.
+
         Returns: 
         '''
 
-        self.reset_aim(fighter, {}, fight_handler)
-
-        quiet = False if 'quiet' not in action else action['quiet']
-        if quiet:
-            return None
-
-        # Timer
+        if fight_handler.world.playing_back:
+            return None # No timer
 
         weapon, weapon_index = fighter.get_current_weapon()
         if weapon is None or 'ammo' not in weapon:
             return None
 
         reload_time = weapon['reload']
-        if 'Fast-Draw (Ammo)' in fighter.details['skills']:
-            skill_menu = [('made SKILL roll', True),
-                          ('did NOT make SKILL roll', False)]
-            made_skill_roll = self._window_manager.menu(
-                ('roll <= fast-draw skill (%d)' %
-                        fighter.details['skills']['Fast-Draw (Ammo)']),
-                skill_menu)
 
-            if made_skill_roll:
-                reload_time -= 1
+        # B43: combat reflexes
+        if 'Combat Reflexes' in fighter.details['advantages']:
+            reload_time -= 1
 
-                if 'Combat Reflexes' in fighter.details['advantages']:
+        quiet = False if 'quiet' not in action else action['quiet']
+        if not quiet:
+            # B194: fast draw
+            if 'Fast-Draw (Ammo)' in fighter.details['skills']:
+                skill_menu = [('made SKILL roll', True),
+                              ('did NOT make SKILL roll', False)]
+                made_skill_roll = self._window_manager.menu(
+                    ('roll <= fast-draw skill (%d)' %
+                            fighter.details['skills']['Fast-Draw (Ammo)']),
+                    skill_menu)
+
+                if made_skill_roll:
                     reload_time -= 1
-                
-        if reload_time <= 0:
-            return None
 
-        reload_time -= Timer.announcement_margin
+                    
+        if reload_time > 0:
+            self.do_action(fighter,
+                           {'name': 'reload-really',
+                            'time': reload_time},
+                           fight_handler)
+
+        return None # No timer
+
+
+    def __do_reload_really(self,
+                           fighter,          # Fighter object
+                           action,           # {'name': 'reload-really',
+                                             #  'time': <duration>}
+                           fight_handler,    # FightHandler object
+                         ):
+        '''
+        Called to handle a menu selection.
+
+        This is the 1st part of a 2-part action.  This action ('reload') asks
+        questions of the user and sends the second part ('reload-really').
+        The 1st part isn't executed when playing back.
+
+        Returns: 
+        '''
+
+        self.reset_aim(fighter, {}, fight_handler) # OK
+
+        # Timer
+
+        reload_time = action['time'] - Timer.announcement_margin
 
         timer = Timer(None)
         timer.from_pieces(fighter.name, reload_time, 'RELOADING')
