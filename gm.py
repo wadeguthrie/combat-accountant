@@ -3028,45 +3028,9 @@ class Ruleset(object):
                                     #   of another action
                  ):
         '''
-        ONLY to be used for fights (otherwise, there's no fight handler to log
-        the actions).
-
-        Default, non-ruleset related, action handling.  Good for drawing
-        weapons and such.
         '''
-
-        actions = {
-            'adjust-hp':            {'doit': self._adjust_hp},
-            'all-out-attack':       {'doit': self.__do_attack},
-            'attack':               {'doit': self.__do_attack},
-            'don-armor':            {'doit': self.__don_armor},
-            'draw-weapon':          {'doit': self.__draw_weapon},
-            'end-turn':             {'doit': self.__end_turn},
-            'pick-opponent':        {'doit': self.__pick_opponent},
-            'reload-really':        {'doit': self.__do_reload},
-            'set-consciousness':    {'doit': self.__set_consciousness},
-            'start-turn':           {'doit': self.__start_turn},
-            'use-item':             {'doit': self.__use_item},
-            'user-defined':         {'doit': self.__do_custom_action},
-        }
-
-        handled = Ruleset.UNHANDLED
-        if 'name' in action:
-            if action['name'] in actions:
-                action_info = actions[action['name']]
-                if action_info['doit'] is not None:
-                    handled = action_info['doit'](fighter, 
-                                                  action, 
-                                                  fight_handler)
-        else:
-            handled = Ruleset.HANDLED_OK  # No name? It's just a comment.
-
-        # Log the action into the history
-
-        if fight_handler is not None and logit:
-            fight_handler.add_to_history(action)
-
-        return handled
+        handled = self.perform_action(fighter, action, fight_handler, logit)
+        self.record_action(fighter, action, fight_handler, handled, logit)
 
 
     def get_action_menu(self,
@@ -3265,6 +3229,74 @@ class Ruleset(object):
                 }
 
 
+    def perform_action(self,
+                       fighter,          # Fighter object
+                       action,           # {'name': <action>, parameters...}
+                       fight_handler,    # FightHandler object
+                       logit=True        # Log into history and
+                                         #  'actions_this_turn' because the
+                                         #  action is not a side-effect of
+                                         #  another action
+                      ):
+        '''
+        ONLY to be used for fights (otherwise, there's no fight handler to log
+        the actions).
+
+        Default, non-ruleset related, action handling.  Good for drawing
+        weapons and such.
+        '''
+        print 'Ruleset::perform_action' # TODO: remove
+
+        actions = {
+            'adjust-hp':            {'doit': self._adjust_hp},
+            'all-out-attack':       {'doit': self.__do_attack},
+            'attack':               {'doit': self.__do_attack},
+            'don-armor':            {'doit': self.__don_armor},
+            'draw-weapon':          {'doit': self.__draw_weapon},
+            'end-turn':             {'doit': self.__end_turn},
+            'pick-opponent':        {'doit': self.__pick_opponent},
+            'reload-really':        {'doit': self.__do_reload},
+            'set-consciousness':    {'doit': self.__set_consciousness},
+            'start-turn':           {'doit': self.__start_turn},
+            'use-item':             {'doit': self.__use_item},
+            'user-defined':         {'doit': self.__do_custom_action},
+        }
+
+        handled = Ruleset.UNHANDLED
+        if 'name' in action:
+            if action['name'] in actions:
+                action_info = actions[action['name']]
+                if action_info['doit'] is not None:
+                    handled = action_info['doit'](fighter, 
+                                                  action, 
+                                                  fight_handler)
+        else:
+            handled = Ruleset.HANDLED_OK  # No name? It's just a comment.
+
+        return handled
+
+
+    def record_action(self,
+                      fighter,          # Fighter object
+                      action,           # {'name': <action>, parameters...}
+                      fight_handler,    # FightHandler object
+                      handled,          # bool: whether/how the action was
+                                        #   handled
+                      logit=True        # Log into history and
+                                        #  'actions_this_turn' because the
+                                        #  action is not a side-effect of
+                                        #  another action
+                     ):
+        # Log the action into the history
+
+        if fight_handler is not None and logit:
+            if 'name' in action: # TODO: remove
+                print 'history %s->%s' % (action['name'], fighter.name) # TODO: remove
+            fight_handler.add_to_history(action)
+
+        return
+
+
     def search_one_creature(self,
                             name,       # string containing the name
                             group,      # string containing the group
@@ -3431,6 +3463,7 @@ class Ruleset(object):
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
+        print 'Ruleset::pick-opponent for %s' % fighter.name # TODO: remove
         fighter.details['opponent'] = {'group': action['opponent']['group'],
                                        'name': action['opponent']['name']}
         return Ruleset.HANDLED_OK
@@ -4409,31 +4442,33 @@ class GurpsRuleset(Ruleset):
         return ', '.join(results)
 
 
-    def do_action(self,
-                  fighter,          # Fighter object
-                  action,           # {'name': <action>, parameters...}
-                  fight_handler,    # FightHandler object
-                  logit=True        # Log into history and 'actions_this_turn'
-                                    #   because the action is not a side-effect
-                                    #   of another action
-                 ):
+    def perform_action(self,
+                       fighter,          # Fighter object
+                       action,           # {'name': <action>, parameters...}
+                       fight_handler,    # FightHandler object
+                       logit=True        # Log into history and
+                                         #  'actions_this_turn' because the
+                                         #  action is not a side-effect of
+                                         #  another action
+                      ):
 
         # Label the action so playback knows who receives it.
+        print '\n--- GurpsRuleset::perform_action' # TODO: remove
 
         action['fighter'] = {}
         action['fighter']['name'] = fighter.name
         action['fighter']['group'] = fighter.group
 
-        # Call base class' do_action FIRST because GurpsRuleset depends on
+        # Call base class' perform_action FIRST because GurpsRuleset depends on
         # the actions of the base class.  It make no sense for the base class'
         # actions to depend on the child class'.
 
-        #PP = pprint.PrettyPrinter(indent=3, width=150)
-        #PP.pprint(action)
+        PP = pprint.PrettyPrinter(indent=3, width=150)
+        PP.pprint(action)
 
-        handled = super(GurpsRuleset, self).do_action(fighter,
-                                                      action,
-                                                      fight_handler)
+        handled = super(GurpsRuleset, self).perform_action(fighter,
+                                                           action,
+                                                           fight_handler)
         actions = {
             'adjust-fp':            {'doit': self.__do_adjust_fp},
             'adjust-hp-really':     {'doit': self.__adjust_hp_really},
@@ -4452,7 +4487,6 @@ class GurpsRuleset(Ruleset):
             'move':                 {'doit': self.__do_nothing},
             'move-and-attack':      {'doit': self.__do_attack},
             'nothing':              {'doit': self.__do_nothing},
-            #'pick-opponent':        {'doit': self.__reset_aim},
             'pick-opponent':        {'doit': self.__do_nothing},
             'reload':               {'doit': self.__do_reload},
             'reload-really':        {'doit': self.__do_reload_really},
@@ -4465,24 +4499,44 @@ class GurpsRuleset(Ruleset):
         }
 
         if 'name' not in action:
-            return # It's just a comment
+            return handled
 
         if handled == Ruleset.HANDLED_ERROR:
-            return  # Don't log it, no further action required
+            return  handled
         
         if action['name'] in actions:
             timer = None
             action_info = actions[action['name']]
             if action_info['doit'] is not None:
                 timer = action_info['doit'](fighter, action, fight_handler)
-            handled = True
+            handled = Ruleset.HANDLED_OK
 
             if timer is not None and logit:
                 fighter.timers.add(timer)
 
-        # TODO: put this in Ruleset as post_action_accounting()
+        return handled
+
+
+    def record_action(self,
+                      fighter,          # Fighter object
+                      action,           # {'name': <action>, parameters...}
+                      fight_handler,    # FightHandler object
+                      handled,          # bool: whether/how the action was
+                                        #   handled
+                      logit=True        # Log into history and
+                                        #  'actions_this_turn' because the
+                                        #  action is not a side-effect of
+                                        #  another action
+                     ):
+        super(GurpsRuleset, self).record_action(fighter,
+                                                action,
+                                                fight_handler,
+                                                handled,
+                                                logit)
+
         if handled == Ruleset.HANDLED_OK:
-            if logit:
+            if logit and 'name' in action:
+                print 'actions_this_turn %s -> %s' % (action['name'], fighter.name) # TODO: remove
                 fighter.details['actions_this_turn'].append(action['name'])
         elif handled == Ruleset.UNHANDLED:
             self._window_manager.error(
@@ -4490,8 +4544,6 @@ class GurpsRuleset(Ruleset):
                                                             action['name']])
 
         # Don't deal with HANDLED_ERROR
-
-        return # Nothing to return
 
 
     def end_turn(self,
@@ -6410,12 +6462,15 @@ class GurpsRuleset(Ruleset):
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
+        print '\n=== GurpsRuleset::__do_aim for %s' % fighter.name # TODO: remove
 
         if fight_handler is None or not fight_handler.world.playing_back:
             if fighter.details['opponent'] is None:
+                print '<<< Picking opponent' # TODO: remove
                 # NOTE: if picking a new opponent spoils an aim, this would
                 # spoil the aim on playback.
                 fight_handler.pick_opponent()
+                print 'Picking opponent>>>' # TODO: remove
 
         rounds = fighter.details['aim']['rounds']
         if rounds == 0:
@@ -6598,6 +6653,7 @@ class GurpsRuleset(Ruleset):
             text = ['User-defined action']
 
         elif action['name'] == 'pick-opponent':
+            print 'GurpsRuleset::pick-opponent for %s' % fighter.name # TODO: remove
             return None
 
         else:
