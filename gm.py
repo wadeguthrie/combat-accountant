@@ -3245,7 +3245,6 @@ class Ruleset(object):
         Default, non-ruleset related, action handling.  Good for drawing
         weapons and such.
         '''
-        print 'Ruleset::perform_action' # TODO: remove
 
         actions = {
             'adjust-hp':            {'doit': self._adjust_hp},
@@ -3287,11 +3286,11 @@ class Ruleset(object):
                                         #  action is not a side-effect of
                                         #  another action
                      ):
-        # Log the action into the history
+        '''
+        Logs the action into the fight's history
+        '''
 
         if fight_handler is not None and logit:
-            if 'name' in action: # TODO: remove
-                print 'history %s->%s' % (action['name'], fighter.name) # TODO: remove
             fight_handler.add_to_history(action)
 
         return
@@ -3463,7 +3462,6 @@ class Ruleset(object):
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        print 'Ruleset::pick-opponent for %s' % fighter.name # TODO: remove
         fighter.details['opponent'] = {'group': action['opponent']['group'],
                                        'name': action['opponent']['name']}
         return Ruleset.HANDLED_OK
@@ -4453,7 +4451,6 @@ class GurpsRuleset(Ruleset):
                       ):
 
         # Label the action so playback knows who receives it.
-        print '\n--- GurpsRuleset::perform_action' # TODO: remove
 
         action['fighter'] = {}
         action['fighter']['name'] = fighter.name
@@ -4463,8 +4460,8 @@ class GurpsRuleset(Ruleset):
         # the actions of the base class.  It make no sense for the base class'
         # actions to depend on the child class'.
 
-        PP = pprint.PrettyPrinter(indent=3, width=150)
-        PP.pprint(action)
+        #PP = pprint.PrettyPrinter(indent=3, width=150)
+        #PP.pprint(action)
 
         handled = super(GurpsRuleset, self).perform_action(fighter,
                                                            action,
@@ -4536,7 +4533,6 @@ class GurpsRuleset(Ruleset):
 
         if handled == Ruleset.HANDLED_OK:
             if logit and 'name' in action:
-                print 'actions_this_turn %s -> %s' % (action['name'], fighter.name) # TODO: remove
                 fighter.details['actions_this_turn'].append(action['name'])
         elif handled == Ruleset.UNHANDLED:
             self._window_manager.error(
@@ -6462,15 +6458,10 @@ class GurpsRuleset(Ruleset):
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        print '\n=== GurpsRuleset::__do_aim for %s' % fighter.name # TODO: remove
 
         if fight_handler is None or not fight_handler.world.playing_back:
             if fighter.details['opponent'] is None:
-                print '<<< Picking opponent' # TODO: remove
-                # NOTE: if picking a new opponent spoils an aim, this would
-                # spoil the aim on playback.
                 fight_handler.pick_opponent()
-                print 'Picking opponent>>>' # TODO: remove
 
         rounds = fighter.details['aim']['rounds']
         if rounds == 0:
@@ -6653,7 +6644,6 @@ class GurpsRuleset(Ruleset):
             text = ['User-defined action']
 
         elif action['name'] == 'pick-opponent':
-            print 'GurpsRuleset::pick-opponent for %s' % fighter.name # TODO: remove
             return None
 
         else:
