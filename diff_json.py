@@ -203,6 +203,10 @@ if __name__ == '__main__':
 
     PP = pprint.PrettyPrinter(indent=3, width=150)
 
+    print 'LHS: %s' % ARGS.filename[0]
+    print 'RHS: %s' % ARGS.filename[1]
+    print ''
+
     with GmJson(ARGS.filename[0]) as file1:
         with GmJson(ARGS.filename[1]) as file2:
             if are_equal(file1.read_data, file2.read_data):

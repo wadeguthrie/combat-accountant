@@ -2996,6 +2996,7 @@ class Ruleset(object):
 
     def __init__(self, window_manager):
         self._window_manager = window_manager
+        self._announce = False # TODO: remove
 
     @staticmethod
     def roll(number, # the number of dice
@@ -3029,8 +3030,8 @@ class Ruleset(object):
                  ):
         '''
         '''
-        handled = self.perform_action(fighter, action, fight_handler, logit)
-        self.record_action(fighter, action, fight_handler, handled, logit)
+        handled = self._perform_action(fighter, action, fight_handler, logit)
+        self._record_action(fighter, action, fight_handler, handled, logit)
 
 
     def get_action_menu(self,
@@ -3229,15 +3230,15 @@ class Ruleset(object):
                 }
 
 
-    def perform_action(self,
-                       fighter,          # Fighter object
-                       action,           # {'name': <action>, parameters...}
-                       fight_handler,    # FightHandler object
-                       logit=True        # Log into history and
-                                         #  'actions_this_turn' because the
-                                         #  action is not a side-effect of
-                                         #  another action
-                      ):
+    def _perform_action(self,
+                        fighter,          # Fighter object
+                        action,           # {'name': <action>, parameters...}
+                        fight_handler,    # FightHandler object
+                        logit=True        # Log into history and
+                                          #  'actions_this_turn' because the
+                                          #  action is not a side-effect of
+                                          #  another action
+                       ):
         '''
         ONLY to be used for fights (otherwise, there's no fight handler to log
         the actions).
@@ -3275,17 +3276,17 @@ class Ruleset(object):
         return handled
 
 
-    def record_action(self,
-                      fighter,          # Fighter object
-                      action,           # {'name': <action>, parameters...}
-                      fight_handler,    # FightHandler object
-                      handled,          # bool: whether/how the action was
-                                        #   handled
-                      logit=True        # Log into history and
-                                        #  'actions_this_turn' because the
-                                        #  action is not a side-effect of
-                                        #  another action
-                     ):
+    def _record_action(self,
+                       fighter,          # Fighter object
+                       action,           # {'name': <action>, parameters...}
+                       fight_handler,    # FightHandler object
+                       handled,          # bool: whether/how the action was
+                                         #   handled
+                       logit=True        # Log into history and
+                                         #  'actions_this_turn' because the
+                                         #  action is not a side-effect of
+                                         #  another action
+                      ):
         '''
         Logs the action into the fight's history
         '''
@@ -4411,9 +4412,23 @@ class GurpsRuleset(Ruleset):
     def can_finish_turn(self,
                         fighter # Fighter object
                        ):
+        # If the fighter does one of these things and the turn is over, he
+        # clearly hasn't forgotten to do something.  Other actions are passive
+        # and their existence doesn't mean that the fighter has actually tried
+        # to do anything.
+
+        active_actions = [
+            'aim',             'all-out-attack', 'attack',
+            'cast-spell',      'change-posture', 'concentrate',
+            'defend',          'don-armor',      'draw-weapon',
+            'evaluate',        'feint',          'move',
+            'move-and-attack', 'nothing',        'reload',
+            'reload-really',   'stun',           'use-item',
+            'user-defined'
+        ]
 
         for action in fighter.details['actions_this_turn']:
-            if action != 'start-turn' and action != 'end-turn':
+            if action in active_actions:
                 return True
 
         if not fighter.is_conscious():
@@ -4440,15 +4455,15 @@ class GurpsRuleset(Ruleset):
         return ', '.join(results)
 
 
-    def perform_action(self,
-                       fighter,          # Fighter object
-                       action,           # {'name': <action>, parameters...}
-                       fight_handler,    # FightHandler object
-                       logit=True        # Log into history and
-                                         #  'actions_this_turn' because the
-                                         #  action is not a side-effect of
-                                         #  another action
-                      ):
+    def _perform_action(self,
+                        fighter,          # Fighter object
+                        action,           # {'name': <action>, parameters...}
+                        fight_handler,    # FightHandler object
+                        logit=True        # Log into history and
+                                          #  'actions_this_turn' because the
+                                          #  action is not a side-effect of
+                                          #  another action
+                       ):
 
         # Label the action so playback knows who receives it.
 
@@ -4456,16 +4471,23 @@ class GurpsRuleset(Ruleset):
         action['fighter']['name'] = fighter.name
         action['fighter']['group'] = fighter.group
 
+        #PP = pprint.PrettyPrinter(indent=3, width=150)
+        #PP.pprint(action)
+
         # Call base class' perform_action FIRST because GurpsRuleset depends on
         # the actions of the base class.  It make no sense for the base class'
         # actions to depend on the child class'.
 
-        #PP = pprint.PrettyPrinter(indent=3, width=150)
-        #PP.pprint(action)
+        handled = super(GurpsRuleset, self)._perform_action(fighter,
+                                                            action,
+                                                            fight_handler)
 
-        handled = super(GurpsRuleset, self).perform_action(fighter,
-                                                           action,
-                                                           fight_handler)
+        # The 'really' actions are used when an action needs to ask questions
+        # of the user.  The original action asks the questions and sends the
+        # 'really' action with all of the answers.  When played back, the
+        # original action just returns.  That way, there are no questions on
+        # playback and the answers are the same as they were the first time.
+
         actions = {
             'adjust-fp':            {'doit': self.__do_adjust_fp},
             'adjust-hp-really':     {'doit': self.__adjust_hp_really},
@@ -4514,31 +4536,39 @@ class GurpsRuleset(Ruleset):
         return handled
 
 
-    def record_action(self,
-                      fighter,          # Fighter object
-                      action,           # {'name': <action>, parameters...}
-                      fight_handler,    # FightHandler object
-                      handled,          # bool: whether/how the action was
-                                        #   handled
-                      logit=True        # Log into history and
-                                        #  'actions_this_turn' because the
-                                        #  action is not a side-effect of
-                                        #  another action
-                     ):
-        super(GurpsRuleset, self).record_action(fighter,
-                                                action,
-                                                fight_handler,
-                                                handled,
-                                                logit)
+    def _record_action(self,
+                       fighter,          # Fighter object
+                       action,           # {'name': <action>, parameters...}
+                       fight_handler,    # FightHandler object
+                       handled,          # bool: whether/how the action was
+                                         #   handled
+                       logit=True        # Log into history and
+                                         #  'actions_this_turn' because the
+                                         #  action is not a side-effect of
+                                         #  another action
+                      ):
+        super(GurpsRuleset, self)._record_action(fighter,
+                                                 action,
+                                                 fight_handler,
+                                                 handled,
+                                                 logit)
+
+        if self._announce:  # TODO: remove
+            print 'HANDLED: %r' % handled   # TODO: remove
+            print 'LOGIT: %r' % logit   # TODO: remove
+            PP.pprint(action)   # TODO: remove
 
         if handled == Ruleset.HANDLED_OK:
             if logit and 'name' in action:
+                if self._announce:  # TODO: remove
+                    print '** APPENDING' # TODO: remove
                 fighter.details['actions_this_turn'].append(action['name'])
         elif handled == Ruleset.UNHANDLED:
             self._window_manager.error(
                             ['action "%s" is not handled by any ruleset' %
                                                             action['name']])
 
+        self._announce = False # TODO: remove
         # Don't deal with HANDLED_ERROR
 
 
@@ -5881,8 +5911,6 @@ class GurpsRuleset(Ruleset):
                    fighter,         # Fighter object
                    fight_handler    # FightHandler object
                   ):
-        fighter.details['actions_this_turn'] = []
-
         playing_back = (False if fight_handler is None else
                                         fight_handler.world.playing_back)
         # B426 - FP check for consciousness
@@ -5924,33 +5952,29 @@ class GurpsRuleset(Ruleset):
         if (fighter.is_conscious() and
                                     fighter.details['current']['hp'] <= 0 and
                                     not playing_back):
+            unconscious_roll = fighter.details['current']['ht']
+            if 'High Pain Threshold' in fighter.details['advantages']:
+                unconscious_roll += 3
+
+                menu_title = (
+                    '%s: HP < 0: roll <= HT+3 (%d) or pass out (B327,B59)' %
+                    (fighter.name, unconscious_roll))
+            else:
+                menu_title = (
+                    '%s: HP < 0: roll <= HT (%d) or pass out (B327)' %
+                    (fighter.name, unconscious_roll))
+
             pass_out_menu = [('made HT roll', True),
                              ('did NOT make HT roll', False)]
+            made_ht_roll = self._window_manager.menu(menu_title, pass_out_menu)
 
-            if 'High Pain Threshold' in fighter.details['advantages']:
-                unconscious_roll = fighter.details['current']['ht'] + 3
+            if not made_ht_roll:
+                self.do_action(fighter,
+                               {'name': 'set-consciousness',
+                                'level': Fighter.UNCONSCIOUS},
+                               fight_handler)
 
-                made_ht_roll = self._window_manager.menu(
-                    ('%s: HP < 0: roll <= HT+3 (%d) or pass out (B327,B59)' %
-                        (fighter.name, unconscious_roll)),
-                     pass_out_menu)
-
-                if not made_ht_roll:
-                    self.do_action(fighter,
-                                   {'name': 'set-consciousness',
-                                    'level': Fighter.UNCONSCIOUS},
-                                   fight_handler)
-            else:
-                made_ht_roll = self._window_manager.menu(
-                    ('%s: HP < 0: roll <= HT (%d) or pass out (B327)' %
-                        (fighter.name, fighter.details['current']['ht'])),
-                     pass_out_menu)
-
-                if not made_ht_roll:
-                    self.do_action(fighter,
-                                   {'name': 'set-consciousness',
-                                    'level': Fighter.UNCONSCIOUS},
-                                   fight_handler)
+        fighter.details['actions_this_turn'] = []
 
 
     #
@@ -6128,11 +6152,13 @@ class GurpsRuleset(Ruleset):
                         'Major Wound (B420): Roll vs. HT (%d) or be stunned' % 
                                                                         total)
 
-                stunned_menu = [('Succeeded (roll <= HT (%d))' % total,
+                stunned_menu = [
+                   ('Succeeded (roll <= HT (%d))' % total,
                                  GurpsRuleset.MAJOR_WOUND_SUCCESS),
-                                ('Missed roll by < 5 (roll < %d)' % (total+5),
+                   ('Missed roll by < 5 (roll < %d) -- stunned' % (total+5),
                                  GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL),
-                                ('Missed roll by >= 5 (roll >= %d)' % (total+5),
+                   ('Missed roll by >= 5 (roll >= %d -- unconscious)' %
+                                                                    (total+5),
                                  GurpsRuleset.MAJOR_WOUND_BAD_FAIL),
                                ]
                 stunned_results = self._window_manager.menu(menu_title,
@@ -7908,10 +7934,14 @@ class FightHandler(ScreenHandler):
             if current_fighter.name == Fight.name:
                 pass
             elif current_fighter.is_dead():
-                self.add_to_history({'comment': ' (%s) did nothing (dead)' %
+                if not self.world.playing_back:
+                    self.add_to_history(
+                            {'comment': ' (%s) did nothing (dead)' %
                                                         current_fighter.name})
             elif current_fighter.is_absent():
-                self.add_to_history({'comment': ' (%s) did nothing (absent)' %
+                if not self.world.playing_back:
+                    self.add_to_history(
+                            {'comment': ' (%s) did nothing (absent)' %
                                                         current_fighter.name})
 
             else:
@@ -7928,7 +7958,8 @@ class FightHandler(ScreenHandler):
                 keep_going = False
 
         if round_before != self._saved_fight['round']:
-            self.add_to_history({'comment': '--- Round %d ---' %
+            if not self.world.playing_back:
+                self.add_to_history({'comment': '--- Round %d ---' %
                                                 self._saved_fight['round']})
 
 
