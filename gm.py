@@ -2345,23 +2345,12 @@ class TimersWidget(object):
             timer['actions']['announcement'] = param['announcement']
         if param['state'] is not None:
             timer['actions']['state'] = param['state']
-        timer_obj.from_pieces(pieces)
 
+        timer_obj.from_pieces(timer)
         self.__timers.add(timer_obj)
 
 
     # Private and Protected Methods
-
-    def __continuous_message_action(self,
-                                    param
-                                   ):
-        title = 'Enter the Continuous Message'
-        height = 1
-        width = (curses.COLS - 4) - Timer.len_timer_leader
-        string = self.__window_manager.input_box(height, width, title)
-        if string is not None and len(string) <= 0:
-            string = None
-        param['continuous_message'] = string
 
 
     def __announcement_action(self,
@@ -2374,6 +2363,20 @@ class TimersWidget(object):
         if announcement is not None and len(announcement) <= 0:
             announcement = None
         param['announcement'] = announcement
+        return True # Keep going
+
+
+    def __continuous_message_action(self,
+                                    param
+                                   ):
+        title = 'Enter the Continuous Message'
+        height = 1
+        width = (curses.COLS - 4) - Timer.len_timer_leader
+        string = self.__window_manager.input_box(height, width, title)
+        if string is not None and len(string) <= 0:
+            string = None
+        param['continuous_message'] = string
+        return True # Keep going
 
 
     def __new_state_action(self,
@@ -2385,6 +2388,7 @@ class TimersWidget(object):
         state = self.__window_manager.menu('Which State', state_menu)
         if state is not None:
             param['state'] = state
+        return True # Keep going
 
 
 class Timers(object):
