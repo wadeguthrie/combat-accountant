@@ -2291,63 +2291,20 @@ class TimersWidget(object):
                    timer_recipient_name # string
                    ):
 
-        # How long is the timer?
+        timer_dict = self.__make_timer_dict(timer_recipient_name)
 
-        title = 'Rounds To Wait...'
-        height = 1
-        width = len(title)
-        adj_string = self.__window_manager.input_box(height, width, title)
-        if adj_string is None or len(adj_string) <= 0:
-            return
-        rounds = int(adj_string)
-        if rounds <= 0:
-            return
+        if timer_dict is not None:
+            timer_obj = Timer(None)
+            timer_obj.from_pieces(timer)
+            self.__timers.add(timer_obj)
 
-        # What does the timer do?
 
-        keep_asking = True
-        keep_asking_menu = [('yes', True), ('no', False)]
-        param = {'announcement': None,
-                 'continuous_message': None,
-                 'state': None}
-        actions_menu = [('message (continuous)', 
-                                {'doit': self.__continuous_message_action,
-                                 'param': param}),
-                        ('announcement',       
-                                {'doit': self.__announcement_action,
-                                 'param': param}),
-                        ('state change',          
-                                {'doit': self.__new_state_action,
-                                 'param': param})]
-        while keep_asking:
-            result = self.__window_manager.menu('Timer Action', actions_menu)
-            if result is None:
-                return
-            keep_asking = self.__window_manager.menu('Pick More Actions',
-                                                     keep_asking_menu)
-            if keep_asking is None:
-                keep_asking = True
+    def make_timer_action(self,
+                          timer_recipient_name, # string
+                         ):
 
-        # Install the timer.
+        return self.__make_timer_dict(timer_recipient_name)
 
-        if 'announcement' in param and param['announcement'] is not None:
-            # Shave a little off the time so that the timer will announce
-            # as his round starts rather than at the end.
-            rounds -= Timer.announcement_margin
-
-        timer_obj = Timer(None)
-        timer = { 'parent-name': timer_recipient_name,
-                  'rounds': rounds,
-                  'string': param['continuous_message'],
-                  'actions': {} }
-
-        if param['announcement'] is not None:
-            timer['actions']['announcement'] = param['announcement']
-        if param['state'] is not None:
-            timer['actions']['state'] = param['state']
-
-        timer_obj.from_pieces(timer)
-        self.__timers.add(timer_obj)
 
 
     # Private and Protected Methods
@@ -2377,6 +2334,68 @@ class TimersWidget(object):
             string = None
         param['continuous_message'] = string
         return True # Keep going
+
+
+    def __make_timer_dict(self,
+                          timer_recipient_name # string
+                         ):
+
+        # How long is the timer?
+
+        title = 'Rounds To Wait...'
+        height = 1
+        width = len(title)
+        adj_string = self.__window_manager.input_box(height, width, title)
+        if adj_string is None or len(adj_string) <= 0:
+            return None
+        rounds = int(adj_string)
+        if rounds <= 0:
+            return None
+
+        # What does the timer do?
+
+        keep_asking = True
+        keep_asking_menu = [('yes', True), ('no', False)]
+        param = {'announcement': None,
+                 'continuous_message': None,
+                 'state': None}
+        actions_menu = [('message (continuous)', 
+                                {'doit': self.__continuous_message_action,
+                                 'param': param}),
+                        ('announcement',       
+                                {'doit': self.__announcement_action,
+                                 'param': param}),
+                        ('state change',          
+                                {'doit': self.__new_state_action,
+                                 'param': param})]
+        while keep_asking:
+            result = self.__window_manager.menu('Timer Action', actions_menu)
+            if result is None:
+                return None
+            keep_asking = self.__window_manager.menu('Pick More Actions',
+                                                     keep_asking_menu)
+            if keep_asking is None:
+                keep_asking = True
+
+        # Install the timer.
+
+        if 'announcement' in param and param['announcement'] is not None:
+            # Shave a little off the time so that the timer will announce
+            # as his round starts rather than at the end.
+            rounds -= Timer.announcement_margin
+
+        timer_dict = { 'parent-name': timer_recipient_name,
+                       'rounds': rounds,
+                       'string': param['continuous_message'],
+                       'actions': {} }
+
+        if param['announcement'] is not None:
+            timer_dict['actions']['announcement'] = param['announcement']
+        if param['state'] is not None:
+            timer_dict['actions']['state'] = param['state']
+
+        return timer_dict
+
 
 
     def __new_state_action(self,
@@ -3261,6 +3280,7 @@ class Ruleset(object):
             'pick-opponent':        {'doit': self.__pick_opponent},
             'reload-really':        {'doit': self.__do_reload},
             'set-consciousness':    {'doit': self.__set_consciousness},
+            'set-timer':            {'doit': self.__set_timer},
             'start-turn':           {'doit': self.__start_turn},
             'use-item':             {'doit': self.__use_item},
             'user-defined':         {'doit': self.__do_custom_action},
@@ -3371,8 +3391,8 @@ class Ruleset(object):
         '''
 
         if (fighter.details['opponent'] is None and
-                                (fight_handler is None or
-                                 not fight_handler.world.playing_back)):
+                                        fight_handler is not None and
+                                        not fight_handler.world.playing_back):
             fight_handler.pick_opponent()
 
         weapon, weapon_index = fighter.get_current_weapon()
@@ -3388,6 +3408,7 @@ class Ruleset(object):
                            action,           # {'name': <action>, parameters...}
                            fight_handler,    # FightHandler object
                           ):
+        # TODO: ask how long this custom action should take
         height = 1
         title = 'What Action Is Performed'
         width = self._window_manager.getmaxyx()
@@ -3453,8 +3474,9 @@ class Ruleset(object):
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        fighter.end_turn(fight_handler)
-        fight_handler.modify_index(1)
+        if fight_handler is not None:
+            fighter.end_turn(fight_handler)
+            fight_handler.modify_index(1)
         return Ruleset.HANDLED_OK
 
 
@@ -3482,6 +3504,18 @@ class Ruleset(object):
         Returns: Nothing, return values for these functions are ignored.
         '''
         fighter.set_consciousness(action['level'])
+        return Ruleset.HANDLED_OK
+
+
+    def __set_timer(self,
+                    fighter,          # Fighter object
+                    action,           # {'name': <action>, parameters...}
+                    fight_handler,    # FightHandler object
+                   ):
+
+        timer_obj = Timer(None)
+        timer_obj.from_pieces(action['timer'])
+        fighter.timers.add(timer_obj)
         return Ruleset.HANDLED_OK
 
 
@@ -6488,7 +6522,7 @@ class GurpsRuleset(Ruleset):
         Returns: Nothing, return values for these functions are ignored.
         '''
 
-        if fight_handler is None or not fight_handler.world.playing_back:
+        if fight_handler is not None and not fight_handler.world.playing_back:
             if fighter.details['opponent'] is None:
                 fight_handler.pick_opponent()
 
@@ -6522,6 +6556,7 @@ class GurpsRuleset(Ruleset):
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
+        # TODO: maybe reset_aim just needs 'fighter' parameter
         self.reset_aim(fighter, {}, fight_handler)
 
         # Timer
@@ -6553,7 +6588,10 @@ class GurpsRuleset(Ruleset):
             weapon, throw_away = fighter.get_current_weapon()
             holding_ranged = (False if weapon is None else
                                         (weapon['type'] == 'ranged weapon'))
-            opponent = fight_handler.get_opponent_for(fighter)
+            if fight_handler is None:
+                opponent = None
+            else:
+                opponent = fight_handler.get_opponent_for(fighter)
             if weapon is None:
                 unarmed_skills = self.get_weapons_unarmed_skills(weapon)
                 unarmed_info = self.get_unarmed_info(fighter,
@@ -6705,7 +6743,7 @@ class GurpsRuleset(Ruleset):
         Returns: 
         '''
 
-        if fight_handler.world.playing_back:
+        if fight_handler is not None and fight_handler.world.playing_back:
             return None # No timer
 
         weapon, weapon_index = fighter.get_current_weapon()
@@ -8932,7 +8970,13 @@ class FightHandler(ScreenHandler):
 
         timers_widget = TimersWidget(timer_recipient.timers,
                                      self._window_manager)
-        timers_widget.make_timer(timer_recipient.name)
+
+        timer_dict = timers_widget.make_timer_action(timer_recipient.name)
+        if timer_dict is not None:
+            self.__ruleset.do_action(timer_recipient,
+                                     {'name': 'set-timer',
+                                      'timer': timer_dict},
+                                     self)
 
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
