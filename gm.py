@@ -20,13 +20,10 @@ import traceback
 #   - Need to be able to generate a blank creature (maybe it's a default
 #     Template).
 #   - Should have a 'post-action-accounting' method where an action can be
-#     augmented. (?)  Need to save to history first.  Also need to append to
-#     actions this round.
+#     augmented. (?)  Need to save to history first.  
 #   - Overhaul of spell casting
-#       o Spell stuff should all be in GurpsRuleset
 #       o Need maintain spell action
 #   - add laser sights to weapons
-#   - Add playback of actions, like from: self._saved_fight['history']
 #   - Need equipment containers
 #
 # TODO (eventually):
@@ -2157,39 +2154,37 @@ class Timer(object):
 
 
     def from_pieces(self,
-                    parent_name,           # string describing the thing
-                                           #   calling the timer
-                    rounds,                # rounds until timer fires
-                                           #   (3.0 rounds fires at end
-                                           #   of 3 rounds; 2.9 rounds
-                                           #   fires at beginning of 3
-                                           #   rounds).
-                    text,                  # string to display (in
-                                           #   fighter's notes) while
-                                           #   timer is running
-                    announcement = None,   # string to display (in its
-                                           #   own window) when timer
-                                           #   fires
-                    state = None           # string describing new state of
-                                           #   fighter (see
-                                           #   Fighter.conscious_map)
-           ):
+                    pieces, # { 'parent-name': <text>, string describing the
+                            #                          thing calling the timer
+                            #   'rounds': <number>,    rounds until timer fires
+                            #                          (3.0 rounds fires at end
+                            #                          of 3 rounds; 2.9 rounds
+                            #                          fires at beginning of 3
+                            #                          rounds).
+                            #   'string': <text> or [<text>, <text>, ...],
+                            #                          string to display (in
+                            #                          fighter's notes) while
+                            #                          timer is running
+                            #   'actions': {'state': <text>,
+                            #                          string describing new
+                            #                          state of fighter (see
+                            #                          Fighter.conscious_map)
+                            #               'announcement': <text>},
+                            #                          string to display (in
+                            #                          its own window) when
+                            #                          timer fires
+                            # }
+                   ):
         '''
         Creates a new timer from scratch (rather than from data that's already
         in the JSON).
         '''
 
-        name = '<< Unknown Parent >>' if parent_name is None else parent_name
-        self.details = {'parent-name': name,
-                        'rounds': rounds,
-                        'string': text,
-                        'actions': {}}
-
-        if state is not None:
-            self.details['actions']['state'] = state
-
-        if announcement is not None:
-            self.details['actions']['announcement'] = announcement
+        self.details = copy.deepcopy(pieces)
+        if 'parent-name' not in self.details:
+            self.details['parent-name'] = '<< Unknown Parent >>'
+        if 'actions' not in self.details:
+            self.details['actions'] = {}
 
 
     def get_description(self):
@@ -2341,11 +2336,17 @@ class TimersWidget(object):
             rounds -= Timer.announcement_margin
 
         timer_obj = Timer(None)
-        timer_obj.from_pieces(timer_recipient_name,
-                              rounds,
-                              param['continuous_message'],
-                              param['announcement'],
-                              param['state'])
+        timer = { 'parent-name': timer_recipient_name,
+                  'rounds': rounds,
+                  'string': param['continuous_message'],
+                  'actions': {} }
+
+        if param['announcement'] is not None:
+            timer['actions']['announcement'] = param['announcement']
+        if param['state'] is not None:
+            timer['actions']['state'] = param['state']
+        timer_obj.from_pieces(pieces)
+
         self.__timers.add(timer_obj)
 
 
@@ -2996,7 +2997,6 @@ class Ruleset(object):
 
     def __init__(self, window_manager):
         self._window_manager = window_manager
-        self._announce = False # TODO: remove
 
     @staticmethod
     def roll(number, # the number of dice
@@ -4553,22 +4553,14 @@ class GurpsRuleset(Ruleset):
                                                  handled,
                                                  logit)
 
-        if self._announce:  # TODO: remove
-            print 'HANDLED: %r' % handled   # TODO: remove
-            print 'LOGIT: %r' % logit   # TODO: remove
-            PP.pprint(action)   # TODO: remove
-
         if handled == Ruleset.HANDLED_OK:
             if logit and 'name' in action:
-                if self._announce:  # TODO: remove
-                    print '** APPENDING' # TODO: remove
                 fighter.details['actions_this_turn'].append(action['name'])
         elif handled == Ruleset.UNHANDLED:
             self._window_manager.error(
                             ['action "%s" is not handled by any ruleset' %
                                                             action['name']])
 
-        self._announce = False # TODO: remove
         # Don't deal with HANDLED_ERROR
 
 
@@ -4601,7 +4593,7 @@ class GurpsRuleset(Ruleset):
         action_menu = []
 
         if fighter.details['stunned']:
-            # TODO: not quite sure how to handle this one
+            # TODO: not quite sure how to handle this one for playback
             action_menu.append(
                 ('do nothing (stunned)', {'text': ['Do Nothing (Stunned)',
                                                    ' Defense: any @-4',
@@ -6299,13 +6291,15 @@ class GurpsRuleset(Ruleset):
         # Timer
 
         timer = Timer(None)
-        casting_time -= Timer.announcement_margin
         text = [('Casting (%s) @ skill (%d): %s' % (complete_spell['name'],
                                                     complete_spell['skill'],
                                                     complete_spell['notes'])),
                 ' Defense: none',
                 ' Move: none']
-        timer.from_pieces(fighter.name, casting_time, text)
+
+        timer.from_pieces({'parent-name': fighter.name,
+                           'rounds': casting_time - Timer.announcement_margin,
+                           'string': text})
         timer.mark_owner_as_busy()  # When casting, the owner is busy
 
         # If the spell lasts any time at all, put a timer up so that we see
@@ -6314,10 +6308,10 @@ class GurpsRuleset(Ruleset):
                                             complete_spell['duration'] > 1):
             duration_timer = Timer(None)
             duration_timer.from_pieces(
-                                fighter.name,
-                                complete_spell['duration'],
-                                'SPELL ACTIVE: %s' % complete_spell['name'])
-            timer.details['actions']['timer'] = duration_timer.details
+                       {'parent-name': fighter.name,
+                        'rounds': complete_spell['duration'],
+                        'string': 'SPELL ACTIVE: %s' % complete_spell['name'],
+                        'actions': {'timer': duration_timer.details}})
 
             # Opponent?
 
@@ -6334,19 +6328,23 @@ class GurpsRuleset(Ruleset):
                     opponent = None
 
             if opponent:
-                delay_timer = Timer(None)
-                delay_timer.from_pieces(
-                        opponent.name,
-                        casting_time,
-                        ('Waiting for "%s" spell to take affect' %
-                                                    complete_spell['name']))
-
                 spell_timer = Timer(None)
                 spell_timer.from_pieces(
-                        opponent.name,
-                        complete_spell['duration'],
-                        'SPELL "%s" AGAINST ME' % complete_spell['name'])
-                delay_timer.details['actions']['timer'] = spell_timer.details
+                         {'parent-name': opponent.name,
+                          'rounds': complete_spell['duration'],
+                          'string': 'SPELL "%s" AGAINST ME' %
+                                                    complete_spell['name']
+                         })
+
+                delay_timer = Timer(None)
+                delay_timer.from_pieces(
+                         {'parent-name': opponent.name,
+                          'rounds': casting_time,
+                          'string': ('Waiting for "%s" spell to take affect' %
+                                                    complete_spell['name']),
+                          'actions': {'timer': spell_timer.details}
+                         })
+                        
                 opponent.timers.add(delay_timer)
 
         return timer
@@ -6367,14 +6365,15 @@ class GurpsRuleset(Ruleset):
         # Timer
 
         timer = Timer(None)
-        text = ['Change posture',
-                ' NOTE: crouch 1st action = free',
-                '       crouch->stand = free',
-                '       kneel->stand = step',
-                ' Defense: any',
-                ' Move: none']
-        time = 1 - Timer.announcement_margin
-        timer.from_pieces(fighter.name, time, text)
+
+        timer.from_pieces({'parent-name': fighter.name,
+                           'rounds': 1 - Timer.announcement_margin,
+                           'string': ['Change posture',
+                                      ' NOTE: crouch 1st action = free',
+                                      '       crouch->stand = free',
+                                      '       kneel->stand = step',
+                                      ' Defense: any',
+                                      ' Move: none'] })
 
         return timer
 
@@ -6499,11 +6498,13 @@ class GurpsRuleset(Ruleset):
         # Timer
 
         timer = Timer(None)
-        text = [('Aim%s' % (' (braced)' if action['braced'] else '')),
-                  ' Defense: any loses aim',
-                  ' Move: step']
-        time = 1 - Timer.announcement_margin
-        timer.from_pieces(fighter.name, time, text)
+        timer.from_pieces(
+            {'parent-name': fighter.name,
+             'rounds': 1 - Timer.announcement_margin,
+             'string': [('Aim%s' % (' (braced)' if action['braced'] else '')),
+                         ' Defense: any loses aim',
+                         ' Move: step']
+            })
 
         return timer
 
@@ -6575,9 +6576,9 @@ class GurpsRuleset(Ruleset):
         else:
             text = ['<<UNHANDLED ACTION: %s' % action['name']]
 
-        time = 1 - Timer.announcement_margin
-        timer.from_pieces(fighter.name, time, text)
-
+        timer.from_pieces({'parent-name': fighter.name,
+                           'rounds': 1 - Timer.announcement_margin,
+                           'string': text})
         return timer
 
 
@@ -6597,20 +6598,23 @@ class GurpsRuleset(Ruleset):
         timer = None
         if action['name'] == 'defend':
             timer = Timer(None)
-            text = ['All out defense', ' Defense: double', ' Move: step']
-            time = 1 - Timer.announcement_margin
-            timer.from_pieces(fighter.name, time, text)
+            timer.from_pieces( {'parent-name': fighter.name,
+                                'rounds': 1 - Timer.announcement_margin,
+                                'string': ['All out defense',
+                                           ' Defense: double',
+                                           ' Move: step']} )
 
         elif action['name'] == 'don-armor':
             timer = Timer(None)
             armor, throw_away = fighter.get_current_armor()
             title = ('Doff armor' if armor is None else
                                                 ('Don %s' % armor['name']))
-            text = [title, ' Defense: none', ' Move: none']
 
-            time = 1 - Timer.announcement_margin
-            timer.from_pieces(fighter.name, time, text)
-
+            timer.from_pieces( {'parent-name': fighter.name,
+                                'rounds': 1 - Timer.announcement_margin,
+                                'string': [title,
+                                           ' Defense: none',
+                                           ' Move: none']} )
         return timer
 
 
@@ -6675,8 +6679,9 @@ class GurpsRuleset(Ruleset):
         else:
             text = ['<<UNHANDLED ACTION: %s' % action['name']]
 
-        time = 1 - Timer.announcement_margin
-        timer.from_pieces(fighter.name, time, text)
+        timer.from_pieces( {'parent-name': fighter.name,
+                            'rounds': 1 - Timer.announcement_margin,
+                            'string': text} )
 
         return timer
 
@@ -6753,10 +6758,12 @@ class GurpsRuleset(Ruleset):
 
         # Timer
 
-        reload_time = action['time'] - Timer.announcement_margin
-
         timer = Timer(None)
-        timer.from_pieces(fighter.name, reload_time, 'RELOADING')
+        timer.from_pieces( 
+                    {'parent-name': fighter.name,
+                     'rounds': action['time'] - Timer.announcement_margin,
+                     'string': 'RELOADING'} )
+
         timer.mark_owner_as_busy()  # When reloading, the owner is busy
 
         return timer
@@ -6792,11 +6799,10 @@ class GurpsRuleset(Ruleset):
 
         title = 'Holster weapon' if weapon is None else (
                                                 'Draw %s' % weapon['name'])
-        text = [title, ' Defense: any', ' Move: step']
-
-        time = 1 - Timer.announcement_margin
-        timer.from_pieces(fighter.name, time, text)
-
+        
+        timer.from_pieces({'parent-name': fighter.name,
+                           'rounds': 1 - Timer.announcement_margin,
+                           'string': [title, ' Defense: any', ' Move: step']})
         return timer
 
 
@@ -7764,8 +7770,6 @@ class FightHandler(ScreenHandler):
                                                             monster_group)
                 if details is not None:
                     self.__ruleset.is_creature_consistent(name, details)
-
-        # TODO: I may want to take the snapshot here instead of below
 
         if not self.should_we_show_current_fighter():
             self.modify_index(1)

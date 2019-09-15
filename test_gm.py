@@ -3161,7 +3161,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         round_count = 3
         timer_text = '%d' % timer_id
         timer_obj = gm.Timer(None)
-        timer_obj.from_pieces(fighter.name, round_count, timer_text)
+        timer_obj.from_pieces({'parent-name': fighter.name,
+                               'rounds': round_count,
+                               'string': timer_text})
+
         fighter.timers.add(timer_obj)
 
         for i in range(round_count):
@@ -3185,7 +3188,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             timer_text = '%d' % timer_id
             timer_id += 1
             timer_obj = gm.Timer(None)
-            timer_obj.from_pieces(fighter.name, round_count[i], timer_text)
+            timer_obj.from_pieces({'parent-name': fighter.name,
+                                   'rounds': round_count[i],
+                                   'string': timer_text})
             fighter.timers.add(timer_obj)
 
         # round 0
@@ -3232,7 +3237,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         round_count = 1
         timer0_text = '%d' % timer_id
         timer_obj = gm.Timer(None)
-        timer_obj.from_pieces(fighter.name, round_count, timer0_text)
+        timer_obj.from_pieces({'parent-name': fighter.name,
+                               'rounds': round_count,
+                               'string': timer0_text})
+                                   
         fighter.timers.add(timer_obj)
 
         # start turn -- decrement 1-turn timer, timer = 0, keep it this turn
@@ -3248,7 +3256,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         round_count = 0.9
         timer1_text = '%d' % timer_id
         timer_obj = gm.Timer(None)
-        timer_obj.from_pieces(fighter.name, round_count, timer1_text)
+        timer_obj.from_pieces({'parent-name': fighter.name,
+                               'rounds': round_count,
+                               'string': timer1_text})
         fighter.timers.add(timer_obj)
 
         # assert 2 timers -- right: both timers are there
