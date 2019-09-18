@@ -441,6 +441,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         self.__vodou_priest_ammo_count = 5
         self.__vodou_priest_initial_shots = 9
+
+        self.__vodou_priest_spell_index = {
+            "Awaken": 0,
+            "Animate Shadow": 1,
+            "Explosive Lightning": 2,
+            "Itch": 3,
+            "Death Vision": 4,
+        }
         self.__vodou_priest_fighter = {
             "shock": 0, 
             "stunned": False,
@@ -473,6 +481,28 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "dr": self.__vodou_priest_armor_dr, 
                   "name": "Sport coat/Jeans"
                  }  # index 2
+            ],
+            "spells": [
+              {
+                "skill": 18, 
+                "name": "Awaken"
+              }, 
+              {
+                "skill": 16, 
+                "name": "Animate Shadow"
+              }, 
+              {
+                "skill": 16, 
+                "name": "Explosive Lightning"
+              }, 
+              {
+                "skill": 12, 
+                "name": "Itch"
+              }, 
+              {
+                "skill": 16, 
+                "name": "Death Vision"
+              }, 
             ],
             "skills": {"Guns (Pistol)":
                                     self.__vodou_priest_fighter_pistol_skill,
@@ -947,6 +977,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
+                                  mock_fight_handler,
                                   self.__window_manager)
 
         self.__ruleset.do_action(vodou_priest,
@@ -969,6 +1000,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__bokor_fighter),
                                    self.__ruleset,
+                                  mock_fight_handler,
                                    self.__window_manager)
 
         self.__ruleset.do_action(bokor_fighter,
@@ -989,6 +1021,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset,
+                                  mock_fight_handler,
                                   self.__window_manager)
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(tank_fighter)
         assert dodge_skill == 9
@@ -997,6 +1030,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset,
+                                   mock_fight_handler,
                                    self.__window_manager)
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(thief_fighter)
         assert dodge_skill == 8
@@ -1011,6 +1045,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
+                                  None, # FightHandler
                                   self.__window_manager)
         block_skill, block_why = self.__ruleset.get_block_skill(
                                                         vodou_priest_fighter,
@@ -1021,6 +1056,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__bokor_fighter),
                                    self.__ruleset,
+                                   None, # FightHandler
                                    self.__window_manager)
         block_skill, block_why = self.__ruleset.get_block_skill(bokor_fighter,
                                                                 None)
@@ -1030,6 +1066,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset,
+                                  None, # FightHandler
                                   self.__window_manager)
         block_skill, block_why = self.__ruleset.get_block_skill(tank_fighter,
                                                                 None)
@@ -1039,6 +1076,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset,
+                                   None, # FightHandler
                                    self.__window_manager)
         block_skill, block_why = self.__ruleset.get_block_skill(thief_fighter,
                                                                 None)
@@ -1056,6 +1094,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                     'group',
                                     copy.deepcopy(self.__vodou_priest_fighter),
                                     self.__ruleset,
+                                    None, # FightHandler
                                     self.__window_manager)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(
                                                     vodou_priest_fighter,
@@ -1068,6 +1107,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__bokor_fighter),
                                    self.__ruleset,
+                                   None, # FightHandler
                                    self.__window_manager)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(bokor_fighter,
                                                                 weapon)
@@ -1079,6 +1119,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset,
+                                  None, # FightHandler
                                   self.__window_manager)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(tank_fighter,
                                                                 weapon)
@@ -1089,6 +1130,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset,
+                                  None, # FightHandler
                                   self.__window_manager)
         weapon_index, weapon  = tank_fighter.get_weapon_by_name('sick stick')
         self.__ruleset.do_action(tank_fighter, 
@@ -1118,6 +1160,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset,
+                                   None, # FightHandler
                                    self.__window_manager)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(thief_fighter,
                                                                 weapon)
@@ -1128,6 +1171,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset,
+                                   None, # FightHandler
                                    self.__window_manager)
         weapon_index, weapon = thief_fighter.get_weapon_by_name('Large Knife')
         self.__ruleset.do_action(tank_fighter, 
@@ -1162,6 +1206,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                     'group',
                                     copy.deepcopy(self.__vodou_priest_fighter),
                                     self.__ruleset,
+                                    mock_fight_handler,
                                     self.__window_manager)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(
                                                 vodou_priest_fighter,
@@ -1179,6 +1224,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__bokor_fighter),
                                    self.__ruleset,
+                                   mock_fight_handler,
                                    self.__window_manager)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(bokor_fighter,
                                                             None,
@@ -1196,6 +1242,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset,
+                                  mock_fight_handler,
                                   self.__window_manager)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
                                                             None,
@@ -1212,6 +1259,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset,
+                                   mock_fight_handler,
                                    self.__window_manager)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
                                                             None,
@@ -1247,6 +1295,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset,
+                                   mock_fight_handler,
                                    self.__window_manager)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
                                                             None,
@@ -1684,6 +1733,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
+                                  mock_fight_handler,
                                   self.__window_manager)
         requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest, 
@@ -1880,6 +1930,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                           'group',
                           copy.deepcopy(self.__tank_fighter),
                           self.__ruleset,
+                          mock_fight_handler,
                           self.__window_manager)
 
         self.__ruleset.do_action(vodou_priest,
@@ -1924,6 +1975,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
+                                  mock_fight_handler,
                                   self.__window_manager)
         requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest, 
@@ -2157,6 +2209,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                            'group',
                            copy.deepcopy(self.__thief_fighter),
                            self.__ruleset,
+                           mock_fight_handler,
                            self.__window_manager)
         requested_weapon_index = 1 # Knife
         self.__ruleset.do_action(thief, 
@@ -2193,6 +2246,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset,
+                                  mock_fight_handler,
                                   self.__window_manager)
 
         self.__ruleset.do_action(thief,
@@ -2261,6 +2315,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
+                                  mock_fight_handler,
                                   self.__window_manager)
 
         requested_weapon_index = self.__vodou_pistol_index
@@ -2680,6 +2735,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
+                                  mock_fight_handler,
                                   self.__window_manager)
 
         del vodou_priest.details['advantages']['Combat Reflexes']
@@ -2822,6 +2878,100 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         #assert vodou_priest.details['posture'] == 'lying'
 
 
+    def test_spell_casting(self):
+        '''
+        GURPS-specific test
+        '''
+
+        # Setup
+
+        self.__window_manager = MockWindowManager()
+        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        mock_fight_handler = MockFightHandler()
+
+        vodou_priest = gm.Fighter('Priest',
+                                  'group',
+                                  copy.deepcopy(self.__vodou_priest_fighter),
+                                  self.__ruleset,
+                                  mock_fight_handler,
+                                  self.__window_manager)
+
+        expected = [
+          {'name': "Awaken",
+           'cost': 1,
+           'time': 1,
+           'skill': 18,
+           'skill-bonus': -1,
+           'duration': 0,
+           'notes': "M90"},
+          {'name': "Animate Shadow",
+           'cost': 4,
+           'time': 2,
+           'skill': 16,
+           'skill-bonus': -1,
+           'duration': 5,
+           'notes': "M154, Subject's shadow attacks them, HT negates"},
+          {'name': "Death Vision",
+           'cost': 2,
+           'time': 3,
+           'skill': 16,
+           'skill-bonus': -1,
+           'duration': 1,
+           'notes': "M149, vs. IQ"},
+          {'name': "Explosive Lightning",
+           'cost': None,
+           'time': None,
+           'skill': 16,
+           'skill-bonus': -1,
+           'duration': 0,
+           'notes': "M196, cost 2-mage level, damage 1d-1 /2"}, 
+          {'name': "Itch",
+           'cost': 2,
+           'time': 1,
+           'skill': 12,
+           'skill-bonus': 0,
+           'duration': None,
+           'notes': "M35"},
+        ]
+
+        vodou_priest.timers.clear_all()
+        original_fp = vodou_priest.details['current']['fp']
+        assert original_fp == vodou_priest.details['permanent']['fp']
+
+        action = {'name': 'cast-spell',
+                  'spell-index':
+                     self.__vodou_priest_spell_index[expected[0]['name']]
+                 }
+
+        self.__ruleset.do_action(vodou_priest, action, mock_fight_handler)
+
+        text = [('Casting (%s) @ skill (%d): %s' % (expected[0]['name'],
+                                                    expected[0]['skill'],
+                                                    expected[0]['notes'])),
+                ' Defense: none',
+                ' Move: none']
+
+        #print '\nTIMERS' # TODO: remove
+        #PP.pprint(vodou_priest.details['timers']) # TODO: remove
+
+        assert len(vodou_priest.details['timers']) == 1
+        assert vodou_priest.details['timers'][0]['string'] == text
+        expected_cost = expected[0]['cost'] + expected[0]['skill-bonus']
+        assert (vodou_priest.details['current']['fp'] ==
+                                        original_fp - expected_cost)
+
+        # TODO: after the casting timer goes off, verify that duration timer
+        # is active
+
+        #'CAST SPELL (%s) ACTIVE' %
+        #'CAST SPELL (%s) FIRED' %
+
+        # TODO: verify that casting timer is marked as busy
+
+
+        # TODO: check that cost changes with better skill
+        # TODO: setup caster and opponent
+
     def test_don_doff_armor(self):
         '''
         General test
@@ -2837,6 +2987,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
+                                  mock_fight_handler,
                                   self.__window_manager)
 
         # Don armor
@@ -2880,6 +3031,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
+                                  mock_fight_handler,
                                   self.__window_manager)
 
         # Draw Weapon
@@ -2921,6 +3073,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
+                                  mock_fight_handler,
                                   self.__window_manager)
 
         # Draw Weapon
@@ -3101,6 +3254,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
+                                  mock_fight_handler,
                                   self.__window_manager)
         requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest, 
@@ -3143,8 +3297,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit # aiming for 1 round
 
 
-
-
     def test_timers(self):
         '''
         Basic test
@@ -3153,6 +3305,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                              'group',
                              copy.deepcopy(self.__tank_fighter),
                              self.__ruleset,
+                             None, # FightHandler
                              self.__window_manager)
 
         # Test a standard timer
@@ -3406,6 +3559,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                              'group',
                              copy.deepcopy(self.__tank_fighter),
                              self.__ruleset,
+                             None, # FightHandler
                              self.__window_manager)
 
         original_item = fighter.details['stuff'][

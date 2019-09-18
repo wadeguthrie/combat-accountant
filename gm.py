@@ -1868,6 +1868,7 @@ class World(object):
             fight = Fight(group_name,
                           self.details['fights'][group_name],
                           self.__ruleset,
+                          None, # FightHandler
                           self.__window_manager
                           )
             return fight.get_creatures()
@@ -2200,7 +2201,8 @@ class Timer(object):
             # rather than at the end.
             rounds += Timer.announcement_margin
 
-        round_count_string = Timer.round_count_string % rounds
+        round_count_string = Timer.round_count_string % (rounds +
+                                                    Timer.announcement_margin)
         this_line.append(round_count_string)
         if 'announcement' in self.details['actions']:
             this_line.append('[%s]' % self.details['actions']['announcement'])
@@ -2246,7 +2248,8 @@ class Timer(object):
             # rather than at the end.
             rounds += Timer.announcement_margin
 
-        round_count_string = Timer.round_count_string % rounds
+        round_count_string = Timer.round_count_string % (rounds +
+                                                    Timer.announcement_margin)
         this_line.append(round_count_string)
 
         needs_headline = True
@@ -2415,6 +2418,7 @@ class Timers(object):
                  timer_details, # List from JSON containing timers
                  owner,         # ThingsInFight object to receive timer
                                 #   actions.
+                 fight_handler, # timers send actions thru FightHandler object
                  window_manager # For displaying error messages
                 ):
 
@@ -2425,6 +2429,7 @@ class Timers(object):
                          'obj': []}
 
         self.__owner = owner
+        self.__fight_handler = fight_handler
 
         for timer_data in timer_details:
             timer_obj = Timer(timer_data)
@@ -2516,6 +2521,7 @@ class ThingsInFight(object):
                  details,       # world.details['fights'][name] (world is
                                 #   a World object)
                  ruleset,       # Ruleset object
+                 fight_handler, # FightHandler object
                  window_manager # GmWindowManager object for reporting errors
                 ):
         self.name = name
@@ -2538,6 +2544,7 @@ class ThingsInFight(object):
             details['timers'] = []
         self.timers = Timers(self.details['timers'],
                              self,
+                             fight_handler,
                              self._window_manager)
 
 
@@ -2630,12 +2637,14 @@ class Fight(ThingsInFight):
                  details,       # world.details['fights'][name] (world is
                                 #   a World object)
                  ruleset,       # Ruleset object
+                 fight_handler, # FightHandler object
                  window_manager # GmWindowManager object for error reporting
                 ):
         super(Fight, self).__init__(Fight.name,
                                     group,
                                     details,
                                     ruleset,
+                                    fight_handler,
                                     window_manager)
         self.detailed_name = Fight.detailed_name % group
 
@@ -2683,12 +2692,14 @@ class Fighter(ThingsInFight):
                  group,             # string = 'PCs' or some monster group
                  fighter_details,   # dict as in the JSON
                  ruleset,           # a Ruleset object
+                 fight_handler,     # FightHandler object
                  window_manager     # a GmWindowManager object
                 ):
         super(Fighter, self).__init__(name,
                                       group,
                                       fighter_details,
                                       ruleset,
+                                      fight_handler,
                                       window_manager)
         pass
 
@@ -3053,6 +3064,8 @@ class Ruleset(object):
                  ):
         '''
         '''
+        if 'name' in action and action['name'] == 'cast-spell':
+            print '\n=== Ruleset::do_acton' # TODO: remove
         handled = self._perform_action(fighter, action, fight_handler, logit)
         self._record_action(fighter, action, fight_handler, handled, logit)
 
@@ -3262,6 +3275,8 @@ class Ruleset(object):
                                           #  action is not a side-effect of
                                           #  another action
                        ):
+        if 'name' in action and action['name'] == 'cast-spell':
+            print '\n--- Ruleset::_perform_action' # TODO: remove
         '''
         ONLY to be used for fights (otherwise, there's no fight handler to log
         the actions).
@@ -4502,6 +4517,8 @@ class GurpsRuleset(Ruleset):
                                           #  action is not a side-effect of
                                           #  another action
                        ):
+        if 'name' in action and action['name'] == 'cast-spell':
+            print '\n--- GurpsRuleset::_perform_action' # TODO: remove
 
         # Label the action so playback knows who receives it.
 
@@ -4509,8 +4526,9 @@ class GurpsRuleset(Ruleset):
         action['fighter']['name'] = fighter.name
         action['fighter']['group'] = fighter.group
 
-        #PP = pprint.PrettyPrinter(indent=3, width=150)
-        #PP.pprint(action)
+        if 'name' in action and action['name'] == 'cast-spell':
+            PP = pprint.PrettyPrinter(indent=3, width=150)
+            PP.pprint(action)
 
         # Call base class' perform_action FIRST because GurpsRuleset depends on
         # the actions of the base class.  It make no sense for the base class'
@@ -4562,13 +4580,24 @@ class GurpsRuleset(Ruleset):
             return  handled
         
         if action['name'] in actions:
+            if action['name'] == 'cast-spell':
+                print 'getting ready to call "doit"' # TODO: remove
             timer = None
             action_info = actions[action['name']]
             if action_info['doit'] is not None:
                 timer = action_info['doit'](fighter, action, fight_handler)
             handled = Ruleset.HANDLED_OK
 
+            if action['name'] == 'cast-spell':
+                print 'getting ready to add timer (2)' # TODO: remove
+                PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
+                print 'timer:', # TODO: remove
+                PP.pprint(timer) # TODO: remove
+                print 'logit:', # TODO: remove
+                PP.pprint(logit) # TODO: remove
             if timer is not None and logit:
+                if action['name'] == 'cast-spell':
+                    print 'ADDING TIMER' # TODO: remove
                 fighter.timers.add(timer)
 
         return handled
@@ -6265,6 +6294,12 @@ class GurpsRuleset(Ruleset):
         Returns: Nothing, return values for these functions are ignored.
         '''
 
+        print '\n--- __cast_spell' # TODO: remove
+
+        if fight_handler is not None and fight_handler.world.playing_back:
+            print 'RETURNING (1)' # TODO: remove
+            return None # No timers
+
         # TODO: break into cast-spell and cast-spell-really (ala reload).
 
         spell_index = action['spell-index']
@@ -6274,9 +6309,25 @@ class GurpsRuleset(Ruleset):
             self._window_manager.error(
                 ['Spell "%s" not in GurpsRuleset.spells' % spell['name']]
             )
-            return None
+            print 'RETURNING (2)' # TODO: remove
+            return None # No timers
         complete_spell = copy.deepcopy(spell)
         complete_spell.update(GurpsRuleset.spells[spell['name']])
+
+        # Duration
+
+        if complete_spell['duration'] is None:
+            title = 'Duration for (%s) - see (%s) ' % (
+                                                    complete_spell['name'],
+                                                    complete_spell['notes'])
+            height = 1
+            width = len(title)
+            duration_string = ''
+            while len(duration_string) <= 0:
+                duration_string = self._window_manager.input_box(height,
+                                                                 width,
+                                                                 title)
+            complete_spell['duration'] = int(duration_string)
 
         # Cost
 
@@ -6290,23 +6341,15 @@ class GurpsRuleset(Ruleset):
                 cost_string = self._window_manager.input_box(height,
                                                              width,
                                                              title)
-            cost = int(cost_string)
-        else:
-            cost = complete_spell['cost']
+            complete_spell['cost'] = int(cost_string)
 
         # M8 - High skill level costs less
         skill = complete_spell['skill'] - 15
         while skill >= 0:
-            cost -= 1
+            complete_spell['cost'] -= 1
             skill -= 5
-        if cost <= 0:
-            cost = 0
-        else:
-            self.do_action(fighter, 
-                           {'name': 'adjust-fp', 
-                            'adj': -cost},
-                           fight_handler,
-                           logit=False)
+        if complete_spell['cost'] <= 0:
+            complete_spell['cost'] = 0
 
         # Casting time
 
@@ -6322,70 +6365,122 @@ class GurpsRuleset(Ruleset):
                 casting_time_string = self._window_manager.input_box(height,
                                                                      width,
                                                                      title)
-            casting_time = int(casting_time_string)
+            complete_spell['casting time'] = int(casting_time_string)
+
+        # Opponent?
+
+        # TODO: the opponent timer should be launched from the caster because
+        # the timing is all honked up when launching from the opponent (if the
+        # opponent is just after the caster in initiative, the spell will go
+        # off (from the point of view of the opponent) nearly a round before
+        # it should.
+
+        #opponent = None
+        #if fight_handler is not None:
+        #    opponent = fight_handler.get_opponent_for(fighter)
+
+        #if opponent is not None:
+        #    opponent_timer_menu = [('yes', True), ('no', False)]
+        #    timer_for_opponent = self._window_manager.menu(
+        #                                ('Mark %s with spell' % opponent.name),
+        #                                opponent_timer_menu)
+        #    if not timer_for_opponent:
+        #        opponent = None
+
+        # TODO: send the action for the second part
+
+        action = {'name': 'cast-spell-really',
+                  'spell': complete_spell}
+
+        #action['opponent'] = None if opponent is None else {
+        #                                            'name':  opponent.name,
+        #                                            'group': opponent.group}
+
+        # TODO: do in second part -- from here, below
+
+        if complete_spell['cost'] > 0:
+            self.do_action(fighter, 
+                           {'name': 'adjust-fp', 
+                            'adj': -complete_spell['cost']},
+                           fight_handler,
+                           logit=False)
+
+        # Duration Timer
+
+
+        # If the spell lasts any time at all, put a timer up so that we see
+        # that it's active
+
+        duration_timer = Timer(None)
+        if complete_spell['duration'] > 1:
+            duration_timer.from_pieces(
+                       {'parent-name': fighter.name,
+                        'rounds': complete_spell['duration'],
+                        'string': 'CAST SPELL (%s) ACTIVE' %
+                                                        complete_spell['name']
+                       })
         else:
-            casting_time = complete_spell['casting time']
+            duration_timer.from_pieces(
+                       {'parent-name': fighter.name,
+                        'rounds': 1,
+                        'actions': {'announcement':
+                                'CAST SPELL (%s) FIRED' %
+                                                        complete_spell['name']}
+                       })
 
-        # Timer
+        # Casting Timer
 
-        timer = Timer(None)
+        casting_timer = Timer(None)
         text = [('Casting (%s) @ skill (%d): %s' % (complete_spell['name'],
                                                     complete_spell['skill'],
                                                     complete_spell['notes'])),
                 ' Defense: none',
                 ' Move: none']
 
-        timer.from_pieces({'parent-name': fighter.name,
-                           'rounds': casting_time - Timer.announcement_margin,
-                           'string': text})
-        timer.mark_owner_as_busy()  # When casting, the owner is busy
+        casting_timer.from_pieces({'parent-name': fighter.name,
+                           'rounds': complete_spell['casting time'] -
+                                                Timer.announcement_margin,
+                           'string': text,
+                           'actions': {'timer': duration_timer.details}})
+        casting_timer.mark_owner_as_busy()  # When casting, the owner is busy
 
-        # If the spell lasts any time at all, put a timer up so that we see
-        # that it's active
-        if (complete_spell['duration'] is not None and
-                                            complete_spell['duration'] > 1):
-            duration_timer = Timer(None)
-            duration_timer.from_pieces(
-                       {'parent-name': fighter.name,
-                        'rounds': complete_spell['duration'],
-                        'string': 'SPELL ACTIVE: %s' % complete_spell['name'],
-                        'actions': {'timer': duration_timer.details}})
+        # Opponent's Timers
 
-            # Opponent?
+        #if action['opponent'] is not None and fight_handler is not None:
+        #    opponent = fight_handler.get_fighter_object(
+        #                                    action['opponent']['name'],
+        #                                    action['opponent']['group'])
 
-            opponent = None
-            if fight_handler is not None:
-                opponent = fight_handler.get_opponent_for(fighter)
+        #    spell_timer = Timer(None)
+        #    if complete_spell['duration'] > 1:
+        #        spell_timer.from_pieces(
+        #                 {'parent-name': opponent.name,
+        #                  'rounds': complete_spell['duration'],
+        #                  'string': 'SPELL "%s" AGAINST ME' %
+        #                                            complete_spell['name']
+        #                 })
+        #    else:
+        #        spell_timer.from_pieces(
+        #                 {'parent-name': opponent.name,
+        #                  'rounds': 1 - Timer.announcement_margin,
+        #                  'actions': {'announcement':
+        #                                    ('SPELL (%s) AGAINST ME FIRED' %
+        #                                            complete_spell['name'])}
+        #                 })
 
-            if opponent is not None:
-                opponent_timer_menu = [('yes', True), ('no', False)]
-                timer_for_opponent = self._window_manager.menu(
-                                    ('Mark %s with spell' % opponent.name),
-                                    opponent_timer_menu)
-                if not timer_for_opponent:
-                    opponent = None
+        #    delay_timer = Timer(None)
+        #    delay_timer.from_pieces(
+        #             {'parent-name': opponent.name,
+        #              'rounds': complete_spell['casting time'],
+        #              'string': ('Waiting for "%s" spell to take affect' %
+        #                                        complete_spell['name']),
+        #              'actions': {'timer': spell_timer.details}
+        #             })
 
-            if opponent:
-                spell_timer = Timer(None)
-                spell_timer.from_pieces(
-                         {'parent-name': opponent.name,
-                          'rounds': complete_spell['duration'],
-                          'string': 'SPELL "%s" AGAINST ME' %
-                                                    complete_spell['name']
-                         })
+        #    opponent.timers.add(delay_timer)
 
-                delay_timer = Timer(None)
-                delay_timer.from_pieces(
-                         {'parent-name': opponent.name,
-                          'rounds': casting_time,
-                          'string': ('Waiting for "%s" spell to take affect' %
-                                                    complete_spell['name']),
-                          'actions': {'timer': spell_timer.details}
-                         })
-                        
-                opponent.timers.add(delay_timer)
-
-        return timer
+        print 'RETURNING A TIMER' # TODO: remove
+        return casting_timer
 
 
     def __change_posture(self,
@@ -7269,6 +7364,7 @@ class BuildFightHandler(ScreenHandler):
                                          self.__group_name,
                                          to_creature,
                                          self.__ruleset,
+                                         None, # FightHandler
                                          self._window_manager))
                 self.__new_char_name = creature_name
                 # BuildFightGmWindow
@@ -7323,6 +7419,7 @@ class BuildFightHandler(ScreenHandler):
                                                   self.__group_name,
                                                   to_creature,
                                                   self.__ruleset,
+                                                  None, # FightHandler
                                                   self._window_manager))
             # BuildFightGmWindow
             self._window.show_creatures(self.__critters['obj'],
@@ -7438,6 +7535,7 @@ class BuildFightHandler(ScreenHandler):
                             self.world.get_creature_details(
                                                     name, self.__group_name),
                             self.__ruleset,
+                            None, # FightHandler
                             self._window_manager)
                 self.__critters['obj'].append(fighter)
 
@@ -7452,11 +7550,13 @@ class BuildFightHandler(ScreenHandler):
                 fight = Fight(self.__group_name,
                               self.world.details['fights'][self.__group_name],
                               self.__ruleset,
+                              None, # FightHandler
                               self._window_manager)
             else:
                 fight = Fight(self.__group_name,
                               the_fight_itself,
                               self.__ruleset,
+                              None, # FightHandler
                               self._window_manager)
 
             self.__critters['obj'].insert(0, fight)
@@ -7559,6 +7659,7 @@ class BuildFightHandler(ScreenHandler):
         fight = Fight(self.__group_name,
                       self.world.details['fights'][self.__group_name],
                       self.__ruleset,
+                      None, # FightHandler
                       self._window_manager)
         self.__critters['obj'].insert(0, fight)
 
@@ -7861,6 +7962,17 @@ class FightHandler(ScreenHandler):
                  'details': fighter.details} for fighter in self.__fighters]
 
 
+    def get_fighter_object(self,
+                           name,  # name of a fighter in that group
+                           group  # 'PCs' or group under world['fights']
+                          ):
+        for fighter in self.__fighters:
+            if fighter.group == group and fighter.name == name:
+                return fighter
+
+        return None
+
+
     def get_opponent_for(self,
                          fighter # Fighter object
                         ):
@@ -7869,7 +7981,7 @@ class FightHandler(ScreenHandler):
                                         fighter.details['opponent'] is None):
             return None
 
-        opponent = self.__get_fighter_object(
+        opponent = self.get_fighter_object(
                                         fighter.details['opponent']['name'],
                                         fighter.details['opponent']['group'])
         return opponent
@@ -8063,7 +8175,7 @@ class FightHandler(ScreenHandler):
                                  },
                                  self)
 
-        opponent = self.__get_fighter_object(opponent_name, opponent_group)
+        opponent = self.get_fighter_object(opponent_name, opponent_group)
 
         # Ask to have them fight each other
         if (opponent is not None and opponent.details['opponent'] is None):
@@ -8138,6 +8250,7 @@ class FightHandler(ScreenHandler):
                                       new_NPC.group,
                                       details_copy,
                                       self.__ruleset,
+                                      self,
                                       self._window_manager)
                 self.__fighters[index] = new_fighter
                 self._window_manager.display_window(
@@ -8208,6 +8321,7 @@ class FightHandler(ScreenHandler):
                                   'PCs',
                                   details,
                                   self.__ruleset,
+                                  self,
                                   self._window_manager)
                 self.__fighters.append(fighter)
 
@@ -8226,6 +8340,7 @@ class FightHandler(ScreenHandler):
                                       monster_group,
                                       details,
                                       self.__ruleset,
+                                      self,
                                       self._window_manager)
                     self.__fighters.append(fighter)
 
@@ -8247,6 +8362,7 @@ class FightHandler(ScreenHandler):
             fight = Fight(monster_group,
                           the_fight_itself,
                           self.__ruleset,
+                          self,
                           self._window_manager)
 
             self.__fighters.insert(0, fight)
@@ -8484,17 +8600,6 @@ class FightHandler(ScreenHandler):
         return self.world.get_creature_details(name, group)
 
 
-    def __get_fighter_object(self,
-                             name,  # name of a fighter in that group
-                             group  # 'PCs' or group under world['fights']
-                            ):
-        for fighter in self.__fighters:
-            if fighter.group == group and fighter.name == name:
-                return fighter
-
-        return None
-
-
     def __give_equipment(self):
         if self.__viewing_index is not None:
             from_fighter = self.__fighters[self.__viewing_index]
@@ -8516,8 +8621,8 @@ class FightHandler(ScreenHandler):
             from_fighter.add_equipment(item, None)
             return True # Keep going
 
-        to_fighter = self.__get_fighter_object(to_fighter_name,
-                                               from_fighter.group)
+        to_fighter = self.get_fighter_object(to_fighter_name,
+                                             from_fighter.group)
 
         to_fighter.add_equipment(item, from_fighter.detailed_name)
         return True # Keep going
@@ -8746,7 +8851,7 @@ class FightHandler(ScreenHandler):
             if 'fighter' in action:
                 name = action['fighter']['name']
                 group = action['fighter']['group']
-                fighter = self.__get_fighter_object(name, group)
+                fighter = self.get_fighter_object(name, group)
             else:
                 fighter = current_fighter
             self.__ruleset.do_action(fighter, action, self)
@@ -9616,6 +9721,7 @@ class MainHandler(ScreenHandler):
                              'PCs',
                              character_list[to_fighter_info],
                              self.__ruleset,
+                             None, # FightHandler
                              self._window_manager)
 
         to_fighter.add_equipment(item, from_fighter.detailed_name)
@@ -10067,6 +10173,7 @@ class MainHandler(ScreenHandler):
                                     self.world.get_creature_details(name,
                                                                       group),
                                     self.__ruleset,
+                                    None, # FightHandler
                                     self._window_manager)
                         self.__chars.append(fighter)
 
@@ -10083,12 +10190,14 @@ class MainHandler(ScreenHandler):
                 #elif the_fight_itself is None:
                 #    fight =  Fight(group,
                 #                   self.world.details['fights'][group],
+                #                   None, # FightHandler
                 #                   self.__ruleset)
 
                 elif the_fight_itself is not None:
                     fight = Fight(group,
                                   the_fight_itself,
                                   self.__ruleset,
+                                  None, # FightHandler
                                   self._window_manager)
                     self.__chars.insert(0, fight)
 
@@ -10099,6 +10208,7 @@ class MainHandler(ScreenHandler):
                             'PCs',
                             self.world.get_creature_details(x, 'PCs'),
                             self.__ruleset,
+                            None, # FightHandler
                             self._window_manager)
                     for x in sorted(self.world.get_creatures('PCs'))]
 
@@ -10109,6 +10219,7 @@ class MainHandler(ScreenHandler):
                                 'NPCs',
                                 self.world.get_creature_details(x, 'NPCs'),
                                 self.__ruleset,
+                                None, # FightHandler
                                 self._window_manager)
                         for x in sorted(self.world.get_creatures('NPCs'))])
         else:
@@ -10194,6 +10305,7 @@ class EquipmentManager(object):
                           self.__group_name,
                           self.__character['details'],
                           self.__ruleset,
+                          None, # FightHandler
                           self._window_manager)
 
         '''
