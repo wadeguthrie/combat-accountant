@@ -4592,7 +4592,7 @@ class GurpsRuleset(Ruleset):
                 print 'getting ready to add timer (2)' # TODO: remove
                 PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
                 print 'timer:', # TODO: remove
-                PP.pprint(timer) # TODO: remove
+                PP.pprint(timer.details) # TODO: remove
                 print 'logit:', # TODO: remove
                 PP.pprint(logit) # TODO: remove
             if timer is not None and logit:

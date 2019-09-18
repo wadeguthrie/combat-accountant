@@ -2899,66 +2899,98 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected = [
           {'name': "Awaken",
            'cost': 1,
-           'time': 1,
+           'casting time': 1,
            'skill': 18,
            'skill-bonus': -1,
            'duration': 0,
            'notes': "M90"},
           {'name': "Animate Shadow",
            'cost': 4,
-           'time': 2,
+           'casting time': 2,
            'skill': 16,
            'skill-bonus': -1,
            'duration': 5,
            'notes': "M154, Subject's shadow attacks them, HT negates"},
           {'name': "Death Vision",
            'cost': 2,
-           'time': 3,
+           'casting time': 3,
            'skill': 16,
            'skill-bonus': -1,
            'duration': 1,
            'notes': "M149, vs. IQ"},
           {'name': "Explosive Lightning",
-           'cost': None,
-           'time': None,
+           'cost': '2',
+           'casting time': '3',
            'skill': 16,
            'skill-bonus': -1,
            'duration': 0,
            'notes': "M196, cost 2-mage level, damage 1d-1 /2"}, 
           {'name': "Itch",
            'cost': 2,
-           'time': 1,
+           'casting time': 1,
            'skill': 12,
            'skill-bonus': 0,
-           'duration': None,
+           'duration': '2',
            'notes': "M35"},
         ]
 
-        vodou_priest.timers.clear_all()
         original_fp = vodou_priest.details['current']['fp']
         assert original_fp == vodou_priest.details['permanent']['fp']
 
-        action = {'name': 'cast-spell',
-                  'spell-index':
-                     self.__vodou_priest_spell_index[expected[0]['name']]
-                 }
 
-        self.__ruleset.do_action(vodou_priest, action, mock_fight_handler)
+        for trial in expected:
+            vodou_priest.timers.clear_all()
+            vodou_priest.details['current']['fp'] = original_fp
 
-        text = [('Casting (%s) @ skill (%d): %s' % (expected[0]['name'],
-                                                    expected[0]['skill'],
-                                                    expected[0]['notes'])),
-                ' Defense: none',
-                ' Move: none']
+            if gm.GurpsRuleset.spells[trial['name']]['cost'] is None:
+                self.__window_manager.set_input_box_response(
+                    'Cost to cast (%s) - see (%s) ' % (trial['name'],
+                                                       trial['notes']),
+                    trial['cost'])
+            if gm.GurpsRuleset.spells[trial['name']]['casting time'] is None:
+                self.__window_manager.set_input_box_response(
+                    'Seconds to cast (%s) - see (%s) ' % (trial['name'],
+                                                          trial['notes']),
+                    trial['casting time'])
+            if gm.GurpsRuleset.spells[trial['name']]['duration'] is None:
+                self.__window_manager.set_input_box_response(
+                    'Duration for (%s) - see (%s) ' % (trial['name'],
+                                                       trial['notes']),
+                    trial['duration'])
 
-        #print '\nTIMERS' # TODO: remove
-        #PP.pprint(vodou_priest.details['timers']) # TODO: remove
+            action = {
+                'name': 'cast-spell',
+                'spell-index':
+                    self.__vodou_priest_spell_index[trial['name']]
+                     }
 
-        assert len(vodou_priest.details['timers']) == 1
-        assert vodou_priest.details['timers'][0]['string'] == text
-        expected_cost = expected[0]['cost'] + expected[0]['skill-bonus']
-        assert (vodou_priest.details['current']['fp'] ==
-                                        original_fp - expected_cost)
+            self.__ruleset.do_action(vodou_priest, action, mock_fight_handler)
+
+            # TODO: add to the answers of questions
+
+            text = [('Casting (%s) @ skill (%d): %s' % (trial['name'],
+                                                        trial['skill'],
+                                                        trial['notes'])),
+                    ' Defense: none',
+                    ' Move: none']
+
+            #print '\nTIMERS' # TODO: remove
+            #PP.pprint(vodou_priest.details['timers']) # TODO: remove
+
+            assert len(vodou_priest.details['timers']) == 1
+            assert vodou_priest.details['timers'][0]['string'] == text
+
+
+            # TODO: there should be a test.reset() that would clear out the
+            # set_menu_response and the set_input_box_response values (and
+            # maybe some other stuff I'm not thinking about).
+
+            cost = (trial['cost'] if not isinstance(trial['cost'], str) else
+                                                        int(trial['cost']))
+
+            expected_cost = cost + trial['skill-bonus']
+            assert (vodou_priest.details['current']['fp'] ==
+                                                original_fp - expected_cost)
 
         # TODO: after the casting timer goes off, verify that duration timer
         # is active
