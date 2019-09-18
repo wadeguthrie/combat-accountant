@@ -2966,20 +2966,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
             self.__ruleset.do_action(vodou_priest, action, mock_fight_handler)
 
-            # TODO: add to the answers of questions
-
-            text = [('Casting (%s) @ skill (%d): %s' % (trial['name'],
-                                                        trial['skill'],
-                                                        trial['notes'])),
-                    ' Defense: none',
-                    ' Move: none']
-
-            #print '\nTIMERS' # TODO: remove
-            #PP.pprint(vodou_priest.details['timers']) # TODO: remove
-
-            assert len(vodou_priest.details['timers']) == 1
-            assert vodou_priest.details['timers'][0]['string'] == text
-
 
             # TODO: there should be a test.reset() that would clear out the
             # set_menu_response and the set_input_box_response values (and
@@ -2991,6 +2977,28 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             expected_cost = cost + trial['skill-bonus']
             assert (vodou_priest.details['current']['fp'] ==
                                                 original_fp - expected_cost)
+
+            # Cast the spell and see what happens
+
+            casting_text = [('Casting (%s) @ skill (%d): %s' % (
+                                trial['name'], trial['skill'], trial['notes'])),
+                             ' Defense: none',
+                             ' Move: none']
+
+            casting_time = (trial['casting time'] if not
+                                isinstance(trial['casting time'], str) else
+                                int(trial['casting time']))
+            for turn in range(casting_time):
+                assert len(vodou_priest.details['timers']) == 1
+                assert (vodou_priest.details['timers'][0]['string'] ==
+                                                                casting_text)
+                self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'end-turn'},
+                                 mock_fight_handler)
+                self.__ruleset.do_action(vodou_priest, 
+                                 {'name': 'start-turn'},
+                                 mock_fight_handler)
+
 
         # TODO: after the casting timer goes off, verify that duration timer
         # is active

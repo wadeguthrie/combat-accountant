@@ -3064,8 +3064,6 @@ class Ruleset(object):
                  ):
         '''
         '''
-        if 'name' in action and action['name'] == 'cast-spell':
-            print '\n=== Ruleset::do_acton' # TODO: remove
         handled = self._perform_action(fighter, action, fight_handler, logit)
         self._record_action(fighter, action, fight_handler, handled, logit)
 
@@ -3275,8 +3273,6 @@ class Ruleset(object):
                                           #  action is not a side-effect of
                                           #  another action
                        ):
-        if 'name' in action and action['name'] == 'cast-spell':
-            print '\n--- Ruleset::_perform_action' # TODO: remove
         '''
         ONLY to be used for fights (otherwise, there's no fight handler to log
         the actions).
@@ -4517,9 +4513,6 @@ class GurpsRuleset(Ruleset):
                                           #  action is not a side-effect of
                                           #  another action
                        ):
-        if 'name' in action and action['name'] == 'cast-spell':
-            print '\n--- GurpsRuleset::_perform_action' # TODO: remove
-
         # Label the action so playback knows who receives it.
 
         action['fighter'] = {}
@@ -4580,24 +4573,13 @@ class GurpsRuleset(Ruleset):
             return  handled
         
         if action['name'] in actions:
-            if action['name'] == 'cast-spell':
-                print 'getting ready to call "doit"' # TODO: remove
             timer = None
             action_info = actions[action['name']]
             if action_info['doit'] is not None:
                 timer = action_info['doit'](fighter, action, fight_handler)
             handled = Ruleset.HANDLED_OK
 
-            if action['name'] == 'cast-spell':
-                print 'getting ready to add timer (2)' # TODO: remove
-                PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
-                print 'timer:', # TODO: remove
-                PP.pprint(timer.details) # TODO: remove
-                print 'logit:', # TODO: remove
-                PP.pprint(logit) # TODO: remove
             if timer is not None and logit:
-                if action['name'] == 'cast-spell':
-                    print 'ADDING TIMER' # TODO: remove
                 fighter.timers.add(timer)
 
         return handled
@@ -6294,10 +6276,7 @@ class GurpsRuleset(Ruleset):
         Returns: Nothing, return values for these functions are ignored.
         '''
 
-        print '\n--- __cast_spell' # TODO: remove
-
         if fight_handler is not None and fight_handler.world.playing_back:
-            print 'RETURNING (1)' # TODO: remove
             return None # No timers
 
         # TODO: break into cast-spell and cast-spell-really (ala reload).
@@ -6309,7 +6288,6 @@ class GurpsRuleset(Ruleset):
             self._window_manager.error(
                 ['Spell "%s" not in GurpsRuleset.spells' % spell['name']]
             )
-            print 'RETURNING (2)' # TODO: remove
             return None # No timers
         complete_spell = copy.deepcopy(spell)
         complete_spell.update(GurpsRuleset.spells[spell['name']])
@@ -6479,7 +6457,6 @@ class GurpsRuleset(Ruleset):
 
         #    opponent.timers.add(delay_timer)
 
-        print 'RETURNING A TIMER' # TODO: remove
         return casting_timer
 
 
