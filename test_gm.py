@@ -128,6 +128,7 @@ class MockWorld(object):
 class MockFightHandler(object):
     def __init__(self):
         self.world = MockWorld()
+        self.clear_opponents()
 
     def add_to_history(self, action):
         pass
@@ -141,7 +142,27 @@ class MockFightHandler(object):
     def get_opponent_for(self,
                          fighter    # Fighter object
                         ):
-        return None # TODO: need a 'load it up' method
+        if fighter.group not in self.__opponents:
+            return None
+
+        if fighter.name not in self.__opponents[fighter.group]:
+            return None
+
+        return self.__opponents[fighter.group][fighter.name]
+
+
+    def set_opponent_for(self,
+                         fighter,   # Fighter object
+                         opponent   # Fighter object
+                        ):
+        if fighter.group not in self.__opponents:
+            self.__opponents[fighter.group] = {}
+        self.__opponents[fighter.group][fighter.name] = opponent
+
+
+    def clear_opponents(self):
+        self.__opponents = {} # group: {name: object, name: object}
+
 
 class MockMainGmWindow(object):
     def __init__(self, window_manager=None):
@@ -2907,6 +2928,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   mock_fight_handler,
                                   self.__window_manager)
 
+        opponent = gm.Fighter('Opponent',
+                              'other_group',
+                              copy.deepcopy(self.__one_more_guy),
+                              self.__ruleset,
+                              mock_fight_handler,
+                              self.__window_manager)
+
+        mock_fight_handler.set_opponent_for(vodou_priest, opponent)
+
         expected = [
           {'name': "Awaken",
            'cost': 1,
@@ -2946,9 +2976,16 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         ]
 
         original_fp = vodou_priest.details['current']['fp']
+
         assert original_fp == vodou_priest.details['permanent']['fp']
 
         for trial in expected:
+            print '\n----- %s -----' % trial['name'] # TODO: remove
+            PP.pprint(gm.GurpsRuleset.spells[trial['name']]) # TODO: remove
+            PP.pprint(trial) # TODO: remove
+
+            opponent.timers.clear_all()
+
             vodou_priest.timers.clear_all()
             vodou_priest.details['current']['fp'] = original_fp
 
@@ -2967,6 +3004,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                     'Duration for (%s) - see (%s) ' % (trial['name'],
                                                        trial['notes']),
                     '%s' % trial['duration'])
+
+            self.__window_manager.set_menu_response(
+                                        'Mark %s with spell' % opponent.name,
+                                        True)
 
             action = {
                 'name': 'cast-spell',
@@ -2988,24 +3029,62 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                 trial['name'], trial['skill'], trial['notes'])),
                              ' Defense: none',
                              ' Move: none']
+            opponent_casting_text = ('Waiting for "%s" spell to take affect' %
+                                                                trial['name'])
 
             # Check each round of casting
 
+            print '\n== Start casting ==\n' # TODO: remove
+
             for turn in range(trial['casting time']):
+                # For the caster, you're doing the check, end-turn, then
+                # start-turn because the action takes place in the middle of a
+                # turn.
+
                 assert len(vodou_priest.details['timers']) == 1
                 assert (vodou_priest.details['timers'][0]['string'] ==
                                                                 casting_text)
                 assert vodou_priest.details['timers'][0]['busy']
                 self.__ruleset.do_action(vodou_priest, 
-                                 {'name': 'end-turn'},
-                                 mock_fight_handler)
+                                         {'name': 'end-turn'},
+                                         mock_fight_handler)
                 self.__ruleset.do_action(vodou_priest, 
-                                 {'name': 'start-turn'},
-                                 mock_fight_handler)
+                                         {'name': 'start-turn'},
+                                         mock_fight_handler)
+
+                # For the opponent, you need to do start-turn, check, then
+                # end-turn because they get affected after the caster does
+                # their thing.
+
+                self.__ruleset.do_action(opponent, 
+                                         {'name': 'start-turn'},
+                                         mock_fight_handler)
+
+                assert len(opponent.details['timers']) == 1
+                PP.pprint(opponent.details['timers']) # TODO: remove
+                assert (opponent.details['timers'][0]['string'] ==
+                                                        opponent_casting_text)
+
+                self.__ruleset.do_action(opponent, 
+                                         {'name': 'end-turn'},
+                                         mock_fight_handler)
+
+            # One extra round for the opponent because the opponent happens
+            # after the caster.
+
+            self.__ruleset.do_action(opponent, 
+                                     {'name': 'start-turn'},
+                                     mock_fight_handler)
+
+            if trial['duration'] != 0:  # TODO: remove
+                PP.pprint(opponent.details['timers']) # TODO: remove
 
             # Check each round of active spell
 
             active_text = 'CAST SPELL (%s) ACTIVE' % trial['name']
+            opponent_active_text = 'SPELL "%s" AGAINST ME' % trial['name']
+
+            print '\n== Done with casting ==\n' # TODO: remove
 
             for turn in range(trial['duration']):
                 assert len(vodou_priest.details['timers']) == 1
@@ -3021,11 +3100,28 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                  {'name': 'start-turn'},
                                  mock_fight_handler)
 
+                # Opponent
+
+                assert len(opponent.details['timers']) == 1
+                PP.pprint(opponent.details['timers']) # TODO: remove
+                assert (opponent.details['timers'][0]['string'] ==
+                                                        opponent_active_text)
+
+                self.__ruleset.do_action(opponent, 
+                                         {'name': 'end-turn'},
+                                         mock_fight_handler)
+                self.__ruleset.do_action(opponent, 
+                                         {'name': 'start-turn'},
+                                         mock_fight_handler)
+
+            print '\n== Done with duration ==\n' # TODO: remove
+
             # Make sure that all of the timers are dead
 
             assert len(vodou_priest.details['timers']) == 0
+            PP.pprint(opponent.details['timers']) # TODO: remove
+            assert len(opponent.details['timers']) == 0
 
-        # TODO: setup caster and opponent
 
     def test_don_doff_armor(self):
         '''

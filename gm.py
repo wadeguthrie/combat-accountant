@@ -15,7 +15,9 @@ import sys
 import traceback
 
 # TODO:
-#   - Fighter objects should be saved and passed around rather than re-created
+#   - Fighter objects should be saved in World.creatures[group][name] and
+#     retrieved from there.  The FightHandler and such can store name and
+#     group lists.
 #   - Monsters should have a way to get pocket lint.
 #   - Need to be able to generate a blank creature (maybe it's a default
 #     Template).
