@@ -6346,32 +6346,24 @@ class GurpsRuleset(Ruleset):
 
         # Opponent?
 
-        # TODO: the opponent timer should be launched from the caster because
-        # the timing is all honked up when launching from the opponent (if the
-        # opponent is just after the caster in initiative, the spell will go
-        # off (from the point of view of the opponent) nearly a round before
-        # it should.
+        opponent = None
+        if fight_handler is not None:
+            opponent = fight_handler.get_opponent_for(fighter)
 
-        #opponent = None
-        #if fight_handler is not None:
-        #    opponent = fight_handler.get_opponent_for(fighter)
-
-        #if opponent is not None:
-        #    opponent_timer_menu = [('yes', True), ('no', False)]
-        #    timer_for_opponent = self._window_manager.menu(
-        #                                ('Mark %s with spell' % opponent.name),
-        #                                opponent_timer_menu)
-        #    if not timer_for_opponent:
-        #        opponent = None
+        if opponent is not None:
+            opponent_timer_menu = [('yes', True), ('no', False)]
+            timer_for_opponent = self._window_manager.menu(
+                                        ('Mark %s with spell' % opponent.name),
+                                        opponent_timer_menu)
+            if not timer_for_opponent:
+                opponent = None
+            else:
+                pass # TODO: put 'opponent' in action
 
         # TODO: send the action for the second part
 
         action = {'name': 'cast-spell-really',
                   'spell': complete_spell}
-
-        #action['opponent'] = None if opponent is None else {
-        #                                            'name':  opponent.name,
-        #                                            'group': opponent.group}
 
         # TODO: do in second part -- from here, below
 
@@ -6421,38 +6413,38 @@ class GurpsRuleset(Ruleset):
 
         # Opponent's Timers
 
-        #if action['opponent'] is not None and fight_handler is not None:
-        #    opponent = fight_handler.get_fighter_object(
-        #                                    action['opponent']['name'],
-        #                                    action['opponent']['group'])
+        if opponent is not None and fight_handler is not None:
+            #opponent = fight_handler.get_fighter_object(
+            #                                action['opponent']['name'],
+            #                                action['opponent']['group'])
 
-        #    spell_timer = Timer(None)
-        #    if complete_spell['duration'] > 1:
-        #        spell_timer.from_pieces(
-        #                 {'parent-name': opponent.name,
-        #                  'rounds': complete_spell['duration'],
-        #                  'string': 'SPELL "%s" AGAINST ME' %
-        #                                            complete_spell['name']
-        #                 })
-        #    else:
-        #        spell_timer.from_pieces(
-        #                 {'parent-name': opponent.name,
-        #                  'rounds': 1 - Timer.announcement_margin,
-        #                  'actions': {'announcement':
-        #                                    ('SPELL (%s) AGAINST ME FIRED' %
-        #                                            complete_spell['name'])}
-        #                 })
+            spell_timer = Timer(None)
+            if complete_spell['duration'] > 0:
+                spell_timer.from_pieces(
+                         {'parent-name': opponent.name,
+                          'rounds': complete_spell['duration'] -
+                                                Timer.announcement_margin,
+                          'string': 'SPELL "%s" AGAINST ME' %
+                                                    complete_spell['name']
+                         })
 
-        #    delay_timer = Timer(None)
-        #    delay_timer.from_pieces(
-        #             {'parent-name': opponent.name,
-        #              'rounds': complete_spell['casting time'],
-        #              'string': ('Waiting for "%s" spell to take affect' %
-        #                                        complete_spell['name']),
-        #              'actions': {'timer': spell_timer.details}
-        #             })
+            delay_timer = Timer(None)
 
-        #    opponent.timers.add(delay_timer)
+            actions = {'timer': spell_timer.details}
+            if complete_spell['duration'] == 0:
+                actions['announcement'] = ('SPELL (%s) AGAINST ME FIRED' %
+                                                        complete_spell['name'])
+
+            delay_timer.from_pieces(
+                     {'parent-name': opponent.name,
+                      'rounds': complete_spell['casting time'] -
+                                                Timer.announcement_margin,
+                      'string': ('Waiting for "%s" spell to take affect' %
+                                                complete_spell['name']),
+                      'actions': actions
+                     })
+
+            opponent.timers.add(delay_timer)
 
         return casting_timer
 

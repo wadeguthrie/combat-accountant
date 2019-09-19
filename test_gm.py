@@ -138,6 +138,11 @@ class MockFightHandler(object):
     def modify_index(self, adjustment):
         pass
 
+    def get_opponent_for(self,
+                         fighter    # Fighter object
+                        ):
+        return None # TODO: need a 'load it up' method
+
 class MockMainGmWindow(object):
     def __init__(self, window_manager=None):
         pass
