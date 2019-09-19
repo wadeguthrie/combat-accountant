@@ -2980,10 +2980,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert original_fp == vodou_priest.details['permanent']['fp']
 
         for trial in expected:
-            print '\n----- %s -----' % trial['name'] # TODO: remove
-            PP.pprint(gm.GurpsRuleset.spells[trial['name']]) # TODO: remove
-            PP.pprint(trial) # TODO: remove
-
             opponent.timers.clear_all()
 
             vodou_priest.timers.clear_all()
@@ -3034,8 +3030,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
             # Check each round of casting
 
-            print '\n== Start casting ==\n' # TODO: remove
-
             for turn in range(trial['casting time']):
                 # For the caster, you're doing the check, end-turn, then
                 # start-turn because the action takes place in the middle of a
@@ -3061,7 +3055,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                          mock_fight_handler)
 
                 assert len(opponent.details['timers']) == 1
-                PP.pprint(opponent.details['timers']) # TODO: remove
                 assert (opponent.details['timers'][0]['string'] ==
                                                         opponent_casting_text)
 
@@ -3076,15 +3069,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                      {'name': 'start-turn'},
                                      mock_fight_handler)
 
-            if trial['duration'] != 0:  # TODO: remove
-                PP.pprint(opponent.details['timers']) # TODO: remove
-
             # Check each round of active spell
 
             active_text = 'CAST SPELL (%s) ACTIVE' % trial['name']
             opponent_active_text = 'SPELL "%s" AGAINST ME' % trial['name']
-
-            print '\n== Done with casting ==\n' # TODO: remove
 
             for turn in range(trial['duration']):
                 assert len(vodou_priest.details['timers']) == 1
@@ -3103,7 +3091,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 # Opponent
 
                 assert len(opponent.details['timers']) == 1
-                PP.pprint(opponent.details['timers']) # TODO: remove
                 assert (opponent.details['timers'][0]['string'] ==
                                                         opponent_active_text)
 
@@ -3114,12 +3101,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                          {'name': 'start-turn'},
                                          mock_fight_handler)
 
-            print '\n== Done with duration ==\n' # TODO: remove
-
             # Make sure that all of the timers are dead
 
             assert len(vodou_priest.details['timers']) == 0
-            PP.pprint(opponent.details['timers']) # TODO: remove
             assert len(opponent.details['timers']) == 0
 
 
