@@ -8,7 +8,6 @@ import unittest
 
 '''
 action['name'] == 'adjust-fp':
-action['name'] == 'cast-spell':
 
 # DONE (except for 'aim') 'pick-opponent':
 # DONE: 'adjust-hp':
@@ -20,6 +19,7 @@ action['name'] == 'cast-spell':
 # DONE: 'reload':
 # DONE: 'set-consciousness':
 # DONE: (except for combat reflexes) 'stun':
+# DONE: 'cast-spell':
 # NOTHING: 'concentrate':
 # NOTHING: 'evaluate':
 # NOTHING: 'feint':
@@ -31,6 +31,12 @@ action['name'] == 'cast-spell':
 # DON'T BOTHER: 'move-and-attack':
 # DON'T BOTHER: 'use-item':
 '''
+
+
+# TODO: there should be a test.reset() that would clear out the
+# set_menu_response and the set_input_box_response values (and
+# maybe some other stuff I'm not thinking about).  It should be called prior
+# to each test's init.
 
 # Save a fight
 # TODO: test that saving a fight and starting up again doesn't change the
@@ -2919,8 +2925,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
            'duration': 1,
            'notes': "M149, vs. IQ"},
           {'name': "Explosive Lightning",
-           'cost': '2',
-           'casting time': '3',
+           'cost': 2,
+           'casting time': 3,
            'skill': 16,
            'skill-bonus': -1,
            'duration': 0,
@@ -2930,7 +2936,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
            'casting time': 1,
            'skill': 12,
            'skill-bonus': 0,
-           'duration': '2',
+           'duration': 2,
            'notes': "M35"},
         ]
 
@@ -2945,17 +2951,17 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 self.__window_manager.set_input_box_response(
                     'Cost to cast (%s) - see (%s) ' % (trial['name'],
                                                        trial['notes']),
-                    trial['cost'])
+                    '%s' % trial['cost'])
             if gm.GurpsRuleset.spells[trial['name']]['casting time'] is None:
                 self.__window_manager.set_input_box_response(
                     'Seconds to cast (%s) - see (%s) ' % (trial['name'],
                                                           trial['notes']),
-                    trial['casting time'])
+                    '%s' % trial['casting time'])
             if gm.GurpsRuleset.spells[trial['name']]['duration'] is None:
                 self.__window_manager.set_input_box_response(
                     'Duration for (%s) - see (%s) ' % (trial['name'],
                                                        trial['notes']),
-                    trial['duration'])
+                    '%s' % trial['duration'])
 
             action = {
                 'name': 'cast-spell',
@@ -2965,19 +2971,13 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
             self.__ruleset.do_action(vodou_priest, action, mock_fight_handler)
 
+            # Cost
 
-            # TODO: there should be a test.reset() that would clear out the
-            # set_menu_response and the set_input_box_response values (and
-            # maybe some other stuff I'm not thinking about).
-
-            cost = (trial['cost'] if isinstance(trial['cost'], int) else
-                                                        int(trial['cost']))
-
-            expected_cost = cost + trial['skill-bonus']
+            expected_cost = trial['cost'] + trial['skill-bonus']
             assert (vodou_priest.details['current']['fp'] ==
                                                 original_fp - expected_cost)
 
-            # Cast the spell and see what happens
+            # Watch the casting time and the spell duration
 
             casting_text = [('Casting (%s) @ skill (%d): %s' % (
                                 trial['name'], trial['skill'], trial['notes'])),
@@ -2986,10 +2986,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
             # Check each round of casting
 
-            casting_time = (trial['casting time'] if
-                                isinstance(trial['casting time'], int) else
-                                int(trial['casting time']))
-            for turn in range(casting_time):
+            for turn in range(trial['casting time']):
                 assert len(vodou_priest.details['timers']) == 1
                 assert (vodou_priest.details['timers'][0]['string'] ==
                                                                 casting_text)
@@ -3003,12 +3000,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
             # Check each round of active spell
 
-            duration = (trial['duration'] if
-                                isinstance(trial['duration'], int) else
-                                int(trial['duration']))
             active_text = 'CAST SPELL (%s) ACTIVE' % trial['name']
 
-            for turn in range(duration):
+            for turn in range(trial['duration']):
                 assert len(vodou_priest.details['timers']) == 1
                 assert (vodou_priest.details['timers'][0]['string'] ==
                                                                 active_text)
@@ -3022,9 +3016,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                  {'name': 'start-turn'},
                                  mock_fight_handler)
 
-            assert len(vodou_priest.details['timers']) == 0
+            # Make sure that all of the timers are dead
 
-        #'CAST SPELL (%s) FIRED' %
+            assert len(vodou_priest.details['timers']) == 0
 
         # TODO: setup caster and opponent
 
