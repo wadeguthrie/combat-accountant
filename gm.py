@@ -6435,9 +6435,12 @@ class GurpsRuleset(Ruleset):
                 actions['announcement'] = ('SPELL (%s) AGAINST ME FIRED' %
                                                         complete_spell['name'])
 
+            # Add 1 to the timer because the first thing the opponent will see
+            # is a decrement (the caster only sees the decrement on the _next_
+            # round)
             delay_timer.from_pieces(
                      {'parent-name': opponent.name,
-                      'rounds': complete_spell['casting time'] -
+                      'rounds': 1 + complete_spell['casting time'] -
                                                 Timer.announcement_margin,
                       'string': ('Waiting for "%s" spell to take affect' %
                                                 complete_spell['name']),
