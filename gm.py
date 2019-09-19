@@ -4519,9 +4519,8 @@ class GurpsRuleset(Ruleset):
         action['fighter']['name'] = fighter.name
         action['fighter']['group'] = fighter.group
 
-        if 'name' in action and action['name'] == 'cast-spell':
-            PP = pprint.PrettyPrinter(indent=3, width=150)
-            PP.pprint(action)
+        # PP = pprint.PrettyPrinter(indent=3, width=150)
+        # PP.pprint(action)
 
         # Call base class' perform_action FIRST because GurpsRuleset depends on
         # the actions of the base class.  It make no sense for the base class'
@@ -6390,20 +6389,13 @@ class GurpsRuleset(Ruleset):
         # that it's active
 
         duration_timer = Timer(None)
-        if complete_spell['duration'] > 1:
+        if complete_spell['duration'] > 0:
             duration_timer.from_pieces(
                        {'parent-name': fighter.name,
-                        'rounds': complete_spell['duration'],
+                        'rounds': complete_spell['duration'] -
+                                                    Timer.announcement_margin,
                         'string': 'CAST SPELL (%s) ACTIVE' %
                                                         complete_spell['name']
-                       })
-        else:
-            duration_timer.from_pieces(
-                       {'parent-name': fighter.name,
-                        'rounds': 1,
-                        'actions': {'announcement':
-                                'CAST SPELL (%s) FIRED' %
-                                                        complete_spell['name']}
                        })
 
         # Casting Timer
@@ -6415,11 +6407,16 @@ class GurpsRuleset(Ruleset):
                 ' Defense: none',
                 ' Move: none']
 
+        actions = {'timer': duration_timer.details}
+        if complete_spell['duration'] == 0:
+            actions['announcement'] = ('CAST SPELL (%s) FIRED' %
+                                                        complete_spell['name'])
+
         casting_timer.from_pieces({'parent-name': fighter.name,
                            'rounds': complete_spell['casting time'] -
                                                 Timer.announcement_margin,
                            'string': text,
-                           'actions': {'timer': duration_timer.details}})
+                           'actions': actions})
         casting_timer.mark_owner_as_busy()  # When casting, the owner is busy
 
         # Opponent's Timers
