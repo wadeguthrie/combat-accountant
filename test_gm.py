@@ -2938,7 +2938,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert original_fp == vodou_priest.details['permanent']['fp']
 
         for trial in expected:
-            print '\n----- %s -----' % trial['name'] # TODO: remove
             vodou_priest.timers.clear_all()
             vodou_priest.details['current']['fp'] = original_fp
 
@@ -3009,11 +3008,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                 int(trial['duration']))
             active_text = 'CAST SPELL (%s) ACTIVE' % trial['name']
 
-            print 'duration: %d' % duration # TODO: remove
             for turn in range(duration):
-                print '  >>> turn in duration' # TODO: remove
                 assert len(vodou_priest.details['timers']) == 1
-                PP.pprint(vodou_priest.details['timers'][0]) # TODO: remove
                 assert (vodou_priest.details['timers'][0]['string'] ==
                                                                 active_text)
                 if 'busy' in vodou_priest.details['timers'][0]:
@@ -3025,7 +3021,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 self.__ruleset.do_action(vodou_priest, 
                                  {'name': 'start-turn'},
                                  mock_fight_handler)
-            print '  <<< done with duration' # TODO: remove
 
             assert len(vodou_priest.details['timers']) == 0
 
