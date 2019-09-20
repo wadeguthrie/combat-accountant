@@ -4545,6 +4545,7 @@ class GurpsRuleset(Ruleset):
             'all-out-attack':       {'doit': self.__do_attack},
             'attack':               {'doit': self.__do_attack},
             'cast-spell':           {'doit': self.__cast_spell},
+            'cast-spell-really':    {'doit': self.__cast_spell_really},
             'change-posture':       {'doit': self.__change_posture},
             'check-for-death':      {'doit': self.__check_for_death},
             'concentrate':          {'doit': self.__do_nothing},
@@ -6359,15 +6360,30 @@ class GurpsRuleset(Ruleset):
                                         opponent_timer_menu)
             if not timer_for_opponent:
                 opponent = None
-            else:
-                pass # TODO: put 'opponent' in action
 
-        # TODO: send the action for the second part
+        # Send the action for the second part
 
-        action = {'name': 'cast-spell-really',
-                  'spell': complete_spell}
+        new_action = {'name': 'cast-spell-really',
+                      'complete spell': complete_spell}
 
-        # TODO: do in second part -- from here, below
+        if opponent is not None:
+            new_action['opponent'] = {'name': opponent.name,
+                                      'group': opponent.group}
+
+        self.do_action(fighter, new_action, fight_handler)
+
+        return None # No new timers
+
+
+    def __cast_spell_really(self,
+                            fighter,      # Fighter object
+                            action,       # {'name': <action>,
+                                          #  'spell-index':
+                                          #     <index in 'spells'>, ...
+                            fight_handler # FightHandler object
+                           ):
+
+        complete_spell = action['complete spell']
 
         if complete_spell['cost'] > 0:
             self.do_action(fighter, 
@@ -6415,10 +6431,10 @@ class GurpsRuleset(Ruleset):
 
         # Opponent's Timers
 
-        if opponent is not None and fight_handler is not None:
-            #opponent = fight_handler.get_fighter_object(
-            #                                action['opponent']['name'],
-            #                                action['opponent']['group'])
+        if 'opponent' in action and fight_handler is not None:
+            opponent = fight_handler.get_fighter_object(
+                                            action['opponent']['name'],
+                                            action['opponent']['group'])
 
             spell_timer = Timer(None)
             if complete_spell['duration'] > 0:

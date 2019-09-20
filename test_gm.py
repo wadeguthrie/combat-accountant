@@ -129,15 +129,19 @@ class MockFightHandler(object):
     def __init__(self):
         self.world = MockWorld()
         self.clear_opponents()
+        self.__fighter_objects = {}
 
     def add_to_history(self, action):
         pass
 
-    def pick_opponent(self):
-        pass
+    def clear_opponents(self):
+        self.__opponents = {} # group: {name: object, name: object}
 
-    def modify_index(self, adjustment):
-        pass
+    def get_fighter_object(self,
+                           name,
+                           group
+                          ):
+        return self.__fighter_objects[group][name]
 
     def get_opponent_for(self,
                          fighter    # Fighter object
@@ -150,6 +154,21 @@ class MockFightHandler(object):
 
         return self.__opponents[fighter.group][fighter.name]
 
+    def modify_index(self, adjustment):
+        pass
+
+    def pick_opponent(self):
+        pass
+
+    def set_fighter_object(self,
+                           name,
+                           group,
+                           fighter_object
+                          ):
+        if group not in self.__fighter_objects:
+            self.__fighter_objects[group] = {}
+        self.__fighter_objects[group][name] = fighter_object
+
 
     def set_opponent_for(self,
                          fighter,   # Fighter object
@@ -159,9 +178,6 @@ class MockFightHandler(object):
             self.__opponents[fighter.group] = {}
         self.__opponents[fighter.group][fighter.name] = opponent
 
-
-    def clear_opponents(self):
-        self.__opponents = {} # group: {name: object, name: object}
 
 
 class MockMainGmWindow(object):
@@ -2936,6 +2952,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                               self.__window_manager)
 
         mock_fight_handler.set_opponent_for(vodou_priest, opponent)
+        mock_fight_handler.set_fighter_object('Priest',
+                                              'group',
+                                              vodou_priest)
+        mock_fight_handler.set_fighter_object('Opponent',
+                                              'other_group',
+                                              opponent)
 
         expected = [
           {'name': "Awaken",
@@ -3007,8 +3029,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
             action = {
                 'name': 'cast-spell',
-                'spell-index':
-                    self.__vodou_priest_spell_index[trial['name']]
+                'spell-index': self.__vodou_priest_spell_index[trial['name']]
                      }
 
             self.__ruleset.do_action(vodou_priest, action, mock_fight_handler)
@@ -3062,8 +3083,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                          {'name': 'end-turn'},
                                          mock_fight_handler)
 
-            # One extra round for the opponent because the opponent happens
-            # after the caster.
+            # One extra round for the opponent so that the timers get deleted.
+            # Note the proper progression of start-turn / end-turn from the
+            # casting loop through this through the duration loop.
 
             self.__ruleset.do_action(opponent, 
                                      {'name': 'start-turn'},
