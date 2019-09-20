@@ -15,9 +15,15 @@ import sys
 import traceback
 
 # TODO:
+#   - action['name'] -> action['action-name'] (to make various files easier to
+#     read)
+#   - Consolodate files used by this program
 #   - Fighter objects should be saved in World.creatures[group][name] and
 #     retrieved from there.  The FightHandler and such can store name and
 #     group lists.
+#       o Get the fighter objects through a method, first
+#       o Move the dead fight to the dead fight list through a method
+#       o Have the dead fight method remove those Fighters from the World
 #   - Monsters should have a way to get pocket lint.
 #   - Need to be able to generate a blank creature (maybe it's a default
 #     Template).
@@ -34,6 +40,8 @@ import traceback
 #     5-foot step slot in D&D if you don't use it).
 #       * should warn when trying to do a second action (take note of fastdraw)
 #   - Multiple weapons
+#       o add 'draw second weapon' as an action
+#       o add 'attack with 2 weapons' as an action
 #   - an item's type should be an array (so that a battle mech can be both
 #     armor and weapon.
 #   - Rules-specific equipment support
