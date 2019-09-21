@@ -1928,6 +1928,28 @@ class World(object):
         return details
 
 
+    def get_creature(self,
+                     name,  # String
+                     group  # String
+                    ):
+        '''
+        Returns: Fighter object
+        '''
+        if group not in self.__fighters:
+            self.__fighters[group] = {}
+            
+        if name not in self.__fighters[group]:
+            self.__fighters[group][name] = Fighter(
+                                            name,
+                                            group,
+                                            self.get_creature_details(name,
+                                                                      group),
+                                            self.__ruleset,
+                                            self.__window_manager)
+
+        return self.__fighters[group][name]
+
+
     def get_fights(self):
         '''
         Returns {fight_name: {details}, fight_name: {details}, ...}
@@ -7400,11 +7422,9 @@ class BuildFightHandler(ScreenHandler):
             # Add our new creature to its group and show it to the world.
 
             self.__critters['data'][creature_name] = to_creature
-            self.__critters['obj'].append(Fighter(creature_name,
-                                                  self.__group_name,
-                                                  to_creature,
-                                                  self.__ruleset,
-                                                  self._window_manager))
+            self.__critters['obj'].append(self.world.get_creature(
+                                                        creature_name,
+                                                        self.__group_name))
             # BuildFightGmWindow
             self._window.show_creatures(self.__critters['obj'],
                                         self.__new_char_name,
@@ -7512,15 +7532,7 @@ class BuildFightHandler(ScreenHandler):
             if name == Fight.name:
                 the_fight_itself = details
             else:
-                fighter = Fighter(
-                            name,
-                            self.__group_name,
-                            # Calls 'get_creature_details' in case 'details'
-                            # is a redirect.
-                            self.world.get_creature_details(
-                                                    name, self.__group_name),
-                            self.__ruleset,
-                            self._window_manager)
+                fighter = self.world.get_creature(name, self.__group_name)
                 self.__critters['obj'].append(fighter)
 
         self.__critters['obj'] = sorted(self.__critters['obj'],
@@ -8227,11 +8239,8 @@ class FightHandler(ScreenHandler):
         for index, fighter in enumerate(self.__fighters):
             if (fighter.name == new_NPC.name and
                                             fighter.group == new_NPC.group):
-                new_fighter = Fighter(new_NPC.name,
-                                      new_NPC.group,
-                                      details_copy,
-                                      self.__ruleset,
-                                      self._window_manager)
+                new_fighter = self.world.get_creature(new_NPC.name,
+                                                      new_NPC.group)
                 self.__fighters[index] = new_fighter
                 self._window_manager.display_window(
                                                ('Promoted Monster to NPC'),
@@ -8295,13 +8304,8 @@ class FightHandler(ScreenHandler):
                              #       'info': <Fighter object>}
 
         for name in self.world.get_creature_detail_list('PCs'):
-            details = self.world.get_creature_details(name, 'PCs')
-            if details is not None:
-                fighter = Fighter(name,
-                                  'PCs',
-                                  details,
-                                  self.__ruleset,
-                                  self._window_manager)
+            fighter = self.world.get_creature(name, 'PCs')
+            if fighter is not None:
                 self.__fighters.append(fighter)
 
         the_fight_itself = None
@@ -8315,11 +8319,7 @@ class FightHandler(ScreenHandler):
                 if name == Fight.name:
                     the_fight_itself = details
                 else:
-                    fighter = Fighter(name,
-                                      monster_group,
-                                      details,
-                                      self.__ruleset,
-                                      self._window_manager)
+                    fighter = self.world.get_creature(name, monster_group)
                     self.__fighters.append(fighter)
 
         if fight_order is None:
@@ -9694,12 +9694,7 @@ class MainHandler(ScreenHandler):
             self._draw_screen()
             return True # Keep going
 
-        to_fighter = Fighter(to_fighter_info,
-                             'PCs',
-                             character_list[to_fighter_info],
-                             self.__ruleset,
-                             self._window_manager)
-
+        to_fighter = self.world.get_creature(to_fighter_info, 'PCs')
         to_fighter.add_equipment(item, from_fighter.detailed_name)
         self._draw_screen()
         return True # Keep going
@@ -10144,13 +10139,7 @@ class MainHandler(ScreenHandler):
                     if name == Fight.name:
                         the_fight_itself = details
                     else:
-                        fighter = Fighter(
-                                    name,
-                                    group,
-                                    self.world.get_creature_details(name,
-                                                                      group),
-                                    self.__ruleset,
-                                    self._window_manager)
+                        fighter = self.world.get_creature(name, group)
                         self.__chars.append(fighter)
 
                 self.__chars = sorted(self.__chars, key=lambda x: x.name)
@@ -10178,21 +10167,13 @@ class MainHandler(ScreenHandler):
 
         if group is None:
             self.__chars = [
-                    Fighter(x,
-                            'PCs',
-                            self.world.get_creature_details(x, 'PCs'),
-                            self.__ruleset,
-                            self._window_manager)
+                    self.world.get_creature(x, 'PCs')
                     for x in sorted(self.world.get_creature_detail_list('PCs'))]
 
             npcs = self.world.get_creature_detail_list('NPCs')
             if npcs is not None:
                 self.__chars.extend([
-                        Fighter(x,
-                                'NPCs',
-                                self.world.get_creature_details(x, 'NPCs'),
-                                self.__ruleset,
-                                self._window_manager)
+                        self.world.get_creature(x, 'NPCs')
                         for x in sorted(
                                 self.world.get_creature_detail_list('NPCs'))])
         else:
@@ -10275,11 +10256,8 @@ class EquipmentManager(object):
         # Temporarily create a 'Fighter' object just to use one of its member
         # functions.
 
-        fighter = Fighter(self.__character['name'],
-                          self.__group_name,
-                          self.__character['details'],
-                          self.__ruleset,
-                          self._window_manager)
+        fighter = self.__world.get_creature(self.__character['name'],
+                                            self.__group_name)
 
         '''
         self.__world = world
