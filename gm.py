@@ -1797,6 +1797,7 @@ class World(object):
         self.__window_manager = window_manager
         self.__delete_old_debug_files()
         self.snapshots = {'startup': self.source_filename}
+        self.__fighters = {}
 
         # |playing_back| is True only while we're actively playing back a
         # debug file.  There are two ways the code handles this variable.
@@ -1860,8 +1861,7 @@ class World(object):
         ScreenHandler.maintainjson = False
 
 
-    # TODO: should be get_creatures_detail
-    def get_creatures(self,
+    def get_creature_detail_list(self,
                       group_name  # 'PCs', 'NPCs', or a monster group
                      ):
         '''
@@ -1880,7 +1880,7 @@ class World(object):
                           self.__ruleset,
                           self.__window_manager
                           )
-            return fight.get_creatures()
+            return fight.get_creature_detail_list()
 
         return None
 
@@ -1896,7 +1896,7 @@ class World(object):
         elif group_name == 'NPCs':
             details = self.details['NPCs'][name]
         else:
-            group = self.get_creatures(group_name)
+            group = self.get_creature_detail_list(group_name)
             if group is None:
                 self.__window_manager.error(
                                     ['No "%s" group in "fights"' % group_name])
@@ -2652,7 +2652,7 @@ class Fight(ThingsInFight):
         self.detailed_name = Fight.detailed_name % group
 
 
-    def get_creatures(self):
+    def get_creature_detail_list(self):
         '''
         Returns dict of details: {name: {<details>}, name: ... }
         '''
@@ -7501,7 +7501,8 @@ class BuildFightHandler(ScreenHandler):
 
         self.__group_name = group_answer
         self.__critters = {
-                    'data': self.world.get_creatures(self.__group_name),
+                    'data': self.world.get_creature_detail_list(
+                                                            self.__group_name),
                     'obj': []}
 
         # Build the Fighter object array
@@ -7617,7 +7618,7 @@ class BuildFightHandler(ScreenHandler):
             if group_name is None or len(group_name) == 0:
                 self._window_manager.error(['You have to name your fight'])
                 keep_asking = True
-            elif self.world.get_creatures(group_name) is not None:
+            elif self.world.get_creature_detail_list(group_name) is not None:
                 self._window_manager.error(
                     ['Fight name "%s" already exists' % group_name])
                 keep_asking = True
@@ -7888,7 +7889,7 @@ class FightHandler(ScreenHandler):
                                                    'name': fighter.name})
 
         if monster_group is not None:
-            for name in self.world.get_creatures(monster_group):
+            for name in self.world.get_creature_detail_list(monster_group):
                 details = self.world.get_creature_details(name,
                                                             monster_group)
                 if details is not None:
@@ -8037,7 +8038,7 @@ class FightHandler(ScreenHandler):
                                 self._saved_fight['monsters'] is not None and
                                 self.__keep_monsters == False):
             fight_group = self._saved_fight['monsters']
-            fight = self.world.get_creatures(fight_group)
+            fight = self.world.get_creature_detail_list(fight_group)
 
             fmt='%Y-%m-%d-%H-%M-%S'
             date = datetime.datetime.now().strftime(fmt).format()
@@ -8218,7 +8219,7 @@ class FightHandler(ScreenHandler):
 
         # Make the redirect entry
 
-        group = self.world.get_creatures(new_NPC.group)
+        group = self.world.get_creature_detail_list(new_NPC.group)
         group[new_NPC.name] = { "redirect": "NPCs" }
 
         # Replace fighter information with new fighter information
@@ -8293,7 +8294,7 @@ class FightHandler(ScreenHandler):
                              # are: {'group': <groupname>,
                              #       'info': <Fighter object>}
 
-        for name in self.world.get_creatures('PCs'):
+        for name in self.world.get_creature_detail_list('PCs'):
             details = self.world.get_creature_details(name, 'PCs')
             if details is not None:
                 fighter = Fighter(name,
@@ -8305,9 +8306,9 @@ class FightHandler(ScreenHandler):
 
         the_fight_itself = None
         if monster_group is not None:
-            for name in self.world.get_creatures(monster_group):
+            for name in self.world.get_creature_detail_list(monster_group):
                 details = self.world.get_creature_details(name,
-                                                            monster_group)
+                                                          monster_group)
                 if details is None:
                     continue
 
@@ -8587,7 +8588,7 @@ class FightHandler(ScreenHandler):
             return True # Keep going
 
 
-        character_list = self.world.get_creatures(from_fighter.group)
+        character_list = self.world.get_creature_detail_list(from_fighter.group)
         character_menu = [(dude, dude) for dude in character_list]
         to_fighter_name = self._window_manager.menu(
                                         'Give "%s" to whom?' % item['name'],
@@ -9220,7 +9221,7 @@ class MainHandler(ScreenHandler):
                                                     self._window_manager)
 
         # Check characters for consistency.
-        for name in self.world.get_creatures('PCs'):
+        for name in self.world.get_creature_detail_list('PCs'):
             details = self.world.get_creature_details(name, 'PCs')
             if details is not None:
                 self.__ruleset.is_creature_consistent(name, details)
@@ -9262,7 +9263,7 @@ class MainHandler(ScreenHandler):
         fight_name = self._window_manager.menu('Join Which Fight', fight_menu)
 
         # Make sure the person isn't already in the fight
-        fight = self.world.get_creatures(fight_name)
+        fight = self.world.get_creature_detail_list(fight_name)
         if npc_name in fight:
             self._window_manager.error(['"%s" already in fight "%s"' %
                                                     (npc_name, fight_name)])
@@ -9667,7 +9668,7 @@ class MainHandler(ScreenHandler):
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        for name in self.world.get_creatures('PCs'):
+        for name in self.world.get_creature_detail_list('PCs'):
             details = self.world.get_creature_details(name, 'PCs')
             if details is not None:
                 self.__ruleset.heal_fighter(details)
@@ -9682,7 +9683,7 @@ class MainHandler(ScreenHandler):
         if item is None:
             return True # Keep going
 
-        character_list = self.world.get_creatures('PCs')
+        character_list = self.world.get_creature_detail_list('PCs')
         character_menu = [(dude, dude) for dude in character_list]
         to_fighter_info = self._window_manager.menu(
                                         'Give "%s" to whom?' % item['name'],
@@ -9901,7 +9902,8 @@ class MainHandler(ScreenHandler):
         monster_group = self.world.details['dead-monsters'][
                                                         monster_group_index]
 
-        if self.world.get_creatures(monster_group['name']) is not None:
+        if self.world.get_creature_detail_list(
+                                        monster_group['name']) is not None:
             self._window_manager.error(['Fight by name "%s" exists' %
                                                     monster_group['name']])
             return True
@@ -10068,7 +10070,7 @@ class MainHandler(ScreenHandler):
         look_for_re = re.compile(look_for_string)
 
         all_results = []
-        for name in self.world.get_creatures('PCs'):
+        for name in self.world.get_creature_detail_list('PCs'):
             creature = self.world.get_creature_details(name, 'PCs')
             result = self.__ruleset.search_one_creature(name,
                                                         'PCs',
@@ -10077,7 +10079,7 @@ class MainHandler(ScreenHandler):
             if result is not None and len(result) > 0:
                 all_results.extend(result)
 
-        for name in self.world.get_creatures('NPCs'):
+        for name in self.world.get_creature_detail_list('NPCs'):
             creature = self.world.get_creature_details(name, 'NPCs')
             result = self.__ruleset.search_one_creature(name,
                                                         'NPCs',
@@ -10087,7 +10089,7 @@ class MainHandler(ScreenHandler):
                 all_results.extend(result)
 
         for fight_name in self.world.get_fights():
-            for name in self.world.get_creatures(fight_name):
+            for name in self.world.get_creature_detail_list(fight_name):
                 creature = self.world.get_creature_details(name, fight_name)
                 result = self.__ruleset.search_one_creature(name,
                                                             '%s' % fight_name,
@@ -10135,7 +10137,7 @@ class MainHandler(ScreenHandler):
                         group=None):
         if group is not None:
             self.__chars = []
-            monsters = self.world.get_creatures(group)
+            monsters = self.world.get_creature_detail_list(group)
             if monsters is not None:
                 the_fight_itself = None
                 for name, details in monsters.iteritems():
@@ -10181,9 +10183,9 @@ class MainHandler(ScreenHandler):
                             self.world.get_creature_details(x, 'PCs'),
                             self.__ruleset,
                             self._window_manager)
-                    for x in sorted(self.world.get_creatures('PCs'))]
+                    for x in sorted(self.world.get_creature_detail_list('PCs'))]
 
-            npcs = self.world.get_creatures('NPCs')
+            npcs = self.world.get_creature_detail_list('NPCs')
             if npcs is not None:
                 self.__chars.extend([
                         Fighter(x,
@@ -10191,7 +10193,8 @@ class MainHandler(ScreenHandler):
                                 self.world.get_creature_details(x, 'NPCs'),
                                 self.__ruleset,
                                 self._window_manager)
-                        for x in sorted(self.world.get_creatures('NPCs'))])
+                        for x in sorted(
+                                self.world.get_creature_detail_list('NPCs'))])
         else:
             pass
 
@@ -10250,11 +10253,12 @@ class MainHandler(ScreenHandler):
 
         # If this is a monster list, run a consistency check
         #if self.__current_display is not None:
-        #    monsters = self.world.get_creatures(self.__current_display)
+        #    monsters = self.world.get_creature_detail_list(
+        #                                           self.__current_display)
         #    for name in monsters:
         #        creature = self.world.get_creature_details(
-        #                                                name,
-        #                                                self.__current_display)
+        #                                           name,
+        #                                           self.__current_display)
         #        self.__ruleset.is_creature_consistent(name, creature)
 
         return True
