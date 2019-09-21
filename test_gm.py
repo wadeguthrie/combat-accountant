@@ -4080,7 +4080,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fights = world.get_fights()
         assert 'test_new_fight' in fights # verify that fight  exists
         if 'test_new_fight' in fights:
-            creatures = world.get_creature_detail_list('test_new_fight')
+            creatures = world.get_creature_details_list('test_new_fight')
             # The 'creatures' should be '<< ARENA >>', '1 - Horatio'
             assert '1 - Horatio' in creatures
 
@@ -4167,7 +4167,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fights = world.get_fights()
         assert 'test_new_fight' in fights # verify that fight  exists
         if 'test_new_fight' in fights:
-            creatures = world.get_creature_detail_list('test_new_fight')
+            creatures = world.get_creature_details_list('test_new_fight')
             assert '1 - Horatio' not in creatures
             assert '2 - Ophelia' in creatures
 
@@ -4191,7 +4191,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         build_fight.set_command_ribbon_input('q')
         build_fight.handle_user_input_until_done()
 
-        creatures = world.get_creature_detail_list(group)
+        creatures = world.get_creature_details_list(group)
         assert 'Skippy' in creatures
 
         ### Add NPCs ###
@@ -4214,7 +4214,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         build_fight.set_command_ribbon_input('q')
         build_fight.handle_user_input_until_done()
 
-        creatures = world.get_creature_detail_list(group)
+        creatures = world.get_creature_details_list(group)
         assert 'Stinky' in creatures
 
 
