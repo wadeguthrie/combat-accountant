@@ -1243,930 +1243,7 @@
     }
   }, 
   "fights": {
-    "BLAH": {
-      "stuff": [], 
-      "timers": [], 
-      "monsters": {
-        "<< ROOM >>": {
-          "notes": [], 
-          "stuff": [], 
-          "timers": [
-            {
-              "actions": {
-                "announcement": "TWO"
-              }, 
-              "name": "<< ROOM >>", 
-              "string": "two", 
-              "rounds": 1.9
-            }, 
-            {
-              "actions": {}, 
-              "name": "<< ROOM >>", 
-              "string": "three", 
-              "rounds": 3
-            }, 
-            {
-              "actions": {
-                "announcement": "FOUR"
-              }, 
-              "name": "<< ROOM >>", 
-              "string": "", 
-              "rounds": 3.9
-            }, 
-            {
-              "actions": {}, 
-              "name": "<< ROOM >>", 
-              "string": "", 
-              "rounds": 5
-            }
-          ]
-        }, 
-        "1 - manny": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 4, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, nice David-built laser", 
-              "damage": {
-                "dice": {
-                  "plus": 3, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Small Knife", 
-              "notes": "B272", 
-              "damage": {
-                "sw": {
-                  "plus": -3, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": -1, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "brass knuckles", 
-              "notes": "B271", 
-              "damage": {
-                "thr": {
-                  "plus": 1, 
-                  "type": "cr"
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Karate", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 3, 
-              "name": "Sport coat/Jeans"
-            }
-          ], 
-          "stunned": false, 
-          "skills": {
-            "Beam Weapons (Pistol)": 18, 
-            "Brawling": 18, 
-            "Knife": 18
-          }, 
-          "notes": [
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Rolls eyes when bored/annoyed", 
-            "instincts: To find the one", 
-            "hair: Frazzled", 
-            "speech: Um Uh", 
-            "knack: Endurance", 
-            "personality: Organized"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": 4, 
-          "current": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "per": 12, 
-            "st": 16, 
-            "wi": 12, 
-            "ht": 10, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "check_for_death": false, 
-          "state": "alive", 
-          "permanent": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "ht": 10, 
-            "st": 16, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "actions_this_turn": [], 
-          "weapon-index": null, 
-          "timers": [
-            {
-              "actions": {
-                "announcement": "TWO"
-              }, 
-              "name": "1 - manny", 
-              "string": "two", 
-              "rounds": 1.9
-            }, 
-            {
-              "actions": {}, 
-              "name": "1 - manny", 
-              "string": "three", 
-              "rounds": 3
-            }, 
-            {
-              "actions": {
-                "announcement": "FOUR"
-              }, 
-              "name": "1 - manny", 
-              "string": "", 
-              "rounds": 3.9
-            }, 
-            {
-              "actions": {}, 
-              "name": "1 - manny", 
-              "string": "", 
-              "rounds": 5
-            }
-          ], 
-          "posture": "standing", 
-          "opponent": null
-        }, 
-        "3 - jack": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 4, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, nice David-built laser", 
-              "damage": {
-                "dice": {
-                  "plus": 3, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Small Knife", 
-              "notes": "B272", 
-              "damage": {
-                "sw": {
-                  "plus": -3, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": -1, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "brass knuckles", 
-              "notes": "B271", 
-              "damage": {
-                "thr": {
-                  "plus": 1, 
-                  "type": "cr"
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Karate", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 3, 
-              "name": "Sport coat/Jeans"
-            }
-          ], 
-          "stunned": false, 
-          "skills": {
-            "Beam Weapons (Pistol)": 18, 
-            "Brawling": 18, 
-            "Knife": 18
-          }, 
-          "notes": [
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Dandruff", 
-            "instincts: To be a champion", 
-            "hair: Bald", 
-            "speech: High-pitched", 
-            "knack: Smelting", 
-            "personality: Truthful"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": 4, 
-          "current": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "per": 12, 
-            "st": 16, 
-            "wi": 12, 
-            "ht": 10, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "check_for_death": false, 
-          "state": "alive", 
-          "permanent": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "ht": 10, 
-            "st": 16, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "actions_this_turn": [], 
-          "weapon-index": null, 
-          "timers": [], 
-          "posture": "standing", 
-          "opponent": null
-        }, 
-        "2 - moe": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 4, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, nice David-built laser", 
-              "damage": {
-                "dice": {
-                  "plus": 3, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Small Knife", 
-              "notes": "B272", 
-              "damage": {
-                "sw": {
-                  "plus": -3, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": -1, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "brass knuckles", 
-              "notes": "B271", 
-              "damage": {
-                "thr": {
-                  "plus": 1, 
-                  "type": "cr"
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Karate", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 3, 
-              "name": "Sport coat/Jeans"
-            }
-          ], 
-          "stunned": false, 
-          "skills": {
-            "Beam Weapons (Pistol)": 18, 
-            "Brawling": 18, 
-            "Knife": 18
-          }, 
-          "notes": [
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Cracks knuckles", 
-            "instincts: To establish a dynasty", 
-            "hair: Streaked", 
-            "speech: Whispery", 
-            "knack: Heroic self-sacrifice", 
-            "personality: Cautious"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": 4, 
-          "current": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "per": 12, 
-            "st": 16, 
-            "wi": 12, 
-            "ht": 10, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "check_for_death": false, 
-          "state": "alive", 
-          "permanent": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "ht": 10, 
-            "st": 16, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "actions_this_turn": [], 
-          "weapon-index": null, 
-          "timers": [], 
-          "posture": "standing", 
-          "opponent": null
-        }
-      }
-    }, 
-    "Dima's Crew": {
-      "monsters": {
-        "5: Dmitry": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stunned": 0, 
-          "skills": {
-            "Beam Weapons (Pistol)": 17, 
-            "Brawling": 17, 
-            "Knife": 17
-          }, 
-          "shock": 0, 
-          "armor-index": 3, 
-          "short-notes": [
-            ""
-          ], 
-          "current": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "permanent": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "state": "alive", 
-          "stuff": [
-            {
-              "acc": 3, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, average David-built laser", 
-              "notes": "Nice weapon", 
-              "damage": {
-                "dice": {
-                  "plus": 1, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 7, 
-                "shots_left": 7
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": [], 
-              "name": "Sport coat/Jeans", 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 2
-            }
-          ], 
-          "timers": [], 
-          "actions_this_turn": [], 
-          "weapon-index": null, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "posture": "standing", 
-          "check_for_death": false, 
-          "opponent": null
-        }, 
-        "4: Andre": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stunned": 0, 
-          "skills": {
-            "Beam Weapons (Pistol)": 17, 
-            "Brawling": 17, 
-            "Knife": 17
-          }, 
-          "shock": 0, 
-          "armor-index": 3, 
-          "short-notes": [
-            "* DR 2 on suit ", 
-            ""
-          ], 
-          "current": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "permanent": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "state": "alive", 
-          "stuff": [
-            {
-              "acc": 3, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, average David-built laser", 
-              "notes": "Nice weapon", 
-              "damage": {
-                "dice": {
-                  "plus": 1, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 7, 
-                "shots_left": 7
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": [], 
-              "name": "Sport coat/Jeans", 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 2
-            }
-          ], 
-          "timers": [], 
-          "actions_this_turn": [], 
-          "weapon-index": null, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "posture": "standing", 
-          "check_for_death": false, 
-          "opponent": null
-        }, 
-        "Dima - Bratva": {
-          "redirect": "NPCs"
-        }, 
-        "3: Alex": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stunned": 0, 
-          "skills": {
-            "Beam Weapons (Pistol)": 17, 
-            "Brawling": 17, 
-            "Knife": 17
-          }, 
-          "shock": 0, 
-          "armor-index": 3, 
-          "short-notes": [
-            ""
-          ], 
-          "current": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "permanent": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "state": "alive", 
-          "stuff": [
-            {
-              "acc": 3, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, average David-built laser", 
-              "notes": "Nice weapon", 
-              "damage": {
-                "dice": {
-                  "plus": 1, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 7, 
-                "shots_left": 7
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": [], 
-              "name": "Sport coat/Jeans", 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 2
-            }
-          ], 
-          "timers": [], 
-          "actions_this_turn": [], 
-          "weapon-index": null, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "posture": "standing", 
-          "check_for_death": false, 
-          "opponent": null
-        }, 
-        "2: Nikita": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stunned": 0, 
-          "skills": {
-            "Beam Weapons (Pistol)": 17, 
-            "Brawling": 17, 
-            "Knife": 17
-          }, 
-          "shock": 0, 
-          "armor-index": 3, 
-          "short-notes": [
-            ""
-          ], 
-          "current": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "permanent": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "state": "alive", 
-          "stuff": [
-            {
-              "acc": 3, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, average David-built laser", 
-              "notes": "Nice weapon", 
-              "damage": {
-                "dice": {
-                  "plus": 1, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 7, 
-                "shots_left": 7
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": [], 
-              "name": "Sport coat/Jeans", 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 2
-            }
-          ], 
-          "timers": [], 
-          "actions_this_turn": [], 
-          "weapon-index": null, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "posture": "standing", 
-          "check_for_death": false, 
-          "opponent": null
-        }
-      }
-    }, 
     "Battle of Persephone, Marshals Office": {
-      "stuff": [], 
-      "timers": [], 
       "monsters": {
         "2 - Lovelie - Summoner": {
           "aim": {
@@ -2397,7 +1474,6 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 70, 
@@ -2411,7 +1487,7 @@
             "basic-move": 8, 
             "basic-speed": 8.25
           }, 
-          "check_for_death": false, 
+          "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 70, 
@@ -2438,9 +1514,10 @@
             "Vodou Practitioner (Lwa 5)": 140, 
             "Combat Reflexes": 15
           }, 
-          "actions_this_turn": [], 
           "weapon-index": null, 
+          "check_for_death": false, 
           "timers": [], 
+          "actions_this_turn": [], 
           "opponent": null, 
           "spells": [
             {
@@ -2725,6 +1802,1333 @@
           ]
         }
       }
+    }, 
+    "BLAH": {
+      "monsters": {
+        "<< ROOM >>": {
+          "notes": [], 
+          "stuff": [], 
+          "timers": [
+            {
+              "name": "<< ROOM >>", 
+              "string": "two", 
+              "actions": {
+                "announcement": "TWO"
+              }, 
+              "rounds": 1.9
+            }, 
+            {
+              "name": "<< ROOM >>", 
+              "string": "three", 
+              "actions": {}, 
+              "rounds": 3
+            }, 
+            {
+              "name": "<< ROOM >>", 
+              "string": "", 
+              "actions": {
+                "announcement": "FOUR"
+              }, 
+              "rounds": 3.9
+            }, 
+            {
+              "name": "<< ROOM >>", 
+              "string": "", 
+              "actions": {}, 
+              "rounds": 5
+            }
+          ]
+        }, 
+        "1 - manny": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "stunned": false, 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Rolls eyes when bored/annoyed", 
+            "instincts: To find the one", 
+            "hair: Frazzled", 
+            "speech: Um Uh", 
+            "knack: Endurance", 
+            "personality: Organized"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": 4, 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "per": 12, 
+            "st": 16, 
+            "wi": 12, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
+            "per": 12, 
+            "wi": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [
+            {
+              "name": "1 - manny", 
+              "string": "two", 
+              "actions": {
+                "announcement": "TWO"
+              }, 
+              "rounds": 1.9
+            }, 
+            {
+              "name": "1 - manny", 
+              "string": "three", 
+              "actions": {}, 
+              "rounds": 3
+            }, 
+            {
+              "name": "1 - manny", 
+              "string": "", 
+              "actions": {
+                "announcement": "FOUR"
+              }, 
+              "rounds": 3.9
+            }, 
+            {
+              "name": "1 - manny", 
+              "string": "", 
+              "actions": {}, 
+              "rounds": 5
+            }
+          ], 
+          "actions_this_turn": [], 
+          "opponent": null
+        }, 
+        "3 - jack": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "stunned": false, 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Dandruff", 
+            "instincts: To be a champion", 
+            "hair: Bald", 
+            "speech: High-pitched", 
+            "knack: Smelting", 
+            "personality: Truthful"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": 4, 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "per": 12, 
+            "st": 16, 
+            "wi": 12, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
+            "per": 12, 
+            "wi": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "actions_this_turn": [], 
+          "opponent": null
+        }, 
+        "2 - moe": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "stunned": false, 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Cracks knuckles", 
+            "instincts: To establish a dynasty", 
+            "hair: Streaked", 
+            "speech: Whispery", 
+            "knack: Heroic self-sacrifice", 
+            "personality: Cautious"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": 4, 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "per": 12, 
+            "st": 16, 
+            "wi": 12, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
+            "per": 12, 
+            "wi": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "actions_this_turn": [], 
+          "opponent": null
+        }
+      }
+    }, 
+    "NEWER FIGHT": {
+      "monsters": {}
+    }, 
+    "Planets": {
+      "monsters": {
+        "1 - mercury": {
+          "stunned": false, 
+          "short-notes": [], 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "posture": "standing", 
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: staby (born on this station)", 
+            "characteristics: Flips a coin", 
+            "instincts: To show kindness", 
+            "hair: Limp", 
+            "speech: Wheezy", 
+            "knack: Smelting", 
+            "personality: Humorless"
+          ], 
+          "shock": 0, 
+          "armor-index": 4, 
+          "actions_this_turn": [], 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "wi": 12, 
+            "st": 16, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25, 
+            "per": 12
+          }, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
+            "wi": 12, 
+            "per": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": null
+        }, 
+        "<< ROOM >>": {
+          "notes": [], 
+          "stuff": [], 
+          "timers": []
+        }, 
+        "3 - earth": {
+          "stunned": false, 
+          "short-notes": [], 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "posture": "standing", 
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Loves the sea and ships", 
+            "instincts: To discover the truth", 
+            "hair: Frazzled", 
+            "speech: Quiet", 
+            "knack: A safe place", 
+            "personality: Irreverent"
+          ], 
+          "shock": 0, 
+          "armor-index": 4, 
+          "actions_this_turn": [], 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "wi": 12, 
+            "st": 16, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25, 
+            "per": 12
+          }, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
+            "wi": 12, 
+            "per": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": null
+        }, 
+        "2 - venus": {
+          "stunned": false, 
+          "short-notes": [], 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "posture": "standing", 
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Repeats same phrase over and over", 
+            "instincts: To be careful", 
+            "hair: Limp", 
+            "speech: Fast", 
+            "knack: Steely nerves", 
+            "personality: Courteous"
+          ], 
+          "shock": 0, 
+          "armor-index": 4, 
+          "actions_this_turn": [], 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "wi": 12, 
+            "st": 16, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25, 
+            "per": 12
+          }, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
+            "wi": 12, 
+            "per": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }
+    }, 
+    "Dima's Crew": {
+      "monsters": {
+        "5: Dmitry": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 17, 
+            "Brawling": 17, 
+            "Knife": 17
+          }, 
+          "posture": "standing", 
+          "shock": 0, 
+          "armor-index": 3, 
+          "short-notes": [
+            ""
+          ], 
+          "current": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "wi": 11, 
+            "st": 12, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75, 
+            "per": 11
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "wi": 11, 
+            "st": 12, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75, 
+            "per": 11
+          }, 
+          "state": "alive", 
+          "stuff": [
+            {
+              "acc": 3, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, average David-built laser", 
+              "notes": "Nice weapon", 
+              "damage": {
+                "dice": {
+                  "plus": 1, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 7, 
+                "shots_left": 7
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Large Knife", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": [], 
+              "name": "Sport coat/Jeans", 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 2
+            }
+          ], 
+          "timers": [], 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "actions_this_turn": [], 
+          "opponent": null
+        }, 
+        "4: Andre": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 17, 
+            "Brawling": 17, 
+            "Knife": 17
+          }, 
+          "posture": "standing", 
+          "shock": 0, 
+          "armor-index": 3, 
+          "short-notes": [
+            "* DR 2 on suit ", 
+            ""
+          ], 
+          "current": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "wi": 11, 
+            "st": 12, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75, 
+            "per": 11
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "wi": 11, 
+            "st": 12, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75, 
+            "per": 11
+          }, 
+          "state": "alive", 
+          "stuff": [
+            {
+              "acc": 3, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, average David-built laser", 
+              "notes": "Nice weapon", 
+              "damage": {
+                "dice": {
+                  "plus": 1, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 7, 
+                "shots_left": 7
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Large Knife", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": [], 
+              "name": "Sport coat/Jeans", 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 2
+            }
+          ], 
+          "timers": [], 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "actions_this_turn": [], 
+          "opponent": null
+        }, 
+        "Dima - Bratva": {
+          "redirect": "NPCs"
+        }, 
+        "3: Alex": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 17, 
+            "Brawling": 17, 
+            "Knife": 17
+          }, 
+          "posture": "standing", 
+          "shock": 0, 
+          "armor-index": 3, 
+          "short-notes": [
+            ""
+          ], 
+          "current": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "wi": 11, 
+            "st": 12, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75, 
+            "per": 11
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "wi": 11, 
+            "st": 12, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75, 
+            "per": 11
+          }, 
+          "state": "alive", 
+          "stuff": [
+            {
+              "acc": 3, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, average David-built laser", 
+              "notes": "Nice weapon", 
+              "damage": {
+                "dice": {
+                  "plus": 1, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 7, 
+                "shots_left": 7
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Large Knife", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": [], 
+              "name": "Sport coat/Jeans", 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 2
+            }
+          ], 
+          "timers": [], 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "actions_this_turn": [], 
+          "opponent": null
+        }, 
+        "2: Nikita": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 17, 
+            "Brawling": 17, 
+            "Knife": 17
+          }, 
+          "posture": "standing", 
+          "shock": 0, 
+          "armor-index": 3, 
+          "short-notes": [
+            ""
+          ], 
+          "current": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "wi": 11, 
+            "st": 12, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75, 
+            "per": 11
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "wi": 11, 
+            "st": 12, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75, 
+            "per": 11
+          }, 
+          "state": "alive", 
+          "stuff": [
+            {
+              "acc": 3, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, average David-built laser", 
+              "notes": "Nice weapon", 
+              "damage": {
+                "dice": {
+                  "plus": 1, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 7, 
+                "shots_left": 7
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Large Knife", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": [], 
+              "name": "Sport coat/Jeans", 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 2
+            }
+          ], 
+          "timers": [], 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "actions_this_turn": [], 
+          "opponent": null
+        }
+      }
     }
   }, 
   "PCs": {
@@ -2733,6 +3137,53 @@
         "braced": false, 
         "rounds": 0
       }, 
+      "stunned": false, 
+      "skills": {
+        "Stealth": 14, 
+        "Brawling": 13, 
+        "Beam Weapons (Pistol)": 15, 
+        "Fast-Talk": 13, 
+        "Gambling": 7, 
+        "Knife": 15, 
+        "Observation": 13, 
+        "Interrogation": 12, 
+        "Lockpicking": 12, 
+        "Streetwise": 12, 
+        "Guns (Pistol)": 13, 
+        "First Aid": 14, 
+        "Armoury (Small Arms)": 11, 
+        "Search": 11, 
+        "Guns (Grenade Launcher)": 9, 
+        "Fast-Draw (Ammo)": 13, 
+        "Traps": 12, 
+        "Beam Weapons (Rifle)": 14, 
+        "Karate": 13, 
+        "Axe/Mace": 12, 
+        "Throwing": 10, 
+        "Acting": 7, 
+        "Holdout": 11, 
+        "Law (Conglomerate)": 10
+      }, 
+      "shock": 0, 
+      "armor-index": null, 
+      "actions_this_turn": [
+        "reload", 
+        "reload"
+      ], 
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 12, 
+        "wi": 12, 
+        "st": 10, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6, 
+        "per": 12
+      }, 
+      "fargark": {}, 
+      "state": "alive", 
       "stuff": [
         {
           "count": 1, 
@@ -2941,52 +3392,7 @@
           "name": "Fingerbone of fog"
         }
       ], 
-      "stunned": false, 
-      "skills": {
-        "Stealth": 14, 
-        "Brawling": 13, 
-        "Beam Weapons (Pistol)": 15, 
-        "Fast-Talk": 13, 
-        "Gambling": 7, 
-        "Knife": 15, 
-        "Observation": 13, 
-        "Interrogation": 12, 
-        "Lockpicking": 12, 
-        "Streetwise": 12, 
-        "Guns (Pistol)": 13, 
-        "First Aid": 14, 
-        "Armoury (Small Arms)": 11, 
-        "Search": 11, 
-        "Guns (Grenade Launcher)": 9, 
-        "Fast-Draw (Ammo)": 13, 
-        "Traps": 12, 
-        "Beam Weapons (Rifle)": 14, 
-        "Karate": 13, 
-        "Axe/Mace": 12, 
-        "Throwing": 10, 
-        "Acting": 7, 
-        "Holdout": 11, 
-        "Law (Conglomerate)": 10
-      }, 
-      "actions_this_turn": [], 
-      "shock": 0, 
-      "armor-index": null, 
-      "short-notes": [
-        ""
-      ], 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 12, 
-        "wi": 12, 
-        "st": 10, 
-        "ht": 11, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
-      }, 
-      "state": "alive", 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -2999,6 +3405,8 @@
         "basic-speed": 6, 
         "per": 12
       }, 
+      "weapon-index": null, 
+      "check_for_death": false, 
       "advantages": {
         "G-Experience": 3, 
         "No Sense of Humor": -10, 
@@ -3012,21 +3420,10 @@
         "Night Vision": 4, 
         "Combat Reflexes": 15
       }, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [
-        {
-          "rounds": 0.9, 
-          "name": "lawerence - Spenser", 
-          "actions": {}, 
-          "string": [
-            "Attack", 
-            " Defense: any", 
-            " Move: step"
-          ]
-        }
-      ], 
       "posture": "standing", 
+      "short-notes": [
+        ""
+      ], 
       "opponent": null
     }, 
     "samuel - Erik": {
@@ -3034,6 +3431,123 @@
         "braced": false, 
         "rounds": 0
       }, 
+      "stunned": false, 
+      "skills": {
+        "Camouflage": 11, 
+        "Stealth": 12, 
+        "Brawling": 15, 
+        "Beam Weapons (Pistol)": 16, 
+        "Streetwise": 11, 
+        "Knife": 14, 
+        "Theology (Vodun)": 10, 
+        "Lockpicking": 10, 
+        "Intimidation": 12, 
+        "Law (Conglomerate, trans-territorial jurisdiction/the void)": 9, 
+        "Filch": 12, 
+        "Running": 10, 
+        "Fast-Draw (Pistol)": 14, 
+        "First Aid": 13, 
+        "Armoury (Small Arms)": 10, 
+        "Climbing": 12, 
+        "Urban Survival": 11, 
+        "Pickpocket": 11, 
+        "Beam Weapons (Rifle)": 13, 
+        "Axe/Mace": 13, 
+        "Fast-Draw (Knife)": 14, 
+        "Gesture": 11, 
+        "Throwing": 14, 
+        "Scrounging": 12
+      }, 
+      "notes": [
+        "Born November 1st 2099 (Fet Gede - All Souls Day) - 24 years old.", 
+        "", 
+        "Samuel grew up in the impoverished Port Au Prince commune of Cite", 
+        "Soleil. This former shantytown grew to house well over one and a", 
+        "half million souls by 2099. With the deaths of most of his family by", 
+        "the time he turned 15, Samuel fled with Esther, his younger sister,", 
+        "to the larger, and wealthier urban center of Port au Prince. To find", 
+        "his fortune, as they say.", 
+        "", 
+        "He lived hand to mouth doing any kind of work, legal or otherwise,", 
+        "to support himself and his sister for several years. Befriending a", 
+        "few of the other homeless they eked out a rough, uneducated", 
+        "existence. Around his 17th birthday, he met Beatrice Hyppolite, also", 
+        "known as Missus H. Missus H took the children to her \"home\" in an", 
+        "abandoned warehouse, where she acted as a mother figure for her", 
+        "\"Lost Bays (babies)\" and began to teach Samuel to read and the", 
+        "basics of history and arithmetic.", 
+        "", 
+        "Missus H was also a Vodouisant and head of her small Sosyete. She", 
+        "encouraged Samuel to join her Sosyete and he picked up a rudimentary", 
+        "understanding of Vodou. The power of Vodouisants disturbed Samuel", 
+        "and he began to refuse to join in the Fets. But Missus H insisted", 
+        "that Samuel had the touch. All the signs were present for him to be", 
+        "a great Houngan. Missus H told Samuel that his birthday made him a", 
+        "vessel for a reborn soul and he will forever be connected to the", 
+        "spirit world. ", 
+        "", 
+        "By 2118, when he was 19, Samuel moved Esther and himself out of", 
+        "Missus H's home and was able to find a steady, semi-legitimate job", 
+        "as a night security guard for Professional Security Services (PSS),", 
+        "a well known and long standing security company with roots in the", 
+        "20th century. He worked his way through the ranks eventually being", 
+        "trained in weapons and served as an armed security guard.", 
+        "", 
+        "Esther took work as a waitress in a nightclub/bar, the Cafe Trio,", 
+        "and Samuel began to work part-time as a bouncer there. The Trio was", 
+        "host to several members of Haiti's underground drug traffickers,", 
+        "most notably Gregory Occeant. Occeant was a regular and a Hounsi.", 
+        "His wealth and political power derived from the wealth have allowed", 
+        "him to hire the services of Loveson Jabouin, a powerful Bokor.", 
+        "", 
+        "A year ago, while Samuel was working a night shift for PSS, Esther", 
+        "went missing. She was last seen at the Trio speaking with Occeant", 
+        "and Jabouin. Samuel suspects Occeant and/or Jabouin to be behind", 
+        "her disappearance but he can't prove it. While trailing Jabouin,", 
+        "Samuel followed him to his home. After the Bokor had left Samuel", 
+        "broke in looking for proof or evidence of his sister's whereabouts.", 
+        "He discovered an awful truth. Jabouin was head of a secret police", 
+        "force under Occeant and his drug cartel. This group was tasked,", 
+        "among other duties, with collecting slave labor for the cartel's", 
+        "production facilities.", 
+        "", 
+        "Before Samuel could learn more Jabouin returned home. Samuel grabbed", 
+        "a small leather pouch with an animal skull stitched to the flap. He", 
+        "recognized this as part of the Bokor's ceremonial paraphernalia,", 
+        "but Samuel has been too afraid of both the contents of the pouch and", 
+        "the Bokor to ever open the pouch.", 
+        "", 
+        "With Jabouin now an enemy Samuel needed to escape Haiti, at the", 
+        "very least. It was soon after that he came across an ad for security", 
+        "on the space station Persephone. He sold what possessions he had,", 
+        "collected his last paycheck and found the nearest recruitment office.", 
+        "", 
+        "The small pouch with the animal skull was packed in the bottom of", 
+        "his suitcase and the haunting words of Missus H echo in his mind", 
+        "whenever he thinks about the bag. \"In Haiti, there are secrets we", 
+        "keep, even from ourselves.\"", 
+        ""
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "actions_this_turn": [
+        "reload", 
+        "reload"
+      ], 
+      "current": {
+        "fp": 13, 
+        "iq": 11, 
+        "hp": 12, 
+        "wi": 11, 
+        "st": 12, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 6, 
+        "basic-speed": 6, 
+        "per": 11
+      }, 
+      "fargark": {}, 
+      "state": "alive", 
       "stuff": [
         {
           "acc": 4, 
@@ -3146,119 +3660,7 @@
           }
         }
       ], 
-      "stunned": false, 
-      "skills": {
-        "Camouflage": 11, 
-        "Stealth": 12, 
-        "Brawling": 15, 
-        "Beam Weapons (Pistol)": 16, 
-        "Streetwise": 11, 
-        "Knife": 14, 
-        "Theology (Vodun)": 10, 
-        "Lockpicking": 10, 
-        "Intimidation": 12, 
-        "Law (Conglomerate, trans-territorial jurisdiction/the void)": 9, 
-        "Filch": 12, 
-        "Running": 10, 
-        "Fast-Draw (Pistol)": 14, 
-        "First Aid": 13, 
-        "Armoury (Small Arms)": 10, 
-        "Climbing": 12, 
-        "Urban Survival": 11, 
-        "Pickpocket": 11, 
-        "Beam Weapons (Rifle)": 13, 
-        "Axe/Mace": 13, 
-        "Fast-Draw (Knife)": 14, 
-        "Gesture": 11, 
-        "Throwing": 14, 
-        "Scrounging": 12
-      }, 
-      "notes": [
-        "Born November 1st 2099 (Fet Gede - All Souls Day) - 24 years old.", 
-        "", 
-        "Samuel grew up in the impoverished Port Au Prince commune of Cite", 
-        "Soleil. This former shantytown grew to house well over one and a", 
-        "half million souls by 2099. With the deaths of most of his family by", 
-        "the time he turned 15, Samuel fled with Esther, his younger sister,", 
-        "to the larger, and wealthier urban center of Port au Prince. To find", 
-        "his fortune, as they say.", 
-        "", 
-        "He lived hand to mouth doing any kind of work, legal or otherwise,", 
-        "to support himself and his sister for several years. Befriending a", 
-        "few of the other homeless they eked out a rough, uneducated", 
-        "existence. Around his 17th birthday, he met Beatrice Hyppolite, also", 
-        "known as Missus H. Missus H took the children to her \"home\" in an", 
-        "abandoned warehouse, where she acted as a mother figure for her", 
-        "\"Lost Bays (babies)\" and began to teach Samuel to read and the", 
-        "basics of history and arithmetic.", 
-        "", 
-        "Missus H was also a Vodouisant and head of her small Sosyete. She", 
-        "encouraged Samuel to join her Sosyete and he picked up a rudimentary", 
-        "understanding of Vodou. The power of Vodouisants disturbed Samuel", 
-        "and he began to refuse to join in the Fets. But Missus H insisted", 
-        "that Samuel had the touch. All the signs were present for him to be", 
-        "a great Houngan. Missus H told Samuel that his birthday made him a", 
-        "vessel for a reborn soul and he will forever be connected to the", 
-        "spirit world. ", 
-        "", 
-        "By 2118, when he was 19, Samuel moved Esther and himself out of", 
-        "Missus H's home and was able to find a steady, semi-legitimate job", 
-        "as a night security guard for Professional Security Services (PSS),", 
-        "a well known and long standing security company with roots in the", 
-        "20th century. He worked his way through the ranks eventually being", 
-        "trained in weapons and served as an armed security guard.", 
-        "", 
-        "Esther took work as a waitress in a nightclub/bar, the Cafe Trio,", 
-        "and Samuel began to work part-time as a bouncer there. The Trio was", 
-        "host to several members of Haiti's underground drug traffickers,", 
-        "most notably Gregory Occeant. Occeant was a regular and a Hounsi.", 
-        "His wealth and political power derived from the wealth have allowed", 
-        "him to hire the services of Loveson Jabouin, a powerful Bokor.", 
-        "", 
-        "A year ago, while Samuel was working a night shift for PSS, Esther", 
-        "went missing. She was last seen at the Trio speaking with Occeant", 
-        "and Jabouin. Samuel suspects Occeant and/or Jabouin to be behind", 
-        "her disappearance but he can't prove it. While trailing Jabouin,", 
-        "Samuel followed him to his home. After the Bokor had left Samuel", 
-        "broke in looking for proof or evidence of his sister's whereabouts.", 
-        "He discovered an awful truth. Jabouin was head of a secret police", 
-        "force under Occeant and his drug cartel. This group was tasked,", 
-        "among other duties, with collecting slave labor for the cartel's", 
-        "production facilities.", 
-        "", 
-        "Before Samuel could learn more Jabouin returned home. Samuel grabbed", 
-        "a small leather pouch with an animal skull stitched to the flap. He", 
-        "recognized this as part of the Bokor's ceremonial paraphernalia,", 
-        "but Samuel has been too afraid of both the contents of the pouch and", 
-        "the Bokor to ever open the pouch.", 
-        "", 
-        "With Jabouin now an enemy Samuel needed to escape Haiti, at the", 
-        "very least. It was soon after that he came across an ad for security", 
-        "on the space station Persephone. He sold what possessions he had,", 
-        "collected his last paycheck and found the nearest recruitment office.", 
-        "", 
-        "The small pouch with the animal skull was packed in the bottom of", 
-        "his suitcase and the haunting words of Missus H echo in his mind", 
-        "whenever he thinks about the bag. \"In Haiti, there are secrets we", 
-        "keep, even from ourselves.\"", 
-        ""
-      ], 
-      "shock": 0, 
-      "armor-index": null, 
-      "current": {
-        "fp": 13, 
-        "iq": 11, 
-        "hp": 12, 
-        "wi": 11, 
-        "st": 12, 
-        "ht": 11, 
-        "dx": 13, 
-        "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 11
-      }, 
-      "posture": "standing", 
-      "state": "alive", 
+      "timers": [], 
       "permanent": {
         "fp": 13, 
         "iq": 11, 
@@ -3271,6 +3673,8 @@
         "basic-speed": 6, 
         "per": 11
       }, 
+      "weapon-index": null, 
+      "check_for_death": false, 
       "advantages": {
         "G-Experience": 1, 
         "Guilt Complex (Loss Of Sister)": -5, 
@@ -3284,21 +3688,7 @@
         "Flashbacks, Mild": -5, 
         "Combat Reflexes": 15
       }, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [
-        {
-          "rounds": 0.9, 
-          "name": "samuel - Erik", 
-          "actions": {}, 
-          "string": [
-            "Attack", 
-            " Defense: any", 
-            " Move: step"
-          ]
-        }
-      ], 
-      "actions_this_turn": [], 
+      "posture": "standing", 
       "opponent": null
     }, 
     "deri - Chelsea": {
@@ -3404,6 +3794,56 @@
           "name": "Tell Time"
         }
       ], 
+      "stunned": false, 
+      "skills": {
+        "Law (Conglomorate, trans-territorial/the void)": 13, 
+        "Forgery": 12, 
+        "Brawling": 11, 
+        "Current Affairs (Teraforming)": 14, 
+        "Fast-Talk": 15, 
+        "Beam Weapons (Pistol)": 11, 
+        "Knife": 10, 
+        "Detect Lies": 14, 
+        "Thrown Weapon (Knife)": 10, 
+        "Streetwise": 15, 
+        "Climbing": 8, 
+        "Lip Reading": 14, 
+        "Electronics Repair (Security)": 15, 
+        "Connoisseur (Visual Arts)": 13, 
+        "Axe/Mace": 8, 
+        "Hazardous Materials (Chemical)": 13, 
+        "Mechanic (Spacecraft)": 15, 
+        "Electronics Operation (Teraforming)": 13, 
+        "Diplomacy": 14, 
+        "Computer Hacking": 13, 
+        "Electronics Repair (Teraforming)": 13, 
+        "Computer Operation": 14, 
+        "Computer Programming": 12, 
+        "Electronics Operation (Security)": 14, 
+        "Escape": 9, 
+        "Piloting (Low-Performance Spacecraft)": 9, 
+        "Area Knowledge (Space Station)": 16
+      }, 
+      "shock": 0, 
+      "armor-index": null, 
+      "actions_this_turn": [
+        "reload", 
+        "reload"
+      ], 
+      "current": {
+        "fp": 11, 
+        "iq": 14, 
+        "hp": 10, 
+        "wi": 14, 
+        "st": 9, 
+        "ht": 11, 
+        "dx": 9, 
+        "basic-move": 5, 
+        "basic-speed": 5, 
+        "per": 14
+      }, 
+      "fargark": {}, 
+      "state": "alive", 
       "stuff": [
         {
           "acc": 4, 
@@ -3488,52 +3928,7 @@
           "type": "melee weapon"
         }
       ], 
-      "stunned": false, 
-      "skills": {
-        "Law (Conglomorate, trans-territorial/the void)": 13, 
-        "Forgery": 12, 
-        "Brawling": 11, 
-        "Current Affairs (Teraforming)": 14, 
-        "Fast-Talk": 15, 
-        "Beam Weapons (Pistol)": 11, 
-        "Knife": 10, 
-        "Detect Lies": 14, 
-        "Thrown Weapon (Knife)": 10, 
-        "Streetwise": 15, 
-        "Climbing": 8, 
-        "Lip Reading": 14, 
-        "Electronics Repair (Security)": 15, 
-        "Connoisseur (Visual Arts)": 13, 
-        "Axe/Mace": 8, 
-        "Hazardous Materials (Chemical)": 13, 
-        "Mechanic (Spacecraft)": 15, 
-        "Electronics Operation (Teraforming)": 13, 
-        "Diplomacy": 14, 
-        "Computer Hacking": 13, 
-        "Electronics Repair (Teraforming)": 13, 
-        "Computer Operation": 14, 
-        "Computer Programming": 12, 
-        "Electronics Operation (Security)": 14, 
-        "Escape": 9, 
-        "Piloting (Low-Performance Spacecraft)": 9, 
-        "Area Knowledge (Space Station)": 16
-      }, 
-      "actions_this_turn": [], 
-      "shock": 0, 
-      "armor-index": null, 
-      "current": {
-        "fp": 11, 
-        "iq": 14, 
-        "hp": 10, 
-        "wi": 14, 
-        "st": 9, 
-        "ht": 11, 
-        "dx": 9, 
-        "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 14
-      }, 
-      "state": "alive", 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 14, 
@@ -3546,6 +3941,8 @@
         "basic-speed": 5, 
         "per": 14
       }, 
+      "weapon-index": null, 
+      "check_for_death": false, 
       "advantages": {
         "G-Experience": 1, 
         "Alcohol Intolerance": -1, 
@@ -3567,17 +3964,61 @@
         "Versatile": 5, 
         "Dreamer": -1
       }, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
+      "opponent": null, 
+      "posture": "standing"
     }, 
     "vasilis - Alan": {
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
+      "stunned": false, 
+      "skills": {
+        "Engineer (Starships)": 12, 
+        "Brawling": 12, 
+        "Beam Weapons (Pistol)": 16, 
+        "Cryptography": 13, 
+        "Piloting (Low-Performance Spacecraft)": 14, 
+        "Mathematics (Applied)": 12, 
+        "Law (Conglomerate, trans-territorial jurisdiction/the void)": 12, 
+        "First Aid": 15, 
+        "Armoury (Small Arms)": 14, 
+        "Climbing": 11, 
+        "Lip Reading": 13, 
+        "Expert Skill (Computer Security)": 12, 
+        "Search": 14, 
+        "Bartender": 13, 
+        "Observation": 15, 
+        "Beam Weapons (Rifle)": 16, 
+        "Axe/Mace": 12, 
+        "Physics": 11, 
+        "Engineer (Electronics)": 12, 
+        "Computer Hacking": 15, 
+        "Forensics": 14, 
+        "Computer Programming": 12, 
+        "Electronics Operation (Security)": 14, 
+        "Piloting (Loader Mech)": 13
+      }, 
+      "shock": 0, 
+      "armor-index": null, 
+      "actions_this_turn": [
+        "reload", 
+        "reload"
+      ], 
+      "current": {
+        "fp": 10, 
+        "iq": 14, 
+        "hp": 12, 
+        "wi": 14, 
+        "st": 10, 
+        "ht": 9, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.25, 
+        "per": 14
+      }, 
+      "fargark": {}, 
+      "state": "alive", 
       "stuff": [
         {
           "acc": 3, 
@@ -3638,53 +4079,7 @@
           "name": "Hacking Equipment +1"
         }
       ], 
-      "stunned": false, 
-      "skills": {
-        "Engineer (Starships)": 12, 
-        "Brawling": 12, 
-        "Beam Weapons (Pistol)": 16, 
-        "Cryptography": 13, 
-        "Piloting (Low-Performance Spacecraft)": 14, 
-        "Mathematics (Applied)": 12, 
-        "Law (Conglomerate, trans-territorial jurisdiction/the void)": 12, 
-        "First Aid": 15, 
-        "Armoury (Small Arms)": 14, 
-        "Climbing": 11, 
-        "Lip Reading": 13, 
-        "Expert Skill (Computer Security)": 12, 
-        "Search": 14, 
-        "Bartender": 13, 
-        "Observation": 15, 
-        "Beam Weapons (Rifle)": 16, 
-        "Axe/Mace": 12, 
-        "Physics": 11, 
-        "Engineer (Electronics)": 12, 
-        "Computer Hacking": 15, 
-        "Forensics": 14, 
-        "Computer Programming": 12, 
-        "Electronics Operation (Security)": 14, 
-        "Piloting (Loader Mech)": 13
-      }, 
-      "actions_this_turn": [], 
-      "shock": 0, 
-      "armor-index": null, 
-      "short-notes": [
-        "In mech, canopy closed, lights on ", 
-        ""
-      ], 
-      "current": {
-        "fp": 10, 
-        "iq": 14, 
-        "hp": 12, 
-        "wi": 14, 
-        "st": 10, 
-        "ht": 9, 
-        "dx": 12, 
-        "basic-move": 5, 
-        "basic-speed": 5.25, 
-        "per": 14
-      }, 
-      "state": "alive", 
+      "timers": [], 
       "permanent": {
         "fp": 10, 
         "iq": 14, 
@@ -3697,6 +4092,8 @@
         "basic-speed": 5.25, 
         "per": 14
       }, 
+      "weapon-index": null, 
+      "check_for_death": false, 
       "advantages": {
         "G-Experience": 1, 
         "Eidetic Memory": 5, 
@@ -3707,10 +4104,11 @@
         "Cannot Speak (Mute) - Computer Voice Synthesizer": -10, 
         "Secret (Turned in evidence on brutal mob hit)": -30
       }, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
       "posture": "standing", 
+      "short-notes": [
+        "In mech, canopy closed, lights on ", 
+        ""
+      ], 
       "opponent": null
     }, 
     "mama V - Karen": {
@@ -3804,6 +4202,36 @@
           "name": "Powerstone"
         }
       ], 
+      "stunned": false, 
+      "skills": {
+        "Physician": 14, 
+        "Axe/Mace": 7, 
+        "Law (Conglomerate, Trans territorial jurisdiction/the void)": 14, 
+        "Fast-Draw (Pistol)": 9, 
+        "Brawling": 8, 
+        "First Aid": 17, 
+        "Beam Weapons (Pistol)": 14
+      }, 
+      "shock": 0, 
+      "armor-index": null, 
+      "actions_this_turn": [
+        "reload", 
+        "reload"
+      ], 
+      "current": {
+        "fp": 18, 
+        "iq": 16, 
+        "hp": 19, 
+        "wi": 16, 
+        "st": 9, 
+        "ht": 8, 
+        "dx": 8, 
+        "basic-move": 5, 
+        "basic-speed": 4, 
+        "per": 16
+      }, 
+      "fargark": {}, 
+      "state": "alive", 
       "stuff": [
         {
           "count": 1, 
@@ -3857,32 +4285,7 @@
           "name": "C Cell"
         }
       ], 
-      "stunned": false, 
-      "skills": {
-        "Physician": 14, 
-        "Axe/Mace": 7, 
-        "Law (Conglomerate, Trans territorial jurisdiction/the void)": 14, 
-        "Fast-Draw (Pistol)": 9, 
-        "Brawling": 8, 
-        "First Aid": 17, 
-        "Beam Weapons (Pistol)": 14
-      }, 
-      "actions_this_turn": [], 
-      "shock": 0, 
-      "armor-index": null, 
-      "current": {
-        "fp": 18, 
-        "iq": 16, 
-        "hp": 19, 
-        "wi": 16, 
-        "st": 9, 
-        "ht": 8, 
-        "dx": 8, 
-        "basic-move": 5, 
-        "basic-speed": 4, 
-        "per": 16
-      }, 
-      "state": "alive", 
+      "timers": [], 
       "permanent": {
         "fp": 18, 
         "iq": 16, 
@@ -3895,6 +4298,8 @@
         "basic-speed": 4, 
         "per": 16
       }, 
+      "weapon-index": null, 
+      "check_for_death": false, 
       "advantages": {
         "Ailurophobia (Cats)": -5, 
         "Compulsive Vowing": -5, 
@@ -3911,11 +4316,8 @@
         "Impulsiveness": -10, 
         "Lwa (Bokor)": 8
       }, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
+      "opponent": null, 
+      "posture": "standing"
     }
   }, 
   "dead-monsters": [
@@ -3931,9 +4333,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -3976,9 +4378,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4021,9 +4423,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4066,9 +4468,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4112,9 +4514,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4157,9 +4559,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 12, 
             "iq": 13, 
@@ -4202,9 +4604,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4247,9 +4649,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4299,9 +4701,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4344,9 +4746,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4389,9 +4791,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4434,9 +4836,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4480,9 +4882,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4525,9 +4927,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4570,9 +4972,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4615,9 +5017,9 @@
           "stuff": [], 
           "stunned": false, 
           "skills": {}, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4716,9 +5118,9 @@
             "Brawling": 16, 
             "Axe/Mace": 14
           }, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4794,9 +5196,9 @@
             "Beam Weapons (Pistol)": 15, 
             "Brawling": 12
           }, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 12, 
             "iq": 13, 
@@ -4888,9 +5290,9 @@
             "Brawling": 16, 
             "Axe/Mace": 14
           }, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -4986,9 +5388,9 @@
             "Brawling": 14, 
             "Knife": 15
           }, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -5064,9 +5466,9 @@
             "Beam Weapons (Pistol)": 13, 
             "Brawling": 12
           }, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -5159,9 +5561,9 @@
             "Brawling": 16, 
             "Axe/Mace": 14
           }, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -5253,9 +5655,9 @@
             "Brawling": 16, 
             "Axe/Mace": 14
           }, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -5351,9 +5753,9 @@
             "Brawling": 14, 
             "Knife": 15
           }, 
-          "actions_this_turn": [], 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -5403,6 +5805,7 @@
           "skills": {}, 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 12, 
             "iq": 13, 
@@ -5430,11 +5833,10 @@
           "state": "alive", 
           "stuff": [], 
           "timers": [], 
-          "actions_this_turn": [], 
           "weapon-index": null, 
+          "check_for_death": false, 
           "advantages": {}, 
           "posture": "standing", 
-          "check_for_death": false, 
           "opponent": null
         }, 
         "Dude": {
@@ -5450,6 +5852,7 @@
           }, 
           "shock": 0, 
           "armor-index": null, 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -5526,14 +5929,13 @@
             }
           ], 
           "timers": [], 
-          "actions_this_turn": [], 
           "weapon-index": null, 
+          "check_for_death": false, 
           "advantages": {
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
           "posture": "standing", 
-          "check_for_death": false, 
           "opponent": null
         }
       }
@@ -7330,7 +7732,7 @@
           ], 
           "shock": 0, 
           "armor-index": null, 
-          "posture": "standing", 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -7462,7 +7864,7 @@
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
-          "actions_this_turn": [], 
+          "posture": "standing", 
           "opponent": null
         }, 
         "William - Deputy Marshal (Stoddard)": {
@@ -7490,7 +7892,7 @@
           ], 
           "shock": 0, 
           "armor-index": null, 
-          "posture": "standing", 
+          "actions_this_turn": [], 
           "current": {
             "fp": 11, 
             "iq": 12, 
@@ -7608,7 +8010,7 @@
             "Combat Reflexes": 15, 
             "High Pain Threshold": 10
           }, 
-          "actions_this_turn": [], 
+          "posture": "standing", 
           "opponent": null
         }, 
         "6: Matthew": {
@@ -7930,7 +8332,6 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 11, 
@@ -7944,7 +8345,7 @@
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "check_for_death": false, 
+          "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
@@ -7965,9 +8366,10 @@
             "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "actions_this_turn": [], 
           "weapon-index": null, 
+          "check_for_death": false, 
           "timers": [], 
+          "actions_this_turn": [], 
           "opponent": null, 
           "spells": [
             {
@@ -8154,7 +8556,6 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 11, 
@@ -8168,7 +8569,7 @@
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "check_for_death": false, 
+          "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
@@ -8189,9 +8590,10 @@
             "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "actions_this_turn": [], 
           "weapon-index": null, 
+          "check_for_death": false, 
           "timers": [], 
+          "actions_this_turn": [], 
           "opponent": null, 
           "spells": [
             {
@@ -8858,7 +9260,6 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 11, 
@@ -8872,7 +9273,7 @@
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "check_for_death": false, 
+          "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
@@ -8893,9 +9294,10 @@
             "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "actions_this_turn": [], 
           "weapon-index": null, 
+          "check_for_death": false, 
           "timers": [], 
+          "actions_this_turn": [], 
           "opponent": null, 
           "spells": [
             {
@@ -8991,7 +9393,6 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 11, 
@@ -9005,7 +9406,7 @@
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "check_for_death": false, 
+          "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
@@ -9026,9 +9427,10 @@
             "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "actions_this_turn": [], 
           "weapon-index": null, 
+          "check_for_death": false, 
           "timers": [], 
+          "actions_this_turn": [], 
           "opponent": {
             "group": "PCs", 
             "name": "lawerence - Spenser"
@@ -9115,7 +9517,6 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 11, 
@@ -9129,7 +9530,7 @@
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "check_for_death": false, 
+          "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
@@ -9150,9 +9551,10 @@
             "High Pain Threshold": 10, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "actions_this_turn": [], 
           "weapon-index": null, 
+          "check_for_death": false, 
           "timers": [], 
+          "actions_this_turn": [], 
           "opponent": null, 
           "spells": [
             {
@@ -9833,7 +10235,6 @@
           ], 
           "shock": 0, 
           "short-notes": [], 
-          "posture": "standing", 
           "armor-index": null, 
           "current": {
             "fp": 30, 
@@ -9847,7 +10248,7 @@
             "basic-move": 5, 
             "basic-speed": 5.25
           }, 
-          "check_for_death": false, 
+          "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 30, 
@@ -9866,9 +10267,10 @@
             "Vodou Practitioner (Mambo 2)": 35, 
             "Lwa (Mambo, Erzulie Freda)": 6
           }, 
-          "actions_this_turn": [], 
           "weapon-index": null, 
+          "check_for_death": false, 
           "timers": [], 
+          "actions_this_turn": [], 
           "opponent": null, 
           "spells": [
             {
@@ -10344,47 +10746,858 @@
           ]
         }
       }
+    }, 
+    {
+      "date": "2019-09-21-14-41-47", 
+      "name": "MARX", 
+      "fight": {
+        "2 - harpo": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "stunned": false, 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: roo (bounce between stations)", 
+            "characteristics: Unable to remember names", 
+            "instincts: To prove a point", 
+            "hair: Wavy", 
+            "speech: Mumbly", 
+            "knack: Magical awareness", 
+            "personality: Expressive"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": 4, 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "per": 12, 
+            "st": 16, 
+            "wi": 12, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
+            "per": 12, 
+            "wi": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "actions_this_turn": [
+            "nothing", 
+            "end-turn"
+          ], 
+          "opponent": null
+        }, 
+        "<< ROOM >>": {
+          "notes": [], 
+          "stuff": [], 
+          "timers": []
+        }, 
+        "1 - groucho": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "stunned": false, 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Blinks constantly", 
+            "instincts: To become someone else", 
+            "hair: Short", 
+            "speech: Prim, haughty, proud", 
+            "knack: An innate spell", 
+            "personality: Deliberate"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": 4, 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "per": 12, 
+            "st": 16, 
+            "wi": 12, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
+            "per": 12, 
+            "wi": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "actions_this_turn": [], 
+          "opponent": null
+        }, 
+        "3 - chico": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "stunned": false, 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: staby (born on this station)", 
+            "characteristics: Haphephobic (afraid of being touched)", 
+            "instincts: To establish a dynasty", 
+            "hair: Pony-tail", 
+            "speech: High-pitched", 
+            "knack: Ratcatching", 
+            "personality: Rigid"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": 4, 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "per": 12, 
+            "st": 16, 
+            "wi": 12, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
+            "per": 12, 
+            "wi": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "actions_this_turn": [
+            "start-turn"
+          ], 
+          "opponent": null
+        }
+      }
+    }, 
+    {
+      "date": "2019-09-21-16-00-09", 
+      "name": "Outer Planets", 
+      "fight": {
+        "<< ROOM >>": {
+          "notes": [], 
+          "stuff": [], 
+          "timers": []
+        }, 
+        "2 - neptune": {
+          "stunned": false, 
+          "short-notes": [], 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "posture": "standing", 
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Insomniac", 
+            "instincts: To prove a point", 
+            "hair: Wiry", 
+            "speech: Loud", 
+            "knack: Ratcatching", 
+            "personality: Apathetic"
+          ], 
+          "shock": 0, 
+          "armor-index": 4, 
+          "actions_this_turn": [], 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "wi": 12, 
+            "st": 16, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25, 
+            "per": 12
+          }, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
+            "wi": 12, 
+            "per": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": null
+        }, 
+        "3 - pluto": {
+          "stunned": false, 
+          "short-notes": [], 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "posture": "standing", 
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Burn scar, bodyLocation: Right arm", 
+            "instincts: To avenge", 
+            "hair: Pony-tail", 
+            "speech: Curt short", 
+            "knack: A beautiful mind", 
+            "personality: Confused"
+          ], 
+          "shock": 0, 
+          "armor-index": 4, 
+          "actions_this_turn": [], 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "wi": 12, 
+            "st": 16, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25, 
+            "per": 12
+          }, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
+            "wi": 12, 
+            "per": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": null
+        }, 
+        "1 - uranus": {
+          "stunned": false, 
+          "short-notes": [], 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "posture": "standing", 
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Likes to arm wrestle", 
+            "instincts: To prove worth", 
+            "hair: Well groomed", 
+            "speech: Crisp", 
+            "knack: A stockpile of food", 
+            "personality: Troublemaker"
+          ], 
+          "shock": 0, 
+          "armor-index": 4, 
+          "actions_this_turn": [], 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "wi": 12, 
+            "st": 16, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25, 
+            "per": 12
+          }, 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "ht": 10, 
+            "st": 16, 
+            "wi": 12, 
+            "per": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "timers": [], 
+          "check_for_death": false, 
+          "opponent": null
+        }
+      }
     }
   ], 
   "current-fight": {
-    "index": 3, 
-    "monsters": "Battle Of Persephone, Floor Level", 
+    "index": 1, 
+    "monsters": "Outer Planets", 
     "fighters": [
       {
-        "group": "PCs", 
-        "name": "lawerence - Spenser"
+        "group": "Outer Planets", 
+        "name": "<< ROOM >>"
+      }, 
+      {
+        "group": "Outer Planets", 
+        "name": "2 - neptune"
+      }, 
+      {
+        "group": "Outer Planets", 
+        "name": "3 - pluto"
+      }, 
+      {
+        "group": "Outer Planets", 
+        "name": "1 - uranus"
       }, 
       {
         "group": "PCs", 
         "name": "samuel - Erik"
       }, 
       {
-        "group": "Battle Of Persephone, Floor Level", 
-        "name": "3 - Davidson"
-      }, 
-      {
-        "group": "Battle Of Persephone, Floor Level", 
-        "name": "6 - Ricardo"
+        "group": "PCs", 
+        "name": "lawerence - Spenser"
       }, 
       {
         "group": "PCs", 
         "name": "vasilis - Alan"
-      }, 
-      {
-        "group": "Battle Of Persephone, Floor Level", 
-        "name": "5 - Jesula"
-      }, 
-      {
-        "group": "Battle Of Persephone, Floor Level", 
-        "name": "4 - Schneider"
-      }, 
-      {
-        "group": "Battle Of Persephone, Floor Level", 
-        "name": "2 - Fabiola"
-      }, 
-      {
-        "group": "Battle Of Persephone, Floor Level", 
-        "name": "1 - Gaelle"
       }, 
       {
         "group": "PCs", 
@@ -10402,80 +11615,49 @@
         "comment": "--- Round 0 ---"
       }, 
       {
-        "comment": "(samuel - Erik) did (Attack) maneuver", 
-        "group": "PCs", 
-        "fighter": "samuel - Erik", 
-        "name": "attack"
+        "comment": "Reloading after fight", 
+        "fighter": {
+          "group": "PCs", 
+          "name": "samuel - Erik"
+        }, 
+        "name": "reload", 
+        "quiet": true
       }, 
       {
-        "comment": "(samuel - Erik) picked (3 - Davidson) as opponent", 
-        "opponent-name": "3 - Davidson", 
-        "name": "pick-opponent", 
-        "opponent-group": "Battle Of Persephone, Floor Level"
+        "comment": "Reloading after fight", 
+        "fighter": {
+          "group": "PCs", 
+          "name": "lawerence - Spenser"
+        }, 
+        "name": "reload", 
+        "quiet": true
       }, 
       {
-        "comment": "(3 - Davidson) picked (samuel - Erik) as opponent right back", 
-        "opponent-name": "samuel - Erik", 
-        "name": "pick-opponent", 
-        "opponent-group": "PCs"
+        "comment": "Reloading after fight", 
+        "fighter": {
+          "group": "PCs", 
+          "name": "vasilis - Alan"
+        }, 
+        "name": "reload", 
+        "quiet": true
       }, 
       {
-        "comment": "(lawerence - Spenser) did (Attack) maneuver", 
-        "group": "PCs", 
-        "fighter": "lawerence - Spenser", 
-        "name": "attack"
+        "comment": "Reloading after fight", 
+        "fighter": {
+          "group": "PCs", 
+          "name": "deri - Chelsea"
+        }, 
+        "name": "reload", 
+        "quiet": true
       }, 
       {
-        "comment": "(lawerence - Spenser) picked (6 - Ricardo) as opponent", 
-        "opponent-name": "6 - Ricardo", 
-        "name": "pick-opponent", 
-        "opponent-group": "Battle Of Persephone, Floor Level"
-      }, 
-      {
-        "comment": "(6 - Ricardo) picked (lawerence - Spenser) as opponent right back", 
-        "opponent-name": "lawerence - Spenser", 
-        "name": "pick-opponent", 
-        "opponent-group": "PCs"
-      }, 
-      {
-        "comment": "(3 - Davidson) did (Cast (Animate Shadow)) maneuver", 
-        "group": "Battle Of Persephone, Floor Level", 
-        "spell-index": 15, 
-        "fighter": "3 - Davidson", 
-        "name": "cast-spell"
-      }, 
-      {
-        "name": "reload"
-      }, 
-      {
-        "name": "reload"
-      }, 
-      {
-        "name": "reload"
-      }, 
-      {
-        "name": "reload"
-      }, 
-      {
-        "name": "reload"
-      }, 
-      {
-        "name": "reload"
-      }, 
-      {
-        "name": "reload"
-      }, 
-      {
-        "name": "reload"
-      }, 
-      {
-        "name": "reload"
-      }, 
-      {
-        "name": "reload"
-      }, 
-      {
-        "name": "reload"
+        "comment": "Reloading after fight", 
+        "fighter": {
+          "group": "PCs", 
+          "name": "mama V - Karen"
+        }, 
+        "name": "reload", 
+        "quiet": true
       }
     ]
   }, 
@@ -10485,7 +11667,6 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
       "stunned": false, 
       "skills": {}, 
       "notes": [
@@ -10500,6 +11681,7 @@
       ], 
       "shock": 0, 
       "armor-index": null, 
+      "actions_this_turn": [], 
       "current": {
         "fp": 11, 
         "iq": 12, 
@@ -10512,8 +11694,10 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "posture": "standing", 
+      "fargark": {}, 
       "state": "alive", 
+      "stuff": [], 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -10526,17 +11710,24 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "advantages": {}, 
       "weapon-index": null, 
       "check_for_death": false, 
-      "timers": [], 
-      "actions_this_turn": [], 
+      "advantages": {}, 
+      "posture": "standing", 
       "opponent": null
     }, 
     "Catherine - tereshkova mechanic": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "per": 10, 
+        "wi": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5
       }, 
       "stuff": [], 
       "stunned": 0, 
@@ -10553,19 +11744,11 @@
         "personality: Docile"
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": null, 
-      "current": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "ht": 10, 
-        "st": 10, 
-        "per": 10, 
-        "wi": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -10586,6 +11769,7 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [], 
       "opponent": null
     }, 
     "Lady Shenice - Bokor": {
@@ -10593,7 +11777,6 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
       "stunned": false, 
       "skills": {}, 
       "notes": [
@@ -10605,6 +11788,7 @@
       ], 
       "shock": 0, 
       "armor-index": null, 
+      "actions_this_turn": [], 
       "current": {
         "fp": 11, 
         "iq": 12, 
@@ -10617,8 +11801,10 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "posture": "standing", 
+      "fargark": {}, 
       "state": "alive", 
+      "stuff": [], 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -10631,11 +11817,10 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "advantages": {}, 
       "weapon-index": null, 
       "check_for_death": false, 
-      "timers": [], 
-      "actions_this_turn": [], 
+      "advantages": {}, 
+      "posture": "standing", 
       "opponent": null
     }, 
     "Stoddard, Leland (Chief Deputy Marshal)": {
@@ -10643,7 +11828,6 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
       "stunned": false, 
       "skills": {}, 
       "notes": [
@@ -10662,6 +11846,7 @@
       ], 
       "shock": 0, 
       "armor-index": null, 
+      "actions_this_turn": [], 
       "current": {
         "fp": 11, 
         "iq": 12, 
@@ -10674,8 +11859,10 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "posture": "standing", 
+      "fargark": {}, 
       "state": "alive", 
+      "stuff": [], 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -10688,17 +11875,24 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "advantages": {}, 
       "weapon-index": null, 
       "check_for_death": false, 
-      "timers": [], 
-      "actions_this_turn": [], 
+      "advantages": {}, 
+      "posture": "standing", 
       "opponent": null
     }, 
     "Savannah - Deri's Horticulture Contact": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "wi": 10, 
+        "st": 10, 
+        "ht": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5, 
+        "per": 10
       }, 
       "stuff": [], 
       "stunned": false, 
@@ -10716,19 +11910,11 @@
         ""
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": null, 
-      "current": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "wi": 10, 
-        "st": 10, 
-        "ht": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 10
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -10749,6 +11935,7 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [], 
       "opponent": null
     }, 
     "Anaica - (party friend) Mambo on Tereshkova": {
@@ -10818,7 +12005,6 @@
           "name": "Wizard Eye"
         }
       ], 
-      "stuff": [], 
       "stunned": 0, 
       "skills": {}, 
       "notes": [
@@ -10846,8 +12032,10 @@
         "basic-speed": 5.25, 
         "per": 12
       }, 
-      "check_for_death": false, 
+      "fargark": {}, 
       "state": "absent", 
+      "stuff": [], 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -10860,23 +12048,30 @@
         "basic-speed": 5.25, 
         "per": 12
       }, 
+      "weapon-index": null, 
+      "check_for_death": false, 
       "advantages": {
         "Empathy": 5, 
         "Lwa (Mambo, Erzulie Freda)": 6, 
         "Vodou Practitioner (Mambo/Hougan 2)": 35
       }, 
       "actions_this_turn": [], 
-      "weapon-index": null, 
-      "timers": [], 
       "opponent": null, 
       "posture": "standing"
     }, 
     "Samantha - (party) Mambo on Tereshkova": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 11, 
+        "iq": 13, 
+        "hp": 10, 
+        "wi": 13, 
+        "st": 10, 
+        "ht": 11, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5.25, 
+        "per": 13
       }, 
-      "stuff": [], 
       "stunned": 0, 
       "skills": {}, 
       "notes": [
@@ -10891,22 +12086,17 @@
         "** 18 spells **"
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": null, 
-      "current": {
-        "fp": 11, 
-        "iq": 13, 
-        "hp": 10, 
-        "wi": 13, 
-        "st": 10, 
-        "ht": 11, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5.25, 
-        "per": 13
-      }, 
       "posture": "standing", 
+      "actions_this_turn": [], 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "fargark": {}, 
       "state": "alive", 
+      "stuff": [], 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -10919,16 +12109,15 @@
         "basic-speed": 5.25, 
         "per": 13
       }, 
+      "weapon-index": null, 
+      "check_for_death": false, 
       "advantages": {
         "Empathy": 5, 
         "Primary Lwa (Erzulie Freda)": 6, 
         "Vodou Practitioner (Mambo/Hougan 2)": 35
       }, 
       "opponent": null, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "actions_this_turn": [], 
+      "short-notes": [], 
       "spells": [
         {
           "skill": 12, 
@@ -10997,7 +12186,6 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
       "stunned": false, 
       "skills": {}, 
       "notes": [
@@ -11027,6 +12215,7 @@
       ], 
       "shock": 0, 
       "armor-index": null, 
+      "actions_this_turn": [], 
       "current": {
         "fp": 11, 
         "iq": 12, 
@@ -11039,8 +12228,10 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "posture": "standing", 
+      "fargark": {}, 
       "state": "alive", 
+      "stuff": [], 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -11053,17 +12244,24 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "advantages": {}, 
       "weapon-index": null, 
       "check_for_death": false, 
-      "timers": [], 
-      "actions_this_turn": [], 
+      "advantages": {}, 
+      "posture": "standing", 
       "opponent": null
     }, 
     "Owen Martin - Journeyman deputy marshal (party's boss)": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "per": 12, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
       }, 
       "stuff": [
         {
@@ -11133,19 +12331,11 @@
         "personality: Shy"
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": null, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "per": 12, 
-        "wi": 12, 
-        "dx": 12, 
-        "basic-move": 5, 
-        "basic-speed": 5.75
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -11169,12 +12359,21 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [], 
       "opponent": null
     }, 
     "Oscar": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "wi": 10, 
+        "st": 10, 
+        "ht": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5, 
+        "per": 10
       }, 
       "stuff": [], 
       "stunned": false, 
@@ -11190,19 +12389,11 @@
         "personality: Promiscuous"
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": null, 
-      "current": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "wi": 10, 
-        "st": 10, 
-        "ht": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 10
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -11223,12 +12414,21 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [], 
       "opponent": null
     }, 
     "Dr. Zoya Krovopushkova - Medical Examiner": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "per": 10, 
+        "st": 10, 
+        "wi": 10, 
+        "ht": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5
       }, 
       "stuff": [], 
       "stunned": 0, 
@@ -11245,19 +12445,11 @@
         ""
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": null, 
-      "current": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "per": 10, 
-        "st": 10, 
-        "wi": 10, 
-        "ht": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -11278,6 +12470,7 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [], 
       "opponent": null
     }, 
     "Amelia - Deputy Marshal (Stoddard)": {
@@ -11293,6 +12486,24 @@
         "basic-move": 5, 
         "basic-speed": 5.75
       }, 
+      "stunned": 0, 
+      "skills": {
+        "Beam Weapons (Pistol)": 15, 
+        "Brawling": 14, 
+        "Knife": 15
+      }, 
+      "notes": [
+        "With Stoddard"
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "actions_this_turn": [], 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "fargark": {}, 
+      "state": "alive", 
       "stuff": [
         {
           "acc": 2, 
@@ -11350,22 +12561,10 @@
           "name": "C Cell"
         }
       ], 
-      "stunned": 0, 
-      "skills": {
-        "Beam Weapons (Pistol)": 15, 
-        "Brawling": 14, 
-        "Knife": 15
+      "advantages": {
+        "Combat Reflexes": 15, 
+        "High Pain Threshold": 10
       }, 
-      "notes": [
-        "With Stoddard"
-      ], 
-      "shock": 0, 
-      "armor-index": null, 
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "state": "alive", 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -11378,21 +12577,24 @@
         "basic-move": 5, 
         "basic-speed": 5.75
       }, 
-      "timers": [], 
-      "opponent": null, 
       "weapon-index": null, 
       "check_for_death": false, 
-      "advantages": {
-        "Combat Reflexes": 15, 
-        "High Pain Threshold": 10
-      }, 
-      "actions_this_turn": [], 
+      "timers": [], 
+      "opponent": null, 
       "posture": "standing"
     }, 
     "David - Master Weaponsmith": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 10, 
+        "iq": 12, 
+        "hp": 16, 
+        "wi": 12, 
+        "st": 16, 
+        "ht": 10, 
+        "dx": 11, 
+        "basic-move": 6, 
+        "basic-speed": 6.25, 
+        "per": 12
       }, 
       "stuff": [
         {
@@ -11445,19 +12647,11 @@
         "personality: Trusting"
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": 4, 
-      "current": {
-        "fp": 10, 
-        "iq": 12, 
-        "hp": 16, 
-        "wi": 12, 
-        "st": 16, 
-        "ht": 10, 
-        "dx": 11, 
-        "basic-move": 6, 
-        "basic-speed": 6.25, 
-        "per": 12
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -11478,6 +12672,7 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [], 
       "opponent": null
     }, 
     "Celeline Fermine - Pilot (dead)": {
@@ -11485,7 +12680,6 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
       "stunned": false, 
       "skills": {}, 
       "notes": [
@@ -11496,6 +12690,7 @@
       ], 
       "shock": 0, 
       "armor-index": null, 
+      "actions_this_turn": [], 
       "current": {
         "fp": 11, 
         "iq": 12, 
@@ -11508,8 +12703,10 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "posture": "standing", 
+      "fargark": {}, 
       "state": "alive", 
+      "stuff": [], 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -11522,17 +12719,24 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "advantages": {}, 
       "weapon-index": null, 
       "check_for_death": false, 
-      "timers": [], 
-      "actions_this_turn": [], 
+      "advantages": {}, 
+      "posture": "standing", 
       "opponent": null
     }, 
     "Dmitriy - radio operator on Tereshkova": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "per": 10, 
+        "wi": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5
       }, 
       "stuff": [], 
       "stunned": 0, 
@@ -11549,19 +12753,11 @@
         "personality: Obedient"
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": null, 
-      "current": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "ht": 10, 
-        "st": 10, 
-        "per": 10, 
-        "wi": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -11582,6 +12778,7 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [], 
       "opponent": null
     }, 
     "Mama Cedella - Bokor": {
@@ -11590,7 +12787,6 @@
         "rounds": 0
       }, 
       "spells": [], 
-      "stuff": [], 
       "stunned": false, 
       "skills": {}, 
       "notes": [
@@ -11621,6 +12817,7 @@
       ], 
       "shock": 0, 
       "armor-index": null, 
+      "actions_this_turn": [], 
       "current": {
         "fp": 11, 
         "iq": 12, 
@@ -11633,8 +12830,10 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "check_for_death": false, 
+      "fargark": {}, 
       "state": "alive", 
+      "stuff": [], 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -11647,12 +12846,11 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "advantages": {}, 
-      "actions_this_turn": [], 
       "weapon-index": null, 
-      "timers": [], 
-      "posture": "standing", 
-      "opponent": null
+      "check_for_death": false, 
+      "advantages": {}, 
+      "opponent": null, 
+      "posture": "standing"
     }, 
     "William - Deputy Marshal (Stoddard)": {
       "current": {
@@ -11667,6 +12865,24 @@
         "basic-move": 5, 
         "basic-speed": 5.75
       }, 
+      "stunned": 0, 
+      "skills": {
+        "Beam Weapons (Pistol)": 15, 
+        "Brawling": 14, 
+        "Knife": 15
+      }, 
+      "notes": [
+        "With Stoddard"
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "actions_this_turn": [], 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "fargark": {}, 
+      "state": "alive", 
       "stuff": [
         {
           "acc": 2, 
@@ -11752,22 +12968,10 @@
           "name": "C Cell"
         }
       ], 
-      "stunned": 0, 
-      "skills": {
-        "Beam Weapons (Pistol)": 15, 
-        "Brawling": 14, 
-        "Knife": 15
+      "advantages": {
+        "Combat Reflexes": 15, 
+        "High Pain Threshold": 10
       }, 
-      "notes": [
-        "With Stoddard"
-      ], 
-      "shock": 0, 
-      "armor-index": null, 
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "state": "alive", 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -11780,15 +12984,10 @@
         "basic-move": 5, 
         "basic-speed": 5.75
       }, 
-      "timers": [], 
-      "opponent": null, 
       "weapon-index": null, 
       "check_for_death": false, 
-      "advantages": {
-        "Combat Reflexes": 15, 
-        "High Pain Threshold": 10
-      }, 
-      "actions_this_turn": [], 
+      "timers": [], 
+      "opponent": null, 
       "posture": "standing"
     }, 
     "Olivia - Special Deputy Marshal (Stoddard)": {
@@ -11804,6 +13003,24 @@
         "basic-move": 5, 
         "basic-speed": 5.75
       }, 
+      "stunned": 0, 
+      "skills": {
+        "Beam Weapons (Pistol)": 15, 
+        "Brawling": 14, 
+        "Knife": 15
+      }, 
+      "notes": [
+        "With Stoddard"
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "actions_this_turn": [], 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "fargark": {}, 
+      "state": "alive", 
       "stuff": [
         {
           "acc": 2, 
@@ -11896,22 +13113,10 @@
           "name": "C Cell"
         }
       ], 
-      "stunned": 0, 
-      "skills": {
-        "Beam Weapons (Pistol)": 15, 
-        "Brawling": 14, 
-        "Knife": 15
+      "advantages": {
+        "Combat Reflexes": 15, 
+        "High Pain Threshold": 10
       }, 
-      "notes": [
-        "With Stoddard"
-      ], 
-      "shock": 0, 
-      "armor-index": null, 
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "state": "alive", 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -11924,15 +13129,10 @@
         "basic-move": 5, 
         "basic-speed": 5.75
       }, 
-      "timers": [], 
-      "opponent": null, 
       "weapon-index": null, 
       "check_for_death": false, 
-      "advantages": {
-        "Combat Reflexes": 15, 
-        "High Pain Threshold": 10
-      }, 
-      "actions_this_turn": [], 
+      "timers": [], 
+      "opponent": null, 
       "posture": "standing"
     }, 
     "Queen Clio - Bokor": {
@@ -11940,7 +13140,6 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
       "stunned": false, 
       "skills": {}, 
       "notes": [
@@ -11991,6 +13190,7 @@
       ], 
       "shock": 0, 
       "armor-index": null, 
+      "actions_this_turn": [], 
       "current": {
         "fp": 11, 
         "iq": 12, 
@@ -12003,8 +13203,10 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "posture": "standing", 
+      "fargark": {}, 
       "state": "alive", 
+      "stuff": [], 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -12017,17 +13219,24 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "advantages": {}, 
       "weapon-index": null, 
       "check_for_death": false, 
-      "timers": [], 
-      "actions_this_turn": [], 
+      "advantages": {}, 
+      "posture": "standing", 
       "opponent": null
     }, 
     "Ryder - marshal intern": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "per": 10, 
+        "wi": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5
       }, 
       "stuff": [], 
       "stunned": 0, 
@@ -12044,19 +13253,11 @@
         "personality: Bullying"
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": null, 
-      "current": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "ht": 10, 
-        "st": 10, 
-        "per": 10, 
-        "wi": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -12077,6 +13278,7 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [], 
       "opponent": null
     }, 
     "Papa Jorge - Bokor": {
@@ -12084,7 +13286,6 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
       "stunned": false, 
       "skills": {}, 
       "notes": [
@@ -12104,6 +13305,7 @@
       ], 
       "shock": 0, 
       "armor-index": null, 
+      "actions_this_turn": [], 
       "current": {
         "fp": 11, 
         "iq": 12, 
@@ -12116,8 +13318,10 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "posture": "standing", 
+      "fargark": {}, 
       "state": "alive", 
+      "stuff": [], 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -12130,17 +13334,24 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "advantages": {}, 
       "weapon-index": null, 
       "check_for_death": false, 
-      "timers": [], 
-      "actions_this_turn": [], 
+      "advantages": {}, 
+      "posture": "standing", 
       "opponent": null
     }, 
     "Jessica - Tereshkova security": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "per": 12, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
       }, 
       "stuff": [
         {
@@ -12209,19 +13420,11 @@
         "personality: Cranky"
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": null, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "per": 12, 
-        "wi": 12, 
-        "dx": 12, 
-        "basic-move": 5, 
-        "basic-speed": 5.75
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -12245,6 +13448,7 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [], 
       "opponent": null
     }, 
     "Dima - Bratva": {
@@ -12347,10 +13551,8 @@
         "Dislikes Samuel.  He would not drink with him."
       ], 
       "shock": 0, 
+      "fargark": {}, 
       "armor-index": 4, 
-      "short-notes": [
-        ""
-      ], 
       "current": {
         "fp": 12, 
         "iq": 12, 
@@ -12385,6 +13587,9 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [
+        ""
+      ], 
       "opponent": null
     }, 
     "Mackenzie - Marshal's Intern": {
@@ -12392,7 +13597,6 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
       "stunned": false, 
       "skills": {}, 
       "notes": [
@@ -12420,6 +13624,7 @@
       ], 
       "shock": 0, 
       "armor-index": null, 
+      "actions_this_turn": [], 
       "current": {
         "fp": 11, 
         "iq": 12, 
@@ -12432,8 +13637,10 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "posture": "standing", 
+      "fargark": {}, 
       "state": "alive", 
+      "stuff": [], 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -12446,17 +13653,24 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "advantages": {}, 
       "weapon-index": null, 
       "check_for_death": false, 
-      "timers": [], 
-      "actions_this_turn": [], 
+      "advantages": {}, 
+      "posture": "standing", 
       "opponent": null
     }, 
     "Lucy - Director of Operations": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "per": 10, 
+        "wi": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5
       }, 
       "stuff": [], 
       "stunned": 0, 
@@ -12473,19 +13687,11 @@
         "personality: Miserly"
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": null, 
-      "current": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "ht": 10, 
-        "st": 10, 
-        "per": 10, 
-        "wi": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -12506,6 +13712,7 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [], 
       "opponent": null
     }, 
     "Hurley, Mitchell (Chief Deputy Marshal)": {
@@ -12513,7 +13720,6 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
       "stunned": false, 
       "skills": {}, 
       "notes": [
@@ -12530,6 +13736,7 @@
       ], 
       "shock": 0, 
       "armor-index": null, 
+      "actions_this_turn": [], 
       "current": {
         "fp": 11, 
         "iq": 12, 
@@ -12542,8 +13749,10 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "posture": "standing", 
+      "fargark": {}, 
       "state": "alive", 
+      "stuff": [], 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -12556,11 +13765,10 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "advantages": {}, 
       "weapon-index": null, 
       "check_for_death": false, 
-      "timers": [], 
-      "actions_this_turn": [], 
+      "advantages": {}, 
+      "posture": "standing", 
       "opponent": null
     }, 
     "Mambo Iriye - Bokor": {
@@ -12568,7 +13776,6 @@
         "braced": false, 
         "rounds": 0
       }, 
-      "stuff": [], 
       "stunned": false, 
       "skills": {}, 
       "notes": [
@@ -12577,6 +13784,7 @@
       ], 
       "shock": 0, 
       "armor-index": null, 
+      "actions_this_turn": [], 
       "current": {
         "fp": 11, 
         "iq": 12, 
@@ -12589,8 +13797,10 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "posture": "standing", 
+      "fargark": {}, 
       "state": "alive", 
+      "stuff": [], 
+      "timers": [], 
       "permanent": {
         "fp": 11, 
         "iq": 12, 
@@ -12603,17 +13813,24 @@
         "basic-speed": 6, 
         "per": 12
       }, 
-      "advantages": {}, 
       "weapon-index": null, 
       "check_for_death": false, 
-      "timers": [], 
-      "actions_this_turn": [], 
+      "advantages": {}, 
+      "posture": "standing", 
       "opponent": null
     }, 
     "Arseniy - Xenobiologist in tiger team": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "per": 10, 
+        "wi": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5
       }, 
       "stuff": [], 
       "stunned": 0, 
@@ -12630,19 +13847,11 @@
         "personality: Sensible"
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": null, 
-      "current": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "ht": 10, 
-        "st": 10, 
-        "per": 10, 
-        "wi": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -12663,23 +13872,15 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [], 
       "opponent": null
     }, 
     "11 - Panama Hat": {
-      "current": {
-        "fp": 30, 
-        "iq": 12, 
-        "hp": 10, 
-        "per": 8, 
-        "st": 10, 
-        "wi": 12, 
-        "ht": 11, 
-        "dx": 13, 
-        "basic-move": 5, 
-        "basic-speed": 6
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "stunned": false, 
-      "posture": "standing", 
       "skills": {}, 
       "notes": [
         "station history: staby (born on this station)", 
@@ -12691,12 +13892,20 @@
         "personality: Gracious"
       ], 
       "shock": 0, 
-      "short-notes": [], 
-      "actions_this_turn": [], 
+      "fargark": {}, 
+      "posture": "standing", 
       "armor-index": null, 
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 30, 
+        "iq": 12, 
+        "hp": 10, 
+        "per": 8, 
+        "st": 10, 
+        "wi": 12, 
+        "ht": 11, 
+        "dx": 13, 
+        "basic-move": 5, 
+        "basic-speed": 6
       }, 
       "permanent": {
         "fp": 30, 
@@ -12719,13 +13928,15 @@
         "High Pain Threshold": 10, 
         "Lwa (Mambo, Erzulie Freda)": 6
       }, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
       "opponent": {
         "group": "PCs", 
         "name": "samuel - Erik"
       }, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "actions_this_turn": [], 
+      "short-notes": [], 
       "spells": [
         {
           "skill": 18, 
@@ -12778,19 +13989,6 @@
       ]
     }, 
     "Maia Thompson - Operations manager on Tereshkova": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "stuff": [], 
-      "stunned": 0, 
-      "skills": {}, 
-      "notes": [
-        "station history: lifer (born on Earth, this is 1st station)"
-      ], 
-      "shock": 0, 
-      "short-notes": [], 
-      "armor-index": null, 
       "current": {
         "fp": 10, 
         "iq": 10, 
@@ -12802,6 +14000,19 @@
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
+      }, 
+      "stuff": [], 
+      "stunned": 0, 
+      "skills": {}, 
+      "notes": [
+        "station history: lifer (born on Earth, this is 1st station)"
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -12822,12 +14033,21 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [], 
       "opponent": null
     }, 
     "Isaac Harris - Tiger team leader": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 11, 
+        "iq": 12, 
+        "hp": 11, 
+        "ht": 11, 
+        "st": 10, 
+        "per": 12, 
+        "wi": 12, 
+        "dx": 12, 
+        "basic-move": 5, 
+        "basic-speed": 5.75
       }, 
       "stuff": [
         {
@@ -12895,19 +14115,11 @@
         "personality: Moody"
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": null, 
-      "current": {
-        "fp": 11, 
-        "iq": 12, 
-        "hp": 11, 
-        "ht": 11, 
-        "st": 10, 
-        "per": 12, 
-        "wi": 12, 
-        "dx": 12, 
-        "basic-move": 5, 
-        "basic-speed": 5.75
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -12931,12 +14143,21 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [], 
       "opponent": null
     }, 
     "Anel - control tower, tereshkova": {
-      "aim": {
-        "braced": false, 
-        "rounds": 0
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "per": 10, 
+        "wi": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5
       }, 
       "stuff": [], 
       "stunned": 0, 
@@ -12953,19 +14174,11 @@
         "personality: Daring"
       ], 
       "shock": 0, 
-      "short-notes": [], 
       "armor-index": null, 
-      "current": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "ht": 10, 
-        "st": 10, 
-        "per": 10, 
-        "wi": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -12986,6 +14199,7 @@
       "check_for_death": false, 
       "timers": [], 
       "actions_this_turn": [], 
+      "short-notes": [], 
       "opponent": null
     }
   }, 
@@ -13339,74 +14553,6 @@
   ], 
   "Names": {
     "russian": {
-      "last": [
-        "Alexeev",
-        "Andreyev",
-        "Baranov",
-        "Bobrov",
-        "Bogomolov",
-        "Bykov",
-        "Chernov",
-        "Chugunkin",
-        "Drozdov",
-        "Egorov",
-        "Fedorov",
-        "Golubev",
-        "Gorky",
-        "Gusev",
-        "Ibragimov",
-        "Ivanov",
-        "Kalashnik",
-        "Kamenev",
-        "Kotov",
-        "Kozlov",
-        "Krovopuskov",
-        "Kuznetsov",
-        "Krupin",
-        "Lagunov",
-        "Lebedev",
-        "Merkulov",
-        "Meknikov",
-        "Mikhailov",
-        "Molchalin",
-        "Molotov",
-        "Morozov",
-        "Nikolaev",
-        "Orlov",
-        "Pasternak",
-        "Pavlov",
-        "Petrov",
-        "Petukhov",
-        "Plotnikov",
-        "Popov",
-        "Portnov",
-        "Prostakov",
-        "Pelyovin",
-        "Rabinovich",
-        "Razuvayev",
-        "Rozhdestvensky",
-        "Rybakov",
-        "Semenov",
-        "Skumin",
-        "Sobakin",
-        "Sobol",
-        "Sobolev",
-        "Sokolov",
-        "Sorokin",
-        "Sultanov",
-        "Stepanov",
-        "Vasiliev",
-        "Volkov",
-        "Vorobyev",
-        "Voznesensky",
-        "Utkin",
-        "Vinogradov",
-        "Voronin",
-        "Yakovlev",
-        "Zhuravlev",
-        "Zima",
-        "Zolotov"
-      ],
       "male": [
         "Aymeric", 
         "Aleksey", 
@@ -13491,6 +14637,74 @@
         "Zahar", 
         "Zhenya"
       ], 
+      "last": [
+        "Alexeev", 
+        "Andreyev", 
+        "Baranov", 
+        "Bobrov", 
+        "Bogomolov", 
+        "Bykov", 
+        "Chernov", 
+        "Chugunkin", 
+        "Drozdov", 
+        "Egorov", 
+        "Fedorov", 
+        "Golubev", 
+        "Gorky", 
+        "Gusev", 
+        "Ibragimov", 
+        "Ivanov", 
+        "Kalashnik", 
+        "Kamenev", 
+        "Kotov", 
+        "Kozlov", 
+        "Krovopuskov", 
+        "Kuznetsov", 
+        "Krupin", 
+        "Lagunov", 
+        "Lebedev", 
+        "Merkulov", 
+        "Meknikov", 
+        "Mikhailov", 
+        "Molchalin", 
+        "Molotov", 
+        "Morozov", 
+        "Nikolaev", 
+        "Orlov", 
+        "Pasternak", 
+        "Pavlov", 
+        "Petrov", 
+        "Petukhov", 
+        "Plotnikov", 
+        "Popov", 
+        "Portnov", 
+        "Prostakov", 
+        "Pelyovin", 
+        "Rabinovich", 
+        "Razuvayev", 
+        "Rozhdestvensky", 
+        "Rybakov", 
+        "Semenov", 
+        "Skumin", 
+        "Sobakin", 
+        "Sobol", 
+        "Sobolev", 
+        "Sokolov", 
+        "Sorokin", 
+        "Sultanov", 
+        "Stepanov", 
+        "Vasiliev", 
+        "Volkov", 
+        "Vorobyev", 
+        "Voznesensky", 
+        "Utkin", 
+        "Vinogradov", 
+        "Voronin", 
+        "Yakovlev", 
+        "Zhuravlev", 
+        "Zima", 
+        "Zolotov"
+      ], 
       "female": [
         "Anastasia", 
         "Anna", 
@@ -13573,108 +14787,6 @@
       ]
     }, 
     "australian": {
-      "last": [
-        "Adams",
-        "Allen",
-        "Anderson",
-        "Bailey",
-        "Baker",
-        "Bell",
-        "Bennett",
-        "Brown",
-        "Butler",
-        "Cameron",
-        "Campbell",
-        "Carter",
-        "Chapman",
-        "Clark",
-        "Clarke",
-        "Colling",
-        "Cook",
-        "Cooper",
-        "Cox",
-        "Davies",
-        "Davis",
-        "Edwards",
-        "Elliott",
-        "Ellis",
-        "Evans",
-        "Fisher",
-        "Gibson",
-        "Graham",
-        "Gray",
-        "Green",
-        "Hall",
-        "Hamilton",
-        "Harris",
-        "Harrison",
-        "Harvey",
-        "Hill",
-        "Hughes",
-        "Jackson",
-        "James",
-        "Johnson",
-        "Johnston",
-        "Jones",
-        "Kelly",
-        "Kennedy",
-        "King",
-        "Knight",
-        "Lee",
-        "Lewis",
-        "Marshall",
-        "Martin",
-        "Mason",
-        "Matthews",
-        "McDonald",
-        "Miller",
-        "Mills",
-        "Mitchell",
-        "Moore",
-        "Morgan",
-        "Morris",
-        "Murphy",
-        "Murray",
-        "Nguyen",
-        "OBrien",
-        "Parker",
-        "Pearce",
-        "Phillips",
-        "Price",
-        "Reid",
-        "Richards",
-        "Richardson",
-        "Roberts",
-        "Robertson",
-        "Robinson",
-        "Rogers",
-        "Ross",
-        "Russell",
-        "Ryan",
-        "Scott",
-        "Shaw",
-        "Simpson",
-        "Smith",
-        "Stevens",
-        "Stewart",
-        "Taylor",
-        "Thomas",
-        "Thompson",
-        "Thomson",
-        "Tran",
-        "Turner",
-        "Walker",
-        "Walsh",
-        "Ward",
-        "Watson",
-        "Webb",
-        "White",
-        "Williams",
-        "Wilson",
-        "Wood",
-        "Wright",
-        "Young"
-      ],
       "male": [
         "Oliver", 
         "Jack", 
@@ -13776,6 +14888,108 @@
         "Ali", 
         "Jude", 
         "Lenny"
+      ], 
+      "last": [
+        "Adams", 
+        "Allen", 
+        "Anderson", 
+        "Bailey", 
+        "Baker", 
+        "Bell", 
+        "Bennett", 
+        "Brown", 
+        "Butler", 
+        "Cameron", 
+        "Campbell", 
+        "Carter", 
+        "Chapman", 
+        "Clark", 
+        "Clarke", 
+        "Colling", 
+        "Cook", 
+        "Cooper", 
+        "Cox", 
+        "Davies", 
+        "Davis", 
+        "Edwards", 
+        "Elliott", 
+        "Ellis", 
+        "Evans", 
+        "Fisher", 
+        "Gibson", 
+        "Graham", 
+        "Gray", 
+        "Green", 
+        "Hall", 
+        "Hamilton", 
+        "Harris", 
+        "Harrison", 
+        "Harvey", 
+        "Hill", 
+        "Hughes", 
+        "Jackson", 
+        "James", 
+        "Johnson", 
+        "Johnston", 
+        "Jones", 
+        "Kelly", 
+        "Kennedy", 
+        "King", 
+        "Knight", 
+        "Lee", 
+        "Lewis", 
+        "Marshall", 
+        "Martin", 
+        "Mason", 
+        "Matthews", 
+        "McDonald", 
+        "Miller", 
+        "Mills", 
+        "Mitchell", 
+        "Moore", 
+        "Morgan", 
+        "Morris", 
+        "Murphy", 
+        "Murray", 
+        "Nguyen", 
+        "OBrien", 
+        "Parker", 
+        "Pearce", 
+        "Phillips", 
+        "Price", 
+        "Reid", 
+        "Richards", 
+        "Richardson", 
+        "Roberts", 
+        "Robertson", 
+        "Robinson", 
+        "Rogers", 
+        "Ross", 
+        "Russell", 
+        "Ryan", 
+        "Scott", 
+        "Shaw", 
+        "Simpson", 
+        "Smith", 
+        "Stevens", 
+        "Stewart", 
+        "Taylor", 
+        "Thomas", 
+        "Thompson", 
+        "Thomson", 
+        "Tran", 
+        "Turner", 
+        "Walker", 
+        "Walsh", 
+        "Ward", 
+        "Watson", 
+        "Webb", 
+        "White", 
+        "Williams", 
+        "Wilson", 
+        "Wood", 
+        "Wright", 
+        "Young"
       ], 
       "female": [
         "Olivia", 
@@ -13881,107 +15095,6 @@
       ]
     }, 
     "venezuelan": {
-      "last": [
-        "Acosta",
-        "Aguilar",
-        "Aguirre",
-        "Alonso",
-        "Alvarez",
-        "Arias",
-        "Benitez",
-        "Bianchi",
-        "Blanco",
-        "Bruno",
-        "Cabrera",
-        "Caceres",
-        "Calvo",
-        "Campos",
-        "Carrizo",
-        "Castillo",
-        "Castro",
-        "Cohen",
-        "Colombo",
-        "Correa",
-        "Costa",
-        "Delgado",
-        "Diaz",
-        "Dominguez",
-        "Fernandez",
-        "Ferrari",
-        "Ferreyra",
-        "Figueroa",
-        "Flores",
-        "Franco",
-        "Gallo",
-        "Garcia",
-        "Gil",
-        "Gimenez",
-        "Godoy",
-        "Gomez",
-        "Gonzalez",
-        "Gutierrez",
-        "Guzman",
-        "Hernandez",
-        "Herrera",
-        "Ibanez",
-        "Iglesias",
-        "Juarez",
-        "Ledesma",
-        "Lopez",
-        "Lorenzo",
-        "Luna",
-        "Maldonado",
-        "Marino",
-        "Martin",
-        "Martinez",
-        "Medina",
-        "Mendez",
-        "Mendoza",
-        "Miranda",
-        "Molina",
-        "Morales",
-        "Moreno",
-        "Munoz",
-        "Navarro",
-        "Nunez",
-        "Ortiz",
-        "Otero",
-        "Paz",
-        "Peralta",
-        "Pereyra",
-        "Perez",
-        "Ponce",
-        "Prieto",
-        "Quiroga",
-        "Ramirez",
-        "Ramos",
-        "Rey",
-        "Rios",
-        "Rivas",
-        "Rivero",
-        "Rodriguez",
-        "Rojas",
-        "Romano",
-        "Romero",
-        "Rossi",
-        "Ruiz",
-        "Russo",
-        "Sanchez",
-        "Santos",
-        "Silva",
-        "Soria",
-        "Sosa",
-        "Soto",
-        "Suarez",
-        "Torres",
-        "Varela",
-        "Vargas",
-        "Vasquez",
-        "Vega",
-        "Vera",
-        "Vidal",
-        "Villalba"
-      ],
       "male": [
         "Santiago", 
         "Matias", 
@@ -14084,6 +15197,107 @@
         "Juan Felipe", 
         "Gonzalo"
       ], 
+      "last": [
+        "Acosta", 
+        "Aguilar", 
+        "Aguirre", 
+        "Alonso", 
+        "Alvarez", 
+        "Arias", 
+        "Benitez", 
+        "Bianchi", 
+        "Blanco", 
+        "Bruno", 
+        "Cabrera", 
+        "Caceres", 
+        "Calvo", 
+        "Campos", 
+        "Carrizo", 
+        "Castillo", 
+        "Castro", 
+        "Cohen", 
+        "Colombo", 
+        "Correa", 
+        "Costa", 
+        "Delgado", 
+        "Diaz", 
+        "Dominguez", 
+        "Fernandez", 
+        "Ferrari", 
+        "Ferreyra", 
+        "Figueroa", 
+        "Flores", 
+        "Franco", 
+        "Gallo", 
+        "Garcia", 
+        "Gil", 
+        "Gimenez", 
+        "Godoy", 
+        "Gomez", 
+        "Gonzalez", 
+        "Gutierrez", 
+        "Guzman", 
+        "Hernandez", 
+        "Herrera", 
+        "Ibanez", 
+        "Iglesias", 
+        "Juarez", 
+        "Ledesma", 
+        "Lopez", 
+        "Lorenzo", 
+        "Luna", 
+        "Maldonado", 
+        "Marino", 
+        "Martin", 
+        "Martinez", 
+        "Medina", 
+        "Mendez", 
+        "Mendoza", 
+        "Miranda", 
+        "Molina", 
+        "Morales", 
+        "Moreno", 
+        "Munoz", 
+        "Navarro", 
+        "Nunez", 
+        "Ortiz", 
+        "Otero", 
+        "Paz", 
+        "Peralta", 
+        "Pereyra", 
+        "Perez", 
+        "Ponce", 
+        "Prieto", 
+        "Quiroga", 
+        "Ramirez", 
+        "Ramos", 
+        "Rey", 
+        "Rios", 
+        "Rivas", 
+        "Rivero", 
+        "Rodriguez", 
+        "Rojas", 
+        "Romano", 
+        "Romero", 
+        "Rossi", 
+        "Ruiz", 
+        "Russo", 
+        "Sanchez", 
+        "Santos", 
+        "Silva", 
+        "Soria", 
+        "Sosa", 
+        "Soto", 
+        "Suarez", 
+        "Torres", 
+        "Varela", 
+        "Vargas", 
+        "Vasquez", 
+        "Vega", 
+        "Vera", 
+        "Vidal", 
+        "Villalba"
+      ], 
       "female": [
         "Salome", 
         "Luciana", 
@@ -14098,352 +15312,352 @@
       ]
     }, 
     "haitian": {
-      "last": [
-        "Ade",
-        "Alcenat",
-        "Alexandre",
-        "Alexis",
-        "Andre",
-        "Anselme",
-        "Antoine",
-        "Arcus",
-        "Atis-Clotaire",
-        "Augusmat",
-        "Auguste",
-        "Augustin",
-        "Austin",
-        "Aveska",
-        "Azor",
-        "Barthelemy",
-        "Bayonne",
-        "Belfort",
-        "Bissainthe",
-        "Bobo",
-        "Boucicaut",
-        "Boulos",
-        "Brand",
-        "Bruny",
-        "Charles",
-        "Chery",
-        "Christian",
-        "Cloue",
-        "Constant",
-        "Craan",
-        "Damus",
-        "Descolines",
-        "Desir",
-        "Dolce",
-        "Doliscat",
-        "Ducoste",
-        "Dufrene",
-        "Eloi",
-        "Elusma",
-        "Fellinga",
-        "Fenelon",
-        "Fidelia",
-        "Flambert",
-        "Fortunat",
-        "Francillon",
-        "Francois",
-        "Fritzson",
-        "Fucien",
-        "Gaetjens",
-        "Genevois",
-        "Germain",
-        "Gervil",
-        "Gilles",
-        "Goreux",
-        "Gracien",
-        "Guerrier",
-        "Guillaume",
-        "Guilliod",
-        "Gustave",
-        "Herold",
-        "James",
-        "Janvier",
-        "Jean-Charles",
-        "Jean-Jacques",
-        "Jean-Joseph",
-        "Jeoboam",
-        "Jerome",
-        "Joseph",
-        "LaDouceur",
-        "Lauture",
-        "Leandre",
-        "Lormera",
-        "Louis",
-        "Marcelin",
-        "Marseille",
-        "Mathieu",
-        "Menelas",
-        "Mercier",
-        "Metelus",
-        "Millien",
-        "Montrevil",
-        "Nazaire",
-        "Nazon",
-        "Noel",
-        "Noncent",
-        "Nooitmeer",
-        "Norde",
-        "Pascal",
-        "Philippe",
-        "Pierre",
-        "Pierrot",
-        "Piquant",
-        "Racine",
-        "Radamaker",
-        "Saba",
-        "Saint-Cyr",
-        "Saint-Duc",
-        "Saint-Lot",
-        "Saint-Preux",
-        "Saint-Vil",
-        "Sanon",
-        "Sarki",
-        "Sirin",
-        "Sprangers",
-        "Tassy",
-        "Thermeus",
-        "Ulysse",
-        "Versailles",
-        "Vorbe",
-        "Zullo"
-      ],
       "male": [
-        "Alex",
-        "Amos",
-        "Andre",
-        "Anel",
-        "Antoine",
-        "Bernard",
-        "Berthony",
-        "Charles",
-        "Claude",
-        "Claudy",
-        "Daniel",
-        "David",
-        "Davidson",
-        "Denis",
-        "Dieudonne",
-        "Dieuseul",
-        "Eddy",
-        "Edner",
-        "Elie",
-        "Emmanuel",
-        "Enock",
-        "Erick",
-        "Ernst",
-        "Etienne",
-        "Evens",
-        "Felix",
-        "Francois",
-        "Frantz",
-        "Fritz",
-        "Fritzner",
-        "Gary",
-        "Gerald",
-        "Gerard",
-        "Gesner",
-        "Gregory",
-        "Guy",
-        "Henry",
-        "Jackson",
-        "Jacquelin",
-        "Jacques",
-        "James",
-        "Jameson",
-        "Jean Baptiste",
-        "Jean Claude",
-        "Jean Marc",
-        "Jean Robert",
-        "Jean",
-        "Jimmy",
-        "Jocelyn",
-        "Joel",
-        "Johnny",
-        "Jonas",
-        "Jonel",
-        "Joseph",
-        "Josue",
-        "Jude",
-        "Julio",
-        "Junior",
-        "Kervens",
-        "Lesly",
-        "Louis",
-        "Luc",
-        "Lucien",
-        "Luckner",
-        "Mackenson",
-        "Marcelin",
-        "Marie",
-        "Mario",
-        "Michel",
-        "Michelet",
-        "Mickenson",
-        "Moise",
-        "Nelson",
-        "Patrick",
-        "Paul",
-        "Peterson",
-        "Philippe",
-        "Pierre Richard",
-        "Pierre",
-        "Raymond",
-        "Reginald",
-        "Remy",
-        "Renel",
-        "Ricardo",
-        "Robenson",
-        "Robert",
-        "Rodrigue",
-        "Roland",
-        "Ronald",
-        "Ronel",
-        "Rony",
-        "Saint",
-        "Samuel",
-        "Sandley",
-        "Schneider",
-        "Serge",
-        "Simon",
-        "Smith",
-        "Sony",
-        "Stanley",
-        "Stevenson",
-        "Watson",
-        "Wesley",
-        "Wilbert",
-        "Wilfrid",
-        "Wilguens",
-        "Wilky",
-        "Willy",
-        "Wilner",
-        "Wilson",
-        "Wisly",
-        "Yves",
+        "Alex", 
+        "Amos", 
+        "Andre", 
+        "Anel", 
+        "Antoine", 
+        "Bernard", 
+        "Berthony", 
+        "Charles", 
+        "Claude", 
+        "Claudy", 
+        "Daniel", 
+        "David", 
+        "Davidson", 
+        "Denis", 
+        "Dieudonne", 
+        "Dieuseul", 
+        "Eddy", 
+        "Edner", 
+        "Elie", 
+        "Emmanuel", 
+        "Enock", 
+        "Erick", 
+        "Ernst", 
+        "Etienne", 
+        "Evens", 
+        "Felix", 
+        "Francois", 
+        "Frantz", 
+        "Fritz", 
+        "Fritzner", 
+        "Gary", 
+        "Gerald", 
+        "Gerard", 
+        "Gesner", 
+        "Gregory", 
+        "Guy", 
+        "Henry", 
+        "Jackson", 
+        "Jacquelin", 
+        "Jacques", 
+        "James", 
+        "Jameson", 
+        "Jean Baptiste", 
+        "Jean Claude", 
+        "Jean Marc", 
+        "Jean Robert", 
+        "Jean", 
+        "Jimmy", 
+        "Jocelyn", 
+        "Joel", 
+        "Johnny", 
+        "Jonas", 
+        "Jonel", 
+        "Joseph", 
+        "Josue", 
+        "Jude", 
+        "Julio", 
+        "Junior", 
+        "Kervens", 
+        "Lesly", 
+        "Louis", 
+        "Luc", 
+        "Lucien", 
+        "Luckner", 
+        "Mackenson", 
+        "Marcelin", 
+        "Marie", 
+        "Mario", 
+        "Michel", 
+        "Michelet", 
+        "Mickenson", 
+        "Moise", 
+        "Nelson", 
+        "Patrick", 
+        "Paul", 
+        "Peterson", 
+        "Philippe", 
+        "Pierre Richard", 
+        "Pierre", 
+        "Raymond", 
+        "Reginald", 
+        "Remy", 
+        "Renel", 
+        "Ricardo", 
+        "Robenson", 
+        "Robert", 
+        "Rodrigue", 
+        "Roland", 
+        "Ronald", 
+        "Ronel", 
+        "Rony", 
+        "Saint", 
+        "Samuel", 
+        "Sandley", 
+        "Schneider", 
+        "Serge", 
+        "Simon", 
+        "Smith", 
+        "Sony", 
+        "Stanley", 
+        "Stevenson", 
+        "Watson", 
+        "Wesley", 
+        "Wilbert", 
+        "Wilfrid", 
+        "Wilguens", 
+        "Wilky", 
+        "Willy", 
+        "Wilner", 
+        "Wilson", 
+        "Wisly", 
+        "Yves", 
         "Yvon"
       ], 
+      "last": [
+        "Ade", 
+        "Alcenat", 
+        "Alexandre", 
+        "Alexis", 
+        "Andre", 
+        "Anselme", 
+        "Antoine", 
+        "Arcus", 
+        "Atis-Clotaire", 
+        "Augusmat", 
+        "Auguste", 
+        "Augustin", 
+        "Austin", 
+        "Aveska", 
+        "Azor", 
+        "Barthelemy", 
+        "Bayonne", 
+        "Belfort", 
+        "Bissainthe", 
+        "Bobo", 
+        "Boucicaut", 
+        "Boulos", 
+        "Brand", 
+        "Bruny", 
+        "Charles", 
+        "Chery", 
+        "Christian", 
+        "Cloue", 
+        "Constant", 
+        "Craan", 
+        "Damus", 
+        "Descolines", 
+        "Desir", 
+        "Dolce", 
+        "Doliscat", 
+        "Ducoste", 
+        "Dufrene", 
+        "Eloi", 
+        "Elusma", 
+        "Fellinga", 
+        "Fenelon", 
+        "Fidelia", 
+        "Flambert", 
+        "Fortunat", 
+        "Francillon", 
+        "Francois", 
+        "Fritzson", 
+        "Fucien", 
+        "Gaetjens", 
+        "Genevois", 
+        "Germain", 
+        "Gervil", 
+        "Gilles", 
+        "Goreux", 
+        "Gracien", 
+        "Guerrier", 
+        "Guillaume", 
+        "Guilliod", 
+        "Gustave", 
+        "Herold", 
+        "James", 
+        "Janvier", 
+        "Jean-Charles", 
+        "Jean-Jacques", 
+        "Jean-Joseph", 
+        "Jeoboam", 
+        "Jerome", 
+        "Joseph", 
+        "LaDouceur", 
+        "Lauture", 
+        "Leandre", 
+        "Lormera", 
+        "Louis", 
+        "Marcelin", 
+        "Marseille", 
+        "Mathieu", 
+        "Menelas", 
+        "Mercier", 
+        "Metelus", 
+        "Millien", 
+        "Montrevil", 
+        "Nazaire", 
+        "Nazon", 
+        "Noel", 
+        "Noncent", 
+        "Nooitmeer", 
+        "Norde", 
+        "Pascal", 
+        "Philippe", 
+        "Pierre", 
+        "Pierrot", 
+        "Piquant", 
+        "Racine", 
+        "Radamaker", 
+        "Saba", 
+        "Saint-Cyr", 
+        "Saint-Duc", 
+        "Saint-Lot", 
+        "Saint-Preux", 
+        "Saint-Vil", 
+        "Sanon", 
+        "Sarki", 
+        "Sirin", 
+        "Sprangers", 
+        "Tassy", 
+        "Thermeus", 
+        "Ulysse", 
+        "Versailles", 
+        "Vorbe", 
+        "Zullo"
+      ], 
       "female": [
-        "Adeline",
-        "Alexandra",
-        "Anaica",
-        "Angeline",
-        "Beatrice",
-        "Bernadette",
-        "Betty",
-        "Carline",
-        "Carole",
-        "Chedeline",
-        "Claudette",
-        "Darline",
-        "Denise",
-        "Dieula",
-        "Edeline",
-        "Edline",
-        "Edna",
-        "Esterline",
-        "Esther",
-        "Eveline",
-        "Evelyne",
-        "Fabienne",
-        "Fabiola",
-        "Farah",
-        "Francoise",
-        "Fredeline",
-        "Gaelle",
-        "Gertha",
-        "Gertrude",
-        "Gina",
-        "Ginette",
-        "Gladys",
-        "Guerda",
-        "Guerlande",
-        "Guerline",
-        "Islande",
-        "Jacqueline",
-        "Jean",
-        "Jeanne",
-        "Jenniflore",
-        "Jessica",
-        "Jesula",
-        "Jocelyne",
-        "Johanne",
-        "Josette",
-        "Josiane",
-        "Judeline",
-        "Judith",
-        "Kerline",
-        "Kimberly",
-        "Linda",
-        "Lourdes-Gina",
-        "Lovelie",
-        "Lovely Madeline",
-        "Lynda",
-        "Magalie",
-        "Magdala",
-        "Manoucheka",
-        "Marie Ange",
-        "Marie Carmel",
-        "Marie Carmelle",
-        "Marie Claude",
-        "Marie Denise",
-        "Marie Lourdes",
-        "Marie Michelle",
-        "Marie Nicole",
-        "Marie Rose",
-        "Marie",
-        "Marjorie",
-        "Marlene",
-        "Martine",
-        "Medjine",
-        "Micheline",
-        "Mimose",
-        "Mireille",
-        "Mirlande",
-        "Mirlene",
-        "Mona",
-        "Monique",
-        "Myriam",
-        "Myrlande",
-        "Myrlene",
-        "Myrtha",
-        "Nadege",
-        "Nadia",
-        "Nadine",
-        "Nahomie",
-        "Nancy",
-        "Naomie",
-        "Natacha",
-        "Nathalie",
-        "Nephtalie",
-        "Nerlande",
-        "Nicole",
-        "Patricia",
-        "Rachelle",
-        "Rebecca",
-        "Rose-Merline",
-        "Rose Marie",
-        "Rose",
-        "Roselene",
-        "Roseline",
-        "Rosemene",
-        "Rosena",
-        "Rosenie",
-        "Ruth",
-        "Samantha",
-        "Sandra",
-        "Sherline",
-        "Simone",
-        "Sophonie",
-        "Stephanie",
-        "Suze",
-        "Suzette",
-        "Widelene",
-        "Yolande",
-        "Yolene",
-        "Yolette",
+        "Adeline", 
+        "Alexandra", 
+        "Anaica", 
+        "Angeline", 
+        "Beatrice", 
+        "Bernadette", 
+        "Betty", 
+        "Carline", 
+        "Carole", 
+        "Chedeline", 
+        "Claudette", 
+        "Darline", 
+        "Denise", 
+        "Dieula", 
+        "Edeline", 
+        "Edline", 
+        "Edna", 
+        "Esterline", 
+        "Esther", 
+        "Eveline", 
+        "Evelyne", 
+        "Fabienne", 
+        "Fabiola", 
+        "Farah", 
+        "Francoise", 
+        "Fredeline", 
+        "Gaelle", 
+        "Gertha", 
+        "Gertrude", 
+        "Gina", 
+        "Ginette", 
+        "Gladys", 
+        "Guerda", 
+        "Guerlande", 
+        "Guerline", 
+        "Islande", 
+        "Jacqueline", 
+        "Jean", 
+        "Jeanne", 
+        "Jenniflore", 
+        "Jessica", 
+        "Jesula", 
+        "Jocelyne", 
+        "Johanne", 
+        "Josette", 
+        "Josiane", 
+        "Judeline", 
+        "Judith", 
+        "Kerline", 
+        "Kimberly", 
+        "Linda", 
+        "Lourdes-Gina", 
+        "Lovelie", 
+        "Lovely Madeline", 
+        "Lynda", 
+        "Magalie", 
+        "Magdala", 
+        "Manoucheka", 
+        "Marie Ange", 
+        "Marie Carmel", 
+        "Marie Carmelle", 
+        "Marie Claude", 
+        "Marie Denise", 
+        "Marie Lourdes", 
+        "Marie Michelle", 
+        "Marie Nicole", 
+        "Marie Rose", 
+        "Marie", 
+        "Marjorie", 
+        "Marlene", 
+        "Martine", 
+        "Medjine", 
+        "Micheline", 
+        "Mimose", 
+        "Mireille", 
+        "Mirlande", 
+        "Mirlene", 
+        "Mona", 
+        "Monique", 
+        "Myriam", 
+        "Myrlande", 
+        "Myrlene", 
+        "Myrtha", 
+        "Nadege", 
+        "Nadia", 
+        "Nadine", 
+        "Nahomie", 
+        "Nancy", 
+        "Naomie", 
+        "Natacha", 
+        "Nathalie", 
+        "Nephtalie", 
+        "Nerlande", 
+        "Nicole", 
+        "Patricia", 
+        "Rachelle", 
+        "Rebecca", 
+        "Rose-Merline", 
+        "Rose Marie", 
+        "Rose", 
+        "Roselene", 
+        "Roseline", 
+        "Rosemene", 
+        "Rosena", 
+        "Rosenie", 
+        "Ruth", 
+        "Samantha", 
+        "Sandra", 
+        "Sherline", 
+        "Simone", 
+        "Sophonie", 
+        "Stephanie", 
+        "Suze", 
+        "Suzette", 
+        "Widelene", 
+        "Yolande", 
+        "Yolene", 
+        "Yolette", 
         "Yvrose"
       ]
     }

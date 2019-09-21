@@ -296,7 +296,7 @@ class GmWindow(object):
 
 
     def show_description(self,
-                         character # Fighter or Fight object
+                         character # Fighter or Venue object
                         ):
         self._char_detail_window.clear()
         if character is None:
@@ -527,11 +527,11 @@ class MainGmWindow(GmWindow):
 
         for line, char in enumerate(char_list):
             # TODO: perhaps the colors should be consolidated in the Figher
-            #   and Fight objects
+            #   and Venue objects
             mode = curses.A_REVERSE if standout else 0
             if char.group == 'NPCs':
                 mode |= curses.color_pair(GmWindowManager.CYAN_BLACK)
-            elif char.name == Fight.name:
+            elif char.name == Venue.name:
                 mode |= curses.color_pair(GmWindowManager.BLUE_BLACK)
             else:
                 mode |= self._window_manager.get_mode_from_fighter_state(
@@ -1875,12 +1875,7 @@ class World(object):
 
         fights = self.get_fights()
         if group_name in fights:
-            fight = Fight(group_name,
-                          self.details['fights'][group_name],
-                          self.__ruleset,
-                          self.__window_manager
-                          )
-            return fight.get_creature_detail_list()
+            return self.details['fights'][group_name]['monsters']
 
         return None
 
@@ -2650,11 +2645,10 @@ class ThingsInFight(object):
         return [[{'text': '(Nothing to explain)', 'mode': curses.A_NORMAL}]]
 
 
-
-class Fight(ThingsInFight):
+class Venue(ThingsInFight):
     name = '<< ROOM >>'                 # Describes the FIGHT object
     detailed_name = '<< ROOM: %s >>'    # insert the group into the '%s' slot
-    empty_fight = {
+    empty_venue = {
         'stuff': [],
         'notes': [],
         'timers': []
@@ -2666,19 +2660,12 @@ class Fight(ThingsInFight):
                  ruleset,       # Ruleset object
                  window_manager # GmWindowManager object for error reporting
                 ):
-        super(Fight, self).__init__(Fight.name,
+        super(Venue, self).__init__(Venue.name,
                                     group,
                                     details,
                                     ruleset,
                                     window_manager)
-        self.detailed_name = Fight.detailed_name % group
-
-
-    def get_creature_detail_list(self):
-        '''
-        Returns dict of details: {name: {<details>}, name: ... }
-        '''
-        return self.details['monsters']
+        self.detailed_name = Venue.detailed_name % group
 
 
     def get_description(self,
@@ -2691,8 +2678,6 @@ class Fight(ThingsInFight):
 
     def get_state(self):
         return Fighter.FIGHT
-
-
 
 
 class Fighter(ThingsInFight):
@@ -5142,7 +5127,7 @@ class GurpsRuleset(Ruleset):
 
 
     def get_fight_description(self,
-                              fight,     # Fight object
+                              fight,     # Venue object
                               output,    # recepticle for fight detail.
                                          # [[{'text','mode'},...],  # line 0
                                          #  [...],               ]  # line 1...
@@ -7142,7 +7127,7 @@ class BuildFightHandler(ScreenHandler):
 
         self.__critters = None # dict of parallel arrays:
                                #    {'data': <dict from json>,
-                               #     'obj': array of <Fighter> obj or <Fight>
+                               #     'obj': array of <Fighter> obj or <Venue>
                                #        obj in display order}
 
         self.__deleted_critter_count = 0
@@ -7306,7 +7291,7 @@ class BuildFightHandler(ScreenHandler):
             # NOTE: this is still imperfect.  If you delete a monster and then
             #   come back later, you'll still have numbering problems.
             # ALSO NOTE: we use 'len' rather than 'len'+1 because we've added
-            #   a Fight to the list -- the Fight has an implied prefix of '0'
+            #   a Venue to the list -- the Venue has an implied prefix of '0'
             creature_num = (len(self.__critters['data']) +
                                                 self.__deleted_critter_count)
             while keep_asking:
@@ -7529,7 +7514,7 @@ class BuildFightHandler(ScreenHandler):
 
         the_fight_itself = None
         for name, details in self.__critters['data'].iteritems():
-            if name == Fight.name:
+            if name == Venue.name:
                 the_fight_itself = details
             else:
                 fighter = self.world.get_creature(name, self.__group_name)
@@ -7538,17 +7523,18 @@ class BuildFightHandler(ScreenHandler):
         self.__critters['obj'] = sorted(self.__critters['obj'],
                                         key=lambda x: x.name)
 
-        # Add the Fight to the object array (but only for monsters).
+        # Add the Venue to the object array (but only for monsters).
 
         if creature_type == BuildFightHandler.MONSTERs:
             if the_fight_itself is None:
-                self.__critters['data'][Fight.name] = Fight.empty_fight
-                fight = Fight(self.__group_name,
-                              self.world.details['fights'][self.__group_name],
+                self.__critters['data'][Venue.name] = Venue.empty_venue
+                group = self.world.details['fights'][self.__group_name]
+                fight = Venue(self.__group_name,
+                              group['monsters'][Venue.name],
                               self.__ruleset,
                               self._window_manager)
             else:
-                fight = Fight(self.__group_name,
+                fight = Venue(self.__group_name,
                               the_fight_itself,
                               self.__ruleset,
                               self._window_manager)
@@ -7645,13 +7631,13 @@ class BuildFightHandler(ScreenHandler):
 
         fights[group_name] = {'monsters': {}}
 
-        self.__critters = {'data': fights[self.__group_name]['monsters'],
+        self.__critters = {'data': fights[group_name]['monsters'],
                            'obj': []}
 
 
-        self.__critters['data'][Fight.name] = Fight.empty_fight
-        fight = Fight(self.__group_name,
-                      self.world.details['fights'][self.__group_name],
+        self.__critters['data'][Venue.name] = Venue.empty_venue
+        fight = Venue(group_name,
+                      fights[group_name]['monsters'][Venue.name],
                       self.__ruleset,
                       self._window_manager)
         self.__critters['obj'].insert(0, fight)
@@ -7681,7 +7667,7 @@ class BuildFightHandler(ScreenHandler):
 
         ignore_name, from_creature  = self.__name_and_obj_from_index(
                                                         self.__viewing_index)
-        if from_creature.name == Fight.name:
+        if from_creature.name == Venue.name:
             self._window_manager.error(['Can\'t make a template from a room'])
             return True # Keep going
 
@@ -7970,7 +7956,7 @@ class FightHandler(ScreenHandler):
                          fighter # Fighter object
                         ):
         ''' Returns Fighter object for opponent of 'fighter'. '''
-        if (fighter is None or fighter.name == Fight.name or
+        if (fighter is None or fighter.name == Venue.name or
                                         fighter.details['opponent'] is None):
             return None
 
@@ -8082,7 +8068,7 @@ class FightHandler(ScreenHandler):
                                             self._saved_fight['fighters']) - 1
                 self._saved_fight['round'] += adj 
             current_fighter = self.get_current_fighter()
-            if current_fighter.name == Fight.name:
+            if current_fighter.name == Venue.name:
                 pass
             elif current_fighter.is_dead():
                 if not self.world.playing_back:
@@ -8131,7 +8117,7 @@ class FightHandler(ScreenHandler):
         default_selection = None
         for fighter in self.__fighters:
             if (fighter.group != current_fighter.group and
-                                                fighter.name != Fight.name):
+                                                fighter.name != Venue.name):
                 opponent_group = fighter.group
                 if fighter.is_conscious():
                     if fighter.details['opponent'] is None:
@@ -8258,11 +8244,11 @@ class FightHandler(ScreenHandler):
     def should_we_show_current_fighter(self):
         '''
         Only called when the fight starts to see if the first creature (or the
-        Fight) should be displayed.
+        Venue) should be displayed.
         '''
         show_fighter = True
         current_fighter = self.get_current_fighter()
-        if current_fighter.name == Fight.name:
+        if current_fighter.name == Venue.name:
             show_fighter = False
 
         elif current_fighter.is_dead():
@@ -8316,7 +8302,7 @@ class FightHandler(ScreenHandler):
                 if details is None:
                     continue
 
-                if name == Fight.name:
+                if name == Venue.name:
                     the_fight_itself = details
                 else:
                     fighter = self.world.get_creature(name, monster_group)
@@ -8337,7 +8323,7 @@ class FightHandler(ScreenHandler):
 
         # Put the fight info (if any) at the top of the list.
         if the_fight_itself is not None:
-            fight = Fight(monster_group,
+            fight = Venue(monster_group,
                           the_fight_itself,
                           self.__ruleset,
                           self._window_manager)
@@ -8888,7 +8874,7 @@ class FightHandler(ScreenHandler):
         ask_to_save = False # Ask to save if some monster is conscious
         ask_to_loot = False # Ask to loot if some monster is unconscious
         for fighter in self.__fighters:
-            if fighter.group != 'PCs' and fighter.name != Fight.name:
+            if fighter.group != 'PCs' and fighter.name != Venue.name:
                 if fighter.is_conscious():
                     ask_to_save = True
                 else:
@@ -10136,7 +10122,7 @@ class MainHandler(ScreenHandler):
             if monsters is not None:
                 the_fight_itself = None
                 for name, details in monsters.iteritems():
-                    if name == Fight.name:
+                    if name == Venue.name:
                         the_fight_itself = details
                     else:
                         fighter = self.world.get_creature(name, group)
@@ -10144,7 +10130,7 @@ class MainHandler(ScreenHandler):
 
                 self.__chars = sorted(self.__chars, key=lambda x: x.name)
 
-                # Add the Fight to the object array
+                # Add the Venue to the object array
 
                 if len(self.__chars) == 0:
                     group = None
@@ -10153,12 +10139,13 @@ class MainHandler(ScreenHandler):
                 # exist.
                 #
                 #elif the_fight_itself is None:
-                #    fight =  Fight(group,
-                #                   self.world.details['fights'][group],
-                #                   self.__ruleset)
+                #  fight =  Venue(
+                #   group,
+                #   self.world.details['fights'][group]['monsters'][Venue.name],
+                #   self.__ruleset)
 
                 elif the_fight_itself is not None:
-                    fight = Fight(group,
+                    fight = Venue(group,
                                   the_fight_itself,
                                   self.__ruleset,
                                   self._window_manager)
