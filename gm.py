@@ -1878,7 +1878,6 @@ class World(object):
             fight = Fight(group_name,
                           self.details['fights'][group_name],
                           self.__ruleset,
-                          None, # FightHandler
                           self.__window_manager
                           )
             return fight.get_creatures()
@@ -2428,7 +2427,6 @@ class Timers(object):
                  timer_details, # List from JSON containing timers
                  owner,         # ThingsInFight object to receive timer
                                 #   actions.
-                 fight_handler, # timers send actions thru FightHandler object
                  window_manager # For displaying error messages
                 ):
 
@@ -2439,7 +2437,6 @@ class Timers(object):
                          'obj': []}
 
         self.__owner = owner
-        self.__fight_handler = fight_handler
 
         for timer_data in timer_details:
             timer_obj = Timer(timer_data)
@@ -2531,7 +2528,6 @@ class ThingsInFight(object):
                  details,       # world.details['fights'][name] (world is
                                 #   a World object)
                  ruleset,       # Ruleset object
-                 fight_handler, # FightHandler object
                  window_manager # GmWindowManager object for reporting errors
                 ):
         self.name = name
@@ -2554,7 +2550,6 @@ class ThingsInFight(object):
             details['timers'] = []
         self.timers = Timers(self.details['timers'],
                              self,
-                             fight_handler,
                              self._window_manager)
 
 
@@ -2647,14 +2642,12 @@ class Fight(ThingsInFight):
                  details,       # world.details['fights'][name] (world is
                                 #   a World object)
                  ruleset,       # Ruleset object
-                 fight_handler, # FightHandler object
                  window_manager # GmWindowManager object for error reporting
                 ):
         super(Fight, self).__init__(Fight.name,
                                     group,
                                     details,
                                     ruleset,
-                                    fight_handler,
                                     window_manager)
         self.detailed_name = Fight.detailed_name % group
 
@@ -2702,14 +2695,12 @@ class Fighter(ThingsInFight):
                  group,             # string = 'PCs' or some monster group
                  fighter_details,   # dict as in the JSON
                  ruleset,           # a Ruleset object
-                 fight_handler,     # FightHandler object
                  window_manager     # a GmWindowManager object
                 ):
         super(Fighter, self).__init__(name,
                                       group,
                                       fighter_details,
                                       ruleset,
-                                      fight_handler,
                                       window_manager)
         pass
 
@@ -7326,7 +7317,7 @@ class BuildFightHandler(ScreenHandler):
             # Add personality stuff to notes
         
             if self.__group_name != 'PCs':
-                with GmJson('npc_detail.json') as npc_detail:
+                with GmJson('gm-npc-random-detail.json') as npc_detail:
                     for name, traits in npc_detail.read_data['traits'].iteritems():
                         trait = random.choice(traits)
                         if isinstance(trait, dict):
@@ -7359,7 +7350,6 @@ class BuildFightHandler(ScreenHandler):
                                          self.__group_name,
                                          to_creature,
                                          self.__ruleset,
-                                         None, # FightHandler
                                          self._window_manager))
                 self.__new_char_name = creature_name
                 # BuildFightGmWindow
@@ -7414,7 +7404,6 @@ class BuildFightHandler(ScreenHandler):
                                                   self.__group_name,
                                                   to_creature,
                                                   self.__ruleset,
-                                                  None, # FightHandler
                                                   self._window_manager))
             # BuildFightGmWindow
             self._window.show_creatures(self.__critters['obj'],
@@ -7530,7 +7519,6 @@ class BuildFightHandler(ScreenHandler):
                             self.world.get_creature_details(
                                                     name, self.__group_name),
                             self.__ruleset,
-                            None, # FightHandler
                             self._window_manager)
                 self.__critters['obj'].append(fighter)
 
@@ -7545,13 +7533,11 @@ class BuildFightHandler(ScreenHandler):
                 fight = Fight(self.__group_name,
                               self.world.details['fights'][self.__group_name],
                               self.__ruleset,
-                              None, # FightHandler
                               self._window_manager)
             else:
                 fight = Fight(self.__group_name,
                               the_fight_itself,
                               self.__ruleset,
-                              None, # FightHandler
                               self._window_manager)
 
             self.__critters['obj'].insert(0, fight)
@@ -7654,7 +7640,6 @@ class BuildFightHandler(ScreenHandler):
         fight = Fight(self.__group_name,
                       self.world.details['fights'][self.__group_name],
                       self.__ruleset,
-                      None, # FightHandler
                       self._window_manager)
         self.__critters['obj'].insert(0, fight)
 
@@ -8245,7 +8230,6 @@ class FightHandler(ScreenHandler):
                                       new_NPC.group,
                                       details_copy,
                                       self.__ruleset,
-                                      self,
                                       self._window_manager)
                 self.__fighters[index] = new_fighter
                 self._window_manager.display_window(
@@ -8316,7 +8300,6 @@ class FightHandler(ScreenHandler):
                                   'PCs',
                                   details,
                                   self.__ruleset,
-                                  self,
                                   self._window_manager)
                 self.__fighters.append(fighter)
 
@@ -8335,7 +8318,6 @@ class FightHandler(ScreenHandler):
                                       monster_group,
                                       details,
                                       self.__ruleset,
-                                      self,
                                       self._window_manager)
                     self.__fighters.append(fighter)
 
@@ -8357,7 +8339,6 @@ class FightHandler(ScreenHandler):
             fight = Fight(monster_group,
                           the_fight_itself,
                           self.__ruleset,
-                          self,
                           self._window_manager)
 
             self.__fighters.insert(0, fight)
@@ -9716,7 +9697,6 @@ class MainHandler(ScreenHandler):
                              'PCs',
                              character_list[to_fighter_info],
                              self.__ruleset,
-                             None, # FightHandler
                              self._window_manager)
 
         to_fighter.add_equipment(item, from_fighter.detailed_name)
@@ -10168,7 +10148,6 @@ class MainHandler(ScreenHandler):
                                     self.world.get_creature_details(name,
                                                                       group),
                                     self.__ruleset,
-                                    None, # FightHandler
                                     self._window_manager)
                         self.__chars.append(fighter)
 
@@ -10185,14 +10164,12 @@ class MainHandler(ScreenHandler):
                 #elif the_fight_itself is None:
                 #    fight =  Fight(group,
                 #                   self.world.details['fights'][group],
-                #                   None, # FightHandler
                 #                   self.__ruleset)
 
                 elif the_fight_itself is not None:
                     fight = Fight(group,
                                   the_fight_itself,
                                   self.__ruleset,
-                                  None, # FightHandler
                                   self._window_manager)
                     self.__chars.insert(0, fight)
 
@@ -10203,7 +10180,6 @@ class MainHandler(ScreenHandler):
                             'PCs',
                             self.world.get_creature_details(x, 'PCs'),
                             self.__ruleset,
-                            None, # FightHandler
                             self._window_manager)
                     for x in sorted(self.world.get_creatures('PCs'))]
 
@@ -10214,7 +10190,6 @@ class MainHandler(ScreenHandler):
                                 'NPCs',
                                 self.world.get_creature_details(x, 'NPCs'),
                                 self.__ruleset,
-                                None, # FightHandler
                                 self._window_manager)
                         for x in sorted(self.world.get_creatures('NPCs'))])
         else:
@@ -10300,7 +10275,6 @@ class EquipmentManager(object):
                           self.__group_name,
                           self.__character['details'],
                           self.__ruleset,
-                          None, # FightHandler
                           self._window_manager)
 
         '''
@@ -10510,7 +10484,7 @@ if __name__ == '__main__':
                 filename = bug_report.read_data['snapshots']['fight']
                 playback_history = bug_report.read_data['history']
         else:
-            with GmJson('gm.json') as read_prefs:
+            with GmJson('gm-prefs.json') as read_prefs:
                 prefs = read_prefs.read_data
 
                 # Get the Campaign's Name
