@@ -519,13 +519,11 @@ class MainGmWindow(GmWindow):
             return
 
         for line, char in enumerate(char_list):
-            # TODO: perhaps the colors should be consolidated in the Figher
-            #   and Venue objects
             mode = curses.A_REVERSE if standout else 0
             if char.group == 'NPCs':
-                mode |= curses.color_pair(GmWindowManager.CYAN_BLACK)
+                mode |= self._window_manager.color_of_npc()
             elif char.name == Venue.name:
-                mode |= curses.color_pair(GmWindowManager.BLUE_BLACK)
+                mode |= self._window_manager.color_of_venue()
             else:
                 mode |= self._window_manager.get_mode_from_fighter_state(
                                     Fighter.get_fighter_state(char.details))
@@ -933,7 +931,7 @@ class FightGmWindow(GmWindow):
         if is_attacker:
             mode = curses.A_NORMAL 
         else:
-            mode = curses.color_pair(GmWindowManager.CYAN_BLACK)
+            mode = self._window_manager.color_of_fighter()
             mode = mode | curses.A_BOLD
 
         notes, ignore = fighter.get_defenses_notes(opponent)
@@ -945,7 +943,7 @@ class FightGmWindow(GmWindow):
         # Attacker
 
         if is_attacker:
-            mode = curses.color_pair(GmWindowManager.CYAN_BLACK)
+            mode = self._window_manager.color_of_fighter()
             mode = mode | curses.A_BOLD
         else:
             mode = curses.A_NORMAL 
@@ -1170,6 +1168,15 @@ class GmWindowManager(object):
     #
     # Public Methods
     #
+
+    def color_of_fighter(self):
+        return curses.color_pair(GmWindowManager.CYAN_BLACK)
+
+    def color_of_npc(self):
+        return curses.color_pair(GmWindowManager.CYAN_BLACK)
+
+    def color_of_venue(self):
+        return curses.color_pair(GmWindowManager.BLUE_BLACK)
 
     def display_window(self,
                        title,
