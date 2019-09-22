@@ -1780,7 +1780,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # no aim, no posture
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
-        self.__ruleset.reset_aim(vodou_priest, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(vodou_priest)
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'change-posture',
                                   'posture': 'standing'},
@@ -1869,7 +1869,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                  {'name': 'change-posture',
                                   'posture': 'crawling'},
                                  mock_fight_handler)
-        self.__ruleset.reset_aim(vodou_priest, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(vodou_priest)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
@@ -1913,7 +1913,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # aim / not braced, posture (no posture minus for ranged attacks: B551)
 
-        self.__ruleset.reset_aim(vodou_priest, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(vodou_priest)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
 
         # 1 round
@@ -1953,7 +1953,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # --- Opponents w/ posture ---
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
-        self.__ruleset.reset_aim(vodou_priest, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(vodou_priest)
         tank = gm.Fighter('Tank',
                           'group',
                           copy.deepcopy(self.__tank_fighter),
@@ -2014,7 +2014,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Regular, no aim - for a baseline
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
-        self.__ruleset.reset_aim(vodou_priest, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(vodou_priest)
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'change-posture',
                                   'posture': 'standing'},
@@ -2024,7 +2024,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Damage _would_ ruin aim except for successful Will roll
 
-        self.__ruleset.reset_aim(vodou_priest, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(vodou_priest)
 
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
@@ -2069,7 +2069,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Damage ruins aim -- miss will roll
 
-        self.__ruleset.reset_aim(vodou_priest, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(vodou_priest)
 
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
@@ -2109,7 +2109,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Draw weapon ruins aim
 
-        self.__ruleset.reset_aim(vodou_priest, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(vodou_priest)
 
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
@@ -2147,7 +2147,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
             + self.__colt_pistol_acc
             + 1) # braced
-        self.__ruleset.reset_aim(vodou_priest, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(vodou_priest)
         self.__ruleset.do_action(vodou_priest, 
                                  {'name': 'aim', 'braced': True},
                                  mock_fight_handler)
@@ -2176,7 +2176,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Defense ruins aim
 
-        self.__ruleset.reset_aim(vodou_priest, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(vodou_priest)
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'change-posture',
                                   'posture': 'standing'},
@@ -2214,7 +2214,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Last One is Regular - shows nothing carries over
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
-        self.__ruleset.reset_aim(vodou_priest, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(vodou_priest)
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'change-posture',
                                   'posture': 'standing'},
@@ -2305,7 +2305,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # --- Aiming does not help ---
 
-        self.__ruleset.reset_aim(thief, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(thief)
         expected_to_hit = self.__thief_knife_skill
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
 
@@ -2626,7 +2626,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         #
 
-        self.__ruleset.reset_aim(vodou_priest, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(vodou_priest)
 
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
@@ -2681,7 +2681,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'posture': 'standing'},
                                  mock_fight_handler)
 
-        self.__ruleset.reset_aim(vodou_priest, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(vodou_priest)
 
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
@@ -2740,7 +2740,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                   'posture': 'standing'},
                                  mock_fight_handler)
 
-        self.__ruleset.reset_aim(vodou_priest, {}, mock_fight_handler)
+        self.__ruleset.reset_aim(vodou_priest)
 
 
     def test_adjust_hp_2(self):

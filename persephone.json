@@ -27,13 +27,17 @@
             "type": "value", 
             "value": 11
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 10
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -50,10 +54,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 12
           }
         }, 
         "advantages": {
@@ -243,13 +243,17 @@
             "type": "value", 
             "value": 16
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 16
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -266,10 +270,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 6.25
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 12
           }
         }, 
         "timers": {
@@ -298,11 +298,15 @@
             "type": "value", 
             "value": 10
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 10
           }, 
           "st": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "wi": {
             "type": "value", 
             "value": 10
           }, 
@@ -321,10 +325,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 10
           }
         }, 
         "timers": {
@@ -354,13 +354,17 @@
             "type": "value", 
             "value": 10
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 10
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -377,10 +381,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.25
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 12
           }
         }, 
         "timers": {
@@ -535,13 +535,17 @@
             "type": "value", 
             "value": 11
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 10
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -558,10 +562,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 12
           }
         }, 
         "advantages": {
@@ -639,13 +639,17 @@
             "type": "value", 
             "value": 12
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 10
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -662,10 +666,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 12
           }
         }, 
         "timers": {
@@ -724,13 +724,17 @@
             "type": "value", 
             "value": 16
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
-            "value": 10
+            "value": 8
           }, 
           "st": {
             "type": "value", 
             "value": 12
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 10
           }, 
           "ht": {
             "type": "value", 
@@ -747,10 +751,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.0
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 8
           }
         }, 
         "timers": {
@@ -780,13 +780,17 @@
             "type": "value", 
             "value": 10
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 13
           }, 
           "st": {
             "type": "value", 
             "value": 10
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 13
           }, 
           "ht": {
             "type": "value", 
@@ -803,10 +807,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.5
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 13
           }
         }, 
         "timers": {
@@ -818,6 +818,10 @@
         "skills": {
           "type": "value", 
           "value": {}
+        }, 
+        "stuff": {
+          "type": "value", 
+          "value": []
         }, 
         "permanent": {
           "fp": {
@@ -832,17 +836,13 @@
             "type": "value", 
             "value": 10
           }, 
-          "per": {
+          "wi": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 10
-          }, 
-          "wi": {
-            "type": "value", 
-            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -859,11 +859,11 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.25
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 12
           }
-        }, 
-        "stuff": {
-          "type": "value", 
-          "value": []
         }, 
         "advantages": {
           "type": "value", 
@@ -1021,13 +1021,17 @@
             "type": "value", 
             "value": 12
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 8
           }, 
           "st": {
             "type": "value", 
             "value": 12
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 8
           }, 
           "ht": {
             "type": "value", 
@@ -1044,10 +1048,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 4.75
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 8
           }
         }, 
         "advantages": {
@@ -1199,13 +1199,17 @@
             "type": "value", 
             "value": 15
           }, 
-          "wi": {
+          "per": {
             "type": "value", 
             "value": 9
           }, 
           "st": {
             "type": "value", 
             "value": 15
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 9
           }, 
           "ht": {
             "type": "value", 
@@ -1222,10 +1226,6 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.25
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 9
           }
         }, 
         "timers": {
@@ -1243,6 +1243,925 @@
     }
   }, 
   "fights": {
+    "BLAH": {
+      "monsters": {
+        "<< ROOM >>": {
+          "notes": [], 
+          "stuff": [], 
+          "timers": [
+            {
+              "string": "two", 
+              "rounds": 1.9, 
+              "actions": {
+                "announcement": "TWO"
+              }, 
+              "name": "<< ROOM >>"
+            }, 
+            {
+              "string": "three", 
+              "rounds": 3, 
+              "actions": {}, 
+              "name": "<< ROOM >>"
+            }, 
+            {
+              "string": "", 
+              "rounds": 3.9, 
+              "actions": {
+                "announcement": "FOUR"
+              }, 
+              "name": "<< ROOM >>"
+            }, 
+            {
+              "string": "", 
+              "rounds": 5, 
+              "actions": {}, 
+              "name": "<< ROOM >>"
+            }
+          ]
+        }, 
+        "1 - manny": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "stunned": false, 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Rolls eyes when bored/annoyed", 
+            "instincts: To find the one", 
+            "hair: Frazzled", 
+            "speech: Um Uh", 
+            "knack: Endurance", 
+            "personality: Organized"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": 4, 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "wi": 12, 
+            "st": 16, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25, 
+            "per": 12
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "ht": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "wi": 12, 
+            "st": 16, 
+            "per": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [
+            {
+              "string": "two", 
+              "rounds": 1.9, 
+              "actions": {
+                "announcement": "TWO"
+              }, 
+              "name": "1 - manny"
+            }, 
+            {
+              "string": "three", 
+              "rounds": 3, 
+              "actions": {}, 
+              "name": "1 - manny"
+            }, 
+            {
+              "string": "", 
+              "rounds": 3.9, 
+              "actions": {
+                "announcement": "FOUR"
+              }, 
+              "name": "1 - manny"
+            }, 
+            {
+              "string": "", 
+              "rounds": 5, 
+              "actions": {}, 
+              "name": "1 - manny"
+            }
+          ], 
+          "actions_this_turn": [], 
+          "opponent": null
+        }, 
+        "3 - jack": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "stunned": false, 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Dandruff", 
+            "instincts: To be a champion", 
+            "hair: Bald", 
+            "speech: High-pitched", 
+            "knack: Smelting", 
+            "personality: Truthful"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": 4, 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "wi": 12, 
+            "st": 16, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25, 
+            "per": 12
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "ht": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "wi": 12, 
+            "st": 16, 
+            "per": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "actions_this_turn": [], 
+          "opponent": null
+        }, 
+        "2 - moe": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stuff": [
+            {
+              "acc": 4, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, nice David-built laser", 
+              "damage": {
+                "dice": {
+                  "plus": 3, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 8, 
+                "shots_left": 8
+              }
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Small Knife", 
+              "notes": "B272", 
+              "damage": {
+                "sw": {
+                  "plus": -3, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": -1, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "brass knuckles", 
+              "notes": "B271", 
+              "damage": {
+                "thr": {
+                  "plus": 1, 
+                  "type": "cr"
+                }
+              }, 
+              "parry": 0, 
+              "skill": "Karate", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 1, 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 3, 
+              "name": "Sport coat/Jeans"
+            }
+          ], 
+          "stunned": false, 
+          "skills": {
+            "Beam Weapons (Pistol)": 18, 
+            "Brawling": 18, 
+            "Knife": 18
+          }, 
+          "notes": [
+            "station history: lifer (born on Earth, this is 1st station)", 
+            "characteristics: Cracks knuckles", 
+            "instincts: To establish a dynasty", 
+            "hair: Streaked", 
+            "speech: Whispery", 
+            "knack: Heroic self-sacrifice", 
+            "personality: Cautious"
+          ], 
+          "shock": 0, 
+          "short-notes": [], 
+          "armor-index": 4, 
+          "current": {
+            "fp": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "wi": 12, 
+            "st": 16, 
+            "ht": 10, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25, 
+            "per": 12
+          }, 
+          "posture": "standing", 
+          "state": "alive", 
+          "permanent": {
+            "fp": 10, 
+            "ht": 10, 
+            "iq": 12, 
+            "hp": 16, 
+            "wi": 12, 
+            "st": 16, 
+            "per": 12, 
+            "dx": 11, 
+            "basic-move": 6, 
+            "basic-speed": 6.25
+          }, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "timers": [], 
+          "actions_this_turn": [], 
+          "opponent": null
+        }
+      }
+    }, 
+    "Dima's Crew": {
+      "monsters": {
+        "5: Dmitry": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 17, 
+            "Brawling": 17, 
+            "Knife": 17
+          }, 
+          "posture": "standing", 
+          "shock": 0, 
+          "armor-index": 3, 
+          "short-notes": [
+            ""
+          ], 
+          "current": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "per": 11, 
+            "st": 12, 
+            "wi": 11, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "per": 11, 
+            "st": 12, 
+            "wi": 11, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "state": "alive", 
+          "stuff": [
+            {
+              "acc": 3, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, average David-built laser", 
+              "notes": "Nice weapon", 
+              "damage": {
+                "dice": {
+                  "plus": 1, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 7, 
+                "shots_left": 7
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Large Knife", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": [], 
+              "name": "Sport coat/Jeans", 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 2
+            }
+          ], 
+          "timers": [], 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "actions_this_turn": [], 
+          "opponent": null
+        }, 
+        "4: Andre": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 17, 
+            "Brawling": 17, 
+            "Knife": 17
+          }, 
+          "posture": "standing", 
+          "shock": 0, 
+          "armor-index": 3, 
+          "short-notes": [
+            "* DR 2 on suit ", 
+            ""
+          ], 
+          "current": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "per": 11, 
+            "st": 12, 
+            "wi": 11, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "per": 11, 
+            "st": 12, 
+            "wi": 11, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "state": "alive", 
+          "stuff": [
+            {
+              "acc": 3, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, average David-built laser", 
+              "notes": "Nice weapon", 
+              "damage": {
+                "dice": {
+                  "plus": 1, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 7, 
+                "shots_left": 7
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Large Knife", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": [], 
+              "name": "Sport coat/Jeans", 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 2
+            }
+          ], 
+          "timers": [], 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "actions_this_turn": [], 
+          "opponent": null
+        }, 
+        "Dima - Bratva": {
+          "redirect": "NPCs"
+        }, 
+        "3: Alex": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 17, 
+            "Brawling": 17, 
+            "Knife": 17
+          }, 
+          "posture": "standing", 
+          "shock": 0, 
+          "armor-index": 3, 
+          "short-notes": [
+            ""
+          ], 
+          "current": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "per": 11, 
+            "st": 12, 
+            "wi": 11, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "per": 11, 
+            "st": 12, 
+            "wi": 11, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "state": "alive", 
+          "stuff": [
+            {
+              "acc": 3, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, average David-built laser", 
+              "notes": "Nice weapon", 
+              "damage": {
+                "dice": {
+                  "plus": 1, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 7, 
+                "shots_left": 7
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Large Knife", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": [], 
+              "name": "Sport coat/Jeans", 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 2
+            }
+          ], 
+          "timers": [], 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "actions_this_turn": [], 
+          "opponent": null
+        }, 
+        "2: Nikita": {
+          "aim": {
+            "braced": false, 
+            "rounds": 0
+          }, 
+          "stunned": 0, 
+          "skills": {
+            "Beam Weapons (Pistol)": 17, 
+            "Brawling": 17, 
+            "Knife": 17
+          }, 
+          "posture": "standing", 
+          "shock": 0, 
+          "armor-index": 3, 
+          "short-notes": [
+            ""
+          ], 
+          "current": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "per": 11, 
+            "st": 12, 
+            "wi": 11, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "permanent": {
+            "fp": 11, 
+            "iq": 11, 
+            "hp": 11, 
+            "per": 11, 
+            "st": 12, 
+            "wi": 11, 
+            "ht": 11, 
+            "dx": 12, 
+            "basic-move": 5, 
+            "basic-speed": 5.75
+          }, 
+          "state": "alive", 
+          "stuff": [
+            {
+              "acc": 3, 
+              "count": 1, 
+              "owners": [
+                "David (smith)"
+              ], 
+              "name": "pistol, average David-built laser", 
+              "notes": "Nice weapon", 
+              "damage": {
+                "dice": {
+                  "plus": 1, 
+                  "num_dice": 2, 
+                  "type": "pi"
+                }
+              }, 
+              "reload": 3, 
+              "skill": "Beam Weapons (Pistol)", 
+              "type": "ranged weapon", 
+              "ammo": {
+                "name": "C Cell", 
+                "shots": 7, 
+                "shots_left": 7
+              }
+            }, 
+            {
+              "count": 1, 
+              "owners": null, 
+              "name": "Large Knife", 
+              "notes": "", 
+              "damage": {
+                "sw": {
+                  "plus": -2, 
+                  "type": "cut"
+                }, 
+                "thr": {
+                  "plus": 0, 
+                  "type": "imp"
+                }
+              }, 
+              "parry": -1, 
+              "skill": "Knife", 
+              "type": "melee weapon"
+            }, 
+            {
+              "count": 5, 
+              "notes": "", 
+              "type": "misc", 
+              "owners": null, 
+              "name": "C Cell"
+            }, 
+            {
+              "count": 1, 
+              "owners": [], 
+              "name": "Sport coat/Jeans", 
+              "type": "armor", 
+              "notes": "Enchanted w/fortify spell [M66]", 
+              "dr": 2
+            }
+          ], 
+          "timers": [], 
+          "weapon-index": null, 
+          "check_for_death": false, 
+          "advantages": {
+            "Combat Reflexes": 15, 
+            "High Pain Threshold": 10
+          }, 
+          "actions_this_turn": [], 
+          "opponent": null
+        }
+      }
+    }, 
     "Battle of Persephone, Marshals Office": {
       "monsters": {
         "2 - Lovelie - Summoner": {
@@ -1267,12 +2186,12 @@
           "armor-index": null, 
           "current": {
             "fp": 10, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -1281,12 +2200,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -1477,12 +2396,12 @@
           "armor-index": null, 
           "current": {
             "fp": 70, 
+            "ht": 18, 
             "iq": 17, 
             "hp": 25, 
-            "ht": 18, 
+            "wi": 18, 
             "st": 25, 
             "per": 17, 
-            "wi": 18, 
             "dx": 15, 
             "basic-move": 8, 
             "basic-speed": 8.25
@@ -1491,12 +2410,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 70, 
+            "ht": 18, 
             "iq": 17, 
             "hp": 25, 
-            "ht": 18, 
+            "wi": 18, 
             "st": 25, 
             "per": 17, 
-            "wi": 18, 
             "dx": 15, 
             "basic-move": 8, 
             "basic-speed": 8.25
@@ -1640,12 +2559,12 @@
           "armor-index": null, 
           "current": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -1654,12 +2573,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -1802,1330 +2721,6 @@
           ]
         }
       }
-    }, 
-    "BLAH": {
-      "monsters": {
-        "<< ROOM >>": {
-          "notes": [], 
-          "stuff": [], 
-          "timers": [
-            {
-              "name": "<< ROOM >>", 
-              "string": "two", 
-              "actions": {
-                "announcement": "TWO"
-              }, 
-              "rounds": 1.9
-            }, 
-            {
-              "name": "<< ROOM >>", 
-              "string": "three", 
-              "actions": {}, 
-              "rounds": 3
-            }, 
-            {
-              "name": "<< ROOM >>", 
-              "string": "", 
-              "actions": {
-                "announcement": "FOUR"
-              }, 
-              "rounds": 3.9
-            }, 
-            {
-              "name": "<< ROOM >>", 
-              "string": "", 
-              "actions": {}, 
-              "rounds": 5
-            }
-          ]
-        }, 
-        "1 - manny": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 4, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, nice David-built laser", 
-              "damage": {
-                "dice": {
-                  "plus": 3, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Small Knife", 
-              "notes": "B272", 
-              "damage": {
-                "sw": {
-                  "plus": -3, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": -1, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "brass knuckles", 
-              "notes": "B271", 
-              "damage": {
-                "thr": {
-                  "plus": 1, 
-                  "type": "cr"
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Karate", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 3, 
-              "name": "Sport coat/Jeans"
-            }
-          ], 
-          "stunned": false, 
-          "skills": {
-            "Beam Weapons (Pistol)": 18, 
-            "Brawling": 18, 
-            "Knife": 18
-          }, 
-          "notes": [
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Rolls eyes when bored/annoyed", 
-            "instincts: To find the one", 
-            "hair: Frazzled", 
-            "speech: Um Uh", 
-            "knack: Endurance", 
-            "personality: Organized"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": 4, 
-          "current": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "per": 12, 
-            "st": 16, 
-            "wi": 12, 
-            "ht": 10, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "posture": "standing", 
-          "state": "alive", 
-          "permanent": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "ht": 10, 
-            "st": 16, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [
-            {
-              "name": "1 - manny", 
-              "string": "two", 
-              "actions": {
-                "announcement": "TWO"
-              }, 
-              "rounds": 1.9
-            }, 
-            {
-              "name": "1 - manny", 
-              "string": "three", 
-              "actions": {}, 
-              "rounds": 3
-            }, 
-            {
-              "name": "1 - manny", 
-              "string": "", 
-              "actions": {
-                "announcement": "FOUR"
-              }, 
-              "rounds": 3.9
-            }, 
-            {
-              "name": "1 - manny", 
-              "string": "", 
-              "actions": {}, 
-              "rounds": 5
-            }
-          ], 
-          "actions_this_turn": [], 
-          "opponent": null
-        }, 
-        "3 - jack": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 4, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, nice David-built laser", 
-              "damage": {
-                "dice": {
-                  "plus": 3, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Small Knife", 
-              "notes": "B272", 
-              "damage": {
-                "sw": {
-                  "plus": -3, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": -1, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "brass knuckles", 
-              "notes": "B271", 
-              "damage": {
-                "thr": {
-                  "plus": 1, 
-                  "type": "cr"
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Karate", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 3, 
-              "name": "Sport coat/Jeans"
-            }
-          ], 
-          "stunned": false, 
-          "skills": {
-            "Beam Weapons (Pistol)": 18, 
-            "Brawling": 18, 
-            "Knife": 18
-          }, 
-          "notes": [
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Dandruff", 
-            "instincts: To be a champion", 
-            "hair: Bald", 
-            "speech: High-pitched", 
-            "knack: Smelting", 
-            "personality: Truthful"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": 4, 
-          "current": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "per": 12, 
-            "st": 16, 
-            "wi": 12, 
-            "ht": 10, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "posture": "standing", 
-          "state": "alive", 
-          "permanent": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "ht": 10, 
-            "st": 16, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
-          "actions_this_turn": [], 
-          "opponent": null
-        }, 
-        "2 - moe": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 4, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, nice David-built laser", 
-              "damage": {
-                "dice": {
-                  "plus": 3, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Small Knife", 
-              "notes": "B272", 
-              "damage": {
-                "sw": {
-                  "plus": -3, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": -1, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "brass knuckles", 
-              "notes": "B271", 
-              "damage": {
-                "thr": {
-                  "plus": 1, 
-                  "type": "cr"
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Karate", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 3, 
-              "name": "Sport coat/Jeans"
-            }
-          ], 
-          "stunned": false, 
-          "skills": {
-            "Beam Weapons (Pistol)": 18, 
-            "Brawling": 18, 
-            "Knife": 18
-          }, 
-          "notes": [
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Cracks knuckles", 
-            "instincts: To establish a dynasty", 
-            "hair: Streaked", 
-            "speech: Whispery", 
-            "knack: Heroic self-sacrifice", 
-            "personality: Cautious"
-          ], 
-          "shock": 0, 
-          "short-notes": [], 
-          "armor-index": 4, 
-          "current": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "per": 12, 
-            "st": 16, 
-            "wi": 12, 
-            "ht": 10, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "posture": "standing", 
-          "state": "alive", 
-          "permanent": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "ht": 10, 
-            "st": 16, 
-            "per": 12, 
-            "wi": 12, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "timers": [], 
-          "actions_this_turn": [], 
-          "opponent": null
-        }
-      }
-    }, 
-    "Planets": {
-      "monsters": {
-        "1 - mercury": {
-          "stunned": false, 
-          "short-notes": [], 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "posture": "standing", 
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 4, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, nice David-built laser", 
-              "damage": {
-                "dice": {
-                  "plus": 3, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Small Knife", 
-              "notes": "B272", 
-              "damage": {
-                "sw": {
-                  "plus": -3, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": -1, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "brass knuckles", 
-              "notes": "B271", 
-              "damage": {
-                "thr": {
-                  "plus": 1, 
-                  "type": "cr"
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Karate", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 3, 
-              "name": "Sport coat/Jeans"
-            }
-          ], 
-          "skills": {
-            "Beam Weapons (Pistol)": 18, 
-            "Brawling": 18, 
-            "Knife": 18
-          }, 
-          "notes": [
-            "station history: staby (born on this station)", 
-            "characteristics: Flips a coin", 
-            "instincts: To show kindness", 
-            "hair: Limp", 
-            "speech: Wheezy", 
-            "knack: Smelting", 
-            "personality: Humorless"
-          ], 
-          "shock": 0, 
-          "armor-index": 4, 
-          "actions_this_turn": [], 
-          "current": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "wi": 12, 
-            "st": 16, 
-            "ht": 10, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25, 
-            "per": 12
-          }, 
-          "state": "alive", 
-          "permanent": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "ht": 10, 
-            "st": 16, 
-            "wi": 12, 
-            "per": 12, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "timers": [], 
-          "check_for_death": false, 
-          "opponent": null
-        }, 
-        "<< ROOM >>": {
-          "notes": [], 
-          "stuff": [], 
-          "timers": []
-        }, 
-        "3 - earth": {
-          "stunned": false, 
-          "short-notes": [], 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "posture": "standing", 
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 4, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, nice David-built laser", 
-              "damage": {
-                "dice": {
-                  "plus": 3, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Small Knife", 
-              "notes": "B272", 
-              "damage": {
-                "sw": {
-                  "plus": -3, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": -1, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "brass knuckles", 
-              "notes": "B271", 
-              "damage": {
-                "thr": {
-                  "plus": 1, 
-                  "type": "cr"
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Karate", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 3, 
-              "name": "Sport coat/Jeans"
-            }
-          ], 
-          "skills": {
-            "Beam Weapons (Pistol)": 18, 
-            "Brawling": 18, 
-            "Knife": 18
-          }, 
-          "notes": [
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Loves the sea and ships", 
-            "instincts: To discover the truth", 
-            "hair: Frazzled", 
-            "speech: Quiet", 
-            "knack: A safe place", 
-            "personality: Irreverent"
-          ], 
-          "shock": 0, 
-          "armor-index": 4, 
-          "actions_this_turn": [], 
-          "current": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "wi": 12, 
-            "st": 16, 
-            "ht": 10, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25, 
-            "per": 12
-          }, 
-          "state": "alive", 
-          "permanent": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "ht": 10, 
-            "st": 16, 
-            "wi": 12, 
-            "per": 12, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "timers": [], 
-          "check_for_death": false, 
-          "opponent": null
-        }, 
-        "2 - venus": {
-          "stunned": false, 
-          "short-notes": [], 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "posture": "standing", 
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 4, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, nice David-built laser", 
-              "damage": {
-                "dice": {
-                  "plus": 3, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Small Knife", 
-              "notes": "B272", 
-              "damage": {
-                "sw": {
-                  "plus": -3, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": -1, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "brass knuckles", 
-              "notes": "B271", 
-              "damage": {
-                "thr": {
-                  "plus": 1, 
-                  "type": "cr"
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Karate", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 3, 
-              "name": "Sport coat/Jeans"
-            }
-          ], 
-          "skills": {
-            "Beam Weapons (Pistol)": 18, 
-            "Brawling": 18, 
-            "Knife": 18
-          }, 
-          "notes": [
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Repeats same phrase over and over", 
-            "instincts: To be careful", 
-            "hair: Limp", 
-            "speech: Fast", 
-            "knack: Steely nerves", 
-            "personality: Courteous"
-          ], 
-          "shock": 0, 
-          "armor-index": 4, 
-          "actions_this_turn": [], 
-          "current": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "wi": 12, 
-            "st": 16, 
-            "ht": 10, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25, 
-            "per": 12
-          }, 
-          "state": "alive", 
-          "permanent": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "ht": 10, 
-            "st": 16, 
-            "wi": 12, 
-            "per": 12, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "timers": [], 
-          "check_for_death": false, 
-          "opponent": null
-        }
-      }
-    }, 
-    "Dima's Crew": {
-      "monsters": {
-        "5: Dmitry": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stunned": 0, 
-          "skills": {
-            "Beam Weapons (Pistol)": 17, 
-            "Brawling": 17, 
-            "Knife": 17
-          }, 
-          "posture": "standing", 
-          "shock": 0, 
-          "armor-index": 3, 
-          "short-notes": [
-            ""
-          ], 
-          "current": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "permanent": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "state": "alive", 
-          "stuff": [
-            {
-              "acc": 3, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, average David-built laser", 
-              "notes": "Nice weapon", 
-              "damage": {
-                "dice": {
-                  "plus": 1, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 7, 
-                "shots_left": 7
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": [], 
-              "name": "Sport coat/Jeans", 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 2
-            }
-          ], 
-          "timers": [], 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "actions_this_turn": [], 
-          "opponent": null
-        }, 
-        "4: Andre": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stunned": 0, 
-          "skills": {
-            "Beam Weapons (Pistol)": 17, 
-            "Brawling": 17, 
-            "Knife": 17
-          }, 
-          "posture": "standing", 
-          "shock": 0, 
-          "armor-index": 3, 
-          "short-notes": [
-            "* DR 2 on suit ", 
-            ""
-          ], 
-          "current": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "permanent": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "state": "alive", 
-          "stuff": [
-            {
-              "acc": 3, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, average David-built laser", 
-              "notes": "Nice weapon", 
-              "damage": {
-                "dice": {
-                  "plus": 1, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 7, 
-                "shots_left": 7
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": [], 
-              "name": "Sport coat/Jeans", 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 2
-            }
-          ], 
-          "timers": [], 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "actions_this_turn": [], 
-          "opponent": null
-        }, 
-        "Dima - Bratva": {
-          "redirect": "NPCs"
-        }, 
-        "3: Alex": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stunned": 0, 
-          "skills": {
-            "Beam Weapons (Pistol)": 17, 
-            "Brawling": 17, 
-            "Knife": 17
-          }, 
-          "posture": "standing", 
-          "shock": 0, 
-          "armor-index": 3, 
-          "short-notes": [
-            ""
-          ], 
-          "current": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "permanent": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "state": "alive", 
-          "stuff": [
-            {
-              "acc": 3, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, average David-built laser", 
-              "notes": "Nice weapon", 
-              "damage": {
-                "dice": {
-                  "plus": 1, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 7, 
-                "shots_left": 7
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": [], 
-              "name": "Sport coat/Jeans", 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 2
-            }
-          ], 
-          "timers": [], 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "actions_this_turn": [], 
-          "opponent": null
-        }, 
-        "2: Nikita": {
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stunned": 0, 
-          "skills": {
-            "Beam Weapons (Pistol)": 17, 
-            "Brawling": 17, 
-            "Knife": 17
-          }, 
-          "posture": "standing", 
-          "shock": 0, 
-          "armor-index": 3, 
-          "short-notes": [
-            ""
-          ], 
-          "current": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "permanent": {
-            "fp": 11, 
-            "iq": 11, 
-            "hp": 11, 
-            "wi": 11, 
-            "st": 12, 
-            "ht": 11, 
-            "dx": 12, 
-            "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 11
-          }, 
-          "state": "alive", 
-          "stuff": [
-            {
-              "acc": 3, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, average David-built laser", 
-              "notes": "Nice weapon", 
-              "damage": {
-                "dice": {
-                  "plus": 1, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 7, 
-                "shots_left": 7
-              }
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Large Knife", 
-              "notes": "", 
-              "damage": {
-                "sw": {
-                  "plus": -2, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": 0, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": [], 
-              "name": "Sport coat/Jeans", 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 2
-            }
-          ], 
-          "timers": [], 
-          "weapon-index": null, 
-          "check_for_death": false, 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "actions_this_turn": [], 
-          "opponent": null
-        }
-      }
     }
   }, 
   "PCs": {
@@ -3171,13 +2766,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -3394,13 +2989,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -3535,13 +3130,13 @@
         "fp": 13, 
         "iq": 11, 
         "hp": 12, 
-        "wi": 11, 
+        "per": 11, 
         "st": 12, 
+        "wi": 11, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 11
+        "basic-speed": 6
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -3662,13 +3257,13 @@
         "fp": 13, 
         "iq": 11, 
         "hp": 12, 
-        "wi": 11, 
+        "per": 11, 
         "st": 12, 
+        "wi": 11, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 11
+        "basic-speed": 6
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -3831,13 +3426,13 @@
         "fp": 11, 
         "iq": 14, 
         "hp": 10, 
-        "wi": 14, 
+        "per": 14, 
         "st": 9, 
+        "wi": 14, 
         "ht": 11, 
         "dx": 9, 
         "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 14
+        "basic-speed": 5
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -3930,19 +3525,19 @@
         "fp": 11, 
         "iq": 14, 
         "hp": 10, 
-        "wi": 14, 
+        "per": 14, 
         "st": 9, 
+        "wi": 14, 
         "ht": 11, 
         "dx": 9, 
         "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 14
+        "basic-speed": 5
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
       "advantages": {
         "G-Experience": 1, 
-        "Alcohol Intolerance": -1, 
+        "Empathy": 15, 
         "Honest Face": 1, 
         "Wealth": -10, 
         "Extra Hit Points": 2, 
@@ -3950,7 +3545,7 @@
         "Nosy": -1, 
         "Like knick knacks": -1, 
         "Vodou Practitioner": 15, 
-        "Empathy": 15, 
+        "Alcohol Intolerance": -1, 
         "Impulsiveness": -10, 
         "Cultural Familiarity (Teraformers)": 1, 
         "Short Attention Span": -10, 
@@ -4006,13 +3601,13 @@
         "fp": 10, 
         "iq": 14, 
         "hp": 12, 
-        "wi": 14, 
+        "per": 14, 
         "st": 10, 
+        "wi": 14, 
         "ht": 9, 
         "dx": 12, 
         "basic-move": 5, 
-        "basic-speed": 5.25, 
-        "per": 14
+        "basic-speed": 5.25
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -4081,13 +3676,13 @@
         "fp": 10, 
         "iq": 14, 
         "hp": 12, 
-        "wi": 14, 
+        "per": 14, 
         "st": 10, 
+        "wi": 14, 
         "ht": 9, 
         "dx": 12, 
         "basic-move": 5, 
-        "basic-speed": 5.25, 
-        "per": 14
+        "basic-speed": 5.25
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -4219,13 +3814,13 @@
         "fp": 18, 
         "iq": 16, 
         "hp": 19, 
-        "wi": 16, 
+        "per": 16, 
         "st": 9, 
+        "wi": 16, 
         "ht": 8, 
         "dx": 8, 
         "basic-move": 5, 
-        "basic-speed": 4, 
-        "per": 16
+        "basic-speed": 4
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -4287,13 +3882,13 @@
         "fp": 18, 
         "iq": 16, 
         "hp": 19, 
-        "wi": 16, 
+        "per": 16, 
         "st": 9, 
+        "wi": 16, 
         "ht": 8, 
         "dx": 8, 
         "basic-move": 5, 
-        "basic-speed": 4, 
-        "per": 16
+        "basic-speed": 4
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -4337,26 +3932,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4382,26 +3977,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4427,26 +4022,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4472,26 +4067,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -4518,26 +4113,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 12
+            "basic-speed": 5.25
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 12
+            "basic-speed": 5.25
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4563,26 +4158,26 @@
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "wi": 13, 
+            "per": 13, 
             "st": 10, 
+            "wi": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5, 
-            "per": 13
+            "basic-speed": 5.5
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "wi": 13, 
+            "per": 13, 
             "st": 10, 
+            "wi": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5, 
-            "per": 13
+            "basic-speed": 5.5
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4608,26 +4203,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4653,26 +4248,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -4705,26 +4300,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4750,26 +4345,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4795,26 +4390,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4840,26 +4435,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -4886,26 +4481,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4931,26 +4526,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4976,26 +4571,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -5021,26 +4616,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -5122,26 +4717,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -5200,26 +4795,26 @@
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "wi": 13, 
+            "per": 13, 
             "st": 10, 
+            "wi": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5, 
-            "per": 13
+            "basic-speed": 5.5
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "wi": 13, 
+            "per": 13, 
             "st": 10, 
+            "wi": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5, 
-            "per": 13
+            "basic-speed": 5.5
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -5294,26 +4889,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -5392,26 +4987,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "High Pain Threshold": 10
@@ -5470,26 +5065,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 12
+            "basic-speed": 5.25
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 12
+            "basic-speed": 5.25
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -5565,26 +5160,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -5659,26 +5254,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -5757,26 +5352,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "High Pain Threshold": 10
@@ -5807,25 +5402,25 @@
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "wi": 13, 
+            "per": 13, 
             "st": 10, 
+            "wi": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5, 
-            "per": 13
+            "basic-speed": 5.5
           }, 
           "permanent": {
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "wi": 13, 
+            "per": 13, 
             "st": 10, 
+            "wi": 13, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5, 
-            "per": 13
+            "basic-speed": 5.5
           }, 
           "state": "alive", 
           "stuff": [], 
@@ -5854,25 +5449,25 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "stuff": [
@@ -5970,13 +5565,13 @@
             "fp": 9, 
             "iq": 8, 
             "hp": -9, 
-            "wi": 8, 
+            "per": 8, 
             "st": 12, 
+            "wi": 8, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75, 
-            "per": 8
+            "basic-speed": 4.75
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -5984,13 +5579,13 @@
             "fp": 9, 
             "iq": 8, 
             "hp": 12, 
-            "wi": 8, 
+            "per": 8, 
             "st": 12, 
+            "wi": 8, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75, 
-            "per": 8
+            "basic-speed": 4.75
           }, 
           "advantages": {
             "High Pain Threshold": 10
@@ -6033,13 +5628,13 @@
             "fp": 9, 
             "iq": 8, 
             "hp": -3, 
-            "wi": 8, 
+            "per": 8, 
             "st": 12, 
+            "wi": 8, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75, 
-            "per": 8
+            "basic-speed": 4.75
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -6047,13 +5642,13 @@
             "fp": 9, 
             "iq": 8, 
             "hp": 12, 
-            "wi": 8, 
+            "per": 8, 
             "st": 12, 
+            "wi": 8, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75, 
-            "per": 8
+            "basic-speed": 4.75
           }, 
           "advantages": {
             "High Pain Threshold": 10
@@ -6104,13 +5699,13 @@
             "fp": 11, 
             "iq": 9, 
             "hp": -6, 
-            "wi": 9, 
+            "per": 9, 
             "st": 15, 
+            "wi": 9, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 9
+            "basic-speed": 5.25
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -6118,13 +5713,13 @@
             "fp": 11, 
             "iq": 9, 
             "hp": 15, 
-            "wi": 9, 
+            "per": 9, 
             "st": 15, 
+            "wi": 9, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 9
+            "basic-speed": 5.25
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -6179,13 +5774,13 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -6193,13 +5788,13 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -6264,12 +5859,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": -4, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6278,12 +5873,12 @@
           "state": "unconscious", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6358,12 +5953,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": -7, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6372,12 +5967,12 @@
           "state": "dead", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6443,12 +6038,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6457,12 +6052,12 @@
           "state": "dead", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6525,12 +6120,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6539,12 +6134,12 @@
           "state": "dead", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6607,12 +6202,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 0, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6621,12 +6216,12 @@
           "state": "unconscious", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6692,12 +6287,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": -4, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6706,12 +6301,12 @@
           "state": "dead", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6783,12 +6378,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -6797,12 +6392,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -6865,12 +6460,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": -17, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -6879,12 +6474,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -7021,12 +6616,12 @@
           "armor-index": null, 
           "current": {
             "fp": 20, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -7034,12 +6629,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 20, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -7103,12 +6698,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 6, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.5
@@ -7117,12 +6712,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.5
@@ -7185,12 +6780,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": -13, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 11, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -7199,12 +6794,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 11, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -7341,12 +6936,12 @@
           "armor-index": null, 
           "current": {
             "fp": 20, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -7354,12 +6949,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 20, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -7426,12 +7021,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -7440,12 +7035,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -7508,12 +7103,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": -7, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -7522,12 +7117,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -7590,12 +7185,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 10, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -7604,12 +7199,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -7672,12 +7267,12 @@
           "armor-index": null, 
           "current": {
             "fp": 7, 
+            "ht": 10, 
             "iq": 8, 
             "hp": -1, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.5
@@ -7686,12 +7281,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
+            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 12, 
             "per": 8, 
-            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.5
@@ -7734,25 +7329,25 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "stuff": [
@@ -7894,25 +7489,25 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "per": 12, 
             "st": 10, 
+            "wi": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75, 
-            "per": 12
+            "basic-speed": 5.75
           }, 
           "state": "alive", 
           "stuff": [
@@ -8096,13 +7691,13 @@
             "fp": 11, 
             "iq": 9, 
             "hp": 15, 
-            "wi": 9, 
+            "per": 9, 
             "st": 15, 
+            "wi": 9, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 9
+            "basic-speed": 5.25
           }, 
           "posture": "standing", 
           "state": "alive", 
@@ -8110,13 +7705,13 @@
             "fp": 11, 
             "iq": 9, 
             "hp": 15, 
-            "wi": 9, 
+            "per": 9, 
             "st": 15, 
+            "wi": 9, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25, 
-            "per": 9
+            "basic-speed": 5.25
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -8213,12 +7808,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -8227,12 +7822,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -8277,12 +7872,12 @@
           "armor-index": null, 
           "current": {
             "fp": 10, 
+            "ht": 10, 
             "iq": 10, 
             "hp": 10, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 10, 
             "per": 10, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5
@@ -8291,12 +7886,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 10, 
+            "ht": 10, 
             "iq": 10, 
             "hp": 10, 
-            "ht": 10, 
+            "wi": 10, 
             "st": 10, 
             "per": 10, 
-            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5
@@ -8332,12 +7927,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -8346,12 +7941,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -8556,12 +8151,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -8570,12 +8165,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -8741,12 +8336,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -8755,12 +8350,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -8854,12 +8449,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 6
@@ -8868,12 +8463,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 6
@@ -8967,12 +8562,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 6
@@ -8981,12 +8576,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 6
@@ -9080,12 +8675,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9094,12 +8689,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9193,12 +8788,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 12, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 15, 
             "basic-move": 5, 
             "basic-speed": 5
@@ -9207,12 +8802,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 12, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 15, 
             "basic-move": 5, 
             "basic-speed": 5
@@ -9260,12 +8855,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9274,12 +8869,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9393,12 +8988,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9407,12 +9002,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9517,12 +9112,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9531,12 +9126,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9663,12 +9258,12 @@
           "armor-index": null, 
           "current": {
             "fp": 27, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9677,12 +9272,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9697,27 +9292,27 @@
           "check_for_death": false, 
           "timers": [
             {
-              "rounds": 1.9, 
               "name": "Spell for 3 - Davidson", 
+              "string": "Casting (Animate Shadow) @ skill (16): M154, Subject's shadow attacks them, HT negates", 
               "actions": {
                 "timer": {
-                  "rounds": 5, 
                   "name": "Spell Duration Timer for 3 - Davidson", 
+                  "string": "SPELL ACTIVE: Animate Shadow", 
                   "actions": {}, 
-                  "string": "SPELL ACTIVE: Animate Shadow"
+                  "rounds": 5
                 }
               }, 
-              "string": "Casting (Animate Shadow) @ skill (16): M154, Subject's shadow attacks them, HT negates"
+              "rounds": 1.9
             }, 
             {
-              "rounds": 0.9, 
               "name": "3 - Davidson", 
-              "actions": {}, 
               "string": [
                 "Cast (Animate Shadow)", 
                 " Defense: none", 
                 " Move: none"
-              ]
+              ], 
+              "actions": {}, 
+              "rounds": 0.9
             }
           ], 
           "actions_this_turn": [], 
@@ -9881,12 +9476,12 @@
           "armor-index": null, 
           "current": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9895,12 +9490,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10058,12 +9653,12 @@
           "armor-index": null, 
           "current": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10072,12 +9667,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10235,12 +9830,12 @@
           "armor-index": null, 
           "current": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10249,12 +9844,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10412,12 +10007,12 @@
           "armor-index": null, 
           "current": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10426,12 +10021,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10589,12 +10184,12 @@
           "armor-index": null, 
           "current": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10603,12 +10198,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10848,24 +10443,24 @@
             "fp": 10, 
             "iq": 12, 
             "hp": 16, 
-            "per": 12, 
-            "st": 16, 
             "wi": 12, 
+            "st": 16, 
             "ht": 10, 
             "dx": 11, 
             "basic-move": 6, 
-            "basic-speed": 6.25
+            "basic-speed": 6.25, 
+            "per": 12
           }, 
           "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 10, 
+            "ht": 10, 
             "iq": 12, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 12, 
             "st": 16, 
             "per": 12, 
-            "wi": 12, 
             "dx": 11, 
             "basic-move": 6, 
             "basic-speed": 6.25
@@ -10988,24 +10583,24 @@
             "fp": 10, 
             "iq": 12, 
             "hp": 16, 
-            "per": 12, 
-            "st": 16, 
             "wi": 12, 
+            "st": 16, 
             "ht": 10, 
             "dx": 11, 
             "basic-move": 6, 
-            "basic-speed": 6.25
+            "basic-speed": 6.25, 
+            "per": 12
           }, 
           "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 10, 
+            "ht": 10, 
             "iq": 12, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 12, 
             "st": 16, 
             "per": 12, 
-            "wi": 12, 
             "dx": 11, 
             "basic-move": 6, 
             "basic-speed": 6.25
@@ -11120,24 +10715,24 @@
             "fp": 10, 
             "iq": 12, 
             "hp": 16, 
-            "per": 12, 
-            "st": 16, 
             "wi": 12, 
+            "st": 16, 
             "ht": 10, 
             "dx": 11, 
             "basic-move": 6, 
-            "basic-speed": 6.25
+            "basic-speed": 6.25, 
+            "per": 12
           }, 
           "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 10, 
+            "ht": 10, 
             "iq": 12, 
             "hp": 16, 
-            "ht": 10, 
+            "wi": 12, 
             "st": 16, 
             "per": 12, 
-            "wi": 12, 
             "dx": 11, 
             "basic-move": 6, 
             "basic-speed": 6.25
@@ -11152,413 +10747,6 @@
           "actions_this_turn": [
             "start-turn"
           ], 
-          "opponent": null
-        }
-      }
-    }, 
-    {
-      "date": "2019-09-21-16-00-09", 
-      "name": "Outer Planets", 
-      "monsters": {
-        "<< ROOM >>": {
-          "notes": [], 
-          "stuff": [], 
-          "timers": []
-        }, 
-        "2 - neptune": {
-          "stunned": false, 
-          "short-notes": [], 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "posture": "standing", 
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 4, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, nice David-built laser", 
-              "damage": {
-                "dice": {
-                  "plus": 3, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Small Knife", 
-              "notes": "B272", 
-              "damage": {
-                "sw": {
-                  "plus": -3, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": -1, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "brass knuckles", 
-              "notes": "B271", 
-              "damage": {
-                "thr": {
-                  "plus": 1, 
-                  "type": "cr"
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Karate", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 3, 
-              "name": "Sport coat/Jeans"
-            }
-          ], 
-          "skills": {
-            "Beam Weapons (Pistol)": 18, 
-            "Brawling": 18, 
-            "Knife": 18
-          }, 
-          "notes": [
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Insomniac", 
-            "instincts: To prove a point", 
-            "hair: Wiry", 
-            "speech: Loud", 
-            "knack: Ratcatching", 
-            "personality: Apathetic"
-          ], 
-          "shock": 0, 
-          "armor-index": 4, 
-          "actions_this_turn": [], 
-          "current": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "wi": 12, 
-            "st": 16, 
-            "ht": 10, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25, 
-            "per": 12
-          }, 
-          "state": "alive", 
-          "permanent": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "ht": 10, 
-            "st": 16, 
-            "wi": 12, 
-            "per": 12, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "timers": [], 
-          "check_for_death": false, 
-          "opponent": null
-        }, 
-        "3 - pluto": {
-          "stunned": false, 
-          "short-notes": [], 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "posture": "standing", 
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 4, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, nice David-built laser", 
-              "damage": {
-                "dice": {
-                  "plus": 3, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Small Knife", 
-              "notes": "B272", 
-              "damage": {
-                "sw": {
-                  "plus": -3, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": -1, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "brass knuckles", 
-              "notes": "B271", 
-              "damage": {
-                "thr": {
-                  "plus": 1, 
-                  "type": "cr"
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Karate", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 3, 
-              "name": "Sport coat/Jeans"
-            }
-          ], 
-          "skills": {
-            "Beam Weapons (Pistol)": 18, 
-            "Brawling": 18, 
-            "Knife": 18
-          }, 
-          "notes": [
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Burn scar, bodyLocation: Right arm", 
-            "instincts: To avenge", 
-            "hair: Pony-tail", 
-            "speech: Curt short", 
-            "knack: A beautiful mind", 
-            "personality: Confused"
-          ], 
-          "shock": 0, 
-          "armor-index": 4, 
-          "actions_this_turn": [], 
-          "current": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "wi": 12, 
-            "st": 16, 
-            "ht": 10, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25, 
-            "per": 12
-          }, 
-          "state": "alive", 
-          "permanent": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "ht": 10, 
-            "st": 16, 
-            "wi": 12, 
-            "per": 12, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "timers": [], 
-          "check_for_death": false, 
-          "opponent": null
-        }, 
-        "1 - uranus": {
-          "stunned": false, 
-          "short-notes": [], 
-          "advantages": {
-            "Combat Reflexes": 15, 
-            "High Pain Threshold": 10
-          }, 
-          "weapon-index": null, 
-          "posture": "standing", 
-          "aim": {
-            "braced": false, 
-            "rounds": 0
-          }, 
-          "stuff": [
-            {
-              "acc": 4, 
-              "count": 1, 
-              "owners": [
-                "David (smith)"
-              ], 
-              "name": "pistol, nice David-built laser", 
-              "damage": {
-                "dice": {
-                  "plus": 3, 
-                  "num_dice": 2, 
-                  "type": "pi"
-                }
-              }, 
-              "reload": 3, 
-              "skill": "Beam Weapons (Pistol)", 
-              "type": "ranged weapon", 
-              "ammo": {
-                "name": "C Cell", 
-                "shots": 8, 
-                "shots_left": 8
-              }
-            }, 
-            {
-              "count": 5, 
-              "notes": "", 
-              "type": "misc", 
-              "owners": null, 
-              "name": "C Cell"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "Small Knife", 
-              "notes": "B272", 
-              "damage": {
-                "sw": {
-                  "plus": -3, 
-                  "type": "cut"
-                }, 
-                "thr": {
-                  "plus": -1, 
-                  "type": "imp"
-                }
-              }, 
-              "parry": -1, 
-              "skill": "Knife", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "owners": null, 
-              "name": "brass knuckles", 
-              "notes": "B271", 
-              "damage": {
-                "thr": {
-                  "plus": 1, 
-                  "type": "cr"
-                }
-              }, 
-              "parry": 0, 
-              "skill": "Karate", 
-              "type": "melee weapon"
-            }, 
-            {
-              "count": 1, 
-              "type": "armor", 
-              "notes": "Enchanted w/fortify spell [M66]", 
-              "dr": 3, 
-              "name": "Sport coat/Jeans"
-            }
-          ], 
-          "skills": {
-            "Beam Weapons (Pistol)": 18, 
-            "Brawling": 18, 
-            "Knife": 18
-          }, 
-          "notes": [
-            "station history: lifer (born on Earth, this is 1st station)", 
-            "characteristics: Likes to arm wrestle", 
-            "instincts: To prove worth", 
-            "hair: Well groomed", 
-            "speech: Crisp", 
-            "knack: A stockpile of food", 
-            "personality: Troublemaker"
-          ], 
-          "shock": 0, 
-          "armor-index": 4, 
-          "actions_this_turn": [], 
-          "current": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "wi": 12, 
-            "st": 16, 
-            "ht": 10, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25, 
-            "per": 12
-          }, 
-          "state": "alive", 
-          "permanent": {
-            "fp": 10, 
-            "iq": 12, 
-            "hp": 16, 
-            "ht": 10, 
-            "st": 16, 
-            "wi": 12, 
-            "per": 12, 
-            "dx": 11, 
-            "basic-move": 6, 
-            "basic-speed": 6.25
-          }, 
-          "timers": [], 
-          "check_for_death": false, 
           "opponent": null
         }
       }
@@ -11683,13 +10871,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -11699,13 +10887,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -11713,15 +10901,15 @@
       "posture": "standing", 
       "opponent": null
     }, 
-    "Catherine - tereshkova mechanic": {
+    "Catherine - Tereshkova mechanic": {
       "current": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -11751,12 +10939,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -11790,13 +10978,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -11806,13 +10994,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -11848,13 +11036,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -11864,13 +11052,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -11883,13 +11071,13 @@
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "per": 10, 
         "st": 10, 
+        "wi": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 10
+        "basic-speed": 5
       }, 
       "stuff": [], 
       "stunned": false, 
@@ -11919,13 +11107,13 @@
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "per": 10, 
         "st": 10, 
+        "wi": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 10
+        "basic-speed": 5
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -12021,13 +11209,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 10, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25, 
-        "per": 12
+        "basic-speed": 5.25
       }, 
       "fargark": {}, 
       "state": "absent", 
@@ -12037,13 +11225,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 10, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25, 
-        "per": 12
+        "basic-speed": 5.25
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -12061,13 +11249,13 @@
         "fp": 11, 
         "iq": 13, 
         "hp": 10, 
-        "wi": 13, 
+        "per": 13, 
         "st": 10, 
+        "wi": 13, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25, 
-        "per": 13
+        "basic-speed": 5.25
       }, 
       "stunned": 0, 
       "skills": {}, 
@@ -12098,13 +11286,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 10, 
-        "wi": 12, 
+        "per": 13, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25, 
-        "per": 13
+        "basic-speed": 5.25
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -12217,13 +11405,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -12233,13 +11421,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -12250,12 +11438,12 @@
     "Owen Martin - Journeyman deputy marshal (party's boss)": {
       "current": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12338,12 +11526,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12364,13 +11552,13 @@
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "per": 10, 
         "st": 10, 
+        "wi": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 10
+        "basic-speed": 5
       }, 
       "stuff": [], 
       "stunned": false, 
@@ -12398,66 +11586,10 @@
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
-        "st": 10, 
-        "ht": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 10
-      }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "actions_this_turn": [], 
-      "short-notes": [], 
-      "opponent": null
-    }, 
-    "Dr. Zoya Krovopushkova - Medical Examiner": {
-      "current": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
         "per": 10, 
         "st": 10, 
         "wi": 10, 
         "ht": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5
-      }, 
-      "stuff": [], 
-      "stunned": 0, 
-      "skills": {}, 
-      "notes": [
-        "station history: lifer (born on Earth, this is 1st station) ", 
-        "characteristics: Stands very close ", 
-        "instincts: To save someone from a monstrosity ", 
-        "hair: Curly ", 
-        "speech: Low-pitched ", 
-        "knack: Unique perspective ", 
-        "personality: Obsessive ", 
-        "Plump, round-faced Russian Woman.  Always smoking a cigarette. ", 
-        ""
-      ], 
-      "shock": 0, 
-      "armor-index": null, 
-      "fargark": {}, 
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "posture": "standing", 
-      "state": "alive", 
-      "permanent": {
-        "fp": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "ht": 10, 
-        "st": 10, 
-        "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -12473,12 +11605,12 @@
     "Amelia - Deputy Marshal (Stoddard)": {
       "current": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12564,12 +11696,12 @@
       }, 
       "permanent": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12585,13 +11717,13 @@
         "fp": 10, 
         "iq": 12, 
         "hp": 16, 
-        "wi": 12, 
+        "per": 12, 
         "st": 16, 
+        "wi": 12, 
         "ht": 10, 
         "dx": 11, 
         "basic-move": 6, 
-        "basic-speed": 6.25, 
-        "per": 12
+        "basic-speed": 6.25
       }, 
       "stuff": [
         {
@@ -12656,13 +11788,13 @@
         "fp": 10, 
         "iq": 12, 
         "hp": 16, 
-        "wi": 12, 
+        "per": 12, 
         "st": 16, 
+        "wi": 12, 
         "ht": 10, 
         "dx": 11, 
         "basic-move": 6, 
-        "basic-speed": 6.25, 
-        "per": 12
+        "basic-speed": 6.25
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -12692,13 +11824,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -12708,13 +11840,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -12725,12 +11857,12 @@
     "Dmitriy - radio operator on Tereshkova": {
       "current": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -12760,12 +11892,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -12819,13 +11951,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -12835,13 +11967,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -12852,12 +11984,12 @@
     "William - Deputy Marshal (Stoddard)": {
       "current": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12971,12 +12103,12 @@
       }, 
       "permanent": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12990,12 +12122,12 @@
     "Olivia - Special Deputy Marshal (Stoddard)": {
       "current": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -13116,12 +12248,12 @@
       }, 
       "permanent": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -13192,13 +12324,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -13208,13 +12340,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -13225,12 +12357,12 @@
     "Ryder - marshal intern": {
       "current": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13260,12 +12392,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13307,13 +12439,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -13323,13 +12455,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -13340,12 +12472,12 @@
     "Jessica - Tereshkova security": {
       "current": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -13427,12 +12559,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -13554,13 +12686,13 @@
         "fp": 12, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 13, 
+        "wi": 12, 
         "ht": 12, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6.25, 
-        "per": 12
+        "basic-speed": 6.25
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -13568,13 +12700,13 @@
         "fp": 12, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 13, 
+        "wi": 12, 
         "ht": 12, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6.25, 
-        "per": 12
+        "basic-speed": 6.25
       }, 
       "advantages": {
         "Combat Reflexes": 15, 
@@ -13587,6 +12719,59 @@
       "short-notes": [
         ""
       ], 
+      "opponent": null
+    }, 
+    "Zoya Krovopuskova - Coroner": {
+      "stunned": false, 
+      "short-notes": [], 
+      "advantages": {}, 
+      "weapon-index": null, 
+      "posture": "standing", 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "stuff": [], 
+      "skills": {}, 
+      "notes": [
+        "station history: staby (born on this station) ", 
+        "A plump, round-faced Russian woman.  She has a cigarette in her mouth and odd ", 
+        "stains on her smock. ", 
+        "She stands a little too close.  She smells of smoke, antiseptic, and human tissue ", 
+        "that's a little past its sell-by date. ", 
+        "She hands a plasic bucket to you.  \"Barf on my floor and you clean it up.\" ", 
+        ""
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "actions_this_turn": [], 
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "wi": 10, 
+        "st": 10, 
+        "ht": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5, 
+        "per": 10
+      }, 
+      "state": "alive", 
+      "permanent": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "wi": 10, 
+        "per": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5
+      }, 
+      "timers": [], 
+      "check_for_death": false, 
       "opponent": null
     }, 
     "Mackenzie - Marshal's Intern": {
@@ -13626,13 +12811,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -13642,13 +12827,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -13659,12 +12844,12 @@
     "Lucy - Director of Operations": {
       "current": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13694,12 +12879,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13738,13 +12923,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -13754,13 +12939,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -13786,13 +12971,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -13802,13 +12987,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "wi": 12, 
+        "per": 12, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6, 
-        "per": 12
+        "basic-speed": 6
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -13819,12 +13004,12 @@
     "Arseniy - Xenobiologist in tiger team": {
       "current": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13854,12 +13039,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13896,25 +13081,25 @@
         "fp": 30, 
         "iq": 12, 
         "hp": 10, 
-        "per": 8, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 5, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 8
       }, 
       "permanent": {
         "fp": 30, 
         "iq": 12, 
         "hp": 10, 
-        "per": 8, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 5, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 8
       }, 
       "state": "alive", 
       "stuff": [], 
@@ -13988,12 +13173,12 @@
     "Maia Thompson - Operations manager on Tereshkova": {
       "current": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -14015,12 +13200,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -14036,12 +13221,12 @@
     "Isaac Harris - Tiger team leader": {
       "current": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -14122,12 +13307,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 11, 
+        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "ht": 11, 
+        "wi": 12, 
         "st": 10, 
         "per": 12, 
-        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -14146,12 +13331,12 @@
     "Anel - control tower, tereshkova": {
       "current": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -14181,12 +13366,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
+        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "ht": 10, 
+        "wi": 10, 
         "st": 10, 
         "per": 10, 
-        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5

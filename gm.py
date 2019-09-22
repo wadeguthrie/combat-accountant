@@ -5944,9 +5944,7 @@ class GurpsRuleset(Ruleset):
 
 
     def reset_aim(self,                         # Public to support testing
-                  fighter,          # Fighter object
-                  action,           # {'name': <action>, parameters...}
-                  fight_handler     # FightHandler object
+                  fighter           # Fighter object
                  ):
         fighter.details['aim']['rounds'] = 0
         fighter.details['aim']['braced'] = False
@@ -5996,7 +5994,7 @@ class GurpsRuleset(Ruleset):
         fighter.details['stunned'] = False
         fighter.details['check_for_death'] = False
         fighter.details['posture'] = 'standing'
-        self.reset_aim(fighter, {}, None)
+        self.reset_aim(fighter)
 
 
     def start_turn(self,
@@ -6330,8 +6328,6 @@ class GurpsRuleset(Ruleset):
         if fight_handler is not None and fight_handler.world.playing_back:
             return None # No timers
 
-        # TODO: break into cast-spell and cast-spell-really (ala reload).
-
         spell_index = action['spell-index']
         spell = fighter.details['spells'][spell_index]
 
@@ -6529,7 +6525,7 @@ class GurpsRuleset(Ruleset):
         Returns: Nothing, return values for these functions are ignored.
         '''
         fighter.details['posture'] = action['posture']
-        self.reset_aim(fighter, {}, fight_handler)
+        self.reset_aim(fighter)
 
         # Timer
 
@@ -6687,8 +6683,7 @@ class GurpsRuleset(Ruleset):
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        # TODO: maybe reset_aim just needs 'fighter' parameter
-        self.reset_aim(fighter, {}, fight_handler)
+        self.reset_aim(fighter)
 
         # Timer
 
@@ -6764,7 +6759,7 @@ class GurpsRuleset(Ruleset):
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        self.reset_aim(fighter, {}, fight_handler)
+        self.reset_aim(fighter)
 
         # Timer
 
@@ -6927,7 +6922,7 @@ class GurpsRuleset(Ruleset):
         Returns: 
         '''
 
-        self.reset_aim(fighter, {}, fight_handler) # OK
+        self.reset_aim(fighter)
 
         # Timer
 
@@ -6951,7 +6946,7 @@ class GurpsRuleset(Ruleset):
         Called to handle a menu selection.
         Returns: Nothing, return values for these functions are ignored.
         '''
-        self.reset_aim(fighter, {}, fight_handler)
+        self.reset_aim(fighter)
 
         # Timer
 
