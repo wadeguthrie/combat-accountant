@@ -3283,22 +3283,38 @@ class Ruleset(object):
         return sections
 
 
+    # Ruleset
     def heal_fighter(self,
-                     fighter_details    # 'details' is OK, here
+                     fighter,   # Fighter object
+                     world      # World object
                     ):
         '''
         Removes all injury (and their side-effects) from a fighter.
         '''
-        if 'permanent' not in fighter_details:
+        if 'permanent' not in fighter.details:
             return
 
-        for stat in fighter_details['permanent'].iterkeys():
-            fighter_details['current'][stat] = (
-                                        fighter_details['permanent'][stat])
-        if (fighter_details['state'] != 'absent' and
-                                        fighter_details['state'] != 'fight'):
-            fighter_details['state'] = 'alive'
-        # TODO: if ['Options']['reload-on-heal']: reload
+        for stat in fighter.details['permanent'].iterkeys():
+            fighter.details['current'][stat] = (
+                                        fighter.details['permanent'][stat])
+        if (fighter.details['state'] != 'absent' and
+                                        fighter.details['state'] != 'fight'):
+            fighter.details['state'] = 'alive'
+
+        if ('reload-on-heal' in world.details['Options'] and 
+                            world.details['Options']['reload-on-heal'] and
+                            fighter.group == 'PCs'):
+            throw_away, original_weapon_index = fighter.get_current_weapon()
+            for index, item in enumerate(fighter.details['stuff']):
+                if item['type'] == 'ranged weapon':
+                    fighter.draw_weapon_by_index(index)
+                    self.do_action(fighter,
+                                   {'name': 'reload',
+                                    'comment': 'Reloading on heal',
+                                    'notimer': True,
+                                    'quiet': True},
+                                   None)
+            fighter.draw_weapon_by_index(original_weapon_index)
 
 
     def make_empty_creature(self):
@@ -3435,7 +3451,12 @@ class Ruleset(object):
 
     def _adjust_hp(self,
                    fighter,          # Fighter object
-                   action,           # {'name': <action>, parameters...}
+                   action,           # {'name': 'adjust-hp',
+                                     #  'adj': <int> # add to HP
+                                     #  'quiet': <bool> # use defaults for all
+                                     #                    user interactions --
+                                     #                    optional
+                                     # }
                    fight_handler,    # FightHandler object
                   ):
         fighter.details['current']['hp'] += action['adj']
@@ -3470,7 +3491,6 @@ class Ruleset(object):
                            action,           # {'name': <action>, parameters...}
                            fight_handler,    # FightHandler object
                           ):
-        # TODO: ask how long this custom action should take
         height = 1
         title = 'What Action Is Performed'
         width = self._window_manager.getmaxyx()
@@ -3481,7 +3501,17 @@ class Ruleset(object):
 
     def __do_reload(self,
                     fighter,          # Fighter object
-                    action,           # {'name': <action>, parameters...}
+                    action,           # {'name': 'reload',
+                                      #  'comment': <string>, # optional
+                                      #  'notimer': <bool>, # whether to
+                                      #                       return a timer
+                                      #                       for the fighter
+                                      #                       -- optional
+                                      #  'quiet': <bool>    # use defaults for
+                                      #                       all user
+                                      #                       interactions
+                                      #                       -- optional
+                                      # }
                     fight_handler,    # FightHandler object
                   ):
         '''
@@ -5867,16 +5897,18 @@ class GurpsRuleset(Ruleset):
         return ['dx'] # Camel in Cairo -- should never get here
 
 
+    # GurpsRuleset
     def heal_fighter(self,
-                     fighter_details    # Details is OK, here
+                     fighter,   # Fighter object
+                     world      # World object
                     ):
         '''
         Removes all injury (and their side-effects) from a fighter.
         '''
-        super(GurpsRuleset, self).heal_fighter(fighter_details)
-        fighter_details['shock'] = 0
-        fighter_details['stunned'] = False
-        fighter_details['check_for_death'] = False
+        super(GurpsRuleset, self).heal_fighter(fighter, world)
+        fighter.details['shock'] = 0
+        fighter.details['stunned'] = False
+        fighter.details['check_for_death'] = False
 
 
     def initiative(self,
@@ -6856,7 +6888,17 @@ class GurpsRuleset(Ruleset):
 
     def __do_reload(self,
                     fighter,          # Fighter object
-                    action,           # {'name': 'reload', parameters...}
+                    action,           # {'name': 'reload',
+                                      #  'comment': <string>, # optional
+                                      #  'notimer': <bool>, # whether to
+                                      #                       return a timer
+                                      #                       for the fighter
+                                      #                       -- optional
+                                      #  'quiet': <bool>    # use defaults for
+                                      #                       all user
+                                      #                       interactions
+                                      #                       -- optional
+                                      # }
                     fight_handler,    # FightHandler object
                   ):
         '''
@@ -6875,6 +6917,13 @@ class GurpsRuleset(Ruleset):
         weapon, weapon_index = fighter.get_current_weapon()
         if weapon is None or 'ammo' not in weapon:
             return None
+
+        # Check to see if we need a reload at all
+
+        if weapon['ammo']['shots_left'] == weapon['ammo']['shots']:
+            return None
+
+        # If we do, how long will it take?
 
         reload_time = weapon['reload']
 
@@ -6898,18 +6947,28 @@ class GurpsRuleset(Ruleset):
 
                     
         if reload_time > 0:
-            self.do_action(fighter,
-                           {'name': 'reload-really',
-                            'time': reload_time},
-                           fight_handler)
+            new_action = {'name': 'reload-really', 'time': reload_time}
+            if 'notimer' in action:
+                new_action['notimer'] = action['notimer']
+            self.do_action(fighter, new_action, fight_handler)
 
         return None # No timer
 
 
     def __do_reload_really(self,
-                           fighter,          # Fighter object
-                           action,           # {'name': 'reload-really',
-                                             #  'time': <duration>}
+                           fighter, # Fighter object
+                           action,  # {'name': 'reload-really',
+                                    #  'comment': <string>, # optional
+                                    #  'notimer': <bool>, # whether to
+                                    #                       return a timer
+                                    #                       for the fighter
+                                    #                       -- optional
+                                    #  'quiet': <bool>    # use defaults for
+                                    #                       all user
+                                    #                       interactions
+                                    #                       -- optional
+                                    #  'time': <duration>}
+                                    # }
                            fight_handler,    # FightHandler object
                          ):
         '''
@@ -6926,13 +6985,15 @@ class GurpsRuleset(Ruleset):
 
         # Timer
 
-        timer = Timer(None)
-        timer.from_pieces( 
-                    {'parent-name': fighter.name,
-                     'rounds': action['time'] - Timer.announcement_margin,
-                     'string': 'RELOADING'} )
+        timer = None
+        if 'notimer' not in action or not action['notimer']:
+            timer = Timer(None)
+            timer.from_pieces( 
+                        {'parent-name': fighter.name,
+                         'rounds': action['time'] - Timer.announcement_margin,
+                         'string': 'RELOADING'} )
 
-        timer.mark_owner_as_busy()  # When reloading, the owner is busy
+            timer.mark_owner_as_busy()  # When reloading, the owner is busy
 
         return timer
 
@@ -7883,9 +7944,6 @@ class FightHandler(ScreenHandler):
         #   'monsters': <name> # group name of the monsters in the fight
         # }
 
-        # TODO: keep the fighter objects for the PCs and NPCs in the World
-        #   object .
-
         fight_order = None
         if self._saved_fight['saved']:
             if save_snapshot:   # True, except for tests
@@ -8238,9 +8296,6 @@ class FightHandler(ScreenHandler):
             self._window_manager.error(['There\'s already an NPC named %s' %
                                         new_NPC.name])
             return True
-
-        # TODO: do we need to call 'get_creature_details' in case 'details'
-        #   is a redirect?
 
         details_copy = copy.deepcopy(new_NPC.details)
         self.world.details['NPCs'][new_NPC.name] = details_copy
@@ -9680,15 +9735,16 @@ class MainHandler(ScreenHandler):
         return self.__notes('notes')
 
 
+    # MainHandler
     def __fully_heal(self):
         '''
         Command ribbon method.
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         for name in self.world.get_creature_details_list('PCs'):
-            details = self.world.get_creature_details(name, 'PCs')
-            if details is not None:
-                self.__ruleset.heal_fighter(details)
+            fighter = self.world.get_creature(name, 'PCs')
+            if fighter is not None:
+                self.__ruleset.heal_fighter(fighter, self.world)
         self._draw_screen()
         return True
 
@@ -9717,6 +9773,7 @@ class MainHandler(ScreenHandler):
         return True # Keep going
 
 
+    # MainHandler
     def __heal(self):
         '''
         Command ribbon method.
@@ -9725,7 +9782,8 @@ class MainHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        self.__ruleset.heal_fighter(self.__chars[self.__char_index].details)
+        self.__ruleset.heal_fighter(self.__chars[self.__char_index],
+                                    self.world)
         self._draw_screen()
 
         return True
@@ -10143,6 +10201,9 @@ class MainHandler(ScreenHandler):
 
     def __setup_PC_list(self,
                         group=None):
+        '''
+        builds self.__chars, a list of Fighter objects
+        '''
         if group is not None:
             self.__chars = []
             monsters = self.world.get_creature_details_list(group)

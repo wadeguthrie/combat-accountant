@@ -3245,11 +3245,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Empty out the ammo and fire a couple of times
 
-        for reload_count in range(self.__vodou_priest_ammo_count):
+        shots_taken = 0
+        while ammo['count'] != 0:
+            self.__ruleset.do_action(vodou_priest, 
+                                     {'name': 'attack'},
+                                     mock_fight_handler)
+            shots_taken += 1
             self.__ruleset.do_action(vodou_priest, 
                                      {'name': 'reload'},
                                      mock_fight_handler)
-        shots_taken = 2
 
         for shot in range(shots_taken):
             self.__ruleset.do_action(vodou_priest, 
