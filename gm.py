@@ -7402,37 +7402,34 @@ class BuildFightHandler(ScreenHandler):
             if self.__template_name is None:
                 self.__new_template()
 
-            # TODO: allow just a blank creature made by:
-            # to_creature = self.__ruleset.make_empty_creature()
-
             # Based on which creature from the template
+            empty_creature = 'Blank Template'
             creature_menu = [(from_creature_name, from_creature_name)
                 for from_creature_name in
                         self.world.details['Templates'][self.__template_name]]
             creature_menu = sorted(creature_menu, key=lambda x: x[0].upper())
+            creature_menu.append((empty_creature, empty_creature))
 
             from_creature_name = self._window_manager.menu('Monster',
                                                            creature_menu)
-            # TODO: maybe not
-            if from_creature_name is None:
-                return True # Keep going
 
             # Generate the creature for the template
 
-            from_creature = (self.world.details[
-                        'Templates'][self.__template_name][from_creature_name])
             to_creature = self.__ruleset.make_empty_creature()
 
-            for key, value in from_creature.iteritems():
-                if key == 'permanent':
-                    for ikey, ivalue in value.iteritems():
-                        to_creature['permanent'][ikey] = (
-                            self.__get_value_from_template(ivalue,
+            if from_creature_name != empty_creature:
+                from_creature = (self.world.details[
+                        'Templates'][self.__template_name][from_creature_name])
+                for key, value in from_creature.iteritems():
+                    if key == 'permanent':
+                        for ikey, ivalue in value.iteritems():
+                            to_creature['permanent'][ikey] = (
+                                self.__get_value_from_template(ivalue,
                                                            from_creature))
-                        to_creature['current'][ikey] = to_creature[
+                            to_creature['current'][ikey] = to_creature[
                                                             'permanent'][ikey]
-                else:
-                    to_creature[key] = self.__get_value_from_template(
+                    else:
+                        to_creature[key] = self.__get_value_from_template(
                                                         value, from_creature)
 
             # Get the new creature name
