@@ -7404,9 +7404,20 @@ class BuildFightHandler(ScreenHandler):
 
             # Based on which creature from the template
             empty_creature = 'Blank Template'
-            creature_menu = [(from_creature_name, from_creature_name)
-                for from_creature_name in
-                        self.world.details['Templates'][self.__template_name]]
+
+            creature_menu = []
+            for from_creature_name in (
+                        self.world.details['Templates'][self.__template_name]):
+                if from_creature_name == empty_creature:
+                    self._window_manager.error(
+                        ['Template "%s" contains illegal template:' % 
+                                                        self.__template_name,
+                         '"%s". Replacing with an empty creature.' %
+                                                        empty_creature])
+                else:
+                    creature_menu.append((from_creature_name,
+                                          from_creature_name))
+
             creature_menu = sorted(creature_menu, key=lambda x: x[0].upper())
             creature_menu.append((empty_creature, empty_creature))
 
