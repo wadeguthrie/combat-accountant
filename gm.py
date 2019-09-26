@@ -660,8 +660,6 @@ class BuildFightGmWindow(GmWindow):
 
         self.show_description(highlighted_creature)
 
-        self.refresh() # TODO: needed?
-
 
     def status_ribbon(self,
                       group,            # name of group being modified,
@@ -1835,14 +1833,25 @@ class World(object):
         Saves a copy of the master JSON file to a debug directory.
         '''
 
-        # TODO: do unique numbers if there's already a file with the same name
-
         if tag is None:
             return None
 
         # Save the current JSON for debugging, later
-        debug_filename = os.path.join(World.debug_directory,
-                                      timeStamped('debug_json', tag, 'json'))
+        keep_going = True
+        count = 0
+
+        while keep_going:
+            counted_tag = '%s-%d' % (tag, count)
+            debug_filename = os.path.join(World.debug_directory,
+                                          timeStamped('debug_json',
+                                                      counted_tag,
+                                                      'json'))
+            if os.path.exists(debug_filename):
+                count += 1
+            else:
+                keep_going = False
+
+
         with open(debug_filename, 'w') as f:
             json.dump(self.details, f, indent=2)
 
@@ -7178,7 +7187,16 @@ class ScreenHandler(object):
         }
 
 
-        bug_report_json = timeStamped('bug_report', None, 'json')
+        keep_going = True
+        count = 0
+        while keep_going:
+            count_string = '%d' % count
+            bug_report_json = timeStamped('bug_report', count_string, 'json')
+            if os.path.exists(bug_report_json):
+                count += 1
+            else:
+                keep_going = False
+
         with open(bug_report_json, 'w') as f:
             json.dump(bug_report, f, indent=2)
 
