@@ -14,6 +14,15 @@ import re
 import sys
 import traceback
 
+'''
+GURPS is a trademark of Steve Jackson Games, and its rules and art are
+copyrighted by Steve Jackson Games. All rights are reserved by Steve Jackson
+Games. This game aid is the original creation of Wade Guthrie and is released
+for free distribution, and not for resale, under the permissions granted in
+the <a href="http://www.sjgames.com/general/online_policy.html">Steve Jackson
+Games Online Policy</a>.
+'''
+
 # TODO:
 #   - action['name'] -> action['action-name'] (to make various files easier to
 #     read)
@@ -3358,10 +3367,10 @@ class Ruleset(object):
         '''
 
         actions = {
-            'adjust-hp':            {'doit': self._adjust_hp},
-            'all-out-attack':       {'doit': self.__do_attack},
-            'attack':               {'doit': self.__do_attack},
-            'don-armor':            {'doit': self.__don_armor},
+            'adjust-hp':            {'doit': self._adjust_hp},  # done
+            'all-out-attack':       {'doit': self.__do_attack}, # done
+            'attack':               {'doit': self.__do_attack}, # done
+            'don-armor':            {'doit': self.__don_armor}, # done
             'draw-weapon':          {'doit': self.__draw_weapon},
             'end-turn':             {'doit': self.__end_turn},
             'pick-opponent':        {'doit': self.__pick_opponent},
@@ -3474,7 +3483,8 @@ class Ruleset(object):
 
     def __do_attack(self,
                     fighter,          # Fighter object
-                    action,           # {'name': <action>, parameters...}
+                    action,           # {'name': 'attack' | 'all-out-attack' |
+                                      #          'move-and-attack'
                     fight_handler     # FightHandler object
                    ):
         '''
@@ -3542,7 +3552,9 @@ class Ruleset(object):
 
     def __don_armor(self,
                     fighter,          # Fighter object
-                    action,           # {'name': <action>, parameters...}
+                    action,           # {'name': 'don-armor',
+                                      #  'armor-index': <int> # index in
+                                      #             fighter.details['stuff']
                     fight_handler,    # FightHandler object
                    ):
         '''
@@ -3650,6 +3662,29 @@ class Ruleset(object):
 
 class GurpsRuleset(Ruleset):
     '''
+    Steve Jackson Games appears to allow the creation of a "Game Aid" which is
+    PC-based and not a phone or tablet app.  This is done in
+    http://sjgames.com/general/online_policy.html. The relevant text is as
+    follows:
+
+        "If you mean [by 'So, does that mean I can...Create a character
+        generator or other game aid?] a "game aid" or "player aid" program,
+        yes, you certainly can, if it's for a PC-type computer and you
+        include the appropriate notices. We currently do not allow "apps"
+        for mobile devices to be created using our content or trademarks. [...]
+
+        We want to ENCOURAGE our fans to create these programs, share them
+        with the community, and have fun doing it. If you want to charge money
+        for a game aid based on our work, the Online Policy does NOT apply
+        . . . you must either get a license from us, or sell us the game aid
+        for distribution as a regular product, and either way we'll hold you
+        to professional standards. Email licensing@sjgames.com with a formal
+        proposal letter."
+
+    So, we're not charging, we're not putting this on a mobile device, and the
+    appropriate notices are included at the front of this code, so we _should_
+    be good.
+
     This is a place for all of the ruleset (e.g., GURPS, AD&D) specific
     stuff.
 
@@ -4628,22 +4663,22 @@ class GurpsRuleset(Ruleset):
 
         actions = {
             'adjust-fp':            {'doit': self.__do_adjust_fp},
-            'adjust-hp-really':     {'doit': self.__adjust_hp_really},
-            'aim':                  {'doit': self.__do_aim},
-            'all-out-attack':       {'doit': self.__do_attack},
-            'attack':               {'doit': self.__do_attack},
+            'adjust-hp-really':     {'doit': self.__adjust_hp_really},  # done
+            'aim':                  {'doit': self.__do_aim},            # done
+            'all-out-attack':       {'doit': self.__do_attack},         # done
+            'attack':               {'doit': self.__do_attack},         # done
             'cast-spell':           {'doit': self.__cast_spell},
             'cast-spell-really':    {'doit': self.__cast_spell_really},
             'change-posture':       {'doit': self.__change_posture},
             'check-for-death':      {'doit': self.__check_for_death},
             'concentrate':          {'doit': self.__do_nothing},
             'defend':               {'doit': self.__reset_aim},
-            'don-armor':            {'doit': self.__reset_aim},
+            'don-armor':            {'doit': self.__reset_aim},         # done
             'draw-weapon':          {'doit': self.__draw_weapon},
             'evaluate':             {'doit': self.__do_nothing},
             'feint':                {'doit': self.__do_nothing},
             'move':                 {'doit': self.__do_nothing},
-            'move-and-attack':      {'doit': self.__do_attack},
+            'move-and-attack':      {'doit': self.__do_attack},         # done
             'nothing':              {'doit': self.__do_nothing},
             'pick-opponent':        {'doit': self.__do_nothing},
             'reload':               {'doit': self.__do_reload},
@@ -6682,7 +6717,8 @@ class GurpsRuleset(Ruleset):
 
     def __do_aim(self,
                  fighter,      # Fighter object
-                 action,       # {'name': <action>, 'braced': True | False...
+                 action,       # {'name': 'aim',
+                               #  'braced': <bool> # see B364
                  fight_handler # FightHandler object
                 ):
         '''
@@ -6717,7 +6753,8 @@ class GurpsRuleset(Ruleset):
 
     def __do_attack(self,
                    fighter,          # Fighter object
-                   action,           # {'name': <action>, parameters...}
+                   action,           # {'name': 'attack' | 'all-out-attack' |
+                                     #          'move-and-attack'
                    fight_handler     # FightHandler object
                   ):
         '''
@@ -6793,7 +6830,7 @@ class GurpsRuleset(Ruleset):
 
     def __reset_aim(self,
                     fighter,          # Fighter object
-                    action,           # {'name': <action>, parameters...}
+                    action,           # {'name': 'defend' | 'don-armor'}
                     fight_handler     # FightHandler object
                    ):
         '''
