@@ -3367,10 +3367,10 @@ class Ruleset(object):
         '''
 
         actions = {
-            'adjust-hp':            {'doit': self._adjust_hp},  # done
-            'all-out-attack':       {'doit': self.__do_attack}, # done
-            'attack':               {'doit': self.__do_attack}, # done
-            'don-armor':            {'doit': self.__don_armor}, # done
+            'adjust-hp':            {'doit': self._adjust_hp},
+            'all-out-attack':       {'doit': self.__do_attack},
+            'attack':               {'doit': self.__do_attack},
+            'don-armor':            {'doit': self.__don_armor},
             'draw-weapon':          {'doit': self.__draw_weapon},
             'end-turn':             {'doit': self.__end_turn},
             'pick-opponent':        {'doit': self.__pick_opponent},
@@ -3471,6 +3471,7 @@ class Ruleset(object):
                    fighter,          # Fighter object
                    action,           # {'name': 'adjust-hp',
                                      #  'adj': <int> # add to HP
+                                     #  'comment': <string>, # optional
                                      #  'quiet': <bool> # use defaults for all
                                      #                    user interactions --
                                      #                    optional
@@ -3485,6 +3486,7 @@ class Ruleset(object):
                     fighter,          # Fighter object
                     action,           # {'name': 'attack' | 'all-out-attack' |
                                       #          'move-and-attack'
+                                      #  'comment': <string>, # optional
                     fight_handler     # FightHandler object
                    ):
         '''
@@ -3505,9 +3507,11 @@ class Ruleset(object):
         return Ruleset.HANDLED_OK 
 
 
+    # TODO: this should be a two-stage action like 'cast-spell'
     def __do_custom_action(self,
                            fighter,          # Fighter object
-                           action,           # {'name': <action>, parameters...}
+                           action,           # {'name': 'user-defined',
+                                             #  'comment': <string>, # optional
                            fight_handler,    # FightHandler object
                           ):
         height = 1
@@ -3554,7 +3558,9 @@ class Ruleset(object):
                     fighter,          # Fighter object
                     action,           # {'name': 'don-armor',
                                       #  'armor-index': <int> # index in
-                                      #             fighter.details['stuff']
+                                      #         fighter.details['stuff',
+                                      #         None doffs armor
+                                      #  'comment': <string> # optional
                     fight_handler,    # FightHandler object
                    ):
         '''
@@ -3567,7 +3573,11 @@ class Ruleset(object):
 
     def __draw_weapon(self,
                       fighter,          # Fighter object
-                      action,           # {'name': <action>, parameters...}
+                      action,           # {'name': 'draw-weapon',
+                                        #  'weapon-index': <int> # index in
+                                        #       fighter.details['stuff'],
+                                        #       None drops weapon
+                                        #  'comment': <string> # optional
                       fight_handler,    # FightHandler object
                      ):
         '''
@@ -3580,7 +3590,8 @@ class Ruleset(object):
 
     def __end_turn(self,
                    fighter,          # Fighter object
-                   action,           # {'name': <action>, parameters...}
+                   action,           # {'name': 'end-turn',
+                                     #  'comment': <string> # optional
                    fight_handler,    # FightHandler object
                   ):
         '''
@@ -3595,7 +3606,11 @@ class Ruleset(object):
 
     def __pick_opponent(self,
                         fighter,          # Fighter object
-                        action,           # {'name': <action>, parameters...}
+                        action,           # {'name': 'pick-opponent',
+                                          #  'opponent': 
+                                          #     {'name': opponent_name,
+                                          #      'group': opponent_group},
+                                          #  'comment': <string> # optional
                         fight_handler,    # FightHandler object
                        ):
         '''
@@ -3609,7 +3624,10 @@ class Ruleset(object):
 
     def __set_consciousness(self,
                             fighter,          # Fighter object
-                            action,           # {'name': <action>, params...}
+                            action,           # {'name': 'set-consciousness',
+                                              #  'level': <int> # see
+                                              #         Fighter.conscious_map
+                                              #  'comment': <string> # optional
                             fight_handler,    # FightHandler object
                            ):
         '''
@@ -3622,7 +3640,10 @@ class Ruleset(object):
 
     def __set_timer(self,
                     fighter,          # Fighter object
-                    action,           # {'name': <action>, parameters...}
+                    action,           # {'name': 'set-timer',
+                                      #  'timer': <dict> # see
+                                      #                    Timer::from_pieces
+                                      #  'comment': <string> # optional
                     fight_handler,    # FightHandler object
                    ):
 
@@ -3634,7 +3655,8 @@ class Ruleset(object):
 
     def __start_turn(self,
                      fighter,          # Fighter object
-                     action,           # {'name': <action>, parameters...}
+                     action,           # {'name': 'start-turn',
+                                       #  'comment': <string> # optional
                      fight_handler,    # FightHandler object
                     ):
         '''
@@ -3647,7 +3669,10 @@ class Ruleset(object):
 
     def __use_item(self,
                    fighter,          # Fighter object
-                   action,           # {'name': <action>, parameters...}
+                   action,           # {'name': 'use-item',
+                                     #  'item-index': <int> # index in
+                                     #       fighter.details['stuff']
+                                     #  'comment': <string>, # optional
                    fight_handler,    # FightHandler object
                   ):
         '''
@@ -4663,22 +4688,22 @@ class GurpsRuleset(Ruleset):
 
         actions = {
             'adjust-fp':            {'doit': self.__do_adjust_fp},
-            'adjust-hp-really':     {'doit': self.__adjust_hp_really},  # done
-            'aim':                  {'doit': self.__do_aim},            # done
-            'all-out-attack':       {'doit': self.__do_attack},         # done
-            'attack':               {'doit': self.__do_attack},         # done
+            'adjust-hp-really':     {'doit': self.__adjust_hp_really},
+            'aim':                  {'doit': self.__do_aim},
+            'all-out-attack':       {'doit': self.__do_attack},
+            'attack':               {'doit': self.__do_attack},
             'cast-spell':           {'doit': self.__cast_spell},
             'cast-spell-really':    {'doit': self.__cast_spell_really},
             'change-posture':       {'doit': self.__change_posture},
             'check-for-death':      {'doit': self.__check_for_death},
             'concentrate':          {'doit': self.__do_nothing},
             'defend':               {'doit': self.__reset_aim},
-            'don-armor':            {'doit': self.__reset_aim},         # done
+            'don-armor':            {'doit': self.__reset_aim},
             'draw-weapon':          {'doit': self.__draw_weapon},
             'evaluate':             {'doit': self.__do_nothing},
             'feint':                {'doit': self.__do_nothing},
             'move':                 {'doit': self.__do_nothing},
-            'move-and-attack':      {'doit': self.__do_attack},         # done
+            'move-and-attack':      {'doit': self.__do_attack},
             'nothing':              {'doit': self.__do_nothing},
             'pick-opponent':        {'doit': self.__do_nothing},
             'reload':               {'doit': self.__do_reload},
@@ -6149,8 +6174,9 @@ class GurpsRuleset(Ruleset):
 
     def _adjust_hp(self,
                    fighter,         # Fighter object
-                   action,          # {'name': <action>,
+                   action,          # {'name': 'adjust-hp',
                                     #  'adj': <number (usually < 0) HP change>,
+                                    #  'comment': <string>, # optional
                                     #  'quiet': <bool - use defaults for all
                                     #            user interactions.> }
                    fight_handler,
@@ -6375,7 +6401,8 @@ class GurpsRuleset(Ruleset):
 
     def __adjust_hp_really(self,
                            fighter,         # Fighter object
-                           action,          # {'name': <action>,
+                           action,          # {'name': 'adjust-hp-really',
+                                            #  'comment': <string>, # optional
                                             #  'adj': <number = HP change>,
                                             #  'quiet': <bool - use defaults
                                             #            for all user
@@ -6392,8 +6419,9 @@ class GurpsRuleset(Ruleset):
 
     def __cast_spell(self,
                      fighter,      # Fighter object
-                     action,       # {'name': <action>,
+                     action,       # {'name': 'cast-spell',
                                    #  'spell-index': <index in 'spells'>, ...
+                                   #  'comment': <string>, # optional
                      fight_handler # FightHandler object
                     ):
         '''
@@ -6498,9 +6526,13 @@ class GurpsRuleset(Ruleset):
 
     def __cast_spell_really(self,
                             fighter,      # Fighter object
-                            action,       # {'name': <action>,
-                                          #  'spell-index':
-                                          #     <index in 'spells'>, ...
+                            action,       # {'name': 'cast-spell-really'
+                                          #  'complete spell': <dict> # this
+                                          #     is a combination of the spell
+                                          #     in the character details and
+                                          #     the same spell from the
+                                          #     ruleset
+                                          #  'comment': <string>, # optional
                             fight_handler # FightHandler object
                            ):
 
@@ -6593,7 +6625,10 @@ class GurpsRuleset(Ruleset):
 
     def __change_posture(self,
                          fighter,          # Fighter object
-                         action,           # {'name': <action>, parameters...}
+                         action,           # {'name': 'change-posture',
+                                           #  'posture': <string> # posture
+                                           #        from GurpsRuleset.posture
+                                           #  'comment': <string>, # optional
                          fight_handler     # FightHandler object
                         ):
         '''
@@ -6622,7 +6657,8 @@ class GurpsRuleset(Ruleset):
     def __check_for_death(self,
                           fighter,          # Fighter object
                           action,           # {'name': 'check-for-death',
-                                            #  'value': <bool>}
+                                            #  'value': <bool>,
+                                            #  'comment': <string>, # optional
                           fight_handler     # FightHandler object
                          ):
         fighter.details['check_for_death'] = action['value']
@@ -6675,7 +6711,9 @@ class GurpsRuleset(Ruleset):
 
     def __do_adjust_fp(self,
                        fighter,      # Fighter object
-                       action,       # {'name': <action>, parameters...}
+                       action,       # {'name': 'adjust-fp', 
+                                     #  'adj': <int> # number to add to FP
+                                     #  'comment': <string>, # optional
                        fight_handler # FightHandler object (for logging)
                       ):
         # See B426 for consequences of loss of FP
@@ -6708,7 +6746,9 @@ class GurpsRuleset(Ruleset):
 
     def __do_adjust_shock(self,
                  fighter,      # Fighter object
-                 action,       # {'name': <action>, 'braced': True | False...
+                 action,       # {'name': 'shock',
+                               #  'value': <int> # level to which to set shock
+                               #  'comment': <string>, # optional
                  fight_handler # FightHandler object
                 ):
         fighter.details['shock'] = action['value']
@@ -6719,6 +6759,7 @@ class GurpsRuleset(Ruleset):
                  fighter,      # Fighter object
                  action,       # {'name': 'aim',
                                #  'braced': <bool> # see B364
+                               #  'comment': <string>, # optional
                  fight_handler # FightHandler object
                 ):
         '''
@@ -6755,6 +6796,7 @@ class GurpsRuleset(Ruleset):
                    fighter,          # Fighter object
                    action,           # {'name': 'attack' | 'all-out-attack' |
                                      #          'move-and-attack'
+                                     #  'comment': <string>, # optional
                    fight_handler     # FightHandler object
                   ):
         '''
@@ -6830,7 +6872,10 @@ class GurpsRuleset(Ruleset):
 
     def __reset_aim(self,
                     fighter,          # Fighter object
-                    action,           # {'name': 'defend' | 'don-armor'}
+                    action,           # {'name': 'defend' | 'don-armor' |
+                                      #          'reset-aim' |
+                                      #          'set-consciousness',
+                                      #  'comment': <string>, # optional
                     fight_handler     # FightHandler object
                    ):
         '''
@@ -6866,7 +6911,15 @@ class GurpsRuleset(Ruleset):
 
     def __do_nothing(self,
                      fighter,      # Fighter object
-                     action,       # {'name': <action>, ...
+                     action,       # {'name': 'concentrate' | 'evaluate' |
+                                   #          'feint' | 'move' | 'nothing' |
+                                   #          'pick-opponent' | 'use-item' |
+                                   #          'user-defined',
+                                   #  'comment': <string>, # optional
+                                   #
+                                   # NOTE: Some actions have other
+                                   # parameters used buy |Ruleset|
+                                   #
                      fight_handler # FightHandler object
                     ):
         '''
@@ -6935,11 +6988,11 @@ class GurpsRuleset(Ruleset):
     def __do_reload(self,
                     fighter,          # Fighter object
                     action,           # {'name': 'reload',
-                                      #  'comment': <string>, # optional
                                       #  'notimer': <bool>, # whether to
                                       #                       return a timer
                                       #                       for the fighter
                                       #                       -- optional
+                                      #  'comment': <string>, # optional
                                       #  'quiet': <bool>    # use defaults for
                                       #                       all user
                                       #                       interactions
@@ -7004,11 +7057,11 @@ class GurpsRuleset(Ruleset):
     def __do_reload_really(self,
                            fighter, # Fighter object
                            action,  # {'name': 'reload-really',
-                                    #  'comment': <string>, # optional
                                     #  'notimer': <bool>, # whether to
                                     #                       return a timer
                                     #                       for the fighter
                                     #                       -- optional
+                                    #  'comment': <string>, # optional
                                     #  'quiet': <bool>    # use defaults for
                                     #                       all user
                                     #                       interactions
@@ -7046,7 +7099,11 @@ class GurpsRuleset(Ruleset):
 
     def __draw_weapon(self,
                       fighter,          # Fighter object
-                      action,           # {'name': <action>, parameters...}
+                      action,           # {'name': 'draw-weapon',
+                                        #  'weapon-index': <int> # index in
+                                        #       fighter.details['stuff'],
+                                        #       None drops weapon
+                                        #  'comment': <string>, # optional
                       fight_handler,    # FightHandler object
                      ):
         '''
@@ -7128,7 +7185,9 @@ class GurpsRuleset(Ruleset):
 
     def __stun_action(self,
                       fighter,          # Fighter object
-                      action,           # {'name': <action>, parameters...}
+                      action,           # {'name': 'stun',
+                                        #  'stun': False}
+                                        #  'comment': <string>, # optional
                       fight_handler,    # FightHandler object
                      ):
         fighter.details['stunned'] = action['stun']
