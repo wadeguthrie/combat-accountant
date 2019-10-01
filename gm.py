@@ -7217,6 +7217,7 @@ class ScreenHandler(object):
 
         self._saved_fight = self.world.details['current-fight']
 
+        # Install default command ribbon command(s).
         self._choices = {
             ord('B'): {'name': 'Bug Report', 'func': self._make_bug_report},
         }
@@ -7225,16 +7226,27 @@ class ScreenHandler(object):
     def add_to_history(self,
                        action # {'name':xxx, ...} - see Ruleset::do_action()
                       ):
+        '''
+        Adds an action (see Ruleset::do_action) to the saved information for
+        this session.
+        '''
         self.world.add_to_history(action)
 
 
     def clear_history(self):
+        '''
+        Deletes all of the saved information for this session.
+        '''
         self.world.clear_history()
 
 
     def handle_user_input_until_done(self):
         '''
-        Draws the screen and does event loop (gets input, responds to input)
+        Draws the screen and does event loop (gets single-character input,
+        looks up input in self._choices (i.e., the command ribbon commands),
+        and calls the associated function (if any).
+
+        Returns: nothing
         '''
         self._draw_screen()
 
@@ -7251,7 +7263,28 @@ class ScreenHandler(object):
     # Protected Methods
     #
 
-    def _add_to_choice_dict(self, new_choices):
+    def _add_to_choice_dict(self,
+                            new_choices # dict: {
+                                        # key_char: {'name': long description,
+                                        #            'func': function to
+                                        #                    execute if this
+                                        #                    is selected
+                           ):
+        '''
+        Adds options to the command ribbon.  
+
+        key_char is the character someone would need to hit to invoke the
+        choice.  The key_char can be of the following forms:
+            ord('d')
+            curses.KEY_UP
+
+        The 'name' is shown (next to the key_char) on the screen.
+
+        The 'func' is executed if the selection is chosen.
+
+        Returns: nothing
+        '''
+
         # Check for errors...
         for key in self._choices.iterkeys():
             if key in new_choices:
@@ -7260,16 +7293,23 @@ class ScreenHandler(object):
                 return False # Found a problem
 
         self._choices.update(new_choices)
-        return True # Everything's good
 
 
     def _draw_screen(self):
+        '''
+        Every screen should have a '_draw_screen' method to display the whole
+        screen.  This is here as a placeholder.
+        '''
         pass
 
 
     def _make_bug_report(self):
         '''
         Command ribbon method.
+
+        Gathers all the information required (I hope) to reproduce a bug and
+        writes it to a file.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         lines, cols = self._window_manager.getmaxyx()
