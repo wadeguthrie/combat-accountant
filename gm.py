@@ -7312,6 +7312,11 @@ class ScreenHandler(object):
 
 
 class BuildFightHandler(ScreenHandler):
+    '''
+    Adds creatures to the PC, NPC, or a monster list (possibly creating a new
+    monster list).  These creatures are created from one of the templates
+    provided in the World's JSON file.
+    '''
     (NPCs,
      PCs,
      MONSTERs) = range(3)
@@ -7394,7 +7399,12 @@ class BuildFightHandler(ScreenHandler):
                              adj  # integer adjustment to viewing index
                             ):
         '''
+        Changes the index of the current creature.  The current creature is
+        the one that's modified.
+
         NOTE: this breaks if |adj| is > len(self.__critters['data'])
+
+        Returns: nothing.
         '''
 
         len_list = len(self.__critters['data'])
@@ -7415,6 +7425,10 @@ class BuildFightHandler(ScreenHandler):
 
 
     def get_group_name(self):
+        '''
+        Returns the name of the group ('PCs', 'NPCs', or the monster group)
+        that is currently being modified.
+        '''
         return self.__group_name
 
 
@@ -7423,6 +7437,11 @@ class BuildFightHandler(ScreenHandler):
     #
 
     def _draw_screen(self):
+        '''
+        Draws the complete screen for the FightHandler.
+
+        Returns: nothing.
+        '''
         self._window.clear()
         self._window.status_ribbon(self.__group_name,
                                    self.__template_name,
@@ -7554,7 +7573,8 @@ class BuildFightHandler(ScreenHandler):
         
             if self.__group_name != 'PCs':
                 with GmJson('gm-npc-random-detail.json') as npc_detail:
-                    for name, traits in npc_detail.read_data['traits'].iteritems():
+                    for name, traits in (
+                                npc_detail.read_data['traits'].iteritems()):
                         trait = random.choice(traits)
                         if isinstance(trait, dict):
                             trait_array = [trait['text']]
@@ -7650,6 +7670,9 @@ class BuildFightHandler(ScreenHandler):
     def __delete_creature(self):
         '''
         Command ribbon method.
+
+        Removes a creature from the creature list.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         if self.__viewing_index is None:
@@ -7699,6 +7722,10 @@ class BuildFightHandler(ScreenHandler):
 
         '''
         Command ribbon method.
+
+        Selects an existing group as the current group to modify.  Builds out
+        all of the necessary pieces to make that happen.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
@@ -7790,6 +7817,11 @@ class BuildFightHandler(ScreenHandler):
                                   template_value,
                                   template
                                  ):
+        '''
+        Expands a template item based on the template item's type.
+
+        Returns the expanded value.
+        '''
         if template_value['type'] == 'value':
             return template_value['value']
 
@@ -7806,6 +7838,10 @@ class BuildFightHandler(ScreenHandler):
     def __name_and_obj_from_index(self,
                                   index, # index into self.__critters['obj']
                                  ):
+        '''
+        Returns the name and Fighter/Venue object from the index into the
+        __critters list.
+        '''
         if index is None:
             return None, None
 
@@ -7880,7 +7916,11 @@ class BuildFightHandler(ScreenHandler):
 
     def __make_template(self):
         '''
+        Command ribbon method.
+
         Creates a template from a creature.  Puts it in the same section.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
         # A little error checking
@@ -7945,6 +7985,9 @@ class BuildFightHandler(ScreenHandler):
     def __new_template(self):
         '''
         Command ribbon method.
+
+        Selects a new (existing) template to use to make new creatures.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         # Get the new group info.
@@ -7969,6 +8012,9 @@ class BuildFightHandler(ScreenHandler):
     def __quit(self):
         '''
         Command ribbon method.
+
+        Quits out of the BuildFightHandler.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
@@ -7981,6 +8027,14 @@ class BuildFightHandler(ScreenHandler):
 
 
     def __view_prev(self): # look at previous character
+        '''
+        Command ribbon method.
+
+        Changes the current creature to the previous one, wrapping if
+        necessary.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
         self.change_viewing_index(-1)
         # BuildFightGmWindow
         self._window.show_creatures(self.__critters['obj'],
@@ -7990,6 +8044,14 @@ class BuildFightHandler(ScreenHandler):
 
 
     def __view_next(self): # look at next character
+        '''
+        Command ribbon method.
+
+        Changes the current creature to the next one, wrapping if
+        necessary.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
         self.change_viewing_index(1)
         # BuildFightGmWindow
         self._window.show_creatures(self.__critters['obj'],
