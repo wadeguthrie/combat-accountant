@@ -7999,6 +7999,20 @@ class BuildFightHandler(ScreenHandler):
 
 
 class FightHandler(ScreenHandler):
+    '''
+    Manages a fight between the PCs and a monster group.
+
+    The Fighters are all shown, intermingled, in initiative order (i.e., the
+    order that they may take action, in a fight).
+
+    Operations are communicated with text-based |actions|.  Each action is
+    saved to the fight's history so that they can be displayed or can be
+    replayed on top of a snapshot of the World taken when the fight starts.
+
+    Has the concept of the "current" Fighter or Venue.  That's normally, the
+    Fighter that has initiative but the user can can selete another with up
+    and down buttons.
+    '''
     def __init__(self,
                  window_manager,        # GmWindowManager object for menus and
                                         #   errors
@@ -8146,11 +8160,11 @@ class FightHandler(ScreenHandler):
     # Public Methods
     #
 
-    def display_window(self,
-                       title,
-                       lines  # [{'text', 'mode'}, ...]
-                      ):
-        return True
+    #def display_window(self,
+    #                   title,
+    #                   lines  # [{'text', 'mode'}, ...]
+    #                  ):
+    #    return True
 
 
     def get_current_fighter(self):              # Public to support testing
@@ -8162,16 +8176,22 @@ class FightHandler(ScreenHandler):
 
 
     def get_fighters(self):                     # Public to support testing
-        '''  '''
+        '''
+        Returns a list of information for all the Fighters in self.__fighters.
+        '''
         return [{'name': fighter.name,
                  'group': fighter.group,
                  'details': fighter.details} for fighter in self.__fighters]
 
 
     def get_fighter_object(self,
-                           name,  # name of a fighter in that group
-                           group  # 'PCs' or group under world['fights']
+                           name,  # <string> name of a fighter in that group
+                           group  # <string> 'PCs' or group under
+                                  #     world['fights']
                           ):
+        '''
+        Returns the Fighter object given the name and group of the fighter, 
+        '''
         for fighter in self.__fighters:
             if fighter.group == group and fighter.name == name:
                 return fighter
@@ -8182,7 +8202,7 @@ class FightHandler(ScreenHandler):
     def get_opponent_for(self,
                          fighter # Fighter object
                         ):
-        ''' Returns Fighter object for opponent of 'fighter'. '''
+        ''' Returns Fighter object for opponent of |fighter|. '''
         if (fighter is None or fighter.name == Venue.name or
                                         fighter.details['opponent'] is None):
             return None
@@ -8196,6 +8216,8 @@ class FightHandler(ScreenHandler):
     def handle_user_input_until_done(self):
         '''
         Draws the screen and does event loop (gets input, responds to input)
+
+        Returns: nothing
         '''
         self._draw_screen()
 
@@ -8266,11 +8288,31 @@ class FightHandler(ScreenHandler):
             self.world.remove_fight(fight_group)
 
 
+    def keep_fight(self,
+                   throw_away   # Required/used by the caller because
+                                #   there's a list of methods to call,
+                                #   and (apparently) some of them may
+                                #   use this parameter.  It's ignored
+                                #   by this method, however.
+                  ):
+        '''
+        Don't remove the fight from the list of fights when we're done with it.
+        This is useful if the fight contains creatures that we're going to
+        need later or if the party disengages from the fight but might come
+        back to it.
+        '''
+        self.__keep_monsters = True
+        return True # Keep asking questions
+
+
     def modify_index(self,                      # Public to support testing
                      adj      # 1 or -1, adjust the index by this
                     ):
         '''
-        Increment or decrement the index.  Only stop on living creatures.
+        Increment or decrement the index to the Fighter that has the
+        initiative.  Only stop on living creatures.
+
+        Returns: nothing
         '''
         first_index = self._saved_fight['index']
 
@@ -8322,14 +8364,22 @@ class FightHandler(ScreenHandler):
     def pick_opponent(self):
         '''
         Command ribbon method.
+
+        Allows the user to choose an opponent for the current Fighter.  If the
+        opponent does not currently have an opponent of his/her own, it gives
+        the user the option of making that opposition mutual (so that the two
+        Fighters are opponents of each other).
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+
         if self.__viewing_index is not None:
             current_fighter = self.__fighters[self.__viewing_index]
         else:
             current_fighter = self.get_current_fighter()
 
-        # Pick the opponent.
+        # Pick the opponent.  The default selection is for someone who doesn't
+        # already have an opponent.
 
         opponent_group = None
         opponent_menu = []
@@ -8401,6 +8451,14 @@ class FightHandler(ScreenHandler):
 
 
     def promote_to_NPC(self):                       # Public to support testing
+        '''
+        Command ribbon method.
+
+        Converts a monster to an NPC.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
         if self.__viewing_index is not None:
             new_NPC = self.__fighters[self.__viewing_index]
         else:
@@ -8454,6 +8512,13 @@ class FightHandler(ScreenHandler):
 
 
     def set_viewing_index(self, new_index):     # Public to support testing.
+        '''
+        Selects a different Fighter or Venue as the currently viewed one.
+        Some commands will used the currently viewed entity as their default
+        recipient.
+
+        Returns: Nothing
+        '''
         self.__viewing_index = new_index
 
 
@@ -8479,17 +8544,6 @@ class FightHandler(ScreenHandler):
         return show_fighter
 
 
-    def keep_fight(self,
-                   throw_away   # Required/used by the caller because
-                                #   there's a list of methods to call,
-                                #   and (apparently) some of them may
-                                #   use this parameter.  It's ignored
-                                #   by this method, however.
-                  ):
-        self.__keep_monsters = True
-        return True # Keep asking questions
-
-
     def save_fight(self,
                    throw_away   # Required/used by the caller because
                                 #   there's a list of methods to call,
@@ -8497,6 +8551,10 @@ class FightHandler(ScreenHandler):
                                 #   use this parameter.  It's ignored
                                 #   by this method, however.
                   ):
+        '''
+        Save the fight so that it is the run the next time we start fighting
+        (i.e., if we need to interrupt this fight and continue it, later).
+        '''
         self._saved_fight['saved'] = True
         return True # Keep asking questions
 
@@ -8508,20 +8566,27 @@ class FightHandler(ScreenHandler):
                              monster_group, # String
                              fight_order    # {name: {group: index, ...}, ...
                             ):
+        '''
+        Creates the list of Fighters and the Venue.  This includes the PCs,
+        the monster group, and the location of the fight.  They're created in
+        initiative order (i.e., the order in which they act in a round of
+        fighting, according to the ruleset).
+        '''
 
         # Build the fighter list (even if the fight was saved since monsters
         # or characters could have been added since the save happened).
 
         self.__fighters = [] # This is a parallel array to
                              # self._saved_fight['fighters'] but the contents
-                             # are: {'group': <groupname>,
-                             #       'info': <Fighter object>}
+                             # are ThingsInFight (i.e., Fighters or a Venue)
 
+        # Start with the PCs
         for name in self.world.get_creature_details_list('PCs'):
             fighter = self.world.get_creature(name, 'PCs')
             if fighter is not None:
                 self.__fighters.append(fighter)
 
+        # Then add the monsters (and the Venue, if it exists)
         the_fight_itself = None
         if monster_group is not None:
             for name in self.world.get_creature_details_list(monster_group):
@@ -8536,6 +8601,7 @@ class FightHandler(ScreenHandler):
                     fighter = self.world.get_creature(name, monster_group)
                     self.__fighters.append(fighter)
 
+        # Put the creatures in order
         if fight_order is None:
             # Sort by initiative = basic-speed followed by DEX followed by
             # random
@@ -8562,6 +8628,13 @@ class FightHandler(ScreenHandler):
     def __change_viewing_index(self,
                                adj  # integer adjustment to viewing index
                               ):
+        '''
+        Selects a different Fighter or Venue as the currently viewed one.
+        Some commands will used the currently viewed entity as their default
+        recipient.
+
+        Returns: Nothing
+        '''
         self.__viewing_index += adj
         if self.__viewing_index >= len(self._saved_fight['fighters']):
             self.__viewing_index = 0
@@ -8572,6 +8645,10 @@ class FightHandler(ScreenHandler):
     def __damage_HP(self):
         '''
         Command ribbon method.
+
+        Removes life levels (or 'hit points' -- HP) from the selected fighter
+        or the current fighter's opponent.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
@@ -8667,6 +8744,11 @@ class FightHandler(ScreenHandler):
     def __dead(self):
         '''
         Command ribbon method.
+
+        Allows the user to change the consciousness level of a creature.  This
+        may cause it to become dead, reanimate back to life, or go
+        unconscious, for example.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         now_dead, current_fighter = self.__select_fighter('Who is Dead',
@@ -8705,9 +8787,11 @@ class FightHandler(ScreenHandler):
 
     def __defend(self):
         '''
-        Performed on the opponent of the current fighter.
-
         Command ribbon method.
+
+        Allows the user to pick a creature to defend itself.  In some rulesets
+        (GURPS, for example), that would cause the creature to lose aim.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
@@ -8761,6 +8845,12 @@ class FightHandler(ScreenHandler):
 
 
     def _draw_screen(self):
+        '''
+        Draws the complete screen for the FightHandler.
+
+        Returns: nothing.
+        '''
+
         self._window.clear()
         current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
@@ -8780,18 +8870,33 @@ class FightHandler(ScreenHandler):
 
 
     def __full_notes(self):
+        '''
+        Command ribbon method.
+
+        Allows the user to modify the current fighter's full notes.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
         return self.__notes('notes')
 
 
-    def __get_fighter_details(self,
-                              name,     # string
-                              group     # string
-                             ):
-        ''' Used for constructing a Fighter from the JSON information. '''
-        return self.world.get_creature_details(name, group)
+    #def __get_fighter_details(self,
+    #                          name,     # string
+    #                          group     # string
+    #                         ):
+    #    ''' Used for constructing a Fighter from the JSON information. '''
+    #    return self.world.get_creature_details(name, group)
 
 
     def __give_equipment(self):
+        '''
+        Command ribbon method.
+
+        Allows user to transfer one item of equipment from the "current"
+        Fighter or Venue to another figher.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
         if self.__viewing_index is not None:
             from_fighter = self.__fighters[self.__viewing_index]
         else:
@@ -8831,6 +8936,8 @@ class FightHandler(ScreenHandler):
         '''
         out_of_commision_fighter.timers.decrement_all()
         out_of_commision_fighter.timers.remove_expired_kill_dying()
+        # NOTE: if a ruleset has bleeding rules, there would be a call to the
+        # ruleset, here.
 
 
     def __loot_bodies(self,
@@ -8841,8 +8948,8 @@ class FightHandler(ScreenHandler):
                                    #   by this method, however.
                      ):
         '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
+        Gives the user the option to distribute the equipment of all the
+        unconscious or dead monsters among the PCs.
         '''
 
         if self.__viewing_index != self._saved_fight['index']:
@@ -8907,6 +9014,10 @@ class FightHandler(ScreenHandler):
     def __maneuver(self):
         '''
         Command ribbon method.
+
+        Provides a menu of activities that the current Fighter can perform.
+        Performs the selected one.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
@@ -8933,9 +9044,6 @@ class FightHandler(ScreenHandler):
 
             self.__ruleset.do_action(current_fighter, maneuver['action'], self)
 
-        # a round count larger than 0 will get shown but less than 1 will
-        # get deleted before the next round
-
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
                                    opponent,
@@ -8948,6 +9056,10 @@ class FightHandler(ScreenHandler):
     def __next_fighter(self):
         '''
         Command ribbon method.
+
+        Close-out the actions of the current fighter and start the actions of
+        the next fighter in the fight.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         self.__viewing_index = None
@@ -8982,7 +9094,10 @@ class FightHandler(ScreenHandler):
 
     def __next_PC_name(self):
         '''
-        Finds the name of the next PC to fight _after_ the current index.
+        Finds the name of the next PC (note: the next PC, not the next
+        Fighter) to fight _after_ the current initiative.
+
+        Returns the name of that PC.
         '''
 
         next_PC_name = None
@@ -9003,6 +9118,9 @@ class FightHandler(ScreenHandler):
                ):
         '''
         Command ribbon method.
+
+        Allows the user to modify a Fighter's notes or short-notes.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         notes_recipient, current_fighter = self.__select_fighter(
@@ -9038,6 +9156,15 @@ class FightHandler(ScreenHandler):
 
 
     def __playback_history(self):
+        '''
+        Command ribbon method.
+
+        If we're reproducing a scenario (like from a bug report), we're
+        provided with a sequence of history.  This routine plays that entire
+        sequence.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
         next_fighter = self.get_current_fighter()
         self.world.playing_back = True
         for action in self.__saved_history:
@@ -9075,6 +9202,12 @@ class FightHandler(ScreenHandler):
     def __prev_fighter(self):
         '''
         Command ribbon method.
+
+        Move the initiative of the fight to the PREVIOUS character.  This is
+        against the normal flow of actions but it's here in case the user
+        inadvertently advanced the initiative or remembered something s/he
+        wanted the previous fighter to have done.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         self.__viewing_index = None
@@ -9101,6 +9234,13 @@ class FightHandler(ScreenHandler):
     def __quit(self):
         '''
         Command ribbon method.
+
+        Quits the fight.  Gives the option to loot the bodies of unconscious
+        (or worse) monsters.  Gives the option to keep the fight to be
+        available to be fought another day, or to save the fight so that it'll
+        be automatically chosen to be continued the next time the user goes to
+        fight.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
@@ -9158,6 +9298,13 @@ class FightHandler(ScreenHandler):
 
 
     def __short_notes(self):
+        '''
+        Command ribbon method.
+
+        Lets the user edit a fighter's (or Venue's) short notes.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
         return self.__notes('short-notes')
 
 
@@ -9182,10 +9329,13 @@ class FightHandler(ScreenHandler):
                                               #   0=current fighter, 1=opponent
                          ):
         '''
-        Selects a fighter to be the object of the current action.
+        Selects a fighter to be the object of the current action based on a
+        priority scheme in this method's comments, below.
         '''
         selected_fighter = None
         current_fighter = None
+
+        # If there's a currently viewed fighter, choose him/her
         if self.__viewing_index is not None:
             current_fighter = self.__fighters[self.__viewing_index]
             opponent = self.get_opponent_for(current_fighter)
@@ -9195,8 +9345,13 @@ class FightHandler(ScreenHandler):
             opponent = self.get_opponent_for(current_fighter)
 
             if opponent is None:
+                # If the fighter that has initiative has no opponent, choose
+                # the current initiative fighter
                 selected_fighter = current_fighter
             else:
+                # If the current initiative fighter _does_ have an opponent,
+                # ask the user whether to use the current initiative fighter
+                # or the opponent.
                 selected_fighter_menu = [
                                     (current_fighter.name, current_fighter),
                                     (opponent.name, opponent)]
@@ -9210,6 +9365,9 @@ class FightHandler(ScreenHandler):
     def __show_history(self):
         '''
         Command ribbon method.
+
+        Displays the actions that have happened in the fight.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         lines = []
@@ -9227,6 +9385,9 @@ class FightHandler(ScreenHandler):
     def __show_info(self):
         '''
         Command ribbon method.
+
+        Shows detailed information about the selected creature.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         char_info = []
@@ -9244,6 +9405,10 @@ class FightHandler(ScreenHandler):
     def __show_why(self):
         '''
         Command ribbon method.
+
+        Explain the details that went into a fighter's calculated numbers
+        (e.g., to-hit).
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         why_target, current_fighter = self.__select_fighter('Details For Whom')
@@ -9261,7 +9426,8 @@ class FightHandler(ScreenHandler):
     def __timer(self):
         '''
         Command ribbon method.
-        Asks user for information for timer to add to a fighter.
+
+        Asks user for information for a timer to add to a Fighter.
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
@@ -9293,7 +9459,8 @@ class FightHandler(ScreenHandler):
     def __timer_cancel(self):
         '''
         Command ribbon method.
-        Asks user for information for timer to add to a fighter.
+
+        Allows the user to cancel one of a Fighter's active timers.
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
@@ -9328,7 +9495,14 @@ class FightHandler(ScreenHandler):
 
 
     def __view_init(self):
-        ''' look at initiative character (back to fight) '''
+        '''
+        Command ribbon method.
+
+        Make the 'currently viewed' character the one that currently has the
+        initiative in the fight.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
         self.__viewing_index = None
         current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
@@ -9341,7 +9515,14 @@ class FightHandler(ScreenHandler):
 
 
     def __view_prev(self):
-        ''' look at previous character, don't change init '''
+        '''
+        Command ribbon method.
+
+        Look at previous character, don't change which character currently has
+        the initiative.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
         if self.__viewing_index is None:
             self.__viewing_index = self._saved_fight['index']
         self.__change_viewing_index(-1)
@@ -9358,7 +9539,14 @@ class FightHandler(ScreenHandler):
 
 
     def __view_next(self):
-        ''' look at next character, don't change init '''
+        '''
+        Command ribbon method.
+
+        Look at next character, don't change which character currently has the
+        initiative.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
         if self.__viewing_index is None:
             self.__viewing_index = self._saved_fight['index']
         self.__change_viewing_index(1)
@@ -9375,6 +9563,12 @@ class FightHandler(ScreenHandler):
 
 
 class MainHandler(ScreenHandler):
+    '''
+    This is the primary screen of the program.  It displays a list of
+    creatures, in the left pane.  It highlights the "current" creature and it
+    shows the details of the current creature in the right pane.
+    '''
+
     (CHAR_LIST,
      CHAR_DETAIL) = (1, 2)  # These are intended to be bits so they can be ored
                             # together
@@ -9453,12 +9647,23 @@ class MainHandler(ScreenHandler):
     #
 
     def get_fighter_from_char_index(self):      # Public to support testing
+        '''
+        Returns the current Fighter (object).
+        '''
         return self.__chars[self.__char_index]
 
 
     def next_char(self,                         # Public to support testing
                   index=None  # Just for testing
                  ):
+        '''
+        Command ribbon method.
+
+        Moves the pointer to the current creature to the next creature,
+        wrapping around the list if necessary.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
         if index is not None:
             self.__char_index = index
         elif self.__char_index is None:
@@ -9479,11 +9684,23 @@ class MainHandler(ScreenHandler):
                                         #   use this parameter.  It's ignored
                                         #   by this method, however.
                           ):
+        '''
+        Handler for an Party sub-menu entry.
+
+        Adds an existing NPC to a monster list (that NPC also stays in the NPC
+        list).  This is useful if an NPC wishes to fight alongside a group of
+        monsters against the party.
+
+        Operates on the currently selected NPC.
+
+        Returns: None
+        '''
+
         # Make sure the person is an NPC
         npc_name = self.__chars[self.__char_index].name
         if self.__chars[self.__char_index].group != 'NPCs':
             self._window_manager.error(['"%s" not an NPC' % npc_name])
-            return True
+            return None
 
         # Select the fight
         fight_menu = [(fight_name, fight_name)
@@ -9495,12 +9712,12 @@ class MainHandler(ScreenHandler):
         if npc_name in fight:
             self._window_manager.error(['"%s" already in fight "%s"' %
                                                     (npc_name, fight_name)])
-            return True
+            return None
 
         fight[npc_name] = {'redirect': 'NPCs'}
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
-        return True
+        return None
 
 
     def NPC_joins_PCs(self,                     # Public to support testing
@@ -9510,19 +9727,30 @@ class MainHandler(ScreenHandler):
                                    #   use this parameter.  It's ignored
                                    #   by this method, however.
                      ):
+        '''
+        Handler for an Party sub-menu entry.
+
+        Adds an existing NPC to the PC list (that NPC also stays in the NPC
+        list).  This is useful if an NPC wishes to fight alongside the party.
+
+        Operates on the currently selected NPC.
+
+        Returns: None
+        '''
+
         npc_name = self.__chars[self.__char_index].name
         if self.__chars[self.__char_index].group != 'NPCs':
             self._window_manager.error(['"%s" not an NPC' % npc_name])
-            return True
+            return None
 
         if npc_name in self.world.details['PCs']:
             self._window_manager.error(['"%s" already a PC' % npc_name])
-            return True
+            return None
 
         self.world.details['PCs'][npc_name] = {'redirect': 'NPCs'}
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
-        return True
+        return None
 
     #
     # Protected and Private Methods
@@ -9562,8 +9790,11 @@ class MainHandler(ScreenHandler):
                                     #   by this method, however.
                       ):
         '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
+        Handler for an Party sub-menu entry.
+
+        Modifies an existing monster list or creates a new monster list.
+
+        Returns: None
         '''
 
         build_fight = BuildFightHandler(self._window_manager,
@@ -9582,7 +9813,7 @@ class MainHandler(ScreenHandler):
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
 
-        return True # Keep going
+        return None
 
 
     def __add_NPCs(self,
@@ -9593,8 +9824,11 @@ class MainHandler(ScreenHandler):
                                 #   by this method, however.
                   ):
         '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
+        Handler for an Party sub-menu entry.
+
+        Modifies the NPC list.
+
+        Returns: None
         '''
 
         build_fight = BuildFightHandler(self._window_manager,
@@ -9604,7 +9838,7 @@ class MainHandler(ScreenHandler):
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list(self.__current_display) # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
-        return True # Keep going
+        return None
 
 
     def __add_PCs(self,
@@ -9615,8 +9849,11 @@ class MainHandler(ScreenHandler):
                                #   by this method, however.
                  ):
         '''
-        Command ribbon method.
-        Returns: False to exit the current ScreenHandler, True to stay.
+        Handler for an Party sub-menu entry.
+
+        Adds PCs to the PC list.
+
+        Returns: None
         '''
 
         build_fight = BuildFightHandler(self._window_manager,
@@ -9626,7 +9863,7 @@ class MainHandler(ScreenHandler):
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list(self.__current_display) # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
-        return True # Keep going
+        return None
 
 
     def __add_spell(self,
@@ -10169,26 +10406,26 @@ class MainHandler(ScreenHandler):
                                       #   by this method, however.
                         ):
         '''
-        Command ribbon method.
+        Handler for an Party sub-menu entry.
 
         Removes an NPC that's currently in the party list.  He stays being an
         NPC.  Operates on current creature in the creature list.
 
-        Returns: False to exit the current ScreenHandler, True to stay.
+        Returns: None
         '''
         npc_name = self.__chars[self.__char_index].name
         if npc_name not in self.world.details['NPCs']:
             self._window_manager.error(['"%s" not an NPC' % npc_name])
-            return True
+            return None
 
         if npc_name not in self.world.details['PCs']:
             self._window_manager.error(['"%s" not in PC list' % npc_name])
-            return True
+            return None
 
         del(self.world.details['PCs'][npc_name])
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
-        return True
+        return None
 
 
     def __party(self):
