@@ -2735,7 +2735,59 @@ class Venue(ThingsInFight):
                                      # [[{'text','mode'},...],  # line 0
                                      #  [...],               ]  # line 1...
                         ):
-        self._ruleset.get_fight_description(self, char_detail)
+        '''
+        Provides a text description of all of the components of a Venue.
+
+        Returns: nothing -- output is written to the |char_detail| variable
+        '''
+
+        # stuff
+
+        mode = curses.A_NORMAL 
+        char_detail.append([{'text': 'Equipment',
+                             'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        if 'stuff' in self.details:
+            for item in sorted(self.details['stuff'], key=lambda x: x['name']):
+                found_one = True
+                EquipmentManager.get_description(item, [], char_detail)
+
+        if not found_one:
+            char_detail.append([{'text': '  (None)', 'mode': mode}])
+
+        # Timers
+
+        mode = curses.A_NORMAL 
+        char_detail.append([{'text': 'Timers', 'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        timers = self.timers.get_all() # objects
+        for timer in timers:
+            found_one = True
+            text = timer.get_description()
+            leader = '  '
+            for line in text:
+                char_detail.append([{'text': '%s%s' % (leader, line),
+                                     'mode': mode}])
+                leader = '    '
+
+        if not found_one:
+            char_detail.append([{'text': '  (None)', 'mode': mode}])
+
+        # Notes
+
+        mode = curses.A_NORMAL 
+        char_detail.append([{'text': 'Notes', 'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        if 'notes' in self.details:
+            for note in self.details['notes']:
+                found_one = True
+                char_detail.append([{'text': '  %s' % note, 'mode': mode}])
+
+        if not found_one:
+            char_detail.append([{'text': '  (None)', 'mode': mode}])
 
 
     def get_state(self):
@@ -5274,65 +5326,19 @@ class GurpsRuleset(Ruleset):
         return dodge_skill, dodge_why
 
 
-    def get_fight_description(self,
-                              fight,     # Venue object
-                              output,    # recepticle for fight detail.
-                                         # [[{'text','mode'},...],  # line 0
-                                         #  [...],               ]  # line 1...
-                             ):
-
-        # stuff
-
-        mode = curses.A_NORMAL 
-        output.append([{'text': 'Equipment', 'mode': mode | curses.A_BOLD}])
-
-        found_one = False
-        if 'stuff' in fight.details:
-            for item in sorted(fight.details['stuff'], key=lambda x: x['name']):
-                found_one = True
-                EquipmentManager.get_description(item, [], output)
-
-        if not found_one:
-            output.append([{'text': '  (None)', 'mode': mode}])
-
-        # Timers
-
-        mode = curses.A_NORMAL 
-        output.append([{'text': 'Timers', 'mode': mode | curses.A_BOLD}])
-
-        found_one = False
-        timers = fight.timers.get_all() # objects
-        for timer in timers:
-            found_one = True
-            text = timer.get_description()
-            leader = '  '
-            for line in text:
-                output.append([{'text': '%s%s' % (leader, line),
-                                'mode': mode}])
-                leader = '    '
-
-        if not found_one:
-            output.append([{'text': '  (None)', 'mode': mode}])
-
-        # Notes
-
-        mode = curses.A_NORMAL 
-        output.append([{'text': 'Notes', 'mode': mode | curses.A_BOLD}])
-
-        found_one = False
-        if 'notes' in fight.details:
-            for note in fight.details['notes']:
-                found_one = True
-                output.append([{'text': '  %s' % note, 'mode': mode}])
-
-        if not found_one:
-            output.append([{'text': '  (None)', 'mode': mode}])
 
 
     def get_fighter_defenses_notes(self,
                                    fighter, # Fighter object
                                    opponent # Fighter object
                                   ):
+        '''
+        Returns a tuple of strings describing:
+        
+        1) the current (based on weapons held, armor worn, etc) defensive
+           capability (parry, dodge, block) of the Fighter, and
+        2) the pieces that went into the above calculations
+        '''
         notes = []
         why = []
 
@@ -5396,11 +5402,15 @@ class GurpsRuleset(Ruleset):
         return notes, why
 
 
-
     def get_fighter_to_hit_damage_notes(self,
                                         fighter,    # Fighter object
                                         opponent    # Fighter object
                                        ):
+        '''
+        Returns a list of strings describing the current (using the current
+        weapon, in the current posture, etc.) fighting capability (to-hit and
+        damage) of the fighter.
+        '''
         notes = []
         weapon, holding_weapon_index = fighter.get_current_weapon()
         unarmed_skills = self.get_weapons_unarmed_skills(weapon)
@@ -5450,6 +5460,11 @@ class GurpsRuleset(Ruleset):
     def get_fighter_notes(self,
                           fighter   # Fighter object
                          ):
+        '''
+        Returns a list of strings describing the current fighting state of the
+        fighter (rounds available, whether s/he's aiming, current posture,
+        etc.)
+        '''
         notes = []
 
         # Ranged weapon status
@@ -5496,6 +5511,12 @@ class GurpsRuleset(Ruleset):
                         fighter,    # Fighter object
                         weapon      # dict
                        ):
+        '''
+        Returns a tuple of:
+            1) the number the defender needs to roll to successfully parry an
+               attack
+            2) a string describing the pieces that went into the number
+        '''
         if weapon is None or weapon['skill'] not in fighter.details['skills']:
             return None, None
         skill = fighter.details['skills'][weapon['skill']]
@@ -5538,6 +5559,10 @@ class GurpsRuleset(Ruleset):
     def get_posture_mods(self,
                          posture    # string: 'standing' | ...
                         ):
+        '''
+        Returns a dict with the attack, defense, and target minuses for the
+        given posture.
+        '''
         return (None if posture not in GurpsRuleset.posture else
                                             GurpsRuleset.posture[posture])
 
@@ -5545,7 +5570,11 @@ class GurpsRuleset(Ruleset):
     def get_fight_commands(self,
                            fight_handler    # FightHandler object
                           ):
-        ''' Returns fight commands that are specific to the GURPS ruleset. '''
+        ''' 
+        Returns fight commands that are specific to the GURPS ruleset.  These
+        commands are structured for a command ribbon.  The functions point
+        right back to local functions of the GurpsRuleset.
+        '''
         return { 
             ord('f'): {'name': 'FP damage',
                        'func': self.__damage_FP,
@@ -5664,8 +5693,30 @@ class GurpsRuleset(Ruleset):
                         ):
         '''
         Makes sense of the cascade of unarmed skills (brawling, boxing,
-        karate).
+        karate).  Takes into account posture and other states to determine
+        to-hit and damage for hand-to-hand and kicking.
+
+        Returns: dict with all the information
+          {
+            'punch_skill': <int> number the attacker needs to hit the target
+                                 while punching (for best of DX, brawling, etc.)
+            'punch_string': <string> describing amount and type of damage
+            'punch_damage': <dict> {'num_dice': <int>, 'plus': <int>}
+
+            'kick_skill': <int> number the attacker needs to hit the target
+                                while kicking (for best of DX, boxing, etc.)
+            'kick_string': <string> describing amount and type of damage
+            'kick_damage': <dict> {'num_dice': <int>, 'plus': <int>}
+
+            'parry_skill': <int> number the defender needs to parry an attack
+                                 (for best of DX, brawling, etc.)
+            'parry_string': <string> describing type of parry
+
+            'why': [] strings describing how each of the above values were
+                      determined
+          }
         '''
+
         # Assumes 'dx' is in unarmed_skills
         result = {
             'punch_skill': fighter.details['current']['dx'],
@@ -5948,9 +5999,10 @@ class GurpsRuleset(Ruleset):
                                    weapon # None or dict from JSON
                                   ):
         '''
-        If this weapon (which may be None) uses the unarmed combat skills.
-        That's basically a blackjack or brass knuckles but there may be more.
-        Assumes weapon's skill is the most advanced skill supported.
+        Determines whether this weapon (which may be None) uses the unarmed
+        combat skills.  That's basically a blackjack or brass knuckles but
+        there may be more.  Assumes weapon's skill is the most advanced skill
+        supported.
 
         Returns array of skills supported by this weapon.
         '''
@@ -5989,6 +6041,14 @@ class GurpsRuleset(Ruleset):
     def initiative(self,
                    fighter # Fighter object
                   ):
+        '''
+        Generates a tuple of numbers for a creature that determines the order
+        in which the creatures get to act in a fight.  Sorting creatures by
+        their tuples (1st sorting key on the 1st element of the tuple, ...)
+        will put them in the proper order.
+
+        Returns: the 'initiative' tuple
+        '''
         return (fighter.details['current']['basic-speed'],
                 fighter.details['current']['dx'],
                 Ruleset.roll(1, 6)
@@ -6027,6 +6087,14 @@ class GurpsRuleset(Ruleset):
 
 
     def make_empty_creature(self):
+        '''
+        Builds the minimum legal character detail (the dict that goes into the
+        JSON).  You can feed this to the constructor of a Fighter.  First,
+        however, you need to install it in the World's JSON so that it's
+        backed-up and recognized by the rest of the software.
+
+        Returns: the dict.
+        '''
         to_monster = super(GurpsRuleset, self).make_empty_creature()
         to_monster.update({'aim': { 'braced': False, 'rounds': 0 },
                            'skills': { },
@@ -6053,6 +6121,11 @@ class GurpsRuleset(Ruleset):
     def reset_aim(self,                         # Public to support testing
                   fighter           # Fighter object
                  ):
+        '''
+        Resets the aim for the Fighter.
+
+        Returns: nothing.
+        '''
         fighter.details['aim']['rounds'] = 0
         fighter.details['aim']['braced'] = False
 
@@ -6063,6 +6136,12 @@ class GurpsRuleset(Ruleset):
                             creature,   # dict describing the creature
                             look_for_re # compiled Python regex
                            ):
+        '''
+        Looks through a creature for the regular expression |look_for_re|.
+
+        Returns: dict: with name, group, location (where in the character the
+        regex was found), and notes (text for display to the user).
+        '''
 
         result = super(GurpsRuleset, self).search_one_creature(name,
                                                                group,
@@ -6108,6 +6187,12 @@ class GurpsRuleset(Ruleset):
                    fighter,         # Fighter object
                    fight_handler    # FightHandler object
                   ):
+        '''
+        Performs all of the stuff required for a Fighter to start his/her
+        turn.  Does all the consciousness/death checks, etc.
+
+        Returns: nothing
+        '''
         playing_back = (False if fight_handler is None else
                                         fight_handler.world.playing_back)
         # B426 - FP check for consciousness
@@ -6416,8 +6501,16 @@ class GurpsRuleset(Ruleset):
                            fight_handler,
                           ):
         '''
-        Actually changes the hit points.  See |GurpsRuleset::_adjust_hp| for
-        an idea of how this method is used.
+        Action handler for GurpsRuleset.
+
+        This is the 2nd part of a 2-part action.  This action
+        ('adjust-hp-really') actually perfoms all the actions and
+        side-effects of changing the hit-points.  See
+        |GurpsRuleset::_adjust_hp| for an idea of how this method is used.
+        
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
         '''
         super(GurpsRuleset, self)._adjust_hp(fighter, action, fight_handler)
         return None # No timers
@@ -6431,12 +6524,21 @@ class GurpsRuleset(Ruleset):
                      fight_handler # FightHandler object
                     ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for GurpsRuleset.
+
+        This is the 1st part of a 2-part action.  This action ('cast-spell')
+        asks questions of the user and sends the second part
+        ('cast-spell-really').  The 1st part isn't executed when playing back.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
         '''
 
         if fight_handler is not None and fight_handler.world.playing_back:
             return None # No timers
+
+        # Assemble the spell from the ruleset's copy of it and the Fighter's
+        # copy of it.
 
         spell_index = action['spell-index']
         spell = fighter.details['spells'][spell_index]
@@ -6541,8 +6643,20 @@ class GurpsRuleset(Ruleset):
                                           #  'comment': <string>, # optional
                             fight_handler # FightHandler object
                            ):
+        '''
+        Action handler for GurpsRuleset.
+
+        This is the 2nd part of a 2-part action.  This action
+        ('cast-spell-really') actually perfoms all the actions and
+        side-effects of casting a spell.  This is mostly a bunch of timers.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
+        '''
 
         complete_spell = action['complete spell']
+
+        # Charge the spell caster for the spell.
 
         if complete_spell['cost'] > 0:
             self.do_action(fighter, 
@@ -6638,8 +6752,12 @@ class GurpsRuleset(Ruleset):
                          fight_handler     # FightHandler object
                         ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for GurpsRuleset.
+
+        Changes the posture of the Fighter.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
         '''
         fighter.details['posture'] = action['posture']
         self.reset_aim(fighter)
@@ -6667,6 +6785,14 @@ class GurpsRuleset(Ruleset):
                                             #  'comment': <string>, # optional
                           fight_handler     # FightHandler object
                          ):
+        '''
+        Action handler for GurpsRuleset.
+
+        Sets the Fighter's 'check_for_death' field.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
+        '''
         fighter.details['check_for_death'] = action['value']
         return None # No timer
 
@@ -6679,6 +6805,10 @@ class GurpsRuleset(Ruleset):
                    ):
         '''
         Command ribbon method.
+
+        Figures out from whom to remove fatigue points and removes them (via
+        an action).
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
@@ -6722,6 +6852,16 @@ class GurpsRuleset(Ruleset):
                                      #  'comment': <string>, # optional
                        fight_handler # FightHandler object (for logging)
                       ):
+        '''
+        Action handler for GurpsRuleset.
+
+        Adjusts the fatigue points of a Fighter and manages all of the side-
+        effects associated therewith.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
+        '''
+
         # See B426 for consequences of loss of FP
         adj = action['adj'] # Adj is likely negative
 
@@ -6757,6 +6897,14 @@ class GurpsRuleset(Ruleset):
                                #  'comment': <string>, # optional
                  fight_handler # FightHandler object
                 ):
+        '''
+        Action handler for GurpsRuleset.
+
+        Changes the Fighter's shock value.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
+        '''
         fighter.details['shock'] = action['value']
         return None  # No timer
 
@@ -6769,8 +6917,12 @@ class GurpsRuleset(Ruleset):
                  fight_handler # FightHandler object
                 ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for GurpsRuleset.
+
+        Peforms the 'aim' action.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
         '''
 
         if fight_handler is not None and not fight_handler.world.playing_back:
@@ -6806,8 +6958,16 @@ class GurpsRuleset(Ruleset):
                    fight_handler     # FightHandler object
                   ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for GurpsRuleset.
+
+        Does the ruleset-specific stuff for an attack.  MOSTLY, that's just
+        creating the timer, though, since I don't currently have the code roll
+        anything (putting this in a comment will come back to bite me when I
+        inevitably add that capability to the code but not read and repair the
+        comments).
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
         '''
         self.reset_aim(fighter)
 
@@ -6885,8 +7045,12 @@ class GurpsRuleset(Ruleset):
                     fight_handler     # FightHandler object
                    ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for GurpsRuleset.
+
+        Resets any ongoing aim that the Fighter may have had.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
         '''
         self.reset_aim(fighter)
 
@@ -6929,8 +7093,12 @@ class GurpsRuleset(Ruleset):
                      fight_handler # FightHandler object
                     ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for GurpsRuleset.
+
+        Does nothing but create the appropriate timer for the action.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
         '''
         
         # Timer
@@ -7007,13 +7175,14 @@ class GurpsRuleset(Ruleset):
                     fight_handler,    # FightHandler object
                   ):
         '''
-        Called to handle a menu selection.
+        Action handler for GurpsRuleset.
 
         This is the 1st part of a 2-part action.  This action ('reload') asks
         questions of the user and sends the second part ('reload-really').
         The 1st part isn't executed when playing back.
 
-        Returns: 
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
         '''
 
         if fight_handler is not None and fight_handler.world.playing_back:
@@ -7077,13 +7246,15 @@ class GurpsRuleset(Ruleset):
                            fight_handler,    # FightHandler object
                          ):
         '''
-        Called to handle a menu selection.
+        Action handler for GurpsRuleset.
 
-        This is the 1st part of a 2-part action.  This action ('reload') asks
-        questions of the user and sends the second part ('reload-really').
-        The 1st part isn't executed when playing back.
+        This is the 2nd part of a 2-part action.  This action ('reload-really')
+        actually perfoms all the GurpsRuleset-specific actions and
+        side-effects of reloading the Fighter's current weapon.  Note that a
+        lot of the obvious part is done by the base class Ruleset.
 
-        Returns: 
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
         '''
 
         self.reset_aim(fighter)
@@ -7113,8 +7284,13 @@ class GurpsRuleset(Ruleset):
                       fight_handler,    # FightHandler object
                      ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for GurpsRuleset.
+
+        Does the ruleset-specific stuff to draw or holster a weapon.  The
+        majority of the work for this is actually done in the base class.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
         '''
         self.reset_aim(fighter)
 
@@ -7145,8 +7321,15 @@ class GurpsRuleset(Ruleset):
 
 
     def __get_damage_type_str(self,
-                              damage_type
+                              damage_type   # <string> key in
+                                            #   GurpsRuleset.damage_mult
                              ):
+        '''
+        Expands the short-hand version of damage type with the long form (that
+        includes the damage multiplier).
+
+        Returns the long form string.
+        '''
         if damage_type in GurpsRuleset.damage_mult:
             damage_type_str = '%s=x%.1f' % (
                                         damage_type,
@@ -7164,6 +7347,9 @@ class GurpsRuleset(Ruleset):
               ):
         '''
         Command ribbon method.
+
+        Figures out whom to stun and stuns them.
+
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
@@ -7196,6 +7382,14 @@ class GurpsRuleset(Ruleset):
                                         #  'comment': <string>, # optional
                       fight_handler,    # FightHandler object
                      ):
+        '''
+        Action handler for GurpsRuleset.
+
+        Marks the Fighter as stunned.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
+        '''
         fighter.details['stunned'] = action['stun']
         return None # No timer
 
