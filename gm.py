@@ -4669,6 +4669,15 @@ class GurpsRuleset(Ruleset):
     def can_finish_turn(self,
                         fighter # Fighter object
                        ):
+        '''
+        If a Fighter has done something this turn, we can move to the next
+        Fighter.  Otherwise, the Fighter should do something before we go to
+        the next Fighter.
+
+        Returns: <bool> telling the caller whether this Fighter needs to do
+        something before we move on.
+        '''
+
         # If the fighter does one of these things and the turn is over, he
         # clearly hasn't forgotten to do something.  Other actions are passive
         # and their existence doesn't mean that the fighter has actually tried
@@ -4695,10 +4704,18 @@ class GurpsRuleset(Ruleset):
 
 
     def damage_to_string(self,
-                         damages # list of dict -- returned by 'get_damage'
+                         damages # list of dict -- returned by 'get_damage'.
+                                 # The dict looks like:
+                                 #
+                                 #  {'attack_type': <string> (e.g., 'sw')
+                                 #   'num_dice': <int>
+                                 #   'plus': <int>
+                                 #   'damage_type': <string> (e.g., 'crushing')}
                         ):
         '''
         Converts array of dicts returned by get_damage into a string.
+
+        Returns the string.
         '''
         results = []
         for damage in damages:
@@ -4721,6 +4738,16 @@ class GurpsRuleset(Ruleset):
                                           #  action is not a side-effect of
                                           #  another action
                        ):
+        '''
+        This routine delegates actions to routines that perform the action.
+        The action routine may return a timer.  _this_ routine adds the timer
+        to the Fighter.  That timer is there, primarily, to keep track of what
+        the Fighter did but it can also mark the Fighter as busy for a
+        multi-round action.
+
+        Returns: nothing
+        '''
+
         # Label the action so playback knows who receives it.
 
         action['fighter'] = {}
@@ -4804,6 +4831,11 @@ class GurpsRuleset(Ruleset):
                                          #  action is not a side-effect of
                                          #  another action
                       ):
+        '''
+        Saves a performed 'action' in the Fighter's did-it-this-round list.
+
+        Returns: nothing.
+        '''
         super(GurpsRuleset, self)._record_action(fighter,
                                                  action,
                                                  fight_handler,
@@ -4825,6 +4857,12 @@ class GurpsRuleset(Ruleset):
                  fighter,       # Fighter object
                  fight_handler  # FightHandler object
                 ):
+        '''
+        Performs all of the stuff required for a Fighter to end his/her
+        turn.  Does all the consciousness/death checks, etc.
+
+        Returns: nothing
+        '''
         fighter.details['shock'] = 0
 
         if fighter.details['stunned'] and not fight_handler.world.playing_back:
@@ -4845,7 +4883,24 @@ class GurpsRuleset(Ruleset):
                         fighter,    # Fighter object
                         opponent    # Fighter object
                        ):
-        ''' Builds the menu of maneuvers allowed for the fighter. '''
+        '''
+        Builds a list of all of the things that this fighter can do this
+        round.  This list will be fed to GmWindowManager.menu(), so each
+        element is a tuple of
+
+        1) the string to be displayed
+        2) a dict that contains one or more of
+
+            'text' - text to go in a timer to show what the Fighter is doing
+            'action' - an action to be sent to the ruleset
+            'menu' - a menu to be recursively called
+
+        NOTE: all menu items should end, ultimately, in an 'action' because
+        then the activity will be logged in the history and can be played-back
+        if there's a bug to be reported.
+
+        Returns the menu (i.e., the list)
+        '''
 
         action_menu = []
 
@@ -4980,6 +5035,12 @@ class GurpsRuleset(Ruleset):
                         fighter,    # Fighter object
                         weapon      # dict
                        ):
+        '''
+        Returns a tuple of:
+            1) the number the defender needs to roll to successfully block an
+               attack
+            2) a string describing the calculations that went into the number
+        '''
         if weapon is None or weapon['skill'] not in fighter.details['skills']:
             return None, None
         skill = fighter.details['skills'][weapon['skill']]
@@ -5027,6 +5088,15 @@ class GurpsRuleset(Ruleset):
                                                # [[{'text','mode'},...], #line 0
                                                #  [...],               ] #line 1
                                  ):
+        '''
+        Provides a text description of a Fighter including all of the
+        attributes (current and permanent), equipment, skills, etc.
+
+        Portions of the character description are ruleset-specific.  That's
+        why this routine is in GurpsRuleset rather than in the Fighter class.
+
+        Returns: nothing.  The output is written to the |output| variable.
+        '''
 
         # attributes
 
@@ -5191,6 +5261,10 @@ class GurpsRuleset(Ruleset):
 
 
     def get_creature_abilities(self):
+        '''
+        Returns the list of capabilities that, according to the ruleset, a
+        creature can have.  See |GurpsRuleset.abilities|
+        '''
         return GurpsRuleset.abilities
 
 
@@ -5198,6 +5272,21 @@ class GurpsRuleset(Ruleset):
                    fighter,   # Fighter object
                    weapon     # dict {'type': 'imp', 'thr': +1, ...}
                   ):
+        '''
+        Returns a tuple of:
+            1) A list of dict describing the kind of damage that |fighter|
+               can do with |weapon|.  A weapon can do multiple types of damage
+               (for instance a sword can do swinging damage or thrust damage).
+               Each type of damage looks like this:
+
+                {'attack_type': <string> (e.g., 'sw')
+                 'num_dice': <int>
+                 'plus': <int>
+                 'damage_type': <string> (e.g., 'crushing')}
+
+            2) a string describing the calculations that went into the pieces
+               of the dict
+        '''
         st = fighter.details['current']['st']
         results = []
         why = []
@@ -5273,6 +5362,12 @@ class GurpsRuleset(Ruleset):
     def get_dodge_skill(self,                       # Public to aid in testing
                         fighter # Fighter object
                        ): # B326
+        '''
+        Returns a tuple of:
+            1) the number the defender needs to roll to successfully dodge an
+               attack
+            2) a string describing the calculations that went into the number
+        '''
         dodge_why = []
         dodge_skill_modified = False
 
@@ -5324,8 +5419,6 @@ class GurpsRuleset(Ruleset):
             dodge_why.append('  ...for a dodge skill total = %d' % dodge_skill)
 
         return dodge_skill, dodge_why
-
-
 
 
     def get_fighter_defenses_notes(self,
@@ -5515,7 +5608,7 @@ class GurpsRuleset(Ruleset):
         Returns a tuple of:
             1) the number the defender needs to roll to successfully parry an
                attack
-            2) a string describing the pieces that went into the number
+            2) a string describing the calculations that went into the number
         '''
         if weapon is None or weapon['skill'] not in fighter.details['skills']:
             return None, None
