@@ -2386,7 +2386,7 @@ class TimersWidget(object):
 
         if timer_dict is not None:
             timer_obj = Timer(None)
-            timer_obj.from_pieces(timer)
+            timer_obj.from_pieces(timer_dict)
             self.__timers.add(timer_obj)
 
 
