@@ -27,17 +27,13 @@
             "type": "value", 
             "value": 11
           }, 
-          "per": {
+          "wi": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 10
-          }, 
-          "wi": {
-            "type": "value", 
-            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -54,6 +50,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 12
           }
         }, 
         "advantages": {
@@ -243,17 +243,13 @@
             "type": "value", 
             "value": 16
           }, 
-          "per": {
+          "wi": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 16
-          }, 
-          "wi": {
-            "type": "value", 
-            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -270,6 +266,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 6.25
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 12
           }
         }, 
         "timers": {
@@ -298,15 +298,11 @@
             "type": "value", 
             "value": 10
           }, 
-          "per": {
+          "wi": {
             "type": "value", 
             "value": 10
           }, 
           "st": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "wi": {
             "type": "value", 
             "value": 10
           }, 
@@ -325,6 +321,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 10
           }
         }, 
         "timers": {
@@ -354,17 +354,13 @@
             "type": "value", 
             "value": 10
           }, 
-          "per": {
+          "wi": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 10
-          }, 
-          "wi": {
-            "type": "value", 
-            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -381,6 +377,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.25
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 12
           }
         }, 
         "timers": {
@@ -535,17 +535,13 @@
             "type": "value", 
             "value": 11
           }, 
-          "per": {
+          "wi": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 10
-          }, 
-          "wi": {
-            "type": "value", 
-            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -562,6 +558,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 12
           }
         }, 
         "advantages": {
@@ -639,17 +639,13 @@
             "type": "value", 
             "value": 12
           }, 
-          "per": {
+          "wi": {
             "type": "value", 
             "value": 12
           }, 
           "st": {
             "type": "value", 
             "value": 10
-          }, 
-          "wi": {
-            "type": "value", 
-            "value": 12
           }, 
           "ht": {
             "type": "value", 
@@ -666,6 +662,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.75
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 12
           }
         }, 
         "timers": {
@@ -724,17 +724,13 @@
             "type": "value", 
             "value": 16
           }, 
-          "per": {
+          "wi": {
             "type": "value", 
-            "value": 8
+            "value": 10
           }, 
           "st": {
             "type": "value", 
             "value": 12
-          }, 
-          "wi": {
-            "type": "value", 
-            "value": 10
           }, 
           "ht": {
             "type": "value", 
@@ -751,6 +747,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.0
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 8
           }
         }, 
         "timers": {
@@ -780,17 +780,13 @@
             "type": "value", 
             "value": 10
           }, 
-          "per": {
+          "wi": {
             "type": "value", 
             "value": 13
           }, 
           "st": {
             "type": "value", 
             "value": 10
-          }, 
-          "wi": {
-            "type": "value", 
-            "value": 13
           }, 
           "ht": {
             "type": "value", 
@@ -807,6 +803,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.5
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 13
           }
         }, 
         "timers": {
@@ -818,60 +818,6 @@
         "skills": {
           "type": "value", 
           "value": {}
-        }, 
-        "stuff": {
-          "type": "value", 
-          "value": []
-        }, 
-        "permanent": {
-          "fp": {
-            "type": "value", 
-            "value": 30
-          }, 
-          "iq": {
-            "type": "value", 
-            "value": 12
-          }, 
-          "hp": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "wi": {
-            "type": "value", 
-            "value": 12
-          }, 
-          "st": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "ht": {
-            "type": "value", 
-            "value": 11
-          }, 
-          "dx": {
-            "type": "value", 
-            "value": 10
-          }, 
-          "basic-move": {
-            "type": "value", 
-            "value": 5
-          }, 
-          "basic-speed": {
-            "type": "value", 
-            "value": 5.25
-          }, 
-          "per": {
-            "type": "value", 
-            "value": 12
-          }
-        }, 
-        "advantages": {
-          "type": "value", 
-          "value": {
-            "Empathy": 5, 
-            "Vodou Practitioner (Mambo 2)": 35, 
-            "Lwa (Mambo, Erzulie Freda)": 6
-          }
         }, 
         "spells": {
           "type": "value", 
@@ -993,6 +939,60 @@
               "name": "Phase"
             }
           ]
+        }, 
+        "permanent": {
+          "fp": {
+            "type": "value", 
+            "value": 30
+          }, 
+          "iq": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "hp": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "st": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "wi": {
+            "type": "value", 
+            "value": 12
+          }, 
+          "ht": {
+            "type": "value", 
+            "value": 11
+          }, 
+          "dx": {
+            "type": "value", 
+            "value": 10
+          }, 
+          "basic-move": {
+            "type": "value", 
+            "value": 5
+          }, 
+          "basic-speed": {
+            "type": "value", 
+            "value": 5.25
+          }
+        }, 
+        "advantages": {
+          "type": "value", 
+          "value": {
+            "Empathy": 5, 
+            "Vodou Practitioner (Mambo 2)": 35, 
+            "Lwa (Mambo, Erzulie Freda)": 6
+          }
+        }, 
+        "stuff": {
+          "type": "value", 
+          "value": []
         }
       }, 
       "bad guy: low level": {
@@ -1021,17 +1021,13 @@
             "type": "value", 
             "value": 12
           }, 
-          "per": {
+          "wi": {
             "type": "value", 
             "value": 8
           }, 
           "st": {
             "type": "value", 
             "value": 12
-          }, 
-          "wi": {
-            "type": "value", 
-            "value": 8
           }, 
           "ht": {
             "type": "value", 
@@ -1048,6 +1044,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 4.75
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 8
           }
         }, 
         "advantages": {
@@ -1199,17 +1199,13 @@
             "type": "value", 
             "value": 15
           }, 
-          "per": {
+          "wi": {
             "type": "value", 
             "value": 9
           }, 
           "st": {
             "type": "value", 
             "value": 15
-          }, 
-          "wi": {
-            "type": "value", 
-            "value": 9
           }, 
           "ht": {
             "type": "value", 
@@ -1226,6 +1222,10 @@
           "basic-speed": {
             "type": "value", 
             "value": 5.25
+          }, 
+          "per": {
+            "type": "value", 
+            "value": 9
           }
         }, 
         "timers": {
@@ -1250,32 +1250,32 @@
           "stuff": [], 
           "timers": [
             {
-              "string": "two", 
               "rounds": 1.9, 
+              "name": "<< ROOM >>", 
               "actions": {
                 "announcement": "TWO"
               }, 
-              "name": "<< ROOM >>"
+              "string": "two"
             }, 
             {
-              "string": "three", 
               "rounds": 3, 
+              "name": "<< ROOM >>", 
               "actions": {}, 
-              "name": "<< ROOM >>"
+              "string": "three"
             }, 
             {
-              "string": "", 
               "rounds": 3.9, 
+              "name": "<< ROOM >>", 
               "actions": {
                 "announcement": "FOUR"
               }, 
-              "name": "<< ROOM >>"
+              "string": ""
             }, 
             {
-              "string": "", 
               "rounds": 5, 
+              "name": "<< ROOM >>", 
               "actions": {}, 
-              "name": "<< ROOM >>"
+              "string": ""
             }
           ]
         }, 
@@ -1379,24 +1379,24 @@
             "fp": 10, 
             "iq": 12, 
             "hp": 16, 
-            "wi": 12, 
+            "per": 12, 
             "st": 16, 
+            "wi": 12, 
             "ht": 10, 
             "dx": 11, 
             "basic-move": 6, 
-            "basic-speed": 6.25, 
-            "per": 12
+            "basic-speed": 6.25
           }, 
           "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 10, 
-            "ht": 10, 
             "iq": 12, 
             "hp": 16, 
-            "wi": 12, 
+            "ht": 10, 
             "st": 16, 
             "per": 12, 
+            "wi": 12, 
             "dx": 11, 
             "basic-move": 6, 
             "basic-speed": 6.25
@@ -1409,32 +1409,32 @@
           "check_for_death": false, 
           "timers": [
             {
-              "string": "two", 
               "rounds": 1.9, 
+              "name": "1 - manny", 
               "actions": {
                 "announcement": "TWO"
               }, 
-              "name": "1 - manny"
+              "string": "two"
             }, 
             {
-              "string": "three", 
               "rounds": 3, 
+              "name": "1 - manny", 
               "actions": {}, 
-              "name": "1 - manny"
+              "string": "three"
             }, 
             {
-              "string": "", 
               "rounds": 3.9, 
+              "name": "1 - manny", 
               "actions": {
                 "announcement": "FOUR"
               }, 
-              "name": "1 - manny"
+              "string": ""
             }, 
             {
-              "string": "", 
               "rounds": 5, 
+              "name": "1 - manny", 
               "actions": {}, 
-              "name": "1 - manny"
+              "string": ""
             }
           ], 
           "actions_this_turn": [], 
@@ -1540,24 +1540,24 @@
             "fp": 10, 
             "iq": 12, 
             "hp": 16, 
-            "wi": 12, 
+            "per": 12, 
             "st": 16, 
+            "wi": 12, 
             "ht": 10, 
             "dx": 11, 
             "basic-move": 6, 
-            "basic-speed": 6.25, 
-            "per": 12
+            "basic-speed": 6.25
           }, 
           "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 10, 
-            "ht": 10, 
             "iq": 12, 
             "hp": 16, 
-            "wi": 12, 
+            "ht": 10, 
             "st": 16, 
             "per": 12, 
+            "wi": 12, 
             "dx": 11, 
             "basic-move": 6, 
             "basic-speed": 6.25
@@ -1672,24 +1672,24 @@
             "fp": 10, 
             "iq": 12, 
             "hp": 16, 
-            "wi": 12, 
+            "per": 12, 
             "st": 16, 
+            "wi": 12, 
             "ht": 10, 
             "dx": 11, 
             "basic-move": 6, 
-            "basic-speed": 6.25, 
-            "per": 12
+            "basic-speed": 6.25
           }, 
           "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 10, 
-            "ht": 10, 
             "iq": 12, 
             "hp": 16, 
-            "wi": 12, 
+            "ht": 10, 
             "st": 16, 
             "per": 12, 
+            "wi": 12, 
             "dx": 11, 
             "basic-move": 6, 
             "basic-speed": 6.25
@@ -1729,25 +1729,25 @@
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "per": 11, 
-            "st": 12, 
             "wi": 11, 
+            "st": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 11
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "per": 11, 
-            "st": 12, 
             "wi": 11, 
+            "st": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 11
           }, 
           "state": "alive", 
           "stuff": [
@@ -1842,25 +1842,25 @@
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "per": 11, 
-            "st": 12, 
             "wi": 11, 
+            "st": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 11
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "per": 11, 
-            "st": 12, 
             "wi": 11, 
+            "st": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 11
           }, 
           "state": "alive", 
           "stuff": [
@@ -1957,25 +1957,25 @@
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "per": 11, 
-            "st": 12, 
             "wi": 11, 
+            "st": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 11
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "per": 11, 
-            "st": 12, 
             "wi": 11, 
+            "st": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 11
           }, 
           "state": "alive", 
           "stuff": [
@@ -2069,25 +2069,25 @@
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "per": 11, 
-            "st": 12, 
             "wi": 11, 
+            "st": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 11
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 11, 
             "hp": 11, 
-            "per": 11, 
-            "st": 12, 
             "wi": 11, 
+            "st": 12, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 11
           }, 
           "state": "alive", 
           "stuff": [
@@ -2186,12 +2186,12 @@
           "armor-index": null, 
           "current": {
             "fp": 10, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -2200,12 +2200,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -2396,12 +2396,12 @@
           "armor-index": null, 
           "current": {
             "fp": 70, 
-            "ht": 18, 
             "iq": 17, 
             "hp": 25, 
-            "wi": 18, 
+            "ht": 18, 
             "st": 25, 
             "per": 17, 
+            "wi": 18, 
             "dx": 15, 
             "basic-move": 8, 
             "basic-speed": 8.25
@@ -2410,12 +2410,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 70, 
-            "ht": 18, 
             "iq": 17, 
             "hp": 25, 
-            "wi": 18, 
+            "ht": 18, 
             "st": 25, 
             "per": 17, 
+            "wi": 18, 
             "dx": 15, 
             "basic-move": 8, 
             "basic-speed": 8.25
@@ -2559,12 +2559,12 @@
           "armor-index": null, 
           "current": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -2573,12 +2573,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -2766,13 +2766,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -2989,13 +2989,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -3130,13 +3130,13 @@
         "fp": 13, 
         "iq": 11, 
         "hp": 12, 
-        "per": 11, 
-        "st": 12, 
         "wi": 11, 
+        "st": 12, 
         "ht": 11, 
-        "dx": 13, 
+        "dx": 14, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 11
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -3257,13 +3257,13 @@
         "fp": 13, 
         "iq": 11, 
         "hp": 12, 
-        "per": 11, 
-        "st": 12, 
         "wi": 11, 
+        "st": 12, 
         "ht": 11, 
-        "dx": 13, 
+        "dx": 14, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 11
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -3426,13 +3426,13 @@
         "fp": 11, 
         "iq": 14, 
         "hp": 10, 
-        "per": 14, 
-        "st": 9, 
         "wi": 14, 
+        "st": 9, 
         "ht": 11, 
         "dx": 9, 
         "basic-move": 5, 
-        "basic-speed": 5
+        "basic-speed": 5, 
+        "per": 14
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -3525,35 +3525,35 @@
         "fp": 11, 
         "iq": 14, 
         "hp": 10, 
-        "per": 14, 
-        "st": 9, 
         "wi": 14, 
+        "st": 9, 
         "ht": 11, 
         "dx": 9, 
         "basic-move": 5, 
-        "basic-speed": 5
+        "basic-speed": 5, 
+        "per": 14
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
       "advantages": {
         "G-Experience": 1, 
-        "Empathy": 15, 
         "Honest Face": 1, 
         "Wealth": -10, 
         "Extra Hit Points": 2, 
         "Habit": -1, 
         "Nosy": -1, 
         "Like knick knacks": -1, 
+        "Impulsiveness": -10, 
         "Vodou Practitioner": 15, 
         "Alcohol Intolerance": -1, 
-        "Impulsiveness": -10, 
+        "Versatile": 5, 
         "Cultural Familiarity (Teraformers)": 1, 
         "Short Attention Span": -10, 
         "Curious": -5, 
         "Bad Temper": -10, 
         "Deep Sleeper": 1, 
         "Combat Reflexes": 15, 
-        "Versatile": 5, 
+        "Empathy": 15, 
         "Dreamer": -1
       }, 
       "opponent": null, 
@@ -3601,13 +3601,13 @@
         "fp": 10, 
         "iq": 14, 
         "hp": 12, 
-        "per": 14, 
-        "st": 10, 
         "wi": 14, 
+        "st": 10, 
         "ht": 9, 
         "dx": 12, 
         "basic-move": 5, 
-        "basic-speed": 5.25
+        "basic-speed": 5.25, 
+        "per": 14
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -3676,13 +3676,13 @@
         "fp": 10, 
         "iq": 14, 
         "hp": 12, 
-        "per": 14, 
-        "st": 10, 
         "wi": 14, 
+        "st": 10, 
         "ht": 9, 
         "dx": 12, 
         "basic-move": 5, 
-        "basic-speed": 5.25
+        "basic-speed": 5.25, 
+        "per": 14
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -3814,13 +3814,13 @@
         "fp": 18, 
         "iq": 16, 
         "hp": 19, 
-        "per": 16, 
-        "st": 9, 
         "wi": 16, 
+        "st": 9, 
         "ht": 8, 
         "dx": 8, 
         "basic-move": 5, 
-        "basic-speed": 4
+        "basic-speed": 4, 
+        "per": 16
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -3882,13 +3882,13 @@
         "fp": 18, 
         "iq": 16, 
         "hp": 19, 
-        "per": 16, 
-        "st": 9, 
         "wi": 16, 
+        "st": 9, 
         "ht": 8, 
         "dx": 8, 
         "basic-move": 5, 
-        "basic-speed": 4
+        "basic-speed": 4, 
+        "per": 16
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -3932,26 +3932,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -3977,26 +3977,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4022,26 +4022,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4067,26 +4067,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -4113,26 +4113,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 10, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25
+            "basic-speed": 5.25, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 10, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25
+            "basic-speed": 5.25, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4158,26 +4158,26 @@
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "per": 13, 
-            "st": 10, 
             "wi": 13, 
+            "st": 10, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5
+            "basic-speed": 5.5, 
+            "per": 13
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "per": 13, 
-            "st": 10, 
             "wi": 13, 
+            "st": 10, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5
+            "basic-speed": 5.5, 
+            "per": 13
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4203,26 +4203,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4248,26 +4248,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -4300,26 +4300,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4345,26 +4345,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4390,26 +4390,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4435,26 +4435,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -4481,26 +4481,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4526,26 +4526,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4571,26 +4571,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4616,26 +4616,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -4717,26 +4717,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4795,26 +4795,26 @@
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "per": 13, 
-            "st": 10, 
             "wi": 13, 
+            "st": 10, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5
+            "basic-speed": 5.5, 
+            "per": 13
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "per": 13, 
-            "st": 10, 
             "wi": 13, 
+            "st": 10, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5
+            "basic-speed": 5.5, 
+            "per": 13
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4889,26 +4889,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -4987,26 +4987,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "High Pain Threshold": 10
@@ -5065,26 +5065,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 10, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25
+            "basic-speed": 5.25, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 10, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25
+            "basic-speed": 5.25, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -5160,26 +5160,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -5254,26 +5254,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15
@@ -5352,26 +5352,26 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 12, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "High Pain Threshold": 10
@@ -5402,25 +5402,25 @@
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "per": 13, 
-            "st": 10, 
             "wi": 13, 
+            "st": 10, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5
+            "basic-speed": 5.5, 
+            "per": 13
           }, 
           "permanent": {
             "fp": 12, 
             "iq": 13, 
             "hp": 10, 
-            "per": 13, 
-            "st": 10, 
             "wi": 13, 
+            "st": 10, 
             "ht": 11, 
             "dx": 11, 
             "basic-move": 5, 
-            "basic-speed": 5.5
+            "basic-speed": 5.5, 
+            "per": 13
           }, 
           "state": "alive", 
           "stuff": [], 
@@ -5449,25 +5449,25 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "stuff": [
@@ -5565,13 +5565,13 @@
             "fp": 9, 
             "iq": 8, 
             "hp": -9, 
-            "per": 8, 
-            "st": 12, 
             "wi": 8, 
+            "st": 12, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75
+            "basic-speed": 4.75, 
+            "per": 8
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -5579,13 +5579,13 @@
             "fp": 9, 
             "iq": 8, 
             "hp": 12, 
-            "per": 8, 
-            "st": 12, 
             "wi": 8, 
+            "st": 12, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75
+            "basic-speed": 4.75, 
+            "per": 8
           }, 
           "advantages": {
             "High Pain Threshold": 10
@@ -5628,13 +5628,13 @@
             "fp": 9, 
             "iq": 8, 
             "hp": -3, 
-            "per": 8, 
-            "st": 12, 
             "wi": 8, 
+            "st": 12, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75
+            "basic-speed": 4.75, 
+            "per": 8
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -5642,13 +5642,13 @@
             "fp": 9, 
             "iq": 8, 
             "hp": 12, 
-            "per": 8, 
-            "st": 12, 
             "wi": 8, 
+            "st": 12, 
             "ht": 9, 
             "dx": 11, 
             "basic-move": 4, 
-            "basic-speed": 4.75
+            "basic-speed": 4.75, 
+            "per": 8
           }, 
           "advantages": {
             "High Pain Threshold": 10
@@ -5699,13 +5699,13 @@
             "fp": 11, 
             "iq": 9, 
             "hp": -6, 
-            "per": 9, 
-            "st": 15, 
             "wi": 9, 
+            "st": 15, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25
+            "basic-speed": 5.25, 
+            "per": 9
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -5713,13 +5713,13 @@
             "fp": 11, 
             "iq": 9, 
             "hp": 15, 
-            "per": 9, 
-            "st": 15, 
             "wi": 9, 
+            "st": 15, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25
+            "basic-speed": 5.25, 
+            "per": 9
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -5774,13 +5774,13 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "posture": "standing", 
           "state": "unconscious", 
@@ -5788,13 +5788,13 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -5859,12 +5859,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": -4, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -5873,12 +5873,12 @@
           "state": "unconscious", 
           "permanent": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -5953,12 +5953,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": -7, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -5967,12 +5967,12 @@
           "state": "dead", 
           "permanent": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6038,12 +6038,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6052,12 +6052,12 @@
           "state": "dead", 
           "permanent": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6120,12 +6120,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6134,12 +6134,12 @@
           "state": "dead", 
           "permanent": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6202,12 +6202,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 0, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6216,12 +6216,12 @@
           "state": "unconscious", 
           "permanent": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6287,12 +6287,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": -4, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6301,12 +6301,12 @@
           "state": "dead", 
           "permanent": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -6378,12 +6378,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -6392,12 +6392,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -6460,12 +6460,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": -17, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -6474,12 +6474,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -6616,12 +6616,12 @@
           "armor-index": null, 
           "current": {
             "fp": 20, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -6629,12 +6629,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 20, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -6698,12 +6698,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 6, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.5
@@ -6712,12 +6712,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.5
@@ -6780,12 +6780,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": -13, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 11, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -6794,12 +6794,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 11, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -6936,12 +6936,12 @@
           "armor-index": null, 
           "current": {
             "fp": 20, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -6949,12 +6949,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 20, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -7021,12 +7021,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -7035,12 +7035,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.0
@@ -7103,12 +7103,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": -7, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -7117,12 +7117,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 6.0
@@ -7185,12 +7185,12 @@
           "armor-index": null, 
           "current": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 10, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -7199,12 +7199,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -7267,12 +7267,12 @@
           "armor-index": null, 
           "current": {
             "fp": 7, 
-            "ht": 10, 
             "iq": 8, 
             "hp": -1, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.5
@@ -7281,12 +7281,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 16, 
-            "ht": 10, 
             "iq": 8, 
             "hp": 16, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 12, 
             "per": 8, 
+            "wi": 10, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.5
@@ -7329,25 +7329,25 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "stuff": [
@@ -7489,25 +7489,25 @@
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "permanent": {
             "fp": 11, 
             "iq": 12, 
             "hp": 11, 
-            "per": 12, 
-            "st": 10, 
             "wi": 12, 
+            "st": 10, 
             "ht": 11, 
             "dx": 12, 
             "basic-move": 5, 
-            "basic-speed": 5.75
+            "basic-speed": 5.75, 
+            "per": 12
           }, 
           "state": "alive", 
           "stuff": [
@@ -7691,13 +7691,13 @@
             "fp": 11, 
             "iq": 9, 
             "hp": 15, 
-            "per": 9, 
-            "st": 15, 
             "wi": 9, 
+            "st": 15, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25
+            "basic-speed": 5.25, 
+            "per": 9
           }, 
           "posture": "standing", 
           "state": "alive", 
@@ -7705,13 +7705,13 @@
             "fp": 11, 
             "iq": 9, 
             "hp": 15, 
-            "per": 9, 
-            "st": 15, 
             "wi": 9, 
+            "st": 15, 
             "ht": 11, 
             "dx": 10, 
             "basic-move": 5, 
-            "basic-speed": 5.25
+            "basic-speed": 5.25, 
+            "per": 9
           }, 
           "advantages": {
             "Combat Reflexes": 15, 
@@ -7808,12 +7808,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -7822,12 +7822,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -7872,12 +7872,12 @@
           "armor-index": null, 
           "current": {
             "fp": 10, 
-            "ht": 10, 
             "iq": 10, 
             "hp": 10, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 10, 
             "per": 10, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5
@@ -7886,12 +7886,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 10, 
-            "ht": 10, 
             "iq": 10, 
             "hp": 10, 
-            "wi": 10, 
+            "ht": 10, 
             "st": 10, 
             "per": 10, 
+            "wi": 10, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5
@@ -7927,12 +7927,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -7941,12 +7941,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -8151,12 +8151,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -8165,12 +8165,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -8336,12 +8336,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -8350,12 +8350,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.75
@@ -8449,12 +8449,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 6
@@ -8463,12 +8463,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 6
@@ -8562,12 +8562,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 6
@@ -8576,12 +8576,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 6
@@ -8675,12 +8675,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -8689,12 +8689,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 11, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 12, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -8788,12 +8788,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 15, 
             "basic-move": 5, 
             "basic-speed": 5
@@ -8802,12 +8802,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 12, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 15, 
             "basic-move": 5, 
             "basic-speed": 5
@@ -8855,12 +8855,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -8869,12 +8869,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -8988,12 +8988,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9002,12 +9002,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9112,12 +9112,12 @@
           "armor-index": null, 
           "current": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9126,12 +9126,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 11, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9258,12 +9258,12 @@
           "armor-index": null, 
           "current": {
             "fp": 27, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9272,12 +9272,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9292,27 +9292,27 @@
           "check_for_death": false, 
           "timers": [
             {
-              "name": "Spell for 3 - Davidson", 
               "string": "Casting (Animate Shadow) @ skill (16): M154, Subject's shadow attacks them, HT negates", 
+              "rounds": 1.9, 
               "actions": {
                 "timer": {
-                  "name": "Spell Duration Timer for 3 - Davidson", 
                   "string": "SPELL ACTIVE: Animate Shadow", 
+                  "rounds": 5, 
                   "actions": {}, 
-                  "rounds": 5
+                  "name": "Spell Duration Timer for 3 - Davidson"
                 }
               }, 
-              "rounds": 1.9
+              "name": "Spell for 3 - Davidson"
             }, 
             {
-              "name": "3 - Davidson", 
               "string": [
                 "Cast (Animate Shadow)", 
                 " Defense: none", 
                 " Move: none"
               ], 
+              "rounds": 0.9, 
               "actions": {}, 
-              "rounds": 0.9
+              "name": "3 - Davidson"
             }
           ], 
           "actions_this_turn": [], 
@@ -9476,12 +9476,12 @@
           "armor-index": null, 
           "current": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9490,12 +9490,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 13, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9653,12 +9653,12 @@
           "armor-index": null, 
           "current": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9667,12 +9667,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9830,12 +9830,12 @@
           "armor-index": null, 
           "current": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -9844,12 +9844,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
-            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "wi": 12, 
+            "ht": 11, 
             "st": 10, 
             "per": 12, 
+            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10007,12 +10007,12 @@
           "armor-index": null, 
           "current": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10021,12 +10021,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10184,12 +10184,12 @@
           "armor-index": null, 
           "current": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10198,12 +10198,12 @@
           "state": "alive", 
           "permanent": {
             "fp": 30, 
+            "ht": 11, 
             "iq": 12, 
             "hp": 10, 
-            "ht": 11, 
+            "wi": 12, 
             "st": 10, 
             "per": 12, 
-            "wi": 12, 
             "dx": 10, 
             "basic-move": 5, 
             "basic-speed": 5.25
@@ -10443,24 +10443,24 @@
             "fp": 10, 
             "iq": 12, 
             "hp": 16, 
-            "wi": 12, 
+            "per": 12, 
             "st": 16, 
+            "wi": 12, 
             "ht": 10, 
             "dx": 11, 
             "basic-move": 6, 
-            "basic-speed": 6.25, 
-            "per": 12
+            "basic-speed": 6.25
           }, 
           "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 10, 
-            "ht": 10, 
             "iq": 12, 
             "hp": 16, 
-            "wi": 12, 
+            "ht": 10, 
             "st": 16, 
             "per": 12, 
+            "wi": 12, 
             "dx": 11, 
             "basic-move": 6, 
             "basic-speed": 6.25
@@ -10583,24 +10583,24 @@
             "fp": 10, 
             "iq": 12, 
             "hp": 16, 
-            "wi": 12, 
+            "per": 12, 
             "st": 16, 
+            "wi": 12, 
             "ht": 10, 
             "dx": 11, 
             "basic-move": 6, 
-            "basic-speed": 6.25, 
-            "per": 12
+            "basic-speed": 6.25
           }, 
           "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 10, 
-            "ht": 10, 
             "iq": 12, 
             "hp": 16, 
-            "wi": 12, 
+            "ht": 10, 
             "st": 16, 
             "per": 12, 
+            "wi": 12, 
             "dx": 11, 
             "basic-move": 6, 
             "basic-speed": 6.25
@@ -10715,24 +10715,24 @@
             "fp": 10, 
             "iq": 12, 
             "hp": 16, 
-            "wi": 12, 
+            "per": 12, 
             "st": 16, 
+            "wi": 12, 
             "ht": 10, 
             "dx": 11, 
             "basic-move": 6, 
-            "basic-speed": 6.25, 
-            "per": 12
+            "basic-speed": 6.25
           }, 
           "posture": "standing", 
           "state": "alive", 
           "permanent": {
             "fp": 10, 
-            "ht": 10, 
             "iq": 12, 
             "hp": 16, 
-            "wi": 12, 
+            "ht": 10, 
             "st": 16, 
             "per": 12, 
+            "wi": 12, 
             "dx": 11, 
             "basic-move": 6, 
             "basic-speed": 6.25
@@ -10871,13 +10871,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -10887,74 +10887,18 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
       "advantages": {}, 
       "posture": "standing", 
-      "opponent": null
-    }, 
-    "Catherine - Tereshkova mechanic": {
-      "current": {
-        "fp": 10, 
-        "ht": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "wi": 10, 
-        "st": 10, 
-        "per": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5
-      }, 
-      "stuff": [], 
-      "stunned": 0, 
-      "skills": {}, 
-      "notes": [
-        "origin: russian", 
-        "gender: female", 
-        "station history: lifer (born on Earth, this is 1st station)", 
-        "characteristics: Freckled", 
-        "instincts: To perfect a skill", 
-        "hair: Strange hairstyle", 
-        "speech: Spits often", 
-        "knack: The attention of supernatural powers", 
-        "personality: Docile"
-      ], 
-      "shock": 0, 
-      "armor-index": null, 
-      "fargark": {}, 
-      "aim": {
-        "braced": false, 
-        "rounds": 0
-      }, 
-      "posture": "standing", 
-      "state": "alive", 
-      "permanent": {
-        "fp": 10, 
-        "ht": 10, 
-        "iq": 10, 
-        "hp": 10, 
-        "wi": 10, 
-        "st": 10, 
-        "per": 10, 
-        "dx": 10, 
-        "basic-move": 5, 
-        "basic-speed": 5
-      }, 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "check_for_death": false, 
-      "timers": [], 
-      "actions_this_turn": [], 
-      "short-notes": [], 
       "opponent": null
     }, 
     "Lady Shenice - Bokor": {
@@ -10978,13 +10922,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -10994,13 +10938,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -11036,13 +10980,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -11052,13 +10996,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -11071,13 +11015,13 @@
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "per": 10, 
-        "st": 10, 
         "wi": 10, 
+        "st": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5
+        "basic-speed": 5, 
+        "per": 10
       }, 
       "stuff": [], 
       "stunned": false, 
@@ -11107,13 +11051,13 @@
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "per": 10, 
-        "st": 10, 
         "wi": 10, 
+        "st": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5
+        "basic-speed": 5, 
+        "per": 10
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -11209,13 +11153,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 10, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25
+        "basic-speed": 5.25, 
+        "per": 12
       }, 
       "fargark": {}, 
       "state": "absent", 
@@ -11225,13 +11169,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 10, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25
+        "basic-speed": 5.25, 
+        "per": 12
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -11249,13 +11193,13 @@
         "fp": 11, 
         "iq": 13, 
         "hp": 10, 
-        "per": 13, 
-        "st": 10, 
         "wi": 13, 
+        "st": 10, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25
+        "basic-speed": 5.25, 
+        "per": 13
       }, 
       "stunned": 0, 
       "skills": {}, 
@@ -11286,13 +11230,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 10, 
-        "per": 13, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5.25
+        "basic-speed": 5.25, 
+        "per": 13
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -11405,13 +11349,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -11421,13 +11365,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -11438,12 +11382,12 @@
     "Owen Martin - Journeyman deputy marshal (party's boss)": {
       "current": {
         "fp": 11, 
-        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "wi": 12, 
+        "ht": 11, 
         "st": 10, 
         "per": 12, 
+        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -11526,12 +11470,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 11, 
-        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "wi": 12, 
+        "ht": 11, 
         "st": 10, 
         "per": 12, 
+        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -11547,18 +11491,74 @@
       "short-notes": [], 
       "opponent": null
     }, 
+    "Catherine - Tereshkova mechanic": {
+      "current": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "per": 10, 
+        "wi": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5
+      }, 
+      "stuff": [], 
+      "stunned": 0, 
+      "skills": {}, 
+      "notes": [
+        "origin: russian", 
+        "gender: female", 
+        "station history: lifer (born on Earth, this is 1st station)", 
+        "characteristics: Freckled", 
+        "instincts: To perfect a skill", 
+        "hair: Strange hairstyle", 
+        "speech: Spits often", 
+        "knack: The attention of supernatural powers", 
+        "personality: Docile"
+      ], 
+      "shock": 0, 
+      "armor-index": null, 
+      "fargark": {}, 
+      "aim": {
+        "braced": false, 
+        "rounds": 0
+      }, 
+      "posture": "standing", 
+      "state": "alive", 
+      "permanent": {
+        "fp": 10, 
+        "iq": 10, 
+        "hp": 10, 
+        "ht": 10, 
+        "st": 10, 
+        "per": 10, 
+        "wi": 10, 
+        "dx": 10, 
+        "basic-move": 5, 
+        "basic-speed": 5
+      }, 
+      "advantages": {}, 
+      "weapon-index": null, 
+      "check_for_death": false, 
+      "timers": [], 
+      "actions_this_turn": [], 
+      "short-notes": [], 
+      "opponent": null
+    }, 
     "Oscar": {
       "current": {
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "per": 10, 
-        "st": 10, 
         "wi": 10, 
+        "st": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5
+        "basic-speed": 5, 
+        "per": 10
       }, 
       "stuff": [], 
       "stunned": false, 
@@ -11586,13 +11586,13 @@
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "per": 10, 
-        "st": 10, 
         "wi": 10, 
+        "st": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5
+        "basic-speed": 5, 
+        "per": 10
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -11605,12 +11605,12 @@
     "Amelia - Deputy Marshal (Stoddard)": {
       "current": {
         "fp": 11, 
-        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "wi": 12, 
+        "ht": 11, 
         "st": 10, 
         "per": 12, 
+        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -11696,12 +11696,12 @@
       }, 
       "permanent": {
         "fp": 11, 
-        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "wi": 12, 
+        "ht": 11, 
         "st": 10, 
         "per": 12, 
+        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -11717,13 +11717,13 @@
         "fp": 10, 
         "iq": 12, 
         "hp": 16, 
-        "per": 12, 
-        "st": 16, 
         "wi": 12, 
+        "st": 16, 
         "ht": 10, 
         "dx": 11, 
         "basic-move": 6, 
-        "basic-speed": 6.25
+        "basic-speed": 6.25, 
+        "per": 12
       }, 
       "stuff": [
         {
@@ -11788,13 +11788,13 @@
         "fp": 10, 
         "iq": 12, 
         "hp": 16, 
-        "per": 12, 
-        "st": 16, 
         "wi": 12, 
+        "st": 16, 
         "ht": 10, 
         "dx": 11, 
         "basic-move": 6, 
-        "basic-speed": 6.25
+        "basic-speed": 6.25, 
+        "per": 12
       }, 
       "advantages": {}, 
       "weapon-index": null, 
@@ -11824,13 +11824,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -11840,13 +11840,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -11857,12 +11857,12 @@
     "Dmitriy - radio operator on Tereshkova": {
       "current": {
         "fp": 10, 
-        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "ht": 10, 
         "st": 10, 
         "per": 10, 
+        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -11892,12 +11892,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
-        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "ht": 10, 
         "st": 10, 
         "per": 10, 
+        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -11951,13 +11951,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -11967,13 +11967,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -11984,12 +11984,12 @@
     "William - Deputy Marshal (Stoddard)": {
       "current": {
         "fp": 11, 
-        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "wi": 12, 
+        "ht": 11, 
         "st": 10, 
         "per": 12, 
+        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12103,12 +12103,12 @@
       }, 
       "permanent": {
         "fp": 11, 
-        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "wi": 12, 
+        "ht": 11, 
         "st": 10, 
         "per": 12, 
+        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12122,12 +12122,12 @@
     "Olivia - Special Deputy Marshal (Stoddard)": {
       "current": {
         "fp": 11, 
-        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "wi": 12, 
+        "ht": 11, 
         "st": 10, 
         "per": 12, 
+        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12248,12 +12248,12 @@
       }, 
       "permanent": {
         "fp": 11, 
-        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "wi": 12, 
+        "ht": 11, 
         "st": 10, 
         "per": 12, 
+        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12324,13 +12324,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -12340,13 +12340,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -12357,12 +12357,12 @@
     "Ryder - marshal intern": {
       "current": {
         "fp": 10, 
-        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "ht": 10, 
         "st": 10, 
         "per": 10, 
+        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -12392,12 +12392,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
-        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "ht": 10, 
         "st": 10, 
         "per": 10, 
+        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -12439,13 +12439,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -12455,13 +12455,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -12472,12 +12472,12 @@
     "Jessica - Tereshkova security": {
       "current": {
         "fp": 11, 
-        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "wi": 12, 
+        "ht": 11, 
         "st": 10, 
         "per": 12, 
+        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12559,12 +12559,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 11, 
-        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "wi": 12, 
+        "ht": 11, 
         "st": 10, 
         "per": 12, 
+        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -12686,13 +12686,13 @@
         "fp": 12, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 13, 
         "wi": 12, 
+        "st": 13, 
         "ht": 12, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6.25
+        "basic-speed": 6.25, 
+        "per": 12
       }, 
       "posture": "standing", 
       "state": "alive", 
@@ -12700,13 +12700,13 @@
         "fp": 12, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 13, 
         "wi": 12, 
+        "st": 13, 
         "ht": 12, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6.25
+        "basic-speed": 6.25, 
+        "per": 12
       }, 
       "advantages": {
         "Combat Reflexes": 15, 
@@ -12722,16 +12722,12 @@
       "opponent": null
     }, 
     "Zoya Krovopuskova - Coroner": {
-      "stunned": false, 
-      "short-notes": [], 
-      "advantages": {}, 
-      "weapon-index": null, 
-      "posture": "standing", 
       "aim": {
         "braced": false, 
         "rounds": 0
       }, 
       "stuff": [], 
+      "stunned": false, 
       "skills": {}, 
       "notes": [
         "station history: staby (born on this station) ", 
@@ -12743,20 +12739,21 @@
         ""
       ], 
       "shock": 0, 
+      "short-notes": [], 
       "armor-index": null, 
-      "actions_this_turn": [], 
       "current": {
         "fp": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "per": 10, 
         "st": 10, 
+        "wi": 10, 
         "ht": 10, 
         "dx": 10, 
         "basic-move": 5, 
-        "basic-speed": 5, 
-        "per": 10
+        "basic-speed": 5
       }, 
+      "posture": "standing", 
       "state": "alive", 
       "permanent": {
         "fp": 10, 
@@ -12764,14 +12761,17 @@
         "hp": 10, 
         "ht": 10, 
         "st": 10, 
-        "wi": 10, 
         "per": 10, 
+        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
       }, 
-      "timers": [], 
+      "advantages": {}, 
+      "weapon-index": null, 
       "check_for_death": false, 
+      "timers": [], 
+      "actions_this_turn": [], 
       "opponent": null
     }, 
     "Mackenzie - Marshal's Intern": {
@@ -12811,13 +12811,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -12827,13 +12827,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -12844,12 +12844,12 @@
     "Lucy - Director of Operations": {
       "current": {
         "fp": 10, 
-        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "ht": 10, 
         "st": 10, 
         "per": 10, 
+        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -12879,12 +12879,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
-        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "ht": 10, 
         "st": 10, 
         "per": 10, 
+        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -12923,13 +12923,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -12939,13 +12939,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -12971,13 +12971,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "fargark": {}, 
       "state": "alive", 
@@ -12987,13 +12987,13 @@
         "fp": 11, 
         "iq": 12, 
         "hp": 12, 
-        "per": 12, 
-        "st": 10, 
         "wi": 12, 
+        "st": 10, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 6, 
-        "basic-speed": 6
+        "basic-speed": 6, 
+        "per": 12
       }, 
       "weapon-index": null, 
       "check_for_death": false, 
@@ -13004,12 +13004,12 @@
     "Arseniy - Xenobiologist in tiger team": {
       "current": {
         "fp": 10, 
-        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "ht": 10, 
         "st": 10, 
         "per": 10, 
+        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13039,12 +13039,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
-        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "ht": 10, 
         "st": 10, 
         "per": 10, 
+        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13081,25 +13081,25 @@
         "fp": 30, 
         "iq": 12, 
         "hp": 10, 
-        "wi": 12, 
+        "per": 8, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 5, 
-        "basic-speed": 6, 
-        "per": 8
+        "basic-speed": 6
       }, 
       "permanent": {
         "fp": 30, 
         "iq": 12, 
         "hp": 10, 
-        "wi": 12, 
+        "per": 8, 
         "st": 10, 
+        "wi": 12, 
         "ht": 11, 
         "dx": 13, 
         "basic-move": 5, 
-        "basic-speed": 6, 
-        "per": 8
+        "basic-speed": 6
       }, 
       "state": "alive", 
       "stuff": [], 
@@ -13173,12 +13173,12 @@
     "Maia Thompson - Operations manager on Tereshkova": {
       "current": {
         "fp": 10, 
-        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "ht": 10, 
         "st": 10, 
         "per": 10, 
+        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13200,12 +13200,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
-        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "ht": 10, 
         "st": 10, 
         "per": 10, 
+        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13221,12 +13221,12 @@
     "Isaac Harris - Tiger team leader": {
       "current": {
         "fp": 11, 
-        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "wi": 12, 
+        "ht": 11, 
         "st": 10, 
         "per": 12, 
+        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -13307,12 +13307,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 11, 
-        "ht": 11, 
         "iq": 12, 
         "hp": 11, 
-        "wi": 12, 
+        "ht": 11, 
         "st": 10, 
         "per": 12, 
+        "wi": 12, 
         "dx": 12, 
         "basic-move": 5, 
         "basic-speed": 5.75
@@ -13331,12 +13331,12 @@
     "Anel - control tower, tereshkova": {
       "current": {
         "fp": 10, 
-        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "ht": 10, 
         "st": 10, 
         "per": 10, 
+        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
@@ -13366,12 +13366,12 @@
       "state": "alive", 
       "permanent": {
         "fp": 10, 
-        "ht": 10, 
         "iq": 10, 
         "hp": 10, 
-        "wi": 10, 
+        "ht": 10, 
         "st": 10, 
         "per": 10, 
+        "wi": 10, 
         "dx": 10, 
         "basic-move": 5, 
         "basic-speed": 5
