@@ -2381,8 +2381,11 @@ class TimersWidget(object):
     def make_timer(self,
                    timer_recipient_name # string
                    ):
+        '''
+        Makes a timer object and adds it to the Timers list.
+        '''
 
-        timer_dict = self.__make_timer_dict(timer_recipient_name)
+        timer_dict = self.make_timer_dict(timer_recipient_name)
 
         if timer_dict is not None:
             timer_obj = Timer(None)
@@ -2390,46 +2393,15 @@ class TimersWidget(object):
             self.__timers.add(timer_obj)
 
 
-    def make_timer_action(self,
-                          timer_recipient_name, # string
-                         ):
+    def make_timer_dict(self,
+                        timer_recipient_name, # string
+                       ):
+        '''
+        Builds the data dictionary describing a new timer.  Asks all the
+        questions necessary to provide the dict with the data it needs.
 
-        return self.__make_timer_dict(timer_recipient_name)
-
-
-
-    # Private and Protected Methods
-
-
-    def __announcement_action(self,
-                              param
-                             ):
-        title = 'Enter the Announcement'
-        height = 1
-        width = (curses.COLS - 4) - Timer.len_timer_leader
-        announcement = self.__window_manager.input_box(height, width, title)
-        if announcement is not None and len(announcement) <= 0:
-            announcement = None
-        param['announcement'] = announcement
-        return True # Keep going
-
-
-    def __continuous_message_action(self,
-                                    param
-                                   ):
-        title = 'Enter the Continuous Message'
-        height = 1
-        width = (curses.COLS - 4) - Timer.len_timer_leader
-        string = self.__window_manager.input_box(height, width, title)
-        if string is not None and len(string) <= 0:
-            string = None
-        param['continuous_message'] = string
-        return True # Keep going
-
-
-    def __make_timer_dict(self,
-                          timer_recipient_name # string
-                         ):
+        Returns: the dict for the new timer.
+        '''
 
         # How long is the timer?
 
@@ -2445,7 +2417,6 @@ class TimersWidget(object):
 
         # What does the timer do?
 
-        keep_asking = True
         keep_asking_menu = [('yes', True), ('no', False)]
         param = {'announcement': None,
                  'continuous_message': None,
@@ -2459,6 +2430,7 @@ class TimersWidget(object):
                         ('state change',          
                                 {'doit': self.__new_state_action,
                                  'param': param})]
+        keep_asking = True
         while keep_asking:
             result = self.__window_manager.menu('Timer Action', actions_menu)
             if result is None:
@@ -2489,19 +2461,83 @@ class TimersWidget(object):
 
 
 
+    # Private and Protected Methods
+
+
+    def __announcement_action(self,
+                              param    # dict passed by the menu handler --
+                                       #   contains the announcement text
+                                       #   associated with the timer
+                             ):
+        '''
+        Handler for the timer's 'what do I do with this timer' entry.
+
+        Sets the timer up to display a window containing text when the timer
+        fires.
+
+        Returns: True -- just so it's not None
+        '''
+        title = 'Enter the Announcement'
+        height = 1
+        width = (curses.COLS - 4) - Timer.len_timer_leader
+        announcement = self.__window_manager.input_box(height, width, title)
+        if announcement is not None and len(announcement) <= 0:
+            announcement = None
+        param['announcement'] = announcement
+        return True
+
+
+    def __continuous_message_action(self,
+                                    param   # dict passed by the menu
+                                            #  handler -- contains the text
+                                            #  associated with the timer
+                                   ):
+        '''
+        Handler for the timer's 'what do I do with this timer' entry.
+
+        Sets the timer up to display the provided text when the timer is
+        displayed.
+
+        Returns: True -- just so it's not None
+        '''
+        title = 'Enter the Continuous Message'
+        height = 1
+        width = (curses.COLS - 4) - Timer.len_timer_leader
+        string = self.__window_manager.input_box(height, width, title)
+        if string is not None and len(string) <= 0:
+            string = None
+        param['continuous_message'] = string
+        return True
+
+
     def __new_state_action(self,
-                           param
+                           param    # dict passed by the menu handler --
+                                    #   contains the destination state of the
+                                    #   Fighter associated with the timer
                           ):
+        '''
+        Handler for the timer's 'what do I do with this timer' entry.
+
+        Sets the timer up to change the consciousness state of it's associated
+        object when the timer fires.
+
+        Returns: True -- just so it's not None
+        '''
         state_menu = [(x, x) for x in Fighter.conscious_map.keys() 
                                                             if x != 'fight']
         state_menu = sorted(state_menu, key=lambda x: x[0].upper())
         state = self.__window_manager.menu('Which State', state_menu)
         if state is not None:
             param['state'] = state
-        return True # Keep going
+        return True
 
 
 class Timers(object):
+    '''
+    Keeps a list of timers.  There are two parallel lists: 'data' keeps the
+    actual data (it's a pointer to the spot in the JSON where the ultimate
+    data is stored) while 'obj' keeps Timer objects.
+    '''
     def __init__(self,
                  timer_details, # List from JSON containing timers
                  owner,         # ThingsInFight object to receive timer
@@ -2527,12 +2563,21 @@ class Timers(object):
     def add(self,
             timer   # Timer object
            ):
+        '''
+        Adds a timer to this list's timers.
+
+        Returns the timer right back, again.
+        '''
         self.__timers['data'].append(timer.details)
         self.__timers['obj'].append(timer)
         return timer
 
 
     def clear_all(self):
+        ''' Removes all of this list's timers. '''
+        # I think I have to pop the timer data, individually, because setting
+        # ['data'] to [] would just remove our pointer to the JSON data
+        # without modifying the JSON data.
         while len(self.__timers['data']) > 0:
             self.__timers['data'].pop()
         self.__timers['obj'] = []
@@ -2545,14 +2590,17 @@ class Timers(object):
 
 
     def get_all(self):
+        ''' Returns a complete list of this list's Timer objects.  '''
         return self.__timers['obj']
 
 
     def remove_expired_keep_dying(self):
         '''
-        Removes timers BUT KEEPS the timers that are dying this round.  Call
-        this at the beginning of the round.  Standard timers that die this
-        round are kept so that they're shown.
+        Removes expired timers BUT KEEPS the timers that are dying this
+        round.  Call this at the beginning of the round.  Standard timers that
+        die this round are kept so that they're shown.
+
+        Returns nothing.
         '''
 
         remove_these = []
@@ -2567,11 +2615,14 @@ class Timers(object):
 
     def remove_expired_kill_dying(self):
         '''
-        Removes timers AND KILLS the timers that are dying this round.  Call
-        this at the end of the round to scrape off the timers that expire this
-        round.
+        Removes expired timers AND REMOVES the timers that are dying this
+        round.  Call this at the end of the round to scrape off the timers
+        that expire this round.
+
+        Returns nothing.
         '''
 
+        # TODO: should I just reverse the order we go through the timer list?
         remove_these = []
         for index, timer in enumerate(self.__timers['obj']):
             if timer.details['rounds'] <= 0:    # <= kills the timers dying
@@ -2583,8 +2634,13 @@ class Timers(object):
 
 
     def remove_timer_by_index(self,
-                              index
+                              index # Index of the timer to be removed
                              ):
+        '''
+        Removes a timer from the timer list.
+
+        Returns nothing.
+        '''
         del self.__timers['data'][index]
         del self.__timers['obj'][index]
 
@@ -2595,12 +2651,21 @@ class Timers(object):
     def __fire_timer(self,
                      timer  # Timer object
                     ):
+        '''
+        Has the timer do whatever it does when it fires (i.e., when its time
+        runs out).
+
+        Returns nothing.
+        '''
         new_timer = timer.fire(self.__owner, self.__window_manager)
         if new_timer is not None:
             self.add(Timer(new_timer))
 
 
 class ThingsInFight(object):
+    '''
+    Base class to manage timers, equipment, and notes for Fighters and Venues.
+    '''
     def __init__(self,
                  name,          # string, name of the thing
                  group,         # string to index into world['fights']
@@ -2640,12 +2705,22 @@ class ThingsInFight(object):
                       new_item,   # dict describing new equipment
                       source=None # string describing where equipment came from
                       ):
+        '''
+        Accept a new item of equipment and put it in the list.
+
+        Returns the new index of the equipment.
+        '''
         return self.equipment.add(new_item, source)
 
 
     def remove_equipment(self,
                          item_index
                         ):
+        '''
+        Discards an item from the Fighter's/Venue's equipment list.
+
+        Returns: the discarded item
+        '''
         return self.equipment.remove(item_index)
 
     #
@@ -2655,24 +2730,51 @@ class ThingsInFight(object):
     def get_defenses_notes(self,
                            opponent # Throw away Fighter object
                           ):
+        '''
+        Returns a tuple of strings describing:
+        
+        1) the current (based on weapons held, armor worn, etc) defensive
+           capability of the Fighter, and
+        2) the pieces that went into the above calculations
+
+        Or, in the case of the base class, nothing.
+        '''
         return None, None
 
 
     def get_long_summary_string(self):
+        '''
+        Returns a string that contains a short (but not the shortest)
+        description of the state of the Fighter or Venue.
+        '''
         return '%s' % self.name
 
 
     def get_notes(self):
+        '''
+        Returns a list of strings describing the current fighting state of the
+        fighter (rounds available, whether s/he's aiming, current posture,
+        etc.).  There's decidedly less information than that returned by the
+        base class.
+        '''
         return None 
 
 
     def get_short_summary_string(self):
+        '''
+        Returns a string that contains the shortest description of the Fighter.
+        '''
         return '%s' % self.name
 
 
     def get_to_hit_damage_notes(self,
                                 opponent # Throw away Fighter object
                                ):
+        '''
+        Returns a list of strings describing the current (using the current
+        weapon, in the current posture, etc.) fighting capability (to-hit and
+        damage) of a fighter.  It does nothing in the base class.
+        '''
         return None
 
     #
@@ -2683,9 +2785,20 @@ class ThingsInFight(object):
                   world,          # World object
                   fight_handler   # FightHandler object
                  ):
+        '''
+        Perform the post-fight cleanup.  Remove all the timers, that sort of
+        thing.
+
+        Returns nothing.
+        '''
         self.timers.clear_all()
 
     def start_fight(self):
+        '''
+        Configures the Fighter or Venue to start a fight.
+
+        Returns nothing.
+        '''
         pass
 
     #
@@ -2708,6 +2821,11 @@ class ThingsInFight(object):
 
 
 class Venue(ThingsInFight):
+    '''
+    Incorporates all of the information for a room (or whatever).  This is the
+    mechanism whereby items can be distributed in a room.  The data
+    is just a pointer to the JSON data so that it's edited in-place.
+    '''
     name = '<< ROOM >>'                 # Describes the FIGHT object
     detailed_name = '<< ROOM: %s >>'    # insert the group into the '%s' slot
     empty_venue = {
@@ -2795,6 +2913,10 @@ class Venue(ThingsInFight):
 
 
 class Fighter(ThingsInFight):
+    '''
+    Incorporates all of the information for a PC, NPC, or monster.  The data
+    is just a pointer to the JSON data so that it's edited in-place.
+    '''
     (ALIVE,
      UNCONSCIOUS,
      DEAD,
@@ -2829,6 +2951,11 @@ class Fighter(ThingsInFight):
 
     @staticmethod
     def get_fighter_state(details):
+        '''
+        Returns the fighter state number.  Note that Fighter.INJURED needs to
+        be calculated -- we don't store that in the Fighter as a separate
+        state.
+        '''
         conscious_number = Fighter.conscious_map[details['state']]
         if (conscious_number == Fighter.ALIVE and 
                         details['current']['hp'] < details['permanent']['hp']):
@@ -2851,7 +2978,13 @@ class Fighter(ThingsInFight):
                       new_item,   # dict describing new equipment
                       source=None # string describing where equipment came from
                       ):
+        '''
+        Accept a new item of equipment and put it in the list.
+
+        Returns the new index of the equipment.
+        '''
         index = self.equipment.add(new_item, source)
+        # TODO: Do we need to sheath weapon and doff armor?
         self.details['weapon-index'] = None
         self.details['armor-index'] = None
         return index
@@ -2879,6 +3012,12 @@ class Fighter(ThingsInFight):
                   world,          # World object (for options)
                   fight_handler   # FightHandler object (for do_action)
                  ):
+        '''
+        Perform the post-fight cleanup.  Remove all the timers, reload if the
+        option is set.  Sheathe the weapon.
+
+        Returns nothing.
+        '''
         super(Fighter, self).end_fight(world, fight_handler)
         if ('reload-after-fight' in world.details['Options'] and 
                             world.details['Options']['reload-after-fight'] and
@@ -2893,7 +3032,11 @@ class Fighter(ThingsInFight):
 
     def get_current_armor(self):
         '''
-        Returns a dict (from the JSON)
+        Gets the armor the Fighter is wearing.
+
+        Returns a tuple:
+            1) a dict (from the JSON)
+            2) index of the weapon
         '''
         if 'armor-index' not in self.details:
             return None, None
@@ -2906,8 +3049,14 @@ class Fighter(ThingsInFight):
 
     def get_current_weapon(self):
         '''
-        Returns a dict (from the JSON)
+        Gets the weapon that the Fighter is holding.
+
+        Returns a tuple:
+            1) a dict (from the JSON)
+            2) index of the weapon
         '''
+        if 'weapon-index' not in self.details:
+            return None, None
         weapon_index = self.details['weapon-index']
         if weapon_index is None:
             return None, None
@@ -2919,7 +3068,7 @@ class Fighter(ThingsInFight):
                            name
                           ):
         '''
-        Remove weapon from sheath or holster.
+        Draw weapon from sheath or holster.
 
         Returns index, item
         '''
@@ -2930,9 +3079,20 @@ class Fighter(ThingsInFight):
 
 
     def remove_equipment(self,
-                         item_index
+                         item_index # <int> index into Equipment list
                         ):
+        '''
+        Discards an item from the Fighter's equipment list.
+
+        Returns: the discarded item
+        '''
         item = self.equipment.remove(item_index)
+
+        # Unhand the weapon and doff the armor since the index messes that up.
+
+        # TODO: find a way to keep the weapon and armor when an item is
+        # removed.  Maybe get the name of the item, remove the equipment,
+        # get_item_by_name (what to do about duplcate names?)
         self.details['weapon-index'] = None
         self.details['armor-index'] = None
         return item
@@ -2945,6 +3105,13 @@ class Fighter(ThingsInFight):
     def get_defenses_notes(self,
                            opponent # Fighter object
                           ):
+        '''
+        Returns a tuple of strings describing:
+        
+        1) the current (based on weapons held, armor worn, etc) defensive
+           capability of the Fighter, and
+        2) the pieces that went into the above calculations
+        '''
         defense_notes, defense_why = self._ruleset.get_fighter_defenses_notes(
                                                                 self,
                                                                 opponent)
@@ -2956,10 +3123,21 @@ class Fighter(ThingsInFight):
                                 # [[{'text','mode'},...],  # line 0
                                 #  [...],               ]  # line 1...
                         ):
+        '''
+        Provides a text description of a Fighter including all of the
+        attributes (current and permanent), equipment, etc.
+
+        Returns: nothing.  The output is written to the |output| variable.
+        '''
         self._ruleset.get_character_description(self, output)
 
 
     def get_long_summary_string(self):
+        '''
+        Returns a string that contains a short (but not the shortest)
+        description of the state of the Fighter.
+        '''
+        # TODO: this is ruleset-based
         fighter_string = '%s HP: %d/%d FP: %d/%d' % (
                                     self.name,
                                     self.details['current']['hp'],
@@ -2970,6 +3148,11 @@ class Fighter(ThingsInFight):
 
 
     def get_notes(self):
+        '''
+        Returns a list of strings describing the current fighting state of the
+        fighter (rounds available, whether s/he's aiming, current posture,
+        etc.)
+        '''
         notes = self._ruleset.get_fighter_notes(self)
         return notes
 
@@ -2977,11 +3160,20 @@ class Fighter(ThingsInFight):
     def get_to_hit_damage_notes(self,
                                 opponent # Fighter object
                                ):
+        '''
+        Returns a list of strings describing the current (using the current
+        weapon, in the current posture, etc.) fighting capability (to-hit and
+        damage) of the fighter.
+        '''
         notes = self._ruleset.get_fighter_to_hit_damage_notes(self, opponent)
         return notes
 
 
     def get_short_summary_string(self):
+        '''
+        Returns a string that contains the shortest description of the Fighter.
+        '''
+        # TODO: this is ruleset based
         fighter_string = '%s HP:%d/%d' % (self.name,
                                           self.details['current']['hp'],
                                           self.details['permanent']['hp'])
@@ -2993,12 +3185,26 @@ class Fighter(ThingsInFight):
     #
 
     def can_finish_turn(self):
+        '''
+        If a Fighter has done something this turn, we can move to the next
+        Fighter.  Otherwise, the Fighter should do something before we go to
+        the next Fighter.
+
+        Returns: <bool> telling the caller whether this Fighter needs to do
+        something before we move on.
+        '''
         return self._ruleset.can_finish_turn(self)
 
 
     def end_turn(self,
                  fight_handler  # FightHandler object
                 ):
+        '''
+        Performs all of the stuff required for a Fighter to end his/her
+        turn.
+
+        Returns: nothing
+        '''
         self._ruleset.end_turn(self, fight_handler)
         self.timers.remove_expired_kill_dying()
 
@@ -3020,9 +3226,14 @@ class Fighter(ThingsInFight):
         return True if self.details['state'] == 'absent' else False
 
 
-    def set_consciousness(self, conscious_number):
+    def set_consciousness(self,
+                          conscious_number  # <int> See Fighter.conscious_map
+                         ):
         '''
-        Sets the state of the fighter.
+        Sets the state (alive, unconscious, dead, absent, etc.) of the
+        Fighter.  
+
+        Returns nothing.
         '''
 
         for state_name, state_num in Fighter.conscious_map.iteritems():
@@ -3036,6 +3247,11 @@ class Fighter(ThingsInFight):
 
 
     def start_fight(self):
+        '''
+        Configures the Fighter to start a fight.
+
+        Returns nothing.
+        '''
         # NOTE: we're allowing health to still be messed-up, here
         # NOTE: person may go around wearing armor -- no need to reset
         self.details['opponent'] = None
@@ -3045,6 +3261,12 @@ class Fighter(ThingsInFight):
     def start_turn(self,
                    fight_handler    # FightHandler object
                   ):
+        '''
+        Performs all of the stuff required for a Fighter to start his/her
+        turn.  Handles timer stuff.
+
+        Returns: nothing
+        '''
         self._ruleset.start_turn(self, fight_handler)
         self.timers.decrement_all()
         self.timers.remove_expired_keep_dying()
@@ -3065,6 +3287,11 @@ class Fighter(ThingsInFight):
 
 
     def toggle_absent(self):
+        '''
+        Toggles the consciousness state between absent and alive.
+
+        Returns nothing.
+        '''
 
         if self.details['state'] == 'absent':
             self.details['state'] = 'alive'
@@ -3080,6 +3307,8 @@ class Fighter(ThingsInFight):
                          fight_handler  # FightHandler object
                         ):
         '''
+        Explains how the stuff in the descriptions were calculated.
+
         Returns [[{'text':x, 'mode':x}, {...}], [], [], ...]
             where the outer array contains lines
             each line is an array that contains a line-segment
@@ -3188,6 +3417,9 @@ class Ruleset(object):
                                     #   of another action
                  ):
         '''
+        Executes an action for a Fighter then records that action.
+
+        Returns nothing.
         '''
         handled = self._perform_action(fighter, action, fight_handler, logit)
         self._record_action(fighter, action, fight_handler, handled, logit)
@@ -3199,8 +3431,22 @@ class Ruleset(object):
                         opponent        # Fighter object
                        ):
         '''
-        Builds the menu of maneuvers allowed for the fighter. This is for the
-        non-ruleset-based stuff like drawing weapons and such.
+        Builds a list of all of the things that this fighter can do this
+        round.  This list will be fed to GmWindowManager.menu(), so each
+        element is a tuple of
+
+        1) the string to be displayed
+        2) a dict that contains one or more of
+
+            'text' - text to go in a timer to show what the Fighter is doing
+            'action' - an action to be sent to the ruleset
+            'menu' - a menu to be recursively called
+
+        NOTE: all menu items should end, ultimately, in an 'action' because
+        then the activity will be logged in the history and can be played-back
+        if there's a bug to be reported.
+
+        Returns the menu (i.e., the list)
         '''
 
         # Figure out who we are and what we're holding.
@@ -3364,6 +3610,8 @@ class Ruleset(object):
                     ):
         '''
         Removes all injury (and their side-effects) from a fighter.
+
+        Returns: nothing.
         '''
         if 'permanent' not in fighter.details:
             return
@@ -3392,6 +3640,14 @@ class Ruleset(object):
 
 
     def make_empty_creature(self):
+        '''
+        Builds the minimum legal character detail (the dict that goes into the
+        JSON).  You can feed this to the constructor of a Fighter.  First,
+        however, you need to install it in the World's JSON so that it's
+        backed-up and recognized by the rest of the software.
+
+        Returns: the dict.
+        '''
         return {'stuff': [],
                 'weapon-index': None,
                 'armor-index': None,
@@ -3415,11 +3671,21 @@ class Ruleset(object):
                                           #  another action
                        ):
         '''
-        ONLY to be used for fights (otherwise, there's no fight handler to log
-        the actions).
+        This routine delegates actions to routines that perform the action.
+        The 'doit' routines return whether the action was successfully handled
+        or not (i.e., UNHANDLED, HANDLED_OK, or HANDLED_ERROR) and that is, in
+        turn, returned to the calling routine. 
 
         Default, non-ruleset related, action handling.  Good for drawing
         weapons and such.
+
+        ONLY to be used for fights (otherwise, there's no fight handler to log
+        the actions).
+
+        This is called directly from the child ruleset (which is called from 
+        do_action because _perform_action is overridden by the child class.
+
+        Returns: nothing
         '''
 
         actions = {
@@ -3464,7 +3730,9 @@ class Ruleset(object):
                                          #  another action
                       ):
         '''
-        Logs the action into the fight's history
+        Logs a performed 'action' in the fight's history.
+
+        Returns: nothing.
         '''
 
         if fight_handler is not None and logit:
@@ -3479,6 +3747,12 @@ class Ruleset(object):
                             creature,   # dict describing the creature
                             look_for_re # compiled Python regex
                            ):
+        '''
+        Looks through a creature for the regular expression |look_for_re|.
+
+        Returns: dict: with name, group, location (where in the character the
+        regex was found), and notes (text for display to the user).
+        '''
         result = []
 
         if look_for_re.search(name):
@@ -3534,6 +3808,15 @@ class Ruleset(object):
                                      # }
                    fight_handler,    # FightHandler object
                   ):
+        '''
+        Action handler for Ruleset.
+
+        Adjust the Fighter's hit points.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+
         fighter.details['current']['hp'] += action['adj']
         return Ruleset.HANDLED_OK
 
@@ -3546,10 +3829,18 @@ class Ruleset(object):
                     fight_handler     # FightHandler object
                    ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for Ruleset.
+
+        Performs an attack action for the Fighter.  Picks an opponent if the
+        fighter doesn't have one.  Reduces the ammo if the Fighter's weapon
+        takes ammunition.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
 
+        # TODO: this should be in two parts like cast_spell since the user can
+        # be asked to pick an opponent.
         if (fighter.details['opponent'] is None and
                                         fight_handler is not None and
                                         not fight_handler.world.playing_back):
@@ -3570,6 +3861,15 @@ class Ruleset(object):
                                              #  'comment': <string>, # optional
                            fight_handler,    # FightHandler object
                           ):
+        '''
+        Action handler for Ruleset.
+
+        Allows the user to describe some action that wasn't in the Ruleset or
+        the derived Ruleset.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
         height = 1
         title = 'What Action Is Performed'
         width = self._window_manager.getmaxyx()
@@ -3594,8 +3894,12 @@ class Ruleset(object):
                     fight_handler,    # FightHandler object
                   ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for Ruleset.
+
+        Reloads the Fighter's current weapon.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
         weapon, weapon_index = fighter.get_current_weapon()
         if weapon is None or 'ammo' not in weapon:
@@ -3620,9 +3924,15 @@ class Ruleset(object):
                     fight_handler,    # FightHandler object
                    ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for Ruleset.
+
+        Dons a specific piece of armor for the Fighter.  If the index is None,
+        it doffs the current armor.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
+
         fighter.don_armor_by_index(action['armor-index'])
         return Ruleset.HANDLED_OK
 
@@ -3637,9 +3947,15 @@ class Ruleset(object):
                       fight_handler,    # FightHandler object
                      ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for Ruleset.
+
+        Draws a specific weapon for the Fighter.  If index in None, it
+        holsters the current weapon.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
+
         fighter.draw_weapon_by_index(action['weapon-index'])
         return Ruleset.HANDLED_OK
 
@@ -3651,9 +3967,15 @@ class Ruleset(object):
                    fight_handler,    # FightHandler object
                   ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for Ruleset.
+
+        Does all of the shut-down operations for a Fighter to complete his
+        turn.  Moves to the next Fighter.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
+
         if fight_handler is not None:
             fighter.end_turn(fight_handler)
             fight_handler.modify_index(1)
@@ -3670,9 +3992,14 @@ class Ruleset(object):
                         fight_handler,    # FightHandler object
                        ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for Ruleset.
+
+        Establishes a Fighter's opponent for future actions.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
+
         fighter.details['opponent'] = {'group': action['opponent']['group'],
                                        'name': action['opponent']['name']}
         return Ruleset.HANDLED_OK
@@ -3687,9 +4014,14 @@ class Ruleset(object):
                             fight_handler,    # FightHandler object
                            ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for Ruleset.
+
+        Configures the consciousness state of the Fighter.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
+
         fighter.set_consciousness(action['level'])
         return Ruleset.HANDLED_OK
 
@@ -3702,6 +4034,14 @@ class Ruleset(object):
                                       #  'comment': <string> # optional
                     fight_handler,    # FightHandler object
                    ):
+        '''
+        Action handler for Ruleset.
+
+        Attaches a Timer to the Fighter.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
 
         timer_obj = Timer(None)
         timer_obj.from_pieces(action['timer'])
@@ -3716,8 +4056,13 @@ class Ruleset(object):
                      fight_handler,    # FightHandler object
                     ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for Ruleset.
+
+        Action to do all the preparatory work for a Fighter to start his/her
+        turn.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
         fighter.start_turn(fight_handler)
         return Ruleset.HANDLED_OK
@@ -3732,8 +4077,12 @@ class Ruleset(object):
                    fight_handler,    # FightHandler object
                   ):
         '''
-        Called to handle a menu selection.
-        Returns: Nothing, return values for these functions are ignored.
+        Action handler for Ruleset.
+
+        Use and discard a specific item (decrements its count).
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
         item = fighter.equipment.get_item_by_index(action['item-index'])
         if item is not None and 'count' in item:
@@ -9829,7 +10178,7 @@ class FightHandler(ScreenHandler):
         timers_widget = TimersWidget(timer_recipient.timers,
                                      self._window_manager)
 
-        timer_dict = timers_widget.make_timer_action(timer_recipient.name)
+        timer_dict = timers_widget.make_timer_dict(timer_recipient.name)
         if timer_dict is not None:
             self.__ruleset.do_action(timer_recipient,
                                      {'name': 'set-timer',
