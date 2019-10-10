@@ -2737,7 +2737,7 @@ class ThingsInFight(object):
            capability of the Fighter, and
         2) the pieces that went into the above calculations
 
-        Or, in the case of the base class, nothing.
+        Or, in the case of the base class, None.
         '''
         return None, None
 
@@ -7632,12 +7632,12 @@ class GurpsRuleset(Ruleset):
 
         weapon, weapon_index = fighter.get_current_weapon()
         if weapon is None or 'ammo' not in weapon:
-            return None
+            return None # No timer
 
         # Check to see if we need a reload at all
 
         if weapon['ammo']['shots_left'] == weapon['ammo']['shots']:
-            return None
+            return None # No timer
 
         # If we do, how long will it take?
 
@@ -8934,7 +8934,7 @@ class FightHandler(ScreenHandler):
             if fighter.group == group and fighter.name == name:
                 return fighter
 
-        return None
+        return None # Not found
 
 
     def get_opponent_for(self,
@@ -8943,7 +8943,7 @@ class FightHandler(ScreenHandler):
         ''' Returns Fighter object for opponent of |fighter|. '''
         if (fighter is None or fighter.name == Venue.name or
                                         fighter.details['opponent'] is None):
-            return None
+            return None # No opponent
 
         opponent = self.get_fighter_object(
                                         fighter.details['opponent']['name'],
@@ -10431,14 +10431,14 @@ class MainHandler(ScreenHandler):
 
         Operates on the currently selected NPC.
 
-        Returns: None
+        Returns: True -- anything but 'None' for a menu handler
         '''
 
         # Make sure the person is an NPC
         npc_name = self.__chars[self.__char_index].name
         if self.__chars[self.__char_index].group != 'NPCs':
             self._window_manager.error(['"%s" not an NPC' % npc_name])
-            return None
+            return True
 
         # Select the fight
         fight_menu = [(fight_name, fight_name)
@@ -10450,12 +10450,12 @@ class MainHandler(ScreenHandler):
         if npc_name in fight:
             self._window_manager.error(['"%s" already in fight "%s"' %
                                                     (npc_name, fight_name)])
-            return None
+            return True
 
         fight[npc_name] = {'redirect': 'NPCs'}
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
-        return None
+        return True
 
 
     def NPC_joins_PCs(self,                     # Public to support testing
@@ -10473,22 +10473,22 @@ class MainHandler(ScreenHandler):
 
         Operates on the currently selected NPC.
 
-        Returns: None
+        Returns: True -- anything but None (since it's a menu handler)
         '''
 
         npc_name = self.__chars[self.__char_index].name
         if self.__chars[self.__char_index].group != 'NPCs':
             self._window_manager.error(['"%s" not an NPC' % npc_name])
-            return None
+            return True
 
         if npc_name in self.world.details['PCs']:
             self._window_manager.error(['"%s" already a PC' % npc_name])
-            return None
+            return True
 
         self.world.details['PCs'][npc_name] = {'redirect': 'NPCs'}
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
-        return None
+        return True
 
     #
     # Protected and Private Methods
@@ -10506,7 +10506,7 @@ class MainHandler(ScreenHandler):
 
         Allows the user to add equipment to a Fighter or Venue.
 
-        Returns: None
+        Returns: True -- anything but 'None' in a menu handler
         '''
         fighter = self.__chars[self.__char_index]
 
@@ -10517,7 +10517,7 @@ class MainHandler(ScreenHandler):
             self._draw_screen()
             keep_asking = self._window_manager.menu('Add More Equipment',
                                                     keep_asking_menu)
-        return None
+        return True
 
 
     def __add_monsters(self,
@@ -10532,7 +10532,7 @@ class MainHandler(ScreenHandler):
 
         Modifies an existing monster list or creates a new monster list.
 
-        Returns: None
+        Returns: True -- anything but None in a menu handler
         '''
 
         build_fight = BuildFightHandler(self._window_manager,
@@ -10551,7 +10551,7 @@ class MainHandler(ScreenHandler):
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
 
-        return None
+        return True
 
 
     def __add_NPCs(self,
@@ -10566,7 +10566,7 @@ class MainHandler(ScreenHandler):
 
         Modifies the NPC list.
 
-        Returns: None
+        Returns: True -- anything but None in a menu handler
         '''
 
         build_fight = BuildFightHandler(self._window_manager,
@@ -10576,7 +10576,7 @@ class MainHandler(ScreenHandler):
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list(self.__current_display) # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
-        return None
+        return True
 
 
     def __add_PCs(self,
@@ -10591,7 +10591,7 @@ class MainHandler(ScreenHandler):
 
         Adds PCs to the PC list.
 
-        Returns: None
+        Returns: True -- anything but None in a menu handler
         '''
 
         build_fight = BuildFightHandler(self._window_manager,
@@ -10601,7 +10601,7 @@ class MainHandler(ScreenHandler):
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list(self.__current_display) # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
-        return None
+        return True
 
 
     def __add_spell(self,
@@ -10616,7 +10616,8 @@ class MainHandler(ScreenHandler):
 
         Adds a user-designated magic spell to a Fighter.
 
-        Returns: None
+        Returns: None if we want to bail out of the process of adding a spell,
+                 True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
 
@@ -10670,7 +10671,7 @@ class MainHandler(ScreenHandler):
 
             keep_asking = self._window_manager.menu('Add More Spells',
                                                     keep_asking_menu)
-        return None
+        return True
 
 
     def __add_timer(self,
@@ -10685,7 +10686,7 @@ class MainHandler(ScreenHandler):
 
         Adds a user-described timer to a Fighter or Venue.
 
-        Returns: None
+        Returns: True -- anything but None in a menu handler
         '''
         fighter = self.__chars[self.__char_index]
         lines, cols = self._window.getmaxyx()
@@ -10698,7 +10699,7 @@ class MainHandler(ScreenHandler):
             self._draw_screen()
             keep_asking = self._window_manager.menu('Add More Timers',
                                                     keep_asking_menu)
-        return None
+        return True
 
 
     def __change_attributes(self,
@@ -10714,7 +10715,9 @@ class MainHandler(ScreenHandler):
         Allows the user to modify one or more attribute values of the Fighter.
         The specific attributes come from the Ruleset.
 
-        Returns: None
+        # TODO: propogate None/True to menu-handlers, below.
+        Returns: None if we want to bail-out of the change attributes process,
+                 True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
         keep_asking_menu = [('yes', True), ('no', False)]
@@ -10761,7 +10764,7 @@ class MainHandler(ScreenHandler):
             self._draw_screen()
             keep_asking = self._window_manager.menu('Change More Attributes',
                                                     keep_asking_menu)
-        return None
+        return True
 
 
     def __don_armor(self,
@@ -10776,7 +10779,8 @@ class MainHandler(ScreenHandler):
 
         Asks the user which armor the Fighter should wear and puts it on.
 
-        Returns: nothing.
+        Returns: None if we want to bail-out of the change attributes process,
+                 True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
         armor, throw_away = fighter.get_current_armor()
@@ -10802,7 +10806,7 @@ class MainHandler(ScreenHandler):
                                  },
                                  None)
         self._draw_screen()
-        return None
+        return True # anything but 'None' for a menu handler
 
 
     def _draw_screen(self,
@@ -10842,7 +10846,8 @@ class MainHandler(ScreenHandler):
         Asks the user which weapon (or shield) the Fighter should draw and
         draws it.
 
-        Returns: nothing.
+        Returns: None if we want to bail-out of the change attributes process,
+                 True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
         weapon, throw_away = fighter.get_current_weapon()
@@ -10870,7 +10875,7 @@ class MainHandler(ScreenHandler):
                                  },
                                  None)
         self._draw_screen()
-        return None
+        return True # Anything but 'None' for a menu handler
 
 
     def __equip(self):
@@ -11020,7 +11025,8 @@ class MainHandler(ScreenHandler):
         Provides a way for one Fighter (or Venue) to transfer an item of
         equipment to a different Fighter (or Venue).
 
-        Returns: None
+        Returns: None if we want to bail-out of the change attributes process,
+                 True, otherwise
         '''
         from_fighter = self.__chars[self.__char_index]
 
@@ -11042,7 +11048,7 @@ class MainHandler(ScreenHandler):
         to_fighter = self.world.get_creature(to_fighter_info, 'PCs')
         to_fighter.add_equipment(item, from_fighter.detailed_name)
         self._draw_screen()
-        return None
+        return True # anything but 'None' for a successful menu handler
 
 
     # MainHandler
@@ -11109,7 +11115,8 @@ class MainHandler(ScreenHandler):
 
         Allows the user to modify a Fighter's notes or short-notes.
 
-        Returns: None
+        Returns: None if we want to bail-out of the change attributes process,
+                 True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
         if fighter is None:
@@ -11133,7 +11140,7 @@ class MainHandler(ScreenHandler):
         fighter.details[notes_type] = [x for x in notes.split('\n')]
         self._draw_screen()
 
-        return None
+        return True # Menu handler's success returns anything but 'None'
 
 
     def __NPC_leaves_PCs(self,
@@ -11149,7 +11156,8 @@ class MainHandler(ScreenHandler):
         Removes an NPC that's currently in the party list.  He stays being an
         NPC.  Operates on current creature in the creature list.
 
-        Returns: None
+        Returns: None if we want to bail-out of the change attributes process,
+                 True, otherwise
         '''
         npc_name = self.__chars[self.__char_index].name
         if npc_name not in self.world.details['NPCs']:
@@ -11163,7 +11171,7 @@ class MainHandler(ScreenHandler):
         del(self.world.details['PCs'][npc_name])
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
-        return None
+        return True # Menu handler's success returns anything but 'None'
 
 
     def __party(self):
@@ -11250,12 +11258,13 @@ class MainHandler(ScreenHandler):
         should be removed from his list.  Then removes that piece of
         equipment.
 
-        Returns: None
+        Returns: None if we want to bail-out of the change attributes process,
+                 True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
         self.__equipment_manager.remove_equipment(fighter)
         self._draw_screen()
-        return None
+        return True # Menu handler's success returns anything but 'None'
 
 
     def __remove_spell(self,
@@ -11271,7 +11280,8 @@ class MainHandler(ScreenHandler):
         Asks the user which spell the current Fighter currently knows that he
         shouldn't, then removes that spell from the Fighter's spell list.
 
-        Returns: None
+        Returns: None if we want to bail-out of the change attributes process,
+                 True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
 
@@ -11302,7 +11312,7 @@ class MainHandler(ScreenHandler):
 
             keep_asking = self._window_manager.menu('Remove More Spells',
                                                     keep_asking_menu)
-        return None
+        return True # Menu handler's success returns anything but 'None'
 
 
     def __resurrect_fight(self):
@@ -11361,7 +11371,8 @@ class MainHandler(ScreenHandler):
         Adds an ability (a Ruleset-defined category of things, like
         'skills' or 'advantages') to a creature.
 
-        Returns: None
+        Returns: None if we want to bail-out of the change attributes process,
+                 True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
 
@@ -11427,7 +11438,8 @@ class MainHandler(ScreenHandler):
 
             keep_asking = self._window_manager.menu(('Add More %s' % param),
                                                     keep_asking_menu)
-            return None
+
+        return True # Menu handler's success returns anything but 'None'
 
 
     def __ruleset_ability_rm(self,
@@ -11440,7 +11452,8 @@ class MainHandler(ScreenHandler):
         Removes an ability (a Ruleset-defined category of things, like
         'skills' or 'advantages') from a creature.
 
-        Returns: None
+        Returns: None if we want to bail-out of the change attributes process,
+                 True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
 
@@ -11463,7 +11476,7 @@ class MainHandler(ScreenHandler):
             keep_asking = self._window_manager.menu(
                                         'Remove More %s' % param.capitalize(),
                                         keep_asking_menu)
-        return None
+        return True # Menu handler's success returns anything but 'None'
 
 
     def __run_fight(self):
@@ -11682,7 +11695,8 @@ class MainHandler(ScreenHandler):
 
         Asks user for timer to remove from a fighter and removes it.
 
-        Returns: None
+        Returns: None if we want to bail-out of the change attributes process,
+                 True, otherwise
         '''
         timer_recipient = self.__chars[self.__char_index]
 
@@ -11701,7 +11715,7 @@ class MainHandler(ScreenHandler):
 
         self._draw_screen()
 
-        return None
+        return True # Menu handler's success returns anything but 'None'
 
 
     def __toggle_Monster_PC_NPC_display(self):
