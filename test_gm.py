@@ -768,8 +768,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # WORLD: 1
         self.base_world_dict = {
-          "Options": {},
-          "Templates": {
+          "options": {},
+          "templates": {
             "Arena Combat": {
               "VodouCleric": {
                 "permanent": {

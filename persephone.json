@@ -1,5 +1,5 @@
 {
-  "Templates": {
+  "templates": {
     "Bad Guys": {
       "Tank": {
         "skills": {
@@ -13733,7 +13733,7 @@
       "name": "C Cell"
     }
   ], 
-  "Names": {
+  "names": {
     "russian": {
       "male": [
         "Aymeric", 
@@ -14844,7 +14844,7 @@
       ]
     }
   }, 
-  "Options": {
+  "options": {
     "reload-after-fight": true, 
     "reload-on-heal": true
   }

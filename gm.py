@@ -24,6 +24,13 @@ Games Online Policy</a>.
 '''
 
 # TODO:
+#   - Fix the action handling.  Two part actions should be handled by the same
+#     handler but the action should have a 'part: 2' in it.  This will make a
+#     cleaner interface for new rulesets.
+#   - Reporting a bug should make a new directory and move all the relevant
+#     files to that directory
+#   - Add a version number that is reported in the bug.
+#
 #   - action['name'] -> action['action-name'] (to make various files easier to
 #     read)
 #   - Monsters should have a way to get pocket lint.
@@ -70,9 +77,9 @@ Games Online Policy</a>.
 
 class GmJson(object):
     '''
-    Context manager that opens and loads a JSON.  Does so in a context manager
-    and does all this in ASCII (for v2.7 Python).  Needs to know about
-    a window manager.
+    Context manager that opens and loads a JSON file.  Does so in a context
+    manager and does all this in ASCII (for v2.7 Python).  Needs to know about
+    a window manager for error reporting.
     '''
 
     def __init__(self,
@@ -204,6 +211,13 @@ And, then, invoke like so:
 class GmWindow(object):
     '''
     Generic window for the GM tool.
+
+    Like much of this code, it reflects the abstractions provided by Curses
+    since that's the initial GUI implementation.  The idea behind that is it
+    seemed stupid to invent an arbitrary API just to convert Curses' API to
+    that.  I figure that anyone that wants to port this to, say, a _REAL_ GUI,
+    could just port their API to curses'.  If there are any incompatibilies,
+    we'll address them, then.
     '''
     def __init__(self,
                  window_manager, # A GmWindowManager object
@@ -243,17 +257,20 @@ class GmWindow(object):
         '''
         Explicit destructor because Python is broken when it comes to
         destructors.
+
+        Returns: nothing.
         '''
         self._window_manager.pop_gm_window(self)
         del self._window                   # kill ourselves
         self._window_manager.refresh_all() # refresh everything else
-        return True
 
 
     def command_ribbon(self):
         '''
         Draws a list of commands across the bottom of the screen.  Uses
         information gathered through |build_command_ribbon|.
+
+        Returns nothing.
         '''
         choice_strings = copy.deepcopy(self._command_ribbon['choice_strings'])
         lines = self._command_ribbon['lines']
@@ -290,16 +307,27 @@ class GmWindow(object):
 
 
     def getmaxyx(self):
+        '''
+        Returns the tuple containing the number of lines and columns in
+        the window.
+        '''
         return self._window.getmaxyx()
 
 
     def refresh(self):
+        ''' Redraws the window. '''
         self._window.refresh()
 
 
     def show_description(self,
                          character # Fighter or Venue object
                         ):
+        '''
+        Displays the description of the Fighter/Venue object in the current
+        window.
+
+        Returns: nothing.
+        '''
         self._char_detail_window.clear()
         if character is None:
             self.refresh()
@@ -317,6 +345,12 @@ class GmWindow(object):
     def status_ribbon(self,
                       filename,
                       maintain_json):
+        '''
+        Displays the current status of the window handler across the top of the
+        window.
+
+        Returns: nothing
+        '''
 
         lines, cols = self.getmaxyx()
 
@@ -342,10 +376,20 @@ class GmWindow(object):
 
 
     def touchwin(self):
+        '''
+        Pretends that the window has been modified so that 'refresh' will
+        redraw it.
+
+        Returns nothing.
+        '''
         self._window.touchwin()
 
 
     def uses_whole_screen(self):
+        '''
+        Returns True if this window takes-up the whole screen, False,
+        otherwise.
+        '''
         lines, cols = self.getmaxyx()
         if lines < curses.LINES or cols < curses.COLS:
             return False
@@ -364,6 +408,12 @@ class GmWindow(object):
                                choices,   # hash: ord('f'): {'name': 'xxx',
                                           #                  'func': self.func}
                               ):
+        '''
+        Given a set of commands (here, called 'choices'), this routine builds
+        the strings for the command ribbon and arranges them into lines.
+
+        Returns nothing.
+        '''
         # Build the choice strings
 
         self._command_ribbon = {
@@ -417,6 +467,9 @@ class GmWindow(object):
 
 
 class MainGmWindow(GmWindow):
+    '''
+    This is the startup window for the program.  
+    '''
     def __init__(self,
                  window_manager,
                  command_ribbon_choices
@@ -460,18 +513,29 @@ class MainGmWindow(GmWindow):
 
 
     def char_detail_home(self):
+        '''
+        Scrolls the character detail pane to the top and redraws the pane.
+
+        Return: nothing
+        '''
         self._char_detail_window.scroll_to(0)
         self._char_detail_window.draw_window()
         self._char_detail_window.refresh()
 
 
     def char_list_home(self):
+        '''
+        Scrolls the character list pane to the top and redraws the pane.
+
+        Return: nothing
+        '''
         self.__char_list_window.scroll_to(0)
         self.__char_list_window.draw_window()
         self.__char_list_window.refresh()
 
 
     def close(self):
+        ''' Closes the window and disposes of its resources.  '''
         # Kill my subwindows, first
         if self.__char_list_window is not None:
             del self.__char_list_window
@@ -483,6 +547,7 @@ class MainGmWindow(GmWindow):
 
 
     def refresh(self):
+        ''' Re-draws all of the window's panes.  '''
         super(MainGmWindow, self).refresh()
         if self.__char_list_window is not None:
             self.__char_list_window.refresh()
@@ -491,24 +556,28 @@ class MainGmWindow(GmWindow):
 
 
     def scroll_char_detail_down(self):
+        ''' Scrolls the character detail pane down.  '''
         self._char_detail_window.scroll_down()
         self._char_detail_window.draw_window()
         self._char_detail_window.refresh()
 
 
     def scroll_char_detail_up(self):
+        ''' Scrolls the character detail pane up.  '''
         self._char_detail_window.scroll_up()
         self._char_detail_window.draw_window()
         self._char_detail_window.refresh()
 
 
     def scroll_char_list_down(self):
+        ''' Scrolls the character list pane down.  '''
         self.__char_list_window.scroll_down()
         self.__char_list_window.draw_window()
         self.__char_list_window.refresh()
 
 
     def scroll_char_list_up(self):
+        ''' Scrolls the character list pane up.  '''
         self.__char_list_window.scroll_up()
         self.__char_list_window.draw_window()
         self.__char_list_window.refresh()
@@ -520,6 +589,12 @@ class MainGmWindow(GmWindow):
                        current_index,
                        standout = False
                       ):
+        '''
+        Builds a color-annotated character list from the passed-in list.
+        Displays the color-annotated list.
+
+        Returns nothing.
+        '''
         del self.__char_list[:]
 
         if char_list is None:
@@ -538,7 +613,7 @@ class MainGmWindow(GmWindow):
                                     Fighter.get_fighter_state(char.details))
 
             mode |= (curses.A_NORMAL if current_index is None or
-                                       current_index != line
+                                                       current_index != line
                                     else curses.A_STANDOUT)
 
             self.__char_list.append([{'text': char.detailed_name,
@@ -549,6 +624,7 @@ class MainGmWindow(GmWindow):
 
 
     def touchwin(self):
+        ''' Touches all of this window's sub-panes.  '''
         super(MainGmWindow, self).touchwin()
         if self.__char_list_window is not None:
             self.__char_list_window.touchwin()
@@ -558,6 +634,11 @@ class MainGmWindow(GmWindow):
 
 
 class BuildFightGmWindow(GmWindow):
+    '''
+    Window display for building individual creatures, assembling creatures
+    into groups, and moving creatures between groups.  A group is one of:
+    'PCs', 'NPCs', or a group of monsters (for a fight).
+    '''
     def __init__(self,
                  window_manager,
                  command_ribbon_choices
@@ -601,6 +682,7 @@ class BuildFightGmWindow(GmWindow):
 
 
     def close(self):
+        ''' Closes the window and disposes of its resources.  '''
         # Kill my subwindows, first
         if self.__char_list_window is not None:
             del self.__char_list_window
@@ -612,6 +694,7 @@ class BuildFightGmWindow(GmWindow):
 
 
     def refresh(self):
+        ''' Re-draws all of the window's panes.  '''
         super(BuildFightGmWindow, self).refresh()
         if self.__char_list_window is not None:
             self.__char_list_window.refresh()
@@ -620,12 +703,14 @@ class BuildFightGmWindow(GmWindow):
 
 
     def scroll_char_detail_down(self):
+        ''' Scrolls the character detail pane down.  '''
         self._char_detail_window.scroll_down()
         self._char_detail_window.draw_window()
         self._char_detail_window.refresh()
 
 
     def scroll_char_detail_up(self):
+        ''' Scrolls the character detail pane up.  '''
         self._char_detail_window.scroll_up()
         self._char_detail_window.draw_window()
         self._char_detail_window.refresh()
@@ -638,6 +723,13 @@ class BuildFightGmWindow(GmWindow):
                        viewing_index    # index into creature list:
                                         #   dict: {'new'=True, index=0}
                       ):
+        '''
+        Builds a color-annotated character list from the passed-in list.
+        Displays the color-annotated list.  Shows details in the right-hand
+        pane for the 'current' creature, 
+
+        Returns nothing.
+        '''
 
         # self.__char_list = []   # [[{'text', 'mode'}, ...],   # line 0
         #                         #  [...],                  ]  # line 1...
@@ -694,6 +786,7 @@ class BuildFightGmWindow(GmWindow):
 
 
     def touchwin(self):
+        ''' Touches all of this window's sub-panes.  '''
         super(BuildFightGmWindow, self).touchwin()
         if self.__char_list_window is not None:
             self.__char_list_window.touchwin()
@@ -705,6 +798,7 @@ class BuildFightGmWindow(GmWindow):
     #
 
     def __quit(self):
+        ''' Closes the window. '''
         self._window.close()
         del self._window
         self._window = None
@@ -712,6 +806,10 @@ class BuildFightGmWindow(GmWindow):
 
 
 class FightGmWindow(GmWindow):
+    '''
+    Window display for running a fight.  Has panes for the current fighter,
+    the current defender, and the list of creatures.
+    '''
     def __init__(self,
                  window_manager,        # GmWindowManager object
                  ruleset,               # Ruleset object
@@ -742,6 +840,7 @@ class FightGmWindow(GmWindow):
 
 
     def close(self):
+        ''' Closes the window and disposes of its resources.  '''
         # Kill my subwindows, first
         if self.__character_window is not None:
             del self.__character_window
@@ -756,6 +855,7 @@ class FightGmWindow(GmWindow):
 
 
     def refresh(self):
+        ''' Re-draws all of the window's panes.  '''
         super(FightGmWindow, self).refresh()
         if self.__character_window is not None:
             self.__character_window.refresh()
@@ -771,7 +871,11 @@ class FightGmWindow(GmWindow):
                      input_filename,
                      maintain_json
                     ):
-        '''Prints the fight round information at the top of the screen.'''
+        '''
+        Prints the fight round information at the top of the screen.
+
+        Returns nothing
+        '''
 
         self._window.move(0, 0)
         self._window.clrtoeol()
@@ -846,6 +950,17 @@ class FightGmWindow(GmWindow):
 
 
     def start_fight(self):
+        '''
+        Builds the windows for the fight.  This is separate from the
+        constructor because you need things in the following order:
+            create the big window (so we know the width of that)
+            create the command ribbon (based on the width of the background
+                window)
+            create the sub-panes (based on the number of lines in the command
+                ribbon)
+
+        Returns: nothing.
+        '''
         lines, cols = self._window.getmaxyx()
         height = (lines                 # The whole window height, except...
             - (self.__FIGHTER_LINE+1)   # ...a block at the top, and...
@@ -876,6 +991,7 @@ class FightGmWindow(GmWindow):
 
 
     def touchwin(self):
+        ''' Touches all of this window's sub-panes.  '''
         super(FightGmWindow, self).touchwin()
         if self.__character_window is not None:
             self.__character_window.touchwin()
@@ -890,8 +1006,14 @@ class FightGmWindow(GmWindow):
 
     def __show_fighter(self,
                        fighter, # Fighter object
-                       column
+                       column   # int: column in which to display |fighter|
                       ):
+        '''
+        Display's a summary of a single fighter.
+
+        Returns: True if the fighter is alive (indicating that showing the
+        fighter's notes might be in order), False otherwise
+        '''
         show_more_info = True # conscious -- show all the fighter's info
         fighter_string = fighter.get_long_summary_string()
         fighter_state = fighter.get_state()
@@ -909,7 +1031,9 @@ class FightGmWindow(GmWindow):
                                                 #   notes
                             ):
         '''
-        Displays ancillary information about the fighter
+        Displays ancillary information about |fighter|.
+
+        Returns nothing.
         '''
         window.clear()
         line = 0
@@ -988,6 +1112,11 @@ class FightGmWindow(GmWindow):
                               fighters,  # array of <Fighter object>
                               current_index,
                               selected_index=None):
+        '''
+        Shows a short summary of each of the fighters in initiative order.
+
+        Returns nothing.
+        '''
         self.__summary_window.clear()
         for line, fighter in enumerate(fighters):
             mode = self._window_manager.get_mode_from_fighter_state(
@@ -1001,51 +1130,6 @@ class FightGmWindow(GmWindow):
             elif fighter.group == 'PCs':
                 mode = mode | curses.A_BOLD
             self.__summary_window.addstr(line, 0, fighter_string, mode)
-
-
-class OutfitCharactersGmWindow(GmWindow):
-    def __init__(self, window_manager):
-        super(OutfitCharactersGmWindow, self).__init__(window_manager,
-                                                 curses.LINES,
-                                                 curses.COLS,
-                                                 0,
-                                                 0)
-        lines, cols = self._window.getmaxyx()
-        self.__outfit_window = self._window_manager.new_native_window(
-                                                                    lines - 4,
-                                                                    cols / 2,
-                                                                    1,
-                                                                    1)
-
-
-    def close(self):
-        # Kill my subwindows, first
-        if self.__outfit_window is not None:
-            del self.__outfit_window
-            self.__outfit_window = None
-        super(OutfitCharactersGmWindow, self).close()
-
-
-    def refresh(self):
-        super(OutfitCharactersGmWindow, self).refresh()
-        if self.__outfit_window is not None:
-            self.__outfit_window.refresh()
-
-
-    def touchwin(self):
-        super(OutfitCharactersGmWindow, self).touchwin()
-        if self.__outfit_window is not None:
-            self.__outfit_window.touchwin()
-
-    #
-    # Private methods
-    #
-
-    def __quit(self):
-        self._window.close()
-        del self._window
-        self._window = None
-        return False # Leave
 
 
 class GmWindowManager(object):
@@ -1081,7 +1165,9 @@ class GmWindowManager(object):
     def __init__(self):
         self.__stdscr = None
         self.__y = 0 # For debug printouts
-        self.__window_stack = [] # Stack of GmWindow
+        self.__window_stack = [] # Stack of GmWindow in Z order.  The screen
+                                 # can be completely re-drawn by building from
+                                 # the bottom of the stack to the top.
         self.STATE_COLOR = {}
 
 
@@ -1186,12 +1272,15 @@ class GmWindowManager(object):
         return curses.color_pair(GmWindowManager.BLUE_BLACK)
 
     def display_window(self,
-                       title,
+                       title, # string: the title displayed, centered, in the
+                              #   box around the display window.
                        lines  # [[{'text', 'mode'}, ],    # line 0
                               #  [...],               ]   # line 1
                       ):
         '''
         Presents a display of |lines| to the user.  Scrollable.
+
+        Returns: nothing
         '''
 
         # height and width of text box (not border)
@@ -1246,14 +1335,19 @@ class GmWindowManager(object):
 
 
     def edit_window(self,
-                    height, width,
-                    contents,  # initial string (w/ \n) for the window
-                    title,
-                    footer
+                    height,     # int: height of the window in characters
+                    width,      # int: width of the window in characters
+                    contents,   # initial string (w/ \n) for the window
+                    title,      # string: the title displayed, centered, in the
+                                #   box around the edit window.
+                    footer      # string: something to be displayed, centered,
+                                #   at the bottom of the box around the window
                    ):
         '''
         Creates a window to edit a block of text using an EMACS style
         interface.
+
+        Returns the edited contents of the window
         '''
         border_win, edit_win = self.__centered_boxed_window(height,
                                                             width,
@@ -1277,10 +1371,11 @@ class GmWindowManager(object):
 
 
     def error(self,
-              strings, # array of single-line strings
-              title=' ERROR '
+              strings,          # array of single-line strings
+              title=' ERROR '   # string: the title displayed, centered, in the
+                                #   box around the error message.
              ):
-        '''Provides an error to the screen.'''
+        ''' Displays an error to the screen. '''
 
         mode = curses.color_pair(GmWindowManager.RED_WHITE)
         width = max(len(string) for string in strings)
@@ -1302,13 +1397,15 @@ class GmWindowManager(object):
         del border_win
         del error_win
         self.hard_refresh_all()
-        return string
 
 
     def get_build_fight_gm_window(self,
                                   command_ribbon_choices
                                  ):
-                                  
+        '''
+        Returns a BuildFightGmWindow object.  Useful for providing Mocks
+        in testing.
+        '''
         return BuildFightGmWindow(self, command_ribbon_choices)
 
 
@@ -1318,28 +1415,40 @@ class GmWindowManager(object):
                                                     #   {'name': xxx,
                                                     #    'func': yyy}, ...
                            ):
+        '''
+        Returns a FightGmWindow object.  Useful for providing Mocks in testing.
+        '''
         return FightGmWindow(self, ruleset, command_ribbon_choices)
 
 
     def get_mode_from_fighter_state(self,
                                     state # from STATE_COLOR
                                    ):
+        '''
+        Returns the color (in the format of a CURSES color) associated with
+        |state|.
+        '''
         return self.STATE_COLOR[state]
 
 
     def get_main_gm_window(self,
-                           command_ribbon_choices):
+                           command_ribbon_choices,
+                          ):
+        '''
+        Returns a MainGmWindow object.  Useful for providing Mocks in testing.
+        '''
         return MainGmWindow(self, command_ribbon_choices)
 
 
     def getmaxyx(self):
+        ''' Returns a tuple containing the height and width of the screen. '''
         return curses.LINES, curses.COLS
 
 
     def get_one_character(self,
                           window=None # Window (for Curses)
                          ):
-        '''Reads one character from the keyboard.'''
+        '''Returns one character read from the keyboard.'''
 
         if window is None:
             window = self.__stdscr
@@ -1348,13 +1457,9 @@ class GmWindowManager(object):
         return c
 
 
-    def get_outfit_gm_window(self):
-        return OutfitCharactersGmWindow(self)
-
-
     def get_string(self, window=None):
         '''
-        Gets a complete string from the keyboard.  For Curses, you have to 
+        Returns a complete string from the keyboard.  For Curses, you have to 
         turn off raw mode to get the string then turn it back on when you're
         done.
         '''
@@ -1375,7 +1480,10 @@ class GmWindowManager(object):
 
     def hard_refresh_all(self):
         '''
-        Touches and refreshes all of the windows, from back to front
+        Touches and refreshes all of the windows, in z-order, as per the
+        stack.
+
+        Returns nothing.
         '''
         # First, find the top-most window that is a whole-screen window --
         # only touch and refresh from there, above.  Look from bottom up since
@@ -1394,11 +1502,17 @@ class GmWindowManager(object):
 
 
     def input_box(self,
-                  height,
-                  width,
-                  title
+                  height,   # int: height of the data window (the box around
+                            #   it will, therefore, be bigger)
+                  width,    # int: width of the data window (see |height|)
+                  title     # string: the title displayed, centered, in the
+                            #   box around the data.
                  ):
-        '''Provides a window to get input from the screen.'''
+        '''
+        Provides a window to get input from the screen.
+
+        Returns the string provided by the user.
+        '''
 
         border_win, menu_win = self.__centered_boxed_window(height,
                                                             width,
@@ -1412,8 +1526,19 @@ class GmWindowManager(object):
     
 
     def menu(self,
-             title,
-             strings_results, # array of tuples (string, return value)
+             title,             # string: title of the menu, displayed to user
+             strings_results,   # array of tuples (string, return-value).  If
+                                #   |return-value| is a dict, special
+                                #   processing may be perfomred, based on the
+                                #   dict members.  |return-value['doit']| is
+                                #   assumed to be a method whose return value
+                                #   is the result of the user making this
+                                #   selection.  It takes one parameter (the
+                                #   value in |return-value['param']|).  
+                                #   |return-value['menu']| is assumed to be a
+                                #   nested menu (of the form equivalent to
+                                #   |strings_results|.  NOTE: ['menu'] takes
+                                #   precidence over ['doit'].
              starting_index = 0 # Who is selected when the menu starts
             ):
         '''
@@ -1552,7 +1677,11 @@ class GmWindowManager(object):
         return window
 
 
-    def pop_gm_window(self, delete_this_window):
+    def pop_gm_window(self,
+                      delete_this_window # GmWindow object: window to be
+                                         #  removed
+                     ):
+        ''' Removes a specified window from the stack.  '''
         top_window = self.__window_stack[-1]
         for index, window in enumerate(self.__window_stack):
             if window is delete_this_window:
@@ -1575,13 +1704,12 @@ class GmWindowManager(object):
 
 
     def push_gm_window(self, window):
+        ''' Adds a window to the stack.  '''
         self.__window_stack.append(window)
 
 
     def refresh_all(self):
-        '''
-        Refreshes all of the windows, from back to front
-        '''
+        ''' Re-draws all of the window's panes.  '''
         for window in self.__window_stack:
             window.refresh()
 
@@ -1593,13 +1721,16 @@ class GmWindowManager(object):
     def __centered_boxed_window(self,
                                 height, # height of INSIDE window
                                 width,  # width of INSIDE window
-                                title,
+                                title,  # string: title displayed for the
+                                        #   window
                                 mode=curses.A_NORMAL,
                                 data_for_scrolling=None
                                ):
         '''
         Creates a temporary window, on top of the current one, that is
         centered and has a box around it.
+
+        Returns a tuple with the outer (box) and inner (data) window.
         '''
         box_margin = 2
 
@@ -1653,7 +1784,10 @@ class GmWindowManager(object):
                             ):
         '''
         If a menu_result is a dict that contains either another menu or a
-        'doit' function do the menu or the doit function.
+        'doit' function, show the menu to the user or call the 'doit' function.
+
+        Returns the result of the menu or the return value of the 'doit'
+        function, as appropriate.
         '''
 
         if isinstance(menu_result, dict):
@@ -1671,6 +1805,11 @@ class GmWindowManager(object):
 
 
 class GmScrollableWindow(object):
+    '''
+    This class represents a window of data that might be larger than the
+    window can show at one time.  The view of the data can be moved up or
+    down (scrolled) as necessary.
+    '''
     def __init__(self,
                  lines,             # [[{'text', 'mode'}, ...],  # line 0
                                     #  [...]                  ]  # line 1
@@ -1695,13 +1834,12 @@ class GmScrollableWindow(object):
 
 
     def clear(self):
+        ''' Removes the printable data from the window. '''
         self.__window.clear()
 
 
     def draw_window(self):
-        '''
-        Fills the window with the data that's supposed to be in it.
-        '''
+        ''' Fills the window with the data that's supposed to be in it.  '''
         self.clear()
         line_cnt = len(self.__lines) - self.top_line
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
@@ -1714,16 +1852,25 @@ class GmScrollableWindow(object):
 
 
     def get_showable_menu_lines(self):
+        '''
+        Returns a dict containing the ordinal number of the line at the top
+        window and the ordinal number of the line at the bottom of the window.
+        '''
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
         return {'top_line': self.top_line,
                 'bottom_line': self.top_line + win_line_cnt - 1}
 
 
     def refresh(self):
+        ''' Re-draws all of the window's panes.  '''
         self.__window.refresh()
 
 
-    def scroll_down(self, line_cnt=None):
+    def scroll_down(self,
+                    line_cnt=None,  # int: lines to scroll the window, 'None'
+                                    #   scrolls a half screen.
+                   ):
+        ''' Scrolls the window down. '''
         if line_cnt is None:
             line_cnt = self.__default_scroll_lines
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
@@ -1745,7 +1892,10 @@ class GmScrollableWindow(object):
         # lines before the refresh happens.
 
 
-    def scroll_to(self, line):
+    def scroll_to(self,
+                  line  # int: scroll to this line
+                 ):
+        ''' Scrolls the window to a specific line.  '''
         self.top_line = line
         if self.top_line < 0:
             self.top_line = 0
@@ -1755,6 +1905,7 @@ class GmScrollableWindow(object):
 
 
     def scroll_to_end(self):
+        ''' Scrolls the window to the last line of the data. '''
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
 
         self.top_line = len(self.__lines) - win_line_cnt
@@ -1763,7 +1914,11 @@ class GmScrollableWindow(object):
         self.draw_window()
 
 
-    def scroll_up(self, line_cnt=None):
+    def scroll_up(self,
+                  line_cnt=None # int: number of lines to scroll, 'None'
+                                #   scrolls half the screen
+                 ):
+        ''' Scrolls the window up. '''
         if line_cnt is None:
             line_cnt = self.__default_scroll_lines
         if self.top_line == 0:
@@ -1776,6 +1931,7 @@ class GmScrollableWindow(object):
 
 
     def touchwin(self):
+        ''' Touches all of this window's sub-panes.  '''
         self.__window.touchwin()
 
 
@@ -1828,10 +1984,12 @@ class World(object):
     def add_to_history(self,
                        action # {'name':xxx, ...} - see Ruleset::do_action()
                       ):
+        ''' Adds an action to the saved history list.  '''
         self.details['current-fight']['history'].append(action)
 
 
     def clear_history(self):
+        ''' Removes all the saved history data.  '''
         self.details['current-fight']['history'] = []
 
 
@@ -1840,6 +1998,8 @@ class World(object):
                          ):
         '''
         Saves a copy of the master JSON file to a debug directory.
+
+        Returns the filename o which the data was written.
         '''
 
         if tag is None:
@@ -1870,17 +2030,29 @@ class World(object):
 
 
     def dont_save_on_exit(self):
+        '''
+        Causes the local copy of the JSON data NOT to be written back to the
+        file when the program ends.
+
+        Returns nothing.
+        '''
         self.__gm_json.write_data = None
         ScreenHandler.maintainjson = True
 
 
     def do_save_on_exit(self):
+        '''
+        Causes the local copy of the JSON data to be written back to the
+        file when the program ends.
+
+        Returns nothing.
+        '''
         self.__gm_json.write_data = self.__gm_json.read_data
         ScreenHandler.maintainjson = False
 
 
     def get_creature_details_list(self,
-                      group_name  # 'PCs', 'NPCs', or a monster group
+                      group_name  # string: 'PCs', 'NPCs', or a monster group
                      ):
         '''
         Used to get PCs, NPCs, or a fight's list of creatures.
@@ -1898,7 +2070,15 @@ class World(object):
         return None
 
 
-    def get_creature_details(self, name, group_name):
+    def get_creature_details(self,
+                             name,      # string name of creature
+                             group_name # string name of creature's group
+                            ):
+        '''
+        Returns the dict containing the information for the creature in
+        question.  If the group is not 'PCs' or 'NPCs', it burrows down to
+        find the correct creature.
+        '''
         if name is None or group_name is None:
             self.__window_manager.error(
                 ['Name: %r or group: %r is "None"' % (name, group_name)])
@@ -1973,21 +2153,34 @@ class World(object):
 
 
     def get_random_name(self):
+        '''
+        Navigates through the different categories of Names (e.g., racial,
+        then male/female, etc.) to find a name.  The user is asked for a
+        designation for each category but, if s/he so choses, a random value
+        will be supplied.  Once the user abdicates responsibility, random
+        values are chosen for the remaining categories.
+
+        Returns a tuple that contains the name, the country name, and the
+        gender of the creature.
+        '''
+        # TODO: should return an array so that any structure of naming
+        # categories is permitted.
         randomly_generate = False
 
-        if self.details['Names'] is None:
+        # TODO: 'names' should be optional
+        if self.details['names'] is None:
             self.__window_manager.error(
-                                    ['There are no "Names" in the database'])
+                                    ['There are no "names" in the database'])
             return None, None, None
 
         # Country
 
-        country_menu = [(x, x) for x in self.details['Names']]
+        country_menu = [(x, x) for x in self.details['names']]
         country_name = self.__window_manager.menu('What kind of name',
                                                country_menu)
         if country_name is None:
             randomly_generate = True
-            country_name = random.choice(self.details['Names'].keys())
+            country_name = random.choice(self.details['names'].keys())
 
         # Gender
 
@@ -2003,14 +2196,19 @@ class World(object):
 
         # Name
 
-        first_name = random.choice(self.details['Names'][country_name][gender])
-        last_name = random.choice(self.details['Names'][country_name]['last'])
+        first_name = random.choice(self.details['names'][country_name][gender])
+        last_name = random.choice(self.details['names'][country_name]['last'])
         name = '%s %s' % (first_name, last_name)
 
         return (name, country_name, gender)
 
 
     def is_saved_on_exit(self):
+        '''
+        Returns True if the local copy of the JSON data will be automatically
+        written to the associated file when the program exits; False,
+        otherwise.
+        '''
         return False if self.__gm_json.write_data is None else True
 
 
@@ -2020,6 +2218,8 @@ class World(object):
         '''
         Moves fight named |group_name| to the dead-monsters list.  Removes
         local references to them.
+
+        Returns nothing.
         '''
 
         if group_name in self.details['fights']:
@@ -2040,6 +2240,13 @@ class World(object):
     def restore_fight(self,
                       group_index # index into |dead-monsters|
                      ):
+        '''
+        Moves a fight from the 'dead-monsters' list to the 'fights' list.
+        This kind of thing is useful, for example, when a monster from a
+        finished fight needs to be made into an NPC.
+
+        Returns nothing.
+        '''
 
         group = self.details['dead-monsters'][group_index]
         group_name = group['name']
@@ -2049,13 +2256,15 @@ class World(object):
 
         # Remove fight from dead-monsters
         del(self.details['dead-monsters'][group_index])
-        return True
-
-
-        pass
 
 
     def toggle_saved_on_exit(self):
+        '''
+        Toggles whether the local copy of the JSON data is written back to the
+        file when the program ends.
+
+        Returns nothing.
+        '''
         if self.is_saved_on_exit():
             self.dont_save_on_exit()
         else:
@@ -2070,6 +2279,8 @@ class World(object):
         Delete debug files that are older than a couple of days old but remove
         no more than the last 10 files.  This is all pretty arbitrary but it
         seems like a reasonable amount to keep on hand.
+
+        Returns nothing.
         '''
 
         minimum_files_to_keep = 10  # Arbitrary
@@ -2094,7 +2305,12 @@ class World(object):
                 if mod_date < two_days_ago: # '<' means 'earlier than'
                     os.remove(path)
 
+
 class Equipment(object):
+    '''
+    Object that manipulates a list of equipment.  The list is assumed to be
+    from somewhere in the JSON data but that's not strictly a requirement.
+    '''
     def __init__(self,
                  equipment, # self.details['stuff'], list of items
                 ):
@@ -2105,6 +2321,12 @@ class Equipment(object):
             new_item,   # dict describing new equipment
             source=None # string describing where equipment came from
            ):
+        '''
+        Adds an item to the equipment list.  If a source if given, the source
+        string is added to the item's list of owners.
+
+        Returns the current index of the item in the equipment list.
+        '''
         if source is not None and new_item['owners'] is not None:
             new_item['owners'].append(source)
 
@@ -2121,19 +2343,24 @@ class Equipment(object):
 
 
     def get_item_by_index(self,
-                          index
+                          index # integer index into the equipment list
                          ):
+        '''
+        Returns the dictionary data of the index-th item in the equipment
+        list.  Returns None if the item is not found.
+        '''
         return (None if index >= len(self.__equipment) else
                                                 self.__equipment[index])
 
 
     def get_item_by_name(self,              # Public to facilitate testing
-                         name
+                         name   # string that matches the name of the thing
                         ):
         '''
-        Remove weapon from sheath or holster.
-
-        Returns index, item
+        Returns a tuple that contains index, item (i.e., the dict describing
+        the item) of the (first) item in the equipment list that has a name
+        that matches the passed-in name.  Returns None, None if the item is
+        not found.
         '''
         for index, item in enumerate(self.__equipment):
             if item['name'] == name:
@@ -2142,8 +2369,13 @@ class Equipment(object):
 
 
     def remove(self,
-               item_index
+               item_index   # integer index into the equipment list
               ):
+        '''
+        Removes an item (by index) from the list of equipment.
+
+        Returns the removed item.
+        '''
         # NOTE: This assumes that there won't be any placeholder items --
         # items with a count of 0 (or less).
         if item_index >= len(self.__equipment):
@@ -2169,6 +2401,14 @@ class Equipment(object):
                         rhs,    # part of equipment dict (at level=0, is dict)
                         level=0 # how far deep in the recursive calls are we
                        ):
+        '''
+        Checks that two objects contain the same data.  That is harder than it
+        seems since dictionaries have non-constant order.  This does look
+        recursively down lists, dictionaries, and scalars.
+
+        Returns True if the left-hand-side thing contains the exact same data
+        as the right-hand-side thing.  Returns False otherwise.
+        '''
         level += 1
 
         if isinstance(lhs, dict):
@@ -2201,6 +2441,13 @@ class Equipment(object):
 
 
 class Timer(object):
+    '''
+    Embodies a timer that counts down with fight rounds.  There's optional
+    text associated with it (that's shown while the timer is counting down)
+    and there's optional actions when the timer actually reaches zero.  This
+    is an object built around data that is intended to be kept in the JSON
+    data file but that's not strictly required for this object to work.
+    '''
     round_count_string = '%d Rnds: ' # assume rounds takes same space as '%d' 
     len_timer_leader = len(round_count_string)
     announcement_margin = 0.1 # time removed from an announcement timer so that
@@ -2276,6 +2523,9 @@ class Timer(object):
 
 
     def get_description(self):
+        '''
+        Returns a long description of the timer to show the user.
+        '''
         result = [] # List of strings, one per line of output
         this_line = []
 
@@ -2323,6 +2573,7 @@ class Timer(object):
 
     def get_one_line_description(self):
         '''
+        Returns a short desctiption of the timer to show the user.
         '''
         this_line = []
 
@@ -2383,6 +2634,8 @@ class TimersWidget(object):
                    ):
         '''
         Makes a timer object and adds it to the Timers list.
+
+        Returns: nothing
         '''
 
         timer_dict = self.make_timer_dict(timer_recipient_name)
@@ -3019,8 +3272,8 @@ class Fighter(ThingsInFight):
         Returns nothing.
         '''
         super(Fighter, self).end_fight(world, fight_handler)
-        if ('reload-after-fight' in world.details['Options'] and 
-                            world.details['Options']['reload-after-fight'] and
+        if ('reload-after-fight' in world.details['options'] and 
+                            world.details['options']['reload-after-fight'] and
                             self.group == 'PCs'):
             self._ruleset.do_action(self,
                                     {'name': 'reload',
@@ -3623,8 +3876,8 @@ class Ruleset(object):
                                         fighter.details['state'] != 'fight'):
             fighter.details['state'] = 'alive'
 
-        if ('reload-on-heal' in world.details['Options'] and 
-                            world.details['Options']['reload-on-heal'] and
+        if ('reload-on-heal' in world.details['options'] and 
+                            world.details['options']['reload-on-heal'] and
                             fighter.group == 'PCs'):
             throw_away, original_weapon_index = fighter.get_current_weapon()
             for index, item in enumerate(fighter.details['stuff']):
@@ -8169,7 +8422,7 @@ class BuildFightHandler(ScreenHandler):
 
             creature_menu = []
             for from_creature_name in (
-                        self.world.details['Templates'][self.__template_name]):
+                        self.world.details['templates'][self.__template_name]):
                 if from_creature_name == empty_creature:
                     self._window_manager.error(
                         ['Template "%s" contains illegal template:' % 
@@ -8185,6 +8438,9 @@ class BuildFightHandler(ScreenHandler):
 
             from_creature_name = self._window_manager.menu('Monster',
                                                            creature_menu)
+            if from_creature_name is None:
+                keep_adding_creatures = False
+                break
 
             # Generate the creature for the template
 
@@ -8192,7 +8448,7 @@ class BuildFightHandler(ScreenHandler):
 
             if from_creature_name != empty_creature:
                 from_creature = (self.world.details[
-                        'Templates'][self.__template_name][from_creature_name])
+                        'templates'][self.__template_name][from_creature_name])
                 for key, value in from_creature.iteritems():
                     if key == 'permanent':
                         for ikey, ivalue in value.iteritems():
@@ -8409,7 +8665,7 @@ class BuildFightHandler(ScreenHandler):
 
         lines, cols = self._window.getmaxyx()
         template_menu = [(template_name, template_name)
-                    for template_name in self.world.details['Templates']]
+                    for template_name in self.world.details['templates']]
         template_name = self._window_manager.menu('From Which Template',
                                                          template_menu)
         if template_name is None:
@@ -8539,7 +8795,7 @@ class BuildFightHandler(ScreenHandler):
 
         lines, cols = self._window.getmaxyx()
         template_menu = [(template_name, template_name)
-                    for template_name in self.world.details['Templates']]
+                    for template_name in self.world.details['templates']]
         template_name = self._window_manager.menu('From Which Template',
                                                          template_menu)
         if template_name is None:
@@ -8628,7 +8884,7 @@ class BuildFightHandler(ScreenHandler):
             if template_name is None or len(template_name) == 0:
                 return True
             elif (template_name in
-                    self.world.details['Templates'][self.__template_name]):
+                    self.world.details['templates'][self.__template_name]):
                 self._window_manager.error(
                     ['Template name "%s" already exists' % template_name])
                 keep_asking = True
@@ -8653,7 +8909,7 @@ class BuildFightHandler(ScreenHandler):
             else:
                 pass # We're ignoring these
 
-        template_list = self.world.details['Templates'][self.__template_name]
+        template_list = self.world.details['templates'][self.__template_name]
         template_list[template_name] = to_creature
         return True # Keep going
 
@@ -8671,7 +8927,7 @@ class BuildFightHandler(ScreenHandler):
         # Get the template
         lines, cols = self._window.getmaxyx()
         template_menu = [(template_name, template_name)
-                    for template_name in self.world.details['Templates']]
+                    for template_name in self.world.details['templates']]
         template_name = self._window_manager.menu('From Which Template',
                                                   template_menu)
         if template_name is None:
@@ -10715,7 +10971,6 @@ class MainHandler(ScreenHandler):
         Allows the user to modify one or more attribute values of the Fighter.
         The specific attributes come from the Ruleset.
 
-        # TODO: propogate None/True to menu-handlers, below.
         Returns: None if we want to bail-out of the change attributes process,
                  True, otherwise
         '''
@@ -10779,7 +11034,7 @@ class MainHandler(ScreenHandler):
 
         Asks the user which armor the Fighter should wear and puts it on.
 
-        Returns: None if we want to bail-out of the change attributes process,
+        Returns: None if we want to bail-out of the don armor process,
                  True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
@@ -10846,7 +11101,7 @@ class MainHandler(ScreenHandler):
         Asks the user which weapon (or shield) the Fighter should draw and
         draws it.
 
-        Returns: None if we want to bail-out of the change attributes process,
+        Returns: None if we want to bail-out of the draw weapon process,
                  True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
@@ -11025,7 +11280,7 @@ class MainHandler(ScreenHandler):
         Provides a way for one Fighter (or Venue) to transfer an item of
         equipment to a different Fighter (or Venue).
 
-        Returns: None if we want to bail-out of the change attributes process,
+        Returns: None if we want to bail-out of the give equipment process,
                  True, otherwise
         '''
         from_fighter = self.__chars[self.__char_index]
@@ -11115,7 +11370,7 @@ class MainHandler(ScreenHandler):
 
         Allows the user to modify a Fighter's notes or short-notes.
 
-        Returns: None if we want to bail-out of the change attributes process,
+        Returns: None if we want to bail-out of the notes editing process,
                  True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
@@ -11156,7 +11411,7 @@ class MainHandler(ScreenHandler):
         Removes an NPC that's currently in the party list.  He stays being an
         NPC.  Operates on current creature in the creature list.
 
-        Returns: None if we want to bail-out of the change attributes process,
+        Returns: None if we want to bail-out of the remove NPC process,
                  True, otherwise
         '''
         npc_name = self.__chars[self.__char_index].name
@@ -11258,7 +11513,7 @@ class MainHandler(ScreenHandler):
         should be removed from his list.  Then removes that piece of
         equipment.
 
-        Returns: None if we want to bail-out of the change attributes process,
+        Returns: None if we want to bail-out of the remove equipment process,
                  True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
@@ -11280,7 +11535,7 @@ class MainHandler(ScreenHandler):
         Asks the user which spell the current Fighter currently knows that he
         shouldn't, then removes that spell from the Fighter's spell list.
 
-        Returns: None if we want to bail-out of the change attributes process,
+        Returns: None if we want to bail-out of the remove spell process,
                  True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
@@ -11371,7 +11626,7 @@ class MainHandler(ScreenHandler):
         Adds an ability (a Ruleset-defined category of things, like
         'skills' or 'advantages') to a creature.
 
-        Returns: None if we want to bail-out of the change attributes process,
+        Returns: None if we want to bail-out of the add ability process,
                  True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
@@ -11452,7 +11707,7 @@ class MainHandler(ScreenHandler):
         Removes an ability (a Ruleset-defined category of things, like
         'skills' or 'advantages') from a creature.
 
-        Returns: None if we want to bail-out of the change attributes process,
+        Returns: None if we want to bail-out of the remove ability process,
                  True, otherwise
         '''
         fighter = self.__chars[self.__char_index]
@@ -11695,7 +11950,7 @@ class MainHandler(ScreenHandler):
 
         Asks user for timer to remove from a fighter and removes it.
 
-        Returns: None if we want to bail-out of the change attributes process,
+        Returns: None if we want to bail-out of the cancel timer process,
                  True, otherwise
         '''
         timer_recipient = self.__chars[self.__char_index]
