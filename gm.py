@@ -14,15 +14,6 @@ import re
 import sys
 import traceback
 
-'''
-GURPS is a trademark of Steve Jackson Games, and its rules and art are
-copyrighted by Steve Jackson Games. All rights are reserved by Steve Jackson
-Games. This game aid is the original creation of Wade Guthrie and is released
-for free distribution, and not for resale, under the permissions granted in
-the <a href="http://www.sjgames.com/general/online_policy.html">Steve Jackson
-Games Online Policy</a>.
-'''
-
 # TODO:
 #   - Fix the action handling.  Two part actions should be handled by the same
 #     handler but the action should have a 'part: 2' in it.  This will make a
@@ -4345,6 +4336,14 @@ class Ruleset(object):
 
 class GurpsRuleset(Ruleset):
     '''
+    GURPS is a trademark of Steve Jackson Games, and its rules and art are
+    copyrighted by Steve Jackson Games. All rights are reserved by Steve
+    Jackson Games. This game aid is the original creation of Wade Guthrie and
+    is released for free distribution, and not for resale, under the
+    permissions granted in the
+    <a href="http://www.sjgames.com/general/online_policy.html">Steve Jackson
+    Games Online Policy</a>.
+
     Steve Jackson Games appears to allow the creation of a "Game Aid" which is
     PC-based and not a phone or tablet app.  This is done in
     http://sjgames.com/general/online_policy.html. The relevant text is as
@@ -4365,10 +4364,12 @@ class GurpsRuleset(Ruleset):
         proposal letter."
 
     So, we're not charging, we're not putting this on a mobile device, and the
-    appropriate notices are included at the front of this code, so we _should_
-    be good.
+    appropriate notices are included above, so we _should_ be good.  I've
+    included the notice at the beginning of this class because it is my intent
+    to compartmentalize all GURPS-specific stuff in this class.  The rest of
+    this program is (supposed to be) generic.
 
-    This is a place for all of the ruleset (e.g., GURPS, AD&D) specific
+    This is a place for all of the ruleset (GURPS, in this case) specific
     stuff.
 
     In addition to what's required by 'Ruleset', each character's dict is
