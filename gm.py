@@ -121,9 +121,8 @@ class GmJson(object):
             print 'EXCEPTION val: %s' % exception_value
             traceback.print_exc() # or traceback.format_exc()
 
-        if self.write_data is not None:
-            with open(self.__filename, 'w') as f:
-                json.dump(self.write_data, f, indent=2)
+        self.open_write_json_and_close(self.write_data)
+
         return True
 
     # Used to keep JSON load from automatically converting to Unicode.
@@ -167,6 +166,18 @@ class GmJson(object):
             return None, 'Couldn\'t read JSON: "%s"' % str(e)
 
         return GmJson.__byteify(my_dict, ignore_dicts=True), None
+
+
+    def open_write_json_and_close(self,
+                                  write_data   # Python data to be written to the file
+                                 ):
+        '''
+        Dump Python data to the JSON file.
+        '''
+        if write_data is not None:
+            with open(self.__filename, 'w') as f:
+                json.dump(write_data, f, indent=2)
+
 
 '''
 How to use this GUI.
@@ -293,7 +304,13 @@ class GmWindow(object):
                                         choice_text['body'],
                                         curses.A_BOLD)
                 left += self._command_ribbon['max_width']
-            self._window.addstr(line, left, '|', curses.A_NORMAL)
+            # TODO: figure out why, occassionally, this fails.  I _think_ it's when the math
+            # doesn't quite work out and something goes beyond the edge of the screen, but
+            # that's just a theory.
+            try:
+                self._window.addstr(line, left, '|', curses.A_NORMAL)
+            except:
+                pass
         self.refresh()
 
 
@@ -727,6 +744,11 @@ class BuildFightGmWindow(GmWindow):
 
         self.__char_list_window.clear()
         del self.__char_list[:]
+
+        if char_list is None:
+            self.__char_list_window.draw_window()
+            self.refresh()
+            return
 
         highlighted_creature = None
         for index, char in enumerate(char_list):
@@ -1972,6 +1994,19 @@ class World(object):
         if save_snapshot:
             self.do_debug_snapshot('startup')
 
+    @staticmethod
+    def get_empty_world():
+        result = { 'templates': {},
+                   'fights': {},
+                   'PCs': {},
+                   'dead-monsters': [],
+                   'current-fight': { 'history': [], 'saved': False },
+                   'NPCs': {},
+                   'stuff': [],
+                   'options': {}
+                 }
+        return result
+
     def add_to_history(self,
                        action # {'name':xxx, ...} - see Ruleset::do_action()
                       ):
@@ -2159,9 +2194,7 @@ class World(object):
         randomly_generate = False
 
         # TODO: 'names' should be optional
-        if self.details['names'] is None:
-            self.__window_manager.error(
-                                    ['There are no "names" in the database'])
+        if 'names' not in self.details or self.details['names'] is None:
             return None, None, None
 
         # Country
@@ -6180,7 +6213,6 @@ class GurpsRuleset(Ruleset):
                                     weapon['ammo']['shots'],
                                     (0 if clip is None else clip['count'])))
 
-
         # Active aim
 
         if (fighter.details['aim'] is not None and
@@ -7204,7 +7236,6 @@ class GurpsRuleset(Ruleset):
         side-effects of changing the hit-points.  See
         |GurpsRuleset::_adjust_hp| for an idea of how this method is used.
 
-
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
         '''
@@ -7915,7 +7946,6 @@ class GurpsRuleset(Ruleset):
                 if made_skill_roll:
                     reload_time -= 1
 
-
         if reload_time > 0:
             new_action = {'name': 'reload-really', 'time': reload_time}
             if 'notimer' in action:
@@ -8280,12 +8310,7 @@ class BuildFightHandler(ScreenHandler):
         self.__ruleset = ruleset
         self.__template_name = None # Name of templates we'll use to create
                                     # new creatures.
-
-        self.__critters = None # dict of parallel arrays:
-                               #    {'data': <dict from json>,
-                               #     'obj': array of <Fighter> obj or <Venue>
-                               #        obj in display order}
-
+        self.__critters = None
         self.__deleted_critter_count = 0
         self.__equipment_manager = EquipmentManager(self.world, window_manager)
 
@@ -8314,9 +8339,6 @@ class BuildFightHandler(ScreenHandler):
             else:
                 self.__existing_group(creature_type)
 
-        if self.__critters is None:
-            return
-
         self._draw_screen()
         self.__add_creature()
         return
@@ -8336,7 +8358,6 @@ class BuildFightHandler(ScreenHandler):
 
         Returns: nothing.
         '''
-
         len_list = len(self.__critters['data'])
         if len_list == 0:
             return
@@ -8379,7 +8400,8 @@ class BuildFightHandler(ScreenHandler):
                                    ScreenHandler.maintainjson)
         self._window.command_ribbon()
         # BuildFightGmWindow
-        self._window.show_creatures(self.__critters['obj'],
+        fighters = None if self.__critters is None else self.__critters['obj']
+        self._window.show_creatures(fighters,
                                     self.__new_char_name,
                                     self.__viewing_index)
         if (self.__new_char_name is not None and
@@ -8399,7 +8421,6 @@ class BuildFightHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-
         # A little error checking
 
         self.__viewing_index = None
@@ -8414,34 +8435,38 @@ class BuildFightHandler(ScreenHandler):
         keep_adding_creatures = True
         while keep_adding_creatures:
 
-            # Get a template
+            # Get a template.
             if self.__template_name is None:
                 self.__new_template()
 
             # Based on which creature from the template
+
             empty_creature = 'Blank Template'
+            from_creature_name = empty_creature
 
-            creature_menu = []
-            for from_creature_name in (
-                        self.world.details['templates'][self.__template_name]):
-                if from_creature_name == empty_creature:
-                    self._window_manager.error(
-                        ['Template "%s" contains illegal template:' %
-                                                        self.__template_name,
-                         '"%s". Replacing with an empty creature.' %
-                                                        empty_creature])
-                else:
-                    creature_menu.append((from_creature_name,
-                                          from_creature_name))
+            # None means there are no templates or the user decided against a template.
+            if self.__template_name is not None:
+                creature_menu = []
+                for from_creature_name in (
+                            self.world.details['templates'][self.__template_name]):
+                    if from_creature_name == empty_creature:
+                        self._window_manager.error(
+                            ['Template "%s" contains illegal template:' %
+                                                            self.__template_name,
+                             '"%s". Replacing with an empty creature.' %
+                                                            empty_creature])
+                    else:
+                        creature_menu.append((from_creature_name,
+                                              from_creature_name))
 
-            creature_menu = sorted(creature_menu, key=lambda x: x[0].upper())
-            creature_menu.append((empty_creature, empty_creature))
+                creature_menu = sorted(creature_menu, key=lambda x: x[0].upper())
+                creature_menu.append((empty_creature, empty_creature))
 
-            from_creature_name = self._window_manager.menu('Monster',
-                                                           creature_menu)
-            if from_creature_name is None:
-                keep_adding_creatures = False
-                break
+                from_creature_name = self._window_manager.menu('Monster',
+                                                               creature_menu)
+                if from_creature_name is None:
+                    keep_adding_creatures = False
+                    break
 
             # Generate the creature for the template
 
@@ -8464,7 +8489,6 @@ class BuildFightHandler(ScreenHandler):
 
             # Get the new creature name
 
-            keep_asking = True
             lines, cols = self._window.getmaxyx()
 
             # We're not filling in the holes if we delete a monster, we're
@@ -8473,8 +8497,10 @@ class BuildFightHandler(ScreenHandler):
             #   come back later, you'll still have numbering problems.
             # ALSO NOTE: we use 'len' rather than 'len'+1 because we've added
             #   a Venue to the list -- the Venue has an implied prefix of '0'
-            creature_num = (len(self.__critters['data']) +
-                                                self.__deleted_critter_count)
+            previous_creature_count = (0 if self.__critters is None else
+                                                            len(self.__critters['data']))
+            creature_num = previous_creature_count + self.__deleted_critter_count
+            keep_asking = True
             while keep_asking:
                 base_name = self._window_manager.input_box(1,      # height
                                                            cols-4, # width
@@ -8495,7 +8521,9 @@ class BuildFightHandler(ScreenHandler):
                 else:
                     creature_name = '%d - %s' % (creature_num, base_name)
 
-                if creature_name in self.__critters['data']:
+                if self.__critters is None:
+                    keep_asking = False
+                elif creature_name in self.__critters['data']:
                     self._window_manager.error(
                         ['Monster "%s" already exists' % creature_name])
                     keep_asking = True
@@ -8524,7 +8552,6 @@ class BuildFightHandler(ScreenHandler):
             # Modify the creature we just created
 
             keep_changing_this_creature = True
-
             while keep_changing_this_creature:
                 # Creating a temporary list to show.  Add the new creature by
                 # its current creature name and allow the name to be modified.
@@ -8534,7 +8561,10 @@ class BuildFightHandler(ScreenHandler):
 
                 # Note: we're not going to touch the objects in temp_list so
                 # it's OK that this is just copying references.
-                temp_list = [x for x in self.__critters['obj']]
+                if self.__critters is None:
+                    temp_list = []
+                else:
+                    temp_list = [x for x in self.__critters['obj']]
                 temp_list.append(Fighter(creature_name,
                                          self.__group_name,
                                          to_creature,
@@ -8560,7 +8590,9 @@ class BuildFightHandler(ScreenHandler):
                                                                'Add to Name')
                     temp_creature_name = '%s - %s' % (creature_name,
                                                      more_text)
-                    if temp_creature_name in self.__critters['data']:
+                    if self.__critters is None:
+                        creature_name = temp_creature_name
+                    elif temp_creature_name in self.__critters['data']:
                         self._window_manager.error(
                                             ['Monster "%s" already exists' %
                                                 temp_creature_name])
@@ -8661,7 +8693,6 @@ class BuildFightHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-
         # Get the template name
 
         lines, cols = self._window.getmaxyx()
@@ -8669,8 +8700,6 @@ class BuildFightHandler(ScreenHandler):
                     for template_name in self.world.details['templates']]
         template_name = self._window_manager.menu('From Which Template',
                                                          template_menu)
-        if template_name is None:
-            return True  # Keep going
         self.__template_name = template_name
 
         # Get the group information
@@ -8695,9 +8724,8 @@ class BuildFightHandler(ScreenHandler):
 
         self.__group_name = group_answer
         self.__critters = {
-                    'data': self.world.get_creature_details_list(
-                                                            self.__group_name),
-                    'obj': []}
+                'data': self.world.get_creature_details_list(self.__group_name),
+                'obj': []}
 
         # Build the Fighter object array
 
@@ -8791,7 +8819,6 @@ class BuildFightHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-
         # Get the template info.
 
         lines, cols = self._window.getmaxyx()
@@ -8824,14 +8851,12 @@ class BuildFightHandler(ScreenHandler):
         # Set the name and group of the new group
 
         self.__group_name = group_name
-        fights = self.world.get_fights() # New groups can
-                                           # only be in fights.
+        fights = self.world.get_fights() # New groups can only be in fights.
 
         fights[group_name] = {'monsters': {}}
 
         self.__critters = {'data': fights[group_name]['monsters'],
                            'obj': []}
-
 
         self.__critters['data'][Venue.name] = Venue.empty_venue
         fight = Venue(group_name,
@@ -8855,7 +8880,6 @@ class BuildFightHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-
         # A little error checking
 
         if self.__template_name is None:
@@ -8950,7 +8974,6 @@ class BuildFightHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-
         for name, creature in self.__critters['data'].iteritems():
             self.__ruleset.is_creature_consistent(name, creature)
 
@@ -10646,6 +10669,8 @@ class MainHandler(ScreenHandler):
         '''
         Returns the current Fighter (object).
         '''
+        if self.__char_index >= len(self.__chars):
+            return None
         return self.__chars[self.__char_index]
 
 
@@ -10693,9 +10718,13 @@ class MainHandler(ScreenHandler):
         '''
 
         # Make sure the person is an NPC
-        npc_name = self.__chars[self.__char_index].name
-        if self.__chars[self.__char_index].group != 'NPCs':
-            self._window_manager.error(['"%s" not an NPC' % npc_name])
+
+        npc = self.get_fighter_from_char_index()
+        if npc is None:
+            return True
+
+        if npc.group != 'NPCs':
+            self._window_manager.error(['"%s" not an NPC' % npc.name])
             return True
 
         # Select the fight
@@ -10705,12 +10734,12 @@ class MainHandler(ScreenHandler):
 
         # Make sure the person isn't already in the fight
         fight = self.world.get_creature_details_list(fight_name)
-        if npc_name in fight:
+        if npc.name in fight:
             self._window_manager.error(['"%s" already in fight "%s"' %
-                                                    (npc_name, fight_name)])
+                                                    (npc.name, fight_name)])
             return True
 
-        fight[npc_name] = {'redirect': 'NPCs'}
+        fight[npc.name] = {'redirect': 'NPCs'}
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
         return True
@@ -10733,17 +10762,19 @@ class MainHandler(ScreenHandler):
 
         Returns: True -- anything but None (since it's a menu handler)
         '''
-
-        npc_name = self.__chars[self.__char_index].name
-        if self.__chars[self.__char_index].group != 'NPCs':
-            self._window_manager.error(['"%s" not an NPC' % npc_name])
+        npc = self.get_fighter_from_char_index()
+        if npc is None:
             return True
 
-        if npc_name in self.world.details['PCs']:
-            self._window_manager.error(['"%s" already a PC' % npc_name])
+        if npc.group != 'NPCs':
+            self._window_manager.error(['"%s" not an NPC' % npc.name])
             return True
 
-        self.world.details['PCs'][npc_name] = {'redirect': 'NPCs'}
+        if npc.name in self.world.details['PCs']:
+            self._window_manager.error(['"%s" already a PC' % npc.name])
+            return True
+
+        self.world.details['PCs'][npc.name] = {'redirect': 'NPCs'}
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
         return True
@@ -10766,7 +10797,9 @@ class MainHandler(ScreenHandler):
 
         Returns: True -- anything but 'None' in a menu handler
         '''
-        fighter = self.__chars[self.__char_index]
+        fighter = self.get_fighter_from_char_index()
+        if fighter is None:
+            return True
 
         keep_asking = True
         keep_asking_menu = [('yes', True), ('no', False)]
@@ -10877,7 +10910,9 @@ class MainHandler(ScreenHandler):
         Returns: None if we want to bail out of the process of adding a spell,
                  True, otherwise
         '''
-        fighter = self.__chars[self.__char_index]
+        fighter = self.get_fighter_from_char_index()
+        if fighter is None:
+            return None
 
         # Is the fighter a caster?
         if 'spells' not in fighter.details:
@@ -10946,7 +10981,10 @@ class MainHandler(ScreenHandler):
 
         Returns: True -- anything but None in a menu handler
         '''
-        fighter = self.__chars[self.__char_index]
+        fighter = self.get_fighter_from_char_index()
+        if fighter is None:
+            return True
+
         lines, cols = self._window.getmaxyx()
         timers_widget = TimersWidget(fighter.timers, self._window_manager)
 
@@ -10976,7 +11014,10 @@ class MainHandler(ScreenHandler):
         Returns: None if we want to bail-out of the change attributes process,
                  True, otherwise
         '''
-        fighter = self.__chars[self.__char_index]
+        fighter = self.get_fighter_from_char_index()
+        if fighter is None:
+            return None
+
         keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
         while keep_asking:
@@ -11039,7 +11080,10 @@ class MainHandler(ScreenHandler):
         Returns: None if we want to bail-out of the don armor process,
                  True, otherwise
         '''
-        fighter = self.__chars[self.__char_index]
+        fighter = self.get_fighter_from_char_index()
+        if fighter is None:
+            return None
+
         armor, throw_away = fighter.get_current_armor()
         armor_index = None
         if armor is None:
@@ -11083,7 +11127,7 @@ class MainHandler(ScreenHandler):
                                     self.__char_index,
                                     inverse)
 
-        person = (None if self.__char_index is None
+        person = (None if (self.__char_index is None or len(self.__chars) <= 0)
                        else self.__chars[self.__char_index])
         self._window.show_description(person)
 
@@ -11106,7 +11150,10 @@ class MainHandler(ScreenHandler):
         Returns: None if we want to bail-out of the draw weapon process,
                  True, otherwise
         '''
-        fighter = self.__chars[self.__char_index]
+        fighter = self.get_fighter_from_char_index()
+        if fighter is None:
+            return None
+
         weapon, throw_away = fighter.get_current_weapon()
         weapon_index = None
         if weapon is None:
@@ -11143,7 +11190,9 @@ class MainHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        fighter = self.__chars[self.__char_index]
+        fighter = self.get_fighter_from_char_index()
+        if fighter is None:
+            return True
 
         sub_menu = []
         if 'stuff' in fighter.details:
@@ -11285,7 +11334,9 @@ class MainHandler(ScreenHandler):
         Returns: None if we want to bail-out of the give equipment process,
                  True, otherwise
         '''
-        from_fighter = self.__chars[self.__char_index]
+        fighter = self.get_fighter_from_char_index()
+        if fighter is None:
+            return None
 
         item = self.__equipment_manager.remove_equipment(from_fighter)
         if item is None:
@@ -11317,8 +11368,11 @@ class MainHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        self.__ruleset.heal_fighter(self.__chars[self.__char_index],
-                                    self.world)
+        fighter = self.get_fighter_from_char_index()
+        if fighter is None:
+            return True
+
+        self.__ruleset.heal_fighter(fighter, self.world)
         self._draw_screen()
 
         return True
@@ -11375,9 +11429,9 @@ class MainHandler(ScreenHandler):
         Returns: None if we want to bail-out of the notes editing process,
                  True, otherwise
         '''
-        fighter = self.__chars[self.__char_index]
+        fighter = self.get_fighter_from_char_index()
         if fighter is None:
-            return None
+            return True
 
         # Now, get the notes for that person
         lines, cols = self._window.getmaxyx()
@@ -11416,16 +11470,19 @@ class MainHandler(ScreenHandler):
         Returns: None if we want to bail-out of the remove NPC process,
                  True, otherwise
         '''
-        npc_name = self.__chars[self.__char_index].name
-        if npc_name not in self.world.details['NPCs']:
-            self._window_manager.error(['"%s" not an NPC' % npc_name])
+        npc = self.get_fighter_from_char_index()
+        if npc is None:
             return None
 
-        if npc_name not in self.world.details['PCs']:
-            self._window_manager.error(['"%s" not in PC list' % npc_name])
+        if npc.name not in self.world.details['NPCs']:
+            self._window_manager.error(['"%s" not an NPC' % npc.name])
             return None
 
-        del(self.world.details['PCs'][npc_name])
+        if npc.name not in self.world.details['PCs']:
+            self._window_manager.error(['"%s" not in PC list' % npc.name])
+            return None
+
+        del(self.world.details['PCs'][npc.name])
         self.__setup_PC_list(self.__current_display)
         self._draw_screen()
         return True # Menu handler's success returns anything but 'None'
@@ -11461,6 +11518,9 @@ class MainHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+        if len(self.__chars) <= 0:
+                return True
+
         if self.__char_index is None:
             self.__char_index = len(self.__chars) - 1
         else:
@@ -11518,7 +11578,10 @@ class MainHandler(ScreenHandler):
         Returns: None if we want to bail-out of the remove equipment process,
                  True, otherwise
         '''
-        fighter = self.__chars[self.__char_index]
+        fighter = self.get_fighter_from_char_index()
+        if fighter is None:
+            return None
+
         self.__equipment_manager.remove_equipment(fighter)
         self._draw_screen()
         return True # Menu handler's success returns anything but 'None'
@@ -11540,7 +11603,9 @@ class MainHandler(ScreenHandler):
         Returns: None if we want to bail-out of the remove spell process,
                  True, otherwise
         '''
-        fighter = self.__chars[self.__char_index]
+        fighter = self.get_fighter_from_char_index()
+        if fighter is None:
+            return None
 
         # Is the fighter a caster?
         if 'spells' not in fighter.details:
@@ -11631,7 +11696,9 @@ class MainHandler(ScreenHandler):
         Returns: None if we want to bail-out of the add ability process,
                  True, otherwise
         '''
-        fighter = self.__chars[self.__char_index]
+        fighter = self.get_fighter_from_char_index()
+        if fighter is None:
+            return None
 
         if param not in fighter.details:
             self._window_manager.error(['%s doesn\'t support' % (fighter.name,
@@ -11712,7 +11779,9 @@ class MainHandler(ScreenHandler):
         Returns: None if we want to bail-out of the remove ability process,
                  True, otherwise
         '''
-        fighter = self.__chars[self.__char_index]
+        fighter = self.get_fighter_from_char_index()
+        if fighter is None:
+            return None
 
         keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
@@ -11955,7 +12024,9 @@ class MainHandler(ScreenHandler):
         Returns: None if we want to bail-out of the cancel timer process,
                  True, otherwise
         '''
-        timer_recipient = self.__chars[self.__char_index]
+        timer_recipient = self.get_fighter_from_char_index()
+        if timer_recipient is None:
+            return None
 
         # Select a timer
 
@@ -12241,16 +12312,23 @@ if __name__ == '__main__':
         # NOTE: When other things find their way into the prefs, the scope
         # of the read_prefs GmJson will have to be larger
         prefs = {}
+        filename = None
         if ARGS.playback is not None:
             with GmJson(ARGS.playback) as bug_report:
                 filename = bug_report.read_data['snapshots']['fight']
                 playback_history = bug_report.read_data['history']
         else:
-            with GmJson('gm-prefs.json') as read_prefs:
+            filename = ARGS.filename
+
+            prefs_filename = 'gm-prefs.json'
+            if not os.path.exists(prefs_filename):
+                with open(prefs_filename, 'w') as f:
+                    f.write('{ }') # Provide a default preferences file
+
+            with GmJson(prefs_filename) as read_prefs:
                 prefs = read_prefs.read_data
 
                 # Get the Campaign's Name
-                filename = ARGS.filename
                 if filename is not None:
                     read_prefs.write_data = prefs
                     prefs['campaign'] = filename
@@ -12261,11 +12339,30 @@ if __name__ == '__main__':
                 if filename is None:
                     filename_menu = [
                         (x, x) for x in os.listdir('.') if x.endswith('.json')]
+                    filename_menu.insert(0, ('Create new campaign file', None))
 
                     filename = window_manager.menu('Which File', filename_menu)
-                    if filename is None:
-                        window_manager.error(['Need to specify a JSON file'])
-                        sys.exit(2)
+
+                    lines, cols = window_manager.getmaxyx()
+                    while filename is None:
+                        # create a new file
+                        filename = window_manager.input_box(1,
+                                                            cols-4,
+                                                            'Campaign name')
+                        if len(filename) <= 0:
+                            # Guess we're not going to run the program after all
+                            sys.exit(2)
+
+                        if not filename.endswith('.json'):
+                            filename = filename + '.json'
+
+                        if os.path.exists(filename):
+                            window_manager.error(['JSON file "%s" exists' % filename])
+                            filename = None
+                        else:
+                            json_file = GmJson(filename, window_manager)
+                            world_data = World.get_empty_world()
+                            json_file.open_write_json_and_close(world_data)
 
                     read_prefs.write_data = prefs
                     prefs['campaign'] = filename
