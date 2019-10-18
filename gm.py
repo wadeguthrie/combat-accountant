@@ -1165,6 +1165,7 @@ class GmWindowManager(object):
     def __enter__(self):
         try:
             self.__stdscr = curses.initscr()
+            self.__stdscr.refresh() # Seems to be needed for the initial screen to be shown.
             curses.start_color()
             curses.use_default_colors()
             self.STATE_COLOR = {
