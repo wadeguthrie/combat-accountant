@@ -28,7 +28,7 @@ import traceback
 #   - Need to be able to generate a blank creature (maybe it's a default
 #     Template).
 #   - Should have a 'post-action-accounting' method where an action can be
-#     augmented. (?)  Need to save to history first.  
+#     augmented. (?)  Need to save to history first.
 #   - Overhaul of spell casting
 #       o Need maintain spell action
 #   - add laser sights to weapons
@@ -352,7 +352,7 @@ class GmWindow(object):
                         0 if not maintain_json else len(wont_be_saved_string))
         start_file_string = (cols - len_whole_string) / 2
 
-        mode = curses.A_NORMAL 
+        mode = curses.A_NORMAL
         self._window.addstr(0,
                             start_file_string,
                             '%s' % filename,
@@ -459,7 +459,7 @@ class GmWindow(object):
 
 class MainGmWindow(GmWindow):
     '''
-    This is the startup window for the program.  
+    This is the startup window for the program.
     '''
     def __init__(self,
                  window_manager,
@@ -484,7 +484,7 @@ class MainGmWindow(GmWindow):
                     - top_line  # ...a block at the top, and...
                     - (self._command_ribbon['lines_for_choices'] + 1))
                                 # ...a space for the command ribbon + margin
-               
+
         width = (cols / 2) - 1 # -1 for margin
 
         self.__char_list_window = GmScrollableWindow(
@@ -653,7 +653,7 @@ class BuildFightGmWindow(GmWindow):
             - top_line                  # ...a block at the top, and...
             - (self._command_ribbon['lines_for_choices'] + 1))
                                         # ...a space for the command ribbon.
-        
+
         width = (cols / 2) - 2 # -1 for margin
 
         self.__char_list_window = GmScrollableWindow(
@@ -717,7 +717,7 @@ class BuildFightGmWindow(GmWindow):
         '''
         Builds a color-annotated character list from the passed-in list.
         Displays the color-annotated list.  Shows details in the right-hand
-        pane for the 'current' creature, 
+        pane for the 'current' creature,
 
         Returns nothing.
         '''
@@ -755,7 +755,7 @@ class BuildFightGmWindow(GmWindow):
 
     def status_ribbon(self,
                       group,            # name of group being modified,
-                      template,         # name of template 
+                      template,         # name of template
                       input_filename,   # passthru to base class
                       maintain_json     # passthru to base class
                      ):
@@ -957,7 +957,7 @@ class FightGmWindow(GmWindow):
             - (self.__FIGHTER_LINE+1)   # ...a block at the top, and...
             - (self._command_ribbon['lines_for_choices'] + 1))
                                         # ...a space for the command ribbon.
-        
+
         self.fighter_win_width = self.__pane_width - self.__margin_width
 
         top_line = self.__FIGHTER_LINE+1 # Start after the main fighter info
@@ -1051,7 +1051,7 @@ class FightGmWindow(GmWindow):
         # Defender
 
         if is_attacker:
-            mode = curses.A_NORMAL 
+            mode = curses.A_NORMAL
         else:
             mode = self._window_manager.color_of_fighter()
             mode = mode | curses.A_BOLD
@@ -1068,7 +1068,7 @@ class FightGmWindow(GmWindow):
             mode = self._window_manager.color_of_fighter()
             mode = mode | curses.A_BOLD
         else:
-            mode = curses.A_NORMAL 
+            mode = curses.A_NORMAL
         notes = fighter.get_to_hit_damage_notes(opponent)
         if notes is not None:
             for note in notes:
@@ -1090,7 +1090,7 @@ class FightGmWindow(GmWindow):
                 window.addstr(line, 0, string, mode)
                 line += 1
 
-        if ('short-notes' in fighter.details and 
+        if ('short-notes' in fighter.details and
                                 fighter.details['short-notes'] is not None):
             for note in fighter.details['short-notes']:
                 window.addstr(line, 0, note, mode)
@@ -1139,7 +1139,7 @@ class GmWindowManager(object):
      MAGENTA_BLACK,
      CYAN_BLACK,
      WHITE_BLACK,
-     
+
      RED_WHITE) = range(1, 9)
 
     # NOTE: remember to call win.refresh()
@@ -1150,7 +1150,7 @@ class GmWindowManager(object):
     #                                               curses.COLOR_WHITE) # bg
     #   only legal colors: 0:black, 1:red, 2:green, 3:yellow, 4:blue,
     #                      5:magenta, 6:cyan, and 7:white
-    # 
+    #
 
 
     def __init__(self):
@@ -1168,17 +1168,17 @@ class GmWindowManager(object):
             curses.start_color()
             curses.use_default_colors()
             self.STATE_COLOR = {
-                Fighter.ALIVE : 
+                Fighter.ALIVE :
                     curses.color_pair(GmWindowManager.GREEN_BLACK),
-                Fighter.INJURED : 
+                Fighter.INJURED :
                     curses.color_pair(GmWindowManager.YELLOW_BLACK),
-                Fighter.UNCONSCIOUS : 
+                Fighter.UNCONSCIOUS :
                     curses.color_pair(GmWindowManager.RED_BLACK),
-                Fighter.DEAD : 
+                Fighter.DEAD :
                     curses.color_pair(GmWindowManager.RED_BLACK),
-                Fighter.ABSENT : 
+                Fighter.ABSENT :
                     curses.color_pair(GmWindowManager.BLUE_BLACK),
-                Fighter.FIGHT : 
+                Fighter.FIGHT :
                     curses.color_pair(GmWindowManager.CYAN_BLACK),
             }
 
@@ -1383,7 +1383,6 @@ class GmWindowManager(object):
         error_win.refresh()
 
         ignored = self.get_one_character()
-        #ignored = self.get_string(error_win)
 
         del border_win
         del error_win
@@ -1450,7 +1449,7 @@ class GmWindowManager(object):
 
     def get_string(self, window=None):
         '''
-        Returns a complete string from the keyboard.  For Curses, you have to 
+        Returns a complete string from the keyboard.  For Curses, you have to
         turn off raw mode to get the string then turn it back on when you're
         done.
         '''
@@ -1514,7 +1513,7 @@ class GmWindowManager(object):
         del menu_win
         self.hard_refresh_all()
         return string
-    
+
 
     def menu(self,
              title,             # string: title of the menu, displayed to user
@@ -1525,7 +1524,7 @@ class GmWindowManager(object):
                                 #   assumed to be a method whose return value
                                 #   is the result of the user making this
                                 #   selection.  It takes one parameter (the
-                                #   value in |return-value['param']|).  
+                                #   value in |return-value['param']|).
                                 #   |return-value['menu']| is assumed to be a
                                 #   nested menu (of the form equivalent to
                                 #   |strings_results|.  NOTE: ['menu'] takes
@@ -1788,7 +1787,7 @@ class GmWindowManager(object):
                     return None         # Keep going
 
             if 'doit' in menu_result and menu_result['doit'] is not None:
-                param = (None if 'param' not in menu_result 
+                param = (None if 'param' not in menu_result
                               else menu_result['param'])
                 menu_result = (menu_result['doit'])(param)
 
@@ -2123,7 +2122,7 @@ class World(object):
         '''
         if group not in self.__fighters:
             self.__fighters[group] = {}
-            
+
         if name not in self.__fighters[group]:
             self.__fighters[group][name] = Fighter(
                                             name,
@@ -2280,7 +2279,7 @@ class World(object):
             os.makedirs(World.debug_directory)
 
         # Get rid of old debugging JSON files.
-         
+
         entries = (os.path.join(World.debug_directory, fn)
                                     for fn in os.listdir(World.debug_directory))
         entries = (
@@ -2416,7 +2415,7 @@ class Equipment(object):
                 elif not self.__is_same_thing(lhs[key], rhs[key], level):
                     return False
             return True
-                
+
         elif isinstance(lhs, list):
             if not isinstance(rhs, list):
                 return False
@@ -2439,7 +2438,7 @@ class Timer(object):
     is an object built around data that is intended to be kept in the JSON
     data file but that's not strictly required for this object to work.
     '''
-    round_count_string = '%d Rnds: ' # assume rounds takes same space as '%d' 
+    round_count_string = '%d Rnds: ' # assume rounds takes same space as '%d'
     len_timer_leader = len(round_count_string)
     announcement_margin = 0.1 # time removed from an announcement timer so that
                               #   it'll go off at the beginning of a round
@@ -2665,13 +2664,13 @@ class TimersWidget(object):
         param = {'announcement': None,
                  'continuous_message': None,
                  'state': None}
-        actions_menu = [('message (continuous)', 
+        actions_menu = [('message (continuous)',
                                 {'doit': self.__continuous_message_action,
                                  'param': param}),
-                        ('announcement',       
+                        ('announcement',
                                 {'doit': self.__announcement_action,
                                  'param': param}),
-                        ('state change',          
+                        ('state change',
                                 {'doit': self.__new_state_action,
                                  'param': param})]
         keep_asking = True
@@ -2767,7 +2766,7 @@ class TimersWidget(object):
 
         Returns: True -- just so it's not None
         '''
-        state_menu = [(x, x) for x in Fighter.conscious_map.keys() 
+        state_menu = [(x, x) for x in Fighter.conscious_map.keys()
                                                             if x != 'fight']
         state_menu = sorted(state_menu, key=lambda x: x[0].upper())
         state = self.__window_manager.menu('Which State', state_menu)
@@ -2976,7 +2975,7 @@ class ThingsInFight(object):
                           ):
         '''
         Returns a tuple of strings describing:
-        
+
         1) the current (based on weapons held, armor worn, etc) defensive
            capability of the Fighter, and
         2) the pieces that went into the above calculations
@@ -3001,7 +3000,7 @@ class ThingsInFight(object):
         etc.).  There's decidedly less information than that returned by the
         base class.
         '''
-        return None 
+        return None
 
 
     def get_short_summary_string(self):
@@ -3105,7 +3104,7 @@ class Venue(ThingsInFight):
 
         # stuff
 
-        mode = curses.A_NORMAL 
+        mode = curses.A_NORMAL
         char_detail.append([{'text': 'Equipment',
                              'mode': mode | curses.A_BOLD}])
 
@@ -3120,7 +3119,7 @@ class Venue(ThingsInFight):
 
         # Timers
 
-        mode = curses.A_NORMAL 
+        mode = curses.A_NORMAL
         char_detail.append([{'text': 'Timers', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
@@ -3139,7 +3138,7 @@ class Venue(ThingsInFight):
 
         # Notes
 
-        mode = curses.A_NORMAL 
+        mode = curses.A_NORMAL
         char_detail.append([{'text': 'Notes', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
@@ -3201,7 +3200,7 @@ class Fighter(ThingsInFight):
         state.
         '''
         conscious_number = Fighter.conscious_map[details['state']]
-        if (conscious_number == Fighter.ALIVE and 
+        if (conscious_number == Fighter.ALIVE and
                         details['current']['hp'] < details['permanent']['hp']):
             return Fighter.INJURED
         return conscious_number
@@ -3263,7 +3262,7 @@ class Fighter(ThingsInFight):
         Returns nothing.
         '''
         super(Fighter, self).end_fight(world, fight_handler)
-        if ('reload-after-fight' in world.details['options'] and 
+        if ('reload-after-fight' in world.details['options'] and
                             world.details['options']['reload-after-fight'] and
                             self.group == 'PCs'):
             self._ruleset.do_action(self,
@@ -3351,7 +3350,7 @@ class Fighter(ThingsInFight):
                           ):
         '''
         Returns a tuple of strings describing:
-        
+
         1) the current (based on weapons held, armor worn, etc) defensive
            capability of the Fighter, and
         2) the pieces that went into the above calculations
@@ -3475,7 +3474,7 @@ class Fighter(ThingsInFight):
                          ):
         '''
         Sets the state (alive, unconscious, dead, absent, etc.) of the
-        Fighter.  
+        Fighter.
 
         Returns nothing.
         '''
@@ -3729,7 +3728,7 @@ class Ruleset(object):
             action_menu.append(('Don Armor', {'menu': don_armor_menu}))
 
         if armor is not None:
-            action_menu.append((('Doff %s' % armor['name']), 
+            action_menu.append((('Doff %s' % armor['name']),
                                  {'action': {'name': 'don-armor',
                                              'armor-index': None}}
                               ))
@@ -3752,7 +3751,7 @@ class Ruleset(object):
         ### Draw or Holster weapon ###
 
         if weapon is not None:
-            action_menu.append((('holster/sheathe %s' % weapon['name']), 
+            action_menu.append((('holster/sheathe %s' % weapon['name']),
                                    {'action': {'name': 'draw-weapon',
                                                'weapon-index': None}
                                    }))
@@ -3779,7 +3778,7 @@ class Ruleset(object):
                     (('draw (ready, etc.; B325, B366, B382) %s' %
                                                     draw_weapon_menu[0][0]),
                      {'action': {'name': 'draw-weapon',
-                                 'weapon-index': 
+                                 'weapon-index':
                             draw_weapon_menu[0][1]['action']['weapon-index']}
                      }))
 
@@ -3822,7 +3821,7 @@ class Ruleset(object):
 
         ### User-defined ###
 
-        action_menu.append(('User-defined', 
+        action_menu.append(('User-defined',
                             {'action': {'name': 'user-defined'}}
                           ))
 
@@ -3867,7 +3866,7 @@ class Ruleset(object):
                                         fighter.details['state'] != 'fight'):
             fighter.details['state'] = 'alive'
 
-        if ('reload-on-heal' in world.details['options'] and 
+        if ('reload-on-heal' in world.details['options'] and
                             world.details['options']['reload-on-heal'] and
                             fighter.group == 'PCs'):
             throw_away, original_weapon_index = fighter.get_current_weapon()
@@ -3918,7 +3917,7 @@ class Ruleset(object):
         This routine delegates actions to routines that perform the action.
         The 'doit' routines return whether the action was successfully handled
         or not (i.e., UNHANDLED, HANDLED_OK, or HANDLED_ERROR) and that is, in
-        turn, returned to the calling routine. 
+        turn, returned to the calling routine.
 
         Default, non-ruleset related, action handling.  Good for drawing
         weapons and such.
@@ -3926,7 +3925,7 @@ class Ruleset(object):
         ONLY to be used for fights (otherwise, there's no fight handler to log
         the actions).
 
-        This is called directly from the child ruleset (which is called from 
+        This is called directly from the child ruleset (which is called from
         do_action because _perform_action is overridden by the child class.
 
         Returns: nothing
@@ -3953,8 +3952,8 @@ class Ruleset(object):
             if action['name'] in actions:
                 action_info = actions[action['name']]
                 if action_info['doit'] is not None:
-                    handled = action_info['doit'](fighter, 
-                                                  action, 
+                    handled = action_info['doit'](fighter,
+                                                  action,
                                                   fight_handler)
         else:
             handled = Ruleset.HANDLED_OK  # No name? It's just a comment.
@@ -4095,7 +4094,7 @@ class Ruleset(object):
             return Ruleset.HANDLED_OK
 
         weapon['ammo']['shots_left'] -= 1
-        return Ruleset.HANDLED_OK 
+        return Ruleset.HANDLED_OK
 
 
     # TODO: this should be a two-stage action like 'cast-spell'
@@ -4229,7 +4228,7 @@ class Ruleset(object):
     def __pick_opponent(self,
                         fighter,          # Fighter object
                         action,           # {'name': 'pick-opponent',
-                                          #  'opponent': 
+                                          #  'opponent':
                                           #     {'name': opponent_name,
                                           #      'group': opponent_group},
                                           #  'comment': <string> # optional
@@ -4457,127 +4456,127 @@ class GurpsRuleset(Ruleset):
         'skills': {
             # 'name': {'ask': 'number' | 'string' }
             #         {'value': value}
-            "Acting": {'ask': 'number'}, 
+            "Acting": {'ask': 'number'},
             "Area Knowledge (Space Station)": {'ask': 'number'},
-            "Armoury (Heavy Weapons)": {'ask': 'number'}, 
-            "Armoury (Small Arms)": {'ask': 'number'}, 
-            "Axe/Mace": {'ask': 'number'}, 
-            "Bartender": {'ask': 'number'}, 
-            "Beam Weapons (Pistol)": {'ask': 'number'}, 
-            "Beam Weapons (Rifle)": {'ask': 'number'}, 
-            "Brawling": {'ask': 'number'}, 
-            "Camouflage": {'ask': 'number'}, 
-            "Climbing": {'ask': 'number'}, 
-            "Climbing": {'ask': 'number'}, 
-            "Computer Hacking": {'ask': 'number'}, 
-            "Computer Operation": {'ask': 'number'}, 
-            "Computer Programming": {'ask': 'number'}, 
-            "Connoisseur (Visual Arts)": {'ask': 'number'}, 
-            "Cryptography": {'ask': 'number'}, 
-            "Current Affairs (Teraforming)": {'ask': 'number'}, 
-            "Detect Lies": {'ask': 'number'}, 
-            "Diplomacy": {'ask': 'number'}, 
-            "Electronics Operation (Security)": {'ask': 'number'}, 
-            "Electronics Operation (Teraforming)": {'ask': 'number'}, 
-            "Electronics Repair (Security)": {'ask': 'number'}, 
-            "Electronics Repair (Teraforming)": {'ask': 'number'}, 
-            "Engineer (Electronics)": {'ask': 'number'}, 
-            "Engineer (Starships)": {'ask': 'number'}, 
-            "Escape": {'ask': 'number'}, 
-            "Expert Skill (Computer Security)": {'ask': 'number'}, 
-            "Fast-Draw (Ammo)": {'ask': 'number'}, 
-            "Fast-Draw (Knife)": {'ask': 'number'}, 
-            "Fast-Draw (Pistol)": {'ask': 'number'}, 
-            "Fast-Talk": {'ask': 'number'}, 
-            "Filch": {'ask': 'number'}, 
-            "First Aid": {'ask': 'number'}, 
-            "Forensics": {'ask': 'number'}, 
-            "Forgery": {'ask': 'number'}, 
-            "Gambling": {'ask': 'number'}, 
-            "Gesture": {'ask': 'number'}, 
-            "Gunner (Beams)": {'ask': 'number'}, 
-            "Gunner (Cannon)": {'ask': 'number'}, 
-            "Guns (Grenade Launcher)": {'ask': 'number'}, 
-            "Guns (Pistol)": {'ask': 'number'}, 
-            "Hazardous Materials (Chemical)": {'ask': 'number'}, 
-            "Holdout": {'ask': 'number'}, 
-            "Interrogation": {'ask': 'number'}, 
-            "Intimidation": {'ask': 'number'}, 
-            "Karate": {'ask': 'number'}, 
-            "Knife": {'ask': 'number'}, 
+            "Armoury (Heavy Weapons)": {'ask': 'number'},
+            "Armoury (Small Arms)": {'ask': 'number'},
+            "Axe/Mace": {'ask': 'number'},
+            "Bartender": {'ask': 'number'},
+            "Beam Weapons (Pistol)": {'ask': 'number'},
+            "Beam Weapons (Rifle)": {'ask': 'number'},
+            "Brawling": {'ask': 'number'},
+            "Camouflage": {'ask': 'number'},
+            "Climbing": {'ask': 'number'},
+            "Climbing": {'ask': 'number'},
+            "Computer Hacking": {'ask': 'number'},
+            "Computer Operation": {'ask': 'number'},
+            "Computer Programming": {'ask': 'number'},
+            "Connoisseur (Visual Arts)": {'ask': 'number'},
+            "Cryptography": {'ask': 'number'},
+            "Current Affairs (Teraforming)": {'ask': 'number'},
+            "Detect Lies": {'ask': 'number'},
+            "Diplomacy": {'ask': 'number'},
+            "Electronics Operation (Security)": {'ask': 'number'},
+            "Electronics Operation (Teraforming)": {'ask': 'number'},
+            "Electronics Repair (Security)": {'ask': 'number'},
+            "Electronics Repair (Teraforming)": {'ask': 'number'},
+            "Engineer (Electronics)": {'ask': 'number'},
+            "Engineer (Starships)": {'ask': 'number'},
+            "Escape": {'ask': 'number'},
+            "Expert Skill (Computer Security)": {'ask': 'number'},
+            "Fast-Draw (Ammo)": {'ask': 'number'},
+            "Fast-Draw (Knife)": {'ask': 'number'},
+            "Fast-Draw (Pistol)": {'ask': 'number'},
+            "Fast-Talk": {'ask': 'number'},
+            "Filch": {'ask': 'number'},
+            "First Aid": {'ask': 'number'},
+            "Forensics": {'ask': 'number'},
+            "Forgery": {'ask': 'number'},
+            "Gambling": {'ask': 'number'},
+            "Gesture": {'ask': 'number'},
+            "Gunner (Beams)": {'ask': 'number'},
+            "Gunner (Cannon)": {'ask': 'number'},
+            "Guns (Grenade Launcher)": {'ask': 'number'},
+            "Guns (Pistol)": {'ask': 'number'},
+            "Hazardous Materials (Chemical)": {'ask': 'number'},
+            "Holdout": {'ask': 'number'},
+            "Interrogation": {'ask': 'number'},
+            "Intimidation": {'ask': 'number'},
+            "Karate": {'ask': 'number'},
+            "Knife": {'ask': 'number'},
             "Law (Conglomerate)": {'ask': 'number'},
             "Law (Conglomerate, Trans territorial jurisdiction/the void)":
-            {'ask': 'number'}, 
-            "Lip Reading": {'ask': 'number'}, 
-            "Lockpicking": {'ask': 'number'}, 
-            "Mathematics (Applied)": {'ask': 'number'}, 
-            "Mechanic (Spacecraft)": {'ask': 'number'}, 
-            "Observation": {'ask': 'number'}, 
-            "Physician": {'ask': 'number'}, 
-            "Physics": {'ask': 'number'}, 
-            "Pickpocket": {'ask': 'number'}, 
+            {'ask': 'number'},
+            "Lip Reading": {'ask': 'number'},
+            "Lockpicking": {'ask': 'number'},
+            "Mathematics (Applied)": {'ask': 'number'},
+            "Mechanic (Spacecraft)": {'ask': 'number'},
+            "Observation": {'ask': 'number'},
+            "Physician": {'ask': 'number'},
+            "Physics": {'ask': 'number'},
+            "Pickpocket": {'ask': 'number'},
             "Piloting (Loader Mech)": {'ask': 'number'},
-            "Piloting (Low-Performance Spacecraft)": {'ask': 'number'}, 
-            "Running": {'ask': 'number'}, 
+            "Piloting (Low-Performance Spacecraft)": {'ask': 'number'},
+            "Running": {'ask': 'number'},
             "Scrounging": {'ask': 'number'},
-            "Search": {'ask': 'number'}, 
-            "Stealth": {'ask': 'number'}, 
-            "Streetwise": {'ask': 'number'}, 
-            "Theology (Vodun)": {'ask': 'number'}, 
-            "Throwing": {'ask': 'number'}, 
-            "Thrown Weapon (Knife)": {'ask': 'number'}, 
-            "Tonfa": {'ask': 'number'}, 
-            "Traps": {'ask': 'number'}, 
-            "Urban Survival": {'ask': 'number'}, 
+            "Search": {'ask': 'number'},
+            "Stealth": {'ask': 'number'},
+            "Streetwise": {'ask': 'number'},
+            "Theology (Vodun)": {'ask': 'number'},
+            "Throwing": {'ask': 'number'},
+            "Thrown Weapon (Knife)": {'ask': 'number'},
+            "Tonfa": {'ask': 'number'},
+            "Traps": {'ask': 'number'},
+            "Urban Survival": {'ask': 'number'},
         },
         'advantages': {
     # 'name': {'ask': 'number' | 'string' }
     #         {'value': value}
-            "Acute Vision": {'ask': 'number'}, 
+            "Acute Vision": {'ask': 'number'},
             "Phobia": {'ask': 'string'},
-            "Alcohol Intolerance": {'value': -1}, 
-            "Appearance": {'ask': 'string'}, 
-            "Bad Sight": {'value': -25}, 
-            "Bad Temper": {'value': -10}, 
-            "Cannot Speak": {'value': -10}, 
-            "Channeling": {'value': 10}, 
-            "Code of Honor": {'ask': 'string'}, 
+            "Alcohol Intolerance": {'value': -1},
+            "Appearance": {'ask': 'string'},
+            "Bad Sight": {'value': -25},
+            "Bad Temper": {'value': -10},
+            "Cannot Speak": {'value': -10},
+            "Channeling": {'value': 10},
+            "Code of Honor": {'ask': 'string'},
             "Combat Reflexes": {'value': 15},
-            "Compulsive Behavior": {'ask': 'string'}, 
+            "Compulsive Behavior": {'ask': 'string'},
             "Cultural Familiarity": {'ask': 'string'},
-            "Curious": {'value': -5}, 
-            "Deep Sleeper": {'value': 1}, 
+            "Curious": {'value': -5},
+            "Deep Sleeper": {'value': 1},
             "Delusions": {'ask': 'string'},
-            "Distractible": {'value': 1}, 
+            "Distractible": {'value': 1},
             "Dreamer": {'value': -1},
-            "Dyslexia": {'value': -10}, 
-            "Eidetic Memory": {'ask': 'number'}, 
+            "Dyslexia": {'value': -10},
+            "Eidetic Memory": {'ask': 'number'},
             "Empathy": {'ask': 'number'},
             "Enemy": {'ask': 'string'},
-            "Extra Hit Points": {'ask': 'number'}, 
-            "Fit": {'value': 5}, 
-            "Flashbacks": {'ask': 'string'}, 
+            "Extra Hit Points": {'ask': 'number'},
+            "Fit": {'value': 5},
+            "Flashbacks": {'ask': 'string'},
             "G-Experience": {'ask': 'number'},
             "Guilt Complex": {'ask': 'string'},
-            "Habit": {'ask': 'string'}, 
-            "High Pain Threshold": {'value': 10}, 
-            "Honest Face": {'value': 1}, 
-            "Humble": {'value', -1}, 
-            "Impulsiveness": {'ask': 'number'}, 
-            "Light Sleeper": {'value': -5}, 
+            "Habit": {'ask': 'string'},
+            "High Pain Threshold": {'value': 10},
+            "Honest Face": {'value': 1},
+            "Humble": {'value', -1},
+            "Impulsiveness": {'ask': 'number'},
+            "Light Sleeper": {'value': -5},
             "Like (Quirk) ": {'ask': 'string'},
             "Lwa": {'ask': 'string'},
             "Night Vision": {'ask': 'number'},
-            "No Sense of Humor": {'value': -10}, 
-            "Nosy": {'value': -1}, 
-            "Personality Change": {'ask': 'string'}, 
-            "Pyromania": {'value': -10}, 
-            "Rapid Healing": {'value': 5}, 
-            "Responsive": {'value': -1}, 
+            "No Sense of Humor": {'value': -10},
+            "Nosy": {'value': -1},
+            "Personality Change": {'ask': 'string'},
+            "Pyromania": {'value': -10},
+            "Rapid Healing": {'value': 5},
+            "Responsive": {'value': -1},
             "Secret": {'ask': 'string'},
-            "Short Attention Span": {'value': -10}, 
-            "Squeamish": {'value': -10}, 
-            "Versatile": {'value': 5}, 
+            "Short Attention Span": {'value': -10},
+            "Squeamish": {'value': -10},
+            "Versatile": {'value': 5},
             "Vodou Practitioner (level 0)": {'value': 5},
             "Vodou Practitioner (Mambo/Hougan 1)": {'value': 15},
             "Vodou Practitioner (Mambo/Hougan 2)": {'value': 35},
@@ -4587,7 +4586,7 @@ class GurpsRuleset(Ruleset):
             "Vodou Practitioner (Bokor 3)": {'value': 75},
             "Vow": {'ask': 'string'},
             "Wealth": {'ask': 'string'},
-            "Weirdness Magnet": {'value': -15}, 
+            "Weirdness Magnet": {'value': -15},
         }
     }
 
@@ -4597,633 +4596,633 @@ class GurpsRuleset(Ruleset):
         # Alphabetized for conevenience
 
         "Agonize": {
-          "cost": 8, 
-          "notes": "M40, HT negates", 
-          "maintain": 6, 
-          "casting time": 1, 
+          "cost": 8,
+          "notes": "M40, HT negates",
+          "maintain": 6,
+          "casting time": 1,
           "duration": 60,
-        }, 
+        },
         "Alarm": {
-          "cost": 1, 
-          "notes": "M100", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 1,
+          "notes": "M100",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 604800,   # one week
-        }, 
+        },
         "Alter Visage": {
-          "cost": 4, 
-          "notes": "M41", 
-          "maintain": 0, 
-          "casting time": 60, 
+          "cost": 4,
+          "notes": "M41",
+          "maintain": 0,
+          "casting time": 60,
           "duration": 3600,
-        }, 
+        },
         "Analyze Magic": {
-          "cost": 8, 
-          "notes": "M102", 
-          "maintain": None, 
-          "casting time": 3600, 
+          "cost": 8,
+          "notes": "M102",
+          "maintain": None,
+          "casting time": 3600,
           "duration": 0,    # Instant
-        }, 
+        },
         "Animate Shadow": {
-          "cost": 4, 
-          "notes": "M154, Subject's shadow attacks them, HT negates", 
-          "maintain": 4, 
-          "casting time": 2, 
+          "cost": 4,
+          "notes": "M154, Subject's shadow attacks them, HT negates",
+          "maintain": 4,
+          "casting time": 2,
           "duration": 5,
         },
         "Armor": {
-          "cost": None, 
-          "notes": "M167, 2xDR, lasts 1 minute", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M167, 2xDR, lasts 1 minute",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 60,
-        }, 
+        },
         "Awaken": {
-          "cost": 1, 
-          "notes": "M90", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 1,
+          "notes": "M90",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Bless Plants": {
-          "cost": 1, 
-          "notes": "M161", 
-          "maintain": 4, 
-          "casting time": 300, 
+          "cost": 1,
+          "notes": "M161",
+          "maintain": 4,
+          "casting time": 300,
           "duration": 0,    # One season - no need to keep track
-        }, 
+        },
         "Blink": {
-          "cost": 2, 
-          "notes": "M148", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "M148",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Boost Dexterity": {
-          "cost": 1, 
-          "notes": "M37", 
-          "maintain": 2, 
-          "casting time": 1, 
+          "cost": 1,
+          "notes": "M37",
+          "maintain": 2,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Bravery": {
-          "cost": 2, 
-          "notes": "M134", 
-          "maintain": 2, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "M134",
+          "maintain": 2,
+          "casting time": 1,
           "duration": 3600,
-        }, 
+        },
         "Charm": {
-          "cost": 6, 
-          "notes": "M139, vs. Will", 
-          "maintain": 3, 
-          "casting time": 1, 
+          "cost": 6,
+          "notes": "M139, vs. Will",
+          "maintain": 3,
+          "casting time": 1,
           "duration": 60,
-        }, 
+        },
         "Choke": {
-          "cost": 4, 
-          "notes": "M40, vs. HT", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 4,
+          "notes": "M40, vs. HT",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 30,
-        }, 
+        },
         "Climbing": {
-          "cost": 1, 
-          "notes": "M35", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 1,
+          "notes": "M35",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 60,
-        }, 
+        },
         "Clumsiness": {
-          "cost": 1, 
-          "notes": "M36", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": 1,
+          "notes": "M36",
+          "maintain": None,
+          "casting time": 1,
           "duration": 60,
-        }, 
+        },
         "Command": {
-          "cost": 4, 
-          "notes": "M136, vs. Will", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 4,
+          "notes": "M136, vs. Will",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Communicate": {
-          "cost": 4, 
-          "notes": "M48", 
-          "maintain": 4, 
-          "casting time": 4, 
+          "cost": 4,
+          "notes": "M48",
+          "maintain": 4,
+          "casting time": 4,
           "duration": 60,
-        }, 
+        },
         "Conceal Magic": {
-          "cost": 1, 
-          "notes": "M122", 
-          "maintain": None, 
-          "casting time": 3, 
+          "cost": 1,
+          "notes": "M122",
+          "maintain": None,
+          "casting time": 3,
           "duration": 36000,    # 10 hours
-        }, 
+        },
         "Cure Disease": {
-          "cost": 4, 
-          "notes": "M91", 
-          "maintain": 2, 
-          "casting time": 600, 
+          "cost": 4,
+          "notes": "M91",
+          "maintain": 2,
+          "casting time": 600,
           "duration": 0,
-        }, 
+        },
         "Daze": {
-          "cost": 3, 
-          "notes": "M134", 
-          "maintain": 2, 
-          "casting time": 2, 
+          "cost": 3,
+          "notes": "M134",
+          "maintain": 2,
+          "casting time": 2,
           "duration": 60,
-        }, 
+        },
         "Death Touch": {
-          "cost": None, 
-          "notes": "M41, 1-3, needs touch", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M41, 1-3, needs touch",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Death Vision": {
-          "cost": 2, 
-          "notes": "M149, vs. IQ", 
-          "maintain": None, 
-          "casting time": 3, 
+          "cost": 2,
+          "notes": "M149, vs. IQ",
+          "maintain": None,
+          "casting time": 3,
           "duration": 1,
-        }, 
+        },
         "Detect Magic": {
-          "cost": 2, 
-          "notes": "M101", 
-          "maintain": None, 
-          "casting time": 300, 
+          "cost": 2,
+          "notes": "M101",
+          "maintain": None,
+          "casting time": 300,
           "duration": 0,
-        }, 
+        },
         "Emotion Control": {
-          "cost": 2, 
-          "notes": "M137", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "M137",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 3600,
-        }, 
+        },
         "Enchant": {
-          "cost": None, 
-          "notes": "M56", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M56",
+          "maintain": None,
+          "casting time": 1,
           "duration": 0,    # Permanent - no need to track
-        }, 
+        },
         "Enslave": {
-          "cost": 30, 
-          "notes": "M141, vs. Will", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 30,
+          "notes": "M141, vs. Will",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,    # Permanent - no need to track
-        }, 
+        },
         "Evisceration": {
-          "cost": 10, 
-          "notes": "M154, HT/IQ negates, Magery 3", 
-          "maintain": 0, 
-          "casting time": 5, 
+          "cost": 10,
+          "notes": "M154, HT/IQ negates, Magery 3",
+          "maintain": 0,
+          "casting time": 5,
           "duration": 0,
-        }, 
+        },
         "Explosive Lightning": {
-          "cost": None, 
-          "notes": "M196, cost 2-mage level, damage 1d-1 /2", 
-          "maintain": 0, 
-          "casting time": None, 
+          "cost": None,
+          "notes": "M196, cost 2-mage level, damage 1d-1 /2",
+          "maintain": 0,
+          "casting time": None,
           "duration": 0,
         },
         "False Memory": {
-          "cost": 3, 
-          "notes": "M139, vs. Will", 
-          "maintain": 0, 
-          "casting time": 5, 
+          "cost": 3,
+          "notes": "M139, vs. Will",
+          "maintain": 0,
+          "casting time": 5,
           "duration": None, # Ask
-        }, 
+        },
         "Far Hearing": {
-          "cost": 4, 
-          "notes": "M173", 
-          "maintain": 2, 
-          "casting time": 3, 
+          "cost": 4,
+          "notes": "M173",
+          "maintain": 2,
+          "casting time": 3,
           "duration": 60,
-        }, 
+        },
         "Fear": {
-          "cost": 1, 
-          "notes": "M134", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": 1,
+          "notes": "M134",
+          "maintain": None,
+          "casting time": 1,
           "duration": 36000,    # 10 minutes
-        }, 
+        },
         "Fog": {
-          "cost": None, 
-          "notes": "M193, cost: 2/yard radius, lasts 1 minute", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M193, cost: 2/yard radius, lasts 1 minute",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 60,
-        }, 
+        },
         "Foolishness": {
-          "cost": None, 
-          "notes": "M134", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M134",
+          "maintain": None,
+          "casting time": 1,
           "duration": 60,
-        }, 
+        },
         "Fumble": {
-          "cost": 3, 
-          "notes": "M38", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": 3,
+          "notes": "M38",
+          "maintain": None,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Golem": {
-          "cost": 250, 
-          "notes": "M59", 
-          "maintain": 0, 
-          "casting time": 0, 
+          "cost": 250,
+          "notes": "M59",
+          "maintain": 0,
+          "casting time": 0,
           "duration": 0,    # Permanent -- no need to track
-        }, 
+        },
         "Grace": {
-          "cost": 4, 
-          "notes": "M37", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": 4,
+          "notes": "M37",
+          "maintain": None,
+          "casting time": 1,
           "duration": 60,
-        }, 
+        },
         "Great Ward": {
-          "cost": None, 
-          "notes": "M122, cost: 1/person (min:4)", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M122, cost: 1/person (min:4)",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,
         },
         "Hair Growth": {
-          "cost": 1, 
-          "notes": "M39", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": 1,
+          "notes": "M39",
+          "maintain": None,
+          "casting time": 1,
           "duration": 5,
-        }, 
+        },
         "Haircut": {
-          "cost": 2, 
-          "notes": "M39", 
-          "maintain": None, 
-          "casting time": 2, 
+          "cost": 2,
+          "notes": "M39",
+          "maintain": None,
+          "casting time": 2,
           "duration": 0,
-        }, 
+        },
         "Heal Plant": {
-          "cost": 3, 
-          "notes": "M161", 
-          "maintain": None, 
-          "casting time": 60, 
+          "cost": 3,
+          "notes": "M161",
+          "maintain": None,
+          "casting time": 60,
           "duration": 0,    # Permanent -- no need to track
-        }, 
+        },
         "Identify Plant": {
-          "cost": 2, 
-          "notes": "M161", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "M161",
+          "maintain": None,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Identify Spell": {
-          "cost": 2, 
-          "notes": "M102", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "M102",
+          "maintain": None,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Itch": {
-          "cost": 2, 
-          "notes": "M35", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "M35",
+          "maintain": None,
+          "casting time": 1,
           "duration": None, # Ask
-        }, 
+        },
         "Lend Energy": {
-          "cost": None, 
-          "notes": "M89", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M89",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,    # Permanent -- no need to track
-        }, 
+        },
         "Lend Vitality": {
-          "cost": None, 
-          "notes": "M89", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M89",
+          "maintain": None,
+          "casting time": 1,
           "duration": 3600,
-        }, 
+        },
         "Lesser Geas": {
-          "cost": 12, 
-          "notes": "M140, vs. Will ", 
-          "maintain": 0, 
-          "casting time": 30, 
+          "cost": 12,
+          "notes": "M140, vs. Will ",
+          "maintain": 0,
+          "casting time": 30,
           "duration": 0,    # Permanent -- no need to track
-        }, 
+        },
         "Light": {
-          "cost": 1, 
-          "notes": "M110", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 1,
+          "notes": "M110",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 60,
-        }, 
+        },
         "Lightning": {
-          "cost": None, 
-          "notes": "M196, cost 1-3, cast=cost, needs an attack", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M196, cost 1-3, cast=cost, needs an attack",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Lightning Whip": {
-          "cost": None, 
-          "notes": "M196, cost 1 per 2 yards reach", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M196, cost 1 per 2 yards reach",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 10,
         },
         "Loyalty": {
-          "cost": 2, 
-          "notes": "M136", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "M136",
+          "maintain": None,
+          "casting time": 1,
           "duration": 3600,
-        }, 
+        },
         "Luck": {
-          "cost": 2, 
-          "notes": "V2", 
-          "maintain": 1, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "V2",
+          "maintain": 1,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Lure": {
-          "cost": 1, 
-          "notes": "M137", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": 1,
+          "notes": "M137",
+          "maintain": None,
+          "casting time": 1,
           "duration": 3600,
-        }, 
+        },
         "Madness": {
-          "cost": None, 
-          "notes": "M136, cost: 2-6", 
-          "maintain": 0, 
-          "casting time": 2, 
+          "cost": None,
+          "notes": "M136, cost: 2-6",
+          "maintain": 0,
+          "casting time": 2,
           "duration": 60,
         },
         "Major Heal": {
-          "cost": None, 
-          "notes": "M91", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M91",
+          "maintain": None,
+          "casting time": 1,
           "duration": 0,    # Permanent -- no need to track
-        }, 
+        },
         "Malfunction": {
-          "cost": 5, 
-          "notes": "M177, touch", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 5,
+          "notes": "M177, touch",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 60,
-        }, 
+        },
         "Manastone": {
-          "cost": None, 
-          "notes": "M70", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M70",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,    # Indefinite -- no need to track
-        }, 
+        },
         "Might": {
-          "cost": None, 
-          "notes": "M37", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M37",
+          "maintain": None,
+          "casting time": 1,
           "duration": 60,
-        }, 
+        },
         "Mind-Sending": {
-          "cost": 4, 
-          "notes": "M47", 
-          "maintain": 4, 
-          "casting time": 4, 
+          "cost": 4,
+          "notes": "M47",
+          "maintain": 4,
+          "casting time": 4,
           "duration": 60,
-        }, 
+        },
         "Minor Heal": {
-          "cost": None, 
-          "notes": "M91", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M91",
+          "maintain": None,
+          "casting time": 1,
           "duration": 0,    # Permanent -- no need to track
-        }, 
+        },
         "Pain": {
-          "cost": 2, 
-          "notes": "M36, vs. HT", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "M36, vs. HT",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 1,
-        }, 
+        },
         "Panic": {
-          "cost": 4, 
-          "notes": "M134, vs. Will", 
-          "maintain": 2, 
-          "casting time": 1, 
+          "cost": 4,
+          "notes": "M134, vs. Will",
+          "maintain": 2,
+          "casting time": 1,
           "duration": 60,
-        }, 
+        },
         "Phase": {
-          "cost": 3, 
-          "notes": "M83, avoid an attack", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 3,
+          "notes": "M83, avoid an attack",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,
         },
         "Planar Summons": {
-          "cost": None, 
-          "notes": "M82", 
-          "maintain": 0, 
-          "casting time": 300, 
+          "cost": None,
+          "notes": "M82",
+          "maintain": 0,
+          "casting time": 300,
           "duration": 3600,
-        }, 
+        },
         "Powerstone": {
-          "cost": 20, 
-          "notes": "M69", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": 20,
+          "notes": "M69",
+          "maintain": None,
+          "casting time": 1,
           "duration": 0,    # Permanent -- no need to track
-        }, 
+        },
         "Relieve Sickness": {
-          "cost": 2, 
-          "notes": "M90", 
-          "maintain": 2, 
-          "casting time": 10, 
+          "cost": 2,
+          "notes": "M90",
+          "maintain": 2,
+          "casting time": 10,
           "duration": 600,  # 10 minutes
-        }, 
+        },
         "Repair": {
-          "cost": None, 
-          "notes": "M118", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M118",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,    # Permanent -- no need to track
-        }, 
+        },
         "Restoration": {
-          "cost": 15, 
-          "notes": "M93", 
-          "maintain": 0, 
-          "casting time": 60, 
+          "cost": 15,
+          "notes": "M93",
+          "maintain": 0,
+          "casting time": 60,
           "duration": 0,    # Permanent -- no need to track
-        }, 
+        },
         "Rotting Death": {
-          "cost": 3, 
-          "notes": "M154 vs. HT, needs touch", 
-          "maintain": 2, 
-          "casting time": 1, 
+          "cost": 3,
+          "notes": "M154 vs. HT, needs touch",
+          "maintain": 2,
+          "casting time": 1,
           "duration": 1,
-        }, 
+        },
         "Seek Machine": {
-          "cost": 3, 
-          "notes": "M175", 
-          "maintain": None, 
-          "casting time": 10, 
+          "cost": 3,
+          "notes": "M175",
+          "maintain": None,
+          "casting time": 10,
           "duration": 0,
-        }, 
+        },
         "Seek Plant": {
-          "cost": 2, 
-          "notes": "M161", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "M161",
+          "maintain": None,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Sense Emotion": {
-          "cost": 2, 
-          "notes": "M45", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "M45",
+          "maintain": None,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Sense Foes": {
-          "cost": 2, 
-          "notes": "M45", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "M45",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Sense Life": {
-          "cost": None, 
-          "notes": "M45, cost 1/2 per yard radius, see M11", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M45, cost 1/2 per yard radius, see M11",
+          "maintain": None,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Shapeshifting": {
-          "cost": None, 
-          "notes": "M32", 
-          "maintain": None, 
-          "casting time": 3, 
+          "cost": None,
+          "notes": "M32",
+          "maintain": None,
+          "casting time": 3,
           "duration": 3600,
-        }, 
+        },
         "Shield": {
-          "cost": 2, 
-          "notes": "M167", 
-          "maintain": None, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "M167",
+          "maintain": None,
+          "casting time": 1,
           "duration": 60,
-        }, 
+        },
         "Sleep": {
-          "cost": 4, 
-          "notes": "M135", 
-          "maintain": 0, 
-          "casting time": 3, 
+          "cost": 4,
+          "notes": "M135",
+          "maintain": 0,
+          "casting time": 3,
           "duration": 0,
-        }, 
+        },
         "Spasm": {
-          "cost": 2, 
-          "notes": "M35", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "M35",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Stop Power": {
-          "cost": None, 
-          "notes": "M179, 3 pts /1.5 yard radius", 
-          "maintain": 0, 
-          "casting time": 3, 
+          "cost": None,
+          "notes": "M179, 3 pts /1.5 yard radius",
+          "maintain": 0,
+          "casting time": 3,
           "duration": 60,
-        }, 
+        },
         "Strike Blind": {
-          "cost": 4, 
-          "notes": "M38, vs HT", 
-          "maintain": 2, 
-          "casting time": 1, 
+          "cost": 4,
+          "notes": "M38, vs HT",
+          "maintain": 2,
+          "casting time": 1,
           "duration": 10,
-        }, 
+        },
         "Stun": {
-          "cost": 2, 
-          "notes": "M37, B420, vs. HT", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 2,
+          "notes": "M37, B420, vs. HT",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Summon Demon": {
-          "cost": 20, 
-          "notes": "M155", 
-          "maintain": 0, 
-          "casting time": 300, 
+          "cost": 20,
+          "notes": "M155",
+          "maintain": 0,
+          "casting time": 300,
           "duration": 3600,
-        }, 
+        },
         "Summon Spirit": {
-          "cost": 20, 
-          "notes": "M150", 
-          "maintain": 0, 
-          "casting time": 300, 
+          "cost": 20,
+          "notes": "M150",
+          "maintain": 0,
+          "casting time": 300,
           "duration": 60,
-        }, 
+        },
         "Teleport": {
-          "cost": None, 
-          "notes": "M147, cost: 5 for 100 yards", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M147, cost: 5 for 100 yards",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Terror": {
-          "cost": 4, 
-          "notes": "M134, Area, Will negates", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 4,
+          "notes": "M134, Area, Will negates",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Tell Time": {
-          "cost": 1, 
-          "notes": "M100", 
-          "maintain": 2, 
-          "casting time": 1, 
+          "cost": 1,
+          "notes": "M100",
+          "maintain": 2,
+          "casting time": 1,
           "duration": 0,
-        }, 
+        },
         "Throw Spell": {
-          "cost": 3, 
-          "notes": "M128", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": 3,
+          "notes": "M128",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 0,    # Indefinite -- no need to track
-        }, 
+        },
         "Total Paralysis": {
-          "cost": None, 
-          "notes": "M40, cost: 2-6", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M40, cost: 2-6",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 60,
         },
         "Wall Of Lightning": {
-          "cost": None, 
-          "notes": "M197", 
-          "maintain": 0, 
-          "casting time": 1, 
+          "cost": None,
+          "notes": "M197",
+          "maintain": 0,
+          "casting time": 1,
           "duration": 60,
-        }, 
+        },
         "Wizard Eye": {
-          "cost": 4, 
-          "notes": "M104", 
-          "maintain": 2, 
-          "casting time": 2, 
+          "cost": 4,
+          "notes": "M104",
+          "maintain": 2,
+          "casting time": 2,
           "duration": 60,
-        }, 
+        },
         "Zombie": {
-          "cost": 8, 
-          "notes": "M151", 
-          "maintain": None, 
-          "casting time": 60, 
+          "cost": 8,
+          "notes": "M151",
+          "maintain": None,
+          "casting time": 60,
           "duration": 0,    # Permanent -- no need to track
         }
     }
@@ -5409,7 +5408,7 @@ class GurpsRuleset(Ruleset):
 
         if handled == Ruleset.HANDLED_ERROR:
             return  handled
-        
+
         if action['name'] in actions:
             timer = None
             action_info = actions[action['name']]
@@ -5558,7 +5557,7 @@ class GurpsRuleset(Ruleset):
                     action_menu.append(('Aim (B324, B364)',
                                         {'menu': brace_menu}))
                 else:
-                    action_menu.append(('Aim (B324, B364)',  
+                    action_menu.append(('Aim (B324, B364)',
                                         {'action': {'name': 'aim',
                                                     'braced': False}}))
 
@@ -5594,7 +5593,7 @@ class GurpsRuleset(Ruleset):
                         cast_text_array.append('%s:%r' % (piece,
                                                          complete_spell[piece]))
                 cast_text = ' '.join(cast_text_array)
-                spell_menu.append(  
+                spell_menu.append(
                     (cast_text,
                     {'action': {'name': 'cast-spell', 'spell-index': index}
                     }))
@@ -5609,7 +5608,7 @@ class GurpsRuleset(Ruleset):
         # Can only feint with a melee weapon
         if weapon is not None and holding_ranged == False:
             action_menu.append(('feint (B365)', {'action': {'name': 'feint'}}))
-        
+
         # FP: B426
         move = fighter.details['current']['basic-move']
         if (fighter.details['current']['fp'] <
@@ -5669,7 +5668,7 @@ class GurpsRuleset(Ruleset):
         if posture_mods is not None and posture_mods['defense'] != 0:
             block_skill_modified = True
             block_skill += posture_mods['defense']
-            block_why.append('  %+d due to %s posture' % 
+            block_why.append('  %+d due to %s posture' %
                                                 (posture_mods['defense'],
                                                  fighter.details['posture']))
 
@@ -5679,7 +5678,7 @@ class GurpsRuleset(Ruleset):
         return block_skill, block_why
 
 
-    #   { 
+    #   {
     #       'Skills': { 'Axe/Mace': 8, 'Climbing': 8, },
     #       'Advantages': { 'Bad Tempter': -10, 'Nosy': -1, },
     #   }
@@ -5703,7 +5702,7 @@ class GurpsRuleset(Ruleset):
 
         # attributes
 
-        mode = curses.A_NORMAL 
+        mode = curses.A_NORMAL
         output.append([{'text': 'Attributes', 'mode': mode | curses.A_BOLD}])
         found_one = False
         pieces = []
@@ -5721,7 +5720,7 @@ class GurpsRuleset(Ruleset):
                 text = '%s:%d/%d' % (item_key,
                                      character.details['current'][item_key],
                                      character.details['permanent'][item_key])
-                if (character.details['current'][item_key] == 
+                if (character.details['current'][item_key] ==
                                      character.details['permanent'][item_key]):
                     mode = curses.A_NORMAL
                 else:
@@ -5752,7 +5751,7 @@ class GurpsRuleset(Ruleset):
 
         # stuff
 
-        mode = curses.A_NORMAL 
+        mode = curses.A_NORMAL
         output.append([{'text': 'Equipment', 'mode': mode | curses.A_BOLD}])
 
         in_use_items = []
@@ -5773,7 +5772,7 @@ class GurpsRuleset(Ruleset):
 
         # advantages
 
-        mode = curses.A_NORMAL 
+        mode = curses.A_NORMAL
         output.append([{'text': 'Advantages', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
@@ -5789,7 +5788,7 @@ class GurpsRuleset(Ruleset):
 
         # skills
 
-        mode = curses.A_NORMAL 
+        mode = curses.A_NORMAL
         output.append([{'text': 'Skills', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
@@ -5805,7 +5804,7 @@ class GurpsRuleset(Ruleset):
         # spells
 
         if 'spells' in character.details:
-            mode = curses.A_NORMAL 
+            mode = curses.A_NORMAL
             output.append([{'text': 'Spells', 'mode': mode | curses.A_BOLD}])
 
             found_one = False
@@ -5831,7 +5830,7 @@ class GurpsRuleset(Ruleset):
 
         # timers
 
-        mode = curses.A_NORMAL 
+        mode = curses.A_NORMAL
         output.append([{'text': 'Timers', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
@@ -5850,7 +5849,7 @@ class GurpsRuleset(Ruleset):
 
         # notes
 
-        mode = curses.A_NORMAL 
+        mode = curses.A_NORMAL
         output.append([{'text': 'Notes', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
@@ -5924,9 +5923,9 @@ class GurpsRuleset(Ruleset):
                         GurpsRuleset.melee_damage[st]['sw']['num_dice'],
                         GurpsRuleset.melee_damage[st]['sw']['plus']))
             if weapon['damage']['sw']['plus'] != 0:
-                why.append('  ...%+d for the weapon' % 
+                why.append('  ...%+d for the weapon' %
                                             weapon['damage']['sw']['plus'])
-            why.append('  ...damage: %dd%+d' % 
+            why.append('  ...damage: %dd%+d' %
                 (GurpsRuleset.melee_damage[st]['sw']['num_dice'],
                  GurpsRuleset.melee_damage[st]['sw']['plus'] +
                                             weapon['damage']['sw']['plus']))
@@ -5949,9 +5948,9 @@ class GurpsRuleset(Ruleset):
                              GurpsRuleset.melee_damage[st]['thr']['num_dice'],
                              GurpsRuleset.melee_damage[st]['thr']['plus']))
             if weapon['damage']['thr']['plus'] != 0:
-                why.append('  ...%+d for the weapon' % 
+                why.append('  ...%+d for the weapon' %
                                             weapon['damage']['thr']['plus'])
-            why.append('  ...damage: %dd%+d' % 
+            why.append('  ...damage: %dd%+d' %
                 (GurpsRuleset.melee_damage[st]['thr']['num_dice'],
                  GurpsRuleset.melee_damage[st]['thr']['plus'] +
                                             weapon['damage']['thr']['plus']))
@@ -5992,7 +5991,7 @@ class GurpsRuleset(Ruleset):
         if posture_mods is not None and posture_mods['defense'] != 0:
             dodge_skill_modified = True
             dodge_skill += posture_mods['defense']
-            dodge_why.append('  %+d due to %s posture' % 
+            dodge_why.append('  %+d due to %s posture' %
                                                 (posture_mods['defense'],
                                                  fighter.details['posture']))
 
@@ -6030,7 +6029,7 @@ class GurpsRuleset(Ruleset):
                                   ):
         '''
         Returns a tuple of strings describing:
-        
+
         1) the current (based on weapons held, armor worn, etc) defensive
            capability (parry, dodge, block) of the Fighter, and
         2) the pieces that went into the above calculations
@@ -6179,7 +6178,7 @@ class GurpsRuleset(Ruleset):
                                     weapon['ammo']['shots_left'],
                                     weapon['ammo']['shots'],
                                     (0 if clip is None else clip['count'])))
-                
+
 
         # Active aim
 
@@ -6243,7 +6242,7 @@ class GurpsRuleset(Ruleset):
         if posture_mods is not None and posture_mods['defense'] != 0:
             parry_skill_modified = True
             parry_skill += posture_mods['defense']
-            parry_why.append('  %+d due to %s posture' % 
+            parry_why.append('  %+d due to %s posture' %
                                                 (posture_mods['defense'],
                                                  fighter.details['posture']))
         if parry_skill_modified:
@@ -6266,12 +6265,12 @@ class GurpsRuleset(Ruleset):
     def get_fight_commands(self,
                            fight_handler    # FightHandler object
                           ):
-        ''' 
+        '''
         Returns fight commands that are specific to the GURPS ruleset.  These
         commands are structured for a command ribbon.  The functions point
         right back to local functions of the GurpsRuleset.
         '''
-        return { 
+        return {
             ord('f'): {'name': 'FP damage',
                        'func': self.__damage_FP,
                        'param': {
@@ -6360,7 +6359,7 @@ class GurpsRuleset(Ruleset):
                         posture_mods['attack'], fighter.details['posture']))
                 skill += posture_mods['attack']
             else:
-                why.append('  NOTE: %s posture doesn\'t matter for ranged' % 
+                why.append('  NOTE: %s posture doesn\'t matter for ranged' %
                                                     fighter.details['posture'])
                 why.append('    attacks (B551).')
 
@@ -6508,7 +6507,7 @@ class GurpsRuleset(Ruleset):
                         'Boxing(%d) @DX(%d)+2 = +2/die of thrusting damage' %
                             (result['punch_skill'],
                              fighter.details['current']['dx']))
-                elif (result['punch_skill'] >= 
+                elif (result['punch_skill'] >=
                                         fighter.details['current']['dx']+1):
                     plus_per_die_of_thrust = 1
                     plus_per_die_of_thrust_string = (
@@ -6541,10 +6540,10 @@ class GurpsRuleset(Ruleset):
             result['punch_skill'] += posture_mods['attack']
             result['kick_skill'] += posture_mods['attack']
 
-            punch_why.append('  %+d due to %s posture' % 
+            punch_why.append('  %+d due to %s posture' %
                                                 (posture_mods['attack'],
                                                  fighter.details['posture']))
-            kick_why.append('  %+d due to %s posture' % 
+            kick_why.append('  %+d due to %s posture' %
                                                 (posture_mods['attack'],
                                                  fighter.details['posture']))
 
@@ -6571,7 +6570,7 @@ class GurpsRuleset(Ruleset):
         if posture_mods is not None and posture_mods['defense'] != 0:
             result['parry_skill'] += posture_mods['defense']
 
-            parry_why.append('  %+d due to %s posture' % 
+            parry_why.append('  %+d due to %s posture' %
                                                 (posture_mods['defense'],
                                                  fighter.details['posture']))
 
@@ -6647,7 +6646,7 @@ class GurpsRuleset(Ruleset):
                                             kick_damage['plus']))
             if damage_array is not None:
                 damage_str = self.damage_to_string(damage_array)
-                punch_damage_why.append('  ...for a punch damage total = %s' % 
+                punch_damage_why.append('  ...for a punch damage total = %s' %
                                         damage_str)
             else:
                 punch_damage_why.append(
@@ -6800,15 +6799,15 @@ class GurpsRuleset(Ruleset):
                            'actions_this_turn': [],
                            'check_for_death': False,
                            'posture': 'standing'})
-        to_monster['permanent'] = copy.deepcopy({'fp': 10, 
-                                                 'iq': 10, 
-                                                 'hp': 10, 
-                                                 'wi': 10, 
-                                                 'st': 10, 
-                                                 'ht': 10, 
-                                                 'dx': 10, 
-                                                 'basic-move': 5, 
-                                                 'basic-speed': 5, 
+        to_monster['permanent'] = copy.deepcopy({'fp': 10,
+                                                 'iq': 10,
+                                                 'hp': 10,
+                                                 'wi': 10,
+                                                 'st': 10,
+                                                 'ht': 10,
+                                                 'dx': 10,
+                                                 'basic-move': 5,
+                                                 'basic-speed': 5,
                                                  'per': 10})
         to_monster['current'] = copy.deepcopy(to_monster['permanent'])
         return to_monster
@@ -6913,7 +6912,7 @@ class GurpsRuleset(Ruleset):
                 (('roll <= HT (%d)' % fighter.details['current']['ht']), True),
                 ('did NOT make HT roll', False)]
             made_ht_roll = self._window_manager.menu(
-                ('%s: roll <= HT or DIE (B327)' % fighter.name), 
+                ('%s: roll <= HT or DIE (B327)' % fighter.name),
                  dead_menu)
 
             if not made_ht_roll:
@@ -7007,7 +7006,7 @@ class GurpsRuleset(Ruleset):
                                 | |<- - - - - - - -| |
                                  -                  -
                                  |                  |
-        
+
         Ruleset::_adjust_hp never gets called for the adjust-hp action.
         Ruleset's function gets called, directly, by the 2nd (GurpsRulest-
         specific) action.
@@ -7128,7 +7127,7 @@ class GurpsRuleset(Ruleset):
                 else:
                     total = fighter.details['current']['ht']
                     menu_title = (
-                        'Major Wound (B420): Roll vs. HT (%d) or be stunned' % 
+                        'Major Wound (B420): Roll vs. HT (%d) or be stunned' %
                                                                         total)
 
                 stunned_menu = [
@@ -7152,7 +7151,7 @@ class GurpsRuleset(Ruleset):
                                    {'name': 'change-posture',
                                     'posture': 'lying'},
                                    fight_handler)
-                    self.do_action(fighter, 
+                    self.do_action(fighter,
                                    {'name': 'stun',
                                     'stun': True},
                                    fight_handler)
@@ -7203,7 +7202,7 @@ class GurpsRuleset(Ruleset):
         ('adjust-hp-really') actually perfoms all the actions and
         side-effects of changing the hit-points.  See
         |GurpsRuleset::_adjust_hp| for an idea of how this method is used.
-        
+
 
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
@@ -7355,8 +7354,8 @@ class GurpsRuleset(Ruleset):
         # Charge the spell caster for the spell.
 
         if complete_spell['cost'] > 0:
-            self.do_action(fighter, 
-                           {'name': 'adjust-fp', 
+            self.do_action(fighter,
+                           {'name': 'adjust-fp',
                             'adj': -complete_spell['cost']},
                            fight_handler,
                            logit=False)
@@ -7534,7 +7533,7 @@ class GurpsRuleset(Ruleset):
 
         fight_handler = (None if 'fight_handler' not in param
                                                 else param['fight_handler'])
-        self.do_action(fp_recipient, 
+        self.do_action(fp_recipient,
                        {'name': 'adjust-fp', 'adj': adj, 'comment': comment},
                        fight_handler)
 
@@ -7543,7 +7542,7 @@ class GurpsRuleset(Ruleset):
 
     def __do_adjust_fp(self,
                        fighter,      # Fighter object
-                       action,       # {'name': 'adjust-fp', 
+                       action,       # {'name': 'adjust-fp',
                                      #  'adj': <int> # number to add to FP
                                      #  'comment': <string>, # optional
                        fight_handler # FightHandler object (for logging)
@@ -7796,7 +7795,7 @@ class GurpsRuleset(Ruleset):
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
         '''
-        
+
         # Timer
 
         timer = Timer(None)
@@ -7915,7 +7914,7 @@ class GurpsRuleset(Ruleset):
                 if made_skill_roll:
                     reload_time -= 1
 
-                    
+
         if reload_time > 0:
             new_action = {'name': 'reload-really', 'time': reload_time}
             if 'notimer' in action:
@@ -7960,7 +7959,7 @@ class GurpsRuleset(Ruleset):
         timer = None
         if 'notimer' not in action or not action['notimer']:
             timer = Timer(None)
-            timer.from_pieces( 
+            timer.from_pieces(
                         {'parent-name': fighter.name,
                          'rounds': action['time'] - Timer.announcement_margin,
                          'string': 'RELOADING'} )
@@ -8009,7 +8008,7 @@ class GurpsRuleset(Ruleset):
 
         title = 'Holster weapon' if weapon is None else (
                                                 'Draw %s' % weapon['name'])
-        
+
         timer.from_pieces({'parent-name': fighter.name,
                            'rounds': 1 - Timer.announcement_margin,
                            'string': [title, ' Defense: any', ' Move: step']})
@@ -8161,7 +8160,7 @@ class ScreenHandler(object):
                                         #                    is selected
                            ):
         '''
-        Adds options to the command ribbon.  
+        Adds options to the command ribbon.
 
         key_char is the character someone would need to hit to invoke the
         choice.  The key_char can be of the following forms:
@@ -8426,7 +8425,7 @@ class BuildFightHandler(ScreenHandler):
                         self.world.details['templates'][self.__template_name]):
                 if from_creature_name == empty_creature:
                     self._window_manager.error(
-                        ['Template "%s" contains illegal template:' % 
+                        ['Template "%s" contains illegal template:' %
                                                         self.__template_name,
                          '"%s". Replacing with an empty creature.' %
                                                         empty_creature])
@@ -8503,7 +8502,7 @@ class BuildFightHandler(ScreenHandler):
                     keep_asking = False
 
             # Add personality stuff to notes
-        
+
             if self.__group_name != 'PCs':
                 with GmJson('gm-npc-random-detail.json') as npc_detail:
                     for name, traits in (
@@ -8514,7 +8513,7 @@ class BuildFightHandler(ScreenHandler):
                             for key in trait:
                                 if key in npc_detail.read_data['support']:
                                     trait_array.append('%s: %s' %
-                                        (key, 
+                                        (key,
                                          random.choice(
                                             npc_detail.read_data['support'][key])))
                             trait = ', '.join(trait_array)
@@ -9185,7 +9184,7 @@ class FightHandler(ScreenHandler):
                                   #     world['fights']
                           ):
         '''
-        Returns the Fighter object given the name and group of the fighter, 
+        Returns the Fighter object given the name and group of the fighter,
         '''
         for fighter in self.__fighters:
             if fighter.group == group and fighter.name == name:
@@ -9318,11 +9317,11 @@ class FightHandler(ScreenHandler):
             if self._saved_fight['index'] >= len(
                                             self._saved_fight['fighters']):
                 self._saved_fight['index'] = 0
-                self._saved_fight['round'] += adj 
+                self._saved_fight['round'] += adj
             elif self._saved_fight['index'] < 0:
                 self._saved_fight['index'] = len(
                                             self._saved_fight['fighters']) - 1
-                self._saved_fight['round'] += adj 
+                self._saved_fight['round'] += adj
             current_fighter = self.get_current_fighter()
             if current_fighter.name == Venue.name:
                 pass
@@ -9412,7 +9411,7 @@ class FightHandler(ScreenHandler):
                                  {'name': 'pick-opponent',
                                   'opponent': {'name': opponent_name,
                                                'group': opponent_group},
-                                  'comment': '(%s) picked (%s) as opponent' % 
+                                  'comment': '(%s) picked (%s) as opponent' %
                                                     (current_fighter.name,
                                                      opponent_name)
                                  },
@@ -9431,7 +9430,7 @@ class FightHandler(ScreenHandler):
                     {'name': 'pick-opponent',
                      'opponent': {'name': current_fighter.name,
                                   'group': current_fighter.group},
-                     'comment': '(%s) picked (%s) as opponent right back' % 
+                     'comment': '(%s) picked (%s) as opponent right back' %
                                                         (opponent_name,
                                                          current_fighter.name)
                     },
@@ -10206,7 +10205,7 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         self.__viewing_index = None
-        if (self._saved_fight['index'] == 0 and 
+        if (self._saved_fight['index'] == 0 and
                 self._saved_fight['round'] == 0):
             return True # Not going backwards from the origin
 
@@ -10600,9 +10599,9 @@ class MainHandler(ScreenHandler):
                       {'name': 'scroll char detail',  'func':
                                                        self.__right_pane},
 
-            ord('e'): {'name': 'EQUIP/mod PC/NPC/monster', 'func': 
+            ord('e'): {'name': 'EQUIP/mod PC/NPC/monster', 'func':
                                                        self.__equip},
-            ord('p'): {'name': 'move/add PERSONNEL',  'func': 
+            ord('p'): {'name': 'move/add PERSONNEL',  'func':
                                                        self.__party},
             ord('f'): {'name': 'FIGHT',               'func':
                                                        self.__run_fight},
@@ -10636,6 +10635,7 @@ class MainHandler(ScreenHandler):
             details = self.world.get_creature_details(name, 'PCs')
             if details is not None:
                 self.__ruleset.is_creature_consistent(name, details)
+
 
     #
     # Public Methods
@@ -10986,7 +10986,7 @@ class MainHandler(ScreenHandler):
             if attr_type is None:
                 return None
 
-            attr_menu = [(attr, attr) 
+            attr_menu = [(attr, attr)
                                 for attr in fighter.details[attr_type].keys()]
 
             attr = self._window_manager.menu('Attr To Modify', attr_menu)
@@ -11111,7 +11111,7 @@ class MainHandler(ScreenHandler):
         if weapon is None:
             weapon_menu = []
             for index, item in enumerate(fighter.details['stuff']):
-                if (item['type'] == 'melee weapon' or 
+                if (item['type'] == 'melee weapon' or
                         item['type'] == 'ranged weapon' or
                         item['type'] == 'shield'):
                     if weapon_index != index:
@@ -11637,7 +11637,7 @@ class MainHandler(ScreenHandler):
                                                                  param)])
             return None
 
-        #   { 
+        #   {
         #       'Skills':     { 'Axe/Mace': 8,      'Climbing': 8, },
         #       'Advantages': { 'Bad Tempter': -10, 'Nosy': -1, },
         #   }
@@ -11685,7 +11685,7 @@ class MainHandler(ScreenHandler):
             else:
                 result = None
                 self._window_manager.error(
-                    ['unknown predicate "%r" for "%s"' % 
+                    ['unknown predicate "%r" for "%s"' %
                             (new_ability['predicate'], new_ability['name'])])
 
             if result is not None:
@@ -12042,7 +12042,7 @@ class EquipmentManager(object):
         Returns nothing.
         '''
 
-        mode = curses.A_NORMAL 
+        mode = curses.A_NORMAL
 
         in_use_string = ' (in use)' if item in in_use_items else ''
 
@@ -12158,7 +12158,7 @@ class MyArgumentParser(argparse.ArgumentParser):
     def error(self, message):
         sys.stderr.write('error: %s\n' % message)
         self.print_help()
-        sys.exit(2) 
+        sys.exit(2)
 
 
 def timeStamped(fname,  # <string> Base filename
@@ -12192,7 +12192,7 @@ def are_equal(self, lhs, rhs):
             elif not self.__are_equal(lhs[key], rhs[key]):
                 are_equal = False
         return are_equal
-            
+
     elif isinstance(lhs, list):
         if not isinstance(rhs, list):
             return False
@@ -12302,6 +12302,5 @@ if __name__ == '__main__':
             main_handler = MainHandler(window_manager,
                                        world,
                                        ruleset)
-
             main_handler.handle_user_input_until_done()
 
