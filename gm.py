@@ -8291,15 +8291,16 @@ class PersonnelHandler(ScreenHandler):
         super(PersonnelHandler, self).__init__(window_manager, world)
         self._add_to_choice_dict({
             curses.KEY_UP:
-                      {'name': 'prev character',  'func': self.__view_prev},
+                      {'name': 'prev character',     'func': self.__view_prev},
             curses.KEY_DOWN:
-                      {'name': 'next character',  'func': self.__view_next},
-            ord('a'): {'name': 'add creature',    'func': self.__add_creature},
-            ord('d'): {'name': 'delete creature', 'func':
-                                                    self.__delete_creature},
-            ord('t'): {'name': 'change template', 'func': self.__new_template},
-            ord('T'): {'name': 'make template',   'func': self.__make_template},
-            ord('q'): {'name': 'quit',            'func': self.__quit},
+                      {'name': 'next character',     'func': self.__view_next},
+            ord('a'): {'name': 'add creature',       'func': self.__add_creature},
+            ord('d'): {'name': 'delete creature',    'func':
+                                                        self.__delete_creature},
+            ord('g'): {'name': 'new template group', 'func': self.__new_template_group},
+            ord('t'): {'name': 'change template',    'func': self.__new_template},
+            ord('T'): {'name': 'make template',      'func': self.__make_template},
+            ord('q'): {'name': 'quit',               'func': self.__quit},
         })
         self._window = self._window_manager.get_build_fight_gm_window(
                                                                 self._choices)
@@ -8961,6 +8962,36 @@ class PersonnelHandler(ScreenHandler):
         self._draw_screen()
 
         return True # Keep going
+
+    def __new_template_group(self):
+        '''
+        Command ribbon method.
+
+        Creates a new template group and changes to that group.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        lines, cols = self._window.getmaxyx()
+        keep_asking = True
+        while keep_asking:
+            template_name = self._window_manager.input_box(1,      # height
+                                                           cols-4, # width
+                                                           'New Template Group Name')
+            if template_name is None or len(template_name) <= 0:
+                return True
+            elif template_name in self.world.details['templates']:
+                self._window_manager.error(
+                    ['Template group name "%s" already exists' % template_name])
+                keep_asking = True
+            else:
+                keep_asking = False
+
+        if len(template_name) > 0:
+            self.world.details['templates'][template_name] = {}
+            self.__template_name = template_name
+            self._draw_screen()
+
+        return True
 
 
     def __quit(self):
@@ -10622,7 +10653,7 @@ class MainHandler(ScreenHandler):
 
             ord('e'): {'name': 'EQUIP/mod PC/NPC/monster', 'func':
                                                        self.__equip},
-            ord('p'): {'name': 'move/add PERSONNEL',  'func':
+            ord('p'): {'name': 'PERSONNEL changes',   'func':
                                                        self.__party},
             ord('f'): {'name': 'FIGHT',               'func':
                                                        self.__run_fight},
