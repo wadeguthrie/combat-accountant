@@ -641,7 +641,7 @@ class MainGmWindow(GmWindow):
 
 
 
-class BuildFightGmWindow(GmWindow):
+class PersonnelGmWindow(GmWindow):
     '''
     Window display for building individual creatures, assembling creatures
     into groups, and moving creatures between groups.  A group is one of:
@@ -651,12 +651,12 @@ class BuildFightGmWindow(GmWindow):
                  window_manager,
                  command_ribbon_choices
                 ):
-        super(BuildFightGmWindow, self).__init__(window_manager,
-                                                 curses.LINES,
-                                                 curses.COLS,
-                                                 0,
-                                                 0,
-                                                 command_ribbon_choices)
+        super(PersonnelGmWindow, self).__init__(window_manager,
+                                                curses.LINES,
+                                                curses.COLS,
+                                                0,
+                                                0,
+                                                command_ribbon_choices)
         lines, cols = self._window.getmaxyx()
         # TODO: should _char_detail be in GmWindow?
         self._char_detail = []  # [[{'text', 'mode'}, ...],   # line 0
@@ -698,12 +698,12 @@ class BuildFightGmWindow(GmWindow):
         if self._char_detail_window is not None:
             del self._char_detail_window
             self._char_detail_window = None
-        super(BuildFightGmWindow, self).close()
+        super(PersonnelGmWindow, self).close()
 
 
     def refresh(self):
         ''' Re-draws all of the window's panes.  '''
-        super(BuildFightGmWindow, self).refresh()
+        super(PersonnelGmWindow, self).refresh()
         if self.__char_list_window is not None:
             self.__char_list_window.refresh()
         if self._char_detail_window is not None:
@@ -724,7 +724,7 @@ class BuildFightGmWindow(GmWindow):
         self._char_detail_window.refresh()
 
 
-    # BuildFightGmWindow
+    # PersonnelGmWindow
     def show_creatures(self,
                        char_list,       # [ Fighter(), Fighter(), ..]
                        new_char_name,   # name of character to highlight
@@ -792,15 +792,15 @@ class BuildFightGmWindow(GmWindow):
                             '"%s" from "%s" template' % (group, template),
                             curses.A_NORMAL)
 
-        super(BuildFightGmWindow, self).status_ribbon(input_filename,
-                                                      maintain_json)
+        super(PersonnelGmWindow, self).status_ribbon(input_filename,
+                                                     maintain_json)
 
         self._window.refresh()
 
 
     def touchwin(self):
         ''' Touches all of this window's sub-panes.  '''
-        super(BuildFightGmWindow, self).touchwin()
+        super(PersonnelGmWindow, self).touchwin()
         if self.__char_list_window is not None:
             self.__char_list_window.touchwin()
         if self._char_detail_window is not None:
@@ -1416,10 +1416,10 @@ class GmWindowManager(object):
                                   command_ribbon_choices
                                  ):
         '''
-        Returns a BuildFightGmWindow object.  Useful for providing Mocks
+        Returns a PersonnelGmWindow object.  Useful for providing Mocks
         in testing.
         '''
-        return BuildFightGmWindow(self, command_ribbon_choices)
+        return PersonnelGmWindow(self, command_ribbon_choices)
 
 
     def get_fight_gm_window(self,
@@ -8271,7 +8271,7 @@ class ScreenHandler(object):
         return True # Keep doing whatever you were doing.
 
 
-class BuildFightHandler(ScreenHandler):
+class PersonnelHandler(ScreenHandler):
     '''
     Adds creatures to the PC, NPC, or a monster list (possibly creating a new
     monster list).  These creatures are created from one of the templates
@@ -8288,7 +8288,7 @@ class BuildFightHandler(ScreenHandler):
                  ruleset,           # Ruleset object
                  creature_type,     # one of: NPCs, PCs, or MONSTERs
                 ):
-        super(BuildFightHandler, self).__init__(window_manager, world)
+        super(PersonnelHandler, self).__init__(window_manager, world)
         self._add_to_choice_dict({
             curses.KEY_UP:
                       {'name': 'prev character',  'func': self.__view_prev},
@@ -8297,9 +8297,6 @@ class BuildFightHandler(ScreenHandler):
             ord('a'): {'name': 'add creature',    'func': self.__add_creature},
             ord('d'): {'name': 'delete creature', 'func':
                                                     self.__delete_creature},
-            ord('g'): {'name': 'new group',       'func': self.__new_group},
-            ord('G'): {'name': 'existing group',  'func':
-                                                    self.__existing_group},
             ord('t'): {'name': 'change template', 'func': self.__new_template},
             ord('T'): {'name': 'make template',   'func': self.__make_template},
             ord('q'): {'name': 'quit',            'func': self.__quit},
@@ -8317,13 +8314,13 @@ class BuildFightHandler(ScreenHandler):
         self.__new_char_name = None
         self.__viewing_index = None # integer index into self.__critters
 
-        if creature_type == BuildFightHandler.NPCs:
+        if creature_type == PersonnelHandler.NPCs:
             self.__group_name = 'NPCs'
             self.__existing_group(creature_type)
-        elif creature_type == BuildFightHandler.PCs:
+        elif creature_type == PersonnelHandler.PCs:
             self.__group_name = 'PCs'
             self.__existing_group(creature_type)
-        else: # creature_type == BuildFightHandler.MONSTERs:
+        else: # creature_type == PersonnelHandler.MONSTERs:
             self.__group_name = None    # The name of the monsters or 'PCs'
                                         # that will ultimately take these
                                         # creatures.
@@ -8399,7 +8396,7 @@ class BuildFightHandler(ScreenHandler):
                                    self.world.source_filename,
                                    ScreenHandler.maintainjson)
         self._window.command_ribbon()
-        # BuildFightGmWindow
+        # PersonnelGmWindow
         fighters = None if self.__critters is None else self.__critters['obj']
         self._window.show_creatures(fighters,
                                     self.__new_char_name,
@@ -8571,7 +8568,7 @@ class BuildFightHandler(ScreenHandler):
                                          self.__ruleset,
                                          self._window_manager))
                 self.__new_char_name = creature_name
-                # BuildFightGmWindow
+                # PersonnelGmWindow
                 self._window.show_creatures(temp_list,
                                             self.__new_char_name,
                                             self.__viewing_index)
@@ -8624,7 +8621,7 @@ class BuildFightHandler(ScreenHandler):
             self.__critters['obj'].append(self.world.get_creature(
                                                         creature_name,
                                                         self.__group_name))
-            # BuildFightGmWindow
+            # PersonnelGmWindow
             self._window.show_creatures(self.__critters['obj'],
                                         self.__new_char_name,
                                         self.__viewing_index)
@@ -8673,7 +8670,7 @@ class BuildFightHandler(ScreenHandler):
             self.__deleted_critter_count += 1
 
         self.__viewing_index = None
-        # BuildFightGmWindow
+        # PersonnelGmWindow
         self._window.show_creatures(self.__critters['obj'],
                                     self.__new_char_name,
                                     self.__viewing_index)
@@ -8682,7 +8679,7 @@ class BuildFightHandler(ScreenHandler):
 
 
     def __existing_group(self,
-                         creature_type # BuildFightHandler.NPCs, ...
+                         creature_type # PersonnelHandler.NPCs, ...
                         ):
 
         '''
@@ -8704,17 +8701,17 @@ class BuildFightHandler(ScreenHandler):
 
         # Get the group information
 
-        if creature_type == BuildFightHandler.MONSTERs:
+        if creature_type == PersonnelHandler.MONSTERs:
             group_menu = [(group_name, group_name)
                             for group_name in self.world.get_fights()]
             group_menu = sorted(group_menu, key=lambda x: x[0].upper())
             group_answer = self._window_manager.menu('To Which Group',
                                                      group_menu)
 
-        elif creature_type == BuildFightHandler.NPCs:
+        elif creature_type == PersonnelHandler.NPCs:
             group_answer = 'NPCs'
 
-        elif creature_type == BuildFightHandler.PCs:
+        elif creature_type == PersonnelHandler.PCs:
             group_answer = 'PCs'
 
         if group_answer is None:
@@ -8742,7 +8739,7 @@ class BuildFightHandler(ScreenHandler):
 
         # Add the Venue to the object array (but only for monsters).
 
-        if creature_type == BuildFightHandler.MONSTERs:
+        if creature_type == PersonnelHandler.MONSTERs:
             if the_fight_itself is None:
                 self.__critters['data'][Venue.name] = Venue.empty_venue
                 group = self.world.details['fights'][self.__group_name]
@@ -8970,7 +8967,7 @@ class BuildFightHandler(ScreenHandler):
         '''
         Command ribbon method.
 
-        Quits out of the BuildFightHandler.
+        Quits out of the PersonnelHandler.
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
@@ -8992,7 +8989,7 @@ class BuildFightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         self.change_viewing_index(-1)
-        # BuildFightGmWindow
+        # PersonnelGmWindow
         self._window.show_creatures(self.__critters['obj'],
                                     self.__new_char_name,
                                     self.__viewing_index)
@@ -9009,7 +9006,7 @@ class BuildFightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         self.change_viewing_index(1)
-        # BuildFightGmWindow
+        # PersonnelGmWindow
         self._window.show_creatures(self.__critters['obj'],
                                     self.__new_char_name,
                                     self.__viewing_index)
@@ -10826,10 +10823,10 @@ class MainHandler(ScreenHandler):
         Returns: True -- anything but None in a menu handler
         '''
 
-        build_fight = BuildFightHandler(self._window_manager,
-                                        self.world,
-                                        self.__ruleset,
-                                        BuildFightHandler.MONSTERs)
+        build_fight = PersonnelHandler(self._window_manager,
+                                       self.world,
+                                       self.__ruleset,
+                                       PersonnelHandler.MONSTERs)
         build_fight.handle_user_input_until_done()
 
         # Display the last fight on the main screen
@@ -10860,10 +10857,10 @@ class MainHandler(ScreenHandler):
         Returns: True -- anything but None in a menu handler
         '''
 
-        build_fight = BuildFightHandler(self._window_manager,
-                                        self.world,
-                                        self.__ruleset,
-                                        BuildFightHandler.NPCs)
+        build_fight = PersonnelHandler(self._window_manager,
+                                       self.world,
+                                       self.__ruleset,
+                                       PersonnelHandler.NPCs)
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list(self.__current_display) # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
@@ -10885,10 +10882,10 @@ class MainHandler(ScreenHandler):
         Returns: True -- anything but None in a menu handler
         '''
 
-        build_fight = BuildFightHandler(self._window_manager,
-                                        self.world,
-                                        self.__ruleset,
-                                        BuildFightHandler.PCs)
+        build_fight = PersonnelHandler(self._window_manager,
+                                       self.world,
+                                       self.__ruleset,
+                                       PersonnelHandler.PCs)
         build_fight.handle_user_input_until_done()
         self.__setup_PC_list(self.__current_display) # Since it may have changed
         self._draw_screen() # Redraw current screen when done building fight.
