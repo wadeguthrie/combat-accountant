@@ -8338,7 +8338,10 @@ class PersonnelHandler(ScreenHandler):
                 self.__existing_group(creature_type)
 
         self._draw_screen()
-        self.__add_creature()
+        # TODO: this will require some changes to tests
+        if not self.__critters_contains_critters():
+            self.__add_creature()
+
         return
 
     #
@@ -8384,6 +8387,19 @@ class PersonnelHandler(ScreenHandler):
     #
     # Protected Methods
     #
+
+
+    def __critters_contains_critters(self):
+        '''
+        Returns True if any creature in the self.__critters array is a monster, NPC, or PC.
+            Returns False, otherwise.
+        '''
+        if self.__critters is None:
+            return False
+        for critter in self.__critters['obj']:
+            if critter.name != Venue.name:
+                return True
+        return False
 
     def _draw_screen(self):
         '''
@@ -8706,8 +8722,7 @@ class PersonnelHandler(ScreenHandler):
             group_menu = [(group_name, group_name)
                             for group_name in self.world.get_fights()]
             group_menu = sorted(group_menu, key=lambda x: x[0].upper())
-            group_answer = self._window_manager.menu('To Which Group',
-                                                     group_menu)
+            group_answer = self._window_manager.menu('To Which Group', group_menu)
 
         elif creature_type == PersonnelHandler.NPCs:
             group_answer = 'NPCs'
