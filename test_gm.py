@@ -62,14 +62,14 @@ action['name'] == 'adjust-fp':
 # TODO: test 'resurrect fight'
 # TODO: test equipping characters
 
-class TestBuildFightHandler(gm.BuildFightHandler):
+class TestPersonnelHandler(gm.PersonnelHandler):
     def __init__(self,
                  window_manager,
                  world,
                  ruleset,
                  creature_type # one of: NPCs, PCs, or MONSTERs
                 ):
-        super(TestBuildFightHandler, self).__init__(
+        super(TestPersonnelHandler, self).__init__(
                  window_manager,
                  world,
                  ruleset,
@@ -228,7 +228,7 @@ class MockGmWindow(object):
         return 10, 10
 
 
-class MockBuildFightGmWindow(MockGmWindow):
+class MockPersonnelGmWindow(MockGmWindow):
     def __init__(self):
         pass
 
@@ -329,7 +329,7 @@ class MockWindowManager(object):
             PP.pprint(string_array)
 
     def get_build_fight_gm_window(self, command_ribbon_choices):
-        return MockBuildFightGmWindow()
+        return MockPersonnelGmWindow()
 
     def display_window(self,
                        title,
@@ -4073,10 +4073,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_input_box_response('Monster Name', 'Horatio')
         self.__window_manager.set_menu_response('What Next', 'quit')
 
-        build_fight = TestBuildFightHandler(self.__window_manager,
-                                            world,
-                                            self.__ruleset,
-                                            gm.BuildFightHandler.MONSTERs)
+        build_fight = TestPersonnelHandler(self.__window_manager,
+                                           world,
+                                           self.__ruleset,
+                                           gm.PersonnelHandler.MONSTERs)
 
         build_fight.set_command_ribbon_input('q')
         build_fight.handle_user_input_until_done()
@@ -4113,10 +4113,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_input_box_response('Monster Name', 'Horatio')
         self.__window_manager.set_menu_response('What Next', 'quit')
 
-        build_fight = TestBuildFightHandler(self.__window_manager,
-                                            world,
-                                            self.__ruleset,
-                                            gm.BuildFightHandler.MONSTERs)
+        build_fight = TestPersonnelHandler(self.__window_manager,
+                                           world,
+                                           self.__ruleset,
+                                           gm.PersonnelHandler.MONSTERs)
 
         assert(self.__window_manager.error_state == 
                                     MockWindowManager.FOUND_EXPECTED_ERROR)
@@ -4139,10 +4139,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_input_box_response('Monster Name', 'Ophelia')
         self.__window_manager.set_menu_response('What Next', 'quit')
 
-        build_fight = TestBuildFightHandler(self.__window_manager,
-                                            world,
-                                            self.__ruleset,
-                                            gm.BuildFightHandler.MONSTERs)
+        build_fight = TestPersonnelHandler(self.__window_manager,
+                                           world,
+                                           self.__ruleset,
+                                           gm.PersonnelHandler.MONSTERs)
 
         # The 'creatures' should be '<< ARENA >>', '1 - Horatio', '2 - Ophelia'
 
@@ -4187,10 +4187,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_input_box_response('Monster Name', 'Skippy')
         self.__window_manager.set_menu_response('What Next', 'quit')
 
-        build_fight = TestBuildFightHandler(self.__window_manager,
-                                            world,
-                                            self.__ruleset,
-                                            gm.BuildFightHandler.PCs)
+        build_fight = TestPersonnelHandler(self.__window_manager,
+                                           world,
+                                           self.__ruleset,
+                                           gm.PersonnelHandler.PCs)
 
         build_fight.set_command_ribbon_input('q')
         build_fight.handle_user_input_until_done()
@@ -4210,10 +4210,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_input_box_response('Monster Name', 'Stinky')
         self.__window_manager.set_menu_response('What Next', 'quit')
 
-        build_fight = TestBuildFightHandler(self.__window_manager,
-                                            world,
-                                            self.__ruleset,
-                                            gm.BuildFightHandler.NPCs)
+        build_fight = TestPersonnelHandler(self.__window_manager,
+                                           world,
+                                           self.__ruleset,
+                                           gm.PersonnelHandler.NPCs)
 
         build_fight.set_command_ribbon_input('q')
         build_fight.handle_user_input_until_done()
