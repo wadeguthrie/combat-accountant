@@ -14,55 +14,6 @@ import re
 import sys
 import traceback
 
-# TODO:
-#   - Fix the action handling.  Two part actions should be handled by the same
-#     handler but the action should have a 'part: 2' in it.  This will make a
-#     cleaner interface for new rulesets.
-#   - Reporting a bug should make a new directory and move all the relevant
-#     files to that directory
-#   - Add a version number that is reported in the bug.
-#
-#   - action['name'] -> action['action-name'] (to make various files easier to
-#     read)
-#   - Monsters should have a way to get pocket lint.
-#   - Need to be able to generate a blank creature (maybe it's a default
-#     Template).
-#   - Should have a 'post-action-accounting' method where an action can be
-#     augmented. (?)  Need to save to history first.
-#   - Overhaul of spell casting
-#       o Need maintain spell action
-#   - add laser sights to weapons
-#   - Need equipment containers
-#
-# TODO (eventually):
-#   - should have some concept of time slots and activities that take up time
-#     slots.  Not sure if that'll require too much input (to give up the
-#     5-foot step slot in D&D if you don't use it).
-#       * should warn when trying to do a second action (take note of fastdraw)
-#   - Multiple weapons
-#       o add 'draw second weapon' as an action
-#       o add 'attack with 2 weapons' as an action
-#   - an item's type should be an array (so that a battle mech can be both
-#     armor and weapon.
-#   - Rules-specific equipment support
-#       o Equipping item should ask to add ammo for item
-#       o Equipping item should ask to add skills if they aren't there
-#   - should only be able to ready an unready weapon.
-#   - Allow for markdown in 'notes' and 'short-notes'
-#   - On startup, check each of the characters
-#       o eventually, there needs to be a list of approved skills &
-#         advantages; characters' data should only match the approved list
-#         (this is really to make sure that stuff wasn't mis-typed).
-#   - reloading where the number of shots is in the 'clip' (like with a gun or
-#     a quiver) rather than in the weapon (like in disruptors or lasers)
-#   - plusses on range-based ammo (a bullet with a spell on it, for instance)
-#   - Optimize the way I'm using curses.  I'm willy-nilly touching and
-#     redrawing everything way more often than I should.  Turns out, it's not
-#     costing me much but it's ugly, none-the-less
-#   - need a way to generate equipment
-#   - names, maybe, in a different file
-#   - equipment into equipment-specific objects (maybe?)
-
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
 
@@ -2081,7 +2032,8 @@ class World(object):
                       group_name  # string: 'PCs', 'NPCs', or a monster group
                      ):
         '''
-        Used to get PCs, NPCs, or a fight's list of creatures.
+        Used to get PCs, NPCs, or a fight's list of creatures.  List is in the
+        order they are from the JSON (meaning that they are in random order).
 
         Returns dict of details: {name: {<details>}, name: ... }
         '''
@@ -2104,6 +2056,10 @@ class World(object):
         Returns the dict containing the information for the creature in
         question.  If the group is not 'PCs' or 'NPCs', it burrows down to
         find the correct creature.
+
+        This routine also handles redirection of creatures.  If a creature's
+        whole details section is "'redirect': <group>", it says that this is
+        only a copy and the original is in <group>.
         '''
         if name is None or group_name is None:
             self.__window_manager.error(
@@ -2152,7 +2108,10 @@ class World(object):
                      group  # String
                     ):
         '''
-        Keeps the master list of Fighter objects.
+        Keeps the master list of Fighter objects.  If entry is a redirect, the
+        complete data from the original creature is included, here, under the
+        entry's heading (i.e., the same creature may appear more than once in
+        this list but they all point back to the same data).
 
         Returns: Fighter object
         '''
@@ -3261,7 +3220,7 @@ class Fighter(ThingsInFight):
         Returns the new index of the equipment.
         '''
         index = self.equipment.add(new_item, source)
-        # TODO: Do we need to sheath weapon and doff armor?
+        # TODO: Do we really need to sheath weapon and doff armor?
         self.details['weapon-index'] = None
         self.details['armor-index'] = None
         return index
@@ -8295,20 +8254,38 @@ class PersonnelHandler(ScreenHandler):
             curses.KEY_DOWN:
                       {'name': 'next character',     'func': self.__view_next},
             ord('a'): {'name': 'add creature',       'func': self.__add_creature},
-            ord('d'): {'name': 'delete creature',    'func':
-                                                        self.__delete_creature},
+            ord('d'): {'name': 'delete creature',    'func': self.__delete_creature},
             ord('g'): {'name': 'new template group', 'func': self.__new_template_group},
             ord('t'): {'name': 'change template',    'func': self.__new_template},
             ord('T'): {'name': 'make template',      'func': self.__make_template},
             ord('q'): {'name': 'quit',               'func': self.__quit},
         })
+
+        if creature_type == PersonnelHandler.NPCs:
+            self._add_to_choice_dict({
+                ord('p'): {'name': 'NPC joins PCs',      'func': self.NPC_joins_PCs},
+                ord('P'): {'name': 'NPC leaves PCs',     'func': self.__NPC_leaves_PCs},
+                ord('m'): {'name': 'NPC joins Monsters', 'func': self.NPC_joins_monsters},
+            })
+
         self._window = self._window_manager.get_build_fight_gm_window(
                                                                 self._choices)
 
         self.__ruleset = ruleset
         self.__template_name = None # Name of templates we'll use to create
                                     # new creatures.
-        self.__critters = None
+
+        self.__critters = None  # dict of the Fighters/Venues in a group
+                                # (PCs, NPCs, or monster group) sorted by the
+                                # the Fighters' names (with the venue, if it
+                                # exists, stuffed at the top).  The dict is:
+                                # {
+                                #   'data': array of dict found in the data file
+                                #   'obj':  array of Fighter/Venue object
+                                # }
+                                #
+                                # NOTE: [data][n] is the same creature as [obj][n]
+
         self.__deleted_critter_count = 0
         self.__equipment_manager = EquipmentManager(self.world, window_manager)
 
@@ -8338,7 +8315,7 @@ class PersonnelHandler(ScreenHandler):
                 self.__existing_group(creature_type)
 
         self._draw_screen()
-        # TODO: this will require some changes to tests
+
         if not self.__critters_contains_critters():
             self.__add_creature()
 
@@ -8348,12 +8325,117 @@ class PersonnelHandler(ScreenHandler):
     # Public Methods
     #
 
-    def change_viewing_index(self,              # Public to support testing.
-                             adj  # integer adjustment to viewing index
-                            ):
+
+    def get_group_name(self):
         '''
-        Changes the index of the current creature.  The current creature is
-        the one that's modified.
+        Returns the name of the group ('PCs', 'NPCs', or the monster group)
+        that is currently being modified.
+        '''
+        return self.__group_name
+
+
+    def get_obj_from_index(self):               # Public to support testing
+        '''
+        Returns the Fighter/Venue object from the current viewing index into
+        the __critters list.
+        '''
+        if self.__viewing_index is None:
+            return None
+
+        fighter = self.__critters['obj'][self.__viewing_index]
+
+        return fighter
+
+
+    def NPC_joins_monsters(self):               # Public to support testing
+        '''
+        Command ribbon method.
+
+        Adds an existing NPC to a monster list (that NPC also stays in the NPC
+        list).  This is useful if an NPC wishes to fight alongside a group of
+        monsters against the party.
+
+        Operates on the currently selected NPC.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        # Make sure the person is an NPC
+
+        npc = self.get_obj_from_index()
+        if npc is None:
+            return True
+
+        if npc.group != 'NPCs':
+            self._window_manager.error(['"%s" not an NPC' % npc.name])
+            return True
+
+        # Select the fight
+        fight_menu = [(fight_name, fight_name)
+                                for fight_name in self.world.get_fights()]
+        fight_name = self._window_manager.menu('Join Which Fight', fight_menu)
+
+        # Make sure the person isn't already in the fight
+        fight = self.world.get_creature_details_list(fight_name)
+        if npc.name in fight:
+            self._window_manager.error(['"%s" already in fight "%s"' %
+                                                    (npc.name, fight_name)])
+            return True
+
+        fight[npc.name] = {'redirect': 'NPCs'}
+        self._window.show_creatures(self.__critters['obj'],
+                                    self.__new_char_name,
+                                    self.__viewing_index)
+        return True
+
+
+    def NPC_joins_PCs(self):                    # Public to support testing
+        '''
+        Command ribbon method.
+
+        Adds an existing NPC to the PC list (that NPC also stays in the NPC
+        list).  This is useful if an NPC wishes to fight alongside the party.
+
+        Operates on the currently selected NPC.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        npc = self.get_obj_from_index()
+        if npc is None:
+            return True
+
+        if npc.group != 'NPCs':
+            self._window_manager.error(['"%s" not an NPC' % npc.name])
+            return True
+
+        if npc.name in self.world.details['PCs']:
+            self._window_manager.error(['"%s" already a PC' % npc.name])
+            return True
+
+        self.world.details['PCs'][npc.name] = {'redirect': 'NPCs'}
+
+        self._window.show_creatures(self.__critters['obj'],
+                                    self.__new_char_name,
+                                    self.__viewing_index)
+        return True
+
+
+    def set_viewing_index(self,              # Public to support testing.
+                          new_index  # int: new viewing index
+                         ):
+        ''' Sets the viewing index.  Used for testing. '''
+        self.__viewing_index = new_index
+
+
+    #
+    # Protected Methods
+    #
+
+
+    def __change_viewing_index(self,
+                               adj  # integer adjustment to viewing index
+                              ):
+        '''
+        Changes the viewing index to point to a different creature.
 
         NOTE: this breaks if |adj| is > len(self.__critters['data'])
 
@@ -8374,19 +8456,6 @@ class PersonnelHandler(ScreenHandler):
 
         elif self.__viewing_index < 0:
             self.__viewing_index = len_list - 1
-
-
-    def get_group_name(self):
-        '''
-        Returns the name of the group ('PCs', 'NPCs', or the monster group)
-        that is currently being modified.
-        '''
-        return self.__group_name
-
-
-    #
-    # Protected Methods
-    #
 
 
     def __critters_contains_critters(self):
@@ -8659,8 +8728,8 @@ class PersonnelHandler(ScreenHandler):
             name_to_delete = self.__new_char_name
 
         else:
-            name_to_delete, ignore_body = self.__name_and_obj_from_index(
-                                                        self.__viewing_index)
+            creature = self.get_obj_from_index()
+            name_to_delete = None if creature is None else creature.name
 
         if name_to_delete is None:
             return True
@@ -8809,21 +8878,6 @@ class PersonnelHandler(ScreenHandler):
         return None
 
 
-    def __name_and_obj_from_index(self,
-                                  index, # index into self.__critters['obj']
-                                 ):
-        '''
-        Returns the name and Fighter/Venue object from the index into the
-        __critters list.
-        '''
-        if index is None:
-            return None, None
-
-        fighter = self.__critters['obj'][index]
-
-        return fighter.name, fighter
-
-
     def __new_group(self):
         '''
         Command ribbon method.
@@ -8885,6 +8939,32 @@ class PersonnelHandler(ScreenHandler):
         return True # Keep going
 
 
+    def __NPC_leaves_PCs(self):
+        '''
+        Command ribbon method.
+
+        Removes an NPC that's currently in the party list.  He stays being an
+        NPC.  Operates on current creature in the creature list.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        npc = self.get_obj_from_index()
+        if npc is None:
+            return True
+
+        if npc.name not in self.world.details['NPCs']:
+            self._window_manager.error(['"%s" not an NPC' % npc.name])
+            return True
+
+        if npc.name not in self.world.details['PCs']:
+            self._window_manager.error(['"%s" not in PC list' % npc.name])
+            return True
+
+        del(self.world.details['PCs'][npc.name])
+        self._draw_screen()
+        return True
+
+
     def __make_template(self):
         '''
         Command ribbon method.
@@ -8904,8 +8984,7 @@ class PersonnelHandler(ScreenHandler):
         if self.__viewing_index is None:
             return True # Keep going
 
-        ignore_name, from_creature  = self.__name_and_obj_from_index(
-                                                        self.__viewing_index)
+        from_creature  = self.get_obj_from_index()
         if from_creature.name == Venue.name:
             self._window_manager.error(['Can\'t make a template from a room'])
             return True # Keep going
@@ -9034,7 +9113,7 @@ class PersonnelHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        self.change_viewing_index(-1)
+        self.__change_viewing_index(-1)
         # PersonnelGmWindow
         self._window.show_creatures(self.__critters['obj'],
                                     self.__new_char_name,
@@ -9051,7 +9130,7 @@ class PersonnelHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        self.change_viewing_index(1)
+        self.__change_viewing_index(1)
         # PersonnelGmWindow
         self._window.show_creatures(self.__critters['obj'],
                                     self.__new_char_name,
@@ -9190,8 +9269,10 @@ class FightHandler(ScreenHandler):
 
         if monster_group is not None:
             for name in self.world.get_creature_details_list(monster_group):
+                # TODO: maybe use get_creature so that the information is
+                # cached in World.
                 details = self.world.get_creature_details(name,
-                                                            monster_group)
+                                                          monster_group)
                 if details is not None:
                     self.__ruleset.is_creature_consistent(name, details)
 
@@ -9519,7 +9600,6 @@ class FightHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-
         if self.__viewing_index is not None:
             new_NPC = self.__fighters[self.__viewing_index]
         else:
@@ -10740,88 +10820,6 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True
 
-
-    def NPC_joins_monsters(self,                # Public to support testing
-                           throw_away   # Required/used by the caller because
-                                        #   there's a list of methods to call,
-                                        #   and (apparently) some of them may
-                                        #   use this parameter.  It's ignored
-                                        #   by this method, however.
-                          ):
-        '''
-        Handler for an Party sub-menu entry.
-
-        Adds an existing NPC to a monster list (that NPC also stays in the NPC
-        list).  This is useful if an NPC wishes to fight alongside a group of
-        monsters against the party.
-
-        Operates on the currently selected NPC.
-
-        Returns: True -- anything but 'None' for a menu handler
-        '''
-
-        # Make sure the person is an NPC
-
-        npc = self.get_fighter_from_char_index()
-        if npc is None:
-            return True
-
-        if npc.group != 'NPCs':
-            self._window_manager.error(['"%s" not an NPC' % npc.name])
-            return True
-
-        # Select the fight
-        fight_menu = [(fight_name, fight_name)
-                                for fight_name in self.world.get_fights()]
-        fight_name = self._window_manager.menu('Join Which Fight', fight_menu)
-
-        # Make sure the person isn't already in the fight
-        fight = self.world.get_creature_details_list(fight_name)
-        if npc.name in fight:
-            self._window_manager.error(['"%s" already in fight "%s"' %
-                                                    (npc.name, fight_name)])
-            return True
-
-        fight[npc.name] = {'redirect': 'NPCs'}
-        self.__setup_PC_list(self.__current_display)
-        self._draw_screen()
-        return True
-
-
-    def NPC_joins_PCs(self,                     # Public to support testing
-                      throw_away   # Required/used by the caller because
-                                   #   there's a list of methods to call,
-                                   #   and (apparently) some of them may
-                                   #   use this parameter.  It's ignored
-                                   #   by this method, however.
-                     ):
-        '''
-        Handler for an Party sub-menu entry.
-
-        Adds an existing NPC to the PC list (that NPC also stays in the NPC
-        list).  This is useful if an NPC wishes to fight alongside the party.
-
-        Operates on the currently selected NPC.
-
-        Returns: True -- anything but None (since it's a menu handler)
-        '''
-        npc = self.get_fighter_from_char_index()
-        if npc is None:
-            return True
-
-        if npc.group != 'NPCs':
-            self._window_manager.error(['"%s" not an NPC' % npc.name])
-            return True
-
-        if npc.name in self.world.details['PCs']:
-            self._window_manager.error(['"%s" already a PC' % npc.name])
-            return True
-
-        self.world.details['PCs'][npc.name] = {'redirect': 'NPCs'}
-        self.__setup_PC_list(self.__current_display)
-        self._draw_screen()
-        return True
-
     #
     # Protected and Private Methods
     #
@@ -11497,40 +11495,6 @@ class MainHandler(ScreenHandler):
         return True # Menu handler's success returns anything but 'None'
 
 
-    def __NPC_leaves_PCs(self,
-                         throw_away   # Required/used by the caller because
-                                      #   there's a list of methods to call,
-                                      #   and (apparently) some of them may
-                                      #   use this parameter.  It's ignored
-                                      #   by this method, however.
-                        ):
-        '''
-        Handler for an Party sub-menu entry.
-
-        Removes an NPC that's currently in the party list.  He stays being an
-        NPC.  Operates on current creature in the creature list.
-
-        Returns: None if we want to bail-out of the remove NPC process,
-                 True, otherwise
-        '''
-        npc = self.get_fighter_from_char_index()
-        if npc is None:
-            return None
-
-        if npc.name not in self.world.details['NPCs']:
-            self._window_manager.error(['"%s" not an NPC' % npc.name])
-            return None
-
-        if npc.name not in self.world.details['PCs']:
-            self._window_manager.error(['"%s" not in PC list' % npc.name])
-            return None
-
-        del(self.world.details['PCs'][npc.name])
-        self.__setup_PC_list(self.__current_display)
-        self._draw_screen()
-        return True # Menu handler's success returns anything but 'None'
-
-
     def __party(self):
         '''
         Command ribbon method.
@@ -11543,9 +11507,6 @@ class MainHandler(ScreenHandler):
         sub_menu = [
                     ('monster list',       {'doit': self.__add_monsters}),
                     ('npc list',           {'doit': self.__add_NPCs}),
-                    ('NPC joins PCs',      {'doit': self.NPC_joins_PCs}),
-                    ('NPC leaves PCs',     {'doit': self.__NPC_leaves_PCs}),
-                    ('NPC joins Monsters', {'doit': self.NPC_joins_monsters}),
                     ('pc list',            {'doit': self.__add_PCs}),
                     ]
         self._window_manager.menu('Do what', sub_menu)
