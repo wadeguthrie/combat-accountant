@@ -875,7 +875,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # WORLD: 2
         self.init_world_dict = {
-            # Don't need templates, dead-monsters, equipment, names
+            # Don't need dead-monsters, equipment, names
+            'templates': {
+                'dudes': {
+                    'a dude': copy.deepcopy(self.__bokor_fighter)
+                },
+            },
             'PCs': {
                 # 5.25, 10, rand=1
                 'Manny' : copy.deepcopy(self.__bokor_fighter),
@@ -1046,8 +1051,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_get_dodge_skill ===\n'
+        if ARGS.verbose:
+            print '\n=== test_get_dodge_skill ===\n'
 
         # Deepcopy so that we don't taint the original
         mock_fight_handler = MockFightHandler()
@@ -1113,8 +1118,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_get_block_skill ===\n'
+        if ARGS.verbose:
+            print '\n=== test_get_block_skill ===\n'
 
         # TODO: need non-trivial block tests
         vodou_priest_fighter = gm.Fighter(
@@ -1159,8 +1164,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_get_parry_skill ===\n'
+        if ARGS.verbose:
+            print '\n=== test_get_parry_skill ===\n'
 
         # Unarmed
         weapon = None
@@ -1268,8 +1273,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_get_unarmed_info ===\n'
+        if ARGS.verbose:
+            print '\n=== test_get_unarmed_info ===\n'
 
         # Vodou Priest
         unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
@@ -1453,8 +1458,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Partially GURPS-specific test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_initiative_order ===\n'
+        if ARGS.verbose:
+            print '\n=== test_initiative_order ===\n'
 
         world_data = WorldData(self.init_world_dict)
         world = gm.World("internal_source_file",
@@ -1620,8 +1625,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         This is just like test_initiative_order_again except the fighters are
         reordered randomly and a different random seed is used.
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_initiative_order_again ===\n'
+        if ARGS.verbose:
+            print '\n=== test_initiative_order_again ===\n'
 
         world_data = WorldData(self.init_world_dict_2)
         world = gm.World("internal_source_file",
@@ -1666,8 +1671,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         any of the fighters (except that the opponent was changed).  This
         mirrors a bug that I thought I saw a while ago.
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_change_opponents ===\n'
+        if ARGS.verbose:
+            print '\n=== test_change_opponents ===\n'
 
         world_data = WorldData(self.init_world_dict)
 
@@ -1801,8 +1806,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_ranged_to_hit ===\n'
+        if ARGS.verbose:
+            print '\n=== test_ranged_to_hit ===\n'
 
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
@@ -2044,8 +2049,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_messed_up_aim ===\n'
+        if ARGS.verbose:
+            print '\n=== test_messed_up_aim ===\n'
 
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
@@ -2280,8 +2285,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_melee_to_hit ===\n'
+        if ARGS.verbose:
+            print '\n=== test_melee_to_hit ===\n'
 
         self.__window_manager = MockWindowManager()
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
@@ -2384,8 +2389,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_adjust_hp ===\n'
+        if ARGS.verbose:
+            print '\n=== test_adjust_hp ===\n'
 
         # Setup
 
@@ -2805,8 +2810,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_adjust_hp_2 ===\n'
+        if ARGS.verbose:
+            print '\n=== test_adjust_hp_2 ===\n'
 
         # Setup
 
@@ -2964,8 +2969,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_spell_casting ===\n'
+        if ARGS.verbose:
+            print '\n=== test_spell_casting ===\n'
 
         # Setup
 
@@ -3167,8 +3172,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         General test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_don_doff_armor ===\n'
+        if ARGS.verbose:
+            print '\n=== test_don_doff_armor ===\n'
 
         # Setup
 
@@ -3212,8 +3217,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         General test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_draw_sheathe_weapon ===\n'
+        if ARGS.verbose:
+            print '\n=== test_draw_sheathe_weapon ===\n'
 
         # Setup
 
@@ -3255,8 +3260,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         General test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_reload ===\n'
+        if ARGS.verbose:
+            print '\n=== test_reload ===\n'
 
         # Setup
 
@@ -3346,8 +3351,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         MIXED test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_stun_and_consciousness ===\n'
+        if ARGS.verbose:
+            print '\n=== test_stun_and_consciousness ===\n'
 
         # Setup
 
@@ -3443,8 +3448,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         GURPS test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_defend ===\n'
+        if ARGS.verbose:
+            print '\n=== test_defend ===\n'
 
         # Setup
 
@@ -3502,8 +3507,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_timers ===\n'
+        if ARGS.verbose:
+            print '\n=== test_timers ===\n'
 
         fighter = gm.Fighter('Tank',
                              'group',
@@ -3643,8 +3648,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_save ===\n'
+        if ARGS.verbose:
+            print '\n=== test_save ===\n'
 
         base_world_dict = copy.deepcopy(self.base_world_dict)
 
@@ -3653,7 +3658,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Test that leaving a fight moves the bad guys to the dead monster
         # list
-        # print '\n----------- LEAVE FIGHT -----------\n'
+        if ARGS.verbose:
+            print '\n----------- LEAVE FIGHT -----------\n'
 
         world_data = WorldData(base_world_dict)
         world = gm.World('internal source file',
@@ -3686,7 +3692,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         #
         # test that SAVING the fight works
         #
-        # print '\n----------- SAVE FIGHT -----------\n'
+        if ARGS.verbose:
+            print '\n----------- SAVE FIGHT -----------\n'
 
         world_data = WorldData(base_world_dict)
         world = gm.World('internal source file',
@@ -3725,7 +3732,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         #
         # test that KEEPING the fight works
         #
-        # print '\n----------- KEEP FIGHT -----------\n'
+        if ARGS.verbose:
+            print '\n----------- KEEP FIGHT -----------\n'
 
         world_data = WorldData(base_world_dict)
         world = gm.World('internal source file',
@@ -3761,8 +3769,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_add_remove_equipment ===\n'
+        if ARGS.verbose:
+            print '\n=== test_add_remove_equipment ===\n'
 
         fighter = gm.Fighter('Tank',
                              'group',
@@ -3912,8 +3920,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_redirects ===\n'
+        if ARGS.verbose:
+            print '\n=== test_redirects ===\n'
 
         base_world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(base_world_dict)
@@ -3936,8 +3944,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_redirects_promote_to_NPC ===\n'
+        if ARGS.verbose:
+            print '\n=== test_redirects_promote_to_NPC ===\n'
 
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
@@ -3998,8 +4006,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        #if ARGS.verbose:
-        #    print '\n=== test_NPC_joins ===\n'
+        if ARGS.verbose:
+            print '\n=== test_NPC_joins ===\n'
 
         # NOTE: These indexes assume that we're NOT creating a fight.  When we
         # create a fight, a Fight object '<< ROOM >>' will be created and
@@ -4020,13 +4028,25 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         last_pc_index = 2
 
         # Chico
-        chico_index = 3
+        chico_index = 0
 
         # Grouch
-        groucho_index = 4
+        groucho_index = 1
 
         # Zeppo
-        zeppo_index = 5
+        zeppo_index = 2
+
+        #    'fights': {
+        #        'horsemen': {
+        #          'monsters' : {
+        #            # 5.75, 12, rand=4
+        #            'Famine' : copy.deepcopy(self.__thief_fighter),
+        #
+        #            # 5.5, 11, rand=4
+        #            'Pestilence' : copy.deepcopy(self.__vodou_priest_fighter),
+        #          }
+        #        }
+        #    },
 
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
@@ -4034,102 +4054,122 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                          world_data,
                          self.__ruleset,
                          self.__window_manager,
-                         save_snapshot=False
-                        )
-        main_handler = gm.MainHandler(self.__window_manager,
-                                      world,
-                                      self.__ruleset)
+                         save_snapshot=False)
+        self.__window_manager.set_menu_response('From Which Template', 'dudes')
+        npc_handler = gm.PersonnelHandler(self.__window_manager,
+                                          world,
+                                          self.__ruleset,
+                                          gm.PersonnelHandler.NPCs)
 
-        ### MainHandler.NPC_joins_monsters - not an NPC ###
+        self.__window_manager.set_menu_response('From Which Template', 'dudes')
+        pc_handler = gm.PersonnelHandler(self.__window_manager,
+                                         world,
+                                         self.__ruleset,
+                                         gm.PersonnelHandler.PCs)
+
+        ### PersonnelHandler.NPC_joins_monsters - not an NPC ###
+        if ARGS.verbose:
+            print '\n----------- NPC_joins_monsters - not an NPC -----------\n'
 
         self.__window_manager.reset_error_state()
 
-        main_handler.next_char(pc_manny_index)
-        fighter = main_handler.get_fighter_from_char_index()
+        pc_handler.set_viewing_index(pc_manny_index)
+        fighter = pc_handler.get_obj_from_index()
         self.__window_manager.expect_error(['"Manny" not an NPC'])
 
-        main_handler.NPC_joins_monsters(None)
+        self.__window_manager.set_menu_response('Join Which Fight', 'horsemen')
+        pc_handler.NPC_joins_monsters()
 
         assert(self.__window_manager.error_state ==
                                     MockWindowManager.FOUND_EXPECTED_ERROR)
 
 
-        ### MainHandler.NPC_joins_monsters - works ###
+        ### PersonnelHandler.NPC_joins_monsters - works ###
+        if ARGS.verbose:
+            print '\n----------- NPC_joins_monsters - works -----------\n'
 
         self.__window_manager.reset_error_state()
 
-        main_handler.next_char(groucho_index)
-        fighter = main_handler.get_fighter_from_char_index()
+        npc_handler.set_viewing_index(groucho_index)
+        fighter = npc_handler.get_obj_from_index()
         assert fighter.name == 'Groucho'
 
         self.__window_manager.set_menu_response('Join Which Fight', 'horsemen')
-        main_handler.NPC_joins_monsters(None)
+        npc_handler.NPC_joins_monsters()
 
         source_char = world.get_creature_details('Groucho','NPCs')
         dest_char = world.get_creature_details('Groucho','horsemen')
         assert self.__are_equal(source_char, dest_char)
 
 
-        ### MainHandler.NPC_joins_monsters - NPC already in fight ###
+        ### PersonnelHandler.NPC_joins_monsters - NPC already in fight ###
+        if ARGS.verbose:
+            print '\n----------- NPC_joins_monsters - NPC already with monster -----------\n'
 
-        main_handler.next_char(groucho_index)
-        fighter = main_handler.get_fighter_from_char_index()
+        npc_handler.set_viewing_index(groucho_index)
+        fighter = npc_handler.get_obj_from_index()
         assert fighter.name == 'Groucho'
 
         self.__window_manager.set_menu_response('Join Which Fight', 'horsemen')
         self.__window_manager.expect_error(
                                     ['"Groucho" already in fight "horsemen"'])
 
-        main_handler.NPC_joins_monsters(None)
+        npc_handler.NPC_joins_monsters()
 
         assert(self.__window_manager.error_state ==
                                     MockWindowManager.FOUND_EXPECTED_ERROR)
 
 
-        ### MainHandler.NPC_joins_PCs -- not an NPC ###
+        ### PersonnelHandler.NPC_joins_PCs -- not a PC ###
+        if ARGS.verbose:
+            print '\n----------- NPC_joins_PCs - not a PC -----------\n'
 
-        main_handler.next_char(pc_manny_index)
-        fighter = main_handler.get_fighter_from_char_index()
+        pc_handler.set_viewing_index(pc_manny_index)
+        fighter = pc_handler.get_obj_from_index()
         assert fighter.name == 'Manny'
 
         self.__window_manager.expect_error(['"Manny" not an NPC'])
 
-        main_handler.NPC_joins_monsters(None)
+        pc_handler.NPC_joins_monsters()
 
         assert(self.__window_manager.error_state ==
                                     MockWindowManager.FOUND_EXPECTED_ERROR)
 
 
-        ### MainHandler.NPC_joins_PCs -- works ###
+        ### PersonnelHandler.NPC_joins_PCs -- works ###
+        if ARGS.verbose:
+            print '\n----------- NPC_joins_PCs - works -----------\n'
 
         self.__window_manager.reset_error_state()
 
         # Doing zeppo so he gets put at the end of the alphabetized PC list
         # to make the next test work.
-        main_handler.next_char(zeppo_index)
-        fighter = main_handler.get_fighter_from_char_index()
+        npc_handler.set_viewing_index(zeppo_index)
+        fighter = npc_handler.get_obj_from_index()
         assert fighter.name == 'Zeppo'
 
-        main_handler.NPC_joins_PCs(None)
+        npc_handler.NPC_joins_PCs()
 
         source_char = world.get_creature_details('Zeppo','NPCs')
         dest_char = world.get_creature_details('Zeppo','PCs')
         assert self.__are_equal(source_char, dest_char)
 
 
-        ### MainHandler.NPC_joins_PCs -- already a PC ###
+        ### PersonnelHandler.NPC_joins_PCs -- already a PC ###
         # There isn't a case where something's already a PC where it doesn't
         # fire the 'Not an NPC' error.
+        #if ARGS.verbose:
+        #    print '\n----------- NPC_joins_PCs - NPC already a PC  -----------\n'
 
         # Zeppo should have been put at the end of the alphabetized PC list by
         # the last test.  Now we know the index of an NPC that is also a PC.
-        #main_handler.next_char(last_pc_index + 1)
-        #fighter = main_handler.get_fighter_from_char_index()
+        #npc_handler.set_viewing_index(last_pc_index + 1)
+        #fighter = npc_handler.get_obj_from_index()
         #assert fighter.name == 'Zeppo'
 
         #self.__window_manager.expect_error(['"Zeppo" already a PC'])
 
-        #main_handler.NPC_joins_monsters(None)
+        #npc_handler.NPC_joins_monsters()
 
         #assert(self.__window_manager.error_state ==
         #                            MockWindowManager.FOUND_EXPECTED_ERROR)
@@ -4141,8 +4181,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         '''
         ### Create Fight -- working ###
 
-        #if ARGS.verbose:
-        #    print '\n=== test_new_fight_new_creatures ===\n'
+        if ARGS.verbose:
+            print '\n=== test_new_fight_new_creatures ===\n'
 
         world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(world_dict)
