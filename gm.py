@@ -640,6 +640,20 @@ class PersonnelGmWindow(GmWindow):
                                                  width+1)
 
 
+    def char_detail_home(self):
+        ''' Scrolls the character detail pane to the top and redraws the pane. '''
+        self._char_detail_window.scroll_to(0)
+        self._char_detail_window.draw_window()
+        self._char_detail_window.refresh()
+
+
+    def char_list_home(self):
+        ''' Scrolls the character list pane to the top and redraws the pane.  '''
+        self.__char_list_window.scroll_to(0)
+        self.__char_list_window.draw_window()
+        self.__char_list_window.refresh()
+
+
     def close(self):
         ''' Closes the window and disposes of its resources.  '''
         # Kill my subwindows, first
@@ -673,6 +687,22 @@ class PersonnelGmWindow(GmWindow):
         self._char_detail_window.scroll_up()
         self._char_detail_window.draw_window()
         self._char_detail_window.refresh()
+
+
+    def scroll_char_list_down(self):
+        ''' Scrolls the character list pane down.  '''
+        self.__char_list_window.scroll_down()
+        self.__char_list_window.draw_window()
+        self.__char_list_window.refresh()
+
+
+    # TODO: genericize the scrolling stuff and just pass the window to the
+    # generic routine.
+    def scroll_char_list_up(self):
+        ''' Scrolls the character list pane up.  '''
+        self.__char_list_window.scroll_up()
+        self.__char_list_window.draw_window()
+        self.__char_list_window.refresh()
 
 
     # PersonnelGmWindow
@@ -8084,6 +8114,16 @@ class ScreenHandler(object):
     Base class for the "business logic" backing the user interface.
     '''
 
+    SCREEN_MOVEMENT_CHARS = {
+        curses.KEY_HOME: 'KEY_HOME',
+        curses.KEY_UP: 'KEY_UP',
+        curses.KEY_DOWN: 'KEY_DOWN',
+        curses.KEY_NPAGE: 'KEY_NPAGE',
+        curses.KEY_PPAGE: 'KEY_PPAGE',
+        curses.KEY_LEFT: 'KEY_LEFT',
+        curses.KEY_RIGHT: 'KEY_RIGHT',
+    }
+
     maintainjson = False
 
     def __init__(self,
@@ -8100,6 +8140,22 @@ class ScreenHandler(object):
         self._choices = {
             ord('B'): {'name': 'Bug Report', 'func': self._make_bug_report},
         }
+
+
+    @staticmethod
+    def string_from_character_input(char    # character to convert
+                                   ):
+        '''
+        Returns a printable string from a character.  This is intended to be
+        used to display messages regarding screen input.
+        '''
+        if char < 256:
+            return '%c' % chr(char)
+
+        if char in ScreenHandler.SCREEN_MOVEMENT_CHARS:
+            return '%s' % ScreenHandler.SCREEN_MOVEMENT_CHARS[char]
+
+        return '%d' % char
 
 
     def add_to_history(self,
@@ -8136,7 +8192,8 @@ class ScreenHandler(object):
                 keep_going = self._choices[string]['func']()
             else:
                 self._window_manager.error(
-                                    ['Invalid command: "%c" ' % chr(string)])
+                    ['Invalid command: "%s" ' % 
+                        ScreenHandler.string_from_character_input(string) ])
 
     #
     # Protected Methods
@@ -8208,7 +8265,6 @@ class ScreenHandler(object):
             'snapshots' : self.world.snapshots
         }
 
-
         keep_going = True
         count = 0
         while keep_going:
@@ -8240,6 +8296,9 @@ class PersonnelHandler(ScreenHandler):
      PCs,
      MONSTERs) = range(3)
 
+    (CHAR_LIST,
+     CHAR_DETAIL) = (1, 2)  # These are intended to be bits so they can be ored
+
     def __init__(self,
                  window_manager,    # GmWindowManager object for menus and
                                     #   error reporting
@@ -8249,13 +8308,27 @@ class PersonnelHandler(ScreenHandler):
                 ):
         super(PersonnelHandler, self).__init__(window_manager, world)
         self._add_to_choice_dict({
+            curses.KEY_HOME:
+                  {'name': 'scroll home',            'func': self.__first_page},
             curses.KEY_UP:
-                      {'name': 'prev character',     'func': self.__view_prev},
+                  {'name': 'prev creature',          'func': self.__view_prev},
             curses.KEY_DOWN:
-                      {'name': 'next character',     'func': self.__view_next},
+                  {'name': 'next creature',          'func': self.__view_next},
+            curses.KEY_NPAGE:
+                  {'name': 'scroll down',            'func': self.__next_page},
+            curses.KEY_PPAGE:
+                  {'name': 'scroll up',              'func': self.__prev_page},
+            curses.KEY_LEFT:
+                  {'name': 'scroll char list',       'func': self.__left_pane},
+            curses.KEY_RIGHT:
+                  {'name': 'scroll char detail',     'func': self.__right_pane},
+
             ord('a'): {'name': 'add creature',       'func': self.__add_creature},
             ord('d'): {'name': 'delete creature',    'func': self.__delete_creature},
-            ord('g'): {'name': 'new template group', 'func': self.__new_template_group},
+            ord('e'): {'name': 'equip/modify creature',
+                                                     'func': self.__equip},
+            ord('g'): {'name': 'create template group',
+                                                     'func': self.__new_template_group},
             ord('t'): {'name': 'change template',    'func': self.__new_template},
             ord('T'): {'name': 'make template',      'func': self.__make_template},
             ord('q'): {'name': 'quit',               'func': self.__quit},
@@ -8270,6 +8343,7 @@ class PersonnelHandler(ScreenHandler):
 
         self._window = self._window_manager.get_build_fight_gm_window(
                                                                 self._choices)
+        self.__current_pane = PersonnelHandler.CHAR_DETAIL
 
         self.__ruleset = ruleset
         self.__template_name = None # Name of templates we'll use to create
@@ -8290,7 +8364,7 @@ class PersonnelHandler(ScreenHandler):
         self.__equipment_manager = EquipmentManager(self.world, window_manager)
 
         self.__new_char_name = None
-        self.__viewing_index = None # integer index into self.__critters
+        self.__viewing_index = None
 
         if creature_type == PersonnelHandler.NPCs:
             self.__group_name = 'NPCs'
@@ -8314,6 +8388,7 @@ class PersonnelHandler(ScreenHandler):
             else:
                 self.__existing_group(creature_type)
 
+        self.__viewing_index = 0 if self.__critters_contains_critters() else None
         self._draw_screen()
 
         if not self.__critters_contains_critters():
@@ -8430,6 +8505,81 @@ class PersonnelHandler(ScreenHandler):
     # Protected Methods
     #
 
+    def __first_page(self,
+                     pane = None, # CHAR_LIST, CHAR_DETAIL,
+                                  # CHAR_LIST|CHAR_DETAIL
+                    ):
+        '''
+        Command ribbon method.
+
+        Scrolls to the top of the current pain
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        if pane is None:
+            pane = self.__current_pane
+
+        if (pane & PersonnelHandler.CHAR_DETAIL) != 0:
+            self._window.char_detail_home() # TODO
+
+        if (pane & PersonnelHandler.CHAR_LIST) != 0:
+            self.__char_index = 0
+            self._window.char_list_home()   # TODO
+            self._draw_screen()
+        return True
+
+    def __left_pane(self):
+        '''
+        Command ribbon method.
+
+        Changes the currently active pane to the left-hand one.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        self.__current_pane = PersonnelHandler.CHAR_LIST
+        return True
+
+    def __next_page(self):
+        '''
+        Command ribbon method.
+
+        Scrolls down on the current pane.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        if self.__current_pane == PersonnelHandler.CHAR_DETAIL:
+            self._window.scroll_char_detail_down()
+        else:
+            self._window.scroll_char_list_down()    # TODO
+        return True
+
+
+    def __prev_page(self):
+        '''
+        Command ribbon method.
+
+        Scroll up in the current pane.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        if self.__current_pane == PersonnelHandler.CHAR_DETAIL:
+            self._window.scroll_char_detail_up()
+        else:
+            self._window.scroll_char_list_up() # TODO
+        return True
+
+    def __right_pane(self):
+        '''
+        Command ribbon method.
+
+        Makes the right-hand pane the active pane for scrolling.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        self.__current_pane = PersonnelHandler.CHAR_DETAIL
+        return True
+
+    # #####
 
     def __change_viewing_index(self,
                                adj  # integer adjustment to viewing index
@@ -8496,6 +8646,7 @@ class PersonnelHandler(ScreenHandler):
     # Private Methods
     #
 
+    # TODO: seems a bit long -- break this up into smaller methods
     def __add_creature(self):
         '''
         Command ribbon method.
@@ -8707,12 +8858,211 @@ class PersonnelHandler(ScreenHandler):
             self.__critters['obj'].append(self.world.get_creature(
                                                         creature_name,
                                                         self.__group_name))
+            self.__viewing_index = len(self.__critters['obj']) -1
             # PersonnelGmWindow
             self._window.show_creatures(self.__critters['obj'],
                                         self.__new_char_name,
                                         self.__viewing_index)
 
         return True # Keep going
+
+
+    def __add_equipment(self,
+                        throw_away   # Required/used by the caller because
+                                     #   there's a list of methods to call,
+                                     #   and (apparently) some of them may
+                                     #   use this parameter.  It's ignored
+                                     #   by this method, however.
+                       ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Allows the user to add equipment to a Fighter or Venue.
+
+        Returns: True -- anything but 'None' in a menu handler
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return True
+
+        keep_asking = True
+        keep_asking_menu = [('yes', True), ('no', False)]
+        while keep_asking:
+            self.__equipment_manager.add_equipment(fighter)
+            self._draw_screen()
+            keep_asking = self._window_manager.menu('Add More Equipment',
+                                                    keep_asking_menu)
+        return True
+
+
+    def __add_spell(self,
+                    throw_away   # Required/used by the caller because
+                                 #   there's a list of methods to call,
+                                 #   and (apparently) some of them may
+                                 #   use this parameter.  It's ignored
+                                 #   by this method, however.
+                   ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Adds a user-designated magic spell to a Fighter.
+
+        Returns: None if we want to bail out of the process of adding a spell,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        # Is the fighter a caster?
+        if 'spells' not in fighter.details:
+            self._window_manager.error(
+                ['Doesn\'t look like %s casts spells' % fighter.name])
+            return None
+
+        # Pick from the spell list
+        keep_asking_menu = [('yes', True), ('no', False)]
+        keep_asking = True
+        spell_menu = [(spell_name, spell_name)
+                                for spell_name in
+                                    sorted(self.__ruleset.spells.iterkeys())]
+        while keep_asking:
+            new_spell_name = self._window_manager.menu('Spell to Add',
+                                                       spell_menu)
+            if new_spell_name is None:
+                return None
+
+            # Check if spell is already there
+            for spell in fighter.details['spells']:
+                if spell['name'] == new_spell_name:
+                    self._window_manager.error(
+                            ['%s already has spell "%s"' % (fighter.name,
+                                                            spell['name'])])
+                    new_spell_name = None
+                    break
+
+            if new_spell_name is not None:
+                my_copy = {'name': new_spell_name}
+
+                title = 'At What Skill Level...'
+                height = 1
+                width = len(title) + 2
+                keep_ask_skill = True
+                while keep_ask_skill:
+                    skill_string = self._window_manager.input_box(height,
+                                                                  width,
+                                                                  title)
+                    if skill_string is not None and len(skill_string) > 0:
+                        my_copy['skill'] = int(skill_string)
+                        keep_ask_skill = False
+                    else:
+                        self._window_manager.error(
+                                                ['You must specify a skill'])
+
+                fighter.details['spells'].append(my_copy)
+                self._draw_screen()
+
+            keep_asking = self._window_manager.menu('Add More Spells',
+                                                    keep_asking_menu)
+        return True
+
+
+    def __add_timer(self,
+                    throw_away   # Required/used by the caller because
+                                 #   there's a list of methods to call,
+                                 #   and (apparently) some of them may
+                                 #   use this parameter.  It's ignored
+                                 #   by this method, however.
+                   ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Adds a user-described timer to a Fighter or Venue.
+
+        Returns: True -- anything but None in a menu handler
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return True
+
+        lines, cols = self._window.getmaxyx()
+        timers_widget = TimersWidget(fighter.timers, self._window_manager)
+
+        keep_asking_menu = [('yes', True), ('no', False)]
+        keep_asking = True
+        while keep_asking:
+            timers_widget.make_timer(fighter.name)
+            self._draw_screen()
+            keep_asking = self._window_manager.menu('Add More Timers',
+                                                    keep_asking_menu)
+        return True
+
+
+    def __change_attributes(self,
+                            throw_away   # Required/used by the caller because
+                                         #   there's a list of methods to call,
+                                         #   and (apparently) some of them may
+                                         #   use this parameter.  It's ignored
+                                         #   by this method, however.
+                           ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Allows the user to modify one or more attribute values of the Fighter.
+        The specific attributes come from the Ruleset.
+
+        Returns: None if we want to bail-out of the change attributes process,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        keep_asking_menu = [('yes', True), ('no', False)]
+        keep_asking = True
+        while keep_asking:
+            perm_current_menu = [('current', 'current'),
+                                 ('permanent', 'permanent')]
+            attr_type = self._window_manager.menu('What Type Of Attribute',
+                                                           perm_current_menu)
+            if attr_type is None:
+                return None
+
+            attr_menu = [(attr, attr)
+                                for attr in fighter.details[attr_type].keys()]
+
+            attr = self._window_manager.menu('Attr To Modify', attr_menu)
+            if attr is None:
+                return None
+
+            title = 'New Value'
+            height = 1
+            width = len(title) + 2
+            keep_ask_attr = True
+            while keep_ask_attr:
+                attr_string = self._window_manager.input_box(height,
+                                                             width,
+                                                             title)
+                if attr_string is not None and len(attr_string) > 0:
+                    fighter.details[attr_type][attr] = int(attr_string)
+                    keep_ask_attr = False
+                else:
+                    self._window_manager.error(
+                                    ['You must specify an attribute value'])
+
+            if attr_type == 'permanent':
+                both_menu = [('yes', True), ('no', False)]
+                both = self._window_manager.menu(
+                                            'Change "current" Value To Match ',
+                                            both_menu)
+                if both:
+                    fighter.details['current'][attr] = (
+                                            fighter.details['permanent'][attr])
+
+            self._draw_screen()
+            keep_asking = self._window_manager.menu('Change More Attributes',
+                                                    keep_asking_menu)
+        return True
 
 
     def __delete_creature(self):
@@ -8760,6 +9110,176 @@ class PersonnelHandler(ScreenHandler):
         self._window.show_creatures(self.__critters['obj'],
                                     self.__new_char_name,
                                     self.__viewing_index)
+
+        return True # Keep going
+
+
+    def __don_armor(self,
+                    throw_away   # Required/used by the caller because
+                                 #   there's a list of methods to call,
+                                 #   and (apparently) some of them may
+                                 #   use this parameter.  It's ignored
+                                 #   by this method, however.
+                   ):
+        '''
+        Method for 'equip' sub-menu.
+
+        Asks the user which armor the Fighter should wear and puts it on.
+
+        Returns: None if we want to bail-out of the don armor process,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        armor, throw_away = fighter.get_current_armor()
+        armor_index = None
+        if armor is None:
+            don_armor_menu = []
+            for index, item in enumerate(fighter.details['stuff']):
+                if item['type'] == 'armor':
+                    if armor_index != index:
+                        don_armor_menu.append((item['name'], index))
+            don_armor_menu = sorted(don_armor_menu, key=lambda x: x[0].upper())
+            if len(don_armor_menu) == 1:
+                armor_index = don_armor_menu[0][1]
+            else:
+                armor_index = self._window_manager.menu('Don Which Armor',
+                                                        don_armor_menu)
+                if armor_index is None:
+                    return None
+
+        self.__ruleset.do_action(fighter,
+                                 {'name': 'don-armor',
+                                  'armor-index': armor_index
+                                 },
+                                 None)
+        self._draw_screen()
+        return True # anything but 'None' for a menu handler
+
+
+    def __draw_weapon(self,
+                      throw_away   # Required/used by the caller because
+                                   #   there's a list of methods to call,
+                                   #   and (apparently) some of them may
+                                   #   use this parameter.  It's ignored
+                                   #   by this method, however.
+                     ):
+        '''
+        Method for 'equip' sub-menu.
+
+        Asks the user which weapon (or shield) the Fighter should draw and
+        draws it.
+
+        Returns: None if we want to bail-out of the draw weapon process,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        weapon, throw_away = fighter.get_current_weapon()
+        weapon_index = None
+        if weapon is None:
+            weapon_menu = []
+            for index, item in enumerate(fighter.details['stuff']):
+                if (item['type'] == 'melee weapon' or
+                        item['type'] == 'ranged weapon' or
+                        item['type'] == 'shield'):
+                    if weapon_index != index:
+                        weapon_menu.append((item['name'], index))
+            weapon_menu = sorted(weapon_menu, key=lambda x: x[0].upper())
+            if len(weapon_menu) == 1:
+                weapon_index = weapon_menu[0][1]
+            else:
+                weapon_index = self._window_manager.menu('Draw Which Weapon',
+                                                         weapon_menu)
+                if weapon_index is None:
+                    return None
+
+        self.__ruleset.do_action(fighter,
+                                 {'name': 'draw-weapon',
+                                  'weapon-index': weapon_index
+                                 },
+                                 None)
+        self._draw_screen()
+        return True # Anything but 'None' for a menu handler
+
+
+    def __equip(self):
+        '''
+        Command ribbon method.
+
+        Provides a sub-menu for different ways to augment a Fighter
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return True
+
+        sub_menu = []
+        if 'stuff' in fighter.details:
+            sub_menu.extend([
+                ('attributes (change)', {'doit': self.__change_attributes}),
+                ('equipment (add)',     {'doit': self.__add_equipment}),
+                ('Equipment (remove)',  {'doit': self.__remove_equipment}),
+                ('give equipment',      {'doit': self.__give_equipment}),
+            ])
+
+        self.__ruleset_abilities = self.__ruleset.get_creature_abilities()
+        for ability in self.__ruleset_abilities:
+            if ability in fighter.details:
+                sub_menu.extend([
+                    ('%s (add)' % ability, {'doit': self.__ruleset_ability,
+                                            'param': ability}),
+                    ('%s (remove)' % ability.capitalize(),
+                                            {'doit': self.__ruleset_ability_rm,
+                                             'param': ability})
+                ])
+
+        # Add these at the end since they're less likely to be used (I'm
+        # guessing) than the abilities from the ruleset
+        if 'spells' in fighter.details:
+            sub_menu.extend([
+                ('magic spell (add)',       {'doit': self.__add_spell}),
+                ('Magic spell (remove)',    {'doit': self.__remove_spell})
+            ])
+
+        if 'timers' in fighter.details:
+            sub_menu.extend([
+                ('timers (add)',           {'doit': self.__add_timer})
+            ])
+            sub_menu.extend([
+                ('Timers (remove)',           {'doit': self.__timer_cancel})
+            ])
+
+        if 'notes' in fighter.details:
+            sub_menu.extend([
+                ('notes',           {'doit': self.__full_notes})
+            ])
+
+        if 'short-notes' in fighter.details:
+            sub_menu.extend([
+                ('Notes (short)',   {'doit': self.__short_notes})
+            ])
+
+
+        if 'armor-index' in fighter.details:
+            sub_menu.extend([
+                        ('Don/doff armor',  {'doit': self.__don_armor})
+            ])
+
+        if 'weapon-index' in fighter.details:
+            sub_menu.extend([
+                    ('Draw/drop weapon',    {'doit': self.__draw_weapon})
+            ])
+
+        self._window_manager.menu('Do what', sub_menu)
+
+        # Do a consistency check once you're done equipping
+        self.__ruleset.is_creature_consistent(fighter.name, fighter.details)
 
         return True # Keep going
 
@@ -8847,6 +9367,23 @@ class PersonnelHandler(ScreenHandler):
         return True # Keep going
 
 
+    def __full_notes(self,
+                     throw_away   # Required/used by the caller because
+                                  #   there's a list of methods to call,
+                                  #   and (apparently) some of them may
+                                  #   use this parameter.  It's ignored
+                                  #   by this method, however.
+                    ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Allows the user to modify the current fighter's full notes.
+
+        Returns: None
+        '''
+        return self.__notes('notes')
+
+
     def __get_fighter_object_from_name(self,
                                        name # string name of critter
                                       ):
@@ -8876,6 +9413,47 @@ class PersonnelHandler(ScreenHandler):
         #   {'type': 'derived', 'value': comlicated bunch of crap -- eventually}
 
         return None
+
+
+    def __give_equipment(self,
+                         throw_away   # Required/used by the caller because
+                                      #   there's a list of methods to call,
+                                      #   and (apparently) some of them may
+                                      #   use this parameter.  It's ignored
+                                      #   by this method, however.
+                        ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Provides a way for one Fighter (or Venue) to transfer an item of
+        equipment to a different Fighter (or Venue).
+
+        Returns: None if we want to bail-out of the give equipment process,
+                 True, otherwise
+        '''
+        from_fighter = self.get_obj_from_index()
+        if from_fighter is None:
+            return None
+
+        item = self.__equipment_manager.remove_equipment(from_fighter)
+        if item is None:
+            return None
+
+        character_list = self.world.get_creature_details_list('PCs')
+        character_menu = [(dude, dude) for dude in character_list]
+        to_fighter_info = self._window_manager.menu(
+                                        'Give "%s" to whom?' % item['name'],
+                                        character_menu)
+
+        if to_fighter_info is None:
+            from_fighter.add_equipment(item, None)
+            self._draw_screen()
+            return None
+
+        to_fighter = self.world.get_creature(to_fighter_info, 'PCs')
+        to_fighter.add_equipment(item, from_fighter.detailed_name)
+        self._draw_screen()
+        return True # anything but 'None' for a successful menu handler
 
 
     def __new_group(self):
@@ -9102,6 +9680,258 @@ class PersonnelHandler(ScreenHandler):
         # TODO: do I need to del self._window?
         self._window.close()
         return False # Stop building this fight
+
+
+    def __remove_equipment(self,
+                           throw_away   # Required/used by the caller because
+                                        #   there's a list of methods to call,
+                                        #   and (apparently) some of them may
+                                        #   use this parameter.  It's ignored
+                                        #   by this method, however.
+                          ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Asks the user which piece of equipment the current Fighter has that
+        should be removed from his list.  Then removes that piece of
+        equipment.
+
+        Returns: None if we want to bail-out of the remove equipment process,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        self.__equipment_manager.remove_equipment(fighter)
+        self._draw_screen()
+        return True # Menu handler's success returns anything but 'None'
+
+
+    def __remove_spell(self,
+                       throw_away   # Required/used by the caller because
+                                    #   there's a list of methods to call,
+                                    #   and (apparently) some of them may use
+                                    #   this parameter.  It's ignored by this
+                                    #   method, however.
+                      ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Asks the user which spell the current Fighter currently knows that he
+        shouldn't, then removes that spell from the Fighter's spell list.
+
+        Returns: None if we want to bail-out of the remove spell process,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        # Is the fighter a caster?
+        if 'spells' not in fighter.details:
+            self._window_manager.error(
+                ['Doesn\'t look like %s casts spells' % fighter.name])
+            return None
+
+        keep_asking_menu = [('yes', True), ('no', False)]
+        keep_asking = True
+        while keep_asking:
+            # Make the spell list again (since we've removed one)
+            spell_menu = [(spell['name'], spell['name'])
+                        for spell in sorted(fighter.details['spells'],
+                                            key=lambda x:x['name'])]
+            bad_spell_name = self._window_manager.menu('Spell to Remove',
+                                                       spell_menu)
+
+            if bad_spell_name is None:
+                return None
+
+            for index, spell in enumerate(fighter.details['spells']):
+                if spell['name'] == bad_spell_name:
+                    del fighter.details['spells'][index]
+                    self._draw_screen()
+                    break
+
+            keep_asking = self._window_manager.menu('Remove More Spells',
+                                                    keep_asking_menu)
+        return True # Menu handler's success returns anything but 'None'
+
+
+    def __ruleset_ability(self,
+                          param  # string: Ruleset-defined ability category
+                                 #   name (like 'skills' or 'advantages')
+                         ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Adds an ability (a Ruleset-defined category of things, like
+        'skills' or 'advantages') to a creature.
+
+        Returns: None if we want to bail-out of the add ability process,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        if param not in fighter.details:
+            self._window_manager.error(['%s doesn\'t support' % (fighter.name,
+                                                                 param)])
+            return None
+
+        #   {
+        #       'Skills':     { 'Axe/Mace': 8,      'Climbing': 8, },
+        #       'Advantages': { 'Bad Tempter': -10, 'Nosy': -1, },
+        #   }
+
+        ability_menu = [(name, {'name': name, 'predicate': predicate})
+            for name, predicate in self.__ruleset_abilities[param].iteritems()]
+
+
+        keep_asking_menu = [('yes', True), ('no', False)]
+
+        keep_asking = True
+        while keep_asking:
+            new_ability = self._window_manager.menu(('Adding %s' % param),
+                                                          sorted(ability_menu))
+            if new_ability is None:
+                return None
+
+            # The predicate will take one of several forms...
+            # 'name': {'ask': 'number' | 'string' }
+            #         {'value': value}
+
+            result = None
+            if 'ask' in new_ability['predicate']:
+                if new_ability['predicate']['ask'] == 'number':
+                    title = 'Value for %s' % new_ability['name']
+                    width = len(title) + 2 # Margin to make it prettier
+                else:
+                    title = 'String for %s' % new_ability['name']
+                    lines, cols = self._window.getmaxyx()
+                    width = cols/2
+                height = 1
+                adj_string = self._window_manager.input_box(height,
+                                                            width,
+                                                            title)
+                if adj_string is None or len(adj_string) <= 0:
+                    return None
+
+                if new_ability['predicate']['ask'] == 'number':
+                    result = int(adj_string)
+                else:
+                    result = adj_string
+
+            elif 'value' in new_ability['predicate']:
+                result = new_ability['predicate']['value']
+            else:
+                result = None
+                self._window_manager.error(
+                    ['unknown predicate "%r" for "%s"' %
+                            (new_ability['predicate'], new_ability['name'])])
+
+            if result is not None:
+                fighter.details[param][new_ability['name']] = result
+            self._draw_screen()
+
+            keep_asking = self._window_manager.menu(('Add More %s' % param),
+                                                    keep_asking_menu)
+
+        return True # Menu handler's success returns anything but 'None'
+
+
+    def __ruleset_ability_rm(self,
+                             param  # string: Ruleset-defined ability category
+                                    #   name (like 'skills' or 'advantages')
+                            ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Removes an ability (a Ruleset-defined category of things, like
+        'skills' or 'advantages') from a creature.
+
+        Returns: None if we want to bail-out of the remove ability process,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        keep_asking_menu = [('yes', True), ('no', False)]
+        keep_asking = True
+        while keep_asking:
+            # Make the ability list again (since we've removed one)
+            ability_menu = [(ability, ability)
+                        for ability in sorted(fighter.details[param].keys())]
+            bad_ability_name = self._window_manager.menu(
+                                        '%s to Remove' % param.capitalize(),
+                                        ability_menu)
+
+            if bad_ability_name is None:
+                return None
+
+            del fighter.details[param][bad_ability_name]
+            self._draw_screen()
+
+            keep_asking = self._window_manager.menu(
+                                        'Remove More %s' % param.capitalize(),
+                                        keep_asking_menu)
+        return True # Menu handler's success returns anything but 'None'
+
+
+    def __short_notes(self,
+                      throw_away    # Required/used by the caller because
+                                    #   there's a list of methods to call,
+                                    #   and (apparently) some of them may use
+                                    #   this parameter.  It's ignored by this
+                                    #   method, however.
+                     ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Lets the user edit a fighter's (or Venue's) short notes.
+
+        Returns: None
+        '''
+        return self.__notes('short-notes')
+
+
+    def __timer_cancel(self,
+                       throw_away   # Required/used by the caller because
+                                    #   there's a list of methods to call,
+                                    #   and (apparently) some of them may use
+                                    #   this parameter.  It's ignored by this
+                                    #   method, however.
+                      ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Asks user for timer to remove from a fighter and removes it.
+
+        Returns: None if we want to bail-out of the cancel timer process,
+                 True, otherwise
+        '''
+        timer_recipient = self.get_obj_from_index()
+        if timer_recipient is None:
+            return None
+
+        # Select a timer
+
+        timers = timer_recipient.timers.get_all()
+        timer_menu = [(timer.get_one_line_description(), index)
+                                for index, timer in enumerate(timers)]
+        index = self._window_manager.menu('Remove Which Timer', timer_menu)
+        if index is None:
+            return None
+
+        # Delete the timer
+
+        timer_recipient.timers.remove_timer_by_index(index)
+
+        self._draw_screen()
+
+        return True # Menu handler's success returns anything but 'None'
 
 
     def __view_prev(self): # look at previous character
@@ -10746,8 +11576,6 @@ class MainHandler(ScreenHandler):
                       {'name': 'scroll char detail',  'func':
                                                        self.__right_pane},
 
-            ord('e'): {'name': 'EQUIP/mod PC/NPC/monster', 'func':
-                                                       self.__equip},
             ord('p'): {'name': 'PERSONNEL changes',   'func':
                                                        self.__party},
             ord('f'): {'name': 'FIGHT',               'func':
@@ -10823,33 +11651,6 @@ class MainHandler(ScreenHandler):
     #
     # Protected and Private Methods
     #
-
-    def __add_equipment(self,
-                        throw_away   # Required/used by the caller because
-                                     #   there's a list of methods to call,
-                                     #   and (apparently) some of them may
-                                     #   use this parameter.  It's ignored
-                                     #   by this method, however.
-                       ):
-        '''
-        Handler for an Equip sub-menu entry.
-
-        Allows the user to add equipment to a Fighter or Venue.
-
-        Returns: True -- anything but 'None' in a menu handler
-        '''
-        fighter = self.get_fighter_from_char_index()
-        if fighter is None:
-            return True
-
-        keep_asking = True
-        keep_asking_menu = [('yes', True), ('no', False)]
-        while keep_asking:
-            self.__equipment_manager.add_equipment(fighter)
-            self._draw_screen()
-            keep_asking = self._window_manager.menu('Add More Equipment',
-                                                    keep_asking_menu)
-        return True
 
 
     def __add_monsters(self,
@@ -10936,221 +11737,6 @@ class MainHandler(ScreenHandler):
         return True
 
 
-    def __add_spell(self,
-                    throw_away   # Required/used by the caller because
-                                 #   there's a list of methods to call,
-                                 #   and (apparently) some of them may
-                                 #   use this parameter.  It's ignored
-                                 #   by this method, however.
-                   ):
-        '''
-        Handler for an Equip sub-menu entry.
-
-        Adds a user-designated magic spell to a Fighter.
-
-        Returns: None if we want to bail out of the process of adding a spell,
-                 True, otherwise
-        '''
-        fighter = self.get_fighter_from_char_index()
-        if fighter is None:
-            return None
-
-        # Is the fighter a caster?
-        if 'spells' not in fighter.details:
-            self._window_manager.error(
-                ['Doesn\'t look like %s casts spells' % fighter.name])
-            return None
-
-        # Pick from the spell list
-        keep_asking_menu = [('yes', True), ('no', False)]
-        keep_asking = True
-        spell_menu = [(spell_name, spell_name)
-                                for spell_name in
-                                    sorted(self.__ruleset.spells.iterkeys())]
-        while keep_asking:
-            new_spell_name = self._window_manager.menu('Spell to Add',
-                                                       spell_menu)
-            if new_spell_name is None:
-                return None
-
-            # Check if spell is already there
-            for spell in fighter.details['spells']:
-                if spell['name'] == new_spell_name:
-                    self._window_manager.error(
-                            ['%s already has spell "%s"' % (fighter.name,
-                                                            spell['name'])])
-                    new_spell_name = None
-                    break
-
-            if new_spell_name is not None:
-                my_copy = {'name': new_spell_name}
-
-                title = 'At What Skill Level...'
-                height = 1
-                width = len(title) + 2
-                keep_ask_skill = True
-                while keep_ask_skill:
-                    skill_string = self._window_manager.input_box(height,
-                                                                  width,
-                                                                  title)
-                    if skill_string is not None and len(skill_string) > 0:
-                        my_copy['skill'] = int(skill_string)
-                        keep_ask_skill = False
-                    else:
-                        self._window_manager.error(
-                                                ['You must specify a skill'])
-
-                fighter.details['spells'].append(my_copy)
-                self._draw_screen()
-
-            keep_asking = self._window_manager.menu('Add More Spells',
-                                                    keep_asking_menu)
-        return True
-
-
-    def __add_timer(self,
-                    throw_away   # Required/used by the caller because
-                                 #   there's a list of methods to call,
-                                 #   and (apparently) some of them may
-                                 #   use this parameter.  It's ignored
-                                 #   by this method, however.
-                   ):
-        '''
-        Handler for an Equip sub-menu entry.
-
-        Adds a user-described timer to a Fighter or Venue.
-
-        Returns: True -- anything but None in a menu handler
-        '''
-        fighter = self.get_fighter_from_char_index()
-        if fighter is None:
-            return True
-
-        lines, cols = self._window.getmaxyx()
-        timers_widget = TimersWidget(fighter.timers, self._window_manager)
-
-        keep_asking_menu = [('yes', True), ('no', False)]
-        keep_asking = True
-        while keep_asking:
-            timers_widget.make_timer(fighter.name)
-            self._draw_screen()
-            keep_asking = self._window_manager.menu('Add More Timers',
-                                                    keep_asking_menu)
-        return True
-
-
-    def __change_attributes(self,
-                            throw_away   # Required/used by the caller because
-                                         #   there's a list of methods to call,
-                                         #   and (apparently) some of them may
-                                         #   use this parameter.  It's ignored
-                                         #   by this method, however.
-                           ):
-        '''
-        Handler for an Equip sub-menu entry.
-
-        Allows the user to modify one or more attribute values of the Fighter.
-        The specific attributes come from the Ruleset.
-
-        Returns: None if we want to bail-out of the change attributes process,
-                 True, otherwise
-        '''
-        fighter = self.get_fighter_from_char_index()
-        if fighter is None:
-            return None
-
-        keep_asking_menu = [('yes', True), ('no', False)]
-        keep_asking = True
-        while keep_asking:
-            perm_current_menu = [('current', 'current'),
-                                 ('permanent', 'permanent')]
-            attr_type = self._window_manager.menu('What Type Of Attribute',
-                                                           perm_current_menu)
-            if attr_type is None:
-                return None
-
-            attr_menu = [(attr, attr)
-                                for attr in fighter.details[attr_type].keys()]
-
-            attr = self._window_manager.menu('Attr To Modify', attr_menu)
-            if attr is None:
-                return None
-
-            title = 'New Value'
-            height = 1
-            width = len(title) + 2
-            keep_ask_attr = True
-            while keep_ask_attr:
-                attr_string = self._window_manager.input_box(height,
-                                                             width,
-                                                             title)
-                if attr_string is not None and len(attr_string) > 0:
-                    fighter.details[attr_type][attr] = int(attr_string)
-                    keep_ask_attr = False
-                else:
-                    self._window_manager.error(
-                                    ['You must specify an attribute value'])
-
-            if attr_type == 'permanent':
-                both_menu = [('yes', True), ('no', False)]
-                both = self._window_manager.menu(
-                                            'Change "current" Value To Match ',
-                                            both_menu)
-                if both:
-                    fighter.details['current'][attr] = (
-                                            fighter.details['permanent'][attr])
-
-            self._draw_screen()
-            keep_asking = self._window_manager.menu('Change More Attributes',
-                                                    keep_asking_menu)
-        return True
-
-
-    def __don_armor(self,
-                    throw_away   # Required/used by the caller because
-                                 #   there's a list of methods to call,
-                                 #   and (apparently) some of them may
-                                 #   use this parameter.  It's ignored
-                                 #   by this method, however.
-                   ):
-        '''
-        Method for 'equip' sub-menu.
-
-        Asks the user which armor the Fighter should wear and puts it on.
-
-        Returns: None if we want to bail-out of the don armor process,
-                 True, otherwise
-        '''
-        fighter = self.get_fighter_from_char_index()
-        if fighter is None:
-            return None
-
-        armor, throw_away = fighter.get_current_armor()
-        armor_index = None
-        if armor is None:
-            don_armor_menu = []
-            for index, item in enumerate(fighter.details['stuff']):
-                if item['type'] == 'armor':
-                    if armor_index != index:
-                        don_armor_menu.append((item['name'], index))
-            don_armor_menu = sorted(don_armor_menu, key=lambda x: x[0].upper())
-            if len(don_armor_menu) == 1:
-                armor_index = don_armor_menu[0][1]
-            else:
-                armor_index = self._window_manager.menu('Don Which Armor',
-                                                        don_armor_menu)
-                if armor_index is None:
-                    return None
-
-        self.__ruleset.do_action(fighter,
-                                 {'name': 'don-armor',
-                                  'armor-index': armor_index
-                                 },
-                                 None)
-        self._draw_screen()
-        return True # anything but 'None' for a menu handler
-
-
     def _draw_screen(self,
                      inverse=False
                     ):
@@ -11173,131 +11759,6 @@ class MainHandler(ScreenHandler):
         self._window.show_description(person)
 
         self._window.command_ribbon()
-
-
-    def __draw_weapon(self,
-                      throw_away   # Required/used by the caller because
-                                   #   there's a list of methods to call,
-                                   #   and (apparently) some of them may
-                                   #   use this parameter.  It's ignored
-                                   #   by this method, however.
-                     ):
-        '''
-        Method for 'equip' sub-menu.
-
-        Asks the user which weapon (or shield) the Fighter should draw and
-        draws it.
-
-        Returns: None if we want to bail-out of the draw weapon process,
-                 True, otherwise
-        '''
-        fighter = self.get_fighter_from_char_index()
-        if fighter is None:
-            return None
-
-        weapon, throw_away = fighter.get_current_weapon()
-        weapon_index = None
-        if weapon is None:
-            weapon_menu = []
-            for index, item in enumerate(fighter.details['stuff']):
-                if (item['type'] == 'melee weapon' or
-                        item['type'] == 'ranged weapon' or
-                        item['type'] == 'shield'):
-                    if weapon_index != index:
-                        weapon_menu.append((item['name'], index))
-            weapon_menu = sorted(weapon_menu, key=lambda x: x[0].upper())
-            if len(weapon_menu) == 1:
-                weapon_index = weapon_menu[0][1]
-            else:
-                weapon_index = self._window_manager.menu('Draw Which Weapon',
-                                                         weapon_menu)
-                if weapon_index is None:
-                    return None
-
-        self.__ruleset.do_action(fighter,
-                                 {'name': 'draw-weapon',
-                                  'weapon-index': weapon_index
-                                 },
-                                 None)
-        self._draw_screen()
-        return True # Anything but 'None' for a menu handler
-
-
-    def __equip(self):
-        '''
-        Command ribbon method.
-
-        Provides a sub-menu for different ways to augment a Fighter
-
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        fighter = self.get_fighter_from_char_index()
-        if fighter is None:
-            return True
-
-        sub_menu = []
-        if 'stuff' in fighter.details:
-            sub_menu.extend([
-                ('attributes (change)', {'doit': self.__change_attributes}),
-                ('equipment (add)',     {'doit': self.__add_equipment}),
-                ('Equipment (remove)',  {'doit': self.__remove_equipment}),
-                ('give equipment',      {'doit': self.__give_equipment}),
-            ])
-
-        self.__ruleset_abilities = self.__ruleset.get_creature_abilities()
-        for ability in self.__ruleset_abilities:
-            if ability in fighter.details:
-                sub_menu.extend([
-                    ('%s (add)' % ability, {'doit': self.__ruleset_ability,
-                                            'param': ability}),
-                    ('%s (remove)' % ability.capitalize(),
-                                            {'doit': self.__ruleset_ability_rm,
-                                             'param': ability})
-                ])
-
-        # Add these at the end since they're less likely to be used (I'm
-        # guessing) than the abilities from the ruleset
-        if 'spells' in fighter.details:
-            sub_menu.extend([
-                ('magic spell (add)',       {'doit': self.__add_spell}),
-                ('Magic spell (remove)',    {'doit': self.__remove_spell})
-            ])
-
-        if 'timers' in fighter.details:
-            sub_menu.extend([
-                ('timers (add)',           {'doit': self.__add_timer})
-            ])
-            sub_menu.extend([
-                ('Timers (remove)',           {'doit': self.__timer_cancel})
-            ])
-
-        if 'notes' in fighter.details:
-            sub_menu.extend([
-                ('notes',           {'doit': self.__full_notes})
-            ])
-
-        if 'short-notes' in fighter.details:
-            sub_menu.extend([
-                ('Notes (short)',   {'doit': self.__short_notes})
-            ])
-
-
-        if 'armor-index' in fighter.details:
-            sub_menu.extend([
-                        ('Don/doff armor',  {'doit': self.__don_armor})
-            ])
-
-        if 'weapon-index' in fighter.details:
-            sub_menu.extend([
-                    ('Draw/drop weapon',    {'doit': self.__draw_weapon})
-            ])
-
-        self._window_manager.menu('Do what', sub_menu)
-
-        # Do a consistency check once you're done equipping
-        self.__ruleset.is_creature_consistent(fighter.name, fighter.details)
-
-        return True # Keep going
 
 
     def __first_page(self,
@@ -11324,23 +11785,6 @@ class MainHandler(ScreenHandler):
         return True
 
 
-    def __full_notes(self,
-                     throw_away   # Required/used by the caller because
-                                  #   there's a list of methods to call,
-                                  #   and (apparently) some of them may
-                                  #   use this parameter.  It's ignored
-                                  #   by this method, however.
-                    ):
-        '''
-        Handler for an Equip sub-menu entry.
-
-        Allows the user to modify the current fighter's full notes.
-
-        Returns: None
-        '''
-        return self.__notes('notes')
-
-
     # MainHandler
     def __fully_heal(self):
         '''
@@ -11357,47 +11801,6 @@ class MainHandler(ScreenHandler):
                 self.__ruleset.heal_fighter(fighter, self.world)
         self._draw_screen()
         return True
-
-
-    def __give_equipment(self,
-                         throw_away   # Required/used by the caller because
-                                      #   there's a list of methods to call,
-                                      #   and (apparently) some of them may
-                                      #   use this parameter.  It's ignored
-                                      #   by this method, however.
-                        ):
-        '''
-        Handler for an Equip sub-menu entry.
-
-        Provides a way for one Fighter (or Venue) to transfer an item of
-        equipment to a different Fighter (or Venue).
-
-        Returns: None if we want to bail-out of the give equipment process,
-                 True, otherwise
-        '''
-        fighter = self.get_fighter_from_char_index()
-        if fighter is None:
-            return None
-
-        item = self.__equipment_manager.remove_equipment(from_fighter)
-        if item is None:
-            return None
-
-        character_list = self.world.get_creature_details_list('PCs')
-        character_menu = [(dude, dude) for dude in character_list]
-        to_fighter_info = self._window_manager.menu(
-                                        'Give "%s" to whom?' % item['name'],
-                                        character_menu)
-
-        if to_fighter_info is None:
-            from_fighter.add_equipment(item, None)
-            self._draw_screen()
-            return None
-
-        to_fighter = self.world.get_creature(to_fighter_info, 'PCs')
-        to_fighter.add_equipment(item, from_fighter.detailed_name)
-        self._draw_screen()
-        return True # anything but 'None' for a successful menu handler
 
 
     # MainHandler
@@ -11565,82 +11968,6 @@ class MainHandler(ScreenHandler):
         return False # Leave
 
 
-    def __remove_equipment(self,
-                           throw_away   # Required/used by the caller because
-                                        #   there's a list of methods to call,
-                                        #   and (apparently) some of them may
-                                        #   use this parameter.  It's ignored
-                                        #   by this method, however.
-                          ):
-        '''
-        Handler for an Equip sub-menu entry.
-
-        Asks the user which piece of equipment the current Fighter has that
-        should be removed from his list.  Then removes that piece of
-        equipment.
-
-        Returns: None if we want to bail-out of the remove equipment process,
-                 True, otherwise
-        '''
-        fighter = self.get_fighter_from_char_index()
-        if fighter is None:
-            return None
-
-        self.__equipment_manager.remove_equipment(fighter)
-        self._draw_screen()
-        return True # Menu handler's success returns anything but 'None'
-
-
-    def __remove_spell(self,
-                       throw_away   # Required/used by the caller because
-                                    #   there's a list of methods to call,
-                                    #   and (apparently) some of them may use
-                                    #   this parameter.  It's ignored by this
-                                    #   method, however.
-                      ):
-        '''
-        Handler for an Equip sub-menu entry.
-
-        Asks the user which spell the current Fighter currently knows that he
-        shouldn't, then removes that spell from the Fighter's spell list.
-
-        Returns: None if we want to bail-out of the remove spell process,
-                 True, otherwise
-        '''
-        fighter = self.get_fighter_from_char_index()
-        if fighter is None:
-            return None
-
-        # Is the fighter a caster?
-        if 'spells' not in fighter.details:
-            self._window_manager.error(
-                ['Doesn\'t look like %s casts spells' % fighter.name])
-            return None
-
-        keep_asking_menu = [('yes', True), ('no', False)]
-        keep_asking = True
-        while keep_asking:
-            # Make the spell list again (since we've removed one)
-            spell_menu = [(spell['name'], spell['name'])
-                        for spell in sorted(fighter.details['spells'],
-                                            key=lambda x:x['name'])]
-            bad_spell_name = self._window_manager.menu('Spell to Remove',
-                                                       spell_menu)
-
-            if bad_spell_name is None:
-                return None
-
-            for index, spell in enumerate(fighter.details['spells']):
-                if spell['name'] == bad_spell_name:
-                    del fighter.details['spells'][index]
-                    self._draw_screen()
-                    break
-
-            keep_asking = self._window_manager.menu('Remove More Spells',
-                                                    keep_asking_menu)
-        return True # Menu handler's success returns anything but 'None'
-
-
     def __resurrect_fight(self):
         '''
         Command ribbon method.
@@ -11685,128 +12012,6 @@ class MainHandler(ScreenHandler):
         '''
         self.__current_pane = MainHandler.CHAR_DETAIL
         return True
-
-
-    def __ruleset_ability(self,
-                          param  # string: Ruleset-defined ability category
-                                 #   name (like 'skills' or 'advantages')
-                         ):
-        '''
-        Handler for an Equip sub-menu entry.
-
-        Adds an ability (a Ruleset-defined category of things, like
-        'skills' or 'advantages') to a creature.
-
-        Returns: None if we want to bail-out of the add ability process,
-                 True, otherwise
-        '''
-        fighter = self.get_fighter_from_char_index()
-        if fighter is None:
-            return None
-
-        if param not in fighter.details:
-            self._window_manager.error(['%s doesn\'t support' % (fighter.name,
-                                                                 param)])
-            return None
-
-        #   {
-        #       'Skills':     { 'Axe/Mace': 8,      'Climbing': 8, },
-        #       'Advantages': { 'Bad Tempter': -10, 'Nosy': -1, },
-        #   }
-
-        ability_menu = [(name, {'name': name, 'predicate': predicate})
-            for name, predicate in self.__ruleset_abilities[param].iteritems()]
-
-
-        keep_asking_menu = [('yes', True), ('no', False)]
-
-        keep_asking = True
-        while keep_asking:
-            new_ability = self._window_manager.menu(('Adding %s' % param),
-                                                          sorted(ability_menu))
-            if new_ability is None:
-                return None
-
-            # The predicate will take one of several forms...
-            # 'name': {'ask': 'number' | 'string' }
-            #         {'value': value}
-
-            result = None
-            if 'ask' in new_ability['predicate']:
-                if new_ability['predicate']['ask'] == 'number':
-                    title = 'Value for %s' % new_ability['name']
-                    width = len(title) + 2 # Margin to make it prettier
-                else:
-                    title = 'String for %s' % new_ability['name']
-                    lines, cols = self._window.getmaxyx()
-                    width = cols/2
-                height = 1
-                adj_string = self._window_manager.input_box(height,
-                                                            width,
-                                                            title)
-                if adj_string is None or len(adj_string) <= 0:
-                    return None
-
-                if new_ability['predicate']['ask'] == 'number':
-                    result = int(adj_string)
-                else:
-                    result = adj_string
-
-            elif 'value' in new_ability['predicate']:
-                result = new_ability['predicate']['value']
-            else:
-                result = None
-                self._window_manager.error(
-                    ['unknown predicate "%r" for "%s"' %
-                            (new_ability['predicate'], new_ability['name'])])
-
-            if result is not None:
-                fighter.details[param][new_ability['name']] = result
-            self._draw_screen()
-
-            keep_asking = self._window_manager.menu(('Add More %s' % param),
-                                                    keep_asking_menu)
-
-        return True # Menu handler's success returns anything but 'None'
-
-
-    def __ruleset_ability_rm(self,
-                             param  # string: Ruleset-defined ability category
-                                    #   name (like 'skills' or 'advantages')
-                            ):
-        '''
-        Handler for an Equip sub-menu entry.
-
-        Removes an ability (a Ruleset-defined category of things, like
-        'skills' or 'advantages') from a creature.
-
-        Returns: None if we want to bail-out of the remove ability process,
-                 True, otherwise
-        '''
-        fighter = self.get_fighter_from_char_index()
-        if fighter is None:
-            return None
-
-        keep_asking_menu = [('yes', True), ('no', False)]
-        keep_asking = True
-        while keep_asking:
-            # Make the ability list again (since we've removed one)
-            ability_menu = [(ability, ability)
-                        for ability in sorted(fighter.details[param].keys())]
-            bad_ability_name = self._window_manager.menu(
-                                        '%s to Remove' % param.capitalize(),
-                                        ability_menu)
-
-            if bad_ability_name is None:
-                return None
-
-            del fighter.details[param][bad_ability_name]
-            self._draw_screen()
-
-            keep_asking = self._window_manager.menu(
-                                        'Remove More %s' % param.capitalize(),
-                                        keep_asking_menu)
-        return True # Menu handler's success returns anything but 'None'
 
 
     def __run_fight(self):
@@ -11994,60 +12199,6 @@ class MainHandler(ScreenHandler):
             pass
 
         self.__char_index = 0
-
-
-    def __short_notes(self,
-                      throw_away    # Required/used by the caller because
-                                    #   there's a list of methods to call,
-                                    #   and (apparently) some of them may use
-                                    #   this parameter.  It's ignored by this
-                                    #   method, however.
-                     ):
-        '''
-        Handler for an Equip sub-menu entry.
-
-        Lets the user edit a fighter's (or Venue's) short notes.
-
-        Returns: None
-        '''
-        return self.__notes('short-notes')
-
-
-    def __timer_cancel(self,
-                       throw_away   # Required/used by the caller because
-                                    #   there's a list of methods to call,
-                                    #   and (apparently) some of them may use
-                                    #   this parameter.  It's ignored by this
-                                    #   method, however.
-                      ):
-        '''
-        Handler for an Equip sub-menu entry.
-
-        Asks user for timer to remove from a fighter and removes it.
-
-        Returns: None if we want to bail-out of the cancel timer process,
-                 True, otherwise
-        '''
-        timer_recipient = self.get_fighter_from_char_index()
-        if timer_recipient is None:
-            return None
-
-        # Select a timer
-
-        timers = timer_recipient.timers.get_all()
-        timer_menu = [(timer.get_one_line_description(), index)
-                                for index, timer in enumerate(timers)]
-        index = self._window_manager.menu('Remove Which Timer', timer_menu)
-        if index is None:
-            return None
-
-        # Delete the timer
-
-        timer_recipient.timers.remove_timer_by_index(index)
-
-        self._draw_screen()
-
-        return True # Menu handler's success returns anything but 'None'
 
 
     def __toggle_Monster_PC_NPC_display(self):
