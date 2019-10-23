@@ -1934,9 +1934,6 @@ class World(object):
     '''
     Manages the data in the JSON. This contains the base information for the
     entire world.
-
-    As part of that, it manages the debug files (which are really just
-    snapshots of the JSON).
     '''
     debug_directory = 'debug'
 
@@ -1944,17 +1941,18 @@ class World(object):
                  source_filename,     # Name of file that contains the JSON
                  world_details,       # GmJson object
                  ruleset,             # Ruleset object
+                 program,             # Program object to collect snapshot information
                  window_manager,      # a GmWindowManager object to handle I/O
                  save_snapshot = True # Here so tests can disable it
                 ):
         self.source_filename = source_filename
+        self.program = program
         self.__gm_json = world_details # only used for toggling whether the
                                        # data is saved on exit of the program.
         self.details = world_details.read_data # entire dict from JSON
         self.ruleset = ruleset
         self.__window_manager = window_manager
         self.__delete_old_debug_files()
-        self.snapshots = {'startup': self.source_filename}
         self.__fighters = {}
 
         # |playing_back| is True only while we're actively playing back a
@@ -2030,7 +2028,7 @@ class World(object):
         with open(debug_filename, 'w') as f:
             json.dump(self.details, f, indent=2)
 
-        self.snapshots[tag] = debug_filename
+        self.program.add_snapshot(tag, debug_filename)
 
         return base_name
 
@@ -8257,51 +8255,13 @@ class ScreenHandler(object):
                     'Bug Report',
                     '^G to exit')
 
-        # Gotta do the debug snapshot first, so it's in self.world.snapshots
+        # Gotta do the debug snapshot first, so it's in snapshot list
 
         self.world.do_debug_snapshot('bug')
 
-        # Build the bug report
-
-        bug_report = {
-            'world'     : self.world.source_filename,
-            'history'   : self._saved_fight['history'],
-            'report'    : report,
-            'snapshots' : self.world.snapshots
-        }
-
-        # Find a filename for the bug report
-
-        keep_going = True
-        count = 0
-        extension = 'json'
-        while keep_going:
-            count_string = '%d' % count
-            bug_report_json = timeStamped('bug_report', count_string, extension)
-            if os.path.exists(bug_report_json):
-                count += 1
-            else:
-                keep_going = False
-
-        # Make a directory for the bug report
-
-        extension = '.' + extension
-        directory_name = bug_report_json
-        if directory_name.endswith(extension):
-            directory_name = directory_name[:-len(extension)]
-
-        os.mkdir(directory_name)
-
-        # Copy the snapshot files into the bug report directory
-
-        for filename in self.world.snapshots.itervalues():
-            shutil.copy(filename, directory_name)
-
-        # Dump the bug report into bug report file (in the directory)
-
-        full_bug_report_json = os.path.join(directory_name, bug_report_json)
-        with open(full_bug_report_json, 'w') as f:
-            json.dump(bug_report, f, indent=2)
+        bug_report_json  = self.world.program.make_bug_report(
+                                                self._saved_fight['history'],
+                                                report)
 
         self._window_manager.display_window(
                'Bug Reported',
@@ -12466,6 +12426,99 @@ def are_equal(self, lhs, rhs):
         else:
             return True
 
+
+class Program(object):
+    '''
+    Holds the top-level program stuff.
+
+    As part of that, it manages the debug files (which are really just
+    snapshots of the JSON).
+    '''
+    def __init__(self,
+                 source_filename,     # Name of file that contains the JSON
+                ):
+        self.__source_filename = source_filename
+        self.__snapshots = {'startup': source_filename}
+
+    def add_snapshot(self,
+                     tag,       # string: circumstances of snapshot (e.g.,
+                                #   startup, bug, etc.)
+                     filename   # string: name of output data file associated with tag
+                    ):
+        '''
+        Saves the name of a snapshot of the game file.  The name is saved with
+        a tag that describes the reason for the snapshot.
+
+        Returns: nothing
+        '''
+        self.__snapshots[tag] = filename
+
+
+    def make_bug_report(self,
+                        history,           # list of action dicts for the most recently
+                                           #   started fight (see Ruleset::do_action)
+                        user_description,  # string w/ '\n' to separate lines; user
+                                           #   description of bug
+
+                        crash_snapshot = None   # string: name of file to be
+                                                #   saved as one last snapshot
+                       ):
+        '''
+        Gathers all the information required (I hope) to reproduce a bug and
+        writes it to a file.
+
+        Returns: the name of the file to which the bug summary was written.
+        '''
+
+        if crash_snapshot is not None:
+            self.add_snapshot('crash', crash_snapshot)
+
+        # Build the bug report
+
+        bug_report = {
+            'version'   : VERSION,
+            'world'     : self.__source_filename,
+            'history'   : history,
+            'report'    : user_description,
+            'snapshots' : self.__snapshots
+        }
+
+        # Find a filename for the bug report
+
+        keep_going = True
+        count = 0
+        extension = 'json'
+        while keep_going:
+            count_string = '%d' % count
+            bug_report_json = timeStamped('bug_report', count_string, extension)
+            if os.path.exists(bug_report_json):
+                count += 1
+            else:
+                keep_going = False
+
+        # Make a directory for the bug report
+
+        extension = '.' + extension
+        directory_name = bug_report_json
+        if directory_name.endswith(extension):
+            directory_name = directory_name[:-len(extension)]
+
+        os.mkdir(directory_name)
+
+        # Copy the snapshot files into the bug report directory
+
+        for filename in self.__snapshots.itervalues():
+            shutil.copy(filename, directory_name)
+
+        # Dump the bug report into bug report file (in the directory)
+
+        full_bug_report_json = os.path.join(directory_name, bug_report_json)
+        with open(full_bug_report_json, 'w') as f:
+            json.dump(bug_report, f, indent=2)
+
+        return bug_report_json
+
+
 # Main
 if __name__ == '__main__':
     VERSION = '00.00.00' # major version, minor version, bug fixes
@@ -12491,6 +12544,7 @@ if __name__ == '__main__':
     PP = pprint.PrettyPrinter(indent=3, width=150)
     playback_history = None
 
+    program = None
     with GmWindowManager() as window_manager:
         ruleset = GurpsRuleset(window_manager)
 
@@ -12567,7 +12621,8 @@ if __name__ == '__main__':
                 window_manager.error(['No "PCs" in %s' % filename])
                 sys.exit(2)
 
-            world = World(filename, campaign, ruleset, window_manager)
+            program = Program(filename)
+            world = World(filename, campaign, ruleset, program, window_manager)
 
             # Save the state of things when we leave since there wasn't a
             # horrible crash while reading the data.
@@ -12588,6 +12643,8 @@ if __name__ == '__main__':
                                        world)
             orderly_shutdown = main_handler.handle_user_input_until_done()
 
+        # Write a crashdump of the shutdown
         if not orderly_shutdown:
-            print 'CRASH'
+            if program is not None:
+                program.make_bug_report(None, 'CRASH', filename)
 

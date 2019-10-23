@@ -145,6 +145,16 @@ class WorldData(object):
     def __init__(self, world_dict):
         self.read_data = copy.deepcopy(world_dict)
 
+class MockProgram(object):
+    def __init__(self):
+        pass
+
+    def add_snapshot(self, tag, filename):
+        pass
+
+    def make_bug_report(self, history, user_description):
+        return 'NO FILE'
+
 class MockWorld(object):
     def __init__(self):
         self.playing_back = False
@@ -1460,9 +1470,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             print '\n=== test_initiative_order ===\n'
 
         world_data = WorldData(self.init_world_dict)
+        mock_program = MockProgram()
         world = gm.World("internal_source_file",
                          world_data,
                          self.__ruleset,
+                         mock_program,
                          self.__window_manager,
                          save_snapshot=False
                          )
@@ -1626,9 +1638,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             print '\n=== test_initiative_order_again ===\n'
 
         world_data = WorldData(self.init_world_dict_2)
+        mock_program = MockProgram()
         world = gm.World("internal_source_file",
                          world_data,
                          self.__ruleset,
+                         mock_program,
                          self.__window_manager,
                          save_snapshot=False
                         )
@@ -1671,10 +1685,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             print '\n=== test_change_opponents ===\n'
 
         world_data = WorldData(self.init_world_dict)
-
+        mock_program = MockProgram()
         world = gm.World("internal_source_file",
                          world_data,
                          self.__ruleset,
+                         mock_program,
                          self.__window_manager,
                          save_snapshot=False
                         )
@@ -3355,9 +3370,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__ruleset = gm.GurpsRuleset(self.__window_manager)
 
         world_data = WorldData(self.init_world_dict)
+        mock_program = MockProgram()
         world = gm.World('internal source file',
                          world_data,
                          self.__ruleset,
+                         mock_program,
                          self.__window_manager,
                          save_snapshot=False
                         )
@@ -3656,9 +3673,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             print '\n----------- LEAVE FIGHT -----------\n'
 
         world_data = WorldData(base_world_dict)
+        mock_program = MockProgram()
         world = gm.World('internal source file',
                          world_data,
                          self.__ruleset,
+                         mock_program,
                          self.__window_manager,
                          save_snapshot=False
                         )
@@ -3689,9 +3708,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             print '\n----------- SAVE FIGHT -----------\n'
 
         world_data = WorldData(base_world_dict)
+        mock_program = MockProgram()
         world = gm.World('internal source file',
                          world_data,
                          self.__ruleset,
+                         mock_program,
                          self.__window_manager,
                          save_snapshot=False
                         )
@@ -3728,9 +3749,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             print '\n----------- KEEP FIGHT -----------\n'
 
         world_data = WorldData(base_world_dict)
+        mock_program = MockProgram()
         world = gm.World('internal source file',
                          world_data,
                          self.__ruleset,
+                         mock_program,
                          self.__window_manager,
                          save_snapshot=False
                         )
@@ -3916,9 +3939,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         base_world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(base_world_dict)
+        mock_program = MockProgram()
         world = gm.World('internal source file',
                          world_data,
                          self.__ruleset,
+                         mock_program,
                          self.__window_manager,
                          save_snapshot=False
                         )
@@ -3940,9 +3965,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
+        mock_program = MockProgram()
         world = gm.World('internal source file',
                          world_data,
                          self.__ruleset,
+                         mock_program,
                          self.__window_manager,
                          save_snapshot=False
                         )
@@ -4040,9 +4067,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
+        mock_program = MockProgram()
         world = gm.World('internal source file',
                          world_data,
                          self.__ruleset,
+                         mock_program,
                          self.__window_manager,
                          save_snapshot=False)
         self.__window_manager.set_menu_response('From Which Template', 'dudes')
@@ -4174,9 +4203,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(world_dict)
+        mock_program = MockProgram()
         world = gm.World('internal source file',
                          world_data,
                          self.__ruleset,
+                         mock_program,
                          self.__window_manager,
                          save_snapshot=False
                         )
