@@ -11,6 +11,7 @@ import os
 import pprint
 import random
 import re
+import shutil
 import sys
 import traceback
 
@@ -2018,10 +2019,8 @@ class World(object):
 
         while keep_going:
             counted_tag = '%s-%d' % (tag, count)
-            debug_filename = os.path.join(World.debug_directory,
-                                          timeStamped('debug_json',
-                                                      counted_tag,
-                                                      'json'))
+            base_name = timeStamped('debug_json', counted_tag, 'json')
+            debug_filename = os.path.join(World.debug_directory, base_name)
             if os.path.exists(debug_filename):
                 count += 1
             else:
@@ -2033,7 +2032,7 @@ class World(object):
 
         self.snapshots[tag] = debug_filename
 
-        return debug_filename
+        return base_name
 
 
     def dont_save_on_exit(self):
@@ -8256,7 +8255,11 @@ class ScreenHandler(object):
                     'Bug Report',
                     '^G to exit')
 
+        # Gotta do the debug snapshot first, so it's in self.world.snapshots
+
         self.world.do_debug_snapshot('bug')
+
+        # Build the bug report
 
         bug_report = {
             'world'     : self.world.source_filename,
@@ -8265,17 +8268,37 @@ class ScreenHandler(object):
             'snapshots' : self.world.snapshots
         }
 
+        # Find a filename for the bug report
+
         keep_going = True
         count = 0
+        extension = 'json'
         while keep_going:
             count_string = '%d' % count
-            bug_report_json = timeStamped('bug_report', count_string, 'json')
+            bug_report_json = timeStamped('bug_report', count_string, extension)
             if os.path.exists(bug_report_json):
                 count += 1
             else:
                 keep_going = False
 
-        with open(bug_report_json, 'w') as f:
+        # Make a directory for the bug report
+
+        extension = '.' + extension
+        directory_name = bug_report_json
+        if directory_name.endswith(extension):
+            directory_name = directory_name[:-len(extension)]
+
+        os.mkdir(directory_name)
+
+        # Copy the snapshot files into the bug report directory
+
+        for filename in self.world.snapshots.itervalues():
+            shutil.copy(filename, directory_name)
+
+        # Dump the bug report into bug report file (in the directory)
+
+        full_bug_report_json = os.path.join(directory_name, bug_report_json)
+        with open(full_bug_report_json, 'w') as f:
             json.dump(bug_report, f, indent=2)
 
         self._window_manager.display_window(
