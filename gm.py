@@ -10132,13 +10132,6 @@ class FightHandler(ScreenHandler):
     # Public Methods
     #
 
-    #def display_window(self,
-    #                   title,
-    #                   lines  # [{'text', 'mode'}, ...]
-    #                  ):
-    #    return True
-
-
     def get_current_fighter(self):              # Public to support testing
         '''
         Returns the Fighter object of the current fighter.
@@ -11388,7 +11381,7 @@ class FightHandler(ScreenHandler):
 
         lines = why_target._explain_numbers(self)
 
-        ignore = self._window_manager.display_window(
+        self._window_manager.display_window(
                     'How %s\'s Numbers Were Calculated' % why_target.name,
                     lines)
         return True
@@ -11576,8 +11569,8 @@ class MainHandler(ScreenHandler):
                       {'name': 'scroll char detail',  'func':
                                                        self.__right_pane},
 
-            ord('p'): {'name': 'PERSONNEL changes',   'func':
-                                                       self.__party},
+            ord('a'): {'name': 'about the program',   'func':
+                                                       self.__about},
             ord('f'): {'name': 'FIGHT',               'func':
                                                        self.__run_fight},
             ord('h'): {'name': 'heal selected creature', 'func':
@@ -11586,7 +11579,8 @@ class MainHandler(ScreenHandler):
                                                        self.__fully_heal},
             ord('m'): {'name': 'show MONSTERs or PC/NPC', 'func':
                                        self.__toggle_Monster_PC_NPC_display},
-
+            ord('p'): {'name': 'PERSONNEL changes',   'func':
+                                                       self.__party},
             ord('q'): {'name': 'quit',                'func':
                                                        self.__quit},
             ord('R'): {'name': 'resurrect fight',     'func':
@@ -11651,6 +11645,26 @@ class MainHandler(ScreenHandler):
     #
     # Protected and Private Methods
     #
+
+
+    def __about(self):
+        '''
+        Command ribbon method.
+
+        Displays information block for the combat accountant.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        lines = [[{'text': 'Combat Accountant', 'mode': curses.A_BOLD}],
+                 [{'text': 'Version %s' % VERSION, 'mode': curses.A_NORMAL}],
+                 [{'text': '', 'mode': curses.A_NORMAL}],
+                 [{'text': 'Copyright (c) 2019, Wade Guthrie',  'mode': curses.A_NORMAL}],
+                 [{'text': 'https://github.com/wadeguthrie/combat-accountant',
+                                                                'mode': curses.A_NORMAL}],
+                 [{'text': 'License: Apache License 2.0', 'mode': curses.A_NORMAL}]]
+
+        self._window_manager.display_window('About Combat Accountant', lines)
+        return True
 
 
     def __add_monsters(self,
@@ -12439,6 +12453,8 @@ def are_equal(self, lhs, rhs):
 
 # Main
 if __name__ == '__main__':
+    VERSION = '00.00.00' # major version, minor version, bug fixes
+
     parser = MyArgumentParser()
     parser.add_argument('filename',
              nargs='?', # We get the filename elsewhere if you don't say here
