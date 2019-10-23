@@ -73,13 +73,11 @@ class TestPersonnelHandler(gm.PersonnelHandler):
     def __init__(self,
                  window_manager,
                  world,
-                 ruleset,
                  creature_type # one of: NPCs, PCs, or MONSTERs
                 ):
         super(TestPersonnelHandler, self).__init__(
                  window_manager,
                  world,
-                 ruleset,
                  creature_type, # one of: NPCs, PCs, or MONSTERs
                 )
         self.__command_ribbon_input = []
@@ -1484,7 +1482,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             fight_handler = gm.FightHandler(self.__window_manager,
                                             world,
                                             'horsemen',
-                                            self.__ruleset,
                                             None, # Playback history
                                             save_snapshot=False
                                            )
@@ -1653,7 +1650,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             fight_handler = gm.FightHandler(self.__window_manager,
                                             world,
                                             'marx',
-                                            self.__ruleset,
                                             None, # Playback history
                                             save_snapshot=False
                                            )
@@ -1698,7 +1694,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
                                         'horsemen',
-                                        self.__ruleset,
                                         None, # Playback history
                                         save_snapshot=False
                                        )
@@ -3369,7 +3364,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
                                         'horsemen',
-                                        self.__ruleset,
                                         None, # Playback history
                                         save_snapshot=False
                                        )
@@ -3672,7 +3666,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
                                         "Dima's Crew",
-                                        self.__ruleset,
                                         None, # Playback history
                                         save_snapshot=False)
 
@@ -3708,7 +3701,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
                                         "Dima's Crew",
-                                        self.__ruleset,
                                         None, # Playback history
                                         save_snapshot=False)
 
@@ -3746,7 +3738,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
                                         "Dima's Crew",
-                                        self.__ruleset,
                                         None, # Playback history
                                         save_snapshot=False)
 
@@ -3974,7 +3965,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         fight_handler = gm.FightHandler(self.__window_manager,
                                         world,
                                         "horsemen",
-                                        self.__ruleset,
                                         None, # Playback history
                                         save_snapshot=False)
 
@@ -4058,13 +4048,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response('From Which Template', 'dudes')
         npc_handler = gm.PersonnelHandler(self.__window_manager,
                                           world,
-                                          self.__ruleset,
                                           gm.PersonnelHandler.NPCs)
 
         self.__window_manager.set_menu_response('From Which Template', 'dudes')
         pc_handler = gm.PersonnelHandler(self.__window_manager,
                                          world,
-                                         self.__ruleset,
                                          gm.PersonnelHandler.PCs)
 
         ### PersonnelHandler.NPC_joins_monsters - not an NPC ###
@@ -4206,7 +4194,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         build_fight = TestPersonnelHandler(self.__window_manager,
                                            world,
-                                           self.__ruleset,
                                            gm.PersonnelHandler.MONSTERs)
 
         build_fight.set_command_ribbon_input('q')
@@ -4250,7 +4237,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         build_fight = TestPersonnelHandler(self.__window_manager,
                                            world,
-                                           self.__ruleset,
                                            gm.PersonnelHandler.MONSTERs)
 
         assert(self.__window_manager.error_state ==
@@ -4274,7 +4260,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         build_fight = TestPersonnelHandler(self.__window_manager,
                                            world,
-                                           self.__ruleset,
                                            gm.PersonnelHandler.MONSTERs)
 
         build_fight.set_command_ribbon_input('a')   # Add Ophelia
@@ -4316,7 +4301,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         build_fight = TestPersonnelHandler(self.__window_manager,
                                            world,
-                                           self.__ruleset,
                                            gm.PersonnelHandler.PCs)
 
         build_fight.set_command_ribbon_input('a')
@@ -4341,7 +4325,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         build_fight = TestPersonnelHandler(self.__window_manager,
                                            world,
-                                           self.__ruleset,
                                            gm.PersonnelHandler.NPCs)
 
         build_fight.set_command_ribbon_input('a')
