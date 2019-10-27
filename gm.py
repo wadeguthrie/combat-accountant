@@ -1048,7 +1048,7 @@ class FightGmWindow(GmWindow):
             window.addstr(line, 0, '** ABSENT **', mode)
             line += 1
         elif fighter.details['stunned']:
-            mode = curses.color_pair(GmWindowManager.RED_BLACK) | curses.A_BOLD
+            mode = curses.color_pair(GmWindowManager.MAGENTA_BLACK) | curses.A_BOLD
             window.addstr(line, 0, '** STUNNED **', mode)
             line += 1
 
@@ -1178,9 +1178,9 @@ class GmWindowManager(object):
                 Fighter.INJURED :
                     curses.color_pair(GmWindowManager.YELLOW_BLACK),
                 Fighter.UNCONSCIOUS :
-                    curses.color_pair(GmWindowManager.RED_BLACK),
+                    curses.color_pair(GmWindowManager.MAGENTA_BLACK),
                 Fighter.DEAD :
-                    curses.color_pair(GmWindowManager.RED_BLACK),
+                    curses.color_pair(GmWindowManager.MAGENTA_BLACK),
                 Fighter.ABSENT :
                     curses.color_pair(GmWindowManager.BLUE_BLACK),
                 Fighter.FIGHT :
@@ -8312,9 +8312,10 @@ class PersonnelHandler(ScreenHandler):
             ord('e'): {'name': 'equip/modify creature',
                                                      'func': self.__equip},
             ord('g'): {'name': 'create template group',
-                                                     'func': self.__new_template_group},
-            ord('t'): {'name': 'change template',    'func': self.__new_template},
-            ord('T'): {'name': 'make template',      'func': self.__make_template},
+                                                     'func': self.__create_template_group},
+            ord('t'): {'name': 'change template group',
+                                                     'func': self.__change_template_group},
+            ord('T'): {'name': 'make into template', 'func': self.__create_template},
             ord('q'): {'name': 'quit',               'func': self.__quit},
         })
 
@@ -8329,7 +8330,7 @@ class PersonnelHandler(ScreenHandler):
                                                                 self._choices)
         self.__current_pane = PersonnelHandler.CHAR_DETAIL
 
-        self.__template_name = None # Name of templates we'll use to create
+        self.__template_group = None # Name of templates we'll use to create
                                     # new creatures.
 
         self.__critters = None  # dict of the Fighters/Venues in a group
@@ -8360,8 +8361,10 @@ class PersonnelHandler(ScreenHandler):
                                         # that will ultimately take these
                                         # creatures.
 
-            new_existing_menu = [('new monster group', 'new'),
-                                 ('existing monster group', 'existing')]
+            new_existing_menu = [('new monster group', 'new')]
+            if len(self.world.get_fights()) > 0:
+                new_existing_menu.append(('existing monster group', 'existing'))
+
             new_existing = None
             while new_existing is None:
                 new_existing = self._window_manager.menu('New or Pre-Existing',
@@ -8611,7 +8614,7 @@ class PersonnelHandler(ScreenHandler):
         '''
         self._window.clear()
         self._window.status_ribbon(self.__group_name,
-                                   self.__template_name,
+                                   self.__template_group,
                                    self.world.source_filename,
                                    ScreenHandler.maintainjson)
         self._window.command_ribbon()
@@ -8653,8 +8656,9 @@ class PersonnelHandler(ScreenHandler):
         while keep_adding_creatures:
 
             # Get a template.
-            if self.__template_name is None:
-                self.__new_template()
+
+            if self.__template_group is None:
+                self.__change_template_group()
 
             # Based on which creature from the template
 
@@ -8662,14 +8666,15 @@ class PersonnelHandler(ScreenHandler):
             from_creature_name = empty_creature
 
             # None means there are no templates or the user decided against a template.
-            if self.__template_name is not None:
+
+            if self.__template_group is not None:
                 creature_menu = []
                 for from_creature_name in (
-                            self.world.details['templates'][self.__template_name]):
+                            self.world.details['templates'][self.__template_group]):
                     if from_creature_name == empty_creature:
                         self._window_manager.error(
-                            ['Template "%s" contains illegal template:' %
-                                                            self.__template_name,
+                            ['Template group "%s" contains illegal template:' %
+                                                            self.__template_group,
                              '"%s". Replacing with an empty creature.' %
                                                             empty_creature])
                     else:
@@ -8691,7 +8696,7 @@ class PersonnelHandler(ScreenHandler):
 
             if from_creature_name != empty_creature:
                 from_creature = (self.world.details[
-                        'templates'][self.__template_name][from_creature_name])
+                        'templates'][self.__template_group][from_creature_name])
                 for key, value in from_creature.iteritems():
                     if key == 'permanent':
                         for ikey, ivalue in value.iteritems():
@@ -9281,12 +9286,7 @@ class PersonnelHandler(ScreenHandler):
         '''
         # Get the template name
 
-        lines, cols = self._window.getmaxyx()
-        template_menu = [(template_name, template_name)
-                    for template_name in self.world.details['templates']]
-        template_name = self._window_manager.menu('From Which Template',
-                                                         template_menu)
-        self.__template_name = template_name
+        self.__change_template_group()
 
         # Get the group information
 
@@ -9449,19 +9449,13 @@ class PersonnelHandler(ScreenHandler):
         '''
         # Get the template info.
 
-        lines, cols = self._window.getmaxyx()
-        template_menu = [(template_name, template_name)
-                    for template_name in self.world.details['templates']]
-        template_name = self._window_manager.menu('From Which Template',
-                                                         template_menu)
-        if template_name is None:
-            return True  # Keep going
-        self.__template_name = template_name
+        self.__change_template_group()
 
         # Get the new group info.
 
         keep_asking = True
         group_name = None
+        lines, cols = self._window.getmaxyx()
         while keep_asking:
             group_name = self._window_manager.input_box(1,      # height
                                                         cols-4, # width
@@ -9526,7 +9520,8 @@ class PersonnelHandler(ScreenHandler):
         return True
 
 
-    def __make_template(self):
+    # TODO: alphabetize
+    def __create_template(self):
         '''
         Command ribbon method.
 
@@ -9536,9 +9531,9 @@ class PersonnelHandler(ScreenHandler):
         '''
         # A little error checking
 
-        if self.__template_name is None:
+        if self.__template_group is None:
             self._window_manager.error(
-                ['You must select a template list to which to',
+                ['You must select a template group to which to',
                  'add this template.'])
             return True # Keep going
 
@@ -9554,7 +9549,6 @@ class PersonnelHandler(ScreenHandler):
 
         lines, cols = self._window.getmaxyx()
         keep_asking = True
-        template_name = None
         while keep_asking:
             template_name = self._window_manager.input_box(1,      # height
                                                            cols-4, # width
@@ -9562,7 +9556,7 @@ class PersonnelHandler(ScreenHandler):
             if template_name is None or len(template_name) == 0:
                 return True
             elif (template_name in
-                    self.world.details['templates'][self.__template_name]):
+                    self.world.details['templates'][self.__template_group]):
                 self._window_manager.error(
                     ['Template name "%s" already exists' % template_name])
                 keep_asking = True
@@ -9587,12 +9581,12 @@ class PersonnelHandler(ScreenHandler):
             else:
                 pass # We're ignoring these
 
-        template_list = self.world.details['templates'][self.__template_name]
+        template_list = self.world.details['templates'][self.__template_group]
         template_list[template_name] = to_creature
         return True # Keep going
 
 
-    def __new_template(self):
+    def __change_template_group(self):
         '''
         Command ribbon method.
 
@@ -9604,13 +9598,13 @@ class PersonnelHandler(ScreenHandler):
 
         # Get the template
         lines, cols = self._window.getmaxyx()
-        template_menu = [(template_name, template_name)
-                    for template_name in self.world.details['templates']]
-        template_name = self._window_manager.menu('From Which Template',
-                                                  template_menu)
-        if template_name is None:
+        template_menu = [(template_group, template_group)
+                    for template_group in self.world.details['templates']]
+        template_group = self._window_manager.menu('Which Template Group',
+                                                   template_menu)
+        if template_group is None:
             return True  # Keep going
-        self.__template_name = template_name
+        self.__template_group = template_group
 
         # Display our new state
 
@@ -9618,7 +9612,8 @@ class PersonnelHandler(ScreenHandler):
 
         return True # Keep going
 
-    def __new_template_group(self):
+
+    def __create_template_group(self):
         '''
         Command ribbon method.
 
@@ -9629,21 +9624,21 @@ class PersonnelHandler(ScreenHandler):
         lines, cols = self._window.getmaxyx()
         keep_asking = True
         while keep_asking:
-            template_name = self._window_manager.input_box(1,      # height
+            template_group = self._window_manager.input_box(1,      # height
                                                            cols-4, # width
                                                            'New Template Group Name')
-            if template_name is None or len(template_name) <= 0:
+            if template_group is None or len(template_group) <= 0:
                 return True
-            elif template_name in self.world.details['templates']:
+            elif template_group in self.world.details['templates']:
                 self._window_manager.error(
-                    ['Template group name "%s" already exists' % template_name])
+                    ['Template group name "%s" already exists' % template_group])
                 keep_asking = True
             else:
                 keep_asking = False
 
-        if len(template_name) > 0:
-            self.world.details['templates'][template_name] = {}
-            self.__template_name = template_name
+        if len(template_group) > 0:
+            self.world.details['templates'][template_group] = {}
+            self.__template_group = template_group
             self._draw_screen()
 
         return True
@@ -9998,7 +9993,8 @@ class FightHandler(ScreenHandler):
             ord('d'): {'name': 'defend',      'func': self.__defend},
             ord('D'): {'name': 'dead/unconscious',
                                               'func': self.__dead},
-            ord('g'): {'name': 'give equip',  'func': self.__give_equipment},
+            ord('g'): {'name': 'give equipment',
+                                              'func': self.__give_equipment},
             ord('h'): {'name': 'History',     'func': self.__show_history},
             ord('i'): {'name': 'character info',
                                               'func': self.__show_info},
@@ -11902,7 +11898,7 @@ class MainHandler(ScreenHandler):
                     ('npc list',           {'doit': self.__add_NPCs}),
                     ('pc list',            {'doit': self.__add_PCs}),
                     ]
-        self._window_manager.menu('Do what', sub_menu)
+        self._window_manager.menu('Modify Which List', sub_menu)
         return True
 
 
