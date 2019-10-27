@@ -4074,12 +4074,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                          mock_program,
                          self.__window_manager,
                          save_snapshot=False)
-        self.__window_manager.set_menu_response('From Which Template', 'dudes')
+        self.__window_manager.set_menu_response('Which Template Group', 'dudes')
         npc_handler = gm.PersonnelHandler(self.__window_manager,
                                           world,
                                           gm.PersonnelHandler.NPCs)
 
-        self.__window_manager.set_menu_response('From Which Template', 'dudes')
+        self.__window_manager.set_menu_response('Which Template Group', 'dudes')
         pc_handler = gm.PersonnelHandler(self.__window_manager,
                                          world,
                                          gm.PersonnelHandler.PCs)
@@ -4216,7 +4216,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response(
                                         'New or Pre-Existing', 'new')
         self.__window_manager.set_menu_response(
-                                        'From Which Template', 'Arena Combat')
+                                        'Which Template Group', 'Arena Combat')
         self.__window_manager.set_input_box_response(
                                         'New Fight Name', 'test_new_fight')
         self.__window_manager.set_menu_response('Monster', 'VodouCleric')
@@ -4250,7 +4250,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response(
                                         'New or Pre-Existing', 'new')
         self.__window_manager.set_menu_response(
-                                        'From Which Template', 'Arena Combat')
+                                        'Which Template Group', 'Arena Combat')
         # This one should error out
         self.__window_manager.set_input_box_response(
                                         'New Fight Name', 'test_new_fight')
@@ -4283,7 +4283,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         self.__window_manager.clear_menu_responses()
         self.__window_manager.set_menu_response('New or Pre-Existing', 'existing')
-        self.__window_manager.set_menu_response('From Which Template', 'Arena Combat')
+        self.__window_manager.set_menu_response('Which Template Group', 'Arena Combat')
         self.__window_manager.set_menu_response('To Which Group', 'test_new_fight')
 
         self.__window_manager.set_menu_response('Monster', 'VodouCleric')
@@ -4324,7 +4324,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         group = 'PCs'
         self.__window_manager.clear_menu_responses()
-        self.__window_manager.set_menu_response('From Which Template',
+        self.__window_manager.set_menu_response('Which Template Group',
                                                 'Arena Combat')
         self.__window_manager.set_menu_response('Monster', 'VodouCleric')
         self.__window_manager.set_input_box_response('Monster Name', 'Skippy')
@@ -4348,7 +4348,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         group = 'NPCs'
         self.__window_manager.clear_menu_responses()
-        self.__window_manager.set_menu_response('From Which Template',
+        self.__window_manager.set_menu_response('Which Template Group',
                                                 'Arena Combat')
         self.__window_manager.set_menu_response('Monster', 'VodouCleric')
         self.__window_manager.set_input_box_response('Monster Name', 'Stinky')
