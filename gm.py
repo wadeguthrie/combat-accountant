@@ -8732,6 +8732,7 @@ class PersonnelHandler(ScreenHandler):
                     if base_name is None:
                         self._window_manager.error(['Monster needs a name'])
                         keep_asking = True
+                        continue
                     else:
                         if where is not None:
                             to_creature['notes'].append('origin: %s' % where)
@@ -9596,6 +9597,9 @@ class PersonnelHandler(ScreenHandler):
         '''
         # Get the new group info.
 
+        if len(self.world.details['templates']) <= 0:
+            return True
+
         # Get the template
         lines, cols = self._window.getmaxyx()
         template_menu = [(template_group, template_group)
@@ -9652,8 +9656,9 @@ class PersonnelHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        for name, creature in self.__critters['data'].iteritems():
-            self.world.ruleset.is_creature_consistent(name, creature)
+        if self.__critters is not None:
+            for name, creature in self.__critters['data'].iteritems():
+                self.world.ruleset.is_creature_consistent(name, creature)
 
         # TODO: do I need to del self._window?
         self._window.close()
