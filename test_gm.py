@@ -3,8 +3,7 @@
 import argparse
 import copy
 import curses
-#import curses.ascii
-import gm
+import ca   # combat accountant
 import pprint
 import random
 import unittest
@@ -69,7 +68,7 @@ action['name'] == 'adjust-fp':
 # TODO: test 'resurrect fight'
 # TODO: test equipping characters
 
-class TestPersonnelHandler(gm.PersonnelHandler):
+class TestPersonnelHandler(ca.PersonnelHandler):
     def __init__(self,
                  window_manager,
                  world,
@@ -966,7 +965,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         } # End of world
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
 
     def tearDown(self):
         pass
@@ -1064,7 +1063,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Deepcopy so that we don't taint the original
         mock_fight_handler = MockFightHandler()
-        vodou_priest = gm.Fighter('Priest',
+        vodou_priest = ca.Fighter('Priest',
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
@@ -1086,7 +1085,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Next guy
 
-        bokor_fighter = gm.Fighter('Bokor',
+        bokor_fighter = ca.Fighter('Bokor',
                                    'group',
                                    copy.deepcopy(self.__bokor_fighter),
                                    self.__ruleset,
@@ -1106,7 +1105,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(bokor_fighter)
         assert dodge_skill == (9 + self.__crawling_defense_mod)
 
-        tank_fighter = gm.Fighter('Tank',
+        tank_fighter = ca.Fighter('Tank',
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset,
@@ -1114,7 +1113,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(tank_fighter)
         assert dodge_skill == 9
 
-        thief_fighter = gm.Fighter('Thief',
+        thief_fighter = ca.Fighter('Thief',
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset,
@@ -1130,7 +1129,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             print '\n=== test_get_block_skill ===\n'
 
         # TODO: need non-trivial block tests
-        vodou_priest_fighter = gm.Fighter(
+        vodou_priest_fighter = ca.Fighter(
                                   'Priest',
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
@@ -1141,7 +1140,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                         None)
         assert block_skill == None
 
-        bokor_fighter = gm.Fighter('Bokor',
+        bokor_fighter = ca.Fighter('Bokor',
                                    'group',
                                    copy.deepcopy(self.__bokor_fighter),
                                    self.__ruleset,
@@ -1150,7 +1149,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                                 None)
         assert block_skill == None
 
-        tank_fighter = gm.Fighter('Tank',
+        tank_fighter = ca.Fighter('Tank',
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset,
@@ -1159,7 +1158,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                                 None)
         assert block_skill == None
 
-        thief_fighter = gm.Fighter('Thief',
+        thief_fighter = ca.Fighter('Thief',
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset,
@@ -1178,7 +1177,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Unarmed
         weapon = None
         mock_fight_handler = MockFightHandler()
-        vodou_priest_fighter = gm.Fighter(
+        vodou_priest_fighter = ca.Fighter(
                                     'Vodou Priest',
                                     'group',
                                     copy.deepcopy(self.__vodou_priest_fighter),
@@ -1191,7 +1190,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Unarmed
         weapon = None
-        bokor_fighter = gm.Fighter('Bokor',
+        bokor_fighter = ca.Fighter('Bokor',
                                    'group',
                                    copy.deepcopy(self.__bokor_fighter),
                                    self.__ruleset,
@@ -1202,7 +1201,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Unarmed
         weapon = None
-        tank_fighter = gm.Fighter('Tank',
+        tank_fighter = ca.Fighter('Tank',
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset,
@@ -1212,7 +1211,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert parry_skill is None # None w/weapon; still OK hand-to-hand
 
         # Armed (sick stick)
-        tank_fighter = gm.Fighter('Tank',
+        tank_fighter = ca.Fighter('Tank',
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset,
@@ -1241,7 +1240,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Unarmed
         weapon = None
-        thief_fighter = gm.Fighter('Thief',
+        thief_fighter = ca.Fighter('Thief',
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset,
@@ -1251,7 +1250,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert parry_skill is None # None w/weapon; still OK hand-to-hand
 
         # Armed (Knife)
-        thief_fighter = gm.Fighter('Thief',
+        thief_fighter = ca.Fighter('Thief',
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset,
@@ -1287,7 +1286,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Vodou Priest
         unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
         mock_fight_handler = MockFightHandler()
-        vodou_priest_fighter = gm.Fighter(
+        vodou_priest_fighter = ca.Fighter(
                                     'Vodou Priest',
                                     'group',
                                     copy.deepcopy(self.__vodou_priest_fighter),
@@ -1305,7 +1304,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert hand_to_hand_info['parry_skill'] == 10
 
         # Bokor
-        bokor_fighter = gm.Fighter('Bokor',
+        bokor_fighter = ca.Fighter('Bokor',
                                    'group',
                                    copy.deepcopy(self.__bokor_fighter),
                                    self.__ruleset,
@@ -1322,7 +1321,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert hand_to_hand_info['parry_skill'] == 10
 
         # Tank
-        tank_fighter = gm.Fighter('Tank',
+        tank_fighter = ca.Fighter('Tank',
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset,
@@ -1338,7 +1337,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert hand_to_hand_info['parry_skill'] == 12
 
         # Thief
-        thief_fighter = gm.Fighter('Thief',
+        thief_fighter = ca.Fighter('Thief',
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset,
@@ -1373,7 +1372,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                 + self.__crawling_defense_mod)
 
         # Thief w/o brass knuckles
-        thief_fighter = gm.Fighter('Thief',
+        thief_fighter = ca.Fighter('Thief',
                                    'group',
                                    copy.deepcopy(self.__thief_fighter),
                                    self.__ruleset,
@@ -1471,7 +1470,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         world_data = WorldData(self.init_world_dict)
         mock_program = MockProgram()
-        world = gm.World("internal_source_file",
+        world = ca.World("internal_source_file",
                          world_data,
                          self.__ruleset,
                          mock_program,
@@ -1491,7 +1490,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         for i in range(10):
             # random.randint(1, 6) should generate: 1 2 4 4 4 4 5 6 4 4
             random.seed(9001) # 9001 is an arbitrary number
-            fight_handler = gm.FightHandler(self.__window_manager,
+            fight_handler = ca.FightHandler(self.__window_manager,
                                             world,
                                             'horsemen',
                                             None, # Playback history
@@ -1559,12 +1558,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         injured_hp = 3 # arbitrary amount
         injured_fighter.details['current']['hp'] -= injured_hp
-        unconscious_fighter.set_consciousness(gm.Fighter.UNCONSCIOUS)
-        dead_fighter.set_consciousness(gm.Fighter.DEAD)
+        unconscious_fighter.set_consciousness(ca.Fighter.UNCONSCIOUS)
+        dead_fighter.set_consciousness(ca.Fighter.DEAD)
 
-        assert injured_fighter.get_state() == gm.Fighter.INJURED
-        assert unconscious_fighter.get_state() == gm.Fighter.UNCONSCIOUS
-        assert dead_fighter.get_state() == gm.Fighter.DEAD
+        assert injured_fighter.get_state() == ca.Fighter.INJURED
+        assert unconscious_fighter.get_state() == ca.Fighter.UNCONSCIOUS
+        assert dead_fighter.get_state() == ca.Fighter.DEAD
 
         expected_index = 0
         assert world_data.read_data['current-fight']['index'] == expected_index
@@ -1639,7 +1638,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         world_data = WorldData(self.init_world_dict_2)
         mock_program = MockProgram()
-        world = gm.World("internal_source_file",
+        world = ca.World("internal_source_file",
                          world_data,
                          self.__ruleset,
                          mock_program,
@@ -1661,7 +1660,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         for i in range(10):
             # random.randint(1, 6) should generate: 2 3 4 5 3
             random.seed(8534) # 8534 is an arbitrary number
-            fight_handler = gm.FightHandler(self.__window_manager,
+            fight_handler = ca.FightHandler(self.__window_manager,
                                             world,
                                             'marx',
                                             None, # Playback history
@@ -1686,7 +1685,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         world_data = WorldData(self.init_world_dict)
         mock_program = MockProgram()
-        world = gm.World("internal_source_file",
+        world = ca.World("internal_source_file",
                          world_data,
                          self.__ruleset,
                          mock_program,
@@ -1706,7 +1705,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         injured_index = 2
 
         random.seed(9001) # 9001 is an arbitrary number
-        fight_handler = gm.FightHandler(self.__window_manager,
+        fight_handler = ca.FightHandler(self.__window_manager,
                                         world,
                                         'horsemen',
                                         None, # Playback history
@@ -1820,10 +1819,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             print '\n=== test_ranged_to_hit ===\n'
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = gm.Fighter('Priest',
+        vodou_priest = ca.Fighter('Priest',
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
@@ -2019,7 +2018,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
         self.__ruleset.reset_aim(vodou_priest)
-        tank = gm.Fighter('Tank',
+        tank = ca.Fighter('Tank',
                           'group',
                           copy.deepcopy(self.__tank_fighter),
                           self.__ruleset,
@@ -2063,10 +2062,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             print '\n=== test_messed_up_aim ===\n'
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = gm.Fighter('Priest',
+        vodou_priest = ca.Fighter('Priest',
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
@@ -2299,10 +2298,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             print '\n=== test_melee_to_hit ===\n'
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        thief = gm.Fighter('Thief',
+        thief = ca.Fighter('Thief',
                            'group',
                            copy.deepcopy(self.__thief_fighter),
                            self.__ruleset,
@@ -2338,7 +2337,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # --- Opponents w/ posture (shouldn't change melee attack) ---
 
-        tank_fighter = gm.Fighter('Tank',
+        tank_fighter = ca.Fighter('Tank',
                                   'group',
                                   copy.deepcopy(self.__tank_fighter),
                                   self.__ruleset,
@@ -2405,10 +2404,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = gm.Fighter('Priest',
+        vodou_priest = ca.Fighter('Priest',
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
@@ -2568,7 +2567,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response(
             ('Major Wound (B420): Roll vs. HT (%d) or be stunned' %
                                                     self.__vodou_priest_ht),
-            gm.GurpsRuleset.MAJOR_WOUND_SUCCESS)
+            ca.GurpsRuleset.MAJOR_WOUND_SUCCESS)
 
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'adjust-hp', 'adj': major_damage},
@@ -2602,7 +2601,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response(
             ('Major Wound (B420): Roll vs. HT (%d) or be stunned' %
                                                     self.__vodou_priest_ht),
-            gm.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
+            ca.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
 
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'adjust-hp', 'adj': major_damage},
@@ -2667,7 +2666,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response(
             ('Major Wound (B420): Roll vs. HT (%d) or be stunned' %
                                                     self.__vodou_priest_ht),
-            gm.GurpsRuleset.MAJOR_WOUND_BAD_FAIL)
+            ca.GurpsRuleset.MAJOR_WOUND_BAD_FAIL)
 
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'adjust-hp', 'adj': major_damage},
@@ -2826,10 +2825,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = gm.Fighter('Priest',
+        vodou_priest = ca.Fighter('Priest',
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
@@ -2873,7 +2872,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response(
             ('Major Wound (B420): Roll vs. HT+3 (%d) or be stunned' %
                                                                 stun_roll),
-            gm.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
+            ca.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
 
         # failed the high stun roll so knockdown & stun is still in effect
 
@@ -2938,7 +2937,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         #self.__window_manager.set_menu_response(
         #    ('Major Wound (B420): Roll vs. HT+3 (%d) or be stunned' %
         #                                                        stun_roll),
-        #    gm.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
+        #    ca.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
 
         ## failed the high stun roll so knockdown & stun is still in effect
 
@@ -2985,16 +2984,16 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = gm.Fighter('Priest',
+        vodou_priest = ca.Fighter('Priest',
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
                                   self.__window_manager)
 
-        opponent = gm.Fighter('Opponent',
+        opponent = ca.Fighter('Opponent',
                               'other_group',
                               copy.deepcopy(self.__one_more_guy),
                               self.__ruleset,
@@ -3056,17 +3055,17 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             vodou_priest.timers.clear_all()
             vodou_priest.details['current']['fp'] = original_fp
 
-            if gm.GurpsRuleset.spells[trial['name']]['cost'] is None:
+            if ca.GurpsRuleset.spells[trial['name']]['cost'] is None:
                 self.__window_manager.set_input_box_response(
                     'Cost to cast (%s) - see (%s) ' % (trial['name'],
                                                        trial['notes']),
                     '%s' % trial['cost'])
-            if gm.GurpsRuleset.spells[trial['name']]['casting time'] is None:
+            if ca.GurpsRuleset.spells[trial['name']]['casting time'] is None:
                 self.__window_manager.set_input_box_response(
                     'Seconds to cast (%s) - see (%s) ' % (trial['name'],
                                                           trial['notes']),
                     '%s' % trial['casting time'])
-            if gm.GurpsRuleset.spells[trial['name']]['duration'] is None:
+            if ca.GurpsRuleset.spells[trial['name']]['duration'] is None:
                 self.__window_manager.set_input_box_response(
                     'Duration for (%s) - see (%s) ' % (trial['name'],
                                                        trial['notes']),
@@ -3188,10 +3187,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = gm.Fighter('Priest',
+        vodou_priest = ca.Fighter('Priest',
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
@@ -3233,10 +3232,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = gm.Fighter('Priest',
+        vodou_priest = ca.Fighter('Priest',
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
@@ -3276,10 +3275,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = gm.Fighter('Priest',
+        vodou_priest = ca.Fighter('Priest',
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
@@ -3367,18 +3366,18 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
 
         world_data = WorldData(self.init_world_dict)
         mock_program = MockProgram()
-        world = gm.World('internal source file',
+        world = ca.World('internal source file',
                          world_data,
                          self.__ruleset,
                          mock_program,
                          self.__window_manager,
                          save_snapshot=False
                         )
-        fight_handler = gm.FightHandler(self.__window_manager,
+        fight_handler = ca.FightHandler(self.__window_manager,
                                         world,
                                         'horsemen',
                                         None, # Playback history
@@ -3390,8 +3389,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # check consciousness level
 
-        state_number = gm.Fighter.get_fighter_state(current_fighter.details)
-        assert state_number == gm.Fighter.ALIVE
+        state_number = ca.Fighter.get_fighter_state(current_fighter.details)
+        assert state_number == ca.Fighter.ALIVE
 
         self.__ruleset.do_action(current_fighter,
                                  {'name': 'pick-opponent',
@@ -3400,23 +3399,23 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Test
 
-        new_state = gm.Fighter.ALIVE
+        new_state = ca.Fighter.ALIVE
         self.__ruleset.do_action(current_fighter,
                                 {'name': 'set-consciousness',
                                  'level': new_state},
                                  fight_handler)
-        state_number = gm.Fighter.get_fighter_state(current_fighter.details)
+        state_number = ca.Fighter.get_fighter_state(current_fighter.details)
         assert state_number == new_state
         opponent = fight_handler.get_opponent_for(current_fighter)
         assert opponent.name == 'Moe'
         assert opponent.group == 'PCs'
 
-        new_state = gm.Fighter.UNCONSCIOUS
+        new_state = ca.Fighter.UNCONSCIOUS
         self.__ruleset.do_action(current_fighter,
                                 {'name': 'set-consciousness',
                                  'level': new_state},
                                  fight_handler)
-        state_number = gm.Fighter.get_fighter_state(current_fighter.details)
+        state_number = ca.Fighter.get_fighter_state(current_fighter.details)
         assert state_number == new_state
         opponent = fight_handler.get_opponent_for(current_fighter)
         assert opponent is None
@@ -3465,10 +3464,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = gm.Fighter('Priest',
+        vodou_priest = ca.Fighter('Priest',
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
                                   self.__ruleset,
@@ -3521,7 +3520,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         if ARGS.verbose:
             print '\n=== test_timers ===\n'
 
-        fighter = gm.Fighter('Tank',
+        fighter = ca.Fighter('Tank',
                              'group',
                              copy.deepcopy(self.__tank_fighter),
                              self.__ruleset,
@@ -3532,7 +3531,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         timer_id = 0
         round_count = 3
         timer_text = '%d' % timer_id
-        timer_obj = gm.Timer(None)
+        timer_obj = ca.Timer(None)
         timer_obj.from_pieces({'parent-name': fighter.name,
                                'rounds': round_count,
                                'string': timer_text})
@@ -3559,7 +3558,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         for i in range(timer_count):
             timer_text = '%d' % timer_id
             timer_id += 1
-            timer_obj = gm.Timer(None)
+            timer_obj = ca.Timer(None)
             timer_obj.from_pieces({'parent-name': fighter.name,
                                    'rounds': round_count[i],
                                    'string': timer_text})
@@ -3608,7 +3607,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         timer_id = 0
         round_count = 1
         timer0_text = '%d' % timer_id
-        timer_obj = gm.Timer(None)
+        timer_obj = ca.Timer(None)
         timer_obj.from_pieces({'parent-name': fighter.name,
                                'rounds': round_count,
                                'string': timer0_text})
@@ -3627,7 +3626,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         timer_id = 1
         round_count = 0.9
         timer1_text = '%d' % timer_id
-        timer_obj = gm.Timer(None)
+        timer_obj = ca.Timer(None)
         timer_obj.from_pieces({'parent-name': fighter.name,
                                'rounds': round_count,
                                'string': timer1_text})
@@ -3665,7 +3664,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         base_world_dict = copy.deepcopy(self.base_world_dict)
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = gm.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
 
         # Test that leaving a fight moves the bad guys to the dead monster
         # list
@@ -3674,7 +3673,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
-        world = gm.World('internal source file',
+        world = ca.World('internal source file',
                          world_data,
                          self.__ruleset,
                          mock_program,
@@ -3682,7 +3681,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                          save_snapshot=False
                         )
 
-        fight_handler = gm.FightHandler(self.__window_manager,
+        fight_handler = ca.FightHandler(self.__window_manager,
                                         world,
                                         "Dima's Crew",
                                         None, # Playback history
@@ -3709,7 +3708,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
-        world = gm.World('internal source file',
+        world = ca.World('internal source file',
                          world_data,
                          self.__ruleset,
                          mock_program,
@@ -3719,7 +3718,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         assert world_data.read_data['current-fight']['monsters'] != "Dima's Crew"
 
-        fight_handler = gm.FightHandler(self.__window_manager,
+        fight_handler = ca.FightHandler(self.__window_manager,
                                         world,
                                         "Dima's Crew",
                                         None, # Playback history
@@ -3750,7 +3749,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
-        world = gm.World('internal source file',
+        world = ca.World('internal source file',
                          world_data,
                          self.__ruleset,
                          mock_program,
@@ -3758,7 +3757,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                          save_snapshot=False
                         )
 
-        fight_handler = gm.FightHandler(self.__window_manager,
+        fight_handler = ca.FightHandler(self.__window_manager,
                                         world,
                                         "Dima's Crew",
                                         None, # Playback history
@@ -3786,7 +3785,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         if ARGS.verbose:
             print '\n=== test_add_remove_equipment ===\n'
 
-        fighter = gm.Fighter('Tank',
+        fighter = ca.Fighter('Tank',
                              'group',
                              copy.deepcopy(self.__tank_fighter),
                              self.__ruleset,
@@ -3940,7 +3939,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         base_world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
-        world = gm.World('internal source file',
+        world = ca.World('internal source file',
                          world_data,
                          self.__ruleset,
                          mock_program,
@@ -3966,7 +3965,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
         mock_program = MockProgram()
-        world = gm.World('internal source file',
+        world = ca.World('internal source file',
                          world_data,
                          self.__ruleset,
                          mock_program,
@@ -3989,7 +3988,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         #            {'name': 'Manny',      'group': 'PCs'}]      # 5.25, 10, 1
         pc_manny_index = 4
 
-        fight_handler = gm.FightHandler(self.__window_manager,
+        fight_handler = ca.FightHandler(self.__window_manager,
                                         world,
                                         "horsemen",
                                         None, # Playback history
@@ -4068,21 +4067,21 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
         mock_program = MockProgram()
-        world = gm.World('internal source file',
+        world = ca.World('internal source file',
                          world_data,
                          self.__ruleset,
                          mock_program,
                          self.__window_manager,
                          save_snapshot=False)
         self.__window_manager.set_menu_response('Which Template Group', 'dudes')
-        npc_handler = gm.PersonnelHandler(self.__window_manager,
+        npc_handler = ca.PersonnelHandler(self.__window_manager,
                                           world,
-                                          gm.PersonnelHandler.NPCs)
+                                          ca.PersonnelHandler.NPCs)
 
         self.__window_manager.set_menu_response('Which Template Group', 'dudes')
-        pc_handler = gm.PersonnelHandler(self.__window_manager,
+        pc_handler = ca.PersonnelHandler(self.__window_manager,
                                          world,
-                                         gm.PersonnelHandler.PCs)
+                                         ca.PersonnelHandler.PCs)
 
         ### PersonnelHandler.NPC_joins_monsters - not an NPC ###
         if ARGS.verbose:
@@ -4204,7 +4203,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(world_dict)
         mock_program = MockProgram()
-        world = gm.World('internal source file',
+        world = ca.World('internal source file',
                          world_data,
                          self.__ruleset,
                          mock_program,
@@ -4225,7 +4224,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         build_fight = TestPersonnelHandler(self.__window_manager,
                                            world,
-                                           gm.PersonnelHandler.MONSTERs)
+                                           ca.PersonnelHandler.MONSTERs)
 
         build_fight.set_command_ribbon_input('q')
         build_fight.handle_user_input_until_done()
@@ -4268,7 +4267,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         build_fight = TestPersonnelHandler(self.__window_manager,
                                            world,
-                                           gm.PersonnelHandler.MONSTERs)
+                                           ca.PersonnelHandler.MONSTERs)
 
         assert(self.__window_manager.error_state ==
                                     MockWindowManager.FOUND_EXPECTED_ERROR)
@@ -4291,7 +4290,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         build_fight = TestPersonnelHandler(self.__window_manager,
                                            world,
-                                           gm.PersonnelHandler.MONSTERs)
+                                           ca.PersonnelHandler.MONSTERs)
 
         build_fight.set_command_ribbon_input('a')   # Add Ophelia
 
@@ -4332,7 +4331,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         build_fight = TestPersonnelHandler(self.__window_manager,
                                            world,
-                                           gm.PersonnelHandler.PCs)
+                                           ca.PersonnelHandler.PCs)
 
         build_fight.set_command_ribbon_input('a')
         build_fight.set_command_ribbon_input('q')
@@ -4356,7 +4355,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         build_fight = TestPersonnelHandler(self.__window_manager,
                                            world,
-                                           gm.PersonnelHandler.NPCs)
+                                           ca.PersonnelHandler.NPCs)
 
         build_fight.set_command_ribbon_input('a')
         build_fight.set_command_ribbon_input('q')
