@@ -1975,14 +1975,16 @@ class World(object):
             self.do_debug_snapshot('startup')
 
     @staticmethod
-    def get_empty_world():
+    def get_empty_world(
+            stuff=[]    # List of equipment (dict) to include in empty world
+            ):
         result = { 'templates': {},
                    'fights': {},
                    'PCs': {},
                    'dead-monsters': [],
                    'current-fight': { 'history': [], 'saved': False },
                    'NPCs': {},
-                   'stuff': [],
+                   'stuff': stuff,
                    'options': {}
                  }
         return result
@@ -3846,6 +3848,13 @@ class Ruleset(object):
                           ))
 
         return # No need to return action menu since it was a parameter
+
+
+    def get_sample_items(self):
+        '''
+        Returns a list of sample equipment for creating new game files.
+        '''
+        return []
 
 
     def get_sections_in_template(self):
@@ -6187,6 +6196,61 @@ class GurpsRuleset(Ruleset):
         '''
         return (None if posture not in GurpsRuleset.posture else
                                             GurpsRuleset.posture[posture])
+
+
+    def get_sample_items(self):
+        '''
+        Returns a list of sample equipment for creating new game files.
+        '''
+        return [
+            {
+                "count": 1,
+                "notes": "1d for HT+1d hrs unless other healing",
+                "type": "misc",
+                "owners": None,
+                "name": "Patch: light heal"
+            },
+            {
+              "count": 1,
+              "owners": [],
+              "name": "Armor, Light Street",
+              "type": "armor",
+              "notes": "Some combination of ballistic, ablative, and disruptor.",
+              "dr": 3
+            },
+            {
+                "count": 1,
+                "owners": [],
+                "name": "Tonfa",
+                "notes": "",
+                "damage": { "sw": { "type": "cr", "plus": 0 },
+                            "thr": { "type": "cr", "plus": 1 } },
+                "parry": 0,
+                "skill": "Tonfa",
+                "type": "melee weapon"
+            },
+            {
+                "acc": 2,
+                "count": 1,
+                "owners": None,
+                "name": "pistol, Baretta DX 192",
+                "notes": "",
+                "damage": {
+                    "dice": { "plus": 4, "num_dice": 1, "type": "pi" }
+                },
+                "reload": 3,
+                "skill": "Beam Weapons (Pistol)",
+                "type": "ranged weapon",
+                "ammo": { "name": "C Cell", "shots": 8, "shots_left": 8 }
+            },
+            {
+                "count": 1,
+                "notes": "",
+                "type": "misc",
+                "owners": None,
+                "name": "C Cell"
+            }
+        ]
 
 
     def get_sections_in_template(self):
@@ -12571,7 +12635,8 @@ if __name__ == '__main__':
                             filename = None
                         else:
                             json_file = GmJson(filename, window_manager)
-                            world_data = World.get_empty_world()
+                            world_data = World.get_empty_world(
+                                                    ruleset.get_sample_items())
                             json_file.open_write_json_and_close(world_data)
 
                     read_prefs.write_data = prefs
