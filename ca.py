@@ -304,7 +304,7 @@ class GmWindow(object):
 
     def status_ribbon(self,
                       filename,
-                      maintain_json):
+                      maintain_game_file):
         '''
         Displays the current status of the window handler across the top of the
         window.
@@ -318,7 +318,7 @@ class GmWindow(object):
         wont_be_saved_string = ' (WILL NOT BE SAVED)'
         len_file_string = len(file_string)
         len_whole_string = len_file_string + (
-                        0 if not maintain_json else len(wont_be_saved_string))
+                        0 if not maintain_game_file else len(wont_be_saved_string))
         start_file_string = (cols - len_whole_string) / 2
 
         mode = curses.A_NORMAL
@@ -327,7 +327,7 @@ class GmWindow(object):
                             '%s' % filename,
                             mode | curses.A_BOLD)
 
-        if maintain_json:
+        if maintain_game_file:
             mode = curses.color_pair(GmWindowManager.MAGENTA_BLACK)
             self._window.addstr(0,
                                 start_file_string + len_file_string,
@@ -761,7 +761,7 @@ class PersonnelGmWindow(GmWindow):
                       group,            # name of group being modified,
                       template,         # name of template
                       input_filename,   # passthru to base class
-                      maintain_json     # passthru to base class
+                      maintain_game_file     # passthru to base class
                      ):
         '''Prints the fight round information at the top of the screen.'''
 
@@ -775,7 +775,7 @@ class PersonnelGmWindow(GmWindow):
                             curses.A_NORMAL)
 
         super(PersonnelGmWindow, self).status_ribbon(input_filename,
-                                                     maintain_json)
+                                                     maintain_game_file)
 
         self._window.refresh()
 
@@ -864,7 +864,7 @@ class FightGmWindow(GmWindow):
                      round_no,
                      next_PC_name,
                      input_filename,
-                     maintain_json
+                     maintain_game_file
                     ):
         '''
         Prints the fight round information at the top of the screen.
@@ -905,7 +905,7 @@ class FightGmWindow(GmWindow):
                                 ('Next PC: %s' % next_PC_name),
                                 mode)
 
-        self.status_ribbon(input_filename, maintain_json)
+        self.status_ribbon(input_filename, maintain_game_file)
         self._window.refresh()
 
 
@@ -1932,13 +1932,13 @@ class GmScrollableWindow(object):
 
 class World(object):
     '''
-    Manages the data in the JSON. This contains the base information for the
-    entire world.
+    Manages the data in the Game File. This contains the base information for
+    the entire world.
     '''
     debug_directory = 'debug'
 
     def __init__(self,
-                 source_filename,     # Name of file that contains the JSON
+                 source_filename,     # Name of file that contains the Game File
                  world_details,       # GmJson object
                  ruleset,             # Ruleset object
                  program,             # Program object to collect snapshot information
@@ -1949,7 +1949,7 @@ class World(object):
         self.program = program
         self.__gm_json = world_details # only used for toggling whether the
                                        # data is saved on exit of the program.
-        self.details = world_details.read_data # entire dict from JSON
+        self.details = world_details.read_data # entire dict from Game File
         self.ruleset = ruleset
         self.__window_manager = window_manager
         self.__delete_old_debug_files()
@@ -2005,7 +2005,7 @@ class World(object):
                           tag,  # String with which to tag the debug filename
                          ):
         '''
-        Saves a copy of the master JSON file to a debug directory.
+        Saves a copy of the master Game File to a debug directory.
 
         Returns the filename o which the data was written.
         '''
@@ -2013,7 +2013,7 @@ class World(object):
         if tag is None:
             return None
 
-        # Save the current JSON for debugging, later
+        # Save the current Game File for debugging, later
         keep_going = True
         count = 0
 
@@ -2037,24 +2037,24 @@ class World(object):
 
     def do_save_on_exit(self):
         '''
-        Causes the local copy of the JSON data to be written back to the
+        Causes the local copy of the Game File data to be written back to the
         file when the program ends.
 
         Returns nothing.
         '''
         self.__gm_json.write_data = self.__gm_json.read_data
-        ScreenHandler.maintainjson = False
+        ScreenHandler.maintain_game_file = False
 
 
     def dont_save_on_exit(self):
         '''
-        Causes the local copy of the JSON data NOT to be written back to the
+        Causes the local copy of the Game File data NOT to be written back to the
         file when the program ends.
 
         Returns nothing.
         '''
         self.__gm_json.write_data = None
-        ScreenHandler.maintainjson = True
+        ScreenHandler.maintain_game_file = True
 
 
     def get_creature(self,
@@ -2144,7 +2144,8 @@ class World(object):
                      ):
         '''
         Used to get PCs, NPCs, or a fight's list of creatures.  List is in the
-        order they are from the JSON (meaning that they are in random order).
+        order they are from the Game File (meaning that they are in random
+        order).
 
         Returns dict of details: {name: {<details>}, name: ... }
         '''
@@ -2217,9 +2218,9 @@ class World(object):
 
     def is_saved_on_exit(self):
         '''
-        Returns True if the local copy of the JSON data will be automatically
-        written to the associated file when the program exits; False,
-        otherwise.
+        Returns True if the local copy of the Game File data will be
+        automatically written to the associated file when the program exits;
+        False, otherwise.
         '''
         return False if self.__gm_json.write_data is None else True
 
@@ -2272,8 +2273,8 @@ class World(object):
 
     def toggle_saved_on_exit(self):
         '''
-        Toggles whether the local copy of the JSON data is written back to the
-        file when the program ends.
+        Toggles whether the local copy of the Game File data is written back
+        to the file when the program ends.
 
         Returns nothing.
         '''
@@ -2300,7 +2301,7 @@ class World(object):
         if not os.path.exists(World.debug_directory):
             os.makedirs(World.debug_directory)
 
-        # Get rid of old debugging JSON files.
+        # Get rid of old debugging Game Files.
 
         entries = (os.path.join(World.debug_directory, fn)
                                     for fn in os.listdir(World.debug_directory))
@@ -2321,7 +2322,7 @@ class World(object):
 class Equipment(object):
     '''
     Object that manipulates a list of equipment.  The list is assumed to be
-    from somewhere in the JSON data but that's not strictly a requirement.
+    from somewhere in the Game File data but that's not strictly a requirement.
     '''
     def __init__(self,
                  equipment, # self.details['stuff'], list of items
@@ -2457,7 +2458,7 @@ class Timer(object):
     Embodies a timer that counts down with fight rounds.  There's optional
     text associated with it (that's shown while the timer is counting down)
     and there's optional actions when the timer actually reaches zero.  This
-    is an object built around data that is intended to be kept in the JSON
+    is an object built around data that is intended to be kept in the Game File
     data file but that's not strictly required for this object to work.
     '''
     round_count_string = '%d Rnds: ' # assume rounds takes same space as '%d'
@@ -2467,9 +2468,9 @@ class Timer(object):
                               #   rather than the end
 
     def __init__(self,
-                 details    # dict from the JSON, contains timer's info
+                 details    # dict from the Game File, contains timer's info
            ):
-        self.details = details  # This need to actually be from the JSON
+        self.details = details  # This needs to actually be from the Game File
 
 
     def decrement(self):
@@ -2524,7 +2525,7 @@ class Timer(object):
                    ):
         '''
         Creates a new timer from scratch (rather than from data that's already
-        in the JSON).
+        in the Game File).
         '''
 
         self.details = copy.deepcopy(pieces)
@@ -2800,19 +2801,19 @@ class TimersWidget(object):
 class Timers(object):
     '''
     Keeps a list of timers.  There are two parallel lists: 'data' keeps the
-    actual data (it's a pointer to the spot in the JSON where the ultimate
+    actual data (it's a pointer to the spot in the Game File where the ultimate
     data is stored) while 'obj' keeps Timer objects.
     '''
     def __init__(self,
-                 timer_details, # List from JSON containing timers
+                 timer_details, # List from Game File containing timers
                  owner,         # ThingsInFight object to receive timer
                                 #   actions.
                  window_manager # For displaying error messages
                 ):
 
         # data and obj are parallel arrays.  'data' is just like it is in the
-        # JSON (and, in fact, should point to the JSON data) and 'obj' is the
-        # Timer object from that data.
+        # Game File (and, in fact, should point to the Game File data) and
+        # 'obj' is the Timer object from that data.
         self.__timers = {'data': timer_details,
                          'obj': []}
 
@@ -2841,8 +2842,8 @@ class Timers(object):
     def clear_all(self):
         ''' Removes all of this list's timers. '''
         # I think I have to pop the timer data, individually, because setting
-        # ['data'] to [] would just remove our pointer to the JSON data
-        # without modifying the JSON data.
+        # ['data'] to [] would just remove our pointer to the Game File data
+        # without modifying the Game File data.
         while len(self.__timers['data']) > 0:
             self.__timers['data'].pop()
         self.__timers['obj'] = []
@@ -3089,7 +3090,7 @@ class Venue(ThingsInFight):
     '''
     Incorporates all of the information for a room (or whatever).  This is the
     mechanism whereby items can be distributed in a room.  The data
-    is just a pointer to the JSON data so that it's edited in-place.
+    is just a pointer to the Game File data so that it's edited in-place.
     '''
     name = '<< ROOM >>'                 # Describes the FIGHT object
     detailed_name = '<< ROOM: %s >>'    # insert the group into the '%s' slot
@@ -3180,7 +3181,7 @@ class Venue(ThingsInFight):
 class Fighter(ThingsInFight):
     '''
     Incorporates all of the information for a PC, NPC, or monster.  The data
-    is just a pointer to the JSON data so that it's edited in-place.
+    is just a pointer to the Game File data so that it's edited in-place.
     '''
     (ALIVE,
      UNCONSCIOUS,
@@ -3201,7 +3202,7 @@ class Fighter(ThingsInFight):
     def __init__(self,
                  name,              # string
                  group,             # string = 'PCs' or some monster group
-                 fighter_details,   # dict as in the JSON
+                 fighter_details,   # dict as in the Game File
                  ruleset,           # a Ruleset object
                  window_manager     # a GmWindowManager object for display
                                     #   windows
@@ -3300,7 +3301,7 @@ class Fighter(ThingsInFight):
         Gets the armor the Fighter is wearing.
 
         Returns a tuple:
-            1) a dict (from the JSON)
+            1) a dict (from the Game File)
             2) index of the weapon
         '''
         if 'armor-index' not in self.details:
@@ -3317,7 +3318,7 @@ class Fighter(ThingsInFight):
         Gets the weapon that the Fighter is holding.
 
         Returns a tuple:
-            1) a dict (from the JSON)
+            1) a dict (from the Game File)
             2) index of the weapon
         '''
         if 'weapon-index' not in self.details:
@@ -3914,8 +3915,8 @@ class Ruleset(object):
     def make_empty_creature(self):
         '''
         Builds the minimum legal character detail (the dict that goes into the
-        JSON).  You can feed this to the constructor of a Fighter.  First,
-        however, you need to install it in the World's JSON so that it's
+        Game File).  You can feed this to the constructor of a Fighter.  First,
+        however, you need to install it in the World's Game File so that it's
         backed-up and recognized by the rest of the software.
 
         Returns: the dict.
@@ -6651,7 +6652,7 @@ class GurpsRuleset(Ruleset):
 
 
     def get_weapons_unarmed_skills(self,
-                                   weapon # None or dict from JSON
+                                   weapon # None or dict from Game File
                                   ):
         '''
         Determines whether this weapon (which may be None) uses the unarmed
@@ -6712,7 +6713,7 @@ class GurpsRuleset(Ruleset):
 
     def is_creature_consistent(self,
                                name,    # string: creature's name
-                               creature # dict from JSON
+                               creature # dict from Game File
                               ):
         '''
         Make sure creature has skills for all their stuff.  Trying to make
@@ -6744,8 +6745,8 @@ class GurpsRuleset(Ruleset):
     def make_empty_creature(self):
         '''
         Builds the minimum legal character detail (the dict that goes into the
-        JSON).  You can feed this to the constructor of a Fighter.  First,
-        however, you need to install it in the World's JSON so that it's
+        Game File).  You can feed this to the constructor of a Fighter.  First,
+        however, you need to install it in the World's Game File so that it's
         backed-up and recognized by the rest of the software.
 
         Returns: the dict.
@@ -8186,7 +8187,7 @@ class ScreenHandler(object):
         curses.KEY_RIGHT: 'KEY_RIGHT',
     }
 
-    maintainjson = False
+    maintain_game_file = False
 
     def __init__(self,
                  window_manager,    # GmWindowManager object for menus and
@@ -8324,13 +8325,13 @@ class ScreenHandler(object):
 
         self.world.do_debug_snapshot('bug')
 
-        bug_report_json  = self.world.program.make_bug_report(
+        bug_report_game_file  = self.world.program.make_bug_report(
                                                 self._saved_fight['history'],
                                                 report)
 
         self._window_manager.display_window(
                'Bug Reported',
-                [[{'text': ('Output file "%s"' % bug_report_json),
+                [[{'text': ('Output file "%s"' % bug_report_game_file),
                    'mode': curses.A_NORMAL }]])
 
         return True # Keep doing whatever you were doing.
@@ -8340,7 +8341,7 @@ class PersonnelHandler(ScreenHandler):
     '''
     Adds creatures to the PC, NPC, or a monster list (possibly creating a new
     monster list).  These creatures are created from one of the templates
-    provided in the World's JSON file.
+    provided in the World's Game File file.
     '''
     (NPCs,
      PCs,
@@ -9329,7 +9330,7 @@ class PersonnelHandler(ScreenHandler):
         self._window.status_ribbon(self.__group_name,
                                    self.__template_group,
                                    self.world.source_filename,
-                                   ScreenHandler.maintainjson)
+                                   ScreenHandler.maintain_game_file)
         self._window.command_ribbon()
         # PersonnelGmWindow
         fighters = None if self.__critters is None else self.__critters['obj']
@@ -10860,14 +10861,14 @@ class FightHandler(ScreenHandler):
         self._window.round_ribbon(self._saved_fight['round'],
                                   next_PC_name,
                                   self.world.source_filename,
-                                  ScreenHandler.maintainjson)
+                                  ScreenHandler.maintain_game_file)
         self._window.show_fighters(current_fighter,
                                    opponent,
                                    self.__fighters,
                                    self._saved_fight['index'],
                                    self.__viewing_index)
         self._window.status_ribbon(self.world.source_filename,
-                                   ScreenHandler.maintainjson)
+                                   ScreenHandler.maintain_game_file)
         self._window.command_ribbon()
 
 
@@ -11075,7 +11076,7 @@ class FightHandler(ScreenHandler):
         self._window.round_ribbon(self._saved_fight['round'],
                                   next_PC_name,
                                   self.world.source_filename,
-                                  ScreenHandler.maintainjson)
+                                  ScreenHandler.maintain_game_file)
 
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
@@ -11181,7 +11182,7 @@ class FightHandler(ScreenHandler):
                 self._window.round_ribbon(self._saved_fight['round'],
                                           next_PC_name,
                                           self.world.source_filename,
-                                          ScreenHandler.maintainjson)
+                                          ScreenHandler.maintain_game_file)
 
                 opponent = self.get_opponent_for(next_fighter)
                 self._window.show_fighters(next_fighter,
@@ -11214,7 +11215,7 @@ class FightHandler(ScreenHandler):
         self._window.round_ribbon(self._saved_fight['round'],
                                   next_PC_name,
                                   self.world.source_filename,
-                                  ScreenHandler.maintainjson)
+                                  ScreenHandler.maintain_game_file)
         current_fighter = self.get_current_fighter()
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
@@ -11561,47 +11562,47 @@ class MainHandler(ScreenHandler):
         self.__current_pane = MainHandler.CHAR_DETAIL
         self._add_to_choice_dict({
             curses.KEY_HOME:
-                      {'name': 'scroll home',         'func':
-                                                       self.__first_page},
+                      {'name': 'scroll home',
+                       'func': self.__first_page},
             curses.KEY_UP:
-                      {'name': 'previous character',  'func':
-                                                       self.__prev_char},
+                      {'name': 'previous character',
+                       'func': self.__prev_char},
             curses.KEY_DOWN:
-                      {'name': 'next character',      'func':
-                                                       self.next_char},
+                      {'name': 'next character',
+                       'func': self.next_char},
             curses.KEY_NPAGE:
-                      {'name': 'scroll down',         'func':
-                                                       self.__next_page},
+                      {'name': 'scroll down',
+                       'func': self.__next_page},
             curses.KEY_PPAGE:
-                      {'name': 'scroll up',           'func':
-                                                       self.__prev_page},
+                      {'name': 'scroll up',
+                       'func': self.__prev_page},
             curses.KEY_LEFT:
-                      {'name': 'scroll chars',        'func':
-                                                       self.__left_pane},
+                      {'name': 'scroll chars',
+                       'func': self.__left_pane},
             curses.KEY_RIGHT:
-                      {'name': 'scroll char detail',  'func':
-                                                       self.__right_pane},
+                      {'name': 'scroll char detail',
+                       'func': self.__right_pane},
 
-            ord('a'): {'name': 'about the program',   'func':
-                                                       self.__about},
-            ord('f'): {'name': 'FIGHT',               'func':
-                                                       self.__run_fight},
-            ord('h'): {'name': 'heal selected creature', 'func':
-                                                       self.__heal},
-            ord('H'): {'name': 'Heal all PCs',        'func':
-                                                       self.__fully_heal},
-            ord('m'): {'name': 'show MONSTERs or PC/NPC', 'func':
-                                       self.__toggle_Monster_PC_NPC_display},
-            ord('p'): {'name': 'PERSONNEL changes',   'func':
-                                                       self.__party},
-            ord('q'): {'name': 'quit',                'func':
-                                                       self.__quit},
-            ord('R'): {'name': 'resurrect fight',     'func':
-                                                       self.__resurrect_fight},
-            ord('S'): {'name': 'toggle: Save On Exit','func':
-                                                       self.__maintain_json},
-            ord('/'): {'name': 'search',              'func':
-                                                       self.__search}
+            ord('a'): {'name': 'about the program',
+                       'func': self.__about},
+            ord('f'): {'name': 'FIGHT',
+                       'func': self.__run_fight},
+            ord('h'): {'name': 'heal selected creature',
+                       'func': self.__heal},
+            ord('H'): {'name': 'Heal all PCs',
+                       'func': self.__fully_heal},
+            ord('m'): {'name': 'show MONSTERs or PC/NPC',
+                       'func': self.__toggle_Monster_PC_NPC_display},
+            ord('p'): {'name': 'PERSONNEL changes',
+                       'func': self.__party},
+            ord('q'): {'name': 'quit',
+                       'func': self.__quit},
+            ord('R'): {'name': 'resurrect fight',
+                       'func': self.__resurrect_fight},
+            ord('S'): {'name': 'toggle: Save On Exit',
+                       'func': self.__maintain_game_file},
+            ord('/'): {'name': 'search',
+                       'func': self.__search}
         })
         self._window = self._window_manager.get_main_gm_window(self._choices)
 
@@ -11771,7 +11772,7 @@ class MainHandler(ScreenHandler):
         '''
         self._window.clear()
         self._window.status_ribbon(self.world.source_filename,
-                                   ScreenHandler.maintainjson)
+                                   ScreenHandler.maintain_game_file)
 
         # MainGmWindow
         self._window.show_creatures(self.__chars,
@@ -11858,10 +11859,10 @@ class MainHandler(ScreenHandler):
         return True
 
 
-    def __maintain_json(self):
+    def __maintain_game_file(self):
         '''
         Command ribbon method.  Toggles whether the results of this session
-        are saved to the .json file when the program is exited.
+        are saved to the Game File when the program is exited.
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
@@ -12272,7 +12273,7 @@ class EquipmentManager(object):
     @staticmethod
     def get_description(
                         item,           # Input: dict for a 'stuff' item from
-                                        #   JSON
+                                        #   Game File
                         in_use_items,   # List of items that are in use.
                                         #   These should be references so that
                                         #   it will match identically to
@@ -12466,10 +12467,10 @@ class Program(object):
     Holds the top-level program stuff.
 
     As part of that, it manages the debug files (which are really just
-    snapshots of the JSON).
+    snapshots of the Game File).
     '''
     def __init__(self,
-                 source_filename,     # Name of file that contains the JSON
+                 source_filename,     # string: Name of the Game File
                 ):
         self.__source_filename = source_filename
         self.__snapshots = {'startup': source_filename}
@@ -12524,8 +12525,10 @@ class Program(object):
         extension = 'json'
         while keep_going:
             count_string = '%d' % count
-            bug_report_json = timeStamped('bug_report', count_string, extension)
-            if os.path.exists(bug_report_json):
+            bug_report_game_file = timeStamped('bug_report',
+                                               count_string,
+                                               extension)
+            if os.path.exists(bug_report_game_file):
                 count += 1
             else:
                 keep_going = False
@@ -12533,7 +12536,7 @@ class Program(object):
         # Make a directory for the bug report
 
         extension = '.' + extension
-        directory_name = bug_report_json
+        directory_name = bug_report_game_file
         if directory_name.endswith(extension):
             directory_name = directory_name[:-len(extension)]
 
@@ -12546,11 +12549,12 @@ class Program(object):
 
         # Dump the bug report into bug report file (in the directory)
 
-        full_bug_report_json = os.path.join(directory_name, bug_report_json)
-        with open(full_bug_report_json, 'w') as f:
+        full_bug_report_game_file = os.path.join(directory_name,
+                                                 bug_report_game_file)
+        with open(full_bug_report_game_file, 'w') as f:
             json.dump(bug_report, f, indent=2)
 
-        return bug_report_json
+        return bug_report_game_file
 
 
 # Main
@@ -12560,11 +12564,11 @@ if __name__ == '__main__':
     parser = MyArgumentParser()
     parser.add_argument('filename',
              nargs='?', # We get the filename elsewhere if you don't say here
-             help='Input JSON file containing characters and monsters')
+             help='Input Game File containing characters and monsters')
     parser.add_argument('-v', '--verbose', help='verbose', action='store_true',
                         default=False)
-    parser.add_argument('-m', '--maintainjson',
-             help='Don\'t overwrite the input JSON.  Only for debugging.',
+    parser.add_argument('-m', '--maintain_game_file',
+             help='Don\'t overwrite the input Game File.  Only for debugging.',
              action='store_true',
              default=False)
     parser.add_argument('-p', '--playback',
@@ -12631,13 +12635,13 @@ if __name__ == '__main__':
                             filename = filename + '.json'
 
                         if os.path.exists(filename):
-                            window_manager.error(['JSON file "%s" exists' % filename])
+                            window_manager.error(['Game File "%s" exists' % filename])
                             filename = None
                         else:
-                            json_file = GmJson(filename, window_manager)
+                            game_file = GmJson(filename, window_manager)
                             world_data = World.get_empty_world(
                                                     ruleset.get_sample_items())
-                            json_file.open_write_json_and_close(world_data)
+                            game_file.open_write_json_and_close(world_data)
 
                     read_prefs.write_data = prefs
                     prefs['campaign'] = filename
@@ -12647,11 +12651,11 @@ if __name__ == '__main__':
                                     # to True, we probably exited via a crash
         with GmJson(filename, window_manager) as campaign:
             if campaign.read_data is None:
-                window_manager.error(['JSON file "%s" did not parse right'
+                window_manager.error(['Game File "%s" did not parse right'
                                         % filename])
                 sys.exit(2)
 
-            # Error check the JSON
+            # Error check the Game File
             if 'PCs' not in campaign.read_data:
                 window_manager.error(['No "PCs" in %s' % filename])
                 sys.exit(2)
@@ -12661,7 +12665,7 @@ if __name__ == '__main__':
 
             # Save the state of things when we leave since there wasn't a
             # horrible crash while reading the data.
-            if ARGS.maintainjson:
+            if ARGS.maintain_game_file:
                 world.dont_save_on_exit()
             else:
                 world.do_save_on_exit()
