@@ -1416,6 +1416,15 @@ class GmWindowManager(object):
         return FightGmWindow(self, ruleset, command_ribbon_choices)
 
 
+    def get_main_gm_window(self,
+                           command_ribbon_choices,
+                          ):
+        '''
+        Returns a MainGmWindow object.  Useful for providing Mocks in testing.
+        '''
+        return MainGmWindow(self, command_ribbon_choices)
+
+
     def get_mode_from_fighter_state(self,
                                     state # from STATE_COLOR
                                    ):
@@ -1424,15 +1433,6 @@ class GmWindowManager(object):
         |state|.
         '''
         return self.STATE_COLOR[state]
-
-
-    def get_main_gm_window(self,
-                           command_ribbon_choices,
-                          ):
-        '''
-        Returns a MainGmWindow object.  Useful for providing Mocks in testing.
-        '''
-        return MainGmWindow(self, command_ribbon_choices)
 
 
     def getmaxyx(self):
@@ -2033,17 +2033,6 @@ class World(object):
         return base_name
 
 
-    def dont_save_on_exit(self):
-        '''
-        Causes the local copy of the JSON data NOT to be written back to the
-        file when the program ends.
-
-        Returns nothing.
-        '''
-        self.__gm_json.write_data = None
-        ScreenHandler.maintainjson = True
-
-
     def do_save_on_exit(self):
         '''
         Causes the local copy of the JSON data to be written back to the
@@ -2055,24 +2044,42 @@ class World(object):
         ScreenHandler.maintainjson = False
 
 
-    def get_creature_details_list(self,
-                      group_name  # string: 'PCs', 'NPCs', or a monster group
-                     ):
+    def dont_save_on_exit(self):
         '''
-        Used to get PCs, NPCs, or a fight's list of creatures.  List is in the
-        order they are from the JSON (meaning that they are in random order).
+        Causes the local copy of the JSON data NOT to be written back to the
+        file when the program ends.
 
-        Returns dict of details: {name: {<details>}, name: ... }
+        Returns nothing.
         '''
+        self.__gm_json.write_data = None
+        ScreenHandler.maintainjson = True
 
-        if group_name in self.details:
-            return self.details[group_name]
 
-        fights = self.get_fights()
-        if group_name in fights:
-            return self.details['fights'][group_name]['monsters']
+    def get_creature(self,
+                     name,  # String
+                     group  # String
+                    ):
+        '''
+        Keeps the master list of Fighter objects.  If entry is a redirect, the
+        complete data from the original creature is included, here, under the
+        entry's heading (i.e., the same creature may appear more than once in
+        this list but they all point back to the same data).
 
-        return None
+        Returns: Fighter object
+        '''
+        if group not in self.__fighters:
+            self.__fighters[group] = {}
+
+        if name not in self.__fighters[group]:
+            self.__fighters[group][name] = Fighter(
+                                            name,
+                                            group,
+                                            self.get_creature_details(name,
+                                                                      group),
+                                            self.ruleset,
+                                            self.__window_manager)
+
+        return self.__fighters[group][name]
 
 
     def get_creature_details(self,
@@ -2130,31 +2137,24 @@ class World(object):
         return details
 
 
-    def get_creature(self,
-                     name,  # String
-                     group  # String
-                    ):
+    def get_creature_details_list(self,
+                      group_name  # string: 'PCs', 'NPCs', or a monster group
+                     ):
         '''
-        Keeps the master list of Fighter objects.  If entry is a redirect, the
-        complete data from the original creature is included, here, under the
-        entry's heading (i.e., the same creature may appear more than once in
-        this list but they all point back to the same data).
+        Used to get PCs, NPCs, or a fight's list of creatures.  List is in the
+        order they are from the JSON (meaning that they are in random order).
 
-        Returns: Fighter object
+        Returns dict of details: {name: {<details>}, name: ... }
         '''
-        if group not in self.__fighters:
-            self.__fighters[group] = {}
 
-        if name not in self.__fighters[group]:
-            self.__fighters[group][name] = Fighter(
-                                            name,
-                                            group,
-                                            self.get_creature_details(name,
-                                                                      group),
-                                            self.ruleset,
-                                            self.__window_manager)
+        if group_name in self.details:
+            return self.details[group_name]
 
-        return self.__fighters[group][name]
+        fights = self.get_fights()
+        if group_name in fights:
+            return self.details['fights'][group_name]['monsters']
+
+        return None
 
 
     def get_fights(self):
@@ -3420,6 +3420,17 @@ class Fighter(ThingsInFight):
         return notes
 
 
+    def get_short_summary_string(self):
+        '''
+        Returns a string that contains the shortest description of the Fighter.
+        '''
+        # TODO: this is ruleset based
+        fighter_string = '%s HP:%d/%d' % (self.name,
+                                          self.details['current']['hp'],
+                                          self.details['permanent']['hp'])
+        return fighter_string
+
+
     def get_to_hit_damage_notes(self,
                                 opponent # Fighter object
                                ):
@@ -3430,17 +3441,6 @@ class Fighter(ThingsInFight):
         '''
         notes = self._ruleset.get_fighter_to_hit_damage_notes(self, opponent)
         return notes
-
-
-    def get_short_summary_string(self):
-        '''
-        Returns a string that contains the shortest description of the Fighter.
-        '''
-        # TODO: this is ruleset based
-        fighter_string = '%s HP:%d/%d' % (self.name,
-                                          self.details['current']['hp'],
-                                          self.details['permanent']['hp'])
-        return fighter_string
 
 
     #
@@ -3476,6 +3476,10 @@ class Fighter(ThingsInFight):
         return Fighter.get_fighter_state(self.details)
 
 
+    def is_absent(self):
+        return True if self.details['state'] == 'absent' else False
+
+
     def is_conscious(self):
         # NOTE: 'injured' is not stored in self.details['state']
         return True if self.details['state'] == 'alive' else False
@@ -3483,10 +3487,6 @@ class Fighter(ThingsInFight):
 
     def is_dead(self):
         return True if self.details['state'] == 'dead' else False
-
-
-    def is_absent(self):
-        return True if self.details['state'] == 'absent' else False
 
 
     def set_consciousness(self,
@@ -3924,86 +3924,6 @@ class Ruleset(object):
                 }
 
 
-    def _perform_action(self,
-                        fighter,          # Fighter object
-                        action,           # {'name': <action>, parameters...}
-                        fight_handler,    # FightHandler object
-                        logit=True        # Log into history and
-                                          #  'actions_this_turn' because the
-                                          #  action is not a side-effect of
-                                          #  another action
-                       ):
-        '''
-        This routine delegates actions to routines that perform the action.
-        The 'doit' routines return whether the action was successfully handled
-        or not (i.e., UNHANDLED, HANDLED_OK, or HANDLED_ERROR) and that is, in
-        turn, returned to the calling routine.
-
-        Default, non-ruleset related, action handling.  Good for drawing
-        weapons and such.
-
-        ONLY to be used for fights (otherwise, there's no fight handler to log
-        the actions).
-
-        This is called directly from the child ruleset (which is called from
-        do_action because _perform_action is overridden by the child class.
-
-        Returns: nothing
-        '''
-
-        actions = {
-            'adjust-hp':            {'doit': self._adjust_hp},
-            'all-out-attack':       {'doit': self.__do_attack},
-            'attack':               {'doit': self.__do_attack},
-            'don-armor':            {'doit': self.__don_armor},
-            'draw-weapon':          {'doit': self.__draw_weapon},
-            'end-turn':             {'doit': self.__end_turn},
-            'pick-opponent':        {'doit': self.__pick_opponent},
-            'reload-really':        {'doit': self.__do_reload},
-            'set-consciousness':    {'doit': self.__set_consciousness},
-            'set-timer':            {'doit': self.__set_timer},
-            'start-turn':           {'doit': self.__start_turn},
-            'use-item':             {'doit': self.__use_item},
-            'user-defined':         {'doit': self.__do_custom_action},
-        }
-
-        handled = Ruleset.UNHANDLED
-        if 'name' in action:
-            if action['name'] in actions:
-                action_info = actions[action['name']]
-                if action_info['doit'] is not None:
-                    handled = action_info['doit'](fighter,
-                                                  action,
-                                                  fight_handler)
-        else:
-            handled = Ruleset.HANDLED_OK  # No name? It's just a comment.
-
-        return handled
-
-
-    def _record_action(self,
-                       fighter,          # Fighter object
-                       action,           # {'name': <action>, parameters...}
-                       fight_handler,    # FightHandler object
-                       handled,          # bool: whether/how the action was
-                                         #   handled
-                       logit=True        # Log into history and
-                                         #  'actions_this_turn' because the
-                                         #  action is not a side-effect of
-                                         #  another action
-                      ):
-        '''
-        Logs a performed 'action' in the fight's history.
-
-        Returns: nothing.
-        '''
-
-        if fight_handler is not None and logit:
-            fight_handler.add_to_history(action)
-
-        return
-
-
     def search_one_creature(self,
                             name,       # string containing the name
                             group,      # string containing the group
@@ -4245,6 +4165,63 @@ class Ruleset(object):
         return Ruleset.HANDLED_OK
 
 
+    def _perform_action(self,
+                        fighter,          # Fighter object
+                        action,           # {'name': <action>, parameters...}
+                        fight_handler,    # FightHandler object
+                        logit=True        # Log into history and
+                                          #  'actions_this_turn' because the
+                                          #  action is not a side-effect of
+                                          #  another action
+                       ):
+        '''
+        This routine delegates actions to routines that perform the action.
+        The 'doit' routines return whether the action was successfully handled
+        or not (i.e., UNHANDLED, HANDLED_OK, or HANDLED_ERROR) and that is, in
+        turn, returned to the calling routine.
+
+        Default, non-ruleset related, action handling.  Good for drawing
+        weapons and such.
+
+        ONLY to be used for fights (otherwise, there's no fight handler to log
+        the actions).
+
+        This is called directly from the child ruleset (which is called from
+        do_action because _perform_action is overridden by the child class.
+
+        Returns: nothing
+        '''
+
+        actions = {
+            'adjust-hp':            {'doit': self._adjust_hp},
+            'all-out-attack':       {'doit': self.__do_attack},
+            'attack':               {'doit': self.__do_attack},
+            'don-armor':            {'doit': self.__don_armor},
+            'draw-weapon':          {'doit': self.__draw_weapon},
+            'end-turn':             {'doit': self.__end_turn},
+            'pick-opponent':        {'doit': self.__pick_opponent},
+            'reload-really':        {'doit': self.__do_reload},
+            'set-consciousness':    {'doit': self.__set_consciousness},
+            'set-timer':            {'doit': self.__set_timer},
+            'start-turn':           {'doit': self.__start_turn},
+            'use-item':             {'doit': self.__use_item},
+            'user-defined':         {'doit': self.__do_custom_action},
+        }
+
+        handled = Ruleset.UNHANDLED
+        if 'name' in action:
+            if action['name'] in actions:
+                action_info = actions[action['name']]
+                if action_info['doit'] is not None:
+                    handled = action_info['doit'](fighter,
+                                                  action,
+                                                  fight_handler)
+        else:
+            handled = Ruleset.HANDLED_OK  # No name? It's just a comment.
+
+        return handled
+
+
     def __pick_opponent(self,
                         fighter,          # Fighter object
                         action,           # {'name': 'pick-opponent',
@@ -4266,6 +4243,29 @@ class Ruleset(object):
         fighter.details['opponent'] = {'group': action['opponent']['group'],
                                        'name': action['opponent']['name']}
         return Ruleset.HANDLED_OK
+
+
+    def _record_action(self,
+                       fighter,          # Fighter object
+                       action,           # {'name': <action>, parameters...}
+                       fight_handler,    # FightHandler object
+                       handled,          # bool: whether/how the action was
+                                         #   handled
+                       logit=True        # Log into history and
+                                         #  'actions_this_turn' because the
+                                         #  action is not a side-effect of
+                                         #  another action
+                      ):
+        '''
+        Logs a performed 'action' in the fight's history.
+
+        Returns: nothing.
+        '''
+
+        if fight_handler is not None and logit:
+            fight_handler.add_to_history(action)
+
+        return
 
 
     def __set_consciousness(self,
@@ -5351,130 +5351,6 @@ class GurpsRuleset(Ruleset):
         return ', '.join(results)
 
 
-    def _perform_action(self,
-                        fighter,          # Fighter object
-                        action,           # {'name': <action>, parameters...}
-                        fight_handler,    # FightHandler object
-                        logit=True        # Log into history and
-                                          #  'actions_this_turn' because the
-                                          #  action is not a side-effect of
-                                          #  another action
-                       ):
-        '''
-        This routine delegates actions to routines that perform the action.
-        The action routine may return a timer.  _this_ routine adds the timer
-        to the Fighter.  That timer is there, primarily, to keep track of what
-        the Fighter did but it can also mark the Fighter as busy for a
-        multi-round action.
-
-        Returns: nothing
-        '''
-
-        # Label the action so playback knows who receives it.
-
-        action['fighter'] = {}
-        action['fighter']['name'] = fighter.name
-        action['fighter']['group'] = fighter.group
-
-        # PP = pprint.PrettyPrinter(indent=3, width=150)
-        # PP.pprint(action)
-
-        # Call base class' perform_action FIRST because GurpsRuleset depends on
-        # the actions of the base class.  It make no sense for the base class'
-        # actions to depend on the child class'.
-
-        handled = super(GurpsRuleset, self)._perform_action(fighter,
-                                                            action,
-                                                            fight_handler)
-
-        # The 'really' actions are used when an action needs to ask questions
-        # of the user.  The original action asks the questions and sends the
-        # 'really' action with all of the answers.  When played back, the
-        # original action just returns.  That way, there are no questions on
-        # playback and the answers are the same as they were the first time.
-
-        actions = {
-            'adjust-fp':            {'doit': self.__do_adjust_fp},
-            'adjust-hp-really':     {'doit': self.__adjust_hp_really},
-            'aim':                  {'doit': self.__do_aim},
-            'all-out-attack':       {'doit': self.__do_attack},
-            'attack':               {'doit': self.__do_attack},
-            'cast-spell':           {'doit': self.__cast_spell},
-            'cast-spell-really':    {'doit': self.__cast_spell_really},
-            'change-posture':       {'doit': self.__change_posture},
-            'check-for-death':      {'doit': self.__check_for_death},
-            'concentrate':          {'doit': self.__do_nothing},
-            'defend':               {'doit': self.__reset_aim},
-            'don-armor':            {'doit': self.__reset_aim},
-            'draw-weapon':          {'doit': self.__draw_weapon},
-            'evaluate':             {'doit': self.__do_nothing},
-            'feint':                {'doit': self.__do_nothing},
-            'move':                 {'doit': self.__do_nothing},
-            'move-and-attack':      {'doit': self.__do_attack},
-            'nothing':              {'doit': self.__do_nothing},
-            'pick-opponent':        {'doit': self.__do_nothing},
-            'reload':               {'doit': self.__do_reload},
-            'reload-really':        {'doit': self.__do_reload_really},
-            'reset-aim':            {'doit': self.__reset_aim},
-            'set-consciousness':    {'doit': self.__reset_aim},
-            'shock':                {'doit': self.__do_adjust_shock},
-            'stun':                 {'doit': self.__stun_action},
-            'use-item':             {'doit': self.__do_nothing},
-            'user-defined':         {'doit': self.__do_nothing},
-        }
-
-        if 'name' not in action:
-            return handled
-
-        if handled == Ruleset.HANDLED_ERROR:
-            return  handled
-
-        if action['name'] in actions:
-            timer = None
-            action_info = actions[action['name']]
-            if action_info['doit'] is not None:
-                timer = action_info['doit'](fighter, action, fight_handler)
-            handled = Ruleset.HANDLED_OK
-
-            if timer is not None and logit:
-                fighter.timers.add(timer)
-
-        return handled
-
-
-    def _record_action(self,
-                       fighter,          # Fighter object
-                       action,           # {'name': <action>, parameters...}
-                       fight_handler,    # FightHandler object
-                       handled,          # bool: whether/how the action was
-                                         #   handled
-                       logit=True        # Log into history and
-                                         #  'actions_this_turn' because the
-                                         #  action is not a side-effect of
-                                         #  another action
-                      ):
-        '''
-        Saves a performed 'action' in the Fighter's did-it-this-round list.
-
-        Returns: nothing.
-        '''
-        super(GurpsRuleset, self)._record_action(fighter,
-                                                 action,
-                                                 fight_handler,
-                                                 handled,
-                                                 logit)
-
-        if handled == Ruleset.HANDLED_OK:
-            if logit and 'name' in action:
-                fighter.details['actions_this_turn'].append(action['name'])
-        elif handled == Ruleset.UNHANDLED:
-            self._window_manager.error(
-                            ['action "%s" is not handled by any ruleset' %
-                                                            action['name']])
-
-        # Don't deal with HANDLED_ERROR
-
-
     def end_turn(self,
                  fighter,       # Fighter object
                  fight_handler  # FightHandler object
@@ -6043,6 +5919,38 @@ class GurpsRuleset(Ruleset):
         return dodge_skill, dodge_why
 
 
+    def get_fight_commands(self,
+                           fight_handler    # FightHandler object
+                          ):
+        '''
+        Returns fight commands that are specific to the GURPS ruleset.  These
+        commands are structured for a command ribbon.  The functions point
+        right back to local functions of the GurpsRuleset.
+        '''
+        return {
+            ord('f'): {'name': 'FP damage',
+                       'func': self.__damage_FP,
+                       'param': {
+                            'view': None,
+                            'current-opponent': None,
+                            'current': None,
+                            'fight_handler': fight_handler
+                       },
+                       'show': True,
+                      },
+            ord('S'): {'name': 'Stun',
+                       'func': self.__stun,
+                       'param': {
+                            'view': None,
+                            'current-opponent': None,
+                            'current': None,
+                            'fight_handler': fight_handler
+                       },
+                       'show': True,
+                      },
+            }
+
+
     def get_fighter_defenses_notes(self,
                                    fighter, # Fighter object
                                    opponent # Fighter object
@@ -6117,6 +6025,55 @@ class GurpsRuleset(Ruleset):
         return notes, why
 
 
+    def get_fighter_notes(self,
+                          fighter   # Fighter object
+                         ):
+        '''
+        Returns a list of strings describing the current fighting state of the
+        fighter (rounds available, whether s/he's aiming, current posture,
+        etc.)
+        '''
+        notes = []
+
+        # Ranged weapon status
+
+        weapon, holding_weapon_index = fighter.get_current_weapon()
+        if holding_weapon_index is not None:
+            if weapon['type'] == 'ranged weapon':
+                clip_name = weapon['ammo']['name']
+                clip = None
+                for item in fighter.details['stuff']:
+                    if item['name'] == clip_name:
+                        clip = item
+                        break
+
+                notes.append('  %d/%d shots, %d reloads' % (
+                                    weapon['ammo']['shots_left'],
+                                    weapon['ammo']['shots'],
+                                    (0 if clip is None else clip['count'])))
+
+        # Active aim
+
+        if (fighter.details['aim'] is not None and
+                                    fighter.details['aim']['rounds'] != 0):
+            notes.append('Aiming')
+
+        # And, now, off to the regular stuff
+
+        if fighter.details['posture'] != 'standing':
+            notes.append('Posture: %s' % fighter.details['posture'])
+        if fighter.details['shock'] != 0:
+            notes.append('DX and IQ are at %d (shock)' %
+                                                    fighter.details['shock'])
+
+        if (fighter.details['current']['hp'] <
+                                    fighter.details['permanent']['hp']/3.0):
+            # Already incorporated into Dodge
+            notes.append('Dodge/Move are at 1/2')
+
+        return notes
+
+
     def get_fighter_to_hit_damage_notes(self,
                                         fighter,    # Fighter object
                                         opponent    # Fighter object
@@ -6168,55 +6125,6 @@ class GurpsRuleset(Ruleset):
             notes.append('  to-hit: %d, damage: %s' % (
                                                 unarmed_info['kick_skill'],
                                                 unarmed_info['kick_damage']))
-
-        return notes
-
-
-    def get_fighter_notes(self,
-                          fighter   # Fighter object
-                         ):
-        '''
-        Returns a list of strings describing the current fighting state of the
-        fighter (rounds available, whether s/he's aiming, current posture,
-        etc.)
-        '''
-        notes = []
-
-        # Ranged weapon status
-
-        weapon, holding_weapon_index = fighter.get_current_weapon()
-        if holding_weapon_index is not None:
-            if weapon['type'] == 'ranged weapon':
-                clip_name = weapon['ammo']['name']
-                clip = None
-                for item in fighter.details['stuff']:
-                    if item['name'] == clip_name:
-                        clip = item
-                        break
-
-                notes.append('  %d/%d shots, %d reloads' % (
-                                    weapon['ammo']['shots_left'],
-                                    weapon['ammo']['shots'],
-                                    (0 if clip is None else clip['count'])))
-
-        # Active aim
-
-        if (fighter.details['aim'] is not None and
-                                    fighter.details['aim']['rounds'] != 0):
-            notes.append('Aiming')
-
-        # And, now, off to the regular stuff
-
-        if fighter.details['posture'] != 'standing':
-            notes.append('Posture: %s' % fighter.details['posture'])
-        if fighter.details['shock'] != 0:
-            notes.append('DX and IQ are at %d (shock)' %
-                                                    fighter.details['shock'])
-
-        if (fighter.details['current']['hp'] <
-                                    fighter.details['permanent']['hp']/3.0):
-            # Already incorporated into Dodge
-            notes.append('Dodge/Move are at 1/2')
 
         return notes
 
@@ -6280,37 +6188,6 @@ class GurpsRuleset(Ruleset):
         return (None if posture not in GurpsRuleset.posture else
                                             GurpsRuleset.posture[posture])
 
-
-    def get_fight_commands(self,
-                           fight_handler    # FightHandler object
-                          ):
-        '''
-        Returns fight commands that are specific to the GURPS ruleset.  These
-        commands are structured for a command ribbon.  The functions point
-        right back to local functions of the GurpsRuleset.
-        '''
-        return {
-            ord('f'): {'name': 'FP damage',
-                       'func': self.__damage_FP,
-                       'param': {
-                            'view': None,
-                            'current-opponent': None,
-                            'current': None,
-                            'fight_handler': fight_handler
-                       },
-                       'show': True,
-                      },
-            ord('S'): {'name': 'Stun',
-                       'func': self.__stun,
-                       'param': {
-                            'view': None,
-                            'current-opponent': None,
-                            'current': None,
-                            'fight_handler': fight_handler
-                       },
-                       'show': True,
-                      },
-            }
 
     def get_sections_in_template(self):
         '''
@@ -7749,49 +7626,6 @@ class GurpsRuleset(Ruleset):
         return timer
 
 
-    def __reset_aim(self,
-                    fighter,          # Fighter object
-                    action,           # {'name': 'defend' | 'don-armor' |
-                                      #          'reset-aim' |
-                                      #          'set-consciousness',
-                                      #  'comment': <string>, # optional
-                    fight_handler     # FightHandler object
-                   ):
-        '''
-        Action handler for GurpsRuleset.
-
-        Resets any ongoing aim that the Fighter may have had.
-
-        Returns: Timer (if any) to add to Fighter.  Used for keeping track
-            of what the Fighter is doing.
-        '''
-        self.reset_aim(fighter)
-
-        # Timer
-
-        timer = None
-        if action['name'] == 'defend':
-            timer = Timer(None)
-            timer.from_pieces( {'parent-name': fighter.name,
-                                'rounds': 1 - Timer.announcement_margin,
-                                'string': ['All out defense',
-                                           ' Defense: double',
-                                           ' Move: step']} )
-
-        elif action['name'] == 'don-armor':
-            timer = Timer(None)
-            armor, throw_away = fighter.get_current_armor()
-            title = ('Doff armor' if armor is None else
-                                                ('Don %s' % armor['name']))
-
-            timer.from_pieces( {'parent-name': fighter.name,
-                                'rounds': 1 - Timer.announcement_margin,
-                                'string': [title,
-                                           ' Defense: none',
-                                           ' Move: none']} )
-        return timer
-
-
     def __do_nothing(self,
                      fighter,      # Fighter object
                      action,       # {'name': 'concentrate' | 'evaluate' |
@@ -8049,6 +7883,173 @@ class GurpsRuleset(Ruleset):
         else:
             damage_type_str = '%s' % damage_type
         return damage_type_str
+
+
+    def _perform_action(self,
+                        fighter,          # Fighter object
+                        action,           # {'name': <action>, parameters...}
+                        fight_handler,    # FightHandler object
+                        logit=True        # Log into history and
+                                          #  'actions_this_turn' because the
+                                          #  action is not a side-effect of
+                                          #  another action
+                       ):
+        '''
+        This routine delegates actions to routines that perform the action.
+        The action routine may return a timer.  _this_ routine adds the timer
+        to the Fighter.  That timer is there, primarily, to keep track of what
+        the Fighter did but it can also mark the Fighter as busy for a
+        multi-round action.
+
+        Returns: nothing
+        '''
+
+        # Label the action so playback knows who receives it.
+
+        action['fighter'] = {}
+        action['fighter']['name'] = fighter.name
+        action['fighter']['group'] = fighter.group
+
+        # PP = pprint.PrettyPrinter(indent=3, width=150)
+        # PP.pprint(action)
+
+        # Call base class' perform_action FIRST because GurpsRuleset depends on
+        # the actions of the base class.  It make no sense for the base class'
+        # actions to depend on the child class'.
+
+        handled = super(GurpsRuleset, self)._perform_action(fighter,
+                                                            action,
+                                                            fight_handler)
+
+        # The 'really' actions are used when an action needs to ask questions
+        # of the user.  The original action asks the questions and sends the
+        # 'really' action with all of the answers.  When played back, the
+        # original action just returns.  That way, there are no questions on
+        # playback and the answers are the same as they were the first time.
+
+        actions = {
+            'adjust-fp':            {'doit': self.__do_adjust_fp},
+            'adjust-hp-really':     {'doit': self.__adjust_hp_really},
+            'aim':                  {'doit': self.__do_aim},
+            'all-out-attack':       {'doit': self.__do_attack},
+            'attack':               {'doit': self.__do_attack},
+            'cast-spell':           {'doit': self.__cast_spell},
+            'cast-spell-really':    {'doit': self.__cast_spell_really},
+            'change-posture':       {'doit': self.__change_posture},
+            'check-for-death':      {'doit': self.__check_for_death},
+            'concentrate':          {'doit': self.__do_nothing},
+            'defend':               {'doit': self.__reset_aim},
+            'don-armor':            {'doit': self.__reset_aim},
+            'draw-weapon':          {'doit': self.__draw_weapon},
+            'evaluate':             {'doit': self.__do_nothing},
+            'feint':                {'doit': self.__do_nothing},
+            'move':                 {'doit': self.__do_nothing},
+            'move-and-attack':      {'doit': self.__do_attack},
+            'nothing':              {'doit': self.__do_nothing},
+            'pick-opponent':        {'doit': self.__do_nothing},
+            'reload':               {'doit': self.__do_reload},
+            'reload-really':        {'doit': self.__do_reload_really},
+            'reset-aim':            {'doit': self.__reset_aim},
+            'set-consciousness':    {'doit': self.__reset_aim},
+            'shock':                {'doit': self.__do_adjust_shock},
+            'stun':                 {'doit': self.__stun_action},
+            'use-item':             {'doit': self.__do_nothing},
+            'user-defined':         {'doit': self.__do_nothing},
+        }
+
+        if 'name' not in action:
+            return handled
+
+        if handled == Ruleset.HANDLED_ERROR:
+            return  handled
+
+        if action['name'] in actions:
+            timer = None
+            action_info = actions[action['name']]
+            if action_info['doit'] is not None:
+                timer = action_info['doit'](fighter, action, fight_handler)
+            handled = Ruleset.HANDLED_OK
+
+            if timer is not None and logit:
+                fighter.timers.add(timer)
+
+        return handled
+
+
+    def _record_action(self,
+                       fighter,          # Fighter object
+                       action,           # {'name': <action>, parameters...}
+                       fight_handler,    # FightHandler object
+                       handled,          # bool: whether/how the action was
+                                         #   handled
+                       logit=True        # Log into history and
+                                         #  'actions_this_turn' because the
+                                         #  action is not a side-effect of
+                                         #  another action
+                      ):
+        '''
+        Saves a performed 'action' in the Fighter's did-it-this-round list.
+
+        Returns: nothing.
+        '''
+        super(GurpsRuleset, self)._record_action(fighter,
+                                                 action,
+                                                 fight_handler,
+                                                 handled,
+                                                 logit)
+
+        if handled == Ruleset.HANDLED_OK:
+            if logit and 'name' in action:
+                fighter.details['actions_this_turn'].append(action['name'])
+        elif handled == Ruleset.UNHANDLED:
+            self._window_manager.error(
+                            ['action "%s" is not handled by any ruleset' %
+                                                            action['name']])
+
+        # Don't deal with HANDLED_ERROR
+
+
+    def __reset_aim(self,
+                    fighter,          # Fighter object
+                    action,           # {'name': 'defend' | 'don-armor' |
+                                      #          'reset-aim' |
+                                      #          'set-consciousness',
+                                      #  'comment': <string>, # optional
+                    fight_handler     # FightHandler object
+                   ):
+        '''
+        Action handler for GurpsRuleset.
+
+        Resets any ongoing aim that the Fighter may have had.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
+        '''
+        self.reset_aim(fighter)
+
+        # Timer
+
+        timer = None
+        if action['name'] == 'defend':
+            timer = Timer(None)
+            timer.from_pieces( {'parent-name': fighter.name,
+                                'rounds': 1 - Timer.announcement_margin,
+                                'string': ['All out defense',
+                                           ' Defense: double',
+                                           ' Move: step']} )
+
+        elif action['name'] == 'don-armor':
+            timer = Timer(None)
+            armor, throw_away = fighter.get_current_armor()
+            title = ('Doff armor' if armor is None else
+                                                ('Don %s' % armor['name']))
+
+            timer.from_pieces( {'parent-name': fighter.name,
+                                'rounds': 1 - Timer.announcement_margin,
+                                'string': [title,
+                                           ' Defense: none',
+                                           ' Move: none']} )
+        return timer
 
 
     def __stun(self,
@@ -8488,7 +8489,11 @@ class PersonnelHandler(ScreenHandler):
 
 
     #
-    # Protected Methods
+    # Private and Protected Methods
+    #
+
+    #
+    # Page navigation methods
     #
 
     def __first_page(self,
@@ -8565,73 +8570,9 @@ class PersonnelHandler(ScreenHandler):
         self.__current_pane = PersonnelHandler.CHAR_DETAIL
         return True
 
-    # #####
-
-    def __change_viewing_index(self,
-                               adj  # integer adjustment to viewing index
-                              ):
-        '''
-        Changes the viewing index to point to a different creature.
-
-        NOTE: this breaks if |adj| is > len(self.__critters['data'])
-
-        Returns: nothing.
-        '''
-        len_list = len(self.__critters['data'])
-        if len_list == 0:
-            return
-
-        if self.__viewing_index is None:
-            # autoselect last added creature
-            self.__viewing_index = len_list - 1
-
-        self.__viewing_index += adj
-
-        if self.__viewing_index >= len_list:
-            self.__viewing_index = 0
-
-        elif self.__viewing_index < 0:
-            self.__viewing_index = len_list - 1
-
-
-    def __critters_contains_critters(self):
-        '''
-        Returns True if any creature in the self.__critters array is a monster, NPC, or PC.
-            Returns False, otherwise.
-        '''
-        if self.__critters is None:
-            return False
-        for critter in self.__critters['obj']:
-            if critter.name != Venue.name:
-                return True
-        return False
-
-    def _draw_screen(self):
-        '''
-        Draws the complete screen for the FightHandler.
-
-        Returns: nothing.
-        '''
-        self._window.clear()
-        self._window.status_ribbon(self.__group_name,
-                                   self.__template_group,
-                                   self.world.source_filename,
-                                   ScreenHandler.maintainjson)
-        self._window.command_ribbon()
-        # PersonnelGmWindow
-        fighters = None if self.__critters is None else self.__critters['obj']
-        self._window.show_creatures(fighters,
-                                    self.__new_char_name,
-                                    self.__viewing_index)
-        if (self.__new_char_name is not None and
-                            self.__new_char_name in self.__critters['data']):
-            critter = self.__get_fighter_object_from_name(self.__new_char_name)
-            self._window.show_description(critter)
-
     #
-    # Private Methods
+    # Other methods
     #
-
     # TODO: seems a bit long -- break this up into smaller methods
     def __add_creature(self):
         '''
@@ -9054,6 +8995,172 @@ class PersonnelHandler(ScreenHandler):
         return True
 
 
+    def __change_template_group(self):
+        '''
+        Command ribbon method.
+
+        Selects a new (existing) template to use to make new creatures.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        # Get the new group info.
+
+        if len(self.world.details['templates']) <= 0:
+            return True
+
+        # Get the template
+        lines, cols = self._window.getmaxyx()
+        template_menu = [(template_group, template_group)
+                    for template_group in self.world.details['templates']]
+        template_group = self._window_manager.menu('Which Template Group',
+                                                   template_menu)
+        if template_group is None:
+            return True  # Keep going
+        self.__template_group = template_group
+
+        # Display our new state
+
+        self._draw_screen()
+
+        return True # Keep going
+
+
+    def __change_viewing_index(self,
+                               adj  # integer adjustment to viewing index
+                              ):
+        '''
+        Changes the viewing index to point to a different creature.
+
+        NOTE: this breaks if |adj| is > len(self.__critters['data'])
+
+        Returns: nothing.
+        '''
+        len_list = len(self.__critters['data'])
+        if len_list == 0:
+            return
+
+        if self.__viewing_index is None:
+            # autoselect last added creature
+            self.__viewing_index = len_list - 1
+
+        self.__viewing_index += adj
+
+        if self.__viewing_index >= len_list:
+            self.__viewing_index = 0
+
+        elif self.__viewing_index < 0:
+            self.__viewing_index = len_list - 1
+
+
+    def __create_template(self):
+        '''
+        Command ribbon method.
+
+        Creates a template from a creature.  Puts it in the same section.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        # A little error checking
+
+        if self.__template_group is None:
+            self._window_manager.error(
+                ['You must select a template group to which to',
+                 'add this template.'])
+            return True # Keep going
+
+        if self.__viewing_index is None:
+            return True # Keep going
+
+        from_creature  = self.get_obj_from_index()
+        if from_creature.name == Venue.name:
+            self._window_manager.error(['Can\'t make a template from a room'])
+            return True # Keep going
+
+        # Get the name of the new template
+
+        lines, cols = self._window.getmaxyx()
+        keep_asking = True
+        while keep_asking:
+            template_name = self._window_manager.input_box(1,      # height
+                                                           cols-4, # width
+                                                           'New Template Name')
+            if template_name is None or len(template_name) == 0:
+                return True
+            elif (template_name in
+                    self.world.details['templates'][self.__template_group]):
+                self._window_manager.error(
+                    ['Template name "%s" already exists' % template_name])
+                keep_asking = True
+            else:
+                keep_asking = False
+
+        # Copy current creature into the template
+
+        to_creature = {}
+        allowable_section_names = self.world.ruleset.get_sections_in_template()
+
+        for section_name, section_body in from_creature.details.iteritems():
+            if section_name == 'permanent':
+                to_creature['permanent'] = {}
+                for stat_name, stat_body in section_body.iteritems():
+                    to_creature['permanent'][stat_name] = {
+                                                    'type': 'value',
+                                                    'value': stat_body}
+            elif section_name in allowable_section_names:
+                to_creature[section_name] = {'type': 'value',
+                                             'value': section_body}
+            else:
+                pass # We're ignoring these
+
+        template_list = self.world.details['templates'][self.__template_group]
+        template_list[template_name] = to_creature
+        return True # Keep going
+
+
+    def __create_template_group(self):
+        '''
+        Command ribbon method.
+
+        Creates a new template group and changes to that group.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        lines, cols = self._window.getmaxyx()
+        keep_asking = True
+        while keep_asking:
+            template_group = self._window_manager.input_box(1,      # height
+                                                           cols-4, # width
+                                                           'New Template Group Name')
+            if template_group is None or len(template_group) <= 0:
+                return True
+            elif template_group in self.world.details['templates']:
+                self._window_manager.error(
+                    ['Template group name "%s" already exists' % template_group])
+                keep_asking = True
+            else:
+                keep_asking = False
+
+        if len(template_group) > 0:
+            self.world.details['templates'][template_group] = {}
+            self.__template_group = template_group
+            self._draw_screen()
+
+        return True
+
+
+    def __critters_contains_critters(self):
+        '''
+        Returns True if any creature in the self.__critters array is a monster, NPC, or PC.
+            Returns False, otherwise.
+        '''
+        if self.__critters is None:
+            return False
+        for critter in self.__critters['obj']:
+            if critter.name != Venue.name:
+                return True
+        return False
+
+
     def __delete_creature(self):
         '''
         Command ribbon method.
@@ -9146,6 +9253,29 @@ class PersonnelHandler(ScreenHandler):
                                  None)
         self._draw_screen()
         return True # anything but 'None' for a menu handler
+
+
+    def _draw_screen(self):
+        '''
+        Draws the complete screen for the FightHandler.
+
+        Returns: nothing.
+        '''
+        self._window.clear()
+        self._window.status_ribbon(self.__group_name,
+                                   self.__template_group,
+                                   self.world.source_filename,
+                                   ScreenHandler.maintainjson)
+        self._window.command_ribbon()
+        # PersonnelGmWindow
+        fighters = None if self.__critters is None else self.__critters['obj']
+        self._window.show_creatures(fighters,
+                                    self.__new_char_name,
+                                    self.__viewing_index)
+        if (self.__new_char_name is not None and
+                            self.__new_char_name in self.__critters['data']):
+            critter = self.__get_fighter_object_from_name(self.__new_char_name)
+            self._window.show_description(critter)
 
 
     def __draw_weapon(self,
@@ -9521,133 +9651,6 @@ class PersonnelHandler(ScreenHandler):
         return True
 
 
-    # TODO: alphabetize
-    def __create_template(self):
-        '''
-        Command ribbon method.
-
-        Creates a template from a creature.  Puts it in the same section.
-
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        # A little error checking
-
-        if self.__template_group is None:
-            self._window_manager.error(
-                ['You must select a template group to which to',
-                 'add this template.'])
-            return True # Keep going
-
-        if self.__viewing_index is None:
-            return True # Keep going
-
-        from_creature  = self.get_obj_from_index()
-        if from_creature.name == Venue.name:
-            self._window_manager.error(['Can\'t make a template from a room'])
-            return True # Keep going
-
-        # Get the name of the new template
-
-        lines, cols = self._window.getmaxyx()
-        keep_asking = True
-        while keep_asking:
-            template_name = self._window_manager.input_box(1,      # height
-                                                           cols-4, # width
-                                                           'New Template Name')
-            if template_name is None or len(template_name) == 0:
-                return True
-            elif (template_name in
-                    self.world.details['templates'][self.__template_group]):
-                self._window_manager.error(
-                    ['Template name "%s" already exists' % template_name])
-                keep_asking = True
-            else:
-                keep_asking = False
-
-        # Copy current creature into the template
-
-        to_creature = {}
-        allowable_section_names = self.world.ruleset.get_sections_in_template()
-
-        for section_name, section_body in from_creature.details.iteritems():
-            if section_name == 'permanent':
-                to_creature['permanent'] = {}
-                for stat_name, stat_body in section_body.iteritems():
-                    to_creature['permanent'][stat_name] = {
-                                                    'type': 'value',
-                                                    'value': stat_body}
-            elif section_name in allowable_section_names:
-                to_creature[section_name] = {'type': 'value',
-                                             'value': section_body}
-            else:
-                pass # We're ignoring these
-
-        template_list = self.world.details['templates'][self.__template_group]
-        template_list[template_name] = to_creature
-        return True # Keep going
-
-
-    def __change_template_group(self):
-        '''
-        Command ribbon method.
-
-        Selects a new (existing) template to use to make new creatures.
-
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        # Get the new group info.
-
-        if len(self.world.details['templates']) <= 0:
-            return True
-
-        # Get the template
-        lines, cols = self._window.getmaxyx()
-        template_menu = [(template_group, template_group)
-                    for template_group in self.world.details['templates']]
-        template_group = self._window_manager.menu('Which Template Group',
-                                                   template_menu)
-        if template_group is None:
-            return True  # Keep going
-        self.__template_group = template_group
-
-        # Display our new state
-
-        self._draw_screen()
-
-        return True # Keep going
-
-
-    def __create_template_group(self):
-        '''
-        Command ribbon method.
-
-        Creates a new template group and changes to that group.
-
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        lines, cols = self._window.getmaxyx()
-        keep_asking = True
-        while keep_asking:
-            template_group = self._window_manager.input_box(1,      # height
-                                                           cols-4, # width
-                                                           'New Template Group Name')
-            if template_group is None or len(template_group) <= 0:
-                return True
-            elif template_group in self.world.details['templates']:
-                self._window_manager.error(
-                    ['Template group name "%s" already exists' % template_group])
-                keep_asking = True
-            else:
-                keep_asking = False
-
-        if len(template_group) > 0:
-            self.world.details['templates'][template_group] = {}
-            self.__template_group = template_group
-            self._draw_screen()
-
-        return True
-
-
     def __quit(self):
         '''
         Command ribbon method.
@@ -9917,23 +9920,6 @@ class PersonnelHandler(ScreenHandler):
         return True # Menu handler's success returns anything but 'None'
 
 
-    def __view_prev(self): # look at previous character
-        '''
-        Command ribbon method.
-
-        Changes the current creature to the previous one, wrapping if
-        necessary.
-
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        self.__change_viewing_index(-1)
-        # PersonnelGmWindow
-        self._window.show_creatures(self.__critters['obj'],
-                                    self.__new_char_name,
-                                    self.__viewing_index)
-        return True # Keep going
-
-
     def __view_next(self): # look at next character
         '''
         Command ribbon method.
@@ -9944,6 +9930,23 @@ class PersonnelHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         self.__change_viewing_index(1)
+        # PersonnelGmWindow
+        self._window.show_creatures(self.__critters['obj'],
+                                    self.__new_char_name,
+                                    self.__viewing_index)
+        return True # Keep going
+
+
+    def __view_prev(self): # look at previous character
+        '''
+        Command ribbon method.
+
+        Changes the current creature to the previous one, wrapping if
+        necessary.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        self.__change_viewing_index(-1)
         # PersonnelGmWindow
         self._window.show_creatures(self.__critters['obj'],
                                     self.__new_char_name,
@@ -10457,6 +10460,21 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
 
+    def save_fight(self,
+                   throw_away   # Required/used by the caller because
+                                #   there's a list of methods to call,
+                                #   and (apparently) some of them may
+                                #   use this parameter.  It's ignored
+                                #   by this method, however.
+                  ):
+        '''
+        Save the fight so that it is the run the next time we start fighting
+        (i.e., if we need to interrupt this fight and continue it, later).
+        '''
+        self._saved_fight['saved'] = True
+        return True # Keep asking questions
+
+
     def set_viewing_index(self, new_index):     # Public to support testing.
         '''
         Selects a different Fighter or Venue as the currently viewed one.
@@ -10488,21 +10506,6 @@ class FightHandler(ScreenHandler):
             self.__handle_fighter_background_actions(current_fighter)
 
         return show_fighter
-
-
-    def save_fight(self,
-                   throw_away   # Required/used by the caller because
-                                #   there's a list of methods to call,
-                                #   and (apparently) some of them may
-                                #   use this parameter.  It's ignored
-                                #   by this method, however.
-                  ):
-        '''
-        Save the fight so that it is the run the next time we start fighting
-        (i.e., if we need to interrupt this fight and continue it, later).
-        '''
-        self._saved_fight['saved'] = True
-        return True # Keep asking questions
 
     #
     # Private Methods
@@ -10779,17 +10782,6 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
 
-    #def __do_keep_monsters(self):
-    #    self.__keep_monsters = True # Don't move monsters to dead after fight
-    #    self._saved_fight['saved'] = False
-    #    next_PC_name = self.__next_PC_name()
-    #    self._window.round_ribbon(self._saved_fight['round'],
-    #                              next_PC_name,
-    #                              self.world.source_filename,
-    #                              ScreenHandler.maintainjson)
-    #    return True # Keep going
-
-
     def _draw_screen(self):
         '''
         Draws the complete screen for the FightHandler.
@@ -10824,14 +10816,6 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         return self.__notes('notes')
-
-
-    #def __get_fighter_details(self,
-    #                          name,     # string
-    #                          group     # string
-    #                         ):
-    #    ''' Used for constructing a Fighter from the JSON information. '''
-    #    return self.world.get_creature_details(name, group)
 
 
     def __give_equipment(self):
@@ -11243,32 +11227,6 @@ class FightHandler(ScreenHandler):
         return False # Leave the fight
 
 
-    def __short_notes(self):
-        '''
-        Command ribbon method.
-
-        Lets the user edit a fighter's (or Venue's) short notes.
-
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        return self.__notes('short-notes')
-
-
-    #def __save(self):
-    #    '''
-    #    Command ribbon method.
-    #    Returns: False to exit the current ScreenHandler, True to stay.
-    #    '''
-    #    self._saved_fight['saved'] = True
-    #    self.__keep_monsters = False # Don't move monsters to dead after fight
-    #    next_PC_name = self.__next_PC_name()
-    #    self._window.round_ribbon(self._saved_fight['round'],
-    #                              next_PC_name,
-    #                              self.world.source_filename,
-    #                              ScreenHandler.maintainjson)
-    #    return True # Keep going
-
-
     def __select_fighter(self,
                          menu_title, # string: title of fighter/opponent menu
                          default_selection=0  # int: for menu:
@@ -11306,6 +11264,17 @@ class FightHandler(ScreenHandler):
                                                      selected_fighter_menu,
                                                      default_selection)
         return selected_fighter, current_fighter
+
+
+    def __short_notes(self):
+        '''
+        Command ribbon method.
+
+        Lets the user edit a fighter's (or Venue's) short notes.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        return self.__notes('short-notes')
 
 
     def __show_history(self):
@@ -11460,30 +11429,6 @@ class FightHandler(ScreenHandler):
         return True # Keep going
 
 
-    def __view_prev(self):
-        '''
-        Command ribbon method.
-
-        Look at previous character, don't change which character currently has
-        the initiative.
-
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        if self.__viewing_index is None:
-            self.__viewing_index = self._saved_fight['index']
-        self.__change_viewing_index(-1)
-        viewing_fighter = self.__fighters[self.__viewing_index]
-        opponent = self.get_opponent_for(viewing_fighter)
-        if self.__viewing_index == self._saved_fight['index']:
-            self.__viewing_index = None
-        self._window.show_fighters(viewing_fighter,
-                                   opponent,
-                                   self.__fighters,
-                                   self._saved_fight['index'],
-                                   self.__viewing_index)
-        return True # Keep going
-
-
     def __view_next(self):
         '''
         Command ribbon method.
@@ -11496,6 +11441,30 @@ class FightHandler(ScreenHandler):
         if self.__viewing_index is None:
             self.__viewing_index = self._saved_fight['index']
         self.__change_viewing_index(1)
+        viewing_fighter = self.__fighters[self.__viewing_index]
+        opponent = self.get_opponent_for(viewing_fighter)
+        if self.__viewing_index == self._saved_fight['index']:
+            self.__viewing_index = None
+        self._window.show_fighters(viewing_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
+        return True # Keep going
+
+
+    def __view_prev(self):
+        '''
+        Command ribbon method.
+
+        Look at previous character, don't change which character currently has
+        the initiative.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        if self.__viewing_index is None:
+            self.__viewing_index = self._saved_fight['index']
+        self.__change_viewing_index(-1)
         viewing_fighter = self.__fighters[self.__viewing_index]
         opponent = self.get_opponent_for(viewing_fighter)
         if self.__viewing_index == self._saved_fight['index']:
