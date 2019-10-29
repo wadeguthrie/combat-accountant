@@ -173,6 +173,17 @@ class GmWindow(object):
     could just port their API to curses'.  If there are any incompatibilies,
     we'll address them, then.
     '''
+    SCREEN_MOVEMENT_CHARS = {
+        ord(' '): '" "',
+        curses.KEY_HOME: '<HOME>',
+        curses.KEY_UP: '<UP>',
+        curses.KEY_DOWN: '<DN>',
+        curses.KEY_PPAGE: '<PGUP>',
+        curses.KEY_NPAGE: '<PGDN>',
+        curses.KEY_LEFT: '<LEFT>',
+        curses.KEY_RIGHT: '<RIGHT>'
+    }
+
     def __init__(self,
                  window_manager, # A GmWindowManager object
                  # Using curses screen addressing w/0,0 in upper left corner
@@ -382,23 +393,10 @@ class GmWindow(object):
             'max_width': 0,
             'choice_strings': []
         }
+
         for command, body in choices.iteritems():
-            if command == ord(' '):
-                command_string = '" "'
-            elif command == curses.KEY_HOME:
-                command_string = '<HOME>'
-            elif command == curses.KEY_UP:
-                command_string = '<UP>'
-            elif command == curses.KEY_DOWN:
-                command_string = '<DN>'
-            elif command == curses.KEY_PPAGE:
-                command_string = '<PGUP>'
-            elif command == curses.KEY_NPAGE:
-                command_string = '<PGDN>'
-            elif command == curses.KEY_LEFT:
-                command_string = '<LEFT>'
-            elif command == curses.KEY_RIGHT:
-                command_string = '<RIGHT>'
+            if command in GmWindow.SCREEN_MOVEMENT_CHARS:
+                command_string = GmWindow.SCREEN_MOVEMENT_CHARS[command]
             else:
                 command_string = '%c' % chr(command)
 
@@ -5947,6 +5945,11 @@ class GurpsRuleset(Ruleset):
                             'fight_handler': fight_handler
                        },
                        'show': True,
+                       'help': 'Removes fatigue points from the currently ' +
+                               'selected fighter, or the current opponent ' +
+                               '(if nobody is selected), or (if neither ' +
+                               'of those) the ' +
+                               'fighter that currently has the initiative. ',
                       },
             ord('S'): {'name': 'Stun',
                        'func': self.__stun,
@@ -5957,6 +5960,8 @@ class GurpsRuleset(Ruleset):
                             'fight_handler': fight_handler
                        },
                        'show': True,
+                       'help': 'Causes the selected fighter to be ' +
+                               'stunned (GURPS B420)',
                       },
             }
 
@@ -8177,16 +8182,6 @@ class ScreenHandler(object):
     Base class for the "business logic" backing the user interface.
     '''
 
-    SCREEN_MOVEMENT_CHARS = {
-        curses.KEY_HOME: 'KEY_HOME',
-        curses.KEY_UP: 'KEY_UP',
-        curses.KEY_DOWN: 'KEY_DOWN',
-        curses.KEY_NPAGE: 'KEY_NPAGE',
-        curses.KEY_PPAGE: 'KEY_PPAGE',
-        curses.KEY_LEFT: 'KEY_LEFT',
-        curses.KEY_RIGHT: 'KEY_RIGHT',
-    }
-
     maintain_game_file = False
 
     def __init__(self,
@@ -8201,7 +8196,16 @@ class ScreenHandler(object):
 
         # Install default command ribbon command(s).
         self._choices = {
-            ord('B'): {'name': 'Bug Report', 'func': self._make_bug_report},
+            ord('B'): {'name': 'Bug Report',
+                       'func': self._make_bug_report,
+                       'help': 'Builds a bug report including asking ' +
+                               'you for a description and taking ' +
+                               'a few snapshots of your game file.  ' +
+                               'Puts all this in a directory tagged ' +
+                               'by the date and time of the report.'},
+            ord('H'): {'name': 'Help',
+                       'func': self._print_help,
+                       'help': 'Prints this text.'},
         }
 
 
@@ -8215,8 +8219,8 @@ class ScreenHandler(object):
         if char < 256:
             return '%c' % chr(char)
 
-        if char in ScreenHandler.SCREEN_MOVEMENT_CHARS:
-            return '%s' % ScreenHandler.SCREEN_MOVEMENT_CHARS[char]
+        if char in GmWindow.SCREEN_MOVEMENT_CHARS:
+            return '%s' % GmWindow.SCREEN_MOVEMENT_CHARS[char]
 
         return '%d' % char
 
@@ -8337,6 +8341,132 @@ class ScreenHandler(object):
         return True # Keep doing whatever you were doing.
 
 
+    def _print_help(self):
+        '''
+        Prints out the help screens for the current command ribbon.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        # Figure out how big the different columns are
+
+        max_key_len = 0
+        max_name_len = 0
+        margin_len = 2
+        max_help_len = 0
+        for key, value in self._choices.iteritems():
+            if key in GmWindow.SCREEN_MOVEMENT_CHARS:
+                char = GmWindow.SCREEN_MOVEMENT_CHARS[key]
+            else:
+                char = chr(key)
+            if max_key_len < len(char):
+                max_key_len = len(char)
+            if 'name' in value and max_name_len < len(value['name']):
+                max_name_len = len(value['name'])
+            if 'help' in value and max_help_len < len(value['help']):
+                max_help_len = len(value['help'])
+
+        lines, cols = self._window_manager.getmaxyx()
+        cols -= 2 # Just an aesthetic choice to have the help box just a
+                  # little smaller than the screen.
+        window_box_margin = 2 # Space for the box around the display window
+        help_indent = max_key_len + margin_len + max_name_len + margin_len
+
+        actual_max_help_len = (cols - window_box_margin) - help_indent
+        if max_help_len > actual_max_help_len:
+            max_help_len = actual_max_help_len
+
+        # Put in sorted order
+
+        keys = []
+        for key in self._choices.iterkeys():
+            if key in GmWindow.SCREEN_MOVEMENT_CHARS:
+                char = GmWindow.SCREEN_MOVEMENT_CHARS[key]
+            else:
+                char = '%c' % chr(key)
+            keys.append({'sort_key': char,
+                         'choice_key': key})
+        keys.sort(key=lambda x: x['sort_key'].lower())
+
+        # Now, assemble the output
+
+        colors = [curses.A_BOLD, #curses.color_pair(GmWindowManager.CYAN_BLACK),
+                  curses.A_NORMAL]
+        color_index = 1
+
+        output = []
+        for x in keys:
+            key = x['choice_key']
+            value = self._choices[key]
+            color_index = 1 if color_index == 0 else 0
+
+            line_parts = []
+
+            # Add the key
+
+            if key in GmWindow.SCREEN_MOVEMENT_CHARS:
+                key = GmWindow.SCREEN_MOVEMENT_CHARS[key]
+            else:
+                key = chr(key)
+
+            line_parts.append(key)
+            line_parts.append(' ' * (max_key_len - len(key)))
+            line_parts.append(' ' * margin_len)
+
+            # Add the name
+
+            name = '' if 'name' not in value else value['name']
+            line_parts.append(name)
+            line_parts.append(' ' * (max_name_len - len(name)))
+            line_parts.append(' ' * margin_len)
+
+            # Add the help -- need to wrap the lines at spaces
+
+            if 'help' not in value:
+                output.append([{'text': ''.join(line_parts),
+                                'mode': colors[color_index]}])
+            else:
+                end = len(value['help'])
+
+                index_this_line = 0
+                index_next_line = (len(value['help'])
+                                    if max_help_len >= len(value['help'])
+                                    else max_help_len)
+
+                while index_this_line < end:
+                    # Find the end of the line (stop at a space if the line
+                    # is long).
+                    if index_next_line >= end:
+                        space = -1 # Don't go looking for a space
+                    else:
+                        space = value['help'].rfind(' ',
+                                                    index_this_line,
+                                                    index_next_line)
+                    if space < 0:
+                        string = value['help'][index_this_line:index_next_line]
+                    else:
+                        string = value['help'][index_this_line:space].rstrip()
+                        index_next_line = space + 1
+
+                    # Save up to end of the line
+                    line_parts.append(string)
+
+                    # Build the output string
+                    output.append([{'text': ''.join(line_parts),
+                                    'mode': colors[color_index]}])
+
+                    # Ready for next loop
+                    index_this_line = index_next_line
+                    index_next_line += max_help_len
+                    if index_next_line >= end:
+                        index_next_line = end
+                    line_parts = [' ' * help_indent]
+
+        self._window_manager.display_window('The Command Ribbon, Explained',
+                                            output)
+        return True # Keep doing whatever you were doing.
+
+
 class PersonnelHandler(ScreenHandler):
     '''
     Adds creatures to the PC, NPC, or a monster list (possibly creating a new
@@ -8359,37 +8489,90 @@ class PersonnelHandler(ScreenHandler):
         super(PersonnelHandler, self).__init__(window_manager, world)
         self._add_to_choice_dict({
             curses.KEY_HOME:
-                  {'name': 'scroll home',            'func': self.__first_page},
+                  {'name': 'scroll home',
+                   'func': self.__first_page},
             curses.KEY_UP:
-                  {'name': 'prev creature',          'func': self.__view_prev},
+                  {'name': 'prev creature',
+                   'func': self.__view_prev},
             curses.KEY_DOWN:
-                  {'name': 'next creature',          'func': self.__view_next},
+                  {'name': 'next creature',
+                   'func': self.__view_next},
             curses.KEY_NPAGE:
-                  {'name': 'scroll down',            'func': self.__next_page},
+                  {'name': 'scroll down',
+                   'func': self.__next_page,
+                   'help': 'Scroll DOWN on the current pane which may ' +
+                           'may be either the character pane (on the ' +
+                           'left) or the details pane (on the right)'},
             curses.KEY_PPAGE:
-                  {'name': 'scroll up',              'func': self.__prev_page},
+                  {'name': 'scroll up',
+                   'func': self.__prev_page,
+                   'help': 'Scroll UP on the current pane which may ' +
+                           'may be either the character pane (on the ' +
+                           'left) or the details pane (on the right)'},
             curses.KEY_LEFT:
-                  {'name': 'scroll char list',       'func': self.__left_pane},
+                  {'name': 'scroll char list',
+                   'func': self.__left_pane,
+                   'help': 'Choose the character pane (on the ' +
+                           'left) for scrolling.'},
             curses.KEY_RIGHT:
-                  {'name': 'scroll char detail',     'func': self.__right_pane},
+                  {'name': 'scroll char detail',
+                   'func': self.__right_pane,
+                   'help': 'Choose the details pane (on the ' +
+                           'right) for scrolling.'},
 
-            ord('a'): {'name': 'add creature',       'func': self.__add_creature},
-            ord('d'): {'name': 'delete creature',    'func': self.__delete_creature},
+            ord('a'): {'name': 'add creature',
+                       'func': self.__add_creature,
+                       'help': 'Add a creature to the current group.'},
+            ord('d'): {'name': 'delete creature',
+                       'func': self.__delete_creature,
+                       'help': 'Delete the currently selected creature from the ' +
+                               'current group.'},
             ord('e'): {'name': 'equip/modify creature',
-                                                     'func': self.__equip},
+                       'func': self.__equip,
+                       'help': 'Modify the currently selected creature by ' +
+                               'changing attributes, adding or removing' +
+                               'equipment, or changing some other feature.'},
             ord('g'): {'name': 'create template group',
-                                                     'func': self.__create_template_group},
+                       'func': self.__create_template_group,
+                       'help': 'Make a new collection of templates (like ' +
+                               'bad guys or space marines).'},
             ord('t'): {'name': 'change template group',
-                                                     'func': self.__change_template_group},
-            ord('T'): {'name': 'make into template', 'func': self.__create_template},
-            ord('q'): {'name': 'quit',               'func': self.__quit},
+                       'func': self.__change_template_group,
+                       'help': 'Change the group of templates on which ' +
+                               'you will base newly created creatures ' +
+                               'going forward.'},
+            ord('T'): {'name': 'make into template',
+                       'func': self.__create_template,
+                       'help': 'Convert the currently selected creature ' +
+                               'into a template and add that template into ' +
+                               'the currently selected template group.'},
+            ord('q'): {'name': 'quit',
+                       'func': self.__quit,
+                       'help': 'Quit changing personnel.'},
         })
 
         if creature_type == PersonnelHandler.NPCs:
             self._add_to_choice_dict({
-                ord('p'): {'name': 'NPC joins PCs',      'func': self.NPC_joins_PCs},
-                ord('P'): {'name': 'NPC leaves PCs',     'func': self.__NPC_leaves_PCs},
-                ord('m'): {'name': 'NPC joins Monsters', 'func': self.NPC_joins_monsters},
+                ord('p'): {'name': 'NPC joins PCs',
+                           'func': self.NPC_joins_PCs,
+                           'help': 'Make the currently selected NPC join ' +
+                                   'the player characters.  The NPC will ' +
+                                   'be listed in both groups but they will ' +
+                                   'both refer to the same creature ' +
+                                   '(changing one will change the other).'},
+                ord('P'): {'name': 'NPC leaves PCs',
+                           'func': self.__NPC_leaves_PCs,
+                           'help': 'If the current NPC has joined the party, ' +
+                                   'this will cause him/her to leave the ' +
+                                   'party.'},
+                ord('m'): {'name': 'NPC joins Monsters',
+                           'func': self.NPC_joins_monsters,
+                           'help': 'Make the currently selected NPC join ' +
+                                   'one of the groups of monsters.  The NPC ' +
+                                   'will ' +
+                                   'be listed in both groups but they will ' +
+                                   'both refer to the same creature ' +
+                                   '(changing one will change the other).'},
             })
 
         self._window = self._window_manager.get_build_fight_gm_window(
@@ -10052,62 +10235,138 @@ class FightHandler(ScreenHandler):
         self._add_to_choice_dict({
             curses.KEY_UP:
                       {'name': 'prev character',
-                                              'func': self.__view_prev},
+                       'func': self.__view_prev},
             curses.KEY_DOWN:
                       {'name': 'next character',
-                                              'func': self.__view_next},
+                       'func': self.__view_next},
             curses.KEY_HOME:
                       {'name': 'current character',
-                                              'func': self.__view_init},
+                       'func': self.__view_init},
 
-            ord(' '): {'name': 'next fighter','func': self.__next_fighter},
-            ord('<'): {'name': 'prev fighter','func': self.__prev_fighter},
-            ord('?'): {'name': 'explain',     'func': self.__show_why},
-            ord('d'): {'name': 'defend',      'func': self.__defend},
+            ord(' '): {'name': 'next fighter',
+                       'func': self.__next_fighter,
+                       'help': 'Pass the initiative to the NEXT fighter. ' +
+                               'That fighter will be the only one that ' +
+                               'can maneuver.  If the current fighter ' +
+                               'can, but has not yet performed an action, ' +
+                               'this will give the fighter the chance ' +
+                               'to do something before passing the ' +
+                               'initiative.'},
+            ord('<'): {'name': 'prev fighter',
+                       'func': self.__prev_fighter,
+                       'help': 'Pass the initiative to the PREVIOUS fighter. ' +
+                               'That fighter will be the only one that ' +
+                               'can maneuver.'},
+            ord('?'): {'name': 'explain',
+                       'func': self.__show_why,
+                       'help': 'Explain how the attack and defense numbers ' +
+                               'were calculated for the currently selected ' +
+                               'figher.'},
+            ord('d'): {'name': 'defend',
+                       'func': self.__defend,
+                       'help': 'Cause the currently selected fighter to ' +
+                               'defend themselves.  This might, depending ' +
+                               'on the current ruleset, cause the fighter ' +
+                               'to lose aim.'},
             ord('D'): {'name': 'dead/unconscious',
-                                              'func': self.__dead},
+                       'func': self.__dead,
+                       'help': 'Select the state of the fighter to be alive, ' +
+                               'dead, unconscious, or absent.'},
             ord('g'): {'name': 'give equipment',
-                                              'func': self.__give_equipment},
-            ord('h'): {'name': 'History',     'func': self.__show_history},
+                       'func': self.__give_equipment,
+                       'help': 'Cause the selected fighter to give a piece ' +
+                               'of equipment to another fighter.'},
+            ord('h'): {'name': 'History',
+                       'func': self.__show_history,
+                       # TODO: does it show what's happened since the program
+                       #       started running or since the fight began?
+                       'help': 'Show the list of actions that have happened ' +
+                               'in this fight, so far.'},
             ord('i'): {'name': 'character info',
-                                              'func': self.__show_info},
-            #ord('k'): {'name': 'keep monsters',
-            #                                  'func': self.__do_keep_monsters},
-            ord('-'): {'name': 'HP damage',   'func': self.__damage_HP},
-            #ord('L'): {'name': 'Loot bodies', 'func': self.__loot_bodies},
-            ord('m'): {'name': 'maneuver',    'func': self.__maneuver},
-            ord('n'): {'name': 'short notes', 'func': self.__short_notes},
-            ord('N'): {'name': 'full Notes',  'func': self.__full_notes},
-            ord('o'): {'name': 'opponent',    'func': self.pick_opponent},
+                       'func': self.__show_info,
+                       'help': 'Shows the detailed description of the ' +
+                               'fighter. This includes equipment and ' +
+                               'timers and the like.'},
+            ord('-'): {'name': 'HP damage',
+                       'func': self.__damage_HP,
+                       'help': 'Removes hit points from the currently ' +
+                               'selected fighter, or the current opponent ' +
+                               '(if nobody is selected), or (if neither ' +
+                               'of those) the ' +
+                               'fighter that currently has the initiative. ' +
+                               'If the opponent is the one losing HP and ' +
+                               'the current fighter has not yet attacked ' +
+                               'this round, ' +
+                               'that fighter will be given the opportunity. ' +
+                               'Armor will be taken into account if you ' +
+                               'specify (via subsequent menu).'},
+            ord('m'): {'name': 'maneuver',
+                       'func': self.__maneuver,
+                       'help': 'Causes the fighter with the initiative to ' +
+                               'perform some action (selected via ' +
+                               'subsequent menu).  Only things the figher ' +
+                               'can currently do will be available.'},
+            ord('n'): {'name': 'short notes',
+                       'func': self.__short_notes,
+                       'help': 'Changes the notes displayed during a fight ' +
+                               'for the currently selected fighter'},
+            ord('N'): {'name': 'full Notes',
+                       'func': self.__full_notes,
+                       'help': 'Changes the notes displayed in detailed ' +
+                               'descriptions for the currently selected ' +
+                               'fighter.'},
+            ord('o'): {'name': 'opponent',
+                       'func': self.pick_opponent,
+                       'help': 'Selects an opponent for the currently ' +
+                               'selected fighter.  If possible, the default ' +
+                               'selection on the menu will be for an ' +
+                               'unopposed fighter.'},
             ord('P'): {'name': 'promote to NPC',
-                                              'func': self.promote_to_NPC},
-            ord('q'): {'name': 'quit',        'func': self.__quit},
-            #ord('s'): {'name': 'save',        'func': self.__save},
-            ord('t'): {'name': 'timer',       'func': self.__timer},
-            ord('T'): {'name': 'Timer cancel','func': self.__timer_cancel},
+                       'func': self.promote_to_NPC,
+                       'help': 'If the currently selected fighter is not' +
+                               'a player character, ' +
+                               'make the selected fighter into an ' +
+                               'NPC.  The fighter will ' +
+                               'be listed in both groups but they will ' +
+                               'both refer to the same creature ' +
+                               '(changing one will change the other).'},
+            ord('q'): {'name': 'quit',
+                       'func': self.__quit,
+                       'help': 'Stop the fight.  You will be given the ' +
+                               'opportunity to save it for later, save ' +
+                               'it for the next time you start a fight ' +
+                               '(if, for example, you shut down the ' +
+                               'program at the end of the night but are ' +
+                               'not yet finished), or just leave the ' +
+                               'fight.  If one or more monsters are no ' +
+                               'longer conscious, you will be given the ' +
+                               'opportunity to loot the bodies.'},
+            ord('t'): {'name': 'timer',
+                       'func': self.__timer,
+                       'help': 'Start a timer for the selected fighter. ' +
+                               'A timer can display something in the ' +
+                               'fighters notes until it fires or it can ' +
+                               'display something on the screen when it ' +
+                               'fires.'},
+            ord('T'): {'name': 'Timer cancel',
+                       'func': self.__timer_cancel,
+                       'help': 'Cancel an existing timer for the selected ' +
+                               'fighter.'},
         })
 
         if playback_history is not None:
             self._add_to_choice_dict({
-                                ord('H'): {'name': 'History playback',
-                                           'func': self.__playback_history}
-                                    })
+                ord('p'): {'name': 'History playback',
+                           'func': self.__playback_history,
+                           'help': 'Plays back all of the history in the ' +
+                                   'playback file.'}
+                    })
 
         self._add_to_choice_dict(self.world.ruleset.get_fight_commands(self) )
         self._window = self._window_manager.get_fight_gm_window(self.world.ruleset,
                                                                 self._choices)
 
         self.__viewing_index = None
-
-        # self._saved_fight takes the form:
-        # {
-        #   'index': <number>  # current fighter that has the initiative
-        #   'fighters': [ {'group': <group>,
-        #                  'name': <name>}, ... # fighters in initiative order
-        #   'saved': True | False
-        #   'round': <number>  # round of the fight
-        #   'monsters': <name> # group name of the monsters in the fight
-        # }
 
         fight_order = None
         if self._saved_fight['saved']:
@@ -10897,6 +11156,7 @@ class FightHandler(ScreenHandler):
         else:
             from_fighter = self.get_current_fighter()
 
+        # TODO: this doesn't seem to work with monsters.  Fix that.
         item = self.__equipment_manager.remove_equipment(from_fighter)
         if item is None:
             return True # Keep going
@@ -11572,37 +11832,74 @@ class MainHandler(ScreenHandler):
                        'func': self.next_char},
             curses.KEY_NPAGE:
                       {'name': 'scroll down',
-                       'func': self.__next_page},
+                       'func': self.__next_page,
+                       'help': 'Scroll DOWN on the current pane which may ' +
+                               'may be either the character pane (on the ' +
+                               'left) or the details pane (on the right)'},
             curses.KEY_PPAGE:
                       {'name': 'scroll up',
-                       'func': self.__prev_page},
+                       'func': self.__prev_page,
+                       'help': 'Scroll UP on the current pane which may ' +
+                               'may be either the character pane (on the ' +
+                               'left) or the details pane (on the right)'},
             curses.KEY_LEFT:
                       {'name': 'scroll chars',
-                       'func': self.__left_pane},
+                       'func': self.__left_pane,
+                       'help': 'Choose the character pane (on the ' +
+                               'left) for scrolling.'},
             curses.KEY_RIGHT:
                       {'name': 'scroll char detail',
-                       'func': self.__right_pane},
+                       'func': self.__right_pane,
+                       'help': 'Choose the details pane (on the ' +
+                               'right) for scrolling.'},
 
             ord('a'): {'name': 'about the program',
                        'func': self.__about},
             ord('f'): {'name': 'FIGHT',
-                       'func': self.__run_fight},
-            ord('h'): {'name': 'heal selected creature',
-                       'func': self.__heal},
-            ord('H'): {'name': 'Heal all PCs',
+                       'func': self.__run_fight,
+                       'help': 'Start fighting.  If there is a saved fight, ' +
+                               'that one will start.  Otherwise, if the ' +
+                               'displayed group is ' +
+                               'a bunch of monsters, the fight will be with ' +
+                               'them.  Otherwise, you will be asked to ' +
+                               'select the monsters from a list.'},
+            #ord('h'): {'name': 'heal selected creature',
+            #           'func': self.__heal},
+            ord('h'): {'name': 'Heal all PCs',
                        'func': self.__fully_heal},
             ord('m'): {'name': 'show MONSTERs or PC/NPC',
-                       'func': self.__toggle_Monster_PC_NPC_display},
+                       'func': self.__toggle_Monster_PC_NPC_display,
+                       'help': 'Select whom to display on the main screen. '},
             ord('p'): {'name': 'PERSONNEL changes',
-                       'func': self.__party},
-            ord('q'): {'name': 'quit',
-                       'func': self.__quit},
+                       'func': self.__party,
+                       'help': 'Change the creatures in one of the groups ' +
+                               'of creatures (player characters, non-player ' +
+                               'characters, or one of the groups of ' +
+                               'monsters. You can add creatures to or ' +
+                               'subtract creatures from the selected list, ' +
+                               'modify stats, or add or remove equipment.'},
+            ord('Q'): {'name': 'quit',
+                       'func': self.__quit,
+                       'help': 'Exit the program'},
             ord('R'): {'name': 'resurrect fight',
-                       'func': self.__resurrect_fight},
+                       'func': self.__resurrect_fight,
+                       'help': 'Put a fight that has been completed back ' +
+                               'in the list of availble fights'},
             ord('S'): {'name': 'toggle: Save On Exit',
-                       'func': self.__maintain_game_file},
+                       'func': self.__maintain_game_file,
+                       'help': 'Toggle whether all of the changes to ' +
+                               'your game from this session will be written ' +
+                               'back to the game file when the program is ' +
+                               'exited.  This is really for debugging.'},
             ord('/'): {'name': 'search',
-                       'func': self.__search}
+                       'func': self.__search,
+                       'help': 'Search through all of the various creatures ' +
+                               'in your game for a regular ' +
+                               'expressions.  You will be told where, in ' +
+                               'each search result, the search found your ' +
+                               'search term.  Selecting one of the results ' +
+                               'selects that creature on the screen if that ' +
+                               'creature\'s group is currently displayed.'}
         })
         self._window = self._window_manager.get_main_gm_window(self._choices)
 
