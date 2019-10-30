@@ -3,10 +3,14 @@
 import argparse
 import copy
 import curses
-import ca   # combat accountant
 import pprint
 import random
 import unittest
+
+import ca   # combat accountant
+import ca_fighter
+import ca_gurps_ruleset
+import ca_timers
 
 '''
 FWIW, I realize that many of the Mocks in here are actually Fakes.
@@ -965,7 +969,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         } # End of world
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
 
     def tearDown(self):
         pass
@@ -1063,11 +1067,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Deepcopy so that we don't taint the original
         mock_fight_handler = MockFightHandler()
-        vodou_priest = ca.Fighter('Priest',
-                                  'group',
-                                  copy.deepcopy(self.__vodou_priest_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        vodou_priest = ca_fighter.Fighter(
+                                'Priest',
+                                'group',
+                                copy.deepcopy(self.__vodou_priest_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
 
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'change-posture',
@@ -1085,11 +1090,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Next guy
 
-        bokor_fighter = ca.Fighter('Bokor',
-                                   'group',
-                                   copy.deepcopy(self.__bokor_fighter),
-                                   self.__ruleset,
-                                   self.__window_manager)
+        bokor_fighter = ca_fighter.Fighter(
+                                'Bokor',
+                                'group',
+                                copy.deepcopy(self.__bokor_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
 
         self.__ruleset.do_action(bokor_fighter,
                                  {'name': 'change-posture',
@@ -1105,19 +1111,21 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(bokor_fighter)
         assert dodge_skill == (9 + self.__crawling_defense_mod)
 
-        tank_fighter = ca.Fighter('Tank',
-                                  'group',
-                                  copy.deepcopy(self.__tank_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        tank_fighter = ca_fighter.Fighter(
+                                'Tank',
+                                'group',
+                                copy.deepcopy(self.__tank_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(tank_fighter)
         assert dodge_skill == 9
 
-        thief_fighter = ca.Fighter('Thief',
-                                   'group',
-                                   copy.deepcopy(self.__thief_fighter),
-                                   self.__ruleset,
-                                   self.__window_manager)
+        thief_fighter = ca_fighter.Fighter(
+                                'Thief',
+                                'group',
+                                copy.deepcopy(self.__thief_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(thief_fighter)
         assert dodge_skill == 8
 
@@ -1129,7 +1137,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             print '\n=== test_get_block_skill ===\n'
 
         # TODO: need non-trivial block tests
-        vodou_priest_fighter = ca.Fighter(
+        vodou_priest_fighter = ca_fighter.Fighter(
                                   'Priest',
                                   'group',
                                   copy.deepcopy(self.__vodou_priest_fighter),
@@ -1140,29 +1148,32 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                         None)
         assert block_skill == None
 
-        bokor_fighter = ca.Fighter('Bokor',
-                                   'group',
-                                   copy.deepcopy(self.__bokor_fighter),
-                                   self.__ruleset,
-                                   self.__window_manager)
+        bokor_fighter = ca_fighter.Fighter(
+                                'Bokor',
+                                'group',
+                                copy.deepcopy(self.__bokor_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         block_skill, block_why = self.__ruleset.get_block_skill(bokor_fighter,
                                                                 None)
         assert block_skill == None
 
-        tank_fighter = ca.Fighter('Tank',
-                                  'group',
-                                  copy.deepcopy(self.__tank_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        tank_fighter = ca_fighter.Fighter(
+                                'Tank',
+                                'group',
+                                copy.deepcopy(self.__tank_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         block_skill, block_why = self.__ruleset.get_block_skill(tank_fighter,
                                                                 None)
         assert block_skill == None
 
-        thief_fighter = ca.Fighter('Thief',
-                                   'group',
-                                   copy.deepcopy(self.__thief_fighter),
-                                   self.__ruleset,
-                                   self.__window_manager)
+        thief_fighter = ca_fighter.Fighter(
+                                'Thief',
+                                'group',
+                                copy.deepcopy(self.__thief_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         block_skill, block_why = self.__ruleset.get_block_skill(thief_fighter,
                                                                 None)
         assert block_skill == None
@@ -1177,7 +1188,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Unarmed
         weapon = None
         mock_fight_handler = MockFightHandler()
-        vodou_priest_fighter = ca.Fighter(
+        vodou_priest_fighter = ca_fighter.Fighter(
                                     'Vodou Priest',
                                     'group',
                                     copy.deepcopy(self.__vodou_priest_fighter),
@@ -1190,32 +1201,35 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Unarmed
         weapon = None
-        bokor_fighter = ca.Fighter('Bokor',
-                                   'group',
-                                   copy.deepcopy(self.__bokor_fighter),
-                                   self.__ruleset,
-                                   self.__window_manager)
+        bokor_fighter = ca_fighter.Fighter(
+                                'Bokor',
+                                'group',
+                                copy.deepcopy(self.__bokor_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(bokor_fighter,
                                                                 weapon)
         assert parry_skill is None # None w/weapon; still OK hand-to-hand
 
         # Unarmed
         weapon = None
-        tank_fighter = ca.Fighter('Tank',
-                                  'group',
-                                  copy.deepcopy(self.__tank_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        tank_fighter = ca_fighter.Fighter(
+                                'Tank',
+                                'group',
+                                copy.deepcopy(self.__tank_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(tank_fighter,
                                                                 weapon)
         assert parry_skill is None # None w/weapon; still OK hand-to-hand
 
         # Armed (sick stick)
-        tank_fighter = ca.Fighter('Tank',
-                                  'group',
-                                  copy.deepcopy(self.__tank_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        tank_fighter = ca_fighter.Fighter(
+                                'Tank',
+                                'group',
+                                copy.deepcopy(self.__tank_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         weapon_index, weapon  = tank_fighter.get_weapon_by_name('sick stick')
         self.__ruleset.do_action(tank_fighter,
                                  {'name': 'draw-weapon',
@@ -1240,21 +1254,23 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Unarmed
         weapon = None
-        thief_fighter = ca.Fighter('Thief',
-                                   'group',
-                                   copy.deepcopy(self.__thief_fighter),
-                                   self.__ruleset,
-                                   self.__window_manager)
+        thief_fighter = ca_fighter.Fighter(
+                                'Thief',
+                                'group',
+                                copy.deepcopy(self.__thief_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(thief_fighter,
                                                                 weapon)
         assert parry_skill is None # None w/weapon; still OK hand-to-hand
 
         # Armed (Knife)
-        thief_fighter = ca.Fighter('Thief',
-                                   'group',
-                                   copy.deepcopy(self.__thief_fighter),
-                                   self.__ruleset,
-                                   self.__window_manager)
+        thief_fighter = ca_fighter.Fighter(
+                                'Thief',
+                                'group',
+                                copy.deepcopy(self.__thief_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         weapon_index, weapon = thief_fighter.get_weapon_by_name('Large Knife')
         self.__ruleset.do_action(tank_fighter,
                                  {'name': 'draw-weapon',
@@ -1286,7 +1302,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Vodou Priest
         unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
         mock_fight_handler = MockFightHandler()
-        vodou_priest_fighter = ca.Fighter(
+        vodou_priest_fighter = ca_fighter.Fighter(
                                     'Vodou Priest',
                                     'group',
                                     copy.deepcopy(self.__vodou_priest_fighter),
@@ -1304,11 +1320,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert hand_to_hand_info['parry_skill'] == 10
 
         # Bokor
-        bokor_fighter = ca.Fighter('Bokor',
-                                   'group',
-                                   copy.deepcopy(self.__bokor_fighter),
-                                   self.__ruleset,
-                                   self.__window_manager)
+        bokor_fighter = ca_fighter.Fighter(
+                                'Bokor',
+                                'group',
+                                copy.deepcopy(self.__bokor_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(bokor_fighter,
                                                             None,
                                                             None,
@@ -1321,11 +1338,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert hand_to_hand_info['parry_skill'] == 10
 
         # Tank
-        tank_fighter = ca.Fighter('Tank',
-                                  'group',
-                                  copy.deepcopy(self.__tank_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        tank_fighter = ca_fighter.Fighter(
+                                'Tank',
+                                'group',
+                                copy.deepcopy(self.__tank_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
                                                             None,
                                                             None,
@@ -1337,11 +1355,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert hand_to_hand_info['parry_skill'] == 12
 
         # Thief
-        thief_fighter = ca.Fighter('Thief',
-                                   'group',
-                                   copy.deepcopy(self.__thief_fighter),
-                                   self.__ruleset,
-                                   self.__window_manager)
+        thief_fighter = ca_fighter.Fighter(
+                                'Thief',
+                                'group',
+                                copy.deepcopy(self.__thief_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
                                                             None,
                                                             None,
@@ -1372,11 +1391,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                 + self.__crawling_defense_mod)
 
         # Thief w/o brass knuckles
-        thief_fighter = ca.Fighter('Thief',
-                                   'group',
-                                   copy.deepcopy(self.__thief_fighter),
-                                   self.__ruleset,
-                                   self.__window_manager)
+        thief_fighter = ca_fighter.Fighter(
+                                'Thief',
+                                'group',
+                                copy.deepcopy(self.__thief_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
                                                             None,
                                                             None,
@@ -1558,12 +1578,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         injured_hp = 3 # arbitrary amount
         injured_fighter.details['current']['hp'] -= injured_hp
-        unconscious_fighter.set_consciousness(ca.Fighter.UNCONSCIOUS)
-        dead_fighter.set_consciousness(ca.Fighter.DEAD)
+        unconscious_fighter.set_consciousness(ca_fighter.Fighter.UNCONSCIOUS)
+        dead_fighter.set_consciousness(ca_fighter.Fighter.DEAD)
 
-        assert injured_fighter.get_state() == ca.Fighter.INJURED
-        assert unconscious_fighter.get_state() == ca.Fighter.UNCONSCIOUS
-        assert dead_fighter.get_state() == ca.Fighter.DEAD
+        assert injured_fighter.get_state() == ca_fighter.Fighter.INJURED
+        assert unconscious_fighter.get_state() == ca_fighter.Fighter.UNCONSCIOUS
+        assert dead_fighter.get_state() == ca_fighter.Fighter.DEAD
 
         expected_index = 0
         assert world_data.read_data['current-fight']['index'] == expected_index
@@ -1819,14 +1839,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             print '\n=== test_ranged_to_hit ===\n'
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = ca.Fighter('Priest',
-                                  'group',
-                                  copy.deepcopy(self.__vodou_priest_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        vodou_priest = ca_fighter.Fighter(
+                                'Priest',
+                                'group',
+                                copy.deepcopy(self.__vodou_priest_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'draw-weapon',
@@ -2018,11 +2039,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
         self.__ruleset.reset_aim(vodou_priest)
-        tank = ca.Fighter('Tank',
-                          'group',
-                          copy.deepcopy(self.__tank_fighter),
-                          self.__ruleset,
-                          self.__window_manager)
+        tank = ca_fighter.Fighter(
+                            'Tank',
+                            'group',
+                            copy.deepcopy(self.__tank_fighter),
+                            self.__ruleset,
+                            self.__window_manager)
 
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'change-posture',
@@ -2062,14 +2084,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             print '\n=== test_messed_up_aim ===\n'
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = ca.Fighter('Priest',
-                                  'group',
-                                  copy.deepcopy(self.__vodou_priest_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        vodou_priest = ca_fighter.Fighter(
+                                'Priest',
+                                'group',
+                                copy.deepcopy(self.__vodou_priest_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'draw-weapon',
@@ -2298,14 +2321,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             print '\n=== test_melee_to_hit ===\n'
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        thief = ca.Fighter('Thief',
-                           'group',
-                           copy.deepcopy(self.__thief_fighter),
-                           self.__ruleset,
-                           self.__window_manager)
+        thief = ca_fighter.Fighter(
+                        'Thief',
+                        'group',
+                        copy.deepcopy(self.__thief_fighter),
+                        self.__ruleset,
+                        self.__window_manager)
         requested_weapon_index = 1 # Knife
         self.__ruleset.do_action(thief,
                                  {'name': 'draw-weapon',
@@ -2337,11 +2361,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # --- Opponents w/ posture (shouldn't change melee attack) ---
 
-        tank_fighter = ca.Fighter('Tank',
-                                  'group',
-                                  copy.deepcopy(self.__tank_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        tank_fighter = ca_fighter.Fighter(
+                                'Tank',
+                                'group',
+                                copy.deepcopy(self.__tank_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
 
         self.__ruleset.do_action(thief,
                                  {'name': 'change-posture',
@@ -2404,14 +2429,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = ca.Fighter('Priest',
-                                  'group',
-                                  copy.deepcopy(self.__vodou_priest_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        vodou_priest = ca_fighter.Fighter(
+                                'Priest',
+                                'group',
+                                copy.deepcopy(self.__vodou_priest_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
 
         requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest,
@@ -2567,7 +2593,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response(
             ('Major Wound (B420): Roll vs. HT (%d) or be stunned' %
                                                     self.__vodou_priest_ht),
-            ca.GurpsRuleset.MAJOR_WOUND_SUCCESS)
+            ca_gurps_ruleset.GurpsRuleset.MAJOR_WOUND_SUCCESS)
 
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'adjust-hp', 'adj': major_damage},
@@ -2601,7 +2627,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response(
             ('Major Wound (B420): Roll vs. HT (%d) or be stunned' %
                                                     self.__vodou_priest_ht),
-            ca.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
+            ca_gurps_ruleset.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
 
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'adjust-hp', 'adj': major_damage},
@@ -2666,7 +2692,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response(
             ('Major Wound (B420): Roll vs. HT (%d) or be stunned' %
                                                     self.__vodou_priest_ht),
-            ca.GurpsRuleset.MAJOR_WOUND_BAD_FAIL)
+            ca_gurps_ruleset.GurpsRuleset.MAJOR_WOUND_BAD_FAIL)
 
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'adjust-hp', 'adj': major_damage},
@@ -2825,14 +2851,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = ca.Fighter('Priest',
-                                  'group',
-                                  copy.deepcopy(self.__vodou_priest_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        vodou_priest = ca_fighter.Fighter(
+                                'Priest',
+                                'group',
+                                copy.deepcopy(self.__vodou_priest_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
 
         del vodou_priest.details['advantages']['Combat Reflexes']
 
@@ -2872,7 +2899,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         self.__window_manager.set_menu_response(
             ('Major Wound (B420): Roll vs. HT+3 (%d) or be stunned' %
                                                                 stun_roll),
-            ca.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
+            ca_gurps_ruleset.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
 
         # failed the high stun roll so knockdown & stun is still in effect
 
@@ -2937,7 +2964,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         #self.__window_manager.set_menu_response(
         #    ('Major Wound (B420): Roll vs. HT+3 (%d) or be stunned' %
         #                                                        stun_roll),
-        #    ca.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
+        #    ca_gurps_ruleset.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
 
         ## failed the high stun roll so knockdown & stun is still in effect
 
@@ -2984,20 +3011,22 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = ca.Fighter('Priest',
-                                  'group',
-                                  copy.deepcopy(self.__vodou_priest_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        vodou_priest = ca_fighter.Fighter(
+                                'Priest',
+                                'group',
+                                copy.deepcopy(self.__vodou_priest_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
 
-        opponent = ca.Fighter('Opponent',
-                              'other_group',
-                              copy.deepcopy(self.__one_more_guy),
-                              self.__ruleset,
-                              self.__window_manager)
+        opponent = ca_fighter.Fighter(
+                                'Opponent',
+                                'other_group',
+                                copy.deepcopy(self.__one_more_guy),
+                                self.__ruleset,
+                                self.__window_manager)
 
         mock_fight_handler.set_opponent_for(vodou_priest, opponent)
         mock_fight_handler.set_fighter_object('Priest',
@@ -3055,17 +3084,17 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             vodou_priest.timers.clear_all()
             vodou_priest.details['current']['fp'] = original_fp
 
-            if ca.GurpsRuleset.spells[trial['name']]['cost'] is None:
+            if ca_gurps_ruleset.GurpsRuleset.spells[trial['name']]['cost'] is None:
                 self.__window_manager.set_input_box_response(
                     'Cost to cast (%s) - see (%s) ' % (trial['name'],
                                                        trial['notes']),
                     '%s' % trial['cost'])
-            if ca.GurpsRuleset.spells[trial['name']]['casting time'] is None:
+            if ca_gurps_ruleset.GurpsRuleset.spells[trial['name']]['casting time'] is None:
                 self.__window_manager.set_input_box_response(
                     'Seconds to cast (%s) - see (%s) ' % (trial['name'],
                                                           trial['notes']),
                     '%s' % trial['casting time'])
-            if ca.GurpsRuleset.spells[trial['name']]['duration'] is None:
+            if ca_gurps_ruleset.GurpsRuleset.spells[trial['name']]['duration'] is None:
                 self.__window_manager.set_input_box_response(
                     'Duration for (%s) - see (%s) ' % (trial['name'],
                                                        trial['notes']),
@@ -3187,14 +3216,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = ca.Fighter('Priest',
-                                  'group',
-                                  copy.deepcopy(self.__vodou_priest_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        vodou_priest = ca_fighter.Fighter(
+                                'Priest',
+                                'group',
+                                copy.deepcopy(self.__vodou_priest_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
 
         # Don armor
 
@@ -3232,14 +3262,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = ca.Fighter('Priest',
-                                  'group',
-                                  copy.deepcopy(self.__vodou_priest_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        vodou_priest = ca_fighter.Fighter(
+                                'Priest',
+                                'group',
+                                copy.deepcopy(self.__vodou_priest_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
 
         # Draw Weapon
 
@@ -3275,14 +3306,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = ca.Fighter('Priest',
-                                  'group',
-                                  copy.deepcopy(self.__vodou_priest_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        vodou_priest = ca_fighter.Fighter(
+                                'Priest',
+                                'group',
+                                copy.deepcopy(self.__vodou_priest_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
 
         # Draw Weapon
 
@@ -3366,7 +3398,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
 
         world_data = WorldData(self.init_world_dict)
         mock_program = MockProgram()
@@ -3389,8 +3421,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # check consciousness level
 
-        state_number = ca.Fighter.get_fighter_state(current_fighter.details)
-        assert state_number == ca.Fighter.ALIVE
+        state_number = ca_fighter.Fighter.get_fighter_state(current_fighter.details)
+        assert state_number == ca_fighter.Fighter.ALIVE
 
         self.__ruleset.do_action(current_fighter,
                                  {'name': 'pick-opponent',
@@ -3399,23 +3431,23 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # Test
 
-        new_state = ca.Fighter.ALIVE
+        new_state = ca_fighter.Fighter.ALIVE
         self.__ruleset.do_action(current_fighter,
                                 {'name': 'set-consciousness',
                                  'level': new_state},
                                  fight_handler)
-        state_number = ca.Fighter.get_fighter_state(current_fighter.details)
+        state_number = ca_fighter.Fighter.get_fighter_state(current_fighter.details)
         assert state_number == new_state
         opponent = fight_handler.get_opponent_for(current_fighter)
         assert opponent.name == 'Moe'
         assert opponent.group == 'PCs'
 
-        new_state = ca.Fighter.UNCONSCIOUS
+        new_state = ca_fighter.Fighter.UNCONSCIOUS
         self.__ruleset.do_action(current_fighter,
                                 {'name': 'set-consciousness',
                                  'level': new_state},
                                  fight_handler)
-        state_number = ca.Fighter.get_fighter_state(current_fighter.details)
+        state_number = ca_fighter.Fighter.get_fighter_state(current_fighter.details)
         assert state_number == new_state
         opponent = fight_handler.get_opponent_for(current_fighter)
         assert opponent is None
@@ -3464,14 +3496,15 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
-        vodou_priest = ca.Fighter('Priest',
-                                  'group',
-                                  copy.deepcopy(self.__vodou_priest_fighter),
-                                  self.__ruleset,
-                                  self.__window_manager)
+        vodou_priest = ca_fighter.Fighter(
+                                'Priest',
+                                'group',
+                                copy.deepcopy(self.__vodou_priest_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
         requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'draw-weapon',
@@ -3520,18 +3553,19 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         if ARGS.verbose:
             print '\n=== test_timers ===\n'
 
-        fighter = ca.Fighter('Tank',
-                             'group',
-                             copy.deepcopy(self.__tank_fighter),
-                             self.__ruleset,
-                             self.__window_manager)
+        fighter = ca_fighter.Fighter(
+                            'Tank',
+                            'group',
+                            copy.deepcopy(self.__tank_fighter),
+                            self.__ruleset,
+                            self.__window_manager)
 
         # Test a standard timer
 
         timer_id = 0
         round_count = 3
         timer_text = '%d' % timer_id
-        timer_obj = ca.Timer(None)
+        timer_obj = ca_timers.Timer(None)
         timer_obj.from_pieces({'parent-name': fighter.name,
                                'rounds': round_count,
                                'string': timer_text})
@@ -3558,7 +3592,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         for i in range(timer_count):
             timer_text = '%d' % timer_id
             timer_id += 1
-            timer_obj = ca.Timer(None)
+            timer_obj = ca_timers.Timer(None)
             timer_obj.from_pieces({'parent-name': fighter.name,
                                    'rounds': round_count[i],
                                    'string': timer_text})
@@ -3607,7 +3641,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         timer_id = 0
         round_count = 1
         timer0_text = '%d' % timer_id
-        timer_obj = ca.Timer(None)
+        timer_obj = ca_timers.Timer(None)
         timer_obj.from_pieces({'parent-name': fighter.name,
                                'rounds': round_count,
                                'string': timer0_text})
@@ -3626,7 +3660,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         timer_id = 1
         round_count = 0.9
         timer1_text = '%d' % timer_id
-        timer_obj = ca.Timer(None)
+        timer_obj = ca_timers.Timer(None)
         timer_obj.from_pieces({'parent-name': fighter.name,
                                'rounds': round_count,
                                'string': timer1_text})
@@ -3664,7 +3698,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         base_world_dict = copy.deepcopy(self.base_world_dict)
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca.GurpsRuleset(self.__window_manager)
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
 
         # Test that leaving a fight moves the bad guys to the dead monster
         # list
@@ -3785,11 +3819,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         if ARGS.verbose:
             print '\n=== test_add_remove_equipment ===\n'
 
-        fighter = ca.Fighter('Tank',
-                             'group',
-                             copy.deepcopy(self.__tank_fighter),
-                             self.__ruleset,
-                             self.__window_manager)
+        fighter = ca_fighter.Fighter(
+                            'Tank',
+                            'group',
+                            copy.deepcopy(self.__tank_fighter),
+                            self.__ruleset,
+                            self.__window_manager)
 
         original_item = fighter.details['stuff'][
                                         self.__tank_fighter_pistol_index]
