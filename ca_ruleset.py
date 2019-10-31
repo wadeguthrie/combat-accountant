@@ -25,7 +25,7 @@ class Ruleset(object):
     }
     '''
 
-    (UNHANDLED, HANDLED_OK, HANDLED_ERROR) = range(3)
+    (UNHANDLED, HANDLED_OK, HANDLED_ERROR, DONT_LOG) = range(4)
 
     def __init__(self,
                  window_manager # GmWindowManager object for menus and errors
@@ -427,7 +427,6 @@ class Ruleset(object):
         return Ruleset.HANDLED_OK
 
 
-    # TODO: this should be a two-stage action like 'cast-spell'
     def __do_custom_action(self,
                            fighter,          # Fighter object
                            action,           # {'name': 'user-defined',
@@ -443,12 +442,24 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
+        if 'part' in action and action['part'] == 2:
+            return Ruleset.HANDLED_OK   # We're here just so the new action can
+                                        # get logged
         height = 1
         title = 'What Action Is Performed'
         width = self._window_manager.getmaxyx()
         comment_string = self._window_manager.input_box(height, width, title)
-        action['comment'] += ' -- %s' % comment_string
-        return Ruleset.HANDLED_OK
+
+        new_action = {'name': 'user-defined',
+                      'part': 2}
+
+        if 'comment' in action:
+            new_action['comment'] = '%s -- ' % action['comment']
+        new_action['comment'] += comment_string
+
+        self.do_action(fighter, new_action, fight_handler)
+
+        return Ruleset.DONT_LOG
 
 
     def __do_reload(self,
@@ -590,7 +601,7 @@ class Ruleset(object):
             'draw-weapon':          {'doit': self.__draw_weapon},
             'end-turn':             {'doit': self.__end_turn},
             'pick-opponent':        {'doit': self.__pick_opponent},
-            'reload-really':        {'doit': self.__do_reload},
+            'reload':               {'doit': self.__do_reload},
             'set-consciousness':    {'doit': self.__set_consciousness},
             'set-timer':            {'doit': self.__set_timer},
             'start-turn':           {'doit': self.__start_turn},
@@ -652,7 +663,7 @@ class Ruleset(object):
         Returns: nothing.
         '''
 
-        if fight_handler is not None and logit:
+        if fight_handler is not None and logit and handled != Ruleset.DONT_LOG:
             fight_handler.add_to_history(action)
 
         return
