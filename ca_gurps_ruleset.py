@@ -2827,229 +2827,220 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
     def __cast_spell(self,
                      fighter,      # Fighter object
-                     action,       # {'name': 'cast-spell',
-                                   #  'spell-index': <index in 'spells'>, ...
+                     action,       # {'name': 'cast-spell'
+                                   #  'spell-index': <index in 'spells'>,
+                                   #  'complete spell': <dict> # this
+                                   #     is a combination of the spell
+                                   #     in the character details and
+                                   #     the same spell from the
+                                   #     ruleset
                                    #  'comment': <string>, # optional
+                                   #  'part': 2 # optional
                      fight_handler # FightHandler object
                     ):
         '''
         Action handler for GurpsRuleset.
 
-        This is the 1st part of a 2-part action.  This action ('cast-spell')
-        asks questions of the user and sends the second part
-        ('cast-spell-really').  The 1st part isn't executed when playing back.
+        Handles the action of casting a magic spell.
 
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
         '''
+        if 'part' in action and action['part'] == 2:
+            # This is the 2nd part of a 2-part action.  The 2nd part of this
+            # action actually perfoms all the actions and side-effects of
+            # casting a spell.  This is mostly a bunch of timers.
 
-        if fight_handler is not None and fight_handler.world.playing_back:
-            return None # No timers
+            complete_spell = action['complete spell']
 
-        # Assemble the spell from the ruleset's copy of it and the Fighter's
-        # copy of it.
+            # Charge the spell caster for the spell.
 
-        spell_index = action['spell-index']
-        spell = fighter.details['spells'][spell_index]
+            if complete_spell['cost'] > 0:
+                self.do_action(fighter,
+                               {'name': 'adjust-fp',
+                                'adj': -complete_spell['cost']},
+                               fight_handler,
+                               logit=False)
 
-        if spell['name'] not in GurpsRuleset.spells:
-            self._window_manager.error(
-                ['Spell "%s" not in GurpsRuleset.spells' % spell['name']]
-            )
-            return None # No timers
-        complete_spell = copy.deepcopy(spell)
-        complete_spell.update(GurpsRuleset.spells[spell['name']])
+            # Duration Timer
 
-        # Duration
+            # If the spell lasts any time at all, put a timer up so that we see
+            # that it's active
 
-        if complete_spell['duration'] is None:
-            title = 'Duration for (%s) - see (%s) ' % (
-                                                    complete_spell['name'],
-                                                    complete_spell['notes'])
-            height = 1
-            width = len(title)
-            duration_string = ''
-            while len(duration_string) <= 0:
-                duration_string = self._window_manager.input_box(height,
-                                                                 width,
-                                                                 title)
-            complete_spell['duration'] = int(duration_string)
-
-        # Cost
-
-        if complete_spell['cost'] is None:
-            title = 'Cost to cast (%s) - see (%s) ' % (complete_spell['name'],
-                                                       complete_spell['notes'])
-            height = 1
-            width = len(title)
-            cost_string = ''
-            while len(cost_string) <= 0:
-                cost_string = self._window_manager.input_box(height,
-                                                             width,
-                                                             title)
-            complete_spell['cost'] = int(cost_string)
-
-        # M8 - High skill level costs less
-        skill = complete_spell['skill'] - 15
-        while skill >= 0:
-            complete_spell['cost'] -= 1
-            skill -= 5
-        if complete_spell['cost'] <= 0:
-            complete_spell['cost'] = 0
-
-        # Casting time
-
-        if (complete_spell['casting time'] is None or
-                                        complete_spell['casting time'] == 0):
-            title = 'Seconds to cast (%s) - see (%s) ' % (
-                                                    complete_spell['name'],
-                                                    complete_spell['notes'])
-            height = 1
-            width = len(title)
-            casting_time_string = ''
-            while len(casting_time_string) <= 0:
-                casting_time_string = self._window_manager.input_box(height,
-                                                                     width,
-                                                                     title)
-            complete_spell['casting time'] = int(casting_time_string)
-
-        # Opponent?
-
-        opponent = None
-        if fight_handler is not None:
-            opponent = fight_handler.get_opponent_for(fighter)
-
-        if opponent is not None:
-            opponent_timer_menu = [('yes', True), ('no', False)]
-            timer_for_opponent = self._window_manager.menu(
-                                        ('Mark %s with spell' % opponent.name),
-                                        opponent_timer_menu)
-            if not timer_for_opponent:
-                opponent = None
-
-        # Send the action for the second part
-
-        new_action = {'name': 'cast-spell-really',
-                      'complete spell': complete_spell}
-
-        if opponent is not None:
-            new_action['opponent'] = {'name': opponent.name,
-                                      'group': opponent.group}
-
-        self.do_action(fighter, new_action, fight_handler)
-
-        return None # No new timers
-
-
-    def __cast_spell_really(self,
-                            fighter,      # Fighter object
-                            action,       # {'name': 'cast-spell-really'
-                                          #  'complete spell': <dict> # this
-                                          #     is a combination of the spell
-                                          #     in the character details and
-                                          #     the same spell from the
-                                          #     ruleset
-                                          #  'comment': <string>, # optional
-                            fight_handler # FightHandler object
-                           ):
-        '''
-        Action handler for GurpsRuleset.
-
-        This is the 2nd part of a 2-part action.  This action
-        ('cast-spell-really') actually perfoms all the actions and
-        side-effects of casting a spell.  This is mostly a bunch of timers.
-
-        Returns: Timer (if any) to add to Fighter.  Used for keeping track
-            of what the Fighter is doing.
-        '''
-
-        complete_spell = action['complete spell']
-
-        # Charge the spell caster for the spell.
-
-        if complete_spell['cost'] > 0:
-            self.do_action(fighter,
-                           {'name': 'adjust-fp',
-                            'adj': -complete_spell['cost']},
-                           fight_handler,
-                           logit=False)
-
-        # Duration Timer
-
-
-        # If the spell lasts any time at all, put a timer up so that we see
-        # that it's active
-
-        duration_timer = ca_timers.Timer(None)
-        if complete_spell['duration'] > 0:
-            duration_timer.from_pieces(
-                       {'parent-name': fighter.name,
-                        'rounds': complete_spell['duration'] -
+            duration_timer = ca_timers.Timer(None)
+            if complete_spell['duration'] > 0:
+                duration_timer.from_pieces(
+                           {'parent-name': fighter.name,
+                            'rounds': complete_spell['duration'] -
                                             ca_timers.Timer.announcement_margin,
-                        'string': 'CAST SPELL (%s) ACTIVE' %
+                            'string': 'CAST SPELL (%s) ACTIVE' %
                                                         complete_spell['name']
-                       })
+                           })
 
-        # Casting Timer
+            # Casting Timer
 
-        casting_timer = ca_timers.Timer(None)
-        text = [('Casting (%s) @ skill (%d): %s' % (complete_spell['name'],
+            casting_timer = ca_timers.Timer(None)
+            text = [('Casting (%s) @ skill (%d): %s' % (
+                                                    complete_spell['name'],
                                                     complete_spell['skill'],
                                                     complete_spell['notes'])),
-                ' Defense: none',
-                ' Move: none']
+                    ' Defense: none',
+                    ' Move: none']
 
-        actions = {'timer': duration_timer.details}
-        if complete_spell['duration'] == 0:
-            actions['announcement'] = ('CAST SPELL (%s) FIRED' %
+            actions = {'timer': duration_timer.details}
+            if complete_spell['duration'] == 0:
+                actions['announcement'] = ('CAST SPELL (%s) FIRED' %
                                                         complete_spell['name'])
 
-        casting_timer.from_pieces({'parent-name': fighter.name,
-                           'rounds': complete_spell['casting time'] -
-                                        ca_timers.Timer.announcement_margin,
-                           'string': text,
-                           'actions': actions})
-        casting_timer.mark_owner_as_busy()  # When casting, the owner is busy
+            casting_timer.from_pieces({'parent-name': fighter.name,
+                               'rounds': complete_spell['casting time'] -
+                                            ca_timers.Timer.announcement_margin,
+                               'string': text,
+                               'actions': actions})
+            casting_timer.mark_owner_as_busy()  # When casting, the owner is busy
 
-        # Opponent's Timers
+            # Opponent's Timers
 
-        if 'opponent' in action and fight_handler is not None:
-            opponent = fight_handler.get_fighter_object(
-                                            action['opponent']['name'],
-                                            action['opponent']['group'])
+            if 'opponent' in action and fight_handler is not None:
+                opponent = fight_handler.get_fighter_object(
+                                                action['opponent']['name'],
+                                                action['opponent']['group'])
 
-            spell_timer = ca_timers.Timer(None)
-            if complete_spell['duration'] > 0:
-                spell_timer.from_pieces(
+                spell_timer = ca_timers.Timer(None)
+                if complete_spell['duration'] > 0:
+                    spell_timer.from_pieces(
+                             {'parent-name': opponent.name,
+                              'rounds': complete_spell['duration'] -
+                                            ca_timers.Timer.announcement_margin,
+                              'string': 'SPELL "%s" AGAINST ME' %
+                                                        complete_spell['name']
+                             })
+
+                delay_timer = ca_timers.Timer(None)
+
+                actions = {'timer': spell_timer.details}
+                if complete_spell['duration'] == 0:
+                    actions['announcement'] = ('SPELL (%s) AGAINST ME FIRED' %
+                                                        complete_spell['name'])
+
+                # Add 1 to the timer because the first thing the opponent will
+                # see is a decrement (the caster only sees the decrement on the
+                # _next_ round)
+                delay_timer.from_pieces(
                          {'parent-name': opponent.name,
-                          'rounds': complete_spell['duration'] -
-                                        ca_timers.Timer.announcement_margin,
-                          'string': 'SPELL "%s" AGAINST ME' %
-                                                    complete_spell['name']
+                          'rounds': 1 + complete_spell['casting time'] -
+                                            ca_timers.Timer.announcement_margin,
+                          'string': ('Waiting for "%s" spell to take affect' %
+                                                    complete_spell['name']),
+                          'actions': actions
                          })
 
-            delay_timer = ca_timers.Timer(None)
+                opponent.timers.add(delay_timer)
 
-            actions = {'timer': spell_timer.details}
-            if complete_spell['duration'] == 0:
-                actions['announcement'] = ('SPELL (%s) AGAINST ME FIRED' %
-                                                        complete_spell['name'])
+            return casting_timer
+        else:
+            # This is the 1st part of a 2-part action.  This 1st part of this
+            # action asks questions of the user and sends the second part.
+            # The 1st part isn't executed when playing back.
 
-            # Add 1 to the timer because the first thing the opponent will see
-            # is a decrement (the caster only sees the decrement on the _next_
-            # round)
-            delay_timer.from_pieces(
-                     {'parent-name': opponent.name,
-                      'rounds': 1 + complete_spell['casting time'] -
-                                        ca_timers.Timer.announcement_margin,
-                      'string': ('Waiting for "%s" spell to take affect' %
-                                                complete_spell['name']),
-                      'actions': actions
-                     })
+            if fight_handler is not None and fight_handler.world.playing_back:
+                return None # No timers
 
-            opponent.timers.add(delay_timer)
+            # Assemble the spell from the ruleset's copy of it and the Fighter's
+            # copy of it.
 
-        return casting_timer
+            spell_index = action['spell-index']
+            spell = fighter.details['spells'][spell_index]
+
+            if spell['name'] not in GurpsRuleset.spells:
+                self._window_manager.error(
+                    ['Spell "%s" not in GurpsRuleset.spells' % spell['name']]
+                )
+                return None # No timers
+            complete_spell = copy.deepcopy(spell)
+            complete_spell.update(GurpsRuleset.spells[spell['name']])
+
+            # Duration
+
+            if complete_spell['duration'] is None:
+                title = 'Duration for (%s) - see (%s) ' % (
+                                                        complete_spell['name'],
+                                                        complete_spell['notes'])
+                height = 1
+                width = len(title)
+                duration_string = ''
+                while len(duration_string) <= 0:
+                    duration_string = self._window_manager.input_box(height,
+                                                                     width,
+                                                                     title)
+                complete_spell['duration'] = int(duration_string)
+
+            # Cost
+
+            if complete_spell['cost'] is None:
+                title = 'Cost to cast (%s) - see (%s) ' % (
+                                                        complete_spell['name'],
+                                                        complete_spell['notes'])
+                height = 1
+                width = len(title)
+                cost_string = ''
+                while len(cost_string) <= 0:
+                    cost_string = self._window_manager.input_box(height,
+                                                                 width,
+                                                                 title)
+                complete_spell['cost'] = int(cost_string)
+
+            # M8 - High skill level costs less
+            skill = complete_spell['skill'] - 15
+            while skill >= 0:
+                complete_spell['cost'] -= 1
+                skill -= 5
+            if complete_spell['cost'] <= 0:
+                complete_spell['cost'] = 0
+
+            # Casting time
+
+            if (complete_spell['casting time'] is None or
+                                        complete_spell['casting time'] == 0):
+                title = 'Seconds to cast (%s) - see (%s) ' % (
+                                                    complete_spell['name'],
+                                                    complete_spell['notes'])
+                height = 1
+                width = len(title)
+                casting_time_string = ''
+                while len(casting_time_string) <= 0:
+                    casting_time_string = self._window_manager.input_box(height,
+                                                                         width,
+                                                                         title)
+                complete_spell['casting time'] = int(casting_time_string)
+
+            # Opponent?
+
+            opponent = None
+            if fight_handler is not None:
+                opponent = fight_handler.get_opponent_for(fighter)
+
+            if opponent is not None:
+                opponent_timer_menu = [('yes', True), ('no', False)]
+                timer_for_opponent = self._window_manager.menu(
+                                        ('Mark %s with spell' % opponent.name),
+                                        opponent_timer_menu)
+                if not timer_for_opponent:
+                    opponent = None
+
+            # Send the action for the second part
+
+            new_action = {'name': 'cast-spell',
+                          'complete spell': complete_spell,
+                          'part': 2}
+
+            if opponent is not None:
+                new_action['opponent'] = {'name': opponent.name,
+                                          'group': opponent.group}
+
+            self.do_action(fighter, new_action, fight_handler)
+
+            return None # No new timers
 
 
     def __change_posture(self,
@@ -3616,7 +3607,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # PP.pprint(action)
 
         has_a_part_2 = {
-            'reload' : True
+            'reload' : True,
+            'cast-spell' : True,
         }
 
         # Call base class' perform_action FIRST because GurpsRuleset depends on
@@ -3648,7 +3640,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'all-out-attack':       {'doit': self.__do_attack},
             'attack':               {'doit': self.__do_attack},
             'cast-spell':           {'doit': self.__cast_spell},
-            'cast-spell-really':    {'doit': self.__cast_spell_really},
             'change-posture':       {'doit': self.__change_posture},
             'check-for-death':      {'doit': self.__check_for_death},
             'concentrate':          {'doit': self.__do_nothing},
