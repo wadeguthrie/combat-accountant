@@ -3426,117 +3426,100 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
 
     def __do_reload(self,
-                    fighter,          # Fighter object
-                    action,           # {'name': 'reload',
-                                      #  'notimer': <bool>, # whether to
-                                      #                       return a timer
-                                      #                       for the fighter
-                                      #                       -- optional
-                                      #  'comment': <string>, # optional
-                                      #  'quiet': <bool>    # use defaults for
-                                      #                       all user
-                                      #                       interactions
-                                      #                       -- optional
-                                      # }
+                    fighter, # Fighter object
+                    action,  # {'name': 'reload-really',
+                             #  'notimer': <bool>, # whether to
+                             #                       return a timer
+                             #                       for the fighter
+                             #                       -- optional
+                             #  'comment': <string>, # optional
+                             #  'quiet': <bool>    # use defaults for
+                             #                       all user
+                             #                       interactions
+                             #                       -- optional
+                             #  'time': <duration>
+                             #  'part': 2          # optional }
+                             # }
                     fight_handler,    # FightHandler object
-                  ):
+                   ):
         '''
         Action handler for GurpsRuleset.
 
-        This is the 1st part of a 2-part action.  This action ('reload') asks
-        questions of the user and sends the second part ('reload-really').
-        The 1st part isn't executed when playing back.
+        Handles reloading a weapon.
 
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
         '''
 
-        if fight_handler is not None and fight_handler.world.playing_back:
+        if 'part' in action and action['part'] == 2:
+            # This is the 2nd part of a 2-part action.  This part of the action
+            # actually perfoms all the GurpsRuleset-specific actions and
+            # side-effects of reloading the Fighter's current weapon.  Note
+            # that a lot of the obvious part is done by the base class Ruleset.
+
+            self.reset_aim(fighter)
+
+            # Timer
+
+            timer = None
+            if 'notimer' not in action or not action['notimer']:
+                timer = ca_timers.Timer(None)
+                timer.from_pieces(
+                    {'parent-name': fighter.name,
+                     'rounds': action['time'] - ca_timers.Timer.announcement_margin,
+                     'string': 'RELOADING'} )
+
+                timer.mark_owner_as_busy()  # When reloading, the owner is busy
+
+            return timer
+        else:
+            # This is the 1st part of a 2-part action.  This part of the
+            # action asks questions of the user and sends the second part
+            # The 1st part isn't executed when playing back.
+
+            if fight_handler is not None and fight_handler.world.playing_back:
+                return None # No timer
+
+            weapon, weapon_index = fighter.get_current_weapon()
+            if weapon is None or 'ammo' not in weapon:
+                return None # No timer
+
+            # Check to see if we need a reload at all
+
+            if weapon['ammo']['shots_left'] == weapon['ammo']['shots']:
+                return None # No timer
+
+            # If we do, how long will it take?
+
+            reload_time = weapon['reload']
+
+            # B43: combat reflexes
+            if 'Combat Reflexes' in fighter.details['advantages']:
+                reload_time -= 1
+
+            quiet = False if 'quiet' not in action else action['quiet']
+            if not quiet:
+                # B194: fast draw
+                if 'Fast-Draw (Ammo)' in fighter.details['skills']:
+                    skill_menu = [('made SKILL roll', True),
+                                  ('did NOT make SKILL roll', False)]
+                    made_skill_roll = self._window_manager.menu(
+                        ('roll <= fast-draw skill (%d)' %
+                                fighter.details['skills']['Fast-Draw (Ammo)']),
+                        skill_menu)
+
+                    if made_skill_roll:
+                        reload_time -= 1
+
+            if reload_time > 0:
+                new_action = {'name': 'reload',
+                              'time': reload_time,
+                              'part': 2}
+                if 'notimer' in action:
+                    new_action['notimer'] = action['notimer']
+                self.do_action(fighter, new_action, fight_handler)
+
             return None # No timer
-
-        weapon, weapon_index = fighter.get_current_weapon()
-        if weapon is None or 'ammo' not in weapon:
-            return None # No timer
-
-        # Check to see if we need a reload at all
-
-        if weapon['ammo']['shots_left'] == weapon['ammo']['shots']:
-            return None # No timer
-
-        # If we do, how long will it take?
-
-        reload_time = weapon['reload']
-
-        # B43: combat reflexes
-        if 'Combat Reflexes' in fighter.details['advantages']:
-            reload_time -= 1
-
-        quiet = False if 'quiet' not in action else action['quiet']
-        if not quiet:
-            # B194: fast draw
-            if 'Fast-Draw (Ammo)' in fighter.details['skills']:
-                skill_menu = [('made SKILL roll', True),
-                              ('did NOT make SKILL roll', False)]
-                made_skill_roll = self._window_manager.menu(
-                    ('roll <= fast-draw skill (%d)' %
-                            fighter.details['skills']['Fast-Draw (Ammo)']),
-                    skill_menu)
-
-                if made_skill_roll:
-                    reload_time -= 1
-
-        if reload_time > 0:
-            new_action = {'name': 'reload-really', 'time': reload_time}
-            if 'notimer' in action:
-                new_action['notimer'] = action['notimer']
-            self.do_action(fighter, new_action, fight_handler)
-
-        return None # No timer
-
-
-    def __do_reload_really(self,
-                           fighter, # Fighter object
-                           action,  # {'name': 'reload-really',
-                                    #  'notimer': <bool>, # whether to
-                                    #                       return a timer
-                                    #                       for the fighter
-                                    #                       -- optional
-                                    #  'comment': <string>, # optional
-                                    #  'quiet': <bool>    # use defaults for
-                                    #                       all user
-                                    #                       interactions
-                                    #                       -- optional
-                                    #  'time': <duration>}
-                                    # }
-                           fight_handler,    # FightHandler object
-                         ):
-        '''
-        Action handler for GurpsRuleset.
-
-        This is the 2nd part of a 2-part action.  This action ('reload-really')
-        actually perfoms all the GurpsRuleset-specific actions and
-        side-effects of reloading the Fighter's current weapon.  Note that a
-        lot of the obvious part is done by the base class Ruleset.
-
-        Returns: Timer (if any) to add to Fighter.  Used for keeping track
-            of what the Fighter is doing.
-        '''
-
-        self.reset_aim(fighter)
-
-        # Timer
-
-        timer = None
-        if 'notimer' not in action or not action['notimer']:
-            timer = ca_timers.Timer(None)
-            timer.from_pieces(
-                {'parent-name': fighter.name,
-                 'rounds': action['time'] - ca_timers.Timer.announcement_margin,
-                 'string': 'RELOADING'} )
-
-            timer.mark_owner_as_busy()  # When reloading, the owner is busy
-
-        return timer
 
 
     def __draw_weapon(self,
@@ -3632,13 +3615,25 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # PP = pprint.PrettyPrinter(indent=3, width=150)
         # PP.pprint(action)
 
+        has_a_part_2 = {
+            'reload' : True
+        }
+
         # Call base class' perform_action FIRST because GurpsRuleset depends on
         # the actions of the base class.  It make no sense for the base class'
         # actions to depend on the child class'.
+        #
+        # If there're two parts to an action (the first part asks questions
+        # and the second part does the actual deed), only call the base class
+        # on the second part.
 
-        handled = super(GurpsRuleset, self)._perform_action(fighter,
-                                                            action,
-                                                            fight_handler)
+        if (not action['name'] in has_a_part_2 or
+                                    ('part' in action and action['part'] == 2)):
+            handled = super(GurpsRuleset, self)._perform_action(fighter,
+                                                                action,
+                                                                fight_handler)
+        else:
+            handled = ca_ruleset.Ruleset.UNHANDLED
 
         # The 'really' actions are used when an action needs to ask questions
         # of the user.  The original action asks the questions and sends the
@@ -3667,7 +3662,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'nothing':              {'doit': self.__do_nothing},
             'pick-opponent':        {'doit': self.__do_nothing},
             'reload':               {'doit': self.__do_reload},
-            'reload-really':        {'doit': self.__do_reload_really},
             'reset-aim':            {'doit': self.__reset_aim},
             'set-consciousness':    {'doit': self.__reset_aim},
             'shock':                {'doit': self.__do_adjust_shock},

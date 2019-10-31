@@ -590,7 +590,7 @@ class Ruleset(object):
             'draw-weapon':          {'doit': self.__draw_weapon},
             'end-turn':             {'doit': self.__end_turn},
             'pick-opponent':        {'doit': self.__pick_opponent},
-            'reload-really':        {'doit': self.__do_reload},
+            'reload':               {'doit': self.__do_reload},
             'set-consciousness':    {'doit': self.__set_consciousness},
             'set-timer':            {'doit': self.__set_timer},
             'start-turn':           {'doit': self.__start_turn},
