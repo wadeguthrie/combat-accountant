@@ -67,7 +67,6 @@ class Ruleset(object):
 
         Returns nothing.
         '''
-        print 'Ruleset::do_action: %r' % action # TODO: remove
         handled = self._perform_action(fighter, action, fight_handler, logit)
         self._record_action(fighter, action, fight_handler, handled, logit)
 

@@ -3595,7 +3595,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         Returns: nothing
         '''
-        print 'GurpsRuleset::do_action: %r' % action # TODO: remove
 
         # Label the action so playback knows who receives it.
 
@@ -3632,7 +3631,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                                 fight_handler)
         else:
             handled = ca_ruleset.Ruleset.UNHANDLED
-        print 'handled: %r' % handled # TODO: remove
 
         actions = {
             'adjust-fp':            {'doit': self.__do_adjust_fp},
