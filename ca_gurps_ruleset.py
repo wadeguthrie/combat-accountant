@@ -969,8 +969,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'defend',          'don-armor',      'draw-weapon',
             'evaluate',        'feint',          'move',
             'move-and-attack', 'nothing',        'reload',
-            'reload-really',   'stun',           'use-item',
-            'user-defined'
+            'stun',            'use-item',       'user-defined'
         ]
 
         for action in fighter.details['actions_this_turn']:
@@ -3418,7 +3417,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
     def __do_reload(self,
                     fighter, # Fighter object
-                    action,  # {'name': 'reload-really',
+                    action,  # {'name': 'reload',
                              #  'notimer': <bool>, # whether to
                              #                       return a timer
                              #                       for the fighter
@@ -3596,6 +3595,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         Returns: nothing
         '''
+        print 'GurpsRuleset::do_action: %r' % action # TODO: remove
 
         # Label the action so playback knows who receives it.
 
@@ -3606,9 +3606,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # PP = pprint.PrettyPrinter(indent=3, width=150)
         # PP.pprint(action)
 
-        has_a_part_2 = {
-            'reload' : True,
+        # The 2-part actions are used when an action needs to ask questions
+        # of the user.  The original action asks the questions and sends the
+        # 'part 2' action with all of the answers.  When played back, the
+        # original action just returns.  That way, there are no questions on
+        # playback and the answers are the same as they were the first time.
+
+        has_2_parts = {
             'cast-spell' : True,
+            'reload' : True,
         }
 
         # Call base class' perform_action FIRST because GurpsRuleset depends on
@@ -3619,19 +3625,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # and the second part does the actual deed), only call the base class
         # on the second part.
 
-        if (not action['name'] in has_a_part_2 or
+        if (not action['name'] in has_2_parts or
                                     ('part' in action and action['part'] == 2)):
             handled = super(GurpsRuleset, self)._perform_action(fighter,
                                                                 action,
                                                                 fight_handler)
         else:
             handled = ca_ruleset.Ruleset.UNHANDLED
-
-        # The 'really' actions are used when an action needs to ask questions
-        # of the user.  The original action asks the questions and sends the
-        # 'really' action with all of the answers.  When played back, the
-        # original action just returns.  That way, there are no questions on
-        # playback and the answers are the same as they were the first time.
+        print 'handled: %r' % handled # TODO: remove
 
         actions = {
             'adjust-fp':            {'doit': self.__do_adjust_fp},
@@ -3672,10 +3673,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             action_info = actions[action['name']]
             if action_info['doit'] is not None:
                 timer = action_info['doit'](fighter, action, fight_handler)
-            handled = ca_ruleset.Ruleset.HANDLED_OK
 
-            if timer is not None and logit:
-                fighter.timers.add(timer)
+            # If the base class has asked us not to log, we'll honor that.
+            if handled != ca_ruleset.Ruleset.DONT_LOG:
+                handled = ca_ruleset.Ruleset.HANDLED_OK
+
+                if timer is not None and logit:
+                    fighter.timers.add(timer)
 
         return handled
 
@@ -3696,6 +3700,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         Returns: nothing.
         '''
+        if handled == ca_ruleset.Ruleset.DONT_LOG:
+            return
+
         super(GurpsRuleset, self)._record_action(fighter,
                                                  action,
                                                  fight_handler,
