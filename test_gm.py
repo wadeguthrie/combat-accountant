@@ -2652,8 +2652,8 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # End of the turn -- check for stun (B420) to be over
 
         self.__window_manager.set_menu_response(
-                                            'Stunned: Roll <= HT to recover',
-                                            True)
+                                        'Priest Stunned: Roll <= HT to recover',
+                                        True)
 
         self.__ruleset.do_action(vodou_priest,
                                  {'name': 'end-turn'},
