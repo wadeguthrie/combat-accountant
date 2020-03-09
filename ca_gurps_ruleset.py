@@ -979,6 +979,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         if not fighter.is_conscious():
             return True
 
+        if fighter.timers.is_busy():
+            return True
+
         return False
 
 
