@@ -411,6 +411,14 @@ class Timers(object):
         return self.__timers['obj']
 
 
+    def is_busy(self):
+        '''Returns 'True' if a current timer has the owner marked as busy.'''
+        for timer_obj in self.__timers['obj']:
+            if timer_obj.details['busy']:
+                return True
+        return False
+
+
     def remove_expired_keep_dying(self):
         '''
         Removes expired timers BUT KEEPS the timers that are dying this
