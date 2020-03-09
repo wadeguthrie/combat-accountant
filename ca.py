@@ -4395,9 +4395,13 @@ class FightHandler(ScreenHandler):
             if next_index >= len(self._saved_fight['fighters']):
                 next_index = 0
             if self._saved_fight['fighters'][next_index]['group'] == 'PCs':
+                # FightHandler
                 next_PC_name = (
                         self._saved_fight['fighters'][next_index]['name'])
-                break
+                next_PC = self.get_fighter_object(next_PC_name, 'PCs')
+                if next_PC is not None and next_PC.is_conscious():
+                    break
+                next_PC_name = None
             next_index += 1
         return next_PC_name
 
