@@ -260,6 +260,7 @@ class Ruleset(object):
     def heal_fighter(self,
                      fighter,   # Fighter object
                      world      # World object
+                     # TODO: prefs - for reload-on-heal
                     ):
         '''
         Removes all injury (and their side-effects) from a fighter.

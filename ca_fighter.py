@@ -126,7 +126,7 @@ class ThingsInFight(object):
     #
 
     def end_fight(self,
-                  world,          # World object
+                  world,          # World object - unused
                   fight_handler   # FightHandler object
                  ):
         '''

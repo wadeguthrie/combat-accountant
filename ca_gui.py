@@ -356,11 +356,11 @@ class GmWindowManager(object):
             # Windows console that I was running.  They are
             # 0:black, 1:red, 2:green, 3:yellow, 4:blue, 5:magenta, 6:cyan,
             # 7:white, and (I think) the dark versions of those.
-            for i in range(0, curses.COLORS):
-                curses.init_pair(i+1,   # New ID for color pair
-                                 i,     # Specified foreground color
-                                 -1     # Default background
-                                )
+            #for i in range(0, curses.COLORS):
+            #    curses.init_pair(i+1,   # New ID for color pair
+            #                     i,     # Specified foreground color
+            #                     -1     # Default background
+            #                    )
 
             curses.init_pair(GmWindowManager.RED_BLACK,
                              curses.COLOR_RED, # fg
