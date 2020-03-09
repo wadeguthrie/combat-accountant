@@ -1026,8 +1026,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                             fighter.details['current']['ht']), True),
                 ('Missed roll', False),]
             recovered_from_stun = self._window_manager.menu(
-                                        'Stunned: Roll <= HT to recover',
-                                        stunned_menu)
+                        '%s Stunned: Roll <= HT to recover' % fighter.name,
+                        stunned_menu)
             if recovered_from_stun:
                 self.do_action(fighter,
                                {'name': 'stun', 'stun': False},
@@ -2335,6 +2335,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
     def heal_fighter(self,
                      fighter,   # Fighter object
                      world      # World object
+                     # TODO: prefs - for parent
                     ):
         '''
         Removes all injury (and their side-effects) from a fighter.

@@ -24,6 +24,21 @@ import ca_timers
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
 
+# TODO: bucket o' bugs:
+# * save a fight, add a creature, go back to the fight, crash
+# * configurable colors
+# * stunned needs a page reference
+# * stunned should holster the weapon (on option, move to room otherwise)
+# * failed spells should not get timers
+# * should be able to adjust attributes in a fight
+# * roll or pass out menu needs roll value in the menu choices, not just the title
+# * 'on deck' shouldn't include unconscious PCs
+# * 'stunned' menu should say for whom you're rolling
+# * 'heal all' should mark them as alive
+# * need 'reload all'
+# * if reloading, don't require the creature to do an action before moving on (check
+#   the timers for 'busy' -- maybe 'Timeres' object should have an 'is_busy' method.
+
 class CaGmWindowManager(ca_gui.GmWindowManager):
     def __init__(self):
         super(CaGmWindowManager, self).__init__()
@@ -3239,6 +3254,7 @@ class FightHandler(ScreenHandler):
                  world,                 # World object
                  monster_group,         # string
                  playback_history,      # dict from bug report (usually None)
+                 # TODO: prefs - save for end_fight
                  save_snapshot = True   # Here so tests can disable it
                 ):
         super(FightHandler, self).__init__(window_manager, world)
@@ -4836,6 +4852,7 @@ class MainHandler(ScreenHandler):
                  window_manager,    # GmWindowManager object for menus and
                                     #   errors
                  world              # World object
+                 # TODO: prefs - save for heal and fully_heal
                 ):
         super(MainHandler, self).__init__(window_manager, world)
         self.__current_pane = MainHandler.CHAR_DETAIL
