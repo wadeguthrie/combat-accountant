@@ -273,8 +273,7 @@ class Ruleset(object):
         for stat in fighter.details['permanent'].iterkeys():
             fighter.details['current'][stat] = (
                                         fighter.details['permanent'][stat])
-        if (fighter.details['state'] != 'absent' and
-                                        fighter.details['state'] != 'fight'):
+        if fighter.details['state'] != 'fight':
             fighter.details['state'] = 'alive'
 
         if ('reload-on-heal' in world.details['options'] and
