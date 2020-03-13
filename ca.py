@@ -28,8 +28,6 @@ import ca_timers
 # * configurable colors (not needed so much)
 # * failed spells should not get timers
 # * should be able to adjust attributes in a fight
-# * roll or pass out menu needs roll value in the menu choices, not just the title
-# * 'stunned' menu should say for whom you're rolling
 # * need 'reload all'
 
 class CaGmWindowManager(ca_gui.GmWindowManager):
