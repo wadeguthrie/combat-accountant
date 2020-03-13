@@ -25,8 +25,7 @@ import ca_timers
 #   - traceback.print_stack()
 
 # TODO: bucket o' bugs:
-# * save a fight, add a creature, go back to the fight, crash
-# * configurable colors
+# * configurable colors (not needed so much)
 # * stunned needs a page reference
 # * failed spells should not get timers
 # * should be able to adjust attributes in a fight
@@ -3402,12 +3401,25 @@ class FightHandler(ScreenHandler):
                 self.world.do_debug_snapshot('fight')
             monster_group = self._saved_fight['monsters']
 
-            fight_order = {}
-            for index, fighter in enumerate(self._saved_fight['fighters']):
-                if fighter['name'] not in fight_order:
-                    fight_order[fighter['name']] = {fighter['group']: index}
-                else:
-                    fight_order[fighter['name']][fighter['group']] = index
+            # If the number of creatures don't match the saved fight, make
+            # the code regenerate the list.
+            #
+            # TODO (eventually): the _right_ way to do this is to have
+            # _build_fighter_list call the ruleset to pre-process the fighter
+            # list (i.e., put the random init value in _saved_fight) and sort
+            # based on that.  When a new creature is added, generate the
+            # random init value for the new creature and sort the whole mess.
+            # That keeps the original fight in order and puts the new fighter
+            # in sorted order.
+            if (len(self._saved_fight['fighters']) ==
+                    len(self.world.get_creature_details_list('PCs')) +
+                    len(self.world.get_creature_details_list(monster_group))):
+                fight_order = {}
+                for index, fighter in enumerate(self._saved_fight['fighters']):
+                    if fighter['name'] not in fight_order:
+                        fight_order[fighter['name']] = {fighter['group']: index}
+                    else:
+                        fight_order[fighter['name']][fighter['group']] = index
 
             if playback_history is not None:
                 # Make a copy of the history so I can play it back
