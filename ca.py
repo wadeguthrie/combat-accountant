@@ -28,6 +28,9 @@ import ca_timers
 # * configurable colors (not needed so much)
 # * failed spells should not get timers
 # * should be able to adjust attributes in a fight
+#       a big bunch of PersonnelHandler::__change_attributes() should be
+#       moved to Fighter so that __change_attributes can call it as well as
+#       some menu handler in FightHandler
 # * need 'reload all'
 
 class CaGmWindowManager(ca_gui.GmWindowManager):
