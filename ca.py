@@ -26,7 +26,6 @@ import ca_timers
 
 # TODO: bucket o' bugs:
 # * configurable colors (not needed so much)
-# * stunned needs a page reference
 # * failed spells should not get timers
 # * should be able to adjust attributes in a fight
 # * roll or pass out menu needs roll value in the menu choices, not just the title

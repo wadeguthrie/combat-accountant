@@ -1029,7 +1029,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                             fighter.details['current']['ht']), True),
                 ('Missed roll', False),]
             recovered_from_stun = self._window_manager.menu(
-                        '%s Stunned: Roll <= HT to recover' % fighter.name,
+                        '%s Stunned (B420): Roll <= HT to recover' %
+                            fighter.name,
                         stunned_menu)
             if recovered_from_stun:
                 self.do_action(fighter,
