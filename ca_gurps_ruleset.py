@@ -2560,8 +2560,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     '%s: HP < 0: roll <= HT (%d) or pass out (B327)' %
                     (fighter.name, unconscious_roll))
 
-            pass_out_menu = [('made HT roll', True),
-                             ('did NOT make HT roll', False)]
+            pass_out_menu = [
+                    ('Succeeded (roll <= %d) - NOT unconscious' %
+                        unconscious_roll, True),
+                    ('Failed (roll > %d) - unconscious' %
+                        unconscious_roll, False)]
             made_ht_roll = self._window_manager.menu(menu_title, pass_out_menu)
 
             if not made_ht_roll:
