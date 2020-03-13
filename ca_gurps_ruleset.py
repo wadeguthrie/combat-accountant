@@ -3819,4 +3819,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             of what the Fighter is doing.
         '''
         fighter.details['stunned'] = action['stun']
+
+        # Technically, dropping a weapon should leave the weapon in the room
+        # but it's easier for game play to just holster it.  This assumes a
+        # nice game where the GM just assumes the character (or one of his/
+        # her party members) picks up the gun.
+        self.do_action(fighter,
+                       {'name': 'draw-weapon', 'weapon-index': None},
+                       fight_handler,
+                       logit=False)
+
         return None # No timer
