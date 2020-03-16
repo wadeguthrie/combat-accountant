@@ -1310,8 +1310,11 @@ class ScreenHandler(object):
         # Check for errors...
         for key in self._choices.iterkeys():
             if key in new_choices:
-                self._window_manager.error(
+                if key < 256:
+                    self._window_manager.error(
                         ['Collision of _choices on key "%c"' % chr(key)])
+                    self._window_manager.error(
+                        ['Collision of _choices on key "<%d>"' % key])
                 return False # Found a problem
 
         self._choices.update(new_choices)
@@ -1374,8 +1377,10 @@ class ScreenHandler(object):
         for key, value in self._choices.iteritems():
             if key in ca_gui.GmWindow.SCREEN_MOVEMENT_CHARS:
                 char = ca_gui.GmWindow.SCREEN_MOVEMENT_CHARS[key]
-            else:
+            elif key < 256:
                 char = chr(key)
+            else:
+                char = '<%d>' % key
             if max_key_len < len(char):
                 max_key_len = len(char)
             if 'name' in value and max_name_len < len(value['name']):
@@ -1399,8 +1404,10 @@ class ScreenHandler(object):
         for key in self._choices.iterkeys():
             if key in ca_gui.GmWindow.SCREEN_MOVEMENT_CHARS:
                 char = ca_gui.GmWindow.SCREEN_MOVEMENT_CHARS[key]
-            else:
+            elif key < 256:
                 char = '%c' % chr(key)
+            else:
+                char = '<%d>' % key
             keys.append({'sort_key': char,
                          'choice_key': key})
         keys.sort(key=lambda x: x['sort_key'].lower())
@@ -1423,8 +1430,10 @@ class ScreenHandler(object):
 
             if key in ca_gui.GmWindow.SCREEN_MOVEMENT_CHARS:
                 key = ca_gui.GmWindow.SCREEN_MOVEMENT_CHARS[key]
-            else:
+            elif key < 256:
                 key = chr(key)
+            else:
+                key = '<%d>' % key
 
             line_parts.append(key)
             line_parts.append(' ' * (max_key_len - len(key)))
@@ -1482,6 +1491,71 @@ class ScreenHandler(object):
         self._window_manager.display_window('The Command Ribbon, Explained',
                                             output)
         return True # Keep doing whatever you were doing.
+
+
+class AttributeWidget(object):
+    '''
+    GUI widget used to modify the attributes of a fighter.
+    '''
+    def __init__(self,
+                 window_manager,    # GmWindowManager object for menus
+                                    #   and error reporting
+                 screen_handler,    # ScreenHandler object that encloses
+                                    #   this widget
+                 fighter            # Fighter object -- changing this
+                                    #   guy's attributes
+                ):
+        self.__window_manager = window_manager
+        self.__fighter = fighter
+        self.__screen_handler = screen_handler
+
+    def doit(self):
+        keep_asking_menu = [('yes', True), ('no', False)]
+        keep_asking = True
+        while keep_asking:
+            perm_current_menu = [('current', 'current'),
+                                 ('permanent', 'permanent')]
+            attr_type = self.__window_manager.menu('What Type Of Attribute',
+                                                   perm_current_menu)
+            if attr_type is None:
+                return None
+
+            attr_menu = [(attr, attr)
+                                for attr in self.__fighter.details[attr_type].keys()]
+
+            attr = self.__window_manager.menu('Attr To Modify', attr_menu)
+            if attr is None:
+                return None
+
+            title = 'New Value'
+            height = 1
+            width = len(title) + 2
+            keep_ask_attr = True
+            while keep_ask_attr:
+                attr_string = self.__window_manager.input_box(height,
+                                                             width,
+                                                             title)
+                if attr_string is not None and len(attr_string) > 0:
+                    # TODO: allow for a float instead of just an int
+                    self.__fighter.details[attr_type][attr] = int(attr_string)
+                    keep_ask_attr = False
+                else:
+                    self.__window_manager.error(
+                                    ['You must specify an attribute value'])
+
+            if attr_type == 'permanent':
+                both_menu = [('yes', True), ('no', False)]
+                both = self.__window_manager.menu(
+                                            'Change "current" Value To Match ',
+                                            both_menu)
+                if both:
+                    self.__fighter.details['current'][attr] = (
+                                            self.__fighter.details['permanent'][attr])
+
+            self.__screen_handler.draw_screen()
+            keep_asking = self.__window_manager.menu('Change More Attributes',
+                                                    keep_asking_menu)
+        return True
 
 
 class PersonnelHandler(ScreenHandler):
@@ -1652,6 +1726,16 @@ class PersonnelHandler(ScreenHandler):
     #
     # Public Methods
     #
+
+
+    def draw_screen(self):
+        '''
+        Draws the complete screen for the FightHandler.  This is here so a
+        widget can redraw its parent's screen.
+
+        Returns: nothing.
+        '''
+        self._draw_screen()
 
 
     def get_group_name(self):
@@ -2215,51 +2299,10 @@ class PersonnelHandler(ScreenHandler):
         if fighter is None:
             return None
 
-        keep_asking_menu = [('yes', True), ('no', False)]
-        keep_asking = True
-        while keep_asking:
-            perm_current_menu = [('current', 'current'),
-                                 ('permanent', 'permanent')]
-            attr_type = self._window_manager.menu('What Type Of Attribute',
-                                                           perm_current_menu)
-            if attr_type is None:
-                return None
-
-            attr_menu = [(attr, attr)
-                                for attr in fighter.details[attr_type].keys()]
-
-            attr = self._window_manager.menu('Attr To Modify', attr_menu)
-            if attr is None:
-                return None
-
-            title = 'New Value'
-            height = 1
-            width = len(title) + 2
-            keep_ask_attr = True
-            while keep_ask_attr:
-                attr_string = self._window_manager.input_box(height,
-                                                             width,
-                                                             title)
-                if attr_string is not None and len(attr_string) > 0:
-                    fighter.details[attr_type][attr] = int(attr_string)
-                    keep_ask_attr = False
-                else:
-                    self._window_manager.error(
-                                    ['You must specify an attribute value'])
-
-            if attr_type == 'permanent':
-                both_menu = [('yes', True), ('no', False)]
-                both = self._window_manager.menu(
-                                            'Change "current" Value To Match ',
-                                            both_menu)
-                if both:
-                    fighter.details['current'][attr] = (
-                                            fighter.details['permanent'][attr])
-
-            self._draw_screen()
-            keep_asking = self._window_manager.menu('Change More Attributes',
-                                                    keep_asking_menu)
-        return True
+        attribute_widget = AttributeWidget(self._window_manager,
+                                           self,
+                                           fighter)
+        return attribute_widget.doit()
 
 
     def __change_template_group(self):
@@ -3573,9 +3616,12 @@ class FightHandler(ScreenHandler):
                                                self.__fighters,
                                                self._saved_fight['index'],
                                                self.__viewing_index)
-            else:
+            elif string < 256:
                 self._window_manager.error(
                                     ['Invalid command: "%c" ' % chr(string)])
+            else:
+                self._window_manager.error(
+                                    ['Invalid command: "<%d>" ' % string])
 
             # Display stuff when we're done.
 

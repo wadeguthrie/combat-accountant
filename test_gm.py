@@ -139,9 +139,12 @@ class TestPersonnelHandler(ca.PersonnelHandler):
 
             if string in self._choices:
                 keep_going = self._choices[string]['func']()
-            else:
+            elif string < 256:
                 self._window_manager.error(
                                     ['Invalid command: "%c" ' % chr(string)])
+            else:
+                self._window_manager.error(
+                                    ['Invalid command: "<%d>" ' % string])
 
 
 class WorldData(object):

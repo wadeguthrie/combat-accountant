@@ -272,8 +272,10 @@ class GmWindow(object):
         for command, body in choices.iteritems():
             if command in GmWindow.SCREEN_MOVEMENT_CHARS:
                 command_string = GmWindow.SCREEN_MOVEMENT_CHARS[command]
-            else:
+            elif command < 256:
                 command_string = '%c' % chr(command)
+            else:
+                command_string = '<%d>' % command
 
             choice_text = {'bar': '| ',
                            'command': ('%s' % command_string),
