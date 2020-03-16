@@ -31,7 +31,7 @@ import ca_timers
 #       a big bunch of PersonnelHandler::__change_attributes() should be
 #       moved to Fighter so that __change_attributes can call it as well as
 #       some menu handler in FightHandler
-# * need 'reload all'
+# * need 'reload all' (for now, 'heal all' reloads if options are so set)
 
 class CaGmWindowManager(ca_gui.GmWindowManager):
     def __init__(self):
