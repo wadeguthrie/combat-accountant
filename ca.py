@@ -27,10 +27,6 @@ import ca_timers
 # TODO: bucket o' bugs:
 # * configurable colors (not needed so much)
 # * failed spells should not get timers
-# * should be able to adjust attributes in a fight
-#       a big bunch of PersonnelHandler::__change_attributes() should be
-#       moved to Fighter so that __change_attributes can call it as well as
-#       some menu handler in FightHandler
 # * need 'reload all' (for now, 'heal all' reloads if options are so set)
 
 class CaGmWindowManager(ca_gui.GmWindowManager):
@@ -1527,7 +1523,7 @@ class AttributeWidget(object):
             if attr is None:
                 return None
 
-            title = 'New Value'
+            title = 'New Value (old value: %d)' % self.__fighter.details[attr_type][attr]
             height = 1
             width = len(title) + 2
             keep_ask_attr = True
@@ -3332,6 +3328,10 @@ class FightHandler(ScreenHandler):
                        'help': 'Explain how the attack and defense numbers ' +
                                'were calculated for the currently selected ' +
                                'figher.'},
+            ord('a'): {'name': 'attribute (edit)',
+                       'func': self.__edit_attribute,
+                       'help': 'Allows the user to edit a fighter\'s ' +
+                               'permanent or current attribute values.'},
             ord('d'): {'name': 'defend',
                        'func': self.__defend,
                        'help': 'Cause the currently selected fighter to ' +
@@ -3523,6 +3523,15 @@ class FightHandler(ScreenHandler):
     #
     # Public Methods
     #
+
+    def draw_screen(self):
+        '''
+        Draws the complete screen for the FightHandler.
+
+        Returns: nothing.
+        '''
+        self._draw_screen()
+
 
     def get_current_fighter(self):              # Public to support testing
         '''
@@ -4216,6 +4225,26 @@ class FightHandler(ScreenHandler):
         self._window.status_ribbon(self.world.source_filename,
                                    ScreenHandler.maintain_game_file)
         self._window.command_ribbon()
+
+
+    def __edit_attribute(self):
+        '''
+        Command ribbon method.
+
+        Allows the user to modify one or more of the current fighter's
+        attributes.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        if self.__viewing_index is not None:
+            fighter = self.__fighters[self.__viewing_index]
+        else:
+            fighter = self.get_current_fighter()
+
+        attribute_widget = AttributeWidget(self._window_manager,
+                                           self,
+                                           fighter)
+        return attribute_widget.doit()
 
 
     def __full_notes(self):
