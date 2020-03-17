@@ -17,7 +17,7 @@ FWIW, I realize that many of the Mocks in here are actually Fakes.
 '''
 
 '''
-action['name'] == 'adjust-fp':
+action['action-name'] == 'adjust-fp':
 
 # DONE (except for 'aim') 'pick-opponent':
 # DONE: 'adjust-hp':
@@ -1078,14 +1078,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                 self.__window_manager)
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(vodou_priest)
         assert dodge_skill == 9
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'crawling'},
                                  mock_fight_handler)
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(vodou_priest)
@@ -1101,14 +1101,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                 self.__window_manager)
 
         self.__ruleset.do_action(bokor_fighter,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(bokor_fighter)
         assert dodge_skill == 9
 
         self.__ruleset.do_action(bokor_fighter,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'crawling'},
                                  mock_fight_handler)
         dodge_skill, dodge_why = self.__ruleset.get_dodge_skill(bokor_fighter)
@@ -1235,12 +1235,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                 self.__window_manager)
         weapon_index, weapon  = tank_fighter.get_weapon_by_name('sick stick')
         self.__ruleset.do_action(tank_fighter,
-                                 {'name': 'draw-weapon',
+                                 {'action-name': 'draw-weapon',
                                   'weapon-index': weapon_index},
                                  mock_fight_handler)
 
         self.__ruleset.do_action(tank_fighter,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(tank_fighter,
@@ -1248,7 +1248,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert parry_skill == 11
 
         self.__ruleset.do_action(tank_fighter,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'crawling'},
                                  mock_fight_handler)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(tank_fighter,
@@ -1276,11 +1276,11 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                 self.__window_manager)
         weapon_index, weapon = thief_fighter.get_weapon_by_name('Large Knife')
         self.__ruleset.do_action(tank_fighter,
-                                 {'name': 'draw-weapon',
+                                 {'action-name': 'draw-weapon',
                                   'weapon-index': weapon_index},
                                  mock_fight_handler)
         self.__ruleset.do_action(thief_fighter,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(thief_fighter,
@@ -1288,7 +1288,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert parry_skill == 9
 
         self.__ruleset.do_action(thief_fighter,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'crawling'},
                                  mock_fight_handler)
         parry_skill, parry_why = self.__ruleset.get_parry_skill(thief_fighter,
@@ -1377,7 +1377,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Thief with posture additions
 
         self.__ruleset.do_action(thief_fighter,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'crawling'},
                                  mock_fight_handler)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
@@ -1436,7 +1436,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # --- Opponents w/ posture ---
 
         self.__ruleset.do_action(thief_fighter,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
 
@@ -1455,7 +1455,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # not modify melee attacks
 
         self.__ruleset.do_action(thief_fighter,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'crawling'}, # -2
                                  mock_fight_handler)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
@@ -1470,7 +1470,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # change posture of thief (back to standing)
         self.__ruleset.do_action(thief_fighter,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
@@ -1742,7 +1742,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Make fighter 0 fight figher 2
 
         self.__ruleset.do_action(current_fighter,
-                                 {'name': 'pick-opponent',
+                                 {'action-name': 'pick-opponent',
                                   'opponent': {'name': 'Moe', 'group': 'PCs'}},
                                  fight_handler)
 
@@ -1791,7 +1791,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # fighter 1/Jack) caused the damage to be transferred to the new
         # opponent.
         self.__ruleset.do_action(current_fighter,
-                                 {'name': 'pick-opponent',
+                                 {'action-name': 'pick-opponent',
                                   'opponent': {'name': 'Jack', 'group': 'PCs'}},
                                  fight_handler)
 
@@ -1853,7 +1853,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                 self.__window_manager)
         requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'draw-weapon',
+                                 {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
         weapon, actual_weapon_index = vodou_priest.get_current_weapon()
@@ -1870,7 +1870,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
         self.__ruleset.reset_aim(vodou_priest)
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
@@ -1883,33 +1883,33 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             + self.__colt_pistol_acc
             + 1) # braced
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
 
         # 4 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # no further benefit
@@ -1920,32 +1920,32 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
             + self.__colt_pistol_acc)
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': False},
+                                 {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': False},
+                                 {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': False},
+                                 {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
 
         # 4 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': False},
+                                 {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # no further benefit
@@ -1954,7 +1954,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'crawling'},
                                  mock_fight_handler)
         self.__ruleset.reset_aim(vodou_priest)
@@ -1968,32 +1968,32 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                 + self.__colt_pistol_acc # aim
                                                 +1) # braced
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'crawling'},
                                  mock_fight_handler)
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
 
         # 4 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # no further benefit
@@ -2008,32 +2008,32 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
             + self.__colt_pistol_acc) # aim
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'crawling'},
                                  mock_fight_handler)
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': False},
+                                 {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': False},
+                                 {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': False},
+                                 {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # aiming for 3 rounds
 
         # 4 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': False},
+                                 {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 2 # no further benefit
@@ -2050,13 +2050,13 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                             self.__window_manager)
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
 
         # Picking opponent doesn't change things
         self.__ruleset.do_action(tank,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon)
@@ -2064,7 +2064,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # change posture of thief (-2)
         self.__ruleset.do_action(tank,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'crawling'}, # -2
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon)
@@ -2072,7 +2072,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # change posture of thief (back to standing)
         self.__ruleset.do_action(tank,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon)
@@ -2098,7 +2098,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                 self.__window_manager)
         requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'draw-weapon',
+                                 {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
         weapon, actual_weapon_index = vodou_priest.get_current_weapon()
@@ -2109,7 +2109,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
         self.__ruleset.reset_aim(vodou_priest)
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
@@ -2124,31 +2124,31 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             + self.__colt_pistol_acc
             + 1) # braced
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # adjust_hp but MADE Will roll
-        # action['name'] == 'adjust-hp':
+        # action['action-name'] == 'adjust-hp':
         damage = -1
         self.__window_manager.set_menu_response('roll <= WILL (13) or lose aim',
                                                 True)
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': damage},
+                                 {'action-name': 'adjust-hp', 'adj': damage},
                                  mock_fight_handler)
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
 
@@ -2157,7 +2157,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert to_hit == expected_to_hit + 2 + damage
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'end-turn'},
+                                 {'action-name': 'end-turn'},
                                  mock_fight_handler)  # clear out shock
 
         # Damage ruins aim -- miss will roll
@@ -2169,14 +2169,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             + self.__colt_pistol_acc
             + 1) # braced
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
@@ -2186,18 +2186,18 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                 False)
         damage = -1
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': damage},
+                                 {'action-name': 'adjust-hp', 'adj': damage},
                                  mock_fight_handler)
 
         # 3 rounds (well, 1 round)
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + damage # aiming for 1 round + shock
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'end-turn'},
+                                 {'action-name': 'end-turn'},
                                  mock_fight_handler)  # clear out shock
 
         # Draw weapon ruins aim
@@ -2209,27 +2209,27 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             + self.__colt_pistol_acc
             + 1) # braced
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # Draw weapon
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'draw-weapon',
+                                 {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit # aiming for 1 round
@@ -2242,27 +2242,27 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             + 1) # braced
         self.__ruleset.reset_aim(vodou_priest)
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # Change posture
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'lying'},
                                  mock_fight_handler)
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit # aiming for 1 round
@@ -2271,7 +2271,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         self.__ruleset.reset_aim(vodou_priest)
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
 
@@ -2280,26 +2280,26 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             + self.__colt_pistol_acc
             + 1) # braced
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
 
         # Defend
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'defend'},
+                                 {'action-name': 'defend'},
                                  mock_fight_handler)
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit # aiming for 3 rounds
@@ -2309,7 +2309,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_to_hit = self.__vodou_priest_fighter_pistol_skill
         self.__ruleset.reset_aim(vodou_priest)
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
@@ -2335,7 +2335,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                         self.__window_manager)
         requested_weapon_index = 1 # Knife
         self.__ruleset.do_action(thief,
-                                 {'name': 'draw-weapon',
+                                 {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
         weapon, actual_weapon_index = thief.get_current_weapon()
@@ -2346,7 +2346,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # no posture
         expected_to_hit = self.__thief_knife_skill
         self.__ruleset.do_action(thief,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
@@ -2356,7 +2356,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         expected_to_hit = (self.__thief_knife_skill
                                                 + self.__crawling_attack_mod)
         self.__ruleset.do_action(thief,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'crawling'},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
@@ -2372,14 +2372,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                 self.__window_manager)
 
         self.__ruleset.do_action(thief,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
 
         # Picking opponent doesn't change things
         expected_to_hit = self.__thief_knife_skill
         self.__ruleset.do_action(tank_fighter,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
@@ -2387,7 +2387,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # change posture of tank (opponent)
         self.__ruleset.do_action(tank_fighter,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'crawling'}, # -2
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
@@ -2395,7 +2395,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # change posture of thief (back to standing)
         self.__ruleset.do_action(tank_fighter,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
@@ -2409,14 +2409,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         # 1 round
         self.__ruleset.do_action(thief,
-                                 {'name': 'aim', 'braced': False},
+                                 {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(thief,
-                                 {'name': 'aim', 'braced': False},
+                                 {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
         assert to_hit == expected_to_hit
@@ -2444,7 +2444,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'draw-weapon',
+                                 {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
         weapon, actual_weapon_index = vodou_priest.get_current_weapon()
@@ -2453,7 +2453,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         requested_armor_index = 2
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'don-armor',
+                                 {'action-name': 'don-armor',
                                   'armor-index': requested_armor_index},
                                  mock_fight_handler)
 
@@ -2483,7 +2483,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         original_hp = vodou_priest.details['current']['hp']
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': damage_1st},
+                                 {'action-name': 'adjust-hp', 'adj': damage_1st},
                                  mock_fight_handler)
 
         modified_hp = vodou_priest.details['current']['hp']
@@ -2514,7 +2514,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         original_hp = vodou_priest.details['current']['hp']
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': damage_2nd},
+                                 {'action-name': 'adjust-hp', 'adj': damage_2nd},
                                  mock_fight_handler)
 
         modified_hp = vodou_priest.details['current']['hp']
@@ -2547,7 +2547,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         original_hp = vodou_priest.details['current']['hp']
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': pre_armor_damage},
+                                 {'action-name': 'adjust-hp', 'adj': pre_armor_damage},
                                  mock_fight_handler)
 
         modified_hp = vodou_priest.details['current']['hp']
@@ -2577,10 +2577,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         #
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'end-turn'},
+                                 {'action-name': 'end-turn'},
                                  mock_fight_handler)  # clear out shock
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'start-turn'},
+                                 {'action-name': 'start-turn'},
                                  mock_fight_handler)    # Check for death,
                                                         # check for unconscious
 
@@ -2599,7 +2599,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             ca_gurps_ruleset.GurpsRuleset.MAJOR_WOUND_SUCCESS)
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': major_damage},
+                                 {'action-name': 'adjust-hp', 'adj': major_damage},
                                  mock_fight_handler)
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
@@ -2617,10 +2617,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Major wound (B420) - miss HT roll (knockdown and stunned)
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'end-turn'},
+                                 {'action-name': 'end-turn'},
                                  mock_fight_handler)  # clear out shock
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'start-turn'},
+                                 {'action-name': 'start-turn'},
                                  mock_fight_handler)    # Check for death,
                                                         # check for unconscious
         vodou_priest.details['current']['hp'] = (
@@ -2633,7 +2633,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             ca_gurps_ruleset.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': major_damage},
+                                 {'action-name': 'adjust-hp', 'adj': major_damage},
                                  mock_fight_handler)
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
@@ -2659,7 +2659,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                 True)
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'end-turn'},
+                                 {'action-name': 'end-turn'},
                                  mock_fight_handler)  # clear out shock
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
@@ -2681,7 +2681,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert vodou_priest.details['posture'] == 'lying'
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'start-turn'},
+                                 {'action-name': 'start-turn'},
                                  mock_fight_handler)    # Check for death,
                                                         # check for unconscious
 
@@ -2698,7 +2698,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             ca_gurps_ruleset.GurpsRuleset.MAJOR_WOUND_BAD_FAIL)
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': major_damage},
+                                 {'action-name': 'adjust-hp', 'adj': major_damage},
                                  mock_fight_handler)
 
         assert not vodou_priest.is_conscious()
@@ -2712,16 +2712,16 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Start by healing him up
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'end-turn'},
+                                 {'action-name': 'end-turn'},
                                  mock_fight_handler)  # clear out shock
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'start-turn'},
+                                 {'action-name': 'start-turn'},
                                  mock_fight_handler)    # Check for death,
                                                         # check for unconscious
         vodou_priest.details['current']['hp'] = (
                                     vodou_priest.details['permanent']['hp'])
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
 
@@ -2734,14 +2734,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             + self.__colt_pistol_acc
             + 1) # braced
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
@@ -2754,12 +2754,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         damage = -1
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': damage},
+                                 {'action-name': 'adjust-hp', 'adj': damage},
                                  mock_fight_handler)
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + damage # aiming for 1 round + shock
@@ -2769,16 +2769,16 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Start by healing him up
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'end-turn'},
+                                 {'action-name': 'end-turn'},
                                  mock_fight_handler)  # clear out shock
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'start-turn'},
+                                 {'action-name': 'start-turn'},
                                  mock_fight_handler)    # Check for death,
                                                         # check for unconscious
         vodou_priest.details['current']['hp'] = (
                                     vodou_priest.details['permanent']['hp'])
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
 
@@ -2789,7 +2789,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             + self.__colt_pistol_acc
             + 1) # braced
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
@@ -2797,7 +2797,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # 2 rounds
         expected_to_hit += 1 # aiming for 2 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
@@ -2811,12 +2811,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         damage = -1
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': damage},
+                                 {'action-name': 'adjust-hp', 'adj': damage},
                                  mock_fight_handler)
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + damage # aiming for 1 round + shock
@@ -2828,16 +2828,16 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Start by healing him up
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'end-turn'},
+                                 {'action-name': 'end-turn'},
                                  mock_fight_handler)  # clear out shock
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'start-turn'},
+                                 {'action-name': 'start-turn'},
                                  mock_fight_handler)    # Check for death,
                                                         # check for unconscious
         vodou_priest.details['current']['hp'] = (
                                     vodou_priest.details['permanent']['hp'])
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'change-posture',
+                                 {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
 
@@ -2909,7 +2909,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # +1 to make sure that the damage is more than half
         major_damage = - ((vodou_priest.details['permanent']['hp'] / 2) + 1)
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'adjust-hp', 'adj': major_damage},
+                                 {'action-name': 'adjust-hp', 'adj': major_damage},
                                  mock_fight_handler)
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
@@ -2974,7 +2974,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         ## +1 to make sure that the damage is more than half
         #major_damage = - ((vodou_priest.details['permanent']['hp'] / 2) + 1)
         #self.__ruleset.do_action(vodou_priest,
-        #                         {'name': 'adjust-hp', 'adj': major_damage},
+        #                         {'action-name': 'adjust-hp', 'adj': major_damage},
         #                         mock_fight_handler)
 
         #hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
@@ -3108,7 +3108,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                         True)
 
             action = {
-                'name': 'cast-spell',
+                'action-name': 'cast-spell',
                 'spell-index': self.__vodou_priest_spell_index[trial['name']]
                      }
 
@@ -3141,10 +3141,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                                 casting_text)
                 assert vodou_priest.details['timers'][0]['busy']
                 self.__ruleset.do_action(vodou_priest,
-                                         {'name': 'end-turn'},
+                                         {'action-name': 'end-turn'},
                                          mock_fight_handler)
                 self.__ruleset.do_action(vodou_priest,
-                                         {'name': 'start-turn'},
+                                         {'action-name': 'start-turn'},
                                          mock_fight_handler)
 
                 # For the opponent, you need to do start-turn, check, then
@@ -3152,7 +3152,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                 # their thing.
 
                 self.__ruleset.do_action(opponent,
-                                         {'name': 'start-turn'},
+                                         {'action-name': 'start-turn'},
                                          mock_fight_handler)
 
                 assert len(opponent.details['timers']) == 1
@@ -3160,7 +3160,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                         opponent_casting_text)
 
                 self.__ruleset.do_action(opponent,
-                                         {'name': 'end-turn'},
+                                         {'action-name': 'end-turn'},
                                          mock_fight_handler)
 
             # One extra round for the opponent so that the timers get deleted.
@@ -3168,7 +3168,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             # casting loop through this through the duration loop.
 
             self.__ruleset.do_action(opponent,
-                                     {'name': 'start-turn'},
+                                     {'action-name': 'start-turn'},
                                      mock_fight_handler)
 
             # Check each round of active spell
@@ -3184,10 +3184,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                     assert not vodou_priest.details['timers'][0]['busy']
                 # else, it's OK
                 self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'end-turn'},
+                                 {'action-name': 'end-turn'},
                                  mock_fight_handler)
                 self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'start-turn'},
+                                 {'action-name': 'start-turn'},
                                  mock_fight_handler)
 
                 # Opponent
@@ -3197,10 +3197,10 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                                         opponent_active_text)
 
                 self.__ruleset.do_action(opponent,
-                                         {'name': 'end-turn'},
+                                         {'action-name': 'end-turn'},
                                          mock_fight_handler)
                 self.__ruleset.do_action(opponent,
-                                         {'name': 'start-turn'},
+                                         {'action-name': 'start-turn'},
                                          mock_fight_handler)
 
             # Make sure that all of the timers are dead
@@ -3233,7 +3233,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         requested_armor_index = self.__vodou_armor_index
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'don-armor',
+                                 {'action-name': 'don-armor',
                                   'armor-index': requested_armor_index},
                                  mock_fight_handler)
 
@@ -3245,7 +3245,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         requested_armor_index = None
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'don-armor',
+                                 {'action-name': 'don-armor',
                                   'armor-index': None},
                                  mock_fight_handler)
 
@@ -3279,7 +3279,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'draw-weapon',
+                                 {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
         weapon, actual_weapon_index = vodou_priest.get_current_weapon()
@@ -3290,7 +3290,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         requested_weapon_index = None
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'draw-weapon',
+                                 {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
         weapon, actual_weapon_index = vodou_priest.get_current_weapon()
@@ -3323,7 +3323,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'draw-weapon',
+                                 {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
         weapon, actual_weapon_index = vodou_priest.get_current_weapon()
@@ -3344,7 +3344,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         for shot in range(shots_taken):
             self.__ruleset.do_action(vodou_priest,
-                                     {'name': 'attack'},
+                                     {'action-name': 'attack'},
                                      mock_fight_handler)
 
         assert (weapon['ammo']['shots_left'] ==
@@ -3353,7 +3353,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Now, reload
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'reload'},
+                                 {'action-name': 'reload'},
                                  mock_fight_handler)
 
         assert (weapon['ammo']['shots_left'] ==
@@ -3365,16 +3365,16 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         shots_taken = 0
         while ammo['count'] != 0:
             self.__ruleset.do_action(vodou_priest,
-                                     {'name': 'attack'},
+                                     {'action-name': 'attack'},
                                      mock_fight_handler)
             shots_taken += 1
             self.__ruleset.do_action(vodou_priest,
-                                     {'name': 'reload'},
+                                     {'action-name': 'reload'},
                                      mock_fight_handler)
 
         for shot in range(shots_taken):
             self.__ruleset.do_action(vodou_priest,
-                                     {'name': 'attack'},
+                                     {'action-name': 'attack'},
                                      mock_fight_handler)
 
         assert (weapon['ammo']['shots_left'] ==
@@ -3383,7 +3383,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Reload when there's nothing left with which to reload
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'reload'},
+                                 {'action-name': 'reload'},
                                  mock_fight_handler)
 
         assert (weapon['ammo']['shots_left'] ==
@@ -3428,7 +3428,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert state_number == ca_fighter.Fighter.ALIVE
 
         self.__ruleset.do_action(current_fighter,
-                                 {'name': 'pick-opponent',
+                                 {'action-name': 'pick-opponent',
                                   'opponent': {'name': 'Moe', 'group': 'PCs'}},
                                  fight_handler)
 
@@ -3436,7 +3436,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         new_state = ca_fighter.Fighter.ALIVE
         self.__ruleset.do_action(current_fighter,
-                                {'name': 'set-consciousness',
+                                {'action-name': 'set-consciousness',
                                  'level': new_state},
                                  fight_handler)
         state_number = ca_fighter.Fighter.get_fighter_state(current_fighter.details)
@@ -3447,7 +3447,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         new_state = ca_fighter.Fighter.UNCONSCIOUS
         self.__ruleset.do_action(current_fighter,
-                                {'name': 'set-consciousness',
+                                {'action-name': 'set-consciousness',
                                  'level': new_state},
                                  fight_handler)
         state_number = ca_fighter.Fighter.get_fighter_state(current_fighter.details)
@@ -3469,7 +3469,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         # Stun
 
         self.__ruleset.do_action(current_fighter,
-                                 {'name': 'stun', 'stun': True},
+                                 {'action-name': 'stun', 'stun': True},
                                  fight_handler)
 
         # Check whether stunned
@@ -3510,7 +3510,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                 self.__window_manager)
         requested_weapon_index = self.__vodou_pistol_index
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'draw-weapon',
+                                 {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
         weapon, actual_weapon_index = vodou_priest.get_current_weapon()
@@ -3523,14 +3523,14 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
             + self.__colt_pistol_acc
             + 1) # braced
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1 # aiming for 2 rounds
@@ -3538,12 +3538,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         ### Defend, lose aim ###
 
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'defend'},
+                                 {'action-name': 'defend'},
                                  mock_fight_handler)
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
-                                 {'name': 'aim', 'braced': True},
+                                 {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit # aiming for 1 round

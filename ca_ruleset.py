@@ -57,7 +57,7 @@ class Ruleset(object):
 
     def do_action(self,
                   fighter,          # Fighter object
-                  action,           # {'name': <action>, parameters...}
+                  action,           # {'action-name': <action>, parameters...}
                   fight_handler,    # FightHandler object
                   logit=True        # Log into history and 'actions_this_turn'
                                     #   because the action is not a side-effect
@@ -112,7 +112,7 @@ class Ruleset(object):
             if item['type'] == 'armor':
                 if armor is None or armor_index != index:
                     don_armor_menu.append((item['name'],
-                                           {'action': {'name': 'don-armor',
+                                           {'action': {'action-name': 'don-armor',
                                                        'armor-index': index}}
                                          ))
         don_armor_menu = sorted(don_armor_menu, key=lambda x: x[0].upper())
@@ -123,7 +123,7 @@ class Ruleset(object):
             action_menu.append(
                 (('Don %s' % don_armor_menu[0][0]),
                  {'action': {
-                    'name': 'don-armor',
+                    'action-name': 'don-armor',
                     'armor-index': don_armor_menu[0][1]['action']['armor-index']
                   }
                  }))
@@ -133,7 +133,7 @@ class Ruleset(object):
 
         if armor is not None:
             action_menu.append((('Doff %s' % armor['name']),
-                                 {'action': {'name': 'don-armor',
+                                 {'action': {'action-name': 'don-armor',
                                              'armor-index': None}}
                               ))
 
@@ -143,20 +143,20 @@ class Ruleset(object):
             if weapon['ammo']['shots_left'] > 0:
                 # Can only attack if there's someone to attack
                 action_menu.extend([
-                    ('attack',          {'action': {'name': 'attack'}}),
-                    ('attack, all out', {'action': {'name': 'all-out-attack'}})
+                    ('attack',          {'action': {'action-name': 'attack'}}),
+                    ('attack, all out', {'action': {'action-name': 'all-out-attack'}})
                 ])
         else:
             action_menu.extend([
-                    ('attack',          {'action': {'name': 'attack'}}),
-                    ('attack, all out', {'action': {'name': 'all-out-attack'}})
+                    ('attack',          {'action': {'action-name': 'attack'}}),
+                    ('attack, all out', {'action': {'action-name': 'all-out-attack'}})
             ])
 
         ### Draw or Holster weapon ###
 
         if weapon is not None:
             action_menu.append((('holster/sheathe %s' % weapon['name']),
-                                   {'action': {'name': 'draw-weapon',
+                                   {'action': {'action-name': 'draw-weapon',
                                                'weapon-index': None}
                                    }))
         else:
@@ -169,7 +169,7 @@ class Ruleset(object):
                         item['type'] == 'shield'):
                     if weapon is None or weapon_index != index:
                         draw_weapon_menu.append(
-                            (item['name'], {'action': {'name': 'draw-weapon',
+                            (item['name'], {'action': {'action-name': 'draw-weapon',
                                                        'weapon-index': index}
                                            }))
             draw_weapon_menu = sorted(draw_weapon_menu,
@@ -181,7 +181,7 @@ class Ruleset(object):
                 action_menu.append(
                     (('draw (ready, etc.; B325, B366, B382) %s' %
                                                     draw_weapon_menu[0][0]),
-                     {'action': {'name': 'draw-weapon',
+                     {'action': {'action-name': 'draw-weapon',
                                  'weapon-index':
                             draw_weapon_menu[0][1]['action']['weapon-index']}
                      }))
@@ -194,7 +194,7 @@ class Ruleset(object):
 
         if holding_ranged:
             action_menu.append(('reload (ready)',
-                               {'action': {'name': 'reload'}}
+                               {'action': {'action-name': 'reload'}}
                               ))
 
         ### Use Item ###
@@ -205,7 +205,7 @@ class Ruleset(object):
         for index, item in enumerate(fighter.details['stuff']):
             if item['count'] > 0:
                 use_menu.append((item['name'],
-                                {'action': {'name': 'use-item',
+                                {'action': {'action-name': 'use-item',
                                             'item-index': index}}
                                ))
         use_menu = sorted(use_menu, key=lambda x: x[0].upper())
@@ -215,7 +215,7 @@ class Ruleset(object):
         if len(use_menu) == 1:
             action_menu.append(
                 (('use %s' % use_menu[0][0]),
-                 {'action': {'name': 'use-item',
+                 {'action': {'action-name': 'use-item',
                              'item-index':
                                 use_menu[0][1]['action']['item-index']}
                  }))
@@ -226,7 +226,7 @@ class Ruleset(object):
         ### User-defined ###
 
         action_menu.append(('User-defined',
-                            {'action': {'name': 'user-defined'}}
+                            {'action': {'action-name': 'user-defined'}}
                           ))
 
         return # No need to return action menu since it was a parameter
@@ -285,7 +285,7 @@ class Ruleset(object):
                 if item['type'] == 'ranged weapon':
                     fighter.draw_weapon_by_index(index)
                     self.do_action(fighter,
-                                   {'name': 'reload',
+                                   {'action-name': 'reload',
                                     'comment': 'Reloading on heal',
                                     'notimer': True,
                                     'quiet': True},
@@ -373,7 +373,7 @@ class Ruleset(object):
 
     def _adjust_hp(self,
                    fighter,          # Fighter object
-                   action,           # {'name': 'adjust-hp',
+                   action,           # {'action-name': 'adjust-hp',
                                      #  'adj': <int> # add to HP
                                      #  'comment': <string>, # optional
                                      #  'quiet': <bool> # use defaults for all
@@ -397,7 +397,7 @@ class Ruleset(object):
 
     def __do_attack(self,
                     fighter,          # Fighter object
-                    action,           # {'name': 'attack' | 'all-out-attack' |
+                    action,           # {'action-name': 'attack' | 'all-out-attack' |
                                       #          'move-and-attack'
                                       #  'comment': <string>, # optional
                     fight_handler     # FightHandler object
@@ -430,7 +430,7 @@ class Ruleset(object):
 
     def __do_custom_action(self,
                            fighter,          # Fighter object
-                           action,           # {'name': 'user-defined',
+                           action,           # {'action-name': 'user-defined',
                                              #  'comment': <string>, # optional
                            fight_handler,    # FightHandler object
                           ):
@@ -451,7 +451,7 @@ class Ruleset(object):
         width = self._window_manager.getmaxyx()
         comment_string = self._window_manager.input_box(height, width, title)
 
-        new_action = {'name': 'user-defined',
+        new_action = {'action-name': 'user-defined',
                       'part': 2}
 
         if 'comment' in action:
@@ -465,7 +465,7 @@ class Ruleset(object):
 
     def __do_reload(self,
                     fighter,          # Fighter object
-                    action,           # {'name': 'reload',
+                    action,           # {'action-name': 'reload',
                                       #  'comment': <string>, # optional
                                       #  'notimer': <bool>, # whether to
                                       #                       return a timer
@@ -501,7 +501,7 @@ class Ruleset(object):
 
     def __don_armor(self,
                     fighter,          # Fighter object
-                    action,           # {'name': 'don-armor',
+                    action,           # {'action-name': 'don-armor',
                                       #  'armor-index': <int> # index in
                                       #         fighter.details['stuff',
                                       #         None doffs armor
@@ -524,7 +524,7 @@ class Ruleset(object):
 
     def __draw_weapon(self,
                       fighter,          # Fighter object
-                      action,           # {'name': 'draw-weapon',
+                      action,           # {'action-name': 'draw-weapon',
                                         #  'weapon-index': <int> # index in
                                         #       fighter.details['stuff'],
                                         #       None drops weapon
@@ -547,7 +547,7 @@ class Ruleset(object):
 
     def __end_turn(self,
                    fighter,          # Fighter object
-                   action,           # {'name': 'end-turn',
+                   action,           # {'action-name': 'end-turn',
                                      #  'comment': <string> # optional
                    fight_handler,    # FightHandler object
                   ):
@@ -569,7 +569,7 @@ class Ruleset(object):
 
     def _perform_action(self,
                         fighter,          # Fighter object
-                        action,           # {'name': <action>, parameters...}
+                        action,           # {'action-name': <action>, parameters...}
                         fight_handler,    # FightHandler object
                         logit=True        # Log into history and
                                           #  'actions_this_turn' because the
@@ -611,9 +611,9 @@ class Ruleset(object):
         }
 
         handled = Ruleset.UNHANDLED
-        if 'name' in action:
-            if action['name'] in actions:
-                action_info = actions[action['name']]
+        if 'action-name' in action:
+            if action['action-name'] in actions:
+                action_info = actions[action['action-name']]
                 if action_info['doit'] is not None:
                     handled = action_info['doit'](fighter,
                                                   action,
@@ -626,7 +626,7 @@ class Ruleset(object):
 
     def __pick_opponent(self,
                         fighter,          # Fighter object
-                        action,           # {'name': 'pick-opponent',
+                        action,           # {'action-name': 'pick-opponent',
                                           #  'opponent':
                                           #     {'name': opponent_name,
                                           #      'group': opponent_group},
@@ -649,7 +649,7 @@ class Ruleset(object):
 
     def _record_action(self,
                        fighter,          # Fighter object
-                       action,           # {'name': <action>, parameters...}
+                       action,           # {'action-name': <action>, parameters...}
                        fight_handler,    # FightHandler object
                        handled,          # bool: whether/how the action was
                                          #   handled
@@ -672,7 +672,7 @@ class Ruleset(object):
 
     def __set_consciousness(self,
                             fighter,          # Fighter object
-                            action,           # {'name': 'set-consciousness',
+                            action,           # {'action-name': 'set-consciousness',
                                               #  'level': <int> # see
                                               #         Fighter.conscious_map
                                               #  'comment': <string> # optional
@@ -693,7 +693,7 @@ class Ruleset(object):
 
     def __set_timer(self,
                     fighter,          # Fighter object
-                    action,           # {'name': 'set-timer',
+                    action,           # {'action-name': 'set-timer',
                                       #  'timer': <dict> # see
                                       #                    Timer::from_pieces
                                       #  'comment': <string> # optional
@@ -716,7 +716,7 @@ class Ruleset(object):
 
     def __start_turn(self,
                      fighter,          # Fighter object
-                     action,           # {'name': 'start-turn',
+                     action,           # {'action-name': 'start-turn',
                                        #  'comment': <string> # optional
                      fight_handler,    # FightHandler object
                     ):
@@ -735,7 +735,7 @@ class Ruleset(object):
 
     def __use_item(self,
                    fighter,          # Fighter object
-                   action,           # {'name': 'use-item',
+                   action,           # {'action-name': 'use-item',
                                      #  'item-index': <int> # index in
                                      #       fighter.details['stuff']
                                      #  'comment': <string>, # optional

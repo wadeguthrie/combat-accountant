@@ -369,7 +369,7 @@ class Fighter(ThingsInFight):
                             world.details['options']['reload-after-fight'] and
                             self.group == 'PCs'):
             self._ruleset.do_action(self,
-                                    {'name': 'reload',
+                                    {'action-name': 'reload',
                                      'comment': 'Reloading after fight',
                                      'quiet': True},
                                     fight_handler)

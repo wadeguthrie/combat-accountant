@@ -861,7 +861,7 @@ class World(object):
         return result
 
     def add_to_history(self,
-                       action # {'name':xxx, ...} - see Ruleset::do_action()
+                       action # {'action-name':xxx, ...} - see Ruleset::do_action()
                       ):
         ''' Adds an action to the saved history list.  '''
         self.details['current-fight']['history'].append(action)
@@ -1239,7 +1239,7 @@ class ScreenHandler(object):
 
 
     def add_to_history(self,
-                       action # {'name':xxx, ...} - see Ruleset::do_action()
+                       action # {'action-name':xxx, ...} - see Ruleset::do_action()
                       ):
         '''
         Adds an action (see Ruleset::do_action) to the saved information for
@@ -2329,7 +2329,7 @@ class PersonnelHandler(ScreenHandler):
         self.world.ruleset.do_action(
                 fighter,
                 {
-                    'name': 'set-consciousness',
+                    'action-name': 'set-consciousness',
                     'level': new_state_number,
                     'comment': '(%s) is now (%s)' % (
                         fighter.name,
@@ -2594,7 +2594,7 @@ class PersonnelHandler(ScreenHandler):
                     return None
 
         self.world.ruleset.do_action(fighter,
-                                 {'name': 'don-armor',
+                                 {'action-name': 'don-armor',
                                   'armor-index': armor_index
                                  },
                                  None)
@@ -2665,7 +2665,7 @@ class PersonnelHandler(ScreenHandler):
                     return None
 
         self.world.ruleset.do_action(fighter,
-                                 {'name': 'draw-weapon',
+                                 {'action-name': 'draw-weapon',
                                   'weapon-index': weapon_index
                                  },
                                  None)
@@ -3825,7 +3825,7 @@ class FightHandler(ScreenHandler):
         # Now, reflect the selection in the code.
 
         self.world.ruleset.do_action(current_fighter,
-                                 {'name': 'pick-opponent',
+                                 {'action-name': 'pick-opponent',
                                   'opponent': {'name': opponent_name,
                                                'group': opponent_group},
                                   'comment': '(%s) picked (%s) as opponent' %
@@ -3844,7 +3844,7 @@ class FightHandler(ScreenHandler):
             if answer == True:
                 self.world.ruleset.do_action(
                     opponent,
-                    {'name': 'pick-opponent',
+                    {'action-name': 'pick-opponent',
                      'opponent': {'name': current_fighter.name,
                                   'group': current_fighter.group},
                      'comment': '(%s) picked (%s) as opponent right back' %
@@ -4094,7 +4094,7 @@ class FightHandler(ScreenHandler):
         if adj == 0:
             return True # Keep fighting
 
-        action = {'name': 'adjust-hp', 'adj': adj}
+        action = {'action-name': 'adjust-hp', 'adj': adj}
 
         # Record for posterity
         if hp_recipient is opponent:
@@ -4129,7 +4129,7 @@ class FightHandler(ScreenHandler):
                     comment = '(%s) did (Attack) maneuver' % attacker.name
                     self.world.ruleset.do_action(
                                         attacker,
-                                        {'name': 'attack', 'comment': comment},
+                                        {'action-name': 'attack', 'comment': comment},
                                         self)
         else:
             if adj < 0:
@@ -4178,7 +4178,7 @@ class FightHandler(ScreenHandler):
         self.world.ruleset.do_action(
                 now_dead,
                 {
-                    'name': 'set-consciousness',
+                    'action-name': 'set-consciousness',
                     'level': new_state_number,
                     'comment': '(%s) is now (%s)' % (
                         dead_name,
@@ -4231,7 +4231,7 @@ class FightHandler(ScreenHandler):
         self.world.ruleset.do_action(
             defender,
             {
-                'name': 'defend',
+                'action-name': 'defend',
                 'comment': '(%s) defended (and lost aim)' % defender.name
             },
             self)
@@ -4453,7 +4453,7 @@ class FightHandler(ScreenHandler):
         if 'action' in maneuver:
             maneuver['action']['comment'] = '(%s) did (%s) maneuver' % (
                                                   current_fighter.name,
-                                                  maneuver['action']['name'])
+                                                  maneuver['action']['action-name'])
 
             self.world.ruleset.do_action(current_fighter, maneuver['action'], self)
 
@@ -4485,9 +4485,9 @@ class FightHandler(ScreenHandler):
             self.add_to_history({'comment': '(%s) did nothing (unconscious)' %
                                                     prev_fighter.name})
 
-        self.world.ruleset.do_action(prev_fighter, {'name': 'end-turn'}, self)
+        self.world.ruleset.do_action(prev_fighter, {'action-name': 'end-turn'}, self)
         current_fighter = self.get_current_fighter()
-        self.world.ruleset.do_action(current_fighter, {'name': 'start-turn'}, self)
+        self.world.ruleset.do_action(current_fighter, {'action-name': 'start-turn'}, self)
 
         # Show all the displays
         next_PC_name = self.__next_PC_name()
@@ -4846,7 +4846,7 @@ class FightHandler(ScreenHandler):
         timer_dict = timers_widget.make_timer_dict(timer_recipient.name)
         if timer_dict is not None:
             self.world.ruleset.do_action(timer_recipient,
-                                     {'name': 'set-timer',
+                                     {'action-name': 'set-timer',
                                       'timer': timer_dict},
                                      self)
 
