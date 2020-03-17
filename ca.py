@@ -2301,6 +2301,47 @@ class PersonnelHandler(ScreenHandler):
         return attribute_widget.doit()
 
 
+    def __change_consciousness(self,
+                               throw_away   # Required/used by the caller because
+                                            #   there's a list of methods to call,
+                                            #   and (apparently) some of them may
+                                            #   use this parameter.  It's ignored
+                                            #   by this method, however.
+                               ):
+        '''
+        Handler for a change consciousness sub-menu entry.
+
+        Provides a way for a Fighter change his/her level of consciousness
+
+        Returns: None if we want to bail-out of the change consciousness
+                 process, True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        state_menu = sorted(ca_fighter.Fighter.conscious_map.iteritems(),
+                            key=lambda x:x[1])
+        new_state_number = self._window_manager.menu('New State', state_menu)
+        if new_state_number is None:
+            return None
+
+        self.world.ruleset.do_action(
+                fighter,
+                {
+                    'name': 'set-consciousness',
+                    'level': new_state_number,
+                    'comment': '(%s) is now (%s)' % (
+                        fighter.name,
+                        ca_fighter.Fighter.get_name_from_state_number(
+                                                            new_state_number))
+                },
+                self)
+
+        self._draw_screen()
+        return True # anything but 'None' for a successful menu handler
+
+
     def __change_template_group(self):
         '''
         Command ribbon method.
@@ -2651,6 +2692,7 @@ class PersonnelHandler(ScreenHandler):
                 ('equipment (add)',     {'doit': self.__add_equipment}),
                 ('Equipment (remove)',  {'doit': self.__remove_equipment}),
                 ('give equipment',      {'doit': self.__give_equipment}),
+                ('change consciousness',{'doit': self.__change_consciousness}),
             ])
 
         self.__ruleset_abilities = self.world.ruleset.get_creature_abilities()

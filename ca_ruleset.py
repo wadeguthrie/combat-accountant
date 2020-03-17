@@ -3,6 +3,7 @@
 import random
 
 import ca_fighter
+import ca_timers
 
 class Ruleset(object):
     '''
