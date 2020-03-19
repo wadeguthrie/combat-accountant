@@ -471,7 +471,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "notes": "M139, vs. Will",
           "maintain": 0,
           "casting time": 5,
-          "duration": None, # Ask
+          "duration": None,  # Ask
         },
         "Far Hearing": {
           "cost": 4,
@@ -569,7 +569,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "notes": "M35",
           "maintain": None,
           "casting time": 1,
-          "duration": None, # Ask
+          "duration": None,  # Ask
         },
         "Lend Energy": {
           "cost": None,
@@ -937,17 +937,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
      MAJOR_WOUND_BAD_FAIL) = range(3)
 
     def __init__(self,
-                 window_manager # GmWindowManager object for menus and errors
+                 window_manager  # GmWindowManager object for menus and errors
                 ):
         super(GurpsRuleset, self).__init__(window_manager)
-
 
     #
     # Public Methods
     #
 
     def can_finish_turn(self,
-                        fighter # Fighter object
+                        fighter  # Fighter object
                        ):
         '''
         If a Fighter has done something this turn, we can move to the next
@@ -984,15 +983,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return False
 
-
     def damage_to_string(self,
-                         damages # list of dict -- returned by 'get_damage'.
-                                 # The dict looks like:
-                                 #
-                                 #  {'attack_type': <string> (e.g., 'sw')
-                                 #   'num_dice': <int>
-                                 #   'plus': <int>
-                                 #   'damage_type': <string> (e.g., 'crushing')}
+                         damages  # list of dict -- returned by 'get_damage'.
+                                  # The dict looks like:
+                                  #
+                                  #  {'attack_type': <string> (e.g., 'sw')
+                                  #   'num_dice': <int>
+                                  #   'plus': <int>
+                                  #   'damage_type': <string> (e.g., 'crushing')}
                         ):
         '''
         Converts array of dicts returned by get_damage into a string.
@@ -1009,7 +1007,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             results.append(''.join(string))
 
         return ', '.join(results)
-
 
     def end_turn(self,
                  fighter,       # Fighter object
@@ -1036,7 +1033,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 self.do_action(fighter,
                                {'action-name': 'stun', 'stun': False},
                                fight_handler)
-
 
     def get_action_menu(self,
                         fighter,    # Fighter object
@@ -1072,7 +1068,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                           'action': {'action-name': 'nothing'}}
                 )
             )
-            return action_menu # No other actions permitted
+            return action_menu  # No other actions permitted
 
 
         # Figure out who we are and what we're holding.
@@ -1189,7 +1185,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         action_menu = sorted(action_menu, key=lambda x: x[0].upper())
         return action_menu
 
-
     def get_block_skill(self,                       # Public to aid in testing.
                         fighter,    # Fighter object
                         weapon      # dict
@@ -1233,7 +1228,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             block_why.append('  ...for a block skill total = %d' % block_skill)
 
         return block_skill, block_why
-
 
     def get_character_description(self,
                                   character,   # Fighter object
@@ -1389,7 +1383,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         output.append([{'text': 'Timers', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
-        timers = character.timers.get_all() # objects
+        timers = character.timers.get_all()  # objects
         for timer in timers:
             found_one = True
             text = timer.get_description()
@@ -1416,14 +1410,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         if not found_one:
             output.append([{'text': '  (None)', 'mode': mode}])
 
-
     def get_creature_abilities(self):
         '''
         Returns the list of capabilities that, according to the ruleset, a
         creature can have.  See |GurpsRuleset.abilities|
         '''
         return GurpsRuleset.abilities
-
 
     def get_damage(self,
                    fighter,   # Fighter object
@@ -1515,10 +1507,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return results, why
 
-
     def get_dodge_skill(self,                       # Public to aid in testing
-                        fighter # Fighter object
-                       ): # B326
+                        fighter  # Fighter object
+                       ):  # B326
         '''
         Returns a tuple of:
             1) the number the defender needs to roll to successfully dodge an
@@ -1537,7 +1528,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             dodge_skill -= 4
             dodge_why.append('  -4 due to being stunned (B420)')
 
-        if 'Combat Reflexes' in fighter.details['advantages']: # B43
+        if 'Combat Reflexes' in fighter.details['advantages']:  # B43
             dodge_skill_modified = True
             dodge_why.append('  +1 due to combat reflexes (B43)')
             dodge_skill += 1
@@ -1577,7 +1568,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return dodge_skill, dodge_why
 
-
     def get_fight_commands(self,
                            fight_handler    # FightHandler object
                           ):
@@ -1616,10 +1606,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                       },
             }
 
-
     def get_fighter_defenses_notes(self,
-                                   fighter, # Fighter object
-                                   opponent # Fighter object
+                                   fighter,  # Fighter object
+                                   opponent  # Fighter object
                                   ):
         '''
         Returns a tuple of strings describing:
@@ -1647,11 +1636,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             why.extend(dodge_why)
             notes.append(dodge_string)
 
-        if unarmed_skills is not None: # Unarmed Parry
+        if unarmed_skills is not None:  # Unarmed Parry
             notes.append('%s: %d' % (unarmed_info['parry_string'],
                                      unarmed_info['parry_skill']))
 
-        elif weapon['type'] == 'shield': # NOTE: cloaks also have this 'type'
+        elif weapon['type'] == 'shield':  # NOTE: cloaks also have this 'type'
             block_skill, block_why = self.get_block_skill(fighter, weapon)
             if block_skill is not None:
                 why.extend(block_why)
@@ -1689,7 +1678,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
 
         return notes, why
-
 
     def get_fighter_notes(self,
                           fighter   # Fighter object
@@ -1738,7 +1726,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             notes.append('Dodge/Move are at 1/2')
 
         return notes
-
 
     def get_fighter_to_hit_damage_notes(self,
                                         fighter,    # Fighter object
@@ -1794,7 +1781,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return notes
 
-
     def get_parry_skill(self,                       # Public to aid in testing
                         fighter,    # Fighter object
                         weapon      # dict
@@ -1843,7 +1829,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return parry_skill, parry_why
 
-
     def get_posture_mods(self,
                          posture    # string: 'standing' | ...
                         ):
@@ -1853,7 +1838,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
         return (None if posture not in GurpsRuleset.posture else
                                             GurpsRuleset.posture[posture])
-
 
     def get_sample_items(self):
         '''
@@ -1909,7 +1893,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             }
         ]
 
-
     def get_sections_in_template(self):
         '''
         This returns an array of the Fighter section headings that are
@@ -1924,7 +1907,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         #   actions_this_turn,
 
         return sections
-
 
     def get_to_hit(self,
                    fighter,     # Fighter object
@@ -1996,12 +1978,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         why.append('  ...for a to-hit total of %d' % skill)
         return skill, why
 
-
     def get_unarmed_info(self,
-                         fighter,       # Fighter object
-                         opponent,      # Fighter object
-                         weapon,        # None or dict.  May be brass knuckles.
-                         unarmed_skills # [string, string, ...]
+                         fighter,        # Fighter object
+                         opponent,       # Fighter object
+                         weapon,         # None or dict.  May be brass knuckles.
+                         unarmed_skills  # [string, string, ...]
                         ):
         '''
         Makes sense of the cascade of unarmed skills (brawling, boxing,
@@ -2201,8 +2182,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         # Damage
 
-        punch_damage = None # Expressed as dice
-        kick_damage = None  # Expressed as dice
+        punch_damage = None  # Expressed as dice
+        kick_damage = None   # Expressed as dice
         st = fighter.details['current']['st']
 
         # Base damage
@@ -2306,9 +2287,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return result
 
-
     def get_weapons_unarmed_skills(self,
-                                   weapon # None or dict from Game File
+                                   weapon  # None or dict from Game File
                                   ):
         '''
         Determines whether this weapon (which may be None) uses the unarmed
@@ -2322,7 +2302,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # Skills in increasing order of difficulty
         all_unarmed_skills = ['dx', 'Brawling', 'Boxing', 'Karate']
 
-        if weapon is None: # No weapon uses unarmed skills by definition
+        if weapon is None:  # No weapon uses unarmed skills by definition
             return all_unarmed_skills
 
         if weapon['skill'] not in all_unarmed_skills:
@@ -2333,8 +2313,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 # Returns all of the skills through the matched one
                 return all_unarmed_skills[:i+1]
 
-        return ['dx'] # Camel in Cairo -- should never get here
-
+        return ['dx']  # Camel in Cairo -- should never get here
 
     def heal_fighter(self,
                      fighter,   # Fighter object
@@ -2349,9 +2328,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         fighter.details['stunned'] = False
         fighter.details['check_for_death'] = False
 
-
     def initiative(self,
-                   fighter # Fighter object
+                   fighter  # Fighter object
                   ):
         '''
         Generates a tuple of numbers for a creature that determines the order
@@ -2366,10 +2344,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 ca_ruleset.Ruleset.roll(1, 6)
                 )
 
-
     def is_creature_consistent(self,
-                               name,    # string: creature's name
-                               creature # dict from Game File
+                               name,     # string: creature's name
+                               creature  # dict from Game File
                               ):
         '''
         Make sure creature has skills for all their stuff.  Trying to make
@@ -2396,7 +2373,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     '  but not the skill to use it'])
                 result = False
         return result
-
 
     def make_empty_creature(self):
         '''
@@ -2429,7 +2405,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         to_monster['current'] = copy.deepcopy(to_monster['permanent'])
         return to_monster
 
-
     def reset_aim(self,                         # Public to support testing
                   fighter           # Fighter object
                  ):
@@ -2441,12 +2416,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         fighter.details['aim']['rounds'] = 0
         fighter.details['aim']['braced'] = False
 
-
     def search_one_creature(self,
-                            name,       # string containing the name
-                            group,      # string containing the group
-                            creature,   # dict describing the creature
-                            look_for_re # compiled Python regex
+                            name,        # string containing the name
+                            group,       # string containing the group
+                            creature,    # dict describing the creature
+                            look_for_re  # compiled Python regex
                            ):
         '''
         Looks through a creature for the regular expression |look_for_re|.
@@ -2483,9 +2457,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return result
 
-
     def start_fight(self,
-                    fighter # Fighter object
+                    fighter  # Fighter object
                    ):
         '''
         Removes all the ruleset-related stuff from the old fight except injury.
@@ -2495,7 +2468,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         fighter.details['check_for_death'] = False
         fighter.details['posture'] = 'standing'
         self.reset_aim(fighter)
-
 
     def start_turn(self,
                    fighter,         # Fighter object
@@ -2574,7 +2546,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                fight_handler)
 
         fighter.details['actions_this_turn'] = []
-
 
     #
     # Protected and Private Methods
@@ -2778,7 +2749,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                     'stun': True},
                                    fight_handler)
 
-        if 'High Pain Threshold' not in fighter.details['advantages']: # B59
+        if 'High Pain Threshold' not in fighter.details['advantages']:  # B59
             # Shock (B419) is cumulative but only to a maximum of -4
             # Note: 'adj' is negative
             shock_level = fighter.details['shock'] + adj
@@ -2806,7 +2777,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         self.do_action(fighter, new_action, fight_handler)
         return ca_ruleset.Ruleset.HANDLED_OK
 
-
     def __adjust_hp_really(self,
                            fighter,         # Fighter object
                            action,          # {'action-name': 'adjust-hp-really',
@@ -2829,21 +2799,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             of what the Fighter is doing.
         '''
         super(GurpsRuleset, self)._adjust_hp(fighter, action, fight_handler)
-        return None # No timers
-
+        return None  # No timers
 
     def __cast_spell(self,
-                     fighter,      # Fighter object
-                     action,       # {'action-name': 'cast-spell'
-                                   #  'spell-index': <index in 'spells'>,
-                                   #  'complete spell': <dict> # this
-                                   #     is a combination of the spell
-                                   #     in the character details and
-                                   #     the same spell from the
-                                   #     ruleset
-                                   #  'comment': <string>, # optional
-                                   #  'part': 2 # optional
-                     fight_handler # FightHandler object
+                     fighter,       # Fighter object
+                     action,        # {'action-name': 'cast-spell'
+                                    #  'spell-index': <index in 'spells'>,
+                                    #  'complete spell': <dict> # this
+                                    #     is a combination of the spell
+                                    #     in the character details and
+                                    #     the same spell from the
+                                    #     ruleset
+                                    #  'comment': <string>, # optional
+                                    #  'part': 2 # optional
+                     fight_handler  # FightHandler object
                     ):
         '''
         Action handler for GurpsRuleset.
@@ -2951,7 +2920,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # The 1st part isn't executed when playing back.
 
             if fight_handler is not None and fight_handler.world.playing_back:
-                return None # No timers
+                return None  # No timers
 
             # Assemble the spell from the ruleset's copy of it and the Fighter's
             # copy of it.
@@ -2963,7 +2932,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 self._window_manager.error(
                     ['Spell "%s" not in GurpsRuleset.spells' % spell['name']]
                 )
-                return None # No timers
+                return None  # No timers
             complete_spell = copy.deepcopy(spell)
             complete_spell.update(GurpsRuleset.spells[spell['name']])
 
@@ -3047,8 +3016,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             self.do_action(fighter, new_action, fight_handler)
 
-            return None # No new timers
-
+            return None  # No new timers
 
     def __change_posture(self,
                          fighter,          # Fighter object
@@ -3084,7 +3052,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return timer
 
-
     def __check_for_death(self,
                           fighter,          # Fighter object
                           action,           # {'action-name': 'check-for-death',
@@ -3101,8 +3068,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             of what the Fighter is doing.
         '''
         fighter.details['check_for_death'] = action['value']
-        return None # No timer
-
+        return None  # No timer
 
     def __damage_FP(self,
                     param    # {'view': xxx, 'view-opponent': xxx,
@@ -3149,15 +3115,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                        {'action-name': 'adjust-fp', 'adj': adj, 'comment': comment},
                        fight_handler)
 
-        return True # Keep going
-
+        return True  # Keep going
 
     def __do_adjust_fp(self,
-                       fighter,      # Fighter object
-                       action,       # {'action-name': 'adjust-fp',
-                                     #  'adj': <int> # number to add to FP
-                                     #  'comment': <string>, # optional
-                       fight_handler # FightHandler object (for logging)
+                       fighter,       # Fighter object
+                       action,        # {'action-name': 'adjust-fp',
+                                      #  'adj': <int> # number to add to FP
+                                      #  'comment': <string>, # optional
+                       fight_handler  # FightHandler object (for logging)
                       ):
         '''
         Action handler for GurpsRuleset.
@@ -3170,7 +3135,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
 
         # See B426 for consequences of loss of FP
-        adj = action['adj'] # Adj is likely negative
+        adj = action['adj']  # Adj is likely negative
 
         # If FP go below zero, you lose HP along with FP
         hp_adj = 0
@@ -3196,13 +3161,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                            logit=False)
         return None  # No timer
 
-
     def __do_adjust_shock(self,
-                 fighter,      # Fighter object
-                 action,       # {'action-name': 'shock',
-                               #  'value': <int> # level to which to set shock
-                               #  'comment': <string>, # optional
-                 fight_handler # FightHandler object
+                 fighter,       # Fighter object
+                 action,        # {'action-name': 'shock',
+                                #  'value': <int> # level to which to set shock
+                                #  'comment': <string>, # optional
+                 fight_handler  # FightHandler object
                 ):
         '''
         Action handler for GurpsRuleset.
@@ -3215,13 +3179,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         fighter.details['shock'] = action['value']
         return None  # No timer
 
-
     def __do_aim(self,
-                 fighter,      # Fighter object
-                 action,       # {'action-name': 'aim',
-                               #  'braced': <bool> # see B364
-                               #  'comment': <string>, # optional
-                 fight_handler # FightHandler object
+                 fighter,       # Fighter object
+                 action,        # {'action-name': 'aim',
+                                #  'braced': <bool> # see B364
+                                #  'comment': <string>, # optional
+                 fight_handler  # FightHandler object
                 ):
         '''
         Action handler for GurpsRuleset.
@@ -3255,7 +3218,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             })
 
         return timer
-
 
     def __do_attack(self,
                    fighter,          # Fighter object
@@ -3327,7 +3289,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             else:
                 to_hit, ignore_why = self.get_to_hit(fighter, opponent, weapon)
                 if holding_ranged:
-                    to_hit -= 2 # or weapon's bulk rating, whichever is worse
+                    to_hit -= 2  # or weapon's bulk rating, whichever is worse
                 else:
                     to_hit -= 4
 
@@ -3342,7 +3304,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                            'string': text})
         return timer
 
-
     def __do_nothing(self,
                      fighter,      # Fighter object
                      action,       # {'action-name': 'concentrate' | 'evaluate' |
@@ -3354,7 +3315,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                    # NOTE: Some actions have other
                                    # parameters used buy |Ruleset|
                                    #
-                     fight_handler # FightHandler object
+                     fight_handler  # FightHandler object
                     ):
         '''
         Action handler for GurpsRuleset.
@@ -3422,22 +3383,21 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return timer
 
-
     def __do_reload(self,
-                    fighter, # Fighter object
-                    action,  # {'action-name': 'reload',
-                             #  'notimer': <bool>, # whether to
-                             #                       return a timer
-                             #                       for the fighter
-                             #                       -- optional
-                             #  'comment': <string>, # optional
-                             #  'quiet': <bool>    # use defaults for
-                             #                       all user
-                             #                       interactions
-                             #                       -- optional
-                             #  'time': <duration>
-                             #  'part': 2          # optional }
-                             # }
+                    fighter,  # Fighter object
+                    action,   # {'action-name': 'reload',
+                              #  'notimer': <bool>, # whether to
+                              #                       return a timer
+                              #                       for the fighter
+                              #                       -- optional
+                              #  'comment': <string>, # optional
+                              #  'quiet': <bool>    # use defaults for
+                              #                       all user
+                              #                       interactions
+                              #                       -- optional
+                              #  'time': <duration>
+                              #  'part': 2          # optional }
+                              # }
                     fight_handler,    # FightHandler object
                    ):
         '''
@@ -3476,16 +3436,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # The 1st part isn't executed when playing back.
 
             if fight_handler is not None and fight_handler.world.playing_back:
-                return None # No timer
+                return None  # No timer
 
             weapon, weapon_index = fighter.get_current_weapon()
             if weapon is None or 'ammo' not in weapon:
-                return None # No timer
+                return None  # No timer
 
             # Check to see if we need a reload at all
 
             if weapon['ammo']['shots_left'] == weapon['ammo']['shots']:
-                return None # No timer
+                return None  # No timer
 
             # If we do, how long will it take?
 
@@ -3517,8 +3477,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     new_action['notimer'] = action['notimer']
                 self.do_action(fighter, new_action, fight_handler)
 
-            return None # No timer
-
+            return None  # No timer
 
     def __draw_weapon(self,
                       fighter,          # Fighter object
@@ -3565,7 +3524,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                            'string': [title, ' Defense: any', ' Move: step']})
         return timer
 
-
     def __get_damage_type_str(self,
                               damage_type   # <string> key in
                                             #   GurpsRuleset.damage_mult
@@ -3583,7 +3541,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         else:
             damage_type_str = '%s' % damage_type
         return damage_type_str
-
 
     def _perform_action(self,
                         fighter,          # Fighter object
@@ -3689,7 +3646,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return handled
 
-
     def _record_action(self,
                        fighter,          # Fighter object
                        action,           # {'action-name': <action>, parameters...}
@@ -3724,7 +3680,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                             action['action-name']])
 
         # Don't deal with HANDLED_ERROR
-
 
     def __reset_aim(self,
                     fighter,          # Fighter object
@@ -3770,7 +3725,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                     ' Move: none']} )
         return timer
 
-
     def __stun(self,
                param    # {'view': xxx, 'view-opponent': xxx,
                         #  'current': xxx, 'current-opponent': xxx,
@@ -3804,8 +3758,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         'comment': ('(%s) got stunned' % stunned_dude.name)},
                        fight_handler)
 
-        return True # Keep going
-
+        return True  # Keep going
 
     def __stun_action(self,
                       fighter,          # Fighter object
@@ -3833,4 +3786,4 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                        fight_handler,
                        logit=False)
 
-        return None # No timer
+        return None  # No timer

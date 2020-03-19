@@ -11,25 +11,23 @@ class Timer(object):
     is an object built around data that is intended to be kept in the Game File
     data file but that's not strictly required for this object to work.
     '''
-    round_count_string = '%d Rnds: ' # assume rounds takes same space as '%d'
+    round_count_string = '%d Rnds: '  # assume rounds takes same space as '%d'
     len_timer_leader = len(round_count_string)
-    announcement_margin = 0.1 # time removed from an announcement timer so that
-                              #   it'll go off at the beginning of a round
-                              #   rather than the end
+    announcement_margin = 0.1  # time removed from an announcement timer so that
+                               #   it'll go off at the beginning of a round
+                               #   rather than the end
 
     def __init__(self,
                  details    # dict from the Game File, contains timer's info
            ):
         self.details = details  # This needs to actually be from the Game File
 
-
     def decrement(self):
         self.details['rounds'] -= 1
 
-
     def fire(self,
-             owner,         # ThingsInFight object to receive timer action
-             window_manager # GmWindowManager object -- for display
+             owner,          # ThingsInFight object to receive timer action
+             window_manager  # GmWindowManager object -- for display
             ):
         ''' Fires the timer. '''
 
@@ -50,28 +48,27 @@ class Timer(object):
 
         return result
 
-
     def from_pieces(self,
-                    pieces, # { 'parent-name': <text>, string describing the
-                            #                          thing calling the timer
-                            #   'rounds': <number>,    rounds until timer fires
-                            #                          (3.0 rounds fires at end
-                            #                          of 3 rounds; 2.9 rounds
-                            #                          fires at beginning of 3
-                            #                          rounds).
-                            #   'string': <text> or [<text>, <text>, ...],
-                            #                          string to display (in
-                            #                          fighter's notes) while
-                            #                          timer is running
-                            #   'actions': {'state': <text>,
-                            #                          string describing new
-                            #                          state of fighter (see
-                            #                          Fighter.conscious_map)
-                            #               'announcement': <text>},
-                            #                          string to display (in
-                            #                          its own window) when
-                            #                          timer fires
-                            # }
+                    pieces,  # { 'parent-name': <text>, string describing the
+                             #                          thing calling the timer
+                             #   'rounds': <number>,    rounds until timer fires
+                             #                          (3.0 rounds fires at end
+                             #                          of 3 rounds; 2.9 rounds
+                             #                          fires at beginning of 3
+                             #                          rounds).
+                             #   'string': <text> or [<text>, <text>, ...],
+                             #                          string to display (in
+                             #                          fighter's notes) while
+                             #                          timer is running
+                             #   'actions': {'state': <text>,
+                             #                          string describing new
+                             #                          state of fighter (see
+                             #                          Fighter.conscious_map)
+                             #               'announcement': <text>},
+                             #                          string to display (in
+                             #                          its own window) when
+                             #                          timer fires
+                             # }
                    ):
         '''
         Creates a new timer from scratch (rather than from data that's already
@@ -84,12 +81,11 @@ class Timer(object):
         if 'actions' not in self.details:
             self.details['actions'] = {}
 
-
     def get_description(self):
         '''
         Returns a long description of the timer to show the user.
         '''
-        result = [] # List of strings, one per line of output
+        result = []  # List of strings, one per line of output
         this_line = []
 
         rounds = self.details['rounds']
@@ -133,7 +129,6 @@ class Timer(object):
 
         return result
 
-
     def get_one_line_description(self):
         '''
         Returns a short desctiption of the timer to show the user.
@@ -172,7 +167,6 @@ class Timer(object):
 
         return ' '.join(this_line)
 
-
     def mark_owner_as_busy(self,
                            is_busy = True):
         self.details['busy'] = is_busy
@@ -184,16 +178,15 @@ class TimersWidget(object):
     '''
 
     def __init__(self,
-                 timers,        # Timers object
-                 window_manager # GmWindowManager object for menus and error
-                                #   reporting
+                 timers,         # Timers object
+                 window_manager  # GmWindowManager object for menus and error
+                                 #   reporting
                 ):
         self.__timers = timers
         self.__window_manager = window_manager
 
-
     def make_timer(self,
-                   timer_recipient_name # string
+                   timer_recipient_name  # string
                    ):
         '''
         Makes a timer object and adds it to the Timers list.
@@ -208,9 +201,8 @@ class TimersWidget(object):
             timer_obj.from_pieces(timer_dict)
             self.__timers.add(timer_obj)
 
-
     def make_timer_dict(self,
-                        timer_recipient_name, # string
+                        timer_recipient_name,  # string
                        ):
         '''
         Builds the data dictionary describing a new timer.  Asks all the
@@ -276,10 +268,7 @@ class TimersWidget(object):
 
         return timer_dict
 
-
-
     # Private and Protected Methods
-
 
     def __announcement_action(self,
                               param    # dict passed by the menu handler --
@@ -302,7 +291,6 @@ class TimersWidget(object):
             announcement = None
         param['announcement'] = announcement
         return True
-
 
     def __continuous_message_action(self,
                                     param   # dict passed by the menu
@@ -356,10 +344,10 @@ class Timers(object):
     data is stored) while 'obj' keeps Timer objects.
     '''
     def __init__(self,
-                 timer_details, # List from Game File containing timers
-                 owner,         # ThingsInFight object to receive timer
-                                #   actions.
-                 window_manager # For displaying error messages
+                 timer_details,  # List from Game File containing timers
+                 owner,          # ThingsInFight object to receive timer
+                                 #   actions.
+                 window_manager  # For displaying error messages
                 ):
 
         # data and obj are parallel arrays.  'data' is just like it is in the
@@ -376,7 +364,6 @@ class Timers(object):
 
         self.__window_manager = window_manager
 
-
     def add(self,
             timer   # Timer object
            ):
@@ -389,7 +376,6 @@ class Timers(object):
         self.__timers['obj'].append(timer)
         return timer
 
-
     def clear_all(self):
         ''' Removes all of this list's timers. '''
         # I think I have to pop the timer data, individually, because setting
@@ -399,17 +385,14 @@ class Timers(object):
             self.__timers['data'].pop()
         self.__timers['obj'] = []
 
-
     def decrement_all(self):
         ''' Decrements all timers. '''
         for timer_obj in self.__timers['obj']:
             timer_obj.decrement()
 
-
     def get_all(self):
         ''' Returns a complete list of this list's Timer objects.  '''
         return self.__timers['obj']
-
 
     def is_busy(self):
         '''Returns 'True' if a current timer has the owner marked as busy.'''
@@ -417,7 +400,6 @@ class Timers(object):
             if timer_obj.details['busy']:
                 return True
         return False
-
 
     def remove_expired_keep_dying(self):
         '''
@@ -436,7 +418,6 @@ class Timers(object):
         for index in remove_these:
             self.__fire_timer(self.__timers['obj'][index])
             self.remove_timer_by_index(index)
-
 
     def remove_expired_kill_dying(self):
         '''
@@ -457,9 +438,8 @@ class Timers(object):
             self.__fire_timer(self.__timers['obj'][index])
             self.remove_timer_by_index(index)
 
-
     def remove_timer_by_index(self,
-                              index # Index of the timer to be removed
+                              index  # Index of the timer to be removed
                              ):
         '''
         Removes a timer from the timer list.
@@ -485,5 +465,3 @@ class Timers(object):
         new_timer = timer.fire(self.__owner, self.__window_manager)
         if new_timer is not None:
             self.add(Timer(new_timer))
-
-
