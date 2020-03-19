@@ -10,14 +10,13 @@ class GmJson(object):
     '''
 
     def __init__(self,
-                 filename,             # file containing the JSON to be read
-                 window_manager = None # send error messages here
+                 filename,              # file containing the JSON to be read
+                 window_manager = None  # send error messages here
                 ):
         self.__filename = filename
         self.__window_manager = window_manager
         self.read_data = None
         self.write_data = None
-
 
     def __enter__(self):
         try:
@@ -46,16 +45,15 @@ class GmJson(object):
             self.read_data = None
         return self
 
-
     def __exit__ (self, exception_type, exception_value, exception_traceback):
         if exception_type is IOError:
             print 'IOError: %r' % exception_type
             print 'EXCEPTION val: %s' % exception_value
-            traceback.print_exc() # or traceback.format_exc()
+            traceback.print_exc()  # or traceback.format_exc()
         elif exception_type is not None:
             print 'EXCEPTION type: %r' % exception_type
             print 'EXCEPTION val: %s' % exception_value
-            traceback.print_exc() # or traceback.format_exc()
+            traceback.print_exc()  # or traceback.format_exc()
 
         self.open_write_json_and_close(self.write_data)
 
@@ -92,7 +90,6 @@ class GmJson(object):
         # if it's anything else, return it in its original form
         return data
 
-
     @staticmethod
     def __json_load_byteified(file_handle):
         error_message = None
@@ -103,7 +100,6 @@ class GmJson(object):
 
         return GmJson.__byteify(my_dict, ignore_dicts=True), None
 
-
     def open_write_json_and_close(self,
                                   write_data   # Python data to be written to the file
                                  ):
@@ -113,4 +109,3 @@ class GmJson(object):
         if write_data is not None:
             with open(self.__filename, 'w') as f:
                 json.dump(write_data, f, indent=2)
-

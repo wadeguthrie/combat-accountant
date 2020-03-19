@@ -33,7 +33,7 @@ And, then, invoke like so:
 
     xxx_handler = XxxHandler(self._window_manager, ...)
     xxx_handler.handle_user_input_until_done()
-    self._draw_screen() # Redraw current screen when done with XxxHandler
+    self._draw_screen()  # Redraw current screen when done with XxxHandler
 
 '''
 
@@ -60,7 +60,7 @@ class GmWindow(object):
     }
 
     def __init__(self,
-                 window_manager, # A GmWindowManager object
+                 window_manager,  # A GmWindowManager object
                  # Using curses screen addressing w/0,0 in upper left corner
                  height,
                  width,
@@ -87,11 +87,9 @@ class GmWindow(object):
                                                               left_column)
         self._window_manager.push_gm_window(self)
 
-
     def clear(self):
         '''Clears the screen.'''
         self._window.clear()
-
 
     def close(self):
         '''
@@ -102,8 +100,7 @@ class GmWindow(object):
         '''
         self._window_manager.pop_gm_window(self)
         del self._window                   # kill ourselves
-        self._window_manager.refresh_all() # refresh everything else
-
+        self._window_manager.refresh_all()  # refresh everything else
 
     def command_ribbon(self):
         '''
@@ -116,10 +113,10 @@ class GmWindow(object):
         lines = self._command_ribbon['lines']
         cols = self._command_ribbon['cols']
 
-        line = lines - 1 # -1 because last line is lines-1
+        line = lines - 1  # -1 because last line is lines-1
         for subline in reversed(range(
                             self._command_ribbon['lines_for_choices'])):
-            line = lines - (subline + 1) # -1 because last line is lines-1
+            line = lines - (subline + 1)  # -1 because last line is lines-1
             left = 0
             for i in range(self._command_ribbon['choices_per_line']):
                 if len(choice_strings) == 0:
@@ -151,7 +148,6 @@ class GmWindow(object):
                 pass
         self.refresh()
 
-
     def getmaxyx(self):
         '''
         Returns the tuple containing the number of lines and columns in
@@ -159,14 +155,12 @@ class GmWindow(object):
         '''
         return self._window.getmaxyx()
 
-
     def refresh(self):
         ''' Redraws the window. '''
         self._window.refresh()
 
-
     def show_description(self,
-                         character # Fighter or Venue object
+                         character  # Fighter or Venue object
                         ):
         '''
         Displays the description of the Fighter/Venue object in the current
@@ -186,7 +180,6 @@ class GmWindow(object):
 
         self._char_detail_window.draw_window()
         self._char_detail_window.refresh()
-
 
     def status_ribbon(self,
                       filename,
@@ -220,7 +213,6 @@ class GmWindow(object):
                                 wont_be_saved_string,
                                 mode | curses.A_BOLD)
 
-
     def touchwin(self):
         '''
         Pretends that the window has been modified so that 'refresh' will
@@ -229,7 +221,6 @@ class GmWindow(object):
         Returns nothing.
         '''
         self._window.touchwin()
-
 
     def uses_whole_screen(self):
         '''
@@ -242,7 +233,6 @@ class GmWindow(object):
         # No need to check top and left since there'd be an error if they were
         # non-zero given the height and width of the window.
         return True
-
 
     #
     # Protected and Private Members
@@ -291,11 +281,11 @@ class GmWindow(object):
         # Calculate the number of rows needed for all the commands
 
         self._command_ribbon['choices_per_line'] = int((cols - 1)/
-                        self._command_ribbon['max_width']) # -1 for last '|'
+                        self._command_ribbon['max_width'])  # -1 for last '|'
         self._command_ribbon['lines_for_choices'] = int(
             (len(choices) /
             (self._command_ribbon['choices_per_line'] + 0.0))
-            + 0.9999999) # +0.9999 so 'int' won't truncate last partial line
+            + 0.9999999)  # +0.9999 so 'int' won't truncate last partial line
 
         self._command_ribbon['choice_strings'].sort(reverse=True,
                                         key=lambda s: s['command'].lower())
@@ -307,7 +297,7 @@ class GmWindowManager(object):
     gm.py.  Here, this is provided with the Curses package.
     '''
 
-    ESCAPE = 27 # ASCII value for the escape character
+    ESCAPE = 27  # ASCII value for the escape character
 
     # Foreground / background colors
     (RED_BLACK,
@@ -323,34 +313,32 @@ class GmWindowManager(object):
     # NOTE: remember to call win.refresh()
     # win.addstr(y, x, 'String', attrib)
     #   attrib can be curses.color_pair(1) or curses.A_REVERSE, ...
-    #   color_pair is setup using: curses.init_pair(1, # should be a symbol
-    #                                               curses.COLOR_RED, # fg
-    #                                               curses.COLOR_WHITE) # bg
+    #   color_pair is setup using: curses.init_pair(1,  # should be a symbol
+    #                                               curses.COLOR_RED,  # fg
+    #                                               curses.COLOR_WHITE)  # bg
     #   only legal colors: 0:black, 1:red, 2:green, 3:yellow, 4:blue,
     #                      5:magenta, 6:cyan, and 7:white
     #
 
-
     def __init__(self):
         self.__stdscr = None
-        self.__y = 0 # For debug printouts
-        self.__window_stack = [] # Stack of GmWindow in Z order.  The screen
-                                 # can be completely re-drawn by building from
-                                 # the bottom of the stack to the top.
+        self.__y = 0  # For debug printouts
+        self.__window_stack = []  # Stack of GmWindow in Z order.  The screen
+                                  # can be completely re-drawn by building from
+                                  # the bottom of the stack to the top.
         self.STATE_COLOR = {}
-
 
     def __enter__(self):
         try:
             self.__stdscr = curses.initscr()
-            self.__stdscr.refresh() # Seems to be needed for the initial screen to be shown.
+            self.__stdscr.refresh()  # Seems to be needed for the initial screen to be shown.
             curses.start_color()
             curses.use_default_colors()
             self._setup_colors()
             curses.noecho()
-            curses.cbreak() # respond instantly to keystrokes
-            self.__stdscr.keypad(1) # special characters converted by curses
-                                    # (e.g., curses.KEY_LEFT)
+            curses.cbreak()  # respond instantly to keystrokes
+            self.__stdscr.keypad(1)  # special characters converted by curses
+                                     # (e.g., curses.KEY_LEFT)
 
             # Setup some defaults before I overwrite any
 
@@ -365,37 +353,36 @@ class GmWindowManager(object):
             #                    )
 
             curses.init_pair(GmWindowManager.RED_BLACK,
-                             curses.COLOR_RED, # fg
-                             curses.COLOR_BLACK) # bg
+                             curses.COLOR_RED,  # fg
+                             curses.COLOR_BLACK)  # bg
             curses.init_pair(GmWindowManager.GREEN_BLACK,
-                             curses.COLOR_GREEN, # fg
-                             curses.COLOR_BLACK) # bg
+                             curses.COLOR_GREEN,  # fg
+                             curses.COLOR_BLACK)  # bg
             curses.init_pair(GmWindowManager.YELLOW_BLACK,
-                             curses.COLOR_YELLOW, # fg
-                             curses.COLOR_BLACK) # bg
+                             curses.COLOR_YELLOW,  # fg
+                             curses.COLOR_BLACK)  # bg
             curses.init_pair(GmWindowManager.BLUE_BLACK,
-                             curses.COLOR_BLUE, # fg
-                             curses.COLOR_BLACK) # bg
+                             curses.COLOR_BLUE,  # fg
+                             curses.COLOR_BLACK)  # bg
             curses.init_pair(GmWindowManager.MAGENTA_BLACK,
-                             curses.COLOR_MAGENTA, # fg
-                             curses.COLOR_BLACK) # bg
+                             curses.COLOR_MAGENTA,  # fg
+                             curses.COLOR_BLACK)    # bg
             curses.init_pair(GmWindowManager.CYAN_BLACK,
-                             curses.COLOR_CYAN, # fg
-                             curses.COLOR_BLACK) # bg
+                             curses.COLOR_CYAN,   # fg
+                             curses.COLOR_BLACK)  # bg
             curses.init_pair(GmWindowManager.WHITE_BLACK,
-                             curses.COLOR_WHITE, # fg
-                             curses.COLOR_BLACK) # bg
+                             curses.COLOR_WHITE,  # fg
+                             curses.COLOR_BLACK)  # bg
 
             curses.init_pair(GmWindowManager.RED_WHITE,
-                             curses.COLOR_RED,   # fg
-                             curses.COLOR_WHITE) # bg
+                             curses.COLOR_RED,    # fg
+                             curses.COLOR_WHITE)  # bg
 
             self.__stdscr.clear()
             self.__stdscr.refresh()
         except:
             curses.endwin()
         return self
-
 
     def __exit__ (self, exception_type, exception_value, exception_traceback):
         if exception_type is IOError:
@@ -428,10 +415,10 @@ class GmWindowManager(object):
         return curses.color_pair(GmWindowManager.BLUE_BLACK)
 
     def display_window(self,
-                       title, # string: the title displayed, centered, in the
-                              #   box around the display window.
-                       lines  # [[{'text', 'mode'}, ],    # line 0
-                              #  [...],               ]   # line 1
+                       title,  # string: the title displayed, centered, in the
+                               #   box around the display window.
+                       lines   # [[{'text', 'mode'}, ],    # line 0
+                               #  [...],               ]   # line 1
                       ):
         '''
         Presents a display of |lines| to the user.  Scrollable.
@@ -445,7 +432,7 @@ class GmWindowManager(object):
         # I don't think I need the following now that I'm using a scrolling
         # window:
         #
-        #max_height = curses.LINES - 2 # 2 for the box
+        #max_height = curses.LINES - 2  # 2 for the box
         #if height > max_height:
         #    height = max_height
 
@@ -456,7 +443,7 @@ class GmWindowManager(object):
                 this_line_width += len(piece['text'])
             if this_line_width > width:
                 width = this_line_width
-        width += 1 # Seems to need one more space (or Curses freaks out)
+        width += 1  # Seems to need one more space (or Curses freaks out)
 
         border_win, display_win = self.__centered_boxed_window(
                                                     height,
@@ -488,7 +475,6 @@ class GmWindowManager(object):
 
             display_win.draw_window()
             display_win.refresh()
-
 
     def edit_window(self,
                     height,     # int: height of the window in characters
@@ -525,7 +511,6 @@ class GmWindowManager(object):
         self.hard_refresh_all()
         return contents
 
-
     def error(self,
               strings,          # array of single-line strings
               title=' ERROR '   # string: the title displayed, centered, in the
@@ -537,7 +522,7 @@ class GmWindowManager(object):
         width = max(len(string) for string in strings)
         if width < len(title):
             width = len(title)
-        width += 2 # Need some margin
+        width += 2  # Need some margin
         border_win, error_win = self.__centered_boxed_window(len(strings)+2,
                                                              width,
                                                              title,
@@ -553,9 +538,8 @@ class GmWindowManager(object):
         del error_win
         self.hard_refresh_all()
 
-
     def get_mode_from_fighter_state(self,
-                                    state # from STATE_COLOR
+                                    state  # from STATE_COLOR
                                    ):
         '''
         Returns the color (in the format of a CURSES color) associated with
@@ -563,14 +547,12 @@ class GmWindowManager(object):
         '''
         return self.STATE_COLOR[state]
 
-
     def getmaxyx(self):
         ''' Returns a tuple containing the height and width of the screen. '''
         return curses.LINES, curses.COLS
 
-
     def get_one_character(self,
-                          window=None # Window (for Curses)
+                          window=None  # Window (for Curses)
                          ):
         '''Returns one character read from the keyboard.'''
 
@@ -579,7 +561,6 @@ class GmWindowManager(object):
         c = window.getch()
         # |c| will be something like ord('p') or curses.KEY_HOME
         return c
-
 
     def get_string(self, window=None):
         '''
@@ -600,7 +581,6 @@ class GmWindowManager(object):
         curses.cbreak()
         curses.noecho()
         return string
-
 
     def hard_refresh_all(self):
         '''
@@ -623,7 +603,6 @@ class GmWindowManager(object):
 
         for i in range(top_index, len(self.__window_stack)):
             self.__window_stack[i].refresh()
-
 
     def input_box(self,
                   height,   # int: height of the data window (the box around
@@ -648,7 +627,6 @@ class GmWindowManager(object):
         self.hard_refresh_all()
         return string
 
-
     def menu(self,
              title,             # string: title of the menu, displayed to user
              strings_results,   # array of tuples (string, return-value).  If
@@ -663,7 +641,7 @@ class GmWindowManager(object):
                                 #   nested menu (of the form equivalent to
                                 #   |strings_results|.  NOTE: ['menu'] takes
                                 #   precidence over ['doit'].
-             starting_index = 0 # Who is selected when the menu starts
+             starting_index = 0  # Who is selected when the menu starts
             ):
         '''
         Presents a menu to the user and returns the result.
@@ -672,21 +650,21 @@ class GmWindowManager(object):
         '''
         (MENU_STRING, MENU_RESULT) = range(0, 2)
 
-        if len(strings_results) < 1: # if there's no choice, say so
+        if len(strings_results) < 1:  # if there's no choice, say so
             return None
-        if len(strings_results) == 1: # if there's only 1 choice, autoselect it
+        if len(strings_results) == 1:  # if there's only 1 choice, autoselect it
             return self.__handle_menu_result(strings_results[0][MENU_RESULT])
 
         # height and width of text box (not border)
         height = len(strings_results)
-        max_height = curses.LINES - 2 # 2 for the box
+        max_height = curses.LINES - 2  # 2 for the box
         if height > max_height:
             height = max_height
         width = 0 if title is None else len(title)
         for string, result in strings_results:
             if len(string) > width:
                 width = len(string)
-        width += 1 # Seems to need one more space (or Curses freaks out)
+        width += 1  # Seems to need one more space (or Curses freaks out)
 
         lines, cols = self.getmaxyx()
         if width > cols-4:
@@ -704,7 +682,7 @@ class GmWindowManager(object):
                                         data_for_scrolling=data_for_scrolling)
         menu_win.refresh()
 
-        while True: # The only way out is to return a result
+        while True:  # The only way out is to return a result
             user_input = self.get_one_character()
             new_index = index
             if user_input == curses.KEY_HOME:
@@ -780,12 +758,11 @@ class GmWindowManager(object):
             menu_win.draw_window()
             menu_win.refresh()
 
-
     def new_native_window(self,
                           height=None,
-                          width=None, # window size
+                          width=None,  # window size
                           top_line=0,
-                          left_column=0 # window placement
+                          left_column=0  # window placement
                          ):
         '''
         Returns native-typed window (a curses window, in this case).
@@ -800,10 +777,9 @@ class GmWindowManager(object):
         window = curses.newwin(height, width, top_line, left_column)
         return window
 
-
     def pop_gm_window(self,
-                      delete_this_window # GmWindow object: window to be
-                                         #  removed
+                      delete_this_window  # GmWindow object: window to be
+                                          #  removed
                      ):
         ''' Removes a specified window from the stack.  '''
         top_window = self.__window_stack[-1]
@@ -813,7 +789,6 @@ class GmWindowManager(object):
                 return
 
         print 'ERROR: could not find window %r' % window
-
 
     def printit(self,
                 string  # String to print
@@ -826,27 +801,24 @@ class GmWindowManager(object):
         self.__y = 0 if self.__y == curses.LINES else self.__y + 1
         self.__stdscr.refresh()
 
-
     def push_gm_window(self, window):
         ''' Adds a window to the stack.  '''
         self.__window_stack.append(window)
-
 
     def refresh_all(self):
         ''' Re-draws all of the window's panes.  '''
         for window in self.__window_stack:
             window.refresh()
 
-
     #
     # Private Methods
     #
 
     def __centered_boxed_window(self,
-                                height, # height of INSIDE window
-                                width,  # width of INSIDE window
-                                title,  # string: title displayed for the
-                                        #   window
+                                height,  # height of INSIDE window
+                                width,   # width of INSIDE window
+                                title,   # string: title displayed for the
+                                         #   window
                                 mode=curses.A_NORMAL,
                                 data_for_scrolling=None
                                ):
@@ -902,9 +874,8 @@ class GmWindowManager(object):
 
         return border_win, menu_win
 
-
     def __handle_menu_result(self,
-                             menu_result # Can literally be anything
+                             menu_result  # Can literally be anything
                             ):
         '''
         If a menu_result is a dict that contains either another menu or a
@@ -917,8 +888,8 @@ class GmWindowManager(object):
         if isinstance(menu_result, dict):
             while 'menu' in menu_result:
                 menu_result = self.menu('Which', menu_result['menu'])
-                if menu_result is None: # Bail out regardless of nesting level
-                    return None         # Keep going
+                if menu_result is None:  # Bail out regardless of nesting level
+                    return None          # Keep going
 
             if 'doit' in menu_result and menu_result['doit'] is not None:
                 param = (None if 'param' not in menu_result
@@ -926,7 +897,6 @@ class GmWindowManager(object):
                 menu_result = (menu_result['doit'])(param)
 
         return menu_result
-
 
     def _setup_colors(self):
         pass
@@ -943,9 +913,9 @@ class GmScrollableWindow(object):
                                     #  [...]                  ]  # line 1
                  window_manager,    # GmWindowManager object
                  height=None,
-                 width=None, # window size
+                 width=None,  # window size
                  top_line=0,
-                 left_column=0 # window placement
+                 left_column=0  # window placement
                 ):
         self.__window_manager = window_manager
         self.__lines = lines
@@ -960,11 +930,9 @@ class GmScrollableWindow(object):
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
         self.__default_scroll_lines = win_line_cnt / 2
 
-
     def clear(self):
         ''' Removes the printable data from the window. '''
         self.__window.clear()
-
 
     def draw_window(self):
         ''' Fills the window with the data that's supposed to be in it.  '''
@@ -978,7 +946,6 @@ class GmScrollableWindow(object):
                 self.__window.addstr(i, left, piece['text'], piece['mode'])
                 left += len(piece['text'])
 
-
     def get_showable_menu_lines(self):
         '''
         Returns a dict containing the ordinal number of the line at the top
@@ -988,11 +955,9 @@ class GmScrollableWindow(object):
         return {'top_line': self.top_line,
                 'bottom_line': self.top_line + win_line_cnt - 1}
 
-
     def refresh(self):
         ''' Re-draws all of the window's panes.  '''
         self.__window.refresh()
-
 
     def scroll_down(self,
                     line_cnt=None,  # int: lines to scroll the window, 'None'
@@ -1019,7 +984,6 @@ class GmScrollableWindow(object):
         # NOTE: refresh the window yourself.  That way, you can modify the
         # lines before the refresh happens.
 
-
     def scroll_to(self,
                   line  # int: scroll to this line
                  ):
@@ -1031,7 +995,6 @@ class GmScrollableWindow(object):
             self.top_line = len(self.__lines)
         self.draw_window()
 
-
     def scroll_to_end(self):
         ''' Scrolls the window to the last line of the data. '''
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
@@ -1041,10 +1004,9 @@ class GmScrollableWindow(object):
             self.top_line = 0
         self.draw_window()
 
-
     def scroll_up(self,
-                  line_cnt=None # int: number of lines to scroll, 'None'
-                                #   scrolls half the screen
+                  line_cnt=None  # int: number of lines to scroll, 'None'
+                                 #   scrolls half the screen
                  ):
         ''' Scrolls the window up. '''
         if line_cnt is None:
@@ -1057,9 +1019,6 @@ class GmScrollableWindow(object):
         # NOTE: refresh the window yourself.  That way, you can modify the
         # lines before the refresh happens.
 
-
     def touchwin(self):
         ''' Touches all of this window's sub-panes.  '''
         self.__window.touchwin()
-
-

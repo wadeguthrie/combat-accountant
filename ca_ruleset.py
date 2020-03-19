@@ -29,14 +29,14 @@ class Ruleset(object):
     (UNHANDLED, HANDLED_OK, HANDLED_ERROR, DONT_LOG) = range(4)
 
     def __init__(self,
-                 window_manager # GmWindowManager object for menus and errors
+                 window_manager  # GmWindowManager object for menus and errors
                 ):
         self._window_manager = window_manager
 
     @staticmethod
-    def roll(number, # the number of dice
-             dice,   # the type of dice
-             plus=0  # a number to add to the total of the dice roll
+    def roll(number,  # the number of dice
+             dice,    # the type of dice
+             plus=0   # a number to add to the total of the dice roll
             ):
         '''Simulates a roll of dice.'''
         result = plus
@@ -48,12 +48,10 @@ class Ruleset(object):
     # Public Methods
     #
 
-
     def can_finish_turn(self,
-                        fighter # Fighter object
+                        fighter  # Fighter object
                        ):
         return True
-
 
     def do_action(self,
                   fighter,          # Fighter object
@@ -70,7 +68,6 @@ class Ruleset(object):
         '''
         handled = self._perform_action(fighter, action, fight_handler, logit)
         self._record_action(fighter, action, fight_handler, handled, logit)
-
 
     def get_action_menu(self,
                         action_menu,    # menu for user [(name, predicate)...]
@@ -229,15 +226,13 @@ class Ruleset(object):
                             {'action': {'action-name': 'user-defined'}}
                           ))
 
-        return # No need to return action menu since it was a parameter
-
+        return  # No need to return action menu since it was a parameter
 
     def get_sample_items(self):
         '''
         Returns a list of sample equipment for creating new game files.
         '''
         return []
-
 
     def get_sections_in_template(self):
         '''
@@ -256,8 +251,6 @@ class Ruleset(object):
 
         return sections
 
-
-    # Ruleset
     def heal_fighter(self,
                      fighter,   # Fighter object
                      world      # World object
@@ -292,7 +285,6 @@ class Ruleset(object):
                                    None)
             fighter.draw_weapon_by_index(original_weapon_index)
 
-
     def make_empty_creature(self):
         '''
         Builds the minimum legal character detail (the dict that goes into the
@@ -314,12 +306,11 @@ class Ruleset(object):
                 'short-notes': [],
                 }
 
-
     def search_one_creature(self,
-                            name,       # string containing the name
-                            group,      # string containing the group
-                            creature,   # dict describing the creature
-                            look_for_re # compiled Python regex
+                            name,        # string containing the name
+                            group,       # string containing the group
+                            creature,    # dict describing the creature
+                            look_for_re  # compiled Python regex
                            ):
         '''
         Looks through a creature for the regular expression |look_for_re|.
@@ -354,7 +345,7 @@ class Ruleset(object):
                     result.append({'name': name,
                                    'group': group,
                                    'location': 'notes'})
-                    break # Don't want an entry for each time it's in notes
+                    break  # Don't want an entry for each time it's in notes
 
         if 'short-notes' in creature:
             for line in creature['short-notes']:
@@ -369,7 +360,6 @@ class Ruleset(object):
     #
     # Private and Protected Methods
     #
-
 
     def _adjust_hp(self,
                    fighter,          # Fighter object
@@ -393,7 +383,6 @@ class Ruleset(object):
 
         fighter.details['current']['hp'] += action['adj']
         return Ruleset.HANDLED_OK
-
 
     def __do_attack(self,
                     fighter,          # Fighter object
@@ -426,7 +415,6 @@ class Ruleset(object):
 
         weapon['ammo']['shots_left'] -= 1
         return Ruleset.HANDLED_OK
-
 
     def __do_custom_action(self,
                            fighter,          # Fighter object
@@ -461,7 +449,6 @@ class Ruleset(object):
         self.do_action(fighter, new_action, fight_handler)
 
         return Ruleset.DONT_LOG
-
 
     def __do_reload(self,
                     fighter,          # Fighter object
@@ -498,7 +485,6 @@ class Ruleset(object):
                 return Ruleset.HANDLED_OK
         return Ruleset.HANDLED_ERROR
 
-
     def __don_armor(self,
                     fighter,          # Fighter object
                     action,           # {'action-name': 'don-armor',
@@ -520,7 +506,6 @@ class Ruleset(object):
 
         fighter.don_armor_by_index(action['armor-index'])
         return Ruleset.HANDLED_OK
-
 
     def __draw_weapon(self,
                       fighter,          # Fighter object
@@ -544,7 +529,6 @@ class Ruleset(object):
         fighter.draw_weapon_by_index(action['weapon-index'])
         return Ruleset.HANDLED_OK
 
-
     def __end_turn(self,
                    fighter,          # Fighter object
                    action,           # {'action-name': 'end-turn',
@@ -565,7 +549,6 @@ class Ruleset(object):
             fighter.end_turn(fight_handler)
             fight_handler.modify_index(1)
         return Ruleset.HANDLED_OK
-
 
     def _perform_action(self,
                         fighter,          # Fighter object
@@ -623,7 +606,6 @@ class Ruleset(object):
 
         return handled
 
-
     def __pick_opponent(self,
                         fighter,          # Fighter object
                         action,           # {'action-name': 'pick-opponent',
@@ -645,7 +627,6 @@ class Ruleset(object):
         fighter.details['opponent'] = {'group': action['opponent']['group'],
                                        'name': action['opponent']['name']}
         return Ruleset.HANDLED_OK
-
 
     def _record_action(self,
                        fighter,          # Fighter object
@@ -669,7 +650,6 @@ class Ruleset(object):
 
         return
 
-
     def __set_consciousness(self,
                             fighter,          # Fighter object
                             action,           # {'action-name': 'set-consciousness',
@@ -689,7 +669,6 @@ class Ruleset(object):
 
         fighter.set_consciousness(action['level'])
         return Ruleset.HANDLED_OK
-
 
     def __set_timer(self,
                     fighter,          # Fighter object
@@ -713,7 +692,6 @@ class Ruleset(object):
         fighter.timers.add(timer_obj)
         return Ruleset.HANDLED_OK
 
-
     def __start_turn(self,
                      fighter,          # Fighter object
                      action,           # {'action-name': 'start-turn',
@@ -731,7 +709,6 @@ class Ruleset(object):
         '''
         fighter.start_turn(fight_handler)
         return Ruleset.HANDLED_OK
-
 
     def __use_item(self,
                    fighter,          # Fighter object

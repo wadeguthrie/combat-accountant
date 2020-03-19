@@ -11,12 +11,12 @@ class ThingsInFight(object):
     Base class to manage timers, equipment, and notes for Fighters and Venues.
     '''
     def __init__(self,
-                 name,          # string, name of the thing
-                 group,         # string to index into world['fights']
-                 details,       # world.details['fights'][name] (world is
-                                #   a World object)
-                 ruleset,       # Ruleset object
-                 window_manager # GmWindowManager object for reporting errors
+                 name,           # string, name of the thing
+                 group,          # string to index into world['fights']
+                 details,        # world.details['fights'][name] (world is
+                                 #   a World object)
+                 ruleset,        # Ruleset object
+                 window_manager  # GmWindowManager object for reporting errors
                 ):
         self.name = name
         self.detailed_name = self.name
@@ -46,8 +46,8 @@ class ThingsInFight(object):
     #
 
     def add_equipment(self,
-                      new_item,   # dict describing new equipment
-                      source=None # string describing where equipment came from
+                      new_item,    # dict describing new equipment
+                      source=None  # string describing where equipment came from
                       ):
         '''
         Accept a new item of equipment and put it in the list.
@@ -55,7 +55,6 @@ class ThingsInFight(object):
         Returns the new index of the equipment.
         '''
         return self.equipment.add(new_item, source)
-
 
     def remove_equipment(self,
                          item_index
@@ -72,7 +71,7 @@ class ThingsInFight(object):
     #
 
     def get_defenses_notes(self,
-                           opponent # Throw away Fighter object
+                           opponent  # Throw away Fighter object
                           ):
         '''
         Returns a tuple of strings describing:
@@ -85,14 +84,12 @@ class ThingsInFight(object):
         '''
         return None, None
 
-
     def get_long_summary_string(self):
         '''
         Returns a string that contains a short (but not the shortest)
         description of the state of the Fighter or Venue.
         '''
         return '%s' % self.name
-
 
     def get_notes(self):
         '''
@@ -103,16 +100,14 @@ class ThingsInFight(object):
         '''
         return None
 
-
     def get_short_summary_string(self):
         '''
         Returns a string that contains the shortest description of the Fighter.
         '''
         return '%s' % self.name
 
-
     def get_to_hit_damage_notes(self,
-                                opponent # Throw away Fighter object
+                                opponent  # Throw away Fighter object
                                ):
         '''
         Returns a list of strings describing the current (using the current
@@ -177,12 +172,13 @@ class Venue(ThingsInFight):
         'notes': [],
         'timers': []
     }
+
     def __init__(self,
-                 group,         # string to index into world['fights']
-                 details,       # world.details['fights'][name] (world is
-                                #   a World object)
-                 ruleset,       # Ruleset object
-                 window_manager # GmWindowManager object for error reporting
+                 group,          # string to index into world['fights']
+                 details,        # world.details['fights'][name] (world is
+                                 #   a World object)
+                 ruleset,        # Ruleset object
+                 window_manager  # GmWindowManager object for error reporting
                 ):
         super(Venue, self).__init__(Venue.name,
                                     group,
@@ -191,11 +187,10 @@ class Venue(ThingsInFight):
                                     window_manager)
         self.detailed_name = Venue.detailed_name % group
 
-
     def get_description(self,
-                        char_detail, # recepticle for character detail.
-                                     # [[{'text','mode'},...],  # line 0
-                                     #  [...],               ]  # line 1...
+                        char_detail,  # recepticle for character detail.
+                                      #     [[{'text','mode'},...],  # line 0
+                                      #      [...],               ]  # line 1..
                         ):
         '''
         Provides a text description of all of the components of a Venue.
@@ -226,7 +221,7 @@ class Venue(ThingsInFight):
         char_detail.append([{'text': 'Timers', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
-        timers = self.timers.get_all() # objects
+        timers = self.timers.get_all()  # objects
         for timer in timers:
             found_one = True
             text = timer.get_description()
@@ -253,7 +248,6 @@ class Venue(ThingsInFight):
         if not found_one:
             char_detail.append([{'text': '  (None)', 'mode': mode}])
 
-
     def get_state(self):
         return Fighter.FIGHT
 
@@ -267,7 +261,7 @@ class Fighter(ThingsInFight):
      UNCONSCIOUS,
      DEAD,
 
-     INJURED, # Injured is separate since it's tracked by HP
+     INJURED,  # Injured is separate since it's tracked by HP
      ABSENT,
      FIGHT) = range(6)
 
@@ -294,7 +288,6 @@ class Fighter(ThingsInFight):
                                       window_manager)
         pass
 
-
     @staticmethod
     def get_fighter_state(details):
         '''
@@ -315,14 +308,13 @@ class Fighter(ThingsInFight):
                 return name
         return '<unknown>'
 
-
     #
     # Equipment related methods
     #
 
     def add_equipment(self,
                       new_item,   # dict describing new equipment
-                      source=None # string describing where equipment came from
+                      source=None  # string describing where equipment came from
                       ):
         '''
         Accept a new item of equipment and put it in the list.
@@ -335,14 +327,12 @@ class Fighter(ThingsInFight):
         self.details['armor-index'] = None
         return index
 
-
     def don_armor_by_index(self,
                            index  # Index of armor in fighter's 'stuff'
                                   # list.  'None' removes current armor.
                           ):
         '''Puts on armor.'''
         self.details['armor-index'] = index
-
 
     def draw_weapon_by_index(self,
                              index  # Index of weapon in fighter's 'stuff'
@@ -352,7 +342,6 @@ class Fighter(ThingsInFight):
         # NOTE: call this from the ruleset if you want the ruleset to do its
         # due dilligence (i.e., stop the aim).
         self.details['weapon-index'] = index
-
 
     def end_fight(self,
                   world,          # World object (for options)
@@ -375,7 +364,6 @@ class Fighter(ThingsInFight):
                                     fight_handler)
         self.details['weapon-index'] = None
 
-
     def get_current_armor(self):
         '''
         Gets the armor the Fighter is wearing.
@@ -391,7 +379,6 @@ class Fighter(ThingsInFight):
             return None, None
         armor = self.equipment.get_item_by_index(armor_index)
         return armor, armor_index
-
 
     def get_current_weapon(self):
         '''
@@ -409,7 +396,6 @@ class Fighter(ThingsInFight):
         weapon = self.equipment.get_item_by_index(weapon_index)
         return weapon, weapon_index
 
-
     def get_weapon_by_name(self,                # Public to support testing
                            name
                           ):
@@ -423,9 +409,8 @@ class Fighter(ThingsInFight):
             self.details['weapon-index'] = index
         return index, item
 
-
     def remove_equipment(self,
-                         item_index # <int> index into Equipment list
+                         item_index  # <int> index into Equipment list
                         ):
         '''
         Discards an item from the Fighter's equipment list.
@@ -443,13 +428,12 @@ class Fighter(ThingsInFight):
         self.details['armor-index'] = None
         return item
 
-
     #
     # Notes related methods
     #
 
     def get_defenses_notes(self,
-                           opponent # Fighter object
+                           opponent  # Fighter object
                           ):
         '''
         Returns a tuple of strings describing:
@@ -463,11 +447,10 @@ class Fighter(ThingsInFight):
                                                                 opponent)
         return defense_notes, defense_why
 
-
     def get_description(self,
-                        output, # recepticle for character detail.
-                                # [[{'text','mode'},...],  # line 0
-                                #  [...],               ]  # line 1...
+                        output,  # recepticle for character detail.
+                                 #  [[{'text','mode'},...],  # line 0
+                                 #   [...],               ]  # line 1...
                         ):
         '''
         Provides a text description of a Fighter including all of the
@@ -476,7 +459,6 @@ class Fighter(ThingsInFight):
         Returns: nothing.  The output is written to the |output| variable.
         '''
         self._ruleset.get_character_description(self, output)
-
 
     def get_long_summary_string(self):
         '''
@@ -492,7 +474,6 @@ class Fighter(ThingsInFight):
                                     self.details['permanent']['fp'])
         return fighter_string
 
-
     def get_notes(self):
         '''
         Returns a list of strings describing the current fighting state of the
@@ -501,7 +482,6 @@ class Fighter(ThingsInFight):
         '''
         notes = self._ruleset.get_fighter_notes(self)
         return notes
-
 
     def get_short_summary_string(self):
         '''
@@ -513,9 +493,8 @@ class Fighter(ThingsInFight):
                                           self.details['permanent']['hp'])
         return fighter_string
 
-
     def get_to_hit_damage_notes(self,
-                                opponent # Fighter object
+                                opponent  # Fighter object
                                ):
         '''
         Returns a list of strings describing the current (using the current
@@ -524,7 +503,6 @@ class Fighter(ThingsInFight):
         '''
         notes = self._ruleset.get_fighter_to_hit_damage_notes(self, opponent)
         return notes
-
 
     #
     # Miscellaneous methods
@@ -541,7 +519,6 @@ class Fighter(ThingsInFight):
         '''
         return self._ruleset.can_finish_turn(self)
 
-
     def end_turn(self,
                  fight_handler  # FightHandler object
                 ):
@@ -554,23 +531,18 @@ class Fighter(ThingsInFight):
         self._ruleset.end_turn(self, fight_handler)
         self.timers.remove_expired_kill_dying()
 
-
     def get_state(self):
         return Fighter.get_fighter_state(self.details)
 
-
     def is_absent(self):
         return True if self.details['state'] == 'absent' else False
-
 
     def is_conscious(self):
         # NOTE: 'injured' is not stored in self.details['state']
         return True if self.details['state'] == 'alive' else False
 
-
     def is_dead(self):
         return True if self.details['state'] == 'dead' else False
-
 
     def set_consciousness(self,
                           conscious_number  # <int> See Fighter.conscious_map
@@ -588,9 +560,8 @@ class Fighter(ThingsInFight):
                 break
 
         if not self.is_conscious():
-            self.details['opponent'] = None # unconscious men fight nobody
-            self.draw_weapon_by_index(None) # unconscious men don't hold stuff
-
+            self.details['opponent'] = None  # unconscious men fight nobody
+            self.draw_weapon_by_index(None)  # unconscious men don't hold stuff
 
     def start_fight(self):
         '''
@@ -602,7 +573,6 @@ class Fighter(ThingsInFight):
         # NOTE: person may go around wearing armor -- no need to reset
         self.details['opponent'] = None
         self._ruleset.start_fight(self)
-
 
     def start_turn(self,
                    fight_handler    # FightHandler object
@@ -631,7 +601,6 @@ class Fighter(ThingsInFight):
                 # s/he's already busy
                 self.details['actions_this_turn'].append('busy')
 
-
     def toggle_absent(self):
         '''
         Toggles the consciousness state between absent and alive.
@@ -643,7 +612,6 @@ class Fighter(ThingsInFight):
             self.details['state'] = 'alive'
         else:
             self.details['state'] = 'absent'
-
 
     #
     # Protected and Private Methods
