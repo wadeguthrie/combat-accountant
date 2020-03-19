@@ -67,7 +67,7 @@ class GmWindow(object):
                  top_line,
                  left_column,
                  command_ribbon_choices = None
-                ):
+                 ):
         self._window_manager = window_manager
 
         self._command_ribbon = {
@@ -161,7 +161,7 @@ class GmWindow(object):
 
     def show_description(self,
                          character  # Fighter or Venue object
-                        ):
+                         ):
         '''
         Displays the description of the Fighter/Venue object in the current
         window.
@@ -243,7 +243,7 @@ class GmWindow(object):
                                cols,
                                choices,   # hash: ord('f'): {'name': 'xxx',
                                           #                  'func': self.func}
-                              ):
+                               ):
         '''
         Given a set of commands (here, called 'choices'), this routine builds
         the strings for the command ribbon and arranges them into lines.
@@ -419,7 +419,7 @@ class GmWindowManager(object):
                                #   box around the display window.
                        lines   # [[{'text', 'mode'}, ],    # line 0
                                #  [...],               ]   # line 1
-                      ):
+                       ):
         '''
         Presents a display of |lines| to the user.  Scrollable.
 
@@ -484,7 +484,7 @@ class GmWindowManager(object):
                                 #   box around the edit window.
                     footer      # string: something to be displayed, centered,
                                 #   at the bottom of the box around the window
-                   ):
+                    ):
         '''
         Creates a window to edit a block of text using an EMACS style
         interface.
@@ -515,7 +515,7 @@ class GmWindowManager(object):
               strings,          # array of single-line strings
               title=' ERROR '   # string: the title displayed, centered, in the
                                 #   box around the error message.
-             ):
+              ):
         ''' Displays an error to the screen. '''
 
         mode = curses.color_pair(GmWindowManager.RED_WHITE)
@@ -540,7 +540,7 @@ class GmWindowManager(object):
 
     def get_mode_from_fighter_state(self,
                                     state  # from STATE_COLOR
-                                   ):
+                                    ):
         '''
         Returns the color (in the format of a CURSES color) associated with
         |state|.
@@ -553,7 +553,7 @@ class GmWindowManager(object):
 
     def get_one_character(self,
                           window=None  # Window (for Curses)
-                         ):
+                          ):
         '''Returns one character read from the keyboard.'''
 
         if window is None:
@@ -610,7 +610,7 @@ class GmWindowManager(object):
                   width,    # int: width of the data window (see |height|)
                   title     # string: the title displayed, centered, in the
                             #   box around the data.
-                 ):
+                  ):
         '''
         Provides a window to get input from the screen.
 
@@ -642,7 +642,7 @@ class GmWindowManager(object):
                                 #   |strings_results|.  NOTE: ['menu'] takes
                                 #   precidence over ['doit'].
              starting_index = 0  # Who is selected when the menu starts
-            ):
+             ):
         '''
         Presents a menu to the user and returns the result.
 
@@ -763,7 +763,7 @@ class GmWindowManager(object):
                           width=None,  # window size
                           top_line=0,
                           left_column=0  # window placement
-                         ):
+                          ):
         '''
         Returns native-typed window (a curses window, in this case).
         '''
@@ -780,7 +780,7 @@ class GmWindowManager(object):
     def pop_gm_window(self,
                       delete_this_window  # GmWindow object: window to be
                                           #  removed
-                     ):
+                      ):
         ''' Removes a specified window from the stack.  '''
         top_window = self.__window_stack[-1]
         for index, window in enumerate(self.__window_stack):
@@ -792,7 +792,7 @@ class GmWindowManager(object):
 
     def printit(self,
                 string  # String to print
-               ):
+                ):
         '''
         Really just for debug.  Prints strings on the screen.
         '''
@@ -821,7 +821,7 @@ class GmWindowManager(object):
                                          #   window
                                 mode=curses.A_NORMAL,
                                 data_for_scrolling=None
-                               ):
+                                ):
         '''
         Creates a temporary window, on top of the current one, that is
         centered and has a box around it.
@@ -876,7 +876,7 @@ class GmWindowManager(object):
 
     def __handle_menu_result(self,
                              menu_result  # Can literally be anything
-                            ):
+                             ):
         '''
         If a menu_result is a dict that contains either another menu or a
         'doit' function, show the menu to the user or call the 'doit' function.
@@ -916,7 +916,7 @@ class GmScrollableWindow(object):
                  width=None,  # window size
                  top_line=0,
                  left_column=0  # window placement
-                ):
+                 ):
         self.__window_manager = window_manager
         self.__lines = lines
         self.__window = self.__window_manager.new_native_window(height,
@@ -962,7 +962,7 @@ class GmScrollableWindow(object):
     def scroll_down(self,
                     line_cnt=None,  # int: lines to scroll the window, 'None'
                                     #   scrolls a half screen.
-                   ):
+                    ):
         ''' Scrolls the window down. '''
         if line_cnt is None:
             line_cnt = self.__default_scroll_lines
@@ -986,7 +986,7 @@ class GmScrollableWindow(object):
 
     def scroll_to(self,
                   line  # int: scroll to this line
-                 ):
+                  ):
         ''' Scrolls the window to a specific line.  '''
         self.top_line = line
         if self.top_line < 0:
@@ -1007,7 +1007,7 @@ class GmScrollableWindow(object):
     def scroll_up(self,
                   line_cnt=None  # int: number of lines to scroll, 'None'
                                  #   scrolls half the screen
-                 ):
+                  ):
         ''' Scrolls the window up. '''
         if line_cnt is None:
             line_cnt = self.__default_scroll_lines

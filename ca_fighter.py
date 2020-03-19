@@ -17,7 +17,7 @@ class ThingsInFight(object):
                                  #   a World object)
                  ruleset,        # Ruleset object
                  window_manager  # GmWindowManager object for reporting errors
-                ):
+                 ):
         self.name = name
         self.detailed_name = self.name
         self.group = group
@@ -58,7 +58,7 @@ class ThingsInFight(object):
 
     def remove_equipment(self,
                          item_index
-                        ):
+                         ):
         '''
         Discards an item from the Fighter's/Venue's equipment list.
 
@@ -72,7 +72,7 @@ class ThingsInFight(object):
 
     def get_defenses_notes(self,
                            opponent  # Throw away Fighter object
-                          ):
+                           ):
         '''
         Returns a tuple of strings describing:
 
@@ -108,7 +108,7 @@ class ThingsInFight(object):
 
     def get_to_hit_damage_notes(self,
                                 opponent  # Throw away Fighter object
-                               ):
+                                ):
         '''
         Returns a list of strings describing the current (using the current
         weapon, in the current posture, etc.) fighting capability (to-hit and
@@ -123,7 +123,7 @@ class ThingsInFight(object):
     def end_fight(self,
                   world,          # World object - unused
                   fight_handler   # FightHandler object
-                 ):
+                  ):
         '''
         Perform the post-fight cleanup.  Remove all the timers, that sort of
         thing.
@@ -146,7 +146,7 @@ class ThingsInFight(object):
 
     def _explain_numbers(self,
                          fight_handler  # FightHandler object, ignored
-                        ):
+                         ):
         '''
         Explains how the stuff in the descriptions were calculated.
 
@@ -179,7 +179,7 @@ class Venue(ThingsInFight):
                                  #   a World object)
                  ruleset,        # Ruleset object
                  window_manager  # GmWindowManager object for error reporting
-                ):
+                 ):
         super(Venue, self).__init__(Venue.name,
                                     group,
                                     details,
@@ -191,7 +191,7 @@ class Venue(ThingsInFight):
                         char_detail,  # recepticle for character detail.
                                       #     [[{'text','mode'},...],  # line 0
                                       #      [...],               ]  # line 1..
-                        ):
+                         ):
         '''
         Provides a text description of all of the components of a Venue.
 
@@ -280,7 +280,7 @@ class Fighter(ThingsInFight):
                  ruleset,           # a Ruleset object
                  window_manager     # a GmWindowManager object for display
                                     #   windows
-                ):
+                 ):
         super(Fighter, self).__init__(name,
                                       group,
                                       fighter_details,
@@ -330,14 +330,14 @@ class Fighter(ThingsInFight):
     def don_armor_by_index(self,
                            index  # Index of armor in fighter's 'stuff'
                                   # list.  'None' removes current armor.
-                          ):
+                           ):
         '''Puts on armor.'''
         self.details['armor-index'] = index
 
     def draw_weapon_by_index(self,
                              index  # Index of weapon in fighter's 'stuff'
                                     # list.  'None' removes current weapon.
-                            ):
+                             ):
         '''Draws or removes weapon from sheath or holster.'''
         # NOTE: call this from the ruleset if you want the ruleset to do its
         # due dilligence (i.e., stop the aim).
@@ -346,7 +346,7 @@ class Fighter(ThingsInFight):
     def end_fight(self,
                   world,          # World object (for options)
                   fight_handler   # FightHandler object (for do_action)
-                 ):
+                  ):
         '''
         Perform the post-fight cleanup.  Remove all the timers, reload if the
         option is set.  Sheathe the weapon.
@@ -398,7 +398,7 @@ class Fighter(ThingsInFight):
 
     def get_weapon_by_name(self,                # Public to support testing
                            name
-                          ):
+                           ):
         '''
         Draw weapon from sheath or holster.
 
@@ -411,7 +411,7 @@ class Fighter(ThingsInFight):
 
     def remove_equipment(self,
                          item_index  # <int> index into Equipment list
-                        ):
+                         ):
         '''
         Discards an item from the Fighter's equipment list.
 
@@ -434,7 +434,7 @@ class Fighter(ThingsInFight):
 
     def get_defenses_notes(self,
                            opponent  # Fighter object
-                          ):
+                           ):
         '''
         Returns a tuple of strings describing:
 
@@ -451,7 +451,7 @@ class Fighter(ThingsInFight):
                         output,  # recepticle for character detail.
                                  #  [[{'text','mode'},...],  # line 0
                                  #   [...],               ]  # line 1...
-                        ):
+                         ):
         '''
         Provides a text description of a Fighter including all of the
         attributes (current and permanent), equipment, etc.
@@ -495,7 +495,7 @@ class Fighter(ThingsInFight):
 
     def get_to_hit_damage_notes(self,
                                 opponent  # Fighter object
-                               ):
+                                ):
         '''
         Returns a list of strings describing the current (using the current
         weapon, in the current posture, etc.) fighting capability (to-hit and
@@ -521,7 +521,7 @@ class Fighter(ThingsInFight):
 
     def end_turn(self,
                  fight_handler  # FightHandler object
-                ):
+                 ):
         '''
         Performs all of the stuff required for a Fighter to end his/her
         turn.
@@ -546,7 +546,7 @@ class Fighter(ThingsInFight):
 
     def set_consciousness(self,
                           conscious_number  # <int> See Fighter.conscious_map
-                         ):
+                          ):
         '''
         Sets the state (alive, unconscious, dead, absent, etc.) of the
         Fighter.
@@ -576,7 +576,7 @@ class Fighter(ThingsInFight):
 
     def start_turn(self,
                    fight_handler    # FightHandler object
-                  ):
+                   ):
         '''
         Performs all of the stuff required for a Fighter to start his/her
         turn.  Handles timer stuff.
@@ -619,7 +619,7 @@ class Fighter(ThingsInFight):
 
     def _explain_numbers(self,
                          fight_handler  # FightHandler object
-                        ):
+                         ):
         '''
         Explains how the stuff in the descriptions were calculated.
 
