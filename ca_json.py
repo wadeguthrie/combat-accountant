@@ -12,7 +12,7 @@ class GmJson(object):
     def __init__(self,
                  filename,              # file containing the JSON to be read
                  window_manager = None  # send error messages here
-                ):
+                 ):
         self.__filename = filename
         self.__window_manager = window_manager
         self.read_data = None
@@ -102,7 +102,7 @@ class GmJson(object):
 
     def open_write_json_and_close(self,
                                   write_data   # Python data to be written to the file
-                                 ):
+                                  ):
         '''
         Dump Python data to the JSON file.
         '''

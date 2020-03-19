@@ -10,13 +10,13 @@ class Equipment(object):
     '''
     def __init__(self,
                  equipment  # self.details['stuff'], list of items
-                ):
+                 ):
         self.__equipment = equipment
 
     def add(self,
             new_item,    # dict describing new equipment
             source=None  # string describing where equipment came from
-           ):
+            ):
         '''
         Adds an item to the equipment list.  If a source if given, the source
         string is added to the item's list of owners.
@@ -39,7 +39,7 @@ class Equipment(object):
 
     def get_item_by_index(self,
                           index  # integer index into the equipment list
-                         ):
+                          ):
         '''
         Returns the dictionary data of the index-th item in the equipment
         list.  Returns None if the item is not found.
@@ -49,7 +49,7 @@ class Equipment(object):
 
     def get_item_by_name(self,              # Public to facilitate testing
                          name   # string that matches the name of the thing
-                        ):
+                         ):
         '''
         Returns a tuple that contains index, item (i.e., the dict describing
         the item) of the (first) item in the equipment list that has a name
@@ -63,7 +63,7 @@ class Equipment(object):
 
     def remove(self,
                item_index   # integer index into the equipment list
-              ):
+               ):
         '''
         Removes an item (by index) from the list of equipment.
 
@@ -93,7 +93,7 @@ class Equipment(object):
                         lhs,     # part of equipment dict (at level=0, is dict)
                         rhs,     # part of equipment dict (at level=0, is dict)
                         level=0  # how far deep in the recursive calls are we
-                       ):
+                        ):
         '''
         Checks that two objects contain the same data.  That is harder than it
         seems since dictionaries have non-constant order.  This does look
@@ -137,7 +137,7 @@ class EquipmentManager(object):
     def __init__(self,
                  world,          # World object
                  window_manager  # GmWindowManager object for menus and errors
-                ):
+                 ):
         '''
         Manages equipment lists.  Meant to be embedded in a Fighter or a Venue.
         '''
@@ -156,7 +156,7 @@ class EquipmentManager(object):
                                         # detail.
                                         # [[{'text','mode'},...],  # line 0
                                         #  [...],               ]  # line 1...
-                       ):
+                        ):
         '''
         This is kind-of messed up.  Each type of equipment should have its own
         class that has its own 'get_description'.  In lieu of that, though,
@@ -229,7 +229,7 @@ class EquipmentManager(object):
 
     def add_equipment(self,
                       fighter       # Fighter object
-                     ):
+                      ):
         '''
         Ask user which item to transfer from the store to a fighter and
         transfer it.
@@ -256,7 +256,7 @@ class EquipmentManager(object):
 
     def remove_equipment(self,
                          fighter       # Fighter object
-                        ):
+                         ):
         '''
         Ask the user which piece of equipment to discard and remove it.
 

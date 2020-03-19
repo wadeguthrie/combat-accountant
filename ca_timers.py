@@ -19,7 +19,7 @@ class Timer(object):
 
     def __init__(self,
                  details    # dict from the Game File, contains timer's info
-           ):
+                 ):
         self.details = details  # This needs to actually be from the Game File
 
     def decrement(self):
@@ -28,7 +28,7 @@ class Timer(object):
     def fire(self,
              owner,          # ThingsInFight object to receive timer action
              window_manager  # GmWindowManager object -- for display
-            ):
+             ):
         ''' Fires the timer. '''
 
         result = None   # If there's a timer to be added back into the list,
@@ -69,7 +69,7 @@ class Timer(object):
                              #                          its own window) when
                              #                          timer fires
                              # }
-                   ):
+                    ):
         '''
         Creates a new timer from scratch (rather than from data that's already
         in the Game File).
@@ -181,13 +181,13 @@ class TimersWidget(object):
                  timers,         # Timers object
                  window_manager  # GmWindowManager object for menus and error
                                  #   reporting
-                ):
+                 ):
         self.__timers = timers
         self.__window_manager = window_manager
 
     def make_timer(self,
                    timer_recipient_name  # string
-                   ):
+                    ):
         '''
         Makes a timer object and adds it to the Timers list.
 
@@ -203,7 +203,7 @@ class TimersWidget(object):
 
     def make_timer_dict(self,
                         timer_recipient_name,  # string
-                       ):
+                        ):
         '''
         Builds the data dictionary describing a new timer.  Asks all the
         questions necessary to provide the dict with the data it needs.
@@ -274,7 +274,7 @@ class TimersWidget(object):
                               param    # dict passed by the menu handler --
                                        #   contains the announcement text
                                        #   associated with the timer
-                             ):
+                              ):
         '''
         Handler for the timer's 'what do I do with this timer' entry.
 
@@ -296,7 +296,7 @@ class TimersWidget(object):
                                     param   # dict passed by the menu
                                             #  handler -- contains the text
                                             #  associated with the timer
-                                   ):
+                                    ):
         '''
         Handler for the timer's 'what do I do with this timer' entry.
 
@@ -319,7 +319,7 @@ class TimersWidget(object):
     #                       param    # dict passed by the menu handler --
     #                                #   contains the destination state of the
     #                                #   Fighter associated with the timer
-    #                      ):
+    #                       ):
     #    '''
     #    Handler for the timer's 'what do I do with this timer' entry.
 
@@ -348,7 +348,7 @@ class Timers(object):
                  owner,          # ThingsInFight object to receive timer
                                  #   actions.
                  window_manager  # For displaying error messages
-                ):
+                 ):
 
         # data and obj are parallel arrays.  'data' is just like it is in the
         # Game File (and, in fact, should point to the Game File data) and
@@ -366,7 +366,7 @@ class Timers(object):
 
     def add(self,
             timer   # Timer object
-           ):
+            ):
         '''
         Adds a timer to this list's timers.
 
@@ -440,7 +440,7 @@ class Timers(object):
 
     def remove_timer_by_index(self,
                               index  # Index of the timer to be removed
-                             ):
+                              ):
         '''
         Removes a timer from the timer list.
 
@@ -455,7 +455,7 @@ class Timers(object):
 
     def __fire_timer(self,
                      timer  # Timer object
-                    ):
+                     ):
         '''
         Has the timer do whatever it does when it fires (i.e., when its time
         runs out).

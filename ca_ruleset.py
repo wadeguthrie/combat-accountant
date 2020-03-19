@@ -30,14 +30,14 @@ class Ruleset(object):
 
     def __init__(self,
                  window_manager  # GmWindowManager object for menus and errors
-                ):
+                 ):
         self._window_manager = window_manager
 
     @staticmethod
     def roll(number,  # the number of dice
              dice,    # the type of dice
              plus=0   # a number to add to the total of the dice roll
-            ):
+             ):
         '''Simulates a roll of dice.'''
         result = plus
         for count in range(number):
@@ -50,7 +50,7 @@ class Ruleset(object):
 
     def can_finish_turn(self,
                         fighter  # Fighter object
-                       ):
+                        ):
         return True
 
     def do_action(self,
@@ -60,7 +60,7 @@ class Ruleset(object):
                   logit=True        # Log into history and 'actions_this_turn'
                                     #   because the action is not a side-effect
                                     #   of another action
-                 ):
+                  ):
         '''
         Executes an action for a Fighter then records that action.
 
@@ -73,7 +73,7 @@ class Ruleset(object):
                         action_menu,    # menu for user [(name, predicate)...]
                         fighter,        # Fighter object
                         opponent        # Fighter object
-                       ):
+                        ):
         '''
         Builds a list of all of the things that this fighter can do this
         round.  This list will be fed to GmWindowManager.menu(), so each
@@ -255,7 +255,7 @@ class Ruleset(object):
                      fighter,   # Fighter object
                      world      # World object
                      # TODO: prefs - for reload-on-heal
-                    ):
+                     ):
         '''
         Removes all injury (and their side-effects) from a fighter.
 
@@ -311,7 +311,7 @@ class Ruleset(object):
                             group,       # string containing the group
                             creature,    # dict describing the creature
                             look_for_re  # compiled Python regex
-                           ):
+                            ):
         '''
         Looks through a creature for the regular expression |look_for_re|.
 
@@ -371,7 +371,7 @@ class Ruleset(object):
                                      #                    optional
                                      # }
                    fight_handler,    # FightHandler object
-                  ):
+                   ):
         '''
         Action handler for Ruleset.
 
@@ -390,7 +390,7 @@ class Ruleset(object):
                                       #          'move-and-attack'
                                       #  'comment': <string>, # optional
                     fight_handler     # FightHandler object
-                   ):
+                    ):
         '''
         Action handler for Ruleset.
 
@@ -421,7 +421,7 @@ class Ruleset(object):
                            action,           # {'action-name': 'user-defined',
                                              #  'comment': <string>, # optional
                            fight_handler,    # FightHandler object
-                          ):
+                           ):
         '''
         Action handler for Ruleset.
 
@@ -464,7 +464,7 @@ class Ruleset(object):
                                       #                       -- optional
                                       # }
                     fight_handler,    # FightHandler object
-                  ):
+                    ):
         '''
         Action handler for Ruleset.
 
@@ -493,7 +493,7 @@ class Ruleset(object):
                                       #         None doffs armor
                                       #  'comment': <string> # optional
                     fight_handler,    # FightHandler object
-                   ):
+                    ):
         '''
         Action handler for Ruleset.
 
@@ -515,7 +515,7 @@ class Ruleset(object):
                                         #       None drops weapon
                                         #  'comment': <string> # optional
                       fight_handler,    # FightHandler object
-                     ):
+                      ):
         '''
         Action handler for Ruleset.
 
@@ -534,7 +534,7 @@ class Ruleset(object):
                    action,           # {'action-name': 'end-turn',
                                      #  'comment': <string> # optional
                    fight_handler,    # FightHandler object
-                  ):
+                   ):
         '''
         Action handler for Ruleset.
 
@@ -558,7 +558,7 @@ class Ruleset(object):
                                           #  'actions_this_turn' because the
                                           #  action is not a side-effect of
                                           #  another action
-                       ):
+                        ):
         '''
         This routine delegates actions to routines that perform the action.
         The 'doit' routines return whether the action was successfully handled
@@ -614,7 +614,7 @@ class Ruleset(object):
                                           #      'group': opponent_group},
                                           #  'comment': <string> # optional
                         fight_handler,    # FightHandler object
-                       ):
+                        ):
         '''
         Action handler for Ruleset.
 
@@ -638,7 +638,7 @@ class Ruleset(object):
                                          #  'actions_this_turn' because the
                                          #  action is not a side-effect of
                                          #  another action
-                      ):
+                       ):
         '''
         Logs a performed 'action' in the fight's history.
 
@@ -657,7 +657,7 @@ class Ruleset(object):
                                               #         Fighter.conscious_map
                                               #  'comment': <string> # optional
                             fight_handler,    # FightHandler object
-                           ):
+                            ):
         '''
         Action handler for Ruleset.
 
@@ -677,7 +677,7 @@ class Ruleset(object):
                                       #                    Timer::from_pieces
                                       #  'comment': <string> # optional
                     fight_handler,    # FightHandler object
-                   ):
+                    ):
         '''
         Action handler for Ruleset.
 
@@ -697,7 +697,7 @@ class Ruleset(object):
                      action,           # {'action-name': 'start-turn',
                                        #  'comment': <string> # optional
                      fight_handler,    # FightHandler object
-                    ):
+                     ):
         '''
         Action handler for Ruleset.
 
@@ -717,7 +717,7 @@ class Ruleset(object):
                                      #       fighter.details['stuff']
                                      #  'comment': <string>, # optional
                    fight_handler,    # FightHandler object
-                  ):
+                   ):
         '''
         Action handler for Ruleset.
 

@@ -32,8 +32,8 @@ class CaGmWindowManager(ca_gui.GmWindowManager):
     def get_build_fight_gm_window(self,
                                   command_ribbon_choices  # dict: ord('T'):
                                                           #   {'name': xxx,
-                                                          #    'func': yyy}, ...
-                                 ):
+                                                          #    'func': yyy},...
+                                  ):
         '''
         Returns a PersonnelGmWindow object.  Useful for providing Mocks
         in testing.
@@ -45,7 +45,7 @@ class CaGmWindowManager(ca_gui.GmWindowManager):
                             command_ribbon_choices  # dict: ord('T'):
                                                     #   {'name': xxx,
                                                     #    'func': yyy}, ...
-                           ):
+                            ):
         '''
         Returns a FightGmWindow object.  Useful for providing Mocks in testing.
         '''
@@ -55,7 +55,7 @@ class CaGmWindowManager(ca_gui.GmWindowManager):
                            command_ribbon_choices  # dict: ord('T'):
                                                    #   {'name': xxx,
                                                    #    'func': yyy}, ...
-                          ):
+                           ):
         '''
         Returns a MainGmWindow object.  Useful for providing Mocks in testing.
         '''
@@ -68,17 +68,17 @@ class CaGmWindowManager(ca_gui.GmWindowManager):
         Returns: nothing.
         '''
         self.STATE_COLOR = {
-            ca_fighter.Fighter.ALIVE :
+            ca_fighter.Fighter.ALIVE:
                 curses.color_pair(ca_gui.GmWindowManager.GREEN_BLACK),
-            ca_fighter.Fighter.INJURED :
+            ca_fighter.Fighter.INJURED:
                 curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK),
-            ca_fighter.Fighter.UNCONSCIOUS :
+            ca_fighter.Fighter.UNCONSCIOUS:
                 curses.color_pair(ca_gui.GmWindowManager.MAGENTA_BLACK),
-            ca_fighter.Fighter.DEAD :
+            ca_fighter.Fighter.DEAD:
                 curses.color_pair(ca_gui.GmWindowManager.MAGENTA_BLACK),
-            ca_fighter.Fighter.ABSENT :
+            ca_fighter.Fighter.ABSENT:
                 curses.color_pair(ca_gui.GmWindowManager.BLUE_BLACK),
-            ca_fighter.Fighter.FIGHT :
+            ca_fighter.Fighter.FIGHT:
                 curses.color_pair(ca_gui.GmWindowManager.CYAN_BLACK),
         }
 
@@ -90,7 +90,7 @@ class MainGmWindow(ca_gui.GmWindow):
     def __init__(self,
                  window_manager,
                  command_ribbon_choices
-                ):
+                 ):
         super(MainGmWindow, self).__init__(window_manager,
                                            curses.LINES,
                                            curses.COLS,
@@ -120,7 +120,7 @@ class MainGmWindow(ca_gui.GmWindow):
                                                  width-1,
                                                  top_line,
                                                  1)
-        self._char_detail_window  = ca_gui.GmScrollableWindow(
+        self._char_detail_window = ca_gui.GmScrollableWindow(
                                                  self._char_detail,
                                                  self._window_manager,
                                                  height,
@@ -192,12 +192,12 @@ class MainGmWindow(ca_gui.GmWindow):
         self.__char_list_window.refresh()
 
     def show_creatures(self,
-                       char_list,        # [Fighter(), Fighter(), ..]
-                       current_index,    # int: index into char_list of
-                                         #   currently selected fighter
-                       standout = False  # True if list to be shown in
-                                         #   inverse video, False otherwise
-                      ):
+                       char_list,       # [Fighter(), Fighter(), ..]
+                       current_index,   # int: index into char_list of
+                                        #   currently selected fighter
+                       standout=False   # True if list to be shown in
+                                        #   inverse video, False otherwise
+                       ):
         '''
         Builds a color-annotated character list from the passed-in list.
         Displays the color-annotated list.
@@ -240,7 +240,6 @@ class MainGmWindow(ca_gui.GmWindow):
             self._char_detail_window.touchwin()
 
 
-
 class PersonnelGmWindow(ca_gui.GmWindow):
     '''
     Window display for building individual creatures, assembling creatures
@@ -250,7 +249,7 @@ class PersonnelGmWindow(ca_gui.GmWindow):
     def __init__(self,
                  window_manager,
                  command_ribbon_choices
-                ):
+                 ):
         super(PersonnelGmWindow, self).__init__(window_manager,
                                                 curses.LINES,
                                                 curses.COLS,
@@ -280,7 +279,7 @@ class PersonnelGmWindow(ca_gui.GmWindow):
                                                  width,
                                                  top_line,
                                                  1)
-        self._char_detail_window  = ca_gui.GmScrollableWindow(
+        self._char_detail_window = ca_gui.GmScrollableWindow(
                                                  self._char_detail,
                                                  self._window_manager,
                                                  height,
@@ -289,13 +288,13 @@ class PersonnelGmWindow(ca_gui.GmWindow):
                                                  width+1)
 
     def char_detail_home(self):
-        ''' Scrolls the character detail pane to the top and redraws the pane. '''
+        ''' Scrolls the character detail pane to the top and redraws it. '''
         self._char_detail_window.scroll_to(0)
         self._char_detail_window.draw_window()
         self._char_detail_window.refresh()
 
     def char_list_home(self):
-        ''' Scrolls the character list pane to the top and redraws the pane.  '''
+        ''' Scrolls the character list pane to the top and redraws it.  '''
         self.__char_list_window.scroll_to(0)
         self.__char_list_window.draw_window()
         self.__char_list_window.refresh()
@@ -351,7 +350,7 @@ class PersonnelGmWindow(ca_gui.GmWindow):
                        new_char_name,   # name of character to highlight
                        viewing_index    # index into creature list:
                                         #   dict: {'new'=True, index=0}
-                      ):
+                       ):
         '''
         Builds a color-annotated character list from the passed-in list.
         Displays the color-annotated list.  Shows details in the right-hand
@@ -400,7 +399,7 @@ class PersonnelGmWindow(ca_gui.GmWindow):
                       template,         # name of template
                       input_filename,   # passthru to base class
                       maintain_game_file     # passthru to base class
-                     ):
+                      ):
         '''Prints the fight round information at the top of the screen.'''
 
         group = '(No Group)' if group is None else group
@@ -447,7 +446,7 @@ class FightGmWindow(ca_gui.GmWindow):
                  ruleset,                # Ruleset object
                  command_ribbon_choices  # dict: ord('T'): {'name': xxx,
                                          #                  'func': yyy}, ...
-                ):
+                 ):
         super(FightGmWindow, self).__init__(window_manager,
                                             curses.LINES,
                                             curses.COLS,
@@ -501,7 +500,7 @@ class FightGmWindow(ca_gui.GmWindow):
                      input_filename,     # string: name of game file
                      maintain_game_file  # bool: True if we are NOT overwriting
                                          #   game file when exiting
-                    ):
+                     ):
         '''
         Prints the fight round information at the top of the screen.
 
@@ -539,7 +538,7 @@ class FightGmWindow(ca_gui.GmWindow):
                                         #   initiative
                       selected_index=None   # index to view if it's not the
                                             #  current index
-                     ):
+                      ):
         '''
         Displays the current state of the current fighter and his opponent,
         if he has one.
@@ -593,13 +592,13 @@ class FightGmWindow(ca_gui.GmWindow):
                                                 self.fighter_win_width,
                                                 top_line,
                                                 self.__FIGHTER_COL)
-        self.__opponent_window  = self._window_manager.new_native_window(
+        self.__opponent_window = self._window_manager.new_native_window(
                                                 height,
                                                 self.__pane_width -
                                                         self.__margin_width,
                                                 top_line,
                                                 self.__OPPONENT_COL)
-        self.__summary_window   = self._window_manager.new_native_window(
+        self.__summary_window = self._window_manager.new_native_window(
                                                 height,
                                                 self.__pane_width -
                                                         self.__margin_width,
@@ -623,7 +622,7 @@ class FightGmWindow(ca_gui.GmWindow):
     def __show_fighter(self,
                        fighter,  # Fighter object
                        column    # int: column in which to display |fighter|
-                      ):
+                       ):
         '''
         Display's a summary of a single fighter.
 
@@ -644,7 +643,7 @@ class FightGmWindow(ca_gui.GmWindow):
                              is_attacker,       # True | False
                              window             # Curses window for fighter's
                                                 #   notes
-                            ):
+                             ):
         '''
         Displays ancillary information about |fighter|.
 
@@ -668,7 +667,8 @@ class FightGmWindow(ca_gui.GmWindow):
             window.addstr(line, 0, '** ABSENT **', mode)
             line += 1
         elif fighter.details['stunned']:
-            mode = curses.color_pair(ca_gui.GmWindowManager.MAGENTA_BLACK) | curses.A_BOLD
+            mode = curses.color_pair(
+                    ca_gui.GmWindowManager.MAGENTA_BLACK) | curses.A_BOLD
             window.addstr(line, 0, '** STUNNED **', mode)
             line += 1
 
@@ -754,17 +754,20 @@ class World(object):
     debug_directory = 'debug'
 
     def __init__(self,
-                 source_filename,     # Name of file that contains the Game File
+                 source_filename,     # Name of file w/ the Game File
                  world_details,       # GmJson object
                  ruleset,             # Ruleset object
-                 program,             # Program object to collect snapshot information
+                 program,             # Program object to collect snapshot info
                  window_manager,      # a GmWindowManager object to handle I/O
-                 save_snapshot = True  # Here so tests can disable it
-                ):
+                 save_snapshot=True   # Here so tests can disable it
+                 ):
         self.source_filename = source_filename
         self.program = program
-        self.__gm_json = world_details  # only used for toggling whether the
-                                       # data is saved on exit of the program.
+
+        # only used for toggling whether the data is saved on exit of the
+        # program.
+        self.__gm_json = world_details
+
         self.details = world_details.read_data  # entire dict from Game File
         self.ruleset = ruleset
         self.__window_manager = window_manager
@@ -784,8 +787,8 @@ class World(object):
         #    again, issue the 2nd action (since it wasn't logged originally,
         #    the 2nd action won't be played-back twice)
 
-        self.playing_back = False   # Are we currently playing back a debug
-                                    #   file?
+        # Are we currently playing back a debug file?
+        self.playing_back = False
 
         if save_snapshot:
             self.do_debug_snapshot('startup')
@@ -806,12 +809,13 @@ class World(object):
                   'NPCs': {},
                   'stuff': stuff,
                   'options': {}
-                 }
+                  }
         return result
 
     def add_to_history(self,
-                       action  # {'action-name':xxx, ...} - see Ruleset::do_action()
-                      ):
+                       action   # {'action-name':xxx, ...} -
+                                #   see Ruleset::do_action()
+                       ):
         ''' Adds an action to the saved history list.  '''
         self.details['current-fight']['history'].append(action)
 
@@ -821,7 +825,7 @@ class World(object):
 
     def do_debug_snapshot(self,
                           tag,  # String with which to tag the debug filename
-                         ):
+                          ):
         '''
         Saves a copy of the master Game File to a debug directory.
 
@@ -844,7 +848,6 @@ class World(object):
             else:
                 keep_going = False
 
-
         with open(debug_filename, 'w') as f:
             json.dump(self.details, f, indent=2)
 
@@ -864,8 +867,8 @@ class World(object):
 
     def dont_save_on_exit(self):
         '''
-        Causes the local copy of the Game File data NOT to be written back to the
-        file when the program ends.
+        Causes the local copy of the Game File data NOT to be written back
+        to the file when the program ends.
 
         Returns nothing.
         '''
@@ -875,7 +878,7 @@ class World(object):
     def get_creature(self,
                      name,  # String: name of creature to get
                      group  # String: 'PCs', 'NPCs', or monster group
-                    ):
+                     ):
         '''
         Keeps the master list of Fighter objects.  If entry is a redirect, the
         complete data from the original creature is included, here, under the
@@ -901,7 +904,7 @@ class World(object):
     def get_creature_details(self,
                              name,       # string name of creature
                              group_name  # string name of creature's group
-                            ):
+                             ):
         '''
         Returns the dict containing the information for the creature in
         question.  If the group is not 'PCs' or 'NPCs', it burrows down to
@@ -929,7 +932,8 @@ class World(object):
 
             if name not in group:
                 self.__window_manager.error(
-                    ['No name "%s" in monster group "%s"' % (name, group_name)])
+                    ['No name "%s" in monster group "%s"' %
+                        (name, group_name)])
                 return None
 
             details = group[name]
@@ -953,8 +957,9 @@ class World(object):
         return details
 
     def get_creature_details_list(self,
-                      group_name  # string: 'PCs', 'NPCs', or a monster group
-                     ):
+                                  group_name  # string: 'PCs', 'NPCs', or a
+                                              #     monster group
+                                  ):
         '''
         Used to get PCs, NPCs, or a fight's list of creatures.  List is in the
         order they are from the Game File (meaning that they are in random
@@ -1036,7 +1041,7 @@ class World(object):
 
     def remove_fight(self,
                      group_name  # string, name of the fight
-                    ):
+                     ):
         '''
         Moves fight named |group_name| to the dead-monsters list.  Removes
         local references to them.
@@ -1046,7 +1051,7 @@ class World(object):
 
         if group_name in self.details['fights']:
             # Put fight in dead-monsters list
-            fmt='%Y-%m-%d-%H-%M-%S'
+            fmt = '%Y-%m-%d-%H-%M-%S'
             date = datetime.datetime.now().strftime(fmt).format()
 
             monsters = self.details['fights'][group_name]['monsters']
@@ -1060,7 +1065,7 @@ class World(object):
 
     def restore_fight(self,
                       group_index  # index into |dead-monsters|
-                     ):
+                      ):
         '''
         Moves a fight from the 'dead-monsters' list to the 'fights' list.
         This kind of thing is useful, for example, when a monster from a
@@ -1111,7 +1116,7 @@ class World(object):
         # Get rid of old debugging Game Files.
 
         entries = (os.path.join(World.debug_directory, fn)
-                                    for fn in os.listdir(World.debug_directory))
+                                for fn in os.listdir(World.debug_directory))
         entries = (
                 (datetime.datetime.fromtimestamp(os.path.getctime(fpath)),
                  fpath) for fpath in entries)
@@ -1159,7 +1164,7 @@ class ScreenHandler(object):
 
     @staticmethod
     def string_from_character_input(char    # character to convert
-                                   ):
+                                    ):
         '''
         Returns a printable string from a character.  This is intended to be
         used to display messages regarding screen input.
@@ -1173,8 +1178,9 @@ class ScreenHandler(object):
         return '%d' % char
 
     def add_to_history(self,
-                       action  # {'action-name':xxx, ...} - see Ruleset::do_action()
-                      ):
+                       action   # {'action-name':xxx, ...} -
+                                #   see Ruleset::do_action()
+                       ):
         '''
         Adds an action (see Ruleset::do_action) to the saved information for
         this session.
@@ -1205,8 +1211,7 @@ class ScreenHandler(object):
             else:
                 self._window_manager.error(
                     ['Invalid command: "%s" ' %
-                        ScreenHandler.string_from_character_input(string) ])
-
+                        ScreenHandler.string_from_character_input(string)])
         return True
 
     #
@@ -1219,7 +1224,7 @@ class ScreenHandler(object):
                                          #            'func': function to
                                          #                    execute if this
                                          #                    is selected
-                           ):
+                            ):
         '''
         Adds options to the command ribbon.
 
@@ -1275,14 +1280,14 @@ class ScreenHandler(object):
 
         self.world.do_debug_snapshot('bug')
 
-        bug_report_game_file  = self.world.program.make_bug_report(
+        bug_report_game_file = self.world.program.make_bug_report(
                                                 self._saved_fight['history'],
                                                 report)
 
         self._window_manager.display_window(
                'Bug Reported',
                 [[{'text': ('Output file "%s"' % bug_report_game_file),
-                   'mode': curses.A_NORMAL }]])
+                   'mode': curses.A_NORMAL}]])
 
         return True  # Keep doing whatever you were doing.
 
@@ -1314,8 +1319,11 @@ class ScreenHandler(object):
                 max_help_len = len(value['help'])
 
         lines, cols = self._window_manager.getmaxyx()
-        cols -= 2  # Just an aesthetic choice to have the help box just a
-                   #    little smaller than the screen.
+
+        # Just an aesthetic choice to have the help box just a little
+        # smaller than the screen.
+        cols -= 2
+
         window_box_margin = 2  # Space for the box around the display window
         help_indent = max_key_len + margin_len + max_name_len + margin_len
 
@@ -1430,7 +1438,7 @@ class AttributeWidget(object):
                                     #   this widget
                  fighter            # Fighter object -- changing this
                                     #   guy's attributes
-                ):
+                 ):
         self.__window_manager = window_manager
         self.__fighter = fighter
         self.__screen_handler = screen_handler
@@ -1447,13 +1455,14 @@ class AttributeWidget(object):
                 return None
 
             attr_menu = [(attr, attr)
-                                for attr in self.__fighter.details[attr_type].keys()]
+                         for attr in self.__fighter.details[attr_type].keys()]
 
             attr = self.__window_manager.menu('Attr To Modify', attr_menu)
             if attr is None:
                 return None
 
-            title = 'New Value (old value: %d)' % self.__fighter.details[attr_type][attr]
+            title = ('New Value (old value: %d)' %
+                    self.__fighter.details[attr_type][attr])
             height = 1
             width = len(title) + 2
             keep_ask_attr = True
@@ -1476,7 +1485,7 @@ class AttributeWidget(object):
                                             both_menu)
                 if both:
                     self.__fighter.details['current'][attr] = (
-                                            self.__fighter.details['permanent'][attr])
+                                    self.__fighter.details['permanent'][attr])
 
             self.__screen_handler.draw_screen()
             keep_asking = self.__window_manager.menu('Change More Attributes',
@@ -1502,7 +1511,7 @@ class PersonnelHandler(ScreenHandler):
                                     #   error reporting
                  world,             # World object
                  creature_type,     # one of: NPCs, PCs, or MONSTERs
-                ):
+                 ):
         super(PersonnelHandler, self).__init__(window_manager, world)
         self._add_to_choice_dict({
             curses.KEY_HOME:
@@ -1542,8 +1551,8 @@ class PersonnelHandler(ScreenHandler):
                        'help': 'Add a creature to the current group.'},
             ord('d'): {'name': 'delete creature',
                        'func': self.__delete_creature,
-                       'help': 'Delete the currently selected creature from the ' +
-                               'current group.'},
+                       'help': 'Delete the currently selected creature ' +
+                               'from the current group.'},
             ord('e'): {'name': 'equip/modify creature',
                        'func': self.__equip,
                        'help': 'Modify the currently selected creature by ' +
@@ -1579,9 +1588,9 @@ class PersonnelHandler(ScreenHandler):
                                    '(changing one will change the other).'},
                 ord('P'): {'name': 'NPC leaves PCs',
                            'func': self.__NPC_leaves_PCs,
-                           'help': 'If the current NPC has joined the party, ' +
-                                   'this will cause him/her to leave the ' +
-                                   'party.'},
+                           'help': 'If the current NPC has joined the ' +
+                                   'party, this will cause him/her to leave ' +
+                                   'the party.'},
                 ord('m'): {'name': 'NPC joins Monsters',
                            'func': self.NPC_joins_monsters,
                            'help': 'Make the currently selected NPC join ' +
@@ -1596,23 +1605,22 @@ class PersonnelHandler(ScreenHandler):
                                                                 self._choices)
         self.__current_pane = PersonnelHandler.CHAR_DETAIL
 
-        self.__template_group = None  # Name of templates we'll use to create
-                                      #     new creatures.
+        # Name of templates we'll use to create new creatures.
+        self.__template_group = None
 
-        self.__critters = None  # dict of the Fighters/Venues in a group
-                                # (PCs, NPCs, or monster group) sorted by the
-                                # the Fighters' names (with the venue, if it
-                                # exists, stuffed at the top).  The dict is:
-                                # {
-                                #   'data': array of dict found in the data file
-                                #   'obj':  array of Fighter/Venue object
-                                # }
-                                #
-                                # NOTE: [data][n] is the same creature as [obj][n]
+        # The following is a dict of the Fighters/Venues in a group (PCs,
+        # NPCs, or monster group) sorted by the the Fighters' names (with the
+        # venue, if it exists, stuffed at the top).  The dict is:
+        # {
+        #   'data': array of dict found in the data file
+        #   'obj':  array of Fighter/Venue object
+        # }
+        # NOTE: [data][n] is the same creature as [obj][n]
+        self.__critters = None
 
         self.__deleted_critter_count = 0
-        self.__equipment_manager = ca_equipment.EquipmentManager(self.world,
-                                                                 window_manager)
+        self.__equipment_manager = ca_equipment.EquipmentManager(
+                self.world, window_manager)
 
         self.__new_char_name = None
         self.__viewing_index = None
@@ -1624,13 +1632,14 @@ class PersonnelHandler(ScreenHandler):
             self.__group_name = 'PCs'
             self.__existing_group(creature_type)
         else:  # creature_type == PersonnelHandler.MONSTERs:
-            self.__group_name = None    # The name of the monsters or 'PCs'
-                                        # that will ultimately take these
-                                        # creatures.
+            # This is the name of the monsters or 'PCs' that will ultimately
+            # take these creatures.
+            self.__group_name = None
 
             new_existing_menu = [('new monster group', 'new')]
             if len(self.world.get_fights()) > 0:
-                new_existing_menu.append(('existing monster group', 'existing'))
+                new_existing_menu.append(('existing monster group',
+                                          'existing'))
 
             new_existing = None
             while new_existing is None:
@@ -1641,7 +1650,8 @@ class PersonnelHandler(ScreenHandler):
             else:
                 self.__existing_group(creature_type)
 
-        self.__viewing_index = 0 if self.__critters_contains_critters() else None
+        self.__viewing_index = (0 if self.__critters_contains_critters()
+                                else None)
         self._draw_screen()
 
         if not self.__critters_contains_critters():
@@ -1753,10 +1763,9 @@ class PersonnelHandler(ScreenHandler):
 
     def set_viewing_index(self,              # Public to support testing.
                           new_index  # int: new viewing index
-                         ):
+                          ):
         ''' Sets the viewing index.  Used for testing. '''
         self.__viewing_index = new_index
-
 
     #
     # Private and Protected Methods
@@ -1767,9 +1776,9 @@ class PersonnelHandler(ScreenHandler):
     #
 
     def __first_page(self,
-                     pane = None,  # CHAR_LIST, CHAR_DETAIL,
-                                   #    CHAR_LIST|CHAR_DETAIL
-                    ):
+                     pane=None,  # CHAR_LIST, CHAR_DETAIL,
+                                 #    CHAR_LIST|CHAR_DETAIL
+                     ):
         '''
         Command ribbon method.
 
@@ -1875,7 +1884,8 @@ class PersonnelHandler(ScreenHandler):
             empty_creature = 'Blank Template'
             from_creature_name = empty_creature
 
-            # None means there are no templates or the user decided against a template.
+            # None means there are no templates or the user decided against
+            # a template.
 
             if self.__template_group is not None:
                 creature_menu = []
@@ -2074,7 +2084,7 @@ class PersonnelHandler(ScreenHandler):
                                      #   and (apparently) some of them may
                                      #   use this parameter.  It's ignored
                                      #   by this method, however.
-                       ):
+                        ):
         '''
         Handler for an Equip sub-menu entry.
 
@@ -2101,7 +2111,7 @@ class PersonnelHandler(ScreenHandler):
                                  #   and (apparently) some of them may
                                  #   use this parameter.  It's ignored
                                  #   by this method, however.
-                   ):
+                    ):
         '''
         Handler for an Equip sub-menu entry.
 
@@ -2172,7 +2182,7 @@ class PersonnelHandler(ScreenHandler):
                                  #   and (apparently) some of them may
                                  #   use this parameter.  It's ignored
                                  #   by this method, however.
-                   ):
+                    ):
         '''
         Handler for an Equip sub-menu entry.
 
@@ -2203,7 +2213,7 @@ class PersonnelHandler(ScreenHandler):
                                          #   and (apparently) some of them may
                                          #   use this parameter.  It's ignored
                                          #   by this method, however.
-                           ):
+                            ):
         '''
         Handler for an Equip sub-menu entry.
 
@@ -2230,7 +2240,7 @@ class PersonnelHandler(ScreenHandler):
                                             #   use this parameter.  It's
                                             #   ignored by this method,
                                             #   however.
-                               ):
+                                ):
         '''
         Handler for a change consciousness sub-menu entry.
 
@@ -2295,7 +2305,7 @@ class PersonnelHandler(ScreenHandler):
 
     def __change_viewing_index(self,
                                adj  # integer adjustment to viewing index
-                              ):
+                               ):
         '''
         Changes the viewing index to point to a different creature.
 
@@ -2481,7 +2491,7 @@ class PersonnelHandler(ScreenHandler):
                                  #   and (apparently) some of them may
                                  #   use this parameter.  It's ignored
                                  #   by this method, however.
-                   ):
+                    ):
         '''
         Method for 'equip' sub-menu.
 
@@ -2547,7 +2557,7 @@ class PersonnelHandler(ScreenHandler):
                                    #   and (apparently) some of them may
                                    #   use this parameter.  It's ignored
                                    #   by this method, however.
-                     ):
+                      ):
         '''
         Method for 'equip' sub-menu.
 
@@ -2668,7 +2678,7 @@ class PersonnelHandler(ScreenHandler):
 
     def __existing_group(self,
                          creature_type  # PersonnelHandler.NPCs, ...
-                        ):
+                         ):
 
         '''
         Command ribbon method.
@@ -2752,7 +2762,7 @@ class PersonnelHandler(ScreenHandler):
                                   #   and (apparently) some of them may
                                   #   use this parameter.  It's ignored
                                   #   by this method, however.
-                    ):
+                     ):
         '''
         Handler for an Equip sub-menu entry.
 
@@ -2764,7 +2774,7 @@ class PersonnelHandler(ScreenHandler):
 
     def __get_fighter_object_from_name(self,
                                        name  # string name of critter
-                                      ):
+                                       ):
         '''
         Returns Fighter object given the name of the fighter.
         '''
@@ -2776,7 +2786,7 @@ class PersonnelHandler(ScreenHandler):
     def __get_value_from_template(self,
                                   template_value,
                                   template
-                                 ):
+                                  ):
         '''
         Expands a template item based on the template item's type.
 
@@ -2800,7 +2810,7 @@ class PersonnelHandler(ScreenHandler):
                                       #   and (apparently) some of them may
                                       #   use this parameter.  It's ignored
                                       #   by this method, however.
-                        ):
+                         ):
         '''
         Handler for an Equip sub-menu entry.
 
@@ -2937,7 +2947,7 @@ class PersonnelHandler(ScreenHandler):
                                         #   and (apparently) some of them may
                                         #   use this parameter.  It's ignored
                                         #   by this method, however.
-                          ):
+                           ):
         '''
         Handler for an Equip sub-menu entry.
 
@@ -2962,7 +2972,7 @@ class PersonnelHandler(ScreenHandler):
                                     #   and (apparently) some of them may use
                                     #   this parameter.  It's ignored by this
                                     #   method, however.
-                      ):
+                       ):
         '''
         Handler for an Equip sub-menu entry.
 
@@ -3008,7 +3018,7 @@ class PersonnelHandler(ScreenHandler):
     def __ruleset_ability(self,
                           param  # string: Ruleset-defined ability category
                                  #   name (like 'skills' or 'advantages')
-                         ):
+                          ):
         '''
         Handler for an Equip sub-menu entry.
 
@@ -3089,7 +3099,7 @@ class PersonnelHandler(ScreenHandler):
     def __ruleset_ability_rm(self,
                              param  # string: Ruleset-defined ability category
                                     #   name (like 'skills' or 'advantages')
-                            ):
+                             ):
         '''
         Handler for an Equip sub-menu entry.
 
@@ -3130,7 +3140,7 @@ class PersonnelHandler(ScreenHandler):
                                     #   and (apparently) some of them may use
                                     #   this parameter.  It's ignored by this
                                     #   method, however.
-                     ):
+                      ):
         '''
         Handler for an Equip sub-menu entry.
 
@@ -3146,7 +3156,7 @@ class PersonnelHandler(ScreenHandler):
                                     #   and (apparently) some of them may use
                                     #   this parameter.  It's ignored by this
                                     #   method, however.
-                      ):
+                       ):
         '''
         Handler for an Equip sub-menu entry.
 
@@ -3232,7 +3242,7 @@ class FightHandler(ScreenHandler):
                  playback_history,      # dict from bug report (usually None)
                  # TODO: prefs - save for end_fight
                  save_snapshot=True     # Here so tests can disable it
-                ):
+                 ):
         super(FightHandler, self).__init__(window_manager, world)
         self.__bodies_looted = False
         self.__keep_monsters = False  # Move monsters to 'dead' after fight
@@ -3494,7 +3504,7 @@ class FightHandler(ScreenHandler):
                            name,  # <string> name of a fighter in that group
                            group  # <string> 'PCs' or group under
                                   #     world['fights']
-                          ):
+                           ):
         '''
         Returns the Fighter object given the name and group of the fighter,
         '''
@@ -3506,7 +3516,7 @@ class FightHandler(ScreenHandler):
 
     def get_opponent_for(self,
                          fighter  # Fighter object
-                        ):
+                         ):
         ''' Returns Fighter object for opponent of |fighter|. '''
         if (fighter is None or fighter.name == ca_fighter.Venue.name or
                                         fighter.details['opponent'] is None):
@@ -3599,7 +3609,7 @@ class FightHandler(ScreenHandler):
                                 #   and (apparently) some of them may
                                 #   use this parameter.  It's ignored
                                 #   by this method, however.
-                  ):
+                   ):
         '''
         Don't remove the fight from the list of fights when we're done with it.
         This is useful if the fight contains creatures that we're going to
@@ -3611,7 +3621,7 @@ class FightHandler(ScreenHandler):
 
     def modify_index(self,                      # Public to support testing
                      adj      # 1 or -1, adjust the index by this
-                    ):
+                     ):
         '''
         Increment or decrement the index to the Fighter that has the
         initiative.  Only stop on living creatures.
@@ -3817,7 +3827,7 @@ class FightHandler(ScreenHandler):
                                 #   and (apparently) some of them may
                                 #   use this parameter.  It's ignored
                                 #   by this method, however.
-                  ):
+                   ):
         '''
         Save the fight so that it is the run the next time we start fighting
         (i.e., if we need to interrupt this fight and continue it, later).
@@ -3863,7 +3873,7 @@ class FightHandler(ScreenHandler):
     def __build_fighter_list(self,
                              monster_group,  # String
                              fight_order     # {name: {group: index, ...}, ...
-                            ):
+                             ):
         '''
         Creates the list of Fighters and the Venue.  This includes the PCs,
         the monster group, and the location of the fight.  They're created in
@@ -3924,7 +3934,7 @@ class FightHandler(ScreenHandler):
 
     def __change_viewing_index(self,
                                adj  # integer adjustment to viewing index
-                              ):
+                               ):
         '''
         Selects a different Fighter or Venue as the currently viewed one.
         Some commands will used the currently viewed entity as their default
@@ -4239,7 +4249,7 @@ class FightHandler(ScreenHandler):
                                    #   and (apparently) some of them may
                                    #   use this parameter.  It's ignored
                                    #   by this method, however.
-                     ):
+                      ):
         '''
         Gives the user the option to distribute the equipment of all the
         unconscious or dead monsters among the PCs.
@@ -4273,8 +4283,8 @@ class FightHandler(ScreenHandler):
                                                 bad_guy.details['stuff']))):
                 found_something_on_dead_bad_guy = True
                 xfer_menu = [(good_guy.name, {'guy': good_guy})
-                                 for good_guy in self.__fighters
-                                            if good_guy.group == 'PCs']
+                             for good_guy in self.__fighters
+                             if good_guy.group == 'PCs']
                 xfer_menu.append(('QUIT', {'quit': None}))
                 xfer = self._window_manager.menu(
                         'Who gets %s\'s %s' % (bad_guy.name,
@@ -4324,7 +4334,7 @@ class FightHandler(ScreenHandler):
                                        self.__viewing_index)
 
         action_menu = self.world.ruleset.get_action_menu(current_fighter,
-                                                     opponent)
+                                                         opponent)
         maneuver = self._window_manager.menu('Maneuver', action_menu)
         if maneuver is None:
             return True  # Keep going
@@ -4363,7 +4373,7 @@ class FightHandler(ScreenHandler):
             return self.__maneuver()
         elif not prev_fighter.is_conscious():
             self.add_to_history({'comment': '(%s) did nothing (unconscious)' %
-                                                    prev_fighter.name})
+                                 prev_fighter.name})
 
         self.world.ruleset.do_action(prev_fighter,
                                      {'action-name': 'end-turn'},
@@ -4414,7 +4424,7 @@ class FightHandler(ScreenHandler):
 
     def __notes(self,
                 notes_type  # 'short-notes' or 'notes'
-               ):
+                ):
         '''
         Command ribbon method.
 
@@ -4546,7 +4556,7 @@ class FightHandler(ScreenHandler):
         ask_to_loot = False  # Ask to loot if some monster is unconscious
         for fighter in self.__fighters:
             if (fighter.group != 'PCs' and
-                                    fighter.name != ca_fighter.Venue.name):
+                    fighter.name != ca_fighter.Venue.name):
                 if fighter.is_conscious():
                     ask_to_save = True
                 else:
@@ -4567,7 +4577,7 @@ class FightHandler(ScreenHandler):
                                  {'doit': self.__loot_bodies}))
 
             saved_or_kept = (True if (self._saved_fight['saved'] or
-                                            self.__keep_monsters) else False)
+                             self.__keep_monsters) else False)
 
             if not saved_or_kept and ask_to_save:
                 quit_menu.append(
@@ -4719,9 +4729,9 @@ class FightHandler(ScreenHandler):
         timer_dict = timers_widget.make_timer_dict(timer_recipient.name)
         if timer_dict is not None:
             self.world.ruleset.do_action(timer_recipient,
-                                     {'action-name': 'set-timer',
-                                      'timer': timer_dict},
-                                     self)
+                                         {'action-name': 'set-timer',
+                                          'timer': timer_dict},
+                                         self)
 
         opponent = self.get_opponent_for(current_fighter)
         self._window.show_fighters(current_fighter,
@@ -4749,7 +4759,7 @@ class FightHandler(ScreenHandler):
 
         timers = timer_recipient.timers.get_all()
         timer_menu = [(timer.get_one_line_description(), index)
-                                for index, timer in enumerate(timers)]
+                      for index, timer in enumerate(timers)]
         index = self._window_manager.menu('Remove Which Timer', timer_menu)
         if index is None:
             return True  # Keep fighting
@@ -4850,90 +4860,96 @@ class MainHandler(ScreenHandler):
                                     #   errors
                  world              # World object
                  # TODO: prefs - save for heal and fully_heal
-                ):
+                 ):
         super(MainHandler, self).__init__(window_manager, world)
         self.__current_pane = MainHandler.CHAR_DETAIL
-        self._add_to_choice_dict({
-            curses.KEY_HOME:
-                      {'name': 'scroll home',
-                       'func': self.__first_page},
-            curses.KEY_UP:
-                      {'name': 'previous character',
-                       'func': self.__prev_char},
-            curses.KEY_DOWN:
-                      {'name': 'next character',
-                       'func': self.next_char},
-            curses.KEY_NPAGE:
-                      {'name': 'scroll down',
-                       'func': self.__next_page,
-                       'help': 'Scroll DOWN on the current pane which may ' +
-                               'may be either the character pane (on the ' +
-                               'left) or the details pane (on the right)'},
-            curses.KEY_PPAGE:
-                      {'name': 'scroll up',
-                       'func': self.__prev_page,
-                       'help': 'Scroll UP on the current pane which may ' +
-                               'may be either the character pane (on the ' +
-                               'left) or the details pane (on the right)'},
-            curses.KEY_LEFT:
-                      {'name': 'scroll chars',
-                       'func': self.__left_pane,
-                       'help': 'Choose the character pane (on the ' +
-                               'left) for scrolling.'},
-            curses.KEY_RIGHT:
-                      {'name': 'scroll char detail',
-                       'func': self.__right_pane,
-                       'help': 'Choose the details pane (on the ' +
-                               'right) for scrolling.'},
+        self._add_to_choice_dict(
+                {
+                 curses.KEY_HOME: {'name': 'scroll home',
+                                   'func': self.__first_page},
+                 curses.KEY_UP: {'name': 'previous character',
+                                 'func': self.__prev_char},
+                 curses.KEY_DOWN: {'name': 'next character',
+                                   'func': self.next_char},
+                 curses.KEY_NPAGE: {'name': 'scroll down',
+                                    'func': self.__next_page,
+                                    'help': 'Scroll DOWN on the current ' +
+                                            'pane which may may be either ' +
+                                            'the character pane (on the ' +
+                                            'left) or the details pane ' +
+                                            '(on the right)'},
+                 curses.KEY_PPAGE: {'name': 'scroll up',
+                                    'func': self.__prev_page,
+                                    'help': 'Scroll UP on the current ' +
+                                            'pane which may may be ' +
+                                            'either the character pane ' +
+                                            '(on the left) or the details ' +
+                                            'pane (on the right)'},
+                 curses.KEY_LEFT: {'name': 'scroll chars',
+                                   'func': self.__left_pane,
+                                   'help': 'Choose the character pane (on ' +
+                                           'the left) for scrolling.'},
+                 curses.KEY_RIGHT: {'name': 'scroll char detail',
+                                    'func': self.__right_pane,
+                                    'help': 'Choose the details pane (on ' +
+                                            'the right) for scrolling.'},
 
-            ord('a'): {'name': 'about the program',
-                       'func': self.__about},
-            ord('f'): {'name': 'FIGHT',
-                       'func': self.__run_fight,
-                       'help': 'Start fighting.  If there is a saved fight, ' +
-                               'that one will start.  Otherwise, if the ' +
-                               'displayed group is ' +
-                               'a bunch of monsters, the fight will be with ' +
-                               'them.  Otherwise, you will be asked to ' +
-                               'select the monsters from a list.'},
-            # ord('h'): {'name': 'heal selected creature',
-            #            'func': self.__heal},
-            ord('h'): {'name': 'Heal all PCs',
-                       'func': self.__fully_heal},
-            ord('m'): {'name': 'show MONSTERs or PC/NPC',
-                       'func': self.__toggle_Monster_PC_NPC_display,
-                       'help': 'Select whom to display on the main screen. '},
-            ord('p'): {'name': 'PERSONNEL changes',
-                       'func': self.__party,
-                       'help': 'Change the creatures in one of the groups ' +
-                               'of creatures (player characters, non-player ' +
-                               'characters, or one of the groups of ' +
-                               'monsters. You can add creatures to or ' +
-                               'subtract creatures from the selected list, ' +
-                               'modify stats, or add or remove equipment.'},
-            ord('Q'): {'name': 'quit',
-                       'func': self.__quit,
-                       'help': 'Exit the program'},
-            ord('R'): {'name': 'resurrect fight',
-                       'func': self.__resurrect_fight,
-                       'help': 'Put a fight that has been completed back ' +
-                               'in the list of availble fights'},
-            ord('S'): {'name': 'toggle: Save On Exit',
-                       'func': self.__maintain_game_file,
-                       'help': 'Toggle whether all of the changes to ' +
-                               'your game from this session will be written ' +
-                               'back to the game file when the program is ' +
-                               'exited.  This is really for debugging.'},
-            ord('/'): {'name': 'search',
-                       'func': self.__search,
-                       'help': 'Search through all of the various creatures ' +
-                               'in your game for a regular ' +
-                               'expressions.  You will be told where, in ' +
-                               'each search result, the search found your ' +
-                               'search term.  Selecting one of the results ' +
-                               'selects that creature on the screen if that ' +
-                               'creature\'s group is currently displayed.'}
-        })
+                 ord('a'): {'name': 'about the program',
+                            'func': self.__about},
+                 ord('f'): {'name': 'FIGHT',
+                            'func': self.__run_fight,
+                            'help': 'Start fighting.  If there is a saved ' +
+                                    'fight, that one will start.  ' +
+                                    'Otherwise, if the displayed group is ' +
+                                    'a bunch of monsters, the fight will ' +
+                                    'be with them.  Otherwise, you will ' +
+                                    'be asked to select the monsters ' +
+                                    'from a list.'},
+
+                 # ord('h'): {'name': 'heal selected creature',
+                 #            'func': self.__heal},
+
+                 ord('h'): {'name': 'Heal all PCs',
+                            'func': self.__fully_heal},
+                 ord('m'): {'name': 'show MONSTERs or PC/NPC',
+                            'func': self.__toggle_Monster_PC_NPC_display,
+                            'help': 'Select whom to display on the main ' +
+                                    'screen. '},
+                 ord('p'): {'name': 'PERSONNEL changes',
+                            'func': self.__party,
+                            'help': 'Change the creatures in one of the ' +
+                                    'groups of creatures (player ' +
+                                    'characters, non-player characters, or ' +
+                                    'one of the groups of monsters. You ' +
+                                    'can add creatures to or subtract ' +
+                                    'creatures from the selected list, ' +
+                                    'modify stats, or add or remove ' +
+                                    'equipment.'},
+                 ord('Q'): {'name': 'quit',
+                            'func': self.__quit,
+                            'help': 'Exit the program'},
+                 ord('R'): {'name': 'resurrect fight',
+                            'func': self.__resurrect_fight,
+                            'help': 'Put a fight that has been completed ' +
+                                    'back in the list of availble fights'},
+                 ord('S'): {'name': 'toggle: Save On Exit',
+                            'func': self.__maintain_game_file,
+                            'help': 'Toggle whether all of the changes to ' +
+                                    'your game from this session will be ' +
+                                    'written back to the game file when ' +
+                                    'the program is exited.  This is ' +
+                                    'really for debugging.'},
+                 ord('/'): {'name': 'search',
+                            'func': self.__search,
+                            'help': 'Search through all of the various ' +
+                                    'creatures in your game for a regular ' +
+                                    'expressions.  You will be told where, ' +
+                                    'in each search result, the search ' +
+                                    'found your search term.  Selecting one ' +
+                                    'of the results selects that creature ' +
+                                    'on the screen if that creature\'s ' +
+                                    'group is currently displayed.'}
+                 })
         self._window = self._window_manager.get_main_gm_window(self._choices)
 
         # name of monster group or 'None' for PC/NPC list
@@ -4965,7 +4981,7 @@ class MainHandler(ScreenHandler):
 
     def next_char(self,                         # Public to support testing
                   index=None  # Just for testing
-                 ):
+                  ):
         '''
         Command ribbon method.
 
@@ -5017,7 +5033,7 @@ class MainHandler(ScreenHandler):
                                     #   and (apparently) some of them may
                                     #   use this parameter.  It's ignored
                                     #   by this method, however.
-                      ):
+                       ):
         '''
         Handler for an Party sub-menu entry.
 
@@ -5035,7 +5051,7 @@ class MainHandler(ScreenHandler):
 
         last_group_name = build_fight.get_group_name()
         if (last_group_name is not None and last_group_name != 'PCs' and
-                                            last_group_name != 'NPCs'):
+                last_group_name != 'NPCs'):
             self.__current_display = last_group_name
 
         self.__setup_PC_list(self.__current_display)
@@ -5048,7 +5064,7 @@ class MainHandler(ScreenHandler):
                                 #   and (apparently) some of them may
                                 #   use this parameter.  It's ignored
                                 #   by this method, however.
-                  ):
+                   ):
         '''
         Handler for an Party sub-menu entry.
 
@@ -5071,7 +5087,7 @@ class MainHandler(ScreenHandler):
                                #   and (apparently) some of them may
                                #   use this parameter.  It's ignored
                                #   by this method, however.
-                 ):
+                  ):
         '''
         Handler for an Party sub-menu entry.
 
@@ -5090,7 +5106,7 @@ class MainHandler(ScreenHandler):
 
     def _draw_screen(self,
                      inverse=False
-                    ):
+                     ):
         '''
         Draws the complete screen for the MainHandler.
 
@@ -5106,7 +5122,7 @@ class MainHandler(ScreenHandler):
                                     inverse)
 
         person = (None if (self.__char_index is None or len(self.__chars) <= 0)
-                       else self.__chars[self.__char_index])
+                  else self.__chars[self.__char_index])
         self._window.show_description(person)
 
         self._window.command_ribbon()
@@ -5114,7 +5130,7 @@ class MainHandler(ScreenHandler):
     def __first_page(self,
                      pane=None,  # CHAR_LIST, CHAR_DETAIL,
                                  #    CHAR_LIST|CHAR_DETAIL
-                    ):
+                     ):
         '''
         Command ribbon method.
 
@@ -5206,7 +5222,7 @@ class MainHandler(ScreenHandler):
 
     def __notes(self,
                 notes_type  # <string> 'short-notes' or 'notes'
-               ):
+                ):
         '''
         Handler for an Equip sub-menu entry.
 
@@ -5328,10 +5344,10 @@ class MainHandler(ScreenHandler):
         monster_group = self.world.details['dead-monsters'][
                 monster_group_index]
 
-        if self.world.get_creature_details_list(
-                                        monster_group['name']) is not None:
+        if (self.world.get_creature_details_list(monster_group['name'])
+                is not None):
             self._window_manager.error(['Fight by name "%s" exists' %
-                                                    monster_group['name']])
+                                        monster_group['name']])
             return True
 
         # And, restore the fight
@@ -5365,7 +5381,7 @@ class MainHandler(ScreenHandler):
             monster_group = self.__current_display
         else:
             fight_name_menu = [(name, name)
-                                       for name in self.world.get_fights()]
+                               for name in self.world.get_fights()]
             fight_name_menu = sorted(fight_name_menu,
                                      key=lambda x: x[0].upper())
             monster_group = self._window_manager.menu('Fights',
@@ -5410,29 +5426,32 @@ class MainHandler(ScreenHandler):
         all_results = []
         for name in self.world.get_creature_details_list('PCs'):
             creature = self.world.get_creature_details(name, 'PCs')
-            result = self.world.ruleset.search_one_creature(name,
-                                                        'PCs',
-                                                        creature,
-                                                        look_for_re)
+            result = self.world.ruleset.search_one_creature(
+                    name,
+                    'PCs',
+                    creature,
+                    look_for_re)
             if result is not None and len(result) > 0:
                 all_results.extend(result)
 
         for name in self.world.get_creature_details_list('NPCs'):
             creature = self.world.get_creature_details(name, 'NPCs')
-            result = self.world.ruleset.search_one_creature(name,
-                                                        'NPCs',
-                                                        creature,
-                                                        look_for_re)
+            result = self.world.ruleset.search_one_creature(
+                    name,
+                    'NPCs',
+                    creature,
+                    look_for_re)
             if result is not None and len(result) > 0:
                 all_results.extend(result)
 
         for fight_name in self.world.get_fights():
             for name in self.world.get_creature_details_list(fight_name):
                 creature = self.world.get_creature_details(name, fight_name)
-                result = self.world.ruleset.search_one_creature(name,
-                                                            '%s' % fight_name,
-                                                            creature,
-                                                            look_for_re)
+                result = self.world.ruleset.search_one_creature(
+                        name,
+                        '%s' % fight_name,
+                        creature,
+                        look_for_re)
                 if result is not None and len(result) > 0:
                     all_results.extend(result)
 
@@ -5456,7 +5475,7 @@ class MainHandler(ScreenHandler):
                 index = None
                 for i, character in enumerate(self.__chars):
                     if (character.name == match['name'] and
-                                    character.group == match['group']):
+                            character.group == match['group']):
                         index = i
 
                 result_menu.append((match_string, index))
@@ -5474,7 +5493,7 @@ class MainHandler(ScreenHandler):
                         group=None  # <string>  Name of monster list.  If
                                     #   |None|, it means the PCs, NPCs, and
                                     #   the Venue.
-                       ):
+                        ):
         '''
         Builds self.__chars, a list of Fighter objects for either the Monsters
         (if |group| is not None) or the PCs, NPCs, and the Venue (all in one
@@ -5537,7 +5556,7 @@ class MainHandler(ScreenHandler):
         '''
         if self.__current_display is None:
             group_menu = [(group_name, group_name)
-                            for group_name in self.world.get_fights()]
+                          for group_name in self.world.get_fights()]
             group_menu = sorted(group_menu, key=lambda x: x[0].upper())
             self.__current_display = self._window_manager.menu(
                                                     'Which Monster Group',
@@ -5567,7 +5586,7 @@ class MyArgumentParser(argparse.ArgumentParser):
     '''
     def error(self,
               message   # string: message to display
-             ):
+              ):
         '''
         Displays an error message and exits.  Used by argparse to display
         internal error messages.
@@ -5581,7 +5600,7 @@ def timeStamped(fname,  # <string> Base filename
                 tag,    # <string> Sepecial tag to add to the end of a filename
                 ext,    # <string> Filename extnesion
                 fmt='{fname}-%Y-%m-%d-%H-%M-%S{tag}.{ext}'
-               ):
+                ):
     '''
     Builds a time-stamped filename.
     '''
@@ -5636,7 +5655,7 @@ class Program(object):
     '''
     def __init__(self,
                  source_filename,     # string: Name of the Game File
-                ):
+                 ):
         self.__source_filename = source_filename
         self.__snapshots = {'startup': source_filename}
 
@@ -5645,7 +5664,7 @@ class Program(object):
                                 #   startup, bug, etc.)
                      filename   # string: name of output data file
                                 #   associated with tag
-                    ):
+                     ):
         '''
         Saves the name of a snapshot of the game file.  The name is saved with
         a tag that describes the reason for the snapshot.
@@ -5663,7 +5682,7 @@ class Program(object):
 
                         crash_snapshot=None     # string: name of file to be
                                                 #   saved as one last snapshot
-                       ):
+                        ):
         '''
         Gathers all the information required (I hope) to reproduce a bug and
         writes it to a file.
@@ -5728,17 +5747,19 @@ if __name__ == '__main__':
     VERSION = '00.00.00'    # major version, minor version, bug fixes
 
     parser = MyArgumentParser()
-    parser.add_argument('filename',
-             nargs='?',  # We get the filename elsewhere if you don't say here
-             help='Input Game File containing characters and monsters')
+    parser.add_argument(
+            'filename',
+            nargs='?',  # We get the filename elsewhere if you don't say here
+            help='Input Game File containing characters and monsters')
     parser.add_argument('-v', '--verbose', help='verbose', action='store_true',
                         default=False)
-    parser.add_argument('-m', '--maintain_game_file',
-             help='Don\'t overwrite the input Game File.  Only for debugging.',
-             action='store_true',
-             default=False)
+    parser.add_argument(
+            '-m', '--maintain_game_file',
+            help='Don\'t overwrite the input Game File.  Debugging only.',
+            action='store_true',
+            default=False)
     parser.add_argument('-p', '--playback',
-             help='Play the saved history back.  Only for debugging.')
+                        help='Play the saved history back.  Debugging only.')
 
     ARGS = parser.parse_args()
 
@@ -5822,7 +5843,7 @@ if __name__ == '__main__':
         with ca_json.GmJson(filename, window_manager) as campaign:
             if campaign.read_data is None:
                 window_manager.error(['Game File "%s" did not parse right'
-                        % filename])
+                                      % filename])
                 sys.exit(2)
 
             # Error check the Game File
