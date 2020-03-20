@@ -3,6 +3,7 @@
 import copy
 import curses
 
+
 class Equipment(object):
     '''
     Object that manipulates a list of equipment.  The list is assumed to be
@@ -45,7 +46,7 @@ class Equipment(object):
         list.  Returns None if the item is not found.
         '''
         return (None if index >= len(self.__equipment) else
-                                                self.__equipment[index])
+                self.__equipment[index])
 
     def get_item_by_name(self,              # Public to facilitate testing
                          name   # string that matches the name of the thing
@@ -75,7 +76,7 @@ class Equipment(object):
             return None
 
         if ('count' in self.__equipment[item_index] and
-                                self.__equipment[item_index]['count'] > 1):
+                self.__equipment[item_index]['count'] > 1):
             item = copy.deepcopy(self.__equipment[item_index])
             item['count'] = 1
             self.__equipment[item_index]['count'] -= 1
@@ -176,7 +177,7 @@ class EquipmentManager(object):
             texts.append(' (%d)' % item['count'])
 
         if ('notes' in item and item['notes'] is not None and
-                                                (len(item['notes']) > 0)):
+                (len(item['notes']) > 0)):
             texts.append(': %s' % item['notes'])
         char_detail.append([{'text': ''.join(texts), 'mode': mode}])
 
@@ -217,7 +218,7 @@ class EquipmentManager(object):
                                  'mode': mode}])
 
         if ('owners' in item and item['owners'] is not None and
-                                                    len(item['owners']) > 0):
+                len(item['owners']) > 0):
             texts = ['     Owners: ']
             texts.append('%s' % '->'.join(item['owners']))
             char_detail.append([{'text': ''.join(texts),
@@ -244,7 +245,7 @@ class EquipmentManager(object):
         # Rebuild this every time in case there are unique items in the
         # equipment list
         item_menu = [(item['name'], item)
-                            for item in self.__world.details['stuff']]
+                     for item in self.__world.details['stuff']]
         item_menu = sorted(item_menu, key=lambda x: x[0].upper())
         item = self.__window_manager.menu('Item to Add', item_menu)
         if item is not None:
@@ -266,7 +267,7 @@ class EquipmentManager(object):
             return
 
         item_menu = [(item['name'], index)
-                    for index, item in enumerate(fighter.details['stuff'])]
+                     for index, item in enumerate(fighter.details['stuff'])]
         item_index = self.__window_manager.menu('Item to Remove', item_menu)
         if item_index is None:
             return None

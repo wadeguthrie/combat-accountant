@@ -269,6 +269,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
     spells = {
 
         # Alphabetized for conevenience
+        #"Agonize": {
+        #  "cost": 8, <-- None means 'ask
+        #  "notes": "M40, HT negates", <-- at least give book reference
+        #                                  M40 means page 40 in GURPS
+        #                                  Magic
+        #  "maintain": 6,
+        #  "casting time": 1, <-- None or 0 means 'ask
+        #  "duration": 60, <-- None means 'ask', 0 means 'Instant'
+        #},
 
         "Agonize": {
           "cost": 8,
@@ -396,6 +405,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 3,
           "duration": 36000,    # 10 hours
         },
+        "Control Person": {
+          "cost": 6,
+          "notes": "M49",
+          "maintain": 3,
+          "casting time": 10,
+          "duration": 60,
+        },
+        "Counterspell": {
+          "cost": None,
+          "notes": "M21",
+          "maintain": None,
+          "casting time": 5,
+          "duration": 0,
+        },
         "Cure Disease": {
           "cost": 4,
           "notes": "M91",
@@ -430,6 +453,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 300,
           "duration": 0,
+        },
+        "Dispel Magic": {
+          "cost": 3,
+          "notes": "M126 - casting time = cost",
+          "maintain": None,
+          "casting time": None,
+          "duration": 0,
+        },
+        "Dispel Possession": {
+          "cost": 10,
+          "notes": "M49",
+          "maintain": None,
+          "casting time": 10,
+          "duration": None,
         },
         "Emotion Control": {
           "cost": 2,
@@ -641,7 +678,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 2,
           "duration": 60,
         },
-        "Major Heal": {
+        "Major Healing": {
           "cost": None,
           "notes": "M91",
           "maintain": None,
@@ -669,6 +706,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 1,
           "duration": 60,
         },
+        "Mind-Reading": {
+          "cost": 4,
+          "notes": "M46",
+          "maintain": 2,
+          "casting time": 10,
+          "duration": 60,
+        },
         "Mind-Sending": {
           "cost": 4,
           "notes": "M47",
@@ -676,7 +720,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 4,
           "duration": 60,
         },
-        "Minor Heal": {
+        "Minor Healing": {
           "cost": None,
           "notes": "M91",
           "maintain": None,
@@ -710,6 +754,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 300,
           "duration": 3600,
+        },
+        "Possession": {
+          "cost": 10,
+          "notes": "M49",
+          "maintain": 4,
+          "casting time": 60,
+          "duration": 60,
         },
         "Powerstone": {
           "cost": 20,
@@ -781,6 +832,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 1,
           "duration": 0,
         },
+        "Sensitize": {
+          "cost": 3,
+          "notes": "M39",
+          "maintain": 2,
+          "casting time": 1,
+          "duration": 60,
+        },
         "Shapeshifting": {
           "cost": None,
           "notes": "M32",
@@ -801,6 +859,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 3,
           "duration": 0,
+        },
+        "Soul Rider": {
+          "cost": 5,
+          "notes": "M49",
+          "maintain": 2,
+          "casting time": 3,
+          "duration": 60,
         },
         "Spasm": {
           "cost": 2,
@@ -878,6 +943,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 60,
+        },
+        "Truthsayer": {
+          "cost": 2,
+          "notes": "M45",
+          "maintain": 0,
+          "casting time": 1,
+          "duration": None,
         },
         "Wall Of Lightning": {
           "cost": None,

@@ -99,11 +99,14 @@ class MainGmWindow(ca_gui.GmWindow):
                                            command_ribbon_choices)
 
         lines, cols = self._window.getmaxyx()
-        self._char_detail = []  # [[{'text', 'mode'}, ...],   # line 0
-                                #  [...],                  ]  # line 1...
 
-        self.__char_list = []   # [[{'text', 'mode'}, ...],   # line 0
-                                #  [...],                  ]  # line 1...
+        # [[{'text', 'mode'}, ...],   # line 0
+        #  [...],                  ]  # line 1...
+        self._char_detail = []
+
+        # [[{'text', 'mode'}, ...],   # line 0
+        #  [...],                  ]  # line 1...
+        self.__char_list = []
 
         top_line = 1
         height = (lines         # The whole window height, except...
@@ -219,11 +222,10 @@ class MainGmWindow(ca_gui.GmWindow):
                 mode |= self._window_manager.color_of_venue()
             else:
                 mode |= self._window_manager.get_mode_from_fighter_state(
-                            ca_fighter.Fighter.get_fighter_state(char.details))
+                        ca_fighter.Fighter.get_fighter_state(char.details))
 
             mode |= (curses.A_NORMAL if current_index is None or
-                                                       current_index != line
-                                    else curses.A_STANDOUT)
+                     current_index != line else curses.A_STANDOUT)
 
             self.__char_list.append([{'text': char.detailed_name,
                                       'mode': mode}])
@@ -588,22 +590,20 @@ class FightGmWindow(ca_gui.GmWindow):
         top_line = self.__FIGHTER_LINE+1  # Start after the main fighter info
 
         self.__character_window = self._window_manager.new_native_window(
-                                                height,
-                                                self.fighter_win_width,
-                                                top_line,
-                                                self.__FIGHTER_COL)
+                height,
+                self.fighter_win_width,
+                top_line,
+                self.__FIGHTER_COL)
         self.__opponent_window = self._window_manager.new_native_window(
-                                                height,
-                                                self.__pane_width -
-                                                        self.__margin_width,
-                                                top_line,
-                                                self.__OPPONENT_COL)
+                height,
+                self.__pane_width - self.__margin_width,
+                top_line,
+                self.__OPPONENT_COL)
         self.__summary_window = self._window_manager.new_native_window(
-                                                height,
-                                                self.__pane_width -
-                                                        self.__margin_width,
-                                                top_line,
-                                                self.__SUMMARY_COL)
+                height,
+                self.__pane_width - self.__margin_width,
+                top_line,
+                self.__SUMMARY_COL)
 
     def touchwin(self):
         ''' Touches all of this window's sub-panes.  '''
@@ -633,7 +633,7 @@ class FightGmWindow(ca_gui.GmWindow):
         fighter_string = fighter.get_long_summary_string()
         fighter_state = fighter.get_state()
         mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
-                                                            | curses.A_BOLD)
+                | curses.A_BOLD)
         self._window.addstr(self.__FIGHTER_LINE, column, fighter_string, mode)
         return show_more_info
 
@@ -654,7 +654,7 @@ class FightGmWindow(ca_gui.GmWindow):
 
         fighter_state = fighter.get_state()
         mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
-                                                            | curses.A_BOLD)
+                | curses.A_BOLD)
         if fighter_state == ca_fighter.Fighter.FIGHT:
             pass
         elif fighter_state == ca_fighter.Fighter.DEAD:
@@ -715,7 +715,7 @@ class FightGmWindow(ca_gui.GmWindow):
                 line += 1
 
         if ('short-notes' in fighter.details and
-                                fighter.details['short-notes'] is not None):
+                fighter.details['short-notes'] is not None):
             for note in fighter.details['short-notes']:
                 window.addstr(line, 0, note, mode)
                 line += 1
@@ -1006,7 +1006,7 @@ class World(object):
 
         country_menu = [(x, x) for x in self.details['names']]
         country_name = self.__window_manager.menu('What kind of name',
-                                               country_menu)
+                                                  country_menu)
         if country_name is None:
             randomly_generate = True
             country_name = random.choice(self.details['names'].keys())
@@ -1116,7 +1116,7 @@ class World(object):
         # Get rid of old debugging Game Files.
 
         entries = (os.path.join(World.debug_directory, fn)
-                                for fn in os.listdir(World.debug_directory))
+                   for fn in os.listdir(World.debug_directory))
         entries = (
                 (datetime.datetime.fromtimestamp(os.path.getctime(fpath)),
                  fpath) for fpath in entries)
@@ -1285,7 +1285,7 @@ class ScreenHandler(object):
                                                 report)
 
         self._window_manager.display_window(
-               'Bug Reported',
+                'Bug Reported',
                 [[{'text': ('Output file "%s"' % bug_report_game_file),
                    'mode': curses.A_NORMAL}]])
 
@@ -1390,8 +1390,8 @@ class ScreenHandler(object):
 
                 index_this_line = 0
                 index_next_line = (len(value['help'])
-                                    if max_help_len >= len(value['help'])
-                                    else max_help_len)
+                                   if max_help_len >= len(value['help'])
+                                   else max_help_len)
 
                 while index_this_line < end:
                     # Find the end of the line (stop at a space if the line
@@ -1462,14 +1462,14 @@ class AttributeWidget(object):
                 return None
 
             title = ('New Value (old value: %d)' %
-                    self.__fighter.details[attr_type][attr])
+                     self.__fighter.details[attr_type][attr])
             height = 1
             width = len(title) + 2
             keep_ask_attr = True
             while keep_ask_attr:
                 attr_string = self.__window_manager.input_box(height,
-                                                             width,
-                                                             title)
+                                                              width,
+                                                              title)
                 if attr_string is not None and len(attr_string) > 0:
                     # TODO: allow for a float instead of just an int
                     self.__fighter.details[attr_type][attr] = int(attr_string)
@@ -1489,7 +1489,7 @@ class AttributeWidget(object):
 
             self.__screen_handler.draw_screen()
             keep_asking = self.__window_manager.menu('Change More Attributes',
-                                                    keep_asking_menu)
+                                                     keep_asking_menu)
         return True
 
 
@@ -1514,37 +1514,32 @@ class PersonnelHandler(ScreenHandler):
                  ):
         super(PersonnelHandler, self).__init__(window_manager, world)
         self._add_to_choice_dict({
-            curses.KEY_HOME:
-                  {'name': 'scroll home',
-                   'func': self.__first_page},
-            curses.KEY_UP:
-                  {'name': 'prev creature',
-                   'func': self.__view_prev},
-            curses.KEY_DOWN:
-                  {'name': 'next creature',
-                   'func': self.__view_next},
-            curses.KEY_NPAGE:
-                  {'name': 'scroll down',
-                   'func': self.__next_page,
-                   'help': 'Scroll DOWN on the current pane which may ' +
-                           'may be either the character pane (on the ' +
-                           'left) or the details pane (on the right)'},
-            curses.KEY_PPAGE:
-                  {'name': 'scroll up',
-                   'func': self.__prev_page,
-                   'help': 'Scroll UP on the current pane which may ' +
-                           'may be either the character pane (on the ' +
-                           'left) or the details pane (on the right)'},
-            curses.KEY_LEFT:
-                  {'name': 'scroll char list',
-                   'func': self.__left_pane,
-                   'help': 'Choose the character pane (on the ' +
-                           'left) for scrolling.'},
-            curses.KEY_RIGHT:
-                  {'name': 'scroll char detail',
-                   'func': self.__right_pane,
-                   'help': 'Choose the details pane (on the ' +
-                           'right) for scrolling.'},
+            curses.KEY_HOME: {'name': 'scroll home',
+                              'func': self.__first_page},
+            curses.KEY_UP: {'name': 'prev creature',
+                            'func': self.__view_prev},
+            curses.KEY_DOWN: {'name': 'next creature',
+                              'func': self.__view_next},
+            curses.KEY_NPAGE: {'name': 'scroll down',
+                               'func': self.__next_page,
+                               'help': 'Scroll DOWN on the current pane ' +
+                                       'which may may be either the ' +
+                                       'character pane (on the left) or ' +
+                                       'the details pane (on the right)'},
+            curses.KEY_PPAGE: {'name': 'scroll up',
+                               'func': self.__prev_page,
+                               'help': 'Scroll UP on the current pane which ' +
+                                       'may may be either the character ' +
+                                       'pane (on the left) or the details ' +
+                                       'pane (on the right)'},
+            curses.KEY_LEFT: {'name': 'scroll char list',
+                              'func': self.__left_pane,
+                              'help': 'Choose the character pane (on the ' +
+                                      'left) for scrolling.'},
+            curses.KEY_RIGHT: {'name': 'scroll char detail',
+                               'func': self.__right_pane,
+                               'help': 'Choose the details pane (on the ' +
+                                       'right) for scrolling.'},
 
             ord('a'): {'name': 'add creature',
                        'func': self.__add_creature,
@@ -1644,7 +1639,7 @@ class PersonnelHandler(ScreenHandler):
             new_existing = None
             while new_existing is None:
                 new_existing = self._window_manager.menu('New or Pre-Existing',
-                                                          new_existing_menu)
+                                                         new_existing_menu)
             if new_existing == 'new':
                 self.__new_group()
             else:
@@ -1715,14 +1710,14 @@ class PersonnelHandler(ScreenHandler):
 
         # Select the fight
         fight_menu = [(fight_name, fight_name)
-                                for fight_name in self.world.get_fights()]
+                      for fight_name in self.world.get_fights()]
         fight_name = self._window_manager.menu('Join Which Fight', fight_menu)
 
         # Make sure the person isn't already in the fight
         fight = self.world.get_creature_details_list(fight_name)
         if npc.name in fight:
             self._window_manager.error(['"%s" already in fight "%s"' %
-                                                    (npc.name, fight_name)])
+                                        (npc.name, fight_name)])
             return True
 
         fight[npc.name] = {'redirect': 'NPCs'}
@@ -1894,10 +1889,10 @@ class PersonnelHandler(ScreenHandler):
                                 self.__template_group]):
                     if from_creature_name == empty_creature:
                         self._window_manager.error(
-                            ['Template group "%s" contains illegal template:' %
-                                                        self.__template_group,
-                             '"%s". Replacing with an empty creature.' %
-                                                        empty_creature])
+                                ['Template group "%s" contains illegal template:' %
+                                    self.__template_group,
+                                 '"%s". Replacing with an empty creature.' %
+                                    empty_creature])
                     else:
                         creature_menu.append((from_creature_name,
                                               from_creature_name))
@@ -1924,7 +1919,7 @@ class PersonnelHandler(ScreenHandler):
                         for ikey, ivalue in value.iteritems():
                             to_creature['permanent'][ikey] = (
                                 self.__get_value_from_template(ivalue,
-                                                           from_creature))
+                                                               from_creature))
                             to_creature['current'][ikey] = to_creature[
                                                             'permanent'][ikey]
                     else:
@@ -2035,7 +2030,7 @@ class PersonnelHandler(ScreenHandler):
                                                                cols-4,  # width
                                                                'Add to Name')
                     temp_creature_name = '%s - %s' % (creature_name,
-                                                     more_text)
+                                                      more_text)
                     if self.__critters is None:
                         creature_name = temp_creature_name
                     elif temp_creature_name in self.__critters['data']:
@@ -2134,8 +2129,8 @@ class PersonnelHandler(ScreenHandler):
         keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
         spell_menu = [(spell_name, spell_name)
-                            for spell_name in
-                                sorted(self.world.ruleset.spells.iterkeys())]
+                      for spell_name in
+                      sorted(self.world.ruleset.spells.iterkeys())]
         while keep_asking:
             new_spell_name = self._window_manager.menu('Spell to Add',
                                                        spell_menu)
@@ -2240,7 +2235,7 @@ class PersonnelHandler(ScreenHandler):
                                             #   use this parameter.  It's
                                             #   ignored by this method,
                                             #   however.
-                                ):
+                               ):
         '''
         Handler for a change consciousness sub-menu entry.
 
@@ -2290,7 +2285,7 @@ class PersonnelHandler(ScreenHandler):
         # Get the template
         lines, cols = self._window.getmaxyx()
         template_menu = [(template_group, template_group)
-                    for template_group in self.world.details['templates']]
+                         for template_group in self.world.details['templates']]
         template_group = self._window_manager.menu('Which Template Group',
                                                    template_menu)
         if template_group is None:
@@ -2471,8 +2466,8 @@ class PersonnelHandler(ScreenHandler):
                     break
             if not found:
                 self._window_manager.error(
-                    ['Deleting monster "%s" who is not in object list' %
-                                                            name_to_delete])
+                        ['Deleting monster "%s" who is not in object list' %
+                         name_to_delete])
             self.__new_char_name = None
             del(self.__critters['data'][name_to_delete])
             self.__deleted_critter_count += 1
@@ -2521,11 +2516,10 @@ class PersonnelHandler(ScreenHandler):
                 if armor_index is None:
                     return None
 
-        self.world.ruleset.do_action(fighter,
-                                 {'action-name': 'don-armor',
-                                  'armor-index': armor_index
-                                 },
-                                 None)
+        self.world.ruleset.do_action(
+                fighter,
+                {'action-name': 'don-armor', 'armor-index': armor_index},
+                None)
         self._draw_screen()
         return True  # anything but 'None' for a menu handler
 
@@ -2547,7 +2541,7 @@ class PersonnelHandler(ScreenHandler):
                                     self.__new_char_name,
                                     self.__viewing_index)
         if (self.__new_char_name is not None and
-                            self.__new_char_name in self.__critters['data']):
+                self.__new_char_name in self.__critters['data']):
             critter = self.__get_fighter_object_from_name(self.__new_char_name)
             self._window.show_description(critter)
 
@@ -2590,11 +2584,10 @@ class PersonnelHandler(ScreenHandler):
                 if weapon_index is None:
                     return None
 
-        self.world.ruleset.do_action(fighter,
-                                 {'action-name': 'draw-weapon',
-                                  'weapon-index': weapon_index
-                                 },
-                                 None)
+        self.world.ruleset.do_action(
+                fighter,
+                {'action-name': 'draw-weapon', 'weapon-index': weapon_index},
+                None)
         self._draw_screen()
         return True  # Anything but 'None' for a menu handler
 
@@ -2627,9 +2620,9 @@ class PersonnelHandler(ScreenHandler):
                 sub_menu.extend([
                     ('%s (add)' % ability, {'doit': self.__ruleset_ability,
                                             'param': ability}),
-                    ('%s (remove)' % ability.capitalize(),
-                                            {'doit': self.__ruleset_ability_rm,
-                                             'param': ability})
+                    ('%s (remove)' % (ability.capitalize(),
+                                      {'doit': self.__ruleset_ability_rm,
+                                       'param': ability}))
                 ])
 
         # Add these at the end since they're less likely to be used (I'm
@@ -2696,7 +2689,7 @@ class PersonnelHandler(ScreenHandler):
 
         if creature_type == PersonnelHandler.MONSTERs:
             group_menu = [(group_name, group_name)
-                            for group_name in self.world.get_fights()]
+                          for group_name in self.world.get_fights()]
             group_menu = sorted(group_menu, key=lambda x: x[0].upper())
             group_answer = self._window_manager.menu('To Which Group',
                                                      group_menu)
@@ -2738,10 +2731,11 @@ class PersonnelHandler(ScreenHandler):
                 self.__critters['data'][
                         ca_fighter.Venue.name] = ca_fighter.Venue.empty_venue
                 group = self.world.details['fights'][self.__group_name]
-                fight = ca_fighter.Venue(self.__group_name,
-                              group['monsters'][ca_fighter.Venue.name],
-                              self.world.ruleset,
-                              self._window_manager)
+                fight = ca_fighter.Venue(
+                        self.__group_name,
+                        group['monsters'][ca_fighter.Venue.name],
+                        self.world.ruleset,
+                        self._window_manager)
             else:
                 fight = ca_fighter.Venue(self.__group_name,
                                          the_fight_itself,
@@ -2997,8 +2991,8 @@ class PersonnelHandler(ScreenHandler):
         while keep_asking:
             # Make the spell list again (since we've removed one)
             spell_menu = [(spell['name'], spell['name'])
-                        for spell in sorted(fighter.details['spells'],
-                                            key=lambda x:x['name'])]
+                          for spell in sorted(fighter.details['spells'],
+                          key=lambda x:x['name'])]
             bad_spell_name = self._window_manager.menu('Spell to Remove',
                                                        spell_menu)
 
@@ -3043,14 +3037,15 @@ class PersonnelHandler(ScreenHandler):
         #   }
 
         ability_menu = [(name, {'name': name, 'predicate': predicate})
-            for name, predicate in self.__ruleset_abilities[param].iteritems()]
+                        for name, predicate in
+                        self.__ruleset_abilities[param].iteritems()]
 
         keep_asking_menu = [('yes', True), ('no', False)]
 
         keep_asking = True
         while keep_asking:
             new_ability = self._window_manager.menu(('Adding %s' % param),
-                                                          sorted(ability_menu))
+                                                    sorted(ability_menu))
             if new_ability is None:
                 return None
 
@@ -3084,8 +3079,8 @@ class PersonnelHandler(ScreenHandler):
             else:
                 result = None
                 self._window_manager.error(
-                    ['unknown predicate "%r" for "%s"' %
-                            (new_ability['predicate'], new_ability['name'])])
+                        ['unknown predicate "%r" for "%s"' %
+                         (new_ability['predicate'], new_ability['name'])])
 
             if result is not None:
                 fighter.details[param][new_ability['name']] = result
@@ -3118,7 +3113,8 @@ class PersonnelHandler(ScreenHandler):
         while keep_asking:
             # Make the ability list again (since we've removed one)
             ability_menu = [(ability, ability)
-                        for ability in sorted(fighter.details[param].keys())]
+                            for ability in
+                            sorted(fighter.details[param].keys())]
             bad_ability_name = self._window_manager.menu(
                                         '%s to Remove' % param.capitalize(),
                                         ability_menu)
@@ -3173,7 +3169,7 @@ class PersonnelHandler(ScreenHandler):
 
         timers = timer_recipient.timers.get_all()
         timer_menu = [(timer.get_one_line_description(), index)
-                                for index, timer in enumerate(timers)]
+                      for index, timer in enumerate(timers)]
         index = self._window_manager.menu('Remove Which Timer', timer_menu)
         if index is None:
             return None
@@ -3441,7 +3437,7 @@ class FightHandler(ScreenHandler):
         for fighter in self.__fighters:
             fighter.start_fight()
             self._saved_fight['fighters'].append({'group': fighter.group,
-                                                   'name': fighter.name})
+                                                  'name': fighter.name})
 
         if monster_group is not None:
             for name in self.world.get_creature_details_list(monster_group):
@@ -3519,7 +3515,7 @@ class FightHandler(ScreenHandler):
                          ):
         ''' Returns Fighter object for opponent of |fighter|. '''
         if (fighter is None or fighter.name == ca_fighter.Venue.name or
-                                        fighter.details['opponent'] is None):
+                fighter.details['opponent'] is None):
             return None  # No opponent
 
         opponent = self.get_fighter_object(
@@ -3542,7 +3538,7 @@ class FightHandler(ScreenHandler):
                 choice = self._choices[string]
 
                 viewed_fighter = (None if self.__viewing_index is None
-                        else self.__fighters[self.__viewing_index])
+                                  else self.__fighters[self.__viewing_index])
                 viewed_opponent = self.get_opponent_for(viewed_fighter)
                 current_fighter = self.get_current_fighter()
                 current_opponent = self.get_opponent_for(current_fighter)
@@ -3565,7 +3561,7 @@ class FightHandler(ScreenHandler):
 
                 if 'show' in choice and choice['show']:
                     show_fighter = (current_fighter if viewed_fighter is None
-                                                        else viewed_fighter)
+                                    else viewed_fighter)
                     show_opponent = self.get_opponent_for(show_fighter)
                     self._window.show_fighters(show_fighter,
                                                show_opponent,
@@ -3598,8 +3594,8 @@ class FightHandler(ScreenHandler):
 
         # When done, move current fight to 'dead-monsters'
         if (not self._saved_fight['saved'] and
-                                self._saved_fight['monsters'] is not None and
-                                self.__keep_monsters is False):
+                self._saved_fight['monsters'] is not None and
+                self.__keep_monsters is False):
             fight_group = self._saved_fight['monsters']
             self.world.remove_fight(fight_group)
 
@@ -3648,13 +3644,13 @@ class FightHandler(ScreenHandler):
             elif current_fighter.is_dead():
                 if not self.world.playing_back:
                     self.add_to_history(
-                            {'comment': ' (%s) did nothing (dead)' %
-                                                        current_fighter.name})
+                            {'comment': (' (%s) did nothing (dead)' %
+                                         current_fighter.name)})
             elif current_fighter.is_absent():
                 if not self.world.playing_back:
                     self.add_to_history(
-                            {'comment': ' (%s) did nothing (absent)' %
-                                                        current_fighter.name})
+                            {'comment': (' (%s) did nothing (absent)' %
+                                         current_fighter.name)})
 
             else:
                 keep_going = False
@@ -3699,7 +3695,7 @@ class FightHandler(ScreenHandler):
         default_selection = None
         for fighter in self.__fighters:
             if (fighter.group != current_fighter.group and
-                                        fighter.name != ca_fighter.Venue.name):
+                    fighter.name != ca_fighter.Venue.name):
                 opponent_group = fighter.group
                 if fighter.is_conscious():
                     if fighter.details['opponent'] is None:
@@ -3726,15 +3722,14 @@ class FightHandler(ScreenHandler):
 
         # Now, reflect the selection in the code.
 
-        self.world.ruleset.do_action(current_fighter,
-                                 {'action-name': 'pick-opponent',
-                                  'opponent': {'name': opponent_name,
-                                               'group': opponent_group},
-                                  'comment': '(%s) picked (%s) as opponent' %
-                                                    (current_fighter.name,
-                                                     opponent_name)
-                                 },
-                                 self)
+        self.world.ruleset.do_action(
+                current_fighter,
+                {'action-name': 'pick-opponent',
+                 'opponent': {'name': opponent_name, 'group': opponent_group},
+                 'comment': ('(%s) picked (%s) as opponent' %
+                             (current_fighter.name, opponent_name))
+                 },
+                self)
 
         opponent = self.get_fighter_object(opponent_name, opponent_group)
 
@@ -3742,18 +3737,18 @@ class FightHandler(ScreenHandler):
         if (opponent is not None and opponent.details['opponent'] is None):
             back_menu = [('yes', True), ('no', False)]
             answer = self._window_manager.menu('Make Opponents Go Both Ways',
-                                        back_menu)
+                                               back_menu)
             if answer is True:
                 self.world.ruleset.do_action(
-                    opponent,
-                    {'action-name': 'pick-opponent',
-                     'opponent': {'name': current_fighter.name,
-                                  'group': current_fighter.group},
-                     'comment': '(%s) picked (%s) as opponent right back' %
-                                                        (opponent_name,
-                                                         current_fighter.name)
-                    },
-                    self)
+                        opponent,
+                        {'action-name': 'pick-opponent',
+                         'opponent': {'name': current_fighter.name,
+                                      'group': current_fighter.group},
+                         'comment': (
+                             '(%s) picked (%s) as opponent right back' %
+                             (opponent_name, current_fighter.name))
+                         },
+                        self)
 
         self._window.show_fighters(current_fighter,
                                    opponent,
@@ -3775,7 +3770,7 @@ class FightHandler(ScreenHandler):
         else:
             current_fighter = self.get_current_fighter()
             if (current_fighter.group == 'PCs' or
-                                            current_fighter.group == 'NPCs'):
+                    current_fighter.group == 'NPCs'):
                 opponent = self.get_opponent_for(current_fighter)
                 new_NPC = current_fighter if opponent is None else opponent
             else:
@@ -3809,7 +3804,7 @@ class FightHandler(ScreenHandler):
 
         for index, fighter in enumerate(self.__fighters):
             if (fighter.name == new_NPC.name and
-                                            fighter.group == new_NPC.group):
+                    fighter.group == new_NPC.group):
                 new_fighter = self.world.get_creature(new_NPC.name,
                                                       new_NPC.group)
                 self.__fighters[index] = new_fighter
@@ -3913,15 +3908,14 @@ class FightHandler(ScreenHandler):
         if fight_order is None:
             # Sort by initiative = basic-speed followed by DEX followed by
             # random
-            self.__fighters.sort(
-                    key=lambda fighter:
-                        self.world.ruleset.initiative(fighter), reverse=True)
+            self.__fighters.sort(key=lambda fighter:
+                                 self.world.ruleset.initiative(fighter),
+                                 reverse=True)
         else:
             # Put them in the same order they were in, before (this is a saved
             # fight).
-            self.__fighters.sort(
-                    key=lambda fighter:
-                        fight_order[fighter.name][fighter.group])
+            self.__fighters.sort(key=lambda fighter:
+                                 fight_order[fighter.name][fighter.group])
 
         # Put the fight info (if any) at the top of the list.
         if the_fight_itself is not None:
@@ -4118,7 +4112,7 @@ class FightHandler(ScreenHandler):
             defender = current_fighter
         else:
             defender_menu = [(current_fighter.name, current_fighter),
-                                 (opponent.name, opponent)]
+                             (opponent.name, opponent)]
             defender = self._window_manager.menu('Who is defending',
                                                  defender_menu,
                                                  1)  # assume the opponent

@@ -40,14 +40,13 @@ class ThingsInFight(object):
                                        self,
                                        self._window_manager)
 
-
     #
     # Equipment related methods
     #
 
     def add_equipment(self,
                       new_item,    # dict describing new equipment
-                      source=None  # string describing where equipment came from
+                      source=None  # string: from where did equipment come
                       ):
         '''
         Accept a new item of equipment and put it in the list.
@@ -191,7 +190,7 @@ class Venue(ThingsInFight):
                         char_detail,  # recepticle for character detail.
                                       #     [[{'text','mode'},...],  # line 0
                                       #      [...],               ]  # line 1..
-                         ):
+                        ):
         '''
         Provides a text description of all of the components of a Venue.
 
@@ -297,7 +296,7 @@ class Fighter(ThingsInFight):
         '''
         conscious_number = Fighter.conscious_map[details['state']]
         if (conscious_number == Fighter.ALIVE and
-                        details['current']['hp'] < details['permanent']['hp']):
+                details['current']['hp'] < details['permanent']['hp']):
             return Fighter.INJURED
         return conscious_number
 
@@ -314,7 +313,7 @@ class Fighter(ThingsInFight):
 
     def add_equipment(self,
                       new_item,   # dict describing new equipment
-                      source=None  # string describing where equipment came from
+                      source=None  # string: from where did equipment came
                       ):
         '''
         Accept a new item of equipment and put it in the list.
@@ -355,8 +354,8 @@ class Fighter(ThingsInFight):
         '''
         super(Fighter, self).end_fight(world, fight_handler)
         if ('reload-after-fight' in world.details['options'] and
-                            world.details['options']['reload-after-fight'] and
-                            self.group == 'PCs'):
+                world.details['options']['reload-after-fight'] and
+                self.group == 'PCs'):
             self._ruleset.do_action(self,
                                     {'action-name': 'reload',
                                      'comment': 'Reloading after fight',
@@ -451,7 +450,7 @@ class Fighter(ThingsInFight):
                         output,  # recepticle for character detail.
                                  #  [[{'text','mode'},...],  # line 0
                                  #   [...],               ]  # line 1...
-                         ):
+                        ):
         '''
         Provides a text description of a Fighter including all of the
         attributes (current and permanent), equipment, etc.
