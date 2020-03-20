@@ -3496,8 +3496,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 timer = ca_timers.Timer(None)
                 timer.from_pieces(
                     {'parent-name': fighter.name,
-                     'rounds': action['time'] - ca_timers.Timer.announcement_margin,
-                     'string': 'RELOADING'} )
+                     'rounds': (action['time'] -
+                         ca_timers.Timer.announcement_margin),
+                     'string': 'RELOADING'})
 
                 timer.mark_owner_as_busy()  # When reloading, the owner is busy
 
@@ -3535,7 +3536,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                   ('did NOT make SKILL roll', False)]
                     made_skill_roll = self._window_manager.menu(
                         ('roll <= fast-draw skill (%d)' %
-                                fighter.details['skills']['Fast-Draw (Ammo)']),
+                            fighter.details['skills']['Fast-Draw (Ammo)']),
                         skill_menu)
 
                     if made_skill_roll:
@@ -3577,7 +3578,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         weapon, throw_away = fighter.get_current_weapon()
 
-        #if 'Fast-Draw (Pistol)' in fighter.details['skills']:
+        # if 'Fast-Draw (Pistol)' in fighter.details['skills']:
         #    skill_menu = [('made SKILL roll', True),
         #                  ('did NOT make SKILL roll', False)]
         #    made_skill_roll = self._window_manager.menu(
@@ -3615,13 +3616,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         return damage_type_str
 
     def _perform_action(self,
-                        fighter,          # Fighter object
-                        action,           # {'action-name': <action>, parameters...}
-                        fight_handler,    # FightHandler object
-                        logit=True        # Log into history and
-                                          #  'actions_this_turn' because the
-                                          #  action is not a side-effect of
-                                          #  another action
+                        fighter,        # Fighter object
+                        action,         # {'action-name': <action>, params...}
+                        fight_handler,  # FightHandler object
+                        logit=True      # Log into history and
+                                        #  'actions_this_turn' because the
+                                        #  action is not a side-effect of
+                                        #  another action
                         ):
         '''
         This routine delegates actions to routines that perform the action.
@@ -3648,10 +3649,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # original action just returns.  That way, there are no questions on
         # playback and the answers are the same as they were the first time.
 
-        has_2_parts = {
-            'cast-spell' : True,
-            'reload' : True,
-        }
+        has_2_parts = {'cast-spell': True, 'reload': True}
 
         # Call base class' perform_action FIRST because GurpsRuleset depends on
         # the actions of the base class.  It make no sense for the base class'
@@ -3662,7 +3660,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # on the second part.
 
         if (not action['action-name'] in has_2_parts or
-                                    ('part' in action and action['part'] == 2)):
+                ('part' in action and action['part'] == 2)):
             handled = super(GurpsRuleset, self)._perform_action(fighter,
                                                                 action,
                                                                 fight_handler)
@@ -3701,7 +3699,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             return handled
 
         if handled == ca_ruleset.Ruleset.HANDLED_ERROR:
-            return  handled
+            return handled
 
         if action['action-name'] in actions:
             timer = None
@@ -3720,7 +3718,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
     def _record_action(self,
                        fighter,          # Fighter object
-                       action,           # {'action-name': <action>, parameters...}
+                       action,           # {'action-name': <action>, params...}
                        fight_handler,    # FightHandler object
                        handled,          # bool: whether/how the action was
                                          #   handled
@@ -3745,18 +3743,19 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         if handled == ca_ruleset.Ruleset.HANDLED_OK:
             if logit and 'action-name' in action:
-                fighter.details['actions_this_turn'].append(action['action-name'])
+                fighter.details['actions_this_turn'].append(
+                        action['action-name'])
         elif handled == ca_ruleset.Ruleset.UNHANDLED:
             self._window_manager.error(
                             ['action "%s" is not handled by any ruleset' %
-                                                            action['action-name']])
+                             action['action-name']])
 
         # Don't deal with HANDLED_ERROR
 
     def __reset_aim(self,
                     fighter,          # Fighter object
-                    action,           # {'action-name': 'defend' | 'don-armor' |
-                                      #          'reset-aim' |
+                    action,           # {'action-name': 'defend' | 'don-armor'
+                                      #          | 'reset-aim' |
                                       #          'set-consciousness',
                                       #  'comment': <string>, # optional
                     fight_handler     # FightHandler object
@@ -3777,24 +3776,22 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         if action['action-name'] == 'defend':
             timer = ca_timers.Timer(None)
             timer.from_pieces(
-                        {'parent-name': fighter.name,
-                         'rounds': 1 - ca_timers.Timer.announcement_margin,
-                         'string': ['All out defense',
-                                    ' Defense: double',
-                                    ' Move: step']} )
+                    {'parent-name': fighter.name,
+                     'rounds': 1 - ca_timers.Timer.announcement_margin,
+                     'string': ['All out defense',
+                                ' Defense: double',
+                                ' Move: step']})
 
         elif action['action-name'] == 'don-armor':
             timer = ca_timers.Timer(None)
             armor, throw_away = fighter.get_current_armor()
             title = ('Doff armor' if armor is None else
-                                                ('Don %s' % armor['name']))
+                     ('Don %s' % armor['name']))
 
             timer.from_pieces(
-                        {'parent-name': fighter.name,
-                         'rounds': 1 - ca_timers.Timer.announcement_margin,
-                         'string': [title,
-                                    ' Defense: none',
-                                    ' Move: none']} )
+                    {'parent-name': fighter.name,
+                     'rounds': 1 - ca_timers.Timer.announcement_margin,
+                     'string': [title, ' Defense: none', ' Move: none']})
         return timer
 
     def __stun(self,
@@ -3823,7 +3820,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             return True
 
         fight_handler = (None if 'fight_handler' not in param
-                                                else param['fight_handler'])
+                         else param['fight_handler'])
         self.do_action(stunned_dude,
                        {'action-name': 'stun',
                         'stun': True,
