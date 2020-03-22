@@ -2792,18 +2792,18 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 else:
                     total = fighter.details['current']['ht']
                     menu_title = (
-                        'Major Wound (B420): Roll vs. HT (%d) or be stunned' %
-                                                                        total)
+                            'Major Wound (B420): Roll vs. HT (%d) or be stunned' %
+                            total)
 
                 stunned_menu = [
                    ('Succeeded (roll <= HT (%d))' % total,
-                                 GurpsRuleset.MAJOR_WOUND_SUCCESS),
+                    GurpsRuleset.MAJOR_WOUND_SUCCESS),
                    ('Missed roll by < 5 (roll < %d) -- stunned' % (total+5),
-                                 GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL),
+                    GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL),
                    ('Missed roll by >= 5 (roll >= %d -- unconscious)' %
-                                                                    (total+5),
-                                 GurpsRuleset.MAJOR_WOUND_BAD_FAIL),
-                               ]
+                       (total+5),
+                    GurpsRuleset.MAJOR_WOUND_BAD_FAIL),
+                   ]
                 stunned_results = self._window_manager.menu(menu_title,
                                                             stunned_menu)
                 if stunned_results == GurpsRuleset.MAJOR_WOUND_BAD_FAIL:
@@ -2837,10 +2837,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         ('did NOT make WILL roll', False)]
             made_will_roll = self._window_manager.menu(
                 ('roll <= WILL (%d) or lose aim' %
-                                            fighter.details['current']['wi']),
+                    fighter.details['current']['wi']),
                 aim_menu)
             if not made_will_roll:
-                self.do_action(fighter, {'action-name': 'reset-aim'}, fight_handler)
+                self.do_action(fighter,
+                               {'action-name': 'reset-aim'},
+                               fight_handler)
 
         # Have to copy the action because using the old one confuses the
         # do_action routine that called this function.
@@ -2851,7 +2853,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
     def __adjust_hp_really(self,
                            fighter,         # Fighter object
-                           action,          # {'action-name': 'adjust-hp-really',
+                           action,          # {'action-name':
+                                            #  'adjust-hp-really',
                                             #  'comment': <string>, # optional
                                             #  'adj': <number = HP change>,
                                             #  'quiet': <bool - use defaults
@@ -2919,11 +2922,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             if complete_spell['duration'] > 0:
                 duration_timer.from_pieces(
                            {'parent-name': fighter.name,
-                            'rounds': complete_spell['duration'] -
-                                            ca_timers.Timer.announcement_margin,
-                            'string': 'CAST SPELL (%s) ACTIVE' %
-                                                        complete_spell['name']
-                           })
+                            'rounds': (complete_spell['duration'] -
+                                       ca_timers.Timer.announcement_margin),
+                            'string': ('CAST SPELL (%s) ACTIVE' %
+                                       complete_spell['name'])
+                            })
 
             # Casting Timer
 
@@ -2938,14 +2941,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             actions = {'timer': duration_timer.details}
             if complete_spell['duration'] == 0:
                 actions['announcement'] = ('CAST SPELL (%s) FIRED' %
-                                                        complete_spell['name'])
+                                           complete_spell['name'])
 
-            casting_timer.from_pieces({'parent-name': fighter.name,
-                               'rounds': complete_spell['casting time'] -
-                                            ca_timers.Timer.announcement_margin,
-                               'string': text,
-                               'actions': actions})
-            casting_timer.mark_owner_as_busy()  # When casting, the owner is busy
+            casting_timer.from_pieces(
+                    {'parent-name': fighter.name,
+                     'rounds': (complete_spell['casting time'] -
+                                ca_timers.Timer.announcement_margin),
+                     'string': text,
+                     'actions': actions})
+            casting_timer.mark_owner_as_busy()  # When casting, owner is busy
 
             # Opponent's Timers
 
@@ -2958,30 +2962,30 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 if complete_spell['duration'] > 0:
                     spell_timer.from_pieces(
                              {'parent-name': opponent.name,
-                              'rounds': complete_spell['duration'] -
-                                            ca_timers.Timer.announcement_margin,
-                              'string': 'SPELL "%s" AGAINST ME' %
-                                                        complete_spell['name']
-                             })
+                              'rounds': (complete_spell['duration'] -
+                                         ca_timers.Timer.announcement_margin),
+                              'string': ('SPELL "%s" AGAINST ME' %
+                                         complete_spell['name'])
+                              })
 
                 delay_timer = ca_timers.Timer(None)
 
                 actions = {'timer': spell_timer.details}
                 if complete_spell['duration'] == 0:
                     actions['announcement'] = ('SPELL (%s) AGAINST ME FIRED' %
-                                                        complete_spell['name'])
+                                               complete_spell['name'])
 
                 # Add 1 to the timer because the first thing the opponent will
                 # see is a decrement (the caster only sees the decrement on the
                 # _next_ round)
                 delay_timer.from_pieces(
                          {'parent-name': opponent.name,
-                          'rounds': 1 + complete_spell['casting time'] -
-                                            ca_timers.Timer.announcement_margin,
+                          'rounds': (1 + complete_spell['casting time'] -
+                                     ca_timers.Timer.announcement_margin),
                           'string': ('Waiting for "%s" spell to take affect' %
-                                                    complete_spell['name']),
+                                     complete_spell['name']),
                           'actions': actions
-                         })
+                          })
 
                 opponent.timers.add(delay_timer)
 
@@ -2994,8 +2998,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             if fight_handler is not None and fight_handler.world.playing_back:
                 return None  # No timers
 
-            # Assemble the spell from the ruleset's copy of it and the Fighter's
-            # copy of it.
+            # Assemble the spell from the ruleset's copy of it and the
+            # Fighter's copy of it.
 
             spell_index = action['spell-index']
             spell = fighter.details['spells'][spell_index]
@@ -3012,8 +3016,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             if complete_spell['duration'] is None:
                 title = 'Duration for (%s) - see (%s) ' % (
-                                                        complete_spell['name'],
-                                                        complete_spell['notes'])
+                        complete_spell['name'], complete_spell['notes'])
                 height = 1
                 width = len(title)
                 duration_string = ''
@@ -3027,8 +3030,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             if complete_spell['cost'] is None:
                 title = 'Cost to cast (%s) - see (%s) ' % (
-                                                        complete_spell['name'],
-                                                        complete_spell['notes'])
+                        complete_spell['name'], complete_spell['notes'])
                 height = 1
                 width = len(title)
                 cost_string = ''
@@ -3049,7 +3051,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # Casting time
 
             if (complete_spell['casting time'] is None or
-                                        complete_spell['casting time'] == 0):
+                    complete_spell['casting time'] == 0):
                 title = 'Seconds to cast (%s) - see (%s) ' % (
                                                     complete_spell['name'],
                                                     complete_spell['notes'])
@@ -3057,9 +3059,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 width = len(title)
                 casting_time_string = ''
                 while len(casting_time_string) <= 0:
-                    casting_time_string = self._window_manager.input_box(height,
-                                                                         width,
-                                                                         title)
+                    casting_time_string = self._window_manager.input_box(
+                            height, width, title)
                 complete_spell['casting time'] = int(casting_time_string)
 
             # Opponent?
@@ -3120,13 +3121,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                       '       crouch->stand = free',
                                       '       kneel->stand = step',
                                       ' Defense: any',
-                                      ' Move: none'] })
+                                      ' Move: none']})
 
         return timer
 
     def __check_for_death(self,
                           fighter,          # Fighter object
-                          action,           # {'action-name': 'check-for-death',
+                          action,           # {'action-name':
+                                            #  'check-for-death',
                                             #  'value': <bool>,
                                             #  'comment': <string>, # optional
                           fight_handler     # FightHandler object
@@ -3182,9 +3184,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             comment = '(%s) regained %d FP' % (fp_recipient.name, adj)
 
         fight_handler = (None if 'fight_handler' not in param
-                                                else param['fight_handler'])
+                         else param['fight_handler'])
         self.do_action(fp_recipient,
-                       {'action-name': 'adjust-fp', 'adj': adj, 'comment': comment},
+                       {'action-name': 'adjust-fp',
+                        'adj': adj,
+                        'comment': comment},
                        fight_handler)
 
         return True  # Keep going
@@ -3211,21 +3215,23 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         # If FP go below zero, you lose HP along with FP
         hp_adj = 0
-        if adj < 0  and -adj > fighter.details['current']['fp']:
+        if adj < 0 and -adj > fighter.details['current']['fp']:
             hp_adj = adj
             if fighter.details['current']['fp'] > 0:
                 hp_adj += fighter.details['current']['fp']
 
         if hp_adj < 0:
             self.do_action(fighter,
-                           {'action-name': 'adjust-hp', 'adj': hp_adj, 'quiet': True},
+                           {'action-name': 'adjust-hp',
+                            'adj': hp_adj,
+                            'quiet': True},
                            fight_handler,
                            logit=False)
 
         fighter.details['current']['fp'] += adj
 
         if (fighter.details['current']['fp'] <=
-                                        -fighter.details['permanent']['fp']):
+                -fighter.details['permanent']['fp']):
             self.do_action(fighter,
                            {'action-name': 'set-consciousness',
                             'level': ca_fighter.Fighter.UNCONSCIOUS},
@@ -3234,12 +3240,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         return None  # No timer
 
     def __do_adjust_shock(self,
-                 fighter,       # Fighter object
-                 action,        # {'action-name': 'shock',
-                                #  'value': <int> # level to which to set shock
-                                #  'comment': <string>, # optional
-                 fight_handler  # FightHandler object
-                 ):
+                          fighter,       # Fighter object
+                          action,        # {'action-name': 'shock',
+                                         #  'value': <int> # new shock level
+                                         #  'comment': <string>, # optional
+                          fight_handler  # FightHandler object
+                          ):
         '''
         Action handler for GurpsRuleset.
 
@@ -3282,22 +3288,22 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         timer = ca_timers.Timer(None)
         timer.from_pieces(
-            {'parent-name': fighter.name,
-             'rounds': 1 - ca_timers.Timer.announcement_margin,
-             'string': [('Aim%s' % (' (braced)' if action['braced'] else '')),
-                         ' Defense: any loses aim',
-                         ' Move: step']
-            })
+                {'parent-name': fighter.name,
+                 'rounds': 1 - ca_timers.Timer.announcement_margin,
+                 'string': [('Aim%s' % (' (braced)' if action['braced']
+                                        else '')),
+                            ' Defense: any loses aim',
+                            ' Move: step']})
 
         return timer
 
     def __do_attack(self,
-                   fighter,          # Fighter object
-                   action,           # {'action-name': 'attack' | 'all-out-attack' |
-                                     #          'move-and-attack'
-                                     #  'comment': <string>, # optional
-                   fight_handler     # FightHandler object
-                   ):
+                    fighter,        # Fighter object
+                    action,         # {'action-name': 'attack' |
+                                    #   'all-out-attack' | 'move-and-attack'
+                                    #  'comment': <string>, # optional
+                    fight_handler   # FightHandler object
+                    ):
         '''
         Action handler for GurpsRuleset.
 
@@ -3328,7 +3334,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         elif action['action-name'] == 'move-and-attack':
             # FP: B426
             if (fighter.details['current']['fp'] <
-                            (fighter.details['permanent']['fp'] / 3)):
+                    (fighter.details['permanent']['fp'] / 3)):
                 move_string = 'half=%d (FP:B426)' % (move/2)
             else:
                 move_string = 'full=%d' % move
@@ -3340,7 +3346,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             weapon, throw_away = fighter.get_current_weapon()
             holding_ranged = (False if weapon is None else
-                                        (weapon['type'] == 'ranged weapon'))
+                              (weapon['type'] == 'ranged weapon'))
             if fight_handler is None:
                 opponent = None
             else:
@@ -3378,10 +3384,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
     def __do_nothing(self,
                      fighter,      # Fighter object
-                     action,       # {'action-name': 'concentrate' | 'evaluate' |
-                                   #          'feint' | 'move' | 'nothing' |
-                                   #          'pick-opponent' | 'use-item' |
-                                   #          'user-defined',
+                     action,       # {'action-name': 'concentrate' |
+                                   #    'evaluate' |
+                                   #    'feint' | 'move' | 'nothing' |
+                                   #    'pick-opponent' | 'use-item' |
+                                   #    'user-defined',
                                    #  'comment': <string>, # optional
                                    #
                                    # NOTE: Some actions have other
@@ -3412,7 +3419,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             move = fighter.details['current']['basic-move']
 
             if (fighter.details['current']['fp'] <
-                            (fighter.details['permanent']['fp'] / 3)):
+                    (fighter.details['permanent']['fp'] / 3)):
                 move_string = 'half=%d (FP:B426)' % (move/2)
             else:
                 move_string = 'full=%d' % move
@@ -3429,7 +3436,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         elif action['action-name'] == 'evaluate':
             text = ['Evaluate', ' Defense: any', ' Move: step']
-
 
         elif action['action-name'] == 'concentrate':
             text = ['Concentrate', ' Defense: any w/will roll', ' Move: step']
@@ -3449,9 +3455,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         else:
             text = ['<<UNHANDLED ACTION: %s' % action['action-name']]
 
-        timer.from_pieces( {'parent-name': fighter.name,
-                            'rounds': 1 - ca_timers.Timer.announcement_margin,
-                            'string': text} )
+        timer.from_pieces({'parent-name': fighter.name,
+                           'rounds': 1 - ca_timers.Timer.announcement_margin,
+                           'string': text})
 
         return timer
 
@@ -3497,7 +3503,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 timer.from_pieces(
                     {'parent-name': fighter.name,
                      'rounds': (action['time'] -
-                         ca_timers.Timer.announcement_margin),
+                                ca_timers.Timer.announcement_margin),
                      'string': 'RELOADING'})
 
                 timer.mark_owner_as_busy()  # When reloading, the owner is busy
