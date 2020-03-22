@@ -2620,9 +2620,9 @@ class PersonnelHandler(ScreenHandler):
                 sub_menu.extend([
                     ('%s (add)' % ability, {'doit': self.__ruleset_ability,
                                             'param': ability}),
-                    ('%s (remove)' % (ability.capitalize(),
+                    ('%s (remove)' % ability.capitalize(),
                                       {'doit': self.__ruleset_ability_rm,
-                                       'param': ability}))
+                                       'param': ability})
                 ])
 
         # Add these at the end since they're less likely to be used (I'm
