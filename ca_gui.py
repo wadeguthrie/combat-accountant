@@ -4,6 +4,9 @@ import copy
 import curses
 import curses.ascii
 import curses.textpad
+import re
+
+import pprint # TODO: remove
 
 
 '''
@@ -634,6 +637,47 @@ class GmWindowManager(object):
         del menu_win
         self.hard_refresh_all()
         return string
+
+
+    def input_num_box(self,
+                      height,           # int: height of the data window (the
+                                        #   box around it will, therefore, be
+                                        #   bigger)
+                      width,            # int: width of the data window (see
+                                        #   |height|)
+                      initial_value,    # int/float: starting value
+                      title             # string: the title displayed,
+                                        #   centered, in the box around the
+                                        #   data.
+                      ):
+        '''
+        Returns input number (but allows addition and subtraction to initial).
+        '''
+
+        result = 0 if initial_value is None else initial_value
+
+        string = self.input_box(height, width, title)
+        if string is None or len(string) == 0:
+            return initial_value
+
+        match = re.match('\s*(?P<sign>[\+\-]?)\s*(?P<value>[0-9\.]+)', string)
+        if match is None:
+            return result
+
+        if '.' in match.groupdict()['value']:
+            input_value = float(match.groupdict()['value'])
+        else:
+            input_value = int(match.groupdict()['value'])
+
+        if (match.groupdict()['sign'] is None or
+                len(match.groupdict()['sign']) == 0):
+            return input_value
+
+        if match.groupdict()['sign'] == '+':
+            return result + input_value
+
+        return result - input_value
+
 
     def menu(self,
              title,             # string: title of the menu, displayed to user

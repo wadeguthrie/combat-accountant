@@ -24,6 +24,10 @@ import ca_timers
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
 
+# TODO: add 'controlled/marked' to consciousness menu
+# TODO: hold action = change init.  Best done by saving initiative stuff in
+#   current fight.
+
 
 class CaGmWindowManager(ca_gui.GmWindowManager):
     def __init__(self):
@@ -1466,17 +1470,14 @@ class AttributeWidget(object):
             height = 1
             width = len(title) + 2
             keep_ask_attr = True
-            while keep_ask_attr:
-                attr_string = self.__window_manager.input_box(height,
-                                                              width,
-                                                              title)
-                if attr_string is not None and len(attr_string) > 0:
-                    # TODO: allow for a float instead of just an int
-                    self.__fighter.details[attr_type][attr] = int(attr_string)
-                    keep_ask_attr = False
-                else:
-                    self.__window_manager.error(
-                                    ['You must specify an attribute value'])
+
+
+            self.__fighter.details[attr_type][attr] = (
+                    self.__window_manager.input_num_box(
+                        height,
+                        width,
+                        self.__fighter.details[attr_type][attr],
+                        title))
 
             if attr_type == 'permanent':
                 both_menu = [('yes', True), ('no', False)]
