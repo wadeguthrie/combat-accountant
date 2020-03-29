@@ -1731,6 +1731,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         dr_text_array = []
         armor, armor_index = fighter.get_current_armor()
         if armor is not None:
+            # TODO: ruleset specific
             dr += armor['dr']
             dr_text_array.append(armor['name'])
 
@@ -2424,7 +2425,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Make sure creature has skills for all their stuff.  Trying to make
         sure that one or the other of the skills wasn't entered incorrectly.
         '''
-        result = True
+        result = super(GurpsRuleset, self).is_creature_consistent(name,
+                                                                  creature)
 
         if 'skills' not in creature:
             return result

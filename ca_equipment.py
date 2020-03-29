@@ -213,6 +213,7 @@ class EquipmentManager(object):
                                  'mode': mode}])
         elif item['type'] == 'armor':
             texts = []
+            # TODO: ruleset-specific
             texts.append('dr: %d' % item['dr'])
             char_detail.append([{'text': ('     ' + ', '.join(texts)),
                                  'mode': mode}])

@@ -285,6 +285,40 @@ class Ruleset(object):
                                    None)
             fighter.draw_weapon_by_index(original_weapon_index)
 
+    def is_creature_consistent(self,
+                               name,     # string: creature's name
+                               creature  # dict from Game File
+                               ):
+        '''
+        Make sure creature's information makes sense.
+        '''
+        result = True
+
+        fighter = ca_fighter.Fighter(name,
+                                     'dummy group',  # unused
+                                     creature,
+                                     self,
+                                     self._window_manager)
+
+        armor, throw_away = fighter.get_current_armor()
+        if armor is not None:
+            if armor['type'] != 'armor':
+                self._window_manager.error([
+                    'Creature "%s"' % name,
+                    '  is wearing weird armor "%s"' % armor['name']])
+                result = False
+
+        weapon, throw_away = fighter.get_current_weapon()
+        if weapon is not None:
+            if (weapon['type'] != 'ranged weapon' and
+                    weapon['type'] != 'melee weapon'):
+                self._window_manager.error([
+                    'Creature "%s"' % name,
+                    '  is wielding weird weapon "%s"' % weapon['name']])
+                result = False
+
+        return result
+
     def make_empty_creature(self):
         '''
         Builds the minimum legal character detail (the dict that goes into the
