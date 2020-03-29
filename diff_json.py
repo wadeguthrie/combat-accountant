@@ -2,6 +2,7 @@
 import argparse
 import json
 import pprint
+import traceback
 
 class GmJson(object):
     '''

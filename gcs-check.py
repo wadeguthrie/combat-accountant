@@ -6,6 +6,7 @@ import glob
 import json
 import pprint
 import sys
+import traceback
 import xml.etree.ElementTree as ET
 
 class MyArgumentParser(argparse.ArgumentParser):
