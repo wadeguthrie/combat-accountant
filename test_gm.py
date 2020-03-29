@@ -3205,6 +3205,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
             # Make sure that all of the timers are dead
 
+            PP.pprint(vodou_priest.details['timers']) # TODO: remove
             assert len(vodou_priest.details['timers']) == 0
             assert len(opponent.details['timers']) == 0
 
