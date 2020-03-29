@@ -21,6 +21,7 @@ class Timer(object):
                  details    # dict from the Game File, contains timer's info
                  ):
         self.details = details  # This needs to actually be from the Game File
+        self.__complete_me()
 
     def decrement(self):
         self.details['rounds'] -= 1
@@ -80,6 +81,7 @@ class Timer(object):
             self.details['parent-name'] = '<< Unknown Parent >>'
         if 'actions' not in self.details:
             self.details['actions'] = {}
+        self.__complete_me()
 
     def get_description(self):
         '''
@@ -170,6 +172,19 @@ class Timer(object):
     def mark_owner_as_busy(self,
                            is_busy = True):
         self.details['busy'] = is_busy
+
+    def __complete_me(self):
+        '''
+        Fills-in any missing parts of the timer.
+        '''
+        if self.details is None:
+            self.details = {}
+        if 'busy' not in self.details:
+            self.mark_owner_as_busy(is_busy = False)
+        if 'rounds' not in self.details:
+            self.details['rounds'] = 1
+        if 'actions' not in self.details:
+            self.details['actions'] = []
 
 
 class TimersWidget(object):
