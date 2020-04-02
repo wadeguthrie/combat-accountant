@@ -6,8 +6,6 @@ import curses.ascii
 import curses.textpad
 import re
 
-import pprint # TODO: remove
-
 
 '''
 How to use this GUI.

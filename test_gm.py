@@ -3023,7 +3023,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                 copy.deepcopy(self.__vodou_priest_fighter),
                                 self.__ruleset,
                                 self.__window_manager)
-
         opponent = ca_fighter.Fighter(
                                 'Opponent',
                                 'other_group',
@@ -3205,7 +3204,6 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
             # Make sure that all of the timers are dead
 
-            PP.pprint(vodou_priest.details['timers']) # TODO: remove
             assert len(vodou_priest.details['timers']) == 0
             assert len(opponent.details['timers']) == 0
 
