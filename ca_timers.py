@@ -424,12 +424,12 @@ class Timers(object):
 
         Returns nothing.
         '''
-
         remove_these = []
         for index, timer in enumerate(self.__timers['obj']):
             if timer.details['rounds'] < 0:     # < keeps the timers dying
                                                 #   this round
                 remove_these.insert(0, index)   # largest indexes last
+
         for index in remove_these:
             self.__fire_timer(self.__timers['obj'][index])
             self.remove_timer_by_index(index)

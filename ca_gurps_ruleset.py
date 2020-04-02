@@ -2920,8 +2920,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # If the spell lasts any time at all, put a timer up so that we see
             # that it's active
 
-            duration_timer = ca_timers.Timer(None)
+            duration_timer = None
             if complete_spell['duration'] > 0:
+                duration_timer = ca_timers.Timer(None)
                 duration_timer.from_pieces(
                            {'parent-name': fighter.name,
                             'rounds': (complete_spell['duration'] -
@@ -2940,7 +2941,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     ' Defense: none',
                     ' Move: none']
 
-            actions = {'timer': duration_timer.details}
+            actions = {}
+            if duration_timer is not None:
+                actions['timer'] = duration_timer.details
+
             if complete_spell['duration'] == 0:
                 actions['announcement'] = ('CAST SPELL (%s) FIRED' %
                                            complete_spell['name'])
@@ -2960,8 +2964,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                 action['opponent']['name'],
                                                 action['opponent']['group'])
 
-                spell_timer = ca_timers.Timer(None)
+                spell_timer = None
                 if complete_spell['duration'] > 0:
+                    spell_timer = ca_timers.Timer(None)
                     spell_timer.from_pieces(
                              {'parent-name': opponent.name,
                               'rounds': (complete_spell['duration'] -
@@ -2972,7 +2977,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
                 delay_timer = ca_timers.Timer(None)
 
-                actions = {'timer': spell_timer.details}
+                actions = {}
+                if spell_timer is not None:
+                    actions['timer'] = spell_timer.details
                 if complete_spell['duration'] == 0:
                     actions['announcement'] = ('SPELL (%s) AGAINST ME FIRED' %
                                                complete_spell['name'])
