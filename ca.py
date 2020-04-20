@@ -36,8 +36,7 @@ import ca_timers
 # TODO: crash history doesn't have any of the last stuff that happened
 # TODO: add preferred weapon/armor - this will be at the top of menus to draw
 #       or don
-# TODO: when removing skills, don't ask if you want to remove another when
-#       there are no more skills
+
 # TODO: when removing equipment, ask if you want to remove another
 # TODO: when creating new creatures -- duplicate creature
 # TODO: personnel changes, when not PCs showing, should modify the current
@@ -3134,7 +3133,10 @@ class PersonnelHandler(ScreenHandler):
             ability_menu = [(ability, ability)
                             for ability in
                             sorted(fighter.details[param].keys())]
-            bad_ability_name = self._window_manager.menu(
+            if len(fighter.details[param]) == 0:
+                bad_ability_name = None
+            else:
+                bad_ability_name = self._window_manager.menu(
                                         '%s to Remove' % param.capitalize(),
                                         ability_menu)
 
@@ -3143,6 +3145,9 @@ class PersonnelHandler(ScreenHandler):
 
             del fighter.details[param][bad_ability_name]
             self._draw_screen()
+
+            if len(fighter.details[param]) == 0:
+                return True
 
             keep_asking = self._window_manager.menu(
                                         'Remove More %s' % param.capitalize(),
