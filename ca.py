@@ -37,10 +37,7 @@ import ca_timers
 # TODO: add preferred weapon/armor - this will be at the top of menus to draw
 #       or don
 
-# TODO: when removing equipment, ask if you want to remove another
 # TODO: when creating new creatures -- duplicate creature
-# TODO: personnel changes, when not PCs showing, should modify the current
-#       group
 # TODO: add 'controlled/marked' to consciousness menu
 # TODO: hold action = change init.  Best done by saving initiative stuff in
 #   current fight.
@@ -2974,8 +2971,17 @@ class PersonnelHandler(ScreenHandler):
         if fighter is None:
             return None
 
-        self.__equipment_manager.remove_equipment(fighter)
-        self._draw_screen()
+        keep_asking_menu = [('yes', True), ('no', False)]
+        keep_asking = True
+        while keep_asking:
+            item = self.__equipment_manager.remove_equipment(fighter)
+            self._draw_screen()
+            if item is None or len(fighter.details['stuff']) == 0:
+                return True
+
+            keep_asking = self._window_manager.menu(
+                                        'Remove More Equipment',
+                                        keep_asking_menu)
         return True  # Menu handler's success returns anything but 'None'
 
     def __remove_spell(self,
