@@ -24,6 +24,24 @@ import ca_timers
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
 
+# TODO: the '-hp' action asks whether attacker should attack - that should be
+#       a 2 part action if it isn't already
+# TODO: does '-' for HP do actions without untintentional 2-parts (should
+#       xxx attack should result in a separate action as should the resultant
+#       subtraction of HP).
+# TODO: HP damage shows up twice in the history - adjust-hp and adjust-hp-really
+#       only one should end up in history
+#
+# TODO: should timer firings make it into history?
+# TODO: crash history doesn't have any of the last stuff that happened
+# TODO: add preferred weapon/armor - this will be at the top of menus to draw
+#       or don
+# TODO: when removing skills, don't ask if you want to remove another when
+#       there are no more skills
+# TODO: when removing equipment, ask if you want to remove another
+# TODO: when creating new creatures -- duplicate creature
+# TODO: personnel changes, when not PCs showing, should modify the current
+#       group
 # TODO: add 'controlled/marked' to consciousness menu
 # TODO: hold action = change init.  Best done by saving initiative stuff in
 #   current fight.

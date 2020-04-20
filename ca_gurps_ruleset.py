@@ -1731,7 +1731,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         dr_text_array = []
         armor, armor_index = fighter.get_current_armor()
         if armor is not None:
-            # TODO: ruleset specific
             dr += armor['dr']
             dr_text_array.append(armor['name'])
 
@@ -2755,9 +2754,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                       'mode': curses.A_NORMAL}]
                                   )
 
-                self._window_manager.display_window(
-                                    ('Did %d hp damage to...' % -adj),
-                                    window_text)
+            self._window_manager.display_window(
+                                ('Did %d hp damage to...' % -adj),
+                                window_text)
 
             # Check for Death (B327)
             adjusted_hp = fighter.details['current']['hp'] + adj

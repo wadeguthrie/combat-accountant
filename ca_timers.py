@@ -40,9 +40,9 @@ class Timer(object):
 
         if 'announcement' in self.details['actions']:
             window_manager.display_window(
-                           ('Timer Fired for %s' % self.details['parent-name']),
-                            [[{'text': self.details['actions']['announcement'],
-                               'mode': curses.A_NORMAL }]])
+                       ('Timer Fired for %s' % self.details['parent-name']),
+                        [[{'text': self.details['actions']['announcement'],
+                           'mode': curses.A_NORMAL }]])
 
         if 'timer' in self.details['actions']:
             result = self.details['actions']['timer']
@@ -75,12 +75,7 @@ class Timer(object):
         Creates a new timer from scratch (rather than from data that's already
         in the Game File).
         '''
-
         self.details = copy.deepcopy(pieces)
-        if 'parent-name' not in self.details:
-            self.details['parent-name'] = '<< Unknown Parent >>'
-        if 'actions' not in self.details:
-            self.details['actions'] = {}
         self.__complete_me()
 
     def get_description(self):
@@ -179,12 +174,14 @@ class Timer(object):
         '''
         if self.details is None:
             self.details = {}
+        if 'parent-name' not in self.details:
+            self.details['parent-name'] = '<< Unknown Parent >>'
         if 'busy' not in self.details:
             self.mark_owner_as_busy(is_busy = False)
         if 'rounds' not in self.details:
             self.details['rounds'] = 1
         if 'actions' not in self.details:
-            self.details['actions'] = []
+            self.details['actions'] = {}
 
 
 class TimersWidget(object):
