@@ -24,11 +24,13 @@ import ca_timers
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
 
+# TODO: when a fighter is skipped (maybe, because they are busy), enter that
+#       into the history
+
 # TODO: If FP go below 0, I believe there's a save on every round to not go
 #       unconscious.  Also, note that there's a house rule that we're not
 #       dealing with low FP.
 # TODO: these need to be 2 part:
-#           - do_attack picks opponent
 #           - do_custom_action asks what the action is (maybe should be done
 #               before calling)
 #           - adjust_hp

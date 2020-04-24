@@ -29,6 +29,8 @@ class Ruleset(object):
 
     (UNHANDLED, HANDLED_OK, HANDLED_ERROR, DONT_LOG) = range(4)
 
+    has_2_parts = {'user-defined': True}
+
     def __init__(self,
                  window_manager  # GmWindowManager object for menus and errors
                  ):
