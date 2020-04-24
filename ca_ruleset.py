@@ -1,5 +1,6 @@
 #! /usr/bin/python
 
+import pprint
 import random
 
 import ca_fighter
@@ -66,6 +67,10 @@ class Ruleset(object):
 
         Returns nothing.
         '''
+        PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+        print '\n=== Ruleset.do_action ===' # TODO: remove
+        PP.pprint(action) # TODO: remove
+
         handled = self._perform_action(fighter, action, fight_handler, logit)
         self._record_action(fighter, action, fight_handler, handled, logit)
 
@@ -507,6 +512,10 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
+        PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
+        print '\nRuleset.__do_reload' # TODO: remove
+        PP.pprint(action)   # TODO: remove
+
         weapon, weapon_index = fighter.get_current_weapon()
         if weapon is None or 'ammo' not in weapon:
             return Ruleset.HANDLED_ERROR
@@ -627,6 +636,7 @@ class Ruleset(object):
             'user-defined':         {'doit': self.__do_custom_action},
         }
 
+        print '\nRuleset._perform_action' # TODO: remove
         handled = Ruleset.UNHANDLED
         if 'action-name' in action:
             if action['action-name'] in actions:
@@ -679,7 +689,11 @@ class Ruleset(object):
         Returns: nothing.
         '''
 
+        print '\nRuleset._record_action, handled = %r' % handled # TODO: remove
         if fight_handler is not None and logit and handled != Ruleset.DONT_LOG:
+            print '  adding to history'
+            PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+            PP.pprint(action) # TODO: remove
             fight_handler.add_to_history(action)
 
         return

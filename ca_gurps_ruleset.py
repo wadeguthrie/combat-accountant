@@ -2,6 +2,7 @@
 
 import copy
 import curses
+import pprint
 import random
 
 import ca_fighter
@@ -134,6 +135,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # 'name': {'ask': 'number' | 'string' }
             #         {'value': value}
             "Acting": {'ask': 'number'},
+            "Acrobatics": {'ask': 'number'},
             "Area Knowledge (Space Station)": {'ask': 'number'},
             "Armoury (Heavy Weapons)": {'ask': 'number'},
             "Armoury (Small Arms)": {'ask': 'number'},
@@ -141,10 +143,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             "Bartender": {'ask': 'number'},
             "Beam Weapons (Pistol)": {'ask': 'number'},
             "Beam Weapons (Rifle)": {'ask': 'number'},
+            "Biology": {'ask': 'number'},
             "Brawling": {'ask': 'number'},
             "Camouflage": {'ask': 'number'},
             "Climbing": {'ask': 'number'},
-            "Climbing": {'ask': 'number'},
+            "Connoisseur (Whisky)": {'ask': 'number'},
             "Computer Hacking": {'ask': 'number'},
             "Computer Operation": {'ask': 'number'},
             "Computer Programming": {'ask': 'number'},
@@ -152,8 +155,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             "Cryptography": {'ask': 'number'},
             "Current Affairs (Teraforming)": {'ask': 'number'},
             "Detect Lies": {'ask': 'number'},
+            "Disarming (Knife)": {'ask': 'number'},
             "Diplomacy": {'ask': 'number'},
             "Electronics Operation (Security)": {'ask': 'number'},
+            "Electronics Operation (Sensors)": {'ask': 'number'},
             "Electronics Operation (Teraforming)": {'ask': 'number'},
             "Electronics Repair (Security)": {'ask': 'number'},
             "Electronics Repair (Teraforming)": {'ask': 'number'},
@@ -189,14 +194,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             "Mathematics (Applied)": {'ask': 'number'},
             "Mechanic (Spacecraft)": {'ask': 'number'},
             "Observation": {'ask': 'number'},
+            "Off-Hand Weapon Training (Knife)": {'ask': 'number'},
             "Physician": {'ask': 'number'},
             "Physics": {'ask': 'number'},
             "Pickpocket": {'ask': 'number'},
             "Piloting (Loader Mech)": {'ask': 'number'},
             "Piloting (Low-Performance Spacecraft)": {'ask': 'number'},
+            "Poisons": {'ask': 'number'},
             "Running": {'ask': 'number'},
+            "Savoir-Faire (Mafia)": {'ask': 'number'},
+            "Savoir-Faire (Police)": {'ask': 'number'},
             "Scrounging": {'ask': 'number'},
             "Search": {'ask': 'number'},
+            "Shadowing": {'ask': 'number'},
+            "Smuggling": {'ask': 'number'},
             "Stealth": {'ask': 'number'},
             "Streetwise": {'ask': 'number'},
             "Theology (Vodun)": {'ask': 'number'},
@@ -208,6 +219,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         },
         'advantages': {
             "Acute Vision": {'ask': 'number'},
+            "Always snacking, always carrying food": {'value': -1},
             "Phobia": {'ask': 'string'},
             "Alcohol Intolerance": {'value': -1},
             "Appearance": {'ask': 'string'},
@@ -220,6 +232,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             "Compulsive Behavior": {'ask': 'string'},
             "Cultural Familiarity": {'ask': 'string'},
             "Curious": {'value': -5},
+            "Debt": {'ask': 'number'},
             "Deep Sleeper": {'value': 1},
             "Delusions": {'ask': 'string'},
             "Distractible": {'value': 1},
@@ -241,9 +254,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             "Light Sleeper": {'value': -5},
             "Like (Quirk) ": {'ask': 'string'},
             "Lwa": {'ask': 'string'},
+            "Miserliness": {'ask': 'number'},
             "Night Vision": {'ask': 'number'},
             "No Sense of Humor": {'value': -10},
             "Nosy": {'value': -1},
+            "Obsession": {'value': -1},
+            "Overconfidence": {'ask': 'number'},
             "Personality Change": {'ask': 'string'},
             "Pyromania": {'value': -10},
             "Rapid Healing": {'value': 5},
@@ -2634,6 +2650,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                    fight_handler    # FightHandler object
                    ):
         '''
+        Action handler for GurpsRuleset.
+
         NOTE: This is a huge tangle because, for the GurpsRuleset, we need to
         ask questions (i.e., whether or not to subtract DR from the HP).
         Because of that, there are 2 events: 1) adjust-hp asks the question
@@ -3087,9 +3105,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             # Send the action for the second part
 
-            new_action = {'action-name': 'cast-spell',
-                          'complete spell': complete_spell,
-                          'part': 2}
+            new_action = copy.deepcopy(action)
+            new_action['complete spell'] = complete_spell
+            new_action['part'] = 2
 
             if opponent is not None:
                 new_action['opponent'] = {'name': opponent.name,
@@ -3270,6 +3288,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                  action,        # {'action-name': 'aim',
                                 #  'braced': <bool> # see B364
                                 #  'comment': <string>, # optional
+                                #  'part': 2          # optional }
                  fight_handler  # FightHandler object
                  ):
         '''
@@ -3280,30 +3299,54 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
         '''
+        PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
+        print '\nGurpsRuleset.__do_aim' # TODO: remove
+        PP.pprint(action)   # TODO: remove
 
-        if fight_handler is not None and not fight_handler.world.playing_back:
-            if fighter.details['opponent'] is None:
-                fight_handler.pick_opponent()
+        if 'part' in action and action['part'] == 2:
+            # This is the 2nd part of a 2-part action.  This part of the action
+            # actually perfoms all the GurpsRuleset-specific actions and
+            # side-effects of aiming the Fighter's current weapon.
 
-        rounds = fighter.details['aim']['rounds']
-        if rounds == 0:
-            fighter.details['aim']['braced'] = action['braced']
-            fighter.details['aim']['rounds'] = 1
-        elif rounds < 3:
-            fighter.details['aim']['rounds'] += 1
+            rounds = fighter.details['aim']['rounds']
+            if rounds == 0:
+                fighter.details['aim']['braced'] = action['braced']
+                fighter.details['aim']['rounds'] = 1
+            elif rounds < 3:
+                fighter.details['aim']['rounds'] += 1
 
-        # Timer
+            # Timer
 
-        timer = ca_timers.Timer(None)
-        timer.from_pieces(
-                {'parent-name': fighter.name,
-                 'rounds': 1 - ca_timers.Timer.announcement_margin,
-                 'string': [('Aim%s' % (' (braced)' if action['braced']
-                                        else '')),
-                            ' Defense: any loses aim',
-                            ' Move: step']})
+            timer = ca_timers.Timer(None)
+            timer.from_pieces(
+                    {'parent-name': fighter.name,
+                     'rounds': 1 - ca_timers.Timer.announcement_margin,
+                     'string': [('Aim%s' % (' (braced)' if action['braced']
+                                            else '')),
+                                ' Defense: any loses aim',
+                                ' Move: step']})
 
-        return timer
+            return timer
+
+        else:
+            # This is the 1st part of a 2-part action.  This part of the
+            # action asks questions of the user and sends the second part
+            # The 1st part isn't executed when playing back.
+
+            if fight_handler is not None and fight_handler.world.playing_back:
+                return None  # No timers
+
+            if fight_handler is not None:
+                if fighter.details['opponent'] is None:
+                    fight_handler.pick_opponent()
+
+            # Send the action for the second part
+
+            new_action = copy.deepcopy(action)
+            new_action['part'] = 2
+            self.do_action(fighter, new_action, fight_handler)
+
+            return None  # No timer
 
     def __do_attack(self,
                     fighter,        # Fighter object
@@ -3494,8 +3537,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
         '''
+        PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
+        print '\nGurpsRuleset.__do_reload' # TODO: remove
+        PP.pprint(action)   # TODO: remove
 
         if 'part' in action and action['part'] == 2:
+            print '  PART 2 of reload' # TODO: remove
             # This is the 2nd part of a 2-part action.  This part of the action
             # actually perfoms all the GurpsRuleset-specific actions and
             # side-effects of reloading the Fighter's current weapon.  Note
@@ -3521,17 +3568,21 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # This is the 1st part of a 2-part action.  This part of the
             # action asks questions of the user and sends the second part
             # The 1st part isn't executed when playing back.
+            print '  PART 1 of reload' # TODO: remove
 
             if fight_handler is not None and fight_handler.world.playing_back:
+                print '  PLAYING BACK, returning' # TODO: remove
                 return None  # No timer
 
             weapon, weapon_index = fighter.get_current_weapon()
             if weapon is None or 'ammo' not in weapon:
+                print '  NO AMMO, returning' # TODO: remove
                 return None  # No timer
 
             # Check to see if we need a reload at all
 
             if weapon['ammo']['shots_left'] == weapon['ammo']['shots']:
+                print '  AMMO FULL, returning' # TODO: remove
                 return None  # No timer
 
             # If we do, how long will it take?
@@ -3557,12 +3608,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         reload_time -= 1
 
             if reload_time > 0:
-                new_action = {'action-name': 'reload',
-                              'time': reload_time,
-                              'part': 2}
+                print '  >>> RELOADING, making new action' # TODO: remove
+                new_action = copy.deepcopy(action)
+                new_action['time'] = reload_time
+                new_action['part'] = 2
                 if 'notimer' in action:
                     new_action['notimer'] = action['notimer']
                 self.do_action(fighter, new_action, fight_handler)
+                print '  <<< done making new action' # TODO: remove
 
             return None  # No timer
 
@@ -3648,11 +3701,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns: nothing
         '''
 
+        print '\nGurpsRuleset._perform_action' # TODO: remove
         # Label the action so playback knows who receives it.
 
-        action['fighter'] = {}
-        action['fighter']['name'] = fighter.name
-        action['fighter']['group'] = fighter.group
+        action['fighter'] = {'name': fighter.name,
+                             'group': fighter.group}
 
         # PP = pprint.PrettyPrinter(indent=3, width=150)
         # PP.pprint(action)
@@ -3663,7 +3716,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # original action just returns.  That way, there are no questions on
         # playback and the answers are the same as they were the first time.
 
-        has_2_parts = {'cast-spell': True, 'reload': True}
+        has_2_parts = {'aim': True,
+                       'cast-spell': True,
+                       'reload': True}
 
         # Call base class' perform_action FIRST because GurpsRuleset depends on
         # the actions of the base class.  It make no sense for the base class'
@@ -3673,13 +3728,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # and the second part does the actual deed), only call the base class
         # on the second part.
 
-        if (not action['action-name'] in has_2_parts or
+        two_part_action = True if (
+                'action-name' in action and
+                (action['action-name'] in has_2_parts)) else False
+
+        if (not two_part_action or
                 ('part' in action and action['part'] == 2)):
+            print '  calling parent (not 1st part of 2 part)' # TODO: remove
             handled = super(GurpsRuleset, self)._perform_action(fighter,
                                                                 action,
                                                                 fight_handler)
         else:
-            handled = ca_ruleset.Ruleset.UNHANDLED
+            print '  handled = DONT_LOG (1st part of 2 part)' # TODO: remove
+            # Don't log a multi-part action until its last part.
+            handled = ca_ruleset.Ruleset.DONT_LOG
 
         actions = {
             'adjust-fp':            {'doit': self.__do_adjust_fp},
@@ -3721,6 +3783,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             if action_info['doit'] is not None:
                 timer = action_info['doit'](fighter, action, fight_handler)
 
+            # TODO: this block should be a gurps_ruleset function that is
+            #   called from each of the 'doit' modules.  The 'doit' modules
+            #   should each return 'handled' like the base class 'doit'
+            #   modules do.
+
             # If the base class has asked us not to log, we'll honor that.
             if handled != ca_ruleset.Ruleset.DONT_LOG:
                 handled = ca_ruleset.Ruleset.HANDLED_OK
@@ -3728,6 +3795,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 if timer is not None and logit:
                     fighter.timers.add(timer)
 
+        print '  GurpsRuleset._perform_action returning %r' % handled # TODO: remove
         return handled
 
     def _record_action(self,
@@ -3746,7 +3814,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         Returns: nothing.
         '''
-        if handled == ca_ruleset.Ruleset.DONT_LOG:
+        print '\nGurpsRuleset._record_action, handled = %r' % handled # TODO: remove
+        if (handled == ca_ruleset.Ruleset.DONT_LOG or
+                'action-name' not in action):
             return
 
         super(GurpsRuleset, self)._record_action(fighter,
