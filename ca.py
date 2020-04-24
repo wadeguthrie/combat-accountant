@@ -24,35 +24,26 @@ import ca_timers
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
 
+# TODO: crash history doesn't have any of the last stuff that happened
 # TODO: when a fighter is skipped (maybe, because they are busy), enter that
 #       into the history
-
 # TODO: If FP go below 0, I believe there's a save on every round to not go
 #       unconscious.  Also, note that there's a house rule that we're not
 #       dealing with low FP.
-# TODO: these need to be 2 part:
-#           - adjust_hp
-
+# TODO: hold action = change init.  Best done by saving initiative stuff in
+#   current fight.
+# ----
 # TODO: auto-reload at the beginning of the round shouldn't insert timer.
 #       Should also be able to save partial batteries.
 #       Reload at end of round shouldn't carry-over (maybe all timers get
 #       expunged when the fight isn't saved for next time)
 
-# TODO: the '-hp' action asks whether attacker should attack - that should be
-#       a 2 part action if it isn't already
-# TODO: does '-' for HP do actions without untintentional 2-parts (should
-#       xxx attack should result in a separate action as should the resultant
-#       subtraction of HP).
-#
 # TODO: should timer firings make it into history?
-# TODO: crash history doesn't have any of the last stuff that happened
 # TODO: add preferred weapon/armor - this will be at the top of menus to draw
 #       or don
 
 # TODO: when creating new creatures -- duplicate creature
 # TODO: add 'controlled/marked' to consciousness menu
-# TODO: hold action = change init.  Best done by saving initiative stuff in
-#   current fight.
 
 
 class CaGmWindowManager(ca_gui.GmWindowManager):
@@ -1192,6 +1183,11 @@ class ScreenHandler(object):
                        'help': 'Prints this text.'},
         }
 
+        if ARGS.debug:
+            self._choices[ord('X')] = {'name': 'CRASH',
+                                       'func': self._crash,
+                                       'help': 'Crashes the system.'}
+
     @staticmethod
     def string_from_character_input(char    # character to convert
                                     ):
@@ -1281,6 +1277,10 @@ class ScreenHandler(object):
                 return False  # Found a problem
 
         self._choices.update(new_choices)
+
+    def _crash(self):
+        gonna_crash_it = {}
+        check = gonna_crash_it['crash_it_now']
 
     def _draw_screen(self):
         '''
@@ -5790,6 +5790,11 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--verbose', help='verbose', action='store_true',
                         default=False)
     parser.add_argument(
+            '-d', '--debug',
+            help='Enable debugging features.  Debugging only.',
+            action='store_true',
+            default=False)
+    parser.add_argument(
             '-m', '--maintain_game_file',
             help='Don\'t overwrite the input Game File.  Debugging only.',
             action='store_true',
@@ -5924,3 +5929,8 @@ if __name__ == '__main__':
         if not orderly_shutdown:
             if program is not None:
                 program.make_bug_report(None, 'CRASH', filename)
+
+else:
+    # Just to get some tests to pass
+    class ARGS:
+        debug = False
