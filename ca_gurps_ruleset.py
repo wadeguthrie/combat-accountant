@@ -2707,6 +2707,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             return ca_ruleset.Ruleset.HANDLED_OK
 
         adj = action['adj']
+        dr_comment = None
         quiet = False if 'quiet' not in action else action['quiet']
 
         if adj < 0:
@@ -2772,6 +2773,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                       'mode': curses.A_NORMAL}]
                                   )
 
+                dr_comment = ' (%d HP after dr)' % -adj
             self._window_manager.display_window(
                                 ('Did %d hp damage to...' % -adj),
                                 window_text)
@@ -2866,9 +2868,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # Have to copy the action because using the old one confuses the
         # do_action routine that called this function.
         new_action = copy.deepcopy(action)
+
+        if dr_comment is not None and 'comment' in new_action:
+            new_action['comment'] += dr_comment
         new_action['action-name'] = 'adjust-hp-really'
         self.do_action(fighter, new_action, fight_handler)
-        return ca_ruleset.Ruleset.HANDLED_OK
+        return ca_ruleset.Ruleset.DONT_LOG
 
     def __adjust_hp_really(self,
                            fighter,         # Fighter object
@@ -3299,9 +3304,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
         '''
-        PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
-        print '\nGurpsRuleset.__do_aim' # TODO: remove
-        PP.pprint(action)   # TODO: remove
 
         if 'part' in action and action['part'] == 2:
             # This is the 2nd part of a 2-part action.  This part of the action
@@ -3537,12 +3539,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
         '''
-        PP = pprint.PrettyPrinter(indent=3, width=150)  # TODO: remove
-        print '\nGurpsRuleset.__do_reload' # TODO: remove
-        PP.pprint(action)   # TODO: remove
 
         if 'part' in action and action['part'] == 2:
-            print '  PART 2 of reload' # TODO: remove
             # This is the 2nd part of a 2-part action.  This part of the action
             # actually perfoms all the GurpsRuleset-specific actions and
             # side-effects of reloading the Fighter's current weapon.  Note
@@ -3568,21 +3566,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # This is the 1st part of a 2-part action.  This part of the
             # action asks questions of the user and sends the second part
             # The 1st part isn't executed when playing back.
-            print '  PART 1 of reload' # TODO: remove
 
             if fight_handler is not None and fight_handler.world.playing_back:
-                print '  PLAYING BACK, returning' # TODO: remove
                 return None  # No timer
 
             weapon, weapon_index = fighter.get_current_weapon()
             if weapon is None or 'ammo' not in weapon:
-                print '  NO AMMO, returning' # TODO: remove
                 return None  # No timer
 
             # Check to see if we need a reload at all
 
             if weapon['ammo']['shots_left'] == weapon['ammo']['shots']:
-                print '  AMMO FULL, returning' # TODO: remove
                 return None  # No timer
 
             # If we do, how long will it take?
@@ -3608,14 +3602,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         reload_time -= 1
 
             if reload_time > 0:
-                print '  >>> RELOADING, making new action' # TODO: remove
                 new_action = copy.deepcopy(action)
                 new_action['time'] = reload_time
                 new_action['part'] = 2
                 if 'notimer' in action:
                     new_action['notimer'] = action['notimer']
                 self.do_action(fighter, new_action, fight_handler)
-                print '  <<< done making new action' # TODO: remove
 
             return None  # No timer
 
@@ -3698,10 +3690,55 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         the Fighter did but it can also mark the Fighter as busy for a
         multi-round action.
 
+        IN ORDER TO DO A 2 PART ACTION, DO THE FOLLOWING:
+
+            * add action name to |has_2_parts|, below
+            * build your action handler as follows:
+
+            def __do_whatever(self,
+                              fighter,       # Fighter object
+                              action,
+                              fight_handler  # FightHandler object
+                              ):
+                if 'part' in action and action['part'] == 2:
+                    # This is the 2nd part of a 2-part action.  This part
+                    # actually perfoms all the GurpsRuleset-specific actions
+                    # and side-effects of doing whatever.
+
+                    # DO THE ACTUAL WORK WITHOUT ANY USER INTERFACE
+
+                    # MAKE THE TIMER, HERE, TO SHOW THE ACTION ON THE
+                    # FIGHTER'S DISPLAY.
+
+                    return timer
+                else:
+
+                    # This is the 1st part of a 2-part action.  This part of
+                    # the action asks questions of the user and sends the
+                    # second part.  The 1st part isn't executed when playing
+                    # back.
+
+                    # Don't do the first part when playing back.
+                    if (fight_handler is not None and
+                            fight_handler.world.playing_back):
+                        return None  # No timers
+
+                    # DO ANY USER-INTERFACE STUFF
+
+                    # Send the action for the second part
+
+                    # Do a deepcopy for the second part to copy the comment --
+                    # that's what gets displayed for the history command.
+
+                    new_action = copy.deepcopy(action)
+                    new_action['part'] = 2
+                    self.do_action(fighter, new_action, fight_handler)
+
+                    return None # No timers for part 1
+
         Returns: nothing
         '''
 
-        print '\nGurpsRuleset._perform_action' # TODO: remove
         # Label the action so playback knows who receives it.
 
         action['fighter'] = {'name': fighter.name,
@@ -3734,12 +3771,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         if (not two_part_action or
                 ('part' in action and action['part'] == 2)):
-            print '  calling parent (not 1st part of 2 part)' # TODO: remove
             handled = super(GurpsRuleset, self)._perform_action(fighter,
                                                                 action,
                                                                 fight_handler)
         else:
-            print '  handled = DONT_LOG (1st part of 2 part)' # TODO: remove
             # Don't log a multi-part action until its last part.
             handled = ca_ruleset.Ruleset.DONT_LOG
 
@@ -3795,7 +3830,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 if timer is not None and logit:
                     fighter.timers.add(timer)
 
-        print '  GurpsRuleset._perform_action returning %r' % handled # TODO: remove
         return handled
 
     def _record_action(self,
@@ -3814,7 +3848,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         Returns: nothing.
         '''
-        print '\nGurpsRuleset._record_action, handled = %r' % handled # TODO: remove
         if (handled == ca_ruleset.Ruleset.DONT_LOG or
                 'action-name' not in action):
             return

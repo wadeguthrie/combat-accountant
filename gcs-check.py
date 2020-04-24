@@ -454,7 +454,6 @@ class Character(object):
 
         for skill_gcs in skills_gcs:
             base_name = skill_gcs.find('name').text
-            #print 'SKILL BASE NAME: "%r"' % base_name # TODO: remove
             specs = []
             for specialization in skill_gcs.findall('specialization'):
                 specs.append(specialization.text)
@@ -462,7 +461,6 @@ class Character(object):
                 name_text = '%s (%s)' % (base_name, ','.join(specs))
             else:
                 name_text = base_name
-            #print '  "%r"' % name_text # TODO: remove
 
             cost_text_gcs = skill_gcs.find('points')
             cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
@@ -498,7 +496,6 @@ class Character(object):
             name = advantage_gcs.find('name')
             cost_gcs = self.__get_advantage_cost(advantage_gcs)
 
-            #print 'ADVANTAGE NAME: "%r"' % name.text # TODO: remove
             for modifier in advantage_gcs.findall('modifier'):
                 #modifier_name = modifier.find('name')
                 #print '-modifier name: "%r"' % modifier_name.text
@@ -531,7 +528,6 @@ class Character(object):
             self.__add_advantage_to_gcs_list(child, self.advantages_gcs)
 
         for name in self.advantages_gcs:
-            #print 'ADVANTAGE NAME: "%r"' % name # TODO: remove
             if name not in advantages_json:
                 print '   **GCS> "%s" (%r) in GCS but not in JSON' % (
                                                     name,
@@ -550,13 +546,13 @@ class Character(object):
     def check_spells(self):
         ## SPELLS #####
         # TODO: need to include difficulty level
-        # TODO: should do a better job of making sure that both files either 
+        # TODO: should do a better job of making sure that both files either
         #   DO have spells or DON'T have spells
 
         spells_gcs = self.char_gcs.find('spell_list')
         if spells_gcs is not None:
             if 'spells' in self.char_json:
-                spells_json = {k['name']: k['skill'] 
+                spells_json = {k['name']: k['skill']
                                             for k in self.char_json['spells']}
             else:
                 spells_json = {}

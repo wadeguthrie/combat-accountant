@@ -28,11 +28,10 @@ import ca_timers
 #       unconscious.  Also, note that there's a house rule that we're not
 #       dealing with low FP.
 # TODO: these need to be 2 part:
-#           - do_attack picks opponent -- maybe not
+#           - do_attack picks opponent
 #           - do_custom_action asks what the action is (maybe should be done
 #               before calling)
 #           - adjust_hp
-# TODO: history display shouldn't show part 1 of 2-part actions
 
 # TODO: auto-reload at the beginning of the round shouldn't insert timer.
 #       Should also be able to save partial batteries.
@@ -44,8 +43,6 @@ import ca_timers
 # TODO: does '-' for HP do actions without untintentional 2-parts (should
 #       xxx attack should result in a separate action as should the resultant
 #       subtraction of HP).
-# TODO: HP damage shows up twice in the history - adjust-hp and adjust-hp-really
-#       only one should end up in history
 #
 # TODO: should timer firings make it into history?
 # TODO: crash history doesn't have any of the last stuff that happened
