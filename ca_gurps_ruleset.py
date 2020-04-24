@@ -3792,6 +3792,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # |handled| will be overwritten by that call.
             handled = ca_ruleset.Ruleset.DONT_LOG
 
+        # NOTE: there's currently no mechanism for moving a base class'
+        # modified action to the derived class to further modify.
+
         if two_part_base and two_part_derived:
             call_base_class = True
             call_derived_class = True

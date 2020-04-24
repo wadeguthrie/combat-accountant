@@ -31,8 +31,6 @@ import ca_timers
 #       unconscious.  Also, note that there's a house rule that we're not
 #       dealing with low FP.
 # TODO: these need to be 2 part:
-#           - do_custom_action asks what the action is (maybe should be done
-#               before calling)
 #           - adjust_hp
 
 # TODO: auto-reload at the beginning of the round shouldn't insert timer.
