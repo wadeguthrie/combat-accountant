@@ -1,5 +1,6 @@
 #! /usr/bin/python
 
+import copy
 import pprint
 import random
 
@@ -469,24 +470,44 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
+
         if 'part' in action and action['part'] == 2:
-            return Ruleset.HANDLED_OK   # We're here just so the new action can
-                                        # get logged
-        height = 1
-        title = 'What Action Is Performed'
-        width = self._window_manager.getmaxyx()
-        comment_string = self._window_manager.input_box(height, width, title)
+            # This is the 2nd part of a 2-part action.   We're here just so
+            # part 2 of the action can get logged.
+            return Ruleset.HANDLED_OK
 
-        new_action = {'action-name': 'user-defined',
-                      'part': 2}
+        else:
+            # This is the 1st part of a 2-part action.  This part of
+            # the action asks questions of the user and sends the
+            # second part.  The 1st part isn't executed when playing
+            # back.
 
-        if 'comment' in action:
-            new_action['comment'] = '%s -- ' % action['comment']
-        new_action['comment'] += comment_string
+            # Don't do the first part when playing back.
+            if (fight_handler is not None and
+                    fight_handler.world.playing_back):
+                return Ruleset.HANDLED_OK
 
-        self.do_action(fighter, new_action, fight_handler)
+            height = 1
+            title = 'What Action Is Performed'
+            width = self._window_manager.getmaxyx()
+            comment_string = self._window_manager.input_box(height, width, title)
 
-        return Ruleset.DONT_LOG
+            # Send the action for the second part
+
+            # Do a deepcopy for the second part to copy the comment --
+            # that's what gets displayed for the history command.
+
+            new_action = copy.deepcopy(action)
+            new_action['part'] = 2
+
+            if 'comment' in new_action:
+                new_action['comment'] = '%s -- ' % action['comment']
+            new_action['comment'] += comment_string
+
+            self.do_action(fighter, new_action, fight_handler)
+
+            return Ruleset.DONT_LOG
+
 
     def __do_reload(self,
                     fighter,          # Fighter object
