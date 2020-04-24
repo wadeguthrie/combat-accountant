@@ -24,6 +24,21 @@ import ca_timers
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
 
+# TODO: If FP go below 0, I believe there's a save on every round to not go
+#       unconscious.  Also, note that there's a house rule that we're not
+#       dealing with low FP.
+# TODO: these need to be 2 part:
+#           - do_attack picks opponent -- maybe not
+#           - do_custom_action asks what the action is (maybe should be done
+#               before calling)
+#           - adjust_hp
+# TODO: history display shouldn't show part 1 of 2-part actions
+
+# TODO: auto-reload at the beginning of the round shouldn't insert timer.
+#       Should also be able to save partial batteries.
+#       Reload at end of round shouldn't carry-over (maybe all timers get
+#       expunged when the fight isn't saved for next time)
+
 # TODO: the '-hp' action asks whether attacker should attack - that should be
 #       a 2 part action if it isn't already
 # TODO: does '-' for HP do actions without untintentional 2-parts (should
@@ -5783,7 +5798,7 @@ if __name__ == '__main__':
             action='store_true',
             default=False)
     parser.add_argument('-p', '--playback',
-                        help='Play the saved history back.  Debugging only.')
+                        help='Play history in bug report.  Debugging only.')
 
     ARGS = parser.parse_args()
 
@@ -5791,6 +5806,10 @@ if __name__ == '__main__':
     # sys.exit(2)
 
     PP = pprint.PrettyPrinter(indent=3, width=150)
+
+    print '\n=== STARTING HERE ===' # TODO: remove
+    PP.pprint(ARGS) # TODO: remove
+
     playback_history = None
 
     program = None
@@ -5803,9 +5822,16 @@ if __name__ == '__main__':
         prefs = {}
         filename = None
         if ARGS.playback is not None:
+            print '\n--- Playback is: %s ---' % ARGS.playback # TODO: remove
             with ca_json.GmJson(ARGS.playback) as bug_report:
+                print 'opened file' # TODO: remove
                 filename = bug_report.read_data['snapshots']['fight']
                 playback_history = bug_report.read_data['history']
+
+                print 'file' # TODO: remove
+                PP.pprint(filename) # TODO: remove
+                print 'history' # TODO: remove
+                PP.pprint(playback_history) # TODO: remove
         else:
             filename = ARGS.filename
 
