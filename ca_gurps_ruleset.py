@@ -3692,7 +3692,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         IN ORDER TO DO A 2 PART ACTION, DO THE FOLLOWING:
 
-            * add action name to |has_2_parts|, below
+            * add action name to |has_2_parts| here or in the base class,
             * build your action handler as follows:
 
             def __do_whatever(self,
@@ -3765,18 +3765,71 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # and the second part does the actual deed), only call the base class
         # on the second part.
 
-        two_part_action = True if (
-                'action-name' in action and
-                (action['action-name'] in has_2_parts)) else False
+        # Is this a 2-part action in either the base class (Ruleset) or the
+        # derived class (GurpsRuleset)?
 
-        if (not two_part_action or
-                ('part' in action and action['part'] == 2)):
+        two_part_base = False
+        two_part_derived = False
+
+        if 'action-name' in action:
+            action_name = action['action-name']
+            two_part_base = True if (
+                action_name in ca_ruleset.Ruleset.has_2_parts) else False
+            two_part_derived = True if (
+                action_name in has_2_parts) else False
+
+        # Figure out when to call the base class / derived class for which
+        # parts.
+
+        call_base_class = False
+        call_derived_class = False
+
+        part = 2 if 'part' in action and action['part'] == 2 else 1
+
+        if part == 1:
+            # Don't log a multi-part action until its last part.  If this is
+            # a single-part action, the base class will be called and
+            # |handled| will be overwritten by that call.
+            handled = ca_ruleset.Ruleset.DONT_LOG
+
+        if two_part_base and two_part_derived:
+            call_base_class = True
+            call_derived_class = True
+        elif two_part_base and not two_part_derived:
+            if part == 1:
+                call_base_class = True
+                call_derived_class = False
+            else:
+                call_base_class = True
+                call_derived_class = True
+        elif not two_part_base and two_part_derived:
+            if part == 1:
+                call_base_class = False
+                call_derived_class = True
+            else:
+                call_base_class = True
+                call_derived_class = True
+        else: # not two_part_base and two_part_derived
+            if part == 1:
+                call_base_class = True
+                call_derived_class = True
+            else:
+                call_base_class = False
+                call_derived_class = False
+                self._window_manager.error(
+                        ['action "%s" not expected to have a part 2' %
+                        action['action-name']])
+                handled = ca_ruleset.Ruleset.HANDLED_ERROR
+
+        # Now, call the base class if required.
+
+        if call_base_class:
             handled = super(GurpsRuleset, self)._perform_action(fighter,
                                                                 action,
                                                                 fight_handler)
-        else:
-            # Don't log a multi-part action until its last part.
-            handled = ca_ruleset.Ruleset.DONT_LOG
+
+        if not call_derived_class:
+            return handled
 
         actions = {
             'adjust-fp':            {'doit': self.__do_adjust_fp},
