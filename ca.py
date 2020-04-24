@@ -4,6 +4,7 @@ import argparse
 import copy
 import curses
 import datetime
+import glob
 import json
 import os
 import pprint
@@ -24,7 +25,6 @@ import ca_timers
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
 
-# TODO: crash history doesn't have any of the last stuff that happened
 # TODO: when a fighter is skipped (maybe, because they are busy), enter that
 #       into the history
 # TODO: If FP go below 0, I believe there's a save on every round to not go
@@ -5728,13 +5728,19 @@ class Program(object):
 
         if crash_snapshot is not None:
             self.add_snapshot('crash', crash_snapshot)
+            if history is None:
+                with ca_json.GmJson(crash_snapshot) as crashfile:
+                    if 'current-fight' in crashfile.read_data:
+                        if 'history' in crashfile.read_data['current-fight']:
+                            history = crashfile.read_data['current-fight'][
+                                    'history']
 
         # Build the bug report
 
         bug_report = {
             'version':    VERSION,
             'world':      self.__source_filename,
-            'history':    history,
+            'history':    copy.deepcopy(history),
             'report':     user_description,
             'snapshots':  self.__snapshots
         }
@@ -5757,20 +5763,26 @@ class Program(object):
         # Make a directory for the bug report
 
         extension = '.' + extension
-        directory_name = bug_report_game_file
-        if directory_name.endswith(extension):
-            directory_name = directory_name[:-len(extension)]
+        new_debug_folder = bug_report_game_file
+        if new_debug_folder.endswith(extension):
+            new_debug_folder = new_debug_folder[:-len(extension)]
 
-        os.mkdir(directory_name)
+        os.mkdir(new_debug_folder)
 
-        # Copy the snapshot files into the bug report directory
+        # Copy the snapshot files into the bug report directory.
 
-        for filename in self.__snapshots.itervalues():
-            shutil.copy(filename, directory_name)
+        new_snapshots = {}
+        for key, path_name in self.__snapshots.iteritems():
+            shutil.copy(path_name, new_debug_folder)
+            folder_name, filename = os.path.split(path_name)
+            new_snapshots[key] = filename
+            #os.path.join(new_debug_folder, filename)
+
+        bug_report['snapshots'] = new_snapshots
 
         # Dump the bug report into bug report file (in the directory)
 
-        full_bug_report_game_file = os.path.join(directory_name,
+        full_bug_report_game_file = os.path.join(new_debug_folder,
                                                  bug_report_game_file)
         with open(full_bug_report_game_file, 'w') as f:
             json.dump(bug_report, f, indent=2)
@@ -5800,7 +5812,7 @@ if __name__ == '__main__':
             action='store_true',
             default=False)
     parser.add_argument('-p', '--playback',
-                        help='Play history in bug report.  Debugging only.')
+                        help='Play history from bug report folder.')
 
     ARGS = parser.parse_args()
 
@@ -5808,9 +5820,6 @@ if __name__ == '__main__':
     # sys.exit(2)
 
     PP = pprint.PrettyPrinter(indent=3, width=150)
-
-    print '\n=== STARTING HERE ===' # TODO: remove
-    PP.pprint(ARGS) # TODO: remove
 
     playback_history = None
 
@@ -5824,16 +5833,26 @@ if __name__ == '__main__':
         prefs = {}
         filename = None
         if ARGS.playback is not None:
-            print '\n--- Playback is: %s ---' % ARGS.playback # TODO: remove
-            with ca_json.GmJson(ARGS.playback) as bug_report:
-                print 'opened file' # TODO: remove
-                filename = bug_report.read_data['snapshots']['fight']
-                playback_history = bug_report.read_data['history']
+            if not os.path.isdir(ARGS.playback):
+                window_manager.error(
+                        ['Playback needs a folder name but "%s" is not one' %
+                         ARGS.playback])
+                sys.exit(2)
 
-                print 'file' # TODO: remove
-                PP.pprint(filename) # TODO: remove
-                print 'history' # TODO: remove
-                PP.pprint(playback_history) # TODO: remove
+            # Find bug_report in directory
+            search_path = os.path.join(ARGS.playback, 'bug_report*')
+            files = glob.glob(search_path)
+            if len(files) != 1:
+                window_manager.error(
+                        ['Playback folder expects 1 bug_report file, not %d' %
+                         len(files)])
+                sys.exit(2)
+
+            # Extract information from bug_report file
+            with ca_json.GmJson(files[0]) as bug_report:
+                filename = bug_report.read_data['snapshots']['fight']
+                filename = os.path.join(ARGS.playback, filename)
+                playback_history = bug_report.read_data['history']
         else:
             filename = ARGS.filename
 
@@ -5928,7 +5947,9 @@ if __name__ == '__main__':
         # Write a crashdump of the shutdown
         if not orderly_shutdown:
             if program is not None:
-                program.make_bug_report(None, 'CRASH', filename)
+                print '\n** Making crash report **'
+                crash_filename = program.make_bug_report(None, 'CRASH', filename)
+                print '   Written to: %s' % crash_filename
 
 else:
     # Just to get some tests to pass
