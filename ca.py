@@ -4511,7 +4511,8 @@ class FightHandler(ScreenHandler):
         '''
         next_fighter = self.get_current_fighter()
         self.world.playing_back = True
-        for action in self.__saved_history:
+        while len(self.__saved_history) > 0:
+            action = self.__saved_history.pop(0)
             current_fighter = next_fighter
 
             # print '\n--- __playback_history'
@@ -5832,6 +5833,9 @@ if __name__ == '__main__':
         # of the read_prefs ca_json.GmJson will have to be larger
         prefs = {}
         filename = None
+
+        # Do we have a Playback file (like, we're playing back a bug)?
+
         if ARGS.playback is not None:
             if not os.path.isdir(ARGS.playback):
                 window_manager.error(
@@ -5927,7 +5931,12 @@ if __name__ == '__main__':
 
             # Save the state of things when we leave since there wasn't a
             # horrible crash while reading the data.
-            if ARGS.maintain_game_file:
+
+            if ARGS.playback is not None:
+                # Don't save the playback changes -- that way, you can re-play
+                # the incident over and over without worry.
+                world.dont_save_on_exit()
+            elif ARGS.maintain_game_file:
                 world.dont_save_on_exit()
             else:
                 world.do_save_on_exit()
