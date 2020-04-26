@@ -599,6 +599,8 @@ class Fighter(ThingsInFight):
                 # Allow the fighter to continue without doing anything since
                 # s/he's already busy
                 self.details['actions_this_turn'].append('busy')
+                fight_handler.add_to_history(
+                        {'comment': '(%s) is busy this round' % self.name})
 
     def toggle_absent(self):
         '''
