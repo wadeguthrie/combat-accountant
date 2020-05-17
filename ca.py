@@ -25,6 +25,14 @@ import ca_timers
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
 
+# TODO: house rule: heal above 0 should make conscious (stunned?)
+# TODO: short notes should clear when entering a fight
+# TODO: need to be able to change someone's posture to lying not as part of
+#       a maneuver
+# TODO: cast timer should include opponent's name
+# TODO: unconscious should clear 'stunned'
+# TODO: mark when someone is busy on their short display
+
 # TODO: stunned characters should have announcement window on their initiative
 #
 # TODO: If FP go below 0, I believe there's a save on every round to not go
@@ -35,7 +43,7 @@ import ca_timers
 # TODO: in playback mode, have a single-step feature
 #
 # ----
-# TODO: auto-reload at the beginning of the round shouldn't insert timer.
+# TODO: auto-reload at the beginning of the fight shouldn't insert timer.
 #       Should also be able to save partial batteries.
 #       Reload at end of round shouldn't carry-over (maybe all timers get
 #       expunged when the fight isn't saved for next time)
@@ -45,7 +53,6 @@ import ca_timers
 #       or don
 
 # TODO: when creating new creatures -- duplicate creature
-# TODO: add 'controlled/marked' to consciousness menu
 
 
 class CaGmWindowManager(ca_gui.GmWindowManager):
