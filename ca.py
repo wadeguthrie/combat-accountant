@@ -26,7 +26,6 @@ import ca_timers
 #   - traceback.print_stack()
 
 # TODO: house rule: heal above 0 should make conscious (stunned?)
-# TODO: short notes should clear when entering a fight
 # TODO: need to be able to change someone's posture to lying not as part of
 #       a maneuver
 # TODO: cast timer should include opponent's name

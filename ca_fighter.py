@@ -571,6 +571,9 @@ class Fighter(ThingsInFight):
         # NOTE: we're allowing health to still be messed-up, here
         # NOTE: person may go around wearing armor -- no need to reset
         self.details['opponent'] = None
+        if (self.group == 'PCs' and 'short-notes' in self.details and
+                    self.details['short-notes'] is not None):
+                self.details['short-notes'] = []
         self._ruleset.start_fight(self)
 
     def start_turn(self,
