@@ -25,12 +25,12 @@ import ca_timers
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
 
-# TODO: house rule: heal above 0 should make conscious (stunned?)
+# TODO: WORKAROUND: house rule: heal above 0 should make conscious (stunned?)
 # TODO: need to be able to change someone's posture to lying not as part of
 #       a maneuver
 # TODO: cast timer should include opponent's name
+
 # TODO: unconscious should clear 'stunned'
-# TODO: mark when someone is busy on their short display
 
 # TODO: stunned characters should have announcement window on their initiative
 #
