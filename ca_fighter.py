@@ -490,6 +490,10 @@ class Fighter(ThingsInFight):
         fighter_string = '%s HP:%d/%d' % (self.name,
                                           self.details['current']['hp'],
                                           self.details['permanent']['hp'])
+
+        if self.timers.is_busy():
+            fighter_string = '%s - BUSY' % fighter_string
+
         return fighter_string
 
     def get_to_hit_damage_notes(self,
