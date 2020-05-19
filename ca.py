@@ -30,8 +30,6 @@ import ca_timers
 #       a maneuver
 # TODO: cast timer should include opponent's name
 
-# TODO: unconscious should clear 'stunned'
-
 # TODO: stunned characters should have announcement window on their initiative
 #
 # TODO: If FP go below 0, I believe there's a save on every round to not go

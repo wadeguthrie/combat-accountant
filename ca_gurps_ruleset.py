@@ -3855,7 +3855,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'pick-opponent':        {'doit': self.__do_nothing},
             'reload':               {'doit': self.__do_reload},
             'reset-aim':            {'doit': self.__reset_aim},
-            'set-consciousness':    {'doit': self.__reset_aim},
+            'set-consciousness':    {'doit': self.__set_consciousness},
             'shock':                {'doit': self.__do_adjust_shock},
             'stun':                 {'doit': self.__stun_action},
             'use-item':             {'doit': self.__do_nothing},
@@ -3966,6 +3966,39 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                      'rounds': 1 - ca_timers.Timer.announcement_margin,
                      'string': [title, ' Defense: none', ' Move: none']})
         return timer
+
+
+    def __set_consciousness(self,
+                            fighter,          # Fighter object
+                            action,           # {'action-name': 'set-consciousness',
+                                              #  'level': <int> # see
+                                              #         Fighter.conscious_map
+                                              #  'comment': <string> # optional
+                            fight_handler,    # FightHandler object
+                            ):
+        '''
+        Action handler for GurpsRuleset.
+
+        Sets the consciousness level (and deals with the side-effects) of the
+        fighter.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
+        '''
+        timer = self.__reset_aim(fighter,
+                                 action,
+                                 fight_handler)
+
+        if ('level' in action and (
+                action['level'] == ca_fighter.Fighter.UNCONSCIOUS
+                or action['level'] == ca_fighter.Fighter.DEAD)):
+            self.do_action(fighter,
+                           {'action-name': 'stun',
+                            'stun': False,
+                            'comment': ('(%s) got stunned' % fighter.name)},
+                           fight_handler)
+        return timer
+
 
     def __stun(self,
                param    # {'view': xxx, 'view-opponent': xxx,
