@@ -25,13 +25,10 @@ import ca_timers
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
 
-# TODO: WORKAROUND: house rule: heal above 0 should make conscious (stunned?)
+# TODO: house rule: heal above 0 should make conscious
 # TODO: need to be able to change someone's posture to lying not as part of
 #       a maneuver
-# TODO: cast timer should include opponent's name
 
-# TODO: stunned characters should have announcement window on their initiative
-#
 # TODO: If FP go below 0, I believe there's a save on every round to not go
 #       unconscious.  Also, note that there's a house rule that we're not
 #       dealing with low FP.

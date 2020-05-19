@@ -2634,6 +2634,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                 'level': ca_fighter.Fighter.UNCONSCIOUS},
                                fight_handler)
 
+        # Let the user know if this fighter is stunned.
+
+        if fighter.is_conscious() and fighter.details['stunned']:
+            window_text = [
+                [{'text': 'Stunned, stunned, really stunned',
+                  'mode': curses.A_NORMAL}]
+                           ]
+            self._window_manager.display_window(
+                            ('%s is currently **STUNNED**' % fighter.name),
+                            window_text)
+
         fighter.details['actions_this_turn'] = []
 
     #
