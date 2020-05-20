@@ -36,11 +36,10 @@ import ca_timers
 #   current fight.
 # TODO: in playback mode, have a single-step feature
 #
-# ----
-# TODO: auto-reload at the beginning of the fight shouldn't insert timer.
-#       Should also be able to save partial batteries.
-#       Reload at end of round shouldn't carry-over (maybe all timers get
-#       expunged when the fight isn't saved for next time)
+# TODO: Should be able to save partial batteries.  This is a bit of work since
+#       that means that you can have more than 1 set of ammo from which to
+#       choose.
+# TODO (eventually): reload should happen at end of timer, not beginning/before
 
 # TODO: should timer firings make it into history?
 # TODO: add preferred weapon/armor - this will be at the top of menus to draw
