@@ -25,27 +25,20 @@ import ca_timers
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
 
-# TODO: house rule: heal above 0 should make conscious
+# TODO (lots of work): hold action = change init.  Best done by saving
+#       initiative stuff in current fight.
+# TODO (lots of work): Should be able to save partial batteries.  This is a
+#       bit of work since that means that you can have more than 1 set of ammo
+#       from which to choose.
+
+# TODO (eventually): reload should happen at end of timer, not beginning/before
+# TODO: when creating new creatures -- duplicate creature
+# TODO: in playback mode, have a single-step feature
 # TODO: need to be able to change someone's posture to lying not as part of
 #       a maneuver
-
-# TODO: If FP go below 0, I believe there's a save on every round to not go
-#       unconscious.  Also, note that there's a house rule that we're not
-#       dealing with low FP.
-# TODO: hold action = change init.  Best done by saving initiative stuff in
-#   current fight.
-# TODO: in playback mode, have a single-step feature
-#
-# TODO: Should be able to save partial batteries.  This is a bit of work since
-#       that means that you can have more than 1 set of ammo from which to
-#       choose.
-# TODO (eventually): reload should happen at end of timer, not beginning/before
-
 # TODO: should timer firings make it into history?
 # TODO: add preferred weapon/armor - this will be at the top of menus to draw
 #       or don
-
-# TODO: when creating new creatures -- duplicate creature
 
 
 class CaGmWindowManager(ca_gui.GmWindowManager):
