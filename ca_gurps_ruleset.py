@@ -2909,7 +2909,18 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
         '''
+        pre_adjust_hp = fighter.details['current']['hp']
         super(GurpsRuleset, self)._adjust_hp(fighter, action, fight_handler)
+        post_adjust_hp = fighter.details['current']['hp']
+
+        # NOTE: House rule for healing an unconscious person
+        if (pre_adjust_hp < post_adjust_hp and post_adjust_hp > 0 and
+                not fighter.is_conscious() and not fighter.is_dead()):
+            self.do_action(fighter,
+                           {'action-name': 'set-consciousness',
+                            'level': ca_fighter.Fighter.ALIVE},
+                           fight_handler)
+
         return None  # No timers
 
     def __cast_spell(self,
@@ -3256,7 +3267,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # See B426 for consequences of loss of FP
         adj = action['adj']  # Adj is likely negative
 
-        # If FP go below zero, you lose HP along with FP
+        # If FP go below zero, you lose HP along with FP (B328)
         hp_adj = 0
         if adj < 0 and -adj > fighter.details['current']['fp']:
             hp_adj = adj
@@ -3273,6 +3284,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         fighter.details['current']['fp'] += adj
 
+        # (B328)
         if (fighter.details['current']['fp'] <=
                 -fighter.details['permanent']['fp']):
             self.do_action(fighter,
