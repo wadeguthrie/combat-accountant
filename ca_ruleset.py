@@ -205,11 +205,11 @@ class Ruleset(object):
 
         use_menu = []
         for index, item in enumerate(fighter.details['stuff']):
-            if item['count'] > 0:
-                use_menu.append((item['name'],
-                                {'action': {'action-name': 'use-item',
-                                            'item-index': index}}
-                               ))
+            use_menu.append((item['name'],
+                            {'action': {'action-name': 'use-item',
+                                        'item-index': index,
+                                        'item-name': item['name']}}
+                           ))
         use_menu = sorted(use_menu, key=lambda x: x[0].upper())
 
         # Use menu
@@ -786,7 +786,6 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
-        item = fighter.equipment.get_item_by_index(action['item-index'])
-        if item is not None and 'count' in item:
-            item['count'] -= 1
+        ignore_item = fighter.equipment.remove(action['item-index'])
+
         return Ruleset.HANDLED_OK

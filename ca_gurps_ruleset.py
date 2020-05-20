@@ -1781,6 +1781,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         weapon, holding_weapon_index = fighter.get_current_weapon()
         if holding_weapon_index is not None:
+            # TODO: if there's multiple reload entries, add them up
             if weapon['type'] == 'ranged weapon':
                 clip_name = weapon['ammo']['name']
                 clip = None
@@ -3505,10 +3506,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             text = ['Concentrate', ' Defense: any w/will roll', ' Move: step']
 
         elif action['action-name'] == 'use-item':
-            item = fighter.equipment.get_item_by_index(action['item-index'])
-            text = [('Use %s' % item['name']),
-                    ' Defense: (depends)',
-                    ' Move: (depends)']
+            if 'item-name' in action:
+                text = [('Use %s' % action['item-name']),
+                        ' Defense: (depends)',
+                        ' Move: (depends)']
+            else:
+                text = ['Use item',
+                        ' Defense: (depends)',
+                        ' Move: (depends)']
 
         elif action['action-name'] == 'user-defined':
             text = ['User-defined action']

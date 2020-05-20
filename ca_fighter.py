@@ -359,6 +359,7 @@ class Fighter(ThingsInFight):
             self._ruleset.do_action(self,
                                     {'action-name': 'reload',
                                      'comment': 'Reloading after fight',
+                                     'notimer': True,
                                      'quiet': True},
                                     fight_handler)
         self.details['weapon-index'] = None
