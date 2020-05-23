@@ -578,9 +578,9 @@ class GmWindowManager(object):
         done.
         '''
 
-        # TODO(eventually): this be a mini-context manager that should get the
-        # current state of cbreak and echo and set them on entry and then
-        # reinstate them on exit.
+        # TODO(eventually): this should be a mini-context manager that should
+        # get the current state of cbreak and echo and set them on entry and
+        # then reinstate them on exit.
 
         if window is None:
             window = self.__stdscr

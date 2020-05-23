@@ -370,7 +370,7 @@ class Fighter(ThingsInFight):
 
         Returns a tuple:
             1) a dict (from the Game File)
-            2) index of the weapon
+            2) index of the armor
         '''
         if 'armor-index' not in self.details:
             return None, None
@@ -385,7 +385,7 @@ class Fighter(ThingsInFight):
         Gets the weapon that the Fighter is holding.
 
         Returns a tuple:
-            1) a dict (from the Game File)
+            1) Weapon object
             2) index of the weapon
         '''
         if 'weapon-index' not in self.details:
@@ -394,7 +394,7 @@ class Fighter(ThingsInFight):
         if weapon_index is None:
             return None, None
         weapon = self.equipment.get_item_by_index(weapon_index)
-        return weapon, weapon_index
+        return ca_equipment.Weapon(weapon), weapon_index
 
     def get_weapon_by_name(self,                # Public to support testing
                            name
@@ -402,12 +402,14 @@ class Fighter(ThingsInFight):
         '''
         Draw weapon from sheath or holster.
 
-        Returns index, item
+        Just used in testing.
+
+        Returns index, Weapon object
         '''
         index, item = self.equipment.get_item_by_name(name)
         if index is not None:
             self.details['weapon-index'] = index
-        return index, item
+        return index, ca_equipment.Weapon(item)
 
     def remove_equipment(self,
                          item_index  # <int> index into Equipment list
@@ -654,7 +656,7 @@ class Fighter(ThingsInFight):
             lines = [[{'text': x,
                        'mode': curses.A_NORMAL}] for x in unarmed_info['why']]
         else:
-            if weapon['skill'] in self.details['skills']:
+            if weapon.details['skill'] in self.details['skills']:
                 ignore, to_hit_why = self._ruleset.get_to_hit(self,
                                                               why_opponent,
                                                               weapon)
@@ -667,10 +669,10 @@ class Fighter(ThingsInFight):
                 lines.extend([[{'text': x,
                                 'mode': curses.A_NORMAL}] for x in damage_why])
 
-            if 'notes' in weapon and len(weapon['notes']) != 0:
+            if weapon.notes() is not None:
                 lines.extend([[{'text': 'Weapon: "%s"' % weapon['name'],
                                'mode': curses.A_NORMAL}]])
-                lines.extend([[{'text': '  %s' % weapon['notes'],
+                lines.extend([[{'text': '  %s' % weapon.get_notes(),
                                'mode': curses.A_NORMAL}]])
 
         ignore, defense_why = self.get_defenses_notes(why_opponent)

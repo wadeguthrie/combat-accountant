@@ -2,6 +2,7 @@
 
 import copy
 import curses
+import pprint
 
 
 class Equipment(object):
@@ -27,12 +28,11 @@ class Equipment(object):
         if source is not None and new_item['owners'] is not None:
             new_item['owners'].append(source)
 
-        for item in self.__equipment:
+        for index, item in enumerate(self.__equipment):
             if item['name'] == new_item['name']:
                 if self.__is_same_thing(item, new_item):
                     item['count'] += new_item['count']
                     return
-                break
 
         self.__equipment.append(new_item)
 
@@ -49,16 +49,21 @@ class Equipment(object):
                 self.__equipment[index])
 
     def get_item_by_name(self,              # Public to facilitate testing
-                         name   # string that matches the name of the thing
+                         name,  # string that matches the name of the thing
+                         starting_index = -1    # int
                          ):
         '''
         Returns a tuple that contains index, item (i.e., the dict describing
-        the item) of the (first) item in the equipment list that has a name
-        that matches the passed-in name.  Returns None, None if the item is
-        not found.
+        the item) of the item (the first one after |starting_index|) in the
+        equipment list that has a name that matches the passed-in name.
+        Returns None, None if the item is not found.
         '''
+        # PP = pprint.PrettyPrinter(indent=3, width=150)
+
         for index, item in enumerate(self.__equipment):
-            if item['name'] == name:
+            if index <= starting_index:
+                pass # It's structured like this for debugging
+            elif item['name'] == name:
                 return index, item
         return None, None  # didn't find one
 
@@ -86,6 +91,13 @@ class Equipment(object):
 
         return item
 
+    def show_equipment(self):
+        ''' For debugging purposes. '''
+        PP = pprint.PrettyPrinter(indent=3, width=150)
+        for index, item in enumerate(self.__equipment):
+            print '>>> INDEX %d:' % index
+            PP.pprint(item)
+
     #
     # Private methods
     #
@@ -109,15 +121,15 @@ class Equipment(object):
             if not isinstance(rhs, dict):
                 return False
             for key in rhs.iterkeys():
-                if key not in rhs:
+                if key not in lhs:
                     return False
             for key in lhs.iterkeys():
                 if key not in rhs:
                     return False
-                elif key == 'count' and level == 1:
-                    return True  # the count doesn't go into the match of item
                 elif not self.__is_same_thing(lhs[key], rhs[key], level):
-                    return False
+                    # the count doesn't go into the match of item
+                    if key != 'count' or level != 1:
+                        return False
             return True
 
         elif isinstance(lhs, list):
@@ -131,7 +143,7 @@ class Equipment(object):
             return True
 
         else:
-            return False if lhs != rhs else True
+            return True if lhs == rhs else False
 
 
 class EquipmentManager(object):
@@ -173,6 +185,11 @@ class EquipmentManager(object):
         in_use_string = ' (in use)' if item in in_use_items else ''
 
         texts = ['  %s%s' % (item['name'], in_use_string)]
+
+        if 'shots' in item and 'shots_left' in item:
+            texts.append(' (%d/%d shots left)' % (item['shots_left'],
+                                                  item['shots']))
+
         if 'count' in item and item['count'] != 1:
             texts.append(' (%d)' % item['count'])
 
@@ -274,3 +291,141 @@ class EquipmentManager(object):
             return None
 
         return fighter.remove_equipment(item_index)
+
+
+class Weapon(object):
+    # fighter.get_current_weapon()
+    def __init__(self,
+                 weapon_details    # dict from world file
+                 ):
+        self.details = weapon_details
+
+    def clip_works_with_weapon(self,
+                               clip  # dict for item
+                               ):
+        if clip is None:
+            return False
+
+        clip_shots_unknown = 'shots' not in clip
+        weapon_shots_unknown = ('ammo' not in self.details or
+                                'shots' not in self.details['ammo'])
+
+        if clip_shots_unknown and weapon_shots_unknown:
+            return False
+
+        if clip_shots_unknown or weapon_shots_unknown:
+            return True
+
+        return clip['shots'] == self.details['ammo']['shots']
+
+    def damage(self):
+        return self.__get_parameter('damage')
+
+    def remove_old_clip(self):
+        old_clip = self.details['clip']
+        old_clip['shots'] = self.shots()
+        old_clip['shots_left'] = self.shots_left()
+        self.details['clip'] = None
+        self.shots_left(0)
+        return old_clip
+
+    def is_ranged_weapon(self):
+        return True if self.details['type'] == 'ranged weapon' else False
+
+    def is_melee_weapon(self):
+        return True if self.details['type'] == 'melee weapon' else False
+
+    def is_shield(self):
+        # NOTE: cloaks also have this 'type'
+        return True if self.details['type'] == 'shield' else False
+
+    def load(self,
+             clip  # dict
+             ):
+        if clip is None:
+            return
+        self.details['clip'] = clip
+
+        if 'shots_left' in clip:
+            self.shots_left(clip['shots_left'])
+        else:
+            shots = self.shots()
+            self.shots_left(shots)
+
+    def notes(self):
+        weapon_notes = (None if 'notes' not in self.details
+                or len(self.details) == 0 else self.details['notes'])
+
+        clip = None if 'clip' not in self.details else self.details['clip']
+
+        ammo_notes = (None if clip is None
+                or 'notes' not in clip
+                or len(clip) == 0 else clip['notes'])
+
+        if weapon_notes is None:
+            if ammon_notes is None:
+                notes = ''
+            else:
+                notes = ammo_notes
+        else:
+            if ammon_notes is None:
+                notes = weapon_notes
+            else:
+                notes = '%s - %s' % (weapon_notes, ammo_notes)
+
+        return notes
+
+    def shots(self):
+        return self.__get_parameter('shots', ammo=True)
+
+    def shots_left(self,
+                   new_value = None):
+        clip = None if 'clip' not in self.details else self.details['clip']
+        if new_value is not None:
+            return self.__set_parameter('shots_left', new_value, ammo=True)
+        if clip is None:
+            return 0
+        return self.__get_parameter('shots_left', ammo=True)
+
+    def to_hit(self):
+        return self.__get_parameter('to_hit')
+
+    def use_one_ammo(self):
+        '''
+        Returns True if successful, False otherwise
+        '''
+        clip = None if 'clip' not in self.details else self.details['clip']
+        if self.shots_left() <= 0:
+            return False
+        if clip is not None and 'shots_left' in clip:
+            clip['shots_left'] -= 1
+        self.details['ammo']['shots_left'] -= 1
+        return True
+
+    def uses_ammo(self):
+        return True if 'ammo' in self.details else False
+
+    def __get_parameter(self,
+                        param,   # string
+                        ammo = False
+                        ):
+        clip = None if 'clip' not in self.details else self.details['clip']
+        if clip is not None and param in clip:
+            return clip[param]
+        if ammo:
+            return self.details['ammo'][param]
+        return self.details[param]
+
+    def __set_parameter(self,
+                        param,      # string
+                        new_value,  # number
+                        ammo = False
+                        ):
+        clip = None if 'clip' not in self.details else self.details['clip']
+        if clip is not None and param in clip:
+            clip[param] = new_value
+            return
+        if ammo:
+            self.details['ammo'][param] = new_value
+        else:
+            self.details[param] = new_value

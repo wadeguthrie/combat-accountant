@@ -16,33 +16,6 @@ import ca_timers
 FWIW, I realize that many of the Mocks in here are actually Fakes.
 '''
 
-'''
-action['action-name'] == 'adjust-fp':
-
-# DONE (except for 'aim') 'pick-opponent':
-# DONE: 'adjust-hp':
-# DONE: 'aim':
-# DONE: 'change-posture':
-# DONE: 'defend':
-# DONE: 'don-armor': # or doff armor
-# DONE: 'draw-weapon':
-# DONE: 'reload':
-# DONE: 'set-consciousness':
-# DONE: (except for combat reflexes) 'stun':
-# DONE: 'cast-spell':
-# NOTHING: 'concentrate':
-# NOTHING: 'evaluate':
-# NOTHING: 'feint':
-# NOTHING: 'move':
-# NOTHING: 'nothing':
-# NOTHING: 'user-defined':
-# DON'T BOTHER: 'all-out-attack':
-# DON'T BOTHER: 'attack'
-# DON'T BOTHER: 'move-and-attack':
-# DON'T BOTHER: 'use-item':
-'''
-
-
 # TODO: there should be a test.reset() that would clear out the
 # set_menu_response and the set_input_box_response values (and
 # maybe some other stuff I'm not thinking about).  It should be called prior
@@ -552,6 +525,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "ammo": {"name": "C Cell",
                            "shots_left": self.__vodou_priest_initial_shots,
                            "shots": self.__vodou_priest_initial_shots},
+                  "clip": {"name": "C Cell",
+                           "type": "misc",
+                           "count": 1,
+                           "notes": "",
+                           "owners": None
+                 },
                   "reload": 3,
                   "skill": "Guns (Pistol)",
                   "count": 1,
@@ -629,6 +608,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "damage": {"dice": "1d+4"},
                   "acc": 3,
                   "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
+                  "clip": {"name": "C Cell",
+                           "type": "misc",
+                           "count": 1,
+                           "notes": "",
+                           "owners": None
+                 },
                   "reload": 3,
                   "skill": "Guns (Pistol)",
                   "count": 1,
@@ -667,6 +652,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "damage": {"dice": "1d+3"},
                   "acc": 2,
                   "ammo": {"name": "C Cell", "shots_left": 8, "shots": 8},
+                  "clip": {"name": "C Cell",
+                           "type": "misc",
+                           "count": 1,
+                           "notes": "",
+                           "owners": None
+                 },
                   "reload": 3,
                   "skill": "Guns (Pistol)",
                   "count": 1,
@@ -710,6 +701,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "damage": {"dice": "1d+4"},
                   "acc": 4,
                   "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
+                  "clip": {"name": "C Cell",
+                           "type": "misc",
+                           "count": 1,
+                           "notes": "",
+                           "owners": None
+                 },
                   "reload": 3,
                   "skill": "Guns (Pistol)",
                   "count": 1,
@@ -759,6 +756,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                   "damage": {"dice": "1d+4"},
                   "acc": 2,
                   "ammo": {"name": "C Cell", "shots_left": 8, "shots": 8},
+                  "clip": {"name": "C Cell",
+                           "type": "misc",
+                           "count": 1,
+                           "notes": "",
+                           "owners": None
+                 },
                   "reload": 3,
                   "skill": "Guns (Pistol)",
                   "count": 1,
@@ -2449,7 +2452,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                  mock_fight_handler)
         weapon, actual_weapon_index = vodou_priest.get_current_weapon()
         assert actual_weapon_index == requested_weapon_index
-        assert weapon['name'] == "pistol, Colt 170D"
+        assert weapon.details['name'] == "pistol, Colt 170D"
 
         requested_armor_index = 2
         self.__ruleset.do_action(vodou_priest,
@@ -3283,7 +3286,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                  mock_fight_handler)
         weapon, actual_weapon_index = vodou_priest.get_current_weapon()
         assert actual_weapon_index == requested_weapon_index
-        assert weapon['name'] == "pistol, Colt 170D"
+        assert weapon.details['name'] == "pistol, Colt 170D"
 
         # Sheathe Weapon
 
@@ -3305,7 +3308,7 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         if ARGS.verbose:
             print '\n=== test_reload ===\n'
 
-        # Setup
+        ### Setup ###
 
         self.__window_manager = MockWindowManager()
         self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
@@ -3327,68 +3330,185 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                                  mock_fight_handler)
         weapon, actual_weapon_index = vodou_priest.get_current_weapon()
         assert actual_weapon_index == requested_weapon_index
-        assert weapon['name'] == "pistol, Colt 170D"
-        assert (weapon['ammo']['shots_left'] ==
-                                        self.__vodou_priest_initial_shots)
+        assert weapon.details['name'] == "pistol, Colt 170D"
+        assert weapon.shots_left() == self.__vodou_priest_initial_shots
 
-        ammo = vodou_priest.equipment.get_item_by_index(
+        clip = vodou_priest.equipment.get_item_by_index(
                                                 self.__vodou_priest_ammo_index)
         # check the number of clips/batteries
 
-        assert ammo['count'] == self.__vodou_priest_ammo_count
+        assert clip['count'] == self.__vodou_priest_ammo_count
 
-        # Fire twice and verify that the shots left went down
+        # A. Fire twice and verify that the shots left went down
 
         shots_taken = 2
-
         for shot in range(shots_taken):
             self.__ruleset.do_action(vodou_priest,
                                      {'action-name': 'attack'},
                                      mock_fight_handler)
 
-        assert (weapon['ammo']['shots_left'] ==
+        assert (weapon.shots_left() ==
                             (self.__vodou_priest_initial_shots - shots_taken))
+
+        # Discard the rest of the shots in the clip
+
+        shots_taken = weapon.shots_left()
+        for shot in range(shots_taken):
+            self.__ruleset.do_action(vodou_priest,
+                                     {'action-name': 'attack'},
+                                     mock_fight_handler)
 
         # Now, reload
 
+        self.__window_manager.set_menu_response('Reload With What', 1)
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'reload'},
                                  mock_fight_handler)
 
-        assert (weapon['ammo']['shots_left'] ==
-                                            self.__vodou_priest_initial_shots)
-        assert ammo['count'] == (self.__vodou_priest_ammo_count - 1)
+        assert weapon.shots_left() == self.__vodou_priest_initial_shots
+        assert clip['count'] == (self.__vodou_priest_ammo_count - 1)
 
-        # Empty out the ammo and fire a couple of times
+        index, virtual_clip = vodou_priest.equipment.get_item_by_name('C Cell')
+        assert(virtual_clip is not None)
+        index, second_clip = vodou_priest.equipment.get_item_by_name('C Cell', index)
+        assert(second_clip is None)
 
-        shots_taken = 0
-        while ammo['count'] != 0:
-            self.__ruleset.do_action(vodou_priest,
-                                     {'action-name': 'attack'},
-                                     mock_fight_handler)
-            shots_taken += 1
+        # B. Fire and reload until there are no clips available
+
+        # Note: when the last clip is ejected, a new item takes its place and
+        # clip['count'] will never go to zero
+
+        clip_count = clip['count']
+        for clip_number in range(clip_count):
+            # Shoot until this clip is empty (so the reload discards the empty
+            # clip)
+            shots_left = weapon.shots_left()
+            for shot in range(shots_left):
+                self.__ruleset.do_action(vodou_priest,
+                                         {'action-name': 'attack'},
+                                         mock_fight_handler)
+            self.__window_manager.set_menu_response('Reload With What', 1)
             self.__ruleset.do_action(vodou_priest,
                                      {'action-name': 'reload'},
                                      mock_fight_handler)
 
+        # C. Shoot a number of times and verify that we have the number of
+        #    shots left that we expect (in our last clip).
+
+        shots_taken = 3  # Pick a number at random
         for shot in range(shots_taken):
             self.__ruleset.do_action(vodou_priest,
                                      {'action-name': 'attack'},
                                      mock_fight_handler)
 
-        assert (weapon['ammo']['shots_left'] ==
+        assert (weapon.shots_left() ==
                             (self.__vodou_priest_initial_shots - shots_taken))
 
-        # Reload when there's nothing left with which to reload
+        ## D. Reload when there's nothing left with which to reload
 
+        self.__window_manager.set_menu_response('Reload With What', None)
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'reload'},
                                  mock_fight_handler)
 
-        assert (weapon['ammo']['shots_left'] ==
+        assert (weapon.details['ammo']['shots_left'] ==
                             (self.__vodou_priest_initial_shots - shots_taken))
-        assert ammo['count'] == 0
 
+        throw_away, virtual_clip = vodou_priest.equipment.get_item_by_name('C Cell')
+        assert(virtual_clip is None)
+
+
+    def test_reload_2(self):
+        '''
+        General test
+        '''
+        if ARGS.verbose:
+            print '\n=== test_reload_2 ===\n'
+
+        ### Setup ###
+
+        self.__window_manager = MockWindowManager()
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        mock_fight_handler = MockFightHandler()
+
+        vodou_priest = ca_fighter.Fighter(
+                                'Priest',
+                                'group',
+                                copy.deepcopy(self.__vodou_priest_fighter),
+                                self.__ruleset,
+                                self.__window_manager)
+
+        # Draw Weapon
+
+        requested_weapon_index = self.__vodou_pistol_index
+        self.__ruleset.do_action(vodou_priest,
+                                 {'action-name': 'draw-weapon',
+                                  'weapon-index': requested_weapon_index},
+                                 mock_fight_handler)
+        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        assert actual_weapon_index == requested_weapon_index
+        assert weapon.details['name'] == "pistol, Colt 170D"
+        assert weapon.shots_left() == self.__vodou_priest_initial_shots
+
+        clip = vodou_priest.equipment.get_item_by_index(
+                                                self.__vodou_priest_ammo_index)
+        # check the number of clips/batteries
+
+        assert clip['count'] == self.__vodou_priest_ammo_count
+
+        # A. Fire twice and verify that the shots left went down
+
+        shots_taken = 2
+        for shot in range(shots_taken):
+            self.__ruleset.do_action(vodou_priest,
+                                     {'action-name': 'attack'},
+                                     mock_fight_handler)
+
+        assert (weapon.shots_left() ==
+                            (self.__vodou_priest_initial_shots - shots_taken))
+
+        # Reload and verify that there are two different types of clips (a
+        # bunch of full ones and one partially full one)
+
+        self.__window_manager.set_menu_response('Reload With What', 1)
+        self.__ruleset.do_action(vodou_priest,
+                                 {'action-name': 'reload'},
+                                 mock_fight_handler)
+
+        assert clip['count'] == (self.__vodou_priest_ammo_count - 1)
+
+        first_index, virtual_clip = vodou_priest.equipment.get_item_by_name('C Cell')
+        assert(virtual_clip is not None)
+
+        second_index, second_clip = vodou_priest.equipment.get_item_by_name(
+                'C Cell', first_index)
+        assert(second_clip is not None)
+
+        assert(second_clip['shots_left'] == self.__vodou_priest_initial_shots
+                - shots_taken)
+
+        # Now, try to reload other clips
+
+        # Start off by shooting off one shot so the reload will work
+        self.__ruleset.do_action(vodou_priest,
+                                 {'action-name': 'attack'},
+                                 mock_fight_handler)
+
+        # Reload with the partial (the previously ejected one)
+        self.__window_manager.set_menu_response('Reload With What', second_index)
+        self.__ruleset.do_action(vodou_priest,
+                                 {'action-name': 'reload'},
+                                 mock_fight_handler)
+        assert (weapon.shots_left() ==
+                            (self.__vodou_priest_initial_shots - shots_taken))
+
+        # Now, reload with a full one
+        self.__window_manager.set_menu_response('Reload With What', first_index)
+        self.__ruleset.do_action(vodou_priest,
+                                 {'action-name': 'reload'},
+                                 mock_fight_handler)
+
+        assert (weapon.shots_left() == self.__vodou_priest_initial_shots)
 
     def test_stun_and_consciousness(self):
         '''
@@ -3838,7 +3958,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
         assert original_item['count'] == 1
         same_item = copy.deepcopy(original_item)
         same_item['count'] = 2
+
         fighter.add_equipment(same_item, 'test')
+
         assert original_item['count'] == 3
 
         # Similar item - verify that it doesn't just bump the count
@@ -3849,7 +3971,9 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
 
         assert len(fighter.details['stuff']) == current_count
         fighter.add_equipment(similar_item, 'test')
+
         current_count += 1
+
         assert len(fighter.details['stuff']) == current_count
 
         # Different item
@@ -3861,6 +3985,12 @@ class GmTestCase(unittest.TestCase): # Derive from unittest.TestCase
                           "ammo": {"name": "C Cell",
                                    "shots_left": 8,
                                    "shots": 8},
+                          "clip": {"name": "C Cell",
+                                   "type": "misc",
+                                   "count": 1,
+                                   "notes": "",
+                                   "owners": None
+                         },
                           "reload": 3,
                           "skill": "Guns (Pistol)",
                           "count": 1,

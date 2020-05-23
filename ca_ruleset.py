@@ -30,7 +30,7 @@ class Ruleset(object):
 
     (UNHANDLED, HANDLED_OK, HANDLED_ERROR, DONT_LOG) = range(4)
 
-    has_2_parts = {'user-defined': True}
+    has_2_parts = {'reload': True, 'user-defined': True}
 
     def __init__(self,
                  window_manager  # GmWindowManager object for menus and errors
@@ -71,6 +71,10 @@ class Ruleset(object):
         Returns nothing.
         '''
 
+        #print '\n=== do_action ==='
+        #PP = pprint.PrettyPrinter(indent=3, width=150)
+        #PP.pprint(action)
+
         handled = self._perform_action(fighter, action, fight_handler, logit)
         self._record_action(fighter, action, fight_handler, handled, logit)
 
@@ -102,7 +106,7 @@ class Ruleset(object):
 
         weapon, weapon_index = fighter.get_current_weapon()
         holding_ranged = (False if weapon is None else
-                                (weapon['type'] == 'ranged weapon'))
+                          weapon.is_ranged_weapon())
 
         ### Armor ###
 
@@ -142,7 +146,7 @@ class Ruleset(object):
         ### Attack ###
 
         if holding_ranged:
-            if weapon['ammo']['shots_left'] > 0:
+            if weapon.shots_left() > 0:
                 # Can only attack if there's someone to attack
                 action_menu.extend([
                     ('attack',          {'action': {'action-name': 'attack'}}),
@@ -157,7 +161,7 @@ class Ruleset(object):
         ### Draw or Holster weapon ###
 
         if weapon is not None:
-            action_menu.append((('holster/sheathe %s' % weapon['name']),
+            action_menu.append((('holster/sheathe %s' % weapon.details['name']),
                                    {'action': {'action-name': 'draw-weapon',
                                                'weapon-index': None}
                                    }))
@@ -315,11 +319,11 @@ class Ruleset(object):
 
         weapon, throw_away = fighter.get_current_weapon()
         if weapon is not None:
-            if (weapon['type'] != 'ranged weapon' and
-                    weapon['type'] != 'melee weapon'):
+            if not weapon.is_ranged_weapon() and not weapon.is_melee_weapon():
                 self._window_manager.error([
                     'Creature "%s"' % name,
-                    '  is wielding weird weapon "%s"' % weapon['name']])
+                    '  is wielding weird weapon "%s"' %
+                    weapon.details['name']])
                 result = False
 
         return result
@@ -441,19 +445,18 @@ class Ruleset(object):
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
 
-        # TODO: this should be in two parts like cast_spell since the user can
-        # be asked to pick an opponent.
         if (fighter.details['opponent'] is None and
                                         fight_handler is not None and
                                         not fight_handler.world.playing_back):
             fight_handler.pick_opponent()
 
         weapon, weapon_index = fighter.get_current_weapon()
-        if weapon is None or 'ammo' not in weapon:
+        if weapon is None or not weapon.uses_ammo():
             return Ruleset.HANDLED_OK
 
-        weapon['ammo']['shots_left'] -= 1
-        return Ruleset.HANDLED_OK
+        if weapon.use_one_ammo():
+            return Ruleset.HANDLED_OK
+        return Ruleset.HANDLED_ERROR
 
     def __do_custom_action(self,
                            fighter,          # Fighter object
@@ -517,6 +520,8 @@ class Ruleset(object):
                                       #                       return a timer
                                       #                       for the fighter
                                       #                       -- optional
+                                      #  'clip-index': <int>  # index of clip
+                                      #                       # in equipment
                                       #  'quiet': <bool>    # use defaults for
                                       #                       all user
                                       #                       interactions
@@ -533,17 +538,96 @@ class Ruleset(object):
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
 
-        weapon, weapon_index = fighter.get_current_weapon()
-        if weapon is None or 'ammo' not in weapon:
-            return Ruleset.HANDLED_ERROR
+        if 'part' in action and action['part'] == 2:
+            # This is the 2nd part of a 2-part action.  This part of the action
+            # actually perfoms all the GurpsRuleset-specific actions and
+            # side-effects of reloading the Fighter's current weapon.  Note
+            # that a lot of the obvious part is done by the base class Ruleset.
 
-        clip_name = weapon['ammo']['name']
-        for item in fighter.details['stuff']:
-            if item['name'] == clip_name and item['count'] > 0:
-                weapon['ammo']['shots_left'] = weapon['ammo']['shots']
-                item['count'] -= 1
+            weapon, weapon_index = fighter.get_current_weapon()
+
+            # If there's no new clip to load, just bail out
+            if 'clip-index' not in action:
                 return Ruleset.HANDLED_OK
-        return Ruleset.HANDLED_ERROR
+
+            # Prepare the new clip -- I know this is backwards but the
+            # clip index (for the new clip) is still valid until the old clip
+            # is added to the equipment list
+
+            clip = fighter.equipment.remove(action['clip-index'])
+
+            # Put a non-zero count clip back in equipment list
+            if weapon.shots_left() > 0:
+                old_clip = weapon.remove_old_clip()
+                ignore_item = fighter.equipment.add(old_clip)
+
+            # And put the new clip in the weapon
+            weapon.load(clip)
+
+            return Ruleset.HANDLED_OK
+
+        else:
+            # This is the 1st part of a 2-part action.  This part of
+            # the action asks questions of the user and sends the
+            # second part.  The 1st part isn't executed when playing
+            # back.
+
+            weapon, weapon_index = fighter.get_current_weapon()
+            if weapon is None or not weapon.uses_ammo():
+                return Ruleset.HANDLED_ERROR
+
+            clip_name = weapon.details['ammo']['name']
+
+            # Get a list of clips that fit this weapon, ask the user which one
+
+            clip_menu = []
+            clip_name = weapon.details['ammo']['name']
+            for index, item in enumerate(fighter.details['stuff']):
+                if item['name'] == clip_name:
+                    if 'notes' in item and len(item['notes']) > 0:
+                        text = '%s -- %s' % (item['name'], item['notes'])
+                    else:
+                        text = item['name']
+
+                    if 'shots' in item and 'shots_left' in item:
+                        text += ', (%d/%d shots left)' % (item['shots_left'],
+                                                          item['shots'])
+
+                    clip_menu.append((text, index))
+
+            clip_index = self._window_manager.menu('Reload With What',
+                                                   clip_menu)
+            if clip_index is None:
+                return Ruleset.DONT_LOG
+
+            # Is the clip good?
+
+            clip = fighter.equipment.get_item_by_index(clip_index)
+            if clip is None:
+                return Ruleset.DONT_LOG
+
+            if not weapon.clip_works_with_weapon(clip):
+                self._window_manager.error([
+                    'Weapon "%s" has different clip size to Clip "%s"' % (
+                        weapon.details['name'], clip['name']) ])
+                return Ruleset.HANDLED_ERROR
+
+            # Do a deepcopy for the second part to copy the comment --
+            # that's what gets displayed for the history command.
+
+            action['clip-index'] = clip_index
+
+            # --- THIS IS NOT CALLED in GurpsRuleset ---
+            # If the derived class is a two-parter, it'll be responsible for
+            # launching part-2 of the action (since the base class -- us --
+            # is called first).  That action will be based on _this_ action
+            # so anything we add to it, here, will carry-over.  If the derived
+            # class is a one-parter, then we can launch the second part, here.
+            if not action['two_part_derived']:
+                action['part'] = 2
+                self.do_action(fighter, new_action, fight_handler)
+
+            return Ruleset.DONT_LOG
 
     def __don_armor(self,
                     fighter,          # Fighter object
