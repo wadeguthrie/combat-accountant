@@ -22,23 +22,19 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# NOTE: debugging thoughts:
-#   - traceback.print_stack()
+# TODO: move and attack need to show to-hit minuses
 
-# TODO (lots of work): hold action = change init.  Best done by saving
-#       initiative stuff in current fight.
-# TODO (lots of work): Should be able to save partial batteries.  This is a
-#       bit of work since that means that you can have more than 1 set of ammo
-#       from which to choose.
-
-# TODO (eventually): reload should happen at end of timer, not beginning/before
-# TODO: when creating new creatures -- duplicate creature
-# TODO: in playback mode, have a single-step feature
 # TODO: need to be able to change someone's posture to lying not as part of
 #       a maneuver
 # TODO: should timer firings make it into history?
 # TODO: add preferred weapon/armor - this will be at the top of menus to draw
 #       or don
+# TODO: reload and spells should happen at the end of the timer.  The
+#       'reloading' timer should launch the second part of the action when it
+#       fires.
+
+# NOTE: debugging thoughts:
+#   - traceback.print_stack()
 
 
 class CaGmWindowManager(ca_gui.GmWindowManager):
