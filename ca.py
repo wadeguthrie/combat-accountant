@@ -22,6 +22,9 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: Previous '<' needs to be an action.  Alternatively, 'start_turn' could
+#   go to the named creature.  At LEAST we should warn when they don't match.
+
 # TODO: move and attack need to show to-hit minuses
 
 # TODO: need to be able to change someone's posture to lying not as part of
@@ -3279,6 +3282,7 @@ class FightHandler(ScreenHandler):
                                                     self.world,
                                                     self._window_manager)
         self.__saved_history = None
+        self.__next_playback_action_index = 0  # Only for playback
 
         self._add_to_choice_dict({
             curses.KEY_UP:
@@ -3411,7 +3415,22 @@ class FightHandler(ScreenHandler):
                 ord('p'): {'name': 'History playback',
                            'func': self.__playback_history,
                            'help': 'Plays back all of the history in the ' +
-                                   'playback file.'}
+                                   'playback file.'},
+                ord('x'): {'name': 'Step history 1x',
+                           'func': self.__single_step_history,
+                           'help': 'Plays one step of the history in the ' +
+                                   'playback file.'},
+                ord('X'): {'name': 'Step history multi',
+                           'func': self.__multi_step_history,
+                           'help': 'Plays several steps of the history in the ' +
+                                   'playback file.'},
+                ord('z'): {'name': 'Show playback history',
+                           'func': self.__show_playback,
+                           'help': 'Shows the actions in the playback ' +
+                                   'history.'},
+                # TODO: add a method to show a list of actions in the playback
+                #   file.  They're bold if on or after the next index.  They
+                #   should be preceded by the index in the playback list.
                     })
 
         self._add_to_choice_dict(self.world.ruleset.get_fight_commands(self))
@@ -4383,6 +4402,60 @@ class FightHandler(ScreenHandler):
                                    self.__viewing_index)
         return True  # Keep going
 
+    def __multi_step_history(self):
+        '''
+        Command ribbon method.
+
+        If we're reproducing a scenario (like from a bug report), we're
+        provided with a sequence of history.  This routine plays that entire
+        sequence.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        if self.__saved_history is None:
+            return True
+
+        if self.__next_playback_action_index >= len(self.__saved_history):
+            self._window_manager.error(
+                ['Playback history exhausted -- you are at the end.'])
+            return True
+
+        title = 'Execute How Many Steps of Playback?'
+        height = 1
+        width = len(title)
+        step_count_string = self._window_manager.input_box(height, width, title)
+        if len(step_count_string) <= 0:
+            return True
+
+        step_count = int(step_count_string)
+        if (self.__next_playback_action_index + step_count >
+                len(self.__saved_history)):
+            step_count = (len(self.__saved_history) -
+                    self.__next_playback_action_index)
+
+        for i in range(step_count):
+            action = self.__saved_history[self.__next_playback_action_index]
+            self.__next_playback_action_index += 1
+            next_fighter = self.get_current_fighter()
+
+            # print '\n--- __multi_step_history'
+            # PP.pprint(action)
+
+            self.__raw_single_step(next_fighter,  action)
+
+        lines = []
+        mode = curses.A_NORMAL
+        line = 'Just executed through %d/%d' % (
+                self.__next_playback_action_index - 1,
+                len(self.__saved_history))
+        lines.append([{'text': line, 'mode': mode}])
+        self._window_manager.display_window(
+                'Just executed %d actions of playback' % step_count,
+                lines)
+
+        return True  # Keep going
+
     def __next_fighter(self):
         '''
         Command ribbon method.
@@ -4490,6 +4563,7 @@ class FightHandler(ScreenHandler):
                                    self.__viewing_index)
         return True  # Keep going
 
+
     def __playback_history(self):
         '''
         Command ribbon method.
@@ -4500,38 +4574,28 @@ class FightHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        next_fighter = self.get_current_fighter()
-        self.world.playing_back = True
-        while len(self.__saved_history) > 0:
-            action = self.__saved_history.pop(0)
-            current_fighter = next_fighter
+
+        if self.__saved_history is None:
+            return True
+
+        if self.__next_playback_action_index >= len(self.__saved_history):
+            # TODO: issue an error
+            return True
+
+        # TODO: check for fencepost error
+        step_count = (len(self.__saved_history) -
+                self.__next_playback_action_index)
+
+        for i in range(step_count):
+            action = self.__saved_history[self.__next_playback_action_index]
+            self.__next_playback_action_index += 1
+            next_fighter = self.get_current_fighter()
 
             # print '\n--- __playback_history'
             # PP.pprint(action)
 
-            if 'fighter' in action:
-                name = action['fighter']['name']
-                group = action['fighter']['group']
-                fighter = self.get_fighter_object(name, group)
-            else:
-                fighter = current_fighter
-            self.world.ruleset.do_action(fighter, action, self)
-            next_fighter = self.get_current_fighter()
-            if next_fighter != current_fighter:
-                # Update the display
-                next_PC_name = self.__next_PC_name()
-                self._window.round_ribbon(self._saved_fight['round'],
-                                          next_PC_name,
-                                          self.world.source_filename,
-                                          ScreenHandler.maintain_game_file)
+            self.__raw_single_step(next_fighter,  action)
 
-                opponent = self.get_opponent_for(next_fighter)
-                self._window.show_fighters(next_fighter,
-                                           opponent,
-                                           self.__fighters,
-                                           self._saved_fight['index'],
-                                           self.__viewing_index)
-        self.world.playing_back = False
         return True  # Keep going
 
     def __prev_fighter(self):
@@ -4631,6 +4695,42 @@ class FightHandler(ScreenHandler):
         self._window.close()
         return False  # Leave the fight
 
+    def __raw_single_step(self,
+                          next_fighter,  # Fighter object
+                          action  # dict
+                          ):
+        current_fighter = next_fighter
+
+        # print '\n--- __single_step_history'
+        # PP.pprint(action)
+
+        self.world.playing_back = True
+
+        if 'fighter' in action:
+            name = action['fighter']['name']
+            group = action['fighter']['group']
+            fighter = self.get_fighter_object(name, group)
+        else:
+            fighter = current_fighter
+        self.world.ruleset.do_action(fighter, action, self)
+        next_fighter = self.get_current_fighter()
+        if next_fighter != current_fighter:
+            # Update the display
+            next_PC_name = self.__next_PC_name()
+            self._window.round_ribbon(self._saved_fight['round'],
+                                      next_PC_name,
+                                      self.world.source_filename,
+                                      ScreenHandler.maintain_game_file)
+
+            opponent = self.get_opponent_for(next_fighter)
+            self._window.show_fighters(next_fighter,
+                                       opponent,
+                                       self.__fighters,
+                                       self._saved_fight['index'],
+                                       self.__viewing_index)
+
+        self.world.playing_back = False
+
     def __select_fighter(self,
                          menu_title,  # string: title of fighter/opponent menu
                          default_selection=0  # int: for menu:
@@ -4717,6 +4817,35 @@ class FightHandler(ScreenHandler):
                                             char_info)
         return True
 
+    def __show_playback(self):
+        '''
+        Command ribbon method.
+
+        Displays the actions in the playback history.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        if self.__saved_history is None:
+            return True
+
+        lines = []
+        for index, action in enumerate(self.__saved_history):
+            string = PP.pformat(action)
+            pieces = string.split('\n')
+            mode = (curses.A_BOLD
+                    if index >= self.__next_playback_action_index
+                    else curses.A_NORMAL)
+            for i, piece in enumerate(pieces):
+                if i == 0:
+                    piece = '%03d %s' % (index, piece)
+                else:
+                    piece = '    %s' % piece
+                lines.append([{'text': piece, 'mode': mode}])
+
+        self._window_manager.display_window('Playback History', lines)
+        return True  # Keep going
+
     def __show_why(self):
         '''
         Command ribbon method.
@@ -4736,6 +4865,58 @@ class FightHandler(ScreenHandler):
                     'How %s\'s Numbers Were Calculated' % why_target.name,
                     lines)
         return True
+
+    def __single_step_history(self):
+        '''
+        Command ribbon method.
+
+        If we're reproducing a scenario (like from a bug report), we're
+        provided with a sequence of history.  This routine plays that entire
+        sequence.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        if self.__saved_history is None:
+            return True
+
+        if self.__next_playback_action_index >= len(self.__saved_history):
+            self._window_manager.error(
+                ['Playback history exhausted -- you are at the end.'])
+            return True
+
+        action = self.__saved_history[self.__next_playback_action_index]
+        self.__next_playback_action_index += 1
+        next_fighter = self.get_current_fighter()
+
+        # print '\n--- __single_step_history'
+        # PP.pprint(action)
+
+        self.__raw_single_step(next_fighter,  action)
+
+        # Show X/Y steps and the action
+
+        # TODO: there should probably be a method that formats an action.
+        #  This routine and playback_history should use it.
+        lines = []
+        index = self.__next_playback_action_index - 1
+        string = PP.pformat(action)
+        pieces = string.split('\n')
+        mode = curses.A_NORMAL
+        for i, piece in enumerate(pieces):
+            if i == 0:
+                piece = '%03d %s' % (index, piece)
+            else:
+                piece = '    %s' % piece
+            lines.append([{'text': piece, 'mode': mode}])
+
+        self._window_manager.display_window(
+                'Just executed %d/%d of playback' % (
+                    index,
+                    len(self.__saved_history)),
+                lines)
+
+        return True  # Keep going
 
     def __timer(self):
         '''
