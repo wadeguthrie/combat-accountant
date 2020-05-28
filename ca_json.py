@@ -3,6 +3,7 @@
 import json
 import traceback
 
+
 class GmJson(object):
     '''
     Context manager that opens and loads a JSON file.  Does so in a context
@@ -11,8 +12,8 @@ class GmJson(object):
     '''
 
     def __init__(self,
-                 filename,              # file containing the JSON to be read
-                 window_manager = None  # send error messages here
+                 filename,            # file containing the JSON to be read
+                 window_manager=None  # send error messages here
                  ):
         self.__filename = filename
         self.__window_manager = window_manager
@@ -22,10 +23,10 @@ class GmJson(object):
     def __enter__(self):
         try:
             with open(self.__filename, 'r') as f:
-              self.read_data, error_msg = GmJson.__json_load_byteified(f)
-              if self.read_data is None:
+                self.read_data, error_msg = GmJson.__json_load_byteified(f)
+                if self.read_data is None:
                     error_array = ['Could not read JSON file "%s"' %
-                                                            self.__filename]
+                                   self.__filename]
                     if error_msg is not None:
                         error_array.append(error_msg)
 
@@ -46,7 +47,7 @@ class GmJson(object):
             self.read_data = None
         return self
 
-    def __exit__ (self, exception_type, exception_value, exception_traceback):
+    def __exit__(self, exception_type, exception_value, exception_traceback):
         if exception_type is IOError:
             print 'IOError: %r' % exception_type
             print 'EXCEPTION val: %s' % exception_value
@@ -70,16 +71,15 @@ class GmJson(object):
     #        utm_medium=organic&utm_source=google_rich_qa&
     #        utm_campaign=google_rich_qa
 
-
     @staticmethod
-    def __byteify(data, ignore_dicts = False):
+    def __byteify(data, ignore_dicts=False):
         # if this is a unicode string, return its string representation
         if isinstance(data, unicode):
             return data.encode('utf-8')
         # if this is a list of values, return list of byteified values
         if isinstance(data, list):
-            return [ GmJson.__byteify(item,
-                                      ignore_dicts=True) for item in data ]
+            return [GmJson.__byteify(item,
+                                     ignore_dicts=True) for item in data]
         # if this is a dictionary, return dictionary of byteified keys and
         # values but only if we haven't already byteified it
         if isinstance(data, dict) and not ignore_dicts:
@@ -102,7 +102,7 @@ class GmJson(object):
         return GmJson.__byteify(my_dict, ignore_dicts=True), None
 
     def open_write_json_and_close(self,
-                                  write_data   # Python data to be written to the file
+                                  write_data   # Data to be written to the file
                                   ):
         '''
         Dump Python data to the JSON file.

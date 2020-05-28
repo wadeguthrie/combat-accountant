@@ -29,7 +29,6 @@ import ca_timers
 
 # TODO: need to be able to change someone's posture to lying not as part of
 #       a maneuver
-# TODO: should timer firings make it into history?
 # TODO: add preferred weapon/armor - this will be at the top of menus to draw
 #       or don
 # TODO: reload and spells should happen at the end of the timer.  The
@@ -1491,7 +1490,6 @@ class AttributeWidget(object):
             width = len(title) + 2
             keep_ask_attr = True
 
-
             self.__fighter.details[attr_type][attr] = (
                     self.__window_manager.input_num_box(
                         height,
@@ -1910,7 +1908,7 @@ class PersonnelHandler(ScreenHandler):
                                 self.__template_group]):
                     if from_creature_name == empty_creature:
                         self._window_manager.error(
-                                ['Template group "%s" contains illegal template:' %
+                                ['Template group "%s" contains bad template:' %
                                     self.__template_group,
                                  '"%s". Replacing with an empty creature.' %
                                     empty_creature])
@@ -2639,11 +2637,12 @@ class PersonnelHandler(ScreenHandler):
         for ability in self.__ruleset_abilities:
             if ability in fighter.details:
                 sub_menu.extend([
-                    ('%s (add)' % ability, {'doit': self.__ruleset_ability,
-                                            'param': ability}),
+                    ('%s (add)' % ability,
+                        {'doit': self.__ruleset_ability,
+                         'param': ability}),
                     ('%s (remove)' % ability.capitalize(),
-                                      {'doit': self.__ruleset_ability_rm,
-                                       'param': ability})
+                        {'doit': self.__ruleset_ability_rm,
+                         'param': ability})
                 ])
 
         # Add these at the end since they're less likely to be used (I'm
@@ -3285,15 +3284,12 @@ class FightHandler(ScreenHandler):
         self.__next_playback_action_index = 0  # Only for playback
 
         self._add_to_choice_dict({
-            curses.KEY_UP:
-                      {'name': 'prev character',
-                       'func': self.__view_prev},
-            curses.KEY_DOWN:
-                      {'name': 'next character',
-                       'func': self.__view_next},
-            curses.KEY_HOME:
-                      {'name': 'current character',
-                       'func': self.__view_init},
+            curses.KEY_UP: {'name': 'prev character',
+                            'func': self.__view_prev},
+            curses.KEY_DOWN: {'name': 'next character',
+                              'func': self.__view_next},
+            curses.KEY_HOME: {'name': 'current character',
+                              'func': self.__view_init},
 
             ord(' '): {'name': 'next fighter',
                        'func': self.__next_fighter,
@@ -3422,8 +3418,8 @@ class FightHandler(ScreenHandler):
                                    'playback file.'},
                 ord('X'): {'name': 'Step history multi',
                            'func': self.__multi_step_history,
-                           'help': 'Plays several steps of the history in the ' +
-                                   'playback file.'},
+                           'help': 'Plays several steps of the history in ' +
+                                   'the playback file.'},
                 ord('z'): {'name': 'Show playback history',
                            'func': self.__show_playback,
                            'help': 'Shows the actions in the playback ' +
@@ -4424,7 +4420,9 @@ class FightHandler(ScreenHandler):
         title = 'Execute How Many Steps of Playback?'
         height = 1
         width = len(title)
-        step_count_string = self._window_manager.input_box(height, width, title)
+        step_count_string = self._window_manager.input_box(height,
+                                                           width,
+                                                           title)
         if len(step_count_string) <= 0:
             return True
 
@@ -4432,7 +4430,7 @@ class FightHandler(ScreenHandler):
         if (self.__next_playback_action_index + step_count >
                 len(self.__saved_history)):
             step_count = (len(self.__saved_history) -
-                    self.__next_playback_action_index)
+                          self.__next_playback_action_index)
 
         for i in range(step_count):
             action = self.__saved_history[self.__next_playback_action_index]
@@ -4563,7 +4561,6 @@ class FightHandler(ScreenHandler):
                                    self.__viewing_index)
         return True  # Keep going
 
-
     def __playback_history(self):
         '''
         Command ribbon method.
@@ -4584,7 +4581,7 @@ class FightHandler(ScreenHandler):
 
         # TODO: check for fencepost error
         step_count = (len(self.__saved_history) -
-                self.__next_playback_action_index)
+                      self.__next_playback_action_index)
 
         for i in range(step_count):
             action = self.__saved_history[self.__next_playback_action_index]
@@ -5949,7 +5946,7 @@ class Program(object):
             shutil.copy(path_name, new_debug_folder)
             folder_name, filename = os.path.split(path_name)
             new_snapshots[key] = filename
-            #os.path.join(new_debug_folder, filename)
+            # os.path.join(new_debug_folder, filename)
 
         bug_report['snapshots'] = new_snapshots
 
@@ -6129,7 +6126,9 @@ if __name__ == '__main__':
         if not orderly_shutdown:
             if program is not None:
                 print '\n** Making crash report **'
-                crash_filename = program.make_bug_report(None, 'CRASH', filename)
+                crash_filename = program.make_bug_report(None,
+                                                         'CRASH',
+                                                         filename)
                 print '   Written to: %s' % crash_filename
 
 else:

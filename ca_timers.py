@@ -3,6 +3,7 @@
 import copy
 import curses
 
+
 class Timer(object):
     '''
     Embodies a timer that counts down with fight rounds.  There's optional
@@ -13,9 +14,10 @@ class Timer(object):
     '''
     round_count_string = '%d Rnds: '  # assume rounds takes same space as '%d'
     len_timer_leader = len(round_count_string)
-    announcement_margin = 0.1  # time removed from an announcement timer so that
-                               #   it'll go off at the beginning of a round
-                               #   rather than the end
+
+    # time removed from an announcement timer so that it'll go off at the
+    # beginning of a round rather than the end
+    announcement_margin = 0.1
 
     def __init__(self,
                  details    # dict from the Game File, contains timer's info
@@ -32,17 +34,18 @@ class Timer(object):
              ):
         ''' Fires the timer. '''
 
-        result = None   # If there's a timer to be added back into the list,
-                        #   this will be used to return it
+        # If there's a timer to be added back into the list, this will be
+        # used to return it
+        result = None
 
         if 'state' in self.details['actions']:
             owner.details['state'] = self.details['actions']['state']
 
         if 'announcement' in self.details['actions']:
             window_manager.display_window(
-                       ('Timer Fired for %s' % self.details['parent-name']),
-                        [[{'text': self.details['actions']['announcement'],
-                           'mode': curses.A_NORMAL }]])
+                    ('Timer Fired for %s' % self.details['parent-name']),
+                    [[{'text': self.details['actions']['announcement'],
+                        'mode': curses.A_NORMAL}]])
 
         if 'timer' in self.details['actions']:
             result = self.details['actions']['timer']
@@ -52,11 +55,12 @@ class Timer(object):
     def from_pieces(self,
                     pieces,  # { 'parent-name': <text>, string describing the
                              #                          thing calling the timer
-                             #   'rounds': <number>,    rounds until timer fires
-                             #                          (3.0 rounds fires at end
-                             #                          of 3 rounds; 2.9 rounds
-                             #                          fires at beginning of 3
-                             #                          rounds).
+                             #   'rounds': <number>,    rounds until timer
+                             #                          fires (3.0 rounds
+                             #                          fires at end of 3
+                             #                          rounds; 2.9 rounds
+                             #                          fires at beginning of
+                             #                          3 rounds).
                              #   'string': <text> or [<text>, <text>, ...],
                              #                          string to display (in
                              #                          fighter's notes) while
@@ -88,14 +92,14 @@ class Timer(object):
         rounds = self.details['rounds']
 
         if ('announcement' in self.details['actions'] and
-                        self.details['actions']['announcement'] is not None):
+                self.details['actions']['announcement'] is not None):
             # Add back in the little bit we shave off of an announcement so
             # that the timer will announce as the creature's round starts
             # rather than at the end.
             rounds += Timer.announcement_margin
 
-        round_count_string = Timer.round_count_string % (rounds +
-                                                    Timer.announcement_margin)
+        round_count_string = Timer.round_count_string % (
+                rounds + Timer.announcement_margin)
         this_line.append(round_count_string)
         if 'announcement' in self.details['actions']:
             this_line.append('[%s]' % self.details['actions']['announcement'])
@@ -103,13 +107,13 @@ class Timer(object):
             this_line = []
 
         if ('state' in self.details['actions'] and
-                            self.details['actions']['state'] is not None):
+                self.details['actions']['state'] is not None):
             this_line.append('<%s>' % self.details['actions']['state'])
             result.append(''.join(this_line))
             this_line = []
 
         if ('string' in self.details and self.details['string'] is not None
-                                        and len(self.details['string']) > 0):
+                and len(self.details['string']) > 0):
             if type(self.details['string']) is list:
                 for substring in self.details['string']:
                     this_line.append('%s' % (substring))
@@ -135,24 +139,24 @@ class Timer(object):
         rounds = self.details['rounds']
 
         if ('announcement' in self.details['actions'] and
-                        self.details['actions']['announcement'] is not None):
+                self.details['actions']['announcement'] is not None):
             # Add back in the little bit we shave off of an announcement so
             # that the timer will announce as the creature's round starts
             # rather than at the end.
             rounds += Timer.announcement_margin
 
-        round_count_string = Timer.round_count_string % (rounds +
-                                                    Timer.announcement_margin)
+        round_count_string = Timer.round_count_string % (
+                rounds + Timer.announcement_margin)
         this_line.append(round_count_string)
 
         needs_headline = True
         if 'announcement' in self.details['actions']:
             this_line.append('[%s]' %
-                                    self.details['actions']['announcement'][0])
+                             self.details['actions']['announcement'][0])
             needs_headline = False
 
         if ('string' in self.details and self.details['string'] is not None
-                                        and len(self.details['string']) > 0):
+                and len(self.details['string']) > 0):
             if type(self.details['string']) is list:
                 this_line.append('%s' % (self.details['string'][0]))
             else:
@@ -165,7 +169,7 @@ class Timer(object):
         return ' '.join(this_line)
 
     def mark_owner_as_busy(self,
-                           is_busy = True):
+                           is_busy=True):
         self.details['busy'] = is_busy
 
     def __complete_me(self):
@@ -177,7 +181,7 @@ class Timer(object):
         if 'parent-name' not in self.details:
             self.details['parent-name'] = '<< Unknown Parent >>'
         if 'busy' not in self.details:
-            self.mark_owner_as_busy(is_busy = False)
+            self.mark_owner_as_busy(is_busy=False)
         if 'rounds' not in self.details:
             self.details['rounds'] = 1
         if 'actions' not in self.details:
@@ -199,7 +203,7 @@ class TimersWidget(object):
 
     def make_timer(self,
                    timer_recipient_name  # string
-                    ):
+                   ):
         '''
         Makes a timer object and adds it to the Timers list.
 
@@ -242,14 +246,14 @@ class TimersWidget(object):
                  'continuous_message': None,
                  'state': None}
         actions_menu = [('message (continuous)',
-                                {'doit': self.__continuous_message_action,
-                                 'param': param}),
+                         {'doit': self.__continuous_message_action,
+                          'param': param}),
                         ('announcement',
-                                {'doit': self.__announcement_action,
-                                 'param': param}),
-                        #('state change',
-                        #        {'doit': self.__new_state_action,
-                        #         'param': param})
+                         {'doit': self.__announcement_action,
+                          'param': param}),
+                        # ('state change',
+                        #         {'doit': self.__new_state_action,
+                        #          'param': param})
                         ]
         keep_asking = True
         while keep_asking:
@@ -268,10 +272,10 @@ class TimersWidget(object):
             # as his round starts rather than at the end.
             rounds -= Timer.announcement_margin
 
-        timer_dict = { 'parent-name': timer_recipient_name,
-                       'rounds': rounds,
-                       'string': param['continuous_message'],
-                       'actions': {} }
+        timer_dict = {'parent-name': timer_recipient_name,
+                      'rounds': rounds,
+                      'string': param['continuous_message'],
+                      'actions': {}}
 
         if param['announcement'] is not None:
             timer_dict['actions']['announcement'] = param['announcement']
@@ -326,12 +330,11 @@ class TimersWidget(object):
         param['continuous_message'] = string
         return True
 
-
-    #def __new_state_action(self,
-    #                       param    # dict passed by the menu handler --
-    #                                #   contains the destination state of the
-    #                                #   Fighter associated with the timer
-    #                       ):
+    # def __new_state_action(self,
+    #                        param    # dict passed by the menu handler --
+    #                                 #   contains the destination state of the
+    #                                 #   Fighter associated with the timer
+    #                        ):
     #    '''
     #    Handler for the timer's 'what do I do with this timer' entry.
 
@@ -423,9 +426,8 @@ class Timers(object):
         '''
         remove_these = []
         for index, timer in enumerate(self.__timers['obj']):
-            if timer.details['rounds'] < 0:     # < keeps the timers dying
-                                                #   this round
-                remove_these.insert(0, index)   # largest indexes last
+            if timer.details['rounds'] < 0:  # keeps timers dying this round
+                remove_these.insert(0, index)  # largest indexes last
 
         for index in remove_these:
             self.__fire_timer(self.__timers['obj'][index])
@@ -443,9 +445,8 @@ class Timers(object):
         # TODO: should I just reverse the order we go through the timer list?
         remove_these = []
         for index, timer in enumerate(self.__timers['obj']):
-            if timer.details['rounds'] <= 0:    # <= kills the timers dying
-                                                #   this round
-                remove_these.insert(0, index)   # largest indexes last
+            if timer.details['rounds'] <= 0:  # kills timers dying this round
+                remove_these.insert(0, index)  # largest indexes last
         for index in remove_these:
             self.__fire_timer(self.__timers['obj'][index])
             self.remove_timer_by_index(index)

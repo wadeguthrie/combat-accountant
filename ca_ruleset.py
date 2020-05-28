@@ -7,6 +7,7 @@ import random
 import ca_fighter
 import ca_timers
 
+
 class Ruleset(object):
     '''
     Any ruleset's character's dict is expected to include the following:
@@ -71,9 +72,9 @@ class Ruleset(object):
         Returns nothing.
         '''
 
-        #print '\n=== do_action ==='
-        #PP = pprint.PrettyPrinter(indent=3, width=150)
-        #PP.pprint(action)
+        # print '\n=== do_action ==='
+        # PP = pprint.PrettyPrinter(indent=3, width=150)
+        # PP.pprint(action)
 
         handled = self._perform_action(fighter, action, fight_handler, logit)
         self._record_action(fighter, action, fight_handler, handled, logit)
@@ -108,7 +109,7 @@ class Ruleset(object):
         holding_ranged = (False if weapon is None else
                           weapon.is_ranged_weapon())
 
-        ### Armor ###
+        # ARMOR #
 
         # Armor SUB-menu
 
@@ -117,10 +118,11 @@ class Ruleset(object):
         for index, item in enumerate(fighter.details['stuff']):
             if item['type'] == 'armor':
                 if armor is None or armor_index != index:
-                    don_armor_menu.append((item['name'],
-                                           {'action': {'action-name': 'don-armor',
-                                                       'armor-index': index}}
-                                         ))
+                    don_armor_menu.append(
+                            (item['name'],
+                             {'action': {'action-name': 'don-armor',
+                                                        'armor-index': index}}
+                             ))
         don_armor_menu = sorted(don_armor_menu, key=lambda x: x[0].upper())
 
         # Armor menu
@@ -130,41 +132,46 @@ class Ruleset(object):
                 (('Don %s' % don_armor_menu[0][0]),
                  {'action': {
                     'action-name': 'don-armor',
-                    'armor-index': don_armor_menu[0][1]['action']['armor-index']
-                  }
-                 }))
+                    'armor-index':
+                    don_armor_menu[0][1]['action']['armor-index']}}
+                 ))
 
         elif len(don_armor_menu) > 1:
             action_menu.append(('Don Armor', {'menu': don_armor_menu}))
 
         if armor is not None:
             action_menu.append((('Doff %s' % armor['name']),
-                                 {'action': {'action-name': 'don-armor',
-                                             'armor-index': None}}
-                              ))
+                                {'action': {'action-name': 'don-armor',
+                                            'armor-index': None}}
+                                ))
 
-        ### Attack ###
+        # ATTACK #
 
         if holding_ranged:
             if weapon.shots_left() > 0:
                 # Can only attack if there's someone to attack
                 action_menu.extend([
-                    ('attack',          {'action': {'action-name': 'attack'}}),
-                    ('attack, all out', {'action': {'action-name': 'all-out-attack'}})
+                    ('attack',          {'action':
+                                         {'action-name': 'attack'}}),
+                    ('attack, all out', {'action':
+                                         {'action-name': 'all-out-attack'}})
                 ])
         else:
             action_menu.extend([
-                    ('attack',          {'action': {'action-name': 'attack'}}),
-                    ('attack, all out', {'action': {'action-name': 'all-out-attack'}})
+                    ('attack',          {'action':
+                                         {'action-name': 'attack'}}),
+                    ('attack, all out', {'action':
+                                         {'action-name': 'all-out-attack'}})
             ])
 
-        ### Draw or Holster weapon ###
+        # DRAW OR HOLSTER WEAPON #
 
         if weapon is not None:
-            action_menu.append((('holster/sheathe %s' % weapon.details['name']),
-                                   {'action': {'action-name': 'draw-weapon',
-                                               'weapon-index': None}
-                                   }))
+            action_menu.append(
+                    (('holster/sheathe %s' % weapon.details['name']),
+                     {'action': {'action-name': 'draw-weapon',
+                                 'weapon-index': None}
+                      }))
         else:
             # Draw weapon SUB-menu
 
@@ -175,9 +182,10 @@ class Ruleset(object):
                         item['type'] == 'shield'):
                     if weapon is None or weapon_index != index:
                         draw_weapon_menu.append(
-                            (item['name'], {'action': {'action-name': 'draw-weapon',
-                                                       'weapon-index': index}
-                                           }))
+                            (item['name'],
+                             {'action': {'action-name': 'draw-weapon',
+                                         'weapon-index': index}
+                              }))
             draw_weapon_menu = sorted(draw_weapon_menu,
                                       key=lambda x: x[0].upper())
 
@@ -186,34 +194,34 @@ class Ruleset(object):
             if len(draw_weapon_menu) == 1:
                 action_menu.append(
                     (('draw (ready, etc.; B325, B366, B382) %s' %
-                                                    draw_weapon_menu[0][0]),
-                     {'action': {'action-name': 'draw-weapon',
-                                 'weapon-index':
-                            draw_weapon_menu[0][1]['action']['weapon-index']}
-                     }))
+                        draw_weapon_menu[0][0]),
+                     {'action':
+                         {'action-name': 'draw-weapon',
+                          'weapon-index':
+                          draw_weapon_menu[0][1]['action']['weapon-index']}
+                      }))
 
             elif len(draw_weapon_menu) > 1:
                 action_menu.append(('draw (ready, etc.; B325, B366, B382)',
                                     {'menu': draw_weapon_menu}))
 
-        ### RELOAD ###
+        # RELOAD #
 
         if holding_ranged:
             action_menu.append(('reload (ready)',
-                               {'action': {'action-name': 'reload'}}
-                              ))
+                               {'action': {'action-name': 'reload'}}))
 
-        ### Use Item ###
+        # USE ITEM #
 
         # Use SUB-menu
 
         use_menu = []
         for index, item in enumerate(fighter.details['stuff']):
             use_menu.append((item['name'],
-                            {'action': {'action-name': 'use-item',
-                                        'item-index': index,
-                                        'item-name': item['name']}}
-                           ))
+                             {'action': {'action-name': 'use-item',
+                                         'item-index': index,
+                                         'item-name': item['name']}}
+                             ))
         use_menu = sorted(use_menu, key=lambda x: x[0].upper())
 
         # Use menu
@@ -223,17 +231,16 @@ class Ruleset(object):
                 (('use %s' % use_menu[0][0]),
                  {'action': {'action-name': 'use-item',
                              'item-index':
-                                use_menu[0][1]['action']['item-index']}
-                 }))
+                             use_menu[0][1]['action']['item-index']}
+                  }))
 
         elif len(use_menu) > 1:
             action_menu.append(('use item', {'menu': use_menu}))
 
-        ### User-defined ###
+        # USER-DEFINED #
 
         action_menu.append(('User-defined',
-                            {'action': {'action-name': 'user-defined'}}
-                          ))
+                            {'action': {'action-name': 'user-defined'}}))
 
         return  # No need to return action menu since it was a parameter
 
@@ -280,8 +287,8 @@ class Ruleset(object):
             fighter.details['state'] = 'alive'
 
         if ('reload-on-heal' in world.details['options'] and
-                            world.details['options']['reload-on-heal'] and
-                            fighter.group == 'PCs'):
+                world.details['options']['reload-on-heal'] and
+                fighter.group == 'PCs'):
             throw_away, original_weapon_index = fighter.get_current_weapon()
             for index, item in enumerate(fighter.details['stuff']):
                 if item['type'] == 'ranged weapon':
@@ -429,8 +436,9 @@ class Ruleset(object):
 
     def __do_attack(self,
                     fighter,          # Fighter object
-                    action,           # {'action-name': 'attack' | 'all-out-attack' |
-                                      #          'move-and-attack'
+                    action,           # {'action-name':
+                                      #     'attack' | 'all-out-attack' |
+                                      #     'move-and-attack'
                                       #  'comment': <string>, # optional
                     fight_handler     # FightHandler object
                     ):
@@ -446,8 +454,8 @@ class Ruleset(object):
         '''
 
         if (fighter.details['opponent'] is None and
-                                        fight_handler is not None and
-                                        not fight_handler.world.playing_back):
+                fight_handler is not None and
+                not fight_handler.world.playing_back):
             fight_handler.pick_opponent()
 
         weapon, weapon_index = fighter.get_current_weapon()
@@ -493,7 +501,9 @@ class Ruleset(object):
             height = 1
             title = 'What Action Is Performed'
             width = self._window_manager.getmaxyx()
-            comment_string = self._window_manager.input_box(height, width, title)
+            comment_string = self._window_manager.input_box(height,
+                                                            width,
+                                                            title)
 
             # Send the action for the second part
 
@@ -510,7 +520,6 @@ class Ruleset(object):
             self.do_action(fighter, new_action, fight_handler)
 
             return Ruleset.DONT_LOG
-
 
     def __do_reload(self,
                     fighter,          # Fighter object
@@ -609,7 +618,7 @@ class Ruleset(object):
             if not weapon.clip_works_with_weapon(clip):
                 self._window_manager.error([
                     'Weapon "%s" has different clip size to Clip "%s"' % (
-                        weapon.details['name'], clip['name']) ])
+                        weapon.details['name'], clip['name'])])
                 return Ruleset.HANDLED_ERROR
 
             # Do a deepcopy for the second part to copy the comment --
@@ -696,7 +705,8 @@ class Ruleset(object):
 
     def _perform_action(self,
                         fighter,          # Fighter object
-                        action,           # {'action-name': <action>, parameters...}
+                        action,           # {'action-name':
+                                          #     <action>, parameters...}
                         fight_handler,    # FightHandler object
                         logit=True        # Log into history and
                                           #  'actions_this_turn' because the
@@ -774,7 +784,8 @@ class Ruleset(object):
 
     def _record_action(self,
                        fighter,          # Fighter object
-                       action,           # {'action-name': <action>, parameters...}
+                       action,           # {'action-name':
+                                         #      <action>, parameters...}
                        fight_handler,    # FightHandler object
                        handled,          # bool: whether/how the action was
                                          #   handled
@@ -796,7 +807,8 @@ class Ruleset(object):
 
     def __set_consciousness(self,
                             fighter,          # Fighter object
-                            action,           # {'action-name': 'set-consciousness',
+                            action,           # {'action-name':
+                                              #     'set-consciousness',
                                               #  'level': <int> # see
                                               #         Fighter.conscious_map
                                               #  'comment': <string> # optional

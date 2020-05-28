@@ -288,7 +288,7 @@ class GmWindow(object):
                 self._command_ribbon['max_width'])  # -1 for last '|'
         self._command_ribbon['lines_for_choices'] = int(
                 (len(choices) /
-                (self._command_ribbon['choices_per_line'] + 0.0))
+                    (self._command_ribbon['choices_per_line'] + 0.0))
                 + 0.9999999)  # +0.9999 so 'int' won't truncate partial line
 
         self._command_ribbon['choice_strings'].sort(reverse=True,
@@ -636,7 +636,6 @@ class GmWindowManager(object):
         self.hard_refresh_all()
         return string
 
-
     def input_num_box(self,
                       height,           # int: height of the data window (the
                                         #   box around it will, therefore, be
@@ -675,7 +674,6 @@ class GmWindowManager(object):
             return result + input_value
 
         return result - input_value
-
 
     def menu(self,
              title,             # string: title of the menu, displayed to user

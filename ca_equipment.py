@@ -50,7 +50,7 @@ class Equipment(object):
 
     def get_item_by_name(self,              # Public to facilitate testing
                          name,  # string that matches the name of the thing
-                         starting_index = -1    # int
+                         starting_index=-1    # int
                          ):
         '''
         Returns a tuple that contains index, item (i.e., the dict describing
@@ -62,7 +62,7 @@ class Equipment(object):
 
         for index, item in enumerate(self.__equipment):
             if index <= starting_index:
-                pass # It's structured like this for debugging
+                pass  # It's structured like this for debugging
             elif item['name'] == name:
                 return index, item
         return None, None  # didn't find one
@@ -354,13 +354,13 @@ class Weapon(object):
 
     def notes(self):
         weapon_notes = (None if 'notes' not in self.details
-                or len(self.details) == 0 else self.details['notes'])
+                        or len(self.details) == 0 else self.details['notes'])
 
         clip = None if 'clip' not in self.details else self.details['clip']
 
         ammo_notes = (None if clip is None
-                or 'notes' not in clip
-                or len(clip) == 0 else clip['notes'])
+                      or 'notes' not in clip
+                      or len(clip) == 0 else clip['notes'])
 
         if weapon_notes is None:
             if ammon_notes is None:
@@ -379,7 +379,7 @@ class Weapon(object):
         return self.__get_parameter('shots', ammo=True)
 
     def shots_left(self,
-                   new_value = None):
+                   new_value=None):
         clip = None if 'clip' not in self.details else self.details['clip']
         if new_value is not None:
             return self.__set_parameter('shots_left', new_value, ammo=True)
@@ -407,7 +407,7 @@ class Weapon(object):
 
     def __get_parameter(self,
                         param,   # string
-                        ammo = False
+                        ammo=False
                         ):
         clip = None if 'clip' not in self.details else self.details['clip']
         if clip is not None and param in clip:
@@ -419,7 +419,7 @@ class Weapon(object):
     def __set_parameter(self,
                         param,      # string
                         new_value,  # number
-                        ammo = False
+                        ammo=False
                         ):
         clip = None if 'clip' not in self.details else self.details['clip']
         if clip is not None and param in clip:

@@ -4,6 +4,7 @@ import json
 import pprint
 import traceback
 
+
 class GmJson(object):
     '''
     Context manager that opens and loads a JSON.  Does so in a context manager
@@ -12,22 +13,21 @@ class GmJson(object):
     '''
 
     def __init__(self,
-                 filename,             # file containing the JSON to be read
-                 window_manager = None # send error messages here
-                ):
+                 filename,            # file containing the JSON to be read
+                 window_manager=None  # send error messages here
+                 ):
         self.__filename = filename
         self.__window_manager = window_manager
         self.read_data = None
         self.write_data = None
 
-
     def __enter__(self):
         try:
             with open(self.__filename, 'r') as f:
-              self.read_data, error_msg = GmJson.__json_load_byteified(f)
-              if self.read_data is None:
+                self.read_data, error_msg = GmJson.__json_load_byteified(f)
+                if self.read_data is None:
                     error_array = ['Could not read JSON file "%s"' %
-                                                            self.__filename]
+                                   self.__filename]
                     if error_msg is not None:
                         error_array.append(error_msg)
 
@@ -48,16 +48,15 @@ class GmJson(object):
             self.read_data = None
         return self
 
-
-    def __exit__ (self, exception_type, exception_value, exception_traceback):
+    def __exit__(self, exception_type, exception_value, exception_traceback):
         if exception_type is IOError:
             print 'IOError: %r' % exception_type
             print 'EXCEPTION val: %s' % exception_value
-            traceback.print_exc() # or traceback.format_exc()
+            traceback.print_exc()  # or traceback.format_exc()
         elif exception_type is not None:
             print 'EXCEPTION type: %r' % exception_type
             print 'EXCEPTION val: %s' % exception_value
-            traceback.print_exc() # or traceback.format_exc()
+            traceback.print_exc()  # or traceback.format_exc()
 
         if self.write_data is not None:
             with open(self.__filename, 'w') as f:
@@ -74,16 +73,15 @@ class GmJson(object):
     #        utm_medium=organic&utm_source=google_rich_qa&
     #        utm_campaign=google_rich_qa
 
-
     @staticmethod
-    def __byteify(data, ignore_dicts = False):
+    def __byteify(data, ignore_dicts=False):
         # if this is a unicode string, return its string representation
         if isinstance(data, unicode):
             return data.encode('utf-8')
         # if this is a list of values, return list of byteified values
         if isinstance(data, list):
-            return [ GmJson.__byteify(item,
-                                      ignore_dicts=True) for item in data ]
+            return [GmJson.__byteify(item,
+                                     ignore_dicts=True) for item in data]
         # if this is a dictionary, return dictionary of byteified keys and
         # values but only if we haven't already byteified it
         if isinstance(data, dict) and not ignore_dicts:
@@ -94,7 +92,6 @@ class GmJson(object):
             }
         # if it's anything else, return it in its original form
         return data
-
 
     @staticmethod
     def __json_load_byteified(file_handle):
@@ -144,7 +141,7 @@ def are_equal(lhs, rhs):
                 PP.pprint(rhs)
                 result = False
         return result
-            
+
     elif isinstance(lhs, list):
         if not isinstance(rhs, list):
             print '\n---------------------'
@@ -190,12 +187,13 @@ class MyArgumentParser(argparse.ArgumentParser):
     def error(self, message):
         sys.stderr.write('error: %s\n' % message)
         self.print_help()
-        sys.exit(2) 
+        sys.exit(2)
 
 
 if __name__ == '__main__':
     parser = MyArgumentParser()
-    parser.add_argument('filename', nargs=2,
+    parser.add_argument(
+            'filename', nargs=2,
              help='Input JSON file containing characters and monsters')
     parser.add_argument('-v', '--verbose', help='verbose', action='store_true',
                         default=False)
@@ -212,4 +210,3 @@ if __name__ == '__main__':
         with GmJson(ARGS.filename[1]) as file2:
             if are_equal(file1.read_data, file2.read_data):
                 print 'files are equal'
-
