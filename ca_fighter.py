@@ -51,7 +51,7 @@ class ThingsInFight(object):
         '''
         Accept a new item of equipment and put it in the list.
 
-        Returns the new index of the equipment.
+        Returns the new index of the equipment (for testing).
         '''
         return self.equipment.add(new_item, source)
 

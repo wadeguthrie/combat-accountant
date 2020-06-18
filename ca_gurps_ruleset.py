@@ -332,7 +332,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         },
         "Armor": {
           "cost": None,
-          "notes": "M167, 2xDR, lasts 1 minute",
+          "notes": "M167, cost DR*2, max DR=5",
           "maintain": 0,
           "casting time": 1,
           "duration": 60,
@@ -357,6 +357,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+        },
+        "Body of Metal" :{
+          "cost": 12,
+          "notes": "M183, B262, DR9, et al.",
+          "maintain": 6,
+          "casting time": 5,
+          "duration": 60,
+        },
+        "Body of Plastic" :{
+          "cost": 10,
+          "notes": "M183",
+          "maintain": 5,
+          "casting time": 5,
+          "duration": 60,
         },
         "Boost Dexterity": {
           "cost": 1,
@@ -434,6 +448,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 5,
           "duration": 0,
+        },
+        "Create Fuel" :{
+          "cost": None,
+          "notes": "M179",
+          "maintain": None,
+          "casting time": 30,
+          "duration": None,
         },
         "Cure Disease": {
           "cost": 4,
@@ -554,12 +575,33 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 1,
           "duration": 60,
         },
+        "Force Dome" :{
+          "cost": None,
+          "notes": "M170, cost 3*yards radius",
+          "maintain": None,
+          "casting time": 1,
+          "duration": 600,
+        },
+        "Force Wall" :{
+          "cost": None,
+          "notes": "M170, cost: 2/yard length",
+          "maintain": None,
+          "casting time": 1,
+          "duration": 60,
+        },
         "Fumble": {
           "cost": 3,
           "notes": "M38",
           "maintain": None,
           "casting time": 1,
           "duration": 0,
+        },
+        "Glitch" :{
+          "cost": 3,
+          "notes": "M176",
+          "maintain": None,
+          "casting time": 1,
+          "duration": None,
         },
         "Golem": {
           "cost": 250,
@@ -694,6 +736,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 2,
           "duration": 60,
         },
+        "Magelock" :{
+          "cost": 3,
+          "notes": "M166, locks door magically",
+          "maintain": 2,
+          "casting time": 4,
+          "duration": 21600, # 6 hours
+        },
         "Major Healing": {
           "cost": None,
           "notes": "M91",
@@ -743,6 +792,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 1,
           "duration": 0,    # Permanent -- no need to track
         },
+        "Mystic Mist" :{
+          "cost": None,
+          "notes": "M168, cost: 1 * yards radius, +1 defense rolls",
+          "maintain": None,
+          "casting time": 300,
+          "duration": 36000, # 10 hours
+        },
         "Pain": {
           "cost": 2,
           "notes": "M36, vs. HT",
@@ -785,6 +841,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 1,
           "duration": 0,    # Permanent -- no need to track
         },
+        "Rebuild" :{
+          "cost": None,
+          "notes": "M177",
+          "maintain": None,
+          "casting time": None,
+          "duration": None,
+        },
         "Relieve Sickness": {
           "cost": 2,
           "notes": "M90",
@@ -798,6 +861,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,    # Permanent -- no need to track
+        },
+        "Resist Lightning" :{
+          "cost": 2,
+          "notes": "M196",
+          "maintain": 1,
+          "casting time": 1,
+          "duration": 60,
+        },
+        "Resist Poison" :{
+          "cost": 4,
+          "notes": "M91",
+          "maintain": 3,
+          "casting time": 10,
+          "duration": 3600,
         },
         "Restoration": {
           "cost": 15,
@@ -813,6 +890,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 1,
           "duration": 1,
         },
+        "Schematic" :{
+          "cost": None,
+          "notes": "M177",
+          "maintain": None,
+          "casting time": 5,
+          "duration": 60,
+        },
         "Seek Machine": {
           "cost": 3,
           "notes": "M175",
@@ -826,6 +910,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 0,
+        },
+        "Sense Danger" :{
+          "cost": 3,
+          "notes": "M166",
+          "maintain": 6,
+          "casting time": 1,
+          "duration": 1,
         },
         "Sense Emotion": {
           "cost": 2,
@@ -848,10 +939,24 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 1,
           "duration": 0,
         },
+        "Sense Observation" :{
+          "cost": None,
+          "notes": "M167, cost: 1 (3 if on person)",
+          "maintain": None,
+          "casting time": 5,
+          "duration": 3600,
+        },
         "Sensitize": {
           "cost": 3,
           "notes": "M39",
           "maintain": 2,
+          "casting time": 1,
+          "duration": 60,
+        },
+        "Shape Metal" :{
+          "cost": 6,
+          "notes": "M182",
+          "maintain": None,
           "casting time": 1,
           "duration": 60,
         },
@@ -889,6 +994,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+        },
+        "Steal Power" :{
+          "cost": 0,
+          "notes": "M180",
+          "maintain": 6,
+          "casting time": 5,
+          "duration": 60,
         },
         "Stop Power": {
           "cost": None,
@@ -973,6 +1085,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 60,
+        },
+        "Watchdog" :{
+          "cost": None,
+          "notes": "M167, cost: 1*yards radius, caster is aware of hostile intent",
+          "maintain": 1,
+          "casting time": 10,
+          "duration": 36000,
         },
         "Wizard Eye": {
           "cost": 4,

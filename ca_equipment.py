@@ -322,9 +322,12 @@ class Weapon(object):
         return self.__get_parameter('damage')
 
     def remove_old_clip(self):
-        old_clip = self.details['clip']
-        old_clip['shots'] = self.shots()
-        old_clip['shots_left'] = self.shots_left()
+        if 'clip' in self.details:
+            old_clip = self.details['clip']
+            old_clip['shots'] = self.shots()
+            old_clip['shots_left'] = self.shots_left()
+        else:
+            old_clip = None
         self.details['clip'] = None
         self.shots_left(0)
         return old_clip
@@ -380,11 +383,8 @@ class Weapon(object):
 
     def shots_left(self,
                    new_value=None):
-        clip = None if 'clip' not in self.details else self.details['clip']
         if new_value is not None:
             return self.__set_parameter('shots_left', new_value, ammo=True)
-        if clip is None:
-            return 0
         return self.__get_parameter('shots_left', ammo=True)
 
     def to_hit(self):

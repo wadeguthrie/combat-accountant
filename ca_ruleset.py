@@ -568,7 +568,8 @@ class Ruleset(object):
             # Put a non-zero count clip back in equipment list
             if weapon.shots_left() > 0:
                 old_clip = weapon.remove_old_clip()
-                ignore_item = fighter.equipment.add(old_clip)
+                if old_clip is not None:
+                    ignore_item = fighter.equipment.add(old_clip)
 
             # And put the new clip in the weapon
             weapon.load(clip)
