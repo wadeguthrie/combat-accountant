@@ -22,6 +22,12 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: when modifying fighters, going to the next fighter should scroll his
+#   details list to the top
+# TODO: when adding the second spells/equipment/advantages, etc., start the
+#   menu at the last item that was added
+# TODO: when modifying fighters and donning/doffing armor, wielding/holstering
+#   weapons, don't launch a timer
 # TODO: Previous '<' needs to be an action.  Alternatively, 'start_turn' could
 #   go to the named creature.  At LEAST we should warn when they don't match.
 
