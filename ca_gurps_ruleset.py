@@ -638,6 +638,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 2,
           "duration": 0,
         },
+        "Hallucination": {
+          "cost": 4,
+          "notes": "M140, Will negates, 1 item exists or does not",
+          "maintain": 2,
+          "casting time": 2,
+          "duration": 60,
+        },
         "Heal Plant": {
           "cost": 3,
           "notes": "M161",
@@ -994,6 +1001,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+        },
+        "Spell Shield": {
+          "cost": None,
+          "notes": "M124, cost: 3/yard radius, only non-missile spells",
+          "maintain": None,
+          "casting time": 1,
+          "duration": 60,
+        },
+        "Spell Wall": {
+          "cost": None,
+          "notes": "M124, cost: 2/yard, only non-missile spells",
+          "maintain": None,
+          "casting time": 1,
+          "duration": 60,
         },
         "Steal Power" :{
           "cost": 0,
@@ -1902,6 +1923,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                     weapon.shots_left(),
                                     weapon.shots(),
                                     reloads))
+                weapon_notes = weapon.notes()
+                if weapon_notes is not None and len(weapon_notes) > 0:
+                    notes.append("  %s" % weapon_notes)
 
         # Active aim
 
@@ -3706,11 +3730,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             weapon, weapon_index = fighter.get_current_weapon()
             if weapon is None or not weapon.uses_ammo():
-                return None  # No timer
-
-            # Check to see if we need a reload at all
-
-            if weapon.shots_left() == weapon.shots():
                 return None  # No timer
 
             # If we do, how long will it take?

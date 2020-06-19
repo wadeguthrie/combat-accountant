@@ -366,12 +366,12 @@ class Weapon(object):
                       or len(clip) == 0 else clip['notes'])
 
         if weapon_notes is None:
-            if ammon_notes is None:
+            if ammo_notes is None:
                 notes = ''
             else:
                 notes = ammo_notes
         else:
-            if ammon_notes is None:
+            if ammo_notes is None:
                 notes = weapon_notes
             else:
                 notes = '%s - %s' % (weapon_notes, ammo_notes)

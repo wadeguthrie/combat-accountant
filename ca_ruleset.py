@@ -616,12 +616,6 @@ class Ruleset(object):
             if clip is None:
                 return Ruleset.DONT_LOG
 
-            if not weapon.clip_works_with_weapon(clip):
-                self._window_manager.error([
-                    'Weapon "%s" has different clip size to Clip "%s"' % (
-                        weapon.details['name'], clip['name'])])
-                return Ruleset.HANDLED_ERROR
-
             # Do a deepcopy for the second part to copy the comment --
             # that's what gets displayed for the history command.
 
