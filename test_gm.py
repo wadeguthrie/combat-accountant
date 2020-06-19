@@ -259,6 +259,9 @@ class MockPersonnelGmWindow(MockGmWindow):
                        ):
         pass
 
+    def char_detail_home(self):
+        pass
+
 
 class MockFightGmWindow(MockGmWindow):
     def __init__(self,
@@ -394,7 +397,7 @@ class MockWindowManager(object):
             while 'menu' in menu_result:
                 menu_result = self.menu('Which', menu_result['menu'])
                 if menu_result is None:  # Bail out regardless of nesting level
-                    return None         # Keep going
+                    return None, None    # Keep going
 
             if 'doit' in menu_result and menu_result['doit'] is not None:
                 param = (None if 'param' not in menu_result
@@ -408,7 +411,7 @@ class MockWindowManager(object):
             print '      ',
             PP.pprint(self.__menu_responses)
 
-        return menu_result
+        return menu_result, 0 # supply a dummy index to the menu
 
     def set_input_box_response(self,
                                title,

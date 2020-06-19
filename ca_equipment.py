@@ -247,7 +247,8 @@ class EquipmentManager(object):
     #
 
     def add_equipment(self,
-                      fighter       # Fighter object
+                      fighter,      # Fighter object
+                      starting_index = 0
                       ):
         '''
         Ask user which item to transfer from the store to a fighter and
@@ -265,13 +266,16 @@ class EquipmentManager(object):
         item_menu = [(item['name'], item)
                      for item in self.__world.details['stuff']]
         item_menu = sorted(item_menu, key=lambda x: x[0].upper())
-        item = self.__window_manager.menu('Item to Add', item_menu)
+        item, starting_index = self.__window_manager.menu(
+                'Item to Add', item_menu, starting_index)
         if item is not None:
             source = None
             if item['owners'] is not None and len(item['owners']) == 0:
                 source = 'the store'
 
             fighter.add_equipment(copy.deepcopy(item), source)
+
+        return starting_index
 
     def remove_equipment(self,
                          fighter       # Fighter object
@@ -286,7 +290,8 @@ class EquipmentManager(object):
 
         item_menu = [(item['name'], index)
                      for index, item in enumerate(fighter.details['stuff'])]
-        item_index = self.__window_manager.menu('Item to Remove', item_menu)
+        item_index, ignore = self.__window_manager.menu('Item to Remove',
+                                                        item_menu)
         if item_index is None:
             return None
 
@@ -327,7 +332,14 @@ class Weapon(object):
             old_clip['shots'] = self.shots()
             old_clip['shots_left'] = self.shots_left()
         else:
-            old_clip = None
+            old_clip = {'count': 1,
+                        'owners': [],
+                        'name': self.details['ammo']['name'],
+                        'notes': '',
+                        'shots': self.shots(),
+                        'shots_left': self.shots_left(),
+                        'type': 'misc', # TODO: ruleset?
+                        }
         self.details['clip'] = None
         self.shots_left(0)
         return old_clip

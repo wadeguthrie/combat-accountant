@@ -692,16 +692,18 @@ class GmWindowManager(object):
              starting_index=0   # Who is selected when the menu starts
              ):
         '''
-        Presents a menu to the user and returns the result.
+        Presents a menu to the user and returns the result and the index of
+        the result.
 
         The result value in strings_results can be anything and take any form.
         '''
         (MENU_STRING, MENU_RESULT) = range(0, 2)
 
         if len(strings_results) < 1:  # if there's no choice, say so
-            return None
+            return None, None
         if len(strings_results) == 1:  # if only 1 choice, autoselect it
-            return self.__handle_menu_result(strings_results[0][MENU_RESULT])
+            return (self.__handle_menu_result(strings_results[0][MENU_RESULT]),
+                    0)
 
         # height and width of text box (not border)
         height = len(strings_results)
@@ -730,6 +732,15 @@ class GmWindowManager(object):
                                         data_for_scrolling=data_for_scrolling)
         menu_win.refresh()
 
+        index_into_current_pane = starting_index
+        while index_into_current_pane >= height:
+            menu_win.scroll_down(height)
+            index_into_current_pane -= height
+
+        if index_into_current_pane != starting_index:
+            menu_win.draw_window()
+            menu_win.refresh()
+
         while True:  # The only way out is to return a result
             user_input = self.get_one_character()
             new_index = index
@@ -754,12 +765,12 @@ class GmWindowManager(object):
                 del menu_win
                 self.hard_refresh_all()
                 return self.__handle_menu_result(
-                                        strings_results[index][MENU_RESULT])
+                        strings_results[index][MENU_RESULT]), index
             elif user_input == GmWindowManager.ESCAPE:
                 del border_win
                 del menu_win
                 self.hard_refresh_all()
-                return None
+                return None, None
             else:
                 # Look for a match and return the selection
                 showable = menu_win.get_showable_menu_lines()
@@ -773,8 +784,9 @@ class GmWindowManager(object):
                             del border_win
                             del menu_win
                             self.hard_refresh_all()
-                            return self.__handle_menu_result(
-                                        strings_results[index][MENU_RESULT])
+                            return (self.__handle_menu_result(
+                                        strings_results[index][MENU_RESULT]),
+                                    index)
 
             if new_index != index:
                 old_index = index
@@ -935,7 +947,7 @@ class GmWindowManager(object):
 
         if isinstance(menu_result, dict):
             while 'menu' in menu_result:
-                menu_result = self.menu('Which', menu_result['menu'])
+                menu_result, ignore = self.menu('Which', menu_result['menu'])
                 if menu_result is None:  # Bail out regardless of nesting level
                     return None          # Keep going
 
