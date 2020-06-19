@@ -22,6 +22,11 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: when tactical reloading a weapon that doesn't have a "clip", create
+#   a clip from the available data and put it back in the equipment list.
+# TODO: why do redirect entries have 'stuff' and 'timers' entries?
+# TODO: need 'load' for weapons in 'personnel changes' screen
+#
 # TODO: when modifying fighters, going to the next fighter should scroll his
 #   details list to the top
 # TODO: when adding the second spells/equipment/advantages, etc., start the
