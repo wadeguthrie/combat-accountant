@@ -1,6 +1,7 @@
 #! /usr/bin/python
 
 import copy
+import curses
 import pprint
 import random
 
@@ -463,6 +464,13 @@ class Ruleset(object):
             return Ruleset.HANDLED_OK
 
         if weapon.use_one_ammo():
+            clip = weapon.get_clip()
+            if (clip is not None and 'notes' in clip and
+                    clip['notes'] is not None and len(clip['notes']) > 0):
+                self._window_manager.display_window(
+                    'Shot Fired',
+                    [[{'text': ('%s' % clip['notes']),
+                   'mode': curses.A_NORMAL}]])
             return Ruleset.HANDLED_OK
         return Ruleset.HANDLED_ERROR
 

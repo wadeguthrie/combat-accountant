@@ -390,6 +390,10 @@ class Weapon(object):
     def to_hit(self):
         return self.__get_parameter('to_hit')
 
+    def get_clip(self):
+        clip = None if 'clip' not in self.details else self.details['clip']
+        return clip
+
     def use_one_ammo(self):
         '''
         Returns True if successful, False otherwise
