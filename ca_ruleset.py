@@ -575,8 +575,10 @@ class Ruleset(object):
 
             # Put a non-zero count clip back in equipment list
             if weapon.shots_left() > 0:
+                # TODO: this should create a clip if there's not one
                 old_clip = weapon.remove_old_clip()
                 if old_clip is not None:
+                    # TODO: discard old_clip has no shots left
                     ignore_item = fighter.equipment.add(old_clip)
 
             # And put the new clip in the weapon
@@ -613,8 +615,8 @@ class Ruleset(object):
 
                     clip_menu.append((text, index))
 
-            clip_index = self._window_manager.menu('Reload With What',
-                                                   clip_menu)
+            clip_index, ignore = self._window_manager.menu('Reload With What',
+                                                           clip_menu)
             if clip_index is None:
                 return Ruleset.DONT_LOG
 

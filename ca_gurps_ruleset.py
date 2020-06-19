@@ -1253,7 +1253,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 (('Succeeded (roll <= HT (%d))' %
                     fighter.details['current']['ht']), True),
                 ('Missed roll', False)]
-            recovered_from_stun = self._window_manager.menu(
+            recovered_from_stun, ignore = self._window_manager.menu(
                         '%s Stunned (B420): Roll <= HT to recover' %
                         fighter.name,
                         stunned_menu)
@@ -2706,7 +2706,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 pass_out_menu = [(('roll <= WILL (%s), or did nothing' %
                                   fighter.details['current']['wi']), True),
                                  ('did NOT make WILL roll', False)]
-                made_will_roll = self._window_manager.menu(
+                made_will_roll, ignore = self._window_manager.menu(
                     'On Action: roll <= WILL or pass out due to FP (B426)',
                     pass_out_menu)
                 if not made_will_roll:
@@ -2721,7 +2721,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             dead_menu = [
                 (('roll <= HT (%d)' % fighter.details['current']['ht']), True),
                 ('did NOT make HT roll', False)]
-            made_ht_roll = self._window_manager.menu(
+            made_ht_roll, ignore = self._window_manager.menu(
                 ('%s: roll <= HT or DIE (B327)' % fighter.name),
                 dead_menu)
 
@@ -2756,7 +2756,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         unconscious_roll, True),
                     ('Failed (roll > %d) - unconscious' %
                         unconscious_roll, False)]
-            made_ht_roll = self._window_manager.menu(menu_title, pass_out_menu)
+            made_ht_roll, ignore = self._window_manager.menu(menu_title,
+                                                             pass_out_menu)
 
             if not made_ht_roll:
                 self.do_action(fighter,
@@ -2879,8 +2880,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             if not quiet and dr != 0:
                 use_armor_menu = [('yes', True), ('no', False)]
-                use_armor = self._window_manager.menu('Use Armor\'s DR?',
-                                                      use_armor_menu)
+                use_armor, ignore = self._window_manager.menu(
+                        'Use Armor\'s DR?', use_armor_menu)
             if use_armor:
                 if dr >= -adj:
                     window_text = [
@@ -2966,8 +2967,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                        (total+5),
                     GurpsRuleset.MAJOR_WOUND_BAD_FAIL),
                    ]
-                stunned_results = self._window_manager.menu(menu_title,
-                                                            stunned_menu)
+                stunned_results, ignore = self._window_manager.menu(
+                        menu_title, stunned_menu)
                 if stunned_results == GurpsRuleset.MAJOR_WOUND_BAD_FAIL:
                     self.do_action(fighter,
                                    {'action-name': 'set-consciousness',
@@ -2997,7 +2998,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         if fighter.details['aim']['rounds'] > 0:
             aim_menu = [('made WILL roll', True),
                         ('did NOT make WILL roll', False)]
-            made_will_roll = self._window_manager.menu(
+            made_will_roll, ignore = self._window_manager.menu(
                 ('roll <= WILL (%d) or lose aim' %
                     fighter.details['current']['wi']),
                 aim_menu)
@@ -3254,7 +3255,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             if opponent is not None:
                 opponent_timer_menu = [('yes', True), ('no', False)]
-                timer_for_opponent = self._window_manager.menu(
+                timer_for_opponent, ignore = self._window_manager.menu(
                                         ('Mark %s with spell' % opponent.name),
                                         opponent_timer_menu)
                 if not timer_for_opponent:
@@ -3709,6 +3710,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # Timer
 
             timer = None
+            # TODO: should this be here since there's a handler for 'notimer'
+            # in the calling function?
             if 'notimer' not in action or not action['notimer']:
                 timer = ca_timers.Timer(None)
                 timer.from_pieces(
@@ -3746,7 +3749,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 if 'Fast-Draw (Ammo)' in fighter.details['skills']:
                     skill_menu = [('made SKILL roll', True),
                                   ('did NOT make SKILL roll', False)]
-                    made_skill_roll = self._window_manager.menu(
+                    made_skill_roll, ignore = self._window_manager.menu(
                         ('roll <= fast-draw skill (%d)' %
                             fighter.details['skills']['Fast-Draw (Ammo)']),
                         skill_menu)
@@ -3794,7 +3797,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # if 'Fast-Draw (Pistol)' in fighter.details['skills']:
         #    skill_menu = [('made SKILL roll', True),
         #                  ('did NOT make SKILL roll', False)]
-        #    made_skill_roll = self._window_manager.menu(
+        #    made_skill_roll, ignore = self._window_manager.menu(
         #        ('roll <= fast-draw skill (%d)' %
         #                fighter.details['skills']['Fast-Draw (Ammo)']),
         #        skill_menu)
@@ -4039,7 +4042,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 handled = ca_ruleset.Ruleset.HANDLED_OK
 
                 if timer is not None and logit:
-                    fighter.timers.add(timer)
+                    if 'notimer' not in action or not action['notimer']:
+                        fighter.timers.add(timer)
 
         return handled
 

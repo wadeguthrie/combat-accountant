@@ -257,11 +257,12 @@ class TimersWidget(object):
                         ]
         keep_asking = True
         while keep_asking:
-            result = self.__window_manager.menu('Timer Action', actions_menu)
+            result, ignore = self.__window_manager.menu('Timer Action',
+                                                        actions_menu)
             if result is None:
                 return None
-            keep_asking = self.__window_manager.menu('Pick More Actions',
-                                                     keep_asking_menu)
+            keep_asking, ignore = self.__window_manager.menu(
+                    'Pick More Actions', keep_asking_menu)
             if keep_asking is None:
                 keep_asking = True
 
@@ -346,7 +347,7 @@ class TimersWidget(object):
     #    state_menu = [(x, x) for x in Fighter.conscious_map.keys()
     #                                                        if x != 'fight']
     #    state_menu = sorted(state_menu, key=lambda x: x[0].upper())
-    #    state = self.__window_manager.menu('Which State', state_menu)
+    #    state, ignore = self.__window_manager.menu('Which State', state_menu)
     #    if state is not None:
     #        param['state'] = state
     #    return True

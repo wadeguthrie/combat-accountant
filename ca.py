@@ -22,24 +22,14 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: when tactical reloading a weapon that doesn't have a "clip", create
-#   a clip from the available data and put it back in the equipment list.
 # TODO: why do redirect entries have 'stuff' and 'timers' entries?
-# TODO: need 'load' for weapons in 'personnel changes' screen
+# TODO: need 'load' for weapons in 'personnel changes' screen (notimer).  Maybe
+#   all weapons in equipment list should be empty.  Consistency check should
+#   check if there's ammo for each weapon that takes ammo.
 #
-# TODO: when modifying fighters, going to the next fighter should scroll his
-#   details list to the top
-# TODO: when adding the second spells/equipment/advantages, etc., start the
-#   menu at the last item that was added
-# TODO: when modifying fighters and donning/doffing armor, wielding/holstering
-#   weapons, don't launch a timer
 # TODO: Previous '<' needs to be an action.  Alternatively, 'start_turn' could
 #   go to the named creature.  At LEAST we should warn when they don't match.
 
-# TODO: move and attack need to show to-hit minuses
-
-# TODO: need to be able to change someone's posture to lying not as part of
-#       a maneuver
 # TODO: add preferred weapon/armor - this will be at the top of menus to draw
 #       or don
 # TODO: reload and spells should happen at the end of the timer.  The
@@ -1030,8 +1020,8 @@ class World(object):
         # Country
 
         country_menu = [(x, x) for x in self.details['names']]
-        country_name = self.__window_manager.menu('What kind of name',
-                                                  country_menu)
+        country_name, ignore = self.__window_manager.menu('What kind of name',
+                                                          country_menu)
         if country_name is None:
             randomly_generate = True
             country_name = random.choice(self.details['names'].keys())
@@ -1041,7 +1031,8 @@ class World(object):
         gender_list = ['male', 'female']
         if not randomly_generate:
             gender_menu = [(x, x) for x in gender_list]
-            gender = self.__window_manager.menu('What Gender', gender_menu)
+            gender, ignore = self.__window_manager.menu('What Gender',
+                                                        gender_menu)
             if gender is None:
                 randomly_generate = True
 
@@ -1483,15 +1474,16 @@ class AttributeWidget(object):
         while keep_asking:
             perm_current_menu = [('current', 'current'),
                                  ('permanent', 'permanent')]
-            attr_type = self.__window_manager.menu('What Type Of Attribute',
-                                                   perm_current_menu)
+            attr_type, ignore = self.__window_manager.menu(
+                    'What Type Of Attribute', perm_current_menu)
             if attr_type is None:
                 return None
 
             attr_menu = [(attr, attr)
                          for attr in self.__fighter.details[attr_type].keys()]
 
-            attr = self.__window_manager.menu('Attr To Modify', attr_menu)
+            attr, ignore = self.__window_manager.menu('Attr To Modify',
+                                                      attr_menu)
             if attr is None:
                 return None
 
@@ -1510,16 +1502,15 @@ class AttributeWidget(object):
 
             if attr_type == 'permanent':
                 both_menu = [('yes', True), ('no', False)]
-                both = self.__window_manager.menu(
-                                            'Change "current" Value To Match ',
-                                            both_menu)
+                both, ignore = self.__window_manager.menu(
+                        'Change "current" Value To Match ', both_menu)
                 if both:
                     self.__fighter.details['current'][attr] = (
                                     self.__fighter.details['permanent'][attr])
 
             self.__screen_handler.draw_screen()
-            keep_asking = self.__window_manager.menu('Change More Attributes',
-                                                     keep_asking_menu)
+            keep_asking, ignore = self.__window_manager.menu(
+                    'Change More Attributes', keep_asking_menu)
         return True
 
 
@@ -1668,8 +1659,8 @@ class PersonnelHandler(ScreenHandler):
 
             new_existing = None
             while new_existing is None:
-                new_existing = self._window_manager.menu('New or Pre-Existing',
-                                                         new_existing_menu)
+                new_existing, ignore = self._window_manager.menu(
+                        'New or Pre-Existing', new_existing_menu)
             if new_existing == 'new':
                 self.__new_group()
             else:
@@ -1741,7 +1732,8 @@ class PersonnelHandler(ScreenHandler):
         # Select the fight
         fight_menu = [(fight_name, fight_name)
                       for fight_name in self.world.get_fights()]
-        fight_name = self._window_manager.menu('Join Which Fight', fight_menu)
+        fight_name, ignore = self._window_manager.menu('Join Which Fight',
+                                                       fight_menu)
 
         # Make sure the person isn't already in the fight
         fight = self.world.get_creature_details_list(fight_name)
@@ -1931,8 +1923,8 @@ class PersonnelHandler(ScreenHandler):
                                        key=lambda x: x[0].upper())
                 creature_menu.append((empty_creature, empty_creature))
 
-                from_creature_name = self._window_manager.menu('Monster',
-                                                               creature_menu)
+                from_creature_name, ignore = self._window_manager.menu(
+                        'Monster', creature_menu)
                 if from_creature_name is None:
                     keep_adding_creatures = False
                     break
@@ -2052,9 +2044,10 @@ class PersonnelHandler(ScreenHandler):
                                ('continue (add another creature)', 'continue'),
                                ('quit', 'quit')]
 
-                action = self._window_manager.menu('What Next',
-                                                   action_menu,
-                                                   2)  # start on 'continue'
+                starting_index = 2 # Start on 'continue'
+                action, ignore = self._window_manager.menu('What Next',
+                                                           action_menu,
+                                                           starting_index)
                 if action == 'append':
                     more_text = self._window_manager.input_box(1,       # ht
                                                                cols-4,  # width
@@ -2123,11 +2116,13 @@ class PersonnelHandler(ScreenHandler):
 
         keep_asking = True
         keep_asking_menu = [('yes', True), ('no', False)]
+        starting_index = 0
         while keep_asking:
-            self.__equipment_manager.add_equipment(fighter)
+            starting_index = self.__equipment_manager.add_equipment(
+                    fighter, starting_index)
             self._draw_screen()
-            keep_asking = self._window_manager.menu('Add More Equipment',
-                                                    keep_asking_menu)
+            keep_asking, ignore = self._window_manager.menu(
+                    'Add More Equipment', keep_asking_menu)
         return True
 
     def __add_spell(self,
@@ -2161,9 +2156,10 @@ class PersonnelHandler(ScreenHandler):
         spell_menu = [(spell_name, spell_name)
                       for spell_name in
                       sorted(self.world.ruleset.spells.iterkeys())]
+        current_selection = 0
         while keep_asking:
-            new_spell_name = self._window_manager.menu('Spell to Add',
-                                                       spell_menu)
+            new_spell_name, current_selection = self._window_manager.menu(
+                    'Spell to Add', spell_menu, current_selection)
             if new_spell_name is None:
                 return None
 
@@ -2197,8 +2193,8 @@ class PersonnelHandler(ScreenHandler):
                 fighter.details['spells'].append(my_copy)
                 self._draw_screen()
 
-            keep_asking = self._window_manager.menu('Add More Spells',
-                                                    keep_asking_menu)
+            keep_asking, ignore = self._window_manager.menu('Add More Spells',
+                                                            keep_asking_menu)
         return True
 
     def __add_timer(self,
@@ -2228,8 +2224,8 @@ class PersonnelHandler(ScreenHandler):
         while keep_asking:
             timers_widget.make_timer(fighter.name)
             self._draw_screen()
-            keep_asking = self._window_manager.menu('Add More Timers',
-                                                    keep_asking_menu)
+            keep_asking, ignore = self._window_manager.menu('Add More Timers',
+                                                            keep_asking_menu)
         return True
 
     def __change_attributes(self,
@@ -2280,7 +2276,8 @@ class PersonnelHandler(ScreenHandler):
 
         state_menu = sorted(ca_fighter.Fighter.conscious_map.iteritems(),
                             key=lambda x: x[1])
-        new_state_number = self._window_manager.menu('New State', state_menu)
+        new_state_number, ignore = self._window_manager.menu('New State',
+                                                             state_menu)
         if new_state_number is None:
             return None
 
@@ -2316,8 +2313,8 @@ class PersonnelHandler(ScreenHandler):
         lines, cols = self._window.getmaxyx()
         template_menu = [(template_group, template_group)
                          for template_group in self.world.details['templates']]
-        template_group = self._window_manager.menu('Which Template Group',
-                                                   template_menu)
+        template_group, ignore = self._window_manager.menu(
+                'Which Template Group', template_menu)
         if template_group is None:
             return True  # Keep going
         self.__template_group = template_group
@@ -2353,6 +2350,8 @@ class PersonnelHandler(ScreenHandler):
 
         elif self.__viewing_index < 0:
             self.__viewing_index = len_list - 1
+
+        self._window.char_detail_home()
 
     def __create_template(self):
         '''
@@ -2482,10 +2481,10 @@ class PersonnelHandler(ScreenHandler):
             return True
 
         critter_menu = [('yes', 'yes'), ('no', 'no')]
-        answer = self._window_manager.menu(
-                                'Delete "%s" ARE YOU SURE?' % name_to_delete,
-                                critter_menu,
-                                1)  # Choose 'No' by default
+        answer, ignore = self._window_manager.menu(
+                'Delete "%s" ARE YOU SURE?' % name_to_delete,
+                critter_menu,
+                1)  # Choose 'No' by default
 
         if answer is not None and answer == 'yes':
             found = False
@@ -2541,14 +2540,16 @@ class PersonnelHandler(ScreenHandler):
             if len(don_armor_menu) == 1:
                 armor_index = don_armor_menu[0][1]
             else:
-                armor_index = self._window_manager.menu('Don Which Armor',
-                                                        don_armor_menu)
+                armor_index, ignore = self._window_manager.menu(
+                        'Don Which Armor', don_armor_menu)
                 if armor_index is None:
                     return None
 
         self.world.ruleset.do_action(
                 fighter,
-                {'action-name': 'don-armor', 'armor-index': armor_index},
+                {'action-name': 'don-armor',
+                 'armor-index': armor_index,
+                 'notimer': True},
                 None)
         self._draw_screen()
         return True  # anything but 'None' for a menu handler
@@ -2609,14 +2610,16 @@ class PersonnelHandler(ScreenHandler):
             if len(weapon_menu) == 1:
                 weapon_index = weapon_menu[0][1]
             else:
-                weapon_index = self._window_manager.menu('Draw Which Weapon',
-                                                         weapon_menu)
+                weapon_index, ignore = self._window_manager.menu(
+                        'Draw Which Weapon', weapon_menu)
                 if weapon_index is None:
                     return None
 
         self.world.ruleset.do_action(
                 fighter,
-                {'action-name': 'draw-weapon', 'weapon-index': weapon_index},
+                {'action-name': 'draw-weapon',
+                 'weapon-index': weapon_index,
+                 'notimer': True},
                 None)
         self._draw_screen()
         return True  # Anything but 'None' for a menu handler
@@ -2722,8 +2725,8 @@ class PersonnelHandler(ScreenHandler):
             group_menu = [(group_name, group_name)
                           for group_name in self.world.get_fights()]
             group_menu = sorted(group_menu, key=lambda x: x[0].upper())
-            group_answer = self._window_manager.menu('To Which Group',
-                                                     group_menu)
+            group_answer, ignore = self._window_manager.menu('To Which Group',
+                                                             group_menu)
 
         elif creature_type == PersonnelHandler.NPCs:
             group_answer = 'NPCs'
@@ -2855,9 +2858,8 @@ class PersonnelHandler(ScreenHandler):
 
         character_list = self.world.get_creature_details_list('PCs')
         character_menu = [(dude, dude) for dude in character_list]
-        to_fighter_info = self._window_manager.menu(
-                                        'Give "%s" to whom?' % item['name'],
-                                        character_menu)
+        to_fighter_info, ignore = self._window_manager.menu(
+                'Give "%s" to whom?' % item['name'], character_menu)
 
         if to_fighter_info is None:
             from_fighter.add_equipment(item, None)
@@ -2995,9 +2997,8 @@ class PersonnelHandler(ScreenHandler):
             if item is None or len(fighter.details['stuff']) == 0:
                 return True
 
-            keep_asking = self._window_manager.menu(
-                                        'Remove More Equipment',
-                                        keep_asking_menu)
+            keep_asking, ignore = self._window_manager.menu(
+                    'Remove More Equipment', keep_asking_menu)
         return True  # Menu handler's success returns anything but 'None'
 
     def __remove_spell(self,
@@ -3028,13 +3029,14 @@ class PersonnelHandler(ScreenHandler):
 
         keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
+        current_selection = 0
         while keep_asking:
             # Make the spell list again (since we've removed one)
             spell_menu = [(spell['name'], spell['name'])
                           for spell in sorted(fighter.details['spells'],
                           key=lambda x:x['name'])]
-            bad_spell_name = self._window_manager.menu('Spell to Remove',
-                                                       spell_menu)
+            bad_spell_name, current_selection = self._window_manager.menu(
+                    'Spell to Remove', spell_menu, current_selection)
 
             if bad_spell_name is None:
                 return None
@@ -3045,8 +3047,8 @@ class PersonnelHandler(ScreenHandler):
                     self._draw_screen()
                     break
 
-            keep_asking = self._window_manager.menu('Remove More Spells',
-                                                    keep_asking_menu)
+            keep_asking, ignore = self._window_manager.menu(
+                    'Remove More Spells', keep_asking_menu)
         return True  # Menu handler's success returns anything but 'None'
 
     def __ruleset_ability(self,
@@ -3083,9 +3085,12 @@ class PersonnelHandler(ScreenHandler):
         keep_asking_menu = [('yes', True), ('no', False)]
 
         keep_asking = True
+        current_selection = 0
         while keep_asking:
-            new_ability = self._window_manager.menu(('Adding %s' % param),
-                                                    sorted(ability_menu))
+            new_ability, current_selection = self._window_manager.menu(
+                    ('Adding %s' % param),
+                    sorted(ability_menu),
+                    current_selection)
             if new_ability is None:
                 return None
 
@@ -3126,8 +3131,8 @@ class PersonnelHandler(ScreenHandler):
                 fighter.details[param][new_ability['name']] = result
             self._draw_screen()
 
-            keep_asking = self._window_manager.menu(('Add More %s' % param),
-                                                    keep_asking_menu)
+            keep_asking, ignore = self._window_manager.menu(
+                    ('Add More %s' % param), keep_asking_menu)
 
         return True  # Menu handler's success returns anything but 'None'
 
@@ -3150,6 +3155,7 @@ class PersonnelHandler(ScreenHandler):
 
         keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
+        current_selection = 0
         while keep_asking:
             # Make the ability list again (since we've removed one)
             ability_menu = [(ability, ability)
@@ -3158,9 +3164,10 @@ class PersonnelHandler(ScreenHandler):
             if len(fighter.details[param]) == 0:
                 bad_ability_name = None
             else:
-                bad_ability_name = self._window_manager.menu(
-                                        '%s to Remove' % param.capitalize(),
-                                        ability_menu)
+                bad_ability_name, current_selection = self._window_manager.menu(
+                        '%s to Remove' % param.capitalize(),
+                        ability_menu,
+                        current_selection)
 
             if bad_ability_name is None:
                 return None
@@ -3171,9 +3178,8 @@ class PersonnelHandler(ScreenHandler):
             if len(fighter.details[param]) == 0:
                 return True
 
-            keep_asking = self._window_manager.menu(
-                                        'Remove More %s' % param.capitalize(),
-                                        keep_asking_menu)
+            keep_asking, ignore = self._window_manager.menu(
+                    'Remove More %s' % param.capitalize(), keep_asking_menu)
         return True  # Menu handler's success returns anything but 'None'
 
     def __short_notes(self,
@@ -3216,7 +3222,8 @@ class PersonnelHandler(ScreenHandler):
         timers = timer_recipient.timers.get_all()
         timer_menu = [(timer.get_one_line_description(), index)
                       for index, timer in enumerate(timers)]
-        index = self._window_manager.menu('Remove Which Timer', timer_menu)
+        index, ignore = self._window_manager.menu('Remove Which Timer',
+                                                  timer_menu)
         if index is None:
             return None
 
@@ -3772,9 +3779,9 @@ class FightHandler(ScreenHandler):
 
         if default_selection is None:
             default_selection = 0
-        opponent_name = self._window_manager.menu('Opponent',
-                                                  opponent_menu,
-                                                  default_selection)
+        opponent_name, ignore = self._window_manager.menu('Opponent',
+                                                          opponent_menu,
+                                                          default_selection)
 
         if opponent_name is None:
             return True  # don't leave the fight
@@ -3795,8 +3802,8 @@ class FightHandler(ScreenHandler):
         # Ask to have them fight each other
         if (opponent is not None and opponent.details['opponent'] is None):
             back_menu = [('yes', True), ('no', False)]
-            answer = self._window_manager.menu('Make Opponents Go Both Ways',
-                                               back_menu)
+            answer, ignore = self._window_manager.menu(
+                    'Make Opponents Go Both Ways', back_menu)
             if answer is True:
                 self.world.ruleset.do_action(
                         opponent,
@@ -4073,7 +4080,7 @@ class FightHandler(ScreenHandler):
 
             if ask_to_attack:
                 attack_menu = [('yes', True), ('no', False)]
-                should_attack = self._window_manager.menu(
+                should_attack, ignore = self._window_manager.menu(
                                     ('Should %s Attack?' % attacker.name),
                                     attack_menu)
                 if should_attack:
@@ -4120,7 +4127,8 @@ class FightHandler(ScreenHandler):
         state_menu = sorted(ca_fighter.Fighter.conscious_map.iteritems(),
                             key=lambda x: x[1])
 
-        new_state_number = self._window_manager.menu('New State', state_menu)
+        new_state_number, ignore = self._window_manager.menu('New State',
+                                                             state_menu)
         if new_state_number is None:
             return True  # Keep fighting
 
@@ -4172,9 +4180,10 @@ class FightHandler(ScreenHandler):
         else:
             defender_menu = [(current_fighter.name, current_fighter),
                              (opponent.name, opponent)]
-            defender = self._window_manager.menu('Who is defending',
-                                                 defender_menu,
-                                                 1)  # assume the opponent
+            starting_index = 1 # assume the opponent
+            defender, ignore = self._window_manager.menu('Who is defending',
+                                                         defender_menu,
+                                                         starting_index)
         if defender is None:
             return True  # Keep fighting
 
@@ -4268,7 +4277,7 @@ class FightHandler(ScreenHandler):
         character_list = self.world.get_creature_details_list(
                                                             from_fighter.group)
         character_menu = [(dude, dude) for dude in character_list]
-        to_fighter_name = self._window_manager.menu(
+        to_fighter_name, ignore = self._window_manager.menu(
                                         'Give "%s" to whom?' % item['name'],
                                         character_menu)
 
@@ -4339,7 +4348,7 @@ class FightHandler(ScreenHandler):
                              for good_guy in self.__fighters
                              if good_guy.group == 'PCs']
                 xfer_menu.append(('QUIT', {'quit': None}))
-                xfer = self._window_manager.menu(
+                xfer, ignore = self._window_manager.menu(
                         'Who gets %s\'s %s' % (bad_guy.name,
                                                item['name']),
                         xfer_menu)
@@ -4388,7 +4397,7 @@ class FightHandler(ScreenHandler):
 
         action_menu = self.world.ruleset.get_action_menu(current_fighter,
                                                          opponent)
-        maneuver = self._window_manager.menu('Maneuver', action_menu)
+        maneuver, ignore = self._window_manager.menu('Maneuver', action_menu)
         if maneuver is None:
             return True  # Keep going
 
@@ -4687,7 +4696,8 @@ class FightHandler(ScreenHandler):
                         ('keep this fight in available fight list',
                          {'doit': self.keep_fight}))
 
-            result = self._window_manager.menu('Leaving Fight', quit_menu)
+            result, ignore = self._window_manager.menu('Leaving Fight',
+                                                       quit_menu)
 
             if result is None:
                 return True  # I guess we're not quitting after all
@@ -4771,7 +4781,7 @@ class FightHandler(ScreenHandler):
                 selected_fighter_menu = [
                                     (current_fighter.name, current_fighter),
                                     (opponent.name, opponent)]
-                selected_fighter = self._window_manager.menu(
+                selected_fighter, ignore = self._window_manager.menu(
                                                      menu_title,
                                                      selected_fighter_menu,
                                                      default_selection)
@@ -4977,7 +4987,8 @@ class FightHandler(ScreenHandler):
         timers = timer_recipient.timers.get_all()
         timer_menu = [(timer.get_one_line_description(), index)
                       for index, timer in enumerate(timers)]
-        index = self._window_manager.menu('Remove Which Timer', timer_menu)
+        index, ignore = self._window_manager.menu('Remove Which Timer',
+                                                  timer_menu)
         if index is None:
             return True  # Keep fighting
 
@@ -5553,7 +5564,7 @@ class MainHandler(ScreenHandler):
         fight_name_menu = []
         for i, entry in enumerate(self.world.details['dead-monsters']):
             fight_name_menu.append((entry['name'], i))
-        monster_group_index = self._window_manager.menu(
+        monster_group_index, ignore = self._window_manager.menu(
                 'Resurrect Which Fight', fight_name_menu)
         if monster_group_index is None:
             return True
@@ -5601,8 +5612,8 @@ class MainHandler(ScreenHandler):
                                for name in self.world.get_fights()]
             fight_name_menu = sorted(fight_name_menu,
                                      key=lambda x: x[0].upper())
-            monster_group = self._window_manager.menu('Fights',
-                                                      fight_name_menu)
+            monster_group, ignore = self._window_manager.menu('Fights',
+                                                              fight_name_menu)
             if monster_group is None:
                 return True
 
@@ -5699,7 +5710,8 @@ class MainHandler(ScreenHandler):
 
             menu_title = 'Found "%s"' % look_for_string
 
-            select_result = self._window_manager.menu(menu_title, result_menu)
+            select_result, ignore = self._window_manager.menu(menu_title,
+                                                              result_menu)
             if select_result is not None:
                 self.__char_index = select_result
                 self._draw_screen()
@@ -5775,7 +5787,7 @@ class MainHandler(ScreenHandler):
             group_menu = [(group_name, group_name)
                           for group_name in self.world.get_fights()]
             group_menu = sorted(group_menu, key=lambda x: x[0].upper())
-            self.__current_display = self._window_manager.menu(
+            self.__current_display, ignore = self._window_manager.menu(
                                                     'Which Monster Group',
                                                     group_menu)
         else:
@@ -6061,7 +6073,8 @@ if __name__ == '__main__':
                         (x, x) for x in os.listdir('.') if x.endswith('.json')]
                     filename_menu.insert(0, ('Create new campaign file', None))
 
-                    filename = window_manager.menu('Which File', filename_menu)
+                    filename, ignore = window_manager.menu('Which File',
+                                                           filename_menu)
 
                     lines, cols = window_manager.getmaxyx()
                     while filename is None:
