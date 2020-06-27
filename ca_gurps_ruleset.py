@@ -442,6 +442,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 10,
           "duration": 60,
         },
+        "Control Zombie": {
+          "cost": 3,
+          "notes": "M152 - permanent",
+          "maintain": 0,
+          "casting time": 1,
+          "duration": 0,
+        },
         "Counterspell": {
           "cost": None,
           "notes": "M21",
@@ -769,6 +776,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "notes": "M70",
           "maintain": 0,
           "casting time": 1,
+          "duration": 0,    # Indefinite -- no need to track
+        },
+        "Mass Sleep": {
+          "cost": None,
+          "notes": "M137, cost: area(3), time=1 sec/energy",
+          "maintain": 0,
+          "casting time": None,
           "duration": 0,    # Indefinite -- no need to track
         },
         "Might": {
@@ -1099,6 +1113,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": None,
+        },
+        "Turn Zombie": {
+          "cost": 2,
+          "notes": "M152",
+          "maintain": 0,
+          "casting time": 4,
+          "duration": 86400,
         },
         "Wall Of Lightning": {
           "cost": None,
