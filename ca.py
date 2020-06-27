@@ -22,19 +22,21 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: why do redirect entries have 'stuff' and 'timers' entries?
+# TODO: ISSUE 62 - Previous '<' needs to be an action.  Alternatively,
+#   'start_turn' could go to the named creature.  At LEAST we should warn when
+#   they don't match.
+# TODO: ISSUE 54 - hold initiative
+# TODO: ISSUE 50 - natural weapons
+
 # TODO: need 'load' for weapons in 'personnel changes' screen (notimer).  Maybe
 #   all weapons in equipment list should be empty.  Consistency check should
 #   check if there's ammo for each weapon that takes ammo.
-#
-# TODO: Previous '<' needs to be an action.  Alternatively, 'start_turn' could
-#   go to the named creature.  At LEAST we should warn when they don't match.
-
-# TODO: add preferred weapon/armor - this will be at the top of menus to draw
-#       or don
 # TODO: reload and spells should happen at the end of the timer.  The
 #       'reloading' timer should launch the second part of the action when it
 #       fires.
+# TODO: add preferred weapon/armor - this will be at the top of menus to draw
+#       or don
+# TODO: why do redirect entries have 'stuff' and 'timers' entries?
 
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
