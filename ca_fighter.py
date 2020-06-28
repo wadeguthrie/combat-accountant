@@ -30,7 +30,8 @@ class ThingsInFight(object):
         if 'stuff' not in self.details:     # Public to facilitate testing
             self.details['stuff'] = []
 
-        self.equipment = ca_equipment.Equipment(self.details['stuff'])
+        self.equipment = ca_equipment.Equipment(self.name,
+                                                self.details['stuff'])
 
         # Timers
 
@@ -321,9 +322,6 @@ class Fighter(ThingsInFight):
         Returns the new index of the equipment.
         '''
         index = self.equipment.add(new_item, source)
-        # TODO: Do we really need to sheath weapon and doff armor?
-        self.details['weapon-index'] = None
-        self.details['armor-index'] = None
         return index
 
     def don_armor_by_index(self,
@@ -419,15 +417,23 @@ class Fighter(ThingsInFight):
 
         Returns: the discarded item
         '''
+        before_item_count = self.equipment.get_item_count()
         item = self.equipment.remove(item_index)
+        after_item_count = self.equipment.get_item_count()
 
-        # Unhand the weapon and doff the armor since the index messes that up.
+        # Adjust indexes into the list if the list changed.
 
-        # TODO: find a way to keep the weapon and armor when an item is
-        # removed.  Maybe get the name of the item, remove the equipment,
-        # get_item_by_name (what to do about duplcate names?)
-        self.details['weapon-index'] = None
-        self.details['armor-index'] = None
+        if before_item_count != after_item_count:
+            if item_index == self.details['weapon-index']:
+                self.details['weapon-index'] = None
+            elif item_index < self.details['weapon-index']:
+                self.details['weapon-index'] -= 1
+
+            if item_index == self.details['armor-index']:
+                self.details['armor-index'] = None
+            elif item_index < self.details['armor-index']:
+                self.details['armor-index'] -= 1
+
         return item
 
     #

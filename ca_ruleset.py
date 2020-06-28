@@ -571,7 +571,7 @@ class Ruleset(object):
             # clip index (for the new clip) is still valid until the old clip
             # is added to the equipment list
 
-            clip = fighter.equipment.remove(action['clip-index'])
+            clip = fighter.remove_equipment(action['clip-index'])
 
             # Put a non-zero count clip back in equipment list
             if weapon.shots_left() > 0:
@@ -579,7 +579,7 @@ class Ruleset(object):
                 old_clip = weapon.remove_old_clip()
                 if old_clip is not None:
                     # TODO: discard old_clip has no shots left
-                    ignore_item = fighter.equipment.add(old_clip)
+                    ignore_item = fighter.add_equipment(old_clip)
 
             # And put the new clip in the weapon
             weapon.load(clip)
@@ -684,6 +684,7 @@ class Ruleset(object):
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
 
+        # TODO: draw weapon from counted item makes a copy
         fighter.draw_weapon_by_index(action['weapon-index'])
         return Ruleset.HANDLED_OK
 
@@ -887,6 +888,6 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
-        ignore_item = fighter.equipment.remove(action['item-index'])
+        ignore_item = fighter.remove_equipment(action['item-index'])
 
         return Ruleset.HANDLED_OK

@@ -11,8 +11,10 @@ class Equipment(object):
     from somewhere in the Game File data but that's not strictly a requirement.
     '''
     def __init__(self,
-                 equipment  # self.details['stuff'], list of items
+                 owner_name,    # string, name of owner, for debugging
+                 equipment      # self.details['stuff'], list of items
                  ):
+        self.owner_name = owner_name
         self.__equipment = equipment
 
     def add(self,
@@ -58,14 +60,15 @@ class Equipment(object):
         equipment list that has a name that matches the passed-in name.
         Returns None, None if the item is not found.
         '''
-        # PP = pprint.PrettyPrinter(indent=3, width=150)
-
         for index, item in enumerate(self.__equipment):
             if index <= starting_index:
                 pass  # It's structured like this for debugging
             elif item['name'] == name:
                 return index, item
         return None, None  # didn't find one
+
+    def get_item_count(self):
+        return len(self.__equipment)
 
     def remove(self,
                item_index   # integer index into the equipment list
@@ -76,7 +79,8 @@ class Equipment(object):
         Returns the removed item.
         '''
         # NOTE: This assumes that there won't be any placeholder items --
-        # items with a count of 0 (or less).
+        # items with a count of 0 (or less) -- because I remove items when
+        # their count goes to zero.
         if item_index >= len(self.__equipment):
             return None
 
@@ -304,6 +308,7 @@ class Weapon(object):
                  weapon_details    # dict from world file
                  ):
         self.details = weapon_details
+        self.name = self.details['name']
 
     def clip_works_with_weapon(self,
                                clip  # dict for item

@@ -519,6 +519,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": None,
+            "armor-index": None,
             "stuff": [
                  {"name": "pistol, Colt 170D",
                   "type": "ranged weapon",
@@ -600,6 +601,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": None,
+            "weapon-armor": None,
             "stuff": [
                  {"name": "pistol, Colt 170D",
                   "type": "ranged weapon",
@@ -641,6 +643,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": None,
+            "armor-index": None,
             "stuff": [
                  {"name": "pistol, Kalashnikov Makarov",
                   "type": "ranged weapon",
@@ -686,6 +689,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": None,
+            "armor-index": None,
             "stuff": [
                  {"name": "pistol, Sig D65",  # the index of this is stored
                                               # in __tank_fighter_pistol_index
@@ -738,6 +742,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": None,
+            "armor-index": None,
             "stuff": [
                  {"name": "pistol, Baretta DX 192",
                   "type": "ranged weapon",
@@ -3925,6 +3930,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 copy.deepcopy(self.__tank_fighter),
                 self.__ruleset,
                 self.__window_manager)
+        mock_fight_handler = MockFightHandler()
 
         original_item = fighter.details['stuff'][
                                         self.__tank_fighter_pistol_index]
@@ -3937,9 +3943,12 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         same_item = copy.deepcopy(original_item)
         same_item['count'] = 2
 
+        before_item_count = fighter.equipment.get_item_count()
         fighter.add_equipment(same_item, 'test')
+        after_item_count = fighter.equipment.get_item_count()
 
         assert original_item['count'] == 3
+        assert before_item_count == after_item_count
 
         # Similar item - verify that it doesn't just bump the count
 
@@ -4071,6 +4080,51 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         weapon = fighter.equipment.get_item_by_index(4)  # Removed
         assert weapon is None
+
+        # check weapon index
+
+        sick_stick_index = 1
+        self.__ruleset.do_action(fighter,
+                                 {'action-name': 'draw-weapon',
+                                  'weapon-index': sick_stick_index},
+                                 mock_fight_handler)
+        weapon, actual_weapon_index = fighter.get_current_weapon()
+        assert actual_weapon_index == sick_stick_index
+
+        # remove counted item before weapon index
+
+        sig_acc_4_index = 0
+        fighter.remove_equipment(sig_acc_4_index) # Should just reduce the count
+        weapon = fighter.equipment.get_item_by_index(0)
+        assert weapon['name'] == "pistol, Sig D65"
+        assert weapon['acc'] == 4
+        assert weapon['count'] == 1
+        weapon, actual_weapon_index = fighter.get_current_weapon()
+        assert actual_weapon_index == sick_stick_index
+
+        # remove non-counted item before weapon index
+        fighter.remove_equipment(sig_acc_4_index) # Should remove item
+        sick_stick_index -= 1
+        weapon = fighter.equipment.get_item_by_index(sick_stick_index)
+        assert weapon['name'] == "sick stick"
+        weapon, actual_weapon_index = fighter.get_current_weapon()
+        assert weapon.name == "sick stick"
+        assert actual_weapon_index == sick_stick_index
+
+        # remove item after weapon index
+        sig_acc_5_index = 2
+        fighter.remove_equipment(sig_acc_5_index)
+        weapon = fighter.equipment.get_item_by_index(sick_stick_index)
+        assert weapon['name'] == "sick stick"
+        weapon, actual_weapon_index = fighter.get_current_weapon()
+        assert weapon.name == "sick stick"
+        assert actual_weapon_index == sick_stick_index
+
+        # remove item at weapon index
+        fighter.remove_equipment(sick_stick_index)
+        weapon, actual_weapon_index = fighter.get_current_weapon()
+        assert weapon is None
+        assert actual_weapon_index is None
 
     def test_redirects(self):
         '''
