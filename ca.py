@@ -4439,7 +4439,9 @@ class FightHandler(ScreenHandler):
                 ['Playback history exhausted -- you are at the end.'])
             return True
 
-        title = 'Execute How Many Steps of Playback?'
+        title = ('Execute How Many Steps of Playback (next is %d/%d)?' %
+                 (self.__next_playback_action_index,
+                  len(self.__saved_history)))
         height = 1
         width = len(title)
         step_count_string = self._window_manager.input_box(height,
@@ -5566,6 +5568,7 @@ class MainHandler(ScreenHandler):
         fight_name_menu = []
         for i, entry in enumerate(self.world.details['dead-monsters']):
             fight_name_menu.append((entry['name'], i))
+        # TODO: reverse fight menu so most recent is on top
         monster_group_index, ignore = self._window_manager.menu(
                 'Resurrect Which Fight', fight_name_menu)
         if monster_group_index is None:
