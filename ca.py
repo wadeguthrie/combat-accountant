@@ -22,9 +22,6 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: ISSUE 62 - Previous '<' needs to be an action.  Alternatively,
-#   'start_turn' could go to the named creature.  At LEAST we should warn when
-#   they don't match.
 # TODO: ISSUE 54 - hold initiative
 # TODO: ISSUE 50 - natural weapons
 
@@ -3503,7 +3500,8 @@ class FightHandler(ScreenHandler):
         # sure this looks like a _NEW_ fight.
         self._saved_fight['fighters'] = []
         for fighter in self.__fighters:
-            fighter.start_fight()
+            if not self._saved_fight['saved']:
+                fighter.start_fight()
             self._saved_fight['fighters'].append({'group': fighter.group,
                                                   'name': fighter.name})
 
@@ -3712,12 +3710,12 @@ class FightHandler(ScreenHandler):
             elif current_fighter.is_dead():
                 if not self.world.playing_back:
                     self.add_to_history(
-                            {'comment': (' (%s) did nothing (dead)' %
+                            {'comment': ('(%s) did nothing (dead)' %
                                          current_fighter.name)})
             elif current_fighter.is_absent():
                 if not self.world.playing_back:
                     self.add_to_history(
-                            {'comment': (' (%s) did nothing (absent)' %
+                            {'comment': ('(%s) did nothing (absent)' %
                                          current_fighter.name)})
 
             else:
@@ -4635,7 +4633,11 @@ class FightHandler(ScreenHandler):
                 self._saved_fight['round'] == 0):
             return True  # Not going backwards from the origin
 
-        self.modify_index(-1)
+        prev_fighter = self.get_current_fighter()
+        self.world.ruleset.do_action(prev_fighter,
+                                     {'action-name': 'previous-turn'},
+                                     self)
+
         next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self._saved_fight['round'],
                                   next_PC_name,

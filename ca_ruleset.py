@@ -745,6 +745,7 @@ class Ruleset(object):
             'draw-weapon':          {'doit': self.__draw_weapon},
             'end-turn':             {'doit': self.__end_turn},
             'pick-opponent':        {'doit': self.__pick_opponent},
+            'previous-turn':        {'doit': self.__previous_turn},
             'reload':               {'doit': self.__do_reload},
             'set-consciousness':    {'doit': self.__set_consciousness},
             'set-timer':            {'doit': self.__set_timer},
@@ -786,6 +787,25 @@ class Ruleset(object):
 
         fighter.details['opponent'] = {'group': action['opponent']['group'],
                                        'name': action['opponent']['name']}
+        return Ruleset.HANDLED_OK
+
+    def __previous_turn(self,
+                   ignored_fighter,  # Fighter object - ignored
+                   action,           # {'action-name': 'previous-turn',
+                                     #  'comment': <string> # optional
+                   fight_handler,    # FightHandler object
+                   ):
+        '''
+        Action handler for Ruleset.
+
+        When the GM goes to the next turn by accident, he uses this to go back.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+
+        if fight_handler is not None:
+            fight_handler.modify_index(-1)
         return Ruleset.HANDLED_OK
 
     def _record_action(self,
