@@ -3347,8 +3347,6 @@ class FightHandler(ScreenHandler):
                                'of equipment to another fighter.'},
             ord('h'): {'name': 'History',
                        'func': self.__show_history,
-                       # TODO: does it show what's happened since the program
-                       #       started running or since the fight began?
                        'help': 'Show the list of actions that have happened ' +
                                'in this fight, so far.'},
             ord('i'): {'name': 'character info',
