@@ -4596,7 +4596,8 @@ class FightHandler(ScreenHandler):
             return True
 
         if self.__next_playback_action_index >= len(self.__saved_history):
-            # TODO: issue an error
+            self._window_manager.error(
+                ['Playback history exhausted -- you are at the end.'])
             return True
 
         # TODO: check for fencepost error
@@ -5568,9 +5569,9 @@ class MainHandler(ScreenHandler):
         fight_name_menu = []
         for i, entry in enumerate(self.world.details['dead-monsters']):
             fight_name_menu.append((entry['name'], i))
-        # TODO: reverse fight menu so most recent is on top
         monster_group_index, ignore = self._window_manager.menu(
-                'Resurrect Which Fight', fight_name_menu)
+                'Resurrect Which Fight',
+                list(reversed(fight_name_menu)))
         if monster_group_index is None:
             return True
 
