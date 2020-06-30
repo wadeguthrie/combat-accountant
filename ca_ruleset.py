@@ -218,7 +218,12 @@ class Ruleset(object):
 
         use_menu = []
         for index, item in enumerate(fighter.details['stuff']):
-            use_menu.append((item['name'],
+            if 'count' in item and item['count'] != 1:
+                name = '%s (%d remaining)' % (item['name'], item['count'])
+            else:
+                name = item['name']
+
+            use_menu.append((name,
                              {'action': {'action-name': 'use-item',
                                          'item-index': index,
                                          'item-name': item['name']}}
