@@ -442,8 +442,6 @@ class Timers(object):
 
         Returns nothing.
         '''
-
-        # TODO: should I just reverse the order we go through the timer list?
         remove_these = []
         for index, timer in enumerate(self.__timers['obj']):
             if timer.details['rounds'] <= 0:  # kills timers dying this round
