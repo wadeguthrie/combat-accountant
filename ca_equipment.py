@@ -78,9 +78,6 @@ class Equipment(object):
 
         Returns the removed item.
         '''
-        # NOTE: This assumes that there won't be any placeholder items --
-        # items with a count of 0 (or less) -- because I remove items when
-        # their count goes to zero.
         if item_index >= len(self.__equipment):
             return None
 
@@ -91,7 +88,10 @@ class Equipment(object):
             self.__equipment[item_index]['count'] -= 1
         else:
             item = self.__equipment[item_index]
-            self.__equipment.pop(item_index)
+            if 'discard-when-empty' in item and not item['discard-when-empty']:
+                self.__equipment[item_index]['count'] = 0
+            else:
+                self.__equipment.pop(item_index)
 
         return item
 

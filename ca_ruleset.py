@@ -575,11 +575,12 @@ class Ruleset(object):
 
             # Put a non-zero count clip back in equipment list
             if weapon.shots_left() > 0:
-                # TODO: this should create a clip if there's not one
                 old_clip = weapon.remove_old_clip()
                 if old_clip is not None:
-                    # TODO: discard old_clip has no shots left
-                    ignore_item = fighter.add_equipment(old_clip)
+                    if (old_clip['shots_left'] > 0 or
+                            ('discard-when-empty' in old_clip and
+                             not old_clip['discard-when-empty'])):
+                        ignore_item = fighter.add_equipment(old_clip)
 
             # And put the new clip in the weapon
             weapon.load(clip)
@@ -908,6 +909,10 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
+        item = fighter.equipment.get_item_by_index(action['item-index'])
+        if 'count' in item and item['count'] == 0:
+            self._window_manager.error(['Item is empty, you cannot use it'])
+
         ignore_item = fighter.remove_equipment(action['item-index'])
 
         return Ruleset.HANDLED_OK

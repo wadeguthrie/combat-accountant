@@ -664,6 +664,7 @@ class FightGmWindow(ca_gui.GmWindow):
         Returns nothing.
         '''
         window.clear()
+        lines, cols = window.getmaxyx()
         line = 0
 
         fighter_state = fighter.get_state()
@@ -672,19 +673,24 @@ class FightGmWindow(ca_gui.GmWindow):
         if fighter_state == ca_fighter.Fighter.FIGHT:
             pass
         elif fighter_state == ca_fighter.Fighter.DEAD:
-            window.addstr(line, 0, '** DEAD **', mode)
-            line += 1
+            # TODO(eventually): make the window scrollable rather than limit
+            if line < lines:
+                window.addstr(line, 0, '** DEAD **', mode)
+                line += 1
         elif fighter_state == ca_fighter.Fighter.UNCONSCIOUS:
-            window.addstr(line, 0, '** UNCONSCIOUS **', mode)
-            line += 1
+            if line < lines:
+                window.addstr(line, 0, '** UNCONSCIOUS **', mode)
+                line += 1
         elif fighter_state == ca_fighter.Fighter.ABSENT:
-            window.addstr(line, 0, '** ABSENT **', mode)
-            line += 1
+            if line < lines:
+                window.addstr(line, 0, '** ABSENT **', mode)
+                line += 1
         elif fighter.details['stunned']:
             mode = curses.color_pair(
                     ca_gui.GmWindowManager.MAGENTA_BLACK) | curses.A_BOLD
-            window.addstr(line, 0, '** STUNNED **', mode)
-            line += 1
+            if line < lines:
+                window.addstr(line, 0, '** STUNNED **', mode)
+                line += 1
 
         # Defender
 
@@ -697,8 +703,9 @@ class FightGmWindow(ca_gui.GmWindow):
         notes, ignore = fighter.get_defenses_notes(opponent)
         if notes is not None:
             for note in notes:
-                window.addstr(line, 0, note, mode)
-                line += 1
+                if line < lines:
+                    window.addstr(line, 0, note, mode)
+                    line += 1
 
         # Attacker
 
@@ -710,29 +717,33 @@ class FightGmWindow(ca_gui.GmWindow):
         notes = fighter.get_to_hit_damage_notes(opponent)
         if notes is not None:
             for note in notes:
-                window.addstr(line, 0, note, mode)
-                line += 1
+                if line < lines:
+                    window.addstr(line, 0, note, mode)
+                    line += 1
 
         # now, back to normal
         mode = curses.A_NORMAL
         notes = fighter.get_notes()
         if notes is not None:
             for note in notes:
-                window.addstr(line, 0, note, mode)
-                line += 1
+                if line < lines:
+                    window.addstr(line, 0, note, mode)
+                    line += 1
 
         # Timers
         for timer in fighter.timers.get_all():
             strings = timer.get_description()
             for string in strings:
-                window.addstr(line, 0, string, mode)
-                line += 1
+                if line < lines:
+                    window.addstr(line, 0, string, mode)
+                    line += 1
 
         if ('short-notes' in fighter.details and
                 fighter.details['short-notes'] is not None):
             for note in fighter.details['short-notes']:
-                window.addstr(line, 0, note, mode)
-                line += 1
+                if line < lines:
+                    window.addstr(line, 0, note, mode)
+                    line += 1
 
         window.refresh()
 
