@@ -1309,7 +1309,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         action_menu = []
 
         if fighter.details['stunned']:
-            # TODO: not quite sure how to handle this one for playback
             action_menu.append(
                 ('do nothing (stunned)', {'text': ['Do Nothing (Stunned)',
                                                    ' Defense: any @-4',
