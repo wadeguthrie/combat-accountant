@@ -55,7 +55,8 @@ class Ruleset(object):
     #
 
     def can_finish_turn(self,
-                        fighter  # Fighter object
+                        fighter,        # Fighter object
+                        fight_handler   # FightHandler object
                         ):
         return True
 
