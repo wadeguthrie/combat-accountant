@@ -100,7 +100,9 @@ class ThingsInFight(object):
         '''
         return None
 
-    def get_short_summary_string(self):
+    def get_short_summary_string(self,
+                                 fight_handler  # FightHandler, ignored
+                                 ):
         '''
         Returns a string that contains the shortest description of the Fighter.
         '''
@@ -491,7 +493,9 @@ class Fighter(ThingsInFight):
         notes = self._ruleset.get_fighter_notes(self)
         return notes
 
-    def get_short_summary_string(self):
+    def get_short_summary_string(self,
+                                 fight_handler  # FightHandler, ignored
+                                 ):
         '''
         Returns a string that contains the shortest description of the Fighter.
         '''
@@ -501,7 +505,10 @@ class Fighter(ThingsInFight):
                                           self.details['permanent']['hp'])
 
         if self.timers.is_busy():
-            fighter_string = '%s - BUSY' % fighter_string
+            fighter_string += ' - BUSY'
+
+        if fight_handler.is_fighter_holding_init(self.name, self.group):
+            fighter_string += ' - HOLDING INIT'
 
         return fighter_string
 
@@ -520,7 +527,9 @@ class Fighter(ThingsInFight):
     # Miscellaneous methods
     #
 
-    def can_finish_turn(self):
+    def can_finish_turn(self,
+                        fight_handler # FightHandler object
+                        ):
         '''
         If a Fighter has done something this turn, we can move to the next
         Fighter.  Otherwise, the Fighter should do something before we go to
@@ -529,7 +538,7 @@ class Fighter(ThingsInFight):
         Returns: <bool> telling the caller whether this Fighter needs to do
         something before we move on.
         '''
-        return self._ruleset.can_finish_turn(self)
+        return self._ruleset.can_finish_turn(self, fight_handler)
 
     def end_turn(self,
                  fight_handler  # FightHandler object

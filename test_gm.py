@@ -452,7 +452,10 @@ class MockWindowManager(object):
 
         return result
 
-    def get_fight_gm_window(self, ruleset, command_ribbon_choices):
+    def get_fight_gm_window(self,
+                            ruleset,
+                            command_ribbon_choices,
+                            fight_handler):
         return MockFightGmWindow(ruleset)
 
     def get_main_gm_window(self, command_ribbon_choices):
@@ -1639,7 +1642,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         Partially GURPS-specific test
 
-        This is just like test_initiative_order_again except the fighters are
+        This is just like test_initiative_order except the fighters are
         reordered randomly and a different random seed is used.
         '''
         if ARGS.verbose:

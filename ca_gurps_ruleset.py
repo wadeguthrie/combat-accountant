@@ -1195,7 +1195,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
     #
 
     def can_finish_turn(self,
-                        fighter  # Fighter object
+                        fighter,        # Fighter object
+                        fight_handler   # FightHandler object
                         ):
         '''
         If a Fighter has done something this turn, we can move to the next
@@ -1228,6 +1229,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             return True
 
         if fighter.timers.is_busy():
+            return True
+
+        if fight_handler.is_fighter_holding_init(fighter.name,
+                                                 fighter.group):
             return True
 
         return False
