@@ -6001,8 +6001,11 @@ class MainHandler(ScreenHandler):
 
             menu_title = 'Found "%s"' % look_for_string
 
-            select_result, ignore = self._window_manager.menu(menu_title,
-                                                              result_menu)
+            select_result, ignore = self._window_manager.menu(
+                    menu_title,
+                    result_menu,
+                    starting_index=0,
+                    skip_singles=False)
             if select_result is not None:
                 self.__char_index = select_result
                 self._draw_screen()

@@ -689,7 +689,8 @@ class GmWindowManager(object):
                                 #   nested menu (of the form equivalent to
                                 #   |strings_results|.  NOTE: ['menu'] takes
                                 #   precidence over ['doit'].
-             starting_index=0   # Who is selected when the menu starts
+             starting_index=0,  # Who is selected when the menu starts
+             skip_singles=True  # Do I show menu even if it's only got 1 item?
              ):
         '''
         Presents a menu to the user and returns the result and the index of
@@ -701,7 +702,9 @@ class GmWindowManager(object):
 
         if len(strings_results) < 1:  # if there's no choice, say so
             return None, None
-        if len(strings_results) == 1:  # if only 1 choice, autoselect it
+
+        # if only 1 choice, autoselect it
+        if len(strings_results) == 1 and skip_singles:
             return (self.__handle_menu_result(strings_results[0][MENU_RESULT]),
                     0)
 
