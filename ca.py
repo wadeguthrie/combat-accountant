@@ -4397,9 +4397,15 @@ class FightHandler(ScreenHandler):
         if item is None:
             return True  # Keep going
 
+        character_list = self.world.get_creature_details_list('PCs')
+        character_menu = ([(dude, (dude, 'PCs'))
+                           for dude in character_list])
+
         character_list = self.world.get_creature_details_list(
                                                             from_fighter.group)
-        character_menu = [(dude, dude) for dude in character_list]
+        character_menu.extend([(dude, (dude, from_fighter.group))
+                               for dude in character_list])
+
         to_fighter_name, ignore = self._window_manager.menu(
                                         'Give "%s" to whom?' % item['name'],
                                         character_menu)
@@ -4408,8 +4414,8 @@ class FightHandler(ScreenHandler):
             from_fighter.add_equipment(item, None)
             return True  # Keep going
 
-        ignore, to_fighter = self.get_fighter_object(to_fighter_name,
-                                                     from_fighter.group)
+        ignore, to_fighter = self.get_fighter_object(to_fighter_name[0],
+                                                     to_fighter_name[1])
 
         to_fighter.add_equipment(item, from_fighter.detailed_name)
         return True  # Keep going
@@ -4468,7 +4474,8 @@ class FightHandler(ScreenHandler):
         for bad_guy in self.__fighters:
             if bad_guy.group == 'PCs':  # only steal from bad guys
                 continue
-            if bad_guy.is_conscious():  # only steal from the dead/unconscious
+            if (bad_guy.name != ca_fighter.Venue.name and
+                    bad_guy.is_conscious()):  # only steal from the dead/unconscious
                 # Note that absent characters are not marked as conscious
                 continue
             found_dead_bad_guy = True
@@ -4496,8 +4503,9 @@ class FightHandler(ScreenHandler):
                 xfer['guy'].add_equipment(new_item, bad_guy.detailed_name)
 
                 # indexes are no longer good, remove the weapon and armor
-                bad_guy.don_armor_by_index(None)
-                bad_guy.draw_weapon_by_index(None)
+                if bad_guy.name != ca_fighter.Venue.name:
+                    bad_guy.don_armor_by_index(None)
+                    bad_guy.draw_weapon_by_index(None)
 
         if not found_dead_bad_guy:
             self._window_manager.error(
@@ -5250,6 +5258,12 @@ class FightHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
+        # TODO: this needs to be an action and __held_fighters needs to be in
+        # current-fight.  That way, fighters with held initiative survive
+        # across a saved fight.
+        # TODO: if the fighter has already done something this turn, they
+        # shouldn't be able to do a hold action.
+
         # Adds the current fighter to the list of fighters who are holding
         # their initiative.  Note that we're just moving the fighter who
         # currently has the initiative.  Not the viewing index fighter.
@@ -5284,6 +5298,12 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         # TODO: this needs to be an action
+        # TODO: look at timer handling - maybe base advancing timers on
+        #   whether it's OK to move on (check non-action reasons for moving
+        #   on, though unconscious fighters can't hold their initiative).
+        # TODO: when we're done with all of this, if the fighter that currently
+        # has initiative has already gone, move the initiative to the next
+        # fighter. -- NOTE: the actions are cleared in GurpsRuleset::start_turn
 
         if len(self.__held_fighters) <= 0:
             return True # Keep fighting
