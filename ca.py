@@ -3450,10 +3450,6 @@ class FightHandler(ScreenHandler):
 
         if playback_history is not None:
             self._add_to_choice_dict({
-                ord('p'): {'name': 'History playback',
-                           'func': self.__playback_history,
-                           'help': 'Plays back all of the history in the ' +
-                                   'playback file.'},
                 ord('x'): {'name': 'Step history 1x',
                            'func': self.__single_step_history,
                            'help': 'Plays one step of the history in the ' +
@@ -3462,6 +3458,10 @@ class FightHandler(ScreenHandler):
                            'func': self.__multi_step_history,
                            'help': 'Plays several steps of the history in ' +
                                    'the playback file.'},
+                ord('y'): {'name': 'History playback',
+                           'func': self.__playback_history,
+                           'help': 'Plays back all of the history in the ' +
+                                   'playback file.'},
                 ord('z'): {'name': 'Show playback history',
                            'func': self.__show_playback,
                            'help': 'Shows the actions in the playback ' +

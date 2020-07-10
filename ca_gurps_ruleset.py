@@ -3099,6 +3099,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
         '''
+        #PP = pprint.PrettyPrinter(indent=3, width=150)
+
         if 'part' in action and action['part'] == 2:
             # This is the 2nd part of a 2-part action.  The 2nd part of this
             # action actually perfoms all the actions and side-effects of
@@ -3160,10 +3162,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # Opponent's Timers
 
             if 'opponent' in action and fight_handler is not None:
-                opponent = fight_handler.get_fighter_object(
+                ignore, opponent = fight_handler.get_fighter_object(
                                                 action['opponent']['name'],
                                                 action['opponent']['group'])
-
                 spell_timer = None
                 if complete_spell['duration'] > 0:
                     spell_timer = ca_timers.Timer(None)

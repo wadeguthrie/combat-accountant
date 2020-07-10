@@ -155,7 +155,8 @@ class MockFightHandler(object):
     def get_fighter_object(self,
                            name,
                            group):
-        return self.__fighter_objects[group][name]
+        index = 2 # arbitrary
+        return index, self.__fighter_objects[group][name]
 
     def get_opponent_for(self,
                          fighter    # Fighter object
