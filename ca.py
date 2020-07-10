@@ -23,6 +23,8 @@ import ca_gurps_ruleset
 import ca_timers
 
 # TODO: ISSUE 50 - natural weapons
+# TODO: should be able to give or loot a subset of an item with a count
+# TODO: A non-empty room should say so in the fight.
 
 # TODO: need 'load' for weapons in 'personnel changes' screen (notimer).  Maybe
 #   all weapons in equipment list should be empty.  Consistency check should
@@ -838,7 +840,9 @@ class World(object):
                   'fights': {},
                   'PCs': {},
                   'dead-monsters': [],
-                  'current-fight': {'history': [], 'saved': False},
+                  'current-fight': {'history': [],
+                                    'held-init': [],
+                                    'saved': False},
                   'NPCs': {},
                   'stuff': stuff,
                   'options': {}
@@ -3318,7 +3322,6 @@ class FightHandler(ScreenHandler):
                                                     self._window_manager)
         self.__saved_history = None
         self.__next_playback_action_index = 0  # Only for playback
-        self.__held_fighters = [] # list of tuples for menu - held init
 
         self._add_to_choice_dict({
             curses.KEY_UP: {'name': 'prev character',
@@ -3466,9 +3469,6 @@ class FightHandler(ScreenHandler):
                            'func': self.__show_playback,
                            'help': 'Shows the actions in the playback ' +
                                    'history.'},
-                # TODO: add a method to show a list of actions in the playback
-                #   file.  They're bold if on or after the next index.  They
-                #   should be preceded by the index in the playback list.
                     })
 
         self._add_to_choice_dict(self.world.ruleset.get_fight_commands(self))
@@ -3496,6 +3496,7 @@ class FightHandler(ScreenHandler):
 
         else:
             self.clear_history()
+            self._saved_fight['held-init'] = []
             self.add_to_history({'comment': '--- Round 0 ---'})
 
             self._saved_fight['round'] = 0
@@ -3937,6 +3938,95 @@ class FightHandler(ScreenHandler):
 
         return show_fighter
 
+    def wait_action(self,   # Public so it can be called by the ruleset.
+                    name,   # String: name of fighter
+                    group   # String: group of fighter
+                    ):
+        '''
+        Action handling for tagging someone as holding their initiative.
+        '''
+        # Can't store index because 2 held initiatives can cause the index for
+        # the 2nd fighter changed by the first.
+        self._saved_fight['held-init'].append(
+                ('%s:%s' % (group, name),
+                 {'name': name, 'group': group}))
+
+        lines = []
+        mode = curses.A_NORMAL
+        lines.append([{'text': 'The following fighters are holding:',
+                       'mode': mode}])
+        for fighter in self._saved_fight['held-init']:
+            lines.append([{'text': '  %s' % fighter[0],
+                           'mode': mode}])
+        self._window_manager.display_window(
+                'OK, %s:%s is holding his/her initiative' % (name, group),
+                lines)
+
+    def wait_end_action(self,   # Public so it can be called by the ruleset.
+                        name,   # String: name of fighter
+                        group   # String: group of fighter
+                        ):
+        '''
+        Action handling for tagging someone as holding their initiative.
+        '''
+        # Find the menu_index from the name, group
+
+        menu_index = None
+        for index, entry in enumerate(self._saved_fight['held-init']):
+            if (name == entry[1]['name'] and
+                group == entry[1]['group']):
+                    menu_index = index
+                    break
+        if menu_index is None:
+            self._window_manager.error(
+                    ['%s not found in initiative menu' % name])
+            return True # Keep fighting
+
+        # Remove the index entry from the menu
+
+        self._saved_fight['held-init'].pop(menu_index)
+
+        # Determine destination of move.
+
+        to_index = self.__viewing_index
+        if to_index is None:
+            to_index = self._saved_fight['index']
+
+        # Get the fighter that we're moving
+
+        from_index, fighter_obj = self.get_fighter_object(name,
+                                                          group)
+        fighter_dict = self._saved_fight['fighters'][from_index]
+
+        # Build init of moved fighter to locate it in the moved position if we
+        # sort by initiative.  Copy init of destination fighter, append a
+        # number to the end to make the fighter sort after the destination.
+
+        init_tuple = self._saved_fight['fighters'][to_index]['init']
+        init_list = list(init_tuple)
+        init_list.append(5) # Arbitrary number
+        init_tuple = tuple(init_list)
+        fighter_dict['init'] = init_tuple
+
+        # Move the fighter
+
+        if from_index == to_index:
+            return True  # Keep fighting
+        else:
+            # This simplifies un-holding a group of fighters to the current
+            # init.  It allows the initiative to stay the same as you're
+            # adding each member but adds each member after the previous
+            # addition.
+            self.__viewing_index = to_index
+
+        self.__add_fighter_after_index(fighter_dict, fighter_obj, to_index)
+
+        # If we added one above the removal index, we need to account for that.
+        if from_index > to_index:
+            from_index += 1
+
+        self.__remove_fighter_at_index(from_index)
+
     #
     # Private Methods
     #
@@ -3971,7 +4061,6 @@ class FightHandler(ScreenHandler):
 
         if to_index < self._saved_fight['index']:
             viewing_index = self.__viewing_index
-            #self.__next_fighter(skip_prev=True)
             self.modify_index(1, raw_modify=True)
             self.__viewing_index = viewing_index
 
@@ -4392,7 +4481,6 @@ class FightHandler(ScreenHandler):
         else:
             from_fighter = self.get_current_fighter()
 
-        # TODO: this doesn't seem to work with monsters.  Fix that.
         item = self.__equipment_manager.remove_equipment(from_fighter)
         if item is None:
             return True  # Keep going
@@ -4439,7 +4527,9 @@ class FightHandler(ScreenHandler):
                                 group # string
                                 ):
         # FightHandler
-        for entry in self.__held_fighters:
+        if 'held-init' not in self._saved_fight:
+            return False
+        for entry in self._saved_fight['held-init']:
             if name == entry[1]['name'] and group == entry[1]['group']:
                 return True
         return False
@@ -4747,7 +4837,6 @@ class FightHandler(ScreenHandler):
                 ['Playback history exhausted -- you are at the end.'])
             return True
 
-        # TODO: check for fencepost error
         step_count = (len(self.__saved_history) -
                       self.__next_playback_action_index)
 
@@ -5259,33 +5348,25 @@ class FightHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        # TODO: this needs to be an action and __held_fighters needs to be in
-        # current-fight.  That way, fighters with held initiative survive
-        # across a saved fight.
-        # TODO: if the fighter has already done something this turn, they
-        # shouldn't be able to do a hold action.
-
         # Adds the current fighter to the list of fighters who are holding
         # their initiative.  Note that we're just moving the fighter who
         # currently has the initiative.  Not the viewing index fighter.
         from_index = self._saved_fight['index']
         name = self._saved_fight['fighters'][from_index]['name']
         group = self._saved_fight['fighters'][from_index]['group']
-        # Can't store index because 2 held initiatives can cause the index for
-        # the 2nd fighter changed by the first.
-        self.__held_fighters.append(('%s:%s' % (group, name),
-                                     {'name': name, 'group': group}))
 
-        lines = []
-        mode = curses.A_NORMAL
-        lines.append([{'text': 'The following fighters are holding:',
-                       'mode': mode}])
-        for fighter in self.__held_fighters:
-            lines.append([{'text': '  %s' % fighter[0],
-                           'mode': mode}])
-        self._window_manager.display_window(
-                'OK, %s:%s is holding his/her initiative' % (name, group),
-                lines)
+        ignore, fighter_obj = self.get_fighter_object(name, group)
+        if fighter_obj.can_finish_turn(self):
+            self._window_manager.error(
+                [('%s has already done something this round' % name),
+                 'so s/he cannot hold their initiative.'])
+            return True
+
+        self.world.ruleset.do_action(fighter_obj,
+                                     {'action-name': 'hold-init',
+                                      'name': name,
+                                      'group': group},
+                                     self)
 
         return True  # Keep fighting
 
@@ -5306,7 +5387,7 @@ class FightHandler(ScreenHandler):
         # has initiative has already gone, move the initiative to the next
         # fighter. -- NOTE: the actions are cleared in GurpsRuleset::start_turn
 
-        if len(self.__held_fighters) <= 0:
+        if len(self._saved_fight['held-init']) <= 0:
             return True # Keep fighting
 
         # Figure out which fighter we're moving (in case more than one fighter
@@ -5314,51 +5395,17 @@ class FightHandler(ScreenHandler):
 
         name_group, menu_index = self._window_manager.menu(
                 'Stop Holding Whose Initiative',
-                self.__held_fighters)
+                self._saved_fight['held-init'])
         if menu_index is None:
             return True # Keep fighting
 
-        # Remove the index entry from the menu
-
-        self.__held_fighters.pop(menu_index)
-
-        # Copy init of destination fighter, append a number to the end to make
-        # the fighter sort after the destination.
-
-        to_index = self.__viewing_index
-        if to_index is None:
-            to_index = self._saved_fight['index']
-
-        # Get the fighter that we're moving
-
-        from_index, fighter_obj = self.get_fighter_object(name_group['name'],
-                                                          name_group['group'])
-        fighter_dict = self._saved_fight['fighters'][from_index]
-
-        init_tuple = self._saved_fight['fighters'][to_index]['init']
-        init_list = list(init_tuple)
-        init_list.append(5) # Arbitrary number
-        init_tuple = tuple(init_list)
-        fighter_dict['init'] = init_tuple
-
-        # Move the fighter
-
-        if from_index == to_index:
-            return True  # Keep fighting
-        else:
-            # This simplifies un-holding a group of fighters to the current
-            # init.  It allows the initiative to stay the same as you're
-            # adding each member but adds each member after the previous
-            # addition.
-            self.__viewing_index = to_index
-
-        self.__add_fighter_after_index(fighter_dict, fighter_obj, to_index)
-
-        # If we added one above the removal index, we need to account for that.
-        if from_index > to_index:
-            from_index += 1
-
-        self.__remove_fighter_at_index(from_index)
+        ignore, fighter_obj = self.get_fighter_object(name_group['name'],
+                                                      name_group['group'])
+        self.world.ruleset.do_action(fighter_obj,
+                                     {'action-name': 'hold-init-complete',
+                                      'name': name_group['name'],
+                                      'group': name_group['group']},
+                                     self)
 
         return True  # Keep fighting
 

@@ -716,6 +716,44 @@ class Ruleset(object):
             fight_handler.modify_index(1)
         return Ruleset.HANDLED_OK
 
+    def __hold_init(self,
+                    fighter,          # Fighter object
+                    action,           # {'action-name': 'use-item',
+                                      #  'item-index': <int> # index in
+                                      #       fighter.details['stuff']
+                                      #  'comment': <string>, # optional
+                    fight_handler,    # FightHandler object
+                    ):
+        '''
+        Action handler for Ruleset.
+
+        Use and discard a specific item (decrements its count).
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+        fight_handler.wait_action(action['name'], action['group'])
+        return Ruleset.HANDLED_OK
+
+    def __hold_init_complete(self,
+                             fighter,       # Fighter object
+                             action,        # {'action-name': 'use-item',
+                                            #  'item-index': <int> # ndx in
+                                            #       fighter.details['stuff']
+                                            #  'comment': <string>, # opt'l
+                             fight_handler, # FightHandler object
+                             ):
+        '''
+        Action handler for Ruleset.
+
+        Use and discard a specific item (decrements its count).
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+        fight_handler.wait_end_action(action['name'], action['group'])
+        return Ruleset.HANDLED_OK
+
     def _perform_action(self,
                         fighter,          # Fighter object
                         action,           # {'action-name':
@@ -759,6 +797,8 @@ class Ruleset(object):
             'start-turn':           {'doit': self.__start_turn},
             'use-item':             {'doit': self.__use_item},
             'user-defined':         {'doit': self.__do_custom_action},
+            'hold-init':            {'doit': self.__hold_init},
+            'hold-init-complete':   {'doit': self.__hold_init_complete},
         }
 
         handled = Ruleset.UNHANDLED
