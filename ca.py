@@ -4487,13 +4487,14 @@ class FightHandler(ScreenHandler):
                 xfer_menu = [(good_guy.name, {'guy': good_guy})
                              for good_guy in self.__fighters
                              if good_guy.group == 'PCs']
+                xfer_menu.append(('IGNORE', {'ignore': None}))
                 xfer_menu.append(('QUIT', {'quit': None}))
                 xfer, ignore = self._window_manager.menu(
                         'Who gets %s\'s %s' % (bad_guy.name,
                                                item['name']),
                         xfer_menu)
 
-                if xfer is None:
+                if xfer is None or 'ignore' in xfer:
                     continue
 
                 if 'quit' in xfer:
@@ -6280,6 +6281,8 @@ class Program(object):
 # Main
 if __name__ == '__main__':
     VERSION = '00.02.00'    # major version, minor version, bug fixes
+    #FMT = '%Y-%m-%d-%H-%M-%S' # TODO: remove
+    #print 'A %s' % datetime.datetime.now().strftime(FMT).format() # TODO: remove
 
     parser = MyArgumentParser()
     parser.add_argument(
