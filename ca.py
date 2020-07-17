@@ -4485,14 +4485,17 @@ class FightHandler(ScreenHandler):
         if item is None:
             return True  # Keep going
 
-        character_list = self.world.get_creature_details_list('PCs')
-        character_menu = ([(dude, (dude, 'PCs'))
-                           for dude in character_list])
-
-        character_list = self.world.get_creature_details_list(
-                                                            from_fighter.group)
-        character_menu.extend([(dude, (dude, from_fighter.group))
-                               for dude in character_list])
+        pc_list = []
+        monster_list = []
+        for fighter in self.__fighters:
+            if fighter.group == 'PCs':
+                pc_list.append((fighter.name,
+                               (fighter.name, fighter.group)))
+            else:
+                monster_list.append((fighter.name,
+                                    (fighter.name, fighter.group)))
+        character_menu = pc_list
+        character_menu.extend(monster_list)
 
         to_fighter_name, ignore = self._window_manager.menu(
                                         'Give "%s" to whom?' % item['name'],
@@ -5379,7 +5382,6 @@ class FightHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        # TODO: this needs to be an action
         # TODO: look at timer handling - maybe base advancing timers on
         #   whether it's OK to move on (check non-action reasons for moving
         #   on, though unconscious fighters can't hold their initiative).

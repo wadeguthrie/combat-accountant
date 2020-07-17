@@ -71,7 +71,8 @@ class Equipment(object):
         return len(self.__equipment)
 
     def remove(self,
-               item_index   # integer index into the equipment list
+               item_index,  # integer index into the equipment list
+               item_count=1 # number to remove (None if 'ask')
                ):
         '''
         Removes an item (by index) from the list of equipment.
@@ -81,13 +82,24 @@ class Equipment(object):
         if item_index >= len(self.__equipment):
             return None
 
+        remove_all = False
         if ('count' in self.__equipment[item_index] and
                 self.__equipment[item_index]['count'] > 1):
+
+            if item_count >= self.__equipment[item_index]['count']:
+                item_count = self.__equipment[item_index]['count']
+                remove_all = True
+
+            # Remove the item(s)
+
             item = copy.deepcopy(self.__equipment[item_index])
-            item['count'] = 1
-            self.__equipment[item_index]['count'] -= 1
+            item['count'] = item_count
+            self.__equipment[item_index]['count'] -= item_count
         else:
             item = self.__equipment[item_index]
+            remove_all = True
+
+        if remove_all:
             if 'discard-when-empty' in item and not item['discard-when-empty']:
                 self.__equipment[item_index]['count'] = 0
             else:
@@ -282,7 +294,8 @@ class EquipmentManager(object):
         return starting_index
 
     def remove_equipment(self,
-                         fighter       # Fighter object
+                         fighter,       # Fighter object
+                         count=None     # int
                          ):
         '''
         Ask the user which piece of equipment to discard and remove it.
@@ -299,7 +312,7 @@ class EquipmentManager(object):
         if item_index is None:
             return None
 
-        return fighter.remove_equipment(item_index)
+        return fighter.remove_equipment(item_index, count)
 
 
 class Weapon(object):

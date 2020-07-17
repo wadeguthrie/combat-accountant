@@ -577,7 +577,7 @@ class Ruleset(object):
             # clip index (for the new clip) is still valid until the old clip
             # is added to the equipment list
 
-            clip = fighter.remove_equipment(action['clip-index'])
+            clip = fighter.remove_equipment(action['clip-index'], 1)
 
             # Put a non-zero count clip back in equipment list
             if weapon.shots_left() > 0:

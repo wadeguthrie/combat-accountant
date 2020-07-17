@@ -56,15 +56,53 @@ class ThingsInFight(object):
         '''
         return self.equipment.add(new_item, source)
 
+    def ask_how_many(self,
+                     item_index,    # index into fighter's stuff list
+                     count=None     # number to remove (None if 'ask')
+                     ):
+        '''
+        Determine how many items to remove.
+        '''
+        item = self.equipment.get_item_by_index(item_index)
+        if item is None:
+            return 0
+        current_item_count = 1 if 'count' not in item else item['count']
+
+        if current_item_count < 1:
+            return 0
+        if current_item_count == 1:
+            return current_item_count
+        if count is not None:
+            return count
+
+        # Ask how many to remove
+
+        title = 'How Many Items?'
+        height = 1
+        width = len(title)
+        item_count_string = self._window_manager.input_box(height,
+                                                           width,
+                                                           title)
+        if item_count_string is None:
+            return 1
+
+        item_count = int(item_count_string)
+        if item_count > current_item_count:
+            item_count = current_item_count
+
+        return item_count
+
     def remove_equipment(self,
-                         item_index
+                         item_index,    # index into fighter's stuff list
+                         count=None     # number to remove (None if 'ask')
                          ):
         '''
         Discards an item from the Fighter's/Venue's equipment list.
 
         Returns: the discarded item
         '''
-        return self.equipment.remove(item_index)
+        count = self.ask_how_many(item_index, count)
+        return self.equipment.remove(item_index, count)
 
     #
     # Notes methods
@@ -412,7 +450,8 @@ class Fighter(ThingsInFight):
         return index, ca_equipment.Weapon(item)
 
     def remove_equipment(self,
-                         item_index  # <int> index into Equipment list
+                         item_index,  # <int> index into Equipment list
+                         count=None     # number to remove (None if 'ask')
                          ):
         '''
         Discards an item from the Fighter's equipment list.
@@ -420,7 +459,8 @@ class Fighter(ThingsInFight):
         Returns: the discarded item
         '''
         before_item_count = self.equipment.get_item_count()
-        item = self.equipment.remove(item_index)
+        count = self.ask_how_many(item_index, count)
+        item = self.equipment.remove(item_index, count)
         after_item_count = self.equipment.get_item_count()
 
         # Adjust indexes into the list if the list changed.
