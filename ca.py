@@ -23,8 +23,6 @@ import ca_gurps_ruleset
 import ca_timers
 
 # TODO: ISSUE 50 - natural weapons
-# TODO: should be able to give or loot a subset of an item with a count
-# TODO: A non-empty room should say so in the fight.
 
 # TODO: need 'load' for weapons in 'personnel changes' screen (notimer).  Maybe
 #   all weapons in equipment list should be empty.  Consistency check should
