@@ -288,6 +288,25 @@ class Venue(ThingsInFight):
         if not found_one:
             char_detail.append([{'text': '  (None)', 'mode': mode}])
 
+    def get_short_summary_string(self,
+                                 fight_handler  # FightHandler, ignored
+                                 ):
+        '''
+        Returns a string that contains the shortest description of the Fighter.
+        '''
+        fighter_string = '%s' % self.name
+
+        if 'stuff' in self.details and len(self.details['stuff']) > 0:
+            fighter_string += ' - EQUIP'
+
+        if 'timers' in self.details and len(self.details['timers']) > 0:
+            fighter_string += ' - TIMERS'
+
+        if 'notes' in self.details and len(self.details['notes']) > 0:
+            fighter_string += ' - NOTES'
+
+        return fighter_string
+
     def get_state(self):
         return Fighter.FIGHT
 
