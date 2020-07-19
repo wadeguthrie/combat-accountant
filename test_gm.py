@@ -4030,7 +4030,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # Remove counted item
         self.__window_manager.set_input_box_response(
-                'How Many Items (3 max)?', 1)
+                'How Many Items (3 Available)?', 1)
         fighter.remove_equipment(self.__tank_fighter_pistol_index)
         weapon = fighter.equipment.get_item_by_index(
                 self.__tank_fighter_pistol_index)
@@ -4129,7 +4129,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         sig_acc_4_index = 0
         self.__window_manager.set_input_box_response(
-                'How Many Items (2 max)?', 1)
+                'How Many Items (2 Available)?', 1)
         fighter.remove_equipment(sig_acc_4_index) # Should just reduce the count
         weapon = fighter.equipment.get_item_by_index(0)
         assert weapon['name'] == "pistol, Sig D65"
