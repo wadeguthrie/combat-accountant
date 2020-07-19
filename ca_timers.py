@@ -232,10 +232,10 @@ class TimersWidget(object):
         title = 'Rounds To Wait...'
         height = 1
         width = len(title)
-        adj_string = self.__window_manager.input_box(height, width, title)
-        if adj_string is None or len(adj_string) <= 0:
+        adj = self.__window_manager.input_box_number(height, width, title)
+        if adj is None:
             return None
-        rounds = int(adj_string)
+        rounds = adj
         if rounds <= 0:
             return None
 

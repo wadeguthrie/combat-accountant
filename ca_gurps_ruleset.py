@@ -3229,12 +3229,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         complete_spell['name'], complete_spell['notes'])
                 height = 1
                 width = len(title)
-                duration_string = ''
-                while len(duration_string) <= 0:
-                    duration_string = self._window_manager.input_box(height,
+                duration = None
+                while duration is None:
+                    duration = self._window_manager.input_box_number(height,
                                                                      width,
                                                                      title)
-                complete_spell['duration'] = int(duration_string)
+                complete_spell['duration'] = duration
 
             # Cost
 
@@ -3243,12 +3243,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         complete_spell['name'], complete_spell['notes'])
                 height = 1
                 width = len(title)
-                cost_string = ''
-                while len(cost_string) <= 0:
-                    cost_string = self._window_manager.input_box(height,
+                cost = None
+                while cost is None:
+                    cost = self._window_manager.input_box_number(height,
                                                                  width,
                                                                  title)
-                complete_spell['cost'] = int(cost_string)
+                complete_spell['cost'] = cost
 
             # M8 - High skill level costs less
             skill = complete_spell['skill'] - 15
@@ -3267,11 +3267,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                     complete_spell['notes'])
                 height = 1
                 width = len(title)
-                casting_time_string = ''
-                while len(casting_time_string) <= 0:
-                    casting_time_string = self._window_manager.input_box(
+                casting_time = None
+                while casting_time is None:
+                    casting_time = self._window_manager.input_box_number(
                             height, width, title)
-                complete_spell['casting time'] = int(casting_time_string)
+                complete_spell['casting time'] = casting_time
 
             # Opponent?
 
@@ -3383,10 +3383,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         title = 'Reduce (%s\'s) FP By...' % fp_recipient.name
         height = 1
         width = len(title)
-        adj_string = self._window_manager.input_box(height, width, title)
-        if len(adj_string) <= 0:
+        adj = self._window_manager.input_box_number(height, width, title)
+        if adj is None:
             return True
-        adj = -int(adj_string)  # NOTE: SUBTRACTING the adjustment
+        adj = -adj  # NOTE: SUBTRACTING the adjustment
 
         if adj < 0:
             comment = '(%s) lost %d FP' % (fp_recipient.name, -adj)
