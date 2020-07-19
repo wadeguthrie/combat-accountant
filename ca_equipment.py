@@ -347,8 +347,9 @@ class Weapon(object):
     def remove_old_clip(self):
         if 'clip' in self.details:
             old_clip = self.details['clip']
-            old_clip['shots'] = self.shots()
-            old_clip['shots_left'] = self.shots_left()
+            if old_clip is not None:
+                old_clip['shots'] = self.shots()
+                old_clip['shots_left'] = self.shots_left()
         else:
             old_clip = {'count': 1,
                         'owners': [],
@@ -446,6 +447,9 @@ class Weapon(object):
         clip = None if 'clip' not in self.details else self.details['clip']
         if clip is not None and param in clip:
             return clip[param]
+        if (param == 'shots_left' and 'clip' in self.details and
+                self.details['clip'] is None):
+            return 0
         if ammo:
             return self.details['ammo'][param]
         return self.details[param]
