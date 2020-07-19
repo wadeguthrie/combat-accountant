@@ -1514,7 +1514,7 @@ class AttributeWidget(object):
             keep_ask_attr = True
 
             self.__fighter.details[attr_type][attr] = (
-                    self.__window_manager.input_num_box(
+                    self.__window_manager.input_box_calc(
                         height,
                         width,
                         self.__fighter.details[attr_type][attr],
@@ -4254,13 +4254,13 @@ class FightHandler(ScreenHandler):
         title = 'Reduce (%s\'s) HP By...' % hp_recipient.name
         height = 1
         width = len(title)
-        adj_string = self._window_manager.input_box(height, width, title)
-        if len(adj_string) <= 0:
+        adj = self._window_manager.input_box_number(height, width, title)
+        if adj is None:
             return True
 
-        adj = -int(adj_string)  # NOTE: SUBTRACTING the adjustment
         if adj == 0:
             return True  # Keep fighting
+        adj = -adj # NOTE: SUBTRACTING the adjustment
 
         action = {'action-name': 'adjust-hp', 'adj': adj}
 
