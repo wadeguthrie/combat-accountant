@@ -3347,7 +3347,7 @@ class FightHandler(ScreenHandler):
                        'help': 'Explain how the attack and defense numbers ' +
                                'were calculated for the currently selected ' +
                                'figher.'},
-            ord('a'): {'name': 'attribute (edit)',
+            ord('A'): {'name': 'attribute (edit)',
                        'func': self.__edit_attribute,
                        'help': 'Allows the user to edit a fighter\'s ' +
                                'permanent or current attribute values.'},
