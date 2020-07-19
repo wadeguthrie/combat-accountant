@@ -789,6 +789,7 @@ class Ruleset(object):
             'don-armor':            {'doit': self.__don_armor},
             'draw-weapon':          {'doit': self.__draw_weapon},
             'end-turn':             {'doit': self.__end_turn},
+            'move-and-attack':      {'doit': self.__do_attack},
             'pick-opponent':        {'doit': self.__pick_opponent},
             'previous-turn':        {'doit': self.__previous_turn},
             'reload':               {'doit': self.__do_reload},
