@@ -718,7 +718,7 @@ class Ruleset(object):
 
     def __hold_init(self,
                     fighter,          # Fighter object
-                    action,           # {'action-name': 'use-item',
+                    action,           # {'action-name': 'hold-init',
                                       #  'item-index': <int> # index in
                                       #       fighter.details['stuff']
                                       #  'comment': <string>, # optional
@@ -737,7 +737,8 @@ class Ruleset(object):
 
     def __hold_init_complete(self,
                              fighter,       # Fighter object
-                             action,        # {'action-name': 'use-item',
+                             action,        # {'action-name':
+                                            #       'hold-init-complete',
                                             #  'item-index': <int> # ndx in
                                             #       fighter.details['stuff']
                                             #  'comment': <string>, # opt'l
@@ -960,6 +961,6 @@ class Ruleset(object):
         if 'count' in item and item['count'] == 0:
             self._window_manager.error(['Item is empty, you cannot use it'])
 
-        ignore_item = fighter.remove_equipment(action['item-index'])
+        ignore_item = fighter.remove_equipment(action['item-index'], 1)
 
         return Ruleset.HANDLED_OK
