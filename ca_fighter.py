@@ -77,16 +77,15 @@ class ThingsInFight(object):
 
         # Ask how many to remove
 
-        title = 'How Many Items?'
+        title = 'How Many Items (%d max)?' % current_item_count
         height = 1
         width = len(title)
-        item_count_string = self._window_manager.input_box(height,
+        item_count = self._window_manager.input_box_number(height,
                                                            width,
                                                            title)
-        if item_count_string is None:
+        if item_count is None:
             return 1
 
-        item_count = int(item_count_string)
         if item_count > current_item_count:
             item_count = current_item_count
 

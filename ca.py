@@ -2200,11 +2200,10 @@ class PersonnelHandler(ScreenHandler):
                 width = len(title) + 2
                 keep_ask_skill = True
                 while keep_ask_skill:
-                    skill_string = self._window_manager.input_box(height,
-                                                                  width,
-                                                                  title)
-                    if skill_string is not None and len(skill_string) > 0:
-                        my_copy['skill'] = int(skill_string)
+                    skill = self._window_manager.input_box_number(
+                            height, width, title)
+                    if skill is not None:
+                        my_copy['skill'] = skill
                         keep_ask_skill = False
                     else:
                         self._window_manager.error(
@@ -4675,13 +4674,12 @@ class FightHandler(ScreenHandler):
                   len(self.__saved_history)))
         height = 1
         width = len(title)
-        step_count_string = self._window_manager.input_box(height,
+        step_count = self._window_manager.input_box_number(height,
                                                            width,
                                                            title)
-        if len(step_count_string) <= 0:
+        if len(step_count) is None:
             return True
 
-        step_count = int(step_count_string)
         if (self.__next_playback_action_index + step_count >
                 len(self.__saved_history)):
             step_count = (len(self.__saved_history) -
