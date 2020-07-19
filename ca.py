@@ -3725,6 +3725,14 @@ class FightHandler(ScreenHandler):
                             {'comment': ('(%s) did nothing (absent)' %
                                          current_fighter.name)})
 
+            elif (current_fighter.group != 'PCs' and
+                    not current_fighter.is_conscious()):
+                if raw_modify:
+                    keep_going = False
+                elif not self.world.playing_back:
+                    self.add_to_history(
+                            {'comment': ('(%s) did nothing (unconscious)' %
+                                         current_fighter.name)})
             else:
                 keep_going = False
 
