@@ -327,7 +327,7 @@ class Fighter(ThingsInFight):
         'alive': ALIVE,
         'unconscious': UNCONSCIOUS,
         'dead': DEAD,
-        'absent': ABSENT,
+        'Absent': ABSENT,  # Capitalized for menus
         'fight': FIGHT,
     }
 
@@ -614,7 +614,7 @@ class Fighter(ThingsInFight):
         return Fighter.get_fighter_state(self.details)
 
     def is_absent(self):
-        return True if self.details['state'] == 'absent' else False
+        return True if self.details['state'] == 'Absent' else False
 
     def is_conscious(self):
         # NOTE: 'injured' is not stored in self.details['state']
@@ -692,10 +692,10 @@ class Fighter(ThingsInFight):
         Returns nothing.
         '''
 
-        if self.details['state'] == 'absent':
+        if self.details['state'] == 'Absent':
             self.details['state'] = 'alive'
         else:
-            self.details['state'] = 'absent'
+            self.details['state'] = 'Absent'
 
     #
     # Protected and Private Methods
