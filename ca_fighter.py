@@ -743,9 +743,9 @@ class Fighter(ThingsInFight):
                                 'mode': curses.A_NORMAL}] for x in damage_why])
 
             if weapon.notes() is not None:
-                lines.extend([[{'text': 'Weapon: "%s"' % weapon['name'],
+                lines.extend([[{'text': 'Weapon: "%s"' % weapon.name,
                                'mode': curses.A_NORMAL}]])
-                lines.extend([[{'text': '  %s' % weapon.get_notes(),
+                lines.extend([[{'text': '  %s' % weapon.notes(),
                                'mode': curses.A_NORMAL}]])
 
         ignore, defense_why = self.get_defenses_notes(why_opponent)
