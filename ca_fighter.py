@@ -562,6 +562,9 @@ class Fighter(ThingsInFight):
                                           self.details['current']['hp'],
                                           self.details['permanent']['hp'])
 
+        if self.is_dead():
+            fighter_string += ' - DEAD'
+
         if self.timers.is_busy():
             fighter_string += ' - BUSY'
 
