@@ -2711,7 +2711,10 @@ class PersonnelHandler(ScreenHandler):
 
         if 'weapon-index' in fighter.details:
             sub_menu.extend([
-                    ('Draw/drop weapon',    {'doit': self.__draw_weapon})
+                    ('draw/drop weapon',    {'doit': self.__draw_weapon})
+            ])
+            sub_menu.extend([
+                    ('reload weapon',    {'doit': self.__reload_weapon})
             ])
 
         self._window_manager.menu('Do what', sub_menu)
@@ -2986,6 +2989,35 @@ class PersonnelHandler(ScreenHandler):
         # TODO: do I need to del self._window?
         self._window.close()
         return False  # Stop building this fight
+
+    def __reload_weapon(self,
+                        throw_away   # Required/used by the caller because
+                                     #   there's a list of methods to call,
+                                     #   and (apparently) some of them may
+                                     #   use this parameter.  It's ignored
+                                     #   by this method, however.
+                        ):
+        '''
+        Method for 'equip' sub-menu.
+
+        Reloads the current weapon.
+
+        Returns: None if we want to bail-out of the draw weapon process,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        self.world.ruleset.do_action(
+                fighter,
+                {'action-name': 'reload',
+                 'comment': 'Reloading during personnel mods',
+                 'notimer': True,
+                 'quiet': True},
+                None)
+        self._draw_screen()
+        return True  # Anything but 'None' for a menu handler
 
     def __remove_equipment(self,
                            throw_away   # Required/used by the caller because
