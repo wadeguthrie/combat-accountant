@@ -4452,7 +4452,8 @@ class FightHandler(ScreenHandler):
         attribute_widget = AttributeWidget(self._window_manager,
                                            self,
                                            fighter)
-        return attribute_widget.doit()
+        attribute_widget.doit()
+        return True  # keep fighting
 
     def __full_notes(self):
         '''
@@ -4462,7 +4463,8 @@ class FightHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        return self.__notes('notes')
+        self.__notes('notes')
+        return True  # keep fighting
 
     def __give_equipment(self):
         '''
