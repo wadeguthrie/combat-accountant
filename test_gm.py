@@ -418,6 +418,9 @@ class MockWindowManager(object):
                                title,
                                selection  # first part of string_results tuple
                                ):
+        '''
+        NOTE: |input_box| and |input_box_number| share the same response queue
+        '''
         # print 'set_input_box_response: title: %s, add selection:' % title,
         # PP.pprint(selection)
 
@@ -446,6 +449,31 @@ class MockWindowManager(object):
 
         if ARGS.verbose:
             print '\n  input_box title: "%s", returning:' % title,
+            PP.pprint(result)
+            print '    gives us a response queue of:'
+            print '    ',
+            PP.pprint(self.__input_box_responses)
+
+        return result
+
+    def input_box_number(self,
+                         height,  # ignore
+                         width,  # ignore
+                         title):
+        if title not in self.__input_box_responses:
+            print ('** input_box_number: title "%s" not found in stored responses' %
+                   title)
+            assert False
+        if len(self.__input_box_responses[title]) == 0:
+            print ('** input_box_number: responses["%s"] is empty, can\'t respond' %
+                   title)
+            assert False
+
+        # FIFO queue
+        result = self.__input_box_responses[title].pop(0)
+
+        if ARGS.verbose:
+            print '\n  input_box_number title: "%s", returning:' % title,
             PP.pprint(result)
             print '    gives us a response queue of:'
             print '    ',
@@ -3083,19 +3111,19 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 self.__window_manager.set_input_box_response(
                     'Cost to cast (%s) - see (%s) ' % (trial['name'],
                                                        trial['notes']),
-                    '%s' % trial['cost'])
+                    trial['cost'])
             if (ca_gurps_ruleset.GurpsRuleset.spells[
                     trial['name']]['casting time'] is None):
                 self.__window_manager.set_input_box_response(
                     'Seconds to cast (%s) - see (%s) ' % (trial['name'],
                                                           trial['notes']),
-                    '%s' % trial['casting time'])
+                    trial['casting time'])
             if (ca_gurps_ruleset.GurpsRuleset.spells[
                     trial['name']]['duration'] is None):
                 self.__window_manager.set_input_box_response(
                     'Duration for (%s) - see (%s) ' % (trial['name'],
                                                        trial['notes']),
-                    '%s' % trial['duration'])
+                    trial['duration'])
 
             self.__window_manager.set_menu_response(
                     'Mark %s with spell' % opponent.name, True)
@@ -4001,7 +4029,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                         fighter.details['stuff'][i])
 
         # Remove counted item
-        self.__window_manager.set_input_box_response('How Many Items?', '1')
+        self.__window_manager.set_input_box_response(
+                'How Many Items (3 max)?', 1)
         fighter.remove_equipment(self.__tank_fighter_pistol_index)
         weapon = fighter.equipment.get_item_by_index(
                 self.__tank_fighter_pistol_index)
@@ -4099,7 +4128,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # remove counted item before weapon index
 
         sig_acc_4_index = 0
-        self.__window_manager.set_input_box_response('How Many Items?', '1')
+        self.__window_manager.set_input_box_response(
+                'How Many Items (2 max)?', 1)
         fighter.remove_equipment(sig_acc_4_index) # Should just reduce the count
         weapon = fighter.equipment.get_item_by_index(0)
         assert weapon['name'] == "pistol, Sig D65"
