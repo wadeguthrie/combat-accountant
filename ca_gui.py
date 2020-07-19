@@ -636,17 +636,17 @@ class GmWindowManager(object):
         self.hard_refresh_all()
         return string
 
-    def input_num_box(self,
-                      height,           # int: height of the data window (the
-                                        #   box around it will, therefore, be
-                                        #   bigger)
-                      width,            # int: width of the data window (see
-                                        #   |height|)
-                      initial_value,    # int/float: starting value
-                      title             # string: the title displayed,
-                                        #   centered, in the box around the
-                                        #   data.
-                      ):
+    def input_box_calc(self,
+                       height,           # int: height of the data window (the
+                                         #   box around it will, therefore, be
+                                         #   bigger)
+                       width,            # int: width of the data window (see
+                                         #   |height|)
+                       initial_value,    # int/float: starting value
+                       title             # string: the title displayed,
+                                         #   centered, in the box around the
+                                         #   data.
+                       ):
         '''
         Returns input number (but allows addition and subtraction to initial).
         '''
@@ -661,10 +661,14 @@ class GmWindowManager(object):
         if match is None:
             return result
 
-        if '.' in match.groupdict()['value']:
-            input_value = float(match.groupdict()['value'])
-        else:
-            input_value = int(match.groupdict()['value'])
+        try:
+            if '.' in match.groupdict()['value']:
+                input_value = float(match.groupdict()['value'])
+            else:
+                input_value = int(match.groupdict()['value'])
+        except ValueError:
+            self.error(['Invalid value for a number'])
+            return initial_value
 
         if (match.groupdict()['sign'] is None or
                 len(match.groupdict()['sign']) == 0):
@@ -674,6 +678,34 @@ class GmWindowManager(object):
             return result + input_value
 
         return result - input_value
+
+    def input_box_number(self,
+                         height,    # int: height of the data window (the
+                                    #   box around it will, therefore, be
+                                    #   bigger)
+                         width,     # int: width of the data window (see
+                                    #   |height|)
+                         title      # string: the title displayed,
+                                    #   centered, in the box around the
+                                    #   data.
+                         ):
+        '''
+        Returns input number (does _not_ allow calculations to the number).
+        '''
+        number_string = self.input_box(height, width, title)
+        if len(number_string) <= 0:
+            return None
+
+        try:
+            if '.' in number_string:
+                number = float(number_string)
+            else:
+                number = int(number_string)
+        except ValueError:
+            self.error(['Invalid value for a number'])
+            return None
+        else:
+            return number
 
     def menu(self,
              title,             # string: title of the menu, displayed to user
