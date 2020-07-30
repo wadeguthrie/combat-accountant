@@ -2166,7 +2166,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'why'   is an array of strings describing why the to-hit numbers
                     are what they are.
         '''
-        # TODO: need convenient defaults -- maybe as an entry to the skill
+        # TODO (eventually): need convenient defaults -- maybe as an entry to
+        # the skill
         if weapon.details['skill'] not in fighter.details['skills']:
             return None, None
 
@@ -2336,9 +2337,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         if ('boxing' in fighter.details['skills'] and
                 'boxing' in unarmed_skills):
-            # TODO: if skills are equal, boxing should be used in favor of
-            # brawling or DX but NOT in favor of karate.  It's placed here
-            # because the kick skill isn't improved by boxing.
+            # TODO (eventually): if skills are equal, boxing should be used in
+            # favor of brawling or DX but NOT in favor of karate.  It's placed
+            # here because the kick skill isn't improved by boxing.
             if result['punch_skill'] < fighter.details['skills']['Boxing']:
                 result['punch_string'] = 'Boxing Punch (B182, B271, B370)'
                 result['punch_skill'] = fighter.details['skills']['Boxing']
@@ -2442,8 +2443,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                 kick_damage['num_dice'],
                                 kick_damage['plus']))
 
-        # TODO: maybe I want to make everything use damage_array instead of
-        # making it a special case for brass knuckles.
+        # TODO (eventually): maybe I want to make everything use damage_array
+        # instead of making it a special case for brass knuckles.
         damage_array = None
         if weapon is None:
             punch_damage = copy.deepcopy(GurpsRuleset.melee_damage[st]['thr'])
