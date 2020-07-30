@@ -23,10 +23,16 @@ import ca_gurps_ruleset
 import ca_timers
 
 # TODO: ISSUE 50 - natural weapons
+# TODO: move & attack menu item should show penalties
+# TODO: end hold shouldn't back init pointer up to <<ROOM>> when adding
+#   after last creature
+# TODO: maintain spell
+# TODO: playback from crash of a saved fight doesn't seem to be working (looks
+#   like you start from restore of saved fight but you apply all of the history
+#   since the beginning of the fight).  Maybe save the index, somehow.
+# TODO: 'short notes' should be 'fight notes' since it gets cleared at start
+#   of the fight
 
-# TODO: need 'load' for weapons in 'personnel changes' screen (notimer).  Maybe
-#   all weapons in equipment list should be empty.  Consistency check should
-#   check if there's ammo for each weapon that takes ammo.
 # TODO: reload and spells should happen at the end of the timer.  The
 #       'reloading' timer should launch the second part of the action when it
 #       fires.
@@ -355,8 +361,8 @@ class PersonnelGmWindow(ca_gui.GmWindow):
         self.__char_list_window.draw_window()
         self.__char_list_window.refresh()
 
-    # TODO: genericize the scrolling stuff and just pass the window to the
-    # generic routine.
+    # TODO (eventually): genericize the scrolling stuff and just pass the
+    # window to the generic routine.
 
     def scroll_char_list_up(self):
         ''' Scrolls the character list pane up.  '''
@@ -1029,11 +1035,11 @@ class World(object):
         Returns a tuple that contains the name, the country name, and the
         gender of the creature.
         '''
-        # TODO: should return an array so that any structure of naming
-        # categories is permitted.
+        # TODO (eventually): should return an array so that any structure of
+        # naming categories is permitted.
         randomly_generate = False
 
-        # TODO: 'names' should be optional
+        # TODO (eventually): 'names' should be optional
         if 'names' not in self.details or self.details['names'] is None:
             return None, None, None
 
@@ -1889,7 +1895,8 @@ class PersonnelHandler(ScreenHandler):
     # Other methods
     #
     def __add_creature(self):
-        # TODO: seems a bit long -- break this up into smaller methods
+        # TODO (eventually): seems a bit long -- break this up into smaller
+        # methods
         '''
         Command ribbon method.
 
@@ -2986,7 +2993,7 @@ class PersonnelHandler(ScreenHandler):
             for name, creature in self.__critters['data'].iteritems():
                 self.world.ruleset.is_creature_consistent(name, creature)
 
-        # TODO: do I need to del self._window?
+        # TODO (eventually): do I need to del self._window?
         self._window.close()
         return False  # Stop building this fight
 
@@ -4075,15 +4082,9 @@ class FightHandler(ScreenHandler):
             to_index       # index into _saved_fight and __fighters
             ):
         if self.__viewing_index is None:
-            pass # Just saves a nesting level
+            pass # |pass| just saves a nesting level
         elif to_index < self.__viewing_index:
             self.__change_viewing_index(-1)
-        elif to_index == self.__viewing_index:
-            # You can undo the case of 'held' initiative by placing the
-            # fighter directly after itself.  Put the "new" guy in first.
-            # Deleting the old guy will advance the viewing index to the
-            # newly added guy (causing the index to stay the same).
-            self.__change_viewing_index(1)
 
         # Actually add the fighter
 
@@ -4094,7 +4095,10 @@ class FightHandler(ScreenHandler):
             self._saved_fight['fighters'].insert(to_index+1, fighter_dict)
             self.__fighters.insert(to_index+1, fighter_obj)
 
-        # Adjust initiative index
+        # Adjust initiative index (while maintianing the viewing index)
+
+        if to_index == self.__viewing_index:
+            self.__change_viewing_index(1)
 
         if to_index < self._saved_fight['index']:
             viewing_index = self.__viewing_index
@@ -5223,8 +5227,8 @@ class FightHandler(ScreenHandler):
 
         # Show X/Y steps and the action
 
-        # TODO: there should probably be a method that formats an action.
-        #  This routine and playback_history should use it.
+        # TODO (eventually): there should probably be a method that formats
+        # an action.  This routine and playback_history should use it.
         lines = []
         index = self.__next_playback_action_index - 1
         string = PP.pformat(action)

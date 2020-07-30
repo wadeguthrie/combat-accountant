@@ -691,7 +691,7 @@ class Ruleset(object):
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
 
-        # TODO: draw weapon from counted item makes a copy
+        # TODO: draw weapon from counted item (that takes clips) makes a copy
         fighter.draw_weapon_by_index(action['weapon-index'])
         return Ruleset.HANDLED_OK
 

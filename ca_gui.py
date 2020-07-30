@@ -142,9 +142,10 @@ class GmWindow(object):
                                         curses.A_BOLD)
                 left += self._command_ribbon['max_width']
 
-            # TODO: figure out why, occassionally, this fails.  I _think_ it's
-            # when the math doesn't quite work out and something goes beyond
-            # the edge of the screen, but that's just a theory.
+            # TODO (eventually): figure out why, occassionally, this fails.
+            # I _think_ it's when the math doesn't quite work out and
+            # something goes beyond the edge of the screen, but that's just a
+            # theory.
             try:
                 self._window.addstr(line, left, '|', curses.A_NORMAL)
             except:
