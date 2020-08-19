@@ -22,10 +22,13 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: "Heal all PCs" needs to ask 'which attribute" or "reload?"
+#
+# TODO: the ordinal addition to the initiative is backwards (since initiative
+#   is sorted in reverse order).  Similarly, adding 5 to the end of the
+#   initiative of an un-held fighter doesn't work.
 # TODO: ISSUE 50 - natural weapons
 # TODO: move & attack menu item should show penalties
-# TODO: end hold shouldn't back init pointer up to <<ROOM>> when adding
-#   after last creature
 # TODO: maintain spell
 # TODO: playback from crash of a saved fight doesn't seem to be working (looks
 #   like you start from restore of saved fight but you apply all of the history
@@ -1504,6 +1507,8 @@ class AttributeWidget(object):
                     'What Type Of Attribute', perm_current_menu)
             if attr_type is None:
                 return None
+            else:
+                change_current = True if attr_type == 'current' else False
 
             attr_menu = [(attr, attr)
                          for attr in self.__fighter.details[attr_type].keys()]
@@ -1513,8 +1518,13 @@ class AttributeWidget(object):
             if attr is None:
                 return None
 
-            title = ('New Value (old value: %d)' %
-                     self.__fighter.details[attr_type][attr])
+            if change_current:
+                title = ('New Value (old value: %d/%d)' %
+                         (self.__fighter.details['current'][attr],
+                          self.__fighter.details['permanent'][attr]))
+            else:
+                title = ('New Value (old value: %d)' %
+                         self.__fighter.details['permanent'][attr])
             height = 1
             width = len(title) + 2
             keep_ask_attr = True
@@ -1526,13 +1536,23 @@ class AttributeWidget(object):
                         self.__fighter.details[attr_type][attr],
                         title))
 
-            if attr_type == 'permanent':
+            if change_current:
+                if (self.__fighter.details['current'][attr] >
+                        self.__fighter.details['permanent'][attr]):
+                    cap_menu = [('yes', True), ('no', False)]
+                    cap_current, ignore = self.__window_manager.menu(
+                            'Cap the "current" Value to the "permanent" value',
+                            cap_menu)
+                    if cap_current:
+                        self.__fighter.details['current'][attr] = (
+                                self.__fighter.details['permanent'][attr])
+            else:
                 both_menu = [('yes', True), ('no', False)]
                 both, ignore = self.__window_manager.menu(
                         'Change "current" Value To Match ', both_menu)
                 if both:
                     self.__fighter.details['current'][attr] = (
-                                    self.__fighter.details['permanent'][attr])
+                            self.__fighter.details['permanent'][attr])
 
             self.__screen_handler.draw_screen()
             keep_asking, ignore = self.__window_manager.menu(
@@ -4046,6 +4066,8 @@ class FightHandler(ScreenHandler):
         # sort by initiative.  Copy init of destination fighter, append a
         # number to the end to make the fighter sort after the destination.
 
+        # TODO: instead of adding 5, average the above and below.
+
         init_tuple = self._saved_fight['fighters'][to_index]['init']
         init_list = list(init_tuple)
         init_list.append(5) # Arbitrary number
@@ -4241,7 +4263,8 @@ class FightHandler(ScreenHandler):
             if 'init' in fighter:
                 init_tuple = fighter['init']
                 init_list = list(init_tuple)
-                init_list.append(index)
+                # RULESET: Use negative index because we're sorting backwards
+                init_list.append(-index)
                 init_tuple = tuple(init_list)
                 self._saved_fight['fighters'][index]['init'] = init_tuple
 
@@ -4463,7 +4486,12 @@ class FightHandler(ScreenHandler):
         '''
 
         self._window.clear()
-        current_fighter = self.get_current_fighter()
+
+        if self.__viewing_index is not None:
+            current_fighter = self.__fighters[self.__viewing_index]
+        else:
+            current_fighter = self.get_current_fighter()
+
         opponent = self.get_opponent_for(current_fighter)
         next_PC_name = self.__next_PC_name()
         self._window.round_ribbon(self._saved_fight['round'],
