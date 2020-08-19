@@ -27,7 +27,8 @@ class Equipment(object):
 
         Returns the current index of the item in the equipment list.
         '''
-        if source is not None and new_item['owners'] is not None:
+        if (source is not None and 'owners' in new_item and
+                new_item['owners'] is not None):
             new_item['owners'].append(source)
 
         for index, item in enumerate(self.__equipment):

@@ -4647,6 +4647,16 @@ class FightHandler(ScreenHandler):
             # Reversed so removing items doesn't change the index of others
             for index, item in reversed(list(enumerate(
                                                 bad_guy.details['stuff']))):
+                output = []
+                ca_equipment.EquipmentManager.get_description(item, [], output)
+                # output looks like:
+                # [[{'text','mode'},...],  # line 0
+                #  [...],               ]  # line 1...
+                pieces = []
+                for piece in output[0]: # the first line of the output
+                    pieces.append(piece['text'])
+                description = ''.join(pieces)
+
                 found_something_on_dead_bad_guy = True
                 xfer_menu = [(good_guy.name, {'guy': good_guy})
                              for good_guy in self.__fighters
@@ -4655,7 +4665,7 @@ class FightHandler(ScreenHandler):
                 xfer_menu.append(('QUIT', {'quit': None}))
                 xfer, ignore = self._window_manager.menu(
                         'Who gets %s\'s %s' % (bad_guy.name,
-                                               item['name']),
+                                               description),
                         xfer_menu)
 
                 if xfer is None or 'ignore' in xfer:
