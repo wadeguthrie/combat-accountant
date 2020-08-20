@@ -306,8 +306,21 @@ class EquipmentManager(object):
         if fighter is None:
             return
 
-        item_menu = [(item['name'], index)
-                     for index, item in enumerate(fighter.details['stuff'])]
+        item_menu = []
+        for index, item in enumerate(fighter.details['stuff']):
+            output = []
+            EquipmentManager.get_description(item, [], output)
+            # output looks like:
+            # [[{'text','mode'},...],  # line 0
+            #  [...],               ]  # line 1...
+            pieces = []
+            for piece in output[0]: # the first line of the output
+                pieces.append(piece['text'])
+            description = ''.join(pieces)
+
+            item_menu.append((description, index))
+
+        item_menu = sorted(item_menu, key=lambda x: x[0].upper())
         item_index, ignore = self.__window_manager.menu('Item to Remove',
                                                         item_menu)
         if item_index is None:
