@@ -86,6 +86,16 @@ class Equipment(object):
         if item_count <= 0:
             return None
 
+        if ('natural-weapon' in self.__equipment[item_index] and
+                self.__equipment[item_index]['natural-weapon']):
+            # Can't remove a natural weapon
+            return None
+
+        if ('natural-armor' in self.__equipment[item_index] and
+                self.__equipment[item_index]['natural-armor']):
+            # Can't remove a natural armor
+            return None
+
         remove_all = False
         if ('count' in self.__equipment[item_index] and
                 self.__equipment[item_index]['count'] > 1):
@@ -311,6 +321,10 @@ class EquipmentManager(object):
 
         item_menu = []
         for index, item in enumerate(fighter.details['stuff']):
+            if 'natural-weapon' in item and item['natural-weapon']:
+                continue  # Can't remove natural weapons
+            if 'natural-armor' in item and item['natural-armor']:
+                continue  # Can't remove natural armor
             output = []
             EquipmentManager.get_description(item, [], output)
             # output looks like:
