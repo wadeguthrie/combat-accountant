@@ -2899,23 +2899,30 @@ class PersonnelHandler(ScreenHandler):
         if from_fighter is None:
             return None
 
-        item = self.__equipment_manager.remove_equipment(from_fighter)
-        if item is None:
-            return None
+        keep_asking_menu = [('yes', True), ('no', False)]
+        keep_asking = True
+        while keep_asking:
+            item = self.__equipment_manager.remove_equipment(from_fighter)
+            if item is None:
+                return None
 
-        character_list = self.world.get_creature_details_list('PCs')
-        character_menu = [(dude, dude) for dude in character_list]
-        to_fighter_info, ignore = self._window_manager.menu(
-                'Give "%s" to whom?' % item['name'], character_menu)
+            character_list = self.world.get_creature_details_list('PCs')
+            character_menu = [(dude, dude) for dude in character_list]
+            to_fighter_info, ignore = self._window_manager.menu(
+                    'Give "%s" to whom?' % item['name'], character_menu)
 
-        if to_fighter_info is None:
-            from_fighter.add_equipment(item, None)
+            if to_fighter_info is None:
+                from_fighter.add_equipment(item, None)
+                self._draw_screen()
+                return None
+
+            to_fighter = self.world.get_creature(to_fighter_info, 'PCs')
+            to_fighter.add_equipment(item, from_fighter.detailed_name)
             self._draw_screen()
-            return None
 
-        to_fighter = self.world.get_creature(to_fighter_info, 'PCs')
-        to_fighter.add_equipment(item, from_fighter.detailed_name)
-        self._draw_screen()
+            keep_asking, ignore = self._window_manager.menu(
+                    'Give More Equipment', keep_asking_menu)
+
         return True  # anything but 'None' for a successful menu handler
 
     def __new_group(self):
