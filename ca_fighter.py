@@ -84,7 +84,7 @@ class ThingsInFight(object):
                                                            width,
                                                            title)
         if item_count is None:
-            return 1
+            return 0
 
         if item_count > current_item_count:
             item_count = current_item_count

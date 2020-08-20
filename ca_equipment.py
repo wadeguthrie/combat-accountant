@@ -83,6 +83,9 @@ class Equipment(object):
         if item_index >= len(self.__equipment):
             return None
 
+        if item_count <= 0:
+            return None
+
         remove_all = False
         if ('count' in self.__equipment[item_index] and
                 self.__equipment[item_index]['count'] > 1):
