@@ -114,7 +114,6 @@ class Ruleset(object):
         # ARMOR #
 
         # Armor SUB-menu
-
         armor, armor_index = fighter.get_current_armor()
         don_armor_menu = []   # list of armor that may be donned this turn
         for index, item in enumerate(fighter.details['stuff']):
@@ -141,7 +140,12 @@ class Ruleset(object):
         elif len(don_armor_menu) > 1:
             action_menu.append(('Don Armor', {'menu': don_armor_menu}))
 
-        if armor is not None:
+        must_doff = True
+        if (armor is None or ('natural-armor' in armor and
+                               armor['natural-armor'])):
+            must_doff = False
+
+        if must_doff:
             action_menu.append((('Doff %s' % armor['name']),
                                 {'action': {'action-name': 'don-armor',
                                             'armor-index': None}}
@@ -168,7 +172,12 @@ class Ruleset(object):
 
         # DRAW OR HOLSTER WEAPON #
 
-        if weapon is not None:
+        must_holster = True
+        if (weapon is None or ('natural-weapon' in weapon.details and
+                               weapon.details['natural-weapon'])):
+            must_holster = False
+
+        if must_holster:
             action_menu.append(
                     (('holster/sheathe %s' % weapon.details['name']),
                      {'action': {'action-name': 'draw-weapon',
@@ -324,6 +333,17 @@ class Ruleset(object):
                                      self._window_manager)
 
         armor, throw_away = fighter.get_current_armor()
+        if armor is None:
+            # If they're not holding anything and they have natural weapons,
+            # use those weapons.
+            for index, item in enumerate(fighter.details['stuff']):
+                if 'natural-armor' in item and item['natural-armor']:
+                    self.do_action(fighter,
+                                   {'action-name': 'don-armor',
+                                    'armor-index': index},
+                                   None)
+                    break
+
         if armor is not None:
             if armor['type'] != 'armor':
                 self._window_manager.error([
@@ -332,6 +352,17 @@ class Ruleset(object):
                 result = False
 
         weapon, throw_away = fighter.get_current_weapon()
+        if weapon is None:
+            # If they're not holding anything and they have natural weapons,
+            # use those weapons.
+            for index, item in enumerate(fighter.details['stuff']):
+                if 'natural-weapon' in item and item['natural-weapon']:
+                    self.do_action(fighter,
+                                   {'action-name': 'draw-weapon',
+                                    'weapon-index': index},
+                                   None)
+                    break
+
         if weapon is not None:
             if not weapon.is_ranged_weapon() and not weapon.is_melee_weapon():
                 self._window_manager.error([

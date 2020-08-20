@@ -387,6 +387,15 @@ class Fighter(ThingsInFight):
                                   # list.  'None' removes current armor.
                            ):
         '''Puts on armor.'''
+
+        # if we're doffing armor and there's natural armor, pick that
+        # one up.
+        if index is None:
+            for item_index, item in enumerate(self.details['stuff']):
+                if 'natural-armor' in item and item['natural-armor']:
+                    index = item_index
+                    break
+
         self.details['armor-index'] = index
 
     def draw_weapon_by_index(self,
@@ -396,6 +405,15 @@ class Fighter(ThingsInFight):
         '''Draws or removes weapon from sheath or holster.'''
         # NOTE: call this from the ruleset if you want the ruleset to do its
         # due dilligence (i.e., stop the aim).
+
+        # if we're holstering a weapon and there's a natural weapon, pick that
+        # one up.
+        if index is None:
+            for item_index, item in enumerate(self.details['stuff']):
+                if 'natural-weapon' in item and item['natural-weapon']:
+                    index = item_index
+                    break
+
         self.details['weapon-index'] = index
 
     def end_fight(self,
@@ -476,6 +494,13 @@ class Fighter(ThingsInFight):
 
         Returns: the discarded item
         '''
+        item = self.equipment.get_item_by_index(item_index)
+        if 'natural-weapon' in item and item['natural-weapon']:
+            return None  # can't remove a natural weapon
+
+        if 'natural-armor' in item and item['natural-armor']:
+            return None  # can't remove a natural armor
+
         before_item_count = self.equipment.get_item_count()
         count = self.ask_how_many(item_index, count)
         item = self.equipment.remove(item_index, count)
