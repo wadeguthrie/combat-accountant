@@ -2981,6 +2981,43 @@ class PersonnelHandler(ScreenHandler):
 
         return True  # Keep going
 
+    def __notes(self,
+                notes_type  # 'short-notes' or 'notes'
+                ):
+        '''
+        Command ribbon method.
+
+        Allows the user to modify a Fighter's notes or short-notes.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        notes_recipient = self.get_obj_from_index()
+        if notes_recipient is None:
+            return True  # Keep fighting
+
+        # Now, get the notes for that person
+        lines, cols = self._window.getmaxyx()
+
+        if notes_type not in notes_recipient.details:
+            notes = None
+        else:
+            notes = '\n'.join(notes_recipient.details[notes_type])
+
+        notes = self._window_manager.edit_window(
+                    lines - 4,
+                    cols - 4,
+                    notes,  # initial string (w/ \n) for the window
+                    'Notes',
+                    '^G to exit')
+
+        notes_recipient.details[notes_type] = [x for x in notes.split('\n')]
+
+        # Display our new state
+
+        self._draw_screen()
+
+        return True  # Keep going
+
     def __NPC_leaves_PCs(self):
         '''
         Command ribbon method.
