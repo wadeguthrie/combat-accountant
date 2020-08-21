@@ -333,6 +333,19 @@ class Ruleset(object):
                                      self._window_manager)
 
         armor, throw_away = fighter.get_current_armor()
+        if armor is not None:
+            if armor['type'] != 'armor':
+                self._window_manager.error([
+                    'Creature "%s"' % name,
+                    '  is wearing weird armor "%s. Fixing."' % armor['name']])
+                self.do_action(fighter,
+                               {'action-name': 'don-armor',
+                                'armor-index': None,
+                                'notimer': True},
+                               None)
+                result = False
+
+        armor, throw_away = fighter.get_current_armor()
         if armor is None:
             # If they're not holding anything and they have natural weapons,
             # use those weapons.
@@ -345,11 +358,18 @@ class Ruleset(object):
                                    None)
                     break
 
-        if armor is not None:
-            if armor['type'] != 'armor':
+        weapon, throw_away = fighter.get_current_weapon()
+        if weapon is not None:
+            if not weapon.is_ranged_weapon() and not weapon.is_melee_weapon():
                 self._window_manager.error([
                     'Creature "%s"' % name,
-                    '  is wearing weird armor "%s"' % armor['name']])
+                    '  is wielding weird weapon "%s". Fixing.' %
+                    weapon.details['name']])
+                self.do_action(fighter,
+                               {'action-name': 'draw-weapon',
+                                'weapon-index': None,
+                                'notimer': True},
+                               None)
                 result = False
 
         weapon, throw_away = fighter.get_current_weapon()
@@ -365,13 +385,6 @@ class Ruleset(object):
                                    None)
                     break
 
-        if weapon is not None:
-            if not weapon.is_ranged_weapon() and not weapon.is_melee_weapon():
-                self._window_manager.error([
-                    'Creature "%s"' % name,
-                    '  is wielding weird weapon "%s"' %
-                    weapon.details['name']])
-                result = False
 
         return result
 
