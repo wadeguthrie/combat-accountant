@@ -340,7 +340,8 @@ class Ruleset(object):
                 if 'natural-armor' in item and item['natural-armor']:
                     self.do_action(fighter,
                                    {'action-name': 'don-armor',
-                                    'armor-index': index},
+                                    'armor-index': index,
+                                    'notimer': True},
                                    None)
                     break
 
@@ -359,7 +360,8 @@ class Ruleset(object):
                 if 'natural-weapon' in item and item['natural-weapon']:
                     self.do_action(fighter,
                                    {'action-name': 'draw-weapon',
-                                    'weapon-index': index},
+                                    'weapon-index': index,
+                                    'notimer': True},
                                    None)
                     break
 
