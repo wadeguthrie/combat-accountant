@@ -4151,6 +4151,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     {'parent-name': fighter.name,
                      'rounds': 1 - ca_timers.Timer.announcement_margin,
                      'string': [title, ' Defense: none', ' Move: none']})
+
+        if 'notimer' in action and action['notimer']:
+            return None
+
         return timer
 
     def __set_consciousness(self,
