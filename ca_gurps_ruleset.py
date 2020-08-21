@@ -3736,18 +3736,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             # Timer
 
-            timer = None
-            # TODO: should this be here since there's a handler for 'notimer'
-            # in the calling function?
-            if 'notimer' not in action or not action['notimer']:
-                timer = ca_timers.Timer(None)
-                timer.from_pieces(
-                    {'parent-name': fighter.name,
-                     'rounds': (action['time'] -
-                                ca_timers.Timer.announcement_margin),
-                     'string': 'RELOADING'})
+            timer = ca_timers.Timer(None)
+            timer.from_pieces(
+                {'parent-name': fighter.name,
+                 'rounds': (action['time'] -
+                            ca_timers.Timer.announcement_margin),
+                 'string': 'RELOADING'})
 
-                timer.mark_owner_as_busy()  # When reloading, the owner is busy
+            timer.mark_owner_as_busy()  # When reloading, the owner is busy
 
             return timer
         else:
@@ -4151,9 +4147,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     {'parent-name': fighter.name,
                      'rounds': 1 - ca_timers.Timer.announcement_margin,
                      'string': [title, ' Defense: none', ' Move: none']})
-
-        if 'notimer' in action and action['notimer']:
-            return None
 
         return timer
 

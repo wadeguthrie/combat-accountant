@@ -22,9 +22,6 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: consistency check addition of armor and weapons creates timers for
-#   zombies even though notimer is true.
-
 # TODO: the ordinal addition to the initiative is backwards (since initiative
 #   is sorted in reverse order).  Similarly, adding 5 to the end of the
 #   initiative of an un-held fighter doesn't work.
