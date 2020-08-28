@@ -38,6 +38,7 @@ class Ruleset(object):
                  window_manager  # GmWindowManager object for menus and errors
                  ):
         self._window_manager = window_manager
+        self.sort_init_descending = True # Higher numbered inits go first
 
     @staticmethod
     def roll(number,  # the number of dice

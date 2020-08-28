@@ -22,9 +22,6 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: the ordinal addition to the initiative is backwards (since initiative
-#   is sorted in reverse order).  Similarly, adding 5 to the end of the
-#   initiative of an un-held fighter doesn't work.
 # TODO: move & attack menu item should show penalties
 # TODO: maintain spell
 # TODO: playback from crash of a saved fight doesn't seem to be working (looks
@@ -2259,6 +2256,8 @@ class PersonnelHandler(ScreenHandler):
             return True
 
         lines, cols = self._window.getmaxyx()
+
+        # self.world.ruleset...
         timers_widget = ca_timers.TimersWidget(fighter.timers,
                                                self._window_manager)
 
@@ -4104,14 +4103,30 @@ class FightHandler(ScreenHandler):
         fighter_dict = self._saved_fight['fighters'][from_index]
 
         # Build init of moved fighter to locate it in the moved position if we
-        # sort by initiative.  Copy init of destination fighter, append a
-        # number to the end to make the fighter sort after the destination.
-
-        # TODO: instead of adding 5, average the above and below.
+        # sort by initiative.
 
         init_tuple = self._saved_fight['fighters'][to_index]['init']
         init_list = list(init_tuple)
-        init_list.append(5) # Arbitrary number
+
+        fighter_after = None
+        if (to_index+1) < len(self._saved_fight['fighters']):
+            fighter_after = self._saved_fight['fighters'][to_index+1]
+            init_tuple_plus_1 = fighter_after['init']
+            init_list_plus_1 = list(init_tuple_plus_1)
+            found_one = False
+            for i, datum in enumerate(init_list):
+                if datum != init_list_plus_1[i]:
+                    init_list[i] = (datum + init_list_plus_1[i]) / 2.0
+                    found_one = True
+                    break
+            if not found_one:
+                # TODO: error -- there aren't supposed to be equal inits
+                pass
+        else:
+            # Put the new fighter's initiative beyond the last one
+            init_list[-1] += (-1 if self.world.ruleset.sort_init_descending
+                              else 1)
+
         init_tuple = tuple(init_list)
         fighter_dict['init'] = init_tuple
 
@@ -4258,6 +4273,8 @@ class FightHandler(ScreenHandler):
         self.__fighters.sort(key=lambda fighter:
                              init[(fighter.name, fighter.group)],
                              reverse=True)
+        #TODO: init_list[-1] += (-1 if self.world.ruleset.sort_init_descending
+        #                  else 1)
 
         # Put the fight info (if any) at the top of the list.
         if the_fight_itself is not None:
@@ -4305,6 +4322,8 @@ class FightHandler(ScreenHandler):
                 init_tuple = fighter['init']
                 init_list = list(init_tuple)
                 # RULESET: Use negative index because we're sorting backwards
+                #TODO: init_list[-1] += (-1 if self.world.ruleset.sort_init_descending
+                #                  else 1)
                 init_list.append(-index)
                 init_tuple = tuple(init_list)
                 self._saved_fight['fighters'][index]['init'] = init_tuple
@@ -5342,6 +5361,7 @@ class FightHandler(ScreenHandler):
         if timer_recipient is None:
             return True  # Keep fighting
 
+        # self.world.ruleset...
         timers_widget = ca_timers.TimersWidget(timer_recipient.timers,
                                                self._window_manager)
 
