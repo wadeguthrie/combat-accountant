@@ -50,6 +50,14 @@ class Timer(object):
         if 'timer' in self.details['actions']:
             result = self.details['actions']['timer']
 
+        # TODO: implement this (haven't yet figured out where |ruleset| is
+        #   coming from)
+        #if 'action' in self.details['actions']:
+        #    ruleset.do_action(owner,
+        #                      self.details['actions']['action'],
+        #                      None #fight_handler
+        #                      )
+
         return result
 
     def from_pieces(self,
