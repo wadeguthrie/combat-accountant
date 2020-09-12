@@ -24,9 +24,6 @@ import ca_timers
 
 # TODO: move & attack menu item should show penalties
 # TODO: maintain spell
-# TODO: playback from crash of a saved fight doesn't seem to be working (looks
-#   like you start from restore of saved fight but you apply all of the history
-#   since the beginning of the fight).  Maybe save the index, somehow.
 # TODO: 'short notes' should be 'fight notes' since it gets cleared at start
 #   of the fight
 
@@ -3416,8 +3413,23 @@ class FightHandler(ScreenHandler):
         self.__equipment_manager = ca_equipment.EquipmentManager(
                                                     self.world,
                                                     self._window_manager)
+
         self.__saved_history = None
-        self.__next_playback_action_index = 0  # Only for playback
+
+        # If we're playing back history from a bug report and this fight has
+        # spanned multiple sessions, start the playback history from the
+        # beginning of the most recent session (since the snapshot is from
+        # that spot).
+        if (playback_history is not None and
+                'playback_start_index' in world.details['current-fight']):
+            self.__next_playback_action_index = (
+                    world.details['current-fight']['playback_start_index'])
+        else:
+            self.__next_playback_action_index = 0  # Only for playback
+
+        if 'history' in world.details['current-fight']:
+            world.details['current-fight']['playback_start_index'] = (
+                    len(world.details['current-fight']['history']))
 
         self._add_to_choice_dict({
             curses.KEY_UP: {'name': 'prev character',
@@ -4821,7 +4833,7 @@ class FightHandler(ScreenHandler):
         step_count = self._window_manager.input_box_number(height,
                                                            width,
                                                            title)
-        if len(step_count) is None:
+        if step_count is None:
             return True
 
         if (self.__next_playback_action_index + step_count >
