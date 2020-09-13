@@ -4246,6 +4246,7 @@ class FightHandler(ScreenHandler):
         init = {}
 
         if fight_order is None:
+            print '\n=== fight_order is None ===' # TODO: remove
             # There's no previously established fight order (which would be
             # the case if we're jumping into a fight that was saved) to
             # maintain, just generate the initiative for all of the fighters.
@@ -4253,20 +4254,25 @@ class FightHandler(ScreenHandler):
                 init[(fighter.name,
                       fighter.group)] = self.world.ruleset.initiative(fighter)
         else:
+            print '\n=== fight_order *EXISTS* ===' # TODO: remove
             # We're assuming that every fighter in fight_order is in
             # self.__fighters but not necessarily the other way around.
             for fighter in fight_order:
                 if fighter['name'] == ca_fighter.Venue.name:
-                    break
+                    continue
 
                 # Generate an initiative if it's not already there.  This
                 # deals with legacy fights that don't contain initiative.
                 if 'init' not in fighter:
+                    print '  %s: generating init' % fighter['name'] # TODO: remove
                     for f in self.__fighters:
                         if (f.name == fighter['name'] and
                                 f.group == fighter['group']):
                             fighter['init'] = self.world.ruleset.initiative(f)
                             break
+                else: # TODO: remove
+                    print '  %s: has init: %r' % (fighter['name'],  # TODO: remove
+                                                  fighter['init'])  # TODO: remove
 
                 # Now, build |init| from the fight order
                 init[(fighter['name'], fighter['group'])] = fighter['init']
@@ -4274,19 +4280,49 @@ class FightHandler(ScreenHandler):
             # Finally, add initiative for any fighters that aren't represented
             # in the fight order.  This deals with fighters that were added
             # after the fight started.
+
+            # TODO: this is being called but it shouldn't be.  We need to copy
+            # the saved fight stuff into 'init'
             for fighter in self.__fighters:
                 if (fighter.name, fighter.group) not in init:
                     init[(fighter.name,
                           fighter.group)] = self.world.ruleset.initiative(
                                   fighter)
+                    # TODO: remove this
+                    print 'Adding init for %s, %r' % (fighter.name,
+                                                      init[(fighter.name,
+                                                            fighter.group)])
 
         # Now, sort based on the initiative we just built
+
+        print '\n-- before sort:' # TODO: remove
+        for fighter in self.__fighters: # TODO: remove
+            print '   %s: %r' % (fighter.name, # TODO: remove
+                                 init[fighter.name, fighter.group]) # TODO: remove
 
         self.__fighters.sort(key=lambda fighter:
                              init[(fighter.name, fighter.group)],
                              reverse=True)
-        #TODO: init_list[-1] += (-1 if self.world.ruleset.sort_init_descending
-        #                  else 1)
+
+        # Assign an ordinal to insure the order for fights that are saved
+        # and, then, resorted on re-entry.
+
+        if fight_order is None:
+            for index, fighter in enumerate(self.__fighters):
+                name_group = (fighter.name, fighter.group)
+                if name_group in init:
+                    init_tuple = init[name_group]
+                    init_list = list(init_tuple)
+                    ordinal = (-index if self.world.ruleset.sort_init_descending
+                               else index)
+                    init_list.append(ordinal)
+                    init_tuple = tuple(init_list)
+                    init[name_group] = init_tuple
+
+        print '\n-- after sort:' # TODO: remove
+        for fighter in self.__fighters: # TODO: remove
+            print '   %s: %r' % (fighter.name, # TODO: remove
+                                 init[fighter.name, fighter.group]) # TODO: remove
 
         # Put the fight info (if any) at the top of the list.
         if the_fight_itself is not None:
@@ -4325,20 +4361,6 @@ class FightHandler(ScreenHandler):
                         {'name': fighter.name,
                          'group': fighter.group,
                          'init': init[(fighter.name, fighter.group)]})
-
-        # Assign an ordinal to insure the order for fights that are saved
-        # and, then, resorted on re-entry.
-
-        for index, fighter in enumerate(self._saved_fight['fighters']):
-            if 'init' in fighter:
-                init_tuple = fighter['init']
-                init_list = list(init_tuple)
-                # RULESET: Use negative index because we're sorting backwards
-                #TODO: init_list[-1] += (-1 if self.world.ruleset.sort_init_descending
-                #                  else 1)
-                init_list.append(-index)
-                init_tuple = tuple(init_list)
-                self._saved_fight['fighters'][index]['init'] = init_tuple
 
     def __change_viewing_index(self,
                                adj  # integer adjustment to viewing index
