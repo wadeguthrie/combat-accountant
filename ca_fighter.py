@@ -485,6 +485,10 @@ class Fighter(ThingsInFight):
             self.details['weapon-index'] = index
         return index, ca_equipment.Weapon(item)
 
+    def print_me(self):
+        print '-- Fighter (%s, %s) --' % (self.name, self.group)
+        PP.pprint(self.details)
+
     def remove_equipment(self,
                          item_index,  # <int> index into Equipment list
                          count=None     # number to remove (None if 'ask')
