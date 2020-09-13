@@ -24,8 +24,6 @@ import ca_timers
 
 # TODO: move & attack menu item should show penalties
 # TODO: maintain spell
-# TODO: 'short notes' should be 'fight notes' since it gets cleared at start
-#   of the fight
 
 # TODO: reload and spells should happen at the end of the timer.  The
 #       'reloading' timer should launch the second part of the action when it
@@ -745,9 +743,9 @@ class FightGmWindow(ca_gui.GmWindow):
                     window.addstr(line, 0, string, mode)
                     line += 1
 
-        if ('short-notes' in fighter.details and
-                fighter.details['short-notes'] is not None):
-            for note in fighter.details['short-notes']:
+        if ('fight-notes' in fighter.details and
+                fighter.details['fight-notes'] is not None):
+            for note in fighter.details['fight-notes']:
                 if line < lines:
                     window.addstr(line, 0, note, mode)
                     line += 1
@@ -2714,14 +2712,14 @@ class PersonnelHandler(ScreenHandler):
                 ('Timers (remove)',           {'doit': self.__timer_cancel})
             ])
 
-        if 'notes' in fighter.details:
+        if 'fight-notes' in fighter.details:
             sub_menu.extend([
-                ('notes',           {'doit': self.__full_notes})
+                ('notes (fight)',   {'doit': self.__fight_notes})
             ])
 
-        if 'short-notes' in fighter.details:
+        if 'notes' in fighter.details:
             sub_menu.extend([
-                ('Notes (short)',   {'doit': self.__short_notes})
+                ('Notes',           {'doit': self.__full_notes})
             ])
 
         if 'armor-index' in fighter.details:
@@ -2977,12 +2975,12 @@ class PersonnelHandler(ScreenHandler):
         return True  # Keep going
 
     def __notes(self,
-                notes_type  # 'short-notes' or 'notes'
+                notes_type  # 'fight-notes' or 'notes'
                 ):
         '''
         Command ribbon method.
 
-        Allows the user to modify a Fighter's notes or short-notes.
+        Allows the user to modify a Fighter's notes or fight-notes.
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
@@ -3297,7 +3295,7 @@ class PersonnelHandler(ScreenHandler):
                     'Remove More %s' % param.capitalize(), keep_asking_menu)
         return True  # Menu handler's success returns anything but 'None'
 
-    def __short_notes(self,
+    def __fight_notes(self,
                       throw_away    # Required/used by the caller because
                                     #   there's a list of methods to call,
                                     #   and (apparently) some of them may use
@@ -3307,11 +3305,11 @@ class PersonnelHandler(ScreenHandler):
         '''
         Handler for an Equip sub-menu entry.
 
-        Lets the user edit a fighter's (or Venue's) short notes.
+        Lets the user edit a fighter's (or Venue's) fight notes.
 
         Returns: None
         '''
-        return self.__notes('short-notes')
+        return self.__notes('fight-notes')
 
     def __timer_cancel(self,
                        throw_away   # Required/used by the caller because
@@ -3504,8 +3502,8 @@ class FightHandler(ScreenHandler):
                                'perform some action (selected via ' +
                                'subsequent menu).  Only things the figher ' +
                                'can currently do will be available.'},
-            ord('n'): {'name': 'short notes',
-                       'func': self.__short_notes,
+            ord('n'): {'name': 'fight notes',
+                       'func': self.__fight_notes,
                        'help': 'Changes the notes displayed during a fight ' +
                                'for the currently selected fighter'},
             ord('N'): {'name': 'full Notes',
@@ -4275,8 +4273,6 @@ class FightHandler(ScreenHandler):
             # in the fight order.  This deals with fighters that were added
             # after the fight started.
 
-            # TODO: this is being called but it shouldn't be.  We need to copy
-            # the saved fight stuff into 'init'
             for fighter in self.__fighters:
                 if (fighter.name, fighter.group) not in init:
                     init[(fighter.name,
@@ -4935,12 +4931,12 @@ class FightHandler(ScreenHandler):
         return next_PC_name
 
     def __notes(self,
-                notes_type  # 'short-notes' or 'notes'
+                notes_type  # 'fight-notes' or 'notes'
                 ):
         '''
         Command ribbon method.
 
-        Allows the user to modify a Fighter's notes or short-notes.
+        Allows the user to modify a Fighter's notes or fight-notes.
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
@@ -5212,15 +5208,15 @@ class FightHandler(ScreenHandler):
                                                      default_selection)
         return selected_fighter, current_fighter
 
-    def __short_notes(self):
+    def __fight_notes(self):
         '''
         Command ribbon method.
 
-        Lets the user edit a fighter's (or Venue's) short notes.
+        Lets the user edit a fighter's (or Venue's) fight notes.
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        return self.__notes('short-notes')
+        return self.__notes('fight-notes')
 
     def __show_history(self):
         '''
@@ -5944,12 +5940,12 @@ class MainHandler(ScreenHandler):
         return True
 
     def __notes(self,
-                notes_type  # <string> 'short-notes' or 'notes'
+                notes_type  # <string> 'fight-notes' or 'notes'
                 ):
         '''
         Handler for an Equip sub-menu entry.
 
-        Allows the user to modify a Fighter's notes or short-notes.
+        Allows the user to modify a Fighter's notes or fight-notes.
 
         Returns: None if we want to bail-out of the notes editing process,
                  True, otherwise

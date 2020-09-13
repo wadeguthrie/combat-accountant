@@ -280,7 +280,7 @@ class Ruleset(object):
         #   armor-index, state, weapon-index, opponent
         #
         # Not part of template:
-        #   notes, short-notes, current, timers
+        #   notes, fight-notes, current, timers
 
         return sections
 
@@ -407,7 +407,7 @@ class Ruleset(object):
                 'timers': [],
                 'opponent': None,
                 'notes': [],
-                'short-notes': [],
+                'fight-notes': [],
                 }
 
     def search_one_creature(self,
@@ -451,13 +451,13 @@ class Ruleset(object):
                                    'location': 'notes'})
                     break  # Don't want an entry for each time it's in notes
 
-        if 'short-notes' in creature:
-            for line in creature['short-notes']:
+        if 'fight-notes' in creature:
+            for line in creature['fight-notes']:
                 if look_for_re.search(line):
                     result.append({'name': name,
                                    'group': group,
-                                   'location': 'short-notes',
-                                   'notes': creature['short-notes']})
+                                   'location': 'fight-notes',
+                                   'notes': creature['fight-notes']})
 
         return result
 
