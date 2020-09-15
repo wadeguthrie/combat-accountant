@@ -6480,7 +6480,7 @@ class Program(object):
 
 # Main
 if __name__ == '__main__':
-    VERSION = '00.02.00'    # major version, minor version, bug fixes
+    VERSION = '00.03.00'    # major version, minor version, bug fixes
     #FMT = '%Y-%m-%d-%H-%M-%S' # TODO: remove
     #print 'A %s' % datetime.datetime.now().strftime(FMT).format() # TODO: remove
 
