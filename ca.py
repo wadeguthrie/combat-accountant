@@ -1567,6 +1567,7 @@ class PersonnelHandler(ScreenHandler):
                                     #   error reporting
                  world,             # World object
                  creature_type,     # one of: NPCs, PCs, or MONSTERs
+                 monster_group_name = None # name of monster group, None is OK
                  ):
         super(PersonnelHandler, self).__init__(window_manager, world)
         self._add_to_choice_dict({
@@ -1685,21 +1686,25 @@ class PersonnelHandler(ScreenHandler):
         else:  # creature_type == PersonnelHandler.MONSTERs:
             # This is the name of the monsters or 'PCs' that will ultimately
             # take these creatures.
-            self.__group_name = None
+            self.__group_name = monster_group_name
+            new_existing = 'existing' # If group_name != None
 
-            new_existing_menu = [('new monster group', 'new')]
-            if len(self.world.get_fights()) > 0:
-                new_existing_menu.append(('existing monster group',
-                                          'existing'))
+            if self.__group_name is None:
+                new_existing_menu = [('new monster group', 'new')]
+                if len(self.world.get_fights()) > 0:
+                    new_existing_menu.append(('existing monster group',
+                                              'existing'))
 
-            new_existing = None
-            while new_existing is None:
-                new_existing, ignore = self._window_manager.menu(
-                        'New or Pre-Existing', new_existing_menu)
+                new_existing = None
+                while new_existing is None:
+                    new_existing, ignore = self._window_manager.menu(
+                            'New or Pre-Existing', new_existing_menu)
+
             if new_existing == 'new':
                 self.__new_group()
             else:
-                self.__existing_group(creature_type)
+                self.__existing_group(creature_type,
+                                      monster_group_name)
 
         self.__viewing_index = (0 if self.__critters_contains_critters()
                                 else None)
@@ -2744,7 +2749,8 @@ class PersonnelHandler(ScreenHandler):
         return True  # Keep going
 
     def __existing_group(self,
-                         creature_type  # PersonnelHandler.NPCs, ...
+                         creature_type,  # PersonnelHandler.NPCs, ...
+                         monster_group_name = None # name of monster group
                          ):
 
         '''
@@ -2762,11 +2768,14 @@ class PersonnelHandler(ScreenHandler):
         # Get the group information
 
         if creature_type == PersonnelHandler.MONSTERs:
-            group_menu = [(group_name, group_name)
-                          for group_name in self.world.get_fights()]
-            group_menu = sorted(group_menu, key=lambda x: x[0].upper())
-            group_answer, ignore = self._window_manager.menu('To Which Group',
-                                                             group_menu)
+            if monster_group_name is not None:
+                group_answer = monster_group_name
+            else:
+                group_menu = [(group_name, group_name)
+                              for group_name in self.world.get_fights()]
+                group_menu = sorted(group_menu, key=lambda x: x[0].upper())
+                group_answer, ignore = self._window_manager.menu(
+                        'To Which Group', group_menu)
 
         elif creature_type == PersonnelHandler.NPCs:
             group_answer = 'NPCs'
@@ -5634,12 +5643,23 @@ class MainHandler(ScreenHandler):
                             'func': self.__toggle_Monster_PC_NPC_display,
                             'help': 'Select whom to display on the main ' +
                                     'screen. '},
-                 ord('p'): {'name': 'PERSONNEL changes',
-                            'func': self.__party,
-                            'help': 'Change the creatures in one of the ' +
-                                    'groups of creatures (player ' +
-                                    'characters, non-player characters, or ' +
-                                    'one of the groups of monsters. You ' +
+                 ord('M'): {'name': 'modify Monsters',
+                            'func': self.__add_monsters,
+                            'help': 'Change one or more monsters. You ' +
+                                    'can add creatures to or subtract ' +
+                                    'creatures from the selected list, ' +
+                                    'modify stats, or add or remove ' +
+                                    'equipment.'},
+                 ord('N'): {'name': 'modify NPCs',
+                            'func': self.__add_NPCs,
+                            'help': 'Change non-player characters. You ' +
+                                    'can add creatures to or subtract ' +
+                                    'creatures from the selected list, ' +
+                                    'modify stats, or add or remove ' +
+                                    'equipment.'},
+                 ord('P'): {'name': 'modify PCs',
+                            'func': self.__add_PCs,
+                            'help': 'Change player characters. You ' +
                                     'can add creatures to or subtract ' +
                                     'creatures from the selected list, ' +
                                     'modify stats, or add or remove ' +
@@ -5746,13 +5766,7 @@ class MainHandler(ScreenHandler):
         self._window_manager.display_window('About Combat Accountant', lines)
         return True
 
-    def __add_monsters(self,
-                       throw_away   # Required/used by the caller because
-                                    #   there's a list of methods to call,
-                                    #   and (apparently) some of them may
-                                    #   use this parameter.  It's ignored
-                                    #   by this method, however.
-                       ):
+    def __add_monsters(self):
         '''
         Handler for an Party sub-menu entry.
 
@@ -5760,10 +5774,10 @@ class MainHandler(ScreenHandler):
 
         Returns: True -- anything but None in a menu handler
         '''
-
         build_fight = PersonnelHandler(self._window_manager,
                                        self.world,
-                                       PersonnelHandler.MONSTERs)
+                                       PersonnelHandler.MONSTERs,
+                                       self.__current_display)
         build_fight.handle_user_input_until_done()
 
         # Display the last fight on the main screen
@@ -5777,13 +5791,7 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
         return True
 
-    def __add_NPCs(self,
-                   throw_away   # Required/used by the caller because
-                                #   there's a list of methods to call,
-                                #   and (apparently) some of them may
-                                #   use this parameter.  It's ignored
-                                #   by this method, however.
-                   ):
+    def __add_NPCs(self):
         '''
         Handler for an Party sub-menu entry.
 
@@ -5800,13 +5808,7 @@ class MainHandler(ScreenHandler):
         self._draw_screen()  # Redraw current screen when done building fight.
         return True
 
-    def __add_PCs(self,
-                  throw_away   # Required/used by the caller because
-                               #   there's a list of methods to call,
-                               #   and (apparently) some of them may
-                               #   use this parameter.  It's ignored
-                               #   by this method, however.
-                  ):
+    def __add_PCs(self):
         '''
         Handler for an Party sub-menu entry.
 
@@ -5973,23 +5975,6 @@ class MainHandler(ScreenHandler):
         self._draw_screen()
 
         return True  # Menu handler's success returns anything but 'None'
-
-    def __party(self):
-        '''
-        Command ribbon method.
-
-        Changes the mix of creatures in the lists (PC, NPC, and various
-        monster lists).  Can create new monster lists.
-
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        sub_menu = [
-                    ('monster list',       {'doit': self.__add_monsters}),
-                    ('npc list',           {'doit': self.__add_NPCs}),
-                    ('pc list',            {'doit': self.__add_PCs}),
-                    ]
-        self._window_manager.menu('Modify Which List', sub_menu)
-        return True
 
     def __prev_char(self):
         '''
