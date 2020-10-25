@@ -382,21 +382,33 @@ class Fighter(ThingsInFight):
         index = self.equipment.add(new_item, source)
         return index
 
+    def doff_armor_by_index(self,
+                            index  # Index of armor in fighter's 'stuff'
+                                   # list.  'None' removes current armor.
+                           ):
+        '''Removes armor.'''
+
+        if index not in self.details['armor-index']:
+            return  # Not wearing the armor we want to taking off
+
+        self.details['armor-index'].remove(index)
+
+        # if we're doffing armor and there's natural armor, pick that
+        # one up.
+        for item_index, item in enumerate(self.details['stuff']):
+            if (item_index not in self.details['armor-index'] and
+                    'natural-armor' in item and item['natural-armor']):
+                self.details['armor-index'].append(item_index)
+
+
     def don_armor_by_index(self,
                            index  # Index of armor in fighter's 'stuff'
                                   # list.  'None' removes current armor.
                            ):
         '''Puts on armor.'''
 
-        # if we're doffing armor and there's natural armor, pick that
-        # one up.
-        if index is None:
-            for item_index, item in enumerate(self.details['stuff']):
-                if 'natural-armor' in item and item['natural-armor']:
-                    index = item_index
-                    break
-
-        self.details['armor-index'] = index
+        if index not in self.details['armor-index']:
+            self.details['armor-index'].append(index)
 
     def draw_weapon_by_index(self,
                              index  # Index of weapon in fighter's 'stuff'
@@ -438,7 +450,7 @@ class Fighter(ThingsInFight):
                                     fight_handler)
         self.details['weapon-index'] = None
 
-    def get_current_armor(self):
+    def get_current_armor_indexes(self):
         '''
         Gets the armor the Fighter is wearing.
 
@@ -447,12 +459,8 @@ class Fighter(ThingsInFight):
             2) index of the armor
         '''
         if 'armor-index' not in self.details:
-            return None, None
-        armor_index = self.details['armor-index']
-        if armor_index is None:
-            return None, None
-        armor = self.equipment.get_item_by_index(armor_index)
-        return armor, armor_index
+            return []
+        return self.details['armor-index']
 
     def get_current_weapon(self):
         '''
@@ -469,6 +477,20 @@ class Fighter(ThingsInFight):
             return None, None
         weapon = self.equipment.get_item_by_index(weapon_index)
         return ca_equipment.Weapon(weapon), weapon_index
+
+    def get_items_from_indexes(self,
+                               indexes  # list of indexes in self.details.stuff
+                               ):
+        '''
+        Gets the items corresponding to indexes into the Fighter's stuff
+
+        Returns a list of a dict (from the Game File)
+        '''
+        result = []
+        for index in indexes:
+            item = self.equipment.get_item_by_index(index)
+            result.append(item)
+        return result
 
     def get_weapon_by_name(self,                # Public to support testing
                            name
@@ -490,7 +512,7 @@ class Fighter(ThingsInFight):
         PP.pprint(self.details)
 
     def remove_equipment(self,
-                         item_index,  # <int> index into Equipment list
+                         index_to_remove,  # <int> index into Equipment list
                          count=None     # number to remove (None if 'ask')
                          ):
         '''
@@ -498,7 +520,7 @@ class Fighter(ThingsInFight):
 
         Returns: the discarded item
         '''
-        item = self.equipment.get_item_by_index(item_index)
+        item = self.equipment.get_item_by_index(index_to_remove)
         if 'natural-weapon' in item and item['natural-weapon']:
             return None  # can't remove a natural weapon
 
@@ -506,22 +528,23 @@ class Fighter(ThingsInFight):
             return None  # can't remove a natural armor
 
         before_item_count = self.equipment.get_item_count()
-        count = self.ask_how_many(item_index, count)
-        item = self.equipment.remove(item_index, count)
+        count = self.ask_how_many(index_to_remove, count)
+        item = self.equipment.remove(index_to_remove, count)
         after_item_count = self.equipment.get_item_count()
 
         # Adjust indexes into the list if the list changed.
 
         if before_item_count != after_item_count:
-            if item_index == self.details['weapon-index']:
+            if index_to_remove == self.details['weapon-index']:
                 self.details['weapon-index'] = None
-            elif item_index < self.details['weapon-index']:
+            elif index_to_remove < self.details['weapon-index']:
                 self.details['weapon-index'] -= 1
 
-            if item_index == self.details['armor-index']:
-                self.details['armor-index'] = None
-            elif item_index < self.details['armor-index']:
-                self.details['armor-index'] -= 1
+            for index, item in enumerate(self.details['armor-index']):
+                if index_to_remove == item:
+                    self.details['armor-index'].remove(item)
+                elif index_to_remove < item:
+                    self.details['armor-index'][index] -= 1
 
         return item
 

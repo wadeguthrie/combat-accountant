@@ -551,17 +551,17 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": None,
-            "armor-index": None,
+            "armor-index": [],
             "stuff": [
                  {"name": "pistol, Colt 170D",
-                  "type": "ranged weapon",
+                  "type": ["ranged weapon"],
                   "damage": {"dice": "1d+4"},
                   "acc": self.__colt_pistol_acc,
                   "ammo": {"name": "C Cell",
                            "shots_left": self.__vodou_priest_initial_shots,
                            "shots": self.__vodou_priest_initial_shots},
                   "clip": {"name": "C Cell",
-                           "type": "misc",
+                           "type": ["misc"],
                            "count": 1,
                            "notes": "",
                            "owners": None},
@@ -571,12 +571,12 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                   "owners": 1,
                   "notes": None},  # index 0
                  {"name": "C Cell",
-                  "type": "misc",
+                  "type": ["misc"],
                   "count": self.__vodou_priest_ammo_count,
                   "notes": "",
                   "owners": None},  # index 1
                  {"count": 1,
-                  "type": "armor",
+                  "type": ["armor"],
                   "notes": "Enchanted w/fortify spell [M66]",
                   "dr": self.__vodou_priest_armor_dr,
                   "name": "Sport coat/Jeans"}  # index 2
@@ -636,12 +636,12 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "weapon-armor": None,
             "stuff": [
                  {"name": "pistol, Colt 170D",
-                  "type": "ranged weapon",
+                  "type": ["ranged weapon"],
                   "damage": {"dice": "1d+4"},
                   "acc": 3,
                   "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
                   "clip": {"name": "C Cell",
-                           "type": "misc",
+                           "type": ["misc"],
                            "count": 1,
                            "notes": "",
                            "owners": None},
@@ -650,7 +650,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                   "count": 1,
                   "owners": None,
                   "notes": ""},
-                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
+                 {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
                   "owners": None}
             ],
             "skills": {"Guns (Pistol)": 15, "Brawling": 12},
@@ -675,15 +675,15 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": None,
-            "armor-index": None,
+            "armor-index": [],
             "stuff": [
                  {"name": "pistol, Kalashnikov Makarov",
-                  "type": "ranged weapon",
+                  "type": ["ranged weapon"],
                   "damage": {"dice": "1d+3"},
                   "acc": 2,
                   "ammo": {"name": "C Cell", "shots_left": 8, "shots": 8},
                   "clip": {"name": "C Cell",
-                           "type": "misc",
+                           "type": ["misc"],
                            "count": 1,
                            "notes": "",
                            "owners": None},
@@ -692,7 +692,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                   "count": 1,
                   "owners": None,
                   "notes": ""},
-                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
+                 {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
                   "owners": None}
             ],
             "skills": {"Guns (Pistol)": 13, "Brawling": 12},
@@ -721,16 +721,16 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": None,
-            "armor-index": None,
+            "armor-index": [],
             "stuff": [
                  {"name": "pistol, Sig D65",  # the index of this is stored
                                               # in __tank_fighter_pistol_index
-                  "type": "ranged weapon",
+                  "type": ["ranged weapon"],
                   "damage": {"dice": "1d+4"},
                   "acc": 4,
                   "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
                   "clip": {"name": "C Cell",
-                           "type": "misc",
+                           "type": ["misc"],
                            "count": 1,
                            "notes": "",
                            "owners": None},
@@ -740,13 +740,13 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                   "owners": None,
                   "notes": ""},
                  {"name": "sick stick",
-                  "type": "melee weapon",
+                  "type": ["melee weapon"],
                   "damage": {"dice": "1d+1 fat"},
                   "skill": "Axe/Mace",
                   "count": 1,
                   "owners": None,
                   "notes": ""},
-                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
+                 {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
                   "owners": None}
             ],
             "skills": {"Guns (Pistol)": 16, "Brawling": 16, "Axe/Mace": 14},
@@ -774,15 +774,15 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": None,
-            "armor-index": None,
+            "armor-index": [],
             "stuff": [
                  {"name": "pistol, Baretta DX 192",
-                  "type": "ranged weapon",
+                  "type": ["ranged weapon"],
                   "damage": {"dice": "1d+4"},
                   "acc": 2,
                   "ammo": {"name": "C Cell", "shots_left": 8, "shots": 8},
                   "clip": {"name": "C Cell",
-                           "type": "misc",
+                           "type": ["misc"],
                            "count": 1,
                            "notes": "",
                            "owners": None},
@@ -792,7 +792,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                   "owners": None,
                   "notes": ""},
                  {"name": "Large Knife",
-                  "type": "melee weapon",
+                  "type": ["melee weapon"],
                   "damage": {"dice": "1d-2", "type": "imp"},
                   "skill": "Knife",
                   "parry": -1,
@@ -806,8 +806,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                   "parry": 0,
                   "skill": "Karate",
                   "owners": None,
-                  "type": "melee weapon"},
-                 {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
+                  "type": ["melee weapon"]},
+                 {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
                   "owners": None}
             ],
             "skills": {"Guns (Pistol)": 12,
@@ -2469,9 +2469,13 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                   'armor-index': requested_armor_index},
                                  mock_fight_handler)
 
-        armor, actual_armor_index = vodou_priest.get_current_armor()
-        assert actual_armor_index == requested_armor_index
-        assert armor['name'] == "Sport coat/Jeans"
+
+        armor_index_list = vodou_priest.get_current_armor_indexes()
+        armor_list = vodou_priest.get_items_from_indexes(armor_index_list)
+
+        assert len(armor_index_list) == 1
+        assert armor_index_list[0] == requested_armor_index
+        assert armor_list[0]['name'] == "Sport coat/Jeans"
 
         original_to_hit, ignore = self.__ruleset.get_to_hit(vodou_priest,
                                                             None,
@@ -3257,20 +3261,24 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                   'armor-index': requested_armor_index},
                                  mock_fight_handler)
 
-        armor, actual_armor_index = vodou_priest.get_current_armor()
-        assert actual_armor_index == requested_armor_index
-        assert armor['name'] == "Sport coat/Jeans"
+        armor_index_list = vodou_priest.get_current_armor_indexes()
+        armor_list = vodou_priest.get_items_from_indexes(armor_index_list)
+
+        assert len(armor_index_list) == 1
+        assert armor_index_list[0] == requested_armor_index
+        assert armor_list[0]['name'] == "Sport coat/Jeans"
 
         # Doff armor
 
-        requested_armor_index = None
+        armor_index_list = vodou_priest.get_current_armor_indexes()
+
         self.__ruleset.do_action(vodou_priest,
-                                 {'action-name': 'don-armor',
-                                  'armor-index': None},
+                                 {'action-name': 'doff-armor',
+                                  'armor-index': armor_index_list[0]},
                                  mock_fight_handler)
 
-        armor, actual_armor_index = vodou_priest.get_current_armor()
-        assert actual_armor_index == requested_armor_index
+        armor_index_list = vodou_priest.get_current_armor_indexes()
+        assert len(armor_index_list) == 0
 
         # The effect of the armor is tested in 'hp'
 
@@ -3998,14 +4006,14 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Different item
 
         different_item = {"name": "pistol, Baretta DX 192",
-                          "type": "ranged weapon",
+                          "type": ["ranged weapon"],
                           "damage": {"dice": "1d+4"},
                           "acc": 2,
                           "ammo": {"name": "C Cell",
                                    "shots_left": 8,
                                    "shots": 8},
                           "clip": {"name": "C Cell",
-                                   "type": "misc",
+                                   "type": ["misc"],
                                    "count": 1,
                                    "notes": "",
                                    "owners": None},
@@ -4048,7 +4056,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         [
          0=> {"name": "pistol, Sig D65",  # the index of this is stored
                                           # in __tank_fighter_pistol_index
-              "type": "ranged weapon",
+              "type": ["ranged weapon"],
               "damage": {"dice": "1d+4"},
               "acc": 4,
               "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
@@ -4059,19 +4067,19 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
               "notes": ""
              },
          1=> {"name": "sick stick",
-              "type": "melee weapon",
+              "type": ["melee weapon"],
               "damage": {"dice": "1d+1 fat"},
               "skill": "Axe/Mace",
               "count": 1,
               "owners": None,
               "notes": ""
              },
-         2=> {"name": "C Cell", "type": "misc", "count": 5, "notes": "",
+         2=> {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
               "owners": None,
              },
          3=> {"name": "pistol, Sig D65",  # the index of this is stored
                                           # in __tank_fighter_pistol_index
-              "type": "ranged weapon",
+              "type": ["ranged weapon"],
               "damage": {"dice": "1d+4"},
               "acc": 4, <---------------------- now 5 -- this is similar item
               "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
@@ -4082,7 +4090,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
               "notes": ""
              },
          4=> {"name": "pistol, Baretta DX 192", XXXXX--different item-removed
-              "type": "ranged weapon",
+              "type": ["ranged weapon"],
               "damage": {"dice": "1d+4"},
               "acc": 2,
               "ammo": {"name": "C Cell", "shots_left": 8, "shots": 8},

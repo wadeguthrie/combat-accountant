@@ -1234,12 +1234,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # to do anything.
 
         active_actions = [
-            'aim',             'all-out-attack', 'attack',
-            'cast-spell',      'change-posture', 'concentrate',
-            'defend',          'don-armor',      'draw-weapon',
-            'evaluate',        'feint',          'move',
-            'move-and-attack', 'nothing',        'reload',
-            'stun',            'use-item',       'user-defined'
+            'aim',             'all-out-attack',  'attack',
+            'cast-spell',      'change-posture',  'concentrate',
+            'defend',          'doff-armor',      'don-armor',
+            'draw-weapon',     'evaluate',        'feint',
+            'move',            'move-and-attack', 'nothing',
+            'reload',          'stun',            'use-item',
+            'user-defined'
         ]
 
         for action in fighter.details['actions_this_turn']:
@@ -1573,8 +1574,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         output.append([{'text': 'Equipment', 'mode': mode | curses.A_BOLD}])
 
         in_use_items = []
-        armor_in_use, throw_away = character.get_current_armor()
-        if armor_in_use is not None:
+
+        armor_index_list = character.get_current_armor_indexes()
+        armor_list = character.get_items_from_indexes(armor_index_list)
+
+        for armor_in_use in armor_list:
             in_use_items.append(armor_in_use)
         weapon_in_use, throw_away = character.get_current_weapon()
         if weapon_in_use is not None:
@@ -1923,8 +1927,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         dr = 0
         dr_text_array = []
-        armor, armor_index = fighter.get_current_armor()
-        if armor is not None:
+
+        armor_index_list = fighter.get_current_armor_indexes()
+        armor_list = fighter.get_items_from_indexes(armor_index_list)
+
+        for armor in armor_list:
             dr += armor['dr']
             dr_text_array.append(armor['name'])
 
@@ -1938,9 +1945,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         if dr > 0:
             notes.append('Armor: "%s", DR: %d' % (dr_text, dr))
             why.append('Armor: "%s", DR: %d' % (dr_text, dr))
-            if (armor is not None and 'notes' in armor and
-                    len(armor['notes']) != 0):
-                why.append('  %s' % armor['notes'])
+            for armor in armor_list:
+                if 'notes' in armor and len(armor['notes']) != 0:
+                    why.append('  %s' % armor['notes'])
 
         return notes, why
 
@@ -2915,8 +2922,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             dr = 0
             dr_text_array = []
             use_armor = False
-            armor, armor_index = fighter.get_current_armor()
-            if armor is not None:
+
+            armor_index_list = fighter.get_current_armor_indexes()
+            armor_list = fighter.get_items_from_indexes(armor_index_list)
+
+            for armor in armor_list:
                 dr += armor['dr']
                 dr_text_array.append(armor['name'])
 
@@ -4047,6 +4057,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'check-for-death':      {'doit': self.__check_for_death},
             'concentrate':          {'doit': self.__do_nothing},
             'defend':               {'doit': self.__reset_aim},
+            'doff-armor':           {'doit': self.__reset_aim},
             'don-armor':            {'doit': self.__reset_aim},
             'draw-weapon':          {'doit': self.__draw_weapon},
             'evaluate':             {'doit': self.__do_nothing},
@@ -4158,16 +4169,27 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                 ' Defense: double',
                                 ' Move: step']})
 
+        elif action['action-name'] == 'doff-armor':
+            timer = ca_timers.Timer(None)
+            armor_index = action['armor-index']
+            armor = fighter.equipment.get_item_by_index(armor_index)
+
+            if armor is not None:
+                title = 'Doff %s' % armor['name']
+                timer.from_pieces(
+                        {'parent-name': fighter.name,
+                         'rounds': 1 - ca_timers.Timer.announcement_margin,
+                         'string': [title, ' Defense: none', ' Move: none']})
         elif action['action-name'] == 'don-armor':
             timer = ca_timers.Timer(None)
-            armor, throw_away = fighter.get_current_armor()
-            title = ('Doff armor' if armor is None else
-                     ('Don %s' % armor['name']))
-
-            timer.from_pieces(
-                    {'parent-name': fighter.name,
-                     'rounds': 1 - ca_timers.Timer.announcement_margin,
-                     'string': [title, ' Defense: none', ' Move: none']})
+            armor_index = action['armor-index']
+            armor = fighter.equipment.get_item_by_index(armor_index)
+            if armor is not None:
+                title = 'Don %s' % armor['name']
+                timer.from_pieces(
+                        {'parent-name': fighter.name,
+                         'rounds': 1 - ca_timers.Timer.announcement_margin,
+                         'string': [title, ' Defense: none', ' Move: none']})
 
         return timer
 
