@@ -1030,12 +1030,26 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 1,
           "duration": 60,
         },
+        "Steal Energy" :{
+          "cost": None,
+          "notes": "M150, takes 3FP, gives 1FP",
+          "maintain": 0,
+          "casting time": 60,
+          "duration": 0, # Permanent
+        },
         "Steal Power" :{
           "cost": 0,
           "notes": "M180",
           "maintain": 6,
           "casting time": 5,
           "duration": 60,
+        },
+        "Steal Vitality" :{
+          "cost": None,
+          "notes": "M150, takes 3HP, gives 1HP",
+          "maintain": 0,
+          "casting time": 60,
+          "duration": 0, # Permanent
         },
         "Stop Power": {
           "cost": None,
@@ -1148,6 +1162,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 60,
           "duration": 0,    # Permanent -- no need to track
+        },
+        "Zombie Summoning": {
+          "cost": 5,
+          "notes": "M151",
+          "maintain": 2,
+          "casting time": 4,
+          "duration": 60,
         }
     }
 

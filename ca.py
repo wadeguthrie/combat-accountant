@@ -22,6 +22,12 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: ISSUE 20: need a way to generate equipment
+# TODO: ISSUE 14: item type should be an array
+# TODO: ISSUE 13: multiple weapons (one for each hand)
+# TODO: ISSUE 11: equipment containers
+# TODO: ISSUE 9: maintain spell
+
 # TODO: move & attack menu item should show penalties
 # TODO: maintain spell
 
@@ -6465,7 +6471,7 @@ class Program(object):
 
 # Main
 if __name__ == '__main__':
-    VERSION = '00.03.00'    # major version, minor version, bug fixes
+    VERSION = '00.03.01'    # major version, minor version, bug fixes
     #FMT = '%Y-%m-%d-%H-%M-%S' # TODO: remove
     #print 'A %s' % datetime.datetime.now().strftime(FMT).format() # TODO: remove
 
