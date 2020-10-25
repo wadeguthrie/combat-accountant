@@ -23,7 +23,6 @@ import ca_gurps_ruleset
 import ca_timers
 
 # TODO: ISSUE 20: need a way to generate equipment
-# TODO: ISSUE 14: item type should be an array
 # TODO: ISSUE 13: multiple weapons (one for each hand)
 # TODO: ISSUE 11: equipment containers
 # TODO: ISSUE 9: maintain spell
@@ -2557,6 +2556,58 @@ class PersonnelHandler(ScreenHandler):
 
         return True  # Keep going
 
+    def __doff_armor(self,
+                    throw_away   # Required/used by the caller because
+                                 #   there's a list of methods to call,
+                                 #   and (apparently) some of them may
+                                 #   use this parameter.  It's ignored
+                                 #   by this method, however.
+                    ):
+        '''
+        Method for 'equip' sub-menu.
+
+        Asks the user which armor the Fighter should wear and puts it on.
+
+        Returns: None if we want to bail-out of the doff armor process,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        # Are we even wearing armor?
+        armor_index_list = fighter.get_current_armor_indexes()
+        if len(armor_index_list) == 0:
+            return None
+
+        # Build the menu
+        armor_list = fighter.get_items_from_indexes(armor_index_list)
+        doff_armor_menu = []
+        for index, item in enumerate(armor_list):
+            doff_armor_menu.append((item['name'], armor_index_list[index]))
+        doff_armor_menu = sorted(doff_armor_menu, key=lambda x: x[0].upper())
+
+        # Get the index
+        if len(doff_armor_menu) == 0:
+            return None
+        elif len(doff_armor_menu) == 1:
+            armor_index = doff_armor_menu[0][1]
+        else:
+            armor_index, ignore = self._window_manager.menu(
+                    'Doff Which Armor', doff_armor_menu)
+            if armor_index is None:
+                return None
+
+        # Doff the armor
+        self.world.ruleset.do_action(
+                fighter,
+                {'action-name': 'doff-armor',
+                 'armor-index': armor_index,
+                 'notimer': True},
+                None)
+        self._draw_screen()
+        return True  # anything but 'None' for a menu handler
+
     def __don_armor(self,
                     throw_away   # Required/used by the caller because
                                  #   there's a list of methods to call,
@@ -2576,22 +2627,24 @@ class PersonnelHandler(ScreenHandler):
         if fighter is None:
             return None
 
-        armor, throw_away = fighter.get_current_armor()
+        armor_index_list = fighter.get_current_armor_indexes()
+        armor_list = fighter.get_items_from_indexes(armor_index_list)
+        don_armor_menu = []
+        for index, item in enumerate(fighter.details['stuff']):
+            if 'armor' in item['type']:
+                if index not in armor_index_list:
+                    don_armor_menu.append((item['name'], index))
+        don_armor_menu = sorted(don_armor_menu, key=lambda x: x[0].upper())
         armor_index = None
-        if armor is None:
-            don_armor_menu = []
-            for index, item in enumerate(fighter.details['stuff']):
-                if item['type'] == 'armor':
-                    if armor_index != index:
-                        don_armor_menu.append((item['name'], index))
-            don_armor_menu = sorted(don_armor_menu, key=lambda x: x[0].upper())
-            if len(don_armor_menu) == 1:
-                armor_index = don_armor_menu[0][1]
-            else:
-                armor_index, ignore = self._window_manager.menu(
-                        'Don Which Armor', don_armor_menu)
-                if armor_index is None:
-                    return None
+        if len(don_armor_menu) == 0:
+            return None
+        elif len(don_armor_menu) == 1:
+            armor_index = don_armor_menu[0][1]
+        else:
+            armor_index, ignore = self._window_manager.menu(
+                    'Don Which Armor', don_armor_menu)
+            if armor_index is None:
+                return None
 
         self.world.ruleset.do_action(
                 fighter,
@@ -2649,9 +2702,9 @@ class PersonnelHandler(ScreenHandler):
         if weapon is None:
             weapon_menu = []
             for index, item in enumerate(fighter.details['stuff']):
-                if (item['type'] == 'melee weapon' or
-                        item['type'] == 'ranged weapon' or
-                        item['type'] == 'shield'):
+                if ('melee weapon' in item['type'] or
+                        'ranged weapon' in item['type'] or
+                        'shield' in item['type']):
                     if weapon_index != index:
                         weapon_menu.append((item['name'], index))
             weapon_menu = sorted(weapon_menu, key=lambda x: x[0].upper())
@@ -2733,18 +2786,38 @@ class PersonnelHandler(ScreenHandler):
                 ('Notes',           {'doit': self.__full_notes})
             ])
 
+        owns_weapon = False
+        owns_armor = False
+        for index, item in enumerate(fighter.details['stuff']):
+            if ('melee weapon' in item['type'] or
+                    'ranged weapon' in item['type'] or
+                    'shield' in item['type']):
+                owns_weapon = True
+            if 'armor' in item['type']:
+                owns_armor = True
+
         if 'armor-index' in fighter.details:
-            sub_menu.extend([
-                        ('Don/doff armor',  {'doit': self.__don_armor})
-            ])
+            if owns_armor:
+                sub_menu.extend([
+                    ('Don armor',  {'doit': self.__don_armor})
+                ])
+            armor_indexes = fighter.get_current_armor_indexes()
+            if len(armor_indexes) > 0:
+                sub_menu.extend([
+                    ('Doff armor',  {'doit': self.__doff_armor})
+                ])
 
         if 'weapon-index' in fighter.details:
-            sub_menu.extend([
+            if owns_weapon:
+                sub_menu.extend([
                     ('draw/drop weapon',    {'doit': self.__draw_weapon})
-            ])
-            sub_menu.extend([
+                ])
+            weapon, index = fighter.get_current_weapon()
+            if (weapon is not None and
+                    'ranged weapon' not in weapon.details['type']):
+                sub_menu.extend([
                     ('reload weapon',    {'doit': self.__reload_weapon})
-            ])
+                ])
 
         self._window_manager.menu('Do what', sub_menu)
 
@@ -4764,7 +4837,9 @@ class FightHandler(ScreenHandler):
 
                 # indexes are no longer good, remove the weapon and armor
                 if bad_guy.name != ca_fighter.Venue.name:
-                    bad_guy.don_armor_by_index(None)
+                    armor_index_list = bad_guy.get_current_armor_indexes()
+                    for armor_index in armor_index_list:
+                        bad_guy.doff_armor_by_index(armor_index)
                     bad_guy.draw_weapon_by_index(None)
 
         if not found_dead_bad_guy:

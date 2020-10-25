@@ -115,11 +115,13 @@ class Ruleset(object):
         # ARMOR #
 
         # Armor SUB-menu
-        armor, armor_index = fighter.get_current_armor()
+
+        armor_index_list = fighter.get_current_armor_indexes()
+
         don_armor_menu = []   # list of armor that may be donned this turn
         for index, item in enumerate(fighter.details['stuff']):
-            if item['type'] == 'armor':
-                if armor is None or armor_index != index:
+            if 'armor' in item['type']:
+                if index not in armor_index_list:
                     don_armor_menu.append(
                             (item['name'],
                              {'action': {'action-name': 'don-armor',
@@ -127,7 +129,7 @@ class Ruleset(object):
                              ))
         don_armor_menu = sorted(don_armor_menu, key=lambda x: x[0].upper())
 
-        # Armor menu
+        # Don armor menu
 
         if len(don_armor_menu) == 1:
             action_menu.append(
@@ -141,16 +143,16 @@ class Ruleset(object):
         elif len(don_armor_menu) > 1:
             action_menu.append(('Don Armor', {'menu': don_armor_menu}))
 
-        must_doff = True
-        if (armor is None or ('natural-armor' in armor and
-                               armor['natural-armor'])):
-            must_doff = False
+        # Doff armor menu
 
-        if must_doff:
-            action_menu.append((('Doff %s' % armor['name']),
-                                {'action': {'action-name': 'don-armor',
-                                            'armor-index': None}}
-                                ))
+        armor_list = fighter.get_items_from_indexes(armor_index_list)
+        for index, armor in enumerate(armor_list):
+            if ('natural-armor' not in armor or not armor['natural-armor']):
+                action_menu.append(
+                        (('Doff %s' % armor['name']),
+                         {'action': {'action-name': 'don-armor',
+                                     'armor-index': armor_index_list[index]}}
+                         ))
 
         # ATTACK #
 
@@ -189,9 +191,9 @@ class Ruleset(object):
 
             draw_weapon_menu = []   # weapons that may be drawn this turn
             for index, item in enumerate(fighter.details['stuff']):
-                if (item['type'] == 'ranged weapon' or
-                        item['type'] == 'melee weapon' or
-                        item['type'] == 'shield'):
+                if ('ranged weapon' in item['type'] or
+                        'melee weapon' in item['type'] or
+                        'shield' in item['type']):
                     if weapon is None or weapon_index != index:
                         draw_weapon_menu.append(
                             (item['name'],
@@ -308,7 +310,7 @@ class Ruleset(object):
                 fighter.group == 'PCs'):
             throw_away, original_weapon_index = fighter.get_current_weapon()
             for index, item in enumerate(fighter.details['stuff']):
-                if item['type'] == 'ranged weapon':
+                if 'ranged weapon' in item['type']:
                     fighter.draw_weapon_by_index(index)
                     self.do_action(fighter,
                                    {'action-name': 'reload',
@@ -333,23 +335,28 @@ class Ruleset(object):
                                      self,
                                      self._window_manager)
 
-        armor, throw_away = fighter.get_current_armor()
-        if armor is not None:
-            if armor['type'] != 'armor':
+        armor_index_list = fighter.get_current_armor_indexes()
+        armor_list = fighter.get_items_from_indexes(armor_index_list)
+
+        # Dump non-armor being worn as armor
+
+        for index, armor in enumerate(armor_list):
+            if 'armor' not in armor['type']:
                 self._window_manager.error([
                     'Creature "%s"' % name,
                     '  is wearing weird armor "%s. Fixing."' % armor['name']])
                 self.do_action(fighter,
-                               {'action-name': 'don-armor',
-                                'armor-index': None,
+                               {'action-name': 'doff-armor',
+                                'armor-index': armor_index_list[index],
                                 'notimer': True},
                                None)
                 result = False
 
-        armor, throw_away = fighter.get_current_armor()
-        if armor is None:
-            # If they're not holding anything and they have natural weapons,
-            # use those weapons.
+        # Add natural armor if they're not wearing any other kind
+
+        armor_index_list = fighter.get_current_armor_indexes()
+
+        if len(armor_index_list) == 0:
             for index, item in enumerate(fighter.details['stuff']):
                 if 'natural-armor' in item and item['natural-armor']:
                     self.do_action(fighter,
@@ -357,7 +364,6 @@ class Ruleset(object):
                                     'armor-index': index,
                                     'notimer': True},
                                    None)
-                    break
 
         weapon, throw_away = fighter.get_current_weapon()
         if weapon is not None:
@@ -400,7 +406,7 @@ class Ruleset(object):
         '''
         return {'stuff': [],
                 'weapon-index': None,
-                'armor-index': None,
+                'armor-index': [], # can wear multiple armors over each other
                 'permanent': {},
                 'current': {},
                 'state': 'alive',
@@ -719,6 +725,28 @@ class Ruleset(object):
         fighter.don_armor_by_index(action['armor-index'])
         return Ruleset.HANDLED_OK
 
+    def __doff_armor(self,
+                     fighter,         # Fighter object
+                     action,          # {'action-name': 'doff-armor',
+                                      #  'armor-index': <int> # index in
+                                      #         fighter.details['stuff',
+                                      #         None doffs armor
+                                      #  'comment': <string> # optional
+                    fight_handler,    # FightHandler object
+                    ):
+        '''
+        Action handler for Ruleset.
+
+        Dons a specific piece of armor for the Fighter.  If the index is None,
+        it doffs the current armor.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+
+        fighter.doff_armor_by_index(action['armor-index'])
+        return Ruleset.HANDLED_OK
+
     def __draw_weapon(self,
                       fighter,          # Fighter object
                       action,           # {'action-name': 'draw-weapon',
@@ -834,6 +862,7 @@ class Ruleset(object):
             'adjust-hp':            {'doit': self._adjust_hp},
             'all-out-attack':       {'doit': self.__do_attack},
             'attack':               {'doit': self.__do_attack},
+            'doff-armor':           {'doit': self.__doff_armor},
             'don-armor':            {'doit': self.__don_armor},
             'draw-weapon':          {'doit': self.__draw_weapon},
             'end-turn':             {'doit': self.__end_turn},

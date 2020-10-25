@@ -228,7 +228,7 @@ class EquipmentManager(object):
             texts.append(': %s' % item['notes'])
         char_detail.append([{'text': ''.join(texts), 'mode': mode}])
 
-        if item['type'] == 'ranged weapon':
+        if 'ranged weapon' in item['type']:
             texts = []
             texts.append('acc: %d' % item['acc'])
             texts.append('dam(%s): %dd%+d' % (
@@ -238,7 +238,7 @@ class EquipmentManager(object):
             texts.append('reload: %d' % item['reload'])
             char_detail.append([{'text': ('     ' + ', '.join(texts)),
                                  'mode': mode}])
-        elif item['type'] == 'melee weapon':
+        elif 'melee weapon' in item['type']:
             texts = []
             if 'dice' in item['damage']:
                 texts.append('dam(%s): %dd%+d' % (
@@ -258,7 +258,7 @@ class EquipmentManager(object):
 
             char_detail.append([{'text': ('     ' + ', '.join(texts)),
                                  'mode': mode}])
-        elif item['type'] == 'armor':
+        elif 'armor' in item['type']:
             texts = []
             # TODO: ruleset-specific
             texts.append('dr: %d' % item['dr'])
@@ -388,21 +388,21 @@ class Weapon(object):
                         'notes': '',
                         'shots': self.shots(),
                         'shots_left': self.shots_left(),
-                        'type': 'misc', # TODO: ruleset?
+                        'type': ['misc'], # TODO: ruleset?
                         }
         self.details['clip'] = None
         self.shots_left(0)
         return old_clip
 
     def is_ranged_weapon(self):
-        return True if self.details['type'] == 'ranged weapon' else False
+        return True if 'ranged weapon' in self.details['type'] else False
 
     def is_melee_weapon(self):
-        return True if self.details['type'] == 'melee weapon' else False
+        return True if 'melee weapon' in self.details['type'] else False
 
     def is_shield(self):
         # NOTE: cloaks also have this 'type'
-        return True if self.details['type'] == 'shield' else False
+        return True if 'shield' in self.details['type'] else False
 
     def load(self,
              clip  # dict
