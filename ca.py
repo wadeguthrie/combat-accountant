@@ -5152,7 +5152,7 @@ class FightHandler(ScreenHandler):
                     fighter.name != ca_fighter.Venue.name):
                 if fighter.is_conscious():
                     ask_to_save = True
-                else:
+                elif not fighter.is_absent():
                     ask_to_loot = True
 
         # Ask: save or loot?
