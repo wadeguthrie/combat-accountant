@@ -160,7 +160,6 @@ class ThingsInFight(object):
     #
 
     def end_fight(self,
-                  world,          # World object - unused
                   fight_handler   # FightHandler object
                   ):
         '''
@@ -429,7 +428,6 @@ class Fighter(ThingsInFight):
         self.details['weapon-index'] = index
 
     def end_fight(self,
-                  world,          # World object (for options)
                   fight_handler   # FightHandler object (for do_action)
                   ):
         '''
@@ -438,9 +436,9 @@ class Fighter(ThingsInFight):
 
         Returns nothing.
         '''
-        super(Fighter, self).end_fight(world, fight_handler)
-        if ('reload-after-fight' in world.details['options'] and
-                world.details['options']['reload-after-fight'] and
+        super(Fighter, self).end_fight(fight_handler)
+        if (self._ruleset.options is not None and
+                self._ruleset.options.get_option('reload-after-fight') and
                 self.group == 'PCs'):
             self._ruleset.do_action(self,
                                     {'action-name': 'reload',
