@@ -39,6 +39,7 @@ class Ruleset(object):
                  ):
         self._window_manager = window_manager
         self.sort_init_descending = True # Higher numbered inits go first
+        self.options = None
 
     @staticmethod
     def roll(number,  # the number of dice
@@ -305,8 +306,8 @@ class Ruleset(object):
         if fighter.details['state'] != 'fight':
             fighter.details['state'] = 'alive'
 
-        if ('reload-on-heal' in world.details['options'] and
-                world.details['options']['reload-on-heal'] and
+        if (self.options is not None and
+                self.options.get_option('reload-on-heal') and
                 fighter.group == 'PCs'):
             throw_away, original_weapon_index = fighter.get_current_weapon()
             for index, item in enumerate(fighter.details['stuff']):
@@ -467,6 +468,12 @@ class Ruleset(object):
 
         return result
 
+    def set_options(self,
+                    options # Options object
+                    ):
+        '''Saves the options.'''
+        self.options = options
+
     #
     # Private and Protected Methods
     #
@@ -626,16 +633,25 @@ class Ruleset(object):
             if 'clip-index' not in action:
                 return Ruleset.HANDLED_OK
 
+            # xxx
+
+            infinite_clips = True if (self.options is not None and
+                    self.options.get_option('infinite-clips')) else False
+
             # Prepare the new clip -- I know this is backwards but the
             # clip index (for the new clip) is still valid until the old clip
             # is added to the equipment list
 
-            clip = fighter.remove_equipment(action['clip-index'], 1)
+            if infinite_clips:
+                clip = copy.deepcopy(fighter.equipment.get_item_by_index(
+                    action['clip-index']))
+            else:
+                clip = fighter.remove_equipment(action['clip-index'], 1)
 
             # Put a non-zero count clip back in equipment list
             if weapon.shots_left() > 0:
                 old_clip = weapon.remove_old_clip()
-                if old_clip is not None:
+                if (old_clip is not None and not infinite_clips):
                     if (old_clip['shots_left'] > 0 or
                             ('discard-when-empty' in old_clip and
                              not old_clip['discard-when-empty'])):

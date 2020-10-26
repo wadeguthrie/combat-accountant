@@ -2976,6 +2976,7 @@ class PersonnelHandler(ScreenHandler):
         Returns: None if we want to bail-out of the give equipment process,
                  True, otherwise
         '''
+        # Get the object from the viewing index
         from_fighter = self.get_obj_from_index()
         if from_fighter is None:
             return None
@@ -3490,7 +3491,6 @@ class FightHandler(ScreenHandler):
                  world,                 # World object
                  monster_group,         # string
                  playback_history,      # dict from bug report (usually None)
-                 # TODO: prefs - save for end_fight
                  save_snapshot=True     # Here so tests can disable it
                  ):
         super(FightHandler, self).__init__(window_manager, world)
@@ -4798,7 +4798,7 @@ class FightHandler(ScreenHandler):
                 continue
             if (bad_guy.name != ca_fighter.Venue.name and
                     bad_guy.is_conscious()):  # only steal from the dead/unconscious
-                # Note that absent characters are not marked as conscious
+                # NOTE: absent fighters not marked conscious
                 continue
             found_dead_bad_guy = True
 
@@ -5192,7 +5192,7 @@ class FightHandler(ScreenHandler):
 
         if not self._saved_fight['saved']:
             for fighter in self.__fighters:
-                fighter.end_fight(self.world, self)
+                fighter.end_fight(self)
 
         self._window.close()
         return False  # Leave the fight
@@ -6544,6 +6544,27 @@ class Program(object):
         return bug_report_game_file
 
 
+class Options(object):
+    def __init__(self,
+                 global_options,    # dict, options for program
+                 campaign_options   # dict, options for campaign
+                 ):
+        self.__global_options = global_options
+        self.__campaign_options = campaign_options
+
+    def get_option(self,
+                   option_name  # string
+                   ):
+        # NOTE: campaign options override global options
+        if option_name in self.__campaign_options:
+            return self.__campaign_options[option_name]
+
+        if option_name in self.__global_options:
+            return self.__global_options[option_name]
+
+        return None
+
+
 # Main
 if __name__ == '__main__':
     VERSION = '00.03.01'    # major version, minor version, bug fixes
@@ -6684,6 +6705,11 @@ if __name__ == '__main__':
 
             program = Program(filename)
             world = World(filename, campaign, ruleset, program, window_manager)
+            campaign_options = (None if 'options' not in world.details else
+                                world.details['options'])
+            # NOTE: |prefs| is not guaranteed to be writeable
+            options = Options(prefs, campaign_options)
+            ruleset.set_options(options)
 
             # Save the state of things when we leave since there wasn't a
             # horrible crash while reading the data.
