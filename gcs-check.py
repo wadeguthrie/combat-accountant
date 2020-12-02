@@ -131,6 +131,7 @@ class Skills(object):
     level_from_cost = {1:0, 2:1, 4:2, 8:3, 12:4, 16:5, 20:6, 24:7, 28:5}
     difficulty_offset = {'E':0, 'A':-1, 'H':-2, 'VH':-3}
     skills = {
+        'Acrobatics':           {'attr':'DX', 'diff':'H', 'default':-6},
         'Acting':               {'attr':'IQ', 'diff':'A', 'default':-5},
         'Administration':       {'attr':'IQ', 'diff':'A', 'default':-5},
         'Area Knowledge':       {'attr':'IQ', 'diff':'E', 'default':-4},
@@ -140,6 +141,7 @@ class Skills(object):
                                  'equip': {'Laser Sight': 1}},
         # Bartender is really a professional skill
         'Bartender':            {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Biology':              {'attr':'IQ', 'diff':'VH', 'default':-6},
         'Brawling':             {'attr':'DX', 'diff':'E', 'default':None},
         'Camouflage':           {'attr':'IQ', 'diff':'E', 'default':-4},
         'Climbing':             {'attr':'DX', 'diff':'A', 'default':-5},
@@ -154,6 +156,7 @@ class Skills(object):
                                                'Empathy (Sensitive)': 1}},
         'Diagnosis':            {'attr':'IQ', 'diff':'H', 'default':-6},
         'Diplomacy':            {'attr':'IQ', 'diff':'H', 'default':-6},
+        'Disarming':            {'attr':'IQ', 'diff':'H', 'default':-6},
         'Electronics Operation':{'attr':'IQ', 'diff':'A', 'default':-5},
         'Electronics Repair':   {'attr':'IQ', 'diff':'A', 'default':-5},
         'Expert Skill':         {'attr':'IQ', 'diff':'H', 'default':None},
@@ -188,6 +191,7 @@ class Skills(object):
         'Mathematics':          {'attr':'IQ', 'diff':'H', 'default':-6},
         'Mechanic':             {'attr':'IQ', 'diff':'A', 'default':-5},
         'Observation':          {'attr':'Per', 'diff':'A', 'default':-5},
+        'Poisons':              {'attr':'IQ', 'diff':'H', 'default':-6},
         'Physician':            {'attr':'IQ', 'diff':'H', 'default':-7},
         'Physics':              {'attr':'IQ', 'diff':'VH', 'default':-6},
         'Pickpocket':           {'attr':'DX', 'diff':'H', 'default':-6},
@@ -196,6 +200,8 @@ class Skills(object):
         'Savoir-Faire':         {'attr':'IQ', 'diff':'E', 'default':-4},
         'Scrounging':           {'attr':'Per', 'diff':'E', 'default':-4},
         'Search':               {'attr':'Per', 'diff':'A', 'default':-5},
+        'Shadowing':            {'attr':'IQ', 'diff':'A', 'default':-5},
+        'Smuggling':            {'attr':'IQ', 'diff':'A', 'default':-5},
         'Soldier':              {'attr':'IQ', 'diff':'A', 'default':-5},
         'Stealth':              {'attr':'DX', 'diff':'A', 'default':-5},
         'Streetwise':           {'attr':'IQ', 'diff':'A', 'default':-5},
@@ -207,6 +213,10 @@ class Skills(object):
         'Thrown Weapon':        {'attr':'DX', 'diff':'E', 'default':-4},
         'Traps':                {'attr':'IQ', 'diff':'A', 'default':-5},
         'Urban Survival':       {'attr':'Per', 'diff':'A', 'default':-5},
+    }
+    techniques = {
+            'Off-Hand Weapon Training' : 1,
+            'Disarming' : 1,
     }
 
     @staticmethod
@@ -220,7 +230,10 @@ class Skills(object):
         #   - armory: good quality equipment and ?
         #   - fast draw ammo: ?
         if skill_name not in Skills.skills:
-            print '** Need to add "%s" to gcs-check.py' % skill_name
+            if skill_name in Skills.techniques:
+                print '** "%s" is a GURPS Technique and is not yet in gcs-check.py' % skill_name
+            else:
+                print '** Need to add "%s" to gcs-check.py' % skill_name
             return 0
         skill = Skills.skills[skill_name]
         if skill['attr'] not in char.attrs:
@@ -627,6 +640,16 @@ if __name__ == '__main__':
 
     ARGS = parser.parse_args()
     PP = pprint.PrettyPrinter(indent=3, width=150)
+    char_map = {
+            'Mama V.gcs' : 'mama V - Karen',
+            'Lawerence Langelier.gcs' : 'lawerence - Spenser',
+            'Lawerence Langelier copy.gcs' : 'lawerence - Spenser',
+            'Samuel Mercier.gcs' : 'samuel - Erik',
+            'Amandas-Character.gcs' : 'janice - Amanda',
+            'Buehne-VasilisIllyan.gcs' : 'vasilis - Alan',
+            'DeriJeannot.gcs' : 'deri - Chelsea',
+            'DeriJeannotFixed.gcs' : 'deri - Chelsea',
+    }
 
     chars_json = []
     with GmJson(ARGS.json_filename, window_manager=None) as campaign:
@@ -636,12 +659,16 @@ if __name__ == '__main__':
     for gcs_file in glob.glob(ARGS.gcs_filename):
         char_gcs = ET.parse(gcs_file).getroot()
         print '\nWhich character goes with "%s":' % gcs_file
-        for i, char_name_json in enumerate(chars_json):
-            print '  %d) %s' % (i, char_name_json)
-        char_number_json = input('Number: ')
+        if gcs_file in char_map:
+            json_name = char_map[gcs_file]
+        else:
+            for i, char_name_json in enumerate(chars_json):
+                print '  %d) %s' % (i, char_name_json)
+            char_number_json = input('Number: ')
+            json_name = chars_json[char_number_json]
 
-        print '\n== CHARACTER NAME "%s" =====' % chars_json[char_number_json]
-        char_json = data_json['PCs'][chars_json[char_number_json]]
+        print '\n== CHARACTER NAME "%s" =====' % json_name
+        char_json = data_json['PCs'][json_name]
         character = Character(char_json, char_gcs)
         character.check_for_consistency()
 
