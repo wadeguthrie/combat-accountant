@@ -598,9 +598,16 @@ class Character(object):
 
     def check_equipment(self):
         ## EQUIPMENT #####
+        stuff_json = {}
         if 'stuff' in self.char_json:
+            for item in self.char_json['stuff']:
+                if 'count' in item:
+                    stuff_json[item['name']] = item['count']
+                else:
+                    stuff_json[item['name']] = 1
+            #stuff_json = {k['name']:1 for k in self.char_json['stuff']}
+
             #PP.pprint(self.char_json['stuff'])
-            stuff_json = {k['name']:1 for k in self.char_json['stuff']}
         else:
             stuff_json = {}
 
@@ -611,7 +618,10 @@ class Character(object):
                 print '   **GCS> "%s" in GCS but not in JSON' % name
             else:
                 print '  %s' % name
-                del(stuff_json[name])
+                if stuff_json[name] <= 1:
+                    del(stuff_json[name])
+                else:
+                    stuff_json[name] -= 1
         for thing in stuff_json:
             print '   **JSON> "%s" in JSON but not in GCS' % thing
 
