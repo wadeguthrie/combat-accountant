@@ -22,13 +22,14 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: gcs-check should include spell difficulty level
+
 # TODO: ISSUE 20: need a way to generate equipment
 # TODO: ISSUE 13: multiple weapons (one for each hand)
 # TODO: ISSUE 11: equipment containers
 # TODO: ISSUE 9: maintain spell
 
 # TODO: move & attack menu item should show penalties
-# TODO: maintain spell
 
 # TODO: reload and spells should happen at the end of the timer.  The
 #       'reloading' timer should launch the second part of the action when it

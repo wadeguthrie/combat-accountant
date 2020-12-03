@@ -428,6 +428,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 4,
           "duration": 60,
         },
+        "Compel Truth": {
+          "cost": 4,
+          "notes": "M47",
+          "maintain": 2,
+          "casting time": 1,
+          "duration": 300,
+        },
         "Conceal Magic": {
           "cost": 1,
           "notes": "M122",
@@ -799,6 +806,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 10,
           "duration": 60,
         },
+        "Mind-Search": {
+          "cost": 6,
+          "notes": "M46",
+          "maintain": 3,
+          "casting time": 60,
+          "duration": 60,
+        },
         "Mind-Sending": {
           "cost": 4,
           "notes": "M47",
@@ -820,6 +834,27 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 300,
           "duration": 36000, # 10 hours
         },
+        "Nauseate": {
+          "cost": 2,
+          "notes": "M38",
+          "maintain": 0,
+          "casting time": 1,
+          "duration": 10,
+        },
+        "No-Smell": {
+          "cost": 2,
+          "notes": "M24",
+          "maintain": 2,
+          "casting time": 1,
+          "duration": 3600,
+        },
+        "Odor": {
+          "cost": 1,
+          "notes": "M24",
+          "maintain": 0,
+          "casting time": 1,
+          "duration": 3600,
+        },
         "Pain": {
           "cost": 2,
           "notes": "M36, vs. HT",
@@ -833,6 +868,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 1,
           "duration": 60,
+        },
+        "Perfume": {
+          "cost": 2,
+          "notes": "M35",
+          "maintain": 1,
+          "casting time": 1,
+          "duration": 600,
         },
         "Phase": {
           "cost": 3,
@@ -862,9 +904,23 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 1,
           "duration": 0,    # Permanent -- no need to track
         },
+        "Purify Air": {
+          "cost": 1,
+          "notes": "M23",
+          "maintain": 0,
+          "casting time": 1,
+          "duration": 0,    # Instant -- no need to track
+        },
         "Rebuild" :{
           "cost": None,
           "notes": "M177",
+          "maintain": None,
+          "casting time": None,
+          "duration": None,
+        },
+        "Recover Energy" :{
+          "cost": None,
+          "notes": "M89",
           "maintain": None,
           "casting time": None,
           "duration": None,
@@ -890,6 +946,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "casting time": 1,
           "duration": 60,
         },
+        "Resist Pain" :{
+          "cost": 4,
+          "notes": "M38",
+          "maintain": 2,
+          "casting time": 1,
+          "duration": 60,
+        },
         "Resist Poison" :{
           "cost": 4,
           "notes": "M91",
@@ -903,6 +966,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 60,
           "duration": 0,    # Permanent -- no need to track
+        },
+        "Retch": {
+          "cost": 3,
+          "notes": "M38",
+          "maintain": 0,
+          "casting time": 4,
+          "duration": 0,    # Instant -- no need to track
         },
         "Rotting Death": {
           "cost": 3,
@@ -966,6 +1036,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 5,
           "duration": 3600,
+        },
+        "Sense Spirit" :{
+          "cost": None,
+          "notes": "M149",
+          "maintain": None,
+          "casting time": 1,
+          "duration": 0,    # Instant -- no need to track
         },
         "Sensitize": {
           "cost": 3,
@@ -1127,6 +1204,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": None,
+        },
+        "Turn Spirit": {
+          "cost": 4,
+          "notes": "M151",
+          "maintain": 2,
+          "casting time": 1,
+          "duration": 10,
         },
         "Turn Zombie": {
           "cost": 2,

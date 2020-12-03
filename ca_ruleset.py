@@ -342,10 +342,20 @@ class Ruleset(object):
         # Dump non-armor being worn as armor
 
         for index, armor in enumerate(armor_list):
-            if 'armor' not in armor['type']:
+            if armor is None:
                 self._window_manager.error([
                     'Creature "%s"' % name,
-                    '  is wearing weird armor "%s. Fixing."' % armor['name']])
+                    '  is wearing weird armor "<None>". Fixing.'])
+                self.do_action(fighter,
+                               {'action-name': 'doff-armor',
+                                'armor-index': armor_index_list[index],
+                                'notimer': True},
+                               None)
+                result = False
+            elif 'armor' not in armor['type']:
+                self._window_manager.error([
+                    'Creature "%s"' % name,
+                    '  is wearing weird armor "%s". Fixing.' % armor['name']])
                 self.do_action(fighter,
                                {'action-name': 'doff-armor',
                                 'armor-index': armor_index_list[index],
