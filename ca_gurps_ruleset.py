@@ -2280,6 +2280,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
         # TODO (eventually): need convenient defaults -- maybe as an entry to
         # the skill
+        # TODO: if 'skill' is 'dx', this doesn't work
         if weapon.details['skill'] not in fighter.details['skills']:
             return None, None
 
@@ -3700,12 +3701,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 opponent = None
             else:
                 opponent = fight_handler.get_opponent_for(fighter)
-            if weapon is None:
-                unarmed_skills = self.get_weapons_unarmed_skills(weapon)
+            unarmed_skills = self.get_weapons_unarmed_skills(weapon)
+            if unarmed_skills is not None:
                 unarmed_info = self.get_unarmed_info(fighter,
                                                      opponent,
                                                      weapon,
                                                      unarmed_skills)
+                # Reduce to-hit by 4 for melee weapon
                 to_hit = unarmed_info['punch_skill'] - 4
                 to_hit = 9 if to_hit > 9 else to_hit
                 text.append(' Punch to-hit: %d' % to_hit)
