@@ -950,7 +950,11 @@ class GmWindowManager(object):
                                    begin_x-1)
         border_win.border()
         if title is not None:
-            title_start = ((width+box_margin) - (len(title))) / 2
+            max_title_len = width + box_margin
+            if len(title) >= max_title_len:
+                title = title[:(max_title_len-1)]
+
+            title_start = (max_title_len - (len(title))) / 2
             border_win.addstr(0, title_start, title)
 
         border_win.refresh()
