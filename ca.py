@@ -4806,6 +4806,10 @@ class FightHandler(ScreenHandler):
             # Reversed so removing items doesn't change the index of others
             for index, item in reversed(list(enumerate(
                                                 bad_guy.details['stuff']))):
+                # Don't 'loot' natural weapons or armor
+                if (('natural-weapon' in item and item['natural-weapon']) or
+                        ('natural-armor' in item and item['natural-armor'])):
+                    continue
                 output = []
                 ca_equipment.EquipmentManager.get_description(item, [], output)
                 # output looks like:
@@ -4833,7 +4837,9 @@ class FightHandler(ScreenHandler):
                 if 'quit' in xfer:
                     return True
 
-                new_item = bad_guy.details['stuff'].pop(index)
+                # TODO: go back and ask again for items where we didn't get
+                # all of them
+                new_item = bad_guy.remove_equipment(index)
                 xfer['guy'].add_equipment(new_item, bad_guy.detailed_name)
 
                 # indexes are no longer good, remove the weapon and armor
