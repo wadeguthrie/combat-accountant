@@ -612,6 +612,9 @@ class Fighter(ThingsInFight):
                                           self.details['current']['hp'],
                                           self.details['permanent']['hp'])
 
+        if 'label' in self.details and self.details['label'] is not None:
+            fighter_string += ' - %s' % self.details['label']
+
         if self.is_dead():
             fighter_string += ' - DEAD'
 
@@ -704,9 +707,14 @@ class Fighter(ThingsInFight):
         # NOTE: we're allowing health to still be messed-up, here
         # NOTE: person may go around wearing armor -- no need to reset
         self.details['opponent'] = None
-        if (self.group == 'PCs' and 'fight-notes' in self.details and
-                self.details['fight-notes'] is not None):
-            self.details['fight-notes'] = []
+        if self.group == 'PCs':
+            if ('fight-notes' in self.details and
+                    self.details['fight-notes'] is not None):
+                self.details['fight-notes'] = []
+
+            if ('label' in self.details and self.details['label'] is not None):
+                self.details['label'] = None
+
         self._ruleset.start_fight(self)
 
     def start_turn(self,
