@@ -3585,6 +3585,12 @@ class FightHandler(ScreenHandler):
                                'that fighter will be given the opportunity. ' +
                                'Armor will be taken into account if you ' +
                                'specify (via subsequent menu).'},
+            ord('l'): {'name': 'label',
+                       'func': self.__label,
+                       'help': 'Adds a label to a fighter during the fight.'},
+            ord('L'): {'name': 'remove label',
+                       'func': self.__remove_label,
+                       'help': 'Removes a fighter\'s label.'},
             ord('m'): {'name': 'maneuver',
                        'func': self.__maneuver,
                        'help': 'Causes the fighter with the initiative to ' +
@@ -4767,6 +4773,28 @@ class FightHandler(ScreenHandler):
                 return True
         return False
 
+    def __label(self):
+        label_recipient, current_fighter = self.__select_fighter(
+                                                            'Label For Whom')
+        if label_recipient is None:
+            return True  # Keep fighting
+
+        title = 'Label for %s' % label_recipient.name
+        height = 1
+        width = len(title)
+        label = self._window_manager.input_box(height, width, title)
+
+        label_recipient.details['label'] = label
+
+        # Redraw the fighters
+        opponent = self.get_opponent_for(current_fighter)
+        self._window.show_fighters(current_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
+        return True
+
     def __loot_bodies(self,
                       throw_away   # Required/used by the caller because
                                    #   there's a list of methods to call,
@@ -5266,6 +5294,23 @@ class FightHandler(ScreenHandler):
             viewing_index = self.__viewing_index
             self.modify_index(-1, raw_modify=True)
             self.__viewing_index = viewing_index
+
+    def __remove_label(self):
+        label_recipient, current_fighter = self.__select_fighter(
+                                                            'Label For Whom')
+        if label_recipient is None:
+            return True  # Keep fighting
+
+        label_recipient.details['label'] = None
+
+        # Redraw the fighters
+        opponent = self.get_opponent_for(current_fighter)
+        self._window.show_fighters(current_fighter,
+                                   opponent,
+                                   self.__fighters,
+                                   self._saved_fight['index'],
+                                   self.__viewing_index)
+        return True
 
     def __select_fighter(self,
                          menu_title,  # string: title of fighter/opponent menu
