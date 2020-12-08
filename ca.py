@@ -744,15 +744,17 @@ class FightGmWindow(ca_gui.GmWindow):
                 if line >= lines:
                     break
 
-                   #lines   # [[{'text', 'mode'}, ],    # line 0
-                           #  [...],               ]   # line 1
-
                 left = 0
+                y_start, x_start = window.getyx()
                 for piece in line_text:
                     window.addstr(line, left, piece['text'], piece['mode'])
                     left += len(piece['text'])
+                y, x = window.getyx()
 
-                line += 1
+                if y == y_start:
+                    line += 1
+                else:
+                    line += y - y_start
 
         # now, back to normal
         mode = curses.A_NORMAL

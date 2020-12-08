@@ -1040,11 +1040,24 @@ class GmScrollableWindow(object):
         line_cnt = len(self.__lines) - self.top_line
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
         line_cnt = line_cnt if line_cnt < win_line_cnt else win_line_cnt
+        # TODO: I've got al these commented-out lines to skip lines that are
+        # the result of a wrap (like the Mech in the <<ROOM>> of the Armstrong
+        # 1 fight) but then the line count for the window is too small and we
+        # get a  crash.
+        #line = 0
         for i in range(0, line_cnt):
             left = 0
+            #y_start, x_start = self.__window.getyx()
             for piece in self.__lines[i+self.top_line]:
                 self.__window.addstr(i, left, piece['text'], piece['mode'])
+                # instead of 'i', should be 'line'
                 left += len(piece['text'])
+
+            #y, x = self.__window.getyx()
+            #if y == y_start:
+            #    line += 1
+            #else:
+            #    line += y - y_start
 
     def get_showable_menu_lines(self):
         '''
