@@ -678,6 +678,8 @@ class FightGmWindow(ca_gui.GmWindow):
         lines, cols = window.getmaxyx()
         line = 0
 
+        # Show whether fighter's condition
+
         fighter_state = fighter.get_state()
         mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
                 | curses.A_BOLD)
@@ -731,6 +733,26 @@ class FightGmWindow(ca_gui.GmWindow):
                 if line < lines:
                     window.addstr(line, 0, note, mode)
                     line += 1
+
+        # Show equipment for the 'room'
+
+        if fighter_state == ca_fighter.Fighter.FIGHT:
+            char_info = []
+            fighter.get_description(char_info)
+
+            for line_text in char_info:
+                if line >= lines:
+                    break
+
+                   #lines   # [[{'text', 'mode'}, ],    # line 0
+                           #  [...],               ]   # line 1
+
+                left = 0
+                for piece in line_text:
+                    window.addstr(line, left, piece['text'], piece['mode'])
+                    left += len(piece['text'])
+
+                line += 1
 
         # now, back to normal
         mode = curses.A_NORMAL
