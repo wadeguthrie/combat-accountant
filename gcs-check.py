@@ -605,23 +605,25 @@ class Character(object):
                     stuff_json[item['name']] = item['count']
                 else:
                     stuff_json[item['name']] = 1
-            #stuff_json = {k['name']:1 for k in self.char_json['stuff']}
-
-            #PP.pprint(self.char_json['stuff'])
         else:
             stuff_json = {}
 
+        stuff_json = {k.lower(): v for (k, v) in stuff_json.iteritems()}
+        #PP.pprint(stuff_json)
+
         for name in self.stuff_gcs:
+            lower_name = name.lower()
+            #print 'lower: "%s"' % lower_name # TODO: remove
             if name in Character.equipment_white_list_gcs:
                 pass
-            elif name not in stuff_json:
+            elif lower_name not in stuff_json:
                 print '   **GCS> "%s" in GCS but not in JSON' % name
             else:
                 print '  %s' % name
-                if stuff_json[name] <= 1:
-                    del(stuff_json[name])
+                if stuff_json[lower_name] <= 1:
+                    del(stuff_json[lower_name])
                 else:
-                    stuff_json[name] -= 1
+                    stuff_json[lower_name] -= 1
         for thing in stuff_json:
             print '   **JSON> "%s" in JSON but not in GCS' % thing
 

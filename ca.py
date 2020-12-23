@@ -22,6 +22,12 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: Need to be able to scroll character window in main window.
+
+# TODO: There should be a command in a fight 'Group action', maybe, that
+# allows an immediate (and free) menu: don/doff armor, holster/draw weapon,
+# reload.  Only for PCs.
+
 # TODO: gcs-check should include spell difficulty level
 
 # TODO: ISSUE 20: need a way to generate equipment
