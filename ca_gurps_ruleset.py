@@ -4338,9 +4338,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         fight_handler = (None if 'fight_handler' not in param
                          else param['fight_handler'])
+
+        # Toggle stunned
+        if 'stunned' not in stunned_dude.details:
+            stunned_dude.details['stunned']= False
+        do_stun = False if stunned_dude.details['stunned'] else True
+
         self.do_action(stunned_dude,
                        {'action-name': 'stun',
-                        'stun': True,
+                        'stun': do_stun,
                         'comment': ('(%s) got stunned' % stunned_dude.name)},
                        fight_handler)
 
