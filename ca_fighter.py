@@ -538,11 +538,12 @@ class Fighter(ThingsInFight):
             elif index_to_remove < self.details['weapon-index']:
                 self.details['weapon-index'] -= 1
 
-            for index, item in enumerate(self.details['armor-index']):
-                if index_to_remove == item:
-                    self.details['armor-index'].remove(item)
-                elif index_to_remove < item:
-                    self.details['armor-index'][index] -= 1
+            for index_in_armor, index_in_stuff in enumerate(
+                    self.details['armor-index']):
+                if index_to_remove == index_in_stuff:
+                    self.details['armor-index'].remove(index_in_stuff)
+                elif index_to_remove < index_in_stuff:
+                    self.details['armor-index'][index_in_armor] -= 1
 
         return item
 
