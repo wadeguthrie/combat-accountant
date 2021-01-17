@@ -317,7 +317,7 @@ class EquipmentManager(object):
         Returns the removed piece of equipment.
         '''
         if fighter is None:
-            return
+            return None
 
         item_menu = []
         for index, item in enumerate(fighter.details['stuff']):
