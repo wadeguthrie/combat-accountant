@@ -1525,13 +1525,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         else:
             move_string = 'full=%d' % move
 
+        if not holding_ranged or weapon.shots_left() > 0:
+            action_menu.extend([
+                ('Move and attack (B365)',
+                    {'action': {'action-name': 'move-and-attack'}}),
+            ])
+
         action_menu.extend([
             ('move (B364) %s' % move_string,
                 {'action': {'action-name': 'move'}}),
-            ('Move and attack (B365)',
-                {'action': {'action-name': 'move-and-attack'}}),
             ('nothing',
-                {'action': {'action-name': 'nothing'}}),
+                {'action': {'action-name': 'nothing'}})
         ])
 
         super(GurpsRuleset, self).get_action_menu(action_menu,
@@ -2332,7 +2336,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                (opponent_posture_mods['target'],
                                 opponent.details['posture']))
 
-        why.append('  ...for a to-hit total of %d' % skill)
+        # Check for mods from the timers
+        timers = fighter.timers.get_all()
+        for timer in timers:
+            if 'mods' in timer.details:
+                if 'to-hit' in timer.details['mods']:
+                    skill = timer.details['mods']['to-hit']
+                if 'why' in timer.details['mods']:
+                    why.append(timer.details['mods']['why'])
+
         return skill, why
 
     def get_unarmed_info(self,
@@ -3645,6 +3657,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # Timer
 
         timer = ca_timers.Timer(None)
+        mods = None
+        to_hit_penalty = 0
+        MOVE_ATTACK_MELEE_MINUS = -4
+        MOVE_ATTACK_RANGED_MINUS = -2
 
         move = fighter.details['current']['basic-move']
         if action['action-name'] == 'all-out-attack':
@@ -3676,29 +3692,54 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             else:
                 opponent = fight_handler.get_opponent_for(fighter)
             unarmed_skills = self.get_weapons_unarmed_skills(weapon)
+            why = ['Move and attack']
             if unarmed_skills is not None:
                 unarmed_info = self.get_unarmed_info(fighter,
                                                      opponent,
                                                      weapon,
                                                      unarmed_skills)
-                # Reduce to-hit by 4 for melee weapon
-                to_hit = unarmed_info['punch_skill'] - 4
-                to_hit = 9 if to_hit > 9 else to_hit
+                to_hit_penalty = MOVE_ATTACK_MELEE_MINUS
+                to_hit = unarmed_info['punch_skill'] + to_hit_penalty
+
+                if to_hit > 9:
+                    why.append['Melee (punch) attacks capped at 9 (B365)']
+                    to_hit = 9
+                else:
+                    why.append['Melee (punch) attacks at -4 (B365)']
                 text.append(' Punch to-hit: %d' % to_hit)
 
-                to_hit = unarmed_info['kick_skill'] - 4
-                to_hit = 9 if to_hit > 9 else to_hit
+                to_hit_penalty = MOVE_ATTACK_MELEE_MINUS
+                to_hit = unarmed_info['kick_skill'] + to_hit_penalty
+                if to_hit > 9:
+                    why.append['Melee (kick) attacks capped at 9 (B365)']
+                    to_hit = 9
+                else:
+                    why.append['Melee (kick) attacks at -4 (B365)']
                 text.append(' Kick to-hit: %d' % to_hit)
             else:
                 to_hit, ignore_why = self.get_to_hit(fighter, opponent, weapon)
                 if holding_ranged:
-                    to_hit -= 2  # or weapon's bulk rating, whichever is worse
+                    to_hit_penalty = MOVE_ATTACK_RANGED_MINUS
+                    if ('bulk' in weapon.details and
+                            weapon.details['bulk'] < to_hit_penalty):
+                        why.append( 'reducing to-hit by %d (bulk of %s, B365'
+                                % (weapon.details['bulk'], weapon.name))
+                        to_hit += weapon.details['bulk']
+                    else:
+                        why.append['Ranged attacks at -2 (B365)']
+                        to_hit += to_hit_penalty
                 else:
-                    to_hit -= 4
+                    to_hit_penalty = MOVE_ATTACK_MELEE_MINUS
+                    to_hit += to_hit_penalty
+                    if to_hit > 9:
+                        why.append['Melee attacks capped at 9 (B365)']
+                        to_hit = 9
+                    else:
+                        why.append['Melee attacks at -4 (B365)']
 
-                to_hit = 9 if to_hit > 9 else to_hit
                 text.append(' %s to-hit: %d' % (weapon.details['name'],
                                                 to_hit))
+            mods = {'to-hit': to_hit, 'why': ', '.join(why)}
 
         else:
             text = ['<<UNHANDLED ACTION: %s' % action['action-name']]
@@ -3706,6 +3747,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         timer.from_pieces({'parent-name': fighter.name,
                            'rounds': 1 - ca_timers.Timer.announcement_margin,
                            'string': text})
+        if mods is not None:
+            timer.details['mods'] = mods
+
         return timer
 
     def __do_nothing(self,
