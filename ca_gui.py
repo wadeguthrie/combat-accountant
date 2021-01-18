@@ -463,6 +463,12 @@ class GmWindowManager(object):
         display_win.refresh()
 
         keep_going = True
+        # on my laptop, <Fn>+<down> is page down EXCEPT it's really easy to
+        # type <Alt>+<down> (similarly with <up>).  This just grandfathers
+        # those keys to make them work as well.
+        ALT_PGDN = 491
+        ALT_PGUP = 490
+
         while keep_going:
             user_input = self.get_one_character()
             if user_input == curses.KEY_HOME:
@@ -473,11 +479,12 @@ class GmWindowManager(object):
                 display_win.scroll_up(1)
             elif user_input == curses.KEY_DOWN:
                 display_win.scroll_down(1)
-            elif user_input == curses.KEY_NPAGE:
+            elif user_input == curses.KEY_NPAGE or user_input == ALT_PGDN:
                 display_win.scroll_down()
-            elif user_input == curses.KEY_PPAGE:
+            elif user_input == curses.KEY_PPAGE or user_input == ALT_PGUP:
                 display_win.scroll_up()
             else:
+                print 'just got character: %d' % user_input # TODO: remove
                 del border_win
                 del display_win
                 self.hard_refresh_all()
