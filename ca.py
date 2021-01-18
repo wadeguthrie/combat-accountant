@@ -3642,6 +3642,12 @@ class FightHandler(ScreenHandler):
                                'selected fighter.  If possible, the default ' +
                                'selection on the menu will be for an ' +
                                'unopposed fighter.'},
+            ord('O'): {'name': 'Opponent (any)',
+                       'func': self.__pick_all_opponent,
+                       'help': 'Selects an opponent for the currently ' +
+                               'selected fighter.  If possible, the default ' +
+                               'selection on the menu will be for an ' +
+                               'unopposed fighter.'},
             ord('P'): {'name': 'promote to NPC',
                        'func': self.promote_to_NPC,
                        'help': 'If the currently selected fighter is not' +
@@ -3770,6 +3776,23 @@ class FightHandler(ScreenHandler):
             self.world.do_debug_snapshot('fight')
 
         self._window.start_fight()
+
+
+    def __pick_all_opponent(self):
+        '''
+        Command ribbon method.
+
+        Allows the user to choose an opponent for the current Fighter.  If the
+        opponent does not currently have an opponent of his/her own, it gives
+        the user the option of making that opposition mutual (so that the two
+        Fighters are opponents of each other).
+
+        Does NOT limit the possible opponents to the other side.  This is
+        useful for possessed creatures.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        return self.pick_opponent(allow_all=True)
 
     #
     # Public Methods
@@ -3985,7 +4008,9 @@ class FightHandler(ScreenHandler):
                 self.add_to_history({'comment': '--- Round %d ---' %
                                                 self._saved_fight['round']})
 
-    def pick_opponent(self):
+    def pick_opponent(self,
+                      allow_all=False # bool: don't limit to other side
+                      ):
         '''
         Command ribbon method.
 
@@ -4005,13 +4030,12 @@ class FightHandler(ScreenHandler):
         # Pick the opponent.  The default selection is for someone who doesn't
         # already have an opponent.
 
-        opponent_group = None
         opponent_menu = []
         default_selection = None
         for fighter in self.__fighters:
-            if (fighter.group != current_fighter.group and
-                    fighter.name != ca_fighter.Venue.name):
-                opponent_group = fighter.group
+            if ((allow_all or fighter.group != current_fighter.group) and
+                    fighter.name != ca_fighter.Venue.name and
+                    fighter.name != current_fighter.name):
                 if fighter.is_conscious():
                     if fighter.details['opponent'] is None:
                         if default_selection is None:
@@ -4021,16 +4045,16 @@ class FightHandler(ScreenHandler):
                         menu_text = '%s (fighting %s)' % (
                                 fighter.name,
                                 fighter.details['opponent']['name'])
-                    opponent_menu.append((menu_text, fighter.name))
+                    opponent_menu.append((menu_text, {'name': fighter.name,
+                                                      'group': fighter.group}))
         if len(opponent_menu) <= 0:
             self._window_manager.error(['All the opponents are dead'])
             return True  # don't leave the fight
 
         if default_selection is None:
             default_selection = 0
-        opponent_name, ignore = self._window_manager.menu('Opponent',
-                                                          opponent_menu,
-                                                          default_selection)
+        opponent_name, ignore = self._window_manager.menu(
+            'Opponent', opponent_menu, default_selection)
 
         if opponent_name is None:
             return True  # don't leave the fight
@@ -4040,14 +4064,15 @@ class FightHandler(ScreenHandler):
         self.world.ruleset.do_action(
                 current_fighter,
                 {'action-name': 'pick-opponent',
-                 'opponent': {'name': opponent_name, 'group': opponent_group},
+                 'opponent': {'name': opponent_name['name'],
+                              'group': opponent_name['group']},
                  'comment': ('(%s) picked (%s) as opponent' %
                              (current_fighter.name, opponent_name))
                  },
                 self)
 
-        ignore, opponent = self.get_fighter_object(opponent_name,
-                                                   opponent_group)
+        ignore, opponent = self.get_fighter_object(opponent_name['name'],
+                                                   opponent_name['group'])
 
         # Ask to have them fight each other
         if (opponent is not None and opponent.details['opponent'] is None):
@@ -4062,7 +4087,7 @@ class FightHandler(ScreenHandler):
                                       'group': current_fighter.group},
                          'comment': (
                              '(%s) picked (%s) as opponent right back' %
-                             (opponent_name, current_fighter.name))
+                             (opponent_name['name'], current_fighter.name))
                          },
                         self)
 
