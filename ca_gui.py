@@ -484,7 +484,6 @@ class GmWindowManager(object):
             elif user_input == curses.KEY_PPAGE or user_input == ALT_PGUP:
                 display_win.scroll_up()
             else:
-                print 'just got character: %d' % user_input # TODO: remove
                 del border_win
                 del display_win
                 self.hard_refresh_all()

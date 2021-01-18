@@ -60,7 +60,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         'current': {<attribute name> : <final attribute value>, ...}
             These are: 'fp', 'hp', 'iq', 'ht', 'st', 'dx', and 'basic-speed'
         'permanent': {<same attributes as in 'current'>}
-        'check_for_death': True | False
     }
 
     Weapon looks like:
@@ -2261,8 +2260,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         sections.extend(super(GurpsRuleset, self).get_sections_in_template())
 
         # Transitory sections, not used in template:
-        #   aim, stunned, shock, posture, check_for_death,
-        #   actions_this_turn,
+        #   aim, stunned, shock, posture, actions_this_turn,
 
         return sections
 
@@ -2683,7 +2681,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         super(GurpsRuleset, self).heal_fighter(fighter, world)
         fighter.details['shock'] = 0
         fighter.details['stunned'] = False
-        fighter.details['check_for_death'] = False
 
     def initiative(self,
                    fighter  # Fighter object
@@ -2748,7 +2745,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                            'stunned': False,
                            'advantages': {},
                            'actions_this_turn': [],
-                           'check_for_death': False,
                            'posture': 'standing'})
         to_monster['permanent'] = copy.deepcopy({'fp': 10,
                                                  'iq': 10,
@@ -2823,7 +2819,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
         fighter.details['shock'] = 0
         fighter.details['stunned'] = False
-        fighter.details['check_for_death'] = False
         fighter.details['posture'] = 'standing'
         self.reset_aim(fighter)
 
@@ -2853,24 +2848,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                    {'action-name': 'set-consciousness',
                                     'level': ca_fighter.Fighter.UNCONSCIOUS},
                                    fight_handler)
-
-        # B327 -- immediate check for death
-        if (fighter.is_conscious() and fighter.details['check_for_death'] and
-                not playing_back):
-            dead_menu = [
-                (('roll <= HT (%d)' % fighter.details['current']['ht']), True),
-                ('did NOT make HT roll', False)]
-            made_ht_roll, ignore = self._window_manager.menu(
-                ('%s: roll <= HT or DIE (B327)' % fighter.name),
-                dead_menu)
-
-            if not made_ht_roll:
-                self.do_action(fighter,
-                               {'action-name': 'set-consciousness',
-                                'level': ca_fighter.Fighter.DEAD},
-                               fight_handler)
-
-        fighter.details['check_for_death'] = False  # Only show/roll once
 
         # B327 -- checking on each round whether the fighter is still
         # conscious
@@ -2990,6 +2967,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         adj = action['adj']
         dr_comment = None
         quiet = False if 'quiet' not in action else action['quiet']
+        still_alive = True
 
         if adj < 0:
             # Hit location (just for flavor, not for special injury)
@@ -3066,22 +3044,35 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             adjusted_hp = fighter.details['current']['hp'] + adj
 
             if adjusted_hp <= -(5 * fighter.details['permanent']['hp']):
+                # hp < -5*HT
                 self.do_action(fighter,
                                {'action-name': 'set-consciousness',
                                 'level': ca_fighter.Fighter.DEAD},
                                fight_handler)
+                still_alive = False
             else:
+                # hp < -1*HT or -2*HT, ...
                 threshold = -fighter.details['permanent']['hp']
                 while fighter.details['current']['hp'] <= threshold:
                     threshold -= fighter.details['permanent']['hp']
                 if adjusted_hp <= threshold:
-                    self.do_action(fighter,
-                                   {'action-name': 'check-for-death',
-                                    'value': True},
-                                   fight_handler)
+                    dead_menu = [
+                        (('roll <= HT (%d)' %
+                            fighter.details['current']['ht']), True),
+                        ('did NOT make HT roll', False)]
+                    made_ht_roll, ignore = self._window_manager.menu(
+                        ('%s: roll <= HT or DIE (B327)' % fighter.name),
+                        dead_menu)
+
+                    if not made_ht_roll:
+                        self.do_action(fighter,
+                                       {'action-name': 'set-consciousness',
+                                        'level': ca_fighter.Fighter.DEAD},
+                                       fight_handler)
+                        still_alive = False
 
             # Check for Major Injury (B420)
-            if -adj > (fighter.details['permanent']['hp'] / 2):
+            if still_alive and -adj > (fighter.details['permanent']['hp'] / 2):
                 (SUCCESS, SIMPLE_FAIL, BAD_FAIL) = range(3)
                 total = fighter.details['current']['ht']
                 if 'High Pain Threshold' in fighter.details['advantages']:
@@ -3126,7 +3117,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                     'stun': True},
                                    fight_handler)
 
-        if 'High Pain Threshold' not in fighter.details['advantages']:  # B59
+        # B59
+        if (still_alive and
+                'High Pain Threshold' not in fighter.details['advantages']):
             # Shock (B419) is cumulative but only to a maximum of -4
             # Note: 'adj' is negative
             shock_level = fighter.details['shock'] + adj
@@ -3137,7 +3130,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                            fight_handler)
 
         # WILL roll or lose aim
-        if fighter.details['aim']['rounds'] > 0:
+        if still_alive and fighter.details['aim']['rounds'] > 0:
             aim_menu = [('made WILL roll', True),
                         ('did NOT make WILL roll', False)]
             made_will_roll, ignore = self._window_manager.menu(
@@ -3451,25 +3444,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                       ' Move: none']})
 
         return timer
-
-    def __check_for_death(self,
-                          fighter,          # Fighter object
-                          action,           # {'action-name':
-                                            #  'check-for-death',
-                                            #  'value': <bool>,
-                                            #  'comment': <string>, # optional
-                          fight_handler     # FightHandler object
-                          ):
-        '''
-        Action handler for GurpsRuleset.
-
-        Sets the Fighter's 'check_for_death' field.
-
-        Returns: Timer (if any) to add to Fighter.  Used for keeping track
-            of what the Fighter is doing.
-        '''
-        fighter.details['check_for_death'] = action['value']
-        return None  # No timer
 
     def __damage_FP(self,
                     param    # {'view': xxx, 'view-opponent': xxx,
@@ -4140,7 +4114,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'attack':               {'doit': self.__do_attack},
             'cast-spell':           {'doit': self.__cast_spell},
             'change-posture':       {'doit': self.__change_posture},
-            'check-for-death':      {'doit': self.__check_for_death},
             'concentrate':          {'doit': self.__do_nothing},
             'defend':               {'doit': self.__reset_aim},
             'doff-armor':           {'doit': self.__reset_aim},
