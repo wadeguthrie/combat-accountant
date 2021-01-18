@@ -1,6 +1,7 @@
 #! /usr/bin/python
 
 import curses
+import pprint
 
 import ca_equipment
 import ca_timers

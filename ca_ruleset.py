@@ -539,6 +539,7 @@ class Ruleset(object):
         if weapon is None or not weapon.uses_ammo():
             return Ruleset.HANDLED_OK
 
+        clip = weapon.get_clip()
         if weapon.use_one_ammo():
             clip = weapon.get_clip()
             if (clip is not None and 'notes' in clip and
@@ -548,6 +549,14 @@ class Ruleset(object):
                     [[{'text': ('%s' % clip['notes']),
                    'mode': curses.A_NORMAL}]])
             return Ruleset.HANDLED_OK
+
+        # out of ammo
+        clip_name = ('Clip' if clip is None or 'name' not in clip
+                     else clip['name'])
+        self._window_manager.error([
+            'You\'re empty mister',
+            'No shots left in %s' % clip_name])
+
         return Ruleset.HANDLED_ERROR
 
     def __do_custom_action(self,
