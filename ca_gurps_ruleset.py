@@ -3657,6 +3657,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # Timer
 
         timer = ca_timers.Timer(None)
+        # TODO: Mods are actual total values.  They _should_ be delta values
+        # but one of the mods caps the to-hit to 9.
         mods = None
         to_hit_penalty = 0
         MOVE_ATTACK_MELEE_MINUS = -4
@@ -4326,6 +4328,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                             'stun': False,
                             'comment': ('(%s) got stunned' % fighter.name)},
                            fight_handler)
+
+            # if holding initiative, this releases it
+            self.do_action(fighter,
+                           {'action-name': 'hold-init-complete',
+                            'name': fighter.name,
+                            'group': fighter.group,
+                            'in-place': True},
+                           fight_handler)
+
         return timer
 
     def __stun(self,
