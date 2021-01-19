@@ -22,6 +22,16 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: spells need to include entries for:
+#       * touch, missile, area, else.
+#       * specially mark those with 1 or 2 second cast time
+#       * save (cast a spell dialog needs to show this)
+# TODO: should be able to look up any spell
+# TODO: need to see all the details of a weapon during a fight
+# TODO: all user input should go into the history via comments
+# TODO: ending init hold for current fighter, highlight the current fighter
+#   in the list
+
 # TODO: Need to be able to scroll character window in main window.
 
 # TODO: There should be a command in a fight 'Group action', maybe, that
@@ -4227,11 +4237,13 @@ class FightHandler(ScreenHandler):
                 lines)
 
     def wait_end_action(self,   # Public so it can be called by the ruleset.
-                        name,   # String: name of fighter
-                        group   # String: group of fighter
+                        name,           # String: name of fighter
+                        group,          # String: group of fighter
+                        in_place=False  # bool: move fighter to new init?
                         ):
         '''
-        Action handling for tagging someone as holding their initiative.
+        Action handling for tagging someone as no longer holding their
+        initiative.
         '''
         # Find the menu_index from the name, group
 
@@ -4242,13 +4254,16 @@ class FightHandler(ScreenHandler):
                     menu_index = index
                     break
         if menu_index is None:
-            self._window_manager.error(
-                    ['%s not found in initiative menu' % name])
+            #self._window_manager.error(
+            #        ['%s not found in initiative menu' % name])
             return True # Keep fighting
 
         # Remove the index entry from the menu
 
         self._saved_fight['held-init'].pop(menu_index)
+
+        if in_place:
+            return
 
         # Determine destination of move.
 

@@ -191,6 +191,13 @@ class MockFightHandler(object):
             self.__opponents[fighter.group] = {}
         self.__opponents[fighter.group][fighter.name] = opponent
 
+    def wait_end_action(self,   # Public so it can be called by the ruleset.
+                        name,           # String: name of fighter
+                        group,          # String: group of fighter
+                        in_place=False  # bool: move fighter to new init?
+                        ):
+        pass # Since we're not, yet, testing initiative holding
+
 
 class MockMainGmWindow(object):
     def __init__(self, window_manager=None):
