@@ -22,17 +22,10 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: spells need to include entries for:
-#       * touch, missile, area, else.
-#       * specially mark those with 1 or 2 second cast time
-#       * save (cast a spell dialog needs to show this)
-# TODO: should be able to look up any spell
 # TODO: need to see all the details of a weapon during a fight
 # TODO: all user input should go into the history via comments
 # TODO: ending init hold for current fighter, highlight the current fighter
 #   in the list
-
-# TODO: Need to be able to scroll character window in main window.
 
 # TODO: There should be a command in a fight 'Group action', maybe, that
 # allows an immediate (and free) menu: don/doff armor, holster/draw weapon,
@@ -1660,6 +1653,11 @@ class PersonnelHandler(ScreenHandler):
                        'func': self.__create_template_group,
                        'help': 'Make a new collection of templates (like ' +
                                'bad guys or space marines).'},
+            # TODO: ruleset-based
+            ord('s'): {'name': 'list Spells',
+                       'func': self.__list_spells,
+                       'help': 'Display the list of available ' +
+                               'spells.'},
             ord('t'): {'name': 'change template group',
                        'func': self.__change_template_group,
                        'help': 'Change the group of templates on which ' +
@@ -1910,6 +1908,17 @@ class PersonnelHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         self.__current_pane = PersonnelHandler.CHAR_LIST
+        return True
+
+    def __list_spells(self):
+        '''
+        Command ribbon method.
+
+        Displays the list of available spells.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        ca_gurps_ruleset.GurpsRuleset.show_spells(self._window_manager)
         return True
 
     def __next_page(self):

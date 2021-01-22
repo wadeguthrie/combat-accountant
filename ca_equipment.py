@@ -236,6 +236,8 @@ class EquipmentManager(object):
                                           item['damage']['dice']['num_dice'],
                                           item['damage']['dice']['plus']))
             texts.append('reload: %d' % item['reload'])
+            if 'bulk' in item:
+                texts.append('bulk: %d' % item['bulk'])
             char_detail.append([{'text': ('     ' + ', '.join(texts)),
                                  'mode': mode}])
         elif 'melee weapon' in item['type']:
