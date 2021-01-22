@@ -294,12 +294,18 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         #   "duration": 60, <-- None means 'ask', 0 means 'Instant'
         # },
 
+        # 'range': touch, missile, area, normal.
+        # specially mark those with 1 or 2 second cast time
+        # 'save': 'wi', 'ht', xxx, (cast a spell dialog needs to show this)
+
         "Agonize": {
           "cost": 8,
-          "notes": "M40, HT negates",
+          "notes": "M40",
           "maintain": 6,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Alarm": {
           "cost": 1,
@@ -307,6 +313,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 604800,   # one week
+          "range": 'regular',
+          "save": [],
         },
         "Alter Visage": {
           "cost": 4,
@@ -314,6 +322,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 60,
           "duration": 3600,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Analyze Magic": {
           "cost": 8,
@@ -321,13 +331,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 3600,
           "duration": 0,    # Instant
+          "range": 'regular',
+          "save": ['spell'],
         },
         "Animate Shadow": {
           "cost": 4,
-          "notes": "M154, Subject's shadow attacks them, HT negates",
+          "notes": "M154, Subject's shadow attacks them",
           "maintain": 4,
           "casting time": 2,
           "duration": 5,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Armor": {
           "cost": None,
@@ -335,6 +349,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Awaken": {
           "cost": 1,
@@ -342,6 +358,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+          "range": 'area',
+          "save": [],
         },
         "Bless Plants": {
           "cost": 1,
@@ -349,6 +367,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 4,
           "casting time": 300,
           "duration": 0,    # One season - no need to keep track
+          "range": 'area',
+          "save": [],
         },
         "Blink": {
           "cost": 2,
@@ -356,6 +376,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+          "range": 'block',
+          "save": [],
         },
         "Body of Metal" :{
           "cost": 12,
@@ -363,6 +385,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 6,
           "casting time": 5,
           "duration": 60,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Body of Plastic" :{
           "cost": 10,
@@ -370,6 +394,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 5,
           "casting time": 5,
           "duration": 60,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Boost Dexterity": {
           "cost": 1,
@@ -377,6 +403,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 1,
           "duration": 0,
+          "range": 'regular',
+          "save": [],
         },
         "Bravery": {
           "cost": 2,
@@ -384,20 +412,26 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 1,
           "duration": 3600,
+          "range": 'regular',
+          "save": ['wi-1'], # NOTE: need to handle 'wi-1'
         },
         "Charm": {
           "cost": 6,
-          "notes": "M139, vs. Will",
+          "notes": "M139",
           "maintain": 3,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": ['wi'],
         },
         "Choke": {
           "cost": 4,
-          "notes": "M40, vs. HT",
+          "notes": "M40",
           "maintain": 0,
           "casting time": 1,
           "duration": 30,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Climbing": {
           "cost": 1,
@@ -405,6 +439,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Clumsiness": {
           "cost": 1,
@@ -412,13 +448,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Command": {
           "cost": 4,
-          "notes": "M136, vs. Will",
+          "notes": "M136",
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+          "range": 'block',
+          "save": ['wi'],
         },
         "Communicate": {
           "cost": 4,
@@ -426,6 +466,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 4,
           "casting time": 4,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Compel Truth": {
           "cost": 4,
@@ -433,6 +475,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 1,
           "duration": 300,
+          "range": 'inform',
+          "save": ['wi'],
         },
         "Conceal Magic": {
           "cost": 1,
@@ -440,6 +484,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 3,
           "duration": 36000,    # 10 hours
+          "range": 'regular',
+          "save": [],
         },
         "Control Person": {
           "cost": 6,
@@ -447,6 +493,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 3,
           "casting time": 10,
           "duration": 60,
+          "range": 'regular',
+          "save": ['wi'],
         },
         "Control Zombie": {
           "cost": 3,
@@ -454,6 +502,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+          "range": 'regular',
+          "save": ['spell'],
         },
         "Counterspell": {
           "cost": None,
@@ -461,6 +511,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 5,
           "duration": 0,
+          "range": 'regular',
+          "save": ['spell'],
         },
         "Create Fuel" :{
           "cost": None,
@@ -468,6 +520,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 30,
           "duration": None,
+          "range": 'regular',
+          "save": [],
         },
         "Cure Disease": {
           "cost": 4,
@@ -475,6 +529,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 600,
           "duration": 0,
+          "range": 'regular',
+          "save": [],
         },
         "Daze": {
           "cost": 3,
@@ -482,20 +538,26 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 2,
           "duration": 60,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Death Touch": {
           "cost": None,
-          "notes": "M41, 1-3, needs touch",
+          "notes": "M41, 1-3",
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+          "range": 'melee',
+          "save": [],
         },
         "Death Vision": {
           "cost": 2,
-          "notes": "M149, vs. IQ",
+          "notes": "M149, until IQ roll made",
           "maintain": None,
           "casting time": 3,
           "duration": 1,
+          "range": 'regular',
+          "save": [],
         },
         "Detect Magic": {
           "cost": 2,
@@ -503,6 +565,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 300,
           "duration": 0,
+          "range": 'regular',
+          "save": [],
         },
         "Dispel Magic": {
           "cost": 3,
@@ -510,6 +574,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": None,
           "duration": 0,
+          "range": 'area',
+          "save": ['spell'],
         },
         "Dispel Possession": {
           "cost": 10,
@@ -517,6 +583,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 10,
           "duration": None,
+          "range": 'regular',
+          "save": ['spell'],
         },
         "Emotion Control": {
           "cost": 2,
@@ -524,6 +592,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 3600,
+          "range": 'area',
+          "save": ['wi'],
         },
         "Enchant": {
           "cost": None,
@@ -531,20 +601,26 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 0,    # Permanent - no need to track
+          "range": 'enchantment',
+          "save": [],
         },
         "Enslave": {
           "cost": 30,
-          "notes": "M141, vs. Will",
+          "notes": "M141",
           "maintain": 0,
           "casting time": 1,
           "duration": 0,    # Permanent - no need to track
+          "range": 'regular',
+          "save": ['wi'],
         },
         "Evisceration": {
           "cost": 10,
-          "notes": "M154, HT/IQ negates, Magery 3",
+          "notes": "M154, Magery 3",
           "maintain": 0,
           "casting time": 5,
           "duration": 0,
+          "range": 'regular',
+          "save": ['ht', 'iq'], # ht _or_ iq
         },
         "Explosive Lightning": {
           "cost": None,
@@ -552,13 +628,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": None,
           "duration": 0,
+          "range": 'missile',
+          "save": [],
         },
         "False Memory": {
           "cost": 3,
-          "notes": "M139, vs. Will",
+          "notes": "M139",
           "maintain": 0,
           "casting time": 5,
           "duration": None,  # Ask
+          "range": 'regular',
+          "save": ['wi'],
         },
         "Far Hearing": {
           "cost": 4,
@@ -566,13 +646,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 3,
           "duration": 60,
+          "range": 'information',
+          "save": [],
         },
         "Fear": {
           "cost": 1,
           "notes": "M134",
           "maintain": None,
           "casting time": 1,
-          "duration": 36000,    # 10 minutes
+          "duration": 600,    # 10 minutes
+          "range": 'area',
+          "save": ['wi'],
         },
         "Fog": {
           "cost": None,
@@ -580,6 +664,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 60,
+          "range": 'area',
+          "save": [],
         },
         "Foolishness": {
           "cost": None,
@@ -587,13 +673,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": ['wi'],
         },
         "Force Dome" :{
-          "cost": None,
-          "notes": "M170, cost 3*yards radius",
-          "maintain": None,
+          "cost": 3,
+          "notes": "M170",
+          "maintain": 2,
           "casting time": 1,
           "duration": 600,
+          "range": 'area',
+          "save": [],
         },
         "Force Wall" :{
           "cost": None,
@@ -601,6 +691,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Fumble": {
           "cost": 3,
@@ -608,6 +700,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 0,
+          "range": 'block',
+          "save": ['dx'],
         },
         "Glitch" :{
           "cost": 3,
@@ -615,6 +709,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": None,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Golem": {
           "cost": 250,
@@ -622,6 +718,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 0,
           "duration": 0,    # Permanent -- no need to track
+          "range": 'enchantment',
+          "save": [],
         },
         "Grace": {
           "cost": 4,
@@ -629,6 +727,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Great Ward": {
           "cost": None,
@@ -636,6 +736,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+          "range": 'block',
+          "save": ['spell'],
         },
         "Hair Growth": {
           "cost": 1,
@@ -643,6 +745,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 5,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Haircut": {
           "cost": 2,
@@ -650,13 +754,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 2,
           "duration": 0,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Hallucination": {
           "cost": 4,
-          "notes": "M140, Will negates, 1 item exists or does not",
+          "notes": "M140, 1 item exists or does not",
           "maintain": 2,
           "casting time": 2,
           "duration": 60,
+          "range": 'regular',
+          "save": ['wi'],
         },
         "Heal Plant": {
           "cost": 3,
@@ -664,6 +772,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 60,
           "duration": 0,    # Permanent -- no need to track
+          "range": 'area',
+          "save": [],
         },
         "Identify Plant": {
           "cost": 2,
@@ -671,6 +781,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 0,
+          "range": 'information',
+          "save": [],
         },
         "Identify Spell": {
           "cost": 2,
@@ -678,6 +790,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 0,
+          "range": 'information',
+          "save": [],
         },
         "Itch": {
           "cost": 2,
@@ -685,6 +799,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": None,  # Ask
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Lend Energy": {
           "cost": None,
@@ -692,6 +808,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,    # Permanent -- no need to track
+          "range": 'regular',
+          "save": [],
         },
         "Lend Vitality": {
           "cost": None,
@@ -699,13 +817,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 3600,
+          "range": 'regular',
+          "save": [],
         },
         "Lesser Geas": {
           "cost": 12,
-          "notes": "M140, vs. Will ",
+          "notes": "M140",
           "maintain": 0,
           "casting time": 30,
           "duration": 0,    # Permanent -- no need to track
+          "range": 'regular',
+          "save": ['wi'],
         },
         "Light": {
           "cost": 1,
@@ -713,6 +835,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Lightning": {
           "cost": None,
@@ -720,6 +844,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+          "range": 'missile',
+          "save": [],
         },
         "Lightning Whip": {
           "cost": None,
@@ -727,6 +853,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 10,
+          "range": 'regular',
+          "save": [],
         },
         "Loyalty": {
           "cost": 2,
@@ -734,6 +862,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 3600,
+          "range": 'regular',
+          "save": ['wi'],
         },
         "Luck": {
           "cost": 2,
@@ -741,6 +871,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 1,
           "casting time": 1,
           "duration": 0,
+          "range": 'regular',
+          "save": ['wi'],
         },
         "Lure": {
           "cost": 1,
@@ -748,6 +880,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 3600,
+          "range": 'area',
+          "save": ['wi'],
         },
         "Madness": {
           "cost": None,
@@ -755,6 +889,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 2,
           "duration": 60,
+          "range": 'regular',
+          "save": ['wi-2'], # NOTE: need to deal with will-2
         },
         "Magelock" :{
           "cost": 3,
@@ -762,6 +898,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 4,
           "duration": 21600, # 6 hours
+          "range": 'regular',
+          "save": [],
         },
         "Major Healing": {
           "cost": None,
@@ -769,13 +907,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 0,    # Permanent -- no need to track
+          "range": 'regular',
+          "save": [],
         },
         "Malfunction": {
           "cost": 5,
-          "notes": "M177, touch",
+          "notes": "M177",
           "maintain": 0,
           "casting time": 1,
           "duration": 60,
+          "range": 'melee',
+          "save": ['ht'],
         },
         "Manastone": {
           "cost": None,
@@ -783,13 +925,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,    # Indefinite -- no need to track
+          "range": 'enchantment',
+          "save": [],
         },
         "Mass Sleep": {
-          "cost": None,
-          "notes": "M137, cost: area(3), time=1 sec/energy",
+          "cost": 3,
+          "notes": "M137, 2 yards minimum radius, time=1 sec/energy",
           "maintain": 0,
           "casting time": None,
           "duration": 0,    # Indefinite -- no need to track
+          "range": 'area',
+          "save": ['ht'],
         },
         "Might": {
           "cost": None,
@@ -797,6 +943,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Mind-Reading": {
           "cost": 4,
@@ -804,6 +952,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 10,
           "duration": 60,
+          "range": 'regular',
+          "save": ['wi'],
         },
         "Mind-Search": {
           "cost": 6,
@@ -811,6 +961,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 3,
           "casting time": 60,
           "duration": 60,
+          "range": 'regular',
+          "save": ['wi'],
         },
         "Mind-Sending": {
           "cost": 4,
@@ -818,6 +970,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 4,
           "casting time": 4,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Minor Healing": {
           "cost": None,
@@ -825,13 +979,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 0,    # Permanent -- no need to track
+          "range": 'regular',
+          "save": [],
         },
         "Mystic Mist" :{
-          "cost": None,
-          "notes": "M168, cost: 1 * yards radius, +1 defense rolls",
+          "cost": 1,
+          "notes": "M168, +1 defense rolls",
           "maintain": None,
           "casting time": 300,
           "duration": 36000, # 10 hours
+          "range": 'area',
+          "save": [],
         },
         "Nauseate": {
           "cost": 2,
@@ -839,6 +997,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 10,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "No-Smell": {
           "cost": 2,
@@ -846,6 +1006,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 1,
           "duration": 3600,
+          "range": 'regular',
+          "save": [],
         },
         "Odor": {
           "cost": 1,
@@ -853,20 +1015,26 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 3600,
+          "range": 'area',
+          "save": [],
         },
         "Pain": {
           "cost": 2,
-          "notes": "M36, vs. HT",
+          "notes": "M36",
           "maintain": 0,
           "casting time": 1,
           "duration": 1,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Panic": {
           "cost": 4,
-          "notes": "M134, vs. Will",
+          "notes": "M134",
           "maintain": 2,
           "casting time": 1,
           "duration": 60,
+          "range": 'area',
+          "save": ['wi'],
         },
         "Perfume": {
           "cost": 2,
@@ -874,6 +1042,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 1,
           "casting time": 1,
           "duration": 600,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Phase": {
           "cost": 3,
@@ -881,6 +1051,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+          "range": 'block',
+          "save": [],
         },
         "Planar Summons": {
           "cost": None,
@@ -888,6 +1060,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 300,
           "duration": 3600,
+          "range": 'special',
+          "save": [],
         },
         "Possession": {
           "cost": 10,
@@ -895,6 +1069,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 4,
           "casting time": 60,
           "duration": 60,
+          "range": 'regular',
+          "save": ['wi'],
         },
         "Powerstone": {
           "cost": 20,
@@ -902,6 +1078,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 0,    # Permanent -- no need to track
+          "range": 'enchantment',
+          "save": [],
         },
         "Purify Air": {
           "cost": 1,
@@ -909,6 +1087,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,    # Instant -- no need to track
+          "range": 'area',
+          "save": [],
         },
         "Rebuild" :{
           "cost": None,
@@ -916,6 +1096,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": None,
           "duration": None,
+          "range": 'regular',
+          "save": [],
         },
         "Recover Energy" :{
           "cost": None,
@@ -923,6 +1105,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": None,
           "duration": None,
+          "range": 'special',
+          "save": [],
         },
         "Relieve Sickness": {
           "cost": 2,
@@ -930,6 +1114,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 10,
           "duration": 600,  # 10 minutes
+          "range": 'regular',
+          "save": ['spell'],
         },
         "Repair": {
           "cost": None,
@@ -937,6 +1123,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,    # Permanent -- no need to track
+          "range": 'regular',
+          "save": [],
         },
         "Resist Lightning" :{
           "cost": 2,
@@ -944,6 +1132,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 1,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Resist Pain" :{
           "cost": 4,
@@ -951,6 +1141,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Resist Poison" :{
           "cost": 4,
@@ -958,6 +1150,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 3,
           "casting time": 10,
           "duration": 3600,
+          "range": 'regular',
+          "save": [],
         },
         "Restoration": {
           "cost": 15,
@@ -965,6 +1159,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 60,
           "duration": 0,    # Permanent -- no need to track
+          "range": 'regular',
+          "save": [],
         },
         "Retch": {
           "cost": 3,
@@ -972,13 +1168,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 4,
           "duration": 0,    # Instant -- no need to track
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Rotting Death": {
           "cost": 3,
-          "notes": "M154 vs. HT, needs touch",
+          "notes": "M154",
           "maintain": 2,
           "casting time": 1,
           "duration": 1,
+          "range": 'melee',
+          "save": ['ht'],
         },
         "Schematic" :{
           "cost": None,
@@ -986,6 +1186,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 5,
           "duration": 60,
+          "range": 'information',
+          "save": [],
         },
         "Seek Machine": {
           "cost": 3,
@@ -993,6 +1195,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 10,
           "duration": 0,
+          "range": 'information',
+          "save": [],
         },
         "Seek Plant": {
           "cost": 2,
@@ -1000,6 +1204,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 0,
+          "range": 'information',
+          "save": [],
         },
         "Sense Danger" :{
           "cost": 3,
@@ -1007,6 +1213,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 6,
           "casting time": 1,
           "duration": 1,
+          "range": 'information',
+          "save": [],
         },
         "Sense Emotion": {
           "cost": 2,
@@ -1014,6 +1222,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 0,
+          "range": 'regular',
+          "save": [],
         },
         "Sense Foes": {
           "cost": 2,
@@ -1021,6 +1231,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+          "range": 'area',
+          "save": [],
         },
         "Sense Life": {
           "cost": None,
@@ -1028,6 +1240,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 0,
+          "range": 'area',
+          "save": [],
         },
         "Sense Observation" :{
           "cost": None,
@@ -1035,6 +1249,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 5,
           "duration": 3600,
+          "range": 'area',
+          "save": [],
         },
         "Sense Spirit" :{
           "cost": None,
@@ -1042,6 +1258,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 0,    # Instant -- no need to track
+          "range": 'area',
+          "save": [],
         },
         "Sensitize": {
           "cost": 3,
@@ -1049,6 +1267,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Shape Metal" :{
           "cost": 6,
@@ -1056,6 +1276,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Shapeshifting": {
           "cost": None,
@@ -1063,6 +1285,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 3,
           "duration": 3600,
+          "range": 'special',
+          "save": [],
         },
         "Shield": {
           "cost": 2,
@@ -1070,6 +1294,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Sleep": {
           "cost": 4,
@@ -1077,6 +1303,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 3,
           "duration": 0,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Soul Rider": {
           "cost": 5,
@@ -1084,6 +1312,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 3,
           "duration": 60,
+          "range": 'regular',
+          "save": ['wi'],
         },
         "Spasm": {
           "cost": 2,
@@ -1091,13 +1321,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Spell Shield": {
-          "cost": None,
-          "notes": "M124, cost: 3/yard radius, only non-missile spells",
+          "cost": 3,
+          "notes": "M124, only non-missile spells",
           "maintain": None,
           "casting time": 1,
           "duration": 60,
+          "range": 'area',
+          "save": [],
         },
         "Spell Wall": {
           "cost": None,
@@ -1105,6 +1339,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": ['spell'],
         },
         "Steal Energy" :{
           "cost": None,
@@ -1112,6 +1348,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 60,
           "duration": 0, # Permanent
+          "range": 'regular',
+          "save": [],
         },
         "Steal Power" :{
           "cost": 0,
@@ -1119,6 +1357,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 6,
           "casting time": 5,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Steal Vitality" :{
           "cost": None,
@@ -1126,6 +1366,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 60,
           "duration": 0, # Permanent
+          "range": 'regular',
+          "save": [],
         },
         "Stop Power": {
           "cost": None,
@@ -1133,20 +1375,26 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 3,
           "duration": 60,
+          "range": 'area',
+          "save": [],
         },
         "Strike Blind": {
           "cost": 4,
-          "notes": "M38, vs HT",
+          "notes": "M38",
           "maintain": 2,
           "casting time": 1,
           "duration": 10,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Stun": {
           "cost": 2,
-          "notes": "M37, B420, vs. HT",
+          "notes": "M37, B420",
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+          "range": 'regular',
+          "save": ['ht'],
         },
         "Summon Demon": {
           "cost": 20,
@@ -1154,6 +1402,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 300,
           "duration": 3600,
+          "range": 'special',
+          "save": [],
         },
         "Summon Spirit": {
           "cost": 20,
@@ -1161,6 +1411,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 300,
           "duration": 60,
+          "range": 'information',
+          "save": ['wi'],
         },
         "Teleport": {
           "cost": None,
@@ -1168,13 +1420,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+          "range": 'special',
+          "save": [],
         },
         "Terror": {
           "cost": 4,
-          "notes": "M134, Area, Will negates",
+          "notes": "M134, Area",
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
+          "range": 'area',
+          "save": ['wi'],
         },
         "Tell Time": {
           "cost": 1,
@@ -1182,6 +1438,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 1,
           "duration": 0,
+          "range": 'information',
+          "save": [],
         },
         "Throw Spell": {
           "cost": 3,
@@ -1189,6 +1447,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 0,    # Indefinite -- no need to track
+          "range": 'missile',
+          "save": [],   # "special"
         },
         "Total Paralysis": {
           "cost": None,
@@ -1196,6 +1456,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 60,
+          "range": 'melee',
+          "save": ['ht'],
         },
         "Truthsayer": {
           "cost": 2,
@@ -1203,6 +1465,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": None,
+          "range": 'information',
+          "save": ['wi'],
         },
         "Turn Spirit": {
           "cost": 4,
@@ -1210,6 +1474,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 1,
           "duration": 10,
+          "range": 'regular',
+          "save": ['wi'],
         },
         "Turn Zombie": {
           "cost": 2,
@@ -1217,6 +1483,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 4,
           "duration": 86400,
+          "range": 'area',
+          "save": [],
         },
         "Wall Of Lightning": {
           "cost": None,
@@ -1224,13 +1492,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 0,
           "casting time": 1,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Watchdog" :{
-          "cost": None,
-          "notes": "M167, cost: 1*yards radius, caster is aware of hostile intent",
+          "cost": 1,
+          "notes": "M167, caster is aware of hostile intent",
           "maintain": 1,
           "casting time": 10,
           "duration": 36000,
+          "range": 'area',
+          "save": [],
         },
         "Wizard Eye": {
           "cost": 4,
@@ -1238,6 +1510,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 2,
           "duration": 60,
+          "range": 'regular',
+          "save": [],
         },
         "Zombie": {
           "cost": 8,
@@ -1245,6 +1519,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": None,
           "casting time": 60,
           "duration": 0,    # Permanent -- no need to track
+          "range": 'regular',
+          "save": [],
         },
         "Zombie Summoning": {
           "cost": 5,
@@ -1252,6 +1528,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "maintain": 2,
           "casting time": 4,
           "duration": 60,
+          "range": 'special',
+          "save": [],
         }
     }
 
@@ -1496,11 +1774,19 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                               'skill',
                               'casting time',
                               'duration',
-                              'notes']:
+                              'notes',
+                              'range',
+                              'save']:
                     if piece in complete_spell:
-                        cast_text_array.append('%s:%r' %
-                                               (piece,
-                                                complete_spell[piece]))
+                        if piece == 'save': # array needs to be handled
+                            amalgam = ', '.join(complete_spell[piece])
+                            cast_text_array.append('%s:%r' %
+                                                   (piece,
+                                                    amalgam))
+                        else:
+                            cast_text_array.append('%s:%r' %
+                                                   (piece,
+                                                    complete_spell[piece]))
                 cast_text = ' '.join(cast_text_array)
                 spell_menu.append((cast_text,
                                    {'action': {'action-name': 'cast-spell',
@@ -2823,6 +3109,184 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return result
 
+    @staticmethod
+    def show_spells(window_manager):
+                        # Output: recepticle for character
+                        # detail.
+                        # [[{'text','mode'},...],  # line 0
+                        #  [...],               ]  # line 1...
+        '''
+        Displays the spells in a window
+
+        Returns nothing.
+        '''
+
+        spell_info = []
+
+        for spell_name in sorted(GurpsRuleset.spells.iterkeys()):
+            spell = GurpsRuleset.spells[spell_name]
+
+            # TODO: should be an option
+            # Highlight the spells that a bad guy might want to cast.
+            mode = (curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK)
+                    if ((spell['casting time'] is None or
+                         spell['casting time'] <= 2) and
+                        spell['range'] != 'melee')
+                    else curses.A_NORMAL)
+
+            # Top line
+
+            line = [{'text': '%s' % spell_name, 'mode': mode | curses.A_UNDERLINE}]
+
+            texts = ['; %s ' % spell['range']]
+            if len(spell['save']) > 0:
+                texts.append('; resisted by ')
+                texts.append(', '.join(spell['save']))
+
+            line.append({'text': ''.join(texts), 'mode': mode})
+            spell_info.append(line)
+
+            # Next line
+
+            texts = ['  cost: ']
+            if spell['cost'] is None:
+                texts.append('special')
+            else:
+                texts.append('%d' % spell['cost'])
+
+            texts.append(', maintain: ')
+            if spell['maintain'] is None:
+                texts.append('special')
+            else:
+                texts.append('%d' % spell['maintain'])
+
+            texts.append(', casting time: ')
+            if spell['casting time'] is None:
+                texts.append('special')
+            else:
+                texts.append('%d second(s)' % spell['casting time'])
+
+            texts.append(', duration: ')
+            if spell['duration'] is None:
+                texts.append('special')
+            elif spell['duration'] == 0:
+                texts.append('instantaneous/permanent')
+            elif spell['duration'] < 60:
+                texts.append('%d second(s)' % spell['duration'])
+            elif spell['duration'] < 3660:
+                texts.append('%d minute(s)' % (spell['duration'] / 60))
+            elif spell['duration'] < 86400:
+                texts.append('%d hour(s)' % (spell['duration'] / 3660))
+            else:
+                texts.append('%d day(s)' % (spell['duration'] / 86400))
+            spell_info.append([{'text': ''.join(texts), 'mode': mode}])
+
+            # Notes
+
+            texts = ['  %s' % spell['notes']]
+            spell_info.append([{'text': ''.join(texts), 'mode': mode}])
+
+        window_manager.display_window('Spells', spell_info)
+
+class EquipmentManager(object):
+    def __init__(self,
+                 world,          # World object
+                 window_manager  # GmWindowManager object for menus and errors
+                 ):
+        '''
+        Manages equipment lists.  Meant to be embedded in a Fighter or a Venue.
+        '''
+        self.__world = world
+        self.__window_manager = window_manager
+
+    @staticmethod
+    def get_description(
+                        item,           # Input: dict for a 'stuff' item from
+                                        #   Game File
+                        in_use_items,   # List of items that are in use.
+                                        #   These should be references so that
+                                        #   it will match identically to
+                                        #   'item' if it is in use.
+                        char_detail     # Output: recepticle for character
+                                        # detail.
+                                        # [[{'text','mode'},...],  # line 0
+                                        #  [...],               ]  # line 1...
+                        ):
+        '''
+        This is kind-of messed up.  Each type of equipment should have its own
+        class that has its own 'get_description'.  In lieu of that, though,
+        I'm going to centralize it.
+
+        Puts data in |char_detail|.
+
+        Returns nothing.
+        '''
+
+        mode = curses.A_NORMAL
+
+        in_use_string = ' (in use)' if item in in_use_items else ''
+
+        texts = ['  %s%s' % (item['name'], in_use_string)]
+
+        if 'shots' in item and 'shots_left' in item:
+            texts.append(' (%d/%d shots left)' % (item['shots_left'],
+                                                  item['shots']))
+
+        if 'count' in item and item['count'] != 1:
+            texts.append(' (%d)' % item['count'])
+
+        if ('notes' in item and item['notes'] is not None and
+                (len(item['notes']) > 0)):
+            texts.append(': %s' % item['notes'])
+        char_detail.append([{'text': ''.join(texts), 'mode': mode}])
+
+        if 'ranged weapon' in item['type']:
+            texts = []
+            texts.append('acc: %d' % item['acc'])
+            texts.append('dam(%s): %dd%+d' % (
+                                          item['damage']['dice']['type'],
+                                          item['damage']['dice']['num_dice'],
+                                          item['damage']['dice']['plus']))
+            texts.append('reload: %d' % item['reload'])
+            if 'bulk' in item:
+                texts.append('bulk: %d' % item['bulk'])
+            char_detail.append([{'text': ('     ' + ', '.join(texts)),
+                                 'mode': mode}])
+        elif 'melee weapon' in item['type']:
+            texts = []
+            if 'dice' in item['damage']:
+                texts.append('dam(%s): %dd%+d' % (
+                                          item['damage']['dice']['type'],
+                                          item['damage']['dice']['num_dice'],
+                                          item['damage']['dice']['plus']))
+            if 'sw' in item['damage']:
+                texts.append('dam(sw): %s%+d' % (
+                                          item['damage']['sw']['type'],
+                                          item['damage']['sw']['plus']))
+            if 'thr' in item['damage']:
+                texts.append('dam(thr): %s%+d' % (
+                                          item['damage']['thr']['type'],
+                                          item['damage']['thr']['plus']))
+            if 'parry' in item:
+                texts.append('parry: %d' % item['parry'])
+
+            char_detail.append([{'text': ('     ' + ', '.join(texts)),
+                                 'mode': mode}])
+        elif 'armor' in item['type']:
+            texts = []
+            # TODO: ruleset-specific
+            texts.append('dr: %d' % item['dr'])
+            char_detail.append([{'text': ('     ' + ', '.join(texts)),
+                                 'mode': mode}])
+
+        if ('owners' in item and item['owners'] is not None and
+                len(item['owners']) > 0):
+            texts = ['     Owners: ']
+            texts.append('%s' % '->'.join(item['owners']))
+            char_detail.append([{'text': ''.join(texts),
+                                 'mode': mode}])
+
+
     def start_fight(self,
                     fighter  # Fighter object
                     ):
@@ -3361,6 +3825,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # Cost
 
             if complete_spell['cost'] is None:
+                # Assumes that area is built into cost that the user enters
                 title = 'Cost to cast (%s) - see (%s) ' % (
                         complete_spell['name'], complete_spell['notes'])
                 height = 1
@@ -3371,6 +3836,24 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                                  width,
                                                                  title)
                 complete_spell['cost'] = cost
+            elif complete_spell['range'] == 'area':
+                # Range for area spells
+                #
+                # NOTE: B236: Calculate the entire cost for a spell (for
+                # instance, by multiplying cost for the size of the subject or
+                # the area affected) before applying energy cost reductions for
+                # high skill.
+
+                title = 'Radius of spell effect (%s) in yards' % (
+                        complete_spell['name'])
+                height = 1
+                width = len(title)
+                diameter = None
+                while diameter is None:
+                    diameter = self._window_manager.input_box_number(height,
+                                                                     width,
+                                                                     title)
+                complete_spell['cost'] *= diameter
 
             # M8 - High skill level costs less
             skill = complete_spell['skill'] - 15
@@ -3401,7 +3884,50 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             if fight_handler is not None:
                 opponent = fight_handler.get_opponent_for(fighter)
 
-            if opponent is not None:
+            spell_worked_on_opponent = False if opponent is None else True
+
+            # Melee and Missile spells
+
+            if complete_spell['range'] == 'melee':
+                attack_menu = [('Success', True), ('Failure', False)]
+                successful_attack, ignore = self._window_manager.menu(
+                    'Make a Melee Attack', attack_menu)
+                if not successful_attack:
+                    spell_worked_on_opponent = False
+            elif complete_spell['range'] == 'missile':
+                # TODO: should be an option to use 'Innate Attack' skill
+                # (default DX-4) or just regular attack.
+                attack_menu = [('Success', True), ('Failure', False)]
+                successful_attack, ignore = self._window_manager.menu(
+                    'Make a Ranged Attack', attack_menu)
+                if not successful_attack:
+                    spell_worked_on_opponent = False
+
+            # Save for opponent
+
+            if spell_worked_on_opponent and len(complete_spell['save']) > 0:
+                best_save = -100 # arbitrary but unlikely to show up
+                roll_against = None
+                for save in complete_spell['save']:
+                    if (save in opponent.details['current'] and
+                            opponent.details['current'][save] > best_save):
+                        best_save = opponent.details['current'][save]
+                        roll_against = save
+                if roll_against is not None:
+                    save_menu = [(('SUCCESS: %s <= %d - margin of spell skill' % (
+                                    roll_against, best_save)), True),
+                                 (('FAILIRE: %s > %d - margin of spell skill' % (
+                                    roll_against, best_save)), False)]
+                    made_save, ignore = self._window_manager.menu(
+                        ('%s must roll save vs %s' % (opponent.name,
+                                                      roll_against)),
+                        save_menu)
+                    if made_save:
+                        spell_worked_on_opponent = False
+
+            # Mark opponent?
+
+            if spell_worked_on_opponent:
                 opponent_timer_menu = [('yes', True), ('no', False)]
                 timer_for_opponent, ignore = self._window_manager.menu(
                                         ('Mark %s with spell' % opponent.name),
@@ -3415,7 +3941,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             new_action['complete spell'] = complete_spell
             new_action['part'] = 2
 
-            if opponent is not None:
+            if opponent is not None and spell_worked_on_opponent:
                 new_action['opponent'] = {'name': opponent.name,
                                           'group': opponent.group}
 
