@@ -3080,6 +3080,9 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
            'notes': "M154, Subject's shadow attacks them",
            'range': 'reguar',
            'save': ['ht']},
+          # opponent must roll save
+          # mark opponent with spell
+
           {'name': "Awaken",
            'cost': 1,
            'casting time': 1,
@@ -3089,6 +3092,9 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
            'notes': "M90",
            'range': 'area',
            'save': []},
+          # Radius of spell effect
+          # Mark opponent with spell
+
           {'name': "Death Vision",
            'cost': 2,
            'casting time': 3,
@@ -3098,6 +3104,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
            'notes': "M149, until IQ roll made",
            'range': 'reguar',
            'save': []},
+          # Mark opponent with spell
+
           {'name': "Explosive Lightning",
            'cost': 2,
            'casting time': 3,
@@ -3107,6 +3115,11 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
            'notes': "M196, cost 2-mage level, damage 1d-1 /2",
            'range': 'missile',
            'save': []},
+          # Cost to cast
+          # Seconds to cast
+          # Make a Ranged Attack
+          # Mark samuel - Erik with
+
           {'name': "Itch",
            'cost': 2,
            'casting time': 1,
@@ -3116,6 +3129,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
            'notes': "M35",
            'range': 'regular',
            'save': ['ht']},
+          # duration
         ]
 
         original_fp = vodou_priest.details['current']['fp']
@@ -3123,8 +3137,6 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         assert original_fp == vodou_priest.details['permanent']['fp']
 
         for trial in trials:
-            print '\n-- %s --' % trial['name'] # TODO: remove
-            PP.pprint(trial) # TODO: remove
             opponent.timers.clear_all()
 
             vodou_priest.timers.clear_all()
@@ -3154,6 +3166,10 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                     'Duration for (%s) - see (%s) ' % (trial['name'],
                                                        trial['notes']),
                     trial['duration'])
+            if (ca_gurps_ruleset.GurpsRuleset.spells[
+                    trial['name']]['range'] == 'missile'):
+                self.__window_manager.set_menu_response(
+                    'Make a Ranged Attack', True)
 
             # TODO: need to deal with the ONE spell (Evisceration) that has
             # two saves
@@ -3197,11 +3213,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 # start-turn because the action takes place in the middle of a
                 # turn.
 
-                print '-' # TODO: remove
-                PP.pprint(vodou_priest.details['timers']) # TODO: remove
-
                 assert len(vodou_priest.details['timers']) == 1
-                print 'STRING should equal "%s"' % casting_text # TODO: remove
                 assert (vodou_priest.details['timers'][0]['string'] ==
                         casting_text)
                 assert vodou_priest.details['timers'][0]['busy']
