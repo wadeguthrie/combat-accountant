@@ -470,6 +470,7 @@ class MockWindowManager(object):
         if title not in self.__input_box_responses:
             print ('** input_box_number: title "%s" not found in stored responses' %
                    title)
+            PP.pprint(self.__input_box_responses)
             assert False
         if len(self.__input_box_responses[title]) == 0:
             print ('** input_box_number: responses["%s"] is empty, can\'t respond' %
@@ -3076,35 +3077,40 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
            'skill': 18,
            'skill-bonus': -1,
            'duration': 0,
-           'notes': "M90"},
+           'notes': "M90",
+           'range': 'area'},
           {'name': "Animate Shadow",
            'cost': 4,
            'casting time': 2,
            'skill': 16,
            'skill-bonus': -1,
            'duration': 5,
-           'notes': "M154, Subject's shadow attacks them, HT negates"},
+           'notes': "M154, Subject's shadow attacks them, HT negates",
+           'range': 'reguar'},
           {'name': "Death Vision",
            'cost': 2,
            'casting time': 3,
            'skill': 16,
            'skill-bonus': -1,
            'duration': 1,
-           'notes': "M149, vs. IQ"},
+           'notes': "M149, vs. IQ",
+           'range': 'reguar'},
           {'name': "Explosive Lightning",
            'cost': 2,
            'casting time': 3,
            'skill': 16,
            'skill-bonus': -1,
            'duration': 0,
-           'notes': "M196, cost 2-mage level, damage 1d-1 /2"},
+           'notes': "M196, cost 2-mage level, damage 1d-1 /2",
+           'range': 'missile'},
           {'name': "Itch",
            'cost': 2,
            'casting time': 1,
            'skill': 12,
            'skill-bonus': 0,
            'duration': 2,
-           'notes': "M35"},
+           'notes': "M35",
+           'range': 'regular'},
         ]
 
         original_fp = vodou_priest.details['current']['fp']
@@ -3112,10 +3118,18 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         assert original_fp == vodou_priest.details['permanent']['fp']
 
         for trial in expected:
+            print '\n-- %s --' % trial['name'] # TODO: remove
+            PP.pprint(trial) # TODO: remove
             opponent.timers.clear_all()
 
             vodou_priest.timers.clear_all()
             vodou_priest.details['current']['fp'] = original_fp
+
+            if (ca_gurps_ruleset.GurpsRuleset.spells[
+                    trial['name']]['range'] == 'area'):
+                self.__window_manager.set_input_box_response(
+                    'Radius of spell effect (%s) in yards' % trial['name'],
+                    trial['cost'])
 
             if (ca_gurps_ruleset.GurpsRuleset.spells[
                     trial['name']]['cost'] is None):
