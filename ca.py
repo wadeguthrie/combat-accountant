@@ -23,7 +23,6 @@ import ca_gurps_ruleset
 import ca_timers
 
 # TODO: need to see all the details of a weapon during a fight
-# TODO: all user input should go into the history via comments
 # TODO: ending init hold for current fighter, highlight the current fighter
 #   in the list
 
