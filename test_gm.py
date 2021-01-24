@@ -3070,7 +3070,16 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                               'other_group',
                                               opponent)
 
-        expected = [
+        trials = [
+          {'name': "Animate Shadow",
+           'cost': 4,
+           'casting time': 2,
+           'skill': 16,
+           'skill-bonus': -1,
+           'duration': 5,
+           'notes': "M154, Subject's shadow attacks them",
+           'range': 'reguar',
+           'save': ['ht']},
           {'name': "Awaken",
            'cost': 1,
            'casting time': 1,
@@ -3078,23 +3087,17 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
            'skill-bonus': -1,
            'duration': 0,
            'notes': "M90",
-           'range': 'area'},
-          {'name': "Animate Shadow",
-           'cost': 4,
-           'casting time': 2,
-           'skill': 16,
-           'skill-bonus': -1,
-           'duration': 5,
-           'notes': "M154, Subject's shadow attacks them, HT negates",
-           'range': 'reguar'},
+           'range': 'area',
+           'save': []},
           {'name': "Death Vision",
            'cost': 2,
            'casting time': 3,
            'skill': 16,
            'skill-bonus': -1,
            'duration': 1,
-           'notes': "M149, vs. IQ",
-           'range': 'reguar'},
+           'notes': "M149, until IQ roll made",
+           'range': 'reguar',
+           'save': []},
           {'name': "Explosive Lightning",
            'cost': 2,
            'casting time': 3,
@@ -3102,7 +3105,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
            'skill-bonus': -1,
            'duration': 0,
            'notes': "M196, cost 2-mage level, damage 1d-1 /2",
-           'range': 'missile'},
+           'range': 'missile',
+           'save': []},
           {'name': "Itch",
            'cost': 2,
            'casting time': 1,
@@ -3110,14 +3114,15 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
            'skill-bonus': 0,
            'duration': 2,
            'notes': "M35",
-           'range': 'regular'},
+           'range': 'regular',
+           'save': ['ht']},
         ]
 
         original_fp = vodou_priest.details['current']['fp']
 
         assert original_fp == vodou_priest.details['permanent']['fp']
 
-        for trial in expected:
+        for trial in trials:
             print '\n-- %s --' % trial['name'] # TODO: remove
             PP.pprint(trial) # TODO: remove
             opponent.timers.clear_all()
@@ -3149,6 +3154,16 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                     'Duration for (%s) - see (%s) ' % (trial['name'],
                                                        trial['notes']),
                     trial['duration'])
+
+            # TODO: need to deal with the ONE spell (Evisceration) that has
+            # two saves
+            if (len(ca_gurps_ruleset.GurpsRuleset.spells[
+                    trial['name']]['save']) > 0):
+                self.__window_manager.set_menu_response(
+                        ('%s must roll save vs %s' % (
+                            opponent.name,
+                            trial['save'][0])),
+                        False) # False: they didn't save
 
             self.__window_manager.set_menu_response(
                     'Mark %s with spell' % opponent.name, True)
@@ -3182,7 +3197,11 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 # start-turn because the action takes place in the middle of a
                 # turn.
 
+                print '-' # TODO: remove
+                PP.pprint(vodou_priest.details['timers']) # TODO: remove
+
                 assert len(vodou_priest.details['timers']) == 1
+                print 'STRING should equal "%s"' % casting_text # TODO: remove
                 assert (vodou_priest.details['timers'][0]['string'] ==
                         casting_text)
                 assert vodou_priest.details['timers'][0]['busy']
