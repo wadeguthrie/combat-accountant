@@ -1108,6 +1108,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "range": 'special',
           "save": [],
         },
+        "Reflect" :{
+          "cost": 4,
+          "notes": "M122",
+          "maintain": None,
+          "casting time": 0,
+          "duration": 0,
+          "range": 'regular',
+          "save": [],
+        },
         "Relieve Sickness": {
           "cost": 2,
           "notes": "M90",
@@ -1449,6 +1458,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "duration": 0,    # Indefinite -- no need to track
           "range": 'missile',
           "save": [],   # "special"
+        },
+        "Timeslip": {
+          "cost": 1,
+          "notes": "M81",
+          "maintain": 0,
+          "casting time": 0,
+          "duration": 0,
+          "range": 'regular',
+          "save": [],
         },
         "Total Paralysis": {
           "cost": None,
