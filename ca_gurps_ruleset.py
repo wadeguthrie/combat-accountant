@@ -3043,6 +3043,21 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     '  that requires skill "%s"' % item['skill'],
                     '  but not the skill to use it'])
                 result = False
+        if 'spells' in creature:
+            duplicate_check = {}
+            for spell in creature['spells']:
+                if spell['name'] in duplicate_check:
+                    self._window_manager.error([
+                        'Creature "%s"' % name,
+                        '  has two copies of spell "%s"' % spell['name']])
+                else:
+                    duplicate_check[spell['name']] = 1
+
+                if spell['name'] not in GurpsRuleset.spells:
+                    self._window_manager.error([
+                        'Creature "%s"' % name,
+                        '  has spell "%s" that is not in ruleset' %
+                        spell['name']])
         return result
 
     def make_empty_creature(self):
