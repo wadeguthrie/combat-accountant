@@ -1046,7 +1046,7 @@ class GmScrollableWindow(object):
         line_cnt = len(self.__lines) - self.top_line
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
         line_cnt = line_cnt if line_cnt < win_line_cnt else win_line_cnt
-        # TODO: I've got al these commented-out lines to skip lines that are
+        # TODO: I've got all these commented-out lines to skip lines that are
         # the result of a wrap (like the Mech in the <<ROOM>> of the Armstrong
         # 1 fight) but then the line count for the window is too small and we
         # get a  crash.
