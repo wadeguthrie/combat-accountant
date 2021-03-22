@@ -151,7 +151,7 @@ class Ruleset(object):
             if ('natural-armor' not in armor or not armor['natural-armor']):
                 action_menu.append(
                         (('Doff %s' % armor['name']),
-                         {'action': {'action-name': 'don-armor',
+                         {'action': {'action-name': 'doff-armor',
                                      'armor-index': armor_index_list[index]}}
                          ))
 
