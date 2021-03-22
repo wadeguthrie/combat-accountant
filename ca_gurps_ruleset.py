@@ -372,7 +372,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         },
         "Blink": {
           "cost": 2,
-          "notes": "M148",
+          "notes": "M148, Caster must make Body Sense (B181) roll to act.",
           "maintain": 0,
           "casting time": 1,
           "duration": 0,
@@ -3160,7 +3160,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             spell = GurpsRuleset.spells[spell_name]
 
             # TODO: should be an option
-            # Highlight the spells that a bad guy might want to cast.
+            # Highlight the spells that a bad guy might want to cast during
+            # battle.
             mode = (curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK)
                     if ((spell['casting time'] is None or
                          spell['casting time'] <= 2) and
@@ -3655,29 +3656,32 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             # Casting Timer
 
-            casting_timer = ca_timers.Timer(None)
-            text = [('Casting (%s) @ skill (%d): %s' % (
-                                                    complete_spell['name'],
-                                                    complete_spell['skill'],
-                                                    complete_spell['notes'])),
-                    ' Defense: none',
-                    ' Move: none']
+            casting_timer = None
+            if (complete_spell['casting time'] > 0 and
+                    complete_spell['range'] != 'block'):
+                casting_timer = ca_timers.Timer(None)
+                text = [('Casting (%s) @ skill (%d): %s' % (
+                                                        complete_spell['name'],
+                                                        complete_spell['skill'],
+                                                        complete_spell['notes'])),
+                        ' Defense: none',
+                        ' Move: none']
 
-            actions = {}
-            if duration_timer is not None:
-                actions['timer'] = duration_timer.details
+                actions = {}
+                if duration_timer is not None:
+                    actions['timer'] = duration_timer.details
 
-            if complete_spell['duration'] == 0:
-                actions['announcement'] = ('CAST SPELL (%s) FIRED' %
-                                           complete_spell['name'])
+                if complete_spell['duration'] == 0:
+                    actions['announcement'] = ('CAST SPELL (%s) FIRED' %
+                                               complete_spell['name'])
 
-            casting_timer.from_pieces(
-                    {'parent-name': fighter.name,
-                     'rounds': (complete_spell['casting time'] -
-                                ca_timers.Timer.announcement_margin),
-                     'string': text,
-                     'actions': actions})
-            casting_timer.mark_owner_as_busy()  # When casting, owner is busy
+                casting_timer.from_pieces(
+                        {'parent-name': fighter.name,
+                         'rounds': (complete_spell['casting time'] -
+                                    ca_timers.Timer.announcement_margin),
+                         'string': text,
+                         'actions': actions})
+                casting_timer.mark_owner_as_busy()  # When casting, owner is busy
 
             # Opponent's Timers
 
