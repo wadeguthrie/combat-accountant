@@ -4149,19 +4149,19 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 to_hit = unarmed_info['punch_skill'] + to_hit_penalty
 
                 if to_hit > 9:
-                    why.append['Melee (punch) attacks capped at 9 (B365)']
+                    why.append('Melee (punch) attacks capped at 9 (B365)')
                     to_hit = 9
                 else:
-                    why.append['Melee (punch) attacks at -4 (B365)']
+                    why.append('Melee (punch) attacks at -4 (B365)')
                 text.append(' Punch to-hit: %d' % to_hit)
 
                 to_hit_penalty = MOVE_ATTACK_MELEE_MINUS
                 to_hit = unarmed_info['kick_skill'] + to_hit_penalty
                 if to_hit > 9:
-                    why.append['Melee (kick) attacks capped at 9 (B365)']
+                    why.append('Melee (kick) attacks capped at 9 (B365)')
                     to_hit = 9
                 else:
-                    why.append['Melee (kick) attacks at -4 (B365)']
+                    why.append('Melee (kick) attacks at -4 (B365)')
                 text.append(' Kick to-hit: %d' % to_hit)
             else:
                 to_hit, ignore_why = self.get_to_hit(fighter, opponent, weapon)
@@ -4173,16 +4173,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                 % (weapon.details['bulk'], weapon.name))
                         to_hit += weapon.details['bulk']
                     else:
-                        why.append['Ranged attacks at -2 (B365)']
+                        why.append('Ranged attacks at -2 (B365)')
                         to_hit += to_hit_penalty
                 else:
                     to_hit_penalty = MOVE_ATTACK_MELEE_MINUS
                     to_hit += to_hit_penalty
                     if to_hit > 9:
-                        why.append['Melee attacks capped at 9 (B365)']
+                        why.append('Melee attacks capped at 9 (B365)')
                         to_hit = 9
                     else:
-                        why.append['Melee attacks at -4 (B365)']
+                        why.append('Melee attacks at -4 (B365)')
 
                 text.append(' %s to-hit: %d' % (weapon.details['name'],
                                                 to_hit))
