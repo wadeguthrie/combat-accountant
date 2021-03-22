@@ -447,7 +447,6 @@ class Fighter(ThingsInFight):
                                      'notimer': True,
                                      'quiet': True},
                                     fight_handler)
-        self.details['weapon-index'] = None
 
     def get_current_armor_indexes(self):
         '''
