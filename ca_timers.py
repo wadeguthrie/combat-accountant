@@ -252,12 +252,16 @@ class TimersWidget(object):
         keep_asking_menu = [('yes', True), ('no', False)]
         param = {'announcement': None,
                  'continuous_message': None,
+                 'busy': None,
                  'state': None}
         actions_menu = [('message (continuous)',
                          {'doit': self.__continuous_message_action,
                           'param': param}),
                         ('announcement',
                          {'doit': self.__announcement_action,
+                          'param': param}),
+                        ('mark busy',
+                         {'doit': self.__mark_busy_action,
                           'param': param}),
                         # ('state change',
                         #         {'doit': self.__new_state_action,
@@ -290,6 +294,8 @@ class TimersWidget(object):
             timer_dict['actions']['announcement'] = param['announcement']
         if param['state'] is not None:
             timer_dict['actions']['state'] = param['state']
+        if param['busy'] is not None:
+            timer_dict['busy'] = param['busy']
 
         return timer_dict
 
@@ -317,6 +323,7 @@ class TimersWidget(object):
         param['announcement'] = announcement
         return True
 
+
     def __continuous_message_action(self,
                                     param   # dict passed by the menu
                                             #  handler -- contains the text
@@ -337,6 +344,21 @@ class TimersWidget(object):
         if string is not None and len(string) <= 0:
             string = None
         param['continuous_message'] = string
+        return True
+
+    def __mark_busy_action(self,
+                           param    # dict passed by the menu handler --
+                                    #   contains the announcement text
+                                    #   associated with the timer
+                           ):
+        '''
+        Handler for the timer's 'what do I do with this timer' entry.
+
+        Sets the timer up to mark the player as busy.
+
+        Returns: True -- just so it's not None
+        '''
+        param['busy'] = True
         return True
 
     # def __new_state_action(self,
