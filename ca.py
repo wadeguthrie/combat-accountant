@@ -4975,14 +4975,22 @@ class FightHandler(ScreenHandler):
         '''
 
         current_fighter = self.get_current_fighter()
+        if self.__viewing_index is not None:
+            viewed_fighter = self.__fighters[self.__viewing_index]
+
+            fighter_menu = [(viewed_fighter.name, viewed_fighter),
+                               (current_fighter.name, current_fighter)]
+            current_fighter, ignore = self._window_manager.menu('Who is Manuvering?',
+                                                              fighter_menu)
+
         opponent = self.get_opponent_for(current_fighter)
-        if self.__viewing_index != self._saved_fight['index']:
-            self.__viewing_index = None
-            self._window.show_fighters(current_fighter,
-                                       opponent,
-                                       self.__fighters,
-                                       self._saved_fight['index'],
-                                       self.__viewing_index)
+        #if self.__viewing_index != self._saved_fight['index']:
+        #    self.__viewing_index = None
+        #    self._window.show_fighters(current_fighter,
+        #                               opponent,
+        #                               self.__fighters,
+        #                               self._saved_fight['index'],
+        #                               self.__viewing_index)
 
         action_menu = self.world.ruleset.get_action_menu(current_fighter,
                                                          opponent)
