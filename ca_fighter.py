@@ -249,6 +249,7 @@ class Venue(ThingsInFight):
                 found_one = True
                 ca_equipment.EquipmentManager.get_description(item,
                                                               [],
+                                                              [],
                                                               char_detail)
 
         if not found_one:
@@ -490,6 +491,21 @@ class Fighter(ThingsInFight):
             result.append(item)
         return result
 
+    def get_preferred_item_indexes(self):
+        '''
+        Returns a list of indexes of preferred weapons and armor.
+        '''
+        result = []
+
+        if ('preferred-armor-index' in self.details and
+                len(self.details['preferred-armor-index']) > 0):
+            result.extend(self.details['preferred-armor-index'])
+        if ('preferred-weapon-index' in self.details and
+                self.details['preferred-weapon-index'] is not None):
+            result.append(self.details['preferred-weapon-index'])
+
+        return result
+
     def get_weapon_by_name(self,                # Public to support testing
                            name
                            ):
@@ -538,12 +554,27 @@ class Fighter(ThingsInFight):
             elif index_to_remove < self.details['weapon-index']:
                 self.details['weapon-index'] -= 1
 
+            if ('preferred-weapon-index' in self.details and
+                    self.details['preferred-weapon-index'] is not None):
+                if index_to_remove == self.details['preferred-weapon-index']:
+                    self.details['preferred-weapon-index'] = None
+                elif index_to_remove < self.details['preferred-weapon-index']:
+                    self.details['preferred-weapon-index'] -= 1
+
             for index_in_armor, index_in_stuff in enumerate(
                     self.details['armor-index']):
                 if index_to_remove == index_in_stuff:
                     self.details['armor-index'].remove(index_in_stuff)
                 elif index_to_remove < index_in_stuff:
                     self.details['armor-index'][index_in_armor] -= 1
+
+            if 'preferred-armor-index' in self.details:
+                for index_in_armor, index_in_stuff in enumerate(
+                        self.details['preferred-armor-index']):
+                    if index_to_remove == index_in_stuff:
+                        self.details['preferred-armor-index'].remove(index_in_stuff)
+                    elif index_to_remove < index_in_stuff:
+                        self.details['preferred-armor-index'][index_in_armor] -= 1
 
         return item
 

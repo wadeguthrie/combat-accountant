@@ -195,6 +195,9 @@ class EquipmentManager(object):
                                         #   These should be references so that
                                         #   it will match identically to
                                         #   'item' if it is in use.
+                        preferred_items,
+                                        # List of preferred weapons
+                                        #   and armor of the creature
                         char_detail     # Output: recepticle for character
                                         # detail.
                                         # [[{'text','mode'},...],  # line 0
@@ -213,8 +216,9 @@ class EquipmentManager(object):
         mode = curses.A_NORMAL
 
         in_use_string = ' (in use)' if item in in_use_items else ''
+        preferred_string = ' (preferred)' if item in preferred_items else ''
 
-        texts = ['  %s%s' % (item['name'], in_use_string)]
+        texts = ['  %s%s%s' % (item['name'], preferred_string, in_use_string)]
 
         if 'shots' in item and 'shots_left' in item:
             texts.append(' (%d/%d shots left)' % (item['shots_left'],
@@ -328,7 +332,7 @@ class EquipmentManager(object):
             if 'natural-armor' in item and item['natural-armor']:
                 continue  # Can't remove natural armor
             output = []
-            EquipmentManager.get_description(item, [], output)
+            EquipmentManager.get_description(item, [], [], output)
             # output looks like:
             # [[{'text','mode'},...],  # line 0
             #  [...],               ]  # line 1...
