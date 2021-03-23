@@ -26,10 +26,6 @@ import ca_timers
 # TODO: ending init hold for current fighter, highlight the current fighter
 #   in the list
 
-# TODO: There should be a command in a fight 'Group action', maybe, that
-# allows an immediate (and free) menu: don/doff armor, holster/draw weapon,
-# reload.  Only for PCs.
-
 # TODO: gcs-check should include spell difficulty level
 
 # TODO: ISSUE 20: need a way to generate equipment
@@ -37,13 +33,9 @@ import ca_timers
 # TODO: ISSUE 11: equipment containers
 # TODO: ISSUE 9: maintain spell
 
-# TODO: move & attack menu item should show penalties
-
 # TODO: reload and spells should happen at the end of the timer.  The
 #       'reloading' timer should launch the second part of the action when it
 #       fires.
-# TODO: add preferred weapon/armor - this will be at the top of menus to draw
-#       or don
 # TODO: why do redirect entries have 'stuff' and 'timers' entries?
 
 # NOTE: debugging thoughts:
@@ -2859,7 +2851,9 @@ class PersonnelHandler(ScreenHandler):
         if 'weapon-index' in fighter.details:
             if owns_weapon:
                 sub_menu.extend([
-                    ('draw/drop weapon',    {'doit': self.__draw_weapon})
+                    ('draw/drop weapon',    {'doit': self.__draw_weapon}),
+                    ('prefer weapon',       {'doit': self.__prefer_weapon}),
+                    ('Prefer armor',       {'doit': self.__prefer_armor})
                 ])
             weapon, index = fighter.get_current_weapon()
             if (weapon is not None and
@@ -3173,6 +3167,100 @@ class PersonnelHandler(ScreenHandler):
         del(self.world.details['PCs'][npc.name])
         self._draw_screen()
         return True
+
+    def __prefer_armor(self,
+                       throw_away   # Required/used by the caller because
+                                    #   there's a list of methods to call,
+                                    #   and (apparently) some of them may
+                                    #   use this parameter.  It's ignored
+                                    #   by this method, however.
+                       ):
+        '''
+        Method for 'equip' sub-menu.
+
+        Asks the user which armor to prefer and prefers it.
+
+        Returns: None if we want to bail-out of the favor prefer process,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        armor_menu = []
+        for index, item in enumerate(fighter.details['stuff']):
+            if 'armor' in item['type']:
+                preferred_string = (' (preferred)'
+                        if index in fighter.details['preferred-armor-index']
+                        else '')
+                armor_menu.append(('%s%s' % (item['name'], preferred_string),
+                                    index))
+        armor_menu = sorted(armor_menu, key=lambda x: x[0].upper())
+        if len(armor_menu) == 1:
+            armor_index = armor_menu[0][1]
+        else:
+            armor_index, ignore = self._window_manager.menu(
+                    'Toggle Preference For Which Armor', armor_menu)
+            if armor_index is None:
+                return None
+
+        if 'preferred-armor-index' not in fighter.details:
+            fighter.details['preferred-armor-index'] = [armor_index]
+        elif armor_index in fighter.details['preferred-armor-index']:
+            fighter.details['preferred-armor-index'].remove(armor_index)
+        else:
+            fighter.details['preferred-armor-index'].append(armor_index)
+
+        self._draw_screen()
+        return True  # Anything but 'None' for a menu handler
+
+    def __prefer_weapon(self,
+                        throw_away   # Required/used by the caller because
+                                     #   there's a list of methods to call,
+                                     #   and (apparently) some of them may
+                                     #   use this parameter.  It's ignored
+                                     #   by this method, however.
+                        ):
+        '''
+        Method for 'equip' sub-menu.
+
+        Asks the user which weapon to prefer and prefers it.
+
+        Returns: None if we want to bail-out of the prefer weapon process,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        weapon_menu = []
+        for index, item in enumerate(fighter.details['stuff']):
+            if ('melee weapon' in item['type'] or
+                    'ranged weapon' in item['type'] or
+                    'shield' in item['type']):
+                preferred_string = (' (preferred)'
+                        if index == fighter.details['preferred-weapon-index']
+                        else '')
+                weapon_menu.append(('%s%s' % (item['name'], preferred_string),
+                                    index))
+        weapon_menu = sorted(weapon_menu, key=lambda x: x[0].upper())
+        if len(weapon_menu) == 1:
+            weapon_index = weapon_menu[0][1]
+        else:
+            weapon_index, ignore = self._window_manager.menu(
+                    'Toggle Preference For Which Weapon', weapon_menu)
+            if weapon_index is None:
+                return None
+
+        if 'preferred-weapon-index' not in fighter.details:
+            fighter.details['preferred-weapon-index'] = weapon_index
+        elif fighter.details['preferred-weapon-index'] == weapon_index:
+            fighter.details['preferred-weapon-index'] = None
+        else:
+            fighter.details['preferred-weapon-index'] = weapon_index
+
+        self._draw_screen()
+        return True  # Anything but 'None' for a menu handler
 
     def __quit(self):
         '''
@@ -4917,7 +5005,10 @@ class FightHandler(ScreenHandler):
                         ('natural-armor' in item and item['natural-armor'])):
                     continue
                 output = []
-                ca_equipment.EquipmentManager.get_description(item, [], output)
+                ca_equipment.EquipmentManager.get_description(item,
+                                                              [],
+                                                              [],
+                                                              output)
                 # output looks like:
                 # [[{'text','mode'},...],  # line 0
                 #  [...],               ]  # line 1...

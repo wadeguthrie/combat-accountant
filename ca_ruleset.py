@@ -323,7 +323,8 @@ class Ruleset(object):
 
     def is_creature_consistent(self,
                                name,     # string: creature's name
-                               creature  # dict from Game File
+                               creature, # dict from Game File
+                               fight_handler=None
                                ):
         '''
         Make sure creature's information makes sense.
@@ -336,10 +337,81 @@ class Ruleset(object):
                                      self,
                                      self._window_manager)
 
+        playing_back = (False if fight_handler is None else
+                        fight_handler.world.playing_back)
+
+        # Check to see if they're carrying their preferred armor
+
         armor_index_list = fighter.get_current_armor_indexes()
-        armor_list = fighter.get_items_from_indexes(armor_index_list)
+
+        preferred_armor_index_list = []
+        if not playing_back:
+            if 'preferred-armor-index' in fighter.details:
+                preferred_armor_index_list.extend(
+                        fighter.details['preferred-armor-index'])
+
+        if len(preferred_armor_index_list) > 0:
+
+            # First, build list of preferred armor to add
+
+            keep_asking = True
+            while keep_asking:
+                armor_list_menu = []
+                for armor_index in preferred_armor_index_list:
+                    if armor_index not in armor_index_list:
+                        armor = fighter.equipment.get_item_by_index(
+                                armor_index)
+                        armor_list_menu.append(('don %s' % armor['name'],
+                                                armor_index))
+                if len(armor_list_menu) == 0:
+                    keep_asking = False
+                else:
+                    armor_list_menu.append(('Done Putting Armor On', None))
+                    armor_index, ignore = self._window_manager.menu(
+                            'Put on %s\'s preferred armor?' % name,
+                            armor_list_menu)
+                    if armor_index is None:
+                        keep_asking = False
+                    else:
+                        self.do_action(fighter,
+                                       {'action-name': 'don-armor',
+                                        'armor-index': armor_index,
+                                        'notimer': True},
+                                       None)
+
+            # Next, build list of non-preferred armor to remove
+
+            keep_asking = True
+            while keep_asking:
+                armor_list_menu = []
+                for armor_index in armor_index_list:
+                    if armor_index not in preferred_armor_index_list:
+                        armor = fighter.equipment.get_item_by_index(
+                                armor_index)
+                        armor_list_menu.append(('doff %s' % armor['name'],
+                                                armor_index))
+                if len(armor_list_menu) == 0:
+                    keep_asking = False
+                else:
+                    armor_list_menu.append(('Done Taking Armor Off', None))
+                    armor_index, ignore = self._window_manager.menu(
+                            'Remove %s\'s non-preferred armor?' % name,
+                            armor_list_menu)
+                    if armor_index is None:
+                        keep_asking = False
+                    else:
+                        self.do_action(fighter,
+                                       {'action-name': 'doff-armor',
+                                        'armor-index': armor_index,
+                                        'notimer': True},
+                                       None)
 
         # Dump non-armor being worn as armor
+
+        armor_list = []
+        for armor_index in armor_index_list:
+            armor = fighter.equipment.get_item_by_index(armor_index)
+            armor_list.append(armor)
 
         for index, armor in enumerate(armor_list):
             if armor is None:
@@ -376,7 +448,55 @@ class Ruleset(object):
                                     'notimer': True},
                                    None)
 
-        weapon, throw_away = fighter.get_current_weapon()
+        weapon, weapon_index = fighter.get_current_weapon()
+
+        # Check to see if they're carrying their preferred weapon
+
+        preferred_weapon_index = None
+        preferred_weapon = None
+        if 'preferred-weapon-index' in fighter.details:
+            preferred_weapon_index = fighter.details['preferred-weapon-index']
+        if preferred_weapon_index is not None:
+            preferred_weapon = fighter.equipment.get_item_by_index(
+                    preferred_weapon_index)
+
+        playing_back = (False if fight_handler is None else
+                        fight_handler.world.playing_back)
+
+        ask_about_preferred_weapon = False if playing_back else True
+        if preferred_weapon is None:
+            ask_about_preferred_weapon = False
+
+        if ask_about_preferred_weapon:
+            if weapon is None:
+                weapon_name = '<None>'
+            elif weapon_index == preferred_weapon_index:
+                ask_about_preferred_weapon = False
+            else:
+                weapon_name = weapon.name
+
+        if ask_about_preferred_weapon:
+            new_weapon_menu = [('draw %s' % preferred_weapon['name'],
+                                preferred_weapon_index),
+                               ('keep %s' % weapon_name, weapon_index)]
+
+            new_weapon_index, ignore = self._window_manager.menu(
+                    '%s is not using his/her preferred weapon - fix?' % name,
+                    new_weapon_menu)
+            if new_weapon_index == preferred_weapon_index:
+                self.do_action(fighter,
+                               {'action-name': 'draw-weapon',
+                                'weapon-index': None,
+                                'notimer': True},
+                               None)
+                self.do_action(fighter,
+                               {'action-name': 'draw-weapon',
+                                'weapon-index': new_weapon_index,
+                                'notimer': True},
+                               None)
+
+        # Is the current weapon a real weapon?
+
         if weapon is not None:
             if not weapon.is_ranged_weapon() and not weapon.is_melee_weapon():
                 self._window_manager.error([
@@ -402,8 +522,6 @@ class Ruleset(object):
                                     'notimer': True},
                                    None)
                     break
-
-
         return result
 
     def make_empty_creature(self):

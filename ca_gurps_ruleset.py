@@ -1975,13 +1975,19 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         if weapon_in_use is not None:
             in_use_items.append(weapon_in_use.details)
 
+        preferred_item_indexes = character.get_preferred_item_indexes()
+        preferred_items = character.get_items_from_indexes(
+                preferred_item_indexes)
+
         found_one = False
         for item in sorted(character.details['stuff'],
                            key=lambda x: x['name']):
             found_one = True
-            ca_equipment.EquipmentManager.get_description(item,
-                                                          in_use_items,
-                                                          output)
+            ca_equipment.EquipmentManager.get_description(
+                    item,
+                    in_use_items,
+                    preferred_items,
+                    output)
 
         if not found_one:
             output.append([{'text': '  (None)', 'mode': mode}])
@@ -3016,14 +3022,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
     def is_creature_consistent(self,
                                name,     # string: creature's name
-                               creature  # dict from Game File
+                               creature, # dict from Game File
+                               fight_handler=None
                                ):
         '''
         Make sure creature has skills for all their stuff.  Trying to make
         sure that one or the other of the skills wasn't entered incorrectly.
         '''
         result = super(GurpsRuleset, self).is_creature_consistent(name,
-                                                                  creature)
+                                                                  creature,
+                                                                  fight_handler)
 
         if 'skills' not in creature:
             return result
