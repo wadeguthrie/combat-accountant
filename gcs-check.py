@@ -522,12 +522,22 @@ class Character(object):
                         modifier_cost_text = modifier_cost_element.text
                         if modifier_cost_text is not None:
                             cost_gcs += int(modifier_cost_text)
+
+                    # Spell bonuses from a Lwa (if that applies)
+
+                    spell_bonuses_raw = modifier.findall('spell_bonus')
+                    for spell_bonus in spell_bonuses_raw:
+                        college_name = spell_bonus.find('college_name')
+                        amount = spell_bonus.find('amount')
+                        self.__spell_advantages[college_name.text] = (
+                                int(amount.text))
             advantages_gcs[name.text] = cost_gcs
 
 
     def check_advantages(self):
         ## ADVANTAGES #####
         # Checks points spent
+        self.__spell_advantages = {}
 
         advantages_gcs_raw = self.char_gcs.find('advantage_list')
 
@@ -539,6 +549,8 @@ class Character(object):
         advantages_gcs_raw = self.char_gcs.find('advantage_list')
         for child in advantages_gcs_raw:
             self.__add_advantage_to_gcs_list(child, self.advantages_gcs)
+
+        # PP.pprint(self.__spell_advantages) # TODO: remove
 
         for name in self.advantages_gcs:
             if name not in advantages_json:
@@ -558,11 +570,39 @@ class Character(object):
 
     def check_spells(self):
         ## SPELLS #####
-        # TODO: need to include difficulty level
         # TODO: should do a better job of making sure that both files either
         #   DO have spells or DON'T have spells
 
+        # takes points
+        skill_add_to_iq = {
+                'hard' : [
+                    {'points': 24, 'add_to_iq': 5},
+                    {'points': 20, 'add_to_iq': 4},
+                    {'points': 16, 'add_to_iq': 3},
+                    {'points': 12, 'add_to_iq': 2},
+                    {'points': 8, 'add_to_iq': 1},
+                    {'points': 4, 'add_to_iq': 0},
+                    {'points': 2, 'add_to_iq': -1},
+                    {'points': 1, 'add_to_iq': -2},
+                    # +4 for each +1 after this
+                    ],
+
+                'very_hard': [
+                    {'points': 28, 'add_to_iq': 5},
+                    {'points': 24, 'add_to_iq': 4},
+                    {'points': 20, 'add_to_iq': 3},
+                    {'points': 16, 'add_to_iq': 2},
+                    {'points': 12, 'add_to_iq': 1},
+                    {'points': 8, 'add_to_iq': 0},
+                    {'points': 4, 'add_to_iq': -1},
+                    {'points': 2, 'add_to_iq': -2},
+                    {'points': 1, 'add_to_iq': -3},
+                    # +4 for each +1 after this
+                    ]
+                    }
+
         spells_gcs = self.char_gcs.find('spell_list')
+
         if spells_gcs is not None:
             if 'spells' in self.char_json:
                 spells_json = {k['name']: k['skill']
@@ -571,15 +611,57 @@ class Character(object):
                 spells_json = {}
             for child in spells_gcs:
                 name = child.find('name')
-                # TODO: figure out how the difficulty is stored
+                skill_gcs = self.attrs['IQ']
+
+                # Spell difficulty
+                difficulty = ('hard' if 'very_hard' not in child.attrib
+                              else 'very_hard')
+
+                # Points they put into this spell
+                points_string = child.find('points')
+                points = 1 if points_string is None else int(points_string.text)
+
+                # College
+                college = None
+                if child.find('college') is not None:
+                    college = child.find('college').text
+
+                lwa_bonus = 0   # TODO: remove
+                if college in self.__spell_advantages:
+                    lwa_bonus = self.__spell_advantages[college]   # TODO: remove
+                    skill_gcs += self.__spell_advantages[college]
+
+                # Get the skill level
+                # TODO: doesn't deal with more points than 24 or 28
+                delta = None # TODO: remove
+                for lookup in skill_add_to_iq[difficulty]:
+                    if points >= lookup['points']:
+                        delta = lookup['add_to_iq'] # TODO: remove
+                        skill_gcs += lookup['add_to_iq']
+                        break
+
+
                 if name.text not in spells_json:
-                    print '   **GCS> "%s" in GCS but not in JSON' % name.text
+                    print '   **GCS> "%s" (%d) in GCS but not in JSON' % (
+                            name.text, skill_gcs)
                 else:
-                    print '  %s' % name.text
-                    # TODO: compare skill levels
+                    print '  %s: %d' % (name.text, spells_json[name.text])
+                    #print '    college: %s' % college # TODO: remove
+                    #print '    diff:%s, points:%d, delta:%d, lwa:%d, skill: %d' % (
+                    #        difficulty,
+                    #        points,
+                    #        delta,
+                    #        lwa_bonus,
+                    #        skill) # TODO: remove
+
+                    if skill_gcs != spells_json[name.text]:
+                        print '   ** %s = %d in GCS but %d in JSON' % (
+                                name.text, skill_gcs, spells_json[name.text])
+
                     del(spells_json[name.text])
             for child in spells_json:
-                print '   **JSON> "%s" in JSON but not in GCS' % child
+                print '   **JSON> "%s" in JSON (%d) but not in GCS' % (
+                        child, spells_json[child])
 
     def __add_item_to_gcs_list(self,
                                item,        # ET item
@@ -670,6 +752,9 @@ if __name__ == '__main__':
 
     for gcs_file in glob.glob(ARGS.gcs_filename):
         char_gcs = ET.parse(gcs_file).getroot()
+        #print char_gcs # TODO: remove
+        #for node in char_gcs.iter(): # TODO: remove
+        #    print node.tag, node.attrib # TODO: remove
         print '\nWhich character goes with "%s":' % gcs_file
         if gcs_file in char_map:
             json_name = char_map[gcs_file]
