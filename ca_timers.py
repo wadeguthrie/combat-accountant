@@ -268,9 +268,11 @@ class TimersWidget(object):
                         #          'param': param})
                         ]
         keep_asking = True
+        which_action = 0
         while keep_asking:
-            result, ignore = self.__window_manager.menu('Timer Action',
-                                                        actions_menu)
+            result, which_action = self.__window_manager.menu('Timer Action',
+                                                              actions_menu,
+                                                              which_action)
             if result is None:
                 return None
             keep_asking, ignore = self.__window_manager.menu(

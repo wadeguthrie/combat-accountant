@@ -22,20 +22,24 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: need to see all the details of a weapon during a fight
+# TODO: keeping a fight as the next fight shouldn't allow the bodies to be
+#   looted
+# TODO: if there's only one choice when leaving a fight (that would be 'quit'),
+#   make the choice without asking the user (this may already be happening)
 # TODO: ending init hold for current fighter, highlight the current fighter
 #   in the list
 
-# TODO: gcs-check should include spell difficulty level
-
 # TODO: ISSUE 20: need a way to generate equipment
-# TODO: ISSUE 13: multiple weapons (one for each hand)
+# TODO: ISSUE 13: multiple weapons (one for each hand) - end-of-round will
+#   have to change
 # TODO: ISSUE 11: equipment containers
 # TODO: ISSUE 9: maintain spell
 
 # TODO: reload and spells should happen at the end of the timer.  The
 #       'reloading' timer should launch the second part of the action when it
 #       fires.
+# TODO: ability to retire a fight from the main screen (if the players avoided
+#   it)
 # TODO: why do redirect entries have 'stuff' and 'timers' entries?
 
 # NOTE: debugging thoughts:
@@ -1519,6 +1523,7 @@ class AttributeWidget(object):
     def doit(self):
         keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
+        starting_attribute = 0
         while keep_asking:
             perm_current_menu = [('current', 'current'),
                                  ('permanent', 'permanent')]
@@ -1532,8 +1537,8 @@ class AttributeWidget(object):
             attr_menu = [(attr, attr)
                          for attr in self.__fighter.details[attr_type].keys()]
 
-            attr, ignore = self.__window_manager.menu('Attr To Modify',
-                                                      attr_menu)
+            attr, starting_attribute = self.__window_manager.menu(
+                    'Attr To Modify', attr_menu, starting_attribute)
             if attr is None:
                 return None
 
@@ -1976,6 +1981,7 @@ class PersonnelHandler(ScreenHandler):
         # Add as many creatures as we want
 
         keep_adding_creatures = True
+        monster_index = 0
         while keep_adding_creatures:
 
             # Get a template.
@@ -2010,8 +2016,8 @@ class PersonnelHandler(ScreenHandler):
                                        key=lambda x: x[0].upper())
                 creature_menu.append((empty_creature, empty_creature))
 
-                from_creature_name, ignore = self._window_manager.menu(
-                        'Monster', creature_menu)
+                from_creature_name, monster_index = self._window_manager.menu(
+                        'Monster', creature_menu, monster_index)
                 if from_creature_name is None:
                     keep_adding_creatures = False
                     break
@@ -3026,6 +3032,7 @@ class PersonnelHandler(ScreenHandler):
 
         keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
+        to_whom = 0
         while keep_asking:
             item = self.__equipment_manager.remove_equipment(from_fighter)
             if item is None:
@@ -3033,8 +3040,10 @@ class PersonnelHandler(ScreenHandler):
 
             character_list = self.world.get_creature_details_list('PCs')
             character_menu = [(dude, dude) for dude in character_list]
-            to_fighter_info, ignore = self._window_manager.menu(
-                    'Give "%s" to whom?' % item['name'], character_menu)
+            to_fighter_info, to_whom = self._window_manager.menu(
+                    'Give "%s" to whom?' % item['name'],
+                    character_menu,
+                    to_whom)
 
             if to_fighter_info is None:
                 from_fighter.add_equipment(item, None)
@@ -4988,6 +4997,7 @@ class FightHandler(ScreenHandler):
         found_something_on_dead_bad_guy = False
 
         # Go through bad buys and distribute their items
+        to_whom = 0
         for bad_guy in self.__fighters:
             if bad_guy.group == 'PCs':  # only steal from bad guys
                 continue
@@ -5023,10 +5033,11 @@ class FightHandler(ScreenHandler):
                              if good_guy.group == 'PCs']
                 xfer_menu.append(('IGNORE', {'ignore': None}))
                 xfer_menu.append(('QUIT', {'quit': None}))
-                xfer, ignore = self._window_manager.menu(
+                xfer, to_whom = self._window_manager.menu(
                         'Who gets %s\'s %s' % (bad_guy.name,
                                                description),
-                        xfer_menu)
+                        xfer_menu,
+                        to_whom)
 
                 if xfer is None or 'ignore' in xfer:
                     continue
@@ -5071,8 +5082,8 @@ class FightHandler(ScreenHandler):
 
             fighter_menu = [(viewed_fighter.name, viewed_fighter),
                                (current_fighter.name, current_fighter)]
-            current_fighter, ignore = self._window_manager.menu('Who is Manuvering?',
-                                                              fighter_menu)
+            current_fighter, ignore = self._window_manager.menu(
+                    'Who is Manuvering?', fighter_menu)
 
         opponent = self.get_opponent_for(current_fighter)
         #if self.__viewing_index != self._saved_fight['index']:
