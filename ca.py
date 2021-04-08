@@ -22,10 +22,8 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: keeping a fight as the next fight shouldn't allow the bodies to be
-#   looted
-# TODO: if there's only one choice when leaving a fight (that would be 'quit'),
-#   make the choice without asking the user (this may already be happening)
+# TODO: should be able to scroll through description of creature in
+#   'modify Monsters' screen
 # TODO: ending init hold for current fighter, highlight the current fighter
 #   in the list
 
@@ -5387,6 +5385,10 @@ class FightHandler(ScreenHandler):
 
         while ask_to_save or ask_to_loot:
             quit_menu = [('quit -- really', False)]
+            # If we're still in the middle of this fight, there's not time to
+            # loot the bodies.
+            if self._saved_fight['saved']:
+                ask_to_loot = False
 
             if not self.__bodies_looted and ask_to_loot:
                 quit_menu.append(('loot the bodies',
