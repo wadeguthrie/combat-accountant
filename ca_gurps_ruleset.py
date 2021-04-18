@@ -3260,7 +3260,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                   fighter.details['current']['wi']), True),
                                  ('did NOT make WILL roll', False)]
                 made_will_roll, ignore = self._window_manager.menu(
-                    'On Action: roll <= WILL or pass out due to FP (B426)',
+                    ('%s: roll <= WILL or pass out due to FP (B426)' %
+                        fighter.name),
                     pass_out_menu)
                 if not made_will_roll:
                     self.do_action(fighter,
