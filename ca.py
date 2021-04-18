@@ -22,6 +22,15 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: FP should ask if using DR
+# TODO: FP should actually subtract DR
+# TODO: FP damage window says HP in the title
+# TODO: need a way to get back to current init (space? return?)
+# TODO: spells at high enough level is faster (M8, rutuals)
+# TODO: short list should say stunned
+# TODO: should be option to not drop weapon and fall during stun
+# TODO: posture should be on quick display
+
 # TODO: should be able to scroll through description of creature in
 #   'modify Monsters' screen
 # TODO: ending init hold for current fighter, highlight the current fighter
@@ -1526,7 +1535,8 @@ class AttributeWidget(object):
             perm_current_menu = [('current', 'current'),
                                  ('permanent', 'permanent')]
             attr_type, ignore = self.__window_manager.menu(
-                    'What Type Of Attribute', perm_current_menu)
+                    ('%s: Change What Type Of Attribute' %
+                        self.__fighter.name), perm_current_menu)
             if attr_type is None:
                 return None
             else:
