@@ -196,8 +196,9 @@ class Ruleset(object):
                         'melee weapon' in item['type'] or
                         'shield' in item['type']):
                     if weapon is None or weapon_index != index:
+                        # TODO: remove index
                         draw_weapon_menu.append(
-                            (item['name'],
+                            ('%d: %s' % (index, item['name']),
                              {'action': {'action-name': 'draw-weapon',
                                          'weapon-index': index}
                               }))
