@@ -22,6 +22,11 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: 'give equipment' needs to be an action
+# TODO: 'Playback History' should scroll to the current command
+# TODO: need 'verbose' flag that, among other things, includes a weapon's index
+#   in the 'draw weapon' list
+# TODO: playback bug report should show window describing 'report'
 # TODO: FP should ask if using DR
 # TODO: FP should actually subtract DR
 # TODO: FP damage window says HP in the title
@@ -3058,6 +3063,7 @@ class PersonnelHandler(ScreenHandler):
                 self._draw_screen()
                 return None
 
+            # TODO: give equipment needs to be an action
             to_fighter = self.world.get_creature(to_fighter_info, 'PCs')
             to_fighter.add_equipment(item, from_fighter.detailed_name)
             self._draw_screen()
@@ -6861,6 +6867,7 @@ if __name__ == '__main__':
         # of the read_prefs ca_json.GmJson will have to be larger
         prefs = {}
         filename = None
+        report_text = None
 
         # Do we have a Playback file (like, we're playing back a bug)?
 
@@ -6885,6 +6892,8 @@ if __name__ == '__main__':
                 filename = bug_report.read_data['snapshots']['fight']
                 filename = os.path.join(ARGS.playback, filename)
                 playback_history = bug_report.read_data['history']
+                if 'report' in bug_report.read_data:
+                    report_text = bug_report.read_data['report']
         else:
             filename = ARGS.filename
 
@@ -6974,6 +6983,19 @@ if __name__ == '__main__':
                 world.dont_save_on_exit()
             else:
                 world.do_save_on_exit()
+
+            if report_text is not None:
+                naked_lines = report_text.split('\n')
+                lines = []
+                for line in naked_lines:
+                    line = line.rstrip('\r')
+                    line = line.rstrip('\n')
+                    line = line.rstrip()
+                    if len(line) > 0:
+                        lines.append([{'text': line, 'mode': curses.A_NORMAL}])
+
+                window_manager.display_window('Playing Back Bug Report', lines)
+
 
             if world.details['current-fight']['saved']:
                 fight_handler = FightHandler(window_manager,
