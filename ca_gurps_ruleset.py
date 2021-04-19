@@ -3802,9 +3802,18 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                                      title)
                 complete_spell['cost'] *= diameter
 
-            # M8 - High skill level costs less
+            # M8 - High skill level costs less - NOTE: this applies to base
+            # skill, not effective skill.
+            #
+            # TODO: not for blocking spells
+            # TODO: maintain spell gets same discount
+            # TODO: skill of 9 or less: time doubled, needs voice, hands, feet
             skill = complete_spell['skill'] - 15
             while skill >= 0:
+                # TODO: first block: voice OR slight gesture, move 1 yard
+                # TODO: subsequent blocks: no voice OR gesture, time / 2 (round up) - so
+                #   /4 at 3rd block, /8 and 4th block, etc.
+                # TODO: missile spells don't get time benefits
                 complete_spell['cost'] -= 1
                 skill -= 5
             if complete_spell['cost'] <= 0:

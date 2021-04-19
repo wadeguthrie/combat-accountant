@@ -442,6 +442,12 @@ class Fighter(ThingsInFight):
         if (self._ruleset.options is not None and
                 self._ruleset.options.get_option('reload-after-fight') and
                 self.group == 'PCs'):
+
+            window_text = [[{'text': 'Reload, Reload, Reload.',
+                             'mode': curses.A_NORMAL}]]
+            self._window_manager.display_window(
+                    ('%s is Auto-Reloading After The Fight' % self.name),
+                    window_text)
             self._ruleset.do_action(self,
                                     {'action-name': 'reload',
                                      'comment': 'Reloading after fight',
@@ -649,12 +655,14 @@ class Fighter(ThingsInFight):
 
         if self.is_dead():
             fighter_string += ' - DEAD'
+        elif 'stunned' in self.details and self.details['stunned']:
+            fighter_string += ' - STUNNED'
+        else:
+            if self.timers.is_busy():
+                fighter_string += ' - BUSY'
 
-        if self.timers.is_busy():
-            fighter_string += ' - BUSY'
-
-        if fight_handler.is_fighter_holding_init(self.name, self.group):
-            fighter_string += ' - HOLDING INIT'
+            if fight_handler.is_fighter_holding_init(self.name, self.group):
+                fighter_string += ' - HOLDING INIT'
 
         return fighter_string
 

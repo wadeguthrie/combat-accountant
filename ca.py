@@ -23,15 +23,9 @@ import ca_gurps_ruleset
 import ca_timers
 
 # TODO: 'give equipment' needs to be an action
-# TODO: playback bug report should show window describing 'report'
-# TODO: FP should ask if using DR
-# TODO: FP should actually subtract DR
-# TODO: FP damage window says HP in the title
+
 # TODO: need a way to get back to current init (space? return?)
-# TODO: spells at high enough level is faster (M8, rutuals)
-# TODO: short list should say stunned
 # TODO: should be option to not drop weapon and fall during stun
-# TODO: posture should be on quick display
 
 # TODO: should be able to scroll through description of creature in
 #   'modify Monsters' screen
@@ -50,6 +44,9 @@ import ca_timers
 # TODO: ability to retire a fight from the main screen (if the players avoided
 #   it)
 # TODO: why do redirect entries have 'stuff' and 'timers' entries?
+
+# TODO: DIFFICULT: FP should ask if using DR
+# TODO: DIFFICULT: FP should actually subtract DR
 
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
