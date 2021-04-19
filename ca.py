@@ -23,7 +23,6 @@ import ca_gurps_ruleset
 import ca_timers
 
 # TODO: 'give equipment' needs to be an action
-# TODO: 'Playback History' should scroll to the current command
 # TODO: need 'verbose' flag that, among other things, includes a weapon's index
 #   in the 'draw weapon' list
 # TODO: playback bug report should show window describing 'report'
@@ -5617,6 +5616,7 @@ class FightHandler(ScreenHandler):
             return True
 
         lines = []
+        scroll_to = None
         for index, action in enumerate(self.__saved_history):
             string = PP.pformat(action)
             pieces = string.split('\n')
@@ -5626,11 +5626,15 @@ class FightHandler(ScreenHandler):
             for i, piece in enumerate(pieces):
                 if i == 0:
                     piece = '%03d %s' % (index, piece)
+                    if index == self.__next_playback_action_index:
+                        scroll_to = len(lines)
                 else:
                     piece = '    %s' % piece
                 lines.append([{'text': piece, 'mode': mode}])
 
-        self._window_manager.display_window('Playback History', lines)
+        self._window_manager.display_window('Playback History',
+                                            lines,
+                                            scroll_to)
         return True  # Keep going
 
     def __show_why(self):

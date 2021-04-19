@@ -427,8 +427,9 @@ class GmWindowManager(object):
     def display_window(self,
                        title,  # string: the title displayed, centered, in the
                                #   box around the display window.
-                       lines   # [[{'text', 'mode'}, ],    # line 0
+                       lines,  # [[{'text', 'mode'}, ],    # line 0
                                #  [...],               ]   # line 1
+                       scroll_to = None
                        ):
         '''
         Presents a display of |lines| to the user.  Scrollable.
@@ -460,6 +461,9 @@ class GmWindowManager(object):
                                                     width,
                                                     title,
                                                     data_for_scrolling=lines)
+        if scroll_to is not None:
+            display_win.scroll_to(scroll_to)
+
         display_win.refresh()
 
         keep_going = True
