@@ -123,8 +123,14 @@ class Ruleset(object):
         for index, item in enumerate(fighter.details['stuff']):
             if 'armor' in item['type']:
                 if index not in armor_index_list:
+                    if (self.options.get_option('verbose') is not None and
+                            self.options.get_option('verbose')):
+                        entry_name = '%d: %s' % (index, item['name'])
+                    else:
+                        entry_name = '%s' % item['name']
+
                     don_armor_menu.append(
-                            (item['name'],
+                            (entry_name,
                              {'action': {'action-name': 'don-armor',
                                                         'armor-index': index}}
                              ))
@@ -196,9 +202,14 @@ class Ruleset(object):
                         'melee weapon' in item['type'] or
                         'shield' in item['type']):
                     if weapon is None or weapon_index != index:
-                        # TODO: remove index
+                        if (self.options.get_option('verbose') is not None and
+                                self.options.get_option('verbose')):
+                            entry_name = '%d: %s' % (index, item['name'])
+                        else:
+                            entry_name = '%s' % item['name']
+
                         draw_weapon_menu.append(
-                            ('%d: %s' % (index, item['name']),
+                            (entry_name,
                              {'action': {'action-name': 'draw-weapon',
                                          'weapon-index': index}
                               }))
@@ -237,6 +248,10 @@ class Ruleset(object):
                 name = '%s (%d remaining)' % (item['name'], item['count'])
             else:
                 name = item['name']
+
+            if (self.options.get_option('verbose') is not None and
+                    self.options.get_option('verbose')):
+                name = '%d: %s' % (index, name)
 
             use_menu.append((name,
                              {'action': {'action-name': 'use-item',

@@ -23,8 +23,6 @@ import ca_gurps_ruleset
 import ca_timers
 
 # TODO: 'give equipment' needs to be an action
-# TODO: need 'verbose' flag that, among other things, includes a weapon's index
-#   in the 'draw weapon' list
 # TODO: playback bug report should show window describing 'report'
 # TODO: FP should ask if using DR
 # TODO: FP should actually subtract DR
@@ -6826,6 +6824,12 @@ class Options(object):
 
         return None
 
+    def set_campaign_option(self, option_name, option_value):
+        self.__campaign_options[option_name] = option_value
+
+    def set_global_option(self, option_name, option_value):
+        self.__global_options[option_name] = option_value
+
 
 # Main
 if __name__ == '__main__':
@@ -6983,6 +6987,8 @@ if __name__ == '__main__':
                 # Don't save the playback changes -- that way, you can re-play
                 # the incident over and over without worry.
                 world.dont_save_on_exit()
+                # Safe to set this option since we're not writing it back
+                options.set_global_option('verbose', True)
             elif ARGS.maintain_game_file:
                 world.dont_save_on_exit()
             else:
