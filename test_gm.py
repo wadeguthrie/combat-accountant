@@ -2621,7 +2621,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
         self.__window_manager.set_menu_response(
-                ('Major Wound (B420): Roll vs HT (%d) or be stunned' %
+                ('Major Wound (B420): Roll vs HT (%d) or be Stunned and Knocked Down' %
                  self.__vodou_priest_ht),
                 ca_gurps_ruleset.GurpsRuleset.MAJOR_WOUND_SUCCESS)
 
@@ -2656,7 +2656,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
         self.__window_manager.set_menu_response(
-                ('Major Wound (B420): Roll vs HT (%d) or be stunned' %
+                ('Major Wound (B420): Roll vs HT (%d) or be Stunned and Knocked Down' %
                  self.__vodou_priest_ht),
                 ca_gurps_ruleset.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
 
@@ -2721,7 +2721,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
         self.__window_manager.set_menu_response(
-                ('Major Wound (B420): Roll vs HT (%d) or be stunned' %
+                ('Major Wound (B420): Roll vs HT (%d) or be Stunned and Knocked Down' %
                  self.__vodou_priest_ht),
                 ca_gurps_ruleset.GurpsRuleset.MAJOR_WOUND_BAD_FAIL)
 
@@ -2929,7 +2929,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         high_pain_thrshold_margin = 3
         stun_roll = self.__vodou_priest_ht + high_pain_thrshold_margin
         self.__window_manager.set_menu_response(
-            ('Major Wound (B420): Roll vs. HT+3 (%d) or be stunned' %
+            ('Major Wound (B420): Roll vs. HT+3 (%d) or be Stunned and Knocked Down' %
              stun_roll),
             ca_gurps_ruleset.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
 
@@ -2997,7 +2997,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # high_pain_thrshold_margin = 3
         # stun_roll = self.__vodou_priest_ht + high_pain_thrshold_margin
         # self.__window_manager.set_menu_response(
-        #    ('Major Wound (B420): Roll vs. HT+3 (%d) or be stunned' %
+        #    ('Major Wound (B420): Roll vs. HT+3 (%d) or be Stunned and Knocked Down' %
         #                                                        stun_roll),
         #    ca_gurps_ruleset.GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL)
 

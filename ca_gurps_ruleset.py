@@ -1823,8 +1823,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         # FP: B426
         move = fighter.details['current']['basic-move']
-        if (fighter.details['current']['fp'] <
-                (fighter.details['permanent']['fp'] / 3)):
+        no_fatigue_penalty = self.get_option('no-fatigue-penalty')
+        if ((no_fatigue_penalty is None or not no_fatigue_penalty) and
+                fighter.details['current']['fp'] <
+                    (fighter.details['permanent']['fp'] / 3)):
             move_string = 'half=%d (FP:B426)' % (move/2)
         else:
             move_string = 'full=%d' % move
@@ -2221,8 +2223,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             dodge_skill = int(((dodge_skill)/2.0) + 0.5)
 
         # B426
-        if (fighter.details['current']['fp'] <
-                fighter.details['permanent']['fp']/3.0):
+        no_fatigue_penalty = self.get_option('no-fatigue-penalty')
+        if ((no_fatigue_penalty is None or not no_fatigue_penalty) and
+                (fighter.details['current']['fp'] <
+                    fighter.details['permanent']['fp']/3.0)):
             dodge_skill_modified = True
             dodge_why.append(
                     '  dodge(%d)/2 (round up) due to fp(%d) < perm-fp(%d)/3 (B426)'
@@ -2995,14 +2999,18 @@ class GurpsRuleset(ca_ruleset.Ruleset):
     def heal_fighter(self,
                      fighter,   # Fighter object
                      world      # World object
-                     # TODO: prefs - for parent
                      ):
         '''
         Removes all injury (and their side-effects) from a fighter.
         '''
         super(GurpsRuleset, self).heal_fighter(fighter, world)
         fighter.details['shock'] = 0
-        fighter.details['stunned'] = False
+        self.do_action(fighter,
+                       {'action-name': 'stun',
+                        'stun': False,
+                        'comment': ('(%s) got healed and un-stunned' %
+                            fighter.name)},
+                       None) # No fight_handler
 
     def initiative(self,
                    fighter  # Fighter object
@@ -3390,16 +3398,21 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         still_alive = True
 
         if adj < 0:
-            # Hit location (just for flavor, not for special injury)
-            table_lookup = (random.randint(1, 6) +
-                            random.randint(1, 6) +
-                            random.randint(1, 6))
-            hit_location = GurpsRuleset.hit_location_table[table_lookup]
+            hit_location_flavor = self.get_option('hit-location-flavor')
+            if hit_location_flavor is not None and hit_location_flavor:
+                # Hit location (just for flavor, not for special injury)
+                table_lookup = (random.randint(1, 6) +
+                                random.randint(1, 6) +
+                                random.randint(1, 6))
+                hit_location = GurpsRuleset.hit_location_table[table_lookup]
 
-            window_text = [
-                [{'text': ('...%s\'s %s' % (fighter.name, hit_location)),
-                  'mode': curses.A_NORMAL}]
-                           ]
+                window_text = [
+                    [{'text': ('...%s\'s %s' % (fighter.name, hit_location)),
+                      'mode': curses.A_NORMAL}],
+                    [{'text': '', 'mode': curses.A_NORMAL}]
+                               ]
+            else:
+                window_text = []
 
             # Adjust for armor
             dr = 0
@@ -3439,7 +3452,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 action['adj'] = adj
 
                 dr_text = '; '.join(dr_text_array)
-                window_text.append([{'text': '', 'mode': curses.A_NORMAL}])
                 window_text.append(
                     [{'text': ('%s was wearing %s (total dr:%d)' % (
                                                               fighter.name,
@@ -3495,28 +3507,34 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             if still_alive and -adj > (fighter.details['permanent']['hp'] / 2):
                 (SUCCESS, SIMPLE_FAIL, BAD_FAIL) = range(3)
                 total = fighter.details['current']['ht']
+
+                no_knockdown = self.get_option('no-knockdown')
+                stunned_string = 'Stunned and Knocked Down' if (
+                        no_knockdown is None or not no_knockdown) else 'Stunned'
+
                 if 'High Pain Threshold' in fighter.details['advantages']:
                     total = fighter.details['current']['ht'] + 3
                     menu_title = (
-                        'Major Wound (B420): Roll vs. HT+3 (%d) or be stunned'
-                        % total)
+                        'Major Wound (B420): Roll vs. HT+3 (%d) or be %s'
+                        % (total, stunned_string))
                 # elif 'Low Pain Threshold' in fighter.details['advantages']:
                 #    total = fighter.details['current']['ht'] - 4
                 #    menu_title = (
-                #      'Major Wound (B420): Roll vs. HT-4 (%d) or be stunned' %
-                #                                                        total)
+                #      'Major Wound (B420): Roll vs. HT-4 (%d) or be %s' %
+                #      (total, stunned_string))
                 else:
                     total = fighter.details['current']['ht']
                     menu_title = (
-                            'Major Wound (B420): Roll vs HT (%d) or be stunned'
-                            % total)
+                            'Major Wound (B420): Roll vs HT (%d) or be %s'
+                            % (total, stunned_string))
 
                 stunned_menu = [
                    ('Succeeded (roll <= HT (%d))' % total,
                     GurpsRuleset.MAJOR_WOUND_SUCCESS),
-                   ('Missed roll by < 5 (roll < %d) -- stunned' % (total+5),
+                   ('Missed roll by < 5 (roll < %d) -- %s' % (total+5,
+                       stunned_string),
                     GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL),
-                   ('Missed roll by >= 5 (roll >= %d -- unconscious)' %
+                   ('Missed roll by >= 5 (roll >= %d -- Unconscious)' %
                        (total+5),
                     GurpsRuleset.MAJOR_WOUND_BAD_FAIL),
                    ]
@@ -3528,14 +3546,27 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                     'level': ca_fighter.Fighter.UNCONSCIOUS},
                                    fight_handler)
                 elif stunned_results == GurpsRuleset.MAJOR_WOUND_SIMPLE_FAIL:
-                    self.do_action(fighter,
-                                   {'action-name': 'change-posture',
-                                    'posture': 'lying'},
-                                   fight_handler)
+                    # B420 - major wounds cause stunning and knockdown
                     self.do_action(fighter,
                                    {'action-name': 'stun',
                                     'stun': True},
                                    fight_handler)
+
+                    if no_knockdown is None or not no_knockdown:
+                        self.do_action(fighter,
+                                       {'action-name': 'change-posture',
+                                        'posture': 'lying'},
+                                       fight_handler)
+                        # Technically, dropping a weapon should leave the
+                        # weapon in the room but it's easier for game play to
+                        # just holster it.  This assumes a nice game where the
+                        # GM just assumes the character (or one of his/her
+                        # party members) picks up the gun.
+                        self.do_action(fighter,
+                                       {'action-name': 'draw-weapon',
+                                        'weapon-index': None},
+                                       fight_handler,
+                                       logit=False)
 
         # B59
         if (still_alive and
@@ -4157,8 +4188,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         elif action['action-name'] == 'move-and-attack':
             # FP: B426
-            if (fighter.details['current']['fp'] <
-                    (fighter.details['permanent']['fp'] / 3)):
+            no_fatigue_penalty = self.get_option('no-fatigue-penalty')
+            if ((no_fatigue_penalty is None or not no_fatigue_penalty) and
+                    (fighter.details['current']['fp'] <
+                        (fighter.details['permanent']['fp'] / 3))):
                 move_string = 'half=%d (FP:B426)' % (move/2)
             else:
                 move_string = 'full=%d' % move
@@ -4272,8 +4305,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         elif action['action-name'] == 'move':
             move = fighter.details['current']['basic-move']
 
-            if (fighter.details['current']['fp'] <
-                    (fighter.details['permanent']['fp'] / 3)):
+            no_fatigue_penalty = self.get_option('no-fatigue-penalty')
+            if ((no_fatigue_penalty is None or not no_fatigue_penalty) and
+                    (fighter.details['current']['fp'] <
+                        (fighter.details['permanent']['fp'] / 3))):
                 move_string = 'half=%d (FP:B426)' % (move/2)
             else:
                 move_string = 'full=%d' % move
@@ -4865,7 +4900,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
     def __stun_action(self,
                       fighter,          # Fighter object
                       action,           # {'action-name': 'stun',
-                                        #  'stun': False}
+                                        #  'stun': True / False}
                                         #  'comment': <string>, # optional
                       fight_handler,    # FightHandler object
                       ):
@@ -4878,14 +4913,5 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             of what the Fighter is doing.
         '''
         fighter.details['stunned'] = action['stun']
-
-        # Technically, dropping a weapon should leave the weapon in the room
-        # but it's easier for game play to just holster it.  This assumes a
-        # nice game where the GM just assumes the character (or one of his/
-        # her party members) picks up the gun.
-        self.do_action(fighter,
-                       {'action-name': 'draw-weapon', 'weapon-index': None},
-                       fight_handler,
-                       logit=False)
 
         return None  # No timer

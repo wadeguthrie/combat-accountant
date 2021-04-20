@@ -439,15 +439,9 @@ class Fighter(ThingsInFight):
         Returns nothing.
         '''
         super(Fighter, self).end_fight(fight_handler)
-        if (self._ruleset.options is not None and
-                self._ruleset.options.get_option('reload-after-fight') and
+        reload_after_fight = self._ruleset.get_option('reload-after-fight')
+        if (reload_after_fight is not None and reload_after_fight and
                 self.group == 'PCs'):
-
-            window_text = [[{'text': 'Reload, Reload, Reload.',
-                             'mode': curses.A_NORMAL}]]
-            self._window_manager.display_window(
-                    ('%s is Auto-Reloading After The Fight' % self.name),
-                    window_text)
             self._ruleset.do_action(self,
                                     {'action-name': 'reload',
                                      'comment': 'Reloading after fight',

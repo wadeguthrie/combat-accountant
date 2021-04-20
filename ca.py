@@ -25,7 +25,6 @@ import ca_timers
 # TODO: 'give equipment' needs to be an action
 
 # TODO: need a way to get back to current init (space? return?)
-# TODO: should be option to not drop weapon and fall during stun
 
 # TODO: should be able to scroll through description of creature in
 #   'modify Monsters' screen
@@ -5497,6 +5496,14 @@ class FightHandler(ScreenHandler):
                 ask_to_loot = False
 
         if not self._saved_fight['saved']:
+            reload_after_fight = self.world.ruleset.get_option(
+                    'reload-after-fight')
+            if reload_after_fight is not None and reload_after_fight:
+                window_text = [[{'text': 'Reload, Reload, Reload.',
+                                 'mode': curses.A_NORMAL}]]
+                self._window_manager.display_window(
+                        ('Auto-Reloading After The Fight'),
+                        window_text)
             for fighter in self.__fighters:
                 fighter.end_fight(self)
 

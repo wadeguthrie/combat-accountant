@@ -123,8 +123,8 @@ class Ruleset(object):
         for index, item in enumerate(fighter.details['stuff']):
             if 'armor' in item['type']:
                 if index not in armor_index_list:
-                    if (self.options.get_option('verbose') is not None and
-                            self.options.get_option('verbose')):
+                    verbose_option = self.get_option('verbose')
+                    if verbose_option is not None and verbose_option:
                         entry_name = '%d: %s' % (index, item['name'])
                     else:
                         entry_name = '%s' % item['name']
@@ -202,8 +202,8 @@ class Ruleset(object):
                         'melee weapon' in item['type'] or
                         'shield' in item['type']):
                     if weapon is None or weapon_index != index:
-                        if (self.options.get_option('verbose') is not None and
-                                self.options.get_option('verbose')):
+                        verbose_option = self.get_option('verbose')
+                        if verbose_option is not None and verbose_option:
                             entry_name = '%d: %s' % (index, item['name'])
                         else:
                             entry_name = '%s' % item['name']
@@ -249,8 +249,8 @@ class Ruleset(object):
             else:
                 name = item['name']
 
-            if (self.options.get_option('verbose') is not None and
-                    self.options.get_option('verbose')):
+            verbose_option = self.get_option('verbose')
+            if verbose_option is not None and verbose_option:
                 name = '%d: %s' % (index, name)
 
             use_menu.append((name,
@@ -322,8 +322,8 @@ class Ruleset(object):
         if fighter.details['state'] != 'fight':
             fighter.details['state'] = 'alive'
 
-        if (self.options is not None and
-                self.options.get_option('reload-on-heal') and
+        reload_option = self.get_option('reload-on-heal')
+        if (reload_option is not None and reload_option and
                 fighter.group == 'PCs'):
             throw_away, original_weapon_index = fighter.get_current_weapon()
             for index, item in enumerate(fighter.details['stuff']):
@@ -788,8 +788,9 @@ class Ruleset(object):
 
             # xxx
 
-            infinite_clips = True if (self.options is not None and
-                    self.options.get_option('infinite-clips')) else False
+            infinite_clips_option = self.get_option('infinite-clips')
+            infinite_clips = True if (infinite_clips_option is not None and
+                    infinite_clips_option) else False
 
             # Prepare the new clip -- I know this is backwards but the
             # clip index (for the new clip) is still valid until the old clip
@@ -959,6 +960,13 @@ class Ruleset(object):
             fighter.end_turn(fight_handler)
             fight_handler.modify_index(1)
         return Ruleset.HANDLED_OK
+
+    def get_option(self,
+                    option_name     # string: name of option to get
+                    ):
+        if self.options is None:
+            return None
+        return self.options.get_option(option_name)
 
     def __hold_init(self,
                     fighter,          # Fighter object
