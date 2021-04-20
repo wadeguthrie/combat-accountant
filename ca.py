@@ -3032,6 +3032,77 @@ class PersonnelHandler(ScreenHandler):
         Returns: None if we want to bail-out of the give equipment process,
                  True, otherwise
         '''
+
+        #
+        # TODO: convert 'give equipment' to an action.  THIS code is an action
+        #   that dons armor but it works in this context (i.e., not in a
+        #   fight).
+        #
+        #   Need to rework things -- all of the actions need to come after all
+        #   of the questions.  This is complicated because some of the
+        #   questions are buried in cascaded calls.
+        #
+        #   Part 1:
+        #       EquipmentManger::select_item_index(only_items_that_can_be_removed)
+        #       get_item_by_index()
+        #       Get the max count from the item and ask the user
+        #       Ask the user who gets the item.
+        #   Part 2:
+        #       Remove the number of items at index
+        #       add_equipment to the recipient
+        #
+        # Here are the challenges:
+        #
+        #   we -> EquipmentManager::remove_equipment -> Fighter::remove_equipment
+        #   -> Equipment::remove
+        #
+        #   * Fighter::remove_equipment asks 'how_many', so that has to bubble up
+        #     to the top.
+        #   * we remove the equipmnet before aking who gets it.
+        #   * EquipmentManager::remove_equipment asks what to remove (maybe that
+        #     question needs to have its own function so that remove_equipment
+        #     just gets told which piece of equipment).
+        #   * EquipmentManager::remove_equipment refuses to remove natural
+        #     armor or weapons (maybe we need a 'can_be_removed' call so we can
+        #     check ahead, or the 'find_item' call needs to check if it can remove
+        #     them)
+        #
+        #########################
+        #fighter = self.get_obj_from_index()
+        #if fighter is None:
+        #    return None
+
+        #armor_index_list = fighter.get_current_armor_indexes()
+        #armor_list = fighter.get_items_from_indexes(armor_index_list)
+        #don_armor_menu = []
+        #for index, item in enumerate(fighter.details['stuff']):
+        #    if 'armor' in item['type']:
+        #        if index not in armor_index_list:
+        #            don_armor_menu.append((item['name'], index))
+        #don_armor_menu = sorted(don_armor_menu, key=lambda x: x[0].upper())
+        #armor_index = None
+        #if len(don_armor_menu) == 0:
+        #    return None
+        #elif len(don_armor_menu) == 1:
+        #    armor_index = don_armor_menu[0][1]
+        #else:
+        #    armor_index, ignore = self._window_manager.menu(
+        #            'Don Which Armor', don_armor_menu)
+        #    if armor_index is None:
+        #        return None
+
+        #self.world.ruleset.do_action(
+        #        fighter,
+        #        {'action-name': 'don-armor',
+        #         'armor-index': armor_index,
+        #         'notimer': True},
+        #        None)
+        #self._draw_screen()
+
+        #########################
+        #
+        #
+
         # Get the object from the viewing index
         from_fighter = self.get_obj_from_index()
         if from_fighter is None:
