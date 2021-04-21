@@ -58,6 +58,7 @@ class TestPersonnelHandler(ca.PersonnelHandler):
                 creature_type,  # one of: NPCs, PCs, or MONSTERs
                 )
         self.__command_ribbon_input = []
+        self.__saved_thing = None
 
     def set_command_ribbon_input(self,
                                  character  # command ribbon input
@@ -117,6 +118,16 @@ class TestPersonnelHandler(ca.PersonnelHandler):
             else:
                 self._window_manager.error(
                         ['Invalid command: "<%d>" ' % string])
+
+        def set_obj_from_index(self,
+                               thing,   # ThingsInFight (fighter or venue)
+                               ):
+            self.__saved_thing = thing
+
+        def get_obj_from_index(self):
+            saved_thing = self.__saved_thing
+            self.__saved_thing = None
+            return saved_thing
 
 
 class WorldData(object):
@@ -4221,6 +4232,100 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         weapon, actual_weapon_index = fighter.get_current_weapon()
         assert weapon is None
         assert actual_weapon_index is None
+
+    def test_give_equipment(self):
+        '''
+        Basic test
+        '''
+        if ARGS.verbose:
+            print '\n=== test_give_equipment ===\n'
+
+        tank = ca_fighter.Fighter(
+                'Tank',
+                'group',
+                copy.deepcopy(self.__tank_fighter),
+                self.__ruleset,
+                self.__window_manager)
+
+        tank_after_gift = [
+                 {"name": "sick stick",
+                  "type": ["melee weapon"],
+                  "damage": {"dice": "1d+1 fat"},
+                  "skill": "Axe/Mace",
+                  "count": 1,
+                  "owners": None,
+                  "notes": ""},
+                 {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
+                  "owners": None}]
+
+        priest = ca_fighter.Fighter(
+                'Priest',
+                'group',
+                copy.deepcopy(self.__vodou_priest_fighter),
+                self.__ruleset,
+                self.__window_manager)
+        priest_after_gift = [
+                 {"name": "pistol, Colt 170D",
+                  "type": ["ranged weapon"],
+                  "damage": {"dice": "1d+4"},
+                  "acc": self.__colt_pistol_acc,
+                  "ammo": {"name": "C Cell",
+                           "shots_left": self.__vodou_priest_initial_shots,
+                           "shots": self.__vodou_priest_initial_shots},
+                  "clip": {"name": "C Cell",
+                           "type": ["misc"],
+                           "count": 1,
+                           "notes": "",
+                           "owners": None},
+                  "reload": 3,
+                  "skill": "Guns (Pistol)",
+                  "count": 1,
+                  "owners": 1,
+                  "notes": None},  # index 0
+                 {"name": "C Cell",
+                  "type": ["misc"],
+                  "count": self.__vodou_priest_ammo_count,
+                  "notes": "",
+                  "owners": None},  # index 1
+                 {"count": 1,
+                  "type": ["armor"],
+                  "notes": "Enchanted w/fortify spell [M66]",
+                  "dr": self.__vodou_priest_armor_dr,
+                  "name": "Sport coat/Jeans"},
+                 {"name": "pistol, Sig D65",  # the index of this is stored
+                                              # in __tank_fighter_pistol_index
+                  "type": ["ranged weapon"],
+                  "damage": {"dice": "1d+4"},
+                  "acc": 4,
+                  "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
+                  "clip": {"name": "C Cell",
+                           "type": ["misc"],
+                           "count": 1,
+                           "notes": "",
+                           "owners": None},
+                  "reload": 3,
+                  "skill": "Guns (Pistol)",
+                  "count": 1,
+                  "owners": None,
+                  "notes": ""},
+            ]
+
+        # Give item from tank to priest
+        mock_fight_handler = MockFightHandler()
+        mock_fight_handler.set_fighter_object('Priest', 'group', priest)
+
+        self.__ruleset.do_action(
+                tank,
+                {'action-name': 'give-equipment',
+                 'item-index': self.__tank_fighter_pistol_index,
+                 'count': 1,
+                 'recipient': {'name': 'Priest', 'group': 'group'},
+                 'comment': '%s gave pistol to %s' % (tank.name, priest.name)
+                 },
+                mock_fight_handler)
+
+        assert self.__are_equal(tank_after_gift, tank.details['stuff'])
+        assert self.__are_equal(priest_after_gift, priest.details['stuff'])
 
     def test_redirects(self):
         '''

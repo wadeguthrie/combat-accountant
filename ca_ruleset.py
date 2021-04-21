@@ -306,7 +306,6 @@ class Ruleset(object):
     def heal_fighter(self,
                      fighter,   # Fighter object
                      world      # World object
-                     # TODO: prefs - for reload-on-heal
                      ):
         '''
         Removes all injury (and their side-effects) from a fighter.
@@ -968,6 +967,46 @@ class Ruleset(object):
             return None
         return self.options.get_option(option_name)
 
+    def __give_equipment(self,
+                         fighter,          # Fighter object
+                         action,           # {'action-name': 'end-turn',
+                                           #  'item-index': item_index,
+                                           #  'count': number of items to tive,
+                                           #  'recipient': to_fighter_info
+                                           #  'comment': <string> # optional
+                         fight_handler,    # FightHandler object
+                         ):
+        '''
+        Action handler for Ruleset.
+
+        Gives an item from fighter to another.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+
+        '''
+        if fight_handler is None:
+            #NOTE: got no 'world' or I could do this:
+            # if action['recipient']['group'] == 'PCs':
+            #     recipient = self.world.get_creature(to_fighter_info, 'PCs')
+            # else:
+            self._window_manager.error([
+                'You can only give equipment during a fight'])
+            return Ruleset.HANDLED_ERROR
+        else:
+            ignore, recipient = fight_handler.get_fighter_object(
+                                            action['recipient']['name'],
+                                            action['recipient']['group'])
+
+        item = fighter.remove_equipment(action['item-index'], action['count'])
+        if item is None:
+            self._window_manager.error(['No item to transfer'])
+            return Ruleset.HANDLED_ERROR
+        recipient.add_equipment(item, fighter.detailed_name)
+
+        return Ruleset.HANDLED_OK
+
+
     def __hold_init(self,
                     fighter,          # Fighter object
                     action,           # {'action-name': 'hold-init',
@@ -1047,6 +1086,7 @@ class Ruleset(object):
             'don-armor':            {'doit': self.__don_armor},
             'draw-weapon':          {'doit': self.__draw_weapon},
             'end-turn':             {'doit': self.__end_turn},
+            'give-equipment':       {'doit': self.__give_equipment},
             'move-and-attack':      {'doit': self.__do_attack},
             'pick-opponent':        {'doit': self.__pick_opponent},
             'previous-turn':        {'doit': self.__previous_turn},
