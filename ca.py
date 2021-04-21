@@ -22,15 +22,6 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: 'give equipment' needs to be an action
-
-# TODO: need a way to get back to current init (space? return?)
-
-# TODO: should be able to scroll through description of creature in
-#   'modify Monsters' screen
-# TODO: ending init hold for current fighter, highlight the current fighter
-#   in the list
-
 # TODO: ISSUE 20: need a way to generate equipment
 # TODO: ISSUE 13: multiple weapons (one for each hand) - end-of-round will
 #   have to change
@@ -3032,76 +3023,6 @@ class PersonnelHandler(ScreenHandler):
                  True, otherwise
         '''
 
-        #
-        # TODO: convert 'give equipment' to an action.  THIS code is an action
-        #   that dons armor but it works in this context (i.e., not in a
-        #   fight).
-        #
-        #   Need to rework things -- all of the actions need to come after all
-        #   of the questions.  This is complicated because some of the
-        #   questions are buried in cascaded calls.
-        #
-        #   Part 1:
-        #       EquipmentManger::select_item_index(only_items_that_can_be_removed)
-        #       get_item_by_index()
-        #       Get the max count from the item and ask the user
-        #       Ask the user who gets the item.
-        #   Part 2:
-        #       Remove the number of items at index
-        #       add_equipment to the recipient
-        #
-        # Here are the challenges:
-        #
-        #   we -> EquipmentManager::remove_equipment -> Fighter::remove_equipment
-        #   -> Equipment::remove
-        #
-        #   * Fighter::remove_equipment asks 'how_many', so that has to bubble up
-        #     to the top.
-        #   * we remove the equipmnet before aking who gets it.
-        #   * EquipmentManager::remove_equipment asks what to remove (maybe that
-        #     question needs to have its own function so that remove_equipment
-        #     just gets told which piece of equipment).
-        #   * EquipmentManager::remove_equipment refuses to remove natural
-        #     armor or weapons (maybe we need a 'can_be_removed' call so we can
-        #     check ahead, or the 'find_item' call needs to check if it can remove
-        #     them)
-        #
-        #########################
-        #fighter = self.get_obj_from_index()
-        #if fighter is None:
-        #    return None
-
-        #armor_index_list = fighter.get_current_armor_indexes()
-        #armor_list = fighter.get_items_from_indexes(armor_index_list)
-        #don_armor_menu = []
-        #for index, item in enumerate(fighter.details['stuff']):
-        #    if 'armor' in item['type']:
-        #        if index not in armor_index_list:
-        #            don_armor_menu.append((item['name'], index))
-        #don_armor_menu = sorted(don_armor_menu, key=lambda x: x[0].upper())
-        #armor_index = None
-        #if len(don_armor_menu) == 0:
-        #    return None
-        #elif len(don_armor_menu) == 1:
-        #    armor_index = don_armor_menu[0][1]
-        #else:
-        #    armor_index, ignore = self._window_manager.menu(
-        #            'Don Which Armor', don_armor_menu)
-        #    if armor_index is None:
-        #        return None
-
-        #self.world.ruleset.do_action(
-        #        fighter,
-        #        {'action-name': 'don-armor',
-        #         'armor-index': armor_index,
-        #         'notimer': True},
-        #        None)
-        #self._draw_screen()
-
-        #########################
-        #
-        #
-
         # Get the object from the viewing index
         from_fighter = self.get_obj_from_index()
         if from_fighter is None:
@@ -3111,9 +3032,11 @@ class PersonnelHandler(ScreenHandler):
         keep_asking = True
         to_whom = 0
         while keep_asking:
-            item = self.__equipment_manager.remove_equipment(from_fighter)
-            if item is None:
+            item_index = self.__equipment_manager.select_item_index(from_fighter)
+            if item_index is None:
                 return None
+            count = from_fighter.ask_how_many(item_index)
+            item = from_fighter.details['stuff'][item_index]
 
             character_list = self.world.get_creature_details_list('PCs')
             character_menu = [(dude, dude) for dude in character_list]
@@ -3122,13 +3045,17 @@ class PersonnelHandler(ScreenHandler):
                     character_menu,
                     to_whom)
 
-            if to_fighter_info is None:
-                from_fighter.add_equipment(item, None)
-                self._draw_screen()
-                return None
+            # NOTE: Can't use an action for give-equipment, here, because
+            # we're not in a fight and the action needs a fight_handler to
+            # get the Fighter object from the recipient name.  We could,
+            # alternatively use the 'World' but the ruleset shouldn't need
+            # to know about the World, either.
 
-            # TODO: give equipment needs to be an action
+            # TODO: not just to PCs, allow transfer to NPCs
+
             to_fighter = self.world.get_creature(to_fighter_info, 'PCs')
+            item = self.__equipment_manager.remove_equipment_by_index(
+                    from_fighter, item_index, count)
             to_fighter.add_equipment(item, from_fighter.detailed_name)
             self._draw_screen()
 
@@ -4478,7 +4405,8 @@ class FightHandler(ScreenHandler):
                     found_one = True
                     break
             if not found_one:
-                # TODO: error -- there aren't supposed to be equal inits
+                self._window_manager.error(
+                        ['Fighter seems to have the same init as destination'])
                 pass
         else:
             # Put the new fighter's initiative beyond the last one
@@ -4970,34 +4898,49 @@ class FightHandler(ScreenHandler):
         else:
             from_fighter = self.get_current_fighter()
 
-        item = self.__equipment_manager.remove_equipment(from_fighter)
-        if item is None:
-            return True  # Keep going
+        item_index = self.__equipment_manager.select_item_index(from_fighter)
+        if item_index is None:
+            return None
+        count = from_fighter.ask_how_many(item_index)
 
         pc_list = []
         monster_list = []
         for fighter in self.__fighters:
             if fighter.group == 'PCs':
-                pc_list.append((fighter.name,
-                               (fighter.name, fighter.group)))
+                pc_list.append(
+                        (fighter.name,
+                         {'name': fighter.name, 'group': fighter.group}
+                         ))
             else:
-                monster_list.append((fighter.name,
-                                    (fighter.name, fighter.group)))
+                monster_list.append(
+                        (fighter.name,
+                         {'name': fighter.name, 'group': fighter.group}
+                         ))
         character_menu = pc_list
         character_menu.extend(monster_list)
 
+        item = from_fighter.details['stuff'][item_index]
         to_fighter_name, ignore = self._window_manager.menu(
                                         'Give "%s" to whom?' % item['name'],
                                         character_menu)
 
         if to_fighter_name is None:
-            from_fighter.add_equipment(item, None)
             return True  # Keep going
 
-        ignore, to_fighter = self.get_fighter_object(to_fighter_name[0],
-                                                     to_fighter_name[1])
+        # Give item
 
-        to_fighter.add_equipment(item, from_fighter.detailed_name)
+        self.world.ruleset.do_action(
+                from_fighter,
+                {'action-name': 'give-equipment',
+                 'item-index': item_index,
+                 'count': count,
+                 'recipient': to_fighter_name,
+                 'comment': '%s gave %s to %s' % (from_fighter.name,
+                                                  item['name'],
+                                                  to_fighter_name['name'])
+                 },
+                self)
+
         return True  # Keep going
 
     def __handle_fighter_background_actions(
@@ -6003,7 +5946,6 @@ class MainHandler(ScreenHandler):
                  window_manager,    # GmWindowManager object for menus and
                                     #   errors
                  world              # World object
-                 # TODO: prefs - save for heal and fully_heal
                  ):
         super(MainHandler, self).__init__(window_manager, world)
         self.__current_pane = MainHandler.CHAR_DETAIL

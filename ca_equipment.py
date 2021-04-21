@@ -313,24 +313,28 @@ class EquipmentManager(object):
 
         return starting_index
 
-    def remove_equipment(self,
-                         fighter,       # Fighter object
-                         count=None     # int
-                         ):
+    def select_item_index(self,
+                          fighter,                  # Fighter object
+                          limit_to_removable=True   # bool
+                          ):
         '''
-        Ask the user which piece of equipment to discard and remove it.
+        Ask the user to select an item possessed by the fighter.
 
-        Returns the removed piece of equipment.
+        If 'limit_to_removable' is True, only present items that the fighter
+        can separate from his/her body (i.e., not natural weapons or armor).
+
+        Returns index of the selected item.
         '''
         if fighter is None:
             return None
 
         item_menu = []
         for index, item in enumerate(fighter.details['stuff']):
-            if 'natural-weapon' in item and item['natural-weapon']:
-                continue  # Can't remove natural weapons
-            if 'natural-armor' in item and item['natural-armor']:
-                continue  # Can't remove natural armor
+            if limit_to_removable:
+                if 'natural-weapon' in item and item['natural-weapon']:
+                    continue  # Can't remove natural weapons
+                if 'natural-armor' in item and item['natural-armor']:
+                    continue  # Can't remove natural armor
             output = []
             EquipmentManager.get_description(item, [], [], output)
             # output looks like:
@@ -346,6 +350,33 @@ class EquipmentManager(object):
         item_menu = sorted(item_menu, key=lambda x: x[0].upper())
         item_index, ignore = self.__window_manager.menu('Item to Remove',
                                                         item_menu)
+
+        return item_index # This may be 'None'
+
+    def remove_equipment(self,
+                         fighter,       # Fighter object
+                         count=None     # int
+                         ):
+        '''
+        Ask the user which piece of equipment to discard and remove it.
+
+        Returns the removed piece of equipment.
+        '''
+        item_index = self.select_item_index(fighter)
+        return self.remove_equipment_by_index(fighter,
+                                              item_index,
+                                              count)
+
+    def remove_equipment_by_index(self,
+                                  fighter,      # Fighter object
+                                  item_index,   # int index to be removed
+                                  count=None    # int
+                                  ):
+        '''
+        Ask the user which piece of equipment to discard and remove it.
+
+        Returns the removed piece of equipment.
+        '''
         if item_index is None:
             return None
 
