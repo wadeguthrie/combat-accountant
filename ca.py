@@ -22,6 +22,10 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: grenade support (missile-like but not with clips)
+# TODO: the fatigue penalty reduction due to high skill doesn't apply to
+#   blocking spells
+
 # TODO: ISSUE 20: need a way to generate equipment
 # TODO: ISSUE 13: multiple weapons (one for each hand) - end-of-round will
 #   have to change
@@ -5387,6 +5391,20 @@ class FightHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
+        # Temporarily, save a bug report at the end of the fight
+        # TODO: remove, eventually
+
+        if not ScreenHandler.maintain_game_file:
+            self.world.do_debug_snapshot('EndFight')
+            bug_report_game_file = self.world.program.make_bug_report(
+                self.world.details['current-fight']['history'],
+                'Taking a snapshot at the end of the fight')
+
+            self._window_manager.display_window(
+                    'Saved Snapshot After Fight',
+                    [[{'text': ('Output file "%s"' % bug_report_game_file),
+                       'mode': curses.A_NORMAL}]])
+
         # Get the state of the monsters.
 
         ask_to_save = False  # Ask to save if some monster is conscious
@@ -7032,8 +7050,7 @@ if __name__ == '__main__':
                 fight_handler.handle_user_input_until_done()
 
             # Enter into the mainloop
-            main_handler = MainHandler(window_manager,
-                                       world)
+            main_handler = MainHandler(window_manager, world)
             orderly_shutdown = main_handler.handle_user_input_until_done()
 
         # Write a crashdump of the shutdown

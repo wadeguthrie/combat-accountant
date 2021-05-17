@@ -9,6 +9,8 @@ import sys
 import traceback
 import xml.etree.ElementTree as ET
 
+# TODO: deal with purchased HP, etc.
+
 class MyArgumentParser(argparse.ArgumentParser):
     def error(self, message):
         sys.stderr.write('error: %s\n' % message)
