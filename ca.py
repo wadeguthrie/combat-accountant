@@ -32,11 +32,9 @@ import ca_timers
 # TODO: ISSUE 11: equipment containers
 # TODO: ISSUE 9: maintain spell
 
-# TODO: reload and spells should happen at the end of the timer.  The
+# TODO: HouseRule: reload and spells should happen at the end of the timer.  The
 #       'reloading' timer should launch the second part of the action when it
 #       fires.
-# TODO: ability to retire a fight from the main screen (if the players avoided
-#   it)
 # TODO: why do redirect entries have 'stuff' and 'timers' entries?
 
 # TODO: DIFFICULT: FP should ask if using DR
