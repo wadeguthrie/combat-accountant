@@ -3254,9 +3254,11 @@ class PersonnelHandler(ScreenHandler):
             if ('melee weapon' in item['type'] or
                     'ranged weapon' in item['type'] or
                     'shield' in item['type']):
-                preferred_string = (' (preferred)'
-                        if index == fighter.details['preferred-weapon-index']
-                        else '')
+                if ('preferred-weapon-index' not in fighter.details or
+                        index != fighter.details['preferred-weapon-index']):
+                    preferred_string = ''
+                else:
+                    preferred_string = ' (preferred)'
                 weapon_menu.append(('%s%s' % (item['name'], preferred_string),
                                     index))
         weapon_menu = sorted(weapon_menu, key=lambda x: x[0].upper())
