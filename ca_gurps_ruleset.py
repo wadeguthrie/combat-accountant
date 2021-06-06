@@ -4770,6 +4770,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         if handled == ca_ruleset.Ruleset.HANDLED_OK:
             if logit and 'action-name' in action:
+                # This is mostly for actions (like 'set_timer') on a <ROOM>
+                if 'actions_this_turn' not in fighter.details:
+                    fighter.details['actions_this_turn'] = []
                 fighter.details['actions_this_turn'].append(
                         action['action-name'])
         elif handled == ca_ruleset.Ruleset.UNHANDLED:
