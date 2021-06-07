@@ -380,8 +380,64 @@ class Fighter(ThingsInFight):
 
         Returns the new index of the equipment.
         '''
-        index = self.equipment.add(new_item, source)
-        return index
+        # If we're adding a weapon or a piece of armor, is it the first of
+        # its kind?
+
+        is_weapon = True if ('ranged weapon' in new_item['type'] or
+                'melee weapon' in new_item['type']) else False
+        is_armor = True if 'armor' in new_item['type'] else False
+
+        found_preferred_weapon = False
+        found_preferred_armor = False
+        if is_weapon or is_armor:
+            before_item_count = self.equipment.get_item_count()
+            if ('preferred-weapon-index' in self.details and
+                    self.details['preferred-weapon-index'] is not None):
+                found_preferred_weapon = True
+            if ('preferred-armor-index' in self.details and
+                    self.details['preferred-armor-index'] is not None):
+                found_preferred_armor = True
+
+        # Add the item
+        new_item_index = self.equipment.add(new_item, source)
+
+        # If we're adding the creature's first weapon or armor, make it the
+        # preferred weapon or armor.  If it's not the creature's first,
+        # ask the user if it should be the creature's preferred.
+
+        if new_item_index is not None:
+            after_item_count = self.equipment.get_item_count()
+            if is_weapon:
+                if found_preferred_weapon:
+                    if before_item_count != after_item_count:
+                        # Only ask if we've added a new weapon and not just
+                        # bumped-up the count on a previous weapon
+                        replace_preferred_menu = [('yes', True), ('no', False)]
+                        replace_preferred, ignore = self._window_manager.menu(
+                                'Make %s the preferred weapon?' %
+                                new_item['name'],
+                                replace_preferred_menu)
+                        if replace_preferred:
+                            self.details['preferred-weapon-index'] = (
+                                    new_item_index)
+                else:
+                    self.details['preferred-weapon-index'] = new_item_index
+            if is_armor:
+                if found_preferred_armor:
+                    if before_item_count != after_item_count:
+                        # Only ask if we've added a new piece of armor and not
+                        # just bumped-up the count on a previous piece.
+                        replace_preferred_menu = [('yes', True), ('no', False)]
+                        replace_preferred, ignore = self._window_manager.menu(
+                                'Make %s the preferred armor?' %
+                                new_item['name'],
+                                replace_preferred_menu)
+                        if replace_preferred:
+                            self.details['preferred-armor-index'].append(
+                                   new_item_index)
+                else:
+                    self.details['preferred-armor-index'] = [new_item_index]
+        return new_item_index
 
     def doff_armor_by_index(self,
                             index  # Index of armor in fighter's 'stuff'

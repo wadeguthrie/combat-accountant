@@ -4435,6 +4435,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             reload_time = weapon.details['reload']
 
             # B43: combat reflexes
+            # TODO: this is only for fast draw
             if 'Combat Reflexes' in fighter.details['advantages']:
                 reload_time -= 1
 

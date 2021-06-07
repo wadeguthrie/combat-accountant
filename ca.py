@@ -2210,6 +2210,11 @@ class PersonnelHandler(ScreenHandler):
         keep_asking_menu = [('yes', True), ('no', False)]
         starting_index = 0
         while keep_asking:
+            # NOTE: I keep having to look this up, so here it is:
+            # here ->
+            #   EquipmentManager::add_equipment ->
+            #   Fighter::add_equipment ->
+            #   Equipment::add
             starting_index = self.__equipment_manager.add_equipment(
                     fighter, starting_index)
             self._draw_screen()
@@ -2845,7 +2850,8 @@ class PersonnelHandler(ScreenHandler):
         if 'armor-index' in fighter.details:
             if owns_armor:
                 sub_menu.extend([
-                    ('Don armor',  {'doit': self.__don_armor})
+                    ('Don armor',  {'doit': self.__don_armor}),
+                    ('Prefer armor',       {'doit': self.__prefer_armor})
                 ])
             armor_indexes = fighter.get_current_armor_indexes()
             if len(armor_indexes) > 0:
@@ -2858,7 +2864,6 @@ class PersonnelHandler(ScreenHandler):
                 sub_menu.extend([
                     ('draw/drop weapon',    {'doit': self.__draw_weapon}),
                     ('prefer weapon',       {'doit': self.__prefer_weapon}),
-                    ('Prefer armor',       {'doit': self.__prefer_armor})
                 ])
             weapon, index = fighter.get_current_weapon()
             if (weapon is not None and
@@ -3058,7 +3063,7 @@ class PersonnelHandler(ScreenHandler):
             to_fighter = self.world.get_creature(to_fighter_info, 'PCs')
             item = self.__equipment_manager.remove_equipment_by_index(
                     from_fighter, item_index, count)
-            to_fighter.add_equipment(item, from_fighter.detailed_name)
+            ignore = to_fighter.add_equipment(item, from_fighter.detailed_name)
             self._draw_screen()
 
             keep_asking, ignore = self._window_manager.menu(
@@ -3204,6 +3209,8 @@ class PersonnelHandler(ScreenHandler):
             return None
 
         armor_menu = []
+        if 'preferred-armor-index' not in fighter.details:
+            fighter.details['preferred-armor-index'] = []
         for index, item in enumerate(fighter.details['stuff']):
             if 'armor' in item['type']:
                 preferred_string = (' (preferred)'
@@ -5073,7 +5080,8 @@ class FightHandler(ScreenHandler):
                 # TODO: go back and ask again for items where we didn't get
                 # all of them
                 new_item = bad_guy.remove_equipment(index)
-                xfer['guy'].add_equipment(new_item, bad_guy.detailed_name)
+                ignore = xfer['guy'].add_equipment(new_item,
+                                                   bad_guy.detailed_name)
 
                 # indexes are no longer good, remove the weapon and armor
                 if bad_guy.name != ca_fighter.Venue.name:
