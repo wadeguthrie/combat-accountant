@@ -357,14 +357,22 @@ class Ruleset(object):
 
         # Check to see if they're carrying their preferred armor
 
-        armor_index_list = fighter.get_current_armor_indexes()
-
         preferred_armor_index_list = []
-        if not playing_back:
-            if 'preferred-armor-index' in fighter.details:
-                preferred_armor_index_list.extend(
+        if ('preferred-armor-index' not in fighter.details or
+                len(fighter.details['preferred-armor-index']) == 0):
+            they_have_armor = False
+            for item in fighter.details['stuff']:
+                if 'armor' in item['type']:
+                    they_have_armor = True
+                    break
+            if they_have_armor:
+                self._window_manager.error([
+                    'Creature "%s" has no preferred armor' % name])
+        elif not playing_back:
+            preferred_armor_index_list.extend(
                         fighter.details['preferred-armor-index'])
 
+        armor_index_list = fighter.get_current_armor_indexes()
         if len(preferred_armor_index_list) > 0:
 
             # First, build list of preferred armor to add
@@ -469,9 +477,21 @@ class Ruleset(object):
 
         preferred_weapon_index = None
         preferred_weapon = None
-        if 'preferred-weapon-index' in fighter.details:
+
+        if ('preferred-weapon-index' not in fighter.details or
+                fighter.details['preferred-weapon-index'] is None):
+
+            they_have_a_weapon = False
+            for item in fighter.details['stuff']:
+                if ('ranged weapon' in item['type'] or
+                        'melee weapon' in item['type']):
+                    they_have_a_weapon = True
+                    break
+            if they_have_a_weapon:
+                self._window_manager.error([
+                    'Creature "%s" has no preferred weapon' % name])
+        elif not playing_back:
             preferred_weapon_index = fighter.details['preferred-weapon-index']
-        if preferred_weapon_index is not None:
             preferred_weapon = fighter.equipment.get_item_by_index(
                     preferred_weapon_index)
 
@@ -526,6 +546,7 @@ class Ruleset(object):
                 result = False
 
         weapon, throw_away = fighter.get_current_weapon()
+
         if weapon is None:
             # If they're not holding anything and they have natural weapons,
             # use those weapons.
@@ -537,6 +558,24 @@ class Ruleset(object):
                                     'notimer': True},
                                    None)
                     break
+
+        # Make sure that all missile weapons have their associated ammo.
+
+        for weapon in fighter.details['stuff']:
+            if 'ranged weapon' not in weapon['type']:
+                continue
+            clip_name = weapon['ammo']['name']
+            found_clip = False
+            for clip in fighter.details['stuff']:
+                if clip['name'] == clip_name:
+                    found_clip = True
+                    break
+            if not found_clip:
+                self._window_manager.error([
+                    '"%s"' % name,
+                    '  is carrying a weapon (%s) with no ammo (%s).' % (
+                        weapon['name'], clip_name)])
+
         return result
 
     def make_empty_creature(self):
@@ -844,9 +883,16 @@ class Ruleset(object):
 
                     clip_menu.append((text, index))
 
+            if len(clip_menu) == 0:
+                self._window_manager.error([
+                    'No clips of type %s available for %s' % (clip_name,
+                                                              weapon.name)])
+
             clip_index, ignore = self._window_manager.menu('Reload With What',
                                                            clip_menu)
             if clip_index is None:
+                # TODO: there should be a way to tell the derived ruleset that
+                # we're aborting early.
                 return Ruleset.DONT_LOG
 
             # Is the clip good?
@@ -1002,7 +1048,7 @@ class Ruleset(object):
         if item is None:
             self._window_manager.error(['No item to transfer'])
             return Ruleset.HANDLED_ERROR
-        recipient.add_equipment(item, fighter.detailed_name)
+        ignore = recipient.add_equipment(item, fighter.detailed_name)
 
         return Ruleset.HANDLED_OK
 

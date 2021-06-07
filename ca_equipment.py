@@ -35,7 +35,7 @@ class Equipment(object):
             if item['name'] == new_item['name']:
                 if self.__is_same_thing(item, new_item):
                     item['count'] += new_item['count']
-                    return
+                    return index
 
         self.__equipment.append(new_item)
 
@@ -293,7 +293,7 @@ class EquipmentManager(object):
         Returns nothing.
         '''
         if fighter is None:
-            return
+            return None
 
         # Pick an item off the shelf
 
@@ -309,7 +309,7 @@ class EquipmentManager(object):
             if item['owners'] is not None and len(item['owners']) == 0:
                 source = 'the store'
 
-            fighter.add_equipment(copy.deepcopy(item), source)
+            ignore = fighter.add_equipment(copy.deepcopy(item), source)
 
         return starting_index
 

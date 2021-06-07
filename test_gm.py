@@ -46,6 +46,19 @@ FWIW, I realize that many of the Mocks in here are actually Fakes.
 # TODO: test equipping characters
 
 
+class TestRuleset(ca_gurps_ruleset.GurpsRuleset):
+    def __init__(self, window_manager):
+        super(TestRuleset, self).__init__(window_manager)
+
+    # Our test creatures aren't totally consistent so we don't want to mess
+    # with the test.
+    def is_creature_consistent(self,
+                               name,     # string: creature's name
+                               creature, # dict from Game File
+                               fight_handler=None
+                               ):
+        return True
+
 class TestPersonnelHandler(ca.PersonnelHandler):
     def __init__(self,
                  window_manager,
@@ -732,6 +745,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         }
 
         self.__tank_fighter_pistol_index = 0
+        self.__tank_fighter_sickstick_index = 1
         self.__tank_fighter_stuff_count = 3
 
         self.__tank_fighter = {
@@ -758,7 +772,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                   "count": 1,
                   "owners": None,
                   "notes": ""},
-                 {"name": "sick stick",
+                 {"name": "sick stick", # the index of this is stored in
+                                        # __tank_fighter_sickstick_index
                   "type": ["melee weapon"],
                   "damage": {"dice": "1d+1 fat"},
                   "skill": "Axe/Mace",
@@ -1015,7 +1030,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         }  # End of world
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        self.__ruleset = TestRuleset(self.__window_manager)
 
     def tearDown(self):
         pass
@@ -1875,7 +1890,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             print '\n=== test_ranged_to_hit ===\n'
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        self.__ruleset = TestRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
         vodou_priest = ca_fighter.Fighter(
@@ -2118,7 +2133,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             print '\n=== test_messed_up_aim ===\n'
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        self.__ruleset = TestRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
         vodou_priest = ca_fighter.Fighter(
@@ -2356,7 +2371,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             print '\n=== test_melee_to_hit ===\n'
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        self.__ruleset = TestRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
         thief = ca_fighter.Fighter(
@@ -2463,7 +2478,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        self.__ruleset = TestRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
         vodou_priest = ca_fighter.Fighter(
@@ -2895,7 +2910,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        self.__ruleset = TestRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
         vodou_priest = ca_fighter.Fighter(
@@ -3057,7 +3072,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        self.__ruleset = TestRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
         vodou_priest = ca_fighter.Fighter(
@@ -3306,7 +3321,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        self.__ruleset = TestRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
         vodou_priest = ca_fighter.Fighter(
@@ -3355,7 +3370,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        self.__ruleset = TestRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
         vodou_priest = ca_fighter.Fighter(
@@ -3398,7 +3413,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        self.__ruleset = TestRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
         vodou_priest = ca_fighter.Fighter(
@@ -3516,7 +3531,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        self.__ruleset = TestRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
         vodou_priest = ca_fighter.Fighter(
@@ -3611,7 +3626,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        self.__ruleset = TestRuleset(self.__window_manager)
 
         world_data = WorldData(self.init_world_dict)
         mock_program = MockProgram()
@@ -3709,7 +3724,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Setup
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        self.__ruleset = TestRuleset(self.__window_manager)
         mock_fight_handler = MockFightHandler()
 
         vodou_priest = ca_fighter.Fighter(
@@ -3908,7 +3923,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         base_world_dict = copy.deepcopy(self.base_world_dict)
 
         self.__window_manager = MockWindowManager()
-        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(self.__window_manager)
+        self.__ruleset = TestRuleset(self.__window_manager)
 
         # Test that leaving a fight moves the bad guys to the dead monster
         # list
@@ -4047,7 +4062,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         same_item['count'] = 2
 
         before_item_count = fighter.equipment.get_item_count()
-        fighter.add_equipment(same_item, 'test')
+        ignore = fighter.add_equipment(same_item, 'test')
         after_item_count = fighter.equipment.get_item_count()
 
         assert original_item['count'] == 3
@@ -4060,7 +4075,10 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         similar_item['acc'] = original_item['acc'] + 1
 
         assert len(fighter.details['stuff']) == current_count
-        fighter.add_equipment(similar_item, 'test')
+        self.__window_manager.set_menu_response(
+                'Make pistol, Sig D65 the preferred weapon?',
+                False)
+        ignore = fighter.add_equipment(similar_item, 'test')
 
         current_count += 1
 
@@ -4087,6 +4105,9 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                           "notes": ""}
 
         assert len(fighter.details['stuff']) == current_count
+        self.__window_manager.set_menu_response(
+                'Make pistol, Baretta DX 192 the preferred weapon?',
+                False)
         new_pistol_index = fighter.add_equipment(different_item, 'test')
         current_count += 1
         assert len(fighter.details['stuff']) == current_count
@@ -4232,6 +4253,179 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         weapon, actual_weapon_index = fighter.get_current_weapon()
         assert weapon is None
         assert actual_weapon_index is None
+
+    def test_preferred_add_remove_weapon(self):
+        '''
+        Basic test
+        '''
+        if ARGS.verbose:
+            print '\n=== test_preferred_add_remove_weapon ===\n'
+
+        fighter = ca_fighter.Fighter(
+                'Tank',
+                'group',
+                copy.deepcopy(self.__tank_fighter),
+                self.__ruleset,
+                self.__window_manager)
+        '''
+            "stuff": [
+                 {"name": "pistol, Sig D65",  # the index of this is stored
+                                              # in __tank_fighter_pistol_index
+                  "type": ["ranged weapon"],
+                  "damage": {"dice": "1d+4"},
+                  "acc": 4,
+                  "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
+                  "clip": {"name": "C Cell",
+                           "type": ["misc"],
+                           "count": 1,
+                           "notes": "",
+                           "owners": None},
+                  "reload": 3,
+                  "skill": "Guns (Pistol)",
+                  "count": 1,
+                  "owners": None,
+                  "notes": ""},
+                 {"name": "sick stick",
+                  "type": ["melee weapon"],
+                  "damage": {"dice": "1d+1 fat"},
+                  "skill": "Axe/Mace",
+                  "count": 1,
+                  "owners": None,
+                  "notes": ""},
+                 {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
+                  "owners": None}
+            ],
+
+        '''
+        mock_fight_handler = MockFightHandler()
+
+        original_item = fighter.details['stuff'][
+                                        self.__tank_fighter_pistol_index]
+        current_count = len(fighter.details['stuff'])
+        original_stuff = copy.deepcopy(fighter.details['stuff'])
+
+        # Adds an identical weapon to an existing one.  Since there isn't a
+        # preferred weapon, it should up the count and make it preferred.
+
+        assert 'preferred-weapon-index' not in fighter.details
+        assert original_item['count'] == 1
+        same_item = copy.deepcopy(original_item)
+        same_item['count'] = 2 # 2 items to add
+
+        before_item_count = fighter.equipment.get_item_count()
+        ignore = fighter.add_equipment(same_item, 'test')
+        after_item_count = fighter.equipment.get_item_count()
+
+        assert original_item['count'] == 3 # we've added 2 new items
+        assert before_item_count == after_item_count
+        assert 'preferred-weapon-index' in fighter.details
+        new_preferred_weapon = fighter.details['preferred-weapon-index']
+        assert new_preferred_weapon == self.__tank_fighter_pistol_index
+
+        # Add the same weapon again and show that we don't get asked to make
+        # the newly added weapon a preferred weapon
+
+        before_item_count = fighter.equipment.get_item_count()
+        ignore = fighter.add_equipment(same_item, 'fourth')
+        after_item_count = fighter.equipment.get_item_count()
+
+        assert original_item['count'] == 5 # we've added 2 new items
+        assert before_item_count == after_item_count
+        assert 'preferred-weapon-index' in fighter.details
+        new_preferred_weapon = fighter.details['preferred-weapon-index']
+        assert new_preferred_weapon == self.__tank_fighter_pistol_index
+
+        # Add weapon to list w/preferred weapon: should ask whether to make
+        # new weapon preferred - answer = No
+
+        similar_item = copy.deepcopy(original_item)
+        similar_item['count'] = 1
+        similar_item['acc'] = original_item['acc'] + 1
+        previous_preferred_weapon = fighter.details['preferred-weapon-index']
+
+        self.__window_manager.set_menu_response(
+                'Make pistol, Sig D65 the preferred weapon?', False)
+        ignore = fighter.add_equipment(similar_item, 'sixth')
+        new_preferred_weapon = fighter.details['preferred-weapon-index']
+
+        assert new_preferred_weapon == previous_preferred_weapon
+
+        # Add weapon to list w/preferred weapon: should ask whether to make
+        # new weapon preferred - answer = Yes
+
+        similar_item = copy.deepcopy(similar_item)
+        similar_item['acc'] += 1
+        self.__window_manager.set_menu_response(
+                'Make pistol, Sig D65 the preferred weapon?', True)
+        ignore = fighter.add_equipment(similar_item, 'eighth')
+
+        # The current preferred weapon should be the most recently added item
+        current_count = len(fighter.details['stuff'])
+        new_preferred_weapon = fighter.details['preferred-weapon-index']
+
+        assert new_preferred_weapon == current_count - 1
+
+        # [  index 0: { 'name': 'pistol, Sig D65', 'acc': 4, 'count': 5},
+        #    index 1: { 'name': 'sick stick', 'count': 1 }
+        #    index 2: { 'name': 'C Cell' },
+        #    index 3: { 'name': 'pistol, Sig D65', 'acc': 5, 'count': 1},
+        #    index 4: { 'name': 'pistol, Sig D65', 'acc': 6, 'count': 1} ]
+
+        # Remove preferred weapon, preferred weapon should be none
+
+        old_preferred_weapon = fighter.details['preferred-weapon-index']
+        fighter.remove_equipment(old_preferred_weapon)
+        new_preferred_weapon = fighter.details['preferred-weapon-index']
+        assert new_preferred_weapon is None
+
+        # Remove weapon before preferred weapon: preferred index should move
+        # to continue pointing to preferred weapon
+
+        # [  index 0: { 'name': 'pistol, Sig D65', 'acc': 4, 'count': 5},
+        #    index 1: { 'name': 'sick stick', 'count': 1 } <--- PREFERRED
+        #    index 2: { 'name': 'C Cell' },
+        #    index 3: { 'name': 'pistol, Sig D65', 'acc': 5, 'count': 1}]
+
+        fighter.details['preferred-weapon-index'] = self.__tank_fighter_sickstick_index
+        old_preferred_weapon = fighter.details['preferred-weapon-index']
+        index_to_remove = old_preferred_weapon - 1 # index 0
+        self.__window_manager.set_input_box_response(
+                'How Many Items (5 Available)?', 5)
+        fighter.remove_equipment(index_to_remove)
+        new_preferred_weapon = fighter.details['preferred-weapon-index']
+        assert new_preferred_weapon == old_preferred_weapon - 1
+
+        # Remove weapon after preferred weapon: preferred index should
+        # remain unchanged and point to preferred weapon
+
+        # [  index 0: { 'name': 'sick stick', 'count': 1 } <- PREFERRED
+        #    index 1: { 'name': 'C Cell', 'count': 5 },
+        #    index 2: { 'name': 'pistol, Sig D65', 'acc': 5, 'count': 1}]
+
+        old_preferred_weapon = fighter.details['preferred-weapon-index']
+        index_to_remove = old_preferred_weapon + 1 # index 1
+        self.__window_manager.set_input_box_response(
+                'How Many Items (5 Available)?', 5)
+        fighter.remove_equipment(index_to_remove)
+        new_preferred_weapon = fighter.details['preferred-weapon-index']
+        assert new_preferred_weapon == old_preferred_weapon
+
+        # Add weapon to empty list: should make weapon preferred
+
+        while len(fighter.details['stuff']) > 0:
+            fighter.remove_equipment(0)
+
+        old_preferred_weapon = fighter.details['preferred-weapon-index']
+        assert len(fighter.details['stuff']) == 0
+        assert old_preferred_weapon is None
+
+        original_item = self.__tank_fighter['stuff'][
+                                        self.__tank_fighter_pistol_index]
+        same_item = copy.deepcopy(original_item)
+
+        ignore = fighter.add_equipment(same_item, 'test')
+        new_preferred_weapon = fighter.details['preferred-weapon-index']
+        assert new_preferred_weapon == 0
 
     def test_give_equipment(self):
         '''
