@@ -22,6 +22,9 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: PC joins NPCs in PC editing mode
+# TODO: Don't roll to see if you're stunned if you're already stunned
+
 # TODO: grenade support (missile-like but not with clips)
 # TODO: the fatigue penalty reduction due to high skill doesn't apply to
 #   blocking spells

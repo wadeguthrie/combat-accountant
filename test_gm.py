@@ -36,11 +36,6 @@ FWIW, I realize that many of the Mocks in here are actually Fakes.
 # Notes
 # TODO: test that notes are saved properly
 
-# -- OutfitCharactersHandler --
-# TODO: test that adding something actually adds the right thing and that it's
-#       permenant
-# TODO: test that removing something works
-
 # TODO: test 'search'
 # TODO: test 'resurrect fight'
 # TODO: test equipping characters

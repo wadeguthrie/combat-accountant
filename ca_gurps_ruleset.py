@@ -708,7 +708,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "notes": "M176",
           "maintain": None,
           "casting time": 1,
-          "duration": None,
+          "duration": 0,    # Instantaneous
           "range": 'regular',
           "save": ['ht'],
         },
