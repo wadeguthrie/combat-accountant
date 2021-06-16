@@ -22,8 +22,12 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: 'r' should roll against an attribute for current creature.  'R' should
+#   roll for all creatures of the current type (PC or monster)
+# TODO: add 1 to initiative if someone in the party has combat reflexes (2 if
+#   leader -- not sure how I want to do that)
+
 # TODO: PC joins NPCs in PC editing mode
-# TODO: Don't roll to see if you're stunned if you're already stunned
 
 # TODO: grenade support (missile-like but not with clips)
 # TODO: the fatigue penalty reduction due to high skill doesn't apply to

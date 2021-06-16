@@ -74,6 +74,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
     may change in the future, however.
     '''
 
+    checked_for_unconscious_string = 'Checked this round for unconsciousness'
+
     damage_mult = {'burn': 1.0, 'cor': 1.0, 'cr':  1.0, 'cut': 1.5,
                    'imp':  2.0, 'pi-': 0.5, 'pi':  1.0, 'pi+': 1.5,
                    'pi++': 2.0, 'tbb': 1.0, 'tox': 1.0}
@@ -3298,34 +3300,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # B327 -- checking on each round whether the fighter is still
         # conscious
 
-        if (fighter.is_conscious() and
-                fighter.details['current']['hp'] <= 0 and
-                not playing_back):
-            unconscious_roll = fighter.details['current']['ht']
-            if 'High Pain Threshold' in fighter.details['advantages']:
-                unconscious_roll += 3
-
-                menu_title = (
-                    '%s: HP < 0: roll <= HT+3 (%d) or pass out (B327,B59)' %
-                    (fighter.name, unconscious_roll))
-            else:
-                menu_title = (
-                    '%s: HP < 0: roll <= HT (%d) or pass out (B327)' %
-                    (fighter.name, unconscious_roll))
-
-            pass_out_menu = [
-                    ('Succeeded (roll <= %d) - NOT unconscious' %
-                        unconscious_roll, True),
-                    ('Failed (roll > %d) - unconscious' %
-                        unconscious_roll, False)]
-            made_ht_roll, ignore = self._window_manager.menu(menu_title,
-                                                             pass_out_menu)
-
-            if not made_ht_roll:
-                self.do_action(fighter,
-                               {'action-name': 'set-consciousness',
-                                'level': ca_fighter.Fighter.UNCONSCIOUS},
-                               fight_handler)
+        self.__check_for_unconscious(fighter, fight_handler) # Ignore return
 
         # Let the user know if this fighter is stunned.
 
@@ -3413,7 +3388,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         adj = action['adj']
         dr_comment = None
         quiet = False if 'quiet' not in action else action['quiet']
-        still_alive = True
+        still_conscious = True
 
         if adj < 0:
             hit_location_flavor = self.get_option('hit-location-flavor')
@@ -3499,7 +3474,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                {'action-name': 'set-consciousness',
                                 'level': ca_fighter.Fighter.DEAD},
                                fight_handler)
-                still_alive = False
+                still_conscious = False # Dead
             else:
                 # hp < -1*HT or -2*HT, ...
                 threshold = -fighter.details['permanent']['hp']
@@ -3519,10 +3494,26 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                        {'action-name': 'set-consciousness',
                                         'level': ca_fighter.Fighter.DEAD},
                                        fight_handler)
-                        still_alive = False
+                        still_conscious = False # Dead
+
+            # Check for Unconscious (House Rule)
+            if still_conscious and self.get_option('pass-out-immediately'):
+                if self.__check_for_unconscious(fighter,
+                                                fight_handler,
+                                                adjusted_hp):
+                    alread_checked_timer = ca_timers.Timer(None)
+                    alread_checked_timer.from_pieces(
+                            {'parent-name': fighter.name,
+                             'rounds': 0.9,
+                             'string':
+                                GurpsRuleset.checked_for_unconscious_string
+                             })
+                    fighter.timers.add(alread_checked_timer)
+                    still_conscious = fighter.is_conscious()
 
             # Check for Major Injury (B420)
-            if still_alive and -adj > (fighter.details['permanent']['hp'] / 2):
+            if (still_conscious and
+                    -adj > (fighter.details['permanent']['hp'] / 2)):
                 (SUCCESS, SIMPLE_FAIL, BAD_FAIL) = range(3)
                 total = fighter.details['current']['ht']
 
@@ -3587,7 +3578,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                        logit=False)
 
         # B59
-        if (still_alive and
+        if (still_conscious and
                 'High Pain Threshold' not in fighter.details['advantages']):
             # Shock (B419) is cumulative but only to a maximum of -4
             # Note: 'adj' is negative
@@ -3599,7 +3590,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                            fight_handler)
 
         # WILL roll or lose aim
-        if still_alive and fighter.details['aim']['rounds'] > 0:
+        if still_conscious and fighter.details['aim']['rounds'] > 0:
             aim_menu = [('made WILL roll', True),
                         ('did NOT make WILL roll', False)]
             made_will_roll, ignore = self._window_manager.menu(
@@ -3987,6 +3978,57 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                       ' Move: none']})
 
         return timer
+
+
+    def __check_for_unconscious(self,
+                                fighter,            # Fighter object
+                                fight_handler,      # FightHandler object
+                                adjusted_hp=None    # int: HP to use to check
+                                ):
+        '''
+        Checks to see if a Fighter should go unconscious
+        Returns: True if we checked, False otherwise
+        '''
+
+        if adjusted_hp is None:
+            adjusted_hp = fighter.details['current']['hp']
+
+        if fighter.timers.found_timer_string(
+                GurpsRuleset.checked_for_unconscious_string):
+            return False
+
+        playing_back = (False if fight_handler is None else
+                        fight_handler.world.playing_back)
+
+        if (fighter.is_conscious() and adjusted_hp <= 0 and not playing_back):
+            unconscious_roll = fighter.details['current']['ht']
+            if 'High Pain Threshold' in fighter.details['advantages']:
+                unconscious_roll += 3
+
+                menu_title = (
+                    '%s: HP < 0: roll <= HT+3 (%d) or pass out (B327,B59)' %
+                    (fighter.name, unconscious_roll))
+            else:
+                menu_title = (
+                    '%s: HP < 0: roll <= HT (%d) or pass out (B327)' %
+                    (fighter.name, unconscious_roll))
+
+            pass_out_menu = [
+                    ('Succeeded (roll <= %d) - NOT unconscious' %
+                        unconscious_roll, True),
+                    ('Failed (roll > %d) - unconscious' %
+                        unconscious_roll, False)]
+            made_ht_roll, ignore = self._window_manager.menu(menu_title,
+                                                             pass_out_menu)
+
+            if not made_ht_roll:
+                self.do_action(fighter,
+                               {'action-name': 'set-consciousness',
+                                'level': ca_fighter.Fighter.UNCONSCIOUS},
+                               fight_handler)
+            return True
+
+        return False
 
     def __damage_FP(self,
                     param    # {'view': xxx, 'view-opponent': xxx,

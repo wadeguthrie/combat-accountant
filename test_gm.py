@@ -16,6 +16,8 @@ import ca_timers
 FWIW, I realize that many of the Mocks in here are actually Fakes.
 '''
 
+# TODO: test options
+
 # TODO: there should be a test.reset() that would clear out the
 # set_menu_response and the set_input_box_response values (and
 # maybe some other stuff I'm not thinking about).  It should be called prior
@@ -2641,6 +2643,9 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         major_damage = - ((vodou_priest.details['permanent']['hp'] / 2) + 1)
 
         self.__window_manager.set_menu_response('Use Armor\'s DR?', False)
+        # TODO: clear the 'pass-out-immediately' flag for this.  make a
+        #   separate test for 'pass-out-immediately'.  Remember to put the
+        #   original value back into that flag.
         self.__window_manager.set_menu_response(
                 ('Major Wound (B420): Roll vs HT (%d) or be Stunned and Knocked Down' %
                  self.__vodou_priest_ht),
