@@ -130,7 +130,7 @@ class Skills(object):
             'A': [0, 1, 2, 3, 4],
 
             'H': [0, 0, 1, 2, 3, 4],
-    ]
+    }
     # TODO: techniques
     # For the Dual-Weapon Attack technique, below:
     #   skill = technique_cost[<difficulty>][<points>] +

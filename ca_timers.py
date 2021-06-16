@@ -449,6 +449,16 @@ class Timers(object):
                 return True
         return False
 
+    def found_timer_string(self,
+                           string
+                           ):
+        '''Returns 'True' if a current timer has string matching parameter.'''
+        for timer_obj in self.__timers['obj']:
+            if ('string' in timer_obj.details and
+                    timer_obj.details['string' ] == string):
+                return True
+        return False
+
     def remove_expired_keep_dying(self):
         '''
         Removes expired timers BUT KEEPS the timers that are dying this
