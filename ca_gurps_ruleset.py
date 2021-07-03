@@ -2284,6 +2284,30 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                'of those) the ' +
                                'fighter that currently has the initiative. ',
                        },
+            ord('r'): {'name': 'Roll vs. attrib',
+                       'func': self.__roll_vs_attrib_single,
+                       'param': {
+                            'view': None,
+                            'current-opponent': None,
+                            'current': None,
+                            'fight_handler': fight_handler
+                       },
+                       'show': True,
+                       'help': 'Causes the selected fighter to be ' +
+                               'stunned (GURPS B420)',
+                       },
+            ord('R'): {'name': 'All roll vs. attrib',
+                       'func': self.__roll_vs_attrib_multiple,
+                       'param': {
+                            'view': None,
+                            'current-opponent': None,
+                            'current': None,
+                            'fight_handler': fight_handler
+                       },
+                       'show': True,
+                       'help': 'Causes the selected fighter to be ' +
+                               'stunned (GURPS B420)',
+                       },
             ord('S'): {'name': 'Stun',
                        'func': self.__stun,
                        'param': {
@@ -4878,6 +4902,157 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                          'string': [title, ' Defense: none', ' Move: none']})
 
         return timer
+
+    def __pick_attrib(self,
+                      fighter # Fighter object (see NOTE, below)
+                      ):
+        # TODO: this can go into the generic ruleset
+        # TODO: attribute (edit) should use this
+        '''
+        NOTE: this doesn't have to be the fighter that is being modified but
+        we get the list of attributes from a single fighter.
+        '''
+        # Current or permanent
+        perm_current_menu = [('current', 'current'),
+                             ('permanent', 'permanent')]
+        current_perm, ignore = self._window_manager.menu(
+                ('%s: Choose What Type Of Attribute' %
+                    fighter.name), perm_current_menu)
+
+        # Which attribute
+        attr_menu = [(attr, attr)
+                     for attr in fighter.details[current_perm].keys()]
+
+        attr, ignore = self._window_manager.menu(
+                'Select Attribute', attr_menu)
+        if attr is None:
+            return None
+
+        return current_perm, attr
+
+    def __roll_vs_attrib(self,
+                         attrib # string: name of attribute
+                         ):
+        # ignore 'attrib'
+        return ca_ruleset.Ruleset.roll(3, 6)
+
+    def __roll_vs_attrib_single(self,
+                                param    # {'view': xxx, 'view-opponent': xxx,
+                                         #  'current': xxx, 'current-opponent': xxx,
+                                         #  'fight_handler': <fight handler> } where
+                                         # xxx are Fighter objects
+                                ):
+        '''
+        Command ribbon method.
+
+        Figures out whom to stun and stuns them.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = (param['view']
+                   if 'view' in param and param['view'] is not None
+                   else param['current'])
+
+        if fighter is None:
+            return True
+
+        current_perm, attr_string = self.__pick_attrib(fighter)
+        window_text = []
+        window_line = []
+        roll = self.__roll_vs_attrib(attr_string)
+        attr = fighter.details[current_perm][attr_string]
+        if roll <= attr:
+            mode = curses.color_pair(ca_gui.GmWindowManager.GREEN_BLACK)
+            window_line.append(
+                {'text': ('SUCCEDED by %d' % (attr - roll)),
+                  'mode': mode})
+        else:
+            mode = curses.color_pair(ca_gui.GmWindowManager.RED_BLACK)
+            window_line.append(
+                {'text': ('FAILED by %d' % (roll - attr)),
+                  'mode': mode})
+
+        window_line.append(
+            {'text': (', %s = %d' % (attr_string, attr)), 'mode': mode})
+        window_line.append(
+            {'text': (', roll = %d' % roll), 'mode': mode})
+
+        window_text = [window_line]
+        self._window_manager.display_window(
+                ('%s roll vs. %s' % (fighter.name, attr_string)),
+                window_text)
+
+        return True
+
+    def __roll_vs_attrib_multiple(self,
+                                  param    # {'view': xxx, 'view-opponent': xxx,
+                                           #  'current': xxx, 'current-opponent': xxx,
+                                           #  'fight_handler': <fight handler> } where
+                                           # xxx are Fighter objects
+                                  ):
+        '''
+        Command ribbon method.
+
+        Figures out whom to stun and stuns them.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        selected_fighter = (param['view']
+                   if 'view' in param and param['view'] is not None
+                   else param['current'])
+        if selected_fighter is None:
+            return True
+
+        fight_handler = param['fight_handler']
+        if fight_handler is None:
+            return True
+
+        # Get list of fighters in the current group
+        fighters = fight_handler.get_fighters()
+        fighter_objects = []
+        for fighter_dict in fighters:
+            if fighter_dict['group'] == selected_fighter.group:
+                index, fighter = fight_handler.get_fighter_object(
+                        fighter_dict['name'], fighter_dict['group'])
+
+                if (fighter.name != ca_fighter.Venue.name and
+                        fighter.is_conscious()):
+                    fighter_objects.append(fighter)
+
+        # Get the attribute against which to roll
+        current_perm, attr_string = self.__pick_attrib(selected_fighter)
+        window_text = []
+
+        # Roll for each of the fighters in the selected group
+        for fighter in fighter_objects:
+            window_line = []
+            roll = self.__roll_vs_attrib(attr_string)
+            attr = fighter.details[current_perm][attr_string]
+            if roll <= attr:
+                mode = curses.color_pair(ca_gui.GmWindowManager.GREEN_BLACK)
+                window_line.append(
+                    {'text': ('%s SUCCEDED by %d' % (fighter.name,
+                                                     (attr - roll))),
+                      'mode': mode})
+            else:
+                mode = curses.color_pair(ca_gui.GmWindowManager.RED_BLACK)
+                window_line.append(
+                    {'text': ('%s FAILED by %d' % (fighter.name,
+                                                   (roll - attr))),
+                      'mode': mode})
+
+            window_line.append(
+                {'text': (', %s = %d' % (attr_string, attr)), 'mode': mode})
+            window_line.append(
+                {'text': (', roll = %d' % roll), 'mode': mode})
+
+            window_text.append(window_line)
+
+        self._window_manager.display_window(
+                ('Group roll vs. %s' % attr_string),
+                window_text)
+
+        return True
 
     def __set_consciousness(self,
                             fighter,          # Fighter object
