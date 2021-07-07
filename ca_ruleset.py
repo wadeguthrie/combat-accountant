@@ -197,6 +197,10 @@ class Ruleset(object):
             # Draw weapon SUB-menu
 
             draw_weapon_menu = []   # weapons that may be drawn this turn
+            has_a_preferred_weapon = (
+                    True if 'preferred-weapon-index' in fighter.details and
+                    fighter.details['preferred-weapon-index'] is not None
+                    else False)
             for index, item in enumerate(fighter.details['stuff']):
                 if ('ranged weapon' in item['type'] or
                         'melee weapon' in item['type'] or
@@ -205,6 +209,11 @@ class Ruleset(object):
                         verbose_option = self.get_option('verbose')
                         if verbose_option is not None and verbose_option:
                             entry_name = '%d: %s' % (index, item['name'])
+                        elif (has_a_preferred_weapon and
+                              fighter.details['preferred-weapon-index'] ==
+                              index):
+                            # Add a leading space so it's sorted to the top
+                            entry_name = ' %s (preferred)' % item['name']
                         else:
                             entry_name = '%s' % item['name']
 

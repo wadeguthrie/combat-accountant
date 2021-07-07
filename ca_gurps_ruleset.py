@@ -3939,8 +3939,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                  (('FAILIRE: %s > %d - margin of spell skill' % (
                                     roll_against, best_save)), False)]
                     made_save, ignore = self._window_manager.menu(
-                        ('%s must roll save vs %s' % (opponent.name,
-                                                      roll_against)),
+                        ('%s must roll %s save against %s (skill %d)' % (
+                            opponent.name,
+                            roll_against,
+                            complete_spell['name'],
+                            complete_spell['skill'])),
                         save_menu)
                     if made_save:
                         spell_worked_on_opponent = False
