@@ -3664,6 +3664,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         post_adjust_hp = fighter.details['current']['hp']
 
         # NOTE: House rule for healing an unconscious person
+        # TODO: use adjust-attribute's solution to this
         if (pre_adjust_hp < post_adjust_hp and post_adjust_hp > 0 and
                 not fighter.is_conscious() and not fighter.is_dead()):
             self.do_action(fighter,
@@ -4457,8 +4458,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             text = ['Do nothing', ' Defense: any', ' Move: none']
 
         elif action['action-name'] == 'move':
-            move = fighter.details['current']['basic-move']
+            self.reset_aim(fighter)
 
+            move = fighter.details['current']['basic-move']
             no_fatigue_penalty = self.get_option('no-fatigue-penalty')
             if ((no_fatigue_penalty is None or not no_fatigue_penalty) and
                     (fighter.details['current']['fp'] <
@@ -4469,6 +4471,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             text = ['Move', ' Defense: any', ' Move: %s' % move_string]
 
         elif action['action-name'] == 'feint':
+            self.reset_aim(fighter)
             text = ['Feint',
                     ' Contest of melee weapon or DX',
                     '   subtract score from opp',
@@ -4484,6 +4487,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             text = ['Concentrate', ' Defense: any w/will roll', ' Move: step']
 
         elif action['action-name'] == 'use-item':
+            self.reset_aim(fighter)
             if 'item-name' in action:
                 text = [('Use %s' % action['item-name']),
                         ' Defense: (depends)',
@@ -4494,9 +4498,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         ' Move: (depends)']
 
         elif action['action-name'] == 'user-defined':
+            self.reset_aim(fighter)
             text = ['User-defined action']
 
         elif action['action-name'] == 'pick-opponent':
+            self.reset_aim(fighter)
             return None
 
         else:
