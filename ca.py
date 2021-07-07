@@ -22,8 +22,11 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: 'r' should roll against an attribute for current creature.  'R' should
-#   roll for all creatures of the current type (PC or monster)
+# TODO: moving should destroy aim
+# TODO: option: heal unconscious, make conscious (if FP <= 0, make 1)
+# TODO: search history (may have to add it to the text box)
+# TODO: make a way to add note into the history
+# TODO: adjust attribute needs to be an action
 # TODO: add 1 to initiative if someone in the party has combat reflexes (2 if
 #   leader -- not sure how I want to do that)
 
