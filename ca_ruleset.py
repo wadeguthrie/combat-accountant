@@ -696,7 +696,8 @@ class Ruleset(object):
 
     def __adjust_attribute(self,
                            fighter,         # Fighter object
-                           action,          # {'action-name': 'adjust-hp',
+                           action,          # {'action-name':
+                                            #       'adjust-attribute',
                                             #  'attr-type': 'current' or
                                             #       'permanent'
                                             #  'attribute': name of the
@@ -718,12 +719,10 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
-
         attr_type = action['attr-type']
         attr = action['attribute']
         new_value = action['new-value']
         fighter.details[attr_type][attr] = new_value
-
         return Ruleset.HANDLED_OK
 
     def __do_attack(self,
@@ -1189,6 +1188,11 @@ class Ruleset(object):
             'hold-init':            {'doit': self.__hold_init},
             'hold-init-complete':   {'doit': self.__hold_init_complete},
         }
+
+        # Label the action so playback knows who receives it.
+
+        action['fighter'] = {'name': fighter.name,
+                             'group': fighter.group}
 
         handled = Ruleset.UNHANDLED
         if 'action-name' in action:

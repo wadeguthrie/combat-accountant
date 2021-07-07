@@ -4107,6 +4107,72 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return True  # Keep going
 
+    def __adjust_attribute(self,
+                           fighter,         # Fighter object
+                           action,          # {'action-name':
+                                            #       'adjust-attribute',
+                                            #  'attr-type': 'current' or
+                                            #       'permanent'
+                                            #  'attribute': name of the
+                                            #       attribute to change
+                                            #  'new-value': the new value
+                                            #  'comment': <string>, # optional
+                                            #  'quiet': <bool>
+                                            #       # use defaults for all
+                                            #       # user interactions --
+                                            #       # optional
+                                            # }
+                           fight_handler,   # FightHandler object (ignored)
+                           ):
+        '''
+        Action handler for Ruleset.
+
+        Adjust any of the Fighter's attributes.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+        if 'part' in action and action['part'] == 2:
+            # This is the 2nd part of a 2-part action.  This part of the action
+            # actually perfoms all the GurpsRuleset-specific actions and
+            # side-effects of aiming the Fighter's current weapon.
+
+            # This does nothing -- everything interesting was done in the
+            # first part, before the base class had a chance to modify the
+            # attribute.
+
+            return None # No timer
+
+        else:
+            # This is the 1st part of a 2-part action.  This part of the
+            # action slips in before the base class can modify the
+            # attribute.
+
+            attr_type = action['attr-type']
+            attr = action['attribute']
+            new_value = action['new-value']
+
+            if (self.get_option('conscious-on-heal') and
+                    not fighter.is_conscious() and
+                    attr == 'hp' and
+                    new_value > fighter.details[attr_type][attr] and
+                    attr_type == 'current'):
+                self.do_action(fighter,
+                               {'action-name': 'set-consciousness',
+                                'level': ca_fighter.Fighter.ALIVE},
+                               fight_handler)
+                if fighter.details['current']['fp'] <= 0:
+                    fighter.details['current']['fp'] = 1
+
+            # Send the action for the second part
+
+            new_action = copy.deepcopy(action)
+            new_action['part'] = 2
+            self.do_action(fighter, new_action, fight_handler)
+
+            return None  # No timer
+
+
     def __do_adjust_fp(self,
                        fighter,       # Fighter object
                        action,        # {'action-name': 'adjust-fp',
@@ -4662,11 +4728,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns: nothing
         '''
 
-        # Label the action so playback knows who receives it.
-
-        action['fighter'] = {'name': fighter.name,
-                             'group': fighter.group}
-
         # PP = pprint.PrettyPrinter(indent=3, width=150)
         # PP.pprint(action)
 
@@ -4676,13 +4737,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # original action just returns.  That way, there are no questions on
         # playback and the answers are the same as they were the first time.
 
-        has_2_parts = {'aim': True,
+        has_2_parts = {
+                       'adjust-attribute': True,
+                       'aim': True,
                        'cast-spell': True,
                        'reload': True}
 
         # Call base class' perform_action FIRST because GurpsRuleset depends on
-        # the actions of the base class.  It make no sense for the base class'
-        # actions to depend on the child class'.
+        # the actions of the base class.  It (usually) makes no sense for the
+        # base class' actions to depend on the child class'.
         #
         # If there're two parts to an action (the first part asks questions
         # and the second part does the actual deed), only call the base class
@@ -4759,6 +4822,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             return handled
 
         actions = {
+            'adjust-attribute':     {'doit': self.__adjust_attribute},
             'adjust-fp':            {'doit': self.__do_adjust_fp},
             'adjust-hp-really':     {'doit': self.__adjust_hp_really},
             'aim':                  {'doit': self.__do_aim},
