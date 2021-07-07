@@ -3202,14 +3202,15 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             if (len(ca_gurps_ruleset.GurpsRuleset.spells[
                     trial['name']]['save']) > 0):
                 self.__window_manager.set_menu_response(
-                        ('%s must roll save vs %s' % (
+                        ('%s must roll %s save against %s (skill %d)' % (
                             opponent.name,
-                            trial['save'][0])),
+                            trial['save'][0],
+                            trial['name'],
+                            trial['skill'])),
                         False) # False: they didn't save
 
             self.__window_manager.set_menu_response(
                     'Mark %s with spell' % opponent.name, True)
-
             action = {
                 'action-name': 'cast-spell',
                 'spell-index': self.__vodou_priest_spell_index[trial['name']]

@@ -92,6 +92,9 @@ class ThingsInFight(object):
 
         return item_count
 
+    def get_ruleset(self):
+        return self._ruleset
+
     def remove_equipment(self,
                          item_index,    # index into fighter's stuff list
                          count=None     # number to remove (None if 'ask')

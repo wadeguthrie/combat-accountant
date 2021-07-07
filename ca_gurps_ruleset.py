@@ -3414,6 +3414,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         quiet = False if 'quiet' not in action else action['quiet']
         still_conscious = True
 
+        # Reducing HP
         if adj < 0:
             hit_location_flavor = self.get_option('hit-location-flavor')
             if hit_location_flavor is not None and hit_location_flavor:
@@ -3978,7 +3979,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                            #  'posture': <string> # posture
                                            #        from GurpsRuleset.posture
                                            #  'comment': <string>, # optional
-                         fight_handler     # FightHandler object
+                         fight_handler     # FightHandler object (ignored)
                          ):
         '''
         Action handler for GurpsRuleset.
@@ -4158,7 +4159,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                           action,        # {'action-name': 'shock',
                                          #  'value': <int> # new shock level
                                          #  'comment': <string>, # optional
-                          fight_handler  # FightHandler object
+                          fight_handler  # FightHandler object (ignored)
                           ):
         '''
         Action handler for GurpsRuleset.
@@ -4368,7 +4369,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                    # NOTE: Some actions have other
                                    # parameters used buy |Ruleset|
                                    #
-                     fight_handler  # FightHandler object
+                     fight_handler  # FightHandler object (ignored)
                      ):
         '''
         Action handler for GurpsRuleset.
@@ -4540,7 +4541,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                         #       fighter.details['stuff'],
                                         #       None drops weapon
                                         #  'comment': <string>, # optional
-                      fight_handler,    # FightHandler object
+                      fight_handler,    # FightHandler object (ignored)
                       ):
         '''
         Action handler for GurpsRuleset.
@@ -4858,7 +4859,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                       #          | 'reset-aim' |
                                       #          'set-consciousness',
                                       #  'comment': <string>, # optional
-                    fight_handler     # FightHandler object
+                    fight_handler     # FightHandler object (ignored)
                     ):
         '''
         Action handler for GurpsRuleset.
@@ -5144,7 +5145,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                       action,           # {'action-name': 'stun',
                                         #  'stun': True / False}
                                         #  'comment': <string>, # optional
-                      fight_handler,    # FightHandler object
+                      fight_handler,    # FightHandler object (ignored)
                       ):
         '''
         Action handler for GurpsRuleset.

@@ -58,14 +58,15 @@ class Ruleset(object):
 
     def can_finish_turn(self,
                         fighter,        # Fighter object
-                        fight_handler   # FightHandler object
+                        fight_handler   # FightHandler object (ignored)
                         ):
         return True
 
     def do_action(self,
                   fighter,          # Fighter object
                   action,           # {'action-name': <action>, parameters...}
-                  fight_handler,    # FightHandler object
+                  fight_handler,    # FightHandler object.  Used mostly to
+                                    #   interact with other beings in the fight.
                   logit=True        # Log into history and 'actions_this_turn'
                                     #   because the action is not a side-effect
                                     #   of another action
@@ -678,7 +679,7 @@ class Ruleset(object):
                                      #                    user interactions --
                                      #                    optional
                                      # }
-                   fight_handler,    # FightHandler object
+                   fight_handler,    # FightHandler object (ignored)
                    ):
         '''
         Action handler for Ruleset.
@@ -690,6 +691,39 @@ class Ruleset(object):
         '''
 
         fighter.details['current']['hp'] += action['adj']
+        return Ruleset.HANDLED_OK
+
+
+    def __adjust_attribute(self,
+                           fighter,         # Fighter object
+                           action,          # {'action-name': 'adjust-hp',
+                                            #  'attr-type': 'current' or
+                                            #       'permanent'
+                                            #  'attribute': name of the
+                                            #       attribute to change
+                                            #  'new-value': the new value
+                                            #  'comment': <string>, # optional
+                                            #  'quiet': <bool>
+                                            #       # use defaults for all
+                                            #       # user interactions --
+                                            #       # optional
+                                            # }
+                           fight_handler,   # FightHandler object (ignored)
+                           ):
+        '''
+        Action handler for Ruleset.
+
+        Adjust any of the Fighter's attributes.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+
+        attr_type = action['attr-type']
+        attr = action['attribute']
+        new_value = action['new-value']
+        fighter.details[attr_type][attr] = new_value
+
         return Ruleset.HANDLED_OK
 
     def __do_attack(self,
@@ -934,7 +968,7 @@ class Ruleset(object):
                                       #         fighter.details['stuff',
                                       #         None doffs armor
                                       #  'comment': <string> # optional
-                    fight_handler,    # FightHandler object
+                    fight_handler,    # FightHandler object (ignored)
                     ):
         '''
         Action handler for Ruleset.
@@ -956,7 +990,7 @@ class Ruleset(object):
                                       #         fighter.details['stuff',
                                       #         None doffs armor
                                       #  'comment': <string> # optional
-                    fight_handler,    # FightHandler object
+                    fight_handler,    # FightHandler object (ignored)
                     ):
         '''
         Action handler for Ruleset.
@@ -978,7 +1012,7 @@ class Ruleset(object):
                                         #       fighter.details['stuff'],
                                         #       None drops weapon
                                         #  'comment': <string> # optional
-                      fight_handler,    # FightHandler object
+                      fight_handler,    # FightHandler object (ignored)
                       ):
         '''
         Action handler for Ruleset.
@@ -1135,6 +1169,7 @@ class Ruleset(object):
 
         actions = {
             'adjust-hp':            {'doit': self._adjust_hp},
+            'adjust-attribute':     {'doit': self.__adjust_attribute},
             'all-out-attack':       {'doit': self.__do_attack},
             'attack':               {'doit': self.__do_attack},
             'doff-armor':           {'doit': self.__doff_armor},
@@ -1175,7 +1210,7 @@ class Ruleset(object):
                                           #     {'name': opponent_name,
                                           #      'group': opponent_group},
                                           #  'comment': <string> # optional
-                        fight_handler,    # FightHandler object
+                        fight_handler,    # FightHandler object (ignored)
                         ):
         '''
         Action handler for Ruleset.
@@ -1239,7 +1274,7 @@ class Ruleset(object):
                                               #  'level': <int> # see
                                               #         Fighter.conscious_map
                                               #  'comment': <string> # optional
-                            fight_handler,    # FightHandler object
+                            fight_handler,    # FightHandler object (ignored)
                             ):
         '''
         Action handler for Ruleset.
@@ -1259,7 +1294,7 @@ class Ruleset(object):
                                       #  'timer': <dict> # see
                                       #                    Timer::from_pieces
                                       #  'comment': <string> # optional
-                    fight_handler,    # FightHandler object
+                    fight_handler,    # FightHandler object (ignored)
                     ):
         '''
         Action handler for Ruleset.
@@ -1299,7 +1334,7 @@ class Ruleset(object):
                                      #  'item-index': <int> # index in
                                      #       fighter.details['stuff']
                                      #  'comment': <string>, # optional
-                   fight_handler,    # FightHandler object
+                   fight_handler,    # FightHandler object (ignored)
                    ):
         '''
         Action handler for Ruleset.
