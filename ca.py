@@ -22,7 +22,6 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: moving should destroy aim
 # TODO: search history (may have to add it to the text box)
 # TODO: make a way to add note into the history
 # TODO: add 1 to initiative if someone in the party has combat reflexes (2 if
