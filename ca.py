@@ -1527,6 +1527,7 @@ class AttributeWidget(object):
         self.__window_manager = window_manager
         self.__fighter = fighter
         self.__screen_handler = screen_handler
+        self.__ruleset = fighter.get_ruleset()
 
     def doit(self):
         keep_asking_menu = [('yes', True), ('no', False)]
@@ -1562,13 +1563,14 @@ class AttributeWidget(object):
             width = len(title) + 2
             keep_ask_attr = True
 
-            self.__fighter.details[attr_type][attr] = (
+            new_attr_value = (
                     self.__window_manager.input_box_calc(
                         height,
                         width,
                         self.__fighter.details[attr_type][attr],
                         title))
 
+            force_current = False
             if change_current:
                 if (self.__fighter.details['current'][attr] >
                         self.__fighter.details['permanent'][attr]):
@@ -1577,15 +1579,30 @@ class AttributeWidget(object):
                             'Cap the "current" Value to the "permanent" value',
                             cap_menu)
                     if cap_current:
-                        self.__fighter.details['current'][attr] = (
+                        new_attr_value = (
                                 self.__fighter.details['permanent'][attr])
             else:
                 both_menu = [('yes', True), ('no', False)]
-                both, ignore = self.__window_manager.menu(
+                force_current, ignore = self.__window_manager.menu(
                         'Change "current" Value To Match ', both_menu)
-                if both:
-                    self.__fighter.details['current'][attr] = (
-                            self.__fighter.details['permanent'][attr])
+
+            self.__ruleset.do_action(self.__fighter,
+                           {'action-name': 'adjust-attribute',
+                            'attr-type': attr_type,
+                            'attribute': attr,
+                            'new-value': new_attr_value,
+                            'notimer': True,
+                            'quiet': True},
+                           None)
+            if force_current:
+                self.__ruleset.do_action(self.__fighter,
+                               {'action-name': 'adjust-attribute',
+                                'attr-type': 'current',
+                                'attribute': attr,
+                                'new-value': new_attr_value,
+                                'notimer': True,
+                                'quiet': True},
+                               None)
 
             self.__screen_handler.draw_screen()
             keep_asking, ignore = self.__window_manager.menu(
