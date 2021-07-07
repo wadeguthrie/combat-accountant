@@ -23,10 +23,8 @@ import ca_gurps_ruleset
 import ca_timers
 
 # TODO: moving should destroy aim
-# TODO: option: heal unconscious, make conscious (if FP <= 0, make 1)
 # TODO: search history (may have to add it to the text box)
 # TODO: make a way to add note into the history
-# TODO: adjust attribute needs to be an action
 # TODO: add 1 to initiative if someone in the party has combat reflexes (2 if
 #   leader -- not sure how I want to do that)
 
@@ -1572,7 +1570,7 @@ class AttributeWidget(object):
 
             force_current = False
             if change_current:
-                if (self.__fighter.details['current'][attr] >
+                if (new_attr_value >
                         self.__fighter.details['permanent'][attr]):
                     cap_menu = [('yes', True), ('no', False)]
                     cap_current, ignore = self.__window_manager.menu(
@@ -1590,18 +1588,14 @@ class AttributeWidget(object):
                            {'action-name': 'adjust-attribute',
                             'attr-type': attr_type,
                             'attribute': attr,
-                            'new-value': new_attr_value,
-                            'notimer': True,
-                            'quiet': True},
+                            'new-value': new_attr_value},
                            None)
             if force_current:
                 self.__ruleset.do_action(self.__fighter,
                                {'action-name': 'adjust-attribute',
                                 'attr-type': 'current',
                                 'attribute': attr,
-                                'new-value': new_attr_value,
-                                'notimer': True,
-                                'quiet': True},
+                                'new-value': new_attr_value},
                                None)
 
             self.__screen_handler.draw_screen()
