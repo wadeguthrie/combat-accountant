@@ -473,20 +473,126 @@ class GmWindowManager(object):
         ALT_PGDN = 491
         ALT_PGUP = 490
 
+        search = None # {}
         while keep_going:
             user_input = self.get_one_character()
             if user_input == curses.KEY_HOME:
                 display_win.scroll_to(0)
+                if search is not None:
+                    search['found_line_index'] = -1
             elif user_input == curses.KEY_END:
                 display_win.scroll_to(len(lines)-1)
+                if search is not None:
+                    search['found_line_index'] = len(lines)
             elif user_input == curses.KEY_UP:
                 display_win.scroll_up(1)
+                if search is not None:
+                    search['found_line_index'] -= 1
             elif user_input == curses.KEY_DOWN:
                 display_win.scroll_down(1)
+                if search is not None:
+                    search['found_line_index'] += 1
             elif user_input == curses.KEY_NPAGE or user_input == ALT_PGDN:
                 display_win.scroll_down()
+                if search is not None:
+                    search['found_line_index'] += self.__default_scroll_lines
             elif user_input == curses.KEY_PPAGE or user_input == ALT_PGUP:
                 display_win.scroll_up()
+                if search is not None:
+                    search['found_line_index'] -= self.__default_scroll_lines
+            elif user_input == ord('/'):
+                # NOTE: this does not search across segments, so looking for
+                # 'blah' when there's a non-bolded section '...bl' followed
+                # by a bolded section 'ah...' won't yield any results.
+
+                # Get the search string
+                cols = display_win.get_width()
+                look_for_string = self.input_box(1, cols-4, 'Search For What?')
+                if len(look_for_string) == 0:
+                    if search is None:
+                        self.error(['Need to search for something'])
+                        continue
+                    # otherwise, just use the old search
+                else:
+                    search = {}
+                    search['look_for_string'] = look_for_string
+                    search['look_for_re'] = re.compile(search['look_for_string'])
+
+                found_one = False
+
+                # Now, look for the string
+                for line_index in range(display_win.top_line, len(lines)):
+                    line = lines[line_index]
+                    for segment in line:
+                        if search['look_for_re'].search(segment['text']):
+                            search['found_line_index'] = line_index
+                            found_one = True
+                            display_win.scroll_to(line_index)
+                            border_win.touchwin() # Why is this needed?
+                            border_win.refresh() # Why is this needed?
+                            break
+                    if found_one:
+                        break
+                if not found_one:
+                    self.error(['"%s" not found' % search['look_for_string']])
+                    border_win.touchwin() # Why is this needed?
+                    border_win.refresh() # Why is this needed?
+            elif user_input == ord('n'):
+                if search is None:
+                    self.error(['Need to search, first, with "/"'])
+                    border_win.touchwin() # Why is this needed?
+                    border_win.refresh() # Why is this needed?
+                elif search['found_line_index']+1 >= len(lines):
+                    self.error(['No more matches'])
+                    border_win.touchwin() # Why is this needed?
+                    border_win.refresh() # Why is this needed?
+                else:
+                    found_one = False
+                    for line_index in range(search['found_line_index']+1,
+                                            len(lines)):
+                        line = lines[line_index]
+                        for segment in line:
+                            if search['look_for_re'].search(segment['text']):
+                                search['found_line_index'] = line_index
+                                found_one = True
+                                display_win.scroll_to(line_index)
+                                border_win.touchwin() # Why is this needed?
+                                border_win.refresh() # Why is this needed?
+                                break
+                        if found_one:
+                            break
+                    if not found_one:
+                        self.error(['No more matches'])
+                        border_win.touchwin() # Why is this needed?
+                        border_win.refresh() # Why is this needed?
+            elif user_input == ord('?'):
+                if search is None:
+                    self.error(['Need to search, first, with "/"'])
+                    border_win.touchwin() # Why is this needed?
+                    border_win.refresh() # Why is this needed?
+                elif search['found_line_index'] <= 0:
+                    self.error(['No more matches'])
+                    border_win.touchwin() # Why is this needed?
+                    border_win.refresh() # Why is this needed?
+                else:
+                    found_one = False
+                    for line_index in range(search['found_line_index']-1,
+                                            -1, -1):
+                        line = lines[line_index]
+                        for segment in line:
+                            if search['look_for_re'].search(segment['text']):
+                                search['found_line_index'] = line_index
+                                found_one = True
+                                display_win.scroll_to(line_index)
+                                border_win.touchwin() # Why is this needed?
+                                border_win.refresh() # Why is this needed?
+                                break
+                        if found_one:
+                            break
+                    if not found_one:
+                        self.error(['No more matches'])
+                        border_win.touchwin() # Why is this needed?
+                        border_win.refresh() # Why is this needed?
             else:
                 del border_win
                 del display_win
@@ -1077,6 +1183,14 @@ class GmScrollableWindow(object):
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
         return {'top_line': self.top_line,
                 'bottom_line': self.top_line + win_line_cnt - 1}
+
+    def get_width(self):
+        '''
+        Returns a dict containing the ordinal number of the line at the top
+        window and the ordinal number of the line at the bottom of the window.
+        '''
+        win_line_cnt, win_col_cnt = self.__window.getmaxyx()
+        return win_col_cnt
 
     def refresh(self):
         ''' Re-draws all of the window's panes.  '''
