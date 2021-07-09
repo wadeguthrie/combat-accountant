@@ -22,6 +22,9 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: allow the filename of bug reports to be augmented.
+#            self.world.do_debug_snapshot('EndFight')
+
 # TODO: make a way to add note into the history
 # TODO: add 1 to initiative if someone in the party has combat reflexes (2 if
 #   leader -- not sure how I want to do that)
@@ -288,7 +291,7 @@ class PersonnelGmWindow(ca_gui.GmWindow):
                                                 0,
                                                 command_ribbon_choices)
         lines, cols = self._window.getmaxyx()
-        # TODO: should _char_detail be in GmWindow?
+        # TODO (eventually): should _char_detail be in GmWindow?
         self._char_detail = []  # [[{'text', 'mode'}, ...],   # line 0
                                 #  [...],                  ]  # line 1...
 
@@ -368,7 +371,9 @@ class PersonnelGmWindow(ca_gui.GmWindow):
         self.__char_list_window.refresh()
 
     # TODO (eventually): genericize the scrolling stuff and just pass the
-    # window to the generic routine.
+    # window to the generic routine.  Pay attention to '/' because the generic
+    # routines have differeent search code than the specific.  You can address
+    # it by having the generic code take 'enable_search_code' as a parameter.
 
     def scroll_char_list_up(self):
         ''' Scrolls the character list pane up.  '''
@@ -5096,8 +5101,8 @@ class FightHandler(ScreenHandler):
                 if 'quit' in xfer:
                     return True
 
-                # TODO: go back and ask again for items where we didn't get
-                # all of them
+                # TODO (soon): go back and ask again for items where we didn't
+                # get all of them
                 new_item = bad_guy.remove_equipment(index)
                 ignore = xfer['guy'].add_equipment(new_item,
                                                    bad_guy.detailed_name)
@@ -5419,7 +5424,7 @@ class FightHandler(ScreenHandler):
         '''
 
         # Temporarily, save a bug report at the end of the fight
-        # TODO: remove, eventually
+        # TODO (eventually): remove
 
         if not ScreenHandler.maintain_game_file:
             self.world.do_debug_snapshot('EndFight')
