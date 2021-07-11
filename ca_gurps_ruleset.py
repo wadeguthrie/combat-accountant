@@ -3130,13 +3130,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns: the dict.
         '''
         to_monster = super(GurpsRuleset, self).make_empty_creature()
-        to_monster.update({'aim': {'braced': False, 'rounds': 0},
-                           'skills': {},
+        to_monster.update({'advantages': {},
+                           'aim': {'braced': False, 'rounds': 0},
+                           'check_for_death': False,
+                           'gcs-file': None, # Not required but useful
+                           'posture': 'standing',
                            'shock': 0,
+                           'skills': {},
                            'stunned': False,
-                           'advantages': {},
-                           'actions_this_turn': [],
-                           'posture': 'standing'})
+                           })
         to_monster['permanent'] = copy.deepcopy({'fp': 10,
                                                  'iq': 10,
                                                  'hp': 10,
