@@ -365,6 +365,12 @@ class Ruleset(object):
         playing_back = (False if fight_handler is None else
                         fight_handler.world.playing_back)
 
+        # First, let's make sure that they have all the required parts
+
+        for key, value in ca_fighter.Fighter.strawman.iteritems():
+            if key not in creature:
+                creature[key] = value
+
         # Check to see if they're carrying their preferred armor
 
         preferred_armor_index_list = []
@@ -597,16 +603,19 @@ class Ruleset(object):
 
         Returns: the dict.
         '''
-        return {'stuff': [],
-                'weapon-index': None,
+        return {'actions_this_turn': [],
                 'armor-index': [], # can wear multiple armors over each other
-                'permanent': {},
                 'current': {},
-                'state': 'alive',
-                'timers': [],
-                'opponent': None,
-                'notes': [],
                 'fight-notes': [],
+                'notes': [],
+                'opponent': None,
+                'permanent': {},
+                'preferred-armor-index': [],
+                'preferred-weapon-index': None, # TODO: make sure None is OK
+                'state': 'alive',
+                'stuff': [],
+                'timers': [],
+                'weapon-index': None,
                 }
 
     def search_one_creature(self,

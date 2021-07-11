@@ -335,6 +335,8 @@ class Fighter(ThingsInFight):
         'fight': FIGHT,
     }
 
+    strawman = None
+
     def __init__(self,
                  name,              # string
                  group,             # string = 'PCs' or some monster group
@@ -348,7 +350,8 @@ class Fighter(ThingsInFight):
                                       fighter_details,
                                       ruleset,
                                       window_manager)
-        pass
+        if Fighter.strawman is None:
+            Fighter.strawman = ruleset.make_empty_creature()
 
     @staticmethod
     def get_fighter_state(details):
