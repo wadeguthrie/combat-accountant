@@ -677,7 +677,7 @@ class Fighter(ThingsInFight):
         Returns a string that contains a short (but not the shortest)
         description of the state of the Fighter.
         '''
-        # TODO: this is ruleset-based
+        # TODO (eventually): this is ruleset-based
         fighter_string = '%s HP: %d/%d FP: %d/%d' % (
                                     self.name,
                                     self.details['current']['hp'],
@@ -701,7 +701,7 @@ class Fighter(ThingsInFight):
         '''
         Returns a string that contains the shortest description of the Fighter.
         '''
-        # TODO: this is ruleset based
+        # TODO (eventually): this is ruleset based
         fighter_string = '%s HP:%d/%d' % (self.name,
                                           self.details['current']['hp'],
                                           self.details['permanent']['hp'])
