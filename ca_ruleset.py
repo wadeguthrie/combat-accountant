@@ -611,7 +611,7 @@ class Ruleset(object):
                 'opponent': None,
                 'permanent': {},
                 'preferred-armor-index': [],
-                'preferred-weapon-index': None, # TODO: make sure None is OK
+                'preferred-weapon-index': None, # TODO (now): make sure None is OK
                 'state': 'alive',
                 'stuff': [],
                 'timers': [],
@@ -942,8 +942,8 @@ class Ruleset(object):
             clip_index, ignore = self._window_manager.menu('Reload With What',
                                                            clip_menu)
             if clip_index is None:
-                # TODO: there should be a way to tell the derived ruleset that
-                # we're aborting early.
+                # TODO (eventually): there should be a way to tell the derived
+                #   ruleset that we're aborting early.
                 return Ruleset.DONT_LOG
 
             # Is the clip good?
@@ -1032,7 +1032,8 @@ class Ruleset(object):
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
 
-        # TODO: draw weapon from counted item (that takes clips) makes a copy
+        # TODO (eventually): draw weapon from counted item (that takes clips)
+        #   makes a copy
         fighter.draw_weapon_by_index(action['weapon-index'])
         return Ruleset.HANDLED_OK
 

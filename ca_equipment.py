@@ -266,7 +266,7 @@ class EquipmentManager(object):
                                  'mode': mode}])
         elif 'armor' in item['type']:
             texts = []
-            # TODO: ruleset-specific
+            # TODO (eventually): ruleset-specific
             texts.append('dr: %d' % item['dr'])
             char_detail.append([{'text': ('     ' + ', '.join(texts)),
                                  'mode': mode}])
@@ -425,7 +425,7 @@ class Weapon(object):
                         'notes': '',
                         'shots': self.shots(),
                         'shots_left': self.shots_left(),
-                        'type': ['misc'], # TODO: ruleset?
+                        'type': ['misc'], # TODO (eventually): ruleset?
                         }
         self.details['clip'] = None
         self.shots_left(0)

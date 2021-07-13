@@ -699,7 +699,7 @@ class FightGmWindow(ca_gui.GmWindow):
         if fighter_state == ca_fighter.Fighter.FIGHT:
             pass
         elif fighter_state == ca_fighter.Fighter.DEAD:
-            # TODO(eventually): make the window scrollable rather than limit
+            # TODO (eventually): make the window scrollable rather than limit
             if line < lines:
                 window.addstr(line, 0, '** DEAD **', mode)
                 line += 1
@@ -1672,7 +1672,7 @@ class PersonnelHandler(ScreenHandler):
                        'func': self.__create_template_group,
                        'help': 'Make a new collection of templates (like ' +
                                'bad guys or space marines).'},
-            # TODO: ruleset-based
+            # TODO (now): ruleset-based
             ord('s'): {'name': 'list Spells',
                        'func': self.__list_spells,
                        'help': 'Display the list of available ' +
@@ -3028,7 +3028,7 @@ class PersonnelHandler(ScreenHandler):
         if template_value['type'] == 'value':
             return template_value['value']
 
-        # TODO(eventually, maybe):
+        # TODO (eventually, maybe):
         #   {'type': 'ask-string', 'value': x}
         #   {'type': 'ask-numeric', 'value': x}
         #   {'type': 'ask-logical', 'value': x}
@@ -3082,7 +3082,7 @@ class PersonnelHandler(ScreenHandler):
             # alternatively use the 'World' but the ruleset shouldn't need
             # to know about the World, either.
 
-            # TODO: not just to PCs, allow transfer to NPCs
+            # TODO (now): not just to PCs, allow transfer to NPCs
 
             to_fighter = self.world.get_creature(to_fighter_info, 'PCs')
             item = self.__equipment_manager.remove_equipment_by_index(
@@ -3902,8 +3902,8 @@ class FightHandler(ScreenHandler):
 
         if monster_group is not None:
             for name in self.world.get_creature_details_list(monster_group):
-                # TODO: maybe use get_creature so that the information is
-                # cached in World.
+                # TODO (eventually): maybe use get_creature so that the
+                # information is cached in World.
                 details = self.world.get_creature_details(name,
                                                           monster_group)
                 if details is not None:
@@ -5101,7 +5101,7 @@ class FightHandler(ScreenHandler):
                 if 'quit' in xfer:
                     return True
 
-                # TODO (soon): go back and ask again for items where we didn't
+                # TODO (now): go back and ask again for items where we didn't
                 # get all of them
                 new_item = bad_guy.remove_equipment(index)
                 ignore = xfer['guy'].add_equipment(new_item,
@@ -5951,12 +5951,14 @@ class FightHandler(ScreenHandler):
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
-        # TODO: look at timer handling - maybe base advancing timers on
-        #   whether it's OK to move on (check non-action reasons for moving
-        #   on, though unconscious fighters can't hold their initiative).
-        # TODO: when we're done with all of this, if the fighter that currently
-        # has initiative has already gone, move the initiative to the next
-        # fighter. -- NOTE: the actions are cleared in GurpsRuleset::start_turn
+        # TODO (eventually): look at timer handling - maybe base advancing
+        #   timers on whether it's OK to move on (check non-action reasons
+        #   for moving on, though unconscious fighters can't hold their
+        #   initiative).
+        # TODO (eventually): when we're done with all of this, if the fighter
+        #   that currently has initiative has already gone, move the
+        #   initiative to the next fighter. -- NOTE: the actions are cleared
+        #   in GurpsRuleset::start_turn
 
         if len(self._saved_fight['held-init']) <= 0:
             return True # Keep fighting

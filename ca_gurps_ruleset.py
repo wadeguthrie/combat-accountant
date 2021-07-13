@@ -2640,7 +2640,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
         # TODO (eventually): need convenient defaults -- maybe as an entry to
         # the skill
-        # TODO: if 'skill' is 'dx', this doesn't work
+        # TODO (now): if 'skill' is 'dx', this doesn't work
         if weapon.details['skill'] not in fighter.details['skills']:
             return None, None
 
@@ -3221,7 +3221,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         for spell_name in sorted(GurpsRuleset.spells.iterkeys()):
             spell = GurpsRuleset.spells[spell_name]
 
-            # TODO: should be an option
+            # TODO (now): should be an option
             # Highlight the spells that a bad guy might want to cast during
             # battle.
             mode = (curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK)
@@ -3666,7 +3666,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         post_adjust_hp = fighter.details['current']['hp']
 
         # NOTE: House rule for healing an unconscious person
-        # TODO: use adjust-attribute's solution to this
+        # TODO (now): use adjust-attribute's solution to this
         if (pre_adjust_hp < post_adjust_hp and post_adjust_hp > 0 and
                 not fighter.is_conscious() and not fighter.is_dead()):
             self.do_action(fighter,
@@ -3873,15 +3873,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # M8 - High skill level costs less - NOTE: this applies to base
             # skill, not effective skill.
             #
-            # TODO: not for blocking spells
-            # TODO: maintain spell gets same discount
-            # TODO: skill of 9 or less: time doubled, needs voice, hands, feet
+            # TODO (now): not for blocking spells
+            # TODO (now): maintain spell gets same discount
+            # TODO (now): skill of 9 or less: time doubled, needs voice, hands, feet
             skill = complete_spell['skill'] - 15
             while skill >= 0:
-                # TODO: first block: voice OR slight gesture, move 1 yard
-                # TODO: subsequent blocks: no voice OR gesture, time / 2 (round up) - so
-                #   /4 at 3rd block, /8 and 4th block, etc.
-                # TODO: missile spells don't get time benefits
+                # TODO (now): first block: voice OR slight gesture, move 1 yard
+                # TODO (now): subsequent blocks: no voice OR gesture, time / 2
+                #   (round up) - so /4 at 3rd block, /8 and 4th block, etc.
+                # TODO (now): missile spells don't get time benefits
                 complete_spell['cost'] -= 1
                 skill -= 5
             if complete_spell['cost'] <= 0:
@@ -3919,7 +3919,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 if not successful_attack:
                     spell_worked_on_opponent = False
             elif complete_spell['range'] == 'missile':
-                # TODO: should be an option to use 'Innate Attack' skill
+                # TODO (now): should be an option to use 'Innate Attack' skill
                 # (default DX-4) or just regular attack.
                 attack_menu = [('Success', True), ('Failure', False)]
                 successful_attack, ignore = self._window_manager.menu(
@@ -4327,8 +4327,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # Timer
 
         timer = ca_timers.Timer(None)
-        # TODO: Mods are actual total values.  They _should_ be delta values
-        # but one of the mods caps the to-hit to 9.
+        # TODO (now): Mods are actual total values.  They _should_ be delta
+        #   values but one of the mods caps the to-hit to 9.
         mods = None
         to_hit_penalty = 0
         MOVE_ATTACK_MELEE_MINUS = -4
@@ -4579,7 +4579,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             reload_time = weapon.details['reload']
 
             # B43: combat reflexes
-            # TODO: this is only for fast draw
+            # TODO (now): this is only for fast draw
             if 'Combat Reflexes' in fighter.details['advantages']:
                 reload_time -= 1
 
@@ -4603,7 +4603,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             if 'notimer' in action:
                 new_action['notimer'] = action['notimer']
 
-            # TODO: the action should be launched by a timer
+            # TODO (eventually): the action should be launched by a timer
             self.do_action(fighter, new_action, fight_handler)
 
             return None  # No timer
@@ -4870,9 +4870,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             if action_info['doit'] is not None:
                 timer = action_info['doit'](fighter, action, fight_handler)
 
-            # TODO: this block should be a gurps_ruleset function that is
-            #   called from each of the 'doit' modules.  The 'doit' modules
-            #   should each return 'handled' like the base class 'doit'
+            # TODO (eventually): this block should be a gurps_ruleset function
+            #   that is called from each of the 'doit' modules.  The 'doit'
+            #   modules should each return 'handled' like the base class 'doit'
             #   modules do.
 
             # If the base class has asked us not to log, we'll honor that.
@@ -4982,8 +4982,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
     def __pick_attrib(self,
                       fighter # Fighter object (see NOTE, below)
                       ):
-        # TODO: this can go into the generic ruleset
-        # TODO: attribute (edit) should use this
+        # TODO (now): this can go into the generic ruleset
+        # TODO (now): attribute (edit) should use this
         '''
         NOTE: this doesn't have to be the fighter that is being modified but
         we get the list of attributes from a single fighter.
