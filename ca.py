@@ -22,6 +22,7 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: store the amount of time each person used for their turn.
 # TODO: allow the filename of bug reports to be augmented.
 #            self.world.do_debug_snapshot('EndFight')
 
@@ -3671,6 +3672,9 @@ class FightHandler(ScreenHandler):
     Fighter that has initiative but the user can can selete another with up
     and down buttons.
     '''
+
+    timing_file = 'timing.csv'
+
     def __init__(self,
                  window_manager,        # GmWindowManager object for menus and
                                         #   errors
@@ -4002,6 +4006,9 @@ class FightHandler(ScreenHandler):
                                         fighter.details['opponent']['name'],
                                         fighter.details['opponent']['group'])
         return opponent
+
+    def get_round(self):
+        return self._saved_fight['round']
 
     def handle_user_input_until_done(self):
         '''
@@ -6504,12 +6511,20 @@ class MainHandler(ScreenHandler):
             if monster_group is None:
                 return True
 
-        fight = FightHandler(self._window_manager,
-                             self.world,
-                             monster_group,
-                             None)  # Playback history
+        is_new = False if os.path.exists(FightHandler.timing_file) else True
+        mode = 'w' if is_new else 'a'
+        with open(FightHandler.timing_file, mode) as f:
+            self.world.ruleset.set_timing_file(f, is_new)
+            #TODO: need to record the first action
+            #TODO: need to record the last action
 
-        fight.handle_user_input_until_done()
+            fight = FightHandler(self._window_manager,
+                                 self.world,
+                                 monster_group,
+                                 None)  # Playback history
+            fight.handle_user_input_until_done()
+
+            self.world.ruleset.set_timing_file(None)
 
         self.__current_display = None
 
@@ -7077,11 +7092,20 @@ if __name__ == '__main__':
 
 
             if world.details['current-fight']['saved']:
-                fight_handler = FightHandler(window_manager,
-                                             world,
-                                             None,
-                                             playback_history)
-                fight_handler.handle_user_input_until_done()
+                is_new = False if os.path.exists(FightHandler.timing_file) else True
+                mode = 'w' if is_new else 'a'
+                with open(FightHandler.timing_file, mode) as f:
+                    world.ruleset.set_timing_file(f, is_new)
+                    #TODO: need to record the first action
+                    #TODO: need to record the last action
+
+                    fight_handler = FightHandler(window_manager,
+                                                 world,
+                                                 None,
+                                                 playback_history)
+                    fight_handler.handle_user_input_until_done()
+
+                    world.ruleset.set_timing_file(None)
 
             # Enter into the mainloop
             main_handler = MainHandler(window_manager, world)

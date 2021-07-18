@@ -190,6 +190,9 @@ class MockFightHandler(object):
 
         return self.__opponents[fighter.group][fighter.name]
 
+    def get_round(self):
+        return 1 # Don't really need this for anything but timing
+
     def modify_index(self, adjustment):
         pass
 
