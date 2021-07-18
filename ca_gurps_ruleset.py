@@ -1610,6 +1610,21 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                  ):
         super(GurpsRuleset, self).__init__(window_manager)
 
+        # If the fighter does one of these things and the turn is over, he
+        # clearly hasn't forgotten to do something.  Other actions are passive
+        # and their existence doesn't mean that the fighter has actually tried
+        # to do anything.
+
+        self.active_actions.extend([
+            'aim',             'all-out-attack',  'attack',
+            'cast-spell',      'change-posture',  'concentrate',
+            'defend',          'doff-armor',      'don-armor',
+            'draw-weapon',     'evaluate',        'feint',
+            'move',            'move-and-attack', 'nothing',
+            'reload',          'stun',            'use-item',
+            'user-defined'
+        ])
+
     #
     # Public Methods
     #
@@ -1627,23 +1642,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         something before we move on.
         '''
 
-        # If the fighter does one of these things and the turn is over, he
-        # clearly hasn't forgotten to do something.  Other actions are passive
-        # and their existence doesn't mean that the fighter has actually tried
-        # to do anything.
-
-        active_actions = [
-            'aim',             'all-out-attack',  'attack',
-            'cast-spell',      'change-posture',  'concentrate',
-            'defend',          'doff-armor',      'don-armor',
-            'draw-weapon',     'evaluate',        'feint',
-            'move',            'move-and-attack', 'nothing',
-            'reload',          'stun',            'use-item',
-            'user-defined'
-        ]
-
         for action in fighter.details['actions_this_turn']:
-            if action in active_actions:
+            if action in self.active_actions:
                 return True
 
         if not fighter.is_conscious():

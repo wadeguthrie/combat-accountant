@@ -2,6 +2,7 @@
 
 import copy
 import curses
+import datetime
 import pprint
 import random
 
@@ -33,6 +34,7 @@ class Ruleset(object):
     (UNHANDLED, HANDLED_OK, HANDLED_ERROR, DONT_LOG) = range(4)
 
     has_2_parts = {'reload': True, 'user-defined': True}
+    timing_headings = ['name', 'group', 'time', 'action', 'state', 'round']
 
     def __init__(self,
                  window_manager  # GmWindowManager object for menus and errors
@@ -40,6 +42,10 @@ class Ruleset(object):
         self._window_manager = window_manager
         self.sort_init_descending = True # Higher numbered inits go first
         self.options = None
+        self.active_actions = []
+
+        self._timing_file = None
+        self._char_being_timed = None
 
     @staticmethod
     def roll(number,  # the number of dice
@@ -77,7 +83,7 @@ class Ruleset(object):
         Returns nothing.
         '''
 
-        # print '\n=== do_action ==='
+        # print '\n--- do_action ---'
         # PP = pprint.PrettyPrinter(indent=3, width=150)
         # PP.pprint(action)
 
@@ -675,6 +681,16 @@ class Ruleset(object):
         '''Saves the options.'''
         self.options = options
 
+    def set_timing_file(self,
+                        file_handle,
+                        is_new=False
+                        ):
+        self._timing_file = file_handle
+        if self._timing_file is not None and is_new:
+            for heading in Ruleset.timing_headings:
+                self._timing_file.write('"%s", ' % heading)
+            self._timing_file.write('\n')
+
     #
     # Private and Protected Methods
     #
@@ -1053,6 +1069,28 @@ class Ruleset(object):
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
 
+        if self._char_being_timed is None:
+            pass # TODO: error
+        elif (fighter.name != self._char_being_timed['name'] or
+                fighter.group != self._char_being_timed['group']):
+            pass # TODO: error
+        else:
+            self._char_being_timed['end'] = datetime.datetime.now()
+            self._char_being_timed['time'] = (self._char_being_timed['end'] -
+                          self._char_being_timed['start'])
+            #print '\n=== %r ===' % self._char_being_timed['time']
+            #PP = pprint.PrettyPrinter(indent=3, width=150)
+            #PP.pprint(self._char_being_timed) # TODO: remove
+
+            if self._timing_file is not None:
+                for heading in Ruleset.timing_headings:
+                    if heading in self._char_being_timed:
+                        self._timing_file.write('"%s", ' %
+                                self._char_being_timed[heading])
+                    else:
+                        self._timing_file.write(', ')
+                self._timing_file.write('\n')
+
         if fight_handler is not None:
             fighter.end_turn(fight_handler)
             fight_handler.modify_index(1)
@@ -1279,6 +1317,20 @@ class Ruleset(object):
         if fight_handler is not None and logit and handled != Ruleset.DONT_LOG:
             fight_handler.add_to_history(action)
 
+        # Copy the action name into the timing information
+
+        action_name = (None if 'action-name' not in action else
+                action['action-name'])
+        if self._char_being_timed is None:
+            pass # TODO: error
+        elif (fighter.name != self._char_being_timed['name'] or
+                fighter.group != self._char_being_timed['group']):
+            pass # This happens, e.g., when the opponent loses HP
+        elif (action_name is not None and
+                action_name in self.active_actions):
+            # I know this may overwrite an existing action - that's ok
+            self._char_being_timed['action'] = action_name
+
         return
 
     def __set_consciousness(self,
@@ -1339,7 +1391,15 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
+        # TODO: if _char_being_timed is None, do whatever we do
+        self._char_being_timed = {'name': fighter.name,
+                                  'group': fighter.group,
+                                  'start': datetime.datetime.now(),
+                                  'state': fighter.details['state'],
+                                  'round': fight_handler.get_round()}
+
         fighter.start_turn(fight_handler)
+
         return Ruleset.HANDLED_OK
 
     def __use_item(self,
