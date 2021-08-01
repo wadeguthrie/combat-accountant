@@ -3092,7 +3092,12 @@ class PersonnelHandler(ScreenHandler):
             to_fighter = self.world.get_creature(to_fighter_info, 'PCs')
             item = self.__equipment_manager.remove_equipment_by_index(
                     from_fighter, item_index, count)
-            ignore = to_fighter.add_equipment(item, from_fighter.detailed_name)
+            if from_fighter.group == 'PCs':
+                source = from_fighter.detailed_name
+            else:
+                source = '%s:%s' % (from_fighter.group,
+                                    from_fighter.detailed_name)
+            ignore = to_fighter.add_equipment(item, source)
             self._draw_screen()
 
             keep_asking, ignore = self._window_manager.menu(
@@ -5152,8 +5157,10 @@ class FightHandler(ScreenHandler):
                 # TODO (now): go back and ask again for items where we didn't
                 # get all of them
                 new_item = bad_guy.remove_equipment(index)
+                source = '%s:%s' % (bad_guy.group,
+                                    bad_guy.detailed_name)
                 ignore = xfer['guy'].add_equipment(new_item,
-                                                   bad_guy.detailed_name,
+                                                   source,
                                                    identified=False)
 
                 # indexes are no longer good, remove the weapon and armor

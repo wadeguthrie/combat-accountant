@@ -1148,12 +1148,12 @@ class Ruleset(object):
 
         identified = False if recipient.group != fighter.group else None
 
-        ignore = recipient.add_equipment(item,
-                                         fighter.detailed_name,
-                                         identified)
-
-        PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
-        PP.pprint(item) # TODO: remove
+        if fighter.group == 'PCs':
+            source = fighter.detailed_name
+        else:
+            source = '%s:%s' % (fighter.group,
+                                fighter.detailed_name)
+        ignore = recipient.add_equipment(item, source, identified)
         return Ruleset.HANDLED_OK
 
 
