@@ -2820,9 +2820,13 @@ class PersonnelHandler(ScreenHandler):
                 ('equipment (add)',     {'doit': self.__add_equipment}),
                 ('Equipment (remove)',  {'doit': self.__remove_equipment}),
                 ('give equipment',      {'doit': self.__give_equipment}),
-                ('change consciousness',
-                    {'doit': self.__change_consciousness}),
+                ('identify equipment',  {'doit': self.__identify_equipment}),
             ])
+
+        sub_menu.extend([
+            ('change consciousness',
+                {'doit': self.__change_consciousness}),
+        ])
 
         self.__ruleset_abilities = self.world.ruleset.get_creature_abilities()
         for ability in self.__ruleset_abilities:
@@ -3093,6 +3097,43 @@ class PersonnelHandler(ScreenHandler):
 
             keep_asking, ignore = self._window_manager.menu(
                     'Give More Equipment', keep_asking_menu)
+
+        return True  # anything but 'None' for a successful menu handler
+
+    def __identify_equipment(self,
+                             throw_away   # Required/used by the caller because
+                                          #   there's a list of methods to call,
+                                          #   and (apparently) some of them may
+                                          #   use this parameter.  It's ignored
+                                          #   by this method, however.
+                             ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Provides a way for a Fighter to identify a previously unidentified
+        item.
+
+        Returns: None if we want to bail-out of the give equipment process,
+                 True, otherwise
+        '''
+
+        # Get the object from the viewing index
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        keep_asking_menu = [('yes', True), ('no', False)]
+        keep_asking = True
+        while keep_asking:
+            item_index = self.__equipment_manager.select_item_index(fighter)
+            if item_index is None:
+                return None
+            item = fighter.details['stuff'][item_index]
+            item['identified'] = True
+            self._draw_screen()
+
+            keep_asking, ignore = self._window_manager.menu(
+                    'Identify More Equipment', keep_asking_menu)
 
         return True  # anything but 'None' for a successful menu handler
 
@@ -5112,7 +5153,8 @@ class FightHandler(ScreenHandler):
                 # get all of them
                 new_item = bad_guy.remove_equipment(index)
                 ignore = xfer['guy'].add_equipment(new_item,
-                                                   bad_guy.detailed_name)
+                                                   bad_guy.detailed_name,
+                                                   identified=False)
 
                 # indexes are no longer good, remove the weapon and armor
                 if bad_guy.name != ca_fighter.Venue.name:

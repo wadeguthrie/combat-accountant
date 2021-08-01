@@ -47,8 +47,9 @@ class ThingsInFight(object):
     #
 
     def add_equipment(self,
-                      new_item,    # dict describing new equipment
-                      source=None  # string: from where did equipment come
+                      new_item,         # dict describing new equipment
+                      source=None,      # string: from where did equipment come
+                      identified=None   # ignored, here
                       ):
         '''
         Accept a new item of equipment and put it in the list.
@@ -378,14 +379,22 @@ class Fighter(ThingsInFight):
     #
 
     def add_equipment(self,
-                      new_item,   # dict describing new equipment
-                      source=None  # string: from where did equipment came
+                      new_item,     # dict describing new equipment
+                      source=None,  # string: from where did equipment came
+                      identified=None
                       ):
         '''
         Accept a new item of equipment and put it in the list.
 
         Returns the new index of the equipment.
         '''
+        # if 'owners' doesn't exist or is None, then it's a mundane item and
+        # is indistinguishable from any similar item -- you don't need to know
+        # its provenance and you don't need to identify it.
+        if (identified is not None and 'owners' in new_item and
+                new_item['owners'] is not None):
+            new_item['identified'] = identified
+
         # If we're adding a weapon or a piece of armor, is it the first of
         # its kind?
 

@@ -27,6 +27,9 @@ class Equipment(object):
 
         Returns the current index of the item in the equipment list.
         '''
+        # if 'owners' doesn't exist or is None, then it's a mundane item and
+        # is indistinguishable from any similar item -- you don't need to know
+        # its provenance
         if (source is not None and 'owners' in new_item and
                 new_item['owners'] is not None):
             new_item['owners'].append(source)
@@ -230,6 +233,10 @@ class EquipmentManager(object):
         if ('notes' in item and item['notes'] is not None and
                 (len(item['notes']) > 0)):
             texts.append(': %s' % item['notes'])
+
+        if 'identified' in item and not item['identified']:
+            texts.append(' [UNIDENTIFIED]')
+
         char_detail.append([{'text': ''.join(texts), 'mode': mode}])
 
         if 'ranged weapon' in item['type']:
