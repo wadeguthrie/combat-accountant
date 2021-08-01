@@ -5064,10 +5064,10 @@ class FightHandler(ScreenHandler):
         for bad_guy in self.__fighters:
             if bad_guy.group == 'PCs':  # only steal from bad guys
                 continue
-            if (bad_guy.name != ca_fighter.Venue.name and
-                    bad_guy.is_conscious()):  # only steal from the dead/unconscious
-                # NOTE: absent fighters not marked conscious
-                continue
+            if bad_guy.name != ca_fighter.Venue.name:
+                # only steal from the dead/unconscious
+                if bad_guy.is_conscious() or bad_guy.is_absent():
+                    continue
             found_dead_bad_guy = True
 
             # Reversed so removing items doesn't change the index of others
