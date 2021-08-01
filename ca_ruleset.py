@@ -380,14 +380,18 @@ class Ruleset(object):
         # Check to see if they're carrying their preferred armor
 
         preferred_armor_index_list = []
-        if ('preferred-armor-index' not in fighter.details or
-                len(fighter.details['preferred-armor-index']) == 0):
-            they_have_armor = False
-            for item in fighter.details['stuff']:
+        if len(fighter.details['preferred-armor-index']) == 0:
+            owned_armor_count = 0
+            armor_index = None
+            for index, item in enumerate(fighter.details['stuff']):
                 if 'armor' in item['type']:
-                    they_have_armor = True
-                    break
-            if they_have_armor:
+                    owned_armor_count += 1
+                    armor_index = index
+            if owned_armor_count == 0:
+                pass
+            elif owned_armor_count == 1:
+                fighter.details['preferred-armor-index'] = [armor_index]
+            else: # owns more than one piece of armor
                 self._window_manager.error([
                     'Creature "%s" has no preferred armor' % name])
         elif not playing_back:
@@ -500,16 +504,19 @@ class Ruleset(object):
         preferred_weapon_index = None
         preferred_weapon = None
 
-        if ('preferred-weapon-index' not in fighter.details or
-                fighter.details['preferred-weapon-index'] is None):
-
-            they_have_a_weapon = False
-            for item in fighter.details['stuff']:
+        if fighter.details['preferred-weapon-index'] is None:
+            owned_weapon_count = 0
+            weapon_index = None
+            for index, item in enumerate(fighter.details['stuff']):
                 if ('ranged weapon' in item['type'] or
                         'melee weapon' in item['type']):
-                    they_have_a_weapon = True
-                    break
-            if they_have_a_weapon:
+                    owned_weapon_count += 1
+                    weapon_index = index
+            if owned_weapon_count == 0:
+                pass
+            elif owned_weapon_count == 1:
+                fighter.details['preferred-weapon-index'] = weapon_index
+            else:
                 self._window_manager.error([
                     'Creature "%s" has no preferred weapon' % name])
         elif not playing_back:
