@@ -1145,8 +1145,15 @@ class Ruleset(object):
         if item is None:
             self._window_manager.error(['No item to transfer'])
             return Ruleset.HANDLED_ERROR
-        ignore = recipient.add_equipment(item, fighter.detailed_name)
 
+        identified = False if recipient.group != fighter.group else None
+
+        ignore = recipient.add_equipment(item,
+                                         fighter.detailed_name,
+                                         identified)
+
+        PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+        PP.pprint(item) # TODO: remove
         return Ruleset.HANDLED_OK
 
 
