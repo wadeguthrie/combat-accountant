@@ -1084,7 +1084,7 @@ class Ruleset(object):
         else:
             self._char_being_timed['end'] = datetime.datetime.now()
             self._char_being_timed['time'] = (self._char_being_timed['end'] -
-                          self._char_being_timed['start'])
+                          self._char_being_timed['start']).total_seconds()
             #print '\n=== %r ===' % self._char_being_timed['time']
             #PP = pprint.PrettyPrinter(indent=3, width=150)
             #PP.pprint(self._char_being_timed) # TODO: remove
