@@ -645,6 +645,11 @@ class CompareChars(object):
                     copy_answer = raw_input('Copy GCS value into the JSON? ')
                     if copy_answer[0].lower() == 'y':
                         self.__char_json['permanent'][attr_name] = attr_gcs
+
+                        copy_answer = raw_input('Change current value to match? ')
+                        if copy_answer[0].lower() == 'y':
+                            self.__char_json['current'][attr_name] = attr_gcs
+
                         changes_in_json = True
             else:
                 print '  %s: %r' % (attr_name, attr_gcs)

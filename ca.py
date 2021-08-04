@@ -22,7 +22,7 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: store the amount of time each person used for their turn.
+# TODO: rooms shouldn't get attributes, etc.
 # TODO: allow the filename of bug reports to be augmented.
 #            self.world.do_debug_snapshot('EndFight')
 
@@ -38,7 +38,9 @@ import ca_timers
 
 # TODO: ISSUE 20: need a way to generate equipment
 # TODO: ISSUE 13: multiple weapons (one for each hand) - end-of-round will
-#   have to change
+#   have to change - 'attack' should move to the next weapon - 'current weapon'
+#   should be the next weapon to use in this round (so, it's different
+#   depending on whether you've attacked or not)
 # TODO: ISSUE 11: equipment containers
 # TODO: ISSUE 9: maintain spell
 
