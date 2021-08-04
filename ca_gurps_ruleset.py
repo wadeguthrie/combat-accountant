@@ -4334,11 +4334,29 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         MOVE_ATTACK_MELEE_MINUS = -4
         MOVE_ATTACK_RANGED_MINUS = -2
 
+        # Get some details
+
+        weapon, throw_away = fighter.get_current_weapon()
+        holding_ranged = False if weapon is None else weapon.is_ranged_weapon()
         move = fighter.details['current']['basic-move']
+
         if action['action-name'] == 'all-out-attack':
-            text = ['All out attack',
-                    ' Defense: none',
-                    ' Move: 1/2 = %d' % (move/2)]
+            if holding_ranged:
+                text = ['All out attack',
+                        ' Choice of:',
+                        '   +1 to hit',
+                        '   suppression fire (if ROF > 4)',
+                        ' Defense: NONE',
+                        ' Move: 1/2 = %d' % (move/2)]
+            else:
+                text = ['All out attack',
+                        ' Choice of:',
+                        '   +4 to hit',
+                        '   double attack (simple melee weapon)',
+                        '   feint',
+                        '   +2 damage',
+                        ' Defense: NONE',
+                        ' Move: 1/2 = %d' % (move/2)]
 
         elif action['action-name'] == 'attack':
             text = ['Attack', ' Defense: any', ' Move: step']
@@ -4358,9 +4376,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     ' Defense: Dodge,block',
                     ' Move: %s' % move_string]
 
-            weapon, throw_away = fighter.get_current_weapon()
-            holding_ranged = (False if weapon is None else
-                              weapon.is_ranged_weapon())
             if fight_handler is None:
                 opponent = None
             else:
