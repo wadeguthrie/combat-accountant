@@ -552,7 +552,8 @@ class FightGmWindow(ca_gui.GmWindow):
         self._window.clrtoeol()
         lines, cols = self._window.getmaxyx()
 
-        round_string = 'Round %d' % round_no
+        # start @1, but round is an index (which starts at 0)
+        round_string = 'Round %d' % (round_no+1)
         self._window.addstr(0,  # y
                             0,  # x
                             round_string,
@@ -3941,7 +3942,7 @@ class FightHandler(ScreenHandler):
         else:
             self.clear_history()
             self._saved_fight['held-init'] = []
-            self.add_to_history({'comment': '--- Round 0 ---'})
+            self.add_to_history({'comment': '--- Round 1 ---'})
 
             self._saved_fight['round'] = 0
             self._saved_fight['index'] = 0
@@ -4216,7 +4217,7 @@ class FightHandler(ScreenHandler):
         if round_before != self._saved_fight['round']:
             if not self.world.playing_back:
                 self.add_to_history({'comment': '--- Round %d ---' %
-                                                self._saved_fight['round']})
+                    (self._saved_fight['round']+1)})
 
     def pick_opponent(self,
                       allow_all=False # bool: don't limit to other side
