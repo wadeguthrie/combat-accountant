@@ -368,10 +368,14 @@ class Ruleset(object):
                                      self,
                                      self._window_manager)
 
+        # Don't need to check if the room is consistent.
+        if fighter.name == ca_fighter.Venue.name:
+            return True
+
         playing_back = (False if fight_handler is None else
                         fight_handler.world.playing_back)
 
-        # First, let's make sure that they have all the required parts
+        # First, let's make sure that they have all the required parts.
 
         for key, value in ca_fighter.Fighter.strawman.iteritems():
             if key not in creature:

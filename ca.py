@@ -22,7 +22,6 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: rooms shouldn't get attributes, etc.
 # TODO: allow the filename of bug reports to be augmented.
 #            self.world.do_debug_snapshot('EndFight')
 
