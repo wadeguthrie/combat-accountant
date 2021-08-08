@@ -22,10 +22,9 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: allow the filename of bug reports to be augmented.
-#            self.world.do_debug_snapshot('EndFight')
+# TODO: reload at the end of the fight should reload all the weapons
+# TODO: flesh-out attack, all-out
 
-# TODO: make a way to add note into the history
 # TODO: add 1 to initiative if someone in the party has combat reflexes (2 if
 #   leader -- not sure how I want to do that)
 
@@ -1370,8 +1369,10 @@ class ScreenHandler(object):
         self.world.do_debug_snapshot('bug')
 
         bug_report_game_file = self.world.program.make_bug_report(
-                                                self._saved_fight['history'],
-                                                report)
+                self._saved_fight['history'],
+                report,
+                None, # snapshot filename
+                'requested')
 
         self._window_manager.display_window(
                 'Bug Reported',
@@ -5488,7 +5489,9 @@ class FightHandler(ScreenHandler):
             self.world.do_debug_snapshot('EndFight')
             bug_report_game_file = self.world.program.make_bug_report(
                 self.world.details['current-fight']['history'],
-                'Taking a snapshot at the end of the fight')
+                'Taking a snapshot at the end of the fight',
+                None, # snapshot filename
+                'end_fight')
 
             self._window_manager.display_window(
                     'Saved Snapshot After Fight',
@@ -6865,8 +6868,9 @@ class Program(object):
                         user_description,  # string w/ '\n' to separate lines;
                                            #   user description of bug
 
-                        crash_snapshot=None     # string: name of file to be
-                                                #   saved as one last snapshot
+                        crash_snapshot,    # string: name of file to be
+                                           #   saved as one last snapshot
+                        file_tag=None      # string: add tag to filename
                         ):
         '''
         Gathers all the information required (I hope) to reproduce a bug and
@@ -6900,7 +6904,10 @@ class Program(object):
         count = 0
         extension = 'json'
         while keep_going:
-            count_string = '%d' % count
+            if file_tag is None:
+                count_string = '%d' % count
+            else:
+                count_string = '%d-%s' % (count, file_tag)
             bug_report_game_file = timeStamped('bug_report',
                                                count_string,
                                                extension)
@@ -7166,9 +7173,8 @@ if __name__ == '__main__':
         if not orderly_shutdown:
             if program is not None:
                 print '\n** Making crash report **'
-                crash_filename = program.make_bug_report(None,
-                                                         'CRASH',
-                                                         filename)
+                crash_filename = program.make_bug_report(
+                        None, 'CRASH', filename, 'crash')
                 print '   Written to: %s' % crash_filename
 
 else:

@@ -152,7 +152,7 @@ class MockProgram(object):
     def add_snapshot(self, tag, filename):
         pass
 
-    def make_bug_report(self, history, user_description):
+    def make_bug_report(self, history, user_description, snapshot, file_tag=None):
         return 'NO FILE'
 
 
