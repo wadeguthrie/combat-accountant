@@ -913,7 +913,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "saved": False,
             "round": 0,
             "history": [
-              "--- Round 0 ---"
+              "--- Round 1 ---"
             ]
           },  # current-fight
           "NPCs": {

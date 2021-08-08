@@ -2521,6 +2521,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         parry_why.append('Parry (B327, B376) w/%s @ (skill(%d)/2)+3 = %d' % (
             weapon.details['name'], skill, parry_skill))
 
+        dodge_skill, dodge_why = self.get_dodge_skill(fighter)
         if fighter.details['stunned']:
             dodge_skill -= 4
             dodge_why.append('  -4 due to being stunned (B420)')
