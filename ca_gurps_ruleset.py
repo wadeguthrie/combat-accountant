@@ -3871,23 +3871,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                                      title)
                 complete_spell['cost'] *= diameter
 
-            # M8 - High skill level costs less - NOTE: this applies to base
-            # skill, not effective skill.
-            #
-            # TODO (now): not for blocking spells
-            # TODO (now): maintain spell gets same discount
-            # TODO (now): skill of 9 or less: time doubled, needs voice, hands, feet
-            skill = complete_spell['skill'] - 15
-            while skill >= 0:
-                # TODO (now): first block: voice OR slight gesture, move 1 yard
-                # TODO (now): subsequent blocks: no voice OR gesture, time / 2
-                #   (round up) - so /4 at 3rd block, /8 and 4th block, etc.
-                # TODO (now): missile spells don't get time benefits
-                complete_spell['cost'] -= 1
-                skill -= 5
-            if complete_spell['cost'] <= 0:
-                complete_spell['cost'] = 0
-
             # Casting time
 
             if (complete_spell['casting time'] is None or
@@ -3902,6 +3885,32 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     casting_time = self._window_manager.input_box_number(
                             height, width, title)
                 complete_spell['casting time'] = casting_time
+
+            # Adjust cost and time for skill (M8, M9).  This loop looks at
+            # modifications for skill level 15-19, 20-24, 25-29, etc.
+            #
+            # TODO (now): maintain spell gets same discount
+            skill = complete_spell['skill'] - 15
+            first_time = True
+            while skill >= 0:
+                if complete_spell['range'] != 'block':
+                    complete_spell['cost'] -= 1
+                    skill -= 5
+                # |first_time| is used because there's no time modification
+                # for skill from 15-19 (i.e., the first time through this
+                # loop).
+                if first_time:
+                    first_time = False
+                elif complete_spell['range'] != 'missile':
+                    # M8, under 'Magic Rituals' - Note: time reduction does
+                    # not apply to missile spells.
+                    casting_time = (complete_spell['casting time']/2.0) + 0.5
+                    complete_spell['casting time'] = int(casting_time)
+            if complete_spell['cost'] <= 0:
+                complete_spell['cost'] = 0
+
+            if complete_spell['skill'] <= 9:
+                complete_spell['casting time'] *= 2
 
             # Opponent?
 

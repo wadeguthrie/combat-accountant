@@ -24,11 +24,11 @@ import ca_timers
 
 # TODO: reload at the end of the fight should reload all the weapons
 # TODO: flesh-out attack, all-out
+# TODO: consistency check for preferred weapons should only ask once
 
 # TODO: add 1 to initiative if someone in the party has combat reflexes (2 if
 #   leader -- not sure how I want to do that)
 
-# TODO: PC joins NPCs in PC editing mode
 
 # TODO: grenade support (missile-like but not with clips)
 # TODO: the fatigue penalty reduction due to high skill doesn't apply to
@@ -49,6 +49,8 @@ import ca_timers
 
 # TODO: DIFFICULT: FP should ask if using DR
 # TODO: DIFFICULT: FP should actually subtract DR
+
+# TODO: PC joins NPCs in PC editing mode
 
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
