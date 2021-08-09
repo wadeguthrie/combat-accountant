@@ -3058,7 +3058,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                        None) # No fight_handler
 
     def initiative(self,
-                   fighter  # Fighter object
+                   fighter, # Fighter object
+                   fighters # list of Fighter objects
                    ):
         '''
         Generates a tuple of numbers for a creature that determines the order
@@ -3068,7 +3069,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         Returns: the 'initiative' tuple
         '''
-        return (fighter.details['current']['basic-speed'],
+        # Combat reflexes (B43) adds 1 to the initiative of every member of
+        # the party
+        combat_reflexes_bonus = 0
+        for creature in fighters:
+            if (creature.group == fighter.group and
+                    'Combat Reflexes' in creature.details['advantages']):
+                # Technically, you're supposed to add 2 if the person with
+                # combat reflexes is the leader but I don't have a mechanic
+                # for designating the leader.
+                combat_reflexes_bonus = 1
+                break
+        value = (fighter.details['current']['basic-speed'] +
+                 combat_reflexes_bonus)
+        return (value,
                 fighter.details['current']['dx'],
                 ca_ruleset.Ruleset.roll(1, 6)
                 )
@@ -4603,21 +4617,25 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             reload_time = weapon.details['reload']
 
-            # B43: combat reflexes
-            # TODO (now): this is only for fast draw
-            if 'Combat Reflexes' in fighter.details['advantages']:
-                reload_time -= 1
-
             quiet = False if 'quiet' not in action else action['quiet']
             if not quiet:
                 # B194: fast draw
                 if 'Fast-Draw (Ammo)' in fighter.details['skills']:
                     skill_menu = [('made SKILL roll', True),
                                   ('did NOT make SKILL roll', False)]
+
+                    # B43: combat reflexes
+                    if 'Combat Reflexes' in fighter.details['advantages']:
+                        title = (
+                            'roll <= %d (fast-draw skill + combat reflexes)' %
+                            fighter.details['skills']['Fast-Draw (Ammo)'] + 1)
+                    else:
+                        title = (
+                            'roll <= fast-draw skill (%d)' %
+                            fighter.details['skills']['Fast-Draw (Ammo)'])
+
                     made_skill_roll, ignore = self._window_manager.menu(
-                        ('roll <= fast-draw skill (%d)' %
-                            fighter.details['skills']['Fast-Draw (Ammo)']),
-                        skill_menu)
+                            title, skill_menu)
 
                     if made_skill_roll:
                         reload_time -= 1
@@ -4659,9 +4677,21 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         weapon, throw_away = fighter.get_current_weapon()
 
+        # TODO (now): make this a 2-part action where the fast-draw is checked
+        # in the first part and the draw (and timer) is done in the second part.
+        #
         # if 'Fast-Draw (Pistol)' in fighter.details['skills']:
         #    skill_menu = [('made SKILL roll', True),
         #                  ('did NOT make SKILL roll', False)]
+        #            # B43: combat reflexes
+        #            if 'Combat Reflexes' in fighter.details['advantages']:
+        #                title = (
+        #                    'roll <= %d (fast-draw skill + combat reflexes)' %
+        #                    fighter.details['skills']['Fast-Draw (Ammo)'] + 1)
+        #            else:
+        #                title = (
+        #                    'roll <= fast-draw skill (%d)' %
+        #                    fighter.details['skills']['Fast-Draw (Ammo)'])
         #    made_skill_roll, ignore = self._window_manager.menu(
         #        ('roll <= fast-draw skill (%d)' %
         #                fighter.details['skills']['Fast-Draw (Ammo)']),

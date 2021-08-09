@@ -26,10 +26,6 @@ import ca_timers
 # TODO: flesh-out attack, all-out
 # TODO: consistency check for preferred weapons should only ask once
 
-# TODO: add 1 to initiative if someone in the party has combat reflexes (2 if
-#   leader -- not sure how I want to do that)
-
-
 # TODO: grenade support (missile-like but not with clips)
 # TODO: the fatigue penalty reduction due to high skill doesn't apply to
 #   blocking spells
@@ -4618,7 +4614,9 @@ class FightHandler(ScreenHandler):
             # maintain, just generate the initiative for all of the fighters.
             for fighter in self.__fighters:
                 init[(fighter.name,
-                      fighter.group)] = self.world.ruleset.initiative(fighter)
+                      fighter.group)] = self.world.ruleset.initiative(
+                              fighter,
+                              self.__fighters)
         else:
             # We're assuming that every fighter in fight_order is in
             # self.__fighters but not necessarily the other way around.
