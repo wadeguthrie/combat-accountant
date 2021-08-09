@@ -513,12 +513,37 @@ class Fighter(ThingsInFight):
         reload_after_fight = self._ruleset.get_option('reload-after-fight')
         if (reload_after_fight is not None and reload_after_fight and
                 self.group == 'PCs'):
-            self._ruleset.do_action(self,
+            # Reload EACH weapon the person has.
+            current_weapon, current_weapon_index = self.get_current_weapon()
+            item_count = self.equipment.get_item_count()
+            for item_index in range(item_count):
+                item = self.equipment.get_item_by_index(item_index)
+                if 'ranged weapon' not in item['type']:
+                    continue
+                self._ruleset.do_action(self,
+                                   {'action-name': 'draw-weapon',
+                                    'weapon-index': item_index,
+                                    'comment': 'Reloading after fight',
+                                    'notimer': True,
+                                    'quiet': True},
+                                    fight_handler,
+                                    logit=False)
+                self._ruleset.do_action(self,
                                     {'action-name': 'reload',
                                      'comment': 'Reloading after fight',
                                      'notimer': True,
                                      'quiet': True},
-                                    fight_handler)
+                                    fight_handler,
+                                    logit=False)
+            # re-draw current weapon
+            self._ruleset.do_action(self,
+                               {'action-name': 'draw-weapon',
+                                'weapon-index': current_weapon_index,
+                                'comment': 'Reloading after fight',
+                                'notimer': True,
+                                'quiet': True},
+                                fight_handler,
+                                logit=False)
 
     def get_current_armor_indexes(self):
         '''
