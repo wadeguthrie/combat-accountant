@@ -2039,7 +2039,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         for skill, value in sorted(character.details['skills'].iteritems(),
                                    key=lambda (k, v): (k, v)):
             found_one = True
-            output.append([{'text': '  %s: %d' % (skill, value),
+            crit, fumble = self.__get_crit_fumble(value)
+            output.append([{'text': '  %s: %d --- crit <=%d, fumble >=%d' %
+                                (skill, value, crit, fumble),
                             'mode': mode}])
 
         if not found_one:
@@ -2474,7 +2476,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 else:
                     damage, ignore_why = self.get_damage(fighter, weapon)
                     damage_str = self.damage_to_string(damage)
-                    notes.append('  to-hit: %d' % to_hit)
+                    crit, fumble = self.__get_crit_fumble(to_hit)
+                    notes.append('  to-hit: %d, crit <= %d, fumble >= %d' %
+                            (to_hit, crit, fumble))
                     notes.append('  damage: %s' % damage_str)
             else:
                 self._window_manager.error(
@@ -2489,14 +2493,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                  unarmed_skills)
 
             notes.append(unarmed_info['punch_string'])
-            notes.append('  to-hit: %d, damage: %s' % (
-                                                unarmed_info['punch_skill'],
-                                                unarmed_info['punch_damage']))
+            crit, fumble = self.__get_crit_fumble(unarmed_info['punch_skill'])
+            notes.append('  to-hit: %d, crit <= %d, fumble >= %d, damage: %s' %
+                (unarmed_info['punch_skill'],
+                 crit,
+                 fumble,
+                 unarmed_info['punch_damage']))
 
             notes.append(unarmed_info['kick_string'])
-            notes.append('  to-hit: %d, damage: %s' % (
-                                                unarmed_info['kick_skill'],
-                                                unarmed_info['kick_damage']))
+            crit, fumble = self.__get_crit_fumble(unarmed_info['kick_skill'])
+            notes.append('  to-hit: %d, crit <= %d, fumble >= %d, damage: %s' %
+                (unarmed_info['kick_skill'],
+                 crit,
+                 fumble,
+                 unarmed_info['kick_damage']))
 
         return notes
 
@@ -4419,7 +4429,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     to_hit = 9
                 else:
                     why.append('Melee (punch) attacks at -4 (B365)')
-                text.append(' Punch to-hit: %d' % to_hit)
+                crit, fumble = self.__get_crit_fumble(to_hit)
+                text.append(' Punch to-hit: %d, crit <= %d, fumble >= %d' % (
+                    to_hit, crit, fumble))
 
                 to_hit_penalty = MOVE_ATTACK_MELEE_MINUS
                 to_hit = unarmed_info['kick_skill'] + to_hit_penalty
@@ -4428,7 +4440,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     to_hit = 9
                 else:
                     why.append('Melee (kick) attacks at -4 (B365)')
-                text.append(' Kick to-hit: %d' % to_hit)
+                crit, fumble = self.__get_crit_fumble(to_hit)
+                text.append(' Kick to-hit: %d, crit <= %d, fumble >= %d' % (
+                    to_hit, crit, fumble))
             else:
                 to_hit, ignore_why = self.get_to_hit(fighter, opponent, weapon)
                 if holding_ranged:
@@ -4450,8 +4464,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     else:
                         why.append('Melee attacks at -4 (B365)')
 
-                text.append(' %s to-hit: %d' % (weapon.details['name'],
-                                                to_hit))
+                crit, fumble = self.__get_crit_fumble(to_hit)
+                text.append(' %s to-hit: %d, crit <= %d, fumble >= %d' % (
+                    weapon.details['name'], to_hit, crit, fumble))
             mods = {'to-hit': to_hit, 'why': ', '.join(why)}
 
         else:
@@ -4707,6 +4722,31 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                            'rounds': 1 - ca_timers.Timer.announcement_margin,
                            'string': [title, ' Defense: any', ' Move: step']})
         return timer
+
+    def __get_crit_fumble(self,
+                          skill_level   # int
+                          ):
+        '''
+        returns tuple: (crit, fumble) which are the rolls below (or equal to)
+        establishes a critical success and above (or equal to) establishes a
+        critical failure
+        '''
+        # B347
+        if skill_level >= 16:
+            crit = 6
+        elif skill_level >= 15:
+            crit = 5
+        else:
+            crit = 4
+
+        if skill_level >= 16:
+            fumble = 18
+        elif skill_level >= 7:
+            fumble = 17
+        else:
+            fumble = skill_level + 10
+
+        return crit, fumble
 
     def __get_damage_type_str(self,
                               damage_type   # <string> key in
