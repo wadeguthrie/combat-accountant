@@ -22,13 +22,10 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: reload at the end of the fight should reload all the weapons
 # TODO: flesh-out attack, all-out
 # TODO: consistency check for preferred weapons should only ask once
 
 # TODO: grenade support (missile-like but not with clips)
-# TODO: the fatigue penalty reduction due to high skill doesn't apply to
-#   blocking spells
 
 # TODO: ISSUE 20: need a way to generate equipment
 # TODO: ISSUE 13: multiple weapons (one for each hand) - end-of-round will
