@@ -1620,9 +1620,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'cast-spell',      'change-posture',  'concentrate',
             'defend',          'doff-armor',      'don-armor',
             'draw-weapon',     'evaluate',        'feint',
-            'move',            'move-and-attack', 'nothing',
-            'reload',          'stun',            'use-item',
-            'user-defined'
+            'holster-weapon',  'move',            'move-and-attack',
+            'nothing',         'reload',          'stun',
+            'use-item',        'user-defined'
         ])
 
     #
@@ -1746,9 +1746,19 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         # Figure out who we are and what we're holding.
 
-        weapon, weapon_index = fighter.get_current_weapon()
-        holding_ranged = (False if weapon is None
-                          or not weapon.is_ranged_weapon() else True)
+        weapons = fighter.get_current_weapons()
+        holding_ranged = False
+        holding_loaded_ranged = False
+        holding_melee = False
+        for weapon in weapons:
+            if weapon is None:
+                continue
+            if weapon.is_ranged_weapon():
+                holding_ranged = True
+                if weapon.shots_left() > 0:
+                    holding_loaded_ranged = True
+            else:
+                holding_melee = True
 
         # Posture SUB-menu
 
@@ -1763,26 +1773,24 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # Build the action_menu.  Alphabetical order.  Only allow the things
         # the fighter can do based on zis current situation.
 
-        if holding_ranged:
-            if weapon.shots_left() > 0:
-
-                # Aim
-                #
-                # Ask if we're bracing if this is the first round of aiming
-                # B364 (NOTE: Combat Lite on B234 doesn't mention bracing).
-                if fighter.details['aim']['rounds'] == 0:
-                    brace_menu = [
-                        ('Bracing (B364)', {'action': {'action-name': 'aim',
-                                                       'braced': True}}),
-                        ('Not Bracing', {'action': {'action-name': 'aim',
-                                                    'braced': False}})
-                    ]
-                    action_menu.append(('Aim (B324, B364)',
-                                        {'menu': brace_menu}))
-                else:
-                    action_menu.append(('Aim (B324, B364)',
-                                        {'action': {'action-name': 'aim',
-                                                    'braced': False}}))
+        if holding_loaded_ranged:
+            # Aim
+            #
+            # Ask if we're bracing if this is the first round of aiming
+            # B364 (NOTE: Combat Lite on B234 doesn't mention bracing).
+            if fighter.details['aim']['rounds'] == 0:
+                brace_menu = [
+                    ('Bracing (B364)', {'action': {'action-name': 'aim',
+                                                   'braced': True}}),
+                    ('Not Bracing', {'action': {'action-name': 'aim',
+                                                'braced': False}})
+                ]
+                action_menu.append(('Aim (B324, B364)',
+                                    {'menu': brace_menu}))
+            else:
+                action_menu.append(('Aim (B324, B364)',
+                                    {'action': {'action-name': 'aim',
+                                                'braced': False}}))
 
         action_menu.extend([
             ('posture (B551)',         {'menu': posture_menu}),
@@ -1837,7 +1845,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                             {'action': {'action-name': 'evaluate'}}))
 
         # Can only feint with a melee weapon
-        if weapon is not None and not holding_ranged:
+        if holding_melee:
             action_menu.append(('feint (B365)', {'action':
                                                  {'action-name': 'feint'}}))
 
@@ -1851,7 +1859,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         else:
             move_string = 'full=%d' % move
 
-        if not holding_ranged or weapon.shots_left() > 0:
+        if holding_melee or holding_loaded_ranged:
             action_menu.extend([
                 ('Move and attack (B365)',
                     {'action': {'action-name': 'move-and-attack'}}),
@@ -1993,8 +2001,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         for armor_in_use in armor_list:
             in_use_items.append(armor_in_use)
-        weapon_in_use, throw_away = character.get_current_weapon()
-        if weapon_in_use is not None:
+        weapons = character.get_current_weapons()
+
+        for weapon_in_use in weapons:
+            if weapon_in_use is None:
+                continue
             in_use_items.append(weapon_in_use.details)
 
         preferred_item_indexes = character.get_preferred_item_indexes()
@@ -2338,15 +2349,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         notes = []
         why = []
 
-        weapon, holding_weapon_index = fighter.get_current_weapon()
-        unarmed_skills = self.get_weapons_unarmed_skills(weapon)
-
-        unarmed_info = None
-        if unarmed_skills is not None:
-            unarmed_info = self.get_unarmed_info(fighter,
-                                                 opponent,
-                                                 weapon,
-                                                 unarmed_skills)
+        weapons = fighter.get_current_weapons()
 
         dodge_skill, dodge_why = self.get_dodge_skill(fighter)
         if dodge_skill is not None:
@@ -2354,21 +2357,34 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             why.extend(dodge_why)
             notes.append(dodge_string)
 
-        if unarmed_skills is not None:  # Unarmed Parry
-            notes.append('%s: %d' % (unarmed_info['parry_string'],
-                                     unarmed_info['parry_skill']))
+        # TODO; figure out how to pull the unarmed stuff out of the loop
+        for weapon in weapons:
+            if weapon is None:
+                continue
+            unarmed_skills = self.get_weapons_unarmed_skills(weapon)
 
-        elif weapon.is_shield():  # NOTE: cloaks also have this 'type'
-            block_skill, block_why = self.get_block_skill(fighter, weapon)
-            if block_skill is not None:
-                why.extend(block_why)
-                notes.append('Block (B327, B375): %d' % block_skill)
+            unarmed_info = None
+            if unarmed_skills is not None:
+                unarmed_info = self.get_unarmed_info(fighter,
+                                                     opponent,
+                                                     weapon,
+                                                     unarmed_skills)
 
-        elif weapon.is_melee_weapon():
-            parry_skill, parry_why = self.get_parry_skill(fighter, weapon)
-            if parry_skill is not None:
-                why.extend(parry_why)
-                notes.append('Parry (B327, B376): %d' % parry_skill)
+            if unarmed_skills is not None:  # Unarmed Parry
+                notes.append('%s: %d' % (unarmed_info['parry_string'],
+                                         unarmed_info['parry_skill']))
+
+            elif weapon.is_shield():  # NOTE: cloaks also have this 'type'
+                block_skill, block_why = self.get_block_skill(fighter, weapon)
+                if block_skill is not None:
+                    why.extend(block_why)
+                    notes.append('Block (B327, B375): %d' % block_skill)
+
+            elif weapon.is_melee_weapon():
+                parry_skill, parry_why = self.get_parry_skill(fighter, weapon)
+                if parry_skill is not None:
+                    why.extend(parry_why)
+                    notes.append('Parry (B327, B376): %d' % parry_skill)
 
         # Armor
 
@@ -2408,25 +2424,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
         notes = []
 
-        # Ranged weapon status
-
-        weapon, holding_weapon_index = fighter.get_current_weapon()
-        if holding_weapon_index is not None:
-            if weapon.is_ranged_weapon():
-                clip_name = weapon.details['ammo']['name']
-                reloads = 0  # Counts clips, not rounds
-                for item in fighter.details['stuff']:
-                    if item['name'] == clip_name:
-                        reloads += item['count']
-
-                notes.append('  %d/%d shots, %d reloads' % (
-                                    weapon.shots_left(),
-                                    weapon.shots(),
-                                    reloads))
-                weapon_notes = weapon.notes()
-                if weapon_notes is not None and len(weapon_notes) > 0:
-                    notes.append("  %s" % weapon_notes)
-
         # Active aim
 
         if (fighter.details['aim'] is not None and
@@ -2458,55 +2455,81 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         damage) of the fighter.
         '''
         notes = []
-        weapon, holding_weapon_index = fighter.get_current_weapon()
-        unarmed_skills = self.get_weapons_unarmed_skills(weapon)
+        weapons = fighter.get_current_weapons()
+        for weapon in weapons:
+            if weapon is None:
+                continue
+            unarmed_skills = self.get_weapons_unarmed_skills(weapon)
 
-        if weapon is not None:
-            notes.append('%s' % weapon.details['name'])
+            if weapon is not None:
+                notes.append('%s' % weapon.details['name'])
 
-        if unarmed_skills is None:
-            if weapon.details['skill'] in fighter.details['skills']:
-                to_hit, ignore_why = self.get_to_hit(fighter, opponent, weapon)
-                if to_hit is None:
+            if unarmed_skills is None:
+                if weapon.details['skill'] in fighter.details['skills']:
+                    to_hit, ignore_why = self.get_to_hit(
+                            fighter, opponent, weapon)
+                    if to_hit is None:
+                        self._window_manager.error(
+                                ['%s requires "%s" skill not had by "%s"' %
+                                 (weapon.details['name'],
+                                  weapon.details['skill'],
+                                  fighter.name)])
+                    else:
+                        damage, ignore_why = self.get_damage(fighter, weapon)
+                        damage_str = self.damage_to_string(damage)
+                        crit, fumble = self.__get_crit_fumble(to_hit)
+                        notes.append('  to-hit: %d, crit <= %d, fumble >= %d' %
+                                (to_hit, crit, fumble))
+                        notes.append('  damage: %s' % damage_str)
+
+                        # Ranged weapon status
+
+                        if weapon.is_ranged_weapon():
+                            clip_name = weapon.details['ammo']['name']
+                            reloads = 0  # Counts clips, not rounds
+                            for item in fighter.details['stuff']:
+                                if item['name'] == clip_name:
+                                    reloads += item['count']
+
+                            notes.append('  %d/%d shots, %d reloads' % (
+                                                weapon.shots_left(),
+                                                weapon.shots(),
+                                                reloads))
+
+                        weapon_notes = weapon.notes()
+                        if weapon_notes is not None and len(weapon_notes) > 0:
+                            notes.append("  %s" % weapon_notes)
+                else:
                     self._window_manager.error(
                             ['%s requires "%s" skill not had by "%s"' %
-                             (weapon.details['name'],
-                              weapon.details['skill'],
-                              fighter.name)])
-                else:
-                    damage, ignore_why = self.get_damage(fighter, weapon)
-                    damage_str = self.damage_to_string(damage)
-                    crit, fumble = self.__get_crit_fumble(to_hit)
-                    notes.append('  to-hit: %d, crit <= %d, fumble >= %d' %
-                            (to_hit, crit, fumble))
-                    notes.append('  damage: %s' % damage_str)
+                                (weapon.details['name'],
+                                 weapon.details['skill'],
+                                 fighter.name)])
             else:
-                self._window_manager.error(
-                        ['%s requires "%s" skill not had by "%s"' %
-                            (weapon.details['name'],
-                             weapon.details['skill'],
-                             fighter.name)])
-        else:
-            unarmed_info = self.get_unarmed_info(fighter,
-                                                 opponent,
-                                                 weapon,
-                                                 unarmed_skills)
+                unarmed_info = self.get_unarmed_info(fighter,
+                                                     opponent,
+                                                     weapon,
+                                                     unarmed_skills)
 
-            notes.append(unarmed_info['punch_string'])
-            crit, fumble = self.__get_crit_fumble(unarmed_info['punch_skill'])
-            notes.append('  to-hit: %d, crit <= %d, fumble >= %d, damage: %s' %
-                (unarmed_info['punch_skill'],
-                 crit,
-                 fumble,
-                 unarmed_info['punch_damage']))
+                notes.append(unarmed_info['punch_string'])
+                crit, fumble = self.__get_crit_fumble(
+                        unarmed_info['punch_skill'])
+                notes.append(
+                        '  to-hit: %d, crit <= %d, fumble >= %d, damage: %s' %
+                    (unarmed_info['punch_skill'],
+                     crit,
+                     fumble,
+                     unarmed_info['punch_damage']))
 
-            notes.append(unarmed_info['kick_string'])
-            crit, fumble = self.__get_crit_fumble(unarmed_info['kick_skill'])
-            notes.append('  to-hit: %d, crit <= %d, fumble >= %d, damage: %s' %
-                (unarmed_info['kick_skill'],
-                 crit,
-                 fumble,
-                 unarmed_info['kick_damage']))
+                notes.append(unarmed_info['kick_string'])
+                crit, fumble = self.__get_crit_fumble(
+                        unarmed_info['kick_skill'])
+                notes.append(
+                        '  to-hit: %d, crit <= %d, fumble >= %d, damage: %s' %
+                    (unarmed_info['kick_skill'],
+                     crit,
+                     fumble,
+                     unarmed_info['kick_damage']))
 
         return notes
 
@@ -2704,6 +2727,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     why.append('  %+d for opponent\'s %s posture' %
                                (opponent_posture_mods['target'],
                                 opponent.details['posture']))
+
+        # For a total of...
+        why.append('  ...for a total = %d' % skill)
 
         # Check for mods from the timers
         timers = fighter.timers.get_all()
@@ -3623,11 +3649,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         # just holster it.  This assumes a nice game where the
                         # GM just assumes the character (or one of his/her
                         # party members) picks up the gun.
-                        self.do_action(fighter,
-                                       {'action-name': 'draw-weapon',
-                                        'weapon-index': None},
-                                       fight_handler,
-                                       logit=False)
+                        indexes = fighter.get_current_weapon_indexes()
+                        for index in indexes:
+                            self.do_action(fighter,
+                                           {'action-name': 'holster-weapon',
+                                            'weapon-index': index},
+                                           fight_handler,
+                                           logit=False)
 
         # B59
         if (still_conscious and
@@ -4341,6 +4369,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     fighter,        # Fighter object
                     action,         # {'action-name': 'attack' |
                                     #   'all-out-attack' | 'move-and-attack'
+                                    #  'weapon-index': <int> or None
                                     #  'comment': <string>, # optional
                     fight_handler   # FightHandler object
                     ):
@@ -4370,8 +4399,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         # Get some details
 
-        weapon, throw_away = fighter.get_current_weapon()
-        holding_ranged = False if weapon is None else weapon.is_ranged_weapon()
+        weapons = fighter.get_current_weapons()
+        if (action['weapon-index'] is None or
+                action['weapon-index'] >= len(weapons)):
+            return None  # No timer
+        weapon = weapons[action['weapon-index']]
+        if weapon is None:
+            return None  # No timer
+
+        holding_ranged = False if len(weapons) == 0 else weapon.is_ranged_weapon()
         move = fighter.details['current']['basic-move']
 
         if action['action-name'] == 'all-out-attack':
@@ -4624,11 +4660,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             if fight_handler is not None and fight_handler.world.playing_back:
                 return None  # No timer
 
-            weapon, weapon_index = fighter.get_current_weapon()
-            if weapon is None or not weapon.uses_ammo():
+            weapons = fighter.get_current_weapons()
+            # You need to only have 1 weapon if you're reloading (you need an
+            # empty hand to reload)
+            if weapons is None or len(weapons) != 1:
                 return None  # No timer
 
-            # If we do, how long will it take?
+            weapon = weapons[0]
+            if not weapon.uses_ammo():
+                return None  # No timer
+
+            # If we can reload, how long will it take?
 
             reload_time = weapon.details['reload']
 
@@ -4690,8 +4732,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         timer = ca_timers.Timer(None)
 
-        weapon, throw_away = fighter.get_current_weapon()
-
         # TODO (now): make this a 2-part action where the fast-draw is checked
         # in the first part and the draw (and timer) is done in the second part.
         #
@@ -4715,12 +4755,43 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         #    if made_skill_roll:
         #        ...
 
-        title = 'Holster weapon' if weapon is None else (
-                'Draw %s' % weapon.details['name'])
-
+        item = fighter.equipment.get_item_by_index(action['weapon-index'])
+        weapon = ca_equipment.Weapon(item)
         timer.from_pieces({'parent-name': fighter.name,
                            'rounds': 1 - ca_timers.Timer.announcement_margin,
-                           'string': [title, ' Defense: any', ' Move: step']})
+                           'string': ['Draw %s' % weapon.details['name'],
+                                      ' Defense: any',
+                                      ' Move: step']})
+        return timer
+
+    def __holster_weapon(self,
+                         fighter,          # Fighter object
+                         action,           # {'action-name': 'holster-weapon',
+                                           #  'weapon-index': <int> # index in
+                                           #       fighter.details['stuff'],
+                                           #       None drops weapon
+                                           #  'comment': <string>, # optional
+                         fight_handler,    # FightHandler object (ignored)
+                         ):
+        '''
+        Action handler for GurpsRuleset.
+
+        Does the ruleset-specific stuff to draw or holster a weapon.  The
+        majority of the work for this is actually done in the base class.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
+        '''
+        self.reset_aim(fighter)
+
+        # Timer
+
+        timer = ca_timers.Timer(None)
+        timer.from_pieces({'parent-name': fighter.name,
+                           'rounds': 1 - ca_timers.Timer.announcement_margin,
+                           'string': ['Holster weapon',
+                                      ' Defense: any',
+                                      ' Move: step']})
         return timer
 
     def __get_crit_fumble(self,
@@ -4938,6 +5009,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'doff-armor':           {'doit': self.__reset_aim},
             'don-armor':            {'doit': self.__reset_aim},
             'draw-weapon':          {'doit': self.__draw_weapon},
+            'holster-weapon':       {'doit': self.__holster_weapon},
             'evaluate':             {'doit': self.__do_nothing},
             'feint':                {'doit': self.__do_nothing},
             'move':                 {'doit': self.__do_nothing},

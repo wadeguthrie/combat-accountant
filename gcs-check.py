@@ -220,9 +220,6 @@ class CharacterGcs(object):
                  gcs_file   # filename holding GCS information
                 ):
         self.__char_gcs = ET.parse(gcs_file).getroot()
-        #for node in self.__char_gcs.iter(): # TODO: remove
-        #    print node.tag, node.attrib # TODO: remove
-
         self.char = {} # JSON-like copy of character
 
         # Easier to build a separate 'stuff' list given containers and such.
@@ -240,9 +237,6 @@ class CharacterGcs(object):
         self.__build_equipment()
         self.__build_skills()
         self.__build_spells()
-
-        # PP.pprint(self.char) # TODO: remove
-        #PP.pprint(self.stuff) # TODO: remove
 
     def __add_advantage_to_gcs_list(self,
                                advantage_gcs,   # ET item
@@ -295,7 +289,6 @@ class CharacterGcs(object):
         name = 'none' if name_entry is None else name_entry.text.lower()
         count_entry = item.find('quantity')
         count = 1 if count_entry is None else int(count_entry.text)
-        #print 'Stuff name: "%s", count: %r' % (name, count) # TODO: remove
         if name in stuff_gcs:
             stuff_gcs[name] += count
         else:

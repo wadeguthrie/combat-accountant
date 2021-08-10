@@ -24,14 +24,11 @@ import ca_timers
 
 # TODO: flesh-out attack, all-out
 # TODO: consistency check for preferred weapons should only ask once
-
+#   o if asking 'remove this non-preferred xx', needs a 'make preferred' option
+#   o if asking 'use this preferred xx', needs a 'make un-preferred' option
 # TODO: grenade support (missile-like but not with clips)
 
 # TODO: ISSUE 20: need a way to generate equipment
-# TODO: ISSUE 13: multiple weapons (one for each hand) - end-of-round will
-#   have to change - 'attack' should move to the next weapon - 'current weapon'
-#   should be the next weapon to use in this round (so, it's different
-#   depending on whether you've attacked or not)
 # TODO: ISSUE 11: equipment containers
 # TODO: ISSUE 9: maintain spell
 
@@ -2771,31 +2768,64 @@ class PersonnelHandler(ScreenHandler):
         if fighter is None:
             return None
 
-        weapon, throw_away = fighter.get_current_weapon()
-        weapon_index = None
-        if weapon is None:
-            weapon_menu = []
-            for index, item in enumerate(fighter.details['stuff']):
-                if ('melee weapon' in item['type'] or
-                        'ranged weapon' in item['type'] or
-                        'shield' in item['type']):
-                    if weapon_index != index:
-                        weapon_menu.append((item['name'], index))
-            weapon_menu = sorted(weapon_menu, key=lambda x: x[0].upper())
-            if len(weapon_menu) == 1:
-                weapon_index = weapon_menu[0][1]
-            else:
-                weapon_index, ignore = self._window_manager.menu(
-                        'Draw Which Weapon', weapon_menu)
-                if weapon_index is None:
-                    return None
+        weapon_menu = []
+        for index, item in enumerate(fighter.details['stuff']):
+            if ca_equipment.Weapon.is_weapon(item):
+                weapon_menu.append((item['name'], index))
+        weapon_menu = sorted(weapon_menu, key=lambda x: x[0].upper())
 
-        self.world.ruleset.do_action(
-                fighter,
-                {'action-name': 'draw-weapon',
-                 'weapon-index': weapon_index,
-                 'notimer': True},
-                None)
+        weapon_index, ignore = self._window_manager.menu(
+                'Draw Which Weapon', weapon_menu)
+        if weapon_index is None:
+            return None
+
+        self.world.ruleset.do_action(fighter,
+                                     {'action-name': 'draw-weapon',
+                                      'weapon-index': weapon_index,
+                                      'notimer': True},
+                                     None)
+
+        self._draw_screen()
+        return True  # Anything but 'None' for a menu handler
+
+    def __holster_weapon(self,
+                         throw_away   # Required/used by the caller because
+                                      #   there's a list of methods to call,
+                                      #   and (apparently) some of them may
+                                      #   use this parameter.  It's ignored
+                                      #   by this method, however.
+                         ):
+        '''
+        Method for 'equip' sub-menu.
+
+        Asks the user which weapon (or shield) the Fighter should draw and
+        draws it.
+
+        Returns: None if we want to bail-out of the draw weapon process,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        # The following two lists are guaranteed to be in the same order
+        weapons = fighter.get_current_weapons()
+        weapon_indexes = fighter.get_current_weapon_indexes()
+        weapon_menu = []
+        for index, weapon in enumerate(weapons):
+            if weapon is None:
+                continue
+            weapon_menu.append((weapon.name, weapon_indexes[index]))
+        weapon_index, ignore = self._window_manager.menu(
+                'Holster Which Weapon', weapon_menu)
+        if weapon_index is not None:
+            self.world.ruleset.do_action(
+                    fighter,
+                    {'action-name': 'holster-weapon',
+                     'weapon-index': weapon_index,
+                     'notimer': True},
+                    None)
+
         self._draw_screen()
         return True  # Anything but 'None' for a menu handler
 
@@ -2867,9 +2897,7 @@ class PersonnelHandler(ScreenHandler):
         owns_weapon = False
         owns_armor = False
         for index, item in enumerate(fighter.details['stuff']):
-            if ('melee weapon' in item['type'] or
-                    'ranged weapon' in item['type'] or
-                    'shield' in item['type']):
+            if ca_equipment.Weapon.is_weapon(item):
                 owns_weapon = True
             if 'armor' in item['type']:
                 owns_armor = True
@@ -2889,12 +2917,20 @@ class PersonnelHandler(ScreenHandler):
         if 'weapon-index' in fighter.details:
             if owns_weapon:
                 sub_menu.extend([
-                    ('draw/drop weapon',    {'doit': self.__draw_weapon}),
-                    ('prefer weapon',       {'doit': self.__prefer_weapon}),
+                    ('draw weapon',     {'doit': self.__draw_weapon}),
+                    ('holster weapon',  {'doit': self.__holster_weapon}),
+                    ('prefer weapon',   {'doit': self.__prefer_weapon}),
                 ])
-            weapon, index = fighter.get_current_weapon()
-            if (weapon is not None and
-                    'ranged weapon' not in weapon.details['type']):
+
+            weapons = fighter.get_current_weapons()
+            found_ranged_weapon = False
+            for weapon in weapons:
+                if weapon is None:
+                    continue
+                if 'ranged weapon' in weapon.details['type']:
+                    found_ranged_weapon = True
+
+            if found_ranged_weapon:
                 sub_menu.extend([
                     ('reload weapon',    {'doit': self.__reload_weapon})
                 ])
@@ -3277,9 +3313,8 @@ class PersonnelHandler(ScreenHandler):
         if fighter is None:
             return None
 
+        # Select the armor to prefer
         armor_menu = []
-        if 'preferred-armor-index' not in fighter.details:
-            fighter.details['preferred-armor-index'] = []
         for index, item in enumerate(fighter.details['stuff']):
             if 'armor' in item['type']:
                 preferred_string = (' (preferred)'
@@ -3296,9 +3331,8 @@ class PersonnelHandler(ScreenHandler):
             if armor_index is None:
                 return None
 
-        if 'preferred-armor-index' not in fighter.details:
-            fighter.details['preferred-armor-index'] = [armor_index]
-        elif armor_index in fighter.details['preferred-armor-index']:
+        # Prefer (or unprefer) the selected armor
+        if armor_index in fighter.details['preferred-armor-index']:
             fighter.details['preferred-armor-index'].remove(armor_index)
         else:
             fighter.details['preferred-armor-index'].append(armor_index)
@@ -3325,16 +3359,13 @@ class PersonnelHandler(ScreenHandler):
         if fighter is None:
             return None
 
+        # Select the weapon to prefer
         weapon_menu = []
         for index, item in enumerate(fighter.details['stuff']):
-            if ('melee weapon' in item['type'] or
-                    'ranged weapon' in item['type'] or
-                    'shield' in item['type']):
-                if ('preferred-weapon-index' not in fighter.details or
-                        index != fighter.details['preferred-weapon-index']):
-                    preferred_string = ''
-                else:
-                    preferred_string = ' (preferred)'
+            if ca_equipment.Weapon.is_weapon(item):
+                preferred_string = (' (preferred)'
+                        if (index in fighter.details['preferred-weapon-index'])
+                        else '')
                 weapon_menu.append(('%s%s' % (item['name'], preferred_string),
                                     index))
         weapon_menu = sorted(weapon_menu, key=lambda x: x[0].upper())
@@ -3346,12 +3377,11 @@ class PersonnelHandler(ScreenHandler):
             if weapon_index is None:
                 return None
 
-        if 'preferred-weapon-index' not in fighter.details:
-            fighter.details['preferred-weapon-index'] = weapon_index
-        elif fighter.details['preferred-weapon-index'] == weapon_index:
-            fighter.details['preferred-weapon-index'] = None
+        # Prefer (or unprefer) the selected weapon
+        if weapon_index in fighter.details['preferred-weapon-index']:
+            fighter.details['preferred-weapon-index'].remove(weapon_indx)
         else:
-            fighter.details['preferred-weapon-index'] = weapon_index
+            fighter.details['preferred-weapon-index'].append(weapon_index)
 
         self._draw_screen()
         return True  # Anything but 'None' for a menu handler
@@ -5167,8 +5197,22 @@ class FightHandler(ScreenHandler):
                 if bad_guy.name != ca_fighter.Venue.name:
                     armor_index_list = bad_guy.get_current_armor_indexes()
                     for armor_index in armor_index_list:
-                        bad_guy.doff_armor_by_index(armor_index)
-                    bad_guy.draw_weapon_by_index(None)
+                        self.world.ruleset.do_action(
+                                bad_guy,
+                                {'action-name': 'doff-armor',
+                                 'armor-index': armor_index,
+                                 'notimer': True},
+                                None)
+
+                    weapon_index_list = bad_guy.get_current_weapon_indexes()
+                    for weapon_index in weapon_index_list:
+                        self.world.ruleset.do_action(
+                                bad_guy,
+                                {'action-name': 'holster-weapon',
+                                 'weapon-index': weapon_index,
+                                 'notimer': True},
+                                self)
+
 
         if not found_dead_bad_guy:
             self._window_manager.error(
@@ -6973,8 +7017,6 @@ class Options(object):
 # Main
 if __name__ == '__main__':
     VERSION = '00.03.01'    # major version, minor version, bug fixes
-    #FMT = '%Y-%m-%d-%H-%M-%S' # TODO: remove
-    #print 'A %s' % datetime.datetime.now().strftime(FMT).format() # TODO: remove
 
     parser = MyArgumentParser()
     parser.add_argument(

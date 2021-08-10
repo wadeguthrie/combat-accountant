@@ -1,5 +1,6 @@
 #! /usr/bin/python
 
+import copy
 import curses
 import pprint
 
@@ -328,6 +329,11 @@ class Fighter(ThingsInFight):
      ABSENT,
      FIGHT) = range(6)
 
+    MAX_WEAPONS = 2 # because we only have 2 arms
+
+    # When adding a new weapon, make it preferred?
+    NOT_PREFERRED, ADD_PREFERRED, REPLACE_PREFERRED = range(3)
+
     conscious_map = {
         'alive': ALIVE,
         'unconscious': UNCONSCIOUS,
@@ -398,20 +404,9 @@ class Fighter(ThingsInFight):
         # If we're adding a weapon or a piece of armor, is it the first of
         # its kind?
 
-        is_weapon = True if ('ranged weapon' in new_item['type'] or
-                'melee weapon' in new_item['type']) else False
+        is_weapon = True if ca_equipment.Weapon.is_weapon(new_item) else False
         is_armor = True if 'armor' in new_item['type'] else False
-
-        found_preferred_weapon = False
-        found_preferred_armor = False
-        if is_weapon or is_armor:
-            before_item_count = self.equipment.get_item_count()
-            if ('preferred-weapon-index' in self.details and
-                    self.details['preferred-weapon-index'] is not None):
-                found_preferred_weapon = True
-            if ('preferred-armor-index' in self.details and
-                    self.details['preferred-armor-index'] is not None):
-                found_preferred_armor = True
+        before_item_count = self.equipment.get_item_count()
 
         # Add the item
         new_item_index = self.equipment.add(new_item, source)
@@ -423,22 +418,48 @@ class Fighter(ThingsInFight):
         if new_item_index is not None:
             after_item_count = self.equipment.get_item_count()
             if is_weapon:
-                if found_preferred_weapon:
+                if len(self.details['preferred-weapon-index']) > 0:
                     if before_item_count != after_item_count:
                         # Only ask if we've added a new weapon and not just
                         # bumped-up the count on a previous weapon
-                        replace_preferred_menu = [('yes', True), ('no', False)]
+                        replace_preferred_menu = [
+                                ('no', Fighter.NOT_PREFERRED),
+                                ('replace existing',
+                                    Fighter.REPLACE_PREFERRED)]
+                        if (len(self.details['preferred-weapon-index']) <
+                                Fighter.MAX_WEAPONS):
+                            replace_preferred_menu.append(
+                                    ('add to existing list',
+                                        Fighter.ADD_PREFERRED))
                         replace_preferred, ignore = self._window_manager.menu(
                                 'Make %s the preferred weapon?' %
                                 new_item['name'],
                                 replace_preferred_menu)
-                        if replace_preferred:
-                            self.details['preferred-weapon-index'] = (
+
+                        # If we're replacing an item, which one do we replace?
+                        if replace_preferred == Fighter.REPLACE_PREFERRED:
+                            remove_which_menu = []
+                            for index in self.details['preferred-weapon-index']:
+                                weapon = self.equipment.get_item_by_index(index)
+                                remove_which_menu.append((weapon['name'], index))
+
+                            remove_index, ignore = self._window_manager.menu(
+                                    'Replace which weapon?',
+                                    remove_which_menu)
+                            if remove_index is None:
+                                # I guess we're not replacing anything
+                                replace_preferred = Fighter.NOT_PREFERRED
+                            else:
+                                self.details['preferred-weapon-index'].remove(
+                                    remove_index)
+
+                        if replace_preferred != Fighter.NOT_PREFERRED:
+                            self.details['preferred-weapon-index'].append(
                                     new_item_index)
                 else:
-                    self.details['preferred-weapon-index'] = new_item_index
+                    self.details['preferred-weapon-index'].append(new_item_index)
             if is_armor:
-                if found_preferred_armor:
+                if len(self.details['preferred-weapon-index']) > 0:
                     if before_item_count != after_item_count:
                         # Only ask if we've added a new piece of armor and not
                         # just bumped-up the count on a previous piece.
@@ -448,10 +469,12 @@ class Fighter(ThingsInFight):
                                 new_item['name'],
                                 replace_preferred_menu)
                         if replace_preferred:
+                            # TODO (now): remove old preferred item?
                             self.details['preferred-armor-index'].append(
                                    new_item_index)
                 else:
-                    self.details['preferred-armor-index'] = [new_item_index]
+                    self.details['preferred-armor-index'].append(new_item_index)
+        # TODO: give ARMOR the same treatment
         return new_item_index
 
     def doff_armor_by_index(self,
@@ -483,22 +506,40 @@ class Fighter(ThingsInFight):
             self.details['armor-index'].append(index)
 
     def draw_weapon_by_index(self,
-                             index  # Index of weapon in fighter's 'stuff'
-                                    # list.  'None' removes current weapon.
+                             weapon_index  # Index of weapon in fighter's 'stuff'
+                                           # list.
                              ):
-        '''Draws or removes weapon from sheath or holster.'''
-        # NOTE: call this from the ruleset if you want the ruleset to do its
-        # due dilligence (i.e., stop the aim).
+        '''Draws weapon.'''
+        # NOTE: ONLY CALLED BY ACTIONS
 
-        # if we're holstering a weapon and there's a natural weapon, pick that
-        # one up.
-        if index is None:
-            for item_index, item in enumerate(self.details['stuff']):
-                if 'natural-weapon' in item and item['natural-weapon']:
-                    index = item_index
-                    break
+        if weapon_index is None:
+            self._window_manager.error(
+                    ['Trying to draw weapon with index <None>'])
+            return
 
-        self.details['weapon-index'] = index
+        weapon_indexes = self.get_current_weapon_indexes()
+        if len(weapon_indexes) < Fighter.MAX_WEAPONS: # [], [x]
+            self.details['weapon-index'].append(weapon_index)
+        elif weapon_indexes[0] is None:     # [0, x]
+            weapon_indexes[0] = weapon_index
+        #else:
+        #    error
+
+    def draw_weapon_by_name(self,                # Public to support testing
+                           name
+                           ):
+        # NOTE: ONLY USED FOR TESTING
+        '''
+        Draw weapon from sheath or holster.
+
+        Just used in testing.
+
+        Returns index, Weapon object
+        '''
+        index, item = self.equipment.get_item_by_name(name)
+        if index is not None:
+            self.details['weapon-index'].append(index)
+        return index, ca_equipment.Weapon(item)
 
     def end_fight(self,
                   fight_handler   # FightHandler object (for do_action)
@@ -514,12 +555,25 @@ class Fighter(ThingsInFight):
         if (reload_after_fight is not None and reload_after_fight and
                 self.group == 'PCs'):
             # Reload EACH weapon the person has.
-            current_weapon, current_weapon_index = self.get_current_weapon()
+            before_weapon_indexes = copy.deepcopy(self.get_current_weapon_indexes())
             item_count = self.equipment.get_item_count()
             for item_index in range(item_count):
-                item = self.equipment.get_item_by_index(item_index)
-                if 'ranged weapon' not in item['type']:
+                # Look at the next item owned by the fighter
+                weapon = self.equipment.get_item_by_index(item_index)
+                if 'ranged weapon' not in weapon['type']:
                     continue
+
+                # Dump whatever the person is carrying
+                weapon_indexes = copy.deepcopy(self.get_current_weapon_indexes())
+                for weapon_index in weapon_indexes:
+                    self._ruleset.do_action(
+                            self,
+                            {'action-name': 'holster-weapon',
+                             'weapon-index': weapon_index,
+                             'notimer': True},
+                            fight_handler,
+                            logit=False)
+                # Now, draw the next ranged weapon and reload it
                 self._ruleset.do_action(self,
                                    {'action-name': 'draw-weapon',
                                     'weapon-index': item_index,
@@ -535,15 +589,26 @@ class Fighter(ThingsInFight):
                                      'quiet': True},
                                     fight_handler,
                                     logit=False)
-            # re-draw current weapon
-            self._ruleset.do_action(self,
-                               {'action-name': 'draw-weapon',
-                                'weapon-index': current_weapon_index,
-                                'comment': 'Reloading after fight',
-                                'notimer': True,
-                                'quiet': True},
-                                fight_handler,
-                                logit=False)
+            # Holster whatever the person is carrying and, then, re-draw
+            # "current" weapon
+            after_weapon_indexes = copy.deepcopy(self.get_current_weapon_indexes())
+            for weapon_index in after_weapon_indexes:
+                self._ruleset.do_action(
+                        self,
+                        {'action-name': 'holster-weapon',
+                         'weapon-index': weapon_index,
+                         'notimer': True},
+                        fight_handler,
+                        logit=False)
+            for weapon_index in before_weapon_indexes:
+                self._ruleset.do_action(self,
+                                   {'action-name': 'draw-weapon',
+                                    'weapon-index': weapon_index,
+                                    'comment': 'Reloading after fight',
+                                    'notimer': True,
+                                    'quiet': True},
+                                    fight_handler,
+                                    logit=False)
 
     def get_current_armor_indexes(self):
         '''
@@ -557,21 +622,22 @@ class Fighter(ThingsInFight):
             return []
         return self.details['armor-index']
 
-    def get_current_weapon(self):
-        '''
-        Gets the weapon that the Fighter is holding.
-
-        Returns a tuple:
-            1) Weapon object
-            2) index of the weapon
-        '''
+    def get_current_weapon_indexes(self):
         if 'weapon-index' not in self.details:
-            return None, None
-        weapon_index = self.details['weapon-index']
-        if weapon_index is None:
-            return None, None
-        weapon = self.equipment.get_item_by_index(weapon_index)
-        return ca_equipment.Weapon(weapon), weapon_index
+            return []
+        return self.details['weapon-index']
+
+    def get_current_weapons(self):
+        weapon_indexes = self.get_current_weapon_indexes()
+        weapon_list = []
+        for weapon_index in weapon_indexes:
+            if weapon_index is None:
+                weapon_list.append(None)
+            else:
+                item = self.equipment.get_item_by_index(weapon_index)
+                weapon = ca_equipment.Weapon(item)
+                weapon_list.append(weapon)
+        return weapon_list
 
     def get_items_from_indexes(self,
                                indexes  # list of indexes in self.details.stuff
@@ -588,38 +654,57 @@ class Fighter(ThingsInFight):
         return result
 
     def get_preferred_item_indexes(self):
+        # TODO (now): realize that a single item can be both weapon and armor
         '''
         Returns a list of indexes of preferred weapons and armor.
         '''
         result = []
 
-        if ('preferred-armor-index' in self.details and
-                len(self.details['preferred-armor-index']) > 0):
+        if len(self.details['preferred-armor-index']) > 0:
             result.extend(self.details['preferred-armor-index'])
-        if ('preferred-weapon-index' in self.details and
-                self.details['preferred-weapon-index'] is not None):
-            result.append(self.details['preferred-weapon-index'])
+        if len(self.details['preferred-weapon-index']) > 0:
+            result.extend(self.details['preferred-weapon-index'])
 
         return result
 
-    def get_weapon_by_name(self,                # Public to support testing
-                           name
-                           ):
-        '''
-        Draw weapon from sheath or holster.
+    def holster_weapon_by_index(self,
+                                weapon_index  # Index of weapon in fighter's 'stuff'
+                                       # list.
+                                ):
+        '''Holsters weapon.'''
+        # NOTE: ONLY CALLED FROM AN ACTION
 
-        Just used in testing.
+        # Make sure we have the weapon in question
+        try:
+            index = self.details['weapon-index'].index(weapon_index)
+        except ValueError:
+            item = self.equipment.get_item_by_index(weapon_index)
+            self._window_manager.error(
+                    ['Trying to holster non-drawn weapon: %s' % item['name']])
+            return
 
-        Returns index, Weapon object
-        '''
-        index, item = self.equipment.get_item_by_name(name)
-        if index is not None:
-            self.details['weapon-index'] = index
-        return index, ca_equipment.Weapon(item)
+        # Actually remove the weapon
+        # NOTE: if you're removing the primary hand weapon, the off-hand weapon
+        # is moved to the primary location.  This makes sense unless the
+        # primary hand is injured.  This is a weird enough situation and hard
+        # enough to handle that I'm not supporting it just now.  If I did, it
+        # would look something like this:
+        # if index == len(self.details['weapon-index']) - 1:
+        #     self.details['weapon-index'].pop()
+        # else:
+        #     self.details['weapon-index'][index] = None
 
-    def print_me(self):
-        print '-- Fighter (%s, %s) --' % (self.name, self.group)
-        PP.pprint(self.details)
+        self.details['weapon-index'].pop(index)
+
+        # If there're no weapons left, add natural weapons (if applicable)
+        if len(self.details['weapon-index']) == 0:
+            for item_index, item in enumerate(self.details['stuff']):
+                if 'natural-weapon' in item and item['natural-weapon']:
+                    self.details['weapon-index'].append(item_index)
+
+    #def print_me(self):
+    #    print '-- Fighter (%s, %s) --' % (self.name, self.group)
+    #    PP.pprint(self.details)
 
     def remove_equipment(self,
                          index_to_remove,  # <int> index into Equipment list
@@ -645,18 +730,23 @@ class Fighter(ThingsInFight):
         # Adjust indexes into the list if the list changed.
 
         if before_item_count != after_item_count:
-            if index_to_remove == self.details['weapon-index']:
-                self.details['weapon-index'] = None
-            elif index_to_remove < self.details['weapon-index']:
-                self.details['weapon-index'] -= 1
+            # Remove weapon from current weapon list
+            for index_in_weapons, index_in_stuff in enumerate(
+                    self.details['weapon-index']):
+                if index_to_remove == index_in_stuff:
+                    self.details['weapon-index'].remove(index_in_stuff)
+                elif index_to_remove < index_in_stuff:
+                    self.details['weapon-index'][index_in_weapons] -= 1
 
-            if ('preferred-weapon-index' in self.details and
-                    self.details['preferred-weapon-index'] is not None):
-                if index_to_remove == self.details['preferred-weapon-index']:
-                    self.details['preferred-weapon-index'] = None
-                elif index_to_remove < self.details['preferred-weapon-index']:
-                    self.details['preferred-weapon-index'] -= 1
+            # Remove weapon from preferred weapons list
+            for index_in_weapons, index_in_stuff in enumerate(
+                    self.details['preferred-weapon-index']):
+                if index_to_remove == index_in_stuff:
+                    self.details['preferred-weapon-index'].remove(index_in_stuff)
+                elif index_to_remove < index_in_stuff:
+                    self.details['preferred-weapon-index'][index_in_weapons] -= 1
 
+            # Remove armor from current armor list
             for index_in_armor, index_in_stuff in enumerate(
                     self.details['armor-index']):
                 if index_to_remove == index_in_stuff:
@@ -664,13 +754,13 @@ class Fighter(ThingsInFight):
                 elif index_to_remove < index_in_stuff:
                     self.details['armor-index'][index_in_armor] -= 1
 
-            if 'preferred-armor-index' in self.details:
-                for index_in_armor, index_in_stuff in enumerate(
-                        self.details['preferred-armor-index']):
-                    if index_to_remove == index_in_stuff:
-                        self.details['preferred-armor-index'].remove(index_in_stuff)
-                    elif index_to_remove < index_in_stuff:
-                        self.details['preferred-armor-index'][index_in_armor] -= 1
+            # Remove armor from preferred armor list
+            for index_in_armor, index_in_stuff in enumerate(
+                    self.details['preferred-armor-index']):
+                if index_to_remove == index_in_stuff:
+                    self.details['preferred-armor-index'].remove(index_in_stuff)
+                elif index_to_remove < index_in_stuff:
+                    self.details['preferred-armor-index'][index_in_armor] -= 1
 
         return item
 
@@ -810,7 +900,8 @@ class Fighter(ThingsInFight):
         return True if self.details['state'] == 'dead' else False
 
     def set_consciousness(self,
-                          conscious_number  # <int> See Fighter.conscious_map
+                          conscious_number,  # <int> See Fighter.conscious_map
+                          fight_handler
                           ):
         '''
         Sets the state (alive, unconscious, dead, absent, etc.) of the
@@ -818,6 +909,7 @@ class Fighter(ThingsInFight):
 
         Returns nothing.
         '''
+        # NOTE: ONLY CALLED FROM ACTION OR TESTING
 
         for state_name, state_num in Fighter.conscious_map.iteritems():
             if state_num == conscious_number:
@@ -826,7 +918,16 @@ class Fighter(ThingsInFight):
 
         if not self.is_conscious():
             self.details['opponent'] = None  # unconscious men fight nobody
-            self.draw_weapon_by_index(None)  # unconscious men don't hold stuff
+            weapon_indexes = self.get_current_weapon_indexes()
+            for index in weapon_indexes:
+                # unconscious men don't hold stuff
+                self._ruleset.do_action(
+                        self,
+                        {'action-name': 'holster-weapon',
+                         'weapon-index': index,
+                         'notimer': True},
+                        fight_handler,
+                        logit=False)
 
     def start_fight(self):
         '''
@@ -905,11 +1006,38 @@ class Fighter(ThingsInFight):
                the line is shown in bold
         '''
 
+        weapons = self.get_current_weapons()
         why_opponent = fight_handler.get_opponent_for(self)
-        weapon, holding_weapon_index = self.get_current_weapon()
+        all_lines = []
+        for weapon in weapons:
+            if weapon is None:
+                continue
+            lines = self._explain_one_weapon_numbers(weapon, why_opponent)
+            all_lines.extend(lines)
 
+        ignore, defense_why = self.get_defenses_notes(why_opponent)
+        if defense_why is not None:
+            lines = [[{'text': x,
+                       'mode': curses.A_NORMAL}] for x in defense_why]
+            all_lines.extend(lines)
+
+        return all_lines
+
+    def _explain_one_weapon_numbers(self,
+                                    weapon,         # Weapon object
+                                    why_opponent    # Fighter object
+                                    ):
+        '''
+        Explains how the stuff in the descriptions (for only one weapon) were
+        calculated.
+
+        Returns [[{'text':x, 'mode':x}, {...}], [], [], ...]
+            where the outer array contains lines
+            each line is an array that contains a line-segment
+            each line segment has its own mode so, for example, only SOME of
+               the line is shown in bold
+        '''
         lines = []
-
         unarmed_skills = self._ruleset.get_weapons_unarmed_skills(weapon)
 
         if unarmed_skills is not None:
@@ -920,12 +1048,15 @@ class Fighter(ThingsInFight):
             lines = [[{'text': x,
                        'mode': curses.A_NORMAL}] for x in unarmed_info['why']]
         else:
+            lines.extend([[{'text': 'Weapon: "%s"' % weapon.name,
+                            'mode': curses.A_NORMAL}]])
             if weapon.details['skill'] in self.details['skills']:
+                # To-Hit
                 ignore, to_hit_why = self._ruleset.get_to_hit(self,
                                                               why_opponent,
                                                               weapon)
-                lines = [[{'text': x,
-                           'mode': curses.A_NORMAL}] for x in to_hit_why]
+                lines.extend([[{'text': x,
+                                'mode': curses.A_NORMAL}] for x in to_hit_why])
 
                 # Damage
 
@@ -934,14 +1065,8 @@ class Fighter(ThingsInFight):
                                 'mode': curses.A_NORMAL}] for x in damage_why])
 
             if weapon.notes() is not None:
-                lines.extend([[{'text': 'Weapon: "%s"' % weapon.name,
-                               'mode': curses.A_NORMAL}]])
                 lines.extend([[{'text': '  %s' % weapon.notes(),
                                'mode': curses.A_NORMAL}]])
 
-        ignore, defense_why = self.get_defenses_notes(why_opponent)
-        if defense_why is not None:
-            lines = [[{'text': x,
-                       'mode': curses.A_NORMAL}] for x in defense_why] + lines
-
         return lines
+
