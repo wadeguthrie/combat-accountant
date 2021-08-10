@@ -51,8 +51,9 @@ class Equipment(object):
         Returns the dictionary data of the index-th item in the equipment
         list.  Returns None if the item is not found.
         '''
-        return (None if index >= len(self.__equipment) else
-                self.__equipment[index])
+        if index is None or index >= len(self.__equipment) :
+            return None
+        return self.__equipment[index]
 
     def get_item_by_name(self,              # Public to facilitate testing
                          name,  # string that matches the name of the thing
@@ -392,6 +393,26 @@ class EquipmentManager(object):
 
 class Weapon(object):
     # fighter.get_current_weapon()
+
+    @staticmethod
+    def is_weapon(item  # dict from JSON
+                  ):
+        if ('ranged weapon' in item['type'] or
+                'melee weapon' in item['type'] or
+                'shield' in item['type']):
+            return True
+        return False
+
+    @staticmethod
+    def is_natural_weapon(item  # dict from JSON
+                  ):
+        if not Weapon.is_weapon(item):
+            return False
+
+        if 'natural-weapon' in item and item['natural-weapon']:
+            return True
+        return False
+
     def __init__(self,
                  weapon_details    # dict from world file
                  ):

@@ -6,6 +6,7 @@ import datetime
 import pprint
 import random
 
+import ca_equipment
 import ca_fighter
 import ca_timers
 
@@ -83,9 +84,9 @@ class Ruleset(object):
         Returns nothing.
         '''
 
-        # print '\n--- do_action ---'
-        # PP = pprint.PrettyPrinter(indent=3, width=150)
-        # PP.pprint(action)
+        #print '\n--- do_action for %s ---' % fighter.name
+        #PP = pprint.PrettyPrinter(indent=3, width=150)
+        #PP.pprint(action)
 
         handled = self._perform_action(fighter, action, fight_handler, logit)
         self._record_action(fighter, action, fight_handler, handled, logit)
@@ -116,20 +117,38 @@ class Ruleset(object):
 
         # Figure out who we are and what we're holding.
 
-        weapon, weapon_index = fighter.get_current_weapon()
-        holding_ranged = (False if weapon is None else
-                          weapon.is_ranged_weapon())
+        weapons = fighter.get_current_weapons()
+        holding_ranged = False
+        holding_loaded_ranged = False
+        holding_melee = False
+        holding_natural_weapon = False
+        holding_non_natural_weapon = False
+        for weapon in weapons:
+            if weapon is None:
+                continue
+            if weapon.is_ranged_weapon():
+                holding_ranged = True
+                if weapon.shots_left() > 0:
+                    holding_loaded_ranged = True
+            else:
+                holding_melee = True
+            if ca_equipment.Weapon.is_natural_weapon(weapon.details):
+                holding_natural_weapon = True
+            else:
+                holding_non_natural_weapon = True
+
+        weapon_indexes = fighter.get_current_weapon_indexes()
 
         # ARMOR #
 
         # Armor SUB-menu
 
-        armor_index_list = fighter.get_current_armor_indexes()
+        armor_indexes = fighter.get_current_armor_indexes()
 
         don_armor_menu = []   # list of armor that may be donned this turn
         for index, item in enumerate(fighter.details['stuff']):
             if 'armor' in item['type']:
-                if index not in armor_index_list:
+                if index not in armor_indexes:
                     verbose_option = self.get_option('verbose')
                     if verbose_option is not None and verbose_option:
                         entry_name = '%d: %s' % (index, item['name'])
@@ -159,76 +178,59 @@ class Ruleset(object):
 
         # Doff armor menu
 
-        armor_list = fighter.get_items_from_indexes(armor_index_list)
+        armor_list = fighter.get_items_from_indexes(armor_indexes)
         for index, armor in enumerate(armor_list):
             if ('natural-armor' not in armor or not armor['natural-armor']):
                 action_menu.append(
                         (('Doff %s' % armor['name']),
                          {'action': {'action-name': 'doff-armor',
-                                     'armor-index': armor_index_list[index]}}
+                                     'armor-index': armor_indexes[index]}}
                          ))
 
         # ATTACK #
 
-        if holding_ranged:
-            if weapon.shots_left() > 0:
-                # Can only attack if there's someone to attack
-                action_menu.extend([
-                    ('attack',          {'action':
-                                         {'action-name': 'attack'}}),
-                    ('attack, all out', {'action':
-                                         {'action-name': 'all-out-attack'}})
-                ])
-        else:
+        if holding_melee or holding_loaded_ranged:
+            # Can only attack if there's someone to attack
             action_menu.extend([
-                    ('attack',          {'action':
-                                         {'action-name': 'attack'}}),
-                    ('attack, all out', {'action':
-                                         {'action-name': 'all-out-attack'}})
+                ('attack',          {'action':
+                                     {'action-name': 'attack'}}),
+                ('attack, all out', {'action':
+                                     {'action-name': 'all-out-attack'}})
             ])
 
         # DRAW OR HOLSTER WEAPON #
 
-        must_holster = True
-        if (weapon is None or ('natural-weapon' in weapon.details and
-                               weapon.details['natural-weapon'])):
-            must_holster = False
+        if holding_non_natural_weapon:
+            for index, weapon in enumerate(weapons):
+                weapon_index = weapon_indexes[index]
+                if not ca_equipment.Weapon.is_natural_weapon(weapon.details):
+                    action_menu.append(
+                            (('holster/sheathe %s' % weapon.details['name']),
+                             {'action': {'action-name': 'holster-weapon',
+                                         'weapon-index': weapon_index}
+                              }))
 
-        if must_holster:
-            action_menu.append(
-                    (('holster/sheathe %s' % weapon.details['name']),
-                     {'action': {'action-name': 'draw-weapon',
-                                 'weapon-index': None}
-                      }))
-        else:
+        if len(weapons) < ca_fighter.Fighter.MAX_WEAPONS:
             # Draw weapon SUB-menu
 
             draw_weapon_menu = []   # weapons that may be drawn this turn
-            has_a_preferred_weapon = (
-                    True if 'preferred-weapon-index' in fighter.details and
-                    fighter.details['preferred-weapon-index'] is not None
-                    else False)
             for index, item in enumerate(fighter.details['stuff']):
-                if ('ranged weapon' in item['type'] or
-                        'melee weapon' in item['type'] or
-                        'shield' in item['type']):
-                    if weapon is None or weapon_index != index:
-                        verbose_option = self.get_option('verbose')
-                        if verbose_option is not None and verbose_option:
-                            entry_name = '%d: %s' % (index, item['name'])
-                        elif (has_a_preferred_weapon and
-                              fighter.details['preferred-weapon-index'] ==
-                              index):
-                            # Add a leading space so it's sorted to the top
-                            entry_name = ' %s (preferred)' % item['name']
-                        else:
-                            entry_name = '%s' % item['name']
+                if (ca_equipment.Weapon.is_weapon(item) and
+                        index not in weapon_indexes):
+                    verbose_option = self.get_option('verbose')
+                    if verbose_option is not None and verbose_option:
+                        entry_name = '%d: %s' % (index, item['name'])
+                    elif index in fighter.details['preferred-weapon-index']:
+                        # Add a leading space so it's sorted to the top
+                        entry_name = ' %s (preferred)' % item['name']
+                    else:
+                        entry_name = '%s' % item['name']
 
-                        draw_weapon_menu.append(
-                            (entry_name,
-                             {'action': {'action-name': 'draw-weapon',
-                                         'weapon-index': index}
-                              }))
+                    draw_weapon_menu.append(
+                        (entry_name,
+                         {'action': {'action-name': 'draw-weapon',
+                                     'weapon-index': index}
+                          }))
             draw_weapon_menu = sorted(draw_weapon_menu,
                                       key=lambda x: x[0].upper())
 
@@ -250,7 +252,7 @@ class Ruleset(object):
 
         # RELOAD #
 
-        if holding_ranged:
+        if holding_ranged and len(weapons) == 1:
             action_menu.append(('reload (ready)',
                                {'action': {'action-name': 'reload'}}))
 
@@ -340,17 +342,27 @@ class Ruleset(object):
         reload_option = self.get_option('reload-on-heal')
         if (reload_option is not None and reload_option and
                 fighter.group == 'PCs'):
-            throw_away, original_weapon_index = fighter.get_current_weapon()
+            weapon_indexes = fighter.get_current_weapon_indexes()
             for index, item in enumerate(fighter.details['stuff']):
                 if 'ranged weapon' in item['type']:
-                    fighter.draw_weapon_by_index(index)
+                    self.do_action(fighter,
+                                   {'action-name': 'draw-weapon',
+                                    'weapon-index': index,
+                                    'notimer': True},
+                                   None)
                     self.do_action(fighter,
                                    {'action-name': 'reload',
                                     'comment': 'Reloading on heal',
                                     'notimer': True,
                                     'quiet': True},
                                    None)
-            fighter.draw_weapon_by_index(original_weapon_index)
+            for original_weapon_index in weapon_indexes:
+                self.do_action(fighter,
+                               {'action-name': 'draw-weapon',
+                                'weapon-index': original_weapon_index,
+                                'notimer': True},
+                               None)
+
 
     def is_creature_consistent(self,
                                name,     # string: creature's name
@@ -372,242 +384,21 @@ class Ruleset(object):
         if fighter.name == ca_fighter.Venue.name:
             return True
 
-        playing_back = (False if fight_handler is None else
-                        fight_handler.world.playing_back)
-
         # First, let's make sure that they have all the required parts.
 
         for key, value in ca_fighter.Fighter.strawman.iteritems():
             if key not in creature:
                 creature[key] = value
 
-        # Check to see if they're carrying their preferred armor
-
-        preferred_armor_index_list = []
-        if len(fighter.details['preferred-armor-index']) == 0:
-            owned_armor_count = 0
-            armor_index = None
-            for index, item in enumerate(fighter.details['stuff']):
-                if 'armor' in item['type']:
-                    owned_armor_count += 1
-                    armor_index = index
-            if owned_armor_count == 0:
-                pass
-            elif owned_armor_count == 1:
-                fighter.details['preferred-armor-index'] = [armor_index]
-            else: # owns more than one piece of armor
-                self._window_manager.error([
-                    'Creature "%s" has no preferred armor' % name])
-        elif not playing_back:
-            preferred_armor_index_list.extend(
-                        fighter.details['preferred-armor-index'])
-
-        armor_index_list = fighter.get_current_armor_indexes()
-        if len(preferred_armor_index_list) > 0:
-
-            # First, build list of preferred armor to add
-
-            keep_asking = True
-            while keep_asking:
-                armor_list_menu = []
-                for armor_index in preferred_armor_index_list:
-                    if armor_index not in armor_index_list:
-                        armor = fighter.equipment.get_item_by_index(
-                                armor_index)
-                        armor_list_menu.append(('don %s' % armor['name'],
-                                                armor_index))
-                if len(armor_list_menu) == 0:
-                    keep_asking = False
-                else:
-                    armor_list_menu.append(('Done Putting Armor On', None))
-                    armor_index, ignore = self._window_manager.menu(
-                            'Put on %s\'s preferred armor?' % name,
-                            armor_list_menu)
-                    if armor_index is None:
-                        keep_asking = False
-                    else:
-                        self.do_action(fighter,
-                                       {'action-name': 'don-armor',
-                                        'armor-index': armor_index,
-                                        'notimer': True},
-                                       None)
-
-            # Next, build list of non-preferred armor to remove
-
-            keep_asking = True
-            while keep_asking:
-                armor_list_menu = []
-                for armor_index in armor_index_list:
-                    if armor_index not in preferred_armor_index_list:
-                        armor = fighter.equipment.get_item_by_index(
-                                armor_index)
-                        armor_list_menu.append(('doff %s' % armor['name'],
-                                                armor_index))
-                if len(armor_list_menu) == 0:
-                    keep_asking = False
-                else:
-                    armor_list_menu.append(('Done Taking Armor Off', None))
-                    armor_index, ignore = self._window_manager.menu(
-                            'Remove %s\'s non-preferred armor?' % name,
-                            armor_list_menu)
-                    if armor_index is None:
-                        keep_asking = False
-                    else:
-                        self.do_action(fighter,
-                                       {'action-name': 'doff-armor',
-                                        'armor-index': armor_index,
-                                        'notimer': True},
-                                       None)
-
-        # Dump non-armor being worn as armor
-
-        armor_list = []
-        for armor_index in armor_index_list:
-            armor = fighter.equipment.get_item_by_index(armor_index)
-            armor_list.append(armor)
-
-        for index, armor in enumerate(armor_list):
-            if armor is None:
-                self._window_manager.error([
-                    'Creature "%s"' % name,
-                    '  is wearing weird armor "<None>". Fixing.'])
-                self.do_action(fighter,
-                               {'action-name': 'doff-armor',
-                                'armor-index': armor_index_list[index],
-                                'notimer': True},
-                               None)
-                result = False
-            elif 'armor' not in armor['type']:
-                self._window_manager.error([
-                    'Creature "%s"' % name,
-                    '  is wearing weird armor "%s". Fixing.' % armor['name']])
-                self.do_action(fighter,
-                               {'action-name': 'doff-armor',
-                                'armor-index': armor_index_list[index],
-                                'notimer': True},
-                               None)
-                result = False
-
-        # Add natural armor if they're not wearing any other kind
-
-        armor_index_list = fighter.get_current_armor_indexes()
-
-        if len(armor_index_list) == 0:
-            for index, item in enumerate(fighter.details['stuff']):
-                if 'natural-armor' in item and item['natural-armor']:
-                    self.do_action(fighter,
-                                   {'action-name': 'don-armor',
-                                    'armor-index': index,
-                                    'notimer': True},
-                                   None)
-
-        weapon, weapon_index = fighter.get_current_weapon()
-
-        # Check to see if they're carrying their preferred weapon
-
-        preferred_weapon_index = None
-        preferred_weapon = None
-
-        if fighter.details['preferred-weapon-index'] is None:
-            owned_weapon_count = 0
-            weapon_index = None
-            for index, item in enumerate(fighter.details['stuff']):
-                if ('ranged weapon' in item['type'] or
-                        'melee weapon' in item['type']):
-                    owned_weapon_count += 1
-                    weapon_index = index
-            if owned_weapon_count == 0:
-                pass
-            elif owned_weapon_count == 1:
-                fighter.details['preferred-weapon-index'] = weapon_index
-            else:
-                self._window_manager.error([
-                    'Creature "%s" has no preferred weapon' % name])
-        elif not playing_back:
-            preferred_weapon_index = fighter.details['preferred-weapon-index']
-            preferred_weapon = fighter.equipment.get_item_by_index(
-                    preferred_weapon_index)
+        # Next, check that their preferred armor / weapons agrees with what
+        # they're carrying
 
         playing_back = (False if fight_handler is None else
                         fight_handler.world.playing_back)
 
-        ask_about_preferred_weapon = False if playing_back else True
-        if preferred_weapon is None:
-            ask_about_preferred_weapon = False
-
-        if ask_about_preferred_weapon:
-            if weapon is None:
-                weapon_name = '<None>'
-            elif weapon_index == preferred_weapon_index:
-                ask_about_preferred_weapon = False
-            else:
-                weapon_name = weapon.name
-
-        if ask_about_preferred_weapon:
-            new_weapon_menu = [('draw %s' % preferred_weapon['name'],
-                                preferred_weapon_index),
-                               ('keep %s' % weapon_name, weapon_index)]
-
-            new_weapon_index, ignore = self._window_manager.menu(
-                    '%s is not using his/her preferred weapon - fix?' % name,
-                    new_weapon_menu)
-            if new_weapon_index == preferred_weapon_index:
-                self.do_action(fighter,
-                               {'action-name': 'draw-weapon',
-                                'weapon-index': None,
-                                'notimer': True},
-                               None)
-                self.do_action(fighter,
-                               {'action-name': 'draw-weapon',
-                                'weapon-index': new_weapon_index,
-                                'notimer': True},
-                               None)
-
-        # Is the current weapon a real weapon?
-
-        if weapon is not None:
-            if not weapon.is_ranged_weapon() and not weapon.is_melee_weapon():
-                self._window_manager.error([
-                    'Creature "%s"' % name,
-                    '  is wielding weird weapon "%s". Fixing.' %
-                    weapon.details['name']])
-                self.do_action(fighter,
-                               {'action-name': 'draw-weapon',
-                                'weapon-index': None,
-                                'notimer': True},
-                               None)
-                result = False
-
-        weapon, throw_away = fighter.get_current_weapon()
-
-        if weapon is None:
-            # If they're not holding anything and they have natural weapons,
-            # use those weapons.
-            for index, item in enumerate(fighter.details['stuff']):
-                if 'natural-weapon' in item and item['natural-weapon']:
-                    self.do_action(fighter,
-                                   {'action-name': 'draw-weapon',
-                                    'weapon-index': index,
-                                    'notimer': True},
-                                   None)
-                    break
-
-        # Make sure that all missile weapons have their associated ammo.
-
-        for weapon in fighter.details['stuff']:
-            if 'ranged weapon' not in weapon['type']:
-                continue
-            clip_name = weapon['ammo']['name']
-            found_clip = False
-            for clip in fighter.details['stuff']:
-                if clip['name'] == clip_name:
-                    found_clip = True
-                    break
-            if not found_clip:
-                self._window_manager.error([
-                    '"%s"' % name,
-                    '  is carrying a weapon (%s) with no ammo (%s).' % (
-                        weapon['name'], clip_name)])
+        if not playing_back:
+            self.__configure_armor(fighter)
+            self.__configure_weapons(fighter)
 
         return result
 
@@ -628,11 +419,12 @@ class Ruleset(object):
                 'opponent': None,
                 'permanent': {},
                 'preferred-armor-index': [],
-                'preferred-weapon-index': None, # TODO (now): make sure None is OK
+                'preferred-weapon-index': [],
                 'state': 'alive',
                 'stuff': [],
                 'timers': [],
                 'weapon-index': None,
+                'current-weapon': 0,    # Indexes into 'weapon-index'.
                 }
 
     def search_one_creature(self,
@@ -761,6 +553,280 @@ class Ruleset(object):
         fighter.details[attr_type][attr] = new_value
         return Ruleset.HANDLED_OK
 
+    def __configure_armor(self,
+                          fighter # Fighter object
+                          ):
+        '''
+        Asks to remove armor from current list if it's not in preferred list.
+        Asks to add armor to current list if it is in preferred list.
+        Removes any 'current' armor that's not actually armor
+        If, after all that, there's no armor being worn but there's natural
+        armor, wear that.
+        '''
+        armor_index_list = fighter.get_current_armor_indexes()
+
+        # Dump non-armor being worn as armor
+
+        armor_list = []
+        for armor_index in armor_index_list:
+            armor = fighter.equipment.get_item_by_index(armor_index)
+            armor_list.append(armor)
+
+        for index, armor in enumerate(armor_list):
+            if armor is None:
+                self._window_manager.error([
+                    'Creature "%s"' % name,
+                    '  is wearing weird armor "<None>". Fixing.'])
+                self.do_action(fighter,
+                               {'action-name': 'doff-armor',
+                                'armor-index': armor_index_list[index],
+                                'notimer': True},
+                               None)
+                result = False
+            elif 'armor' not in armor['type']:
+                self._window_manager.error([
+                    'Creature "%s"' % name,
+                    '  is wearing weird armor "%s". Fixing.' % armor['name']])
+                self.do_action(fighter,
+                               {'action-name': 'doff-armor',
+                                'armor-index': armor_index_list[index],
+                                'notimer': True},
+                               None)
+                result = False
+
+        # Check to see if they have preferred armor
+
+        if len(fighter.details['preferred-armor-index']) == 0:
+            owned_armor_count = 0
+            armor_index = None
+            for index, item in enumerate(fighter.details['stuff']):
+                if 'armor' in item['type']:
+                    owned_armor_count += 1
+                    armor_index = index # only useful w/just 1 owned armor
+            if owned_armor_count == 0:
+                pass
+            elif owned_armor_count == 1:
+                fighter.details['preferred-armor-index'] = [armor_index]
+            else: # owns more than one piece of armor
+                self._window_manager.error([
+                    'Creature "%s" has no preferred armor' % name])
+
+        # Now, build list of preferred armor to add
+
+        keep_asking = True
+        while keep_asking:
+            armor_index_list = fighter.get_current_armor_indexes()
+            armor_list_menu = []
+            for armor_index in fighter.details['preferred-armor-index']:
+                if armor_index not in armor_index_list:
+                    armor = fighter.equipment.get_item_by_index(
+                            armor_index)
+                    armor_list_menu.append(('don %s' % armor['name'],
+                                            armor_index))
+            if len(armor_list_menu) == 0:
+                keep_asking = False
+            else:
+                armor_list_menu.append(('Done Putting Armor On', None))
+                armor_index, ignore = self._window_manager.menu(
+                        'Put on %s\'s preferred armor?' % name,
+                        armor_list_menu)
+                if armor_index is None:
+                    keep_asking = False
+                else:
+                    self.do_action(fighter,
+                                   {'action-name': 'don-armor',
+                                    'armor-index': armor_index,
+                                    'notimer': True},
+                                   None)
+
+        # Next, build list of non-preferred armor to remove
+
+        keep_asking = True
+        while keep_asking:
+            armor_index_list = fighter.get_current_armor_indexes()
+            armor_list_menu = []
+            for armor_index in armor_index_list:
+                if armor_index not in fighter.details['preferred-armor-index']:
+                    armor = fighter.equipment.get_item_by_index(
+                            armor_index)
+                    armor_list_menu.append(('doff %s' % armor['name'],
+                                            armor_index))
+            if len(armor_list_menu) == 0:
+                keep_asking = False
+            else:
+                armor_list_menu.append(('Done Taking Armor Off', None))
+                armor_index, ignore = self._window_manager.menu(
+                        'Remove %s\'s non-preferred armor?' % fighter.name,
+                        armor_list_menu)
+                if armor_index is None:
+                    keep_asking = False
+                else:
+                    self.do_action(fighter,
+                                   {'action-name': 'doff-armor',
+                                    'armor-index': armor_index,
+                                    'notimer': True},
+                                   None)
+
+        # Add natural armor if they're not wearing any other kind
+
+        # TODO (now): natural armor should _always_ be selected, not just if
+        # there's no other armor.
+
+        armor_index_list = fighter.get_current_armor_indexes()
+
+        if len(armor_index_list) == 0:
+            for index, item in enumerate(fighter.details['stuff']):
+                if 'natural-armor' in item and item['natural-armor']:
+                    self.do_action(fighter,
+                                   {'action-name': 'don-armor',
+                                    'armor-index': index,
+                                    'notimer': True},
+                                   None)
+
+    def __configure_weapons(self,
+                            fighter # Fighter object
+                            ):
+        '''
+        Asks to remove weapons from current list if it's not in preferred list.
+        Asks to add weapons to current list if it is in preferred list.
+        Removes any 'current' weapons that's not actually weapons
+        If, after all that, there's no weapons being used but there's natural
+        weapons, wear that.
+        '''
+
+        weapon_index_list = fighter.get_current_weapon_indexes()
+
+        # Dump non-weapon being worn as weapon
+
+        weapon_list = []
+        for weapon_index in weapon_index_list:
+            weapon = fighter.equipment.get_item_by_index(weapon_index)
+            weapon_list.append(weapon)
+
+        for index, weapon in enumerate(weapon_list):
+            if weapon is None:
+                self._window_manager.error([
+                    '"%s"' % fighter.name,
+                    '  is wielding weird weapon "<None>". Fixing.'])
+                self.do_action(fighter,
+                               {'action-name': 'holster-weapon',
+                                'weapon-index': weapon_index_list[index],
+                                'notimer': True},
+                               None)
+                result = False
+            elif not ca_equipment.Weapon.is_weapon(weapon):
+                self._window_manager.error([
+                    '"%s"' % fighter.name,
+                    '  is wearing weird weapon "%s". Fixing.' % weapon['name']])
+                self.do_action(fighter,
+                               {'action-name': 'holster-weapon',
+                                'weapon-index': weapon_index_list[index],
+                                'notimer': True},
+                               None)
+                result = False
+
+        # Check to see if they have preferred weapons
+
+        if len(fighter.details['preferred-weapon-index']) == 0:
+            owned_weapon_count = 0
+            weapon_index = None
+            for index, item in enumerate(fighter.details['stuff']):
+                if ca_equipment.Weapon.is_weapon(item):
+                    owned_weapon_count += 1
+                    weapon_index = index # only useful w/just 1 owned weapon
+            if owned_weapon_count == 0:
+                pass # TODO (now): can we just exit the function, here?
+            elif owned_weapon_count == 1:
+                fighter.details['preferred-weapon-index'] = [weapon_index]
+            else: # owns more than one weapon
+                self._window_manager.error([
+                    'Creature "%s" has no preferred weapon' % fighter.name])
+
+        # Now, build list of preferred weapons to add
+
+        keep_asking = True
+        while keep_asking:
+            weapon_index_list = fighter.get_current_weapon_indexes()
+            weapon_list_menu = []
+            for weapon_index in fighter.details['preferred-weapon-index']:
+                if weapon_index not in weapon_index_list:
+                    weapon = fighter.equipment.get_item_by_index(weapon_index)
+                    weapon_list_menu.append(('draw %s' % weapon['name'],
+                                            weapon_index))
+            if len(weapon_list_menu) == 0:
+                keep_asking = False
+            else:
+                weapon_list_menu.append(('Done Drawing Weapons', None))
+                weapon_index, ignore = self._window_manager.menu(
+                        'Draw %s\'s preferred weapon?' % fighter.name,
+                        weapon_list_menu)
+                if weapon_index is None:
+                    keep_asking = False
+                else:
+                    self.do_action(fighter,
+                                   {'action-name': 'draw-weapon',
+                                    'weapon-index': weapon_index,
+                                    'notimer': True},
+                                   None)
+
+        # Next, build list of non-preferred weapon to remove
+
+        keep_asking = True
+        while keep_asking:
+            weapon_index_list = fighter.get_current_weapon_indexes()
+            weapon_list_menu = []
+            for weapon_index in weapon_index_list:
+                if weapon_index not in fighter.details['preferred-weapon-index']:
+                    weapon = fighter.equipment.get_item_by_index(
+                            weapon_index)
+                    weapon_list_menu.append(('holster %s' % weapon['name'],
+                                            weapon_index))
+            if len(weapon_list_menu) == 0:
+                keep_asking = False
+            else:
+                weapon_list_menu.append(('Done Holstering Weapons', None))
+                weapon_index, ignore = self._window_manager.menu(
+                        'Holster %s\'s non-preferred weapon?' % fighter.name,
+                        weapon_list_menu)
+                if weapon_index is None:
+                    keep_asking = False
+                else:
+                    self.do_action(fighter,
+                                   {'action-name': 'holster-weapon',
+                                    'weapon-index': weapon_index,
+                                    'notimer': True},
+                                   None)
+
+        # Add natural weapons if they're not wielding any other kind
+
+        weapon_index_list = fighter.get_current_weapon_indexes()
+
+        if len(weapon_index_list) == 0:
+            for index, item in enumerate(fighter.details['stuff']):
+                if 'natural-weapon' in item and item['natural-weapon']:
+                    self.do_action(fighter,
+                                   {'action-name': 'don-weapon',
+                                    'weapon-index': index,
+                                    'notimer': True},
+                                   None)
+
+        # Make sure that all missile weapons have their associated ammo.
+
+        for weapon in fighter.details['stuff']:
+            if 'ranged weapon' not in weapon['type']:
+                continue
+            clip_name = weapon['ammo']['name']
+            found_clip = False
+            for clip in fighter.details['stuff']:
+                if clip['name'] == clip_name:
+                    found_clip = True
+                    break
+            if not found_clip:
+                self._window_manager.error([
+                    '"%s"' % fighter.name,
+                    '  is carrying a weapon (%s) with no ammo (%s).' % (
+                        weapon['name'], clip_name)])
+
     def __do_attack(self,
                     fighter,          # Fighter object
                     action,           # {'action-name':
@@ -785,8 +851,32 @@ class Ruleset(object):
                 not fight_handler.world.playing_back):
             fight_handler.pick_opponent()
 
-        weapon, weapon_index = fighter.get_current_weapon()
-        if weapon is None or not weapon.uses_ammo():
+        weapons = fighter.get_current_weapons()
+
+        action['weapon-index'] = None
+        if len(weapons) == 0:
+            return Ruleset.HANDLED_OK
+
+        # 'current-weapon' indexes into 'weapon-index' and points to the weapon
+        # in the hand that's attacking right now.
+        if fighter.details['current-weapon'] >= len(weapons):
+            return Ruleset.HANDLED_OK
+        weapon = weapons[fighter.details['current-weapon']]
+        if weapon is None:
+            return Ruleset.HANDLED_OK
+        action['weapon-index'] = fighter.details['current-weapon']
+
+        # Used for a fighter with two weapons.  Advance the index of the weapon
+        # being used for the next attack in the same round.  We're advancing it
+        # a little early to get out ahead of early returns.  We've already used
+        # it's value so it's ok to advance it, here.
+
+        # Wrap around so that you can attack more than once in a round (in
+        # order to fix mistakes during battle).
+        fighter.details['current-weapon'] = (
+                (fighter.details['current-weapon'] + 1) % len(weapons))
+
+        if not weapon.uses_ammo():
             return Ruleset.HANDLED_OK
 
         clip = weapon.get_clip()
@@ -889,14 +979,20 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
+        # You can't reload if both hands are full.
+        weapons = fighter.get_current_weapons()
+        if weapons is None or len(weapons) != 1:
+            return Ruleset.HANDLED_ERROR
+
+        weapon = weapons[0]
+        if weapon is None:
+            return Ruleset.HANDLED_OK
 
         if 'part' in action and action['part'] == 2:
             # This is the 2nd part of a 2-part action.  This part of the action
             # actually perfoms all the GurpsRuleset-specific actions and
             # side-effects of reloading the Fighter's current weapon.  Note
             # that a lot of the obvious part is done by the base class Ruleset.
-
-            weapon, weapon_index = fighter.get_current_weapon()
 
             # If there's no new clip to load, just bail out
             if 'clip-index' not in action:
@@ -938,8 +1034,7 @@ class Ruleset(object):
             # second part.  The 1st part isn't executed when playing
             # back.
 
-            weapon, weapon_index = fighter.get_current_weapon()
-            if weapon is None or not weapon.uses_ammo():
+            if not weapon.uses_ammo():
                 return Ruleset.HANDLED_ERROR
 
             clip_name = weapon.details['ammo']['name']
@@ -1052,8 +1147,7 @@ class Ruleset(object):
         '''
         Action handler for Ruleset.
 
-        Draws a specific weapon for the Fighter.  If index in None, it
-        holsters the current weapon.
+        Draws a specific weapon for the Fighter.
 
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
@@ -1089,10 +1183,6 @@ class Ruleset(object):
             self._char_being_timed['end'] = datetime.datetime.now()
             self._char_being_timed['time'] = (self._char_being_timed['end'] -
                           self._char_being_timed['start']).total_seconds()
-            #print '\n=== %r ===' % self._char_being_timed['time']
-            #PP = pprint.PrettyPrinter(indent=3, width=150)
-            #PP.pprint(self._char_being_timed) # TODO: remove
-
             if self._timing_file is not None:
                 for heading in Ruleset.timing_headings:
                     if heading in self._char_being_timed:
@@ -1204,6 +1294,28 @@ class Ruleset(object):
                                       in_place)
         return Ruleset.HANDLED_OK
 
+    def __holster_weapon(self,
+                         fighter,          # Fighter object
+                         action,           # {'action-name': 'holster-weapon',
+                                           #  'weapon-index': <int> # index in
+                                           #       fighter.details['stuff'],
+                                           #       None drops weapon
+                                           #  'comment': <string> # optional
+                         fight_handler,    # FightHandler object (ignored)
+                         ):
+        '''
+        Action handler for Ruleset.
+
+        Draws a specific weapon for the Fighter.  If index in None, it
+        holsters the current weapon.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+
+        fighter.holster_weapon_by_index(action['weapon-index'])
+        return Ruleset.HANDLED_OK
+
     def _perform_action(self,
                         fighter,          # Fighter object
                         action,           # {'action-name':
@@ -1242,6 +1354,7 @@ class Ruleset(object):
             'draw-weapon':          {'doit': self.__draw_weapon},
             'end-turn':             {'doit': self.__end_turn},
             'give-equipment':       {'doit': self.__give_equipment},
+            'holster-weapon':       {'doit': self.__holster_weapon},
             'move-and-attack':      {'doit': self.__do_attack},
             'pick-opponent':        {'doit': self.__pick_opponent},
             'previous-turn':        {'doit': self.__previous_turn},
@@ -1369,7 +1482,7 @@ class Ruleset(object):
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
 
-        fighter.set_consciousness(action['level'])
+        fighter.set_consciousness(action['level'], fight_handler)
         return Ruleset.HANDLED_OK
 
     def __set_timer(self,
@@ -1409,6 +1522,10 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
+        # The 1st weapon the fighter messes with should be the 1st one in the
+        # weapon-index list (i.e., the weapon in the fighter's dominant hand.
+        fighter.details['current-weapon'] = 0
+
         # TODO: if _char_being_timed is None, do whatever we do
         self._char_being_timed = {'name': fighter.name,
                                   'group': fighter.group,

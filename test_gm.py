@@ -412,6 +412,11 @@ class MockWindowManager(object):
         if ARGS.verbose:
             print '\n  menu title: "%s"' % title
 
+        # If the menu has only one entry, just return that -- no need to check
+        # responses.
+
+        # Now, go check responses for longer menus
+
         if title not in self.__menu_responses:
             print ('\n** menu: title "%s" not found in stored responses' %
                    title)
@@ -582,8 +587,11 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "stunned": False,
             "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
-            "weapon-index": None,
+            "weapon-index": [],
+            "current-weapon": 0,
             "armor-index": [],
+            "preferred-weapon-index": [],
+            "preferred-armor-index": [],
             "stuff": [
                  {"name": "pistol, Colt 170D",
                   "type": ["ranged weapon"],
@@ -664,8 +672,11 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "stunned": False,
             "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
-            "weapon-index": None,
-            "weapon-armor": None,
+            "weapon-index": [],
+            "current-weapon": 0,
+            "armor-index": None,
+            "preferred-weapon-index": [],
+            "preferred-armor-index": [],
             "stuff": [
                  {"name": "pistol, Colt 170D",
                   "type": ["ranged weapon"],
@@ -706,8 +717,11 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "stunned": False,
             "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
-            "weapon-index": None,
+            "weapon-index": [],
+            "current-weapon": 0,
             "armor-index": [],
+            "preferred-weapon-index": [],
+            "preferred-armor-index": [],
             "stuff": [
                  {"name": "pistol, Kalashnikov Makarov",
                   "type": ["ranged weapon"],
@@ -753,8 +767,11 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "stunned": False,
             "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
-            "weapon-index": None,
+            "weapon-index": [],
+            "current-weapon": 0,
             "armor-index": [],
+            "preferred-weapon-index": [],
+            "preferred-armor-index": [],
             "stuff": [
                  {"name": "pistol, Sig D65",  # the index of this is stored
                                               # in __tank_fighter_pistol_index
@@ -807,8 +824,11 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "stunned": False,
             "actions_this_turn": [],
             "aim": {"rounds": 0, "braced": False},
-            "weapon-index": None,
+            "weapon-index": [],
+            "current-weapon": 0,
             "armor-index": [],
+            "preferred-weapon-index": [],
+            "preferred-armor-index": [],
             "stuff": [
                  {"name": "pistol, Baretta DX 192",
                   "type": ["ranged weapon"],
@@ -1113,6 +1133,16 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 return True
         return False
 
+    def __get_current_weapon(self,
+                             fighter # Fighter object
+                             ):
+        # NOTE: assumes a single weapon
+        weapons = fighter.get_current_weapons()
+        weapon_indexes = fighter.get_current_weapon_indexes()
+        weapon = None if len(weapons) == 0 else weapons[0]
+        weapon_index = None if len(weapon_indexes) == 0 else weapon_indexes[0]
+        return weapon, weapon_index
+
     #
     # Actual Tests #
     #
@@ -1287,11 +1317,11 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                 copy.deepcopy(self.__tank_fighter),
                                 self.__ruleset,
                                 self.__window_manager)
-        weapon_index, weapon = tank_fighter.get_weapon_by_name('sick stick')
-        self.__ruleset.do_action(tank_fighter,
-                                 {'action-name': 'draw-weapon',
-                                  'weapon-index': weapon_index},
-                                 mock_fight_handler)
+        weapon_index, weapon = tank_fighter.draw_weapon_by_name('sick stick')
+        #self.__ruleset.do_action(tank_fighter,
+        #                         {'action-name': 'draw-weapon',
+        #                          'weapon-index': weapon_index},
+        #                         mock_fight_handler)
 
         self.__ruleset.do_action(tank_fighter,
                                  {'action-name': 'change-posture',
@@ -1328,11 +1358,11 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                 copy.deepcopy(self.__thief_fighter),
                                 self.__ruleset,
                                 self.__window_manager)
-        weapon_index, weapon = thief_fighter.get_weapon_by_name('Large Knife')
-        self.__ruleset.do_action(tank_fighter,
-                                 {'action-name': 'draw-weapon',
-                                  'weapon-index': weapon_index},
-                                 mock_fight_handler)
+        weapon_index, weapon = thief_fighter.draw_weapon_by_name('Large Knife')
+        #self.__ruleset.do_action(tank_fighter,
+        #                         {'action-name': 'draw-weapon',
+        #                          'weapon-index': weapon_index},
+        #                         mock_fight_handler)
         self.__ruleset.do_action(thief_fighter,
                                  {'action-name': 'change-posture',
                                   'posture': 'standing'},
@@ -1465,7 +1495,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         assert hand_to_hand_info['parry_skill'] == 10
 
         # w/brass knuckles -- Note: that the punch damage is +1
-        ignore, weapon = thief_fighter.get_weapon_by_name('brass knuckles')
+        ignore, weapon = thief_fighter.draw_weapon_by_name('brass knuckles')
         hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
                                                             None,
                                                             weapon,
@@ -1632,8 +1662,9 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         injured_hp = 3  # arbitrary amount
         injured_fighter.details['current']['hp'] -= injured_hp
-        unconscious_fighter.set_consciousness(ca_fighter.Fighter.UNCONSCIOUS)
-        dead_fighter.set_consciousness(ca_fighter.Fighter.DEAD)
+        unconscious_fighter.set_consciousness(ca_fighter.Fighter.UNCONSCIOUS,
+                                              None)
+        dead_fighter.set_consciousness(ca_fighter.Fighter.DEAD, None)
 
         assert injured_fighter.get_state() == ca_fighter.Fighter.INJURED
         assert (unconscious_fighter.get_state() ==
@@ -1904,7 +1935,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
-        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        weapon, actual_weapon_index = self.__get_current_weapon(vodou_priest)
         assert actual_weapon_index == requested_weapon_index
 
         # ranged to-hit should be skill + acc (if aimed) + 1 (if braced)
@@ -2147,7 +2178,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
-        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        weapon, actual_weapon_index = self.__get_current_weapon(vodou_priest)
         assert actual_weapon_index == requested_weapon_index
 
         # Regular, no aim - for a baseline
@@ -2385,7 +2416,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
-        weapon, actual_weapon_index = thief.get_current_weapon()
+        weapon, actual_weapon_index = self.__get_current_weapon(thief)
         assert actual_weapon_index == requested_weapon_index
 
         # melee to-hit should be skill + special conditions
@@ -2493,7 +2524,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
-        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        weapon, actual_weapon_index = self.__get_current_weapon(vodou_priest)
         assert actual_weapon_index == requested_weapon_index
         assert weapon.details['name'] == "pistol, Colt 170D"
 
@@ -3391,19 +3422,18 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
-        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        weapon, actual_weapon_index = self.__get_current_weapon(vodou_priest)
         assert actual_weapon_index == requested_weapon_index
         assert weapon.details['name'] == "pistol, Colt 170D"
 
         # Sheathe Weapon
 
-        requested_weapon_index = None
         self.__ruleset.do_action(vodou_priest,
-                                 {'action-name': 'draw-weapon',
+                                 {'action-name': 'holster-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
-        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
-        assert actual_weapon_index == requested_weapon_index
+        weapon, actual_weapon_index = self.__get_current_weapon(vodou_priest)
+        assert actual_weapon_index == None
 
         # The effect of the weapon is tested throughout the testing
 
@@ -3434,7 +3464,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
-        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        weapon, actual_weapon_index = self.__get_current_weapon(vodou_priest)
         assert actual_weapon_index == requested_weapon_index
         assert weapon.details['name'] == "pistol, Colt 170D"
         assert weapon.shots_left() == self.__vodou_priest_initial_shots
@@ -3452,6 +3482,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             self.__ruleset.do_action(vodou_priest,
                                      {'action-name': 'attack'},
                                      mock_fight_handler)
+            # To simulate the start of the round
+            vodou_priest.details['current-weapon'] = 0
 
         assert (weapon.shots_left() ==
                 (self.__vodou_priest_initial_shots - shots_taken))
@@ -3463,6 +3495,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             self.__ruleset.do_action(vodou_priest,
                                      {'action-name': 'attack'},
                                      mock_fight_handler)
+            # To simulate the start of the round
+            vodou_priest.details['current-weapon'] = 0
 
         # Now, reload
 
@@ -3494,6 +3528,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 self.__ruleset.do_action(vodou_priest,
                                          {'action-name': 'attack'},
                                          mock_fight_handler)
+                # To simulate the start of the round
+                vodou_priest.details['current-weapon'] = 0
             self.__window_manager.set_menu_response('Reload With What', 1)
             self.__ruleset.do_action(vodou_priest,
                                      {'action-name': 'reload'},
@@ -3507,6 +3543,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             self.__ruleset.do_action(vodou_priest,
                                      {'action-name': 'attack'},
                                      mock_fight_handler)
+            # To simulate the start of the round
+            vodou_priest.details['current-weapon'] = 0
 
         assert (weapon.shots_left() ==
                 (self.__vodou_priest_initial_shots - shots_taken))
@@ -3552,7 +3590,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
-        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        weapon, actual_weapon_index = self.__get_current_weapon(vodou_priest)
         assert actual_weapon_index == requested_weapon_index
         assert weapon.details['name'] == "pistol, Colt 170D"
         assert weapon.shots_left() == self.__vodou_priest_initial_shots
@@ -3570,6 +3608,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             self.__ruleset.do_action(vodou_priest,
                                      {'action-name': 'attack'},
                                      mock_fight_handler)
+            # To simulate the start of the round
+            vodou_priest.details['current-weapon'] = 0
 
         assert (weapon.shots_left() ==
                 (self.__vodou_priest_initial_shots - shots_taken))
@@ -3601,6 +3641,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'attack'},
                                  mock_fight_handler)
+        # To simulate the start of the round
+        vodou_priest.details['current-weapon'] = 0
 
         # Reload with the partial (the previously ejected one)
         self.__window_manager.set_menu_response('Reload With What',
@@ -3742,7 +3784,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
                                  mock_fight_handler)
-        weapon, actual_weapon_index = vodou_priest.get_current_weapon()
+        weapon, actual_weapon_index = self.__get_current_weapon(vodou_priest)
         assert actual_weapon_index == requested_weapon_index
 
         # The only way you can see a 'defend' action is because aim is lost.
@@ -4218,7 +4260,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': sick_stick_index},
                                  mock_fight_handler)
-        weapon, actual_weapon_index = fighter.get_current_weapon()
+        weapon, actual_weapon_index = self.__get_current_weapon(fighter)
         assert actual_weapon_index == sick_stick_index
 
         # remove counted item before weapon index
@@ -4231,7 +4273,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         assert weapon['name'] == "pistol, Sig D65"
         assert weapon['acc'] == 4
         assert weapon['count'] == 1
-        weapon, actual_weapon_index = fighter.get_current_weapon()
+        weapon, actual_weapon_index = self.__get_current_weapon(fighter)
         assert actual_weapon_index == sick_stick_index
 
         # remove non-counted item before weapon index
@@ -4239,7 +4281,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         sick_stick_index -= 1
         weapon = fighter.equipment.get_item_by_index(sick_stick_index)
         assert weapon['name'] == "sick stick"
-        weapon, actual_weapon_index = fighter.get_current_weapon()
+        weapon, actual_weapon_index = self.__get_current_weapon(fighter)
         assert weapon.name == "sick stick"
         assert actual_weapon_index == sick_stick_index
 
@@ -4248,13 +4290,13 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         fighter.remove_equipment(sig_acc_5_index)
         weapon = fighter.equipment.get_item_by_index(sick_stick_index)
         assert weapon['name'] == "sick stick"
-        weapon, actual_weapon_index = fighter.get_current_weapon()
+        weapon, actual_weapon_index = self.__get_current_weapon(fighter)
         assert weapon.name == "sick stick"
         assert actual_weapon_index == sick_stick_index
 
         # remove item at weapon index
         fighter.remove_equipment(sick_stick_index)
-        weapon, actual_weapon_index = fighter.get_current_weapon()
+        weapon, actual_weapon_index = self.__get_current_weapon(fighter)
         assert weapon is None
         assert actual_weapon_index is None
 
@@ -4262,6 +4304,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         Basic test
         '''
+
         if ARGS.verbose:
             print '\n=== test_preferred_add_remove_weapon ===\n'
 
@@ -4311,20 +4354,21 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Adds an identical weapon to an existing one.  Since there isn't a
         # preferred weapon, it should up the count and make it preferred.
 
-        assert 'preferred-weapon-index' not in fighter.details
+        assert len(fighter.details['preferred-weapon-index']) == 0
         assert original_item['count'] == 1
+
         same_item = copy.deepcopy(original_item)
         same_item['count'] = 2 # 2 items to add
-
         before_item_count = fighter.equipment.get_item_count()
         ignore = fighter.add_equipment(same_item, 'test')
         after_item_count = fighter.equipment.get_item_count()
 
         assert original_item['count'] == 3 # we've added 2 new items
         assert before_item_count == after_item_count
-        assert 'preferred-weapon-index' in fighter.details
-        new_preferred_weapon = fighter.details['preferred-weapon-index']
-        assert new_preferred_weapon == self.__tank_fighter_pistol_index
+
+        assert len(fighter.details['preferred-weapon-index']) == 1
+        new_preferred_weapon_index = fighter.details['preferred-weapon-index'][0]
+        assert new_preferred_weapon_index == self.__tank_fighter_pistol_index
 
         # Add the same weapon again and show that we don't get asked to make
         # the newly added weapon a preferred weapon
@@ -4333,41 +4377,47 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         ignore = fighter.add_equipment(same_item, 'fourth')
         after_item_count = fighter.equipment.get_item_count()
 
-        assert original_item['count'] == 5 # we've added 2 new items
+        assert original_item['count'] == 5 # we've added 2 MORE new items
         assert before_item_count == after_item_count
-        assert 'preferred-weapon-index' in fighter.details
-        new_preferred_weapon = fighter.details['preferred-weapon-index']
-        assert new_preferred_weapon == self.__tank_fighter_pistol_index
+        assert len(fighter.details['preferred-weapon-index']) == 1
+        new_preferred_weapon_index = fighter.details['preferred-weapon-index'][0]
+        assert new_preferred_weapon_index == self.__tank_fighter_pistol_index
 
         # Add weapon to list w/preferred weapon: should ask whether to make
         # new weapon preferred - answer = No
 
         similar_item = copy.deepcopy(original_item)
         similar_item['count'] = 1
-        similar_item['acc'] = original_item['acc'] + 1
-        previous_preferred_weapon = fighter.details['preferred-weapon-index']
+        similar_item['acc'] = original_item['acc'] + 1 # just so it's different
+        previous_preferred_weapon = fighter.details['preferred-weapon-index'][0]
 
         self.__window_manager.set_menu_response(
                 'Make pistol, Sig D65 the preferred weapon?', False)
         ignore = fighter.add_equipment(similar_item, 'sixth')
-        new_preferred_weapon = fighter.details['preferred-weapon-index']
+        new_preferred_weapon = fighter.details['preferred-weapon-index'][0]
 
+        assert len(fighter.details['preferred-weapon-index']) == 1
         assert new_preferred_weapon == previous_preferred_weapon
 
         # Add weapon to list w/preferred weapon: should ask whether to make
-        # new weapon preferred - answer = Yes
+        # new weapon preferred - answer = Yes, replace existing preference
 
         similar_item = copy.deepcopy(similar_item)
         similar_item['acc'] += 1
         self.__window_manager.set_menu_response(
-                'Make pistol, Sig D65 the preferred weapon?', True)
-        ignore = fighter.add_equipment(similar_item, 'eighth')
+                'Make pistol, Sig D65 the preferred weapon?',
+                ca_fighter.Fighter.REPLACE_PREFERRED)
+        self.__window_manager.set_menu_response('Replace which weapon?', 0)
+
+        new_index = fighter.add_equipment(similar_item, 'eighth')
 
         # The current preferred weapon should be the most recently added item
         current_count = len(fighter.details['stuff'])
-        new_preferred_weapon = fighter.details['preferred-weapon-index']
+        new_preferred_weapon = fighter.details['preferred-weapon-index'][0]
 
+        assert len(fighter.details['preferred-weapon-index']) == 1
         assert new_preferred_weapon == current_count - 1
+        assert new_index == new_preferred_weapon
 
         # [  index 0: { 'name': 'pistol, Sig D65', 'acc': 4, 'count': 5},
         #    index 1: { 'name': 'sick stick', 'count': 1 }
@@ -4377,10 +4427,11 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # Remove preferred weapon, preferred weapon should be none
 
-        old_preferred_weapon = fighter.details['preferred-weapon-index']
+        old_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        self.__window_manager.set_input_box_response(
+                'How Many Items (5 Available)?', 5)
         fighter.remove_equipment(old_preferred_weapon)
-        new_preferred_weapon = fighter.details['preferred-weapon-index']
-        assert new_preferred_weapon is None
+        assert len(fighter.details['preferred-weapon-index']) == 0
 
         # Remove weapon before preferred weapon: preferred index should move
         # to continue pointing to preferred weapon
@@ -4390,13 +4441,13 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         #    index 2: { 'name': 'C Cell' },
         #    index 3: { 'name': 'pistol, Sig D65', 'acc': 5, 'count': 1}]
 
-        fighter.details['preferred-weapon-index'] = self.__tank_fighter_sickstick_index
-        old_preferred_weapon = fighter.details['preferred-weapon-index']
+        fighter.details['preferred-weapon-index'] = [self.__tank_fighter_sickstick_index]
+        old_preferred_weapon = fighter.details['preferred-weapon-index'][0]
         index_to_remove = old_preferred_weapon - 1 # index 0
         self.__window_manager.set_input_box_response(
                 'How Many Items (5 Available)?', 5)
         fighter.remove_equipment(index_to_remove)
-        new_preferred_weapon = fighter.details['preferred-weapon-index']
+        new_preferred_weapon = fighter.details['preferred-weapon-index'][0]
         assert new_preferred_weapon == old_preferred_weapon - 1
 
         # Remove weapon after preferred weapon: preferred index should
@@ -4406,12 +4457,12 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         #    index 1: { 'name': 'C Cell', 'count': 5 },
         #    index 2: { 'name': 'pistol, Sig D65', 'acc': 5, 'count': 1}]
 
-        old_preferred_weapon = fighter.details['preferred-weapon-index']
+        old_preferred_weapon = fighter.details['preferred-weapon-index'][0]
         index_to_remove = old_preferred_weapon + 1 # index 1
         self.__window_manager.set_input_box_response(
                 'How Many Items (5 Available)?', 5)
         fighter.remove_equipment(index_to_remove)
-        new_preferred_weapon = fighter.details['preferred-weapon-index']
+        new_preferred_weapon = fighter.details['preferred-weapon-index'][0]
         assert new_preferred_weapon == old_preferred_weapon
 
         # Add weapon to empty list: should make weapon preferred
@@ -4419,17 +4470,54 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         while len(fighter.details['stuff']) > 0:
             fighter.remove_equipment(0)
 
-        old_preferred_weapon = fighter.details['preferred-weapon-index']
         assert len(fighter.details['stuff']) == 0
-        assert old_preferred_weapon is None
+        assert len(fighter.details['preferred-weapon-index']) == 0
 
         original_item = self.__tank_fighter['stuff'][
                                         self.__tank_fighter_pistol_index]
         same_item = copy.deepcopy(original_item)
 
-        ignore = fighter.add_equipment(same_item, 'test')
-        new_preferred_weapon = fighter.details['preferred-weapon-index']
-        assert new_preferred_weapon == 0
+        new_index = fighter.add_equipment(same_item, 'test')
+        assert len(fighter.details['preferred-weapon-index']) == 1
+        new_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        assert new_preferred_weapon == new_index
+
+        # [  index 0: { 'name': 'pistol, Sig D65', 'acc': 5, 'count': 1} <- PREFERRED ]
+
+        # Add weapon to list w/preferred weapon: should ask whether to make
+        # new weapon preferred - answer = No
+
+        similar_item = copy.deepcopy(similar_item)
+        similar_item['name'] = 'Ray Gun'
+        similar_item['acc'] += 1
+        self.__window_manager.set_menu_response(
+                'Make Ray Gun the preferred weapon?',
+                ca_fighter.Fighter.NOT_PREFERRED)
+
+        old_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        new_index = fighter.add_equipment(similar_item, 'eighth')
+        new_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+
+        assert len(fighter.details['preferred-weapon-index']) == 1
+        assert new_preferred_weapon == old_preferred_weapon
+
+        # Add weapon to list w/preferred weapon: should ask whether to make
+        # new weapon preferred - answer = Yes, add to existing list
+
+        similar_item = copy.deepcopy(similar_item)
+        similar_item['name'] = 'Ray Gun 2'
+        similar_item['acc'] += 1
+        self.__window_manager.set_menu_response(
+                'Make Ray Gun 2 the preferred weapon?',
+                ca_fighter.Fighter.ADD_PREFERRED)
+
+        old_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        new_index = fighter.add_equipment(similar_item, 'eighth')
+
+        assert len(fighter.details['preferred-weapon-index']) == 2
+        assert fighter.details['preferred-weapon-index'][0] == old_preferred_weapon
+        assert fighter.details['preferred-weapon-index'][1] == new_index
+
 
     def test_give_equipment(self):
         '''
