@@ -1152,6 +1152,16 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
+        # TODO: remove <<<
+        if action['weapon-index'] is None:
+            weapon_indexes = fighter.get_current_weapon_indexes()
+            for weapon_index in weapon_indexes:
+                new_action = copy.deepcopy(action)
+                new_action['action-name'] = 'holster-weapon'
+                new_action['weapon-index'] = weapon_index
+                self.do_action(fighter, new_action, fight_handler)
+            return Ruleset.HANDLED_ERROR # Just so the derived class does nothing
+        # TODO: remove >>>
 
         # TODO (eventually): draw weapon from counted item (that takes clips)
         #   makes a copy

@@ -6610,8 +6610,6 @@ class MainHandler(ScreenHandler):
         mode = 'w' if is_new else 'a'
         with open(FightHandler.timing_file, mode) as f:
             self.world.ruleset.set_timing_file(f, is_new)
-            #TODO: need to record the first action
-            #TODO: need to record the last action
 
             fight = FightHandler(self._window_manager,
                                  self.world,
@@ -7193,8 +7191,6 @@ if __name__ == '__main__':
                 mode = 'w' if is_new else 'a'
                 with open(FightHandler.timing_file, mode) as f:
                     world.ruleset.set_timing_file(f, is_new)
-                    #TODO: need to record the first action
-                    #TODO: need to record the last action
 
                     fight_handler = FightHandler(window_manager,
                                                  world,
