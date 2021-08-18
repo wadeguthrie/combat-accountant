@@ -28,8 +28,7 @@ import ca_timers
 #   o if asking 'use this preferred xx', needs a 'make un-preferred' option
 # TODO: grenade support (missile-like but not with clips)
 
-# TODO: technique support
-# TODO: ISSUE 20: need a way to generate equipment
+t# TODO: ISSUE 20: need a way to generate equipment
 # TODO: ISSUE 11: equipment containers
 # TODO: ISSUE 9: maintain spell
 

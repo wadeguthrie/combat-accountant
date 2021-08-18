@@ -25,6 +25,19 @@ class MyArgumentParser(argparse.ArgumentParser):
 
 
 class Skills(object):
+    # Techniques:
+    # Your Final      Difficulty of Technique
+    # Skill Level*    Average     Hard
+    # Default         0 points    0 points
+    # Default+1       1 point     2 points
+    # Default+2       2 points    3 points
+    # Default+3       3 points    4 points
+    # Default+4       4 points    5 points
+    # +1              +1 point    +1 point
+
+    tech_plus_from_pts_table = { 'A': [0, 1, 2], 'H': [0, 0, 1]}
+
+    # Skills:
     # To go from (cost, difficulty, attribute) to skill-level:
     #   level_from_cost[cost] = base level
     #   difficulty_offset[difficulty] : add to base-level
@@ -115,53 +128,21 @@ class Skills(object):
         'Urban Survival':       {'attr':'per', 'diff':'A', 'default':-5},
     }
 
-    # Technique Cost Table
-    # Your Final Difficulty of Technique
-    # Skill Level* Average    Hard
-    # Default      0 points   0 points
-    # Default+1    1 point    2 points
-    # Default+2    2 points   3 points
-    # Default+3    3 points   4 points
-    # Default+4    4 points   5 points
-    # +1           +1 point   +1 point
-    technique_cost = {
-            # put <index> points into an 'A' technique and the skill is
-            # ['A'][points] + default
-            'A': [0, 1, 2, 3, 4],
-
-            'H': [0, 0, 1, 2, 3, 4],
-    }
-    # TODO: techniques
-    # For the Dual-Weapon Attack technique, below:
-    #   skill = technique_cost[<difficulty>][<points>] +
-    #       <default><skill><specialization> + <default><modifier> =
-    #   technique_cost['H'][2] + 'Beam Weapons'(Pistol) -4 =
-    #   1 + <skill in Beam Weapons (pistol)> -4
-
-    # <technique version="3" limit="0">
-    #   <name>Dual-Weapon Attack</name>
-    #   <difficulty>H</difficulty>
-    #   <points>2</points>
-    #   <reference>B230,MA83</reference>
-    #   <default>
-    #       <type>Skill</type>
-    #       <name>Beam Weapons</name>
-    #       <specialization>Pistol</specialization>
-    #       <modifier>-4</modifier>
-    #   </default>
-    #   <categories>
-    #       <category>Cinematic Techniques</category>
-    #       <category>Combat/Weapon</category>
-    #       <category>Ranged Combat</category>
-    #   </categories>
-    # </technique>
-
-    techniques = {
-            'Disarming' : {'diff':'H'},
-            'Death from Above' : {'diff':'H'},
-            'Dual-Weapon Attack' : {'diff':'H'},
-            'Off-Hand Weapon Training' : {'diff':'H'},
-    }
+    @staticmethod
+    def tech_plus_from_pts(difficulty, # 'H' or 'A'
+                           points   # int
+                           ):
+        table = Skills.tech_plus_from_pts_table[difficulty]
+        if points < len(table):
+            plus = table[points]
+        else:
+            # 4 points into a hard technique should get you:
+            #   table[len(table) - 1] = table[2] = 1
+            #   + points + 1 = 5
+            #   - len(table) = -3
+            #   = 1 + 5 - 3 = 3 (check against table on B230 = 3)
+            plus = table[len(table) - 1] + points + 1 - len(table)
+        return plus
 
     @staticmethod
     def get_gcs_level(char,       # Character object
@@ -173,10 +154,10 @@ class Skills(object):
         #   - armory: good quality equipment and ?
         #   - fast draw ammo: ?
         if skill_name not in Skills.skills:
-            if skill_name in Skills.techniques:
-                print '** "%s" is a GURPS Technique and is not yet in gcs-check.py' % skill_name
-            else:
-                print '** Need to add "%s" to gcs-check.py' % skill_name
+            #if skill_name in Skills.techniques:
+            #    print '** "%s" is a GURPS Technique and is not yet in gcs-check.py' % skill_name
+            #else:
+            print '** Need to add "%s" to gcs-check.py' % skill_name
             return 0
         skill = Skills.skills[skill_name]   # {'attr':'DX', 'diff':'E', 'default':-4}
         if skill['attr'] not in char.char['permanent']:
@@ -423,6 +404,7 @@ class CharacterGcs(object):
 
     def __build_skills(self):
         self.char['skills'] = {} # name: skill-level, ...
+        self.char['techniques'] = [] # {"name":...,"default":[...],"value":#}
 
         # Checks skill cost
         # NOTE: Must run |__build_advantages| and |__build_equipment| before
@@ -432,19 +414,48 @@ class CharacterGcs(object):
         skills_gcs = self.__char_gcs.find('skill_list')
 
         for skill_gcs in skills_gcs:
-            base_name = skill_gcs.find('name').text
-            specs = []
-            for specialization in skill_gcs.findall('specialization'):
-                specs.append(specialization.text)
-            if len(specs) > 0:
-                name_text = '%s (%s)' % (base_name, ','.join(specs))
-            else:
-                name_text = base_name
+            if skill_gcs.tag == 'skill':
+                base_name = skill_gcs.find('name').text
+                specs = []
+                for specialization in skill_gcs.findall('specialization'):
+                    specs.append(specialization.text)
+                if len(specs) > 0:
+                    name_text = '%s (%s)' % (base_name, ','.join(specs))
+                else:
+                    name_text = base_name
 
-            cost_text_gcs = skill_gcs.find('points')
-            cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
-            level_gcs = Skills.get_gcs_level(self, base_name, cost_gcs)
-            self.char['skills'][name_text] = level_gcs
+                cost_gcs_text = skill_gcs.find('points')
+                cost_gcs = 0 if cost_gcs_text is None else int(cost_gcs_text.text)
+                level_gcs = Skills.get_gcs_level(self, base_name, cost_gcs)
+                self.char['skills'][name_text] = level_gcs
+            elif skill_gcs.tag == 'technique':
+                base_name = skill_gcs.find('name').text
+                difficulty = skill_gcs.find('difficulty').text # 'H', 'A'
+
+                cost_gcs_text = skill_gcs.find('points')
+                cost_gcs = 0 if cost_gcs_text is None else int(cost_gcs_text.text)
+                plus = Skills.tech_plus_from_pts(difficulty, cost_gcs)
+
+                default = []
+                for default_gcs in skill_gcs.findall('default'):
+                    base = default_gcs.find('name').text
+                    if base is not None:
+                        spec = default_gcs.find('specialization')
+                        if spec is None:
+                            default.append(base)
+                        else:
+                            default.append('%s (%s)' % (base, spec.text))
+                    skill_base_text = default_gcs.find('modifier').text
+                    skill_base = (0 if skill_base_text is None
+                        else int(skill_base_text))
+
+                technique = {
+                    'name': base_name,
+                    'default': default,
+                    'value': plus + skill_base
+                    }
+                # PP.pprint(technique) # TODO: remove
+                self.char['techniques'].append(technique)
 
     def __build_spells(self):
         ## SPELLS #####
@@ -615,6 +626,8 @@ class CompareChars(object):
             changes_in_json = True
         if self.__check_skills():
             changes_in_json = True
+        if self.__check_techniques():
+            changes_in_json = True
         if self.__check_spells():
             changes_in_json = True
         if self.__check_equipment():
@@ -654,6 +667,103 @@ class CompareChars(object):
 
     def __check_skills(self):
         return self.__check_heading('skills', 'Skills')
+
+    def __check_techniques(self):
+        # TODO: there's probably a way to combine techniques and spells (since
+        # they're both lists as opposed to the dicts examined by
+        # |__check_heading|).  The challenge is that spells and techniques look
+        # different under the hood so the 'do we copy' stuff needs to be
+        # custom.
+        changes_in_json = False
+        if 'techniques' in self.__char_json:
+            techniques_json = self.__char_json['techniques']
+        else:
+            techniques_json = []
+
+        if 'techniques' in self.__char_gcs.char:
+            techniques_gcs = copy.deepcopy(self.__char_gcs.char['techniques'])
+        else:
+            techniques_gcs = []
+
+        if len(techniques_gcs) == 0 and len(techniques_json) == 0:
+            # Neither has |techniques|.
+            return
+
+        print '\n-- Techniques List -----'
+
+        matching_items = 0
+        found_errors = False
+        for technique_json in techniques_json:
+            match_gcs = None
+            index_gcs = None
+            for index, technique_gcs in enumerate(techniques_gcs):
+                if (technique_gcs['name'] == technique_json['name'] and
+                        technique_gcs['default'] == technique_json['default']):
+                    match_gcs = technique_gcs
+                    index_gcs = index
+                    break
+
+            if ('default' in technique_json and
+                    len(technique_json['default']) != 0):
+                name = '%s (%s)' % (technique_json['name'],
+                                    ', '.join(technique_json['default']))
+            else:
+                name = technique_json['name']
+            if match_gcs is None:
+                print '   **GCS> "%s" in JSON (%r) but not in GCS' % (
+                        name, technique_json['value'])
+                found_errors = True
+            else:
+                if match_gcs['value'] != technique_json['value']:
+                    print '   ** %s = %r in GCS but %r in JSON' % (
+                        name, match_gcs['value'], technique_json['value'])
+                    found_errors = True
+
+                    # Update the JSON
+                    # If the value is greater in the JSON, this is probably an old
+                    # GCS file.
+                    if ARGS.write_json and match_gcs['value'] > technique_json['value']:
+                        copy_answer = raw_input('Copy GCS value value into the JSON? ')
+                        if copy_answer[0].lower() == 'y':
+                            technique_json['value'] = match_gcs['value']
+                            changes_in_json = True
+                else:
+                    if ARGS.verbose:
+                        print '  %s: %r' % (name, technique_json['value'])
+                    else:
+                        matching_items += 1
+
+                del techniques_gcs[index_gcs]
+
+        if found_errors:
+            print ''
+
+        found_errors = False
+        for technique_gcs in techniques_gcs:
+            if ('default' in technique_gcs and
+                    len(technique_gcs['default']) != 0):
+                name = '%s (%s)' % (technique_gcs['name'],
+                                    ', '.join(technique_gcs['default']))
+            else:
+                name = technique_gcs['name']
+            print '   **JSON> "%s" in GCS (%r) but not in JSON' % (
+                    name, technique_gcs['value'])
+
+            found_errors = True
+
+            # Update the JSON
+
+            if ARGS.write_json:
+                copy_answer = raw_input('Copy GCS technique into the JSON? ')
+                if copy_answer[0].lower() == 'y':
+                    techniques_json.append(technique_gcs)
+                    changes_in_json = True
+
+        if not ARGS.verbose:
+            if found_errors:
+                print ''
+            print '  %d matching items' % matching_items
+        return changes_in_json
 
     def __check_spells(self):
         changes_in_json = False
@@ -791,7 +901,7 @@ class CompareChars(object):
 
         found_errors = False
         for name in things_gcs.iterkeys():
-            if heading != 'skills' or name not in Skills.techniques:
+            if heading != 'skills': # or name not in Skills.techniques:
                 print '   **JSON> "%s" in GCS (%r) but not in JSON' % (
                         name, things_gcs[name])
                 found_errors = True

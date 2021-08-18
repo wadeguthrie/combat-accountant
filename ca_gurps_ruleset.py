@@ -2686,17 +2686,54 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         weapons = fighter.get_current_weapons()
         if len(weapons) == ca_fighter.Fighter.MAX_WEAPONS:
-            # dual-weapon fighting (B230, B417)
-            skill -= 4
-            why.append('  -4 due to dual-weapon fighting (B230, B417)')
-            # TODO: dual-weapon attack technique (B230) - roll on this rather than skill
+            weapon_1ary = weapons[0]
+            weapon_2ary = weapons[1]
+            techniques = (None if 'techniques' not in fighter.details else
+                    fighter.details['techniques'])
 
-            # If what we're holding is identically equal to the second weapon
-            if weapon.details is weapons[1].details:
+            # Dual-weapon fighting (B230, B417)
+
+            if weapon_1ary.details['skill'] == weapon_2ary.details['skill']:
+                defaults = [weapon_1ary.details['skill']]
+            else:
+                defaults = [weapon_1ary.details['skill'],
+                            weapon_2ary.details['skill']]
+
+            technique = self.__get_technique(
+                    techniques, 'Dual-Weapon Attack', defaults)
+
+            if technique is not None:
+                skill += technique['value']
+                why.append('  %+d due to Dual-Weapon Fighting technique' %
+                           technique['value'])
+            else:
                 skill -= 4
-                why.append('  -4 due to off-hand weapon (B417)')
-                # TODO: off-hand weapon training technique (B232) - roll this rather than skill
-                # TODO: ambidesterity advantage (B39) - eliminates -4 with off-hand
+                why.append('  -4 due to dual-weapon fighting (B230, B417)')
+
+            # Off-hand weapon fighting (B417)
+
+            found_match = False # Found a rule to override default 2-weapon?
+            # If what we're holding is identically equal to the second weapon
+            if weapon.details is weapon_2ary.details:
+                if 'Ambidexterity' in fighter.details['advantages']:
+                    found_match = True
+                    skill -= 0
+                    why.append('  no off-hand penalty due to ambidexterity')
+                else:
+                    technique = self.__get_technique(
+                            techniques,
+                            'Off-Hand Weapon Training',
+                            [weapon_2ary.details['skill']])
+                    if technique is not None:
+                        found_match = True
+                        skill += technique['value']
+                        why.append(
+                                '  %+d due to Off-Hand Weapon Training technique' %
+                                technique['value'])
+
+                if not found_match:
+                    skill -= 4
+                    why.append('  -4 due to off-hand weapon (B417)')
 
         # Aiming
 
@@ -4781,6 +4818,32 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                       ' Defense: any',
                                       ' Move: step']})
         return timer
+
+    def __get_technique(self,
+                        techniques,     # list from Fighter.details
+                        technique_name, # string
+                        defaults        # list of strings to match (in order)
+                        ):
+        '''
+        Finds a technique that matches the input parameters.
+        Returns matching technique (None if no match).
+        '''
+
+        if techniques is None or len(techniques) == 0:
+            return None
+
+        for technique in techniques:
+            if (technique['name'] != technique_name or
+                    len(technique["default"]) != len(defaults)):
+                continue
+            found_match = True
+            for index, default in enumerate(defaults):
+                if default != technique["default"][index]:
+                    found_match = False
+                    break
+            if found_match:
+                return technique
+        return None
 
     def __holster_weapon(self,
                          fighter,          # Fighter object
