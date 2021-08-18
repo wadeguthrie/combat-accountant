@@ -2300,10 +2300,9 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
         assert to_hit == expected_to_hit + 1  # aiming for 2 rounds
 
-        # Draw weapon
+        # Move to spoil the aim
         self.__ruleset.do_action(vodou_priest,
-                                 {'action-name': 'draw-weapon',
-                                  'weapon-index': requested_weapon_index},
+                                 {'action-name': 'move'},
                                  mock_fight_handler)
 
         # 3 rounds
@@ -2311,6 +2310,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
         to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+
         assert to_hit == expected_to_hit  # aiming for 1 round
 
         # Posture ruins aim
