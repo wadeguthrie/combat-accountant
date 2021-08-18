@@ -2682,6 +2682,24 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         skill = fighter.details['skills'][weapon.details['skill']]
         why.append('Weapon %s w/skill = %d' % (weapon.details['name'], skill))
 
+        # Dual-Weapon Attacking
+
+        weapons = fighter.get_current_weapons()
+        if len(weapons) == ca_fighter.Fighter.MAX_WEAPONS:
+            # dual-weapon fighting (B230, B417)
+            skill -= 4
+            why.append('  -4 due to dual-weapon fighting (B230, B417)')
+            # TODO: dual-weapon attack technique (B230) - roll on this rather than skill
+
+            # If what we're holding is identically equal to the second weapon
+            if weapon.details is weapons[1].details:
+                skill -= 4
+                why.append('  -4 due to off-hand weapon (B417)')
+                # TODO: off-hand weapon training technique (B232) - roll this rather than skill
+                # TODO: ambidesterity advantage (B39) - eliminates -4 with off-hand
+
+        # Aiming
+
         if 'acc' in weapon.details:
             if fighter.details['aim']['rounds'] > 0:
                 why.append('  +%d due to aiming for 1' % weapon.details['acc'])
