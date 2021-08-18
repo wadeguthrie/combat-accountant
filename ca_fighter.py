@@ -1048,8 +1048,8 @@ class Fighter(ThingsInFight):
             lines = [[{'text': x,
                        'mode': curses.A_NORMAL}] for x in unarmed_info['why']]
         else:
-            lines.extend([[{'text': 'Weapon: "%s"' % weapon.name,
-                            'mode': curses.A_NORMAL}]])
+            #lines.extend([[{'text': 'Weapon: "%s"' % weapon.name,
+            #                'mode': curses.A_NORMAL}]])
             if weapon.details['skill'] in self.details['skills']:
                 # To-Hit
                 ignore, to_hit_why = self._ruleset.get_to_hit(self,
