@@ -374,6 +374,23 @@ class Ruleset(object):
         '''
         result = True
 
+        # TODO: remove <<<
+        # This is just a shim to let pre-2-weapon crash files work (for
+        # testing).  If we get a 'draw' action with None weapon, we'll turn
+        # it into a 'holster' action for all of the weapons we're carrying.
+        print('\n\n====== MODIFYING %s ======\n' % name)
+        #PP = pprint.PrettyPrinter(indent=3, width=150)
+        #PP.pprint(creature)
+        if type(creature['weapon-index']) is not list:
+            new_stuff = [creature['weapon-index']]
+            creature['weapon-index'] = new_stuff
+        if ("preferred-weapon-index" in creature and
+                type(creature['preferred-weapon-index']) is not list):
+            new_stuff = ([] if creature['preferred-weapon-index'] is None
+                         else [creature['preferred-weapon-index']])
+            creature['preferred-weapon-index'] = new_stuff
+        # TODO: remove >>>
+
         fighter = ca_fighter.Fighter(name,
                                      'dummy group',  # unused
                                      creature,
@@ -397,8 +414,8 @@ class Ruleset(object):
                         fight_handler.world.playing_back)
 
         if not playing_back:
-            self.__configure_armor(fighter)
-            self.__configure_weapons(fighter)
+            self.__configure_armor_weapons(fighter, is_armor=True)  # Armor
+            self.__configure_armor_weapons(fighter, is_armor=False) # Weapons
 
         return result
 
@@ -553,279 +570,181 @@ class Ruleset(object):
         fighter.details[attr_type][attr] = new_value
         return Ruleset.HANDLED_OK
 
-    def __configure_armor(self,
-                          fighter # Fighter object
-                          ):
+    def __configure_armor_weapons(self,
+                                  fighter,      # Fighter object
+                                  is_armor=True # If False, configure weapons
+                                  ):
         '''
-        Asks to remove armor from current list if it's not in preferred list.
-        Asks to add armor to current list if it is in preferred list.
-        Removes any 'current' armor that's not actually armor
-        If, after all that, there's no armor being worn but there's natural
-        armor, wear that.
+        Asks to remove armor/weapons from current list if it's not in preferred
+            list.
+        Asks to add armor/weapons to current list if it is in preferred list.
+        Removes any 'current' armor/weapons that's not actually armor/weapons
+        If, after all that, there's no armor/weapons being worn but there's
+            natural armor/weapons, wear that.
         '''
-        armor_index_list = fighter.get_current_armor_indexes()
+        if is_armor:
+            index_list = fighter.get_current_armor_indexes()
+            preferred_index = 'preferred-armor-index'
+            on_action = 'don-armor'
+            off_action = 'doff-armor'
+            action_index = 'armor-index'
+            item_string = 'armor'
+            natural_item = 'natural-armor'
+        else:
+            index_list = fighter.get_current_weapon_indexes()
+            preferred_index = 'preferred-weapon-index'
+            on_action = 'draw-weapon'
+            off_action = 'holster-weapon'
+            action_index = 'weapon-index'
+            item_string = 'weapon'
+            natural_item = 'natural-weapon'
 
-        # Dump non-armor being worn as armor
+        # Dump non-armor/weapon being worn as armor/weapon - ok, I think
 
-        armor_list = []
-        for armor_index in armor_index_list:
-            armor = fighter.equipment.get_item_by_index(armor_index)
-            armor_list.append(armor)
+        item_list = []
+        for item_index in index_list:
+            item = fighter.equipment.get_item_by_index(item_index)
+            item_list.append(item)
 
-        for index, armor in enumerate(armor_list):
-            if armor is None:
+        for index, item in enumerate(item_list):
+            if item is None:
                 self._window_manager.error([
                     'Creature "%s"' % name,
-                    '  is wearing weird armor "<None>". Fixing.'])
+                    '  is using a weird %s "<None>". Fixing.' % item_string])
                 self.do_action(fighter,
-                               {'action-name': 'doff-armor',
-                                'armor-index': armor_index_list[index],
+                               {'action-name': off_action,
+                                action_index: index_list[index],
                                 'notimer': True},
                                None)
                 result = False
-            elif 'armor' not in armor['type']:
+            elif ((is_armor and 'armor' not in item['type']) or
+                    (not is_armor and
+                        not ca_equipment.Weapon.is_weapon(item))):
                 self._window_manager.error([
-                    'Creature "%s"' % name,
-                    '  is wearing weird armor "%s". Fixing.' % armor['name']])
+                    ('Creature "%s"' % name),
+                    ('  is using a weird %s "%s". Fixing.' %
+                        (item_string, item['name']))
+                    ])
                 self.do_action(fighter,
-                               {'action-name': 'doff-armor',
-                                'armor-index': armor_index_list[index],
+                               {'action-name': off_action,
+                                action_index: index_list[index],
                                 'notimer': True},
                                None)
                 result = False
 
-        # Check to see if they have preferred armor
+        # Check to see if they have preferred armor/weapon at all -- ok, I think
 
-        if len(fighter.details['preferred-armor-index']) == 0:
-            owned_armor_count = 0
-            armor_index = None
+        if len(fighter.details[preferred_index]) == 0:
+            owned_item_count = 0
+            item_index = None
             for index, item in enumerate(fighter.details['stuff']):
-                if 'armor' in item['type']:
-                    owned_armor_count += 1
-                    armor_index = index # only useful w/just 1 owned armor
-            if owned_armor_count == 0:
+                if ((is_armor and 'armor' in item['type']) or
+                        (not is_armor and
+                            ca_equipment.Weapon.is_weapon(item))):
+                    owned_item_count += 1
+                    item_index = index # only useful w/just 1 owned armor
+            if owned_item_count == 0:
                 pass
-            elif owned_armor_count == 1:
-                fighter.details['preferred-armor-index'] = [armor_index]
+            elif owned_item_count == 1:
+                fighter.details[preferred_index] = [item_index]
             else: # owns more than one piece of armor
                 self._window_manager.error([
-                    'Creature "%s" has no preferred armor' % name])
+                    'Creature "%s" has no preferred %s' %
+                    (name, item_string)])
 
-        # Now, build list of preferred armor to add
-
-        keep_asking = True
-        while keep_asking:
-            armor_index_list = fighter.get_current_armor_indexes()
-            armor_list_menu = []
-            for armor_index in fighter.details['preferred-armor-index']:
-                if armor_index not in armor_index_list:
-                    armor = fighter.equipment.get_item_by_index(
-                            armor_index)
-                    armor_list_menu.append(('don %s' % armor['name'],
-                                            armor_index))
-            if len(armor_list_menu) == 0:
-                keep_asking = False
-            else:
-                armor_list_menu.append(('Done Putting Armor On', None))
-                armor_index, ignore = self._window_manager.menu(
-                        'Put on %s\'s preferred armor?' % name,
-                        armor_list_menu)
-                if armor_index is None:
-                    keep_asking = False
-                else:
-                    self.do_action(fighter,
-                                   {'action-name': 'don-armor',
-                                    'armor-index': armor_index,
-                                    'notimer': True},
-                                   None)
-
-        # Next, build list of non-preferred armor to remove
+        # Next, remove non-preferred weapon/armor -- ok, I think
 
         keep_asking = True
         while keep_asking:
-            armor_index_list = fighter.get_current_armor_indexes()
-            armor_list_menu = []
-            for armor_index in armor_index_list:
-                if armor_index not in fighter.details['preferred-armor-index']:
-                    armor = fighter.equipment.get_item_by_index(
-                            armor_index)
-                    armor_list_menu.append(('doff %s' % armor['name'],
-                                            armor_index))
-            if len(armor_list_menu) == 0:
+            index_list = (fighter.get_current_armor_indexes() if is_armor else
+                fighter.get_current_weapon_indexes())
+            item_list_menu = []
+            for item_index in index_list:
+                if item_index not in fighter.details[preferred_index]:
+                    item = fighter.equipment.get_item_by_index(
+                            item_index)
+                    item_list_menu.append(('Stop using %s' % item['name'],
+                                            item_index))
+            if len(item_list_menu) == 0:
                 keep_asking = False
             else:
-                armor_list_menu.append(('Done Taking Armor Off', None))
-                armor_index, ignore = self._window_manager.menu(
-                        'Remove %s\'s non-preferred armor?' % fighter.name,
-                        armor_list_menu)
-                if armor_index is None:
+                item_list_menu.append(
+                        (('Done putting away any %s' % item_string), None))
+                title = 'Stop using %s\'s non-preferred %s?' % (fighter.name,
+                                                                 item_string)
+                item_index, ignore = self._window_manager.menu(title,
+                                                               item_list_menu)
+                if item_index is None:
                     keep_asking = False
                 else:
                     self.do_action(fighter,
-                                   {'action-name': 'doff-armor',
-                                    'armor-index': armor_index,
+                                   {'action-name': off_action,
+                                    action_index: item_index,
                                     'notimer': True},
                                    None)
 
-        # Add natural armor if they're not wearing any other kind
+        # Now, add preferred armor (or weapon) -- ok, I think
+
+        keep_asking = True
+        while keep_asking:
+            index_list = (fighter.get_current_armor_indexes() if is_armor else
+                fighter.get_current_weapon_indexes())
+            item_list_menu = []
+            for preferred_item_index in fighter.details[preferred_index]:
+                if preferred_item_index not in index_list:
+                    item = fighter.equipment.get_item_by_index(
+                            preferred_item_index)
+                    item_list_menu.append(('use %s' % item['name'],
+                                            preferred_item_index))
+            if len(item_list_menu) == 0:
+                keep_asking = False
+            else:
+                item_list_menu.append(
+                    (('Done selecting %s to use' % item_string), None))
+                preferred_item_index, ignore = self._window_manager.menu(
+                        'Use %s\'s preferred %s?' % (fighter.name,
+                                                     item_string),
+                        item_list_menu)
+                if preferred_item_index is None:
+                    keep_asking = False
+                else:
+                    self.do_action(fighter,
+                                   {'action-name': on_action,
+                                    action_index: preferred_item_index,
+                                    'notimer': True},
+                                   None)
+
+        # Add natural weapon/armor if they're not wearing any other kind -- ok, I think
 
         # TODO (now): natural armor should _always_ be selected, not just if
         # there's no other armor.
 
-        armor_index_list = fighter.get_current_armor_indexes()
-
-        if len(armor_index_list) == 0:
+        if len(index_list) == 0:
             for index, item in enumerate(fighter.details['stuff']):
-                if 'natural-armor' in item and item['natural-armor']:
+                if natural_item in item and item[natural_item]:
                     self.do_action(fighter,
-                                   {'action-name': 'don-armor',
-                                    'armor-index': index,
-                                    'notimer': True},
-                                   None)
-
-    def __configure_weapons(self,
-                            fighter # Fighter object
-                            ):
-        '''
-        Asks to remove weapons from current list if it's not in preferred list.
-        Asks to add weapons to current list if it is in preferred list.
-        Removes any 'current' weapons that's not actually weapons
-        If, after all that, there's no weapons being used but there's natural
-        weapons, wear that.
-        '''
-
-        weapon_index_list = fighter.get_current_weapon_indexes()
-
-        # Dump non-weapon being worn as weapon
-
-        weapon_list = []
-        for weapon_index in weapon_index_list:
-            weapon = fighter.equipment.get_item_by_index(weapon_index)
-            weapon_list.append(weapon)
-
-        for index, weapon in enumerate(weapon_list):
-            if weapon is None:
-                self._window_manager.error([
-                    '"%s"' % fighter.name,
-                    '  is wielding weird weapon "<None>". Fixing.'])
-                self.do_action(fighter,
-                               {'action-name': 'holster-weapon',
-                                'weapon-index': weapon_index_list[index],
-                                'notimer': True},
-                               None)
-                result = False
-            elif not ca_equipment.Weapon.is_weapon(weapon):
-                self._window_manager.error([
-                    '"%s"' % fighter.name,
-                    '  is wearing weird weapon "%s". Fixing.' % weapon['name']])
-                self.do_action(fighter,
-                               {'action-name': 'holster-weapon',
-                                'weapon-index': weapon_index_list[index],
-                                'notimer': True},
-                               None)
-                result = False
-
-        # Check to see if they have preferred weapons
-
-        if len(fighter.details['preferred-weapon-index']) == 0:
-            owned_weapon_count = 0
-            weapon_index = None
-            for index, item in enumerate(fighter.details['stuff']):
-                if ca_equipment.Weapon.is_weapon(item):
-                    owned_weapon_count += 1
-                    weapon_index = index # only useful w/just 1 owned weapon
-            if owned_weapon_count == 0:
-                pass # TODO (now): can we just exit the function, here?
-            elif owned_weapon_count == 1:
-                fighter.details['preferred-weapon-index'] = [weapon_index]
-            else: # owns more than one weapon
-                self._window_manager.error([
-                    'Creature "%s" has no preferred weapon' % fighter.name])
-
-        # Now, build list of preferred weapons to add
-
-        keep_asking = True
-        while keep_asking:
-            weapon_index_list = fighter.get_current_weapon_indexes()
-            weapon_list_menu = []
-            for weapon_index in fighter.details['preferred-weapon-index']:
-                if weapon_index not in weapon_index_list:
-                    weapon = fighter.equipment.get_item_by_index(weapon_index)
-                    weapon_list_menu.append(('draw %s' % weapon['name'],
-                                            weapon_index))
-            if len(weapon_list_menu) == 0:
-                keep_asking = False
-            else:
-                weapon_list_menu.append(('Done Drawing Weapons', None))
-                weapon_index, ignore = self._window_manager.menu(
-                        'Draw %s\'s preferred weapon?' % fighter.name,
-                        weapon_list_menu)
-                if weapon_index is None:
-                    keep_asking = False
-                else:
-                    self.do_action(fighter,
-                                   {'action-name': 'draw-weapon',
-                                    'weapon-index': weapon_index,
-                                    'notimer': True},
-                                   None)
-
-        # Next, build list of non-preferred weapon to remove
-
-        keep_asking = True
-        while keep_asking:
-            weapon_index_list = fighter.get_current_weapon_indexes()
-            weapon_list_menu = []
-            for weapon_index in weapon_index_list:
-                if weapon_index not in fighter.details['preferred-weapon-index']:
-                    weapon = fighter.equipment.get_item_by_index(
-                            weapon_index)
-                    weapon_list_menu.append(('holster %s' % weapon['name'],
-                                            weapon_index))
-            if len(weapon_list_menu) == 0:
-                keep_asking = False
-            else:
-                weapon_list_menu.append(('Done Holstering Weapons', None))
-                weapon_index, ignore = self._window_manager.menu(
-                        'Holster %s\'s non-preferred weapon?' % fighter.name,
-                        weapon_list_menu)
-                if weapon_index is None:
-                    keep_asking = False
-                else:
-                    self.do_action(fighter,
-                                   {'action-name': 'holster-weapon',
-                                    'weapon-index': weapon_index,
-                                    'notimer': True},
-                                   None)
-
-        # Add natural weapons if they're not wielding any other kind
-
-        weapon_index_list = fighter.get_current_weapon_indexes()
-
-        if len(weapon_index_list) == 0:
-            for index, item in enumerate(fighter.details['stuff']):
-                if 'natural-weapon' in item and item['natural-weapon']:
-                    self.do_action(fighter,
-                                   {'action-name': 'don-weapon',
-                                    'weapon-index': index,
+                                   {'action-name': on_action,
+                                    action_index: index,
                                     'notimer': True},
                                    None)
 
         # Make sure that all missile weapons have their associated ammo.
 
-        for weapon in fighter.details['stuff']:
-            if 'ranged weapon' not in weapon['type']:
-                continue
-            clip_name = weapon['ammo']['name']
-            found_clip = False
-            for clip in fighter.details['stuff']:
-                if clip['name'] == clip_name:
-                    found_clip = True
-                    break
-            if not found_clip:
-                self._window_manager.error([
-                    '"%s"' % fighter.name,
-                    '  is carrying a weapon (%s) with no ammo (%s).' % (
-                        weapon['name'], clip_name)])
+        if not is_armor:    # Just weapons (just ranged weapons, actually)
+            for weapon in fighter.details['stuff']:
+                if 'ranged weapon' not in weapon['type']:
+                    continue
+                clip_name = weapon['ammo']['name']
+                found_clip = False
+                for clip in fighter.details['stuff']:
+                    if clip['name'] == clip_name:
+                        found_clip = True
+                        break
+                if not found_clip:
+                    self._window_manager.error([
+                        '"%s"' % fighter.name,
+                        '  is carrying a weapon (%s) with no ammo (%s).' % (
+                            weapon['name'], clip_name)])
 
     def __do_attack(self,
                     fighter,          # Fighter object
@@ -1153,6 +1072,9 @@ class Ruleset(object):
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
         # TODO: remove <<<
+        # This is just a shim to let pre-2-weapon crash files work (for
+        # testing).  If we get a 'draw' action with None weapon, we'll turn
+        # it into a 'holster' action for all of the weapons we're carrying.
         if action['weapon-index'] is None:
             weapon_indexes = fighter.get_current_weapon_indexes()
             for weapon_index in weapon_indexes:

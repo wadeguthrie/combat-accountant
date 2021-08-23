@@ -628,9 +628,15 @@ class Fighter(ThingsInFight):
         return self.details['weapon-index']
 
     def get_current_weapons(self):
+        PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+        print('\n==== get_current_weapons %s ====' % self.name) # TODO: remove
+        PP.pprint(self.details) # TODO: remove
+
         weapon_indexes = self.get_current_weapon_indexes()
+        print('--weapon indexes--') # TODO: remove
+        PP.pprint(weapon_indexes) # TODO: remove
         weapon_list = []
-        for weapon_index in weapon_indexes:
+        for weapon_index in weapon_indexes: ################
             if weapon_index is None:
                 weapon_list.append(None)
             else:
