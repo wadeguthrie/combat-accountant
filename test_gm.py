@@ -1604,9 +1604,9 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
             # Check the order against the one that I expect
 
-            for index, ignore in enumerate(fighters):
-                assert fighters[index]['name'] == expected[index]['name']
-                assert fighters[index]['group'] == expected[index]['group']
+            for fighter, expected_value in zip(fighters, expected):
+                assert fighter['name'] == expected_value['name']
+                assert fighter['group'] == expected_value['group']
 
         # test that modify index wraps
         # test that cycling a whole round goes to each fighter in order
@@ -1774,9 +1774,9 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
             # Check the order against the one that I expect
 
-            for index, ignore in enumerate(fighters):
-                assert fighters[index]['name'] == expected[index]['name']
-                assert fighters[index]['group'] == expected[index]['group']
+            for fighter, expected_value in zip(fighters, expected):
+                assert fighter['name'] == expected_value['name']
+                assert fighter['group'] == expected_value['group']
 
     def test_change_opponents(self):
         '''

@@ -179,12 +179,12 @@ class Ruleset(object):
         # Doff armor menu
 
         armor_list = fighter.get_items_from_indexes(armor_indexes)
-        for index, armor in enumerate(armor_list):
+        for index, armor in zip(armor_indexes, armor_list):
             if ('natural-armor' not in armor or not armor['natural-armor']):
                 action_menu.append(
                         (('Doff %s' % armor['name']),
                          {'action': {'action-name': 'doff-armor',
-                                     'armor-index': armor_indexes[index]}}
+                                     'armor-index': index}}
                          ))
 
         # ATTACK #
@@ -378,7 +378,7 @@ class Ruleset(object):
         # This is just a shim to let pre-2-weapon crash files work (for
         # testing).  If we get a 'draw' action with None weapon, we'll turn
         # it into a 'holster' action for all of the weapons we're carrying.
-        print('\n\n====== MODIFYING %s ======\n' % name)
+        #print('\n\n====== MODIFYING %s ======\n' % name)
         #PP = pprint.PrettyPrinter(indent=3, width=150)
         #PP.pprint(creature)
         if type(creature['weapon-index']) is not list:
@@ -606,14 +606,14 @@ class Ruleset(object):
             item = fighter.equipment.get_item_by_index(item_index)
             item_list.append(item)
 
-        for index, item in enumerate(item_list):
+        for index, item in zip(index_list, item_list):
             if item is None:
                 self._window_manager.error([
                     'Creature "%s"' % name,
                     '  is using a weird %s "<None>". Fixing.' % item_string])
                 self.do_action(fighter,
                                {'action-name': off_action,
-                                action_index: index_list[index],
+                                action_index: index,
                                 'notimer': True},
                                None)
                 result = False
@@ -627,7 +627,7 @@ class Ruleset(object):
                     ])
                 self.do_action(fighter,
                                {'action-name': off_action,
-                                action_index: index_list[index],
+                                action_index: index,
                                 'notimer': True},
                                None)
                 result = False

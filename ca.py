@@ -2660,8 +2660,8 @@ class PersonnelHandler(ScreenHandler):
         # Build the menu
         armor_list = fighter.get_items_from_indexes(armor_index_list)
         doff_armor_menu = []
-        for index, item in enumerate(armor_list):
-            doff_armor_menu.append((item['name'], armor_index_list[index]))
+        for item, item_index in zip(armor_list, armor_index_list):
+            doff_armor_menu.append((item['name'], item_index))
         doff_armor_menu = sorted(doff_armor_menu, key=lambda x: x[0].upper())
 
         # Get the index
@@ -2818,10 +2818,10 @@ class PersonnelHandler(ScreenHandler):
         weapons = fighter.get_current_weapons()
         weapon_indexes = fighter.get_current_weapon_indexes()
         weapon_menu = []
-        for index, weapon in enumerate(weapons):
+        for weapon, index in zip(weapons, weapon_indexes):
             if weapon is None:
                 continue
-            weapon_menu.append((weapon.name, weapon_indexes[index]))
+            weapon_menu.append((weapon.name, index))
         weapon_index, ignore = self._window_manager.menu(
                 'Holster Which Weapon', weapon_menu)
         if weapon_index is not None:
@@ -2902,7 +2902,7 @@ class PersonnelHandler(ScreenHandler):
 
         owns_weapon = False
         owns_armor = False
-        for index, item in enumerate(fighter.details['stuff']):
+        for item in fighter.details['stuff']:
             if ca_equipment.Weapon.is_weapon(item):
                 owns_weapon = True
             if 'armor' in item['type']:
