@@ -22,14 +22,15 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: change techniques from {name, default, value} to
-#   {name: name(default), skill}.  That eliminates 2-stage testing for
-#   name,default and allows check-gcs.py to parameterize check_spells
-#   and check_techniques into one check_array_headings.
+# TODO: character screen on PersonnelHandler doesn't match the character
+#   immediately after a change has been made to the character
+
+# TODO: unarmed to-hit/damage doesn't show-up on unarmed fighter's display
+
+# TODO: identify item should ask to remove provenance (so that we can gang
+#   like items together)
 
 # TODO: consistency check for preferred weapons should only ask once
-#   o if asking 'remove this non-preferred xx', needs a 'make preferred' option
-#   o if asking 'use this preferred xx', needs a 'make un-preferred' option
 
 # TODO: flesh-out attack, all-out
 # TODO: grenade support (missile-like but not with clips)
