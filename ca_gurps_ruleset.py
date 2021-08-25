@@ -2456,6 +2456,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
         notes = []
         weapons = fighter.get_current_weapons()
+        if len(weapons) == 0:
+            unarmed_skills = self.get_weapons_unarmed_skills(None)
+            self.__show_unarmed_info(notes,
+                                     fighter,
+                                     opponent,
+                                     None,  # Weapon
+                                     unarmed_skills)
+            return notes
+
         for weapon in weapons:
             if weapon is None:
                 continue
@@ -2506,30 +2515,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                  weapon.details['skill'],
                                  fighter.name)])
             else:
-                unarmed_info = self.get_unarmed_info(fighter,
-                                                     opponent,
-                                                     weapon,
-                                                     unarmed_skills)
-
-                notes.append(unarmed_info['punch_string'])
-                crit, fumble = self.__get_crit_fumble(
-                        unarmed_info['punch_skill'])
-                notes.append(
-                        '  to-hit: %d, crit <= %d, fumble >= %d, damage: %s' %
-                    (unarmed_info['punch_skill'],
-                     crit,
-                     fumble,
-                     unarmed_info['punch_damage']))
-
-                notes.append(unarmed_info['kick_string'])
-                crit, fumble = self.__get_crit_fumble(
-                        unarmed_info['kick_skill'])
-                notes.append(
-                        '  to-hit: %d, crit <= %d, fumble >= %d, damage: %s' %
-                    (unarmed_info['kick_skill'],
-                     crit,
-                     fumble,
-                     unarmed_info['kick_damage']))
+                self.__show_unarmed_info(notes,
+                                         fighter,
+                                         opponent,
+                                         weapon,
+                                         unarmed_skills)
 
         return notes
 
@@ -5418,6 +5408,38 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                            fight_handler)
 
         return timer
+
+    def __show_unarmed_info(self,
+                            notes,
+                            fighter,        # Fighter object
+                            opponent,       # Fighter object
+                            weapon,         # Weapon object.  Maybe brass knuckles
+                            unarmed_skills  # [string, string, ...]
+                            ):
+        unarmed_info = self.get_unarmed_info(fighter,
+                                             opponent,
+                                             weapon,
+                                             unarmed_skills)
+
+        notes.append(unarmed_info['punch_string'])
+        crit, fumble = self.__get_crit_fumble(
+                unarmed_info['punch_skill'])
+        notes.append(
+                '  to-hit: %d, crit <= %d, fumble >= %d, damage: %s' %
+            (unarmed_info['punch_skill'],
+             crit,
+             fumble,
+             unarmed_info['punch_damage']))
+
+        notes.append(unarmed_info['kick_string'])
+        crit, fumble = self.__get_crit_fumble(
+                unarmed_info['kick_skill'])
+        notes.append(
+                '  to-hit: %d, crit <= %d, fumble >= %d, damage: %s' %
+            (unarmed_info['kick_skill'],
+             crit,
+             fumble,
+             unarmed_info['kick_damage']))
 
     def __stun(self,
                param    # {'view': xxx, 'view-opponent': xxx,
