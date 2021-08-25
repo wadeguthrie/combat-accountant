@@ -22,13 +22,9 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: unarmed to-hit/damage doesn't show-up on unarmed fighter's display
-
-# TODO: identify item should ask to remove provenance (so that we can gang
-#   like items together)
-
 # TODO: flesh-out attack, all-out
 # TODO: grenade support (missile-like but not with clips)
+# TODO: unarmed Dual-Weapon attack
 
 # TODO: ISSUE 9: maintain spell
 # TODO: ISSUE 20: need a way to generate equipment
@@ -3175,6 +3171,14 @@ class PersonnelHandler(ScreenHandler):
                 return None
             item = fighter.details['stuff'][item_index]
             item['identified'] = True
+
+            # provenance?
+            destroy_provenance, ignore = self._window_manager.menu(
+                    'Remove the previous owners list?', keep_asking_menu)
+            if destroy_provenance:
+                item['owners'] = None
+                fighter.equipment.mother_up_item(item_index)
+
             self._draw_screen()
 
             keep_asking, ignore = self._window_manager.menu(
