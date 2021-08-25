@@ -22,32 +22,29 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: character screen on PersonnelHandler doesn't match the character
-#   immediately after a change has been made to the character
-
 # TODO: unarmed to-hit/damage doesn't show-up on unarmed fighter's display
 
 # TODO: identify item should ask to remove provenance (so that we can gang
 #   like items together)
 
-# TODO: consistency check for preferred weapons should only ask once
-
 # TODO: flesh-out attack, all-out
 # TODO: grenade support (missile-like but not with clips)
 
+# TODO: ISSUE 9: maintain spell
 # TODO: ISSUE 20: need a way to generate equipment
 # TODO: ISSUE 11: equipment containers
-# TODO: ISSUE 9: maintain spell
 
 # TODO: HouseRule: reload and spells should happen at the end of the timer.  The
 #       'reloading' timer should launch the second part of the action when it
 #       fires.
 # TODO: why do redirect entries have 'stuff' and 'timers' entries?
 
-# TODO: DIFFICULT: FP should ask if using DR
-# TODO: DIFFICULT: FP should actually subtract DR
+# TODO: FP should ask if using DR
+# TODO: FP should actually subtract DR
 
 # TODO: PC joins NPCs in PC editing mode
+
+# TODO: consistency check for preferred weapons/armor should only ask once
 
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
@@ -2948,6 +2945,8 @@ class PersonnelHandler(ScreenHandler):
         self.world.ruleset.is_creature_consistent(fighter.name,
                                                   fighter.details)
 
+        self._window.touchwin()
+        self._window.refresh()
         return True  # Keep going
 
     def __existing_group(self,
