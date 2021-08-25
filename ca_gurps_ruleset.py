@@ -2473,6 +2473,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             if weapon is not None:
                 notes.append('%s' % weapon.details['name'])
 
+            # i.e., if this weapon doesn't use on unarmed skills (brass
+            # knuckles are an example of a weapon that _does_).
             if unarmed_skills is None:
                 if weapon.details['skill'] in fighter.details['skills']:
                     to_hit, ignore_why = self.get_to_hit(
@@ -2673,6 +2675,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         why.append('Weapon %s w/skill = %d' % (weapon.details['name'], skill))
 
         # Dual-Weapon Attacking
+        # TODO: break this section out into its own function so that it can be used unarmed
 
         weapons = fighter.get_current_weapons()
         if len(weapons) == ca_fighter.Fighter.MAX_WEAPONS:
@@ -3103,7 +3106,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         there may be more.  Assumes weapon's skill is the most advanced skill
         supported.
 
-        Returns array of skills supported by this weapon.
+        Returns array of skills supported by this weapon as supporting unarmed
+        combat (like brass knuckles).  If the weapon's skill isn't one of the
+        unarmed ones (like Guns (Pistol)), this method returns 'None'.
         '''
 
         # Skills in increasing order of difficulty

@@ -44,6 +44,24 @@ class Equipment(object):
 
         return len(self.__equipment) - 1  # current index of the added item
 
+    def mother_up_item(self,
+                       check_index  # integer index of item to be mothered-up
+                       ):
+        '''
+        Checks to see if item is essentially the same as another item in the
+        list.  If so, remove the passed-in item and up the count of the thing
+        that's the same.
+        '''
+        check_item = self.__equipment[check_index]
+        for index, item in enumerate(self.__equipment):
+            if check_index == index:
+                continue # This is the same exact item
+            if item['name'] == check_item['name']:
+                if self.__is_same_thing(item, check_item):
+                    item['count'] += check_item['count']
+                    self.remove(check_index, check_item['count'])
+                    return
+
     def get_item_by_index(self,
                           index  # integer index into the equipment list
                           ):
