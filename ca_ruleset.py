@@ -374,6 +374,10 @@ class Ruleset(object):
         '''
         result = True
 
+        # Don't need to check if the room is consistent.
+        if name == ca_fighter.Venue.name:
+            return True
+
         # TODO: remove <<<
         # This is just a shim to let pre-2-weapon crash files work (for
         # testing).  If we get a 'draw' action with None weapon, we'll turn
@@ -396,10 +400,6 @@ class Ruleset(object):
                                      creature,
                                      self,
                                      self._window_manager)
-
-        # Don't need to check if the room is consistent.
-        if fighter.name == ca_fighter.Venue.name:
-            return True
 
         # First, let's make sure that they have all the required parts.
 
@@ -734,20 +734,20 @@ class Ruleset(object):
                 if item_index not in fighter.details[preferred_index]:
                     item = fighter.equipment.get_item_by_index(
                             item_index)
-                    item_list_menu.append(('Stop using %s' % item['name'],
+                    item_list_menu.append(('stop using %s' % item['name'],
                                             ('stop', item_index)))
                     # If the preferred list is not full, ask user if s/he wants
                     # to add _this_ item to the preferred list.
                     if (not is_armor or
                             len(fighter.details[preferred_index])
                             < ca_fighter.Fighter.MAX_WEAPONS):
-                        item_list_menu.append(('Prefer %s' % item['name'],
+                        item_list_menu.append(('prefer %s' % item['name'],
                                                 ('prefer', item_index)))
             if len(item_list_menu) == 0:
                 keep_asking = False
             else:
                 item_list_menu.append(
-                        (('Done dealing with non-preferred %s' % items_string),
+                        (('done dealing with non-preferred %s' % items_string),
                             None))
                 title = 'Stop using %s\'s non-preferred %s?' % (fighter.name,
                                                                  item_string)
@@ -785,7 +785,7 @@ class Ruleset(object):
                 keep_asking = False
             else:
                 item_list_menu.append(
-                    (('Done dealing with preferred %s' % items_string), None))
+                    (('done dealing with preferred %s' % items_string), None))
                 preferred_item_index, ignore = self._window_manager.menu(
                         'Use %s\'s preferred %s?' % (fighter.name,
                                                      item_string),
