@@ -22,13 +22,19 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: import from GCS
+# TODO: update from GCS
+
+# TODO: Move PersonnelHandler stuff into MainHandler
+# TODO: add container open/close/move into PersonnelHandler (now, MainHandler)
+
 # TODO: flesh-out attack, all-out
 # TODO: grenade support (missile-like but not with clips)
 # TODO: unarmed Dual-Weapon attack
+# TODO: unarmed parry
 
 # TODO: ISSUE 9: maintain spell
 # TODO: ISSUE 20: need a way to generate equipment
-# TODO: ISSUE 11: equipment containers
 
 # TODO: HouseRule: reload and spells should happen at the end of the timer.  The
 #       'reloading' timer should launch the second part of the action when it
@@ -745,7 +751,7 @@ class FightGmWindow(ca_gui.GmWindow):
 
         if fighter_state == ca_fighter.Fighter.FIGHT:
             char_info = []
-            fighter.get_description(char_info)
+            fighter.get_description(char_info, expand_containers=False)
 
             for line_text in char_info:
                 if line >= lines:
@@ -2208,13 +2214,14 @@ class PersonnelHandler(ScreenHandler):
 
         return True  # Keep going
 
-    def __add_equipment(self,
-                        throw_away   # Required/used by the caller because
-                                     #   there's a list of methods to call,
-                                     #   and (apparently) some of them may
-                                     #   use this parameter.  It's ignored
-                                     #   by this method, however.
-                        ):
+    def __add_equipment_from_store(
+            self,
+            throw_away   # Required/used by the caller because
+                         #   there's a list of methods to call,
+                         #   and (apparently) some of them may
+                         #   use this parameter.  It's ignored
+                         #   by this method, however.
+            ):
         '''
         Handler for an Equip sub-menu entry.
 
@@ -2230,12 +2237,17 @@ class PersonnelHandler(ScreenHandler):
         keep_asking_menu = [('yes', True), ('no', False)]
         starting_index = 0
         while keep_asking:
+            # |starting_index| is the index into the store's list.  Allows
+            #   multiple iterations to start in the list at the last selection
+            #   from the list.
+
             # NOTE: I keep having to look this up, so here it is:
             # here ->
-            #   EquipmentManager::add_equipment ->
+            #   PersonnelHandler::__add_equipment_from_store (this func) ->
+            #   EquipmentManager::add_equipment_from_store ->
             #   Fighter::add_equipment ->
             #   Equipment::add
-            starting_index = self.__equipment_manager.add_equipment(
+            starting_index = self.__equipment_manager.add_equipment_from_store(
                     fighter, starting_index)
             self._draw_screen()
             keep_asking, ignore = self._window_manager.menu(
@@ -2845,7 +2857,8 @@ class PersonnelHandler(ScreenHandler):
         if 'stuff' in fighter.details:
             sub_menu.extend([
                 ('attributes (change)', {'doit': self.__change_attributes}),
-                ('equipment (add)',     {'doit': self.__add_equipment}),
+                ('equipment (add)',     {'doit':
+                    self.__add_equipment_from_store}),
                 ('Equipment (remove)',  {'doit': self.__remove_equipment}),
                 ('give equipment',      {'doit': self.__give_equipment}),
                 ('identify equipment',  {'doit': self.__identify_equipment}),
@@ -5164,10 +5177,8 @@ class FightHandler(ScreenHandler):
                         ('natural-armor' in item and item['natural-armor'])):
                     continue
                 output = []
-                ca_equipment.EquipmentManager.get_description(item,
-                                                              [],
-                                                              [],
-                                                              output)
+                ca_equipment.EquipmentManager.get_description(
+                        item, '', [], False, output)
                 # output looks like:
                 # [[{'text','mode'},...],  # line 0
                 #  [...],               ]  # line 1...
@@ -5776,7 +5787,7 @@ class FightHandler(ScreenHandler):
         if info_about is None:
             return True  # Keep fighting
 
-        info_about.get_description(char_info)
+        info_about.get_description(char_info, expand_containers=False)
         self._window_manager.display_window('%s Information' % info_about.name,
                                             char_info)
         return True

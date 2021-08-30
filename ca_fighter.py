@@ -50,23 +50,25 @@ class ThingsInFight(object):
     def add_equipment(self,
                       new_item,         # dict describing new equipment
                       source=None,      # string: from where did equipment come
-                      identified=None   # ignored, here
+                      identified=None,  # ignored, here
+                      container_stack=[]
                       ):
         '''
         Accept a new item of equipment and put it in the list.
 
         Returns the new index of the equipment (for testing).
         '''
-        return self.equipment.add(new_item, source)
+        return self.equipment.add(new_item, source, container_stack)
 
     def ask_how_many(self,
                      item_index,    # index into fighter's stuff list
-                     count=None     # number to remove (None if 'ask')
+                     count=None,    # number to remove (None if 'ask')
+                     container_stack=[]
                      ):
         '''
         Determine how many items to remove.
         '''
-        item = self.equipment.get_item_by_index(item_index)
+        item = self.equipment.get_item_by_index(item_index, container_stack)
         if item is None:
             return 0
         current_item_count = 1 if 'count' not in item else item['count']
@@ -98,16 +100,17 @@ class ThingsInFight(object):
         return self._ruleset
 
     def remove_equipment(self,
-                         item_index,    # index into fighter's stuff list
-                         count=None     # number to remove (None if 'ask')
+                         item_index,        # index into fighter's stuff list
+                         count=None,        # number to remove (None if 'ask')
+                         container_stack=[]
                          ):
         '''
         Discards an item from the Fighter's/Venue's equipment list.
 
         Returns: the discarded item
         '''
-        count = self.ask_how_many(item_index, count)
-        return self.equipment.remove(item_index, count)
+        count = self.ask_how_many(item_index, count, container_stack)
+        return self.equipment.remove(item_index, count, container_stack)
 
     #
     # Notes methods
@@ -235,6 +238,7 @@ class Venue(ThingsInFight):
                         char_detail,  # recepticle for character detail.
                                       #     [[{'text','mode'},...],  # line 0
                                       #      [...],               ]  # line 1..
+                        expand_containers   # Bool, ignored in the base class
                         ):
         '''
         Provides a text description of all of the components of a Venue.
@@ -252,10 +256,8 @@ class Venue(ThingsInFight):
         if 'stuff' in self.details:
             for item in sorted(self.details['stuff'], key=lambda x: x['name']):
                 found_one = True
-                ca_equipment.EquipmentManager.get_description(item,
-                                                              [],
-                                                              [],
-                                                              char_detail)
+                ca_equipment.EquipmentManager.get_description(
+                        item, '', [], False, char_detail)
 
         if not found_one:
             char_detail.append([{'text': '  (None)', 'mode': mode}])
@@ -385,9 +387,11 @@ class Fighter(ThingsInFight):
     #
 
     def add_equipment(self,
-                      new_item,     # dict describing new equipment
-                      source=None,  # string: from where did equipment came
-                      identified=None
+                      new_item,         # dict describing new equipment
+                      source=None,      # string: from where did equipment
+                                        #   come (None for no change)
+                      identified=None,  # Bool: no change if |None|
+                      container_stack=[]
                       ):
         '''
         Accept a new item of equipment and put it in the list.
@@ -409,7 +413,13 @@ class Fighter(ThingsInFight):
         before_item_count = self.equipment.get_item_count()
 
         # Add the item
-        new_item_index = self.equipment.add(new_item, source)
+        new_item_index = self.equipment.add(new_item,
+                                            source,
+                                            container_stack)
+
+        # if we're adding something to a container, then it can't be preferred.
+        if len(container_stack) > 0:
+            return new_item_index
 
         # If we're adding the creature's first weapon or armor, make it the
         # preferred weapon or armor.  If it's not the creature's first,
@@ -459,6 +469,7 @@ class Fighter(ThingsInFight):
                 else:
                     self.details['preferred-weapon-index'].append(new_item_index)
             if is_armor:
+                # TODO (now): should this be |preferred-ARMOR-index| ?
                 if len(self.details['preferred-weapon-index']) > 0:
                     if before_item_count != after_item_count:
                         # Only ask if we've added a new piece of armor and not
@@ -636,7 +647,7 @@ class Fighter(ThingsInFight):
         #print('--weapon indexes--') # TODO: remove
         #PP.pprint(weapon_indexes) # TODO: remove
         weapon_list = []
-        for weapon_index in weapon_indexes: ################
+        for weapon_index in weapon_indexes:
             if weapon_index is None:
                 weapon_list.append(None)
             else:
@@ -713,29 +724,31 @@ class Fighter(ThingsInFight):
     #    PP.pprint(self.details)
 
     def remove_equipment(self,
-                         index_to_remove,  # <int> index into Equipment list
-                         count=None     # number to remove (None if 'ask')
+                         index_to_remove,   # <int> index into Equipment list
+                         count=None,        # number to remove (None if 'ask')
+                         container_stack=[]
                          ):
         '''
         Discards an item from the Fighter's equipment list.
 
         Returns: the discarded item
         '''
-        item = self.equipment.get_item_by_index(index_to_remove)
+        item = self.equipment.get_item_by_index(index_to_remove,
+                                                container_stack)
         if 'natural-weapon' in item and item['natural-weapon']:
             return None  # can't remove a natural weapon
 
         if 'natural-armor' in item and item['natural-armor']:
             return None  # can't remove a natural armor
 
-        before_item_count = self.equipment.get_item_count()
-        count = self.ask_how_many(index_to_remove, count)
-        item = self.equipment.remove(index_to_remove, count)
-        after_item_count = self.equipment.get_item_count()
+        before_item_count = self.equipment.get_item_count(container_stack)
+        count = self.ask_how_many(index_to_remove, count, container_stack)
+        item = self.equipment.remove(index_to_remove, count, container_stack)
+        after_item_count = self.equipment.get_item_count(container_stack)
 
         # Adjust indexes into the list if the list changed.
 
-        if before_item_count != after_item_count:
+        if len(container_stack) == 0 and before_item_count != after_item_count:
             # Remove weapon from current weapon list
             for index_in_weapons, index_in_stuff in enumerate(
                     self.details['weapon-index']):
@@ -793,6 +806,7 @@ class Fighter(ThingsInFight):
                         output,  # recepticle for character detail.
                                  #  [[{'text','mode'},...],  # line 0
                                  #   [...],               ]  # line 1...
+                        expand_containers   # Bool
                         ):
         '''
         Provides a text description of a Fighter including all of the
@@ -800,7 +814,9 @@ class Fighter(ThingsInFight):
 
         Returns: nothing.  The output is written to the |output| variable.
         '''
-        self._ruleset.get_character_description(self, output)
+        self._ruleset.get_character_description(self,
+                                                output,
+                                                expand_containers)
 
     def get_long_summary_string(self):
         '''

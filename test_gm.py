@@ -586,6 +586,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "shock": 0,
             "stunned": False,
             "actions_this_turn": [],
+            "open-container": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": [],
             "current-weapon": 0,
@@ -671,6 +672,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "shock": 0,
             "stunned": False,
             "actions_this_turn": [],
+            "open-container": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": [],
             "current-weapon": 0,
@@ -716,6 +718,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "shock": 0,
             "stunned": False,
             "actions_this_turn": [],
+            "open-container": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": [],
             "current-weapon": 0,
@@ -766,6 +769,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "shock": 0,
             "stunned": False,
             "actions_this_turn": [],
+            "open-container": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": [],
             "current-weapon": 0,
@@ -823,6 +827,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "shock": 0,
             "stunned": False,
             "actions_this_turn": [],
+            "open-container": [],
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": [],
             "current-weapon": 0,
@@ -5046,6 +5051,169 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         creatures = world.get_creature_details_list(group)
         assert 'Stinky' in creatures
+
+    def test_containers(self):
+        '''
+        Basic test
+        '''
+        # CREATE FIGHT -- WORKING #
+
+        if ARGS.verbose:
+            print '\n=== test_containers ===\n'
+
+        mock_fight_handler = MockFightHandler()
+
+        fighter_dict = copy.deepcopy(self.__thief_fighter)
+        # NOTE: containers are always 1st (that way the indexes don't get
+        # messed up and I don't have to go around recalculating for the
+        # tests.
+        fighter_dict['stuff'] =  [
+             {"name": "Container 11", "type": ["container"], "count": 1, "notes": "",
+                 "owners": None, "stuff": [
+                 {"name": "Container 22", "type": ["container"], "count": 1, "notes": "",
+                     "owners": None, "stuff": [
+                     {"name": "Random Thing 31", "type": ["misc"], "count": 1, "notes": "",
+                          "owners": None},
+                 ]},
+                 {"name": "Random Thing 22", "type": ["misc"], "count": 1, "notes": "",
+                      "owners": None},
+             ]},
+             {"name": "Random Thing 12", "type": ["misc"], "count": 1, "notes": "",
+                  "owners": None},
+             {"name": "Random Thing 13", "type": ["misc"], "count": 1, "notes": "",
+                  "owners": None},
+        ]
+        fighter = ca_fighter.Fighter(
+                'Thief',
+                'group',
+                fighter_dict,
+                self.__ruleset,
+                self.__window_manager)
+
+        # just checking starting conditions
+        # verify: 3 things at top level, 2 things at 2nd level, 1 thing at 3rd
+        # 3, 2, 1
+
+        container = fighter.equipment.get_container([])
+        assert len(container) == 3
+        container = fighter.equipment.get_container([0])
+        assert len(container) == 2
+        container = fighter.equipment.get_container([0, 0])
+        assert len(container) == 1
+
+        # TEST MOVE - move something from level 1 to level 2
+        # verify: top level: 2 things, 2nd level: 3 things, 3rd level: 1 thing
+
+        # index is arbitrary but not '1' since that's a container -- nothing
+        # wrong with moving a container but that's not what we're testing.
+        container = fighter.equipment.get_container([])
+        index = 2
+        item = container[index]
+        self.__ruleset.do_action(
+                fighter,
+                {'action-name': 'move-between-container',
+                 'item-index': index,
+                 'item-name': item['name'],
+                 'destination-index': [0],
+                 },
+                mock_fight_handler)
+        container = fighter.equipment.get_container([])
+        assert len(container) == 2
+        container = fighter.equipment.get_container([0])
+        assert len(container) == 3
+        container = fighter.equipment.get_container([0, 0])
+        assert len(container) == 1
+
+        # 2, 3, 1
+        # TEST OPEN - go to level 2 container
+
+        self.__ruleset.do_action(
+                fighter,
+                {'action-name': 'open-container', 'container-index': 0},
+                mock_fight_handler)
+        # move a couple things to level 3
+        for index in [2, 1]:
+            container = fighter.equipment.get_container([0])
+            item = container[index]
+            self.__ruleset.do_action(
+                    fighter,
+                    {'action-name': 'move-between-container',
+                     'item-index': index,
+                     'item-name': item['name'],
+                     'destination-index': [0, 0],
+                     },
+                    mock_fight_handler)
+
+        # verify: 2, 1, 3
+        container = fighter.equipment.get_container([])
+        assert len(container) == 2
+        container = fighter.equipment.get_container([0])
+        assert len(container) == 1
+        container = fighter.equipment.get_container([0, 0])
+        assert len(container) == 3
+
+        # 2, 1, 3
+        # TEST 2 LEVELS - go to level 3 container
+
+        self.__ruleset.do_action(
+                fighter,
+                {'action-name': 'open-container', 'container-index': 0},
+                mock_fight_handler)
+
+        # move one thing back to level 1
+        container = fighter.equipment.get_container([0, 0])
+        index = 0
+        item = container[index]
+        self.__ruleset.do_action(
+                fighter,
+                {'action-name': 'move-between-container',
+                 'item-index': index,
+                 'item-name': item['name'],
+                 'destination-index': [],
+                 },
+                mock_fight_handler)
+
+        # verify: 3, 1, 2
+        container = fighter.equipment.get_container([])
+        assert len(container) == 3
+        container = fighter.equipment.get_container([0])
+        assert len(container) == 1
+        container = fighter.equipment.get_container([0, 0])
+        assert len(container) == 2
+
+        # 3, 1, 2
+        # TEST CLOSE - Go back to top, move something to level 3
+
+        # go back to level 1 by closing 2 containers
+        self.__ruleset.do_action(
+                fighter,
+                {'action-name': 'close-container'},
+                mock_fight_handler)
+        self.__ruleset.do_action(
+                fighter,
+                {'action-name': 'close-container'},
+                mock_fight_handler)
+
+        # move one thing back to level 3
+        container = fighter.equipment.get_container([0, 0])
+        index = 1
+        item = container[index]
+        self.__ruleset.do_action(
+                fighter,
+                {'action-name': 'move-between-container',
+                 'item-index': index,
+                 'item-name': item['name'],
+                 'destination-index': [0,0],
+                 },
+                mock_fight_handler)
+
+        # verify: 2, 1, 3
+        container = fighter.equipment.get_container([])
+        assert len(container) == 2
+        container = fighter.equipment.get_container([0])
+        assert len(container) == 1
+        container = fighter.equipment.get_container([0, 0])
+        assert len(container) == 3
 
 
 class MyArgumentParser(argparse.ArgumentParser):

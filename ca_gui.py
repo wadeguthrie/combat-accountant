@@ -178,7 +178,7 @@ class GmWindow(object):
             return
 
         del self._char_detail[:]
-        character.get_description(self._char_detail)
+        character.get_description(self._char_detail, expand_containers=True)
 
         # ...and show the screen
 

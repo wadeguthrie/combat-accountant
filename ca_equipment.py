@@ -18,15 +18,23 @@ class Equipment(object):
         self.__equipment = equipment
 
     def add(self,
-            new_item,    # dict describing new equipment
-            source=None  # string describing where equipment came from
+            new_item,       # dict describing new equipment
+            source=None,    # string describing where equipment came from (None
+                            #   for no change)
+            container_stack = []
             ):
         '''
         Adds an item to the equipment list.  If a source if given, the source
         string is added to the item's list of owners.
 
+        NOTE: only called from Fighter::add_equipment.
+
         Returns the current index of the item in the equipment list.
         '''
+        container = self.get_container(container_stack)
+        if container is None:
+            return None # Error condition -- top-level should be []
+
         # if 'owners' doesn't exist or is None, then it's a mundane item and
         # is indistinguishable from any similar item -- you don't need to know
         # its provenance
@@ -34,13 +42,13 @@ class Equipment(object):
                 new_item['owners'] is not None):
             new_item['owners'].append(source)
 
-        for index, item in enumerate(self.__equipment):
+        for index, item in enumerate(container):
             if item['name'] == new_item['name']:
                 if self.__is_same_thing(item, new_item):
                     item['count'] += new_item['count']
                     return index
 
-        self.__equipment.append(new_item)
+        container.append(new_item)
 
         return len(self.__equipment) - 1  # current index of the added item
 
@@ -63,15 +71,55 @@ class Equipment(object):
                     return
 
     def get_item_by_index(self,
-                          index  # integer index into the equipment list
+                          index,  # integer index into the equipment list
+                          container_stack=[]  # stack of indexes of
+                                                #   containers that're open
                           ):
         '''
         Returns the dictionary data of the index-th item in the equipment
         list.  Returns None if the item is not found.
         '''
-        if index is None or index >= len(self.__equipment) :
+
+        if index is None:
             return None
-        return self.__equipment[index]
+
+        current_container = self.get_container(container_stack)
+
+        return (None if current_container is None or
+                index >= len(current_container) else
+                current_container[index])
+
+    def get_container(self,
+                      container_stack   # stack of indexes of containers
+                                        #   that're open
+                      ):
+        current_container = self.__equipment
+        #PP.pprint(current_container) # TODO: remove
+
+        if container_stack is None:
+            return current_container
+
+        open_container_indexes = copy.deepcopy(container_stack)
+        #PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+        #print '\n--- get_item_by_index: %d ---' % index # TODO: remove
+        #PP.pprint(open_container_indexes) # TODO: remove
+        if len(open_container_indexes) > 0:
+            # Doing the 1st one out-of-band because self.__equipment doesn't
+            # have a 'stuff' member.  The rest of the containers will.
+            container_index = open_container_indexes.pop(0)
+            if container_index >= len(current_container):
+                return None
+            current_container = current_container[container_index]['stuff']
+            #print 'POP, index:%d, current_container:' % container_index # TODO: remove
+            #PP.pprint(current_container) # TODO: remove
+
+            for container_index in open_container_indexes:
+                if container_index >= len(current_container):
+                    return None
+                current_container = current_container[container_index]['stuff']
+                #print 'POP, index:%d, current_container:' % container_index # TODO: remove
+                #PP.pprint(current_container) # TODO: remove
+        return current_container
 
     def get_item_by_name(self,              # Public to facilitate testing
                          name,  # string that matches the name of the thing
@@ -90,56 +138,63 @@ class Equipment(object):
                 return index, item
         return None, None  # didn't find one
 
-    def get_item_count(self):
-        return len(self.__equipment)
+    def get_item_count(self,
+                       container_stack=[]):
+        container = self.get_container(container_stack)
+        return None if container is None else len(container)
 
     def remove(self,
-               item_index,  # integer index into the equipment list
-               item_count=1 # number to remove (None if 'ask')
+               item_index,      # integer index into the equipment list
+               item_count=1,    # number to remove (None if 'ask')
+               container_stack=[]
                ):
         '''
         Removes an item (by index) from the list of equipment.
 
         Returns the removed item.
         '''
-        if item_index >= len(self.__equipment):
+        container = self.get_container(container_stack)
+        if container is None:
+            return None # Error condition -- top-level should be []
+
+        if item_index >= len(container):
             return None
 
         if item_count <= 0:
             return None
 
-        if ('natural-weapon' in self.__equipment[item_index] and
-                self.__equipment[item_index]['natural-weapon']):
+        if ('natural-weapon' in container[item_index] and
+                container[item_index]['natural-weapon']):
             # Can't remove a natural weapon
             return None
 
-        if ('natural-armor' in self.__equipment[item_index] and
-                self.__equipment[item_index]['natural-armor']):
+        if ('natural-armor' in container[item_index] and
+                container[item_index]['natural-armor']):
             # Can't remove a natural armor
             return None
 
         remove_all = False
-        if ('count' in self.__equipment[item_index] and
-                self.__equipment[item_index]['count'] > 1):
+        if ('count' in container[item_index] and
+                container[item_index]['count'] > 1):
 
-            if item_count >= self.__equipment[item_index]['count']:
-                item_count = self.__equipment[item_index]['count']
+            if item_count >= container[item_index]['count']:
+                item_count = container[item_index]['count']
                 remove_all = True
 
             # Remove the item(s)
 
-            item = copy.deepcopy(self.__equipment[item_index])
+            item = copy.deepcopy(container[item_index])
             item['count'] = item_count
-            self.__equipment[item_index]['count'] -= item_count
+            container[item_index]['count'] -= item_count
         else:
-            item = self.__equipment[item_index]
+            item = container[item_index]
             remove_all = True
 
         if remove_all:
             if 'discard-when-empty' in item and not item['discard-when-empty']:
-                self.__equipment[item_index]['count'] = 0
+                container[item_index]['count'] = 0
             else:
-                self.__equipment.pop(item_index)
+                container.pop(item_index)
 
         return item
 
@@ -211,20 +266,20 @@ class EquipmentManager(object):
 
     @staticmethod
     def get_description(
-                        item,           # Input: dict for a 'stuff' item from
-                                        #   Game File
-                        in_use_items,   # List of items that are in use.
-                                        #   These should be references so that
-                                        #   it will match identically to
-                                        #   'item' if it is in use.
-                        preferred_items,
-                                        # List of preferred weapons
-                                        #   and armor of the creature
-                        char_detail     # Output: recepticle for character
-                                        # detail.
-                                        # [[{'text','mode'},...],  # line 0
-                                        #  [...],               ]  # line 1...
-                        ):
+            item,                   # Input: dict for a 'stuff' item from
+                                    #   Game File
+            qualifiers,             # String describing item
+            open_sub_containers,    # list of indexes of open sub-items
+                                    #   (recursive) if this is a container.
+                                    #   NOTE: CAN destroy this list
+            expand_containers,      # Bool
+            char_detail,            # Output: recepticle for character
+                                    # detail.
+                                    # [[{'text','mode'},...],  # line 0
+                                    #  [...],               ]  # line 1...
+            indent=''               # String pre-pended to all the desctiptions
+                                    #   (for containers)
+            ):
         '''
         This is kind-of messed up.  Each type of equipment should have its own
         class that has its own 'get_description'.  In lieu of that, though,
@@ -237,10 +292,10 @@ class EquipmentManager(object):
 
         mode = curses.A_NORMAL
 
-        in_use_string = ' (in use)' if item in in_use_items else ''
-        preferred_string = ' (preferred)' if item in preferred_items else ''
+        name = (('[ %s ]' % item['name']) if 'container' in item['type']
+                else item['name'])
 
-        texts = ['  %s%s%s' % (item['name'], preferred_string, in_use_string)]
+        texts = ['  %s%s%s' % (indent, name, qualifiers)]
 
         if 'shots' in item and 'shots_left' in item:
             texts.append(' (%d/%d shots left)' % (item['shots_left'],
@@ -268,7 +323,8 @@ class EquipmentManager(object):
             texts.append('reload: %d' % item['reload'])
             if 'bulk' in item:
                 texts.append('bulk: %d' % item['bulk'])
-            char_detail.append([{'text': ('     ' + ', '.join(texts)),
+            leader = '     %s' % indent
+            char_detail.append([{'text': (leader + ', '.join(texts)),
                                  'mode': mode}])
         elif 'melee weapon' in item['type']:
             texts = []
@@ -288,30 +344,47 @@ class EquipmentManager(object):
             if 'parry' in item:
                 texts.append('parry: %d' % item['parry'])
 
-            char_detail.append([{'text': ('     ' + ', '.join(texts)),
+            leader = '     %s' % indent
+            char_detail.append([{'text': (leader + ', '.join(texts)),
                                  'mode': mode}])
         elif 'armor' in item['type']:
             texts = []
             # TODO (eventually): ruleset-specific
             texts.append('dr: %d' % item['dr'])
-            char_detail.append([{'text': ('     ' + ', '.join(texts)),
+            leader = '     %s' % indent
+            char_detail.append([{'text': (leader + ', '.join(texts)),
                                  'mode': mode}])
 
         if ('owners' in item and item['owners'] is not None and
                 len(item['owners']) > 0):
-            texts = ['     Owners: ']
+            texts = ['     %sOwners: ' % indent]
             texts.append('%s' % '->'.join(item['owners']))
             char_detail.append([{'text': ''.join(texts),
                                  'mode': mode}])
+
+        # Only show contents of open container
+        if 'container' in item['type'] and (
+                expand_containers or qualifiers.find('(OPEN)') >= 0):
+            open_index = (None if len(open_sub_containers) == 0 else
+                open_sub_containers.pop(0))
+            indent += '   '
+            for index, sub_item in enumerate(item['stuff']):
+                qualifiers = ' (OPEN)' if open_index == index else ''
+                EquipmentManager.get_description(
+                        sub_item, qualifiers, open_sub_containers,
+                        expand_containers, char_detail, indent)
 
     #
     # Public Methods
     #
 
-    def add_equipment(self,
-                      fighter,      # Fighter object
-                      starting_index = 0
-                      ):
+    def add_equipment_from_store(
+            self,
+            fighter,              # Fighter object
+            starting_index = 0    # index into the store's list of equipment.
+                                  #     Multiple calls can go to the same spot
+                                  #     in that list as the last call.
+            ):
         '''
         Ask user which item to transfer from the store to a fighter and
         transfer it.
@@ -362,7 +435,7 @@ class EquipmentManager(object):
                 if 'natural-armor' in item and item['natural-armor']:
                     continue  # Can't remove natural armor
             output = []
-            EquipmentManager.get_description(item, [], [], output)
+            EquipmentManager.get_description(item, '', [], False, output)
             # output looks like:
             # [[{'text','mode'},...],  # line 0
             #  [...],               ]  # line 1...
@@ -380,8 +453,9 @@ class EquipmentManager(object):
         return item_index # This may be 'None'
 
     def remove_equipment(self,
-                         fighter,       # Fighter object
-                         count=None     # int
+                         fighter,               # Fighter object
+                         count=None,            # int
+                         container_stack = []   # [index, index, ...]
                          ):
         '''
         Ask the user which piece of equipment to discard and remove it.

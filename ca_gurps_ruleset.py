@@ -1924,10 +1924,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
     def get_character_description(
             self,
-            character,  # Fighter object
-            output,     # recepticle for character data.
-                        # [[{'text','mode'},...], # line 0
-                        #  [...],               ] # line 1
+            character,          # Fighter object
+            output,             # recepticle for character data.
+                                # [[{'text','mode'},...], # line 0
+                                #  [...],               ] # line 1
+            expand_containers   # Bool
             ):
         '''
         Provides a text description of a Fighter including all of the
@@ -2012,15 +2013,33 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         preferred_items = character.get_items_from_indexes(
                 preferred_item_indexes)
 
+        #print '\n--- %s: get_char_descr ---' % character.name # TODO: remove
+        #PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+        if len(character.details['open-container']) == 0:
+            open_item = None
+            sub_items = []
+        else:
+            # print 'has open containers' # TODO: remove
+            # PP.pprint(character.details['open-container']) # TODO: remove
+            sub_items = copy.deepcopy(character.details['open-container'])
+            open_item_index = sub_items.pop(0)
+            open_items = character.get_items_from_indexes([open_item_index])
+            open_item = open_items[0]
+            # print 'open_item: %r' % open_item # TODO: remove
+
         found_one = False
         for item in sorted(character.details['stuff'],
                            key=lambda x: x['name']):
             found_one = True
+
+            in_use_string = ' (in use)' if item in in_use_items else ''
+            preferred_string = ' (preferred)' if item in preferred_items else ''
+            open_string = ' (OPEN)' if item is open_item else ''
+
+            qualifiers = '%s%s%s' % (in_use_string, preferred_string, open_string)
+
             ca_equipment.EquipmentManager.get_description(
-                    item,
-                    in_use_items,
-                    preferred_items,
-                    output)
+                    item, qualifiers, sub_items, expand_containers, output)
 
         if not found_one:
             output.append([{'text': '  (None)', 'mode': mode}])
