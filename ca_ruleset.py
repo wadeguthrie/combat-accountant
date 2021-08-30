@@ -123,6 +123,7 @@ class Ruleset(object):
         holding_melee = False
         holding_natural_weapon = False
         holding_non_natural_weapon = False
+
         for weapon in weapons:
             if weapon is None:
                 continue
@@ -138,6 +139,156 @@ class Ruleset(object):
                 holding_non_natural_weapon = True
 
         weapon_indexes = fighter.get_current_weapon_indexes()
+
+        # ATTACK #
+
+        if holding_melee or holding_loaded_ranged:
+            # Can only attack if there's someone to attack
+            action_menu.extend([
+                ('attack',          {'action':
+                                     {'action-name': 'attack'}}),
+                ('attack, all out', {'action':
+                                     {'action-name': 'all-out-attack'}})
+            ])
+
+        # USER-DEFINED #
+
+        action_menu.append(('User-defined',
+                            {'action': {'action-name': 'user-defined'}}))
+
+        # OPEN CONTAINER
+
+        container_stack = fighter.details['open-container']
+        container = fighter.equipment.get_container(container_stack)
+        if container is None:
+            return None # Error condition -- top-level should be []
+
+        open_container_menu = []
+        containers = []
+        for index, item in enumerate(container):
+            if 'container' in item['type']:
+                containers.append((index, item['name']))
+                verbose_option = self.get_option('verbose')
+                if verbose_option is not None and verbose_option:
+                    entry_name = '%d: %s' % (index, item['name'])
+                else:
+                    entry_name = '%s' % item['name']
+
+                open_container_menu.append(
+                        (entry_name,
+                         {'action':
+                             {'action-name': 'open-container',
+                              'container-index': index
+                             }}
+                         ))
+        open_container_menu = sorted(open_container_menu,
+                                     key=lambda x: x[0].upper())
+
+        found_container = False
+        if len(open_container_menu) == 1:
+            found_container = True
+            action_menu.append(
+                (('Open %s' % open_container_menu[0][0]),
+                 {'action': {
+                    'action-name': 'open-container',
+                    'container-index':
+                    open_container_menu[0][1]['action']['container-index']}}
+                 ))
+
+        elif len(open_container_menu) > 1:
+            found_container = True
+            action_menu.append(('Open Container', {'menu': open_container_menu}))
+
+        # Move item INTO container & FROM container
+
+        # containers = [(index, name), ...]
+        # container = current container
+        for container_index, container_name in containers:
+            move_into_menu = []
+            for index, item in enumerate(container):
+                if index == container_index:
+                    continue # Don't ask to move an item into itself
+                name = item['name']
+                verbose_option = self.get_option('verbose')
+                if verbose_option is not None and verbose_option:
+                    name = '%d: %s' % (index, item['name'])
+
+                move_into_menu.append(
+                        (name,
+                         {'action': {'action-name': 'move-between-container',
+                                     'item-index': index,
+                                     'item-name': item['name'],
+                                     'destination-index': container_stack + [container_index],
+                                     }}
+                         ))
+            move_into_menu = sorted(move_into_menu, key=lambda x: x[0].upper())
+
+            # 'Move' menus - they're the same length because they're the size
+            # of the number of items at this container level.
+
+            if len(move_into_menu) == 1:
+                action_menu.append(
+                    ('move %s into %s' % (move_into_menu[0][0], container_name),
+                     {'action': {'action-name': 'move-between-container',
+                                 'item-index':
+                                 move_into_menu[0][1]['action']['item-index'],
+                                 'container-index': container_stack + [container_index]}
+                      }))
+
+            elif len(move_into_menu) > 1:
+                action_menu.append((('move item to %s' % container_name),
+                                    {'menu': move_into_menu}))
+
+        # Move item FROM container
+
+        if len(container_stack) > 0:
+            move_from_menu = []
+            for index, item in enumerate(container):
+                #if index == container_index:
+                #    continue # Don't ask to move an item into itself
+                name = item['name']
+                verbose_option = self.get_option('verbose')
+                if verbose_option is not None and verbose_option:
+                    name = '%d: %s' % (index, item['name'])
+                move_from_menu.append(
+                        (name,
+                         {'action': {'action-name': 'move-between-container',
+                                     'item-index': index,
+                                     'item-name': item['name'],
+                                     'destination-index': [],
+                                     }}
+                         ))
+            move_from_menu = sorted(move_from_menu, key=lambda x: x[0].upper())
+
+            # 'Move' menus - they're the same length because they're the size
+            # of the number of items at this container level.
+
+            if len(move_from_menu) == 1:
+                action_menu.append(
+                    ('move %s to top-level' % move_from_menu[0][0],
+                     {'action': {'action-name': 'move-between-container',
+                                 'item-index':
+                                 move_from_menu[0][1]['action']['item-index'],
+                                 'destination-index': []}
+                      }))
+
+            elif len(move_from_menu) > 1:
+                action_menu.append(('move item to top-level',
+                                    {'menu': move_from_menu}))
+
+        # Can't don/doff/draw/holster armor/weapons while a container is open
+
+        if len(fighter.details['open-container']) > 0:
+            # Close Container
+            item = fighter.equipment.get_item_by_index(
+                    fighter.details['open-container'][-1],
+                    fighter.details['open-container'][:-1])
+            name = ('container' if item is None or 'name' not in item else
+                    item['name'])
+
+            action_menu.append((('Close %s' % name),
+                                {'action': {'action-name': 'close-container'}}))
+            return  # No need to return action menu since it was a parameter
 
         # ARMOR #
 
@@ -158,7 +309,7 @@ class Ruleset(object):
                     don_armor_menu.append(
                             (entry_name,
                              {'action': {'action-name': 'don-armor',
-                                                        'armor-index': index}}
+                                         'armor-index': index}}
                              ))
         don_armor_menu = sorted(don_armor_menu, key=lambda x: x[0].upper())
 
@@ -186,17 +337,6 @@ class Ruleset(object):
                          {'action': {'action-name': 'doff-armor',
                                      'armor-index': index}}
                          ))
-
-        # ATTACK #
-
-        if holding_melee or holding_loaded_ranged:
-            # Can only attack if there's someone to attack
-            action_menu.extend([
-                ('attack',          {'action':
-                                     {'action-name': 'attack'}}),
-                ('attack, all out', {'action':
-                                     {'action-name': 'all-out-attack'}})
-            ])
 
         # DRAW OR HOLSTER WEAPON #
 
@@ -291,10 +431,6 @@ class Ruleset(object):
         elif len(use_menu) > 1:
             action_menu.append(('use item', {'menu': use_menu}))
 
-        # USER-DEFINED #
-
-        action_menu.append(('User-defined',
-                            {'action': {'action-name': 'user-defined'}}))
 
         return  # No need to return action menu since it was a parameter
 
@@ -442,7 +578,34 @@ class Ruleset(object):
                 'timers': [],
                 'weapon-index': None,
                 'current-weapon': 0,    # Indexes into 'weapon-index'.
+                'open-container': []
                 }
+
+    def search_one_thing(self,
+                         name,        # string containing the name
+                         group,       # string containing the group
+                         thing,       # dict describing a thing
+                         look_for_re  # compiled Python regex
+                         ):
+        result = []
+        if look_for_re.search(thing['name']):
+            result.append({'name': name,
+                           'group': group,
+                           'location': 'stuff["name"]',
+                           'notes': thing['name']})
+        if 'notes' in thing and look_for_re.search(thing['notes']):
+            result.append({'name': name,
+                           'group': group,
+                           'location': '%s["notes"]' % thing['name'],
+                           'notes': thing['notes']})
+        if 'container' in thing['type']:
+            for sub_thing in thing['stuff']:
+                sub_result = self.search_one_thing(name,
+                                                   group,
+                                                   sub_thing,
+                                                   look_for_re)
+                result.extend(sub_result)
+        return result
 
     def search_one_creature(self,
                             name,        # string containing the name
@@ -466,16 +629,11 @@ class Ruleset(object):
 
         if 'stuff' in creature:
             for thing in creature['stuff']:
-                if look_for_re.search(thing['name']):
-                    result.append({'name': name,
-                                   'group': group,
-                                   'location': 'stuff["name"]',
-                                   'notes': thing['name']})
-                if 'notes' in thing and look_for_re.search(thing['notes']):
-                    result.append({'name': name,
-                                   'group': group,
-                                   'location': '%s["notes"]' % thing['name'],
-                                   'notes': thing['notes']})
+                sub_result = self.search_one_thing(name,
+                                                   group,
+                                                   thing,
+                                                   look_for_re)
+                result.extend(sub_result)
 
         if 'notes' in creature:
             for line in creature['notes']:
@@ -721,7 +879,7 @@ class Ruleset(object):
             else: # owns more than one piece of armor
                 self._window_manager.error([
                     'Creature "%s" has no preferred %s' %
-                    (name, item_string)])
+                    (fighter.name, item_string)])
 
         # Next, remove non-preferred weapon/armor
 
@@ -1368,6 +1526,7 @@ class Ruleset(object):
             'adjust-attribute':     {'doit': self.__adjust_attribute},
             'all-out-attack':       {'doit': self.__do_attack},
             'attack':               {'doit': self.__do_attack},
+            'close-container':      {'doit': self.__close_container},
             'doff-armor':           {'doit': self.__doff_armor},
             'don-armor':            {'doit': self.__don_armor},
             'draw-weapon':          {'doit': self.__draw_weapon},
@@ -1375,6 +1534,9 @@ class Ruleset(object):
             'give-equipment':       {'doit': self.__give_equipment},
             'holster-weapon':       {'doit': self.__holster_weapon},
             'move-and-attack':      {'doit': self.__do_attack},
+            'move-between-container':
+                                    {'doit': self.__move_to_container},
+            'open-container':       {'doit': self.__open_container},
             'pick-opponent':        {'doit': self.__pick_opponent},
             'previous-turn':        {'doit': self.__previous_turn},
             'reload':               {'doit': self.__do_reload},
@@ -1404,6 +1566,80 @@ class Ruleset(object):
             handled = Ruleset.HANDLED_OK  # No name? It's just a comment.
 
         return handled
+
+    def __close_container(self,
+                        fighter,          # Fighter object
+                        action,           # {'action-name': 'close-container',
+                                          #  'comment': <string> # optional
+                        fight_handler,    # FightHandler object (ignored)
+                        ):
+        '''
+        Action handler for Ruleset.
+
+        Closes the deepest open container.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+        fighter.details['open-container'].pop()
+        return Ruleset.HANDLED_OK
+
+    def __move_to_container(
+            self,
+            fighter,          # Fighter object
+            action,           # {'action-name': 'move-between-container',
+                              #  'item-index': index,
+                              #  'item-name': string
+                              #  'destination-index': [index, index,...
+            fight_handler,    # FightHandler object (ignored)
+            ):
+        '''
+        Action handler for Ruleset.
+
+        Moves all copies of an item from the CURRENT container level into
+        another arbitrary container.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+        # Put item in container (first, so it doesn't mess-up indexes)
+        item = fighter.equipment.get_item_by_index(
+                action['item-index'], fighter.details['open-container'])
+        ignore = fighter.add_equipment(
+                item,
+                source=None,
+                identified=None,
+                container_stack=action['destination-index'])
+
+        # Now, remove item
+        count = 1 if 'count' not in item else item['count']
+        ignore_item = fighter.remove_equipment(action['item-index'],
+                                               count,
+                                               fighter.details['open-container'])
+
+        return Ruleset.HANDLED_OK
+
+    def __open_container(self,
+                        fighter,          # Fighter object
+                        action,           # {'action-name': 'open-container',
+                                          #  'container-index': int,
+                                          #  'comment': <string> # optional
+                        fight_handler,    # FightHandler object (ignored)
+                        ):
+        '''
+        Action handler for Ruleset.
+
+        Opens the designated container from the fighter's stuff (or from the
+        currently open container, if there is one)
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+        fighter.details['open-container'].append(action['container-index'])
+        #PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+        #print '\n--- %s: open %d ---' % (fighter.name, action['container-index']) # TODO: remove
+        #PP.pprint(fighter.details['open-container']) # TODO: remove
+        return Ruleset.HANDLED_OK
 
     def __pick_opponent(self,
                         fighter,          # Fighter object

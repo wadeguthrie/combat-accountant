@@ -926,14 +926,61 @@ class CompareChars(object):
         return 1 if 'count' not in item else item['count']
 
 
+    def __build_stuff_json(self,
+                           input_stuff  # list
+                           ):
+        '''
+        Makes a dictionary {name: count, ...} out of the input array.  Flattens
+        any containers into the base dictionary.
+
+        NOTE: this is a bit of a sledgehammer in that subtle differences in
+        items with identical names are mashed into one entry.
+
+        NOTE2: the count isn't currently used (partially due to the
+        sledgehammer effect.
+        '''
+        output_dict = {}
+        for item in input_stuff:
+            if 'container' in item['type']:
+                from_container = self.__build_stuff_json(item['stuff'])
+                self.__combine_dicts(output_dict, from_container)
+            count = 1 if 'count' not in item else item['count']
+            if item['name'] in output_dict:
+                output_dict[item['name']] += count
+            else:
+                output_dict[item['name']] = count
+
+        return output_dict
+
+    def __combine_dicts(self,
+                        dict_input1_output, # {name: count, name: count, ...
+                        dict_input2         # {name: count, name: count, ...
+                        ):
+        '''
+        Combine input dictionaries into |dict_input1_output|.
+
+        Returns nothing
+        '''
+        for key, value in dict_input2.iteritems():
+            if key in dict_input1_output:
+                dict_input1_output[key] += value
+            else:
+                dict_input1_output[key] = value
+
+
+
     def __check_equipment(self):
+        # Just comparing the names
+
         changes_in_json = False
         print '\n-- Equipment -----'
 
         if 'stuff' in self.__char_json:
-            stuff_json = self.__char_json['stuff']
+            stuff_json_list = self.__char_json['stuff']
         else:
-            stuff_json = {}
+            stuff_json_list = []
+
+        stuff_json = self.__build_stuff_json(stuff_json_list)
 
         stuff_gcs = copy.deepcopy(self.__char_gcs.stuff)
 
@@ -942,10 +989,10 @@ class CompareChars(object):
 
         matching_items = 0
         found_errors = False
-        for item_json in stuff_json:    # item_json is {}
-            name = item_json['name'].lower()
+        for item_json, count_json in stuff_json.iteritems():    # item_json is {}
+            name = item_json.lower()
             match_gcs = None
-            for name_gcs, count in stuff_gcs.iteritems():
+            for name_gcs, count_gcs in stuff_gcs.iteritems():
                 if name_gcs == name:
                     match_gcs = name_gcs
                     break
