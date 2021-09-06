@@ -25,8 +25,7 @@ import ca_timers
 # TODO: import from GCS
 # TODO: update from GCS
 
-# TODO: Move PersonnelHandler stuff into MainHandler
-# TODO: add container open/close/move into PersonnelHandler (now, MainHandler)
+# TODO: add container open/close/move into PersonnelHandler
 
 # TODO: flesh-out attack, all-out
 # TODO: grenade support (missile-like but not with clips)
@@ -1661,11 +1660,16 @@ class PersonnelHandler(ScreenHandler):
             ord('a'): {'name': 'add creature',
                        'func': self.__add_creature,
                        'help': 'Add a creature to the current group.'},
+            ord('c'): {'name': 'change creature',
+                       'func': self.__change,
+                       'help': 'Modify the currently selected creature by ' +
+                               'changing attributes, adding or removing' +
+                               'equipment, or changing some other feature.'},
             ord('d'): {'name': 'delete creature',
                        'func': self.__delete_creature,
                        'help': 'Delete the currently selected creature ' +
                                'from the current group.'},
-            ord('e'): {'name': 'equip/modify creature',
+            ord('e'): {'name': 'equip creature',
                        'func': self.__equip,
                        'help': 'Modify the currently selected creature by ' +
                                'changing attributes, adding or removing' +
@@ -2383,6 +2387,73 @@ class PersonnelHandler(ScreenHandler):
                                            fighter)
         return attribute_widget.doit()
 
+    def __change(self):
+        '''
+        Command ribbon method.
+
+        Provides a sub-menu for different ways to augment a Fighter
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return True
+
+        sub_menu = []
+        sub_menu.extend([
+            ('attributes (change)', {'doit': self.__change_attributes}),
+            ('change consciousness',
+                {'doit': self.__change_consciousness}),
+        ])
+
+        self.__ruleset_abilities = self.world.ruleset.get_creature_abilities()
+        for ability in self.__ruleset_abilities:
+            if ability in fighter.details:
+                sub_menu.extend([
+                    ('%s (add)' % ability,
+                        {'doit': self.__ruleset_ability,
+                         'param': ability}),
+                    ('%s (remove)' % ability.capitalize(),
+                        {'doit': self.__ruleset_ability_rm,
+                         'param': ability})
+                ])
+
+        # Add these at the end since they're less likely to be used (I'm
+        # guessing) than the abilities from the ruleset
+        if 'spells' in fighter.details:
+            sub_menu.extend([
+                ('magic spell (add)',       {'doit': self.__add_spell}),
+                ('Magic spell (remove)',    {'doit': self.__remove_spell})
+            ])
+
+        if 'timers' in fighter.details:
+            sub_menu.extend([
+                ('timers (add)',           {'doit': self.__add_timer})
+            ])
+            sub_menu.extend([
+                ('Timers (remove)',           {'doit': self.__timer_cancel})
+            ])
+
+        if 'fight-notes' in fighter.details:
+            sub_menu.extend([
+                ('notes (fight)',   {'doit': self.__fight_notes})
+            ])
+
+        if 'notes' in fighter.details:
+            sub_menu.extend([
+                ('Notes',           {'doit': self.__full_notes})
+            ])
+
+        self._window_manager.menu('Do what', sub_menu)
+
+        # Do a consistency check once you're done equipping
+        self.world.ruleset.is_creature_consistent(fighter.name,
+                                                  fighter.details)
+
+        self._window.touchwin()
+        self._window.refresh()
+        return True  # Keep going
+
     def __change_consciousness(self,
                                throw_away   # Required/used by the caller
                                             #   because there's a list of
@@ -2856,55 +2927,11 @@ class PersonnelHandler(ScreenHandler):
         sub_menu = []
         if 'stuff' in fighter.details:
             sub_menu.extend([
-                ('attributes (change)', {'doit': self.__change_attributes}),
                 ('equipment (add)',     {'doit':
                     self.__add_equipment_from_store}),
                 ('Equipment (remove)',  {'doit': self.__remove_equipment}),
                 ('give equipment',      {'doit': self.__give_equipment}),
                 ('identify equipment',  {'doit': self.__identify_equipment}),
-            ])
-
-        sub_menu.extend([
-            ('change consciousness',
-                {'doit': self.__change_consciousness}),
-        ])
-
-        self.__ruleset_abilities = self.world.ruleset.get_creature_abilities()
-        for ability in self.__ruleset_abilities:
-            if ability in fighter.details:
-                sub_menu.extend([
-                    ('%s (add)' % ability,
-                        {'doit': self.__ruleset_ability,
-                         'param': ability}),
-                    ('%s (remove)' % ability.capitalize(),
-                        {'doit': self.__ruleset_ability_rm,
-                         'param': ability})
-                ])
-
-        # Add these at the end since they're less likely to be used (I'm
-        # guessing) than the abilities from the ruleset
-        if 'spells' in fighter.details:
-            sub_menu.extend([
-                ('magic spell (add)',       {'doit': self.__add_spell}),
-                ('Magic spell (remove)',    {'doit': self.__remove_spell})
-            ])
-
-        if 'timers' in fighter.details:
-            sub_menu.extend([
-                ('timers (add)',           {'doit': self.__add_timer})
-            ])
-            sub_menu.extend([
-                ('Timers (remove)',           {'doit': self.__timer_cancel})
-            ])
-
-        if 'fight-notes' in fighter.details:
-            sub_menu.extend([
-                ('notes (fight)',   {'doit': self.__fight_notes})
-            ])
-
-        if 'notes' in fighter.details:
-            sub_menu.extend([
-                ('Notes',           {'doit': self.__full_notes})
             ])
 
         owns_weapon = False
