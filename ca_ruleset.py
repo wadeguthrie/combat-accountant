@@ -669,6 +669,18 @@ class Ruleset(object):
                 self._timing_file.write('"%s", ' % heading)
             self._timing_file.write('\n')
 
+    def start_turn(self,
+                   fighter,         # Fighter object
+                   fight_handler    # FightHandler object
+                   ):
+        '''
+        Performs all of the stuff required for a Fighter to start his/her
+        turn.  Does all the consciousness/death checks, etc.
+
+        Returns: nothing
+        '''
+        pass
+
     #
     # Private and Protected Methods
     #

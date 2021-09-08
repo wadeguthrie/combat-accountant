@@ -7062,7 +7062,7 @@ class Options(object):
 
 # Main
 if __name__ == '__main__':
-    VERSION = '00.03.01'    # major version, minor version, bug fixes
+    VERSION = '00.04.00'    # major version, minor version, bug fixes
 
     parser = MyArgumentParser()
     parser.add_argument(

@@ -3882,6 +3882,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                          'actions': actions})
                 casting_timer.mark_owner_as_busy()  # When casting, owner is busy
 
+                # "Zombie Summoning": {
+                #   "cost": 5,
+                #   "notes": "M151",
+                #   "maintain": 2,
+                #   "casting time": 4,
+                #   "duration": 60,
+                #   "range": 'special',
+                #   "save": [],
+                # }
+
             # Opponent's Timers
 
             if 'opponent' in action and fight_handler is not None:
