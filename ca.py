@@ -22,8 +22,9 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: import from GCS
-# TODO: update from GCS
+# TODO: whitelist should be in each character's JSON.  Mention things in
+#   whitelist in changes log.
+# TODO: technique values should be shown added with their base skill
 
 # TODO: add container open/close/move into PersonnelHandler
 
@@ -1661,7 +1662,7 @@ class PersonnelHandler(ScreenHandler):
                        'func': self.__add_creature,
                        'help': 'Add a creature to the current group.'},
             ord('c'): {'name': 'change creature',
-                       'func': self.__change,
+                       'func': self.__change_creature,
                        'help': 'Modify the currently selected creature by ' +
                                'changing attributes, adding or removing' +
                                'equipment, or changing some other feature.'},
@@ -1678,6 +1679,9 @@ class PersonnelHandler(ScreenHandler):
                        'func': self.__create_template_group,
                        'help': 'Make a new collection of templates (like ' +
                                'bad guys or space marines).'},
+            ord('I'): {'name': 'Import character.',
+                       'func': self.__import_creature,
+                       'help': 'Import character into combat accountant.'},
             # TODO (now): ruleset-based
             ord('s'): {'name': 'list Spells',
                        'func': self.__list_spells,
@@ -1693,6 +1697,9 @@ class PersonnelHandler(ScreenHandler):
                        'help': 'Convert the currently selected creature ' +
                                'into a template and add that template into ' +
                                'the currently selected template group.'},
+            ord('U'): {'name': 'Update character.',
+                       'func': self.__update_creature,
+                       'help': 'Update character from .GCS file.'},
             ord('q'): {'name': 'quit',
                        'func': self.__quit,
                        'help': 'Quit changing personnel.'},
@@ -1924,6 +1931,70 @@ class PersonnelHandler(ScreenHandler):
             self._draw_screen()
         return True
 
+    def __import_creature(self):
+        '''
+        Command ribbon method.
+
+        Imports a character into this program.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        # get the filename to import
+
+        # TODO: need to ask ruleset for filename extension to limit menu
+        # TODO: need to recurse down directories when they're picked
+        # TODO: need to display directories differently
+        filename_menu = [(x, x) for x in os.listdir('.')
+                if os.path.isfile( os.path.join(os.getcwd(), x))]
+        filename, ignore = window_manager.menu('Import From Which File',
+                                               filename_menu)
+        if filename is None:
+            return True
+
+        # actually import the new creature
+
+        name, creature = self.world.ruleset.import_creature_from_file(filename)
+        # TODO: need to redraw after import
+        if creature is None:
+            return True
+
+        # get the creature's name
+
+        if name in self.__critters['data']:
+            self._window_manager.error(
+                    ['Creature with name "%s" already exists' % name])
+            name = None
+
+        if name is None:
+            keep_going = True
+            while keep_going:
+                lines, cols = self._window.getmaxyx()
+                name = self._window_manager.input_box(1,      # height
+                                                      cols-4,  # width
+                                                      'Creature Name')
+                if name is None:
+                    return True
+                elif name in self.__critters['data']:
+                    self._window_manager.error(
+                            ['Creature with name "%s" already exists' % name])
+                else:
+                    keep_going = False
+
+        # install in the current group
+
+        self.__critters['data'][name] = creature
+        self.__critters['obj'].append(self.world.get_creature(
+                                                    name,
+                                                    self.__group_name))
+        self.__viewing_index = len(self.__critters['obj']) - 1
+
+
+        self.__new_char_name = name
+        self._window.show_creatures(self.__critters['obj'],
+                                    self.__new_char_name,
+                                    self.__viewing_index)
+        return True
+
     def __left_pane(self):
         '''
         Command ribbon method.
@@ -1983,6 +2054,63 @@ class PersonnelHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         self.__current_pane = PersonnelHandler.CHAR_DETAIL
+        return True
+
+    def __update_creature(self):
+        '''
+        Command ribbon method.
+
+        Imports a character into this program.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return True
+
+        # get the filename from which to update
+
+        need_file_message = None
+        filename = None # Import from the character's internal filename
+        if 'gcs-file' not in fighter.details:
+            need_file_message = 'No file is associated with %s' % fighter.name
+        elif not os.path.isfile(os.path.join(os.getcwd(),
+                                fighter.details['gcs-file'])):
+            need_file_message = 'File "%s" does not exist, pick a new one' % (
+                    fighter.details['gcs-file'])
+
+        if need_file_message is not None:
+            self._window_manager.error('%s' % need_file_message)
+
+            # TODO: need to ask ruleset for filename extension to limit menu
+            # TODO: need to recurse down directories when they're picked
+            # TODO: need to display directories differently
+            filename_menu = [(x, x) for x in os.listdir('.')
+                    if os.path.isfile( os.path.join(os.getcwd(), x))]
+            filename, ignore = window_manager.menu('Update From Which File',
+                                                   filename_menu)
+            if filename is None:
+                return True
+
+        # actually import the new creature
+
+        changes = self.world.ruleset.update_creature_from_file(fighter.details,
+                                                               filename)
+        changes_with_modes = [
+                [{'text': x, 'mode': curses.A_NORMAL}] for x in changes ]
+
+        # new_list = [expression(i) for i in old_list if filter(i)]
+
+        self._window_manager.display_window(
+                ('Changes made to %s' % fighter.name), changes_with_modes)
+
+        #        'Bug Reported',
+        #        [[{'text': ('Output file "%s"' % bug_report_game_file),
+        #           'mode': curses.A_NORMAL}]])
+
+        self._window.show_creatures(self.__critters['obj'],
+                                    fighter.name,
+                                    self.__viewing_index)
         return True
 
     #
@@ -2387,7 +2515,7 @@ class PersonnelHandler(ScreenHandler):
                                            fighter)
         return attribute_widget.doit()
 
-    def __change(self):
+    def __change_creature(self):
         '''
         Command ribbon method.
 

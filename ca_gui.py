@@ -1159,7 +1159,7 @@ class GmScrollableWindow(object):
         # TODO (eventually): I've got all these commented-out lines to skip
         #   lines that are the result of a wrap (like the Mech in the
         #   <<ROOM>> of the Armstrong 1 fight) but then the line count for the
-        #   window is too small and we get a  crash.
+        #   window is too small and we get a crash.
         #line = 0
         for i in range(0, line_cnt):
             left = 0
