@@ -499,6 +499,18 @@ class Ruleset(object):
                                 'notimer': True},
                                None)
 
+    def import_creature_from_file(self,
+                                  filename    # string
+                                  ):
+        '''
+        Just builds an empty creature so the rules-specific ruleset will have
+        all the important bits.
+
+        Returns: name of the creature (None, at this point) and the dict that
+        holds the creature.
+        '''
+        creature = self.make_empty_creature()
+        return None, creature
 
     def is_creature_consistent(self,
                                name,     # string: creature's name
@@ -518,9 +530,6 @@ class Ruleset(object):
         # This is just a shim to let pre-2-weapon crash files work (for
         # testing).  If we get a 'draw' action with None weapon, we'll turn
         # it into a 'holster' action for all of the weapons we're carrying.
-        #print('\n\n====== MODIFYING %s ======\n' % name)
-        #PP = pprint.PrettyPrinter(indent=3, width=150)
-        #PP.pprint(creature)
         if type(creature['weapon-index']) is not list:
             new_stuff = [creature['weapon-index']]
             creature['weapon-index'] = new_stuff
@@ -576,10 +585,56 @@ class Ruleset(object):
                 'state': 'alive',
                 'stuff': [],
                 'timers': [],
-                'weapon-index': None,
+                'weapon-index': [],
                 'current-weapon': 0,    # Indexes into 'weapon-index'.
                 'open-container': []
                 }
+
+    def make_empty_item(self):
+        '''
+        Builds the minimum legal equipment item (the dict that goes into the
+        Game File).
+
+        Returns: the dict.
+        '''
+        return {'name': 'item', # string.  'item' is a dummy name.
+                'type': [],     # This needs to include 'misc', 'armor', or ...
+                'count': 1,
+                'notes': '',
+                'owners': None} # a list of owners, None if not tracked
+
+    def make_empty_armor(self):
+        '''
+        Builds the minimum legal armor (the dict that goes into the
+        Game File).
+
+        Returns: the dict.
+        '''
+        item = self.make_empty_item()
+        item['type'].append('armor')
+        return item
+
+    def make_empty_melee_weapon(self):
+        '''
+        Builds the minimum legal melee weapon (the dict that goes into the
+        Game File).
+
+        Returns: the dict.
+        '''
+        item = self.make_empty_item()
+        item['type'].append('melee weapon')
+        return item
+
+    def make_empty_missile_weapon(self):
+        '''
+        Builds the minimum legal missile weapon (the dict that goes into the
+        Game File).
+
+        Returns: the dict.
+        '''
+        item = self.make_empty_item()
+        item['type'].append('ranged weapon')
+        return item
 
     def search_one_thing(self,
                          name,        # string containing the name
@@ -680,6 +735,15 @@ class Ruleset(object):
         Returns: nothing
         '''
         pass
+
+    def update_creature_from_file(self,
+                                  fighter_dict,  # dict describing fighter
+                                  filename       # string
+                                  ):
+        '''
+        Returns list of strings describing the changes made to the character.
+        '''
+        return []
 
     #
     # Private and Protected Methods

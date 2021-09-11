@@ -7,6 +7,7 @@ import random
 
 import ca_fighter
 import ca_equipment
+import ca_gcs_import
 import ca_gui
 import ca_ruleset
 import ca_timers
@@ -2065,8 +2066,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         mode = curses.A_NORMAL
         output.append([{'text': 'Skills', 'mode': mode | curses.A_BOLD}])
 
+        skills_list = copy.deepcopy(character.details['skills'])
+        if 'techniques' in character.details:
+            for tech in character.details['techniques']:
+                # TODO: add default value
+                skills_list['%s (%s)' % (
+                    tech['name'], ', '.join(tech['default']))] = tech['value']
+
         found_one = False
-        for skill, value in sorted(character.details['skills'].iteritems(),
+        for skill, value in sorted(skills_list.iteritems(),
                                    key=lambda (k, v): (k, v)):
             found_one = True
             crit, fumble = self.__get_crit_fumble(value)
@@ -3162,6 +3170,19 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                             fighter.name)},
                        None) # No fight_handler
 
+    def import_creature_from_file(self,
+                                  filename  # string
+                                  ):
+        # Get the base, empty, creature so we'll have all the important bits
+        # that may not be in the file
+
+        ignore_name, creature = super(GurpsRuleset,
+                               self).import_creature_from_file(filename)
+
+        gcs_import = ca_gcs_import.GcsImport(self._window_manager)
+        name, creature = gcs_import.import_creature(creature, self, filename)
+        return name, creature
+
     def initiative(self,
                    fighter, # Fighter object
                    fighters # list of Fighter objects
@@ -3271,6 +3292,67 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                  'per': 10})
         to_monster['current'] = copy.deepcopy(to_monster['permanent'])
         return to_monster
+
+    def make_empty_armor(self):
+        '''
+        Builds the minimum legal armor (the dict that goes into the
+        Game File).
+
+        Returns: the dict.
+        '''
+        item = super(GurpsRuleset, self).make_empty_armor()
+        strawman = { "dr": 0 }
+        for key, value in strawman.iteritems():
+            if key not in item:
+                item[key] = value
+        return item
+
+    def make_empty_melee_weapon(self):
+        '''
+        Builds the minimum legal melee weapon (the dict that goes into the
+        Game File).
+
+        Returns: the dict.
+        '''
+        item = super(GurpsRuleset, self).make_empty_melee_weapon()
+        strawman = {
+                "damage": {
+                    "sw": { "plus": -4, "type": "cut" },
+                    "thr": { "plus": -4, "type": "imp" }
+                 },
+                "parry": -4,
+                "skill": "*UNKNOWN*",
+        }
+
+        for key, value in strawman.iteritems():
+            if key not in item:
+                item[key] = value
+
+        return item
+
+    def make_empty_missile_weapon(self):
+        '''
+        Builds the minimum legal missile weapon (the dict that goes into the
+        Game File).
+
+        Returns: the dict.
+        '''
+        item = super(GurpsRuleset, self).make_empty_missile_weapon()
+        strawman = {
+                "acc": 0,
+                "damage": {"dice": { "plus": 0, "num_dice": 0, "type": "pi" }},
+                "bulk": -10,
+                "reload": 10,
+                "skill": "*UNKNOWN*",
+                "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
+                # clip is not required
+        }
+
+        for key, value in strawman.iteritems():
+            if key not in item:
+                item[key] = value
+
+        return item
 
     def reset_aim(self,                         # Public to support testing
                   fighter           # Fighter object
@@ -3460,6 +3542,24 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                             window_text)
 
         fighter.details['actions_this_turn'] = []
+
+    def update_creature_from_file(self,
+                                  fighter_dict,  # dict describing fighter
+                                  filename       # string
+                                  ):
+        # Get the base, empty, creature so we'll have all the important bits
+        # that may not be in the file
+        '''
+        Returns list of strings describing what's changed.
+        '''
+
+        changes = super(GurpsRuleset, self).update_creature_from_file(
+                fighter_dict, filename)
+
+        gcs_import = ca_gcs_import.GcsImport(self._window_manager)
+        new_changes = gcs_import.update_creature(fighter_dict, self, filename)
+        changes.extend(new_changes)
+        return changes
 
     #
     # Protected and Private Methods
