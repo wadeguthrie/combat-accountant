@@ -1890,10 +1890,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                attack
             2) a string describing the calculations that went into the number
         '''
-        if (weapon is None or weapon.details['skill'] not in
-                fighter.details['skills']):
+        skill = None
+        if weapon is not None:
+            skill = fighter.get_best_skill_for_weapon(weapon.details)
+
+        if skill is None:
             return None, None
-        skill = fighter.details['skills'][weapon.details['skill']]
+
         block_why = []
         block_skill_modified = False
 
@@ -2388,16 +2391,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         for weapon in weapons:
             if weapon is None:
                 continue
-            unarmed_skills = self.get_weapons_unarmed_skills(weapon)
 
-            unarmed_info = None
-            if unarmed_skills is not None:
+            if self.does_weapon_use_unarmed_skills(weapon):
                 unarmed_info = self.get_unarmed_info(fighter,
                                                      opponent,
-                                                     weapon,
-                                                     unarmed_skills)
-
-            if unarmed_skills is not None:  # Unarmed Parry
+                                                     weapon)
+                # Unarmed Parry
                 notes.append('%s: %d' % (unarmed_info['parry_string'],
                                          unarmed_info['parry_skill']))
 
@@ -2484,35 +2483,32 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         notes = []
         weapons = fighter.get_current_weapons()
         if len(weapons) == 0:
-            unarmed_skills = self.get_weapons_unarmed_skills(None)
             self.__show_unarmed_info(notes,
                                      fighter,
                                      opponent,
-                                     None,  # Weapon
-                                     unarmed_skills)
+                                     None  # Weapon
+                                     )
             return notes
 
         for weapon in weapons:
             if weapon is None:
                 continue
-            unarmed_skills = self.get_weapons_unarmed_skills(weapon)
 
-            if weapon is not None:
-                notes.append('%s' % weapon.details['name'])
+            notes.append('%s' % weapon.details['name'])
 
-            # i.e., if this weapon doesn't use on unarmed skills (brass
-            # knuckles are an example of a weapon that _does_).
-            if unarmed_skills is None:
-                if weapon.details['skill'] in fighter.details['skills']:
+            if self.does_weapon_use_unarmed_skills(weapon):
+                # i.e., if this weapon uses unarmed skills (brass knuckles are
+                # an example)
+                self.__show_unarmed_info(notes,
+                                         fighter,
+                                         opponent,
+                                         weapon)
+            else:
+                weapon_skill = fighter.get_best_skill_for_weapon(weapon.details)
+                if weapon_skill is not None:
                     to_hit, ignore_why = self.get_to_hit(
                             fighter, opponent, weapon)
-                    if to_hit is None:
-                        self._window_manager.error(
-                                ['%s requires "%s" skill not had by "%s"' %
-                                 (weapon.details['name'],
-                                  weapon.details['skill'],
-                                  fighter.name)])
-                    else:
+                    if to_hit is not None:  # No reason for it to me None
                         damage, ignore_why = self.get_damage(fighter, weapon)
                         damage_str = self.damage_to_string(damage)
                         crit, fumble = self.__get_crit_fumble(to_hit)
@@ -2539,16 +2535,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                             notes.append("  %s" % weapon_notes)
                 else:
                     self._window_manager.error(
-                            ['%s requires "%s" skill not had by "%s"' %
+                            ['%s requires skill "%s" does not have' %
                                 (weapon.details['name'],
-                                 weapon.details['skill'],
                                  fighter.name)])
-            else:
-                self.__show_unarmed_info(notes,
-                                         fighter,
-                                         opponent,
-                                         weapon,
-                                         unarmed_skills)
 
         return notes
 
@@ -2562,10 +2551,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                attack
             2) a string describing the calculations that went into the number
         '''
-        if (weapon is None or weapon.details['skill'] not in
-                fighter.details['skills']):
+        skill_full = None
+        if weapon is not None:
+            skill_full = fighter.get_best_skill_for_weapon(weapon.details)
+
+        if skill_full is None:
             return None, None
-        skill = fighter.details['skills'][weapon.details['skill']]
+        skill = skill_full['value']
+
         parry_why = []
         parry_skill_modified = False
 
@@ -2639,7 +2632,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 "damage": {"sw": {"type": "cr", "plus": 0},
                            "thr": {"type": "cr", "plus": 1}},
                 "parry": 0,
-                "skill": "Tonfa",
+                "skill": {"Tonfa": 0},
                 "type": "melee weapon"
             },
             {
@@ -2652,7 +2645,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     "dice": {"plus": 4, "num_dice": 1, "type": "pi"}
                 },
                 "reload": 3,
-                "skill": "Beam Weapons (Pistol)",
+                "skill": {"Beam Weapons (Pistol)": 0},
                 "type": "ranged weapon",
                 "ammo": {"name": "C Cell", "shots": 8, "shots_left": 8}
             },
@@ -2691,19 +2684,24 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'why'   is an array of strings describing why the to-hit numbers
                     are what they are.
         '''
-        # TODO (eventually): need convenient defaults -- maybe as an entry to
-        # the skill
-        # TODO (now): if 'skill' is 'dx', this doesn't work
-        if weapon.details['skill'] not in fighter.details['skills']:
+        skill_full = None
+        if weapon is not None:
+            skill_full = fighter.get_best_skill_for_weapon(weapon.details)
+
+        if skill_full is None:
             return None, None
+        skill = skill_full['value']
 
         why = []
-        skill = fighter.details['skills'][weapon.details['skill']]
-        why.append('Weapon %s w/skill = %d' % (weapon.details['name'], skill))
+        why.append('Weapon %s w/%s skill = %d' % (
+            weapon.details['name'], skill_full['name'], skill))
+        skill_modifier = weapon.details['skill'][skill_full['name']]
+        if skill_modifier < 0:
+            why.append('  ...using default skill at %d (already included)' %
+                    skill_modifier)
 
         # Dual-Weapon Attacking
         # TODO: break this section out into its own function so that it can be used unarmed
-
         weapons = fighter.get_current_weapons()
         if len(weapons) == ca_fighter.Fighter.MAX_WEAPONS:
             weapon_1ary = weapons[0]
@@ -2712,12 +2710,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     fighter.details['techniques'])
 
             # Dual-weapon fighting (B230, B417)
+            skill_full = fighter.get_best_skill_for_weapon(weapon.details)
+            skill = skill_full['value']
 
-            if weapon_1ary.details['skill'] == weapon_2ary.details['skill']:
-                defaults = [weapon_1ary.details['skill']]
+            # 2nd weapon
+            skill_full = fighter.get_best_skill_for_weapon(weapon_2ary.details)
+            skill_2ary = skill_full['value']
+
+            if skill == skill_2ary:
+                defaults = [skill]
             else:
-                defaults = [weapon_1ary.details['skill'],
-                            weapon_2ary.details['skill']]
+                defaults = [skill, skill_2ary]
 
             technique = self.__get_technique(
                     techniques, 'Dual-Weapon Attack', defaults)
@@ -2743,7 +2746,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     technique = self.__get_technique(
                             techniques,
                             'Off-Hand Weapon Training',
-                            [weapon_2ary.details['skill']])
+                            [skill_2ary])
                     if technique is not None:
                         found_match = True
                         skill += technique['value']
@@ -2820,8 +2823,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
     def get_unarmed_info(self,
                          fighter,        # Fighter object
                          opponent,       # Fighter object
-                         weapon,         # Weapon object.  Maybe brass knuckles
-                         unarmed_skills  # [string, string, ...]
+                         weapon          # Weapon object.  Maybe brass knuckles
                          ):
         '''
         Makes sense of the cascade of unarmed skills (brawling, boxing,
@@ -2849,7 +2851,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           }
         '''
 
-        # Assumes 'dx' is in unarmed_skills
+        # Assumes 'dx' is the minimum
         result = {
             'punch_skill': fighter.details['current']['dx'],
             'punch_string': 'Punch (DX) (B271, B370)',
@@ -2876,12 +2878,25 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         plus_per_die_of_thrust = 0
         plus_per_die_of_thrust_string = None
 
+        if weapon is None:
+            # If you're unarmed, there's no weapon to change the skill
+            weapon = ca_equipment.Weapon(
+                    {'delete me': True,    # Used to stop using this, later
+                      'name': '*Unarmed*',
+                      'skill': {"DX": 0,
+					            "Boxing": 0,
+					            "Brawling": 0,
+					            "Karate": 0 } })
+
+        weapon_skills = weapon.details['skill']
+
         # boxing, brawling, karate, dx
         if ('Brawling' in fighter.details['skills'] and
-                'Brawling' in unarmed_skills):
-            if result['punch_skill'] <= fighter.details['skills']['Brawling']:
+                'Brawling' in weapon_skills):
+            skill = fighter.details['skills']['Brawling'] + weapon_skills['Brawling']
+            if result['punch_skill'] <= skill:
                 result['punch_string'] = 'Brawling Punch (B182, B271, B370)'
-                result['punch_skill'] = fighter.details['skills']['Brawling']
+                result['punch_skill'] = skill
                 result['kick_string'] = 'Brawling Kick (B182, B271, B370)'
                 # Brawling: @DX+2 = +1 per die of thrusting damage
                 if result['punch_skill'] >= fighter.details['current']['dx']+2:
@@ -2890,15 +2905,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         'Brawling(%d) @DX(%d)+2 = +1/die of thrusting damage' %
                         (result['punch_skill'],
                          fighter.details['current']['dx']))
-            if result['parry_skill'] <= fighter.details['skills']['Brawling']:
-                result['parry_skill'] = fighter.details['skills']['Brawling']
+            if result['parry_skill'] <= skill:
+                result['parry_skill'] = skill
                 result['parry_string'] = 'Brawling Parry (B182, B376)'
-        if ('karate' in fighter.details['skills'] and
-                'karate' in unarmed_skills):
-            if result['punch_skill'] <= fighter.details['skills']['Karate']:
+        if ('Karate' in fighter.details['skills'] and
+                'Karate' in weapon_skills):
+            skill = fighter.details['skills']['Karate'] + weapon_skills['Karate']
+            if result['punch_skill'] <= skill:
                 result['punch_string'] = 'Karate Punch (B203, B271, B370)'
                 result['kick_string'] = 'Karate Kick (B203, B271, B370)'
-                result['punch_skill'] = fighter.details['skills']['Karate']
+                result['punch_skill'] = skill
                 # Karate: @DX+1+ = +2 per die of thrusting damage
                 # Karate: @DX = +1 per die of thrusting damage
                 if result['punch_skill'] >= fighter.details['current']['dx']+1:
@@ -2916,8 +2932,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 else:
                     plus_per_die_of_thrust = 0
                     plus_per_die_of_thrust_string = None
-            if result['parry_skill'] <= fighter.details['skills']['Karate']:
-                result['parry_skill'] = fighter.details['skills']['Karate']
+            if result['parry_skill'] <= skill:
+                result['parry_skill'] = skill
                 result['parry_string'] = 'Karate Parry (B203, B376)'
 
         # (brawling, karate, dx) - 2
@@ -2928,14 +2944,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                     result['punch_skill'],
                                                     result['kick_skill']))
 
-        if ('boxing' in fighter.details['skills'] and
-                'boxing' in unarmed_skills):
+        if ('Boxing' in fighter.details['skills'] and
+                'Boxing' in weapon_skills):
             # TODO (eventually): if skills are equal, boxing should be used in
             # favor of brawling or DX but NOT in favor of karate.  It's placed
             # here because the kick skill isn't improved by boxing.
-            if result['punch_skill'] < fighter.details['skills']['Boxing']:
+            skill = fighter.details['skills']['Boxing'] + weapon_skills['Boxing']
+            if result['punch_skill'] < skill:
                 result['punch_string'] = 'Boxing Punch (B182, B271, B370)'
-                result['punch_skill'] = fighter.details['skills']['Boxing']
+                result['punch_skill'] = skill
                 # Boxing: @DX+2+ = +2 per die of thrusting damage
                 # Boxing: @DX+1 = +1 per die of thrusting damage
                 if result['punch_skill'] >= fighter.details['current']['dx']+2:
@@ -2954,8 +2971,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 else:
                     plus_per_die_of_thrust = 0
                     plus_per_die_of_thrust_string = None
-            if result['parry_skill'] < fighter.details['skills']['Boxing']:
-                result['parry_skill'] = fighter.details['skills']['Boxing']
+            if result['parry_skill'] < skill:
+                result['parry_skill'] = skill
                 result['parry_string'] = 'Boxing Parry (B182, B376)'
 
         punch_why.append('%s, to-hit: %d' % (result['punch_string'],
@@ -3035,6 +3052,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                (st,
                                 kick_damage['num_dice'],
                                 kick_damage['plus']))
+
+        if 'delete me' in weapon.details:
+            weapon = None
 
         # TODO (eventually): maybe I want to make everything use damage_array
         # instead of making it a special case for brass knuckles.
@@ -3124,35 +3144,29 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return result
 
-    def get_weapons_unarmed_skills(self,
-                                   weapon  # Weapon object
-                                   ):
+    def does_weapon_use_unarmed_skills(self,
+                                       weapon  # Weapon object
+                                       ):
         '''
         Determines whether this weapon (which may be None) uses the unarmed
         combat skills.  That's basically a blackjack or brass knuckles but
-        there may be more.  Assumes weapon's skill is the most advanced skill
-        supported.
+        there may be more.
 
-        Returns array of skills supported by this weapon as supporting unarmed
-        combat (like brass knuckles).  If the weapon's skill isn't one of the
-        unarmed ones (like Guns (Pistol)), this method returns 'None'.
+        Returns True if this weapon supports unarmed combat (like brass
+        knuckles), False otherwise.
         '''
 
-        # Skills in increasing order of difficulty
-        all_unarmed_skills = ['dx', 'Brawling', 'Boxing', 'Karate']
+        if weapon is None:
+            return True
 
-        if weapon is None:  # No weapon uses unarmed skills by definition
-            return all_unarmed_skills
+        #all_unarmed_skills = ['dx', 'Brawling', 'Boxing', 'Karate']
+        all_unarmed_skills = ['Brawling', 'Boxing', 'Karate']
 
-        if weapon.details['skill'] not in all_unarmed_skills:
-            return None
+        for skill in weapon.details['skill'].iterkeys():
+            if skill in all_unarmed_skills:
+                return True
 
-        for i, skill in enumerate(all_unarmed_skills):
-            if weapon.details['skill'] == skill:
-                # Returns all of the skills through the matched one
-                return all_unarmed_skills[:i+1]
-
-        return ['dx']  # Camel in Cairo -- should never get here
+        return False
 
     def heal_fighter(self,
                      fighter,   # Fighter object
@@ -3229,20 +3243,23 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         if 'skills' not in creature:
             return result
 
-        unarmed_skills = self.get_weapons_unarmed_skills(None)
-
         for item in creature['stuff']:
             # NOTE: if the skill is one of the unarmed skills, then the skill
             # defaults to DX and that's OK -- we don't have to tell the user
             # about this.
-            if ('skill' in item and
-                    item['skill'] not in creature['skills'] and
-                    item['skill'] not in unarmed_skills):
-                self._window_manager.error([
-                    'Creature "%s"' % name,
-                    '  has item "%s"' % item['name'],
-                    '  that requires skill "%s"' % item['skill'],
-                    '  but not the skill to use it'])
+
+            if 'skill' in item:
+                found_skill = False
+                for item_skill in item['skill'].iterkeys():
+                    if (item_skill.lower() not in creature['current'] and
+                            item_skill in creature['skills']):
+                        found_skill = True
+
+                if not found_skill:
+                    self._window_manager.error([
+                        'Creature "%s"' % name,
+                        '  has item "%s"' % item['name'],
+                        '  but not the skill to use it'])
                 result = False
         if 'spells' in creature:
             duplicate_check = {}
@@ -3321,7 +3338,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     "thr": { "plus": -4, "type": "imp" }
                  },
                 "parry": -4,
-                "skill": "*UNKNOWN*",
+                "skill": {"*UNKNOWN*": 0},
         }
 
         for key, value in strawman.iteritems():
@@ -3343,7 +3360,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 "damage": {"dice": { "plus": 0, "num_dice": 0, "type": "pi" }},
                 "bulk": -10,
                 "reload": 10,
-                "skill": "*UNKNOWN*",
+                "skill": {"*UNKNOWN*": 0},
                 "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
                 # clip is not required
         }
@@ -4624,18 +4641,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             text = ['Move & Attack',
                     ' Defense: Dodge,block',
                     ' Move: %s' % move_string]
-
-            if fight_handler is None:
-                opponent = None
-            else:
-                opponent = fight_handler.get_opponent_for(fighter)
-            unarmed_skills = self.get_weapons_unarmed_skills(weapon)
+            opponent = (None if fight_handler is None else
+                    fight_handler.get_opponent_for(fighter))
             why = ['Move and attack']
-            if unarmed_skills is not None:
+            if self.does_weapon_use_unarmed_skills(weapon):
                 unarmed_info = self.get_unarmed_info(fighter,
                                                      opponent,
-                                                     weapon,
-                                                     unarmed_skills)
+                                                     weapon)
                 to_hit_penalty = MOVE_ATTACK_MELEE_MINUS
                 to_hit = unarmed_info['punch_skill'] + to_hit_penalty
 
@@ -5547,13 +5559,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                             notes,
                             fighter,        # Fighter object
                             opponent,       # Fighter object
-                            weapon,         # Weapon object.  Maybe brass knuckles
-                            unarmed_skills  # [string, string, ...]
+                            weapon          # Weapon object.  Maybe brass knuckles
                             ):
-        unarmed_info = self.get_unarmed_info(fighter,
-                                             opponent,
-                                             weapon,
-                                             unarmed_skills)
+        unarmed_info = self.get_unarmed_info(fighter, opponent, weapon)
 
         notes.append(unarmed_info['punch_string'])
         crit, fumble = self.__get_crit_fumble(

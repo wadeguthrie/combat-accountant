@@ -607,7 +607,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": "Guns (Pistol)",
+                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": 1,
                   "notes": None},  # index 0
@@ -691,7 +691,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": "Guns (Pistol)",
+                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},
@@ -737,7 +737,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": "Guns (Pistol)",
+                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},
@@ -789,7 +789,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": "Guns (Pistol)",
+                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},
@@ -797,7 +797,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                         # __tank_fighter_sickstick_index
                   "type": ["melee weapon"],
                   "damage": {"dice": "1d+1 fat"},
-                  "skill": "Axe/Mace",
+                  "skill": {"Axe/Mace": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},
@@ -846,14 +846,14 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": "Guns (Pistol)",
+                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},
                  {"name": "Large Knife",
                   "type": ["melee weapon"],
                   "damage": {"dice": "1d-2", "type": "imp"},
-                  "skill": "Knife",
+                  "skill": {"Knife": 0},
                   "parry": -1,
                   "count": 1,
                   "owners": None,
@@ -863,7 +863,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                   "notes": "B271",
                   "damage": {"thr": {"plus": 0, "type": "cr"}},
                   "parry": 0,
-                  "skill": "Karate",
+                  "skill": {"Brawling": 0, "Boxing": 0, "Karate": 0},
                   "owners": None,
                   "type": ["melee weapon"]},
                  {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
@@ -1392,7 +1392,6 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             print '\n=== test_get_unarmed_info ===\n'
 
         # Vodou Priest
-        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
         mock_fight_handler = MockFightHandler()
         vodou_priest_fighter = ca_fighter.Fighter(
                 'Vodou Priest',
@@ -1403,8 +1402,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         hand_to_hand_info = self.__ruleset.get_unarmed_info(
                 vodou_priest_fighter,
                 None,
-                None,
-                unarmed_skills)
+                None)
         assert hand_to_hand_info['punch_skill'] == 12
         assert hand_to_hand_info['punch_damage'] == '1d-3 (cr=x1.0)'
         assert hand_to_hand_info['kick_skill'] == 10
@@ -1420,8 +1418,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 self.__window_manager)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(bokor_fighter,
                                                             None,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         # PP.pprint(hand_to_hand_info)
         assert hand_to_hand_info['punch_skill'] == 12
         assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
@@ -1438,8 +1435,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 self.__window_manager)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
                                                             None,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         assert hand_to_hand_info['punch_skill'] == 16
         assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
         assert hand_to_hand_info['kick_skill'] == 14
@@ -1455,8 +1451,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 self.__window_manager)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
                                                             None,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         assert hand_to_hand_info['punch_skill'] == 14
         assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
         assert hand_to_hand_info['kick_skill'] == 12
@@ -1471,8 +1466,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  mock_fight_handler)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
                                                             None,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         assert hand_to_hand_info['punch_skill'] == (
                 14 + self.__crawling_attack_mod)
         assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
@@ -1491,8 +1485,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 self.__window_manager)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
                                                             None,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         assert hand_to_hand_info['punch_skill'] == 14
         assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
         assert hand_to_hand_info['kick_skill'] == 12
@@ -1500,11 +1493,13 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         assert hand_to_hand_info['parry_skill'] == 10
 
         # w/brass knuckles -- Note: that the punch damage is +1
+
         ignore, weapon = thief_fighter.draw_weapon_by_name('brass knuckles')
-        hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
-                                                            None,
-                                                            weapon,
-                                                            unarmed_skills)
+        if self.__ruleset.does_weapon_use_unarmed_skills(weapon):
+            hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
+                                                                None,
+                                                                weapon)
+
         assert hand_to_hand_info['punch_skill'] == 14
         assert hand_to_hand_info['punch_damage'] == 'thr: 1d-1 (cr=x1.0)'
         assert hand_to_hand_info['kick_skill'] == 12
@@ -1514,8 +1509,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # back to unarmed
         hand_to_hand_info = self.__ruleset.get_unarmed_info(thief_fighter,
                                                             None,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         assert hand_to_hand_info['punch_skill'] == 14
         assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
         assert hand_to_hand_info['kick_skill'] == 12
@@ -1532,8 +1526,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Picking opponent doesn't change things
         hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
                                                             thief_fighter,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         assert hand_to_hand_info['punch_skill'] == 16
         assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
         assert hand_to_hand_info['kick_skill'] == 14
@@ -1549,8 +1542,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  mock_fight_handler)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
                                                             thief_fighter,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         assert hand_to_hand_info['punch_skill'] == 16
         assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
         assert hand_to_hand_info['kick_skill'] == 14
@@ -1564,8 +1556,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  mock_fight_handler)
         hand_to_hand_info = self.__ruleset.get_unarmed_info(tank_fighter,
                                                             thief_fighter,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         assert hand_to_hand_info['punch_skill'] == 16
         assert hand_to_hand_info['punch_damage'] == '1d-2 (cr=x1.0)'
         assert hand_to_hand_info['kick_skill'] == 14
@@ -2551,13 +2542,10 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                                             None,
                                                             weapon)
 
-        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
-
         original_hand_to_hand_info = self.__ruleset.get_unarmed_info(
                 vodou_priest,
                 None,
-                None,
-                unarmed_skills)
+                None)
 
         original_dodge_skill, ignore = self.__ruleset.get_dodge_skill(
                 vodou_priest)
@@ -2585,8 +2573,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
                                                             None,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         assert (hand_to_hand_info['punch_skill'] ==
                 original_hand_to_hand_info['punch_skill'] + damage_1st)
         assert (hand_to_hand_info['kick_skill'] ==
@@ -2618,8 +2605,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
                                                             None,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         assert (hand_to_hand_info['punch_skill'] ==
                 original_hand_to_hand_info['punch_skill'] + damage_1st)
         assert (hand_to_hand_info['kick_skill'] ==
@@ -2652,8 +2638,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
                                                             None,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         assert (hand_to_hand_info['punch_skill'] ==
                 original_hand_to_hand_info['punch_skill'] + max_shock)
         assert (hand_to_hand_info['kick_skill'] ==
@@ -2697,8 +2682,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
                                                             None,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         assert (hand_to_hand_info['parry_skill'] ==
                 original_hand_to_hand_info['parry_skill'])  # no shock
 
@@ -2732,8 +2716,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
                                                             None,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         stun_penalty = -4
         posture_penalty = -3
         total_penalty = stun_penalty + posture_penalty
@@ -2758,8 +2741,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
                                                             None,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
 
         # Stun should be over -- now there's only the posture penalty
 
@@ -2961,13 +2943,10 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         del vodou_priest.details['advantages']['Combat Reflexes']
 
-        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
-
         original_hand_to_hand_info = self.__ruleset.get_unarmed_info(
                 vodou_priest,
                 None,
-                None,
-                unarmed_skills)
+                None)
 
         original_dodge_skill, ignore = self.__ruleset.get_dodge_skill(
                 vodou_priest)
@@ -3009,8 +2988,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
                                                             None,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
 
         attack_lying_penalty = -4   # B551
         defense_lying_penalty = -3  # B551
@@ -3734,12 +3712,10 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # Setup Stun Test
 
-        unarmed_skills = self.__ruleset.get_weapons_unarmed_skills(None)
         original_hand_to_hand_info = self.__ruleset.get_unarmed_info(
                 current_fighter,
                 None,
-                None,
-                unarmed_skills)
+                None)
         original_dodge_skill, ignore = self.__ruleset.get_dodge_skill(
                 current_fighter)
 
@@ -3753,8 +3729,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(current_fighter,
                                                             None,
-                                                            None,
-                                                            unarmed_skills)
+                                                            None)
         stun_penalty = -4
         total_penalty = stun_penalty
 
@@ -4150,7 +4125,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                    "notes": "",
                                    "owners": None},
                           "reload": 3,
-                          "skill": "Guns (Pistol)",
+                          "skill": {"Guns (Pistol)": 0},
                           "count": 1,
                           "owners": None,
                           "notes": ""}
@@ -4196,7 +4171,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
               "acc": 4,
               "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
               "reload": 3,
-              "skill": "Guns (Pistol)",
+              "skill": {"Guns (Pistol)": 0},
               "count": 1, <------------------------------------------- now 2
               "owners": None,
               "notes": ""
@@ -4204,7 +4179,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
          1=> {"name": "sick stick",
               "type": ["melee weapon"],
               "damage": {"dice": "1d+1 fat"},
-              "skill": "Axe/Mace",
+              "skill": {"Axe/Mace": 0},
               "count": 1,
               "owners": None,
               "notes": ""
@@ -4219,7 +4194,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
               "acc": 4, <---------------------- now 5 -- this is similar item
               "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
               "reload": 3,
-              "skill": "Guns (Pistol)",
+              "skill": {"Guns (Pistol)": 0},
               "count": 1,
               "owners": None,
               "notes": ""
@@ -4230,7 +4205,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
               "acc": 2,
               "ammo": {"name": "C Cell", "shots_left": 8, "shots": 8},
               "reload": 3,
-              "skill": "Guns (Pistol)",
+              "skill": {"Guns (Pistol)": 0},
               "count": 1,
               "owners": None,
               "notes": ""
@@ -4333,14 +4308,14 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": "Guns (Pistol)",
+                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},
                  {"name": "sick stick",
                   "type": ["melee weapon"],
                   "damage": {"dice": "1d+1 fat"},
-                  "skill": "Axe/Mace",
+                  "skill": {"Axe/Mace": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},
@@ -4542,7 +4517,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                  {"name": "sick stick",
                   "type": ["melee weapon"],
                   "damage": {"dice": "1d+1 fat"},
-                  "skill": "Axe/Mace",
+                  "skill": {"Axe/Mace": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},
@@ -4569,7 +4544,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": "Guns (Pistol)",
+                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": 1,
                   "notes": None},  # index 0
@@ -4595,7 +4570,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": "Guns (Pistol)",
+                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},

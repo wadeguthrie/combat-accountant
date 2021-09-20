@@ -23,11 +23,6 @@ import xml.etree.ElementTree as ET
 # element.text is 'foo'
 # element.attrib = {'type': 'cut', 'st': 'sw', 'base': '-2'}
 
-# TODO: Doesn't seem to flatten containers (and remove contents of containers) on update
-# For Import, keep containers
-# For Update, flatten all containers -- put new items at top level
-
-
 import ca_json
 
 # TODO: spenser's & Alan's laser rifle says ACC 9 when I have 8
@@ -40,7 +35,6 @@ import ca_json
 # TODO: fast-draw(knife) doesn't include +1 from combat reflexes
 
 # TODO: spells don't deal with more points than 24 or 28
-# TODO: build a list of everything that changes (for 'update', not 'import')
 
 class Skills(object):
     # Techniques:
@@ -432,15 +426,24 @@ class CharacterGcs(object):
         Returns nothing.
         '''
         # Skill -- find the first one with skill modifier == 0
-        # TODO: modify the data structures to allow multiple skills
         still_need_a_skill = True
+        weapon_dict['skill'] = {}
+        # 'default' elements each describe a single skill (or attribute) that
+        # can be used to use this item.  There're typically several as in:
+        # knife (+0), sword (-2), DX (-4)
+        # They look like:
+        # <default>
+        #   <type>Skill</type>
+        #   <name>Beam Weapons</name>
+        #   <specialization>Rifle</specialization>
+        #   <modifier>0</modifier>
+        # </default>
+
         for default_element in weapon_element.findall('default'):
-            type_element = default_element.find('type')
+            type_element = default_element.find('type') # DX or 'Skill'
             if (type_element is not None and type_element.text == 'Skill'):
                 value_element = default_element.find('modifier')
-                # Just take the first skill with a 0 modifier (which would be
-                # a primary skill rather than a default/fall-back skill)
-                if value_element is not None and int(value_element.text) == 0:
+                if value_element is not None:
                     skill_element = default_element.find('name')
                     specialty_element = default_element.find('specialization')
                     if specialty_element is None:
@@ -449,21 +452,21 @@ class CharacterGcs(object):
                         skill = '%s (%s)' % (skill_element.text,
                                              specialty_element.text)
                     still_need_a_skill = False
-                    weapon_dict['skill'] = skill
-                    break
+                    weapon_dict['skill'][skill] = int(value_element.text)
             else:
+                # TODO: when we handle more than one skill for a weapon,
+                # include handling, here
+                # elif type_element.text == 'DX': -- or in 'current'
                 # This would be the default attribute (like DX) and would
                 # look like:
 				# <default>
 			    #   <type>DX</type>
 				#   <modifier>-4</modifier>
 				# </default>
-                # TODO: when we handle more than one skill for a weapon,
-                # include handling, here
                 pass
 
         if still_need_a_skill:
-            weapon_dict['skill'] = '** UNKNOWN **'
+            weapon_dict['skill']['** UNKNOWN **'] = 0
             self.__window_manager.error([
                 'No skill for "%s" in GCS file -- adding dummy' %
                 weapon_dict['name']
@@ -1034,6 +1037,7 @@ class ImportCharacter(object):
 
         # We don't care if the counts, notes, or owners aren't the same
 
+        # TODO: this will need to deal with multiple skills
         if 'melee weapon' in existing_item['type']:
             if not ImportCharacter.is_optional_element_equal('parry',
                                                              existing_item,
@@ -1373,7 +1377,9 @@ class ImportCharacter(object):
                                             'mode': curses.A_NORMAL}])
 
                         self.__window_manager.display_window(
-                                'Examine These -- Are They The Same Item?', output)
+                                ('Examine These %s -- Are They The Same Item?' %
+                                    item_json['name']),
+                                output)
                         request_menu = [('yes', True), ('no', False)]
                         they_are_the_same, ignore = self.__window_manager.menu(
                                 'Well, Are They The Same Item?', request_menu)

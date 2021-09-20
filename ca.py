@@ -23,7 +23,7 @@ import ca_gurps_ruleset
 import ca_timers
 
 # TODO: whitelist should be in each character's JSON.  Mention things in
-#   whitelist in changes log.
+#   whitelist in 'update' log.
 # TODO: technique values should be shown added with their base skill
 
 # TODO: add container open/close/move into PersonnelHandler
