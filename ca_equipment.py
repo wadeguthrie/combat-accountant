@@ -94,15 +94,10 @@ class Equipment(object):
                                         #   that're open
                       ):
         current_container = self.__equipment
-        #PP.pprint(current_container) # TODO: remove
-
         if container_stack is None:
             return current_container
 
         open_container_indexes = copy.deepcopy(container_stack)
-        #PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
-        #print '\n--- get_item_by_index: %d ---' % index # TODO: remove
-        #PP.pprint(open_container_indexes) # TODO: remove
         if len(open_container_indexes) > 0:
             # Doing the 1st one out-of-band because self.__equipment doesn't
             # have a 'stuff' member.  The rest of the containers will.
@@ -110,15 +105,10 @@ class Equipment(object):
             if container_index >= len(current_container):
                 return None
             current_container = current_container[container_index]['stuff']
-            #print 'POP, index:%d, current_container:' % container_index # TODO: remove
-            #PP.pprint(current_container) # TODO: remove
-
             for container_index in open_container_indexes:
                 if container_index >= len(current_container):
                     return None
                 current_container = current_container[container_index]['stuff']
-                #print 'POP, index:%d, current_container:' % container_index # TODO: remove
-                #PP.pprint(current_container) # TODO: remove
         return current_container
 
     def get_item_by_name(self,              # Public to facilitate testing

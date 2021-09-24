@@ -1954,7 +1954,6 @@ class PersonnelHandler(ScreenHandler):
         # actually import the new creature
 
         name, creature = self.world.ruleset.import_creature_from_file(filename)
-        # TODO: need to redraw after import
         if creature is None:
             return True
 
@@ -2117,8 +2116,6 @@ class PersonnelHandler(ScreenHandler):
     # Other methods
     #
     def __add_creature(self):
-        # TODO (eventually): seems a bit long -- break this up into smaller
-        # methods
         '''
         Command ribbon method.
 
@@ -2138,203 +2135,23 @@ class PersonnelHandler(ScreenHandler):
         # Add as many creatures as we want
 
         keep_adding_creatures = True
-        monster_index = 0
         while keep_adding_creatures:
+            new_creature = self.__make_creature_from_template()
+            if new_creature is None:
+                keep_adding_creatures = False
+                break
 
-            # Get a template.
-
-            if self.__template_group is None:
-                self.__change_template_group()
-
-            # Based on which creature from the template
-
-            empty_creature = 'Blank Template'
-            from_creature_name = empty_creature
-
-            # None means there are no templates or the user decided against
-            # a template.
-
-            if self.__template_group is not None:
-                creature_menu = []
-                for from_creature_name in (
-                            self.world.details['templates'][
-                                self.__template_group]):
-                    if from_creature_name == empty_creature:
-                        self._window_manager.error(
-                                ['Template group "%s" contains bad template:' %
-                                    self.__template_group,
-                                 '"%s". Replacing with an empty creature.' %
-                                    empty_creature])
-                    else:
-                        creature_menu.append((from_creature_name,
-                                              from_creature_name))
-
-                creature_menu = sorted(creature_menu,
-                                       key=lambda x: x[0].upper())
-                creature_menu.append((empty_creature, empty_creature))
-
-                from_creature_name, monster_index = self._window_manager.menu(
-                        'Monster', creature_menu, monster_index)
-                if from_creature_name is None:
-                    keep_adding_creatures = False
-                    break
-
-            # Generate the creature for the template
-
-            to_creature = self.world.ruleset.make_empty_creature()
-
-            if from_creature_name != empty_creature:
-                from_creature = (self.world.details['templates'][
-                                 self.__template_group][from_creature_name])
-                for key, value in from_creature.iteritems():
-                    if key == 'permanent':
-                        for ikey, ivalue in value.iteritems():
-                            to_creature['permanent'][ikey] = (
-                                self.__get_value_from_template(ivalue,
-                                                               from_creature))
-                            to_creature['current'][ikey] = to_creature[
-                                                            'permanent'][ikey]
-                    else:
-                        to_creature[key] = self.__get_value_from_template(
-                                                        value, from_creature)
-
-            # Get the new creature name
-
-            lines, cols = self._window.getmaxyx()
-
-            # We're not filling in the holes if we delete a monster, we're
-            #   just adding to the total of monsters created
-            # NOTE: this is still imperfect.  If you delete a monster and then
-            #   come back later, you'll still have numbering problems.
-            # ALSO NOTE: we use 'len' rather than 'len'+1 because we've added
-            #   a Venue to the list -- the Venue has an implied prefix of '0'
-            previous_creature_count = (0 if self.__critters is None else
-                                       len(self.__critters['data']))
-            creature_num = (previous_creature_count +
-                            self.__deleted_critter_count)
-            keep_asking = True
-            while keep_asking:
-                base_name = self._window_manager.input_box(1,      # height
-                                                           cols-4,  # width
-                                                           'Monster Name')
-                if base_name is None or len(base_name) == 0:
-                    base_name, where, gender = self.world.get_random_name()
-                    if base_name is None:
-                        self._window_manager.error(['Monster needs a name'])
-                        keep_asking = True
-                        continue
-                    else:
-                        if where is not None:
-                            to_creature['notes'].append('origin: %s' % where)
-                        if gender is not None:
-                            to_creature['notes'].append('gender: %s' % gender)
-
-                if self.__group_name == 'NPCs' or self.__group_name == 'PCs':
-                    creature_name = base_name
-                else:
-                    creature_name = '%d - %s' % (creature_num, base_name)
-
-                if self.__critters is None:
-                    keep_asking = False
-                elif creature_name in self.__critters['data']:
-                    self._window_manager.error(
-                        ['Monster "%s" already exists' % creature_name])
-                    keep_asking = True
-                else:
-                    keep_asking = False
-
-            # Add personality stuff to notes
+            creature_name = self.__get_name_for_creature(new_creature)
 
             if self.__group_name != 'PCs':
-                with ca_json.GmJson('gm-npc-random-detail.json') as npc_detail:
-                    for name, traits in (
-                                npc_detail.read_data['traits'].iteritems()):
-                        trait = random.choice(traits)
-                        if isinstance(trait, dict):
-                            trait_array = [trait['text']]
-                            for key in trait:
-                                if key in npc_detail.read_data['support']:
-                                    trait_array.append('%s: %s' %
-                                        (key,
-                                         random.choice(
-                                            npc_detail.read_data['support'][key])))
-                            trait = ', '.join(trait_array)
+                self.__get_personality(new_creature)
 
-                        to_creature['notes'].append('%s: %s' % (name, trait))
-
-            # Modify the creature we just created
-
-            keep_changing_this_creature = True
-            while keep_changing_this_creature:
-                # Creating a temporary list to show.  Add the new creature by
-                # its current creature name and allow the name to be modified.
-                # Once the creature name is sorted, we can add it to the
-                # permanent list.  That simplifies the cleanup (since the
-                # lists are dictionaries, indexed by creature name).
-
-                # Note: we're not going to touch the objects in temp_list so
-                # it's OK that this is just copying references.
-                if self.__critters is None:
-                    temp_list = []
-                else:
-                    temp_list = [x for x in self.__critters['obj']]
-                temp_list.append(ca_fighter.Fighter(creature_name,
-                                                    self.__group_name,
-                                                    to_creature,
-                                                    self.world.ruleset,
-                                                    self._window_manager))
-                self.__new_char_name = creature_name
-                # PersonnelGmWindow
-                self._window.show_creatures(temp_list,
-                                            self.__new_char_name,
-                                            self.__viewing_index)
-
-                action_menu = [('append to name', 'append'),
-                               ('notes', 'notes'),
-                               ('continue (add another creature)', 'continue'),
-                               ('quit', 'quit')]
-
-                starting_index = 2 # Start on 'continue'
-                action, ignore = self._window_manager.menu('What Next',
-                                                           action_menu,
-                                                           starting_index)
-                if action == 'append':
-                    more_text = self._window_manager.input_box(1,       # ht
-                                                               cols-4,  # width
-                                                               'Add to Name')
-                    temp_creature_name = '%s - %s' % (creature_name,
-                                                      more_text)
-                    if self.__critters is None:
-                        creature_name = temp_creature_name
-                    elif temp_creature_name in self.__critters['data']:
-                        self._window_manager.error(
-                                            ['Monster "%s" already exists' %
-                                                temp_creature_name])
-                    else:
-                        creature_name = temp_creature_name
-                elif action == 'notes':
-                    if 'notes' not in to_creature:
-                        notes = None
-                    else:
-                        notes = '\n'.join(to_creature['notes'])
-                    notes = self._window_manager.edit_window(
-                                lines - 4,
-                                cols/2,
-                                notes,  # initial string (w/ \n) for the window
-                                'Notes',
-                                '^G to exit')
-                    to_creature['notes'] = [x for x in notes.split('\n')]
-
-                elif action == 'continue':
-                    keep_changing_this_creature = False
-
-                elif action == 'quit':
-                    keep_changing_this_creature = False
-                    keep_adding_creatures = False
+            creature_name, keep_adding_creatures = self.__modify_new_creature(
+                    creature_name, new_creature)
 
             # Add our new creature to its group and show it to the world.
 
-            self.__critters['data'][creature_name] = to_creature
+            self.__critters['data'][creature_name] = new_creature
             self.__critters['obj'].append(self.world.get_creature(
                                                         creature_name,
                                                         self.__group_name))
@@ -2998,6 +2815,234 @@ class PersonnelHandler(ScreenHandler):
 
         self._draw_screen()
         return True  # Anything but 'None' for a menu handler
+
+    def __get_name_for_creature(self,
+                                new_creature    # dict for creature
+                                ):
+        '''
+        Gets a new name for the passed-in creature.
+
+        Returns creature's name.
+        '''
+
+        # Get the new creature name
+
+        lines, cols = self._window.getmaxyx()
+
+        # We're not filling in the holes if we delete a monster, we're
+        #   just adding to the total of monsters created
+        # NOTE: this is still imperfect.  If you delete a monster and then
+        #   come back later, you'll still have numbering problems.
+        # ALSO NOTE: we use 'len' rather than 'len'+1 because we've added
+        #   a Venue to the list -- the Venue has an implied prefix of '0'
+        previous_creature_count = (0 if self.__critters is None else
+                                   len(self.__critters['data']))
+        creature_num = (previous_creature_count + self.__deleted_critter_count)
+        keep_asking = True
+        creature_name = '** Anonymous **'  # Shouldn't need this
+        while keep_asking:
+            base_name = self._window_manager.input_box(1,      # height
+                                                       cols-4,  # width
+                                                       'Monster Name')
+            if base_name is None or len(base_name) == 0:
+                base_name, where, gender = self.world.get_random_name()
+                if base_name is None:
+                    self._window_manager.error(['Monster needs a name'])
+                    keep_asking = True
+                    continue
+                else:
+                    if where is not None:
+                        new_creature['notes'].append('origin: %s' % where)
+                    if gender is not None:
+                        new_creature['notes'].append('gender: %s' % gender)
+
+            if self.__group_name == 'NPCs' or self.__group_name == 'PCs':
+                creature_name = base_name
+            else:
+                creature_name = '%d - %s' % (creature_num, base_name)
+
+            if self.__critters is None:
+                keep_asking = False
+            elif creature_name in self.__critters['data']:
+                self._window_manager.error(
+                    ['Monster "%s" already exists' % creature_name])
+                keep_asking = True
+            else:
+                keep_asking = False
+
+        return creature_name
+
+    def __get_personality(self,
+                          new_creature  # dict containing creature
+                          ):
+        '''
+        Generates a random personality for the creature.  Adds that description
+        to the creature's notes.
+
+        Returns nothing
+        '''
+        with ca_json.GmJson('gm-npc-random-detail.json') as npc_detail:
+            for name, traits in npc_detail.read_data['traits'].iteritems():
+                trait = random.choice(traits)
+                if isinstance(trait, dict):
+                    trait_array = [trait['text']]
+                    for key in trait:
+                        if key in npc_detail.read_data['support']:
+                            trait_array.append('%s: %s' %
+                                (key,
+                                 random.choice(
+                                    npc_detail.read_data['support'][key])))
+                    trait = ', '.join(trait_array)
+
+                new_creature['notes'].append('%s: %s' % (name, trait))
+
+    def __make_creature_from_template(self):
+        '''
+        Gets a template for the creature currently being added to the current
+        group.
+
+        Returns: dict containing creature generated
+        '''
+        if self.__template_group is None:
+            self.__change_template_group()
+
+        # Based on which creature from the template
+
+        empty_creature = 'Blank Template'
+        from_creature_name = empty_creature
+
+        # None means there are no templates or the user decided against
+        # a template.
+
+        monster_index = 0
+        if self.__template_group is not None:
+            creature_menu = []
+            for from_creature_name in (
+                        self.world.details['templates'][
+                            self.__template_group]):
+                if from_creature_name == empty_creature:
+                    self._window_manager.error(
+                            ['Template group "%s" contains bad template:' %
+                                self.__template_group,
+                             '"%s". Replacing with an empty creature.' %
+                                empty_creature])
+                else:
+                    creature_menu.append((from_creature_name,
+                                          from_creature_name))
+
+            creature_menu = sorted(creature_menu, key=lambda x: x[0].upper())
+            creature_menu.append((empty_creature, empty_creature))
+
+            from_creature_name, monster_index = self._window_manager.menu(
+                    'Monster', creature_menu, monster_index)
+            if from_creature_name is None:
+                return None
+
+        # Generate the creature for the template
+
+        to_creature = self.world.ruleset.make_empty_creature()
+
+        if from_creature_name != empty_creature:
+            from_creature = (self.world.details['templates'][
+                             self.__template_group][from_creature_name])
+            for key, value in from_creature.iteritems():
+                if key == 'permanent':
+                    for ikey, ivalue in value.iteritems():
+                        to_creature['permanent'][ikey] = (
+                            self.__get_value_from_template(ivalue,
+                                                           from_creature))
+                        to_creature['current'][ikey] = to_creature[
+                                                        'permanent'][ikey]
+                else:
+                    to_creature[key] = self.__get_value_from_template(
+                                                    value, from_creature)
+
+        return to_creature
+
+
+    def __modify_new_creature(self,
+                              creature_name,    # string: new creature's name
+                              new_creature      # dict containing creature
+                              ):
+        '''
+        Allows the user to modify a created creature. Potentially modifies
+        new_creature
+
+        Returns: tuple: (new_creature_name,
+                         True to keep adding creatures/False otherwise)
+        '''
+        keep_changing_this_creature = True
+        keep_adding_creatures = True
+        lines, cols = self._window.getmaxyx()
+        while keep_changing_this_creature:
+            # Creating a temporary list to show.  Add the new creature by its
+            # current creature name and allow the name to be modified.  Once
+            # the creature name is sorted, we can add it to the permanent list.
+            # That simplifies the cleanup (since the lists are dictionaries,
+            # indexed by creature name).
+
+            # Note: we're not going to touch the objects in temp_list so it's
+            # OK that this is just copying references.
+
+            if self.__critters is None:
+                temp_list = []
+            else:
+                temp_list = [x for x in self.__critters['obj']]
+            temp_list.append(ca_fighter.Fighter(creature_name,
+                                                self.__group_name,
+                                                new_creature,
+                                                self.world.ruleset,
+                                                self._window_manager))
+            self.__new_char_name = creature_name
+            # PersonnelGmWindow
+            self._window.show_creatures(temp_list,
+                                        self.__new_char_name,
+                                        self.__viewing_index)
+
+            action_menu = [('append to name', 'append'),
+                           ('notes', 'notes'),
+                           ('continue (add another creature)', 'continue'),
+                           ('quit', 'quit')]
+
+            starting_index = 2 # Start on 'continue'
+            action, ignore = self._window_manager.menu('What Next',
+                                                       action_menu,
+                                                       starting_index)
+            if action == 'append':
+                more_text = self._window_manager.input_box(1,       # ht
+                                                           cols-4,  # width
+                                                           'Add to Name')
+                temp_creature_name = '%s - %s' % (creature_name,
+                                                  more_text)
+                if self.__critters is None:
+                    creature_name = temp_creature_name
+                elif temp_creature_name in self.__critters['data']:
+                    self._window_manager.error(
+                                        ['Monster "%s" already exists' %
+                                            temp_creature_name])
+                else:
+                    creature_name = temp_creature_name
+            elif action == 'notes':
+                if 'notes' not in new_creature:
+                    notes = None
+                else:
+                    notes = '\n'.join(new_creature['notes'])
+                notes = self._window_manager.edit_window(
+                            lines - 4,
+                            cols/2,
+                            notes,  # initial string (w/ \n) for the window
+                            'Notes',
+                            '^G to exit')
+                new_creature['notes'] = [x for x in notes.split('\n')]
+
+            elif action == 'continue':
+                keep_changing_this_creature = False
+
+            elif action == 'quit':
+                keep_changing_this_creature = False
+                keep_adding_creatures = False
+
+        return creature_name, keep_adding_creatures
 
     def __holster_weapon(self,
                          throw_away   # Required/used by the caller because
