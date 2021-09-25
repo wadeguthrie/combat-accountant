@@ -686,7 +686,6 @@ class Fighter(ThingsInFight):
         return result
 
     def get_preferred_item_indexes(self):
-        # TODO (now): realize that a single item can be both weapon and armor
         '''
         Returns a list of indexes of preferred weapons and armor.
         '''
@@ -695,7 +694,9 @@ class Fighter(ThingsInFight):
         if len(self.details['preferred-armor-index']) > 0:
             result.extend(self.details['preferred-armor-index'])
         if len(self.details['preferred-weapon-index']) > 0:
-            result.extend(self.details['preferred-weapon-index'])
+            for item in self.details['preferred-weapon-index']:
+                if item not in result:
+                    result.append(item)
 
         return result
 
