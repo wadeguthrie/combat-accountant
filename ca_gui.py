@@ -849,6 +849,9 @@ class GmWindowManager(object):
         '''
         (MENU_STRING, MENU_RESULT) = range(0, 2)
 
+        if starting_index is None:
+            starting_index = 0
+
         if len(strings_results) < 1:  # if there's no choice, say so
             return None, None
 
