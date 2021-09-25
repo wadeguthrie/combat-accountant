@@ -25,15 +25,8 @@ import xml.etree.ElementTree as ET
 
 import ca_json
 
-# TODO: spenser's & Alan's laser rifle says ACC 9 when I have 8
-# TODO: karen's laser pistol says ACC 2 when I have 3 (I may have just messed up)
-# TODO: erik's & Alans's laser rifle says BULK -4 when I have -5
 # TODO: damage type should be 'pi' by default
-# TODO: erik's Blaster Pistol, Sig Sauer D65 doesn't show as same weapon in GCS
-# TODO: alan's Colt Series 170D shows reload of 2 when I have 3
-
 # TODO: fast-draw(knife) doesn't include +1 from combat reflexes
-
 # TODO: spells don't deal with more points than 24 or 28
 
 class Skills(object):
@@ -431,17 +424,18 @@ class CharacterGcs(object):
         # 'default' elements each describe a single skill (or attribute) that
         # can be used to use this item.  There're typically several as in:
         # knife (+0), sword (-2), DX (-4)
-        # They look like:
-        # <default>
-        #   <type>Skill</type>
-        #   <name>Beam Weapons</name>
-        #   <specialization>Rifle</specialization>
-        #   <modifier>0</modifier>
-        # </default>
 
         for default_element in weapon_element.findall('default'):
             type_element = default_element.find('type') # DX or 'Skill'
             if (type_element is not None and type_element.text == 'Skill'):
+                # Looking for something like this:
+                #   <default>
+                #       <type>Skill</type>
+                #       <name>Beam Weapons</name>
+                #       <specialization>Rifle</specialization>
+                #       <modifier>0</modifier>
+                #   </default>
+
                 value_element = default_element.find('modifier')
                 if value_element is not None:
                     skill_element = default_element.find('name')
@@ -454,16 +448,18 @@ class CharacterGcs(object):
                     still_need_a_skill = False
                     weapon_dict['skill'][skill] = int(value_element.text)
             else:
-                # TODO: when we handle more than one skill for a weapon,
-                # include handling, here
-                # elif type_element.text == 'DX': -- or in 'current'
-                # This would be the default attribute (like DX) and would
-                # look like:
-				# <default>
-			    #   <type>DX</type>
-				#   <modifier>-4</modifier>
-				# </default>
-                pass
+                # Looking for something like this:
+				#   <default>
+			    #       <type>DX</type>
+				#       <modifier>-4</modifier>
+				#   </default>
+
+                skill = type_element.text
+                if skill.lower() in self.char['permanent']:
+                    # Then we're talking 'dx' or something as a default
+                    value_element = default_element.find('modifier')
+                    if value_element is not None:
+                        weapon_dict['skill'][skill] = int(value_element.text)
 
         if still_need_a_skill:
             weapon_dict['skill']['** UNKNOWN **'] = 0
@@ -1376,6 +1372,7 @@ class ImportCharacter(object):
                             output.append([{'text': string,
                                             'mode': curses.A_NORMAL}])
 
+                        # TODO: should highlight differences
                         self.__window_manager.display_window(
                                 ('Examine These %s -- Are They The Same Item?' %
                                     item_json['name']),
