@@ -535,7 +535,7 @@ class Weapon(object):
                         'notes': '',
                         'shots': self.shots(),
                         'shots_left': self.shots_left(),
-                        'type': ['misc'], # TODO (eventually): ruleset?
+                        'type': ['misc'],
                         }
         self.details['clip'] = None
         self.shots_left(0)
