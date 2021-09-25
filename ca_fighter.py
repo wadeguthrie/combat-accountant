@@ -469,23 +469,44 @@ class Fighter(ThingsInFight):
                 else:
                     self.details['preferred-weapon-index'].append(new_item_index)
             if is_armor:
-                # TODO (now): should this be |preferred-ARMOR-index| ?
-                if len(self.details['preferred-weapon-index']) > 0:
+                if len(self.details['preferred-armor-index']) > 0:
                     if before_item_count != after_item_count:
-                        # Only ask if we've added a new piece of armor and not
-                        # just bumped-up the count on a previous piece.
-                        replace_preferred_menu = [('yes', True), ('no', False)]
+                        # Only ask if we've added a new item and not just
+                        # bumped-up the count on a previous item
+                        replace_preferred_menu = [
+                                ('no', Fighter.NOT_PREFERRED),
+                                ('replace existing',
+                                    Fighter.REPLACE_PREFERRED)]
+                        replace_preferred_menu.append(
+                                ('add to existing list',
+                                    Fighter.ADD_PREFERRED))
                         replace_preferred, ignore = self._window_manager.menu(
                                 'Make %s the preferred armor?' %
                                 new_item['name'],
                                 replace_preferred_menu)
-                        if replace_preferred:
-                            # TODO (now): remove old preferred item?
+
+                        # If we're replacing an item, which one do we replace?
+                        if replace_preferred == Fighter.REPLACE_PREFERRED:
+                            remove_which_menu = []
+                            for index in self.details['preferred-armor-index']:
+                                item = self.equipment.get_item_by_index(index)
+                                remove_which_menu.append((item['name'], index))
+
+                            remove_index, ignore = self._window_manager.menu(
+                                    'Replace which piece of armor?',
+                                    remove_which_menu)
+                            if remove_index is None:
+                                # I guess we're not replacing anything
+                                replace_preferred = Fighter.NOT_PREFERRED
+                            else:
+                                self.details['preferred-armor-index'].remove(
+                                    remove_index)
+
+                        if replace_preferred != Fighter.NOT_PREFERRED:
                             self.details['preferred-armor-index'].append(
-                                   new_item_index)
+                                    new_item_index)
                 else:
                     self.details['preferred-armor-index'].append(new_item_index)
-        # TODO: give ARMOR the same treatment
         return new_item_index
 
     def doff_armor_by_index(self,
