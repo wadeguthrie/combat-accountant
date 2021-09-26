@@ -328,6 +328,10 @@ class CharacterGcs(object):
         if count_element is not None:
             new_thing['count'] = int(count_element.text)
 
+        notes_element = item.find('quantity')
+        if notes_element is not None:
+            new_thing['notes'] = notes_element.text
+
         # Is it armor?
         dr_bonus_element = item.find('dr_bonus')
         if dr_bonus_element is not None:
@@ -1202,10 +1206,13 @@ class ImportCharacter(object):
                 name = technique_json['name']
 
             if match_gcs is None:
-                pass # TODO: take away technique, but warn
-                changes.append(
-                        '* NOTE: "%s" in JSON (%r) but not in GCS -- UNCHANGED' % (
-                            name, technique_json['value']))
+                remove_menu = [('yes', True), ('no', False)]
+                remove, ignore = self.__window_manager.menu(
+                        'Remove "%s" technique (in JSON=%r) but NOT in GCS' % (
+                            name, technique_json['value']), remove_menu)
+                if remove:
+                    changes.append('"%s" technique removed' % name)
+                    self.__char_gcs.char['techniques'].remove(technique_json)
             else:
                 if match_gcs['value'] != technique_json['value']:
                     if match_gcs['value'] > technique_json['value']:
@@ -1260,10 +1267,14 @@ class ImportCharacter(object):
 
             name = spell_json['name']
             if match_gcs is None:
-                # TODO: take away spell but warn
-                changes.append(
-                        '* NOTE: "%s" in JSON (%r) but not in GCS -- UNCHANGED' % (
-                            name, spell_json['skill']))
+                remove_menu = [('yes', True), ('no', False)]
+                remove, ignore = self.__window_manager.menu(
+                        'Remove "%s" spell (in JSON=%r) but NOT in GCS' % (
+                            name, spell_json['skill']), remove_menu)
+                if remove:
+                    changes.append('"%s" spell removed' % name)
+                    # remove removes a list element by value
+                    self.__char_json['spells'].remove(spell_json)
             else:
                 if match_gcs['skill'] != spell_json['skill']:
                     if match_gcs['skill'] > spell_json['skill']:
@@ -1309,12 +1320,18 @@ class ImportCharacter(object):
             # Neither has |things|; everything's good
             return changes
 
+        items_to_remove = []
         for name in things_json.iterkeys():
             if name not in things_gcs:
-                changes.append(
-                        '* NOTE: "%s" %s in JSON (%r) but not in GCS -- UNCHANGED' % (
-                            name, heading_singular, things_json[name]))
-                # TODO: take away from JSON, but warn
+                remove_menu = [('yes', True), ('no', False)]
+                remove, ignore = self.__window_manager.menu(
+                        'Remove "%s" %s (in JSON=%r) but NOT in GCS' % (
+                            name, heading_singular, things_json[name]),
+                        remove_menu)
+                if remove:
+                    changes.append('"%s" %s removed' % (name,
+                                                        heading_singular))
+                    items_to_remove.append(name)
             else:
                 if things_gcs[name] != things_json[name]:
                     if things_gcs[name] > things_json[name]:
@@ -1328,6 +1345,11 @@ class ImportCharacter(object):
                                  things_gcs[name]))
                     things_json[name] = things_gcs[name]
                 del(things_gcs[name])
+
+        while len(items_to_remove) > 0:
+            name = items_to_remove.pop()
+            # del removes a dict item
+            del self.__char_json[heading][name]
 
         for name in things_gcs.iterkeys():
             changes.append('%s (%d) %s added' %
@@ -1412,10 +1434,15 @@ class ImportCharacter(object):
                             match_gcs = True
                             break
                         else:
-                            # TODO: take away item but warn
-                            changes.append(
-                                '* NOTE: "%s" in JSON but not in GCS -- UNCHANGED' %
-                                item_json['name'])
+                            remove_menu = [('yes', True), ('no', False)]
+                            remove, ignore = self.__window_manager.menu(
+                                'Remove "%s" (in JSON) but NOT in GCS' %
+                                item_json['name'], remove_menu)
+                            if remove:
+                                changes.append('"%s" equipment item removed' %
+                                        item_json['name'])
+                                # remove removes a list element by value
+                                self.__char_json['stuff'].remove(item_json['name'])
 
         for item_gcs in stuff_gcs:
             name_gcs = item_gcs['name']
