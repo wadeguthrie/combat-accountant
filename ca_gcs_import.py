@@ -23,6 +23,7 @@ import xml.etree.ElementTree as ET
 # element.text is 'foo'
 # element.attrib = {'type': 'cut', 'st': 'sw', 'base': '-2'}
 
+import ca_gui
 import ca_json
 
 # TODO: damage type should be 'pi' by default
@@ -399,7 +400,7 @@ class CharacterGcs(object):
             new_thing['type'].append('misc')
 
         for thing in stuff_gcs:
-            if ImportCharacter.is_same_equipment_item(thing, new_thing):
+            if ImportCharacter.find_differences(thing, new_thing) is None:
                 thing['count'] += new_thing['count']
                 new_thing = None
                 break
@@ -843,7 +844,6 @@ class CharacterGcs(object):
         new_thing['type'].append('ranged weapon')
 
         # Skill -- find the first one with skill modifier == 0
-        # TODO: modify the data structures to allow multiple skills
         self.__add_skill_to_weapon(new_thing, weapon_element)
         bulk_element = weapon_element.find('bulk')
         if bulk_element is not None:
@@ -1019,71 +1019,87 @@ class ImportCharacter(object):
         return True
 
     @staticmethod
-    def is_same_equipment_item(existing_item,   # dict:
-                               new_item         # dict:
-                               ):
+    def find_differences(existing_item,   # dict:
+                         new_item         # dict:
+                         ):
         '''
-        Returns True if items are the same; false, otherwise.
+        Returns list of differences, None if none were found.
         '''
+        found_differences = False
+        differences = []
         if existing_item['name'].lower() != new_item['name'].lower():
-            return False
+            found_differences = True
+            differences.append('name')
+            return differences
 
         if existing_item['type'] != new_item['type']:
-            return False
+            found_differences = True
+            differences.append('type')
+            return differences
 
         # We don't care if the counts, notes, or owners aren't the same
 
-        # TODO: this will need to deal with multiple skills
         if 'melee weapon' in existing_item['type']:
             if not ImportCharacter.is_optional_element_equal('parry',
                                                              existing_item,
                                                              new_item):
-                return False
+                found_differences = True
+                differences.append('parry')
 
             if ('skill' not in existing_item or 'skill' not in new_item or
                     existing_item['skill'] != new_item['skill']):
-                return False
+                found_differences = True
+                differences.append('skill')
 
         if 'ranged weapon' in existing_item['type']:
             if not ImportCharacter.is_optional_element_equal('bulk',
                                                              existing_item,
                                                              new_item):
-                return False
+                found_differences = True
+                differences.append('bulk')
 
             if not ImportCharacter.is_optional_element_equal('acc',
                                                              existing_item,
                                                              new_item):
-                return False
+                found_differences = True
+                differences.append('acc')
 
             if not ImportCharacter.is_optional_element_equal('reload',
                                                              existing_item,
                                                              new_item):
-                return False
+                found_differences = True
+                differences.append('reload')
 
             if ('skill' not in existing_item or 'skill' not in new_item or
                     existing_item['skill'] != new_item['skill']):
-                return False
+                found_differences = True
+                differences.append('skill')
 
         if 'armor' in existing_item['type']:
-            if existing_item['dr'] != new_item['dr']:
-                return False
+            if ('dr' not in existing_item or 'dr' not in new_item or
+                    existing_item['dr'] != new_item['dr']):
+                found_differences = True
+                differences.append('dr')
 
         if 'container' in existing_item['type']:
             new_contents = copy.deepcopy(new_item['stuff'])
             for thing in existing_item['stuff']:
                 found_match = False
                 for index, new_thing in enumerate(new_contents):
-                    if ImportCharacter.is_same_equipment_item(thing,
-                                                              new_thing):
+                    new_differences = ImportCharacter.find_differences(
+                            thing, new_thing)
+                    if new_differences is None:
                         new_contents.pop(index)
                         found_match = True
                         break
+                    else:
+                        differences.extend(new_differences)
                 if not found_match:
-                    return False
+                    found_differences = True
             if len(new_contents) > 0:
-                return False
+                found_differences = True
 
-        return True
+        return differences if found_differences else None
 
     # Private and protected methods
 
@@ -1338,12 +1354,13 @@ class ImportCharacter(object):
                 self.__char_gcs.stuff, squash)
 
         PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
+        standout_mode = curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK)
 
         for item_json in stuff_json:    # item_json is {}
             match_gcs = False
             for index, item_gcs in enumerate(stuff_gcs):
-                if ImportCharacter.is_same_equipment_item(item_json,
-                                                          item_gcs):
+                if ImportCharacter.find_differences(item_json,
+                                                    item_gcs) is None:
                     stuff_gcs.pop(index)
                     match_gcs = True
                     break
@@ -1352,6 +1369,10 @@ class ImportCharacter(object):
                 # Do a second pass looking for items that are similar
                 for index, item_gcs in enumerate(stuff_gcs):
                     if item_json['name'].lower() == item_gcs['name'].lower():
+
+                        differences = ImportCharacter.find_differences(
+                                item_json, item_gcs)
+
                         # Make the user descide if these are the same item
                         output = []
                         output.append([{'text': ('--- GCS Item: %s ---' % item_gcs['name']),
@@ -1359,8 +1380,11 @@ class ImportCharacter(object):
                         string = PP.pformat(item_gcs)
                         strings = string.split('\n')
                         for string in strings:
-                            output.append([{'text': string,
-                                            'mode': curses.A_NORMAL}])
+                            mode = curses.A_NORMAL
+                            for difference in differences:
+                                if string.find(difference) >= 0:
+                                    mode = standout_mode
+                            output.append([{'text': string, 'mode': mode}])
 
                         output.append([{'text': '',
                                         'mode': curses.A_NORMAL}])
@@ -1369,10 +1393,12 @@ class ImportCharacter(object):
                         string = PP.pformat(item_json)
                         strings = string.split('\n')
                         for string in strings:
-                            output.append([{'text': string,
-                                            'mode': curses.A_NORMAL}])
+                            mode = curses.A_NORMAL
+                            for difference in differences:
+                                if string.find(difference) >= 0:
+                                    mode = standout_mode
+                            output.append([{'text': string, 'mode': mode}])
 
-                        # TODO: should highlight differences
                         self.__window_manager.display_window(
                                 ('Examine These %s -- Are They The Same Item?' %
                                     item_json['name']),
