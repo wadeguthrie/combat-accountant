@@ -26,8 +26,6 @@ import ca_timers
 #   whitelist in 'update' log.
 # TODO: technique values should be shown added with their base skill
 
-# TODO: add container open/close/move into PersonnelHandler
-
 # TODO: flesh-out attack, all-out
 # TODO: grenade support (missile-like but not with clips)
 # TODO: unarmed Dual-Weapon attack
@@ -2499,6 +2497,202 @@ class PersonnelHandler(ScreenHandler):
 
         self._window.char_detail_home()
 
+    def __container_open(
+                    self,
+                    throw_away   # Required/used by the caller because
+                                 #   there's a list of methods to call,
+                                 #   and (apparently) some of them may
+                                 #   use this parameter.  It's ignored
+                                 #   by this method, however.
+                    ):
+        '''
+        Method for 'equip' sub-menu.
+
+        Opens a container that's at the current level
+
+        Returns: None if we want to bail-out of the doff armor process,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        container_stack = fighter.details['open-container']
+        container = fighter.equipment.get_container(container_stack)
+        containers = fighter.equipment.get_container_list(container)
+
+        # Build the menu
+
+        open_container_menu = []
+        for index, item_name in containers:
+            open_container_menu.append((item_name, index))
+        open_container_menu = sorted(open_container_menu,
+                                     key=lambda x: x[0].upper())
+
+        # Get the index
+
+        container_index, ignore = self._window_manager.menu(
+                'Open Which Container', open_container_menu)
+        if container_index is None:
+            return None
+
+        # Open the container
+
+        self.world.ruleset.do_action(
+                fighter,
+                {'action-name': 'open-container',
+                 'container-index': container_index
+                },
+                None)
+        self._draw_screen()
+        return True  # anything but 'None' for a menu handler
+
+    def __container_move_to(
+                    self,
+                    throw_away   # Required/used by the caller because
+                                 #   there's a list of methods to call,
+                                 #   and (apparently) some of them may
+                                 #   use this parameter.  It's ignored
+                                 #   by this method, however.
+                    ):
+        '''
+        Method for 'equip' sub-menu.
+
+        Moves an item at the current level of the conatiner stack to a
+        sub-container
+
+        Returns: None if we want to bail-out, True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        container_stack = fighter.details['open-container']
+        container = fighter.equipment.get_container(container_stack)
+        containers = fighter.equipment.get_container_list(container)
+
+        # Build the menu - move which item
+
+        move_item_menu = []
+        for index, item in enumerate(container):
+            move_item_menu.append((item['name'], index))
+        move_item_menu = sorted(move_item_menu, key=lambda x: x[0].upper())
+
+        # Get the index
+
+        item_index, ignore = self._window_manager.menu('Move Which Item',
+                                                       move_item_menu)
+        if item_index is None:
+            return None
+        item = container[item_index]
+
+        # Build the menu - move to which container
+
+        open_container_menu = []
+        for index, item_name in containers:
+            open_container_menu.append((item_name, index))
+        open_container_menu = sorted(open_container_menu,
+                                     key=lambda x: x[0].upper())
+
+        # Get the index
+
+        container_index, ignore = self._window_manager.menu(
+                'To Which Container', open_container_menu)
+        if container_index is None:
+            return None
+
+        # Move item INTO container & FROM container
+
+        self.world.ruleset.do_action(
+                fighter,
+                {'action-name': 'move-between-container',
+                 'item-index': item_index,
+                 'item-name': item['name'],
+                 'destination-index': container_stack + [container_index],
+                 },
+                None)
+        self._draw_screen()
+        return True  # anything but 'None' for a menu handler
+
+    def __container_move_to_top_level(
+                    self,
+                    throw_away   # Required/used by the caller because
+                                 #   there's a list of methods to call,
+                                 #   and (apparently) some of them may
+                                 #   use this parameter.  It's ignored
+                                 #   by this method, however.
+                    ):
+        '''
+        Method for 'equip' sub-menu.
+
+        Moves an item to the top-level of the container stack
+
+        Returns: None if we want to bail-out, True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        container_stack = fighter.details['open-container']
+        if len(container_stack) == 0:
+            return None
+        container = fighter.equipment.get_container(container_stack)
+
+        # Build the menu - move which item
+
+        move_item_menu = []
+        for index, item in enumerate(container):
+            move_item_menu.append((item['name'], index))
+        move_item_menu = sorted(move_item_menu, key=lambda x: x[0].upper())
+
+        # Get the index
+
+        item_index, ignore = self._window_manager.menu('Move Which Item',
+                                                       move_item_menu)
+        if item_index is None:
+            return None
+        item = container[item_index]
+
+        # Move item INTO container & FROM container
+
+        self.world.ruleset.do_action(
+                fighter,
+                {'action-name': 'move-between-container',
+                 'item-index': item_index,
+                 'item-name': item['name'],
+                 'destination-index': [],
+                 },
+                None)
+        self._draw_screen()
+        return True  # anything but 'None' for a menu handler
+
+    def __container_close(
+                    self,
+                    throw_away   # Required/used by the caller because
+                                 #   there's a list of methods to call,
+                                 #   and (apparently) some of them may
+                                 #   use this parameter.  It's ignored
+                                 #   by this method, however.
+                    ):
+        '''
+        Method for 'equip' sub-menu.
+
+        Closes the top container in the container stack.
+
+        Returns: None if we want to bail-out, True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        self.world.ruleset.do_action(
+                fighter,
+                {'action-name': 'close-container'},
+                None)
+        self._draw_screen()
+        return True  # anything but 'None' for a menu handler
+
+
     def __create_template(self):
         '''
         Command ribbon method.
@@ -3147,6 +3341,25 @@ class PersonnelHandler(ScreenHandler):
                 sub_menu.extend([
                     ('reload weapon',    {'doit': self.__reload_weapon})
                 ])
+
+        # Container Stuff
+
+        container_stack = fighter.details['open-container']
+        container = fighter.equipment.get_container(container_stack)
+        containers = fighter.equipment.get_container_list(container)
+
+        if len(containers) > 0:
+            sub_menu.extend([
+                ('open container',      {'doit': self.__container_open}),
+                ('move to container',   {'doit': self.__container_move_to}),
+            ])
+        if len(container_stack) > 0:
+            sub_menu.extend([
+                ('move to top level',   {'doit': self.__container_move_to_top_level}),
+                ('close container',     {'doit': self.__container_close}),
+            ])
+
+        # Menu
 
         self._window_manager.menu('Do what', sub_menu)
 

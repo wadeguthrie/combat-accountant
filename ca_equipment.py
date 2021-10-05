@@ -91,8 +91,14 @@ class Equipment(object):
 
     def get_container(self,
                       container_stack   # stack of indexes of containers
-                                        #   that're open
+                                        #   that're open - None if top level
                       ):
+        '''
+        Returns the list for a container.  That's either the top-most equipment
+        list or an item that can hold other items.  Uses |container_stack| to
+        navigate to a specific container (e.g., a coin purse inside a wallet
+        inside a purse).
+        '''
         current_container = self.__equipment
         if container_stack is None:
             return current_container
@@ -110,6 +116,24 @@ class Equipment(object):
                     return None
                 current_container = current_container[container_index]['stuff']
         return current_container
+
+    def get_container_list(self,
+                           container   # list: contains items that may, in turn
+                                       #    contain other items
+                           ):
+        '''
+        Returns list of containers (index, name) in item described by
+        container_stack.
+        '''
+        containers = []
+        if container is None:
+            return containers # Error condition -- top-level should be []
+
+        for index, item in enumerate(container):
+            if 'container' in item['type']:
+                containers.append((index, item['name']))
+
+        return containers
 
     def get_item_by_name(self,              # Public to facilitate testing
                          name,  # string that matches the name of the thing
@@ -140,6 +164,8 @@ class Equipment(object):
                ):
         '''
         Removes an item (by index) from the list of equipment.
+
+        NOTE: only called from Fighter::remove_equipment (and its parents)
 
         Returns the removed item.
         '''

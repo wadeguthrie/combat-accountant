@@ -114,7 +114,6 @@ class Ruleset(object):
 
         Returns the menu (i.e., the list)
         '''
-
         # Figure out who we are and what we're holding.
 
         weapons = fighter.get_current_weapons()
@@ -160,27 +159,23 @@ class Ruleset(object):
 
         container_stack = fighter.details['open-container']
         container = fighter.equipment.get_container(container_stack)
-        if container is None:
-            return None # Error condition -- top-level should be []
+        containers = fighter.equipment.get_container_list(container)
 
         open_container_menu = []
-        containers = []
-        for index, item in enumerate(container):
-            if 'container' in item['type']:
-                containers.append((index, item['name']))
-                verbose_option = self.get_option('verbose')
-                if verbose_option is not None and verbose_option:
-                    entry_name = '%d: %s' % (index, item['name'])
-                else:
-                    entry_name = '%s' % item['name']
+        for index, item_name in containers:
+            verbose_option = self.get_option('verbose')
+            if verbose_option is not None and verbose_option:
+                entry_name = '%d: %s' % (index, item_name)
+            else:
+                entry_name = '%s' % item_name
 
-                open_container_menu.append(
-                        (entry_name,
-                         {'action':
-                             {'action-name': 'open-container',
-                              'container-index': index
-                             }}
-                         ))
+            open_container_menu.append(
+                    (entry_name,
+                     {'action':
+                         {'action-name': 'open-container',
+                          'container-index': index
+                         }}
+                     ))
         open_container_menu = sorted(open_container_menu,
                                      key=lambda x: x[0].upper())
 
