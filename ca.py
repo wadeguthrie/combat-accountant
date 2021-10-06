@@ -3635,8 +3635,8 @@ class PersonnelHandler(ScreenHandler):
         if fighter is None:
             return None
 
-        if 'ignored_equipment' not in fighter.details:
-            fighter.details['ignored_equipment'] = []
+        if 'ignored-equipment' not in fighter.details:
+            fighter.details['ignored-equipment'] = []
 
         keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
@@ -3646,7 +3646,7 @@ class PersonnelHandler(ScreenHandler):
             if item is None or len(fighter.details['stuff']) == 0:
                 return True
 
-            fighter.details['ignored_equipment'].append(item['name'].lower())
+            fighter.details['ignored-equipment'].append(item['name'].lower())
 
             keep_asking, ignore = self._window_manager.menu(
                     'Ignore More Equipment', keep_asking_menu)

@@ -569,20 +569,21 @@ class Ruleset(object):
         Returns: the dict.
         '''
         return {'actions_this_turn': [],
-                'armor-index': [], # can wear multiple armors over each other
-                'current': {},
+                'armor-index': [],      # all armor currently being worn
+                'current': {},          # current attributes (per ruleset)
+                'current-weapon': 0,    # Indexes into 'weapon-index'.
                 'fight-notes': [],
+                'ignored-equipment': [],
                 'notes': [],
-                'opponent': None,
-                'permanent': {},
+                'open-container': [],   # stack of indexes into stuff
+                'opponent': None,       # {'group': xxx, 'name': xxx}
+                'permanent': {},        # permanent attributes (per ruleset)
                 'preferred-armor-index': [],
                 'preferred-weapon-index': [],
                 'state': 'alive',
                 'stuff': [],
                 'timers': [],
-                'weapon-index': [],
-                'current-weapon': 0,    # Indexes into 'weapon-index'.
-                'open-container': []
+                'weapon-index': [],     # all the weapons being held currently
                 }
 
     def make_empty_item(self):
