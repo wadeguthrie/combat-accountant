@@ -2,6 +2,7 @@
 import argparse
 import json
 import pprint
+import sys
 import traceback
 
 
@@ -104,80 +105,109 @@ class GmJson(object):
         return GmJson.__byteify(my_dict, ignore_dicts=True), None
 
 
-def are_equal(lhs, rhs):
+def are_equal(lhs,
+              rhs,
+              path  # string describing stack of containers that got us here
+              ):
     if isinstance(lhs, dict):
         if not isinstance(rhs, dict):
             print '\n---------------------'
-            print '** lhs is a dict but rhs is not'
-            print '\nlhs'
-            PP.pprint(lhs)
-            print '\nrhs'
-            PP.pprint(rhs)
+            print '** TYPE: %s%s is a DICT, but not in %s' % (
+                    ARGS.filename[0], path, ARGS.filename[1])
+            if ARGS.verbose:
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
             return False
         for key in rhs.iterkeys():
             if key not in lhs:
                 print '\n---------------------'
-                print '** KEY "%s" not in lhs' % key
-                print '\nlhs'
-                PP.pprint(lhs)
-                print '\nrhs'
-                PP.pprint(rhs)
+                print '** KEY (%s): %s%s[%s] does not exist' % (
+                        path, ARGS.filename[0], path, key)
+                if ARGS.verbose:
+                    print '\nlhs'
+                    PP.pprint(lhs)
+                    print '\nrhs'
+                    PP.pprint(rhs)
+                else:
+                    print '\n%s%s[%s]:' % (ARGS.filename[1], path, key)
+                    PP.pprint(rhs[key])
                 return False
         result = True
         for key in lhs.iterkeys():
+            new_path = path + ('[%s]' % key)
             if key not in rhs:
                 print '\n---------------------'
-                print '** KEY "%s" not in rhs' % key
-                print '\nlhs'
-                PP.pprint(lhs)
-                print '\nrhs'
-                PP.pprint(rhs)
+                print '** KEY (%s): %s%s[%s] does not exist' % (
+                        key, ARGS.filename[1], path, key)
+                if ARGS.verbose:
+                    print '\nlhs'
+                    PP.pprint(lhs)
+                    print '\nrhs'
+                    PP.pprint(rhs)
+                else:
+                    print '\n%s%s[%s]:' % (ARGS.filename[0], path, key)
+                    PP.pprint(lhs[key])
                 result = False
-            elif not are_equal(lhs[key], rhs[key]):
-                print '\nSo, lhs[%r] != rhs[%r]' % (key, key)
-                print '\nlhs'
-                PP.pprint(lhs)
-                print '\nrhs'
-                PP.pprint(rhs)
+            elif not are_equal(lhs[key], rhs[key], new_path):
+                print '\nSo, %s%s[%r] != %s[...][%r]' % (
+                        ARGS.filename[0], path, key,
+                        ARGS.filename[1], key)
+                # print '\nlhs'
+                # PP.pprint(lhs)
+                # print '\nrhs'
+                # PP.pprint(rhs)
                 result = False
         return result
 
     elif isinstance(lhs, list):
         if not isinstance(rhs, list):
             print '\n---------------------'
-            print '** lhs is a list but rhs is not'
-            print '\nlhs'
-            PP.pprint(lhs)
-            print '\nrhs'
-            PP.pprint(rhs)
-            return False
-        if len(lhs) != len(rhs):
-            print '\n---------------------'
-            print '** length lhs=%d != len rhs=%d' % (len(lhs), len(rhs))
-            print '\nlhs'
-            PP.pprint(lhs)
-            print '\nrhs'
-            PP.pprint(rhs)
-            return False
-        result = True
-        for i in range(len(lhs)):
-            if not are_equal(lhs[i], rhs[i]):
-                print '\nSo, lhs[%d] != rhs[%d]' % (i, i)
+            print '** TYPE: %s%s is a LIST, not so in %s' % (
+                    ARGS.filename[0], path, ARGS.filename[1])
+            if ARGS.verbose:
                 print '\nlhs'
                 PP.pprint(lhs)
                 print '\nrhs'
                 PP.pprint(rhs)
+            return False
+        if len(lhs) != len(rhs):
+            print '\n---------------------'
+            print '** LENGTH: len(%s%s) =%d != len(%s[...]) =%d' % (
+                    ARGS.filename[0], path, len(lhs),
+                    ARGS.filename[1], len(rhs))
+            if ARGS.verbose:
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
+            return False
+        result = True
+        for i in range(len(lhs)):
+            new_path = path + ('[%d]' % i)
+            if not are_equal(lhs[i], rhs[i], new_path):
+                print '\nSo, %s%s[%d] != %s[...][%d]' % (
+                        ARGS.filename[0], path, i,
+                        ARGS.filename[1], i)
+                # print '\nlhs'
+                # PP.pprint(lhs)
+                # print '\nrhs'
+                # PP.pprint(rhs)
                 result = False
         return result
 
     else:
         if lhs != rhs:
             print '\n---------------------'
-            print '** lhs=%r != rhs=%r' % (lhs, rhs)
-            print '\nlhs'
-            PP.pprint(lhs)
-            print '\nrhs'
-            PP.pprint(rhs)
+            print '** VALUE: %s%s =%r != %s[...] =%r' % (
+                    ARGS.filename[0], path, lhs,
+                    ARGS.filename[1], rhs)
+            if ARGS.verbose:
+                print '\nlhs'
+                PP.pprint(lhs)
+                print '\nrhs'
+                PP.pprint(rhs)
             return False
         else:
             return True
@@ -208,5 +238,5 @@ if __name__ == '__main__':
 
     with GmJson(ARGS.filename[0]) as file1:
         with GmJson(ARGS.filename[1]) as file2:
-            if are_equal(file1.read_data, file2.read_data):
+            if are_equal(file1.read_data, file2.read_data, ''):
                 print 'files are equal'
