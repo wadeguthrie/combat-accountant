@@ -913,69 +913,6 @@ class CharacterGcs(object):
 
 
 class ImportCharacter(object):
-    equipment_white_list_gcs = {
-      "alpaca hat": 1,
-      "alpaca lapel pin": 1,
-      "alpaca socks": 1,
-      "alpaca t-shirt": 1,
-      "alpaca wool": 1,
-      "antibiotic": 1,
-      "antitoxin kit": 1,
-      "backpack, small": 1,
-      "ballistic gloves":1,
-      "ballistic sunglasses":1,
-      "bandages": 1,
-      "belt": 1,
-      "boots": 1,
-      "camera": 1,
-      "camera, digital, full-sized":1,
-      "cigarette lighter (metal refillable)": 1,
-      "cigarette lighter":1,
-      "conglomerate marshal uniform": 1,
-      "drop spindle": 1,
-      "duct tape": 1,
-      "e-rubles": 1,
-      "erubles": 1,
-      "electronic cuffs":1,
-      "eruble": 1,
-      "eyeglasses": 1,
-      "fire-starter paste":1,
-      "flashlight":1,
-      "flashlight, heavy": 1,
-      "glowstick":1,
-      "holster, belt": 1,
-      "holster, shoulder":1,
-      "index cards":1,
-      "knitting needles, pair": 1,
-      "lanyard, woven steel": 1,
-      "marker":1,
-      "measuring laser":1,
-      "medicine bag": 1,
-      "messenger bag/shoulder bag": 1,
-      "microfiber towel":1,
-      "multi-tool with flashlight": 1,
-      "multi-tool":1,
-      "nitrile gloves":1,
-      "plastic bags":1,
-      "pocket watch":1,
-      "sheath": 1,
-      "sheath": 1,
-      "sheep skin alpaca": 1,
-      "small sheath": 1,
-      "snack":1,
-      "sunglasses": 1,
-      "tactical belt bag": 1,
-      "teddy bear": 1,
-      "voice synthesizer": 1,
-      "web gear":1,
-      "weed": 1,
-      "whistle": 1,
-      "wicking undergarment": 1,
-      "wooden alpaca figure": 1,
-      "wool": 1,
-      "wristwatch": 1,
-      "yarn alpaca": 1,
-    }
     def __init__(self,
                  window_manager,
                  char_json, # dict for this char directly from the JSON
@@ -1446,8 +1383,11 @@ class ImportCharacter(object):
 
         for item_gcs in stuff_gcs:
             name_gcs = item_gcs['name']
-            if name_gcs.lower() in ImportCharacter.equipment_white_list_gcs:
-                pass
+
+            if ('ignored_equipment' in self.__char_json and
+                    name_gcs.lower() in self.__char_json['ignored_equipment']):
+                changes.append('"%s" equipment IGNORED -- no change' %
+                        item_gcs['name'])
             else:
                 changes.append('"%s" equipment item added' % item_gcs['name'])
                 self.__char_json['stuff'].append(item_gcs)
