@@ -1384,8 +1384,8 @@ class ImportCharacter(object):
         for item_gcs in stuff_gcs:
             name_gcs = item_gcs['name']
 
-            if ('ignored_equipment' in self.__char_json and
-                    name_gcs.lower() in self.__char_json['ignored_equipment']):
+            if ('ignored-equipment' in self.__char_json and
+                    name_gcs.lower() in self.__char_json['ignored-equipment']):
                 changes.append('"%s" equipment IGNORED -- no change' %
                         item_gcs['name'])
             else:
