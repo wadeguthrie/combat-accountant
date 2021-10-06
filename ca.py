@@ -22,8 +22,6 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: whitelist should be in each character's JSON.  Mention things in
-#   whitelist in 'update' log.
 # TODO: technique values should be shown added with their base skill
 
 # TODO: flesh-out attack, all-out
@@ -3299,6 +3297,7 @@ class PersonnelHandler(ScreenHandler):
                 ('Equipment (remove)',  {'doit': self.__remove_equipment}),
                 ('give equipment',      {'doit': self.__give_equipment}),
                 ('identify equipment',  {'doit': self.__identify_equipment}),
+                ('Ignore equipment',    {'doit': self.__ignore_equipment}),
             ])
 
         owns_weapon = False
@@ -3358,6 +3357,8 @@ class PersonnelHandler(ScreenHandler):
                 ('move to top level',   {'doit': self.__container_move_to_top_level}),
                 ('close container',     {'doit': self.__container_close}),
             ])
+
+        sub_menu.sort(key=lambda x: x[0].lower())
 
         # Menu
 
@@ -3609,6 +3610,46 @@ class PersonnelHandler(ScreenHandler):
 
             keep_asking, ignore = self._window_manager.menu(
                     'Identify More Equipment', keep_asking_menu)
+
+        return True  # anything but 'None' for a successful menu handler
+
+    def __ignore_equipment(self,
+                           throw_away   # Required/used by the caller because
+                                        #   there's a list of methods to call,
+                                        #   and (apparently) some of them may
+                                        #   use this parameter.  It's ignored
+                                        #   by this method, however.
+                           ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Removes a piece of equipment from the list and keeps it from showing
+        up again.
+
+        Returns: None if we want to bail-out of the give equipment process,
+                 True, otherwise
+        '''
+
+        # Get the object from the viewing index
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        if 'ignored_equipment' not in fighter.details:
+            fighter.details['ignored_equipment'] = []
+
+        keep_asking_menu = [('yes', True), ('no', False)]
+        keep_asking = True
+        while keep_asking:
+            item = self.__equipment_manager.remove_equipment(fighter)
+            self._draw_screen()
+            if item is None or len(fighter.details['stuff']) == 0:
+                return True
+
+            fighter.details['ignored_equipment'].append(item['name'].lower())
+
+            keep_asking, ignore = self._window_manager.menu(
+                    'Ignore More Equipment', keep_asking_menu)
 
         return True  # anything but 'None' for a successful menu handler
 
