@@ -4,6 +4,8 @@ import copy
 import curses
 import curses.ascii
 import curses.textpad
+import os
+import pprint
 import re
 
 
@@ -1262,3 +1264,76 @@ class GmScrollableWindow(object):
     def touchwin(self):
         ''' Touches all of this window's sub-panes.  '''
         self.__window.touchwin()
+
+class GetFilenameWindow(object):
+    def __init__(self,
+                 window_manager,
+                 starting_dir='.'   # path to dir from which to start
+                 ):
+        self.__window_manager = window_manager
+        self.__starting_dir = starting_dir
+
+    def get_filename(self,
+                     limit_extensions=None  # list: filename ext's w/leading
+                                            #   '.', None for no limits
+                     ):
+        '''
+        Asks the user to select a filename from available names.  Allows
+        navigation into subdirectories.  If |limit_extensions| is not None,
+        only files with an extension in the list will be available.
+
+        Returns the full path to the selected file (or None if no file was
+        selected).
+        '''
+        starting_dir = os.getcwd()
+        directory = self.__starting_dir
+        if directory == '.':
+            directory = os.getcwd()
+
+        keep_asking = True
+        result = None
+        while keep_asking:
+            filename_menu = []
+            directory_menu = [('[..]', {'type': 'dir',
+                                        'name': '..'})]
+            for file in os.listdir(directory):
+                whole_file = os.path.join(directory, file)
+                if os.path.isfile(whole_file):
+                    if limit_extensions is None:
+                        filename_menu.append(('%s' % file,
+                                              {'type': 'file',
+                                               'name': file}))
+                    else:
+                        for extension in limit_extensions:
+                            if whole_file.endswith(extension):
+                                filename_menu.append(('%s' % file,
+                                                      {'type': 'file',
+                                                       'name': file}))
+                                break
+                elif os.path.isdir(whole_file):
+                    directory_menu.append(('[%s]' % file,
+                                          {'type': 'dir', 'name': file}))
+
+            directory_menu = sorted(directory_menu, key=lambda x: x[0].upper())
+            filename_menu = sorted(filename_menu, key=lambda x: x[0].upper())
+            directory_menu.extend(filename_menu)
+            filename_menu = directory_menu
+            filename, ignore = self.__window_manager.menu(
+                    ('Which File in %s' % directory), filename_menu)
+            if filename is None:
+                keep_asking = False
+                result = None
+            elif filename['type'] == 'dir':
+                os.chdir(filename['name'])
+                directory = os.getcwd()
+            else:
+                keep_asking = False
+                result = filename['name']
+
+        os.chdir(starting_dir)
+        # NOTE: return value can be split with os.path.split() or
+        # os.path.basename() and os.path.dirname()
+        return None if result is None else os.path.join(directory, result)
+
+
+

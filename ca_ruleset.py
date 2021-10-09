@@ -429,6 +429,9 @@ class Ruleset(object):
 
         return  # No need to return action menu since it was a parameter
 
+    def get_import_file_extension(self):
+        return None # No restriction on filename
+
     def get_sample_items(self):
         '''
         Returns a list of sample equipment for creating new game files.

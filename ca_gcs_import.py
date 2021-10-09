@@ -588,9 +588,10 @@ class CharacterGcs(object):
         ## EQUIPMENT #####
         # Build the equipment list up front so that skills may make use of it
         stuff_gcs = self.__char_gcs.find('equipment_list')
-        if stuff_gcs is not None:
-            for child in stuff_gcs:
-                self.__add_item_to_gcs_list(child, self.stuff)
+        if stuff_gcs is None:
+            return
+        for child in stuff_gcs:
+            self.__add_item_to_gcs_list(child, self.stuff)
 
     def __build_skills(self):
         self.char['skills'] = {} # name: skill-level, ...
@@ -602,6 +603,8 @@ class CharacterGcs(object):
         #   (a scope for a rifle, for instance).
 
         skills_gcs = self.__char_gcs.find('skill_list')
+        if skills_gcs is None:
+            return
 
         for skill_gcs in skills_gcs:
             if skill_gcs.tag == 'skill':

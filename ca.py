@@ -22,6 +22,8 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: sort all the methods in each class (it's gotten sloppy)
+
 # TODO: technique values should be shown added with their base skill
 
 # TODO: flesh-out attack, all-out
@@ -1937,13 +1939,9 @@ class PersonnelHandler(ScreenHandler):
         '''
         # get the filename to import
 
-        # TODO: need to ask ruleset for filename extension to limit menu
-        # TODO: need to recurse down directories when they're picked
-        # TODO: need to display directories differently
-        filename_menu = [(x, x) for x in os.listdir('.')
-                if os.path.isfile( os.path.join(os.getcwd(), x))]
-        filename, ignore = window_manager.menu('Import From Which File',
-                                               filename_menu)
+        extension = self.world.ruleset.get_import_file_extension()
+        filename_window = ca_gui.GetFilenameWindow(self._window_manager)
+        filename = filename_window.get_filename(extension)
         if filename is None:
             return True
 
@@ -2077,13 +2075,9 @@ class PersonnelHandler(ScreenHandler):
         if need_file_message is not None:
             self._window_manager.error('%s' % need_file_message)
 
-            # TODO: need to ask ruleset for filename extension to limit menu
-            # TODO: need to recurse down directories when they're picked
-            # TODO: need to display directories differently
-            filename_menu = [(x, x) for x in os.listdir('.')
-                    if os.path.isfile( os.path.join(os.getcwd(), x))]
-            filename, ignore = window_manager.menu('Update From Which File',
-                                                   filename_menu)
+            extension = self.world.ruleset.get_import_file_extension()
+            filename_window = ca_gui.GetFilenameWindow(self._window_manager)
+            filename = filename_window.get_filename(extension)
             if filename is None:
                 return True
 
@@ -7576,12 +7570,17 @@ if __name__ == '__main__':
                     filename = prefs['campaign']
 
                 if filename is None:
-                    filename_menu = [
-                        (x, x) for x in os.listdir('.') if x.endswith('.json')]
-                    filename_menu.insert(0, ('Create new campaign file', None))
+                    existing_file_menu = [('new file', False),
+                                          ('existing file', True) ]
+                    use_existing_file, ignore = window_manager.menu(
+                            'Create New or Use Existing Campaign File',
+                            existing_file_menu)
 
-                    filename, ignore = window_manager.menu('Which File',
-                                                           filename_menu)
+                    if use_existing_file:
+                        filename_window = ca_gui.GetFilenameWindow(
+                                window_manager)
+                        filename = filename_window.get_filename(['.json',
+                                                                 '.JSON'])
 
                     lines, cols = window_manager.getmaxyx()
                     while filename is None:
