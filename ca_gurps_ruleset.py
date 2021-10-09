@@ -2537,6 +2537,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return notes
 
+    def get_import_file_extension(self):
+        ''' Returns the filename extension for files from which to import.'''
+        return ['.gcs']
+
     def get_parry_skill(self,                       # Public to aid in testing
                         fighter,    # Fighter object
                         weapon      # Weapon object
