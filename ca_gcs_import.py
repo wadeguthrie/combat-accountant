@@ -135,22 +135,6 @@ class Skills(object):
     }
 
     @staticmethod
-    def tech_plus_from_pts(difficulty, # 'H' or 'A'
-                           points   # int
-                           ):
-        table = Skills.tech_plus_from_pts_table[difficulty]
-        if points < len(table):
-            plus = table[points]
-        else:
-            # 4 points into a hard technique should get you:
-            #   table[len(table) - 1] = table[2] = 1
-            #   + points + 1 = 5
-            #   - len(table) = -3
-            #   = 1 + 5 - 3 = 3 (check against table on B230 = 3)
-            plus = table[len(table) - 1] + points + 1 - len(table)
-        return plus
-
-    @staticmethod
     def get_gcs_level(window_manager,   # ca_gui.GmWindowManager object
                       char,             # Character object
                       skill_name,       # name of skill
@@ -224,6 +208,22 @@ class Skills(object):
                 if result == True:
                     return result
         return False
+
+    @staticmethod
+    def tech_plus_from_pts(difficulty, # 'H' or 'A'
+                           points   # int
+                           ):
+        table = Skills.tech_plus_from_pts_table[difficulty]
+        if points < len(table):
+            plus = table[points]
+        else:
+            # 4 points into a hard technique should get you:
+            #   table[len(table) - 1] = table[2] = 1
+            #   + points + 1 = 5
+            #   - len(table) = -3
+            #   = 1 + 5 - 3 = 3 (check against table on B230 = 3)
+            plus = table[len(table) - 1] + points + 1 - len(table)
+        return plus
 
 class CharacterGcs(object):
     def __init__(self,
@@ -473,18 +473,6 @@ class CharacterGcs(object):
                 weapon_dict['name']
                 ])
 
-    def __build_advantages(self):
-        self.char['advantages'] = {} # name: cost
-        self.__spell_advantages = {}
-
-        ## ADVANTAGES #####
-        # Checks points spent
-
-        advantages_gcs_raw = self.__char_gcs.find('advantage_list')
-        for child in advantages_gcs_raw:
-            self.__add_advantage_to_gcs_list(child,
-                                             self.char['advantages'])
-
     def __adjust_attribute(self,
                            cost_per_point,      # int:
                            advantage_name,      # char:
@@ -506,6 +494,17 @@ class CharacterGcs(object):
             adjustment += self.__get_gcs_attribute(adjustment_name)
         return adjustment
 
+    def __build_advantages(self):
+        self.char['advantages'] = {} # name: cost
+        self.__spell_advantages = {}
+
+        ## ADVANTAGES #####
+        # Checks points spent
+
+        advantages_gcs_raw = self.__char_gcs.find('advantage_list')
+        for child in advantages_gcs_raw:
+            self.__add_advantage_to_gcs_list(child,
+                                             self.char['advantages'])
 
     def __build_attribs(self):
         # Depends on advantages being gathered first
@@ -914,7 +913,6 @@ class CharacterGcs(object):
                         (damage_text, new_thing['name'])
                         ])
 
-
 class ImportCharacter(object):
     def __init__(self,
                  window_manager,
@@ -924,43 +922,6 @@ class ImportCharacter(object):
         self.__window_manager = window_manager
         self.__char_json = char_json
         self.__char_gcs = char_gcs
-
-    def import_data(self):
-        self.__import_attribs()
-        self.__import_advantages()
-        self.__import_skills()
-        self.__import_techniques()
-        self.__import_spells()
-        self.__import_equipment(squash=False)
-
-    def update_data(self):
-        changes = []
-        changes.extend(self.__import_attribs())
-        changes.extend(self.__import_advantages())
-        changes.extend(self.__import_skills())
-        changes.extend(self.__import_techniques())
-        changes.extend(self.__import_spells())
-        changes.extend(self.__import_equipment(squash=True))
-
-        if len(changes) == 0:
-            changes.append('Character up to date -- no changes')
-
-        return changes
-
-    @staticmethod
-    def is_optional_element_equal(element,          # string: comaring this
-                                  existing_item,    # dict
-                                  new_item          # dict
-                                  ):
-        if element in existing_item:
-            if element not in new_item:
-                return False
-            if existing_item[element] != new_item[element]:
-                return False
-        elif element in new_item:
-            return False
-
-        return True
 
     @staticmethod
     def find_differences(existing_item,   # dict:
@@ -1045,6 +1006,43 @@ class ImportCharacter(object):
 
         return differences if found_differences else None
 
+    @staticmethod
+    def is_optional_element_equal(element,          # string: comaring this
+                                  existing_item,    # dict
+                                  new_item          # dict
+                                  ):
+        if element in existing_item:
+            if element not in new_item:
+                return False
+            if existing_item[element] != new_item[element]:
+                return False
+        elif element in new_item:
+            return False
+
+        return True
+
+    def import_data(self):
+        self.__import_attribs()
+        self.__import_advantages()
+        self.__import_skills()
+        self.__import_techniques()
+        self.__import_spells()
+        self.__import_equipment(squash=False)
+
+    def update_data(self):
+        changes = []
+        changes.extend(self.__import_attribs())
+        changes.extend(self.__import_advantages())
+        changes.extend(self.__import_skills())
+        changes.extend(self.__import_techniques())
+        changes.extend(self.__import_spells())
+        changes.extend(self.__import_equipment(squash=True))
+
+        if len(changes) == 0:
+            changes.append('Character up to date -- no changes')
+
+        return changes
+
     # Private and protected methods
 
     def __copy_json_equipment_list(self,
@@ -1080,6 +1078,28 @@ class ImportCharacter(object):
 
         return new_list
 
+    def __get_advantage_cost(self,
+                             advantage_gcs # element from xml.etree.ElementTree
+                            ):
+        cost_text_gcs = advantage_gcs.find('base_points')
+        cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
+        levels_element = advantage_gcs.find('levels')
+        if levels_element is not None:
+            levels = int(levels_element.text)
+            points_per_level_element = advantage_gcs.find('points_per_level')
+            if points_per_level_element is not None:
+                levels *= int(points_per_level_element.text)
+                cost_gcs += levels
+        return cost_gcs
+
+    def __get_stuff_count(self,
+                          item
+                          ):
+        return 1 if 'count' not in item else item['count']
+
+    def __import_advantages(self):
+        return self.__import_heading('advantages', 'advantage')
+
     def __import_attribs(self):
         '''
         Copies the attributes from GCS to the JSON.  Puts the values in both
@@ -1101,207 +1121,6 @@ class ImportCharacter(object):
                 self.__char_json['permanent'][attr_name] = attr_gcs
                 self.__char_json['current'][attr_name] = attr_gcs
         return changes
-
-    def __import_advantages(self):
-        return self.__import_heading('advantages', 'advantage')
-
-    def __import_skills(self):
-        return self.__import_heading('skills', 'skill')
-
-    def __import_techniques(self):
-        # TODO: there's probably a way to combine techniques and skills (since
-        # they're both lists as opposed to the dicts examined by
-        # |__import_heading|).  The challenge is that skills and techniques look
-        # different under the hood so the 'do we copy' stuff needs to be
-        # custom.
-        changes = []
-        if 'techniques' not in self.__char_json:
-            self.__char_json['techniques'] = []
-        techniques_json = self.__char_json['techniques']
-
-        if 'techniques' in self.__char_gcs.char:
-            techniques_gcs = copy.deepcopy(self.__char_gcs.char['techniques'])
-        else:
-            techniques_gcs = []
-
-        if len(techniques_gcs) == 0 and len(techniques_json) == 0:
-            # Neither has |techniques| and that's OK.
-            return changes
-
-        for technique_json in techniques_json:
-            match_gcs = None
-            index_gcs = None
-            for index, technique_gcs in enumerate(techniques_gcs):
-                if (technique_gcs['name'] == technique_json['name'] and
-                        technique_gcs['default'] == technique_json['default']):
-                    match_gcs = technique_gcs
-                    index_gcs = index
-                    break
-
-            if ('default' in technique_json and
-                    len(technique_json['default']) != 0):
-                name = '%s (%s)' % (technique_json['name'],
-                                    ', '.join(technique_json['default']))
-            else:
-                name = technique_json['name']
-
-            if match_gcs is None:
-                remove_menu = [('yes', True), ('no', False)]
-                remove, ignore = self.__window_manager.menu(
-                        'Remove "%s" technique (in JSON=%r) but NOT in GCS' % (
-                            name, technique_json['value']), remove_menu)
-                if remove:
-                    changes.append('"%s" technique removed' % name)
-                    self.__char_gcs.char['techniques'].remove(technique_json)
-            else:
-                if match_gcs['value'] != technique_json['value']:
-                    if match_gcs['value'] > technique_json['value']:
-                        changes.append(
-                                '%s technique changed from %r to %r' %
-                                (name, technique_json['value'], match_gcs['value']))
-                    else:
-                        changes.append(
-                                '%s technique changed from %r to %r -- NOTE: value reduced' %
-                                (name, technique_json['value'], match_gcs['value']))
-                    technique_json['value'] = match_gcs['value']
-
-                del techniques_gcs[index_gcs]
-
-        for technique_gcs in techniques_gcs:
-            if ('default' in technique_gcs and
-                    len(technique_gcs['default']) != 0):
-                name = '%s (%s)' % (technique_gcs['name'],
-                                    ', '.join(technique_gcs['default']))
-            else:
-                name = technique_gcs['name']
-
-            changes.append('%s (%d) technique added' %
-                           (name, technique_gcs['value']))
-            techniques_json.append(technique_gcs)
-
-        return changes
-
-    def __import_spells(self):
-        changes = []
-        if 'spells' not in self.__char_json:
-            self.__char_json['spells'] = []
-        spells_json = self.__char_json['spells']
-
-        if 'spells' in self.__char_gcs.char:
-            spells_gcs = copy.deepcopy(self.__char_gcs.char['spells'])
-        else:
-            spells_gcs = []
-
-        if len(spells_gcs) == 0 and len(spells_json) == 0:
-            # Neither has |spells| and that's OK.
-            return changes
-
-        for spell_json in spells_json:
-            match_gcs = None
-            index_gcs = None
-            for index, spell_gcs in enumerate(spells_gcs):
-                if spell_gcs['name'] == spell_json['name']:
-                    match_gcs = spell_gcs
-                    index_gcs = index
-                    break
-
-            name = spell_json['name']
-            if match_gcs is None:
-                remove_menu = [('yes', True), ('no', False)]
-                remove, ignore = self.__window_manager.menu(
-                        'Remove "%s" spell (in JSON=%r) but NOT in GCS' % (
-                            name, spell_json['skill']), remove_menu)
-                if remove:
-                    changes.append('"%s" spell removed' % name)
-                    # remove removes a list element by value
-                    self.__char_json['spells'].remove(spell_json)
-            else:
-                if match_gcs['skill'] != spell_json['skill']:
-                    if match_gcs['skill'] > spell_json['skill']:
-                        changes.append(
-                                '%s spell changed from %r to %r' %
-                                (spell_json['name'], spell_json['skill'],
-                                 match_gcs['skill']))
-                    else:
-                        changes.append(
-                                '%s spell changed from %r to %r -- NOTE: value reduced' %
-                                (spell_json['name'], spell_json['skill'],
-                                 match_gcs['skill']))
-                    spell_json['skill'] = match_gcs['skill']
-
-                del spells_gcs[index_gcs]
-
-        for spell_gcs in spells_gcs:
-            changes.append('%s (%d) spell added' %
-                           (spell_gcs['name'], spell_gcs['skill']))
-            spells_json.append(spell_gcs)
-
-        return changes
-
-    def __import_heading(self,
-                        heading,            # string: 'skills', 'advantages', etc
-                        heading_singular    # string: 'skill', 'advantage', etc
-                        ):
-        changes = []
-
-        if heading in self.__char_json:
-            things_json = self.__char_json[heading]
-        else:
-            things_json = {}
-
-        # Make the copy so we can delete matches from the list and not mess up
-        # the original character.
-        if heading in self.__char_gcs.char:
-            things_gcs = copy.deepcopy(self.__char_gcs.char[heading])
-        else:
-            things_gcs = {}
-
-        if len(things_gcs) == 0 and len(things_json) == 0:
-            # Neither has |things|; everything's good
-            return changes
-
-        items_to_remove = []
-        for name in things_json.iterkeys():
-            if name not in things_gcs:
-                remove_menu = [('yes', True), ('no', False)]
-                remove, ignore = self.__window_manager.menu(
-                        'Remove "%s" %s (in JSON=%r) but NOT in GCS' % (
-                            name, heading_singular, things_json[name]),
-                        remove_menu)
-                if remove:
-                    changes.append('"%s" %s removed' % (name,
-                                                        heading_singular))
-                    items_to_remove.append(name)
-            else:
-                if things_gcs[name] != things_json[name]:
-                    if things_gcs[name] > things_json[name]:
-                        changes.append('%s %s changed from %r to %r' %
-                                (name, heading_singular, things_json[name],
-                                 things_gcs[name]))
-                    else:
-                        changes.append(
-                                '%s %s changed from %r to %r -- NOTE: value reduced' %
-                                (name, heading_singular, things_json[name],
-                                 things_gcs[name]))
-                    things_json[name] = things_gcs[name]
-                del(things_gcs[name])
-
-        while len(items_to_remove) > 0:
-            name = items_to_remove.pop()
-            # del removes a dict item
-            del self.__char_json[heading][name]
-
-        for name in things_gcs.iterkeys():
-            changes.append('%s (%d) %s added' %
-                    (name, things_gcs[name], heading_singular))
-            things_json[name] = things_gcs[name]
-
-        return changes
-
-    def __get_stuff_count(self,
-                          item
-                          ):
-        return 1 if 'count' not in item else item['count']
 
     def __import_equipment(self,
                            squash   # Bool: whether to flatten containers
@@ -1396,19 +1215,198 @@ class ImportCharacter(object):
                 self.__char_json['stuff'].append(item_gcs)
         return changes
 
-    def __get_advantage_cost(self,
-                             advantage_gcs # element from xml.etree.ElementTree
-                            ):
-        cost_text_gcs = advantage_gcs.find('base_points')
-        cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
-        levels_element = advantage_gcs.find('levels')
-        if levels_element is not None:
-            levels = int(levels_element.text)
-            points_per_level_element = advantage_gcs.find('points_per_level')
-            if points_per_level_element is not None:
-                levels *= int(points_per_level_element.text)
-                cost_gcs += levels
-        return cost_gcs
+    def __import_heading(self,
+                        heading,            # string: 'skills', 'advantages', etc
+                        heading_singular    # string: 'skill', 'advantage', etc
+                        ):
+        changes = []
+
+        if heading in self.__char_json:
+            things_json = self.__char_json[heading]
+        else:
+            things_json = {}
+
+        # Make the copy so we can delete matches from the list and not mess up
+        # the original character.
+        if heading in self.__char_gcs.char:
+            things_gcs = copy.deepcopy(self.__char_gcs.char[heading])
+        else:
+            things_gcs = {}
+
+        if len(things_gcs) == 0 and len(things_json) == 0:
+            # Neither has |things|; everything's good
+            return changes
+
+        items_to_remove = []
+        for name in things_json.iterkeys():
+            if name not in things_gcs:
+                remove_menu = [('yes', True), ('no', False)]
+                remove, ignore = self.__window_manager.menu(
+                        'Remove "%s" %s (in JSON=%r) but NOT in GCS' % (
+                            name, heading_singular, things_json[name]),
+                        remove_menu)
+                if remove:
+                    changes.append('"%s" %s removed' % (name,
+                                                        heading_singular))
+                    items_to_remove.append(name)
+            else:
+                if things_gcs[name] != things_json[name]:
+                    if things_gcs[name] > things_json[name]:
+                        changes.append('%s %s changed from %r to %r' %
+                                (name, heading_singular, things_json[name],
+                                 things_gcs[name]))
+                    else:
+                        changes.append(
+                                '%s %s changed from %r to %r -- NOTE: value reduced' %
+                                (name, heading_singular, things_json[name],
+                                 things_gcs[name]))
+                    things_json[name] = things_gcs[name]
+                del(things_gcs[name])
+
+        while len(items_to_remove) > 0:
+            name = items_to_remove.pop()
+            # del removes a dict item
+            del self.__char_json[heading][name]
+
+        for name in things_gcs.iterkeys():
+            changes.append('%s (%d) %s added' %
+                    (name, things_gcs[name], heading_singular))
+            things_json[name] = things_gcs[name]
+
+        return changes
+
+    def __import_skills(self):
+        return self.__import_heading('skills', 'skill')
+
+    def __import_spells(self):
+        changes = []
+        if 'spells' not in self.__char_json:
+            self.__char_json['spells'] = []
+        spells_json = self.__char_json['spells']
+
+        if 'spells' in self.__char_gcs.char:
+            spells_gcs = copy.deepcopy(self.__char_gcs.char['spells'])
+        else:
+            spells_gcs = []
+
+        if len(spells_gcs) == 0 and len(spells_json) == 0:
+            # Neither has |spells| and that's OK.
+            return changes
+
+        for spell_json in spells_json:
+            match_gcs = None
+            index_gcs = None
+            for index, spell_gcs in enumerate(spells_gcs):
+                if spell_gcs['name'] == spell_json['name']:
+                    match_gcs = spell_gcs
+                    index_gcs = index
+                    break
+
+            name = spell_json['name']
+            if match_gcs is None:
+                remove_menu = [('yes', True), ('no', False)]
+                remove, ignore = self.__window_manager.menu(
+                        'Remove "%s" spell (in JSON=%r) but NOT in GCS' % (
+                            name, spell_json['skill']), remove_menu)
+                if remove:
+                    changes.append('"%s" spell removed' % name)
+                    # remove removes a list element by value
+                    self.__char_json['spells'].remove(spell_json)
+            else:
+                if match_gcs['skill'] != spell_json['skill']:
+                    if match_gcs['skill'] > spell_json['skill']:
+                        changes.append(
+                                '%s spell changed from %r to %r' %
+                                (spell_json['name'], spell_json['skill'],
+                                 match_gcs['skill']))
+                    else:
+                        changes.append(
+                                '%s spell changed from %r to %r -- NOTE: value reduced' %
+                                (spell_json['name'], spell_json['skill'],
+                                 match_gcs['skill']))
+                    spell_json['skill'] = match_gcs['skill']
+
+                del spells_gcs[index_gcs]
+
+        for spell_gcs in spells_gcs:
+            changes.append('%s (%d) spell added' %
+                           (spell_gcs['name'], spell_gcs['skill']))
+            spells_json.append(spell_gcs)
+
+        return changes
+
+    def __import_techniques(self):
+        # TODO: there's probably a way to combine techniques and skills (since
+        # they're both lists as opposed to the dicts examined by
+        # |__import_heading|).  The challenge is that skills and techniques look
+        # different under the hood so the 'do we copy' stuff needs to be
+        # custom.
+        changes = []
+        if 'techniques' not in self.__char_json:
+            self.__char_json['techniques'] = []
+        techniques_json = self.__char_json['techniques']
+
+        if 'techniques' in self.__char_gcs.char:
+            techniques_gcs = copy.deepcopy(self.__char_gcs.char['techniques'])
+        else:
+            techniques_gcs = []
+
+        if len(techniques_gcs) == 0 and len(techniques_json) == 0:
+            # Neither has |techniques| and that's OK.
+            return changes
+
+        for technique_json in techniques_json:
+            match_gcs = None
+            index_gcs = None
+            for index, technique_gcs in enumerate(techniques_gcs):
+                if (technique_gcs['name'] == technique_json['name'] and
+                        technique_gcs['default'] == technique_json['default']):
+                    match_gcs = technique_gcs
+                    index_gcs = index
+                    break
+
+            if ('default' in technique_json and
+                    len(technique_json['default']) != 0):
+                name = '%s (%s)' % (technique_json['name'],
+                                    ', '.join(technique_json['default']))
+            else:
+                name = technique_json['name']
+
+            if match_gcs is None:
+                remove_menu = [('yes', True), ('no', False)]
+                remove, ignore = self.__window_manager.menu(
+                        'Remove "%s" technique (in JSON=%r) but NOT in GCS' % (
+                            name, technique_json['value']), remove_menu)
+                if remove:
+                    changes.append('"%s" technique removed' % name)
+                    self.__char_gcs.char['techniques'].remove(technique_json)
+            else:
+                if match_gcs['value'] != technique_json['value']:
+                    if match_gcs['value'] > technique_json['value']:
+                        changes.append(
+                                '%s technique changed from %r to %r' %
+                                (name, technique_json['value'], match_gcs['value']))
+                    else:
+                        changes.append(
+                                '%s technique changed from %r to %r -- NOTE: value reduced' %
+                                (name, technique_json['value'], match_gcs['value']))
+                    technique_json['value'] = match_gcs['value']
+
+                del techniques_gcs[index_gcs]
+
+        for technique_gcs in techniques_gcs:
+            if ('default' in technique_gcs and
+                    len(technique_gcs['default']) != 0):
+                name = '%s (%s)' % (technique_gcs['name'],
+                                    ', '.join(technique_gcs['default']))
+            else:
+                name = technique_gcs['name']
+
+            changes.append('%s (%d) technique added' %
+                           (name, technique_gcs['value']))
+            techniques_json.append(technique_gcs)
+
+        return changes
 
 
 def timeStamped(fname,  # <string> Base filename

@@ -2322,6 +2322,49 @@ class PersonnelHandler(ScreenHandler):
                                            fighter)
         return attribute_widget.doit()
 
+    def __change_consciousness(self,
+                               throw_away   # Required/used by the caller
+                                            #   because there's a list of
+                                            #   methods to call, and
+                                            #   (apparently) some of them may
+                                            #   use this parameter.  It's
+                                            #   ignored by this method,
+                                            #   however.
+                               ):
+        '''
+        Handler for a change consciousness sub-menu entry.
+
+        Provides a way for a Fighter change his/her level of consciousness
+
+        Returns: None if we want to bail-out of the change consciousness
+                 process, True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        state_menu = sorted(ca_fighter.Fighter.conscious_map.iteritems(),
+                            key=lambda x: x[1])
+        new_state_number, ignore = self._window_manager.menu('New State',
+                                                             state_menu)
+        if new_state_number is None:
+            return None
+
+        self.world.ruleset.do_action(
+                fighter,
+                {
+                    'action-name': 'set-consciousness',
+                    'level': new_state_number,
+                    'comment': '(%s) is now (%s)' % (
+                        fighter.name,
+                        ca_fighter.Fighter.get_name_from_state_number(
+                                                            new_state_number))
+                },
+                self)
+
+        self._draw_screen()
+        return True  # anything but 'None' for a successful menu handler
+
     def __change_creature(self):
         '''
         Command ribbon method.
@@ -2389,49 +2432,6 @@ class PersonnelHandler(ScreenHandler):
         self._window.refresh()
         return True  # Keep going
 
-    def __change_consciousness(self,
-                               throw_away   # Required/used by the caller
-                                            #   because there's a list of
-                                            #   methods to call, and
-                                            #   (apparently) some of them may
-                                            #   use this parameter.  It's
-                                            #   ignored by this method,
-                                            #   however.
-                               ):
-        '''
-        Handler for a change consciousness sub-menu entry.
-
-        Provides a way for a Fighter change his/her level of consciousness
-
-        Returns: None if we want to bail-out of the change consciousness
-                 process, True, otherwise
-        '''
-        fighter = self.get_obj_from_index()
-        if fighter is None:
-            return None
-
-        state_menu = sorted(ca_fighter.Fighter.conscious_map.iteritems(),
-                            key=lambda x: x[1])
-        new_state_number, ignore = self._window_manager.menu('New State',
-                                                             state_menu)
-        if new_state_number is None:
-            return None
-
-        self.world.ruleset.do_action(
-                fighter,
-                {
-                    'action-name': 'set-consciousness',
-                    'level': new_state_number,
-                    'comment': '(%s) is now (%s)' % (
-                        fighter.name,
-                        ca_fighter.Fighter.get_name_from_state_number(
-                                                            new_state_number))
-                },
-                self)
-
-        self._draw_screen()
-        return True  # anything but 'None' for a successful menu handler
-
     def __change_template_group(self):
         '''
         Command ribbon method.
@@ -2489,7 +2489,7 @@ class PersonnelHandler(ScreenHandler):
 
         self._window.char_detail_home()
 
-    def __container_open(
+    def __container_close(
                     self,
                     throw_away   # Required/used by the caller because
                                  #   there's a list of methods to call,
@@ -2500,41 +2500,17 @@ class PersonnelHandler(ScreenHandler):
         '''
         Method for 'equip' sub-menu.
 
-        Opens a container that's at the current level
+        Closes the top container in the container stack.
 
-        Returns: None if we want to bail-out of the doff armor process,
-                 True, otherwise
+        Returns: None if we want to bail-out, True, otherwise
         '''
         fighter = self.get_obj_from_index()
         if fighter is None:
             return None
 
-        container_stack = fighter.details['open-container']
-        container = fighter.equipment.get_container(container_stack)
-        containers = fighter.equipment.get_container_list(container)
-
-        # Build the menu
-
-        open_container_menu = []
-        for index, item_name in containers:
-            open_container_menu.append((item_name, index))
-        open_container_menu = sorted(open_container_menu,
-                                     key=lambda x: x[0].upper())
-
-        # Get the index
-
-        container_index, ignore = self._window_manager.menu(
-                'Open Which Container', open_container_menu)
-        if container_index is None:
-            return None
-
-        # Open the container
-
         self.world.ruleset.do_action(
                 fighter,
-                {'action-name': 'open-container',
-                 'container-index': container_index
-                },
+                {'action-name': 'close-container'},
                 None)
         self._draw_screen()
         return True  # anything but 'None' for a menu handler
@@ -2658,7 +2634,7 @@ class PersonnelHandler(ScreenHandler):
         self._draw_screen()
         return True  # anything but 'None' for a menu handler
 
-    def __container_close(
+    def __container_open(
                     self,
                     throw_away   # Required/used by the caller because
                                  #   there's a list of methods to call,
@@ -2669,21 +2645,44 @@ class PersonnelHandler(ScreenHandler):
         '''
         Method for 'equip' sub-menu.
 
-        Closes the top container in the container stack.
+        Opens a container that's at the current level
 
-        Returns: None if we want to bail-out, True, otherwise
+        Returns: None if we want to bail-out of the doff armor process,
+                 True, otherwise
         '''
         fighter = self.get_obj_from_index()
         if fighter is None:
             return None
 
+        container_stack = fighter.details['open-container']
+        container = fighter.equipment.get_container(container_stack)
+        containers = fighter.equipment.get_container_list(container)
+
+        # Build the menu
+
+        open_container_menu = []
+        for index, item_name in containers:
+            open_container_menu.append((item_name, index))
+        open_container_menu = sorted(open_container_menu,
+                                     key=lambda x: x[0].upper())
+
+        # Get the index
+
+        container_index, ignore = self._window_manager.menu(
+                'Open Which Container', open_container_menu)
+        if container_index is None:
+            return None
+
+        # Open the container
+
         self.world.ruleset.do_action(
                 fighter,
-                {'action-name': 'close-container'},
+                {'action-name': 'open-container',
+                 'container-index': container_index
+                },
                 None)
         self._draw_screen()
         return True  # anything but 'None' for a menu handler
-
 
     def __create_template(self):
         '''
@@ -3002,275 +3001,6 @@ class PersonnelHandler(ScreenHandler):
         self._draw_screen()
         return True  # Anything but 'None' for a menu handler
 
-    def __get_name_for_creature(self,
-                                new_creature    # dict for creature
-                                ):
-        '''
-        Gets a new name for the passed-in creature.
-
-        Returns creature's name.
-        '''
-
-        # Get the new creature name
-
-        lines, cols = self._window.getmaxyx()
-
-        # We're not filling in the holes if we delete a monster, we're
-        #   just adding to the total of monsters created
-        # NOTE: this is still imperfect.  If you delete a monster and then
-        #   come back later, you'll still have numbering problems.
-        # ALSO NOTE: we use 'len' rather than 'len'+1 because we've added
-        #   a Venue to the list -- the Venue has an implied prefix of '0'
-        previous_creature_count = (0 if self.__critters is None else
-                                   len(self.__critters['data']))
-        creature_num = (previous_creature_count + self.__deleted_critter_count)
-        keep_asking = True
-        creature_name = '** Anonymous **'  # Shouldn't need this
-        while keep_asking:
-            base_name = self._window_manager.input_box(1,      # height
-                                                       cols-4,  # width
-                                                       'Monster Name')
-            if base_name is None or len(base_name) == 0:
-                base_name, where, gender = self.world.get_random_name()
-                if base_name is None:
-                    self._window_manager.error(['Monster needs a name'])
-                    keep_asking = True
-                    continue
-                else:
-                    if where is not None:
-                        new_creature['notes'].append('origin: %s' % where)
-                    if gender is not None:
-                        new_creature['notes'].append('gender: %s' % gender)
-
-            if self.__group_name == 'NPCs' or self.__group_name == 'PCs':
-                creature_name = base_name
-            else:
-                creature_name = '%d - %s' % (creature_num, base_name)
-
-            if self.__critters is None:
-                keep_asking = False
-            elif creature_name in self.__critters['data']:
-                self._window_manager.error(
-                    ['Monster "%s" already exists' % creature_name])
-                keep_asking = True
-            else:
-                keep_asking = False
-
-        return creature_name
-
-    def __get_personality(self,
-                          new_creature  # dict containing creature
-                          ):
-        '''
-        Generates a random personality for the creature.  Adds that description
-        to the creature's notes.
-
-        Returns nothing
-        '''
-        with ca_json.GmJson('gm-npc-random-detail.json') as npc_detail:
-            for name, traits in npc_detail.read_data['traits'].iteritems():
-                trait = random.choice(traits)
-                if isinstance(trait, dict):
-                    trait_array = [trait['text']]
-                    for key in trait:
-                        if key in npc_detail.read_data['support']:
-                            trait_array.append('%s: %s' %
-                                (key,
-                                 random.choice(
-                                    npc_detail.read_data['support'][key])))
-                    trait = ', '.join(trait_array)
-
-                new_creature['notes'].append('%s: %s' % (name, trait))
-
-    def __make_creature_from_template(self):
-        '''
-        Gets a template for the creature currently being added to the current
-        group.
-
-        Returns: dict containing creature generated
-        '''
-        if self.__template_group is None:
-            self.__change_template_group()
-
-        # Based on which creature from the template
-
-        empty_creature = 'Blank Template'
-        from_creature_name = empty_creature
-
-        # None means there are no templates or the user decided against
-        # a template.
-
-        monster_index = 0
-        if self.__template_group is not None:
-            creature_menu = []
-            for from_creature_name in (
-                        self.world.details['templates'][
-                            self.__template_group]):
-                if from_creature_name == empty_creature:
-                    self._window_manager.error(
-                            ['Template group "%s" contains bad template:' %
-                                self.__template_group,
-                             '"%s". Replacing with an empty creature.' %
-                                empty_creature])
-                else:
-                    creature_menu.append((from_creature_name,
-                                          from_creature_name))
-
-            creature_menu = sorted(creature_menu, key=lambda x: x[0].upper())
-            creature_menu.append((empty_creature, empty_creature))
-
-            from_creature_name, monster_index = self._window_manager.menu(
-                    'Monster', creature_menu, monster_index)
-            if from_creature_name is None:
-                return None
-
-        # Generate the creature for the template
-
-        to_creature = self.world.ruleset.make_empty_creature()
-
-        if from_creature_name != empty_creature:
-            from_creature = (self.world.details['templates'][
-                             self.__template_group][from_creature_name])
-            for key, value in from_creature.iteritems():
-                if key == 'permanent':
-                    for ikey, ivalue in value.iteritems():
-                        to_creature['permanent'][ikey] = (
-                            self.__get_value_from_template(ivalue,
-                                                           from_creature))
-                        to_creature['current'][ikey] = to_creature[
-                                                        'permanent'][ikey]
-                else:
-                    to_creature[key] = self.__get_value_from_template(
-                                                    value, from_creature)
-
-        return to_creature
-
-
-    def __modify_new_creature(self,
-                              creature_name,    # string: new creature's name
-                              new_creature      # dict containing creature
-                              ):
-        '''
-        Allows the user to modify a created creature. Potentially modifies
-        new_creature
-
-        Returns: tuple: (new_creature_name,
-                         True to keep adding creatures/False otherwise)
-        '''
-        keep_changing_this_creature = True
-        keep_adding_creatures = True
-        lines, cols = self._window.getmaxyx()
-        while keep_changing_this_creature:
-            # Creating a temporary list to show.  Add the new creature by its
-            # current creature name and allow the name to be modified.  Once
-            # the creature name is sorted, we can add it to the permanent list.
-            # That simplifies the cleanup (since the lists are dictionaries,
-            # indexed by creature name).
-
-            # Note: we're not going to touch the objects in temp_list so it's
-            # OK that this is just copying references.
-
-            if self.__critters is None:
-                temp_list = []
-            else:
-                temp_list = [x for x in self.__critters['obj']]
-            temp_list.append(ca_fighter.Fighter(creature_name,
-                                                self.__group_name,
-                                                new_creature,
-                                                self.world.ruleset,
-                                                self._window_manager))
-            self.__new_char_name = creature_name
-            # PersonnelGmWindow
-            self._window.show_creatures(temp_list,
-                                        self.__new_char_name,
-                                        self.__viewing_index)
-
-            action_menu = [('append to name', 'append'),
-                           ('notes', 'notes'),
-                           ('continue (add another creature)', 'continue'),
-                           ('quit', 'quit')]
-
-            starting_index = 2 # Start on 'continue'
-            action, ignore = self._window_manager.menu('What Next',
-                                                       action_menu,
-                                                       starting_index)
-            if action == 'append':
-                more_text = self._window_manager.input_box(1,       # ht
-                                                           cols-4,  # width
-                                                           'Add to Name')
-                temp_creature_name = '%s - %s' % (creature_name,
-                                                  more_text)
-                if self.__critters is None:
-                    creature_name = temp_creature_name
-                elif temp_creature_name in self.__critters['data']:
-                    self._window_manager.error(
-                                        ['Monster "%s" already exists' %
-                                            temp_creature_name])
-                else:
-                    creature_name = temp_creature_name
-            elif action == 'notes':
-                if 'notes' not in new_creature:
-                    notes = None
-                else:
-                    notes = '\n'.join(new_creature['notes'])
-                notes = self._window_manager.edit_window(
-                            lines - 4,
-                            cols/2,
-                            notes,  # initial string (w/ \n) for the window
-                            'Notes',
-                            '^G to exit')
-                new_creature['notes'] = [x for x in notes.split('\n')]
-
-            elif action == 'continue':
-                keep_changing_this_creature = False
-
-            elif action == 'quit':
-                keep_changing_this_creature = False
-                keep_adding_creatures = False
-
-        return creature_name, keep_adding_creatures
-
-    def __holster_weapon(self,
-                         throw_away   # Required/used by the caller because
-                                      #   there's a list of methods to call,
-                                      #   and (apparently) some of them may
-                                      #   use this parameter.  It's ignored
-                                      #   by this method, however.
-                         ):
-        '''
-        Method for 'equip' sub-menu.
-
-        Asks the user which weapon (or shield) the Fighter should draw and
-        draws it.
-
-        Returns: None if we want to bail-out of the draw weapon process,
-                 True, otherwise
-        '''
-        fighter = self.get_obj_from_index()
-        if fighter is None:
-            return None
-
-        # The following two lists are guaranteed to be in the same order
-        weapons = fighter.get_current_weapons()
-        weapon_indexes = fighter.get_current_weapon_indexes()
-        weapon_menu = []
-        for weapon, index in zip(weapons, weapon_indexes):
-            if weapon is None:
-                continue
-            weapon_menu.append((weapon.name, index))
-        weapon_index, ignore = self._window_manager.menu(
-                'Holster Which Weapon', weapon_menu)
-        if weapon_index is not None:
-            self.world.ruleset.do_action(
-                    fighter,
-                    {'action-name': 'holster-weapon',
-                     'weapon-index': weapon_index,
-                     'notimer': True},
-                    None)
-
-        self._draw_screen()
-        return True  # Anything but 'None' for a menu handler
-
     def __equip(self):
         '''
         Command ribbon method.
@@ -3451,6 +3181,22 @@ class PersonnelHandler(ScreenHandler):
 
         return True  # Keep going
 
+    def __fight_notes(self,
+                      throw_away    # Required/used by the caller because
+                                    #   there's a list of methods to call,
+                                    #   and (apparently) some of them may use
+                                    #   this parameter.  It's ignored by this
+                                    #   method, however.
+                      ):
+        '''
+        Handler for an Equip sub-menu entry.
+
+        Lets the user edit a fighter's (or Venue's) fight notes.
+
+        Returns: None
+        '''
+        return self.__notes('fight-notes')
+
     def __full_notes(self,
                      throw_away   # Required/used by the caller because
                                   #   there's a list of methods to call,
@@ -3477,6 +3223,86 @@ class PersonnelHandler(ScreenHandler):
             if critter.name == name:
                 return critter
         return None
+
+    def __get_name_for_creature(self,
+                                new_creature    # dict for creature
+                                ):
+        '''
+        Gets a new name for the passed-in creature.
+
+        Returns creature's name.
+        '''
+
+        # Get the new creature name
+
+        lines, cols = self._window.getmaxyx()
+
+        # We're not filling in the holes if we delete a monster, we're
+        #   just adding to the total of monsters created
+        # NOTE: this is still imperfect.  If you delete a monster and then
+        #   come back later, you'll still have numbering problems.
+        # ALSO NOTE: we use 'len' rather than 'len'+1 because we've added
+        #   a Venue to the list -- the Venue has an implied prefix of '0'
+        previous_creature_count = (0 if self.__critters is None else
+                                   len(self.__critters['data']))
+        creature_num = (previous_creature_count + self.__deleted_critter_count)
+        keep_asking = True
+        creature_name = '** Anonymous **'  # Shouldn't need this
+        while keep_asking:
+            base_name = self._window_manager.input_box(1,      # height
+                                                       cols-4,  # width
+                                                       'Monster Name')
+            if base_name is None or len(base_name) == 0:
+                base_name, where, gender = self.world.get_random_name()
+                if base_name is None:
+                    self._window_manager.error(['Monster needs a name'])
+                    keep_asking = True
+                    continue
+                else:
+                    if where is not None:
+                        new_creature['notes'].append('origin: %s' % where)
+                    if gender is not None:
+                        new_creature['notes'].append('gender: %s' % gender)
+
+            if self.__group_name == 'NPCs' or self.__group_name == 'PCs':
+                creature_name = base_name
+            else:
+                creature_name = '%d - %s' % (creature_num, base_name)
+
+            if self.__critters is None:
+                keep_asking = False
+            elif creature_name in self.__critters['data']:
+                self._window_manager.error(
+                    ['Monster "%s" already exists' % creature_name])
+                keep_asking = True
+            else:
+                keep_asking = False
+
+        return creature_name
+
+    def __get_personality(self,
+                          new_creature  # dict containing creature
+                          ):
+        '''
+        Generates a random personality for the creature.  Adds that description
+        to the creature's notes.
+
+        Returns nothing
+        '''
+        with ca_json.GmJson('gm-npc-random-detail.json') as npc_detail:
+            for name, traits in npc_detail.read_data['traits'].iteritems():
+                trait = random.choice(traits)
+                if isinstance(trait, dict):
+                    trait_array = [trait['text']]
+                    for key in trait:
+                        if key in npc_detail.read_data['support']:
+                            trait_array.append('%s: %s' %
+                                (key,
+                                 random.choice(
+                                    npc_detail.read_data['support'][key])))
+                    trait = ', '.join(trait_array)
+
+                new_creature['notes'].append('%s: %s' % (name, trait))
 
     def __get_value_from_template(self,
                                   template_value,
@@ -3562,6 +3388,47 @@ class PersonnelHandler(ScreenHandler):
 
         return True  # anything but 'None' for a successful menu handler
 
+    def __holster_weapon(self,
+                         throw_away   # Required/used by the caller because
+                                      #   there's a list of methods to call,
+                                      #   and (apparently) some of them may
+                                      #   use this parameter.  It's ignored
+                                      #   by this method, however.
+                         ):
+        '''
+        Method for 'equip' sub-menu.
+
+        Asks the user which weapon (or shield) the Fighter should draw and
+        draws it.
+
+        Returns: None if we want to bail-out of the draw weapon process,
+                 True, otherwise
+        '''
+        fighter = self.get_obj_from_index()
+        if fighter is None:
+            return None
+
+        # The following two lists are guaranteed to be in the same order
+        weapons = fighter.get_current_weapons()
+        weapon_indexes = fighter.get_current_weapon_indexes()
+        weapon_menu = []
+        for weapon, index in zip(weapons, weapon_indexes):
+            if weapon is None:
+                continue
+            weapon_menu.append((weapon.name, index))
+        weapon_index, ignore = self._window_manager.menu(
+                'Holster Which Weapon', weapon_menu)
+        if weapon_index is not None:
+            self.world.ruleset.do_action(
+                    fighter,
+                    {'action-name': 'holster-weapon',
+                     'weapon-index': weapon_index,
+                     'notimer': True},
+                    None)
+
+        self._draw_screen()
+        return True  # Anything but 'None' for a menu handler
+
     def __identify_equipment(self,
                              throw_away   # Required/used by the caller because
                                           #   there's a list of methods to call,
@@ -3646,6 +3513,154 @@ class PersonnelHandler(ScreenHandler):
                     'Ignore More Equipment', keep_asking_menu)
 
         return True  # anything but 'None' for a successful menu handler
+
+    def __make_creature_from_template(self):
+        '''
+        Gets a template for the creature currently being added to the current
+        group.
+
+        Returns: dict containing creature generated
+        '''
+        if self.__template_group is None:
+            self.__change_template_group()
+
+        # Based on which creature from the template
+
+        empty_creature = 'Blank Template'
+        from_creature_name = empty_creature
+
+        # None means there are no templates or the user decided against
+        # a template.
+
+        monster_index = 0
+        if self.__template_group is not None:
+            creature_menu = []
+            for from_creature_name in (
+                        self.world.details['templates'][
+                            self.__template_group]):
+                if from_creature_name == empty_creature:
+                    self._window_manager.error(
+                            ['Template group "%s" contains bad template:' %
+                                self.__template_group,
+                             '"%s". Replacing with an empty creature.' %
+                                empty_creature])
+                else:
+                    creature_menu.append((from_creature_name,
+                                          from_creature_name))
+
+            creature_menu = sorted(creature_menu, key=lambda x: x[0].upper())
+            creature_menu.append((empty_creature, empty_creature))
+
+            from_creature_name, monster_index = self._window_manager.menu(
+                    'Monster', creature_menu, monster_index)
+            if from_creature_name is None:
+                return None
+
+        # Generate the creature for the template
+
+        to_creature = self.world.ruleset.make_empty_creature()
+
+        if from_creature_name != empty_creature:
+            from_creature = (self.world.details['templates'][
+                             self.__template_group][from_creature_name])
+            for key, value in from_creature.iteritems():
+                if key == 'permanent':
+                    for ikey, ivalue in value.iteritems():
+                        to_creature['permanent'][ikey] = (
+                            self.__get_value_from_template(ivalue,
+                                                           from_creature))
+                        to_creature['current'][ikey] = to_creature[
+                                                        'permanent'][ikey]
+                else:
+                    to_creature[key] = self.__get_value_from_template(
+                                                    value, from_creature)
+
+        return to_creature
+
+
+    def __modify_new_creature(self,
+                              creature_name,    # string: new creature's name
+                              new_creature      # dict containing creature
+                              ):
+        '''
+        Allows the user to modify a created creature. Potentially modifies
+        new_creature
+
+        Returns: tuple: (new_creature_name,
+                         True to keep adding creatures/False otherwise)
+        '''
+        keep_changing_this_creature = True
+        keep_adding_creatures = True
+        lines, cols = self._window.getmaxyx()
+        while keep_changing_this_creature:
+            # Creating a temporary list to show.  Add the new creature by its
+            # current creature name and allow the name to be modified.  Once
+            # the creature name is sorted, we can add it to the permanent list.
+            # That simplifies the cleanup (since the lists are dictionaries,
+            # indexed by creature name).
+
+            # Note: we're not going to touch the objects in temp_list so it's
+            # OK that this is just copying references.
+
+            if self.__critters is None:
+                temp_list = []
+            else:
+                temp_list = [x for x in self.__critters['obj']]
+            temp_list.append(ca_fighter.Fighter(creature_name,
+                                                self.__group_name,
+                                                new_creature,
+                                                self.world.ruleset,
+                                                self._window_manager))
+            self.__new_char_name = creature_name
+            # PersonnelGmWindow
+            self._window.show_creatures(temp_list,
+                                        self.__new_char_name,
+                                        self.__viewing_index)
+
+            action_menu = [('append to name', 'append'),
+                           ('notes', 'notes'),
+                           ('continue (add another creature)', 'continue'),
+                           ('quit', 'quit')]
+
+            starting_index = 2 # Start on 'continue'
+            action, ignore = self._window_manager.menu('What Next',
+                                                       action_menu,
+                                                       starting_index)
+            if action == 'append':
+                more_text = self._window_manager.input_box(1,       # ht
+                                                           cols-4,  # width
+                                                           'Add to Name')
+                temp_creature_name = '%s - %s' % (creature_name,
+                                                  more_text)
+                if self.__critters is None:
+                    creature_name = temp_creature_name
+                elif temp_creature_name in self.__critters['data']:
+                    self._window_manager.error(
+                                        ['Monster "%s" already exists' %
+                                            temp_creature_name])
+                else:
+                    creature_name = temp_creature_name
+            elif action == 'notes':
+                if 'notes' not in new_creature:
+                    notes = None
+                else:
+                    notes = '\n'.join(new_creature['notes'])
+                notes = self._window_manager.edit_window(
+                            lines - 4,
+                            cols/2,
+                            notes,  # initial string (w/ \n) for the window
+                            'Notes',
+                            '^G to exit')
+                new_creature['notes'] = [x for x in notes.split('\n')]
+
+            elif action == 'continue':
+                keep_changing_this_creature = False
+
+            elif action == 'quit':
+                keep_changing_this_creature = False
+                keep_adding_creatures = False
+
+        return creature_name, keep_adding_creatures
 
     def __new_group(self):
         '''
@@ -4116,22 +4131,6 @@ class PersonnelHandler(ScreenHandler):
                     'Remove More %s' % param.capitalize(), keep_asking_menu)
         return True  # Menu handler's success returns anything but 'None'
 
-    def __fight_notes(self,
-                      throw_away    # Required/used by the caller because
-                                    #   there's a list of methods to call,
-                                    #   and (apparently) some of them may use
-                                    #   this parameter.  It's ignored by this
-                                    #   method, however.
-                      ):
-        '''
-        Handler for an Equip sub-menu entry.
-
-        Lets the user edit a fighter's (or Venue's) fight notes.
-
-        Returns: None
-        '''
-        return self.__notes('fight-notes')
-
     def __timer_cancel(self,
                        throw_away   # Required/used by the caller because
                                     #   there's a list of methods to call,
@@ -4517,14 +4516,6 @@ class FightHandler(ScreenHandler):
         result = self.__fighters[self._saved_fight['index']]
         return result
 
-    def get_fighters(self):                     # Public to support testing
-        '''
-        Returns a list of information for all the Fighters in self.__fighters.
-        '''
-        return [{'name': fighter.name,
-                 'group': fighter.group,
-                 'details': fighter.details} for fighter in self.__fighters]
-
     def get_fighter_object(self,
                            name,  # <string> name of a fighter in that group
                            group  # <string> 'PCs' or group under
@@ -4538,6 +4529,14 @@ class FightHandler(ScreenHandler):
                 return index, fighter
 
         return None, None  # Not found
+
+    def get_fighters(self):                     # Public to support testing
+        '''
+        Returns a list of information for all the Fighters in self.__fighters.
+        '''
+        return [{'name': fighter.name,
+                 'group': fighter.group,
+                 'details': fighter.details} for fighter in self.__fighters]
 
     def get_opponent_for(self,
                          fighter  # Fighter object
@@ -4630,6 +4629,18 @@ class FightHandler(ScreenHandler):
                 self.__keep_monsters is False):
             fight_group = self._saved_fight['monsters']
             self.world.remove_fight(fight_group)
+
+    def is_fighter_holding_init(self,
+                                name, # string
+                                group # string
+                                ):
+        # FightHandler
+        if 'held-init' not in self._saved_fight:
+            return False
+        for entry in self._saved_fight['held-init']:
+            if name == entry[1]['name'] and group == entry[1]['group']:
+                return True
+        return False
 
     def keep_fight(self,
                    throw_away   # Required/used by the caller because
@@ -5462,6 +5473,16 @@ class FightHandler(ScreenHandler):
         attribute_widget.doit()
         return True  # keep fighting
 
+    def __fight_notes(self):
+        '''
+        Command ribbon method.
+
+        Lets the user edit a fighter's (or Venue's) fight notes.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        return self.__notes('fight-notes')
+
     def __full_notes(self):
         '''
         Command ribbon method.
@@ -5545,18 +5566,6 @@ class FightHandler(ScreenHandler):
         out_of_commision_fighter.timers.remove_expired_kill_dying()
         # NOTE: if a ruleset has bleeding rules, there would be a call to the
         # ruleset, here.
-
-    def is_fighter_holding_init(self,
-                                name, # string
-                                group # string
-                                ):
-        # FightHandler
-        if 'held-init' not in self._saved_fight:
-            return False
-        for entry in self._saved_fight['held-init']:
-            if name == entry[1]['name'] and group == entry[1]['group']:
-                return True
-        return False
 
     def __label(self):
         label_recipient, current_fighter = self.__select_fighter(
@@ -6191,16 +6200,6 @@ class FightHandler(ScreenHandler):
                                                      selected_fighter_menu,
                                                      default_selection)
         return selected_fighter, current_fighter
-
-    def __fight_notes(self):
-        '''
-        Command ribbon method.
-
-        Lets the user edit a fighter's (or Venue's) fight notes.
-
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        return self.__notes('fight-notes')
 
     def __show_history(self):
         '''

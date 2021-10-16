@@ -52,43 +52,6 @@ class Equipment(object):
 
         return len(self.__equipment) - 1  # current index of the added item
 
-    def mother_up_item(self,
-                       check_index  # integer index of item to be mothered-up
-                       ):
-        '''
-        Checks to see if item is essentially the same as another item in the
-        list.  If so, remove the passed-in item and up the count of the thing
-        that's the same.
-        '''
-        check_item = self.__equipment[check_index]
-        for index, item in enumerate(self.__equipment):
-            if check_index == index:
-                continue # This is the same exact item
-            if item['name'] == check_item['name']:
-                if self.__is_same_thing(item, check_item):
-                    item['count'] += check_item['count']
-                    self.remove(check_index, check_item['count'])
-                    return
-
-    def get_item_by_index(self,
-                          index,  # integer index into the equipment list
-                          container_stack=[]  # stack of indexes of
-                                                #   containers that're open
-                          ):
-        '''
-        Returns the dictionary data of the index-th item in the equipment
-        list.  Returns None if the item is not found.
-        '''
-
-        if index is None:
-            return None
-
-        current_container = self.get_container(container_stack)
-
-        return (None if current_container is None or
-                index >= len(current_container) else
-                current_container[index])
-
     def get_container(self,
                       container_stack   # stack of indexes of containers
                                         #   that're open - None if top level
@@ -135,6 +98,25 @@ class Equipment(object):
 
         return containers
 
+    def get_item_by_index(self,
+                          index,  # integer index into the equipment list
+                          container_stack=[]  # stack of indexes of
+                                                #   containers that're open
+                          ):
+        '''
+        Returns the dictionary data of the index-th item in the equipment
+        list.  Returns None if the item is not found.
+        '''
+
+        if index is None:
+            return None
+
+        current_container = self.get_container(container_stack)
+
+        return (None if current_container is None or
+                index >= len(current_container) else
+                current_container[index])
+
     def get_item_by_name(self,              # Public to facilitate testing
                          name,  # string that matches the name of the thing
                          starting_index=-1    # int
@@ -156,6 +138,24 @@ class Equipment(object):
                        container_stack=[]):
         container = self.get_container(container_stack)
         return None if container is None else len(container)
+
+    def mother_up_item(self,
+                       check_index  # integer index of item to be mothered-up
+                       ):
+        '''
+        Checks to see if item is essentially the same as another item in the
+        list.  If so, remove the passed-in item and up the count of the thing
+        that's the same.
+        '''
+        check_item = self.__equipment[check_index]
+        for index, item in enumerate(self.__equipment):
+            if check_index == index:
+                continue # This is the same exact item
+            if item['name'] == check_item['name']:
+                if self.__is_same_thing(item, check_item):
+                    item['count'] += check_item['count']
+                    self.remove(check_index, check_item['count'])
+                    return
 
     def remove(self,
                item_index,      # integer index into the equipment list
@@ -428,6 +428,36 @@ class EquipmentManager(object):
 
         return starting_index
 
+    def remove_equipment(self,
+                         fighter,               # Fighter object
+                         count=None,            # int
+                         container_stack = []   # [index, index, ...]
+                         ):
+        '''
+        Ask the user which piece of equipment to discard and remove it.
+
+        Returns the removed piece of equipment.
+        '''
+        item_index = self.select_item_index(fighter)
+        return self.remove_equipment_by_index(fighter,
+                                              item_index,
+                                              count)
+
+    def remove_equipment_by_index(self,
+                                  fighter,      # Fighter object
+                                  item_index,   # int index to be removed
+                                  count=None    # int
+                                  ):
+        '''
+        Ask the user which piece of equipment to discard and remove it.
+
+        Returns the removed piece of equipment.
+        '''
+        if item_index is None:
+            return None
+
+        return fighter.remove_equipment(item_index, count)
+
     def select_item_index(self,
                           fighter,                  # Fighter object
                           limit_to_removable=True   # bool
@@ -468,49 +498,8 @@ class EquipmentManager(object):
 
         return item_index # This may be 'None'
 
-    def remove_equipment(self,
-                         fighter,               # Fighter object
-                         count=None,            # int
-                         container_stack = []   # [index, index, ...]
-                         ):
-        '''
-        Ask the user which piece of equipment to discard and remove it.
-
-        Returns the removed piece of equipment.
-        '''
-        item_index = self.select_item_index(fighter)
-        return self.remove_equipment_by_index(fighter,
-                                              item_index,
-                                              count)
-
-    def remove_equipment_by_index(self,
-                                  fighter,      # Fighter object
-                                  item_index,   # int index to be removed
-                                  count=None    # int
-                                  ):
-        '''
-        Ask the user which piece of equipment to discard and remove it.
-
-        Returns the removed piece of equipment.
-        '''
-        if item_index is None:
-            return None
-
-        return fighter.remove_equipment(item_index, count)
-
 
 class Weapon(object):
-    # fighter.get_current_weapon()
-
-    @staticmethod
-    def is_weapon(item  # dict from JSON
-                  ):
-        if ('ranged weapon' in item['type'] or
-                'melee weapon' in item['type'] or
-                'shield' in item['type']):
-            return True
-        return False
-
     @staticmethod
     def is_natural_weapon(item  # dict from JSON
                   ):
@@ -518,6 +507,15 @@ class Weapon(object):
             return False
 
         if 'natural-weapon' in item and item['natural-weapon']:
+            return True
+        return False
+
+    @staticmethod
+    def is_weapon(item  # dict from JSON
+                  ):
+        if ('ranged weapon' in item['type'] or
+                'melee weapon' in item['type'] or
+                'shield' in item['type']):
             return True
         return False
 
@@ -548,30 +546,15 @@ class Weapon(object):
     def damage(self):
         return self.__get_parameter('damage')
 
-    def remove_old_clip(self):
-        if 'clip' in self.details:
-            old_clip = self.details['clip']
-            if old_clip is not None:
-                old_clip['shots'] = self.shots()
-                old_clip['shots_left'] = self.shots_left()
-        else:
-            old_clip = {'count': 1,
-                        'owners': [],
-                        'name': self.details['ammo']['name'],
-                        'notes': '',
-                        'shots': self.shots(),
-                        'shots_left': self.shots_left(),
-                        'type': ['misc'],
-                        }
-        self.details['clip'] = None
-        self.shots_left(0)
-        return old_clip
-
-    def is_ranged_weapon(self):
-        return True if 'ranged weapon' in self.details['type'] else False
+    def get_clip(self):
+        clip = None if 'clip' not in self.details else self.details['clip']
+        return clip
 
     def is_melee_weapon(self):
         return True if 'melee weapon' in self.details['type'] else False
+
+    def is_ranged_weapon(self):
+        return True if 'ranged weapon' in self.details['type'] else False
 
     def is_shield(self):
         # NOTE: cloaks also have this 'type'
@@ -613,6 +596,25 @@ class Weapon(object):
 
         return notes
 
+    def remove_old_clip(self):
+        if 'clip' in self.details:
+            old_clip = self.details['clip']
+            if old_clip is not None:
+                old_clip['shots'] = self.shots()
+                old_clip['shots_left'] = self.shots_left()
+        else:
+            old_clip = {'count': 1,
+                        'owners': [],
+                        'name': self.details['ammo']['name'],
+                        'notes': '',
+                        'shots': self.shots(),
+                        'shots_left': self.shots_left(),
+                        'type': ['misc'],
+                        }
+        self.details['clip'] = None
+        self.shots_left(0)
+        return old_clip
+
     def shots(self):
         return self.__get_parameter('shots', ammo=True)
 
@@ -624,10 +626,6 @@ class Weapon(object):
 
     def to_hit(self):
         return self.__get_parameter('to_hit')
-
-    def get_clip(self):
-        clip = None if 'clip' not in self.details else self.details['clip']
-        return clip
 
     def use_one_ammo(self):
         '''
