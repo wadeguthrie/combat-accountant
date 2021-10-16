@@ -438,6 +438,16 @@ class Timers(object):
         for timer_obj in self.__timers['obj']:
             timer_obj.decrement()
 
+    def found_timer_string(self,
+                           string
+                           ):
+        '''Returns 'True' if a current timer has string matching parameter.'''
+        for timer_obj in self.__timers['obj']:
+            if ('string' in timer_obj.details and
+                    timer_obj.details['string' ] == string):
+                return True
+        return False
+
     def get_all(self):
         ''' Returns a complete list of this list's Timer objects.  '''
         return self.__timers['obj']
@@ -446,16 +456,6 @@ class Timers(object):
         '''Returns 'True' if a current timer has the owner marked as busy.'''
         for timer_obj in self.__timers['obj']:
             if timer_obj.details['busy']:
-                return True
-        return False
-
-    def found_timer_string(self,
-                           string
-                           ):
-        '''Returns 'True' if a current timer has string matching parameter.'''
-        for timer_obj in self.__timers['obj']:
-            if ('string' in timer_obj.details and
-                    timer_obj.details['string' ] == string):
                 return True
         return False
 

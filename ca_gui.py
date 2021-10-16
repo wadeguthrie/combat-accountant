@@ -675,10 +675,6 @@ class GmWindowManager(object):
         '''
         return self.STATE_COLOR[state]
 
-    def getmaxyx(self):
-        ''' Returns a tuple containing the height and width of the screen. '''
-        return curses.LINES, curses.COLS
-
     def get_one_character(self,
                           window=None  # Window (for Curses)
                           ):
@@ -705,6 +701,10 @@ class GmWindowManager(object):
         curses.cbreak()
         curses.noecho()
         return string
+
+    def getmaxyx(self):
+        ''' Returns a tuple containing the height and width of the screen. '''
+        return curses.LINES, curses.COLS
 
     def hard_refresh_all(self):
         '''

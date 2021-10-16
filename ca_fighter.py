@@ -924,6 +924,42 @@ class Fighter(ThingsInFight):
         self._ruleset.end_turn(self, fight_handler)
         self.timers.remove_expired_kill_dying()
 
+    def get_best_skill_for_weapon(self,
+                                  weapon    # dict
+                                  ):
+        # skills = [{'name': name, 'modifier': number}, ...]
+        #if weapon['skill'] in self.details['skills']:
+        #    best_skill = weapon['skill']
+        #    best_value = self.details['skills'][best_skill]
+        #else:
+        #    return None
+
+        '''
+        Finds the best skill for this fighter and this weapon.
+
+        Returns None if no skill matching the given weapon was found, else
+            dict: {'name': best_skill, 'value': best_value}
+        '''
+        best_skill = None
+        best_value = None
+        for skill_camel, value in weapon['skill'].iteritems():
+            skill_lower = skill_camel.lower()
+            found_skill = False
+            if skill_camel in self.details['skills']:
+                value += self.details['skills'][skill_camel]
+                found_skill = True
+            elif skill_lower in self.details['current']:
+                value += self.details['current'][skill_lower]
+                found_skill = True
+            if found_skill and (best_value is None or value > best_value):
+                best_value = value
+                best_skill = skill_camel
+
+        if best_skill is None or best_value is None:
+            return None
+
+        return {'name': best_skill, 'value': best_value}
+
     def get_state(self):
         return Fighter.get_fighter_state(self.details)
 
@@ -1105,39 +1141,3 @@ class Fighter(ThingsInFight):
                                'mode': curses.A_NORMAL}]])
 
         return lines
-
-    def get_best_skill_for_weapon(self,
-                                  weapon    # dict
-                                  ):
-        # skills = [{'name': name, 'modifier': number}, ...]
-        #if weapon['skill'] in self.details['skills']:
-        #    best_skill = weapon['skill']
-        #    best_value = self.details['skills'][best_skill]
-        #else:
-        #    return None
-
-        '''
-        Finds the best skill for this fighter and this weapon.
-
-        Returns None if no skill matching the given weapon was found, else
-            dict: {'name': best_skill, 'value': best_value}
-        '''
-        best_skill = None
-        best_value = None
-        for skill_camel, value in weapon['skill'].iteritems():
-            skill_lower = skill_camel.lower()
-            found_skill = False
-            if skill_camel in self.details['skills']:
-                value += self.details['skills'][skill_camel]
-                found_skill = True
-            elif skill_lower in self.details['current']:
-                value += self.details['current'][skill_lower]
-                found_skill = True
-            if found_skill and (best_value is None or value > best_value):
-                best_value = value
-                best_skill = skill_camel
-
-        if best_skill is None or best_value is None:
-            return None
-
-        return {'name': best_skill, 'value': best_value}

@@ -432,6 +432,13 @@ class Ruleset(object):
     def get_import_file_extension(self):
         return None # No restriction on filename
 
+    def get_option(self,
+                    option_name     # string: name of option to get
+                    ):
+        if self.options is None:
+            return None
+        return self.options.get_option(option_name)
+
     def get_sample_items(self):
         '''
         Returns a list of sample equipment for creating new game files.
@@ -562,6 +569,17 @@ class Ruleset(object):
 
         return result
 
+    def make_empty_armor(self):
+        '''
+        Builds the minimum legal armor (the dict that goes into the
+        Game File).
+
+        Returns: the dict.
+        '''
+        item = self.make_empty_item()
+        item['type'].append('armor')
+        return item
+
     def make_empty_creature(self):
         '''
         Builds the minimum legal character detail (the dict that goes into the
@@ -602,17 +620,6 @@ class Ruleset(object):
                 'notes': '',
                 'owners': None} # a list of owners, None if not tracked
 
-    def make_empty_armor(self):
-        '''
-        Builds the minimum legal armor (the dict that goes into the
-        Game File).
-
-        Returns: the dict.
-        '''
-        item = self.make_empty_item()
-        item['type'].append('armor')
-        return item
-
     def make_empty_melee_weapon(self):
         '''
         Builds the minimum legal melee weapon (the dict that goes into the
@@ -634,32 +641,6 @@ class Ruleset(object):
         item = self.make_empty_item()
         item['type'].append('ranged weapon')
         return item
-
-    def search_one_thing(self,
-                         name,        # string containing the name
-                         group,       # string containing the group
-                         thing,       # dict describing a thing
-                         look_for_re  # compiled Python regex
-                         ):
-        result = []
-        if look_for_re.search(thing['name']):
-            result.append({'name': name,
-                           'group': group,
-                           'location': 'stuff["name"]',
-                           'notes': thing['name']})
-        if 'notes' in thing and look_for_re.search(thing['notes']):
-            result.append({'name': name,
-                           'group': group,
-                           'location': '%s["notes"]' % thing['name'],
-                           'notes': thing['notes']})
-        if 'container' in thing['type']:
-            for sub_thing in thing['stuff']:
-                sub_result = self.search_one_thing(name,
-                                                   group,
-                                                   sub_thing,
-                                                   look_for_re)
-                result.extend(sub_result)
-        return result
 
     def search_one_creature(self,
                             name,        # string containing the name
@@ -707,6 +688,32 @@ class Ruleset(object):
 
         return result
 
+    def search_one_thing(self,
+                         name,        # string containing the name
+                         group,       # string containing the group
+                         thing,       # dict describing a thing
+                         look_for_re  # compiled Python regex
+                         ):
+        result = []
+        if look_for_re.search(thing['name']):
+            result.append({'name': name,
+                           'group': group,
+                           'location': 'stuff["name"]',
+                           'notes': thing['name']})
+        if 'notes' in thing and look_for_re.search(thing['notes']):
+            result.append({'name': name,
+                           'group': group,
+                           'location': '%s["notes"]' % thing['name'],
+                           'notes': thing['notes']})
+        if 'container' in thing['type']:
+            for sub_thing in thing['stuff']:
+                sub_result = self.search_one_thing(name,
+                                                   group,
+                                                   sub_thing,
+                                                   look_for_re)
+                result.extend(sub_result)
+        return result
+
     def set_options(self,
                     options # Options object
                     ):
@@ -748,30 +755,6 @@ class Ruleset(object):
     # Private and Protected Methods
     #
 
-    def _adjust_hp(self,
-                   fighter,          # Fighter object
-                   action,           # {'action-name': 'adjust-hp',
-                                     #  'adj': <int> # add to HP
-                                     #  'comment': <string>, # optional
-                                     #  'quiet': <bool> # use defaults for all
-                                     #                    user interactions --
-                                     #                    optional
-                                     # }
-                   fight_handler,    # FightHandler object (ignored)
-                   ):
-        '''
-        Action handler for Ruleset.
-
-        Adjust the Fighter's hit points.
-
-        Returns: Whether the action was successfully handled or not (i.e.,
-        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
-        '''
-
-        fighter.details['current']['hp'] += action['adj']
-        return Ruleset.HANDLED_OK
-
-
     def __adjust_attribute(self,
                            fighter,         # Fighter object
                            action,          # {'action-name':
@@ -803,45 +786,45 @@ class Ruleset(object):
         fighter.details[attr_type][attr] = new_value
         return Ruleset.HANDLED_OK
 
-    def __show_weapons_armor(self,
-                             fighter,
-                             is_armor):
+    def _adjust_hp(self,
+                   fighter,          # Fighter object
+                   action,           # {'action-name': 'adjust-hp',
+                                     #  'adj': <int> # add to HP
+                                     #  'comment': <string>, # optional
+                                     #  'quiet': <bool> # use defaults for all
+                                     #                    user interactions --
+                                     #                    optional
+                                     # }
+                   fight_handler,    # FightHandler object (ignored)
+                   ):
         '''
-        Displays the current state of the fighter's weapons or armor.
-        FOR DEBUGGING ONLY
+        Action handler for Ruleset.
+
+        Adjust the Fighter's hit points.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
-        if is_armor:
-            index_list = fighter.get_current_armor_indexes()
-            preferred_index = 'preferred-armor-index'
-            action_index = 'armor-index'
-            item_string = 'armor'
-            items_string = 'armor'
-            natural_item = 'natural-armor'
-        else:
-            index_list = fighter.get_current_weapon_indexes()
-            preferred_index = 'preferred-weapon-index'
-            action_index = 'weapon-index'
-            item_string = 'weapon'
-            items_string = 'weapons'
-            natural_item = 'natural-weapon'
 
-        print '\n--- %s\'s %s ---' % (fighter.name, items_string)
-        for index in index_list:
-            item = fighter.equipment.get_item_by_index(index)
-            name = '<None>' if item is None else item['name']
-            print '  %d: %s' % (index, name)
+        fighter.details['current']['hp'] += action['adj']
+        return Ruleset.HANDLED_OK
 
-        print '--- in use %s ---' % items_string
-        for index in fighter.details[action_index]:
-            item = fighter.equipment.get_item_by_index(index)
-            name = '<None>' if item is None else item['name']
-            print '  %d: %s' % (index, name)
+    def __close_container(self,
+                        fighter,          # Fighter object
+                        action,           # {'action-name': 'close-container',
+                                          #  'comment': <string> # optional
+                        fight_handler,    # FightHandler object (ignored)
+                        ):
+        '''
+        Action handler for Ruleset.
 
-        print '--- preferred %s ---' % items_string
-        for index in fighter.details[preferred_index]:
-            item = fighter.equipment.get_item_by_index(index)
-            name = '<None>' if item is None else item['name']
-            print '  %d: %s' % (index, name)
+        Closes the deepest open container.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+        fighter.details['open-container'].pop()
+        return Ruleset.HANDLED_OK
 
     def __configure_armor_weapons(self,
                                   fighter,      # Fighter object
@@ -1330,28 +1313,6 @@ class Ruleset(object):
 
             return Ruleset.DONT_LOG
 
-    def __don_armor(self,
-                    fighter,          # Fighter object
-                    action,           # {'action-name': 'don-armor',
-                                      #  'armor-index': <int> # index in
-                                      #         fighter.details['stuff',
-                                      #         None doffs armor
-                                      #  'comment': <string> # optional
-                    fight_handler,    # FightHandler object (ignored)
-                    ):
-        '''
-        Action handler for Ruleset.
-
-        Dons a specific piece of armor for the Fighter.  If the index is None,
-        it doffs the current armor.
-
-        Returns: Whether the action was successfully handled or not (i.e.,
-        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
-        '''
-
-        fighter.don_armor_by_index(action['armor-index'])
-        return Ruleset.HANDLED_OK
-
     def __doff_armor(self,
                      fighter,         # Fighter object
                      action,          # {'action-name': 'doff-armor',
@@ -1372,6 +1333,28 @@ class Ruleset(object):
         '''
 
         fighter.doff_armor_by_index(action['armor-index'])
+        return Ruleset.HANDLED_OK
+
+    def __don_armor(self,
+                    fighter,          # Fighter object
+                    action,           # {'action-name': 'don-armor',
+                                      #  'armor-index': <int> # index in
+                                      #         fighter.details['stuff',
+                                      #         None doffs armor
+                                      #  'comment': <string> # optional
+                    fight_handler,    # FightHandler object (ignored)
+                    ):
+        '''
+        Action handler for Ruleset.
+
+        Dons a specific piece of armor for the Fighter.  If the index is None,
+        it doffs the current armor.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+
+        fighter.don_armor_by_index(action['armor-index'])
         return Ruleset.HANDLED_OK
 
     def __draw_weapon(self,
@@ -1448,13 +1431,6 @@ class Ruleset(object):
             fighter.end_turn(fight_handler)
             fight_handler.modify_index(1)
         return Ruleset.HANDLED_OK
-
-    def get_option(self,
-                    option_name     # string: name of option to get
-                    ):
-        if self.options is None:
-            return None
-        return self.options.get_option(option_name)
 
     def __give_equipment(self,
                          fighter,          # Fighter object
@@ -1568,6 +1544,63 @@ class Ruleset(object):
         fighter.holster_weapon_by_index(action['weapon-index'])
         return Ruleset.HANDLED_OK
 
+    def __move_to_container(
+            self,
+            fighter,          # Fighter object
+            action,           # {'action-name': 'move-between-container',
+                              #  'item-index': index,
+                              #  'item-name': string
+                              #  'destination-index': [index, index,...
+            fight_handler,    # FightHandler object (ignored)
+            ):
+        '''
+        Action handler for Ruleset.
+
+        Moves all copies of an item from the CURRENT container level into
+        another arbitrary container.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+        # Put item in container (first, so it doesn't mess-up indexes)
+        item = fighter.equipment.get_item_by_index(
+                action['item-index'], fighter.details['open-container'])
+        ignore = fighter.add_equipment(
+                item,
+                source=None,
+                identified=None,
+                container_stack=action['destination-index'])
+
+        # Now, remove item
+        count = 1 if 'count' not in item else item['count']
+        ignore_item = fighter.remove_equipment(action['item-index'],
+                                               count,
+                                               fighter.details['open-container'])
+
+        return Ruleset.HANDLED_OK
+
+    def __open_container(self,
+                        fighter,          # Fighter object
+                        action,           # {'action-name': 'open-container',
+                                          #  'container-index': int,
+                                          #  'comment': <string> # optional
+                        fight_handler,    # FightHandler object (ignored)
+                        ):
+        '''
+        Action handler for Ruleset.
+
+        Opens the designated container from the fighter's stuff (or from the
+        currently open container, if there is one)
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+        fighter.details['open-container'].append(action['container-index'])
+        #PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+        #print '\n--- %s: open %d ---' % (fighter.name, action['container-index']) # TODO: remove
+        #PP.pprint(fighter.details['open-container']) # TODO: remove
+        return Ruleset.HANDLED_OK
+
     def _perform_action(self,
                         fighter,          # Fighter object
                         action,           # {'action-name':
@@ -1641,80 +1674,6 @@ class Ruleset(object):
             handled = Ruleset.HANDLED_OK  # No name? It's just a comment.
 
         return handled
-
-    def __close_container(self,
-                        fighter,          # Fighter object
-                        action,           # {'action-name': 'close-container',
-                                          #  'comment': <string> # optional
-                        fight_handler,    # FightHandler object (ignored)
-                        ):
-        '''
-        Action handler for Ruleset.
-
-        Closes the deepest open container.
-
-        Returns: Whether the action was successfully handled or not (i.e.,
-        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
-        '''
-        fighter.details['open-container'].pop()
-        return Ruleset.HANDLED_OK
-
-    def __move_to_container(
-            self,
-            fighter,          # Fighter object
-            action,           # {'action-name': 'move-between-container',
-                              #  'item-index': index,
-                              #  'item-name': string
-                              #  'destination-index': [index, index,...
-            fight_handler,    # FightHandler object (ignored)
-            ):
-        '''
-        Action handler for Ruleset.
-
-        Moves all copies of an item from the CURRENT container level into
-        another arbitrary container.
-
-        Returns: Whether the action was successfully handled or not (i.e.,
-        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
-        '''
-        # Put item in container (first, so it doesn't mess-up indexes)
-        item = fighter.equipment.get_item_by_index(
-                action['item-index'], fighter.details['open-container'])
-        ignore = fighter.add_equipment(
-                item,
-                source=None,
-                identified=None,
-                container_stack=action['destination-index'])
-
-        # Now, remove item
-        count = 1 if 'count' not in item else item['count']
-        ignore_item = fighter.remove_equipment(action['item-index'],
-                                               count,
-                                               fighter.details['open-container'])
-
-        return Ruleset.HANDLED_OK
-
-    def __open_container(self,
-                        fighter,          # Fighter object
-                        action,           # {'action-name': 'open-container',
-                                          #  'container-index': int,
-                                          #  'comment': <string> # optional
-                        fight_handler,    # FightHandler object (ignored)
-                        ):
-        '''
-        Action handler for Ruleset.
-
-        Opens the designated container from the fighter's stuff (or from the
-        currently open container, if there is one)
-
-        Returns: Whether the action was successfully handled or not (i.e.,
-        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
-        '''
-        fighter.details['open-container'].append(action['container-index'])
-        #PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
-        #print '\n--- %s: open %d ---' % (fighter.name, action['container-index']) # TODO: remove
-        #PP.pprint(fighter.details['open-container']) # TODO: remove
-        return Ruleset.HANDLED_OK
 
     def __pick_opponent(self,
                         fighter,          # Fighter object
@@ -1836,6 +1795,46 @@ class Ruleset(object):
         timer_obj.from_pieces(action['timer'])
         fighter.timers.add(timer_obj)
         return Ruleset.HANDLED_OK
+
+    def __show_weapons_armor(self,
+                             fighter,
+                             is_armor):
+        '''
+        Displays the current state of the fighter's weapons or armor.
+        FOR DEBUGGING ONLY
+        '''
+        if is_armor:
+            index_list = fighter.get_current_armor_indexes()
+            preferred_index = 'preferred-armor-index'
+            action_index = 'armor-index'
+            item_string = 'armor'
+            items_string = 'armor'
+            natural_item = 'natural-armor'
+        else:
+            index_list = fighter.get_current_weapon_indexes()
+            preferred_index = 'preferred-weapon-index'
+            action_index = 'weapon-index'
+            item_string = 'weapon'
+            items_string = 'weapons'
+            natural_item = 'natural-weapon'
+
+        print '\n--- %s\'s %s ---' % (fighter.name, items_string)
+        for index in index_list:
+            item = fighter.equipment.get_item_by_index(index)
+            name = '<None>' if item is None else item['name']
+            print '  %d: %s' % (index, name)
+
+        print '--- in use %s ---' % items_string
+        for index in fighter.details[action_index]:
+            item = fighter.equipment.get_item_by_index(index)
+            name = '<None>' if item is None else item['name']
+            print '  %d: %s' % (index, name)
+
+        print '--- preferred %s ---' % items_string
+        for index in fighter.details[preferred_index]:
+            item = fighter.equipment.get_item_by_index(index)
+            name = '<None>' if item is None else item['name']
+            print '  %d: %s' % (index, name)
 
     def __start_turn(self,
                      fighter,          # Fighter object

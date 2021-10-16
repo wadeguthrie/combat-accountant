@@ -1626,6 +1626,86 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'use-item',        'user-defined'
         ])
 
+    @staticmethod
+    def show_spells(window_manager):
+                        # Output: recepticle for character
+                        # detail.
+                        # [[{'text','mode'},...],  # line 0
+                        #  [...],               ]  # line 1...
+        '''
+        Displays the spells in a window
+
+        Returns nothing.
+        '''
+
+        spell_info = []
+
+        for spell_name in sorted(GurpsRuleset.spells.iterkeys()):
+            spell = GurpsRuleset.spells[spell_name]
+
+            # TODO (now): should be an option
+            # Highlight the spells that a bad guy might want to cast during
+            # battle.
+            mode = (curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK)
+                    if ((spell['casting time'] is None or
+                         spell['casting time'] <= 2) and
+                        spell['range'] != 'melee')
+                    else curses.A_NORMAL)
+
+            # Top line
+
+            line = [{'text': '%s' % spell_name, 'mode': mode | curses.A_UNDERLINE}]
+
+            texts = ['; %s ' % spell['range']]
+            if len(spell['save']) > 0:
+                texts.append('; resisted by ')
+                texts.append(', '.join(spell['save']))
+
+            line.append({'text': ''.join(texts), 'mode': mode})
+            spell_info.append(line)
+
+            # Next line
+
+            texts = ['  cost: ']
+            if spell['cost'] is None:
+                texts.append('special')
+            else:
+                texts.append('%d' % spell['cost'])
+
+            texts.append(', maintain: ')
+            if spell['maintain'] is None:
+                texts.append('special')
+            else:
+                texts.append('%d' % spell['maintain'])
+
+            texts.append(', casting time: ')
+            if spell['casting time'] is None:
+                texts.append('special')
+            else:
+                texts.append('%d second(s)' % spell['casting time'])
+
+            texts.append(', duration: ')
+            if spell['duration'] is None:
+                texts.append('special')
+            elif spell['duration'] == 0:
+                texts.append('instantaneous/permanent')
+            elif spell['duration'] < 60:
+                texts.append('%d second(s)' % spell['duration'])
+            elif spell['duration'] < 3660:
+                texts.append('%d minute(s)' % (spell['duration'] / 60))
+            elif spell['duration'] < 86400:
+                texts.append('%d hour(s)' % (spell['duration'] / 3660))
+            else:
+                texts.append('%d day(s)' % (spell['duration'] / 86400))
+            spell_info.append([{'text': ''.join(texts), 'mode': mode}])
+
+            # Notes
+
+            texts = ['  %s' % spell['notes']]
+            spell_info.append([{'text': ''.join(texts), 'mode': mode}])
+
+        window_manager.display_window('Spells', spell_info)
+
     #
     # Public Methods
     #
@@ -1683,6 +1763,30 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             results.append(''.join(string))
 
         return ', '.join(results)
+
+    def does_weapon_use_unarmed_skills(self,
+                                       weapon  # Weapon object
+                                       ):
+        '''
+        Determines whether this weapon (which may be None) uses the unarmed
+        combat skills.  That's basically a blackjack or brass knuckles but
+        there may be more.
+
+        Returns True if this weapon supports unarmed combat (like brass
+        knuckles), False otherwise.
+        '''
+
+        if weapon is None:
+            return True
+
+        #all_unarmed_skills = ['dx', 'Brawling', 'Boxing', 'Karate']
+        all_unarmed_skills = ['Brawling', 'Boxing', 'Karate']
+
+        for skill in weapon.details['skill'].iterkeys():
+            if skill in all_unarmed_skills:
+                return True
+
+        return False
 
     def end_turn(self,
                  fighter,       # Fighter object
@@ -3144,30 +3248,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return result
 
-    def does_weapon_use_unarmed_skills(self,
-                                       weapon  # Weapon object
-                                       ):
-        '''
-        Determines whether this weapon (which may be None) uses the unarmed
-        combat skills.  That's basically a blackjack or brass knuckles but
-        there may be more.
-
-        Returns True if this weapon supports unarmed combat (like brass
-        knuckles), False otherwise.
-        '''
-
-        if weapon is None:
-            return True
-
-        #all_unarmed_skills = ['dx', 'Brawling', 'Boxing', 'Karate']
-        all_unarmed_skills = ['Brawling', 'Boxing', 'Karate']
-
-        for skill in weapon.details['skill'].iterkeys():
-            if skill in all_unarmed_skills:
-                return True
-
-        return False
-
     def heal_fighter(self,
                      fighter,   # Fighter object
                      world      # World object
@@ -3278,6 +3358,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         spell['name']])
         return result
 
+    def make_empty_armor(self):
+        '''
+        Builds the minimum legal armor (the dict that goes into the
+        Game File).
+
+        Returns: the dict.
+        '''
+        item = super(GurpsRuleset, self).make_empty_armor()
+        strawman = { "dr": 0 }
+        for key, value in strawman.iteritems():
+            if key not in item:
+                item[key] = value
+        return item
+
     def make_empty_creature(self):
         '''
         Builds the minimum legal character detail (the dict that goes into the
@@ -3309,20 +3403,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                  'per': 10})
         to_monster['current'] = copy.deepcopy(to_monster['permanent'])
         return to_monster
-
-    def make_empty_armor(self):
-        '''
-        Builds the minimum legal armor (the dict that goes into the
-        Game File).
-
-        Returns: the dict.
-        '''
-        item = super(GurpsRuleset, self).make_empty_armor()
-        strawman = { "dr": 0 }
-        for key, value in strawman.iteritems():
-            if key not in item:
-                item[key] = value
-        return item
 
     def make_empty_melee_weapon(self):
         '''
@@ -3423,86 +3503,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return result
 
-    @staticmethod
-    def show_spells(window_manager):
-                        # Output: recepticle for character
-                        # detail.
-                        # [[{'text','mode'},...],  # line 0
-                        #  [...],               ]  # line 1...
-        '''
-        Displays the spells in a window
-
-        Returns nothing.
-        '''
-
-        spell_info = []
-
-        for spell_name in sorted(GurpsRuleset.spells.iterkeys()):
-            spell = GurpsRuleset.spells[spell_name]
-
-            # TODO (now): should be an option
-            # Highlight the spells that a bad guy might want to cast during
-            # battle.
-            mode = (curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK)
-                    if ((spell['casting time'] is None or
-                         spell['casting time'] <= 2) and
-                        spell['range'] != 'melee')
-                    else curses.A_NORMAL)
-
-            # Top line
-
-            line = [{'text': '%s' % spell_name, 'mode': mode | curses.A_UNDERLINE}]
-
-            texts = ['; %s ' % spell['range']]
-            if len(spell['save']) > 0:
-                texts.append('; resisted by ')
-                texts.append(', '.join(spell['save']))
-
-            line.append({'text': ''.join(texts), 'mode': mode})
-            spell_info.append(line)
-
-            # Next line
-
-            texts = ['  cost: ']
-            if spell['cost'] is None:
-                texts.append('special')
-            else:
-                texts.append('%d' % spell['cost'])
-
-            texts.append(', maintain: ')
-            if spell['maintain'] is None:
-                texts.append('special')
-            else:
-                texts.append('%d' % spell['maintain'])
-
-            texts.append(', casting time: ')
-            if spell['casting time'] is None:
-                texts.append('special')
-            else:
-                texts.append('%d second(s)' % spell['casting time'])
-
-            texts.append(', duration: ')
-            if spell['duration'] is None:
-                texts.append('special')
-            elif spell['duration'] == 0:
-                texts.append('instantaneous/permanent')
-            elif spell['duration'] < 60:
-                texts.append('%d second(s)' % spell['duration'])
-            elif spell['duration'] < 3660:
-                texts.append('%d minute(s)' % (spell['duration'] / 60))
-            elif spell['duration'] < 86400:
-                texts.append('%d hour(s)' % (spell['duration'] / 3660))
-            else:
-                texts.append('%d day(s)' % (spell['duration'] / 86400))
-            spell_info.append([{'text': ''.join(texts), 'mode': mode}])
-
-            # Notes
-
-            texts = ['  %s' % spell['notes']]
-            spell_info.append([{'text': ''.join(texts), 'mode': mode}])
-
-        window_manager.display_window('Spells', spell_info)
-
     def start_fight(self,
                     fighter  # Fighter object
                     ):
@@ -3581,6 +3581,71 @@ class GurpsRuleset(ca_ruleset.Ruleset):
     #
     # Protected and Private Methods
     #
+
+    def __adjust_attribute(self,
+                           fighter,         # Fighter object
+                           action,          # {'action-name':
+                                            #       'adjust-attribute',
+                                            #  'attr-type': 'current' or
+                                            #       'permanent'
+                                            #  'attribute': name of the
+                                            #       attribute to change
+                                            #  'new-value': the new value
+                                            #  'comment': <string>, # optional
+                                            #  'quiet': <bool>
+                                            #       # use defaults for all
+                                            #       # user interactions --
+                                            #       # optional
+                                            # }
+                           fight_handler,   # FightHandler object (ignored)
+                           ):
+        '''
+        Action handler for Ruleset.
+
+        Adjust any of the Fighter's attributes.
+
+        Returns: Whether the action was successfully handled or not (i.e.,
+        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
+        '''
+        if 'part' in action and action['part'] == 2:
+            # This is the 2nd part of a 2-part action.  This part of the action
+            # actually perfoms all the GurpsRuleset-specific actions and
+            # side-effects of aiming the Fighter's current weapon.
+
+            # This does nothing -- everything interesting was done in the
+            # first part, before the base class had a chance to modify the
+            # attribute.
+
+            return None # No timer
+
+        else:
+            # This is the 1st part of a 2-part action.  This part of the
+            # action slips in before the base class can modify the
+            # attribute.
+
+            attr_type = action['attr-type']
+            attr = action['attribute']
+            new_value = action['new-value']
+
+            if (self.get_option('conscious-on-heal') and
+                    not fighter.is_conscious() and
+                    attr == 'hp' and
+                    new_value > fighter.details[attr_type][attr] and
+                    attr_type == 'current'):
+                self.do_action(fighter,
+                               {'action-name': 'set-consciousness',
+                                'level': ca_fighter.Fighter.ALIVE},
+                               fight_handler)
+                if fighter.details['current']['fp'] <= 0:
+                    fighter.details['current']['fp'] = 1
+
+            # Send the action for the second part
+
+            new_action = copy.deepcopy(action)
+            new_action['part'] = 2
+            self.do_action(fighter, new_action, fight_handler)
+
+            return None  # No timer
 
     def _adjust_hp(self,
                    fighter,         # Fighter object
@@ -4368,72 +4433,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return True  # Keep going
 
-    def __adjust_attribute(self,
-                           fighter,         # Fighter object
-                           action,          # {'action-name':
-                                            #       'adjust-attribute',
-                                            #  'attr-type': 'current' or
-                                            #       'permanent'
-                                            #  'attribute': name of the
-                                            #       attribute to change
-                                            #  'new-value': the new value
-                                            #  'comment': <string>, # optional
-                                            #  'quiet': <bool>
-                                            #       # use defaults for all
-                                            #       # user interactions --
-                                            #       # optional
-                                            # }
-                           fight_handler,   # FightHandler object (ignored)
-                           ):
-        '''
-        Action handler for Ruleset.
-
-        Adjust any of the Fighter's attributes.
-
-        Returns: Whether the action was successfully handled or not (i.e.,
-        UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
-        '''
-        if 'part' in action and action['part'] == 2:
-            # This is the 2nd part of a 2-part action.  This part of the action
-            # actually perfoms all the GurpsRuleset-specific actions and
-            # side-effects of aiming the Fighter's current weapon.
-
-            # This does nothing -- everything interesting was done in the
-            # first part, before the base class had a chance to modify the
-            # attribute.
-
-            return None # No timer
-
-        else:
-            # This is the 1st part of a 2-part action.  This part of the
-            # action slips in before the base class can modify the
-            # attribute.
-
-            attr_type = action['attr-type']
-            attr = action['attribute']
-            new_value = action['new-value']
-
-            if (self.get_option('conscious-on-heal') and
-                    not fighter.is_conscious() and
-                    attr == 'hp' and
-                    new_value > fighter.details[attr_type][attr] and
-                    attr_type == 'current'):
-                self.do_action(fighter,
-                               {'action-name': 'set-consciousness',
-                                'level': ca_fighter.Fighter.ALIVE},
-                               fight_handler)
-                if fighter.details['current']['fp'] <= 0:
-                    fighter.details['current']['fp'] = 1
-
-            # Send the action for the second part
-
-            new_action = copy.deepcopy(action)
-            new_action['part'] = 2
-            self.do_action(fighter, new_action, fight_handler)
-
-            return None  # No timer
-
-
     def __do_adjust_fp(self,
                        fighter,       # Fighter object
                        action,        # {'action-name': 'adjust-fp',
@@ -4955,6 +4954,49 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                       ' Move: step']})
         return timer
 
+    def __get_crit_fumble(self,
+                          skill_level   # int
+                          ):
+        '''
+        returns tuple: (crit, fumble) which are the rolls below (or equal to)
+        establishes a critical success and above (or equal to) establishes a
+        critical failure
+        '''
+        # B347
+        if skill_level >= 16:
+            crit = 6
+        elif skill_level >= 15:
+            crit = 5
+        else:
+            crit = 4
+
+        if skill_level >= 16:
+            fumble = 18
+        elif skill_level >= 7:
+            fumble = 17
+        else:
+            fumble = skill_level + 10
+
+        return crit, fumble
+
+    def __get_damage_type_str(self,
+                              damage_type   # <string> key in
+                                            #   GurpsRuleset.damage_mult
+                              ):
+        '''
+        Expands the short-hand version of damage type with the long form (that
+        includes the damage multiplier).
+
+        Returns the long form string.
+        '''
+        if damage_type in GurpsRuleset.damage_mult:
+            damage_type_str = '%s=x%.1f' % (
+                                        damage_type,
+                                        GurpsRuleset.damage_mult[damage_type])
+        else:
+            damage_type_str = '%s' % damage_type
+        return damage_type_str
+
     def __get_technique(self,
                         techniques,     # list from Fighter.details
                         technique_name, # string
@@ -5010,49 +5052,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                       ' Defense: any',
                                       ' Move: step']})
         return timer
-
-    def __get_crit_fumble(self,
-                          skill_level   # int
-                          ):
-        '''
-        returns tuple: (crit, fumble) which are the rolls below (or equal to)
-        establishes a critical success and above (or equal to) establishes a
-        critical failure
-        '''
-        # B347
-        if skill_level >= 16:
-            crit = 6
-        elif skill_level >= 15:
-            crit = 5
-        else:
-            crit = 4
-
-        if skill_level >= 16:
-            fumble = 18
-        elif skill_level >= 7:
-            fumble = 17
-        else:
-            fumble = skill_level + 10
-
-        return crit, fumble
-
-    def __get_damage_type_str(self,
-                              damage_type   # <string> key in
-                                            #   GurpsRuleset.damage_mult
-                              ):
-        '''
-        Expands the short-hand version of damage type with the long form (that
-        includes the damage multiplier).
-
-        Returns the long form string.
-        '''
-        if damage_type in GurpsRuleset.damage_mult:
-            damage_type_str = '%s=x%.1f' % (
-                                        damage_type,
-                                        GurpsRuleset.damage_mult[damage_type])
-        else:
-            damage_type_str = '%s' % damage_type
-        return damage_type_str
 
     def _perform_action(self,
                         fighter,        # Fighter object
@@ -5269,6 +5268,33 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return handled
 
+    def __pick_attrib(self,
+                      fighter # Fighter object (see NOTE, below)
+                      ):
+        # TODO (now): this can go into the generic ruleset
+        # TODO (now): attribute (edit) should use this
+        '''
+        NOTE: this doesn't have to be the fighter that is being modified but
+        we get the list of attributes from a single fighter.
+        '''
+        # Current or permanent
+        perm_current_menu = [('current', 'current'),
+                             ('permanent', 'permanent')]
+        current_perm, ignore = self._window_manager.menu(
+                ('%s: Choose What Type Of Attribute' %
+                    fighter.name), perm_current_menu)
+
+        # Which attribute
+        attr_menu = [(attr, attr)
+                     for attr in fighter.details[current_perm].keys()]
+
+        attr, ignore = self._window_manager.menu(
+                'Select Attribute', attr_menu)
+        if attr is None:
+            return None
+
+        return current_perm, attr
+
     def _record_action(self,
                        fighter,          # Fighter object
                        action,           # {'action-name': <action>, params...}
@@ -5363,86 +5389,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return timer
 
-    def __pick_attrib(self,
-                      fighter # Fighter object (see NOTE, below)
-                      ):
-        # TODO (now): this can go into the generic ruleset
-        # TODO (now): attribute (edit) should use this
-        '''
-        NOTE: this doesn't have to be the fighter that is being modified but
-        we get the list of attributes from a single fighter.
-        '''
-        # Current or permanent
-        perm_current_menu = [('current', 'current'),
-                             ('permanent', 'permanent')]
-        current_perm, ignore = self._window_manager.menu(
-                ('%s: Choose What Type Of Attribute' %
-                    fighter.name), perm_current_menu)
-
-        # Which attribute
-        attr_menu = [(attr, attr)
-                     for attr in fighter.details[current_perm].keys()]
-
-        attr, ignore = self._window_manager.menu(
-                'Select Attribute', attr_menu)
-        if attr is None:
-            return None
-
-        return current_perm, attr
-
     def __roll_vs_attrib(self,
                          attrib # string: name of attribute
                          ):
         # ignore 'attrib'
         return ca_ruleset.Ruleset.roll(3, 6)
-
-    def __roll_vs_attrib_single(self,
-                                param    # {'view': xxx, 'view-opponent': xxx,
-                                         #  'current': xxx, 'current-opponent': xxx,
-                                         #  'fight_handler': <fight handler> } where
-                                         # xxx are Fighter objects
-                                ):
-        '''
-        Command ribbon method.
-
-        Figures out whom to stun and stuns them.
-
-        Returns: False to exit the current ScreenHandler, True to stay.
-        '''
-        fighter = (param['view']
-                   if 'view' in param and param['view'] is not None
-                   else param['current'])
-
-        if fighter is None:
-            return True
-
-        current_perm, attr_string = self.__pick_attrib(fighter)
-        window_text = []
-        window_line = []
-        roll = self.__roll_vs_attrib(attr_string)
-        attr = fighter.details[current_perm][attr_string]
-        if roll <= attr:
-            mode = curses.color_pair(ca_gui.GmWindowManager.GREEN_BLACK)
-            window_line.append(
-                {'text': ('SUCCEDED by %d' % (attr - roll)),
-                  'mode': mode})
-        else:
-            mode = curses.color_pair(ca_gui.GmWindowManager.RED_BLACK)
-            window_line.append(
-                {'text': ('FAILED by %d' % (roll - attr)),
-                  'mode': mode})
-
-        window_line.append(
-            {'text': (', %s = %d' % (attr_string, attr)), 'mode': mode})
-        window_line.append(
-            {'text': (', roll = %d' % roll), 'mode': mode})
-
-        window_text = [window_line]
-        self._window_manager.display_window(
-                ('%s roll vs. %s' % (fighter.name, attr_string)),
-                window_text)
-
-        return True
 
     def __roll_vs_attrib_multiple(self,
                                   param    # {'view': xxx, 'view-opponent': xxx,
@@ -5510,6 +5461,54 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         self._window_manager.display_window(
                 ('Group roll vs. %s' % attr_string),
+                window_text)
+
+        return True
+
+    def __roll_vs_attrib_single(self,
+                                param    # {'view': xxx, 'view-opponent': xxx,
+                                         #  'current': xxx, 'current-opponent': xxx,
+                                         #  'fight_handler': <fight handler> } where
+                                         # xxx are Fighter objects
+                                ):
+        '''
+        Command ribbon method.
+
+        Figures out whom to stun and stuns them.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        fighter = (param['view']
+                   if 'view' in param and param['view'] is not None
+                   else param['current'])
+
+        if fighter is None:
+            return True
+
+        current_perm, attr_string = self.__pick_attrib(fighter)
+        window_text = []
+        window_line = []
+        roll = self.__roll_vs_attrib(attr_string)
+        attr = fighter.details[current_perm][attr_string]
+        if roll <= attr:
+            mode = curses.color_pair(ca_gui.GmWindowManager.GREEN_BLACK)
+            window_line.append(
+                {'text': ('SUCCEDED by %d' % (attr - roll)),
+                  'mode': mode})
+        else:
+            mode = curses.color_pair(ca_gui.GmWindowManager.RED_BLACK)
+            window_line.append(
+                {'text': ('FAILED by %d' % (roll - attr)),
+                  'mode': mode})
+
+        window_line.append(
+            {'text': (', %s = %d' % (attr_string, attr)), 'mode': mode})
+        window_line.append(
+            {'text': (', roll = %d' % roll), 'mode': mode})
+
+        window_text = [window_line]
+        self._window_manager.display_window(
+                ('%s roll vs. %s' % (fighter.name, attr_string)),
                 window_text)
 
         return True
