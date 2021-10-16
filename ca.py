@@ -22,10 +22,6 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: sort all the methods in each class (it's gotten sloppy)
-
-# TODO: technique values should be shown added with their base skill
-
 # TODO: flesh-out attack, all-out
 # TODO: grenade support (missile-like but not with clips)
 # TODO: unarmed Dual-Weapon attack

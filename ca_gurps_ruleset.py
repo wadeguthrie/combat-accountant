@@ -2168,15 +2168,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         mode = curses.A_NORMAL
         output.append([{'text': 'Skills', 'mode': mode | curses.A_BOLD}])
 
-        skills_list = copy.deepcopy(character.details['skills'])
+        PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+        skills_dict = copy.deepcopy(character.details['skills'])
         if 'techniques' in character.details:
             for tech in character.details['techniques']:
-                # TODO: add default value
-                skills_list['%s (%s)' % (
-                    tech['name'], ', '.join(tech['default']))] = tech['value']
+                for default_name in tech['default']:
+                    default_value = skills_dict.get(default_name, 0)
+                    skills_dict['%s (%s)' % (tech['name'], default_name)
+                        ] = tech['value'] + default_value
 
         found_one = False
-        for skill, value in sorted(skills_list.iteritems(),
+        for skill, value in sorted(skills_dict.iteritems(),
                                    key=lambda (k, v): (k, v)):
             found_one = True
             crit, fumble = self.__get_crit_fumble(value)

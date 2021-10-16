@@ -145,9 +145,6 @@ class Skills(object):
         #   - armory: good quality equipment and ?
         #   - fast draw ammo: ?
         if skill_name not in Skills.skills:
-            #if skill_name in Skills.techniques:
-            #    print '** "%s" is a GURPS Technique and is not yet in gcs-check.py' % skill_name
-            #else:
             window_manager.error(['Need to add "%s" to ca_gcs_import' %
                 skill_name])
             return 0
