@@ -66,7 +66,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
     Weapon looks like:
     {
         TBS
-        'type': <melee weapon> | <ranged weapon> | <shield>
+        'type': <thrust weapon> | <swung weapon> | <thrown weapon> |
+                <ranged weapon> | <shield>
         'parry': <plus to parry>
     }
 
@@ -1782,9 +1783,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         #all_unarmed_skills = ['dx', 'Brawling', 'Boxing', 'Karate']
         all_unarmed_skills = ['Brawling', 'Boxing', 'Karate']
 
-        for skill in weapon.details['skill'].iterkeys():
-            if skill in all_unarmed_skills:
-                return True
+        modes = weapon.get_attack_modes()
+        for mode in modes:
+            for skill in weapon.details['type'][mode]['skill'].iterkeys():
+                if skill in all_unarmed_skills:
+                    return True
 
         return False
 
@@ -1996,7 +1999,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
         skill = None
         if weapon is not None:
-            skill = fighter.get_best_skill_for_weapon(weapon.details)
+            modes = weapon.get_attack_modes()
+            for mode in modes:
+                if mode == 'ranged weapon' or mode == 'thrown weapon':
+                    continue    # can't block with missile weapon
+                skill_full = fighter.get_best_skill_for_weapon(weapon.details,
+                                                               mode)
+                if skill_full is not None:
+                    if skill is None or skill_full['value'] > skill:
+                        skill = skill_full['value']
 
         if skill is None:
             return None, None
@@ -2258,7 +2269,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
     def get_damage(self,
                    fighter,   # Fighter object
-                   weapon     # Weapon object
+                   weapon,    # Weapon object
+                   mode       # string: 'swung weapon' or ...
                    ):
         '''
         Returns a tuple of:
@@ -2279,68 +2291,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         results = []
         why = []
 
-        damage = weapon.damage()
-        if 'dice' in damage:
-            damage_type_str = self.__get_damage_type_str(
-                    damage['dice']['type'])
-            results.append(
-                {'attack_type': None,
-                 'num_dice': damage['dice']['num_dice'],
-                 'plus': damage['dice']['plus'],
-                 'damage_type': damage_type_str})
-            why.append('Weapon %s Damage: %dd%+d' % (
-                weapon.details['name'],
-                damage['dice']['num_dice'],
-                damage['dice']['plus']))
-        if 'sw' in damage:
-            damage_type_str = self.__get_damage_type_str(damage['sw']['type'])
-            results.append(
-                {'attack_type': 'sw',
-                 'num_dice': GurpsRuleset.melee_damage[st]['sw']['num_dice'],
-                 'plus': GurpsRuleset.melee_damage[st]['sw']['plus'] +
-                    damage['sw']['plus'],
-                 'damage_type': damage_type_str})
-
-            why.append('Weapon %s Damage: sw%+d' % (weapon.details['name'],
-                                                    damage['sw']['plus']))
-            why.append('  plug ST(%d) into table on B16 = %dd%+d' %
-                       (st,
-                        GurpsRuleset.melee_damage[st]['sw']['num_dice'],
-                        GurpsRuleset.melee_damage[st]['sw']['plus']))
-            if damage['sw']['plus'] != 0:
-                why.append('  ...%+d for the weapon' % damage['sw']['plus'])
-            why.append('  ...damage: %dd%+d' %
-                       (GurpsRuleset.melee_damage[st]['sw']['num_dice'],
-                        GurpsRuleset.melee_damage[st]['sw']['plus'] +
-                        damage['sw']['plus']))
-
-        if 'thr' in damage:
-            damage_type_str = self.__get_damage_type_str(damage['thr']['type'])
-            results.append(
-                {'attack_type': 'thr',
-                 'num_dice': GurpsRuleset.melee_damage[st]['thr']['num_dice'],
-                 'plus': GurpsRuleset.melee_damage[st]['thr']['plus'] +
-                    damage['thr']['plus'],
-                 'damage_type': damage_type_str})
-
-            why.append('Weapon %s Damage: thr%+d' % (weapon.details['name'],
-                       damage['thr']['plus']))
-            why.append('  plug ST(%d) into table on B16 = %dd%+d' %
-                       (st,
-                        GurpsRuleset.melee_damage[st]['thr']['num_dice'],
-                        GurpsRuleset.melee_damage[st]['thr']['plus']))
-            if damage['thr']['plus'] != 0:
-                why.append('  ...%+d for the weapon' % damage['thr']['plus'])
-            why.append('  ...damage: %dd%+d' %
-                       (GurpsRuleset.melee_damage[st]['thr']['num_dice'],
-                        GurpsRuleset.melee_damage[st]['thr']['plus'] +
-                        damage['thr']['plus']))
+        this_results, this_why = self.__get_damage_one_case(mode,
+                                                            weapon,
+                                                            st)
+        results.extend(this_results)
+        why.extend(this_why)
 
         if len(results) == 0:
             return '(None)', why
 
         return results, why
-
     def get_dodge_skill(self,                       # Public to aid in testing
                         fighter  # Fighter object
                         ):  # B326
@@ -2489,6 +2449,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             notes.append(dodge_string)
 
         # TODO; figure out how to pull the unarmed stuff out of the loop
+        # TODO: this doesn't work if there're no weapons -- unarmed
         for weapon in weapons:
             if weapon is None:
                 continue
@@ -2522,7 +2483,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         armor_list = fighter.get_items_from_indexes(armor_index_list)
 
         for armor in armor_list:
-            dr += armor['dr']
+            dr += armor['type']['armor']['dr']
             dr_text_array.append(armor['name'])
 
         if 'Damage Resistance' in fighter.details['advantages']:
@@ -2605,58 +2566,64 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                          opponent,
                                          weapon)
             else:
-                weapon_skill = fighter.get_best_skill_for_weapon(weapon.details)
-                if weapon_skill is not None:
-                    to_hit, ignore_why = self.get_to_hit(fighter,
-                                                         opponent,
-                                                         weapon)
-                    if to_hit is not None:  # No reason for it to me None
-                        damage, ignore_why = self.get_damage(fighter, weapon)
-                        damage_str = self.damage_to_string(damage)
-                        crit, fumble = self.__get_crit_fumble(to_hit)
-                        notes.append('  to-hit: %d, crit <= %d, fumble >= %d' %
-                                (to_hit, crit, fumble))
-                        notes.append('  damage: %s' % damage_str)
+                modes = weapon.get_attack_modes()
+                found_weapon_skill = False
+                for mode in modes:
+                    notes.append('  %s' % mode)
+                    weapon_skill = fighter.get_best_skill_for_weapon(
+                            weapon.details, mode)
+                    if weapon_skill is not None:
+                        found_weapon_skill = True
+                        to_hit, ignore_why = self.get_to_hit(fighter,
+                                                             opponent,
+                                                             weapon,
+                                                             mode)
+                        if to_hit is not None:  # No reason for it to me None
+                            damage, ignore_why = self.get_damage(fighter, weapon, mode)
+                            damage_str = self.damage_to_string(damage)
+                            crit, fumble = self.__get_crit_fumble(to_hit)
+                            notes.append('    to-hit: %d, crit <= %d, fumble >= %d' %
+                                    (to_hit, crit, fumble))
+                            notes.append('    damage: %s' % damage_str)
 
-                        # Ranged weapon status
+                            # Ranged weapon status
 
-                        if weapon.is_ranged_weapon():
-                            clip_name = weapon.details['ammo']['name']
-                            reloads = 0  # Counts clips, not rounds
-                            for item in fighter.details['stuff']:
-                                if item['name'] == clip_name:
-                                    reloads += item['count']
+                            if weapon.is_ranged_weapon():
+                                clip_name = weapon.details['ammo']['name']
+                                reloads = 0  # Counts clips, not rounds
+                                for item in fighter.details['stuff']:
+                                    if item['name'] == clip_name:
+                                        reloads += item['count']
 
-                            notes.append('  %d/%d shots, %d reloads' % (
-                                                weapon.shots_left(),
-                                                weapon.shots(),
-                                                reloads))
+                                notes.append('    %d/%d shots, %d reloads' % (
+                                                    weapon.shots_left(),
+                                                    weapon.shots(),
+                                                    reloads))
 
-                    if 'techniques' in fighter.details:
-                        for technique in fighter.details['techniques']:
-                            # These techniques are handled elsewhere
-                            if (technique['name'] == 'Dual-Weapon Attack' or
-                                    technique['name'] == 'Off-Hand Weapon Training'):
-                                continue
-                            for default in technique['default']:
-                                if default == weapon_skill['name']:
-                                    skill = technique['value'] + weapon_skill['value']
-                                    crit, fumble = self.__get_crit_fumble(to_hit)
-                                    notes.append(
-                                            '  Technique, %s: %d, crit <= %d, fumble >= %d' % (
-                                        technique['name'], skill, crit, fumble))
+                        if 'techniques' in fighter.details:
+                            for technique in fighter.details['techniques']:
+                                # These techniques are handled elsewhere
+                                if (technique['name'] == 'Dual-Weapon Attack' or
+                                        technique['name'] == 'Off-Hand Weapon Training'):
+                                    continue
+                                for default in technique['default']:
+                                    if default == weapon_skill['name']:
+                                        skill = technique['value'] + weapon_skill['value']
+                                        crit, fumble = self.__get_crit_fumble(to_hit)
+                                        notes.append(
+                                                '    Technique, %s: %d, crit <= %d, fumble >= %d' % (
+                                            technique['name'], skill, crit, fumble))
 
 
                     weapon_notes = weapon.notes()
                     if weapon_notes is not None and len(weapon_notes) > 0:
                         notes.append("  NOTES: %s" % weapon_notes)
-                else:
+
+                if not found_weapon_skill:
                     self._window_manager.error(
                             ['%s requires skill "%s" does not have' %
                                 (weapon.details['name'],
                                  fighter.name)])
-
-
         return notes
 
     def get_import_file_extension(self):
@@ -2673,13 +2640,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                attack
             2) a string describing the calculations that went into the number
         '''
-        skill_full = None
+        skill = None
         if weapon is not None:
-            skill_full = fighter.get_best_skill_for_weapon(weapon.details)
+            modes = weapon.get_attack_modes()
+            for mode in modes:
+                if mode == 'ranged weapon' or mode == 'thrown weapon':
+                    continue    # can't parry with missile weapon
+                skill_full = fighter.get_best_skill_for_weapon(weapon.details,
+                                                               mode)
+                if skill_full is not None:
+                    if skill is None or skill_full['value'] > skill:
+                        skill = skill_full['value']
 
-        if skill_full is None:
+        if skill is None:
             return None, None
-        skill = skill_full['value']
 
         parry_why = []
         parry_skill_modified = False
@@ -2734,7 +2708,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             {
                 "count": 1,
                 "notes": "1d for HT+1d hrs unless other healing",
-                "type": "misc",
+                "type": {"misc": 1},
                 "owners": None,
                 "name": "Patch: light heal"
             },
@@ -2742,20 +2716,22 @@ class GurpsRuleset(ca_ruleset.Ruleset):
               "count": 1,
               "owners": [],
               "name": "Armor, Light Street",
-              "type": "armor",
-              "notes": "Some combo of ballistic, ablative, and disruptor.",
-              "dr": 3
+              "type": {"armor": {"dr": 3}},
+              "notes": "Some combo of ballistic, ablative, and disruptor."
             },
             {
                 "count": 1,
                 "owners": [],
                 "name": "Tonfa",
                 "notes": "",
-                "damage": {"sw": {"type": "cr", "plus": 0},
-                           "thr": {"type": "cr", "plus": 1}},
                 "parry": 0,
                 "skill": {"Tonfa": 0},
-                "type": "melee weapon"
+                "type": {
+                    "thrust weapon": {"damage":
+                        {"st": "thr", "type": "cr", "plus": 1}},
+                    "swung weapon": {"damage":
+                        {"st": "sw", "type": "cr", "plus": 0}}
+                    }
             },
             {
                 "acc": 2,
@@ -2768,13 +2744,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 },
                 "reload": 3,
                 "skill": {"Beam Weapons (Pistol)": 0},
-                "type": "ranged weapon",
+                # TODO: incorporate damage, above, into ranged weapon, below
+                "type": {"ranged weapon": 1},
                 "ammo": {"name": "C Cell", "shots": 8, "shots_left": 8}
             },
             {
                 "count": 1,
                 "notes": "",
-                "type": "misc",
+                "type": {"misc": 1},
                 "owners": None,
                 "name": "C Cell"
             }
@@ -2797,9 +2774,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
     def get_to_hit(self,
                    fighter,     # Fighter object
                    opponent,    # Fighter object
-                   weapon       # Weapon object
+                   weapon,      # Weapon object
+                   mode,        # string: 'swung weapon', or ...
+                   moving=False # bool: ignore timers/we attack during move
                    ):
         '''
+        Figures out the total to-hit for this fighter on this opponent with
+        this weapon.  Includes situational stuff (posture, aiming, two-weapon
+        attacks).
+
         Returns tuple (skill, why) where:
             'skill' (number) is the value the attacker needs to roll to-hit
                     the target.
@@ -2808,16 +2791,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
         skill_full = None
         if weapon is not None:
-            skill_full = fighter.get_best_skill_for_weapon(weapon.details)
+            skill_full = fighter.get_best_skill_for_weapon(weapon.details,
+                                                           mode)
 
         if skill_full is None:
             return None, None
         skill = skill_full['value']
 
         why = []
-        why.append('Weapon %s w/%s skill = %d' % (
-            weapon.details['name'], skill_full['name'], skill))
-        skill_modifier = weapon.details['skill'][skill_full['name']]
+        why.append('Weapon %s, %s' % (weapon.details['name'], mode))
+        why.append('  %s: skill = %d' % (skill_full['name'], skill))
+        skill_modifier = weapon.details['type'][mode]['skill'][skill_full['name']]
         if skill_modifier < 0:
             why.append('  ...using default skill at %d (already included)' %
                     skill_modifier)
@@ -2832,7 +2816,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     fighter.details['techniques'])
 
             # Dual-weapon fighting (B230, B417)
-            skill_full = fighter.get_best_skill_for_weapon(weapon.details)
+            skill_full = fighter.get_best_skill_for_weapon(weapon.details,
+                                                           mode)
             skill = skill_full['value']
 
             # 2nd weapon
@@ -2879,6 +2864,24 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 if not found_match:
                     skill -= 4
                     why.append('  -4 due to off-hand weapon (B417)')
+
+        # Attack while Moving
+
+        if not moving:
+            timers = fighter.timers.get_all()
+            for timer in timers:
+                if ('move-and-attack' in timer.details and
+                        timer.details['move-and-attack']):
+                 moving = True
+                 break
+
+        if moving:
+            skill, why = self.__move_and_attack_mods(fighter,
+                                                     opponent,
+                                                     weapon,
+                                                     mode,
+                                                     skill,
+                                                     why)
 
         # Aiming
 
@@ -2928,17 +2931,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                (opponent_posture_mods['target'],
                                 opponent.details['posture']))
 
-        # For a total of...
         why.append('  ...for a total = %d' % skill)
-
-        # Check for mods from the timers
-        timers = fighter.timers.get_all()
-        for timer in timers:
-            if 'mods' in timer.details:
-                if 'to-hit' in timer.details['mods']:
-                    skill = timer.details['mods']['to-hit']
-                if 'why' in timer.details['mods']:
-                    why.append(timer.details['mods']['why'])
 
         return skill, why
 
@@ -3005,12 +2998,28 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             weapon = ca_equipment.Weapon(
                     {'delete me': True,    # Used to stop using this, later
                       'name': '*Unarmed*',
-                      'skill': {"DX": 0,
-					            "Boxing": 0,
-					            "Brawling": 0,
-					            "Karate": 0 } })
+                      'type': {'unarmed': {'damage': {1},
+                                           'skill': {"DX": 0,
+                                                     "Boxing": 0,
+                                                     "Brawling": 0,
+                                                     "Karate": 0 }}
+                                }
+                    })
 
-        weapon_skills = weapon.details['skill']
+        # This is going to make a mish-mash of skills that span the weapon
+        # modes.  Maybe one of the modes includes karate and the others don't
+        # but do include boxing.  This will include both karate and boxing.
+        # Still, a weapon with those traits would be REALLY weird.
+        modes = weapon.get_attack_modes()
+        weapon_skills = {}
+        for mode in modes:
+            skills = weapon.details['type'][mode]['skill']
+            for name, value in skills.iteritems():
+                if name in weapon_skills:
+                    if value > weapon_skills[name]:
+                        weapon_skills[name] = value
+                else:
+                    weapon_skills[name] = value
 
         # boxing, brawling, karate, dx
         if ('Brawling' in fighter.details['skills'] and
@@ -3192,8 +3201,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                     (punch_damage['num_dice'],
                                      punch_damage['plus']))
         else:
-            damage_array, why = self.get_damage(fighter, weapon)
-            punch_damage_why.extend(why)
+            modes = weapon.get_attack_modes()
+            for mode in modes:
+                damage_array_1, why = self.get_damage(fighter, weapon, mode)
+                punch_damage_why.extend(why)
+                if damage_array is None:
+                    damage_array = damage_array_1
+                else:
+                    damage_array.extend(damage_array_1)
 
         # Plusses to damage
 
@@ -3346,18 +3361,32 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # defaults to DX and that's OK -- we don't have to tell the user
             # about this.
 
+            found_skill = False
             if 'skill' in item:
-                found_skill = False
+                #print '\n  -- item %s includes "skill" --' % item['name'] # TODO
                 for item_skill in item['skill'].iterkeys():
                     if (item_skill.lower() not in creature['current'] and
                             item_skill in creature['skills']):
                         found_skill = True
+            elif ca_equipment.Weapon.is_weapon(item):
+                weapon = ca_equipment.Weapon(item)
+                modes = weapon.get_attack_modes()
+                for mode in modes:
+                    if found_skill:
+                        break
+                    for item_skill in item['type'][mode]['skill'].iterkeys():
+                        if (item_skill.lower() not in creature['current'] and
+                                item_skill in creature['skills']):
+                            found_skill = True
+                            break
+            else:
+                found_skill = True # Not really, but just so we don't error
 
-                if not found_skill:
-                    self._window_manager.error([
-                        'Creature "%s"' % name,
-                        '  has item "%s"' % item['name'],
-                        '  but not the skill to use it'])
+            if not found_skill:
+                self._window_manager.error([
+                    'Creature "%s"' % name,
+                    '  has item "%s"' % item['name'],
+                    '  but not the skill to use it'])
                 result = False
         if 'spells' in creature:
             duplicate_check = {}
@@ -3384,10 +3413,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns: the dict.
         '''
         item = super(GurpsRuleset, self).make_empty_armor()
-        strawman = { "dr": 0 }
-        for key, value in strawman.iteritems():
-            if key not in item:
-                item[key] = value
+        item['type'] = {'armor': {'dr': 0 }}
         return item
 
     def make_empty_creature(self):
@@ -3431,12 +3457,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
         item = super(GurpsRuleset, self).make_empty_melee_weapon()
         strawman = {
-                "damage": {
-                    "sw": { "plus": -4, "type": "cut" },
-                    "thr": { "plus": -4, "type": "imp" }
-                 },
+                #"damage": {
+                #    "sw": { "plus": -4, "type": "cut" },
+                #    "thr": { "plus": -4, "type": "imp" }
+                # },
                 "parry": -4,
-                "skill": {"*UNKNOWN*": 0},
+                #"skill": {"*UNKNOWN*": 0},
         }
 
         for key, value in strawman.iteritems():
@@ -3455,10 +3481,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         item = super(GurpsRuleset, self).make_empty_missile_weapon()
         strawman = {
                 "acc": 0,
-                "damage": {"dice": { "plus": 0, "num_dice": 0, "type": "pi" }},
+                #"damage": {"dice": { "plus": 0, "num_dice": 0, "type": "pi" }},
                 "bulk": -10,
                 "reload": 10,
-                "skill": {"*UNKNOWN*": 0},
+                #"skill": {"*UNKNOWN*": 0},
                 "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
                 # clip is not required
         }
@@ -3763,7 +3789,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             armor_list = fighter.get_items_from_indexes(armor_index_list)
 
             for armor in armor_list:
-                dr += armor['dr']
+                dr += armor['type']['armor']['dr']
                 dr_text_array.append(armor['name'])
 
             if 'Damage Resistance' in fighter.details['advantages']:
@@ -4606,9 +4632,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # TODO (now): Mods are actual total values.  They _should_ be delta
         #   values but one of the mods caps the to-hit to 9.
         mods = None
-        to_hit_penalty = 0
-        MOVE_ATTACK_MELEE_MINUS = -4
-        MOVE_ATTACK_RANGED_MINUS = -2
 
         # Get some details
 
@@ -4660,58 +4683,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     ' Move: %s' % move_string]
             opponent = (None if fight_handler is None else
                     fight_handler.get_opponent_for(fighter))
-            why = ['Move and attack']
-            if self.does_weapon_use_unarmed_skills(weapon):
-                unarmed_info = self.get_unarmed_info(fighter,
-                                                     opponent,
-                                                     weapon)
-                to_hit_penalty = MOVE_ATTACK_MELEE_MINUS
-                to_hit = unarmed_info['punch_skill'] + to_hit_penalty
 
-                if to_hit > 9:
-                    why.append('Melee (punch) attacks capped at 9 (B365)')
-                    to_hit = 9
-                else:
-                    why.append('Melee (punch) attacks at -4 (B365)')
-                crit, fumble = self.__get_crit_fumble(to_hit)
-                text.append(' Punch to-hit: %d, crit <= %d, fumble >= %d' % (
-                    to_hit, crit, fumble))
+            for weapon in weapons:
+                modes = weapon.get_attack_modes()
+                for mode in modes:
+                    text.append(' %s' % mode)
+                    to_hit, ignore_why = self.get_to_hit(fighter,
+                                                         opponent,
+                                                         weapon,
+                                                         mode,
+                                                         moving=True)
 
-                to_hit_penalty = MOVE_ATTACK_MELEE_MINUS
-                to_hit = unarmed_info['kick_skill'] + to_hit_penalty
-                if to_hit > 9:
-                    why.append('Melee (kick) attacks capped at 9 (B365)')
-                    to_hit = 9
-                else:
-                    why.append('Melee (kick) attacks at -4 (B365)')
-                crit, fumble = self.__get_crit_fumble(to_hit)
-                text.append(' Kick to-hit: %d, crit <= %d, fumble >= %d' % (
-                    to_hit, crit, fumble))
-            else:
-                to_hit, ignore_why = self.get_to_hit(fighter, opponent, weapon)
-                if holding_ranged:
-                    to_hit_penalty = MOVE_ATTACK_RANGED_MINUS
-                    if ('bulk' in weapon.details and
-                            weapon.details['bulk'] < to_hit_penalty):
-                        why.append( 'reducing to-hit by %d (bulk of %s, B365'
-                                % (weapon.details['bulk'], weapon.name))
-                        to_hit += weapon.details['bulk']
-                    else:
-                        why.append('Ranged attacks at -2 (B365)')
-                        to_hit += to_hit_penalty
-                else:
-                    to_hit_penalty = MOVE_ATTACK_MELEE_MINUS
-                    to_hit += to_hit_penalty
-                    if to_hit > 9:
-                        why.append('Melee attacks capped at 9 (B365)')
-                        to_hit = 9
-                    else:
-                        why.append('Melee attacks at -4 (B365)')
-
-                crit, fumble = self.__get_crit_fumble(to_hit)
-                text.append(' %s to-hit: %d, crit <= %d, fumble >= %d' % (
-                    weapon.details['name'], to_hit, crit, fumble))
-            mods = {'to-hit': to_hit, 'why': ', '.join(why)}
+                    crit, fumble = self.__get_crit_fumble(to_hit)
+                    text.append('  %s to-hit: %d, crit <= %d, fumble >= %d' % (
+                        weapon.details['name'], to_hit, crit, fumble))
 
         else:
             text = ['<<UNHANDLED ACTION: %s' % action['action-name']]
@@ -4719,8 +4704,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         timer.from_pieces({'parent-name': fighter.name,
                            'rounds': 1 - ca_timers.Timer.announcement_margin,
                            'string': text})
-        if mods is not None:
-            timer.details['mods'] = mods
+        if action['action-name'] == 'move-and-attack':
+            timer.details['move-and-attack'] = True
 
         return timer
 
@@ -4997,6 +4982,85 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return crit, fumble
 
+    def __get_damage_one_case(
+            self,
+            mode,  # string: 'thrust weapon', 'swung weapon', ...
+            weapon, # Weapon object
+            st,     # number: fighter's current strength
+            ):
+        '''
+        Damage is described in the following ways:
+
+        {'type': {'swung_weapon': {'damage': {'st': 'sw', 'plus':#, 'type': 'cut' or ...
+        {'type': {'thrust weapon': {'damage': {'st': 'thr', 'plus':#, 'type': 'imp' or ...
+
+        # laser pistol, bite, sick stick
+        {'damage': {'dice': {'plus':#, 'num_dice':#, 'type': 'pi' or ...
+        {'clip': {'damage': {...}
+
+        if there's a clip, use that damage else use the intrinsic damage of
+        the weapon
+
+        knife: damage next to skill whether swung, thrust, or thrown
+        gun: damage next to skill unless clip, then use that
+        brass knuckles: damage is thrust only
+        sick stick: damage is dice
+
+        '''
+        results = []
+        why = []
+
+        # weapon[type][mode]: swung weapon, thrust weapon, thrown weapon,
+        #                      missile weapon
+        damage = weapon.details['type'][mode]['damage']
+
+        if 'st' in damage:
+            attack_type = damage['st']  # 'sw' or 'thr'
+            # This is 'cut', 'imp', 'pi' or ...
+            damage_type_str = self.__get_damage_type_str(damage['type'])
+            results.append(
+                {'attack_type': attack_type, # 'thr', 'sw'
+                 'num_dice':
+                    GurpsRuleset.melee_damage[st][attack_type]['num_dice'],
+                 'plus': GurpsRuleset.melee_damage[st][attack_type]['plus'] +
+                    damage['plus'],
+                 'damage_type': damage_type_str})
+
+            why.append('Weapon %s, %s' % (weapon.details['name'], mode))
+            why.append('  Damage: %s%+d' % ( attack_type, damage['plus']))
+            why.append('  plug ST(%d) into table on B16 = %dd%+d' %
+                       (st,
+                        GurpsRuleset.melee_damage[st][attack_type]['num_dice'],
+                        GurpsRuleset.melee_damage[st][attack_type]['plus']))
+            if damage['plus'] != 0:
+                # TODO: attack_type = 'sw' and there's none of that in |damage|
+                why.append('  ...%+d for the weapon' % damage['plus'])
+            why.append('  ...damage: %dd%+d' %
+                       (GurpsRuleset.melee_damage[st][attack_type]['num_dice'],
+                        GurpsRuleset.melee_damage[st][attack_type]['plus'] +
+                        damage['plus']))
+        elif 'dice' in damage:
+            # if we're here, the damage is based on the weapon and not the
+            # capabilities of the wielder.  Therefore, the damage may be a
+            # function of the ammo in the clip.  Check that.
+            clip = weapon.get_clip()
+            if clip is not None and 'damage' in clip:
+                damage = clip['damage']
+
+            # {'damage': {'dice': {'plus':#, 'num_dice':#, 'type': 'pi' or ...
+            damage_type_str = self.__get_damage_type_str(
+                    damage['dice']['type'])
+            results.append(
+                {'attack_type': None,
+                 'num_dice': damage['dice']['num_dice'],
+                 'plus': damage['dice']['plus'],
+                 'damage_type': damage_type_str})
+            why.append('Weapon %s, %s' % (weapon.details['name'], mode))
+            why.append('  Damage: %dd%+d' % (damage['dice']['num_dice'],
+                                             damage['dice']['plus']))
+
+        return results, why
+
     def __get_damage_type_str(self,
                               damage_type   # <string> key in
                                             #   GurpsRuleset.damage_mult
@@ -5070,6 +5134,82 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                       ' Defense: any',
                                       ' Move: step']})
         return timer
+
+    def __move_and_attack_mods(self,
+                               fighter,
+                               opponent,
+                               weapon,
+                               mode,
+                               to_hit,
+                               why
+                               ):
+        to_hit_penalty = 0
+        MOVE_ATTACK_MELEE_MINUS = -4
+        MOVE_ATTACK_RANGED_MINUS = -2
+
+        if weapon is None:
+            return
+
+        if why is None:
+            why = []
+
+        # FP: B426
+        # TODO: do unarmed move and attack
+        '''
+        if self.does_weapon_use_unarmed_skills(weapon):
+            unarmed_info = self.get_unarmed_info(fighter,
+                                                 opponent,
+                                                 weapon)
+            to_hit_penalty = MOVE_ATTACK_MELEE_MINUS
+            to_hit = unarmed_info['punch_skill'] + to_hit_penalty
+
+            if to_hit > 9:
+                why.append('  = 9, move and melee (punch) attacks capped (B365)')
+                to_hit = 9
+            else:
+                why.append('  -4 for move and melee (punch) attack (B365)')
+            crit, fumble = self.__get_crit_fumble(to_hit)
+
+
+            text.append(' Punch to-hit: %d, crit <= %d, fumble >= %d' % (
+                to_hit, crit, fumble))
+
+            to_hit_penalty = MOVE_ATTACK_MELEE_MINUS
+            to_hit = unarmed_info['kick_skill'] + to_hit_penalty
+            if to_hit > 9:
+                why.append('  =9, move an melee (kick) attacks capped (B365)')
+                to_hit = 9
+            else:
+                why.append(' -4 for move and melee (kick) attack (B365)')
+            crit, fumble = self.__get_crit_fumble(to_hit)
+
+
+            text.append(' Kick to-hit: %d, crit <= %d, fumble >= %d' % (
+                to_hit, crit, fumble))
+        else:
+        '''
+
+        if weapon.is_ranged_weapon():
+            to_hit_penalty = MOVE_ATTACK_RANGED_MINUS
+            if ('bulk' in weapon.details and
+                    weapon.details['bulk'] < to_hit_penalty):
+                why.append( '  %+d for move and ranged attack (bulk of %s) (B365)'
+                        % (weapon.details['bulk'], weapon.name))
+                to_hit += weapon.details['bulk']
+            else:
+                why.append('  -2 for move and ranged attack (B365)')
+                to_hit += to_hit_penalty
+        else:
+            to_hit_penalty = MOVE_ATTACK_MELEE_MINUS
+            to_hit += to_hit_penalty
+            if to_hit > 9:
+                why.append('  = 9, move and melee attacks are capped (B365)')
+                to_hit = 9
+            else:
+                why.append('  -4 for move and melee attack (B365)')
+
+        return to_hit, why
+
 
     def _perform_action(self,
                         fighter,        # Fighter object

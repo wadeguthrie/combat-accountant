@@ -577,7 +577,7 @@ class Ruleset(object):
         Returns: the dict.
         '''
         item = self.make_empty_item()
-        item['type'].append('armor')
+        item['type']['armor'] = {} # 'dr: 3 or some such
         return item
 
     def make_empty_creature(self):
@@ -615,7 +615,7 @@ class Ruleset(object):
         Returns: the dict.
         '''
         return {'name': 'item', # string.  'item' is a dummy name.
-                'type': [],     # This needs to include 'misc', 'armor', or ...
+                'type': {},     # This needs to include 'misc', 'armor', or ...
                 'count': 1,
                 'notes': '',
                 'owners': None} # a list of owners, None if not tracked
@@ -628,7 +628,7 @@ class Ruleset(object):
         Returns: the dict.
         '''
         item = self.make_empty_item()
-        item['type'].append('melee weapon')
+        item['type']['melee weapon'] = {}
         return item
 
     def make_empty_missile_weapon(self):
@@ -639,7 +639,7 @@ class Ruleset(object):
         Returns: the dict.
         '''
         item = self.make_empty_item()
-        item['type'].append('ranged weapon')
+        item['type']['ranged weapon'] = {}
         return item
 
     def search_one_creature(self,

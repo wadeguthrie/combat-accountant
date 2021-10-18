@@ -595,31 +595,33 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "preferred-armor-index": [],
             "stuff": [
                  {"name": "pistol, Colt 170D",
-                  "type": ["ranged weapon"],
-                  "damage": {"dice": "1d+4"},
+                  "type": {
+                      "ranged weapon": {"damage": {"dice": {"plus": 4,
+                                                            "num_dice": 1,
+                                                            "type": "pi"}},
+                                        "skill": {"Guns (Pistol)": 0}}
+                      },
                   "acc": self.__colt_pistol_acc,
                   "ammo": {"name": "C Cell",
                            "shots_left": self.__vodou_priest_initial_shots,
                            "shots": self.__vodou_priest_initial_shots},
                   "clip": {"name": "C Cell",
-                           "type": ["misc"],
+                           "type": {"misc": 1},
                            "count": 1,
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": 1,
                   "notes": None},  # index 0
                  {"name": "C Cell",
-                  "type": ["misc"],
+                  "type": {"misc": 1},
                   "count": self.__vodou_priest_ammo_count,
                   "notes": "",
                   "owners": None},  # index 1
                  {"count": 1,
-                  "type": ["armor"],
+                  "type": {"armor": {"dr": self.__vodou_priest_armor_dr}},
                   "notes": "Enchanted w/fortify spell [M66]",
-                  "dr": self.__vodou_priest_armor_dr,
                   "name": "Sport coat/Jeans"}  # index 2
             ],
             "spells": [
@@ -681,21 +683,24 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "preferred-armor-index": [],
             "stuff": [
                  {"name": "pistol, Colt 170D",
-                  "type": ["ranged weapon"],
+                  "type": {"ranged weapon": {"damage": {"dice": {"plus": 4,
+                                                                 "num_dice": 1,
+                                                                 "type": "pi"}},
+                                             "skill": {"Guns (Pistol)": 0}}
+                           },
                   "damage": {"dice": "1d+4"},
                   "acc": 3,
                   "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
                   "clip": {"name": "C Cell",
-                           "type": ["misc"],
+                           "type": {"misc": 1},
                            "count": 1,
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},
-                 {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
+                 {"name": "C Cell", "type": {"misc": 1}, "count": 5, "notes": "",
                   "owners": None}
             ],
             "skills": {"Guns (Pistol)": 15, "Brawling": 12},
@@ -727,21 +732,23 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "preferred-armor-index": [],
             "stuff": [
                  {"name": "pistol, Kalashnikov Makarov",
-                  "type": ["ranged weapon"],
-                  "damage": {"dice": "1d+3"},
+                  "type": {"ranged weapon": {"damage": {"dice": {"plus": 3,
+                                                                 "num_dice": 1,
+                                                                 "type": "pi"}},
+                                             "skill": {"Guns (Pistol)": 0}}
+                           },
                   "acc": 2,
                   "ammo": {"name": "C Cell", "shots_left": 8, "shots": 8},
                   "clip": {"name": "C Cell",
-                           "type": ["misc"],
+                           "type": {"misc": 1},
                            "count": 1,
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},
-                 {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
+                 {"name": "C Cell", "type": {"misc": 1}, "count": 5, "notes": "",
                   "owners": None}
             ],
             "skills": {"Guns (Pistol)": 13, "Brawling": 12},
@@ -779,29 +786,34 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "stuff": [
                  {"name": "pistol, Sig D65",  # the index of this is stored
                                               # in __tank_fighter_pistol_index
-                  "type": ["ranged weapon"],
-                  "damage": {"dice": "1d+4"},
+                  "type": {"ranged weapon": {"damage": {"dice": {"plus": 4,
+                                                                 "num_dice": 1,
+                                                                 "type": "pi" }},
+                                             "skill": {"Guns (Pistol)": 0}},
+                           },
                   "acc": 4,
                   "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
                   "clip": {"name": "C Cell",
-                           "type": ["misc"],
+                           "type": {"misc": 1},
                            "count": 1,
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},
                  {"name": "sick stick", # the index of this is stored in
                                         # __tank_fighter_sickstick_index
-                  "type": ["melee weapon"],
-                  "damage": {"dice": "1d+1 fat"},
-                  "skill": {"Axe/Mace": 0},
+                  "type": {
+                    "swung weapon": {"damage": {"dice": {"plus": 1,
+                                                         "num_dice": 1,
+                                                         "type": "fat"}},
+                                     "skill": {"Axe/Mace": 0}}
+                    },
                   "count": 1,
                   "owners": None,
                   "notes": ""},
-                 {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
+                 {"name": "C Cell", "type": {"misc": 1}, "count": 5, "notes": "",
                   "owners": None}
             ],
             "skills": {"Guns (Pistol)": 16, "Brawling": 16, "Axe/Mace": 14},
@@ -836,24 +848,34 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "preferred-armor-index": [],
             "stuff": [
                  {"name": "pistol, Baretta DX 192",
-                  "type": ["ranged weapon"],
-                  "damage": {"dice": "1d+4"},
+                  "type": {"ranged weapon": {"damage": {"dice": {"plus": 4,
+                                                                 "num_dice": 1,
+                                                                 "type": "pi"}},
+                                             "skill": {"Guns (Pistol)": 0}}
+                                             },
                   "acc": 2,
                   "ammo": {"name": "C Cell", "shots_left": 8, "shots": 8},
                   "clip": {"name": "C Cell",
-                           "type": ["misc"],
+                           "type": {"misc": 1},
                            "count": 1,
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},
                  {"name": "Large Knife",
-                  "type": ["melee weapon"],
-                  "damage": {"dice": "1d-2", "type": "imp"},
-                  "skill": {"Knife": 0},
+                  "type": {
+                    "swung weapon": {"damage": {"st": "sw",
+                                                "plus": -2,
+                                                "type": "cut"},
+                                     "skill": {"Knife": 0}},
+                    "thrust weapon": {"damage": {"st": "thr",
+                                                 "plus": 0,
+                                                 "type": "imp"},
+                                      "skill": {"Knife": 0}}
+                    },
+                  #"damage": {"dice": "1d-2", "type": "imp"},
                   "parry": -1,
                   "count": 1,
                   "owners": None,
@@ -861,12 +883,19 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                  {"count": 1,
                   "name": "brass knuckles",
                   "notes": "B271",
-                  "damage": {"thr": {"plus": 0, "type": "cr"}},
                   "parry": 0,
-                  "skill": {"Brawling": 0, "Boxing": 0, "Karate": 0},
                   "owners": None,
-                  "type": ["melee weapon"]},
-                 {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
+                  "type": {
+                    #"thrust weapon": {"damage": {"st": "thr", "plus": 1, "type": "cr"}}
+                    "thrust weapon": {"damage": {"st": "thr",
+                                                 "plus": 0,
+                                                 "type": "cr"},
+                                      "skill": {"Brawling": 0,
+                                                "Boxing": 0,
+                                                "Karate": 0}}
+                    }
+                  },
+                 {"name": "C Cell", "type": {"misc": 1}, "count": 5, "notes": "",
                   "owners": None}
             ],
             "skills": {"Guns (Pistol)": 12,
@@ -1948,7 +1977,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        mode = "ranged weapon"
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # aim / braced, no posture
@@ -1965,28 +1995,28 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 1  # aiming for 2 rounds
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 2  # aiming for 3 rounds
 
         # 4 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 2  # no further benefit
 
         # aim / not braced, no posture
@@ -2001,28 +2031,28 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 1  # aiming for 2 rounds
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 2  # aiming for 3 rounds
 
         # 4 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 2  # no further benefit
 
         # no aim, posture (posture doesn't matter for ranged attacks: B551)
@@ -2033,7 +2063,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                   'posture': 'crawling'},
                                  mock_fight_handler)
         self.__ruleset.reset_aim(vodou_priest)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # aim / braced, posture (posture not counted for ranged attacks: B551)
@@ -2049,34 +2079,34 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 1  # aiming for 2 rounds
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 2  # aiming for 3 rounds
 
         # 4 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 2  # no further benefit
 
         # aim / not braced, posture (no posture minus for ranged attacks: B551)
 
         self.__ruleset.reset_aim(vodou_priest)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
 
         # 1 round
         expected_to_hit = (self.__vodou_priest_fighter_pistol_skill
@@ -2088,28 +2118,28 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 1  # aiming for 2 rounds
 
         # 3 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 2  # aiming for 3 rounds
 
         # 4 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 2  # no further benefit
 
         # --- Opponents w/ posture ---
@@ -2133,7 +2163,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon, mode)
         assert to_hit == expected_to_hit
 
         # change posture of thief (-2)
@@ -2141,7 +2171,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'change-posture',
                                   'posture': 'crawling'},  # -2
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon, mode)
         assert to_hit == (expected_to_hit - 2)
 
         # change posture of thief (back to standing)
@@ -2149,7 +2179,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, tank, weapon, mode)
         assert to_hit == expected_to_hit
 
     def test_messed_up_aim(self):
@@ -2170,6 +2200,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 self.__ruleset,
                 self.__window_manager)
         requested_weapon_index = self.__vodou_pistol_index
+        mode = "ranged weapon"
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
@@ -2185,7 +2216,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # Damage _would_ ruin aim except for successful Will roll
@@ -2199,14 +2230,14 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 1  # aiming for 2 rounds
 
         # adjust_hp but MADE Will roll
@@ -2224,7 +2255,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
 
         # aiming for 3 rounds (1st round+brace already in expected_to_hit)
         #   + shock
@@ -2245,14 +2276,14 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 1  # aiming for 2 rounds
 
         # adjust_hp and MISSES Will roll
@@ -2268,7 +2299,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + damage  # aiming for 1 round + shock
 
         self.__ruleset.do_action(vodou_priest,
@@ -2286,14 +2317,14 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 1  # aiming for 2 rounds
 
         # Move to spoil the aim
@@ -2305,7 +2336,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
 
         assert to_hit == expected_to_hit  # aiming for 1 round
 
@@ -2319,14 +2350,14 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 1  # aiming for 2 rounds
 
         # Change posture
@@ -2339,7 +2370,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit  # aiming for 1 round
 
         # Defense ruins aim
@@ -2357,14 +2388,14 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 1  # aiming for 2 rounds
 
         # Defend
@@ -2376,7 +2407,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit  # aiming for 3 rounds
 
         # Last One is Regular - shows nothing carries over
@@ -2387,7 +2418,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
     def test_melee_to_hit(self):
@@ -2408,6 +2439,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 self.__ruleset,
                 self.__window_manager)
         requested_weapon_index = 1  # Knife
+        mode = "swung weapon"
         self.__ruleset.do_action(thief,
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
@@ -2423,7 +2455,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # posture
@@ -2433,7 +2465,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'change-posture',
                                   'posture': 'crawling'},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # --- Opponents w/ posture (shouldn't change melee attack) ---
@@ -2456,7 +2488,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon, mode)
         assert to_hit == expected_to_hit
 
         # change posture of tank (opponent)
@@ -2464,7 +2496,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'change-posture',
                                   'posture': 'crawling'},  # -2
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon, mode)
         assert to_hit == expected_to_hit
 
         # change posture of thief (back to standing)
@@ -2472,27 +2504,27 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                                  {'action-name': 'change-posture',
                                   'posture': 'standing'},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(thief, tank_fighter, weapon, mode)
         assert to_hit == expected_to_hit
 
         # --- Aiming does not help ---
 
         self.__ruleset.reset_aim(thief)
         expected_to_hit = self.__thief_knife_skill
-        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon, mode)
 
         # 1 round
         self.__ruleset.do_action(thief,
                                  {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(thief,
                                  {'action-name': 'aim', 'braced': False},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(thief, None, weapon, mode)
         assert to_hit == expected_to_hit
 
     def test_adjust_hp(self):
@@ -2516,6 +2548,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 self.__window_manager)
 
         requested_weapon_index = self.__vodou_pistol_index
+        mode = "ranged weapon"
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
@@ -2540,7 +2573,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         original_to_hit, ignore = self.__ruleset.get_to_hit(vodou_priest,
                                                             None,
-                                                            weapon)
+                                                            weapon, mode)
 
         original_hand_to_hand_info = self.__ruleset.get_unarmed_info(
                 vodou_priest,
@@ -2568,7 +2601,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         to_hit, ignore = self.__ruleset.get_to_hit(vodou_priest,
                                                    None,
-                                                   weapon)
+                                                   weapon, mode)
         assert to_hit == original_to_hit + damage_1st  # damage is less than 4
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
@@ -2600,7 +2633,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         to_hit, ignore = self.__ruleset.get_to_hit(vodou_priest,
                                                    None,
-                                                   weapon)
+                                                   weapon, mode)
         assert to_hit == original_to_hit + damage_1st  # damage is less than 4
 
         hand_to_hand_info = self.__ruleset.get_unarmed_info(vodou_priest,
@@ -2632,7 +2665,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         max_shock = -4
 
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
 
         assert to_hit == original_to_hit + max_shock
 
@@ -2812,14 +2845,14 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 1  # aiming for 2 rounds
 
         # Take damage, fail will roll
@@ -2838,7 +2871,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + damage  # aiming for 1 round + shock
 
         # make will roll #
@@ -2868,7 +2901,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # 2 rounds
@@ -2876,7 +2909,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # Take damage, make will roll
@@ -2896,7 +2929,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + damage  # aiming for 1 round + shock
 
         # B327
@@ -3401,6 +3434,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Draw Weapon
 
         requested_weapon_index = self.__vodou_pistol_index
+        mode = "ranged weapon"
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
@@ -3443,6 +3477,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Draw Weapon
 
         requested_weapon_index = self.__vodou_pistol_index
+        mode = "ranged weapon"
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
@@ -3569,6 +3604,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Draw Weapon
 
         requested_weapon_index = self.__vodou_pistol_index
+        mode = "ranged weapon"
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
@@ -3760,6 +3796,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 self.__ruleset,
                 self.__window_manager)
         requested_weapon_index = self.__vodou_pistol_index
+        mode = "ranged weapon"
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'draw-weapon',
                                   'weapon-index': requested_weapon_index},
@@ -3776,14 +3813,14 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit
 
         # 2 rounds
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit + 1  # aiming for 2 rounds
 
         # DEFEND, LOSE AIM #
@@ -3796,7 +3833,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         self.__ruleset.do_action(vodou_priest,
                                  {'action-name': 'aim', 'braced': True},
                                  mock_fight_handler)
-        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon)
+        to_hit, why = self.__ruleset.get_to_hit(vodou_priest, None, weapon, mode)
         assert to_hit == expected_to_hit  # aiming for 1 round
 
     def test_timers(self):
@@ -4112,20 +4149,24 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # Different item
 
-        different_item = {"name": "pistol, Baretta DX 192",
-                          "type": ["ranged weapon"],
+        different_item = {
+                "name": "pistol, Baretta DX 192",
+                "type": {"ranged weapon": {"damage": {"dice": {"plus": 4,
+                                                               "num_dice": 1,
+                                                               "type": "pi"}},
+                                           "skill": {"Guns (Pistol)": 0}}
+                                           },
                           "damage": {"dice": "1d+4"},
                           "acc": 2,
                           "ammo": {"name": "C Cell",
                                    "shots_left": 8,
                                    "shots": 8},
                           "clip": {"name": "C Cell",
-                                   "type": ["misc"],
+                                   "type": {"misc": 1},
                                    "count": 1,
                                    "notes": "",
                                    "owners": None},
                           "reload": 3,
-                          "skill": {"Guns (Pistol)": 0},
                           "count": 1,
                           "owners": None,
                           "notes": ""}
@@ -4166,7 +4207,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         [
          0=> {"name": "pistol, Sig D65",  # the index of this is stored
                                           # in __tank_fighter_pistol_index
-              "type": ["ranged weapon"],
+              "type": {"ranged weapon": ...},
               "damage": {"dice": "1d+4"},
               "acc": 4,
               "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
@@ -4177,19 +4218,19 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
               "notes": ""
              },
          1=> {"name": "sick stick",
-              "type": ["melee weapon"],
+              "type": {"melee weapon": ...},
               "damage": {"dice": "1d+1 fat"},
               "skill": {"Axe/Mace": 0},
               "count": 1,
               "owners": None,
               "notes": ""
              },
-         2=> {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
+         2=> {"name": "C Cell", "type": {"misc": 1}, "count": 5, "notes": "",
               "owners": None,
              },
          3=> {"name": "pistol, Sig D65",  # the index of this is stored
                                           # in __tank_fighter_pistol_index
-              "type": ["ranged weapon"],
+              "type": {"ranged weapon": ...},
               "damage": {"dice": "1d+4"},
               "acc": 4, <---------------------- now 5 -- this is similar item
               "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
@@ -4200,7 +4241,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
               "notes": ""
              },
          4=> {"name": "pistol, Baretta DX 192", XXXXX--different item-removed
-              "type": ["ranged weapon"],
+              "type": {"ranged weapon": ...},
               "damage": {"dice": "1d+4"},
               "acc": 2,
               "ammo": {"name": "C Cell", "shots_left": 8, "shots": 8},
@@ -4298,12 +4339,12 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             "stuff": [
                  {"name": "pistol, Sig D65",  # the index of this is stored
                                               # in __tank_fighter_pistol_index
-                  "type": ["ranged weapon"],
+                  "type": {"ranged weapon": ...},
                   "damage": {"dice": "1d+4"},
                   "acc": 4,
                   "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
                   "clip": {"name": "C Cell",
-                           "type": ["misc"],
+                           "type": {"misc": 1},
                            "count": 1,
                            "notes": "",
                            "owners": None},
@@ -4313,13 +4354,13 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                   "owners": None,
                   "notes": ""},
                  {"name": "sick stick",
-                  "type": ["melee weapon"],
+                  "type": {"melee weapon": ...},
                   "damage": {"dice": "1d+1 fat"},
                   "skill": {"Axe/Mace": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},
-                 {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
+                 {"name": "C Cell", "type": {"misc": 1}, "count": 5, "notes": "",
                   "owners": None}
             ],
 
@@ -4515,13 +4556,16 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         tank_after_gift = [
                  {"name": "sick stick",
-                  "type": ["melee weapon"],
-                  "damage": {"dice": "1d+1 fat"},
-                  "skill": {"Axe/Mace": 0},
+                  "type": {
+                    "swung weapon": {"damage": {"dice": {"plus": 1,
+                                                         "num_dice": 1,
+                                                         "type": "fat"}},
+                                     "skill": {"Axe/Mace": 0}}
+                    },
                   "count": 1,
                   "owners": None,
                   "notes": ""},
-                 {"name": "C Cell", "type": ["misc"], "count": 5, "notes": "",
+                 {"name": "C Cell", "type": {"misc": 1}, "count": 5, "notes": "",
                   "owners": None}]
 
         priest = ca_fighter.Fighter(
@@ -4532,45 +4576,48 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                 self.__window_manager)
         priest_after_gift = [
                  {"name": "pistol, Colt 170D",
-                  "type": ["ranged weapon"],
-                  "damage": {"dice": "1d+4"},
+                  "type": {"ranged weapon": {"damage": {"dice": {"plus": 4,
+                                                                 "num_dice": 1,
+                                                                 "type": "pi"}},
+                                             "skill": {"Guns (Pistol)": 0}}
+                                             },
                   "acc": self.__colt_pistol_acc,
                   "ammo": {"name": "C Cell",
                            "shots_left": self.__vodou_priest_initial_shots,
                            "shots": self.__vodou_priest_initial_shots},
                   "clip": {"name": "C Cell",
-                           "type": ["misc"],
+                           "type": {"misc": 1},
                            "count": 1,
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": 1,
                   "notes": None},  # index 0
                  {"name": "C Cell",
-                  "type": ["misc"],
+                  "type": {"misc": 1},
                   "count": self.__vodou_priest_ammo_count,
                   "notes": "",
                   "owners": None},  # index 1
                  {"count": 1,
-                  "type": ["armor"],
+                  "type": {"armor": {"dr": self.__vodou_priest_armor_dr}},
                   "notes": "Enchanted w/fortify spell [M66]",
-                  "dr": self.__vodou_priest_armor_dr,
                   "name": "Sport coat/Jeans"},
                  {"name": "pistol, Sig D65",  # the index of this is stored
                                               # in __tank_fighter_pistol_index
-                  "type": ["ranged weapon"],
-                  "damage": {"dice": "1d+4"},
+                  "type": {"ranged weapon": {"damage": {"dice": {"plus": 4,
+                                                                 "num_dice": 1,
+                                                                 "type": "pi"}},
+                                             "skill": {"Guns (Pistol)": 0}}
+                                             },
                   "acc": 4,
                   "ammo": {"name": "C Cell", "shots_left": 9, "shots": 9},
                   "clip": {"name": "C Cell",
-                           "type": ["misc"],
+                           "type": {"misc": 1},
                            "count": 1,
                            "notes": "",
                            "owners": None},
                   "reload": 3,
-                  "skill": {"Guns (Pistol)": 0},
                   "count": 1,
                   "owners": None,
                   "notes": ""},
@@ -5043,21 +5090,21 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # messed up and I don't have to go around recalculating for the
         # tests.
         fighter_dict['stuff'] =  [
-             {"name": "Container 11", "type": ["container"], "count": 1, "notes": "",
+                {"name": "Container 11", "type": {"container": 1}, "count": 1, "notes": "",
                  "owners": None, "stuff": [
-                 {"name": "Container 22", "type": ["container"], "count": 1, "notes": "",
+                    {"name": "Container 22", "type": {"container": 1}, "count": 1, "notes": "",
                      "owners": None, "stuff": [
-                     {"name": "Random Thing 31", "type": ["misc"], "count": 1, "notes": "",
-                          "owners": None},
+                        {"name": "Random Thing 31", "type": {"misc": 1}, "count": 1, "notes": "",
+                         "owners": None},
+                     ]},
+                    {"name": "Random Thing 22", "type": {"misc": 1}, "count": 1, "notes": "",
+                     "owners": None},
                  ]},
-                 {"name": "Random Thing 22", "type": ["misc"], "count": 1, "notes": "",
-                      "owners": None},
-             ]},
-             {"name": "Random Thing 12", "type": ["misc"], "count": 1, "notes": "",
+                 {"name": "Random Thing 12", "type": {"misc": 1}, "count": 1, "notes": "",
                   "owners": None},
-             {"name": "Random Thing 13", "type": ["misc"], "count": 1, "notes": "",
+                 {"name": "Random Thing 13", "type": {"misc": 1}, "count": 1, "notes": "",
                   "owners": None},
-        ]
+                 ]
         fighter = ca_fighter.Fighter(
                 'Thief',
                 'group',

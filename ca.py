@@ -6285,7 +6285,7 @@ class FightHandler(ScreenHandler):
         if why_target is None:
             return True  # Keep fighting
 
-        lines = why_target._explain_numbers(self)
+        lines = why_target.explain_numbers(self)
 
         self._window_manager.display_window(
                     'How %s\'s Numbers Were Calculated' % why_target.name,

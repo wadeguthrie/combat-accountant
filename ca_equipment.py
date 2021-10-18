@@ -320,6 +320,9 @@ class EquipmentManager(object):
         if 'count' in item and item['count'] != 1:
             texts.append(' (%d)' % item['count'])
 
+        if 'parry' in item:
+            texts.append(' parry: %d' % item['parry'])
+
         if ('notes' in item and item['notes'] is not None and
                 (len(item['notes']) > 0)):
             texts.append(': %s' % item['notes'])
@@ -329,47 +332,42 @@ class EquipmentManager(object):
 
         char_detail.append([{'text': ''.join(texts), 'mode': mode}])
 
-        if 'ranged weapon' in item['type']:
-            texts = []
-            texts.append('acc: %d' % item['acc'])
-            texts.append('dam(%s): %dd%+d' % (
-                                          item['damage']['dice']['type'],
-                                          item['damage']['dice']['num_dice'],
-                                          item['damage']['dice']['plus']))
-            texts.append('reload: %d' % item['reload'])
-            if 'bulk' in item:
-                texts.append('bulk: %d' % item['bulk'])
-            leader = '     %s' % indent
-            char_detail.append([{'text': (leader + ', '.join(texts)),
-                                 'mode': mode}])
-        elif 'melee weapon' in item['type']:
-            texts = []
-            if 'dice' in item['damage']:
-                texts.append('dam(%s): %dd%+d' % (
-                                          item['damage']['dice']['type'],
-                                          item['damage']['dice']['num_dice'],
-                                          item['damage']['dice']['plus']))
-            if 'sw' in item['damage']:
-                texts.append('dam(sw): %s%+d' % (
-                                          item['damage']['sw']['type'],
-                                          item['damage']['sw']['plus']))
-            if 'thr' in item['damage']:
-                texts.append('dam(thr): %s%+d' % (
-                                          item['damage']['thr']['type'],
-                                          item['damage']['thr']['plus']))
-            if 'parry' in item:
-                texts.append('parry: %d' % item['parry'])
+        for type_name, item_type in item['type'].iteritems():
+            if type(item_type) is not dict:
+                continue
 
-            leader = '     %s' % indent
-            char_detail.append([{'text': (leader + ', '.join(texts)),
-                                 'mode': mode}])
-        elif 'armor' in item['type']:
-            texts = []
-            # TODO (eventually): ruleset-specific
-            texts.append('dr: %d' % item['dr'])
-            leader = '     %s' % indent
-            char_detail.append([{'text': (leader + ', '.join(texts)),
-                                 'mode': mode}])
+            if 'damage' in item_type:
+                damage = item_type['damage']
+                texts = []
+                if 'dice' in damage:
+                    texts.append('dam(%s): %dd%+d' % (
+                                                  damage['dice']['type'],
+                                                  damage['dice']['num_dice'],
+                                                  damage['dice']['plus']))
+                elif 'st' in damage:
+                    texts.append('dam(%s): %s%+d' % (damage['st'],
+                                                     damage['type'],
+                                                     damage['plus']))
+
+                if 'reload' in item:
+                    texts.append('reload: %d' % item['reload'])
+                if 'acc' in item:
+                    texts.append('acc: %d' % item['acc'])
+                if 'bulk' in item:
+                    texts.append('bulk: %d' % item['bulk'])
+
+                if len(texts) > 0:
+                    leader = '     %s' % indent
+                    char_detail.append([{'text': (leader + ', '.join(texts)),
+                                         'mode': mode}])
+
+            elif 'armor' in type_name:
+                texts = []
+                # TODO (eventually): ruleset-specific
+                texts.append('dr: %d' % item_type['dr'])
+                leader = '     %s' % indent
+                char_detail.append([{'text': (leader + ', '.join(texts)),
+                                     'mode': mode}])
 
         if ('owners' in item and item['owners'] is not None and
                 len(item['owners']) > 0):
@@ -511,11 +509,29 @@ class Weapon(object):
         return False
 
     @staticmethod
+    def is_item_melee_weapon(item  # dict from JSON
+                             ):
+        if 'melee weapon' in item['type']:
+            return True
+        if 'swung weapon' in item['type']:
+            return True
+        if 'thrust weapon' in item['type']:
+            return True
+        return False
+
+    @staticmethod
+    def is_item_ranged_weapon(item  # dict from JSON
+                              ):
+        if 'ranged weapon' in item['type']:
+            return True
+        return False
+
+    @staticmethod
     def is_weapon(item  # dict from JSON
                   ):
-        if ('ranged weapon' in item['type'] or
-                'melee weapon' in item['type'] or
-                'shield' in item['type']):
+        if Weapon.is_item_melee_weapon(item):
+            return True
+        if Weapon.is_item_ranged_weapon(item):
             return True
         return False
 
@@ -543,18 +559,19 @@ class Weapon(object):
 
         return clip['shots'] == self.details['ammo']['shots']
 
-    def damage(self):
-        return self.__get_parameter('damage')
+    def get_attack_modes(self):
+        modes = [mode for mode in self.details['type'].iterkeys()]
+        return modes
 
     def get_clip(self):
         clip = None if 'clip' not in self.details else self.details['clip']
         return clip
 
     def is_melee_weapon(self):
-        return True if 'melee weapon' in self.details['type'] else False
+        return Weapon.is_item_melee_weapon(self.details)
 
     def is_ranged_weapon(self):
-        return True if 'ranged weapon' in self.details['type'] else False
+        return Weapon.is_item_ranged_weapon(self.details)
 
     def is_shield(self):
         # NOTE: cloaks also have this 'type'
@@ -624,8 +641,8 @@ class Weapon(object):
             return self.__set_parameter('shots_left', new_value, ammo=True)
         return self.__get_parameter('shots_left', ammo=True)
 
-    def to_hit(self):
-        return self.__get_parameter('to_hit')
+    #def to_hit(self): # Is this used?
+    #    return self.__get_parameter('to_hit')
 
     def use_one_ammo(self):
         '''

@@ -94,9 +94,32 @@ class GmJson(object):
     @staticmethod
     def __json_load_byteified(file_handle):
         error_message = None
+
+        # Doesn't work:
+        #original_errmsg= json.decoder.errmsg
+
+        #def our_errmsg(msg, doc, pos, end=None):
+        #    json.last_error_position= json.decoder.linecol(doc, pos)
+        #    return original_errmsg(msg, doc, pos, end)
+
+        #json.decoder.errmsg= our_errmsg
+
         try:
             my_dict = json.load(file_handle, object_hook=GmJson.__byteify)
+        except ValueError as e:
+            print 'XXX'
+            print 'Couldn\'t read JSON: "%s"' % e
+            # Doesn't work:
+            #print 'line: %d, col: %d' % (e.lineno, e.colno)
+            #print '%r' % json.decoder.linecol('', 0)
+            #print("error at %r" % json.last_error_position)
+            print 'YYY'
+
         except Exception as e:
+            print 'Couldn\'t read JSON: "%s"' % e
+            #print e.args
+            #print '----'
+            #traceback.print_exc()
             return None, 'Couldn\'t read JSON: "%s"' % str(e)
 
         return GmJson.__byteify(my_dict, ignore_dicts=True), None
