@@ -179,21 +179,9 @@ class ThingsInFight(object):
         '''
         self.timers.clear_all()
 
-    def start_fight(self):
-        '''
-        Configures the Fighter or Venue to start a fight.
-
-        Returns nothing.
-        '''
-        pass
-
-    #
-    # Protected
-    #
-
-    def _explain_numbers(self,
-                         fight_handler  # FightHandler object, ignored
-                         ):
+    def explain_numbers(self,
+                        fight_handler  # FightHandler object, ignored
+                        ):
         '''
         Explains how the stuff in the descriptions were calculated.
 
@@ -204,6 +192,14 @@ class ThingsInFight(object):
                the line is shown in bold
         '''
         return [[{'text': '(Nothing to explain)', 'mode': curses.A_NORMAL}]]
+
+    def start_fight(self):
+        '''
+        Configures the Fighter or Venue to start a fight.
+
+        Returns nothing.
+        '''
+        pass
 
 
 class Venue(ThingsInFight):
@@ -924,9 +920,51 @@ class Fighter(ThingsInFight):
         self._ruleset.end_turn(self, fight_handler)
         self.timers.remove_expired_kill_dying()
 
-    def get_best_skill_for_weapon(self,
-                                  weapon    # dict
-                                  ):
+    def explain_numbers(self,
+                        fight_handler  # FightHandler object
+                        ):
+        '''
+        Explains how the stuff in the descriptions were calculated.
+
+        Returns [[{'text':x, 'mode':x}, {...}], [], [], ...]
+            where the outer array contains lines
+            each line is an array that contains a line-segment
+            each line segment has its own mode so, for example, only SOME of
+               the line is shown in bold
+        '''
+
+        weapons = self.get_current_weapons()
+        why_opponent = fight_handler.get_opponent_for(self)
+        all_lines = []
+        looking_for_weapon = True
+        for weapon in weapons:
+            if weapon is None:
+                continue
+            looking_for_weapon = False
+
+            modes = weapon.get_attack_modes()
+            for mode in modes:
+                lines = self.__explain_one_weapon_numbers(weapon,
+                                                          mode,
+                                                          why_opponent)
+                all_lines.extend(lines)
+
+        #if looking_for_weapon:
+        #    XXXX - do unarmed stuff
+
+        ignore, defense_why = self.get_defenses_notes(why_opponent)
+        if defense_why is not None:
+            lines = [[{'text': x,
+                       'mode': curses.A_NORMAL}] for x in defense_why]
+            all_lines.extend(lines)
+
+        return all_lines
+
+    def get_best_skill_for_weapon(
+            self,
+            weapon,     # dict
+            mode_name=None   # str: 'swung weapon' or ...; None for all modes
+            ):
         # skills = [{'name': name, 'modifier': number}, ...]
         #if weapon['skill'] in self.details['skills']:
         #    best_skill = weapon['skill']
@@ -940,25 +978,21 @@ class Fighter(ThingsInFight):
         Returns None if no skill matching the given weapon was found, else
             dict: {'name': best_skill, 'value': best_value}
         '''
-        best_skill = None
-        best_value = None
-        for skill_camel, value in weapon['skill'].iteritems():
-            skill_lower = skill_camel.lower()
-            found_skill = False
-            if skill_camel in self.details['skills']:
-                value += self.details['skills'][skill_camel]
-                found_skill = True
-            elif skill_lower in self.details['current']:
-                value += self.details['current'][skill_lower]
-                found_skill = True
-            if found_skill and (best_value is None or value > best_value):
-                best_value = value
-                best_skill = skill_camel
+        best_result = None
+        if mode_name is None:
+            weapon_obj = ca_equipment.Weapon(weapon)
+            modes = weapon_obj.get_attack_modes()
+            for mode in modes:
+                result = self.__get_best_skill_for_weapon_one_modes(weapon,
+                                                                    mode)
+                if (best_result is None or
+                        best_result['value'] < result['value']):
+                    best_result = result
+        else:
+            best_result = self.__get_best_skill_for_weapon_one_modes(weapon,
+                                                                     mode_name)
 
-        if best_skill is None or best_value is None:
-            return None
-
-        return {'name': best_skill, 'value': best_value}
+        return best_result
 
     def get_state(self):
         return Fighter.get_fighter_state(self.details)
@@ -1067,40 +1101,11 @@ class Fighter(ThingsInFight):
     # Protected and Private Methods
     #
 
-    def _explain_numbers(self,
-                         fight_handler  # FightHandler object
-                         ):
-        '''
-        Explains how the stuff in the descriptions were calculated.
-
-        Returns [[{'text':x, 'mode':x}, {...}], [], [], ...]
-            where the outer array contains lines
-            each line is an array that contains a line-segment
-            each line segment has its own mode so, for example, only SOME of
-               the line is shown in bold
-        '''
-
-        weapons = self.get_current_weapons()
-        why_opponent = fight_handler.get_opponent_for(self)
-        all_lines = []
-        for weapon in weapons:
-            if weapon is None:
-                continue
-            lines = self._explain_one_weapon_numbers(weapon, why_opponent)
-            all_lines.extend(lines)
-
-        ignore, defense_why = self.get_defenses_notes(why_opponent)
-        if defense_why is not None:
-            lines = [[{'text': x,
-                       'mode': curses.A_NORMAL}] for x in defense_why]
-            all_lines.extend(lines)
-
-        return all_lines
-
-    def _explain_one_weapon_numbers(self,
-                                    weapon,         # Weapon object
-                                    why_opponent    # Fighter object
-                                    ):
+    def __explain_one_weapon_numbers(self,
+                                     weapon,         # Weapon object
+                                     mode,           # str: 'swung weapon', ...
+                                     why_opponent    # Fighter object
+                                     ):
         '''
         Explains how the stuff in the descriptions (for only one weapon) were
         calculated.
@@ -1122,17 +1127,18 @@ class Fighter(ThingsInFight):
         else:
             #lines.extend([[{'text': 'Weapon: "%s"' % weapon.name,
             #                'mode': curses.A_NORMAL}]])
-            if self.get_best_skill_for_weapon(weapon.details) is not None:
+            if self.get_best_skill_for_weapon(weapon.details,
+                                              mode) is not None:
                 # To-Hit
-                ignore, to_hit_why = self._ruleset.get_to_hit(self,
+                skill, to_hit_why = self._ruleset.get_to_hit(self,
                                                               why_opponent,
-                                                              weapon)
+                                                              weapon,
+                                                              mode)
                 lines.extend([[{'text': x,
                                 'mode': curses.A_NORMAL}] for x in to_hit_why])
 
                 # Damage
-
-                ignore, damage_why = self._ruleset.get_damage(self, weapon)
+                ignore, damage_why = self._ruleset.get_damage(self, weapon, mode)
                 lines.extend([[{'text': x,
                                 'mode': curses.A_NORMAL}] for x in damage_why])
 
@@ -1141,3 +1147,42 @@ class Fighter(ThingsInFight):
                                'mode': curses.A_NORMAL}]])
 
         return lines
+
+    def __get_best_skill_for_weapon_one_modes(
+            self,
+            weapon,     # dict
+            mode        # str: 'swung weapon' or ...; None for all modes
+            ):
+        # skills = [{'name': name, 'modifier': number}, ...]
+        #if weapon['skill'] in self.details['skills']:
+        #    best_skill = weapon['skill']
+        #    best_value = self.details['skills'][best_skill]
+        #else:
+        #    return None
+
+        '''
+        Finds the best skill for this fighter and this weapon.
+
+        Returns None if no skill matching the given weapon was found, else
+            dict: {'name': best_skill, 'value': best_value}
+        '''
+        best_skill = None
+        best_value = None
+        for skill_camel, value in weapon['type'][mode]['skill'].iteritems():
+            skill_lower = skill_camel.lower()
+            found_skill = False
+            if skill_camel in self.details['skills']:
+                value += self.details['skills'][skill_camel]
+                found_skill = True
+            elif skill_lower in self.details['current']:
+                value += self.details['current'][skill_lower]
+                found_skill = True
+            if found_skill and (best_value is None or value > best_value):
+                best_value = value
+                best_skill = skill_camel
+
+        if best_skill is None or best_value is None:
+            return None
+
+        return {'name': best_skill, 'value': best_value}
+

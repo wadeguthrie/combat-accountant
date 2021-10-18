@@ -325,69 +325,29 @@ class CharacterGcs(object):
         if count_element is not None:
             new_thing['count'] = int(count_element.text)
 
-        notes_element = item.find('quantity')
+        notes_element = item.find('notes')
         if notes_element is not None:
             new_thing['notes'] = notes_element.text
 
         # Is it armor?
         dr_bonus_element = item.find('dr_bonus')
         if dr_bonus_element is not None:
-            new_thing['type'].append('armor')
             dr_element = dr_bonus_element.find('amount')
-            new_thing['dr'] = int(dr_element.text)
+            new_thing['type']['armor'] = {'dr': int(dr_element.text)}
 
             blank_item = self.__ruleset.make_empty_armor()
             for key, value in blank_item.iteritems():
                 if key not in new_thing:
                     new_thing[key] = value
 
-        # Melee weapon?
-        # NOTE: only doing melee weapon _or_ ranged weapon because the data
-        #   structures aren't setup to save damage from each, separately
-        # TODO: change data structures so that an item can be both a melee
-        #   weapon and a ranged weapon
         if item.find('melee_weapon') is not None:
-            self.__get_melee_weapon_damaage(new_thing,
-                                            item)
-        elif item.find('ranged_weapon') is not None:
-            weapon_element = item.find('ranged_weapon')
-            self.__get_ranged_weapon_damaage(new_thing,
-                                             weapon_element)
-
-            shots_element = weapon_element.find('shots')
-            if shots_element is not None: # shots: T(1), or 8(3) or 8 (3)
-                match = re.match(
-                        '(?P<shots>T|[0-9]+) *' +
-                        '\( *(?P<reload>[0-9]+)\).*',
-                        shots_element.text)
-                if match:
-                    new_thing['ammo'] = { 'name': '*UNKNOWN*'}
-                    if match.group('shots') == 'T': # Thrown
-                        new_thing['ammo']['shots'] = 1
-                        new_thing['ammo']['shots_left'] = 1
-                    else:
-                        shots = int(match.group('shots'))
-                        new_thing['ammo']['shots'] = shots
-                        new_thing['ammo']['shots_left'] = shots
-
-                    new_thing['reload'] = int(match.group('reload'))
-
-                '''
-                {
-                  "clip": {
-                    "count": 2, "notes": "", "type": [ "misc" ], "owners": null, "name": "C Cell"
-                  },
-                }
-                '''
-
-            blank_item = self.__ruleset.make_empty_missile_weapon()
-            for key, value in blank_item.iteritems():
-                if key not in new_thing:
-                    new_thing[key] = value
+            self.__get_melee_weapon(new_thing, item)
+        if item.find('ranged_weapon') is not None:
+            self.__get_ranged_weapon(new_thing, item)
 
         # Container?
         if item.tag == 'equipment_container':
-            new_thing['type'].append('container')
+            new_thing['type']['container'] = {}
             new_thing['stuff'] = []
             #print '<< CONTAINER'
             for contents in item.findall('equipment_container'):
@@ -398,7 +358,7 @@ class CharacterGcs(object):
 
         # Now add to the creature
         if len(new_thing['type']) == 0:
-            new_thing['type'].append('misc')
+            new_thing['type']['misc'] = {}
 
         for thing in stuff_gcs:
             if ImportCharacter.find_differences(thing, new_thing) is None:
@@ -411,6 +371,7 @@ class CharacterGcs(object):
 
     def __add_skill_to_weapon(self,
                               weapon_dict,      # dict: creating this weapon
+                              mode,             # string: 'swung weapon', ...
                               weapon_element    # xml.etree.ElementTree element
                               ):
         '''
@@ -420,9 +381,10 @@ class CharacterGcs(object):
 
         Returns nothing.
         '''
+        weapon_dict['type'][mode]['skill'] = {}
+
         # Skill -- find the first one with skill modifier == 0
         still_need_a_skill = True
-        weapon_dict['skill'] = {}
         # 'default' elements each describe a single skill (or attribute) that
         # can be used to use this item.  There're typically several as in:
         # knife (+0), sword (-2), DX (-4)
@@ -448,7 +410,8 @@ class CharacterGcs(object):
                         skill = '%s (%s)' % (skill_element.text,
                                              specialty_element.text)
                     still_need_a_skill = False
-                    weapon_dict['skill'][skill] = int(value_element.text)
+                    weapon_dict['type'][mode]['skill'][skill] = int(
+                            value_element.text)
             else:
                 # Looking for something like this:
 				#   <default>
@@ -461,10 +424,11 @@ class CharacterGcs(object):
                     # Then we're talking 'dx' or something as a default
                     value_element = default_element.find('modifier')
                     if value_element is not None:
-                        weapon_dict['skill'][skill] = int(value_element.text)
+                        weapon_dict['type'][mode]['skill'][skill] = int(
+                                value_element.text)
 
         if still_need_a_skill:
-            weapon_dict['skill']['** UNKNOWN **'] = 0
+            weapon_dict['type'][mode]['skill']['** UNKNOWN **'] = 0
             self.__window_manager.error([
                 'No skill for "%s" in GCS file -- adding dummy' %
                 weapon_dict['name']
@@ -727,89 +691,49 @@ class CharacterGcs(object):
                 cost_gcs += levels
         return cost_gcs
 
-    def __get_gcs_attribute(self,
-                            attr_name # string
-                            ):
-        attr_gcs_element = self.__char_gcs.find(attr_name)
-        attr_gcs_text = attr_gcs_element.text
-        attr_gcs = int(attr_gcs_text)
-        return attr_gcs
+    def __get_damage(self,
+                     weapon_element # ElementTree object
+                     ):
+        # <melee_weapon>
+        # <damage type="fat" base="1d+1"/>
+        # <strength>9</strength> <usage>Swung</usage>
+        # <reach>1</reach> <parry>0</parry> <block>No</block>
+        #    <default> <type>DX</type> <modifier>-5</modifier> </default>
+        #    <default> <type>Skill</type> <name>Broadsword</name> <modifier>0</modifier> </default>
+        #    <default> <type>Skill</type> <name>Rapier</name> <modifier>-4</modifier> </default>
+        #    <default> <type>Skill</type> <name>Saber</name> <modifier>-4</modifier> </default>
+        #    <default> <type>Skill</type> <name>Axe/Mace</name> <modifier>0</modifier> </default>
+        # </melee_weapon>
+        #
+        # "type": {
+        #   "swung weapon": {"damage": {"dice": { "plus": 1, "num_dice": 1, "type": "fat" }}}
+        # }
 
-    def __get_melee_weapon_damaage(self,
-                                   new_thing,   # dict for item
-                                   item         # xml.etree equipment element
-                                   ):
-        new_thing['type'].append('melee weapon')
-        new_thing['damage'] = {}
+        # The damage seems to be stored in one of two ways (maybe it's
+        # a version thing?):
+        #   .text could be 'sw-2 cut' or 'thr imp'
+        #   .attrib could be type=cut st=sw base=-2 or type=fat base=1d+1
 
-        for melee_weapon_element in item.findall('melee_weapon'):
-            damage_element = melee_weapon_element.find('damage')
+        damage_element = weapon_element.find('damage')
 
-            # The damage seems to be stored in one of two ways (maybe it's
-            # a version thing?):
-            #   .text could be 'sw-2 cut' or 'thr imp'
-            #   .attrib could be type=cut st=sw base=-2 or type=fat base=1d+1
-
-            _st = ''
-            _type = ''
-            _base = ''
-            if damage_element.text is not None and len(damage_element.text) > 0:
-                # For strength-based damage (like a knife): sw-3 cut
-                match = re.match(
-                        '(?P<st>[a-zA-Z]+)' +
-                        '(?P<base>[+-]?[0-9]*) *' +
-                        '(?P<type>[a-zA-Z]+).*',
-                        damage_element.text)
-                if match is not None: # NOTE: sick stick has damage 1d+1 fat
-                    _st = match.group('st')
-                    _type = match.group('type')
-                    _base = (0 if len(match.group('base')) == 0
-                             else int(match.group('base')))
-                    new_thing['damage'][_st] = {'plus': _base, 'type': _type}
-                else:
-                    # For non-strength-based damage (like a sick stick): 1d1+1 fat
-                    match = re.match(
-                            '(?P<dice>[0-9]*)(?P<d>d?)' +
-                            '(?P<sign>[+-]?)(?P<plus>[0-9]*) *' +
-                            '(?P<type>[a-zA-Z]*)',
-                            damage_element.text)
-                    if match is not None:
-                        _num_dice = (0 if (match.group('dice') is None or
-                                     len(match.group('dice')) == 0) else
-                                     int(match.group('dice')))
-                        _plus = (0 if (match.group('plus') is None or
-                                     len(match.group('plus')) == 0) else
-                                     int(match.group('plus')))
-                        if (match.group('sign') is not None and
-                                len(match.group('sign')) > 0):
-                            sign = 1 if match.group('sign') == '+' else -1
-                            _plus *= sign
-                        _type = ('pi'
-                                 if (match.group('type') is None or
-                                     len(match.group('type')) == 0) else
-                                     match.group('type'))
-                        new_thing['damage']['dice'] = {
-                                'num_dice': _num_dice,
-                                'plus': _plus,
-                                'type': _type}
-
-            elif 'st' in damage_element.attrib: # 1d+4 or -2 or 3d
-                _st = damage_element.attrib['st']
-                _base = (0 if 'base' not in damage_element.attrib else
-                        int(damage_element.attrib['base']))
-                _type = ('pi' # random but after-armor damage is x1
-                        if 'type' not in damage_element.attrib else
-                        damage_element.attrib['type'])
-                new_thing['damage'][_st] = {'plus': _base, 'type': _type}
-
-            elif 'base' in damage_element.attrib: # 1d+4 or -2 or 3d
-                _type = ('pi' # random but after-armor damage is x1
-                        if 'type' not in damage_element.attrib else
-                        damage_element.attrib['type'])
+        _st = ''
+        _type = ''
+        _base = ''
+        damage = {}
+        if damage_element.text is not None and len(damage_element.text) > 0:
+            match = re.match(
+                    '(?P<st>[a-zA-Z]+)' +
+                    '(?P<base>[+-]?[0-9]*) *' +
+                    '(?P<type>[a-zA-Z]+).*',
+                    damage_element.text)
+            if match is None:
+                # <damage>1d+1 fat</damage>
+                # {"damage": {"dice":{"plus":1,"num_dice":1,"type":"fat"}}}
                 match = re.match(
                         '(?P<dice>[0-9]*)(?P<d>d?)' +
-                        '(?P<sign>[+-]?)(?P<plus>[0-9]*) *',
-                        damage_element.attrib['base'])
+                        '(?P<sign>[+-]?)(?P<plus>[0-9]*) *' +
+                        '(?P<type>[a-zA-Z]*)',
+                        damage_element.text)
                 if match is not None:
                     _num_dice = (0 if (match.group('dice') is None or
                                  len(match.group('dice')) == 0) else
@@ -821,14 +745,95 @@ class CharacterGcs(object):
                             len(match.group('sign')) > 0):
                         sign = 1 if match.group('sign') == '+' else -1
                         _plus *= sign
+                    _type = ('pi'
+                             if (match.group('type') is None or
+                                 len(match.group('type')) == 0) else
+                                 match.group('type'))
+                    damage['dice'] = {
+                            'num_dice': _num_dice,
+                            'plus': _plus,
+                            'type': _type}
+            else:
+                # strength based, like:
+                # <damage st="sw" type="cut" base="-2"/>
+                # {"damage": {"st": "sw", "type": "cut", "plus": -2}},
+                _st = match.group('st')
+                _type = match.group('type')
+                _base = (0 if len(match.group('base')) == 0
+                         else int(match.group('base')))
+                damage = {'st': _st, 'plus': _base, 'type': _type}
 
-                new_thing['damage']['dice'] = {'num_dice': _num_dice,
-                                               'plus': _plus,
-                                               'type': _type}
+        elif 'st' in damage_element.attrib: # 1d+4 or -2 or 3d
+            # <damage type="cr" st="thr" base="-1"/>
+            # "damage": {"st": "thr", "plus": -1, "type": "cr"}}
+            _st = damage_element.attrib['st']
+            _base = (0 if 'base' not in damage_element.attrib else
+                    int(damage_element.attrib['base']))
+            _type = ('pi' # random but after-armor damage is x1
+                    if 'type' not in damage_element.attrib else
+                    damage_element.attrib['type'])
+            damage = {'st': _st, 'plus': _base, 'type': _type}
 
-            self.__add_skill_to_weapon(new_thing, melee_weapon_element)
+        elif 'base' in damage_element.attrib: # 1d+4 or -2 or 3d
+            # <damage type="fat" base="1d+1"/>
+            # "damage": {"dice": {"plus":1,"num_dice":1,"type":"fat"}}
 
-        parry_element = melee_weapon_element.find('parry')
+            _type = ('pi' # random but after-armor damage is x1
+                    if 'type' not in damage_element.attrib else
+                    damage_element.attrib['type'])
+            match = re.match(
+                    '(?P<dice>[0-9]*)(?P<d>d?)' +
+                    '(?P<sign>[+-]?)(?P<plus>[0-9]*) *',
+                    damage_element.attrib['base'])
+            if match is not None:
+                _num_dice = (0 if (match.group('dice') is None or
+                             len(match.group('dice')) == 0) else
+                             int(match.group('dice')))
+                _plus = (0 if (match.group('plus') is None or
+                             len(match.group('plus')) == 0) else
+                             int(match.group('plus')))
+                if (match.group('sign') is not None and
+                        len(match.group('sign')) > 0):
+                    sign = 1 if match.group('sign') == '+' else -1
+                    _plus *= sign
+
+            damage['dice'] = {'num_dice': _num_dice,
+                              'plus': _plus,
+                              'type': _type}
+        return damage
+
+    def __get_gcs_attribute(self,
+                            attr_name # string
+                            ):
+        attr_gcs_element = self.__char_gcs.find(attr_name)
+        attr_gcs_text = attr_gcs_element.text
+        attr_gcs = int(attr_gcs_text)
+        return attr_gcs
+
+    def __get_melee_weapon(self,
+                           new_thing,   # dict for item
+                           item         # xml.etree element
+                           ):
+
+        type_from_usage = {'Swung': 'swung weapon',
+                           'Thrust': 'thrust weapon',
+                           'Thrown': 'thrown weapon',
+                           }
+        if 'type' not in new_thing:
+            new_thing['type'] = {}
+        damage = {}
+
+        for weapon_element in item.findall('melee_weapon'):
+            damage = self.__get_damage(weapon_element)
+
+            usage_element = weapon_element.find('usage')
+            usage = 'Swung' if usage_element is None else usage_element.text
+            item_type = ('unknown weapon' if usage not in type_from_usage else
+                         type_from_usage[usage])
+            new_thing['type'][item_type] = {'damage': damage}
+            self.__add_skill_to_weapon(new_thing, item_type, weapon_element)
+
+        parry_element = weapon_element.find('parry')
         if (parry_element is not None and parry_element.text is not None
                 and len(parry_element.text) > 0):
             parry = int(parry_element.text)
@@ -839,76 +844,75 @@ class CharacterGcs(object):
             if key not in new_thing:
                 new_thing[key] = value
 
-    def __get_ranged_weapon_damaage(
-            self,
-            new_thing,      # dict for item
-            weapon_element  # xml.etree ranged_weapon element
-            ):
-        new_thing['type'].append('ranged weapon')
+    def __get_ranged_weapon(self,
+                            new_thing,      # dict for item
+                            item            # xml.etree element
+                            ):
+        # PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
 
-        # Skill -- find the first one with skill modifier == 0
-        self.__add_skill_to_weapon(new_thing, weapon_element)
-        bulk_element = weapon_element.find('bulk')
-        if bulk_element is not None:
-            new_thing['bulk'] = int(bulk_element.text)
+        if 'type' not in new_thing:
+            new_thing['type'] = {}
+        damage = {}
 
-        # accuracy x+y where |x| is the accuracy of the weapon and |y| is
-        # the accuracy of the built-in scope
+        for weapon_element in item.findall('ranged_weapon'):
+            damage = self.__get_damage(weapon_element)
 
-        accuracy_element = weapon_element.find('accuracy')
-        new_thing['acc'] = 0
-        if accuracy_element is not None:
-            values_string = accuracy_element.text.replace('+', ' ')
-            values = values_string.split()
-            for value in values:
-                new_thing['acc'] += int(value)
+            new_thing['type']['ranged weapon'] = {'damage': damage}
+            self.__add_skill_to_weapon(new_thing, 'ranged weapon', weapon_element)
 
-        damage_element = weapon_element.find('damage')
-        if damage_element is not None:
-            new_thing['damage'] = {'dice': {}}
-            # ignoring armor_divisor
-            if 'type' in damage_element.attrib:
-                new_thing['damage']['dice']['type'] = (
-                        damage_element.attrib['type'])
-            damage_text = None
-            if 'base' in damage_element.attrib: # 1d+4 or -2 or 3d
-                damage_text = damage_element.attrib['base']
-            elif damage_element.text is not None and len(damage_element.text) > 0:
-                damage_text = damage_element.text
+            bulk_element = weapon_element.find('bulk')
+            if (bulk_element is not None and bulk_element.text is not None
+                    and len(bulk_element.text) > 0):
+                new_thing['bulk'] = int(bulk_element.text)
 
-            if damage_text is not None:
-                new_thing['damage']['dice']['num_dice'] = 0
-                new_thing['damage']['dice']['plus'] = 0
-                new_thing['damage']['dice']['type'] = '* UNKNOWN *'
+            # accuracy x+y where |x| is the accuracy of the weapon and |y| is
+            # the accuracy of the built-in scope
+
+            accuracy_element = weapon_element.find('accuracy')
+            new_thing['acc'] = 0
+            if (accuracy_element is not None and accuracy_element.text is not None
+                    and len(accuracy_element.text) > 0):
+                values_string = accuracy_element.text.replace('+', ' ')
+                values = values_string.split()
+                for value in values:
+                    new_thing['acc'] += int(value)
+
+            # shots: T(1), or 8(3) or 8 (3)
+
+            shots_element = weapon_element.find('shots')
+            if (shots_element is not None and shots_element.text is not None
+                    and len(shots_element.text) > 0):
                 match = re.match(
-                        '(?P<dice>[0-9]*)(?P<d>d?)' +
-                        '(?P<sign>[+-]?)(?P<plus>[0-9]*).*',
-                        damage_text)
+                        '(?P<shots>T|[0-9]+) *' +
+                        '\( *(?P<reload>[0-9]+)\).*',
+                        shots_element.text)
                 if match:
-                    if len(match.group('dice')) > 0:
-                        if len(match.group('d')) == 0:
-                            window_manager.error([
-                                'Problem parsing base damage "%s" for %s' %
-                                (damage_text, new_thing['name'])
-                                ])
-                        else:
-                            new_thing['damage']['dice']['num_dice'] = (
-                                    int(match.group('dice')))
+                    new_thing['ammo'] = { 'name': '*UNKNOWN*'}
+                    if match.group('shots') == 'T': # Thrown
+                        new_thing['ammo']['shots'] = 1
+                        new_thing['ammo']['shots_left'] = 1
+                    else:
+                        shots = int(match.group('shots'))
+                        new_thing['ammo']['shots'] = shots
+                        new_thing['ammo']['shots_left'] = shots
 
-                    if (len(match.group('sign')) == 0 or
-                            match.group('sign') == '+'):
-                        sign = 1
-                    elif match.group('sign') == '-':
-                        sign = -1
+                    new_thing['reload'] = int(match.group('reload'))
 
-                    if len(match.group('plus')) > 0:
-                        new_thing['damage']['dice']['plus'] = (
-                                int(match.group('plus')) * sign)
-                else:
-                    window_manager.error([
-                        'Problem parsing base info "%s" for %s' %
-                        (damage_text, new_thing['name'])
-                        ])
+            '''
+            {
+              "clip": {
+                "count": 2, "notes": "", "type": [ "misc" ], "owners": null, "name": "C Cell"
+              },
+            }
+            '''
+
+        blank_item = self.__ruleset.make_empty_missile_weapon()
+        for key, value in blank_item.iteritems():
+            if key not in new_thing:
+                new_thing[key] = value
+
+        # print '\n== New Thing ==' # TODO: remove
+        # PP.pprint(new_thing) # TODO: remove
 
 class ImportCharacter(object):
     def __init__(self,
@@ -941,17 +945,14 @@ class ImportCharacter(object):
 
         # We don't care if the counts, notes, or owners aren't the same
 
-        if 'melee weapon' in existing_item['type']:
+        if ('melee weapon' in existing_item['type'] or
+            'swung weapon' in existing_item['type'] or
+            'thrust weapon' in existing_item['type']):
             if not ImportCharacter.is_optional_element_equal('parry',
                                                              existing_item,
                                                              new_item):
                 found_differences = True
                 differences.append('parry')
-
-            if ('skill' not in existing_item or 'skill' not in new_item or
-                    existing_item['skill'] != new_item['skill']):
-                found_differences = True
-                differences.append('skill')
 
         if 'ranged weapon' in existing_item['type']:
             if not ImportCharacter.is_optional_element_equal('bulk',
@@ -972,14 +973,11 @@ class ImportCharacter(object):
                 found_differences = True
                 differences.append('reload')
 
-            if ('skill' not in existing_item or 'skill' not in new_item or
-                    existing_item['skill'] != new_item['skill']):
-                found_differences = True
-                differences.append('skill')
-
         if 'armor' in existing_item['type']:
-            if ('dr' not in existing_item or 'dr' not in new_item or
-                    existing_item['dr'] != new_item['dr']):
+            existing_armor = existing_item['type']['armor']
+            new_armor = new_item['type'].get('armor', None)
+            if (new_armor is None or 'dr' not in new_armor or
+                    existing_armor['dr'] != new_armor['dr']):
                 found_differences = True
                 differences.append('dr')
 
@@ -1025,6 +1023,11 @@ class ImportCharacter(object):
         self.__import_techniques()
         self.__import_spells()
         self.__import_equipment(squash=False)
+
+    def pprint(self):
+        print '\n=== Import Creature ==='
+        PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
+        PP.pprint(self.__char_json)
 
     def update_data(self):
         changes = []
@@ -1457,6 +1460,7 @@ class GcsImport(object):
         name = char_gcs.get_name()
         character = ImportCharacter(self.__window_manager, char_json, char_gcs)
         character.import_data()
+        #character.pprint() # TODO: remove
         return name, char_json
 
     def update_creature(self,
