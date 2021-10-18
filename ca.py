@@ -22,6 +22,9 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# -- trying to make Janice / Amanda work --
+# TODO: deal with thrown weapons.
+
 # TODO: flesh-out attack, all-out
 # TODO: grenade support (missile-like but not with clips)
 # TODO: unarmed Dual-Weapon attack

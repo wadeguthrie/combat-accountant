@@ -2632,14 +2632,30 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                 weapon.shots(),
                                                 reloads))
 
-                        weapon_notes = weapon.notes()
-                        if weapon_notes is not None and len(weapon_notes) > 0:
-                            notes.append("  %s" % weapon_notes)
+                    if 'techniques' in fighter.details:
+                        for technique in fighter.details['techniques']:
+                            # These techniques are handled elsewhere
+                            if (technique['name'] == 'Dual-Weapon Attack' or
+                                    technique['name'] == 'Off-Hand Weapon Training'):
+                                continue
+                            for default in technique['default']:
+                                if default == weapon_skill['name']:
+                                    skill = technique['value'] + weapon_skill['value']
+                                    crit, fumble = self.__get_crit_fumble(to_hit)
+                                    notes.append(
+                                            '  Technique, %s: %d, crit <= %d, fumble >= %d' % (
+                                        technique['name'], skill, crit, fumble))
+
+
+                    weapon_notes = weapon.notes()
+                    if weapon_notes is not None and len(weapon_notes) > 0:
+                        notes.append("  NOTES: %s" % weapon_notes)
                 else:
                     self._window_manager.error(
                             ['%s requires skill "%s" does not have' %
                                 (weapon.details['name'],
                                  fighter.name)])
+
 
         return notes
 
