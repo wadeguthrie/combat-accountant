@@ -2503,7 +2503,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             output.append([{'text': '  (None)', 'mode': mode}])
 
     def get_fighter_description_medium(self,
-                                       fighter  # Fighter object
+                                       fighter, # Fighter object
+                                       output   # [[{'text':...,'mode':...}...
                                        ):
         '''
         Returns medium-length description of the fighter
@@ -2514,7 +2515,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                     fighter.details['permanent']['hp'],
                                     fighter.details['current']['fp'],
                                     fighter.details['permanent']['fp'])
-        return fighter_string
+        fighter_state = fighter.get_state()
+        mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
+                | curses.A_BOLD)
+        output.append([{'text': fighter_string, 'mode': mode}])
 
     def get_fighter_description_short(self,
                                       fighter,      # Fighter object

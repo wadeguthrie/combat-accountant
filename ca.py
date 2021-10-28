@@ -650,24 +650,6 @@ class FightGmWindow(ca_gui.GmWindow):
     # Private Methods
     #
 
-    def __show_fighter(self,
-                       fighter,  # Fighter object
-                       window    # Curses window
-                       ):
-        '''
-        Display's a summary of a single fighter.
-
-        Returns: True if the fighter is alive (indicating that showing the
-        fighter's notes might be in order), False otherwise
-        '''
-        show_more_info = True  # conscious -- show all the fighter's info
-        fighter_string = fighter.get_description_medium()
-        fighter_state = fighter.get_state()
-        mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
-                | curses.A_BOLD)
-        #window.addstr(self.__FIGHTER_LINE, 0, fighter_string, mode)
-        return show_more_info
-
     # TODO: incorporate into ruleset.get_fighter_description_medium
     def __show_fighter_notes(self,
                              fighter,           # Fighter object
@@ -694,9 +676,7 @@ class FightGmWindow(ca_gui.GmWindow):
         mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
                 | curses.A_BOLD)
 
-        fighter_string = fighter.get_description_medium()
-        output.append([{'text': fighter_string, 'mode': mode}])
-
+        fighter.get_description_medium(output)
 
         if fighter_state == ca_fighter.Fighter.FIGHT:
             pass
