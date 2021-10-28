@@ -830,14 +830,21 @@ class Fighter(ThingsInFight):
                                                    output,
                                                    expand_containers)
 
-    def get_description_medium(self,
-                               output   # [[{'text':..., 'mode':...}...]]
-                               ):
+    def get_description_medium(
+            self,
+            output,         # [[{'text':...,'mode':...}...
+            fighter,        # Fighter object
+            opponent,       # Fighter object
+            is_attacker,    # True | False
+            ):
         '''
         Returns a string that contains a short (but not the shortest)
         description of the state of the Fighter.
         '''
-        self._ruleset.get_fighter_description_medium(self, output)
+        self._ruleset.get_fighter_description_medium(output,
+                                                     self,
+                                                     opponent,
+                                                     is_attacker)
 
     def get_notes(self):
         '''
