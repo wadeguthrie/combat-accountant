@@ -579,26 +579,22 @@ class FightGmWindow(ca_gui.GmWindow):
         if he has one.
         '''
 
-        self._window.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
-        self._window.clrtoeol()
+        #self._window.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
+        #self._window.clrtoeol()
 
-        if self.__show_fighter(current_fighter,
-                               self.__FIGHTER_COL):
-            self.__show_fighter_notes(current_fighter,
-                                      opponent,
-                                      is_attacker=True,
-                                      window=self.__character_window)
+        self.__show_fighter_notes(current_fighter,
+                                  opponent,
+                                  is_attacker=True,
+                                  window=self.__character_window)
 
         if opponent is None:
             self.__opponent_window.clear()
             self.__opponent_window.refresh()
         else:
-            if self.__show_fighter(opponent,
-                                   self.__OPPONENT_COL):
-                self.__show_fighter_notes(opponent,
-                                          current_fighter,
-                                          is_attacker=False,
-                                          window=self.__opponent_window)
+            self.__show_fighter_notes(opponent,
+                                      current_fighter,
+                                      is_attacker=False,
+                                      window=self.__opponent_window)
         self.__show_summary_window(fighters, current_index, selected_index)
         self.refresh()
 
@@ -616,13 +612,13 @@ class FightGmWindow(ca_gui.GmWindow):
         '''
         lines, cols = self._window.getmaxyx()
         height = (lines                 # The whole window height, except...
-            - (self.__FIGHTER_LINE+1)   # ...a block at the top, and...
+            - (self.__FIGHTER_LINE)   # ...a block at the top, and...
             - (self._command_ribbon['lines_for_choices'] + 1))
                                         # ...a space for the command ribbon.
 
         self.fighter_win_width = self.__pane_width - self.__margin_width
 
-        top_line = self.__FIGHTER_LINE+1  # Start after the main fighter info
+        top_line = self.__FIGHTER_LINE  # Start after the main fighter info
 
         self.__character_window = self._window_manager.new_native_window(
                 height,
@@ -656,7 +652,7 @@ class FightGmWindow(ca_gui.GmWindow):
 
     def __show_fighter(self,
                        fighter,  # Fighter object
-                       column    # int: column in which to display |fighter|
+                       window    # Curses window
                        ):
         '''
         Display's a summary of a single fighter.
@@ -669,7 +665,7 @@ class FightGmWindow(ca_gui.GmWindow):
         fighter_state = fighter.get_state()
         mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
                 | curses.A_BOLD)
-        self._window.addstr(self.__FIGHTER_LINE, column, fighter_string, mode)
+        #window.addstr(self.__FIGHTER_LINE, 0, fighter_string, mode)
         return show_more_info
 
     # TODO: incorporate into ruleset.get_fighter_description_medium
@@ -691,11 +687,17 @@ class FightGmWindow(ca_gui.GmWindow):
         # Build the output
         #
 
+
         # Show whether fighter's condition
 
         fighter_state = fighter.get_state()
         mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
                 | curses.A_BOLD)
+
+        fighter_string = fighter.get_description_medium()
+        output.append([{'text': fighter_string, 'mode': mode}])
+
+
         if fighter_state == ca_fighter.Fighter.FIGHT:
             pass
         elif fighter_state == ca_fighter.Fighter.DEAD:
