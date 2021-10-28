@@ -22,8 +22,6 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# -- trying to make Janice / Amanda work --
-# TODO: deal with thrown weapons.
 
 # TODO: flesh-out attack, all-out
 # TODO: grenade support (missile-like but not with clips)
@@ -579,9 +577,6 @@ class FightGmWindow(ca_gui.GmWindow):
         if he has one.
         '''
 
-        #self._window.move(self.__FIGHTER_LINE, self.__FIGHTER_COL)
-        #self._window.clrtoeol()
-
         self.__show_fighter_notes(current_fighter,
                                   opponent,
                                   is_attacker=True,
@@ -705,7 +700,7 @@ class FightGmWindow(ca_gui.GmWindow):
                                                         fighter.get_state())
             fighter_string = '%s%s' % (
                             ('> ' if line == current_index else '  '),
-                            fighter.get_short_summary_string(
+                            fighter.get_description_short(
                                 self.__fight_handler))
 
             if selected_index is not None and selected_index == line:

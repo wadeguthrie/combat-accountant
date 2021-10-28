@@ -130,10 +130,25 @@ class ThingsInFight(object):
         '''
         return None, None
 
-    def get_description_medium(self):
+    def get_description_medium(
+            self,
+            output,         # [[{'text':...,'mode':...}...
+            fighter,        # Fighter object
+            opponent,       # Fighter object
+            is_attacker,    # True | False
+            ):
+
         '''
         Returns a string that contains a short (but not the shortest)
         description of the state of the Fighter or Venue.
+        '''
+        return '%s' % self.name
+
+    def get_description_short(self,
+                              fight_handler  # FightHandler, ignored
+                              ):
+        '''
+        Returns a string that contains the shortest description of the Fighter.
         '''
         return '%s' % self.name
 
@@ -145,14 +160,6 @@ class ThingsInFight(object):
         base class.
         '''
         return None
-
-    def get_short_summary_string(self,
-                                 fight_handler  # FightHandler, ignored
-                                 ):
-        '''
-        Returns a string that contains the shortest description of the Fighter.
-        '''
-        return '%s' % self.name
 
     def get_to_hit_damage_notes(self,
                                 opponent  # Throw away Fighter object
@@ -231,21 +238,21 @@ class Venue(ThingsInFight):
         self.detailed_name = Venue.detailed_name % group
 
     def get_description_long(self,
-                        char_detail,  # recepticle for character detail.
+                             output,  # recepticle for character detail.
                                       #     [[{'text','mode'},...],  # line 0
                                       #      [...],               ]  # line 1..
-                        expand_containers   # Bool, ignored in the base class
-                        ):
+                             expand_containers   # Bool, ignored in the base class
+                             ):
         '''
         Provides a text description of all of the components of a Venue.
 
-        Returns: nothing -- output is written to the |char_detail| variable
+        Returns: nothing -- output is written to the |output| variable
         '''
 
         # stuff
 
         mode = curses.A_NORMAL
-        char_detail.append([{'text': 'Equipment',
+        output.append([{'text': 'Equipment',
                              'mode': mode | curses.A_BOLD}])
 
         found_one = False
@@ -253,15 +260,15 @@ class Venue(ThingsInFight):
             for item in sorted(self.details['stuff'], key=lambda x: x['name']):
                 found_one = True
                 ca_equipment.EquipmentManager.get_description(
-                        item, '', [], False, char_detail)
+                        item, '', [], False, output)
 
         if not found_one:
-            char_detail.append([{'text': '  (None)', 'mode': mode}])
+            output.append([{'text': '  (None)', 'mode': mode}])
 
         # Timers
 
         mode = curses.A_NORMAL
-        char_detail.append([{'text': 'Timers', 'mode': mode | curses.A_BOLD}])
+        output.append([{'text': 'Timers', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
         timers = self.timers.get_all()  # objects
@@ -270,30 +277,30 @@ class Venue(ThingsInFight):
             text = timer.get_description()
             leader = '  '
             for line in text:
-                char_detail.append([{'text': '%s%s' % (leader, line),
+                output.append([{'text': '%s%s' % (leader, line),
                                      'mode': mode}])
                 leader = '    '
 
         if not found_one:
-            char_detail.append([{'text': '  (None)', 'mode': mode}])
+            output.append([{'text': '  (None)', 'mode': mode}])
 
         # Notes
 
         mode = curses.A_NORMAL
-        char_detail.append([{'text': 'Notes', 'mode': mode | curses.A_BOLD}])
+        output.append([{'text': 'Notes', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
         if 'notes' in self.details:
             for note in self.details['notes']:
                 found_one = True
-                char_detail.append([{'text': '  %s' % note, 'mode': mode}])
+                output.append([{'text': '  %s' % note, 'mode': mode}])
 
         if not found_one:
-            char_detail.append([{'text': '  (None)', 'mode': mode}])
+            output.append([{'text': '  (None)', 'mode': mode}])
 
-    def get_short_summary_string(self,
-                                 fight_handler  # FightHandler, ignored
-                                 ):
+    def get_description_short(self,
+                              fight_handler  # FightHandler, ignored
+                              ):
         '''
         Returns a string that contains the shortest description of the Fighter.
         '''
@@ -815,11 +822,11 @@ class Fighter(ThingsInFight):
         return defense_notes, defense_why
 
     def get_description_long(self,
-                        output,  # recepticle for character detail.
-                                 #  [[{'text','mode'},...],  # line 0
-                                 #   [...],               ]  # line 1...
-                        expand_containers   # Bool
-                        ):
+                             output,  # recepticle for character detail.
+                                      #  [[{'text','mode'},...],  # line 0
+                                      #   [...],               ]  # line 1...
+                             expand_containers   # Bool
+                             ):
         '''
         Provides a text description of a Fighter including all of the
         attributes (current and permanent), equipment, etc.
@@ -846,6 +853,17 @@ class Fighter(ThingsInFight):
                                                      opponent,
                                                      is_attacker)
 
+    def get_description_short(self,
+                              fight_handler  # FightHandler, ignored
+                              ):
+        '''
+        Returns a string that contains the shortest description of the Fighter.
+        '''
+        fighter_string = self._ruleset.get_fighter_description_short(
+                self, fight_handler)
+
+        return fighter_string
+
     def get_notes(self):
         '''
         Returns a list of strings describing the current fighting state of the
@@ -854,17 +872,6 @@ class Fighter(ThingsInFight):
         '''
         notes = self._ruleset.get_fighter_notes(self)
         return notes
-
-    def get_short_summary_string(self,
-                                 fight_handler  # FightHandler, ignored
-                                 ):
-        '''
-        Returns a string that contains the shortest description of the Fighter.
-        '''
-        fighter_string = self._ruleset.get_fighter_description_short(
-                self, fight_handler)
-
-        return fighter_string
 
     def get_to_hit_damage_notes(self,
                                 opponent  # Fighter object
