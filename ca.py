@@ -685,9 +685,11 @@ class FightGmWindow(ca_gui.GmWindow):
 
         Returns nothing.
         '''
-        window.clear()
-        lines, cols = window.getmaxyx()
-        line = 0
+        output = []
+
+        #
+        # Build the output
+        #
 
         # Show whether fighter's condition
 
@@ -697,24 +699,15 @@ class FightGmWindow(ca_gui.GmWindow):
         if fighter_state == ca_fighter.Fighter.FIGHT:
             pass
         elif fighter_state == ca_fighter.Fighter.DEAD:
-            # TODO (eventually): make the window scrollable rather than limit
-            if line < lines:
-                window.addstr(line, 0, '** DEAD **', mode)
-                line += 1
+            output.append([{'text': '** DEAD **', 'mode': mode}])
         elif fighter_state == ca_fighter.Fighter.UNCONSCIOUS:
-            if line < lines:
-                window.addstr(line, 0, '** UNCONSCIOUS **', mode)
-                line += 1
+            output.append([{'text': '** UNCONSCIOUS **', 'mode': mode}])
         elif fighter_state == ca_fighter.Fighter.ABSENT:
-            if line < lines:
-                window.addstr(line, 0, '** ABSENT **', mode)
-                line += 1
+            output.append([{'text': '** ABSENT **', 'mode': mode}])
         elif fighter.details['stunned']:
             mode = curses.color_pair(
                     ca_gui.GmWindowManager.MAGENTA_BLACK) | curses.A_BOLD
-            if line < lines:
-                window.addstr(line, 0, '** STUNNED **', mode)
-                line += 1
+            output.append([{'text': '** STUNNED **', 'mode': mode}])
 
         # Defender
 
@@ -727,9 +720,7 @@ class FightGmWindow(ca_gui.GmWindow):
         notes, ignore = fighter.get_defenses_notes(opponent)
         if notes is not None:
             for note in notes:
-                if line < lines:
-                    window.addstr(line, 0, note, mode)
-                    line += 1
+                output.append([{'text': note, 'mode': mode}])
 
         # Attacker
 
@@ -741,9 +732,7 @@ class FightGmWindow(ca_gui.GmWindow):
         notes = fighter.get_to_hit_damage_notes(opponent)
         if notes is not None:
             for note in notes:
-                if line < lines:
-                    window.addstr(line, 0, note, mode)
-                    line += 1
+                output.append([{'text': note, 'mode': mode}])
 
         # Show equipment for the 'room'
 
@@ -751,45 +740,46 @@ class FightGmWindow(ca_gui.GmWindow):
             char_info = []
             fighter.get_description_long(char_info, expand_containers=False)
 
-            for line_text in char_info:
-                if line >= lines:
-                    break
-
-                left = 0
-                y_start, x_start = window.getyx()
-                for piece in line_text:
-                    window.addstr(line, left, piece['text'], piece['mode'])
-                    left += len(piece['text'])
-                y, x = window.getyx()
-
-                if y == y_start:
-                    line += 1
-                else:
-                    line += y - y_start
-
         # now, back to normal
         mode = curses.A_NORMAL
         notes = fighter.get_notes()
         if notes is not None:
             for note in notes:
-                if line < lines:
-                    window.addstr(line, 0, note, mode)
-                    line += 1
+                output.append([{'text': note, 'mode': mode}])
 
         # Timers
         for timer in fighter.timers.get_all():
             strings = timer.get_description()
             for string in strings:
-                if line < lines:
-                    window.addstr(line, 0, string, mode)
-                    line += 1
+                output.append([{'text': string, 'mode': mode}])
 
         if ('fight-notes' in fighter.details and
                 fighter.details['fight-notes'] is not None):
             for note in fighter.details['fight-notes']:
-                if line < lines:
-                    window.addstr(line, 0, note, mode)
-                    line += 1
+                output.append([{'text': note, 'mode': mode}])
+
+        #
+        # Display the output
+        # TODO (eventually): make the window scrollable rather than limit
+        #
+
+        window.clear()
+        lines, cols = window.getmaxyx()
+        line = 0
+        for pieces in output:
+            if line >= lines:
+                break
+            left = 0
+            y_start, x_start = window.getyx()
+            for piece in pieces:
+                window.addstr(line, left, piece['text'], piece['mode'])
+                left += len(piece['text'])
+            y, x = window.getyx()
+
+            if y == y_start:
+                line += 1
+            else:
+                line += y - y_start
 
         window.refresh()
 
