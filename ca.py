@@ -665,13 +665,14 @@ class FightGmWindow(ca_gui.GmWindow):
         fighter's notes might be in order), False otherwise
         '''
         show_more_info = True  # conscious -- show all the fighter's info
-        fighter_string = fighter.get_long_summary_string()
+        fighter_string = fighter.get_description_medium()
         fighter_state = fighter.get_state()
         mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
                 | curses.A_BOLD)
         self._window.addstr(self.__FIGHTER_LINE, column, fighter_string, mode)
         return show_more_info
 
+    # TODO: incorporate into ruleset.get_fighter_description_medium
     def __show_fighter_notes(self,
                              fighter,           # Fighter object
                              opponent,          # Fighter object
@@ -748,7 +749,7 @@ class FightGmWindow(ca_gui.GmWindow):
 
         if fighter_state == ca_fighter.Fighter.FIGHT:
             char_info = []
-            fighter.get_description(char_info, expand_containers=False)
+            fighter.get_description_long(char_info, expand_containers=False)
 
             for line_text in char_info:
                 if line >= lines:
@@ -6233,7 +6234,7 @@ class FightHandler(ScreenHandler):
         if info_about is None:
             return True  # Keep fighting
 
-        info_about.get_description(char_info, expand_containers=False)
+        info_about.get_description_long(char_info, expand_containers=False)
         self._window_manager.display_window('%s Information' % info_about.name,
                                             char_info)
         return True
