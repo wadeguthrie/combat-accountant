@@ -650,7 +650,6 @@ class FightGmWindow(ca_gui.GmWindow):
     # Private Methods
     #
 
-    # TODO: incorporate into ruleset.get_fighter_description_medium
     def __show_fighter_notes(self,
                              fighter,           # Fighter object
                              opponent,          # Fighter object
@@ -664,81 +663,7 @@ class FightGmWindow(ca_gui.GmWindow):
         Returns nothing.
         '''
         output = []
-
-        #
-        # Build the output
-        #
-
-
-        # Show whether fighter's condition
-
-        fighter_state = fighter.get_state()
-        mode = (self._window_manager.get_mode_from_fighter_state(fighter_state)
-                | curses.A_BOLD)
-
-        fighter.get_description_medium(output)
-
-        if fighter_state == ca_fighter.Fighter.FIGHT:
-            pass
-        elif fighter_state == ca_fighter.Fighter.DEAD:
-            output.append([{'text': '** DEAD **', 'mode': mode}])
-        elif fighter_state == ca_fighter.Fighter.UNCONSCIOUS:
-            output.append([{'text': '** UNCONSCIOUS **', 'mode': mode}])
-        elif fighter_state == ca_fighter.Fighter.ABSENT:
-            output.append([{'text': '** ABSENT **', 'mode': mode}])
-        elif fighter.details['stunned']:
-            mode = curses.color_pair(
-                    ca_gui.GmWindowManager.MAGENTA_BLACK) | curses.A_BOLD
-            output.append([{'text': '** STUNNED **', 'mode': mode}])
-
-        # Defender
-
-        if is_attacker:
-            mode = curses.A_NORMAL
-        else:
-            mode = self._window_manager.color_of_fighter()
-            mode = mode | curses.A_BOLD
-
-        notes, ignore = fighter.get_defenses_notes(opponent)
-        if notes is not None:
-            for note in notes:
-                output.append([{'text': note, 'mode': mode}])
-
-        # Attacker
-
-        if is_attacker:
-            mode = self._window_manager.color_of_fighter()
-            mode = mode | curses.A_BOLD
-        else:
-            mode = curses.A_NORMAL
-        notes = fighter.get_to_hit_damage_notes(opponent)
-        if notes is not None:
-            for note in notes:
-                output.append([{'text': note, 'mode': mode}])
-
-        # Show equipment for the 'room'
-
-        if fighter_state == ca_fighter.Fighter.FIGHT:
-            char_info = []
-            fighter.get_description_long(char_info, expand_containers=False)
-
-        # now, back to normal
-        mode = curses.A_NORMAL
-        notes = fighter.get_notes()
-        if notes is not None:
-            for note in notes:
-                output.append([{'text': note, 'mode': mode}])
-
-        # Timers
-        for timer in fighter.timers.get_all():
-            strings = timer.get_description()
-            for string in strings:
-                output.append([{'text': string, 'mode': mode}])
-
-        if ('fight-notes' in fighter.details and
-                fighter.details['fight-notes'] is not None):
-            for note in fighter.details['fight-notes']:
-                output.append([{'text': note, 'mode': mode}])
+        fighter.get_description_medium(output, fighter, opponent, is_attacker)
 
         #
         # Display the output
