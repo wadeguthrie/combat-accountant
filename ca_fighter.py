@@ -130,7 +130,7 @@ class ThingsInFight(object):
         '''
         return None, None
 
-    def get_long_summary_string(self):
+    def get_description_medium(self):
         '''
         Returns a string that contains a short (but not the shortest)
         description of the state of the Fighter or Venue.
@@ -230,7 +230,7 @@ class Venue(ThingsInFight):
                                     window_manager)
         self.detailed_name = Venue.detailed_name % group
 
-    def get_description(self,
+    def get_description_long(self,
                         char_detail,  # recepticle for character detail.
                                       #     [[{'text','mode'},...],  # line 0
                                       #      [...],               ]  # line 1..
@@ -814,7 +814,7 @@ class Fighter(ThingsInFight):
                                                                 opponent)
         return defense_notes, defense_why
 
-    def get_description(self,
+    def get_description_long(self,
                         output,  # recepticle for character detail.
                                  #  [[{'text','mode'},...],  # line 0
                                  #   [...],               ]  # line 1...
@@ -826,22 +826,16 @@ class Fighter(ThingsInFight):
 
         Returns: nothing.  The output is written to the |output| variable.
         '''
-        self._ruleset.get_character_description(self,
-                                                output,
-                                                expand_containers)
+        self._ruleset.get_fighter_description_long(self,
+                                                   output,
+                                                   expand_containers)
 
-    def get_long_summary_string(self):
+    def get_description_medium(self):
         '''
         Returns a string that contains a short (but not the shortest)
         description of the state of the Fighter.
         '''
-        # TODO (eventually): this is ruleset-based
-        fighter_string = '%s HP: %d/%d FP: %d/%d' % (
-                                    self.name,
-                                    self.details['current']['hp'],
-                                    self.details['permanent']['hp'],
-                                    self.details['current']['fp'],
-                                    self.details['permanent']['fp'])
+        fighter_string = self._ruleset.get_fighter_description_medium(self)
         return fighter_string
 
     def get_notes(self):
@@ -859,24 +853,8 @@ class Fighter(ThingsInFight):
         '''
         Returns a string that contains the shortest description of the Fighter.
         '''
-        # TODO (eventually): this is ruleset based
-        fighter_string = '%s HP:%d/%d' % (self.name,
-                                          self.details['current']['hp'],
-                                          self.details['permanent']['hp'])
-
-        if 'label' in self.details and self.details['label'] is not None:
-            fighter_string += ' - %s' % self.details['label']
-
-        if self.is_dead():
-            fighter_string += ' - DEAD'
-        elif 'stunned' in self.details and self.details['stunned']:
-            fighter_string += ' - STUNNED'
-        else:
-            if self.timers.is_busy():
-                fighter_string += ' - BUSY'
-
-            if fight_handler.is_fighter_holding_init(self.name, self.group):
-                fighter_string += ' - HOLDING INIT'
+        fighter_string = self._ruleset.get_fighter_description_short(
+                self, fight_handler)
 
         return fighter_string
 

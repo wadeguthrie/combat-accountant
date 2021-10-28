@@ -2041,225 +2041,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return block_skill, block_why
 
-    def get_character_description(
-            self,
-            character,          # Fighter object
-            output,             # recepticle for character data.
-                                # [[{'text','mode'},...], # line 0
-                                #  [...],               ] # line 1
-            expand_containers   # Bool
-            ):
-        '''
-        Provides a text description of a Fighter including all of the
-        attributes (current and permanent), equipment, skills, etc.
-
-        Portions of the character description are ruleset-specific.  That's
-        why this routine is in GurpsRuleset rather than in the Fighter class.
-
-        Returns: nothing.  The output is written to the |output| variable.
-        '''
-
-        # attributes
-
-        mode = curses.A_NORMAL
-        output.append([{'text': 'Attributes', 'mode': mode | curses.A_BOLD}])
-        found_one = False
-        pieces = []
-
-        first_row = ['st', 'dx', 'iq', 'ht', 'per']
-        first_row_pieces = {}
-        for row in range(2):
-            found_one_this_row = False
-            for item_key in character.details['permanent'].iterkeys():
-                in_first_row = item_key in first_row
-                if row == 0 and not in_first_row:
-                    continue
-                if row != 0 and in_first_row:
-                    continue
-                text = '%s:%d/%d' % (item_key,
-                                     character.details['current'][item_key],
-                                     character.details['permanent'][item_key])
-                if (character.details['current'][item_key] ==
-                        character.details['permanent'][item_key]):
-                    mode = curses.A_NORMAL
-                else:
-                    mode = (curses.color_pair(
-                            ca_gui.GmWindowManager.YELLOW_BLACK) |
-                            curses.A_BOLD)
-
-                if row == 0:
-                    # Save the first row as pieces so we can put them in the
-                    # proper order, later.
-                    first_row_pieces[item_key] = {'text': '%s ' % text,
-                                                  'mode': mode}
-                else:
-                    pieces.append({'text': '%s ' % text, 'mode': mode})
-                found_one = True
-                found_one_this_row = True
-
-            if found_one_this_row:
-                if row == 0:
-                    for item_key in first_row:
-                        pieces.append(first_row_pieces[item_key])
-
-                pieces.insert(0, {'text': '  ', 'mode': curses.A_NORMAL})
-                output.append(copy.deepcopy(pieces))
-                del pieces[:]
-
-        if not found_one:
-            output.append([{'text': '  (None)', 'mode': mode}])
-
-        # stuff
-
-        mode = curses.A_NORMAL
-        output.append([{'text': 'Equipment', 'mode': mode | curses.A_BOLD}])
-
-        in_use_items = []
-
-        armor_index_list = character.get_current_armor_indexes()
-        armor_list = character.get_items_from_indexes(armor_index_list)
-
-        for armor_in_use in armor_list:
-            in_use_items.append(armor_in_use)
-        weapons = character.get_current_weapons()
-
-        for weapon_in_use in weapons:
-            if weapon_in_use is None:
-                continue
-            in_use_items.append(weapon_in_use.details)
-
-        preferred_item_indexes = character.get_preferred_item_indexes()
-        preferred_items = character.get_items_from_indexes(
-                preferred_item_indexes)
-
-        if len(character.details['open-container']) == 0:
-            open_item = None
-            sub_items = []
-        else:
-            sub_items = copy.deepcopy(character.details['open-container'])
-            open_item_index = sub_items.pop(0)
-            open_items = character.get_items_from_indexes([open_item_index])
-            open_item = open_items[0]
-
-        found_one = False
-        for item in sorted(character.details['stuff'],
-                           key=lambda x: x['name']):
-            found_one = True
-
-            in_use_string = ' (in use)' if item in in_use_items else ''
-            preferred_string = ' (preferred)' if item in preferred_items else ''
-            open_string = ' (OPEN)' if item is open_item else ''
-
-            qualifiers = '%s%s%s' % (in_use_string, preferred_string, open_string)
-
-            ca_equipment.EquipmentManager.get_description(
-                    item, qualifiers, sub_items, expand_containers, output)
-
-        if not found_one:
-            output.append([{'text': '  (None)', 'mode': mode}])
-
-        # advantages
-
-        mode = curses.A_NORMAL
-        output.append([{'text': 'Advantages', 'mode': mode | curses.A_BOLD}])
-
-        found_one = False
-        for advantage, value in sorted(
-                character.details['advantages'].iteritems(),
-                key=lambda (k, v): (k, v)):
-            found_one = True
-            output.append([{'text': '  %s: %r' % (advantage, value),
-                            'mode': mode}])
-
-        if not found_one:
-            output.append([{'text': '  (None)', 'mode': mode}])
-
-        # skills
-
-        mode = curses.A_NORMAL
-        output.append([{'text': 'Skills', 'mode': mode | curses.A_BOLD}])
-
-        PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
-        skills_dict = copy.deepcopy(character.details['skills'])
-        if 'techniques' in character.details:
-            for tech in character.details['techniques']:
-                for default_name in tech['default']:
-                    default_value = skills_dict.get(default_name, 0)
-                    skills_dict['%s (%s)' % (tech['name'], default_name)
-                        ] = tech['value'] + default_value
-
-        found_one = False
-        for skill, value in sorted(skills_dict.iteritems(),
-                                   key=lambda (k, v): (k, v)):
-            found_one = True
-            crit, fumble = self.__get_crit_fumble(value)
-            output.append([{'text': '  %s: %d --- crit <=%d, fumble >=%d' %
-                                (skill, value, crit, fumble),
-                            'mode': mode}])
-
-        if not found_one:
-            output.append([{'text': '  (None)', 'mode': mode}])
-
-        # spells
-
-        if 'spells' in character.details:
-            mode = curses.A_NORMAL
-            output.append([{'text': 'Spells', 'mode': mode | curses.A_BOLD}])
-
-            found_one = False
-            for spell in sorted(character.details['spells'],
-                                key=lambda(x): x['name']):
-                if spell['name'] not in GurpsRuleset.spells:
-                    self._window_manager.error(
-                        ['Spell "%s" not in GurpsRuleset.spells' %
-                            spell['name']]
-                        )
-                    continue
-                complete_spell = copy.deepcopy(spell)
-                complete_spell.update(GurpsRuleset.spells[spell['name']])
-                found_one = True
-                output.append(
-                        [{'text': '  %s (%d): %s' % (complete_spell['name'],
-                                                     complete_spell['skill'],
-                                                     complete_spell['notes']),
-                          'mode': mode}])
-
-            if not found_one:
-                output.append([{'text': '  (None)', 'mode': mode}])
-
-        # timers
-
-        mode = curses.A_NORMAL
-        output.append([{'text': 'Timers', 'mode': mode | curses.A_BOLD}])
-
-        found_one = False
-        timers = character.timers.get_all()  # objects
-        for timer in timers:
-            found_one = True
-            text = timer.get_description()
-            leader = '  '
-            for line in text:
-                output.append([{'text': '%s%s' % (leader, line),
-                                'mode': mode}])
-                leader = '    '
-
-        if not found_one:
-            output.append([{'text': '  (None)', 'mode': mode}])
-
-        # notes
-
-        mode = curses.A_NORMAL
-        output.append([{'text': 'Notes', 'mode': mode | curses.A_BOLD}])
-
-        found_one = False
-        if 'notes' in character.details:
-            for note in character.details['notes']:
-                found_one = True
-                output.append([{'text': '  %s' % note, 'mode': mode}])
-
-        if not found_one:
-            output.append([{'text': '  (None)', 'mode': mode}])
-
     def get_creature_abilities(self):
         '''
         Returns the list of capabilities that, according to the ruleset, a
@@ -2501,6 +2282,263 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     why.append('  %s' % armor['notes'])
 
         return notes, why
+
+    def get_fighter_description_long(
+            self,
+            character,          # Fighter object
+            output,             # recepticle for character data.
+                                # [[{'text','mode'},...], # line 0
+                                #  [...],               ] # line 1
+            expand_containers   # Bool
+            ):
+        '''
+        Provides a text description of a Fighter including all of the
+        attributes (current and permanent), equipment, skills, etc.
+
+        Portions of the character description are ruleset-specific.  That's
+        why this routine is in GurpsRuleset rather than in the Fighter class.
+
+        Returns: nothing.  The output is written to the |output| variable.
+        '''
+
+        # attributes
+
+        mode = curses.A_NORMAL
+        output.append([{'text': 'Attributes', 'mode': mode | curses.A_BOLD}])
+        found_one = False
+        pieces = []
+
+        first_row = ['st', 'dx', 'iq', 'ht', 'per']
+        first_row_pieces = {}
+        for row in range(2):
+            found_one_this_row = False
+            for item_key in character.details['permanent'].iterkeys():
+                in_first_row = item_key in first_row
+                if row == 0 and not in_first_row:
+                    continue
+                if row != 0 and in_first_row:
+                    continue
+                text = '%s:%d/%d' % (item_key,
+                                     character.details['current'][item_key],
+                                     character.details['permanent'][item_key])
+                if (character.details['current'][item_key] ==
+                        character.details['permanent'][item_key]):
+                    mode = curses.A_NORMAL
+                else:
+                    mode = (curses.color_pair(
+                            ca_gui.GmWindowManager.YELLOW_BLACK) |
+                            curses.A_BOLD)
+
+                if row == 0:
+                    # Save the first row as pieces so we can put them in the
+                    # proper order, later.
+                    first_row_pieces[item_key] = {'text': '%s ' % text,
+                                                  'mode': mode}
+                else:
+                    pieces.append({'text': '%s ' % text, 'mode': mode})
+                found_one = True
+                found_one_this_row = True
+
+            if found_one_this_row:
+                if row == 0:
+                    for item_key in first_row:
+                        pieces.append(first_row_pieces[item_key])
+
+                pieces.insert(0, {'text': '  ', 'mode': curses.A_NORMAL})
+                output.append(copy.deepcopy(pieces))
+                del pieces[:]
+
+        if not found_one:
+            output.append([{'text': '  (None)', 'mode': mode}])
+
+        # stuff
+
+        mode = curses.A_NORMAL
+        output.append([{'text': 'Equipment', 'mode': mode | curses.A_BOLD}])
+
+        in_use_items = []
+
+        armor_index_list = character.get_current_armor_indexes()
+        armor_list = character.get_items_from_indexes(armor_index_list)
+
+        for armor_in_use in armor_list:
+            in_use_items.append(armor_in_use)
+        weapons = character.get_current_weapons()
+
+        for weapon_in_use in weapons:
+            if weapon_in_use is None:
+                continue
+            in_use_items.append(weapon_in_use.details)
+
+        preferred_item_indexes = character.get_preferred_item_indexes()
+        preferred_items = character.get_items_from_indexes(
+                preferred_item_indexes)
+
+        if len(character.details['open-container']) == 0:
+            open_item = None
+            sub_items = []
+        else:
+            sub_items = copy.deepcopy(character.details['open-container'])
+            open_item_index = sub_items.pop(0)
+            open_items = character.get_items_from_indexes([open_item_index])
+            open_item = open_items[0]
+
+        found_one = False
+        for item in sorted(character.details['stuff'],
+                           key=lambda x: x['name']):
+            found_one = True
+
+            in_use_string = ' (in use)' if item in in_use_items else ''
+            preferred_string = ' (preferred)' if item in preferred_items else ''
+            open_string = ' (OPEN)' if item is open_item else ''
+
+            qualifiers = '%s%s%s' % (in_use_string, preferred_string, open_string)
+
+            ca_equipment.EquipmentManager.get_description(
+                    item, qualifiers, sub_items, expand_containers, output)
+
+        if not found_one:
+            output.append([{'text': '  (None)', 'mode': mode}])
+
+        # advantages
+
+        mode = curses.A_NORMAL
+        output.append([{'text': 'Advantages', 'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        for advantage, value in sorted(
+                character.details['advantages'].iteritems(),
+                key=lambda (k, v): (k, v)):
+            found_one = True
+            output.append([{'text': '  %s: %r' % (advantage, value),
+                            'mode': mode}])
+
+        if not found_one:
+            output.append([{'text': '  (None)', 'mode': mode}])
+
+        # skills
+
+        mode = curses.A_NORMAL
+        output.append([{'text': 'Skills', 'mode': mode | curses.A_BOLD}])
+
+        PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+        skills_dict = copy.deepcopy(character.details['skills'])
+        if 'techniques' in character.details:
+            for tech in character.details['techniques']:
+                for default_name in tech['default']:
+                    default_value = skills_dict.get(default_name, 0)
+                    skills_dict['%s (%s)' % (tech['name'], default_name)
+                        ] = tech['value'] + default_value
+
+        found_one = False
+        for skill, value in sorted(skills_dict.iteritems(),
+                                   key=lambda (k, v): (k, v)):
+            found_one = True
+            crit, fumble = self.__get_crit_fumble(value)
+            output.append([{'text': '  %s: %d --- crit <=%d, fumble >=%d' %
+                                (skill, value, crit, fumble),
+                            'mode': mode}])
+
+        if not found_one:
+            output.append([{'text': '  (None)', 'mode': mode}])
+
+        # spells
+
+        if 'spells' in character.details:
+            mode = curses.A_NORMAL
+            output.append([{'text': 'Spells', 'mode': mode | curses.A_BOLD}])
+
+            found_one = False
+            for spell in sorted(character.details['spells'],
+                                key=lambda(x): x['name']):
+                if spell['name'] not in GurpsRuleset.spells:
+                    self._window_manager.error(
+                        ['Spell "%s" not in GurpsRuleset.spells' %
+                            spell['name']]
+                        )
+                    continue
+                complete_spell = copy.deepcopy(spell)
+                complete_spell.update(GurpsRuleset.spells[spell['name']])
+                found_one = True
+                output.append(
+                        [{'text': '  %s (%d): %s' % (complete_spell['name'],
+                                                     complete_spell['skill'],
+                                                     complete_spell['notes']),
+                          'mode': mode}])
+
+            if not found_one:
+                output.append([{'text': '  (None)', 'mode': mode}])
+
+        # timers
+
+        mode = curses.A_NORMAL
+        output.append([{'text': 'Timers', 'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        timers = character.timers.get_all()  # objects
+        for timer in timers:
+            found_one = True
+            text = timer.get_description()
+            leader = '  '
+            for line in text:
+                output.append([{'text': '%s%s' % (leader, line),
+                                'mode': mode}])
+                leader = '    '
+
+        if not found_one:
+            output.append([{'text': '  (None)', 'mode': mode}])
+
+        # notes
+
+        mode = curses.A_NORMAL
+        output.append([{'text': 'Notes', 'mode': mode | curses.A_BOLD}])
+
+        found_one = False
+        if 'notes' in character.details:
+            for note in character.details['notes']:
+                found_one = True
+                output.append([{'text': '  %s' % note, 'mode': mode}])
+
+        if not found_one:
+            output.append([{'text': '  (None)', 'mode': mode}])
+
+    def get_fighter_description_medium(self,
+                                       fighter  # Fighter object
+                                       ):
+        '''
+        Returns medium-length description of the fighter
+        '''
+        fighter_string = '%s HP: %d/%d FP: %d/%d' % (
+                                    fighter.name,
+                                    fighter.details['current']['hp'],
+                                    fighter.details['permanent']['hp'],
+                                    fighter.details['current']['fp'],
+                                    fighter.details['permanent']['fp'])
+        return fighter_string
+
+    def get_fighter_description_short(self,
+                                      fighter,      # Fighter object
+                                      fight_handler # FightHandler object
+                                      ):
+        fighter_string = '%s HP:%d/%d' % (fighter.name,
+                                          fighter.details['current']['hp'],
+                                          fighter.details['permanent']['hp'])
+
+        if 'label' in fighter.details and fighter.details['label'] is not None:
+            fighter_string += ' - %s' % fighter.details['label']
+
+        if fighter.is_dead():
+            fighter_string += ' - DEAD'
+        elif 'stunned' in fighter.details and fighter.details['stunned']:
+            fighter_string += ' - STUNNED'
+        else:
+            if fighter.timers.is_busy():
+                fighter_string += ' - BUSY'
+
+            if fight_handler.is_fighter_holding_init(fighter.name, fighter.group):
+                fighter_string += ' - HOLDING INIT'
+
+        return fighter_string
 
     def get_fighter_notes(self,
                           fighter   # Fighter object
