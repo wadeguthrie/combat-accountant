@@ -641,9 +641,6 @@ class Weapon(object):
             return self.__set_parameter('shots_left', new_value, ammo=True)
         return self.__get_parameter('shots_left', ammo=True)
 
-    #def to_hit(self): # Is this used?
-    #    return self.__get_parameter('to_hit')
-
     def use_one_ammo(self):
         '''
         Returns True if successful, False otherwise

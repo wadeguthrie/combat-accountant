@@ -667,7 +667,8 @@ class Fighter(ThingsInFight):
         weapon_list = []
         for weapon_index in weapon_indexes:
             if weapon_index is None:
-                weapon_list.append(None)
+                weapon = self._ruleset.get_unarmed_weapon()
+                weapon_list.append(weapon)
             else:
                 item = self.equipment.get_item_by_index(weapon_index)
                 weapon = ca_equipment.Weapon(item)

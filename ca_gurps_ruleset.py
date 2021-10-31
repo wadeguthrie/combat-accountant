@@ -1603,6 +1603,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                           17: 'neck',
                           18: 'neck'}
 
+    all_unarmed_skills = ['Brawling', 'Boxing', 'Karate']
+
     (MAJOR_WOUND_SUCCESS,
      MAJOR_WOUND_SIMPLE_FAIL,
      MAJOR_WOUND_BAD_FAIL) = range(3)
@@ -1780,13 +1782,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         if weapon is None:
             return True
 
-        #all_unarmed_skills = ['dx', 'Brawling', 'Boxing', 'Karate']
-        all_unarmed_skills = ['Brawling', 'Boxing', 'Karate']
-
         modes = weapon.get_attack_modes()
         for mode in modes:
             for skill in weapon.details['type'][mode]['skill'].iterkeys():
-                if skill in all_unarmed_skills:
+                if skill in GurpsRuleset.all_unarmed_skills:
                     return True
 
         return False
@@ -2877,6 +2876,33 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         #   aim, stunned, shock, posture, actions_this_turn,
 
         return sections
+
+    def get_unarmed_weapon(self):
+        item = {
+          "count": 1,
+          "owners": null,
+          "name": "unarmed",
+          "notes": "",
+          "parry": 0,
+          "type": {
+            "punch": {"damage": {"st": "sw", "plus": -2, "type": "cut"},
+                             "skill": {"Karate": 0,
+                                       "Boxing": 0,
+                                       "Brawling": 0,
+                                       "DX": 0}
+                             },
+            "kick": {"damage": {"st": "thr", "plus": 0, "type": "imp"},
+                             "skill": {"Karate": 0,
+                                       "Boxing": 0,
+                                       "Brawling": 0,
+                                       "DX": 0}
+                              }
+          }
+        }
+
+        # TODO:
+        # weapon = ca_equipment.Weapon(item)
+        return None
 
     def get_to_hit(self,
                    fighter,     # Fighter object
