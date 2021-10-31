@@ -22,11 +22,18 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: GmScrollableWindow should have their lines public and all access to
+#   those should be through the object's data
+
+# TODO: Make unarmed stuff more closely mirror the armed stuff.
+
+# TODO: make sure unarmed stuff works:
+#   * unarmed Dual-Weapon attack
+#   * unarmed parry
+#   * brass knuckles
 
 # TODO: flesh-out attack, all-out
 # TODO: grenade support (missile-like but not with clips)
-# TODO: unarmed Dual-Weapon attack
-# TODO: unarmed parry
 
 # TODO: ISSUE 9: maintain spell
 # TODO: ISSUE 20: need a way to generate equipment
@@ -615,6 +622,7 @@ class FightGmWindow(ca_gui.GmWindow):
 
         top_line = self.__FIGHTER_LINE  # Start after the main fighter info
 
+        # TODO: eventually, make these ca_gui.GmScrollableWindow windows
         self.__character_window = self._window_manager.new_native_window(
                 height,
                 self.fighter_win_width,
