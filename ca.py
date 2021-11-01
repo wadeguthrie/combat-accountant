@@ -22,6 +22,15 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: player mode
+#   - no dead-monsters, no stuff (always import), no names
+#   - need PersonnelHandler to add NPCs.  No need for fights/monsters or PCs.
+#   - special fights (just one type of monster, add as necessary, only 1 fight, ever)
+#   - one kind of bad guy (unknown)
+#   - saved fights/bug reports should know what options the program was running
+
+# TODO: add RoF (rate of fire) and make it work with shotguns.
+
 # TODO: GmScrollableWindow should have their lines public and all access to
 #   those should be through the object's data
 
@@ -4124,7 +4133,7 @@ class FightHandler(ScreenHandler):
                                         #   errors
                  world,                 # World object
                  monster_group,         # string
-                 playback_history,      # dict from bug report (usually None)
+                 replay_history,      # dict from bug report (usually None)
                  save_snapshot=True     # Here so tests can disable it
                  ):
         super(FightHandler, self).__init__(window_manager, world)
@@ -4137,18 +4146,18 @@ class FightHandler(ScreenHandler):
         self.__saved_history = None
 
         # If we're playing back history from a bug report and this fight has
-        # spanned multiple sessions, start the playback history from the
+        # spanned multiple sessions, start the replay history from the
         # beginning of the most recent session (since the snapshot is from
         # that spot).
-        if (playback_history is not None and
-                'playback_start_index' in world.details['current-fight']):
-            self.__next_playback_action_index = (
-                    world.details['current-fight']['playback_start_index'])
+        if (replay_history is not None and
+                'replay_start_index' in world.details['current-fight']):
+            self.__next_replay_action_index = (
+                    world.details['current-fight']['replay_start_index'])
         else:
-            self.__next_playback_action_index = 0  # Only for playback
+            self.__next_replay_action_index = 0  # Only for replay
 
         if 'history' in world.details['current-fight']:
-            world.details['current-fight']['playback_start_index'] = (
+            world.details['current-fight']['replay_start_index'] = (
                     len(world.details['current-fight']['history']))
 
         self._add_to_choice_dict({
@@ -4291,23 +4300,23 @@ class FightHandler(ScreenHandler):
                                'current fighter.'},
         })
 
-        if playback_history is not None:
+        if replay_history is not None:
             self._add_to_choice_dict({
                 ord('x'): {'name': 'Run ALL history',
-                           'func': self.__playback_history,
+                           'func': self.__replay_history,
                            'help': 'Plays back all of the history in the ' +
-                                   'playback file.'},
+                                   'replay file.'},
                 ord('y'): {'name': 'Step history 1x',
                            'func': self.__single_step_history,
                            'help': 'Plays one step of the history in the ' +
-                                   'playback file.'},
+                                   'replay file.'},
                 ord('Y'): {'name': 'Step history multi',
                            'func': self.__multi_step_history,
                            'help': 'Plays several steps of the history in ' +
-                                   'the playback file.'},
-                ord('z'): {'name': 'Show playback history',
-                           'func': self.__show_playback,
-                           'help': 'Shows the actions in the playback ' +
+                                   'the replay file.'},
+                ord('z'): {'name': 'Show replay history',
+                           'func': self.__show_replay,
+                           'help': 'Shows the actions in the replay ' +
                                    'history.'},
                     })
 
@@ -4327,9 +4336,9 @@ class FightHandler(ScreenHandler):
             # the code regenerate the list.
             fight_order = self._saved_fight['fighters']
 
-            if playback_history is not None:
+            if replay_history is not None:
                 # Make a copy of the history so I can play it back
-                self.__saved_history = playback_history
+                self.__saved_history = replay_history
 
                 # Clean out the history so we can start over
                 self.clear_history()
@@ -5666,13 +5675,13 @@ class FightHandler(ScreenHandler):
         if self.__saved_history is None:
             return True
 
-        if self.__next_playback_action_index >= len(self.__saved_history):
+        if self.__next_replay_action_index >= len(self.__saved_history):
             self._window_manager.error(
-                ['Playback history exhausted -- you are at the end.'])
+                ['replay history exhausted -- you are at the end.'])
             return True
 
-        title = ('Execute How Many Steps of Playback (next is %d/%d)?' %
-                 (self.__next_playback_action_index,
+        title = ('Execute How Many Steps of replay (next is %d/%d)?' %
+                 (self.__next_replay_action_index,
                   len(self.__saved_history)))
         height = 1
         width = len(title)
@@ -5682,14 +5691,14 @@ class FightHandler(ScreenHandler):
         if step_count is None:
             return True
 
-        if (self.__next_playback_action_index + step_count >
+        if (self.__next_replay_action_index + step_count >
                 len(self.__saved_history)):
             step_count = (len(self.__saved_history) -
-                          self.__next_playback_action_index)
+                          self.__next_replay_action_index)
 
         for i in range(step_count):
-            action = self.__saved_history[self.__next_playback_action_index]
-            self.__next_playback_action_index += 1
+            action = self.__saved_history[self.__next_replay_action_index]
+            self.__next_replay_action_index += 1
             next_fighter = self.get_current_fighter()
 
             # print '\n--- __multi_step_history'
@@ -5700,11 +5709,11 @@ class FightHandler(ScreenHandler):
         lines = []
         mode = curses.A_NORMAL
         line = 'Just executed through %d/%d' % (
-                self.__next_playback_action_index - 1,
+                self.__next_replay_action_index - 1,
                 len(self.__saved_history))
         lines.append([{'text': line, 'mode': mode}])
         self._window_manager.display_window(
-                'Just executed %d actions of playback' % step_count,
+                'Just executed %d actions of replay' % step_count,
                 lines)
 
         return True  # Keep going
@@ -5819,7 +5828,7 @@ class FightHandler(ScreenHandler):
                                    self.__viewing_index)
         return True  # Keep going
 
-    def __playback_history(self):
+    def __replay_history(self):
         '''
         Command ribbon method.
 
@@ -5833,20 +5842,20 @@ class FightHandler(ScreenHandler):
         if self.__saved_history is None:
             return True
 
-        if self.__next_playback_action_index >= len(self.__saved_history):
+        if self.__next_replay_action_index >= len(self.__saved_history):
             self._window_manager.error(
-                ['Playback history exhausted -- you are at the end.'])
+                ['replay history exhausted -- you are at the end.'])
             return True
 
         step_count = (len(self.__saved_history) -
-                      self.__next_playback_action_index)
+                      self.__next_replay_action_index)
 
         for i in range(step_count):
-            action = self.__saved_history[self.__next_playback_action_index]
-            self.__next_playback_action_index += 1
+            action = self.__saved_history[self.__next_replay_action_index]
+            self.__next_replay_action_index += 1
             next_fighter = self.get_current_fighter()
 
-            # print '\n--- __playback_history'
+            # print '\n--- __replay_history'
             # PP.pprint(action)
 
             self.__raw_single_step(next_fighter,  action)
@@ -6139,11 +6148,11 @@ class FightHandler(ScreenHandler):
                                             char_info)
         return True
 
-    def __show_playback(self):
+    def __show_replay(self):
         '''
         Command ribbon method.
 
-        Displays the actions in the playback history.
+        Displays the actions in the replay history.
 
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
@@ -6157,18 +6166,18 @@ class FightHandler(ScreenHandler):
             string = PP.pformat(action)
             pieces = string.split('\n')
             mode = (curses.A_BOLD
-                    if index >= self.__next_playback_action_index
+                    if index >= self.__next_replay_action_index
                     else curses.A_NORMAL)
             for i, piece in enumerate(pieces):
                 if i == 0:
                     piece = '%03d %s' % (index, piece)
-                    if index == self.__next_playback_action_index:
+                    if index == self.__next_replay_action_index:
                         scroll_to = len(lines)
                 else:
                     piece = '    %s' % piece
                 lines.append([{'text': piece, 'mode': mode}])
 
-        self._window_manager.display_window('Playback History',
+        self._window_manager.display_window('replay History',
                                             lines,
                                             scroll_to)
         return True  # Keep going
@@ -6207,13 +6216,13 @@ class FightHandler(ScreenHandler):
         if self.__saved_history is None:
             return True
 
-        if self.__next_playback_action_index >= len(self.__saved_history):
+        if self.__next_replay_action_index >= len(self.__saved_history):
             self._window_manager.error(
-                ['Playback history exhausted -- you are at the end.'])
+                ['replay history exhausted -- you are at the end.'])
             return True
 
-        action = self.__saved_history[self.__next_playback_action_index]
-        self.__next_playback_action_index += 1
+        action = self.__saved_history[self.__next_replay_action_index]
+        self.__next_replay_action_index += 1
         next_fighter = self.get_current_fighter()
 
         # print '\n--- __single_step_history'
@@ -6224,9 +6233,9 @@ class FightHandler(ScreenHandler):
         # Show X/Y steps and the action
 
         # TODO (eventually): there should probably be a method that formats
-        # an action.  This routine and playback_history should use it.
+        # an action.  This routine and replay_history should use it.
         lines = []
-        index = self.__next_playback_action_index - 1
+        index = self.__next_replay_action_index - 1
         string = PP.pformat(action)
         pieces = string.split('\n')
         mode = curses.A_NORMAL
@@ -6238,7 +6247,7 @@ class FightHandler(ScreenHandler):
             lines.append([{'text': piece, 'mode': mode}])
 
         self._window_manager.display_window(
-                'Just executed %d/%d of playback' % (
+                'Just executed %d/%d of replay' % (
                     index,
                     len(self.__saved_history)),
                 lines)
@@ -6519,25 +6528,28 @@ class MainHandler(ScreenHandler):
 
                  ord('h'): {'name': 'Heal all PCs',
                             'func': self.__fully_heal},
-                 ord('m'): {'name': 'show MONSTERs or PC/NPC',
+                 ord('M'): {'name': 'show MONSTERs or PC/NPC',
                             'func': self.__toggle_Monster_PC_NPC_display,
                             'help': 'Select whom to display on the main ' +
                                     'screen. '},
-                 ord('M'): {'name': 'modify Monsters',
+                 ord('m'): {'name': 'modify Monsters',
                             'func': self.__add_monsters,
                             'help': 'Change one or more monsters. You ' +
                                     'can add creatures to or subtract ' +
                                     'creatures from the selected list, ' +
                                     'modify stats, or add or remove ' +
                                     'equipment.'},
-                 ord('N'): {'name': 'modify NPCs',
+                 ord('n'): {'name': 'modify NPCs',
                             'func': self.__add_NPCs,
                             'help': 'Change non-player characters. You ' +
                                     'can add creatures to or subtract ' +
                                     'creatures from the selected list, ' +
                                     'modify stats, or add or remove ' +
                                     'equipment.'},
-                 ord('P'): {'name': 'modify PCs',
+                 #ord('N'): {'name': 'New Campaign',
+                 #           'func': self.__new_campaign,
+                 #           'help': 'Create a new campaign.'},
+                 ord('p'): {'name': 'modify PCs',
                             'func': self.__add_PCs,
                             'help': 'Change player characters. You ' +
                                     'can add creatures to or subtract ' +
@@ -6982,7 +6994,7 @@ class MainHandler(ScreenHandler):
             fight = FightHandler(self._window_manager,
                                  self.world,
                                  monster_group,
-                                 None)  # Playback history
+                                 None)  # replay history
             fight.handle_user_input_until_done()
 
             self.world.ruleset.set_timing_file(None)
@@ -7401,7 +7413,12 @@ if __name__ == '__main__':
             help='Don\'t overwrite the input Game File.  Debugging only.',
             action='store_true',
             default=False)
-    parser.add_argument('-p', '--playback',
+    #parser.add_argument(
+    #        '-p', '--player',
+    #        help='Run in "player" mode -- one fighter, unknown monster stats.',
+    #        action='store_true',
+    #        default=False)
+    parser.add_argument('-r', '--replay',
                         help='Play history from bug report folder.')
 
     ARGS = parser.parse_args()
@@ -7411,7 +7428,7 @@ if __name__ == '__main__':
 
     PP = pprint.PrettyPrinter(indent=3, width=150)
 
-    playback_history = None
+    replay_history = None
 
     program = None
     with CaGmWindowManager() as window_manager:
@@ -7424,29 +7441,29 @@ if __name__ == '__main__':
         filename = None
         report_text = None
 
-        # Do we have a Playback file (like, we're playing back a bug)?
+        # Do we have a replay file (like, we're playing back a bug)?
 
-        if ARGS.playback is not None:
-            if not os.path.isdir(ARGS.playback):
+        if ARGS.replay is not None:
+            if not os.path.isdir(ARGS.replay):
                 window_manager.error(
-                        ['Playback needs a folder name but "%s" is not one' %
-                         ARGS.playback])
+                        ['replay needs a folder name but "%s" is not one' %
+                         ARGS.replay])
                 sys.exit(2)
 
             # Find bug_report in directory
-            search_path = os.path.join(ARGS.playback, 'bug_report*')
+            search_path = os.path.join(ARGS.replay, 'bug_report*')
             files = glob.glob(search_path)
             if len(files) != 1:
                 window_manager.error(
-                        ['Playback folder expects 1 bug_report file, not %d' %
+                        ['replay folder expects 1 bug_report file, not %d' %
                          len(files)])
                 sys.exit(2)
 
             # Extract information from bug_report file
             with ca_json.GmJson(files[0]) as bug_report:
                 filename = bug_report.read_data['snapshots']['fight']
-                filename = os.path.join(ARGS.playback, filename)
-                playback_history = bug_report.read_data['history']
+                filename = os.path.join(ARGS.replay, filename)
+                replay_history = bug_report.read_data['history']
                 if 'report' in bug_report.read_data:
                     report_text = bug_report.read_data['report']
         else:
@@ -7535,8 +7552,8 @@ if __name__ == '__main__':
             # Save the state of things when we leave since there wasn't a
             # horrible crash while reading the data.
 
-            if ARGS.playback is not None:
-                # Don't save the playback changes -- that way, you can re-play
+            if ARGS.replay is not None:
+                # Don't save the replay changes -- that way, you can re-play
                 # the incident over and over without worry.
                 world.dont_save_on_exit()
                 # Safe to set this option since we're not writing it back
@@ -7568,7 +7585,7 @@ if __name__ == '__main__':
                     fight_handler = FightHandler(window_manager,
                                                  world,
                                                  None,
-                                                 playback_history)
+                                                 replay_history)
                     fight_handler.handle_user_input_until_done()
 
                     world.ruleset.set_timing_file(None)

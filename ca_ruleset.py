@@ -1657,7 +1657,7 @@ class Ruleset(object):
             'hold-init-complete':   {'doit': self.__hold_init_complete},
         }
 
-        # Label the action so playback knows who receives it.
+        # Label the action so replay knows who receives it.
 
         action['fighter'] = {'name': fighter.name,
                              'group': fighter.group}

@@ -1623,7 +1623,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
             fight_handler = ca.FightHandler(self.__window_manager,
                                             world,
                                             'horsemen',
-                                            None,  # Playback history
+                                            None,  # replay history
                                             save_snapshot=False)
             fighters = fight_handler.get_fighters()
 
