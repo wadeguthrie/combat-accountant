@@ -3839,7 +3839,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         NOTE: This is a huge tangle because, for the GurpsRuleset, we need to
         ask questions (i.e., whether or not to subtract DR from the HP).
         Because of that, there are 2 events: 1) adjust-hp asks the question
-        and generates the 2nd event adjust-hp-really EXCEPT for playback mode,
+        and generates the 2nd event adjust-hp-really EXCEPT for replay mode,
         where it does nothing.  2) adjust-hp-really contains the post-DR
         adjustment and actually reduces the HP.
 
