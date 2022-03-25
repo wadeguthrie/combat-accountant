@@ -1191,6 +1191,8 @@ class ImportCharacter(object):
                         if they_are_the_same:
                             stuff_gcs.pop(index)
                             match_gcs = True
+                            # TODO: copy unmatched things from GCS to JSON
+                            self.__merge_items(item_json, item_gcs)
                             break
                         else:
                             remove_menu = [('yes', True), ('no', False)]
@@ -1407,6 +1409,46 @@ class ImportCharacter(object):
             techniques_json.append(technique_gcs)
 
         return changes
+
+    def __merge_items(self,
+                      item_json,    # dict, destination
+                      item_gcs      # dict
+                      ):
+        '''
+        Merges equipment item |item_gcs| into |item_json|
+        '''
+        if item_json == item_gcs:
+            return
+        if isinstance(item_json, dict):
+            if not isinstance(item_json, dict):
+                return # Not worth merging if they're not the same type
+
+            for key, value in item_gcs.iteritems():
+                if key not in item_json:
+                    item_json[key] = value
+                elif item_json[key] != item_gcs[key]:
+                    if self.__is_scalar(item_json[key]):
+                        item_json[key] = item_gcs[key]
+                    else:
+                        self.__merge_items(item_json[key], item_gcs[key])
+
+        elif isinstance(item_json, list):
+            if not isinstance(item_json, list):
+                return # Not worth merging if they're not the same type
+
+            for value in item_gcs:
+                if value not in item_json:
+                    item_json.append(value)
+
+    def  __is_scalar(self,
+                     item
+                     ):
+        if isinstance(item, dict):
+            return False
+        if isinstance(item, list):
+            return False
+        # set, tuple, <class>, str, int, float
+        return True
 
 
 def timeStamped(fname,  # <string> Base filename

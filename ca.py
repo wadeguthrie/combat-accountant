@@ -7575,7 +7575,6 @@ if __name__ == '__main__':
 
                 window_manager.display_window('Playing Back Bug Report', lines)
 
-
             if world.details['current-fight']['saved']:
                 is_new = False if os.path.exists(FightHandler.timing_file) else True
                 mode = 'w' if is_new else 'a'
