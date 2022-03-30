@@ -11,17 +11,7 @@ import re
 import shutil
 import sys
 import traceback
-import xml.etree.ElementTree as ET
-
-# Examples of how ET works
-#
-# <melee_weapon>
-#   foo
-#   <damage type="cut" st="sw" base="-2"/>
-#
-# element = element.find('melee_weapon') or element.findall('melee_weapon')
-# element.text is 'foo'
-# element.attrib = {'type': 'cut', 'st': 'sw', 'base': '-2'}
+import unicodedata
 
 import ca_gui
 import ca_json
@@ -228,9 +218,12 @@ class CharacterGcs(object):
                  ruleset,
                  gcs_file   # filename holding GCS information
                 ):
+
+        with ca_json.GmJson(gcs_file) as char_file:
+            self.__char_gcs = char_file.read_data
+
         self.__window_manager = window_manager
         self.__ruleset = ruleset
-        self.__char_gcs = ET.parse(gcs_file).getroot()
         self.char = {} # JSON-like copy of character
 
         # Easier to build a separate 'stuff' list given containers and such.
@@ -250,14 +243,15 @@ class CharacterGcs(object):
         self.__build_spells()
 
     def get_name(self):
-        profile = self.__char_gcs.find('profile')
-        player_name_element = profile.find('player_name')
-        player_name = (None if player_name_element is None
-                       else player_name_element.text)
+        if 'player_name' in self.__char_gcs['profile']:
+            player_name = self.__char_gcs['profile']['player_name']
+        else:
+            player_name = None
 
-        character_name_element = profile.find('name')
-        character_name = (None if character_name_element is None
-                       else character_name_element.text)
+        if 'name' in self.__char_gcs['profile']:
+            character_name = self.__char_gcs['profile']['name']
+        else:
+            character_name = None
 
         if character_name is None:
            return 'Bob' if  player_name is None else player_name
@@ -268,93 +262,89 @@ class CharacterGcs(object):
         return '%s - %s' % (character_name.lower(), player_name)
 
     def __add_advantage_to_gcs_list(self,
-                               advantage_gcs,   # ET item
+                               advantage_gcs,   # advantage dict
                                advantages_gcs   # {name: cost, ...
                               ):
-        if advantage_gcs.tag == 'advantage_container':
+        if advantage_gcs['type'] == 'advantage_container':
             #print '<< CONTAINER'
-            for contents in advantage_gcs.findall('advantage_container'):
-                self.__add_advantage_to_gcs_list(contents, advantages_gcs)
-            for contents in advantage_gcs.findall('advantage'):
-                self.__add_advantage_to_gcs_list(contents, advantages_gcs)
+            for advantage in advantage_gcs['children']:
+                self.__add_advantage_to_gcs_list(advantage, advantages_gcs)
             #print '>> CONTAINER'
         else:
-            name = advantage_gcs.find('name')
+            name = advantage_gcs['name']
             cost_gcs = self.__get_advantage_cost(advantage_gcs)
 
-            for modifier in advantage_gcs.findall('modifier'):
-                #modifier_name = modifier.find('name')
-                #print '-modifier name: "%r"' % modifier_name.text
-                #PP.pprint(modifier.attrib)
+            if 'modifiers' in advantage_gcs:
+                for modifier in advantage_gcs['modifiers']:
+                    if 'disabled' in modifier and modifier['disabled']:
+                        continue
 
-                if ('enabled' not in modifier.attrib or
-                                    modifier.attrib['enabled'] != 'no'):
-                    modifier_cost_element = modifier.find('cost')
-                    modifier_cost = 0
-                    if modifier_cost_element is not None:
-                        modifier_cost_text = modifier_cost_element.text
-                        if modifier_cost_text is not None:
-                            cost_gcs += int(modifier_cost_text)
+                    if 'cost' in modifier:
+                        cost_gcs += int(modifier['cost'])
 
                     # Spell bonuses from a Lwa (if that applies)
 
-                    spell_bonuses_raw = modifier.findall('spell_bonus')
-                    for spell_bonus in spell_bonuses_raw:
-                        college_name = spell_bonus.find('college_name')
-                        amount = spell_bonus.find('amount')
-                        self.__spell_advantages[college_name.text] = (
-                                int(amount.text))
-            advantages_gcs[name.text] = cost_gcs
+                    if 'features' in modifier:
+                        for feature in modifier['features']:
+                            if feature['type'] == 'spell_bonus':
+                                college = feature['name']['qualifier']
+                                amount = feature['amount']
+                                self.__spell_advantages[college] = amount
+
+            advantages_gcs[name] = cost_gcs
 
     def __add_item_to_gcs_list(self,
-                               item,        # ET item
-                               stuff_gcs    # list of names of items
+                               item,        # json dict
+                               stuff_gcs,   # container of items (each, a dict)
+                               container_name   # string (for debugging)
                               ):
         '''
         Adds entries into passed-in list for each item (and, recursively, each
         item in containers) in equipment list of a GCS character.
         '''
         new_thing = self.__ruleset.make_empty_item()
-        name_element = item.find('description')
-        if name_element is not None:
+        name = item['description']
+        if name is not None:
             # This strips all the unicode characters that aren't ASCII out --
             #   it means Atatche' case doesn't cause CURSES to crash
-            new_thing['name'] = str(
-                    name_element.text.encode('utf-8').decode('ascii', 'ignore'))
-        count_element = item.find('quantity')
-        if count_element is not None:
-            new_thing['count'] = int(count_element.text)
+            unicode_name = unicode(name, "utf-8")
+            new_thing['name'] = unicodedata.normalize(
+                    'NFKD', unicode_name).encode('ascii', 'ignore').decode()
+        count = 1 if 'quantity' not in item else item['quantity']
+        new_thing['count'] = count
 
-        notes_element = item.find('notes')
-        if notes_element is not None:
-            new_thing['notes'] = notes_element.text
+        if 'notes' in item:
+            new_thing['notes'] = item['notes']
 
         # Is it armor?
-        dr_bonus_element = item.find('dr_bonus')
-        if dr_bonus_element is not None:
-            dr_element = dr_bonus_element.find('amount')
-            new_thing['type']['armor'] = {'dr': int(dr_element.text)}
+        if 'features' in item:
+            for feature in item['features']:
+                if 'type' in feature:
+                    if feature['type'] == 'dr_bonus':
+                        amount = feature['amount']
+                        # location = feature['location']
+                        new_thing['type']['armor'] = {'dr': amount}
 
-            blank_item = self.__ruleset.make_empty_armor()
-            for key, value in blank_item.iteritems():
-                if key not in new_thing:
-                    new_thing[key] = value
+                        blank_item = self.__ruleset.make_empty_armor()
+                        for key, value in blank_item.iteritems():
+                            if key not in new_thing:
+                                new_thing[key] = value
 
-        if item.find('melee_weapon') is not None:
-            self.__get_melee_weapon(new_thing, item)
-        if item.find('ranged_weapon') is not None:
-            self.__get_ranged_weapon(new_thing, item)
+        # Is it a weapon?
+        if 'weapons' in item:
+            for weapon in item['weapons']:
+                if weapon['type'] == 'melee_weapon':
+                    self.__get_melee_weapon(new_thing, item)
+
+                if weapon['type'] == 'ranged_weapon':
+                    self.__get_ranged_weapon(new_thing, item)
 
         # Container?
-        if item.tag == 'equipment_container':
+        if item['type'] == 'equipment_container' and 'children' in item:
             new_thing['type']['container'] = {}
             new_thing['stuff'] = []
-            #print '<< CONTAINER'
-            for contents in item.findall('equipment_container'):
-                self.__add_item_to_gcs_list(contents, new_thing['stuff'])
-            for contents in item.findall('equipment'):
-                self.__add_item_to_gcs_list(contents, new_thing['stuff'])
-            #print '>> CONTAINER'
+            for contents in item['children']:
+                self.__add_item_to_gcs_list(contents, new_thing['stuff'], new_thing['name'])
 
         # Now add to the creature
         if len(new_thing['type']) == 0:
@@ -370,9 +360,9 @@ class CharacterGcs(object):
             stuff_gcs.append(new_thing)
 
     def __add_skill_to_weapon(self,
-                              weapon_dict,      # dict: creating this weapon
+                              weapon_dest,      # dict: creating this weapon
                               mode,             # string: 'swung weapon', ...
-                              weapon_element    # xml.etree.ElementTree element
+                              weapon_source     # dict: from .gcs json
                               ):
         '''
         Goes through a GURPS Character Sheet description of a weapon and pulls
@@ -381,7 +371,7 @@ class CharacterGcs(object):
 
         Returns nothing.
         '''
-        weapon_dict['type'][mode]['skill'] = {}
+        weapon_dest['type'][mode]['skill'] = {}
 
         # Skill -- find the first one with skill modifier == 0
         still_need_a_skill = True
@@ -389,29 +379,24 @@ class CharacterGcs(object):
         # can be used to use this item.  There're typically several as in:
         # knife (+0), sword (-2), DX (-4)
 
-        for default_element in weapon_element.findall('default'):
-            type_element = default_element.find('type') # DX or 'Skill'
-            if (type_element is not None and type_element.text == 'Skill'):
-                # Looking for something like this:
-                #   <default>
-                #       <type>Skill</type>
-                #       <name>Beam Weapons</name>
-                #       <specialization>Rifle</specialization>
-                #       <modifier>0</modifier>
-                #   </default>
+        if 'defaults' not in weapon_source:
+            return # TODO:
 
-                value_element = default_element.find('modifier')
-                if value_element is not None:
-                    skill_element = default_element.find('name')
-                    specialty_element = default_element.find('specialization')
-                    if specialty_element is None:
-                        skill = skill_element.text
-                    else:
-                        skill = '%s (%s)' % (skill_element.text,
-                                             specialty_element.text)
-                    still_need_a_skill = False
-                    weapon_dict['type'][mode]['skill'][skill] = int(
-                            value_element.text)
+        for default in weapon_source['defaults']:
+            skill = default['type'] # DX or 'Skill'
+            modifier = 0 if 'modifier' not in default else default['modifier']
+            if (skill == 'Skill'):
+                # Looking for something like this:
+                #   "type": "Skill",
+                #   "name": "Force Sword",
+                #   "modifier": -3
+
+                skill = default['name']
+                if 'specialization' in default:
+                    skill = '%s (%s)' % (skill, default['specialization'])
+
+                weapon_dest['type'][mode]['skill'][skill] = modifier
+                still_need_a_skill = False
             else:
                 # Looking for something like this:
 				#   <default>
@@ -419,41 +404,17 @@ class CharacterGcs(object):
 				#       <modifier>-4</modifier>
 				#   </default>
 
-                skill = type_element.text
                 if skill.lower() in self.char['permanent']:
                     # Then we're talking 'dx' or something as a default
-                    value_element = default_element.find('modifier')
-                    if value_element is not None:
-                        weapon_dict['type'][mode]['skill'][skill] = int(
-                                value_element.text)
+                    weapon_dest['type'][mode]['skill'][skill] = modifier
+                    still_need_a_skill = False
 
         if still_need_a_skill:
-            weapon_dict['type'][mode]['skill']['** UNKNOWN **'] = 0
+            weapon_dest['type'][mode]['skill']['** UNKNOWN **'] = 0
             self.__window_manager.error([
                 'No skill for "%s" in GCS file -- adding dummy' %
-                weapon_dict['name']
+                weapon_dest['name']
                 ])
-
-    def __adjust_attribute(self,
-                           cost_per_point,      # int:
-                           advantage_name,      # char:
-                           disadvantage_name,   # char:
-                           adjustment_name      # char:
-                           ):
-        adjustment = 0
-
-        # Add advantages and disadvantages
-        if disadvantage_name in self.char['advantages']:
-            adjustment += (self.char['advantages'][disadvantage_name] /
-                    cost_per_point)
-        if advantage_name in self.char['advantages']:
-            adjustment += (self.char['advantages'][advantage_name] /
-                    cost_per_point)
-
-        # Add any adjustment
-        if adjustment_name is not None:
-            adjustment += self.__get_gcs_attribute(adjustment_name)
-        return adjustment
 
     def __build_advantages(self):
         self.char['advantages'] = {} # name: cost
@@ -462,96 +423,105 @@ class CharacterGcs(object):
         ## ADVANTAGES #####
         # Checks points spent
 
-        advantages_gcs_raw = self.__char_gcs.find('advantage_list')
-        for child in advantages_gcs_raw:
-            self.__add_advantage_to_gcs_list(child,
+        advantages = self.__char_gcs['advantages']
+        for advantage in advantages:
+            self.__add_advantage_to_gcs_list(advantage,
                                              self.char['advantages'])
 
     def __build_attribs(self):
-        # Depends on advantages being gathered first
-        #self.char['advantages'] = {} # name: cost
-
         self.char['permanent'] = {} # name: value
 
         # TODO: add move, and speed -- gcs has points spent / json
         # has result
         # JSON names are lower_case, GCS names are upper_case
-        attr_names_json_from_gcs = {
-                                     'ST': 'st' ,
-                                     'DX': 'dx' ,
-                                     'IQ': 'iq' ,
-                                     'HT': 'ht',
-                                   }
-        self.attrs = []
-        for gcs_name, json_name in attr_names_json_from_gcs.iteritems():
-            self.char['permanent'][json_name] = self.__get_gcs_attribute(gcs_name)
+        #   'gcs stat' = the base attribute in GCS
+        #   'adj' = GCS stat that adds to the native stat
+        attrs = {
+            # Base attributes
+            'st': {'gcs stat': 'ST',
+                   'adj': None,
+                   'cost_for_adv': None,
+                   'advantage': None,
+                   'disadvantage': None},
+            'dx': {'gcs stat': 'DX',
+                   'adj': None,
+                   'cost_for_adv': None,
+                   'advantage': None,
+                   'disadvantage': None},
+            'iq': {'gcs stat': 'IQ',
+                   'adj': None,
+                   'cost_for_adv': None,
+                   'advantage': None,
+                   'disadvantage': None},
+            'ht': {'gcs stat': 'HT',
+                   'adj': None,
+                   'cost_for_adv': None,
+                   'advantage': None,
+                   'disadvantage': None},
 
-        # HP
-        self.char['permanent']['hp'] = (self.char['permanent']['st'] +
-                self.__get_gcs_attribute('HP'))
-        cost_per_hit_point = 2
-        self.char['permanent']['hp'] += self.__adjust_attribute(
-                cost_per_hit_point,
-                'Extra Hit Points',
-                'Fewer Hit Points',
-                None)
+            # Derived attributes
+            'hp': {'gcs stat': 'ST',
+                   'adj': 'HP_adj',
+                   'cost_for_adv': 2,
+                   'advantage': 'Extra Hit Points',
+                   'disadvantage': 'Fewer Hit Points'},
+            'fp': {'gcs stat': 'HT',
+                   'adj': 'FP_adj',
+                   'cost_for_adv': 3,
+                   'advantage': 'Extra Fatigue Points',
+                   'disadvantage': 'Fewer Fatigue Points'},
+            'wi': {'gcs stat': 'IQ',
+                   'adj': 'will_adj',
+                   'cost_for_adv': 5,
+                   'advantage': 'Increased Will',
+                   'disadvantage': 'Decreased Will'},
+            'per': {'gcs stat': 'IQ',
+                   'adj': 'per_adj',
+                   'cost_for_adv': 5,
+                   'advantage': 'Increased Perception',
+                   'disadvantage': 'Decreased Perception'},
+            'basic-speed': {'gcs stat': None,
+                   'adj': 'speed_adj',
+                   'cost_for_adv': 5,
+                   'advantage': 'Increased Basic Speed',
+                   'disadvantage': 'Decreased Basic Speed'},
+            'basic-move': {'gcs stat': None,  # Derived from basic-speed
+                   'adj': 'speed_adj',    # TODO: move_adj
+                   'cost_for_adv': 5,
+                   'advantage': 'Increased Basic Move',
+                   'disadvantage': 'Decreased Basic Move'},
+        }
 
-        # FP
-        self.char['permanent']['fp'] = (self.char['permanent']['ht'] +
-                self.__get_gcs_attribute('FP'))
-        cost_per_fatigue_point = 3
-        self.char['permanent']['fp'] += self.__adjust_attribute(
-                cost_per_fatigue_point,
-                'Extra Fatigue Points',
-                'Fewer Fatigue Points',
-                None)
+        for attr_dest, attr_src in attrs.iteritems():
+            # Get the basic stat
+            gcs_name = attr_src['gcs stat']
+            value = self.__get_gcs_attribute(attr_dest,
+                                             gcs_name,
+                                             attr_src['adj'])
 
-        # WILL
-        self.char['permanent']['wi'] = self.char['permanent']['iq']
-        cost_per_will_point = 5
-        self.char['permanent']['wi'] += self.__adjust_attribute(
-                cost_per_will_point,
-                'Increased Will',
-                'Decreased Will',
-                'will')
+            # Add advantage / disadvantage adjustments
+            disadvantage_name = attr_src['disadvantage']
+            cost_per_point = attr_src['cost_for_adv']
+            if (disadvantage_name is not None and
+                    disadvantage_name in self.char['advantages']):
+                value += (self.char['advantages'][disadvantage_name] /
+                          cost_per_point)
 
-        # PERCEPTION
-        self.char['permanent']['per'] = self.char['permanent']['iq']
-        cost_per_perception_point = 5
-        self.char['permanent']['per'] += self.__adjust_attribute(
-                cost_per_perception_point,
-                'Increased Perception',
-                'Decreased Perception',
-                'perception')
+            advantage_name = attr_src['advantage']
+            if (advantage_name is not None and
+                    advantage_name in self.char['advantages']):
+                value += (self.char['advantages'][advantage_name] /
+                          cost_per_point)
 
-        # BASIC-SPEED
-        self.char['permanent']['basic-speed'] = (self.char['permanent']['ht'] +
-                self.char['permanent']['dx']) / 4.0
-        cost_per_basic_speed = 5
-        self.char['permanent']['basic-speed'] += self.__adjust_attribute(
-                cost_per_basic_speed,
-                'Increased Basic Speed',
-                'Decreased Basic Speed',
-                'speed') * 0.25
-
-        # BASIC-MOVE
-        self.char['permanent']['basic-move'] = int(
-                self.char['permanent']['basic-speed'])
-        cost_per_basic_move = 5
-        self.char['permanent']['basic-move'] += self.__adjust_attribute(
-                cost_per_basic_move,
-                'Increased Basic Move',
-                'Decreased Basic Move',
-                'move')
+            self.char['permanent'][attr_dest] = value
 
     def __build_equipment(self):
         ## EQUIPMENT #####
         # Build the equipment list up front so that skills may make use of it
-        stuff_gcs = self.__char_gcs.find('equipment_list')
-        if stuff_gcs is None:
+        if 'equipment' not in self.__char_gcs:
             return
-        for child in stuff_gcs:
-            self.__add_item_to_gcs_list(child, self.stuff)
+        for item in self.__char_gcs['equipment']:
+            self.__add_item_to_gcs_list(item, self.stuff, 'TOP LEVEL')
 
     def __build_skills(self):
         self.char['skills'] = {} # name: skill-level, ...
@@ -562,46 +532,38 @@ class CharacterGcs(object):
         #   this because some skills are affected by advantages and equipment
         #   (a scope for a rifle, for instance).
 
-        skills_gcs = self.__char_gcs.find('skill_list')
-        if skills_gcs is None:
+        if 'skills' not in self.__char_gcs:
             return
 
-        for skill_gcs in skills_gcs:
-            if skill_gcs.tag == 'skill':
-                base_name = skill_gcs.find('name').text
-                specs = []
-                for specialization in skill_gcs.findall('specialization'):
-                    specs.append(specialization.text)
-                if len(specs) > 0:
-                    name_text = '%s (%s)' % (base_name, ','.join(specs))
-                else:
-                    name_text = base_name
+        for skill in self.__char_gcs['skills']:
+            base_name = skill['name']
+            if 'type' not in skill:
+                pass
 
-                cost_gcs_text = skill_gcs.find('points')
-                cost_gcs = 0 if cost_gcs_text is None else int(cost_gcs_text.text)
+            elif skill['type'] == 'skill':
+                if ('specialization' in skill and
+                        len(skill['specialization']) > 0):
+                    name_text = '%s (%s)' % (skill['name'],
+                                             skill['specialization'])
+                else:
+                    name_text = skill['name']
+
+                cost_gcs = 0 if 'points' not in skill else skill['points']
+
                 level_gcs = Skills.get_gcs_level(
                         self.__window_manager, self, base_name, cost_gcs)
                 self.char['skills'][name_text] = level_gcs
-            elif skill_gcs.tag == 'technique':
-                base_name = skill_gcs.find('name').text
-                difficulty = skill_gcs.find('difficulty').text # 'H', 'A'
+            elif skill['type'] == 'technique':
+                difficulty = skill['difficulty'] # 'H', 'A'
+                cost_gcs = 0 if 'points' not in skill else skill['points']
+                plus = Skills.tech_plus_from_pts(difficulty, cost_gcs) ###################33
 
-                cost_gcs_text = skill_gcs.find('points')
-                cost_gcs = 0 if cost_gcs_text is None else int(cost_gcs_text.text)
-                plus = Skills.tech_plus_from_pts(difficulty, cost_gcs)
+                default = skill['default']['name']
+                if 'specialization' in skill['default']:
+                    default += (' (%s)' % skill['default']['specialization'])
 
-                default = []
-                for default_gcs in skill_gcs.findall('default'):
-                    base = default_gcs.find('name').text
-                    if base is not None:
-                        spec = default_gcs.find('specialization')
-                        if spec is None:
-                            default.append(base)
-                        else:
-                            default.append('%s (%s)' % (base, spec.text))
-                    skill_base_text = default_gcs.find('modifier').text
-                    skill_base = (0 if skill_base_text is None
-                        else int(skill_base_text))
+                skill_base = (0 if 'modifier' not in skill['default'] else ####################
+                              skill['default']['modifier'])
 
                 technique = {
                     'name': base_name,
@@ -641,31 +603,39 @@ class CharacterGcs(object):
                     ]
                     }
 
-        spells_gcs = self.__char_gcs.find('spell_list')
-
-        if spells_gcs is None:
+        if ('spells' not in self.__char_gcs or
+                len(self.__char_gcs['spells']) == 0):
             return
 
-        # NOTE: I only add 'spell's if the character has some.
+        # NOTE: Only add 'spell's if the character has some.
 
         self.char['spells'] = [] # {'name': xx, 'skill': xx}, ...
-        for child in spells_gcs:
-            name = child.find('name')
+        for child in self.__char_gcs['spells']:
+            name = child['name']
+
             skill_gcs = self.char['permanent']['iq']
 
             # Spell difficulty
-            difficulty = ('hard' if 'very_hard' not in child.attrib
+            # 'difficulty' = 'IQ/H' or 'IQ/VH'
+
+            match = re.match(
+                    '(?P<attrib>[A-Z]+)(?P<slash>/)' +
+                    '(?P<difficulty>[A-Z]+)',
+                    child['difficulty'])
+            if match is None:
+                continue
+
+            difficulty = ('hard' if match.group('difficulty') == 'H'
                           else 'very_hard')
 
-            # Points they put into this spell
-            points_string = child.find('points')
-            points = 1 if points_string is None else int(points_string.text)
+            # Points they need put into this spell to cast
+            # match = re.match('^(?P<cost>[0-9]+)$', child['casting_cost'])
+            # TODO: this should be 'None' or 0
+            #points = 1 if match is None else int(match.group('cost'))
+            points = 1 if 'points' not in child else child['points']
 
             # College
-            college = None
-            if child.find('college') is not None:
-                college = child.find('college').text
-
+            college = None if 'college' not in child else child['college']
             if college in self.__spell_advantages:
                 skill_gcs += self.__spell_advantages[college]
 
@@ -675,65 +645,57 @@ class CharacterGcs(object):
                 if points >= lookup['points']:
                     skill_gcs += lookup['add_to_iq']
                     break
-            self.char['spells'].append({'name': name.text, 'skill': skill_gcs})
+            self.char['spells'].append({'name': name, 'skill': skill_gcs})
 
     def __get_advantage_cost(self,
-                             advantage_gcs # element from xml.etree.ElementTree
+                             advantage_gcs # advantage dict
                             ):
-        cost_text_gcs = advantage_gcs.find('base_points')
-        cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
-        levels_element = advantage_gcs.find('levels')
-        if levels_element is not None:
-            levels = int(levels_element.text)
-            points_per_level_element = advantage_gcs.find('points_per_level')
-            if points_per_level_element is not None:
-                levels *= int(points_per_level_element.text)
-                cost_gcs += levels
+        cost_gcs = (0 if 'base_points' not in advantage_gcs else
+                    advantage_gcs['base_points'])
+        if 'levels' in advantage_gcs and 'points_per_level' in advantage_gcs:
+            cost_gcs += (advantage_gcs['points_per_level'] *
+                    int(advantage_gcs['levels']))
         return cost_gcs
 
-    def __get_damage(self,
-                     weapon_element # ElementTree object
-                     ):
-        # <melee_weapon>
-        # <damage type="fat" base="1d+1"/>
-        # <strength>9</strength> <usage>Swung</usage>
-        # <reach>1</reach> <parry>0</parry> <block>No</block>
-        #    <default> <type>DX</type> <modifier>-5</modifier> </default>
-        #    <default> <type>Skill</type> <name>Broadsword</name> <modifier>0</modifier> </default>
-        #    <default> <type>Skill</type> <name>Rapier</name> <modifier>-4</modifier> </default>
-        #    <default> <type>Skill</type> <name>Saber</name> <modifier>-4</modifier> </default>
-        #    <default> <type>Skill</type> <name>Axe/Mace</name> <modifier>0</modifier> </default>
-        # </melee_weapon>
-        #
-        # "type": {
-        #   "swung weapon": {"damage": {"dice": { "plus": 1, "num_dice": 1, "type": "fat" }}}
-        # }
-
-        # The damage seems to be stored in one of two ways (maybe it's
-        # a version thing?):
-        #   .text could be 'sw-2 cut' or 'thr imp'
-        #   .attrib could be type=cut st=sw base=-2 or type=fat base=1d+1
-
-        damage_element = weapon_element.find('damage')
-
+    def __get_damage(
+            self,
+            weapon # dict: the whole weapon
+            ):
         _st = ''
         _type = ''
         _base = ''
         damage = {}
-        if damage_element.text is not None and len(damage_element.text) > 0:
-            match = re.match(
-                    '(?P<st>[a-zA-Z]+)' +
-                    '(?P<base>[+-]?[0-9]*) *' +
-                    '(?P<type>[a-zA-Z]+).*',
-                    damage_element.text)
-            if match is None:
-                # <damage>1d+1 fat</damage>
+
+        if 'damage' in weapon:
+            if 'st' in weapon['damage']:
+                # "damage": { "type": "cr", "st": "thr", "base": "-1" },
+                # "damage": { "type": "cr", "st": "thr" },
+                # "damage": { "type": "cut", "st": "sw", "base": "-2" },
+                # "damage": { "type": "imp", "st": "thr" },
+                # "damage": { "type": "imp", "st": "thr", "base": "-1" },
+
+                # strength based, like:
+                # <damage st="sw" type="cut" base="-2"/>
+                # {"damage": {"st": "sw", "type": "cut", "plus": -2}},
+                _st = weapon['damage']['st']
+                _type = weapon['damage']['type']
+                _base = (0 if 'base' not in weapon['damage']
+                         else int(weapon['damage']['base']))
+                damage = {'st': _st, 'plus': _base, 'type': _type}
+
+            elif 'base' in weapon['damage']:
+                # "damage": { "type": "HP", "base": "1d+4" }, # blaster
+                # "damage": { "type": "fat", "base": "1d+1" }, # sick stick
+                # "damage": { "type": "FP", "base": "1d+3" }, # zip tazer
+                # "damage": { "type": "", "base": "2d+4" }, # laser pistol
+                # "damage": { "type": "burn", "base": "3d", "armor_divisor": 2 }, # lasor rifle
+                # "damage": { "type": "", "base": "3d", "armor_divisor": 3 }, # laser rifle
+                #
                 # {"damage": {"dice":{"plus":1,"num_dice":1,"type":"fat"}}}
                 match = re.match(
                         '(?P<dice>[0-9]*)(?P<d>d?)' +
-                        '(?P<sign>[+-]?)(?P<plus>[0-9]*) *' +
-                        '(?P<type>[a-zA-Z]*)',
-                        damage_element.text)
+                        '(?P<sign>[+-]?)(?P<plus>[0-9]*)',
+                        weapon['damage']['base'])
                 if match is not None:
                     _num_dice = (0 if (match.group('dice') is None or
                                  len(match.group('dice')) == 0) else
@@ -746,75 +708,45 @@ class CharacterGcs(object):
                         sign = 1 if match.group('sign') == '+' else -1
                         _plus *= sign
                     _type = ('pi'
-                             if (match.group('type') is None or
-                                 len(match.group('type')) == 0) else
-                                 match.group('type'))
+                             if ('type' not in weapon['damage'] or
+                                 len(weapon['damage']['type']) == 0) else
+                                 weapon['damage']['type'])
                     damage['dice'] = {
                             'num_dice': _num_dice,
                             'plus': _plus,
                             'type': _type}
             else:
-                # strength based, like:
-                # <damage st="sw" type="cut" base="-2"/>
-                # {"damage": {"st": "sw", "type": "cut", "plus": -2}},
-                _st = match.group('st')
-                _type = match.group('type')
-                _base = (0 if len(match.group('base')) == 0
-                         else int(match.group('base')))
-                damage = {'st': _st, 'plus': _base, 'type': _type}
+                # "damage": { "type": "HT-4 aff" }, # tear gas
+                pass # TODO
 
-        elif 'st' in damage_element.attrib: # 1d+4 or -2 or 3d
-            # <damage type="cr" st="thr" base="-1"/>
-            # "damage": {"st": "thr", "plus": -1, "type": "cr"}}
-            _st = damage_element.attrib['st']
-            _base = (0 if 'base' not in damage_element.attrib else
-                    int(damage_element.attrib['base']))
-            _type = ('pi' # random but after-armor damage is x1
-                    if 'type' not in damage_element.attrib else
-                    damage_element.attrib['type'])
-            damage = {'st': _st, 'plus': _base, 'type': _type}
-
-        elif 'base' in damage_element.attrib: # 1d+4 or -2 or 3d
-            # <damage type="fat" base="1d+1"/>
-            # "damage": {"dice": {"plus":1,"num_dice":1,"type":"fat"}}
-
-            _type = ('pi' # random but after-armor damage is x1
-                    if 'type' not in damage_element.attrib else
-                    damage_element.attrib['type'])
-            match = re.match(
-                    '(?P<dice>[0-9]*)(?P<d>d?)' +
-                    '(?P<sign>[+-]?)(?P<plus>[0-9]*) *',
-                    damage_element.attrib['base'])
-            if match is not None:
-                _num_dice = (0 if (match.group('dice') is None or
-                             len(match.group('dice')) == 0) else
-                             int(match.group('dice')))
-                _plus = (0 if (match.group('plus') is None or
-                             len(match.group('plus')) == 0) else
-                             int(match.group('plus')))
-                if (match.group('sign') is not None and
-                        len(match.group('sign')) > 0):
-                    sign = 1 if match.group('sign') == '+' else -1
-                    _plus *= sign
-
-            damage['dice'] = {'num_dice': _num_dice,
-                              'plus': _plus,
-                              'type': _type}
         return damage
 
     def __get_gcs_attribute(self,
-                            attr_name # string
+                            attr_dest,  # string: name in destination
+                            attr_name,  # string: attr in source .gcs file
+                            adj         # string: attr to add (if bought up)
                             ):
-        attr_gcs_element = self.__char_gcs.find(attr_name)
-        attr_gcs_text = attr_gcs_element.text
-        attr_gcs = int(attr_gcs_text)
-        return attr_gcs
+        '''
+        Gets the specified attribute.  Calculates the attribute if need-be.
+        '''
+        if attr_dest == 'basic-move' or attr_dest == 'basic-speed':
+            attr_value = (self.__char_gcs['HT'] + self.__char_gcs['DX']) / 4.0
+            if attr_dest == 'basic-move':
+                attr_value = int(attr_value)
+
+        elif attr_name in self.__char_gcs:
+            attr_value = self.__char_gcs[attr_name]
+
+        # If they've bought up the main attribute, this adds the adjustment
+        if adj is not None and adj in self.__char_gcs:
+            attr_value += self.__char_gcs[adj]
+
+        return attr_value
 
     def __get_melee_weapon(self,
-                           new_thing,   # dict for item
-                           item         # xml.etree element
+                           new_thing,   # dict for receiving item
+                           item         # dict, source for item
                            ):
-
         type_from_usage = {'Swung': 'swung weapon',
                            'Thrust': 'thrust weapon',
                            'Thrown': 'thrown weapon',
@@ -823,21 +755,21 @@ class CharacterGcs(object):
             new_thing['type'] = {}
         damage = {}
 
-        for weapon_element in item.findall('melee_weapon'):
-            damage = self.__get_damage(weapon_element)
-
-            usage_element = weapon_element.find('usage')
-            usage = 'Swung' if usage_element is None else usage_element.text
+        for weapon in item['weapons']:
+            if 'type' not in weapon or weapon['type'] != 'melee_weapon':
+                continue
+            damage = self.__get_damage(weapon)
+            usage = 'Swung' if ('usage' not in weapon or
+                                len(weapon['usage']) == 0) else weapon['usage']
             item_type = ('unknown weapon' if usage not in type_from_usage else
                          type_from_usage[usage])
             new_thing['type'][item_type] = {'damage': damage}
-            self.__add_skill_to_weapon(new_thing, item_type, weapon_element)
 
-        parry_element = weapon_element.find('parry')
-        if (parry_element is not None and parry_element.text is not None
-                and len(parry_element.text) > 0):
-            parry = int(parry_element.text)
-            new_thing['parry'] = parry
+            self.__add_skill_to_weapon(new_thing, item_type, weapon)
+
+            if ('parry' in weapon and len(weapon['parry']) > 0 and
+                    weapon['parry'] != 'no'):
+                new_thing['parry'] = int(weapon['parry'])
 
         blank_item = self.__ruleset.make_empty_melee_weapon()
         for key, value in blank_item.iteritems():
@@ -845,47 +777,42 @@ class CharacterGcs(object):
                 new_thing[key] = value
 
     def __get_ranged_weapon(self,
-                            new_thing,      # dict for item
-                            item            # xml.etree element
+                            new_thing,      # dict for receiving item
+                            item            # dict, source for item
                             ):
-        # PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
-
         if 'type' not in new_thing:
             new_thing['type'] = {}
         damage = {}
 
-        for weapon_element in item.findall('ranged_weapon'):
-            damage = self.__get_damage(weapon_element)
+        for weapon in item['weapons']:
+            if 'type' not in weapon or weapon['type'] != 'ranged_weapon':
+                continue
+            damage = self.__get_damage(weapon)
 
             new_thing['type']['ranged weapon'] = {'damage': damage}
-            self.__add_skill_to_weapon(new_thing, 'ranged weapon', weapon_element)
+            self.__add_skill_to_weapon(new_thing, 'ranged weapon', weapon)
 
-            bulk_element = weapon_element.find('bulk')
-            if (bulk_element is not None and bulk_element.text is not None
-                    and len(bulk_element.text) > 0):
-                new_thing['bulk'] = int(bulk_element.text)
+            if 'bulk' in weapon:
+                new_thing['bulk'] = int(weapon['bulk'])
 
             # accuracy x+y where |x| is the accuracy of the weapon and |y| is
             # the accuracy of the built-in scope
 
-            accuracy_element = weapon_element.find('accuracy')
             new_thing['acc'] = 0
-            if (accuracy_element is not None and accuracy_element.text is not None
-                    and len(accuracy_element.text) > 0):
-                values_string = accuracy_element.text.replace('+', ' ')
-                values = values_string.split()
+            if 'accuracy' in weapon and len(weapon['accuracy']) > 0:
+                accuracy_text = weapon['accuracy']
+                accuracy_text = accuracy_text.replace('+', ' ')
+                values = accuracy_text.split()
                 for value in values:
                     new_thing['acc'] += int(value)
 
             # shots: T(1), or 8(3) or 8 (3)
 
-            shots_element = weapon_element.find('shots')
-            if (shots_element is not None and shots_element.text is not None
-                    and len(shots_element.text) > 0):
+            if 'shots' in weapon and len(weapon['shots']) > 0:
                 match = re.match(
                         '(?P<shots>T|[0-9]+) *' +
                         '\( *(?P<reload>[0-9]+)\).*',
-                        shots_element.text)
+                        weapon['shots'])
                 if match:
                     new_thing['ammo'] = { 'name': '*UNKNOWN*'}
                     if match.group('shots') == 'T': # Thrown
@@ -910,9 +837,6 @@ class CharacterGcs(object):
         for key, value in blank_item.iteritems():
             if key not in new_thing:
                 new_thing[key] = value
-
-        # print '\n== New Thing ==' # TODO: remove
-        # PP.pprint(new_thing) # TODO: remove
 
 class ImportCharacter(object):
     def __init__(self,
@@ -1078,19 +1002,19 @@ class ImportCharacter(object):
 
         return new_list
 
-    def __get_advantage_cost(self,
-                             advantage_gcs # element from xml.etree.ElementTree
-                            ):
-        cost_text_gcs = advantage_gcs.find('base_points')
-        cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
-        levels_element = advantage_gcs.find('levels')
-        if levels_element is not None:
-            levels = int(levels_element.text)
-            points_per_level_element = advantage_gcs.find('points_per_level')
-            if points_per_level_element is not None:
-                levels *= int(points_per_level_element.text)
-                cost_gcs += levels
-        return cost_gcs
+    #def __get_advantage_cost(self,
+    #                         advantage_gcs # dict
+    #                        ):
+    #    cost_text_gcs = advantage_gcs.find('base_points')
+    #    cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
+    #    levels_element = advantage_gcs.find('levels')
+    #    if levels_element is not None:
+    #        levels = int(levels_element.text)
+    #        points_per_level_element = advantage_gcs.find('points_per_level')
+    #        if points_per_level_element is not None:
+    #            levels *= int(points_per_level_element.text)
+    #            cost_gcs += levels
+    #    return cost_gcs
 
     def __get_stuff_count(self,
                           item
