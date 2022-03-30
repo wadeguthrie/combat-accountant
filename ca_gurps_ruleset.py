@@ -2424,10 +2424,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         skills_dict = copy.deepcopy(character.details['skills'])
         if 'techniques' in character.details:
             for tech in character.details['techniques']:
-                for default_name in tech['default']:
-                    default_value = skills_dict.get(default_name, 0)
-                    skills_dict['%s (%s)' % (tech['name'], default_name)
-                        ] = tech['value'] + default_value
+                default_value = skills_dict.get(tech['default'], 0)
+                skills_dict['%s (%s)' % (tech['name'], tech['default'])
+                    ] = tech['value'] + default_value
 
         found_one = False
         for skill, value in sorted(skills_dict.iteritems(),
@@ -2712,13 +2711,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                 if (technique['name'] == 'Dual-Weapon Attack' or
                                         technique['name'] == 'Off-Hand Weapon Training'):
                                     continue
-                                for default in technique['default']:
-                                    if default == weapon_skill['name']:
-                                        skill = technique['value'] + weapon_skill['value']
-                                        crit, fumble = self.__get_crit_fumble(to_hit)
-                                        notes.append(
-                                                '    Technique, %s: %d, crit <= %d, fumble >= %d' % (
-                                            technique['name'], skill, crit, fumble))
+                                if technique['default'] == weapon_skill['name']:
+                                    skill = technique['value'] + weapon_skill['value']
+                                    crit, fumble = self.__get_crit_fumble(to_hit)
+                                    notes.append(
+                                            '    Technique, %s: %d, crit <= %d, fumble >= %d' % (
+                                        technique['name'], skill, crit, fumble))
 
 
                     weapon_notes = weapon.notes()
