@@ -3198,20 +3198,49 @@ class PersonnelHandler(ScreenHandler):
 
         Returns nothing
         '''
+        '''
+
+    "oneline" :
+        {"voice": [
+            ["stacatto", null, null, "droning"],
+            ["breathy", "light", null, null, "strong", "forceful"],
+            ["intense eye contact",  null, null, "will not make eye contact"],
+            ["soprano", "tenor", null, null, "baritone", "deep base"],
+            ["glacially slow", "slow", null, null, "fast", "super fast"],
+            ["quiet", null, null, "loud"],
+            ["lisp", "r/w confusion", "nasal", "throaty", "side mouth"]
+    ]
+        },
+        '''
+
         with ca_json.GmJson('gm-npc-random-detail.json') as npc_detail:
             for name, traits in npc_detail.read_data['traits'].iteritems():
-                trait = random.choice(traits)
-                if isinstance(trait, dict):
-                    trait_array = [trait['text']]
-                    for key in trait:
-                        if key in npc_detail.read_data['support']:
-                            trait_array.append('%s: %s' %
-                                (key,
-                                 random.choice(
-                                    npc_detail.read_data['support'][key])))
-                    trait = ', '.join(trait_array)
+                if name == 'oneline':
+                    # These are collections of things that go on a single line
+                    for line_name, line_pieces in traits.iteritems():
+                        pieces = []
+                        for piece_list in line_pieces:
+                            piece = random.choice(piece_list)
+                            if piece is not None:
+                                pieces.append(piece)
+                        if len(pieces) == 0:
+                            pieces.append('normal')
+                        trait = ', '.join(pieces)
+                        new_creature['notes'].append('%s: %s' % (line_name,
+                                                                 trait))
+                else:
+                    trait = random.choice(traits)
+                    if isinstance(trait, dict):
+                        trait_array = [trait['text']]
+                        for key in trait:
+                            if key in npc_detail.read_data['support']:
+                                trait_array.append('%s: %s' %
+                                    (key,
+                                     random.choice(
+                                        npc_detail.read_data['support'][key])))
+                        trait = ', '.join(trait_array)
 
-                new_creature['notes'].append('%s: %s' % (name, trait))
+                    new_creature['notes'].append('%s: %s' % (name, trait))
 
     def __get_value_from_template(self,
                                   template_value,
