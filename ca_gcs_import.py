@@ -1294,7 +1294,7 @@ class ImportCharacter(object):
             if ('default' in technique_json and
                     len(technique_json['default']) != 0):
                 name = '%s (%s)' % (technique_json['name'],
-                                    ', '.join(technique_json['default']))
+                                    technique_json['default'])
             else:
                 name = technique_json['name']
 
@@ -1305,7 +1305,7 @@ class ImportCharacter(object):
                             name, technique_json['value']), remove_menu)
                 if remove:
                     changes.append('"%s" technique removed' % name)
-                    self.__char_gcs.char['techniques'].remove(technique_json)
+                    self.__char_json['techniques'].remove(technique_json)
             else:
                 if match_gcs['value'] != technique_json['value']:
                     if match_gcs['value'] > technique_json['value']:
@@ -1344,7 +1344,7 @@ class ImportCharacter(object):
         if item_json == item_gcs:
             return
         if isinstance(item_json, dict):
-            if not isinstance(item_json, dict):
+            if not isinstance(item_gcs, dict):
                 return # Not worth merging if they're not the same type
 
             for key, value in item_gcs.iteritems():
@@ -1357,7 +1357,7 @@ class ImportCharacter(object):
                         self.__merge_items(item_json[key], item_gcs[key])
 
         elif isinstance(item_json, list):
-            if not isinstance(item_json, list):
+            if not isinstance(item_gcs, list):
                 return # Not worth merging if they're not the same type
 
             for value in item_gcs:
