@@ -998,8 +998,9 @@ class ImportCharacter(object):
                 # new_item['stuff'] = []
                 # new_list.append(new_item)
             else:
-                new_item = copy.deepcopy(item)
-                new_list.append(new_item)
+                #new_item = copy.deepcopy(item)
+                #new_list.append(new_item)
+                new_list.append(item)
 
         return new_list
 
@@ -1147,6 +1148,10 @@ class ImportCharacter(object):
             else:
                 changes.append('"%s" equipment item added' % item_gcs['name'])
                 self.__char_json['stuff'].append(item_gcs)
+
+        print '\n=*=*= After All Merging =*=*=' # TODO: remove
+        PP.pprint(self.__char_json['stuff']) # TODO: remove
+
         return changes
 
     def __import_heading(self,
@@ -1355,9 +1360,9 @@ class ImportCharacter(object):
         '''
         PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
         if 'name' in item_json: # TODO: remove
-            print '\n--- %s ---' % item_json['name'] # TODO: remove
+            print '\n--- MERGE: %s ---' % item_json['name'] # TODO: remove
         else: # TODO: remove
-            print '\n--- (UNKNOWN ITEM) ---' # TODO: remove
+            print '\n--- MERGE: (UNKNOWN ITEM) ---' # TODO: remove
 
         if item_json == item_gcs or item_gcs is None:
             return
@@ -1376,12 +1381,23 @@ class ImportCharacter(object):
                     print 'ADD KEY: item_json[%r] = %r' % (key, value) # TODO: remove
                 elif item_json[key] != item_gcs[key]:
                     if self.__is_scalar(item_json[key]):
-                        print 'COPY FROM GCS for key %r' % key # TODO: remove
-                        print 'json(old):' # TODO: remove
-                        PP.pprint(item_json[key]) # TODO: remove
-                        print '\ngcs(new):' # TODO: remove
-                        PP.pprint(item_gcs[key]) # TODO: remove
-                        item_json[key] = item_gcs[key]
+                        # TODO: |str| instead of |basestring| in python 3
+                        if (isinstance(item_gcs[key], basestring) and
+                                isinstance(item_json[key], basestring)):
+                            if len(item_gcs[key]) == 0:
+                                pass
+                            elif len(item_json[key]) == 0:
+                                item_json[key] = item_gcs[key]
+                            else:
+                                item_json[key] = '%s, %s' % (item_json[key],
+                                                             item_gcs[key])
+                        else:
+                            print 'COPY FROM GCS for key %r' % key # TODO: remove
+                            print 'json(old):' # TODO: remove
+                            PP.pprint(item_json[key]) # TODO: remove
+                            print '\ngcs(new):' # TODO: remove
+                            PP.pprint(item_gcs[key]) # TODO: remove
+                            item_json[key] = item_gcs[key]
                     else:
                         print 'MERGING at key %r' % key # TODO: remove
                         self.__merge_items(item_json[key], item_gcs[key])
