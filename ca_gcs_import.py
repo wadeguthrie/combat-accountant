@@ -610,8 +610,8 @@ class CharacterGcs(object):
         # NOTE: Only add 'spell's if the character has some.
 
         self.char['spells'] = [] # {'name': xx, 'skill': xx}, ...
-        for child in self.__char_gcs['spells']:
-            name = child['name']
+        for spell_gcs in self.__char_gcs['spells']:
+            name = spell_gcs['name']
 
             skill_gcs = self.char['permanent']['iq']
 
@@ -621,7 +621,7 @@ class CharacterGcs(object):
             match = re.match(
                     '(?P<attrib>[A-Z]+)(?P<slash>/)' +
                     '(?P<difficulty>[A-Z]+)',
-                    child['difficulty'])
+                    spell_gcs['difficulty'])
             if match is None:
                 continue
 
@@ -629,13 +629,13 @@ class CharacterGcs(object):
                           else 'very_hard')
 
             # Points they need put into this spell to cast
-            # match = re.match('^(?P<cost>[0-9]+)$', child['casting_cost'])
+            # match = re.match('^(?P<cost>[0-9]+)$', spell_gcs['casting_cost'])
             # TODO: this should be 'None' or 0
             #points = 1 if match is None else int(match.group('cost'))
-            points = 1 if 'points' not in child else child['points']
+            points = 1 if 'points' not in spell_gcs else spell_gcs['points']
 
             # College
-            college = None if 'college' not in child else child['college']
+            college = None if 'college' not in spell_gcs else spell_gcs['college']
             if college in self.__spell_advantages:
                 skill_gcs += self.__spell_advantages[college]
 
@@ -645,6 +645,7 @@ class CharacterGcs(object):
                 if points >= lookup['points']:
                     skill_gcs += lookup['add_to_iq']
                     break
+
             self.char['spells'].append({'name': name, 'skill': skill_gcs})
 
     def __get_advantage_cost(self,
@@ -1116,7 +1117,14 @@ class ImportCharacter(object):
                             stuff_gcs.pop(index)
                             match_gcs = True
                             # TODO: copy unmatched things from GCS to JSON
+                            print '\n=== MERGING %s ===' % item_json['name'] # TODO: remove
+                            print '\n>>> JSON'  # TODO: remove
+                            PP.pprint(item_json)    # TODO: remove
+                            print '\n>>> GCS'   # TODO: remove
+                            PP.pprint(item_gcs) # TODO: remove
                             self.__merge_items(item_json, item_gcs)
+                            print '\n>>> AFTER merge' # TODO: remove
+                            PP.pprint(item_json) # TODO: remove
                             break
                         else:
                             remove_menu = [('yes', True), ('no', False)]
@@ -1219,13 +1227,14 @@ class ImportCharacter(object):
             # Neither has |spells| and that's OK.
             return changes
 
+        spells_to_remove = []
         for spell_json in spells_json:
+            # Find the GCS equivalent
             match_gcs = None
-            index_gcs = None
             for index, spell_gcs in enumerate(spells_gcs):
                 if spell_gcs['name'] == spell_json['name']:
                     match_gcs = spell_gcs
-                    index_gcs = index
+                    del spells_gcs[index]
                     break
 
             name = spell_json['name']
@@ -1236,8 +1245,7 @@ class ImportCharacter(object):
                             name, spell_json['skill']), remove_menu)
                 if remove:
                     changes.append('"%s" spell removed' % name)
-                    # remove removes a list element by value
-                    self.__char_json['spells'].remove(spell_json)
+                    spells_to_remove.append(name)
             else:
                 if match_gcs['skill'] != spell_json['skill']:
                     if match_gcs['skill'] > spell_json['skill']:
@@ -1245,14 +1253,18 @@ class ImportCharacter(object):
                                 '%s spell changed from %r to %r' %
                                 (spell_json['name'], spell_json['skill'],
                                  match_gcs['skill']))
-                    else:
+                    elif match_gcs['skill'] < spell_json['skill']:
                         changes.append(
                                 '%s spell changed from %r to %r -- NOTE: value reduced' %
                                 (spell_json['name'], spell_json['skill'],
                                  match_gcs['skill']))
                     spell_json['skill'] = match_gcs['skill']
 
-                del spells_gcs[index_gcs]
+        for spell_name in spells_to_remove:
+            for index, spell_json in enumerate(spells_json):
+                if spell_name == spell_json['name']:
+                    del spells_json[index]
+                    break
 
         for spell_gcs in spells_gcs:
             changes.append('%s (%d) spell added' %
@@ -1341,23 +1353,46 @@ class ImportCharacter(object):
         '''
         Merges equipment item |item_gcs| into |item_json|
         '''
-        if item_json == item_gcs:
+        PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+        if 'name' in item_json: # TODO: remove
+            print '\n--- %s ---' % item_json['name'] # TODO: remove
+        else: # TODO: remove
+            print '\n--- (UNKNOWN ITEM) ---' # TODO: remove
+
+        if item_json == item_gcs or item_gcs is None:
             return
         if isinstance(item_json, dict):
             if not isinstance(item_gcs, dict):
+                print '** items not same type' # TODO: remove
+                print 'JSON (dict):' # TODO: remove
+                PP.pprint(item_json) # TODO: remove
+                print '\nGCS' # TODO: remove
+                PP.pprint(item_gcs) # TODO: remove
                 return # Not worth merging if they're not the same type
 
             for key, value in item_gcs.iteritems():
                 if key not in item_json:
                     item_json[key] = value
+                    print 'ADD KEY: item_json[%r] = %r' % (key, value) # TODO: remove
                 elif item_json[key] != item_gcs[key]:
                     if self.__is_scalar(item_json[key]):
+                        print 'COPY FROM GCS for key %r' % key # TODO: remove
+                        print 'json(old):' # TODO: remove
+                        PP.pprint(item_json[key]) # TODO: remove
+                        print '\ngcs(new):' # TODO: remove
+                        PP.pprint(item_gcs[key]) # TODO: remove
                         item_json[key] = item_gcs[key]
                     else:
+                        print 'MERGING at key %r' % key # TODO: remove
                         self.__merge_items(item_json[key], item_gcs[key])
 
         elif isinstance(item_json, list):
             if not isinstance(item_gcs, list):
+                print '** items not same type' # TODO: remove
+                print 'JSON (list):' # TODO: remove
+                PP.pprint(item_json) # TODO: remove
+                print '\nGCS' # TODO: remove
+                PP.pprint(item_gcs) # TODO: remove
                 return # Not worth merging if they're not the same type
 
             for value in item_gcs:
