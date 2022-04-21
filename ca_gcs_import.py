@@ -1118,14 +1118,7 @@ class ImportCharacter(object):
                             stuff_gcs.pop(index)
                             match_gcs = True
                             # TODO: copy unmatched things from GCS to JSON
-                            print '\n=== MERGING %s ===' % item_json['name'] # TODO: remove
-                            print '\n>>> JSON'  # TODO: remove
-                            PP.pprint(item_json)    # TODO: remove
-                            print '\n>>> GCS'   # TODO: remove
-                            PP.pprint(item_gcs) # TODO: remove
                             self.__merge_items(item_json, item_gcs)
-                            print '\n>>> AFTER merge' # TODO: remove
-                            PP.pprint(item_json) # TODO: remove
                             break
                         else:
                             remove_menu = [('yes', True), ('no', False)]
@@ -1148,9 +1141,6 @@ class ImportCharacter(object):
             else:
                 changes.append('"%s" equipment item added' % item_gcs['name'])
                 self.__char_json['stuff'].append(item_gcs)
-
-        print '\n=*=*= After All Merging =*=*=' # TODO: remove
-        PP.pprint(self.__char_json['stuff']) # TODO: remove
 
         return changes
 
@@ -1358,57 +1348,29 @@ class ImportCharacter(object):
         '''
         Merges equipment item |item_gcs| into |item_json|
         '''
-        PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
-        if 'name' in item_json: # TODO: remove
-            print '\n--- MERGE: %s ---' % item_json['name'] # TODO: remove
-        else: # TODO: remove
-            print '\n--- MERGE: (UNKNOWN ITEM) ---' # TODO: remove
-
         if item_json == item_gcs or item_gcs is None:
             return
         if isinstance(item_json, dict):
             if not isinstance(item_gcs, dict):
-                print '** items not same type' # TODO: remove
-                print 'JSON (dict):' # TODO: remove
-                PP.pprint(item_json) # TODO: remove
-                print '\nGCS' # TODO: remove
-                PP.pprint(item_gcs) # TODO: remove
                 return # Not worth merging if they're not the same type
 
             for key, value in item_gcs.iteritems():
                 if key not in item_json:
                     item_json[key] = value
-                    print 'ADD KEY: item_json[%r] = %r' % (key, value) # TODO: remove
                 elif item_json[key] != item_gcs[key]:
                     if self.__is_scalar(item_json[key]):
                         # TODO: |str| instead of |basestring| in python 3
                         if (isinstance(item_gcs[key], basestring) and
                                 isinstance(item_json[key], basestring)):
-                            if len(item_gcs[key]) == 0:
-                                pass
-                            elif len(item_json[key]) == 0:
+                            if len(item_json[key]) == 0:
                                 item_json[key] = item_gcs[key]
-                            else:
-                                item_json[key] = '%s, %s' % (item_json[key],
-                                                             item_gcs[key])
                         else:
-                            print 'COPY FROM GCS for key %r' % key # TODO: remove
-                            print 'json(old):' # TODO: remove
-                            PP.pprint(item_json[key]) # TODO: remove
-                            print '\ngcs(new):' # TODO: remove
-                            PP.pprint(item_gcs[key]) # TODO: remove
                             item_json[key] = item_gcs[key]
                     else:
-                        print 'MERGING at key %r' % key # TODO: remove
                         self.__merge_items(item_json[key], item_gcs[key])
 
         elif isinstance(item_json, list):
             if not isinstance(item_gcs, list):
-                print '** items not same type' # TODO: remove
-                print 'JSON (list):' # TODO: remove
-                PP.pprint(item_json) # TODO: remove
-                print '\nGCS' # TODO: remove
-                PP.pprint(item_gcs) # TODO: remove
                 return # Not worth merging if they're not the same type
 
             for value in item_gcs:
