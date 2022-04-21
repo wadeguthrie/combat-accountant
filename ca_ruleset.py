@@ -1038,6 +1038,8 @@ class Ruleset(object):
                 if 'ranged weapon' not in weapon['type']:
                     continue
                 clip_name = weapon['ammo']['name']
+                if clip_name is None:
+                    continue
                 found_clip = False
                 for clip in fighter.details['stuff']:
                     if clip['name'] == clip_name:
@@ -1259,12 +1261,14 @@ class Ruleset(object):
             if not weapon.uses_ammo():
                 return Ruleset.HANDLED_ERROR
 
-            clip_name = weapon.details['ammo']['name']
+            #clip_name = weapon.details['ammo']['name']
 
             # Get a list of clips that fit this weapon, ask the user which one
 
             clip_menu = []
             clip_name = weapon.details['ammo']['name']
+            if clip_name is None:
+                clip_name = '** UNKNOWN **'
             for index, item in enumerate(fighter.details['stuff']):
                 if item['name'] == clip_name:
                     if 'notes' in item and len(item['notes']) > 0:
@@ -1596,9 +1600,6 @@ class Ruleset(object):
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
         fighter.details['open-container'].append(action['container-index'])
-        #PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
-        #print '\n--- %s: open %d ---' % (fighter.name, action['container-index']) # TODO: remove
-        #PP.pprint(fighter.details['open-container']) # TODO: remove
         return Ruleset.HANDLED_OK
 
     def _perform_action(self,

@@ -2420,7 +2420,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         mode = curses.A_NORMAL
         output.append([{'text': 'Skills', 'mode': mode | curses.A_BOLD}])
 
-        PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
         skills_dict = copy.deepcopy(character.details['skills'])
         if 'techniques' in character.details:
             for tech in character.details['techniques']:
@@ -2695,6 +2694,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
                             if weapon.is_ranged_weapon():
                                 clip_name = weapon.details['ammo']['name']
+                                if clip_name is None:
+                                    clip_name = '** UNKNOWN **'
                                 reloads = 0  # Counts clips, not rounds
                                 for item in fighter.details['stuff']:
                                     if item['name'] == clip_name:
@@ -3494,7 +3495,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             found_skill = False
             if 'skill' in item:
-                #print '\n  -- item %s includes "skill" --' % item['name'] # TODO
                 for item_skill in item['skill'].iterkeys():
                     if (item_skill.lower() not in creature['current'] and
                             item_skill in creature['skills']):
