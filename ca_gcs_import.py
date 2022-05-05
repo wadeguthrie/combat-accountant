@@ -53,6 +53,7 @@ class Skills(object):
         'Bartender':            {'attr':'iq', 'diff':'A', 'default':-5},
         'Biology':              {'attr':'iq', 'diff':'VH', 'default':-6},
         'Brawling':             {'attr':'dx', 'diff':'E', 'default':None},
+        'Broadsword':           {'attr':'dx', 'diff':'A', 'default':None},
         'Camouflage':           {'attr':'iq', 'diff':'E', 'default':-4},
         'Climbing':             {'attr':'dx', 'diff':'A', 'default':-5},
         'Computer Hacking':     {'attr':'iq', 'diff':'VH', 'default':None},
@@ -73,7 +74,9 @@ class Skills(object):
         'Engineer':             {'attr':'iq', 'diff':'H', 'default':None},
         'Environment Suit':     {'attr':'dx', 'diff':'A', 'default':-5},
         'Escape':               {'attr':'dx', 'diff':'H', 'default':-6},
-        'Fast-Draw':            {'attr':'dx', 'diff':'E', 'default':None},
+        'Fast-Draw':            {'attr':'dx', 'diff':'E', 'default':None,
+                                 # TODO: doesn't handle 'Fast-Draw (knife)'
+                                 'advantage': {'Combat Reflexes': 1}},
         'Fast-Talk':            {'attr':'iq', 'diff':'A', 'default':-5},
         'Filch':                {'attr':'dx', 'diff':'A', 'default':-5},
         'First Aid':            {'attr':'iq', 'diff':'E', 'default':-4,
@@ -200,7 +203,7 @@ class Skills(object):
     def tech_plus_from_pts(difficulty, # 'H' or 'A'
                            points   # int
                            ):
-        table = Skills.tech_plus_from_pts_table[difficulty]
+        table = Skills.tech_plus_from_pts_table[difficulty.upper()]
         if points < len(table):
             plus = table[points]
         else:
@@ -294,7 +297,7 @@ class CharacterGcs(object):
             advantages_gcs[name] = cost_gcs
 
     def __add_item_to_gcs_list(self,
-                               item,        # json dict
+                               item,        # ca dict
                                stuff_gcs,   # container of items (each, a dict)
                                container_name   # string (for debugging)
                               ):
@@ -366,8 +369,8 @@ class CharacterGcs(object):
                               ):
         '''
         Goes through a GURPS Character Sheet description of a weapon and pulls
-        out the best skill required to use it.  The result is placed in the
-        JSON's description of that weapon.
+        out the best skill required to use it.  The result is placed in CA's
+        description of that weapon.
 
         Returns nothing.
         '''
@@ -433,85 +436,30 @@ class CharacterGcs(object):
 
         # TODO: add move, and speed -- gcs has points spent / json
         # has result
-        # JSON names are lower_case, GCS names are upper_case
+        # CA names are lower_case, GCS names are upper_case
         #   'gcs stat' = the base attribute in GCS
         #   'adj' = GCS stat that adds to the native stat
-        attrs = {
+        attrs = [
             # Base attributes
-            'st': {'gcs stat': 'ST',
-                   'adj': None,
-                   'cost_for_adv': None,
-                   'advantage': None,
-                   'disadvantage': None},
-            'dx': {'gcs stat': 'DX',
-                   'adj': None,
-                   'cost_for_adv': None,
-                   'advantage': None,
-                   'disadvantage': None},
-            'iq': {'gcs stat': 'IQ',
-                   'adj': None,
-                   'cost_for_adv': None,
-                   'advantage': None,
-                   'disadvantage': None},
-            'ht': {'gcs stat': 'HT',
-                   'adj': None,
-                   'cost_for_adv': None,
-                   'advantage': None,
-                   'disadvantage': None},
+            'st',
+            'dx',
+            'iq',
+            'ht',
 
             # Derived attributes
-            'hp': {'gcs stat': 'ST',
-                   'adj': 'HP_adj',
-                   'cost_for_adv': 2,
-                   'advantage': 'Extra Hit Points',
-                   'disadvantage': 'Fewer Hit Points'},
-            'fp': {'gcs stat': 'HT',
-                   'adj': 'FP_adj',
-                   'cost_for_adv': 3,
-                   'advantage': 'Extra Fatigue Points',
-                   'disadvantage': 'Fewer Fatigue Points'},
-            'wi': {'gcs stat': 'IQ',
-                   'adj': 'will_adj',
-                   'cost_for_adv': 5,
-                   'advantage': 'Increased Will',
-                   'disadvantage': 'Decreased Will'},
-            'per': {'gcs stat': 'IQ',
-                   'adj': 'per_adj',
-                   'cost_for_adv': 5,
-                   'advantage': 'Increased Perception',
-                   'disadvantage': 'Decreased Perception'},
-            'basic-speed': {'gcs stat': None,
-                   'adj': 'speed_adj',
-                   'cost_for_adv': 5,
-                   'advantage': 'Increased Basic Speed',
-                   'disadvantage': 'Decreased Basic Speed'},
-            'basic-move': {'gcs stat': None,  # Derived from basic-speed
-                   'adj': 'speed_adj',    # TODO: move_adj
-                   'cost_for_adv': 5,
-                   'advantage': 'Increased Basic Move',
-                   'disadvantage': 'Decreased Basic Move'},
-        }
+            'hp',
+            'fp',
+            'wi',
+            'per',
+            'basic-speed',
+            'basic-move',
+        ]
 
-        for attr_dest, attr_src in attrs.iteritems():
+        for attr_dest in attrs:
             # Get the basic stat
-            gcs_name = attr_src['gcs stat']
-            value = self.__get_gcs_attribute(attr_dest,
-                                             gcs_name,
-                                             attr_src['adj'])
-
-            # Add advantage / disadvantage adjustments
-            disadvantage_name = attr_src['disadvantage']
-            cost_per_point = attr_src['cost_for_adv']
-            if (disadvantage_name is not None and
-                    disadvantage_name in self.char['advantages']):
-                value += (self.char['advantages'][disadvantage_name] /
-                          cost_per_point)
-
-            advantage_name = attr_src['advantage']
-            if (advantage_name is not None and
-                    advantage_name in self.char['advantages']):
-                value += (self.char['advantages'][advantage_name] /
-                          cost_per_point)
+            value = self.__get_old_style_gcs_attribute(attr_dest)
+            if value is None:
+                value = self.__get_new_style_gcs_attribute(attr_dest)
 
             self.char['permanent'][attr_dest] = value
 
@@ -722,25 +670,146 @@ class CharacterGcs(object):
 
         return damage
 
-    def __get_gcs_attribute(self,
-                            attr_dest,  # string: name in destination
-                            attr_name,  # string: attr in source .gcs file
-                            adj         # string: attr to add (if bought up)
-                            ):
+    def __get_new_style_gcs_attribute(
+            self,
+            dest_name,  # string: name in destination
+            ):
+        attrs = {
+            # Base attributes
+            'st': 'st',
+            'dx': 'dx',
+            'iq': 'iq',
+            'ht': 'ht',
+
+            # Derived attributes
+            'hp': 'hp',
+            'fp': 'fp',
+            'wi': 'will',
+            'per': 'per',
+            'basic-speed': 'basic_speed',
+            'basic-move': 'basic_move',
+        }
+        if 'attributes' not in self.__char_gcs:
+            return None
+
+        src_name = attrs[dest_name]
+        for gcs_attr in self.__char_gcs['attributes']:
+            if src_name == gcs_attr['attr_id']:
+                return gcs_attr['calc']['value']
+        return None
+
+    def __get_old_style_gcs_attribute(
+            self,
+            dest_name,  # string: name in destination
+            ):
         '''
         Gets the specified attribute.  Calculates the attribute if need-be.
         '''
-        if attr_dest == 'basic-move' or attr_dest == 'basic-speed':
+        # TODO: add move, and speed -- gcs has points spent / json
+        # has result
+        # CA names are lower_case, GCS names are upper_case
+        #   'gcs stat' = the base attribute in GCS
+        #   'adj' = GCS stat that adds to the native stat
+        attrs = {
+            # Base attributes
+            'st': {'gcs stat': 'ST',
+                   'new_stat':'st',
+                   'adj': None,
+                   'cost_for_adv': None,
+                   'advantage': None,
+                   'disadvantage': None},
+            'dx': {'gcs stat': 'DX',
+                   'new_stat': 'dx',
+                   'adj': None,
+                   'cost_for_adv': None,
+                   'advantage': None,
+                   'disadvantage': None},
+            'iq': {'gcs stat': 'IQ',
+                   'new_stat': 'iq',
+                   'adj': None,
+                   'cost_for_adv': None,
+                   'advantage': None,
+                   'disadvantage': None},
+            'ht': {'gcs stat': 'HT',
+                   'new_stat': 'ht',
+                   'adj': None,
+                   'cost_for_adv': None,
+                   'advantage': None,
+                   'disadvantage': None},
+
+            # Derived attributes
+            'hp': {'gcs stat': 'ST',
+                   'new_stat': 'hp',
+                   'adj': 'HP_adj',
+                   'cost_for_adv': 2,
+                   'advantage': 'Extra Hit Points',
+                   'disadvantage': 'Fewer Hit Points'},
+            'fp': {'gcs stat': 'HT',
+                   'new_stat': 'fp',
+                   'adj': 'FP_adj',
+                   'cost_for_adv': 3,
+                   'advantage': 'Extra Fatigue Points',
+                   'disadvantage': 'Fewer Fatigue Points'},
+            'wi': {'gcs stat': 'IQ',
+                   'new_stat': 'will',
+                   'adj': 'will_adj',
+                   'cost_for_adv': 5,
+                   'advantage': 'Increased Will',
+                   'disadvantage': 'Decreased Will'},
+            'per': {'gcs stat': 'IQ',
+                   'new_stat': 'per',
+                   'adj': 'per_adj',
+                   'cost_for_adv': 5,
+                   'advantage': 'Increased Perception',
+                   'disadvantage': 'Decreased Perception'},
+            'basic-speed': {'gcs stat': None,
+                   'new_stat': 'basic_speed',
+                   'adj': 'speed_adj',
+                   'cost_for_adv': 5,
+                   'advantage': 'Increased Basic Speed',
+                   'disadvantage': 'Decreased Basic Speed'},
+            'basic-move': {'gcs stat': None,  # Derived from basic-speed
+                   'new_stat': 'basic_move',
+                   'adj': 'speed_adj',    # TODO: move_adj
+                   'cost_for_adv': 5,
+                   'advantage': 'Increased Basic Move',
+                   'disadvantage': 'Decreased Basic Move'},
+        }
+
+        # Get the attribute, itself
+        attr = attrs[dest_name]
+
+        if dest_name == 'basic-move' or dest_name == 'basic-speed':
+            if 'HT' not in self.__char_gcs or 'DX' not in self.__char_gcs:
+                return None
             attr_value = (self.__char_gcs['HT'] + self.__char_gcs['DX']) / 4.0
-            if attr_dest == 'basic-move':
+            if dest_name == 'basic-move':
                 attr_value = int(attr_value)
 
-        elif attr_name in self.__char_gcs:
-            attr_value = self.__char_gcs[attr_name]
+        elif attr['gcs stat'] in self.__char_gcs:
+            attr_value = self.__char_gcs[attr['gcs stat']]
+
+        else:
+            return None
 
         # If they've bought up the main attribute, this adds the adjustment
-        if adj is not None and adj in self.__char_gcs:
-            attr_value += self.__char_gcs[adj]
+        if attr['adj'] is not None and attr['adj'] in self.__char_gcs:
+            attr_value += self.__char_gcs[attr['adj']]
+
+
+        # Add advantage / disadvantage adjustments
+        disadvantage_name = attr['disadvantage']
+        cost_per_point = attr['cost_for_adv']
+        if (disadvantage_name is not None and
+                disadvantage_name in self.char['advantages']):
+            attr_value += (self.char['advantages'][disadvantage_name] /
+                      cost_per_point)
+
+        advantage_name = attr['advantage']
+        if (advantage_name is not None and
+                advantage_name in self.char['advantages']):
+            attr_value += (self.char['advantages'][advantage_name] /
+                      cost_per_point)
 
         return attr_value
 
@@ -842,7 +911,7 @@ class CharacterGcs(object):
 class ImportCharacter(object):
     def __init__(self,
                  window_manager,
-                 char_json, # dict for this char directly from the JSON
+                 char_json, # dict for this char directly from CA
                  char_gcs   # CharacterGcs object
                 ):
         self.__window_manager = window_manager
@@ -979,9 +1048,9 @@ class ImportCharacter(object):
 
         This (optionally) flattens (i.e., squashes) nested containers so that
         all of the items are on the same level.  That allows one set of
-        containers in GCS and a different set of containers in the JSON.
+        containers in GCS and a different set of containers in the CA.
 
-        This can copy a GCS list so long as it's been JSON-ized.
+        This can copy a GCS list so long as it's been CA-ized.
         '''
         new_list = []
         for item in equipment:
@@ -992,7 +1061,7 @@ class ImportCharacter(object):
                 new_list.extend(sub_list)
                 # I don't think I want to copy the container without its
                 # contents because the whole purpose of squashing is to
-                # allow differnet containers in the GCS than in the JSON.
+                # allow differnet containers in the GCS than in the CA.
                 #
                 # new_item = copy.deepcopy(item)
                 # new_item['stuff'] = []
@@ -1028,7 +1097,7 @@ class ImportCharacter(object):
 
     def __import_attribs(self):
         '''
-        Copies the attributes from GCS to the JSON.  Puts the values in both
+        Copies the attributes from GCS to CA.  Puts the values in both
         the current and permanent locations.
 
         Cool for both import and update.
@@ -1095,7 +1164,7 @@ class ImportCharacter(object):
 
                         output.append([{'text': '',
                                         'mode': curses.A_NORMAL}])
-                        output.append([{'text': ('--- JSON Item: %s ---' % item_json['name']),
+                        output.append([{'text': ('--- CA Item: %s ---' % item_json['name']),
                                         'mode': curses.A_NORMAL}])
                         string = PP.pformat(item_json)
                         strings = string.split('\n')
@@ -1117,13 +1186,13 @@ class ImportCharacter(object):
                         if they_are_the_same:
                             stuff_gcs.pop(index)
                             match_gcs = True
-                            # TODO: copy unmatched things from GCS to JSON
+                            # TODO: copy unmatched things from GCS to CA
                             self.__merge_items(item_json, item_gcs)
                             break
                         else:
                             remove_menu = [('yes', True), ('no', False)]
                             remove, ignore = self.__window_manager.menu(
-                                'Remove "%s" (in JSON) but NOT in GCS' %
+                                'Remove "%s" (in CA) but NOT in GCS' %
                                 item_json['name'], remove_menu)
                             if remove:
                                 changes.append('"%s" equipment item removed' %
@@ -1171,7 +1240,7 @@ class ImportCharacter(object):
             if name not in things_gcs:
                 remove_menu = [('yes', True), ('no', False)]
                 remove, ignore = self.__window_manager.menu(
-                        'Remove "%s" %s (in JSON=%r) but NOT in GCS' % (
+                        'Remove "%s" %s (in CA=%r) but NOT in GCS' % (
                             name, heading_singular, things_json[name]),
                         remove_menu)
                 if remove:
@@ -1236,7 +1305,7 @@ class ImportCharacter(object):
             if match_gcs is None:
                 remove_menu = [('yes', True), ('no', False)]
                 remove, ignore = self.__window_manager.menu(
-                        'Remove "%s" spell (in JSON=%r) but NOT in GCS' % (
+                        'Remove "%s" spell (in CA=%r) but NOT in GCS' % (
                             name, spell_json['skill']), remove_menu)
                 if remove:
                     changes.append('"%s" spell removed' % name)
@@ -1308,7 +1377,7 @@ class ImportCharacter(object):
             if match_gcs is None:
                 remove_menu = [('yes', True), ('no', False)]
                 remove, ignore = self.__window_manager.menu(
-                        'Remove "%s" technique (in JSON=%r) but NOT in GCS' % (
+                        'Remove "%s" technique (in CA=%r) but NOT in GCS' % (
                             name, technique_json['value']), remove_menu)
                 if remove:
                     changes.append('"%s" technique removed' % name)

@@ -149,6 +149,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             "Beam Weapons (Rifle)": {'ask': 'number'},
             "Biology": {'ask': 'number'},
             "Brawling": {'ask': 'number'},
+            "Broadsword": {'ask': 'number'},
             "Camouflage": {'ask': 'number'},
             "Climbing": {'ask': 'number'},
             "Connoisseur (Whisky)": {'ask': 'number'},
@@ -1117,6 +1118,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
           "notes": "M122",
           "maintain": None,
           "casting time": 0,
+          "duration": 0,
+          "range": 'regular',
+          "save": [],
+        },
+        "Regeneration" :{
+          "cost": 20,
+          "notes": "M93",
+          "maintain": None,
+          "casting time": 60,
           "duration": 0,
           "range": 'regular',
           "save": [],
@@ -2317,9 +2327,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     continue
                 if row != 0 and in_first_row:
                     continue
-                text = '%s:%d/%d' % (item_key,
-                                     character.details['current'][item_key],
-                                     character.details['permanent'][item_key])
+                if item_key == 'basic-speed':
+                    text = '%s:%.2f/%.2f' % (
+                            item_key,
+                            character.details['current'][item_key],
+                            character.details['permanent'][item_key])
+                else:
+                    text = '%s:%d/%d' % (
+                            item_key,
+                            character.details['current'][item_key],
+                            character.details['permanent'][item_key])
                 if (character.details['current'][item_key] ==
                         character.details['permanent'][item_key]):
                     mode = curses.A_NORMAL
