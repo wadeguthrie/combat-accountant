@@ -22,12 +22,10 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: player mode
-#   - no dead-monsters, no stuff (always import), no names
-#   - need PersonnelHandler to add NPCs.  No need for fights/monsters or PCs.
-#   - special fights (just one type of monster, add as necessary, only 1 fight, ever)
-#   - one kind of bad guy (unknown)
-#   - saved fights/bug reports should know what options the program was running
+# TODO: on import, if an advantage has a "cr" entry, adjust the points as
+#   follows: cr:6, costx2; cr:9, costx1.5 (truncate, don't round), cr:12,
+#   costx1; cr:15, costx0.5 (B119)
+# TODO: on importing advantages: "notes" should be included in name in parens
 
 # TODO: add RoF (rate of fire) and make it work with shotguns.
 
