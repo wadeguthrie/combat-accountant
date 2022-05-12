@@ -16,6 +16,14 @@ import unicodedata
 import ca_gui
 import ca_json
 
+# TODO: weapons should be containers.  If there's a laser site contained in the
+#   weapon, add 1 to to-hit but add 1 to opponent's dodge.
+# TODO: on import, if an advantage has a "cr" entry, adjust the points as
+#   follows: cr:6, costx2; cr:9, costx1.5 (truncate, don't round), cr:12,
+#   costx1; cr:15, costx0.5 (B119)
+# TODO: ammo should default to None.  Merging None with not None should be not
+#   None.  The code should handle None as something that doesn't take ammo
+#   (even if it's a missile weapon).
 # TODO: damage type should be 'pi' by default
 # TODO: fast-draw(knife) doesn't include +1 from combat reflexes
 # TODO: spells don't deal with more points than 24 or 28

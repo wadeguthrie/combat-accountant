@@ -22,9 +22,6 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: on import, if an advantage has a "cr" entry, adjust the points as
-#   follows: cr:6, costx2; cr:9, costx1.5 (truncate, don't round), cr:12,
-#   costx1; cr:15, costx0.5 (B119)
 # TODO: on importing advantages: "notes" should be included in name in parens
 
 # TODO: add RoF (rate of fire) and make it work with shotguns.
@@ -3801,7 +3798,7 @@ class PersonnelHandler(ScreenHandler):
 
         # Prefer (or unprefer) the selected weapon
         if weapon_index in fighter.details['preferred-weapon-index']:
-            fighter.details['preferred-weapon-index'].remove(weapon_indx)
+            fighter.details['preferred-weapon-index'].remove(weapon_index)
         else:
             fighter.details['preferred-weapon-index'].append(weapon_index)
 
