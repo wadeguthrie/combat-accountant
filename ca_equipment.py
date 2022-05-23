@@ -541,23 +541,24 @@ class Weapon(object):
         self.details = weapon_details
         self.name = self.details['name']
 
-    def clip_works_with_weapon(self,
-                               clip  # dict for item
-                               ):
-        if clip is None:
-            return False
-
-        clip_shots_unknown = 'shots' not in clip
-        weapon_shots_unknown = ('ammo' not in self.details or
-                                'shots' not in self.details['ammo'])
-
-        if clip_shots_unknown and weapon_shots_unknown:
-            return False
-
-        if clip_shots_unknown or weapon_shots_unknown:
-            return True
-
-        return clip['shots'] == self.details['ammo']['shots']
+    # Unused?
+    #def clip_works_with_weapon(self,
+    #                           clip  # dict for item
+    #                           ):
+    #    if clip is None:
+    #        return False
+    #
+    #    clip_shots_unknown = 'shots' not in clip
+    #    weapon_shots_unknown = ('ammo' not in self.details or
+    #                            'shots' not in self.details['ammo'])
+    #
+    #    if clip_shots_unknown and weapon_shots_unknown:
+    #        return False
+    #
+    #    if clip_shots_unknown or weapon_shots_unknown:
+    #        return True
+    #
+    #    return clip['shots'] == self.details['ammo']['shots']
 
     def get_attack_modes(self):
         modes = [mode for mode in self.details['type'].iterkeys()]
@@ -614,6 +615,9 @@ class Weapon(object):
         return notes
 
     def remove_old_clip(self):
+        if not self.uses_ammo():
+            return None
+
         if 'clip' in self.details:
             old_clip = self.details['clip']
             if old_clip is not None:
@@ -645,6 +649,8 @@ class Weapon(object):
         '''
         Returns True if successful, False otherwise
         '''
+        if not self.uses_ammo():
+            return True
         clip = None if 'clip' not in self.details else self.details['clip']
         if self.shots_left() <= 0:
             return False
