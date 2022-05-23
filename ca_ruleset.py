@@ -128,7 +128,7 @@ class Ruleset(object):
                 continue
             if weapon.is_ranged_weapon():
                 holding_ranged = True
-                if weapon.shots_left() > 0:
+                if not weapon.uses_ammo() or weapon.shots_left() > 0:
                     holding_loaded_ranged = True
             else:
                 holding_melee = True
@@ -1035,7 +1035,8 @@ class Ruleset(object):
 
         if not is_armor:    # Just weapons (just ranged weapons, actually)
             for weapon in fighter.details['stuff']:
-                if 'ranged weapon' not in weapon['type']:
+                if ('ranged weapon' not in weapon['type'] or
+                        'ammo' not in weapon):
                     continue
                 clip_name = weapon['ammo']['name']
                 if clip_name is None:

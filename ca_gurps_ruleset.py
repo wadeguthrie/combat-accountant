@@ -1872,7 +1872,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 continue
             if weapon.is_ranged_weapon():
                 holding_ranged = True
-                if weapon.shots_left() > 0:
+                if not weapon.uses_ammo() or weapon.shots_left() > 0:
                     holding_loaded_ranged = True
             else:
                 holding_melee = True
@@ -2709,7 +2709,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
                             # Ranged weapon status
 
-                            if weapon.is_ranged_weapon():
+                            if (weapon.is_ranged_weapon() and
+                                    'ammo' in weapon.details):
                                 clip_name = weapon.details['ammo']['name']
                                 if clip_name is None:
                                     clip_name = '** UNKNOWN **'

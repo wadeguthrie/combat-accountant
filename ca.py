@@ -22,9 +22,15 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: include powerstone handling
 # TODO: on importing advantages: "notes" should be included in name in parens
+# TODO: allow None for ammo required
+# TODO: guns should be a container - if it contains a scope or laser pointer,
+#   it adds to the effective skill
+# TODO: should ask when update character wants to delete a spell
 
 # TODO: add RoF (rate of fire) and make it work with shotguns.
+#   see https://www.themook.net/gamegeekery/this-is-my-boomstick/
 
 # TODO: GmScrollableWindow should have their lines public and all access to
 #   those should be through the object's data

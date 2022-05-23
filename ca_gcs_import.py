@@ -72,7 +72,7 @@ class Skills(object):
         'Current Affairs':      {'attr':'iq', 'diff':'E', 'default':-4},
         'Detect Lies':          {'attr':'per', 'diff':'H', 'default':-6,
                                  'advantage': {'Empathy': 3,
-                                               'empathy (sensitive)': 1}},
+                                               'Empathy (sensitive)': 1}},
         'Diagnosis':            {'attr':'iq', 'diff':'H', 'default':-6},
         'Diplomacy':            {'attr':'iq', 'diff':'H', 'default':-6},
         'Electronics Operation':{'attr':'iq', 'diff':'A', 'default':-5},
@@ -892,11 +892,11 @@ class CharacterGcs(object):
                         '\( *(?P<reload>[0-9]+)\).*',
                         weapon['shots'])
                 if match:
-                    new_thing['ammo'] = { 'name': '*UNKNOWN*'}
                     if match.group('shots') == 'T': # Thrown
-                        new_thing['ammo']['shots'] = 1
-                        new_thing['ammo']['shots_left'] = 1
+                        # Not adding ammo if the thing is thrown
+                        pass
                     else:
+                        new_thing['ammo'] = { 'name': '*UNKNOWN*'}
                         shots = int(match.group('shots'))
                         new_thing['ammo']['shots'] = shots
                         new_thing['ammo']['shots_left'] = shots
