@@ -1195,6 +1195,23 @@ class ImportCharacter(object):
                                     mode = standout_mode
                             output.append([{'text': string, 'mode': mode}])
 
+                        # Merged
+                        new_item = copy.deepcopy(item_json)
+                        self.__merge_items(new_item, item_gcs)
+                        output.append([{'text': '',
+                                        'mode': curses.A_NORMAL}])
+                        output.append([{'text': ('--- MERGED Item: %s ---' % new_item['name']),
+                                        'mode': curses.A_NORMAL}])
+                        string = PP.pformat(new_item)
+                        strings = string.split('\n')
+                        for string in strings:
+                            mode = curses.A_NORMAL
+                            for difference in differences:
+                                if string.find(difference) >= 0:
+                                    mode = standout_mode
+                            output.append([{'text': string, 'mode': mode}])
+                        #
+
                         self.__window_manager.display_window(
                                 ('Examine These %s -- Are They The Same Item?' %
                                     item_json['name']),
