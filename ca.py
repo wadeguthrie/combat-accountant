@@ -24,7 +24,6 @@ import ca_timers
 
 # TODO: include powerstone handling
 # TODO: on importing advantages: "notes" should be included in name in parens
-# TODO: allow None for ammo required
 # TODO: guns should be a container - if it contains a scope or laser pointer,
 #   it adds to the effective skill
 # TODO: should ask when update character wants to delete a spell

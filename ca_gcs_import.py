@@ -18,9 +18,6 @@ import ca_json
 
 # TODO: weapons should be containers.  If there's a laser site contained in the
 #   weapon, add 1 to to-hit but add 1 to opponent's dodge.
-# TODO: on import, if an advantage has a "cr" entry, adjust the points as
-#   follows: cr:6, costx2; cr:9, costx1.5 (truncate, don't round), cr:12,
-#   costx1; cr:15, costx0.5 (B119)
 # TODO: ammo should default to None.  Merging None with not None should be not
 #   None.  The code should handle None as something that doesn't take ammo
 #   (even if it's a missile weapon).
@@ -607,11 +604,26 @@ class CharacterGcs(object):
     def __get_advantage_cost(self,
                              advantage_gcs # advantage dict
                             ):
+
         cost_gcs = (0 if 'base_points' not in advantage_gcs else
                     advantage_gcs['base_points'])
         if 'levels' in advantage_gcs and 'points_per_level' in advantage_gcs:
             cost_gcs += (advantage_gcs['points_per_level'] *
                     int(advantage_gcs['levels']))
+        if 'cr' in advantage_gcs:
+            # See 'Self-Control for Mental Disadvantages', B120
+            self_control = [
+                    {'cr': 6,  'multiplier': 2},
+                    {'cr': 9,  'multiplier': 1.5},  # truncate, don't round
+                    {'cr': 12,  'multiplier': 1},
+                    {'cr': 15,  'multiplier': 0.5}, # truncate, don't round
+                    ]
+
+            cr = advantage_gcs['cr']
+            for entry in self_control:
+                if cr <= entry['cr']:
+                    cost_gcs = int(cost_gcs * entry['multiplier'])
+                    break
         return cost_gcs
 
     def __get_damage(
