@@ -3512,10 +3512,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # about this.
 
             found_skill = False
-            skills = []
+            skills = {}
             if 'skill' in item:
                 for item_skill in item['skill'].iterkeys():
-                    skills.append(item_skill)
+                    skills[item_skill] = 1
                     if (item_skill.lower() not in creature['current'] and
                             item_skill in creature['skills']):
                         found_skill = True
@@ -3526,7 +3526,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     if found_skill:
                         break
                     for item_skill in item['type'][mode]['skill'].iterkeys():
-                        skills.append(item_skill)
+                        skills[item_skill] = 1
                         if (item_skill.lower() not in creature['current'] and
                                 item_skill in creature['skills']):
                             found_skill = True
@@ -3537,7 +3537,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             if not found_skill:
                 if len(skills) == 0:
                     skill_list_string = '** NONE **'
-                skill_list_string = ', '.join(skills)
+                skill_list_string = ', '.join(skills.iterkeys())
                 self._window_manager.error([
                     'Creature "%s"' % name,
                     '  has item "%s"' % item['name'],
