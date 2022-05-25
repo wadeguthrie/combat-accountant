@@ -2092,7 +2092,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return results, why
     def get_dodge_skill(self,                       # Public to aid in testing
-                        fighter  # Fighter object
+                        fighter,        # Fighter object
+                        opponent=None   # Fighter object
                         ):  # B326
         '''
         Returns a tuple of:
@@ -2107,6 +2108,24 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         dodge_why.append('Dodge (B326) @ int(basic-speed(%.1f))+3 = %d' % (
                                 fighter.details['current']['basic-speed'],
                                 dodge_skill))
+
+        # Targeting laser on opponent's weapon
+        # NOTE: I do a bad job of calculating dodge if the opponent is
+        # carrying 2 weapons and only one has a targeting laser.  If one
+        # weapon has a targeting laser, I calculate the dodge for that.
+        if opponent is not None:
+            found = False
+            for weapon in opponent.get_current_weapons():
+                if 'stuff' in weapon.details:
+                    for thing in weapon.details['stuff']:
+                        if 'to-hit-bonus' in thing:
+                            dodge_skill += thing['to-hit-bonus']
+                            dodge_why.append('  +1 due to opponent\'s %s' %
+                                    thing['name'])
+                            found = True
+                            break
+                if found:
+                    break
 
         if fighter.details['stunned']:
             dodge_skill -= 4
@@ -2232,7 +2251,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         weapons = fighter.get_current_weapons()
 
-        dodge_skill, dodge_why = self.get_dodge_skill(fighter)
+        dodge_skill, dodge_why = self.get_dodge_skill(fighter, opponent)
         if dodge_skill is not None:
             dodge_string = 'Dodge (B326): %d' % dodge_skill
             why.extend(dodge_why)
@@ -2259,7 +2278,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     notes.append('Block (B327, B375): %d' % block_skill)
 
             elif weapon.is_melee_weapon():
-                parry_skill, parry_why = self.get_parry_skill(fighter, weapon)
+                parry_skill, parry_why = self.get_parry_skill(fighter,
+                                                              weapon,
+                                                              opponent)
                 if parry_skill is not None:
                     why.extend(parry_why)
                     notes.append('Parry (B327, B376): %d' % parry_skill)
@@ -2754,8 +2775,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         return ['.gcs']
 
     def get_parry_skill(self,                       # Public to aid in testing
-                        fighter,    # Fighter object
-                        weapon      # Weapon object
+                        fighter,        # Fighter object
+                        weapon,         # Weapon object
+                        opponent=None   # Fighter object
                         ):
         '''
         Returns a tuple of:
@@ -2785,7 +2807,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         parry_why.append('Parry (B327, B376) w/%s @ (skill(%d)/2)+3 = %d' % (
             weapon.details['name'], skill, parry_skill))
 
-        dodge_skill, dodge_why = self.get_dodge_skill(fighter)
+        dodge_skill, dodge_why = self.get_dodge_skill(fighter, opponent)
         if fighter.details['stunned']:
             dodge_skill -= 4
             dodge_why.append('  -4 due to being stunned (B420)')
@@ -3032,6 +3054,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                      mode,
                                                      skill,
                                                      why)
+
+        # Targeting Laser
+
+        if 'stuff' in weapon.details:
+            for thing in weapon.details['stuff']:
+                if 'to-hit-bonus' in thing:
+                    skill += thing['to-hit-bonus']
+                    why.append('  +1 due to %s' % thing['name'])
 
         # Aiming
 
@@ -3515,7 +3545,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             skills = {}
             if 'skill' in item:
                 for item_skill in item['skill'].iterkeys():
-                    skills[item_skill] = 1
+                    if item_skill.lower() not in creature['current']:
+                        skills[item_skill] = 1
                     if (item_skill.lower() not in creature['current'] and
                             item_skill in creature['skills']):
                         found_skill = True
@@ -3526,7 +3557,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     if found_skill:
                         break
                     for item_skill in item['type'][mode]['skill'].iterkeys():
-                        skills[item_skill] = 1
+                        if item_skill.lower() not in creature['current']:
+                            skills[item_skill] = 1
                         if (item_skill.lower() not in creature['current'] and
                                 item_skill in creature['skills']):
                             found_skill = True

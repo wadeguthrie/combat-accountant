@@ -16,8 +16,6 @@ import unicodedata
 import ca_gui
 import ca_json
 
-# TODO: weapons should be containers.  If there's a laser site contained in the
-#   weapon, add 1 to to-hit but add 1 to opponent's dodge.
 # TODO: ammo should default to None.  Merging None with not None should be not
 #   None.  The code should handle None as something that doesn't take ammo
 #   (even if it's a missile weapon).
