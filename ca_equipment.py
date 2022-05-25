@@ -561,7 +561,8 @@ class Weapon(object):
     #    return clip['shots'] == self.details['ammo']['shots']
 
     def get_attack_modes(self):
-        modes = [mode for mode in self.details['type'].iterkeys()]
+        modes = [mode for mode in self.details['type'].iterkeys()
+                 if mode != 'container']
         return modes
 
     def get_clip(self):
