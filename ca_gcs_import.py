@@ -13,6 +13,7 @@ import sys
 import traceback
 import unicodedata
 
+import ca_equipment
 import ca_gui
 import ca_json
 
@@ -391,7 +392,7 @@ class CharacterGcs(object):
         for default in weapon_source['defaults']:
             skill = default['type'] # DX or 'Skill'
             modifier = 0 if 'modifier' not in default else default['modifier']
-            if (skill == 'Skill'):
+            if (skill.lower() == 'skill'):
                 # Looking for something like this:
                 #   "type": "Skill",
                 #   "name": "Force Sword",
@@ -899,17 +900,27 @@ class CharacterGcs(object):
             if 'shots' in weapon and len(weapon['shots']) > 0:
                 match = re.match(
                         '(?P<shots>T|[0-9]+) *' +
-                        '\( *(?P<reload>[0-9]+)\).*',
+                        '(?P<plus_one>\+1) *' +
+                        '\( *(?P<reload>[0-9]+)' +
+                        '(?P<individual>i?)\).*',
                         weapon['shots'])
+                # TODO: eventually handle 'plus_pne' (one in the chamber)
                 if match:
                     if match.group('shots') == 'T': # Thrown
-                        # Not adding ammo if the thing is thrown
-                        pass
+                        new_thing['ammo'] = None
+                        new_thing['reload_type'] = (
+                                ca_equipment.Equipment.RELOAD_NONE)
                     else:
                         new_thing['ammo'] = { 'name': '*UNKNOWN*'}
                         shots = int(match.group('shots'))
                         new_thing['ammo']['shots'] = shots
                         new_thing['ammo']['shots_left'] = shots
+                        if len(match.group('individual')) > 0:
+                            new_thing['reload_type'] = (
+                                    ca_equipment.Equipment.RELOAD_ONE)
+                        else:
+                            new_thing['reload_type'] = (
+                                    ca_equipment.Equipment.RELOAD_CLIP)
 
                     new_thing['reload'] = int(match.group('reload'))
 
@@ -1543,7 +1554,7 @@ class GcsImport(object):
         name = char_gcs.get_name()
         character = ImportCharacter(self.__window_manager, char_json, char_gcs)
         character.import_data()
-        #character.pprint() # TODO: remove
+        # character.pprint() ######################
         return name, char_json
 
     def update_creature(self,

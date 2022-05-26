@@ -139,9 +139,15 @@ class Ruleset(object):
 
         weapon_indexes = fighter.get_current_weapon_indexes()
 
+        # If you're not holding anything, you've at least got your fists
+        if (not holding_ranged and not holding_melee and
+                not holding_natural_weapon and not holding_non_natural_weapon):
+            holding_natural_weapon = True
+
         # ATTACK #
 
-        if holding_melee or holding_loaded_ranged:
+        if (holding_melee or holding_loaded_ranged or
+                holding_natural_weapon or holding_non_natural_weapon):
             # Can only attack if there's someone to attack
             action_menu.extend([
                 ('attack',          {'action':
@@ -1105,7 +1111,9 @@ class Ruleset(object):
             return Ruleset.HANDLED_OK
 
         clip = weapon.get_clip()
-        if weapon.use_one_ammo():
+
+        rounds = 1 if 'shots_fired' not in action else action['shots_fired']
+        if weapon.use_one_ammo(rounds):
             clip = weapon.get_clip()
             if (clip is not None and 'notes' in clip and
                     clip['notes'] is not None and len(clip['notes']) > 0):
@@ -1223,33 +1231,61 @@ class Ruleset(object):
             if 'clip-index' not in action:
                 return Ruleset.HANDLED_OK
 
-            # xxx
+            # Infinte Clips?
 
             infinite_clips_option = self.get_option('infinite-clips')
             infinite_clips = True if (infinite_clips_option is not None and
                     infinite_clips_option) else False
 
-            # Prepare the new clip -- I know this is backwards but the
-            # clip index (for the new clip) is still valid until the old clip
-            # is added to the equipment list
-
-            if infinite_clips:
-                clip = copy.deepcopy(fighter.equipment.get_item_by_index(
-                    action['clip-index']))
-            else:
-                clip = fighter.remove_equipment(action['clip-index'], 1)
+            # Reload rounds individually (rather than as a whole clip)?
+            reload_by_1 = False
+            if ('reload_type' in weapon.details and
+                    weapon.details['reload_type'] ==
+                    ca_equipment.Equipment.RELOAD_ONE):
+                reload_by_1 = True
 
             # Put a non-zero count clip back in equipment list
-            if weapon.shots_left() > 0:
+            if weapon.shots_left() > 0 and not reload_by_1:
                 old_clip = weapon.remove_old_clip()
-                if (old_clip is not None and not infinite_clips):
+                if old_clip is not None: # and not infinite_clips):
                     if (old_clip['shots_left'] > 0 or
                             ('discard-when-empty' in old_clip and
                              not old_clip['discard-when-empty'])):
                         ignore_item = fighter.add_equipment(old_clip)
 
-            # And put the new clip in the weapon
-            weapon.load(clip)
+            load_type = (ca_equipment.Equipment.RELOAD_CLIP
+                         if 'reload_type' not in weapon.details else
+                         weapon.details['reload_type'])
+
+            # all_items is used for auto-reload at the end of a fight.
+            all_items = (False if 'all_items' not in action else
+                         action['all_items'])
+
+            # This loop almost always executes exactly once.  The only time
+            # that it executes more than once is for individual loads (like a
+            # shotgun where you load one shell at a time) and we're loading
+            # all items (like an auto-reload after a fight).
+            keep_going = True
+            while keep_going:
+                # Prepare the new clip -- I know this is backwards but the
+                # clip index (for the new clip) is still valid until the old clip
+                # is added to the equipment list
+
+                if infinite_clips:
+                    clip = copy.deepcopy(fighter.equipment.get_item_by_index(
+                        action['clip-index']))
+                    if 'count' in clip:
+                        clip['count'] = 1
+                else:
+                    clip = fighter.remove_equipment(action['clip-index'], 1)
+
+                # And put the new clip in the weapon
+                weapon.load(clip, load_type)
+
+                if (not all_items or
+                        load_type != ca_equipment.Equipment.RELOAD_ONE or
+                        weapon.shots_left() == weapon.shots()):
+                    keep_going = False
 
             return Ruleset.HANDLED_OK
 
