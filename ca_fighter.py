@@ -620,6 +620,7 @@ class Fighter(ThingsInFight):
                 self._ruleset.do_action(self,
                                     {'action-name': 'reload',
                                      'comment': 'Reloading after fight',
+                                     'all_items': True,
                                      'notimer': True,
                                      'quiet': True},
                                     fight_handler,
@@ -1127,7 +1128,8 @@ class Fighter(ThingsInFight):
                 skill, to_hit_why = self._ruleset.get_to_hit(self,
                                                               why_opponent,
                                                               weapon,
-                                                              mode)
+                                                              mode,
+                                                              None)
                 lines.extend([[{'text': x,
                                 'mode': curses.A_NORMAL}] for x in to_hit_why])
 

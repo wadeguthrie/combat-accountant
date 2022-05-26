@@ -22,7 +22,8 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: internal use of skills should all be lowercased (xxx.lower()).
+
+# TODO: shotgun support: damage stuff for shotguns
 
 # TODO: include powerstone handling
 # TODO: on importing advantages: "notes" should be included in name in parens

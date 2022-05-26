@@ -6,6 +6,9 @@ import pprint
 
 
 class Equipment(object):
+    (RELOAD_NONE,   # for a thrown dagger or suriken
+     RELOAD_ONE,    # for a shotgun or grenade launcher, loaded one at a time
+     RELOAD_CLIP) = range(3)   # reload_type
     '''
     Object that manipulates a list of equipment.  The list is assumed to be
     from somewhere in the Game File data but that's not strictly a requirement.
@@ -45,7 +48,11 @@ class Equipment(object):
         for index, item in enumerate(container):
             if item['name'] == new_item['name']:
                 if self.__is_same_thing(item, new_item):
-                    item['count'] += new_item['count']
+                    count = 1 if 'count' not in new_item else new_item['count']
+                    if 'count' in item:
+                        item['count'] += count
+                    else:
+                        item['count'] = count
                     return index
 
         container.append(new_item)
@@ -350,7 +357,10 @@ class EquipmentManager(object):
                                                      damage['plus']))
 
                 if 'reload' in item:
-                    texts.append('reload: %d' % item['reload'])
+                    if item['reload_type'] == Equipment.RELOAD_ONE:
+                        texts.append('reload: %d(i)' % item['reload'])
+                    else:
+                        texts.append('reload: %d' % item['reload'])
                 if 'acc' in item:
                     texts.append('acc: %d' % item['acc'])
                 if 'bulk' in item:
@@ -541,25 +551,6 @@ class Weapon(object):
         self.details = weapon_details
         self.name = self.details['name']
 
-    # Unused?
-    #def clip_works_with_weapon(self,
-    #                           clip  # dict for item
-    #                           ):
-    #    if clip is None:
-    #        return False
-    #
-    #    clip_shots_unknown = 'shots' not in clip
-    #    weapon_shots_unknown = ('ammo' not in self.details or
-    #                            'shots' not in self.details['ammo'])
-    #
-    #    if clip_shots_unknown and weapon_shots_unknown:
-    #        return False
-    #
-    #    if clip_shots_unknown or weapon_shots_unknown:
-    #        return True
-    #
-    #    return clip['shots'] == self.details['ammo']['shots']
-
     def get_attack_modes(self):
         modes = [mode for mode in self.details['type'].iterkeys()
                  if mode != 'container']
@@ -580,23 +571,43 @@ class Weapon(object):
         return True if 'shield' in self.details['type'] else False
 
     def load(self,
-             clip  # dict
+             clip,      # dict: from character file
+             load_type  # int: RELOAD_NONE, RELOAD_ONE, or RELOAD_CLIP
              ):
+
         if clip is None:
             return
-        self.details['clip'] = clip
 
-        if 'shots_left' in clip:
-            self.shots_left(clip['shots_left'])
-        else:
-            shots = self.shots()
-            self.shots_left(shots)
+        if load_type == Equipment.RELOAD_NONE:
+            return
+
+        elif load_type == Equipment.RELOAD_ONE:
+            if self.details['clip'] is None:
+                self.details['clip'] = clip
+                # storing the total number of shots in clip as a convenience
+                self.details['clip']['shots'] = self.details['ammo']['shots']
+                self.details['clip']['shots_left'] = 1
+            elif (self.details['clip']['shots_left'] <
+                    self.details['clip']['shots']):
+                self.details['clip']['shots_left'] += 1
+        else: # load_type == Equipment.or RELOAD_CLIP
+            self.details['clip'] = clip
+
+            if 'ammo' not in self.details:
+                return
+
+        # Shotgun or battery needs this stored in ammo:
+        if 'shots' in self.details['ammo']:
+            clip['shots'] = self.details['ammo']['shots']
+
+        if 'shots_left' not in clip:
+            clip['shots_left'] = clip['shots']
 
     def notes(self):
         weapon_notes = (None if 'notes' not in self.details
                         or len(self.details) == 0 else self.details['notes'])
 
-        clip = None if 'clip' not in self.details else self.details['clip']
+        clip = self.get_clip()
 
         ammo_notes = (None if clip is None
                       or 'notes' not in clip
@@ -619,74 +630,47 @@ class Weapon(object):
         if not self.uses_ammo():
             return None
 
+        old_clip = None
         if 'clip' in self.details:
             old_clip = self.details['clip']
-            if old_clip is not None:
-                old_clip['shots'] = self.shots()
-                old_clip['shots_left'] = self.shots_left()
-        else:
-            old_clip = {'count': 1,
-                        'owners': [],
-                        'name': self.details['ammo']['name'],
-                        'notes': '',
-                        'shots': self.shots(),
-                        'shots_left': self.shots_left(),
-                        'type': ['misc'],
-                        }
         self.details['clip'] = None
         self.shots_left(0)
         return old_clip
 
     def shots(self):
-        return self.__get_parameter('shots', ammo=True)
+        clip = self.get_clip()
+        if clip is None or 'shots' not in clip:
+            return 0
+        return clip['shots']
 
     def shots_left(self,
                    new_value=None):
-        if new_value is not None:
-            return self.__set_parameter('shots_left', new_value, ammo=True)
-        return self.__get_parameter('shots_left', ammo=True)
+        clip = self.get_clip()
+        if clip is None or 'shots_left' not in clip:
+            return 0
 
-    def use_one_ammo(self):
+        if new_value is not None:
+            clip['shots_left'] = new_value
+
+        return clip['shots_left']
+
+    def use_one_ammo(self,
+                     rounds=1   # Number of rounds to take
+                     ):
         '''
         Returns True if successful, False otherwise
         '''
         if not self.uses_ammo():
             return True
-        clip = None if 'clip' not in self.details else self.details['clip']
-        if self.shots_left() <= 0:
+        clip = self.get_clip()
+        if clip is None:
             return False
-        if clip is not None and 'shots_left' in clip:
-            clip['shots_left'] -= 1
-        self.details['ammo']['shots_left'] -= 1
+        if self.shots_left() < rounds:
+            return False
+        clip['shots_left'] -= rounds
         return True
 
     def uses_ammo(self):
-        return True if 'ammo' in self.details else False
-
-    def __get_parameter(self,
-                        param,   # string
-                        ammo=False
-                        ):
-        clip = None if 'clip' not in self.details else self.details['clip']
-        if clip is not None and param in clip:
-            return clip[param]
-        if (param == 'shots_left' and 'clip' in self.details and
-                self.details['clip'] is None):
-            return 0
-        if ammo:
-            return self.details['ammo'][param]
-        return self.details[param]
-
-    def __set_parameter(self,
-                        param,      # string
-                        new_value,  # number
-                        ammo=False
-                        ):
-        clip = None if 'clip' not in self.details else self.details['clip']
-        if clip is not None and param in clip:
-            clip[param] = new_value
-            return
-        if ammo:
-            self.details['ammo'][param] = new_value
-        else:
-            self.details[param] = new_value
+        return (True if 'reload_type' in self.details and
+                self.details['reload_type'] != Equipment.RELOAD_NONE
+                else False)

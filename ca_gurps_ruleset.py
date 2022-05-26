@@ -1964,7 +1964,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # Can only feint with a melee weapon
         if holding_melee:
             action_menu.append(('feint (B365)', {'action':
-                                                 {'action-name': 'feint'}}))
+                                                {'action-name': 'feint'}}))
 
         # FP: B426
         move = fighter.details['current']['basic-move']
@@ -2719,7 +2719,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         to_hit, ignore_why = self.get_to_hit(fighter,
                                                              opponent,
                                                              weapon,
-                                                             mode)
+                                                             mode,
+                                                             None)
                         if to_hit is not None:  # No reason for it to me None
                             damage, ignore_why = self.get_damage(fighter, weapon, mode)
                             damage_str = self.damage_to_string(damage)
@@ -2948,6 +2949,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                    opponent,    # Fighter object
                    weapon,      # Weapon object
                    mode,        # string: 'swung weapon', or ...
+                   shots_fired, # int: how many shots taken (1 unless RoF > 1).
+                                #       None means 'use max'
                    moving=False # bool: ignore timers/we attack during move
                    ):
         '''
@@ -3079,6 +3082,43 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             elif fighter.details['aim']['rounds'] > 2:
                 why.append('  +2 due to 2 or more additional rounds of aiming')
                 skill += 2
+
+        # Shotgun? - B373
+        if ('shots_per_round' in weapon.details and
+                'pellets_per_shot' in weapon.details):
+            to_hit_bonus = [
+                    {'shots': 4, 'bonus': +0},
+                    {'shots': 8, 'bonus': +1},
+                    {'shots': 12, 'bonus': +2},
+                    {'shots': 16, 'bonus': +3},
+                    {'shots': 24, 'bonus': +4},
+                    {'shots': 49, 'bonus': +5},
+                    {'shots': 99, 'bonus': +6},
+                    # TODO: each x2, +1 to hit
+                    ]
+
+            # If shots_fired is None, check to see if we've already done an
+            # action that has set the number of shots fired.
+
+            if shots_fired is None:
+                timers = fighter.timers.get_all()
+                for timer in timers:
+                    if ('info' in timer.details and
+                        'shots_fired' in timer.details['info']):
+                        shots_fired = timer.details['info']['shots_fired']
+
+            if shots_fired is None:
+                shots_fired = weapon.details['shots_per_round']
+
+            total_shots = shots_fired * weapon.details['pellets_per_shot']
+            for entry in to_hit_bonus:
+                if total_shots <= entry['shots']:
+                    skill += entry['bonus']
+                    why.append('  %+d for %d shots x %d pellets (B373)' %
+                            (entry['bonus'],
+                             shots_fired,
+                             weapon.details['pellets_per_shot']))
+                    break
 
         # Shock
 
@@ -3672,6 +3712,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 #"damage": {"dice": { "plus": 0, "num_dice": 0, "type": "pi" }},
                 "bulk": -10,
                 "reload": 10,
+                # ca_equipment.Equipment.RELOAD_CLIP
                 #"skill": {"*UNKNOWN*": 0},
                 "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
                 # clip is not required
@@ -4812,90 +4853,184 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
         '''
-        self.reset_aim(fighter)
 
-        # Timer
+        if 'part' in action and action['part'] == 2:
+            # This is the 2nd part of a 2-part action.  This part
+            # actually perfoms all the GurpsRuleset-specific actions
+            # and side-effects of doing whatever.
 
-        timer = ca_timers.Timer(None)
-        # TODO (now): Mods are actual total values.  They _should_ be delta
-        #   values but one of the mods caps the to-hit to 9.
-        mods = None
+            self.reset_aim(fighter)
 
-        # Get some details
+            # Timer
 
-        weapons = fighter.get_current_weapons()
-        if (action['weapon-index'] is None or
-                action['weapon-index'] >= len(weapons)):
-            return None  # No timer
-        weapon = weapons[action['weapon-index']]
-        if weapon is None:
-            return None  # No timer
+            timer = ca_timers.Timer(None)
+            # TODO (now): Mods are actual total values.  They _should_ be delta
+            #   values but one of the mods caps the to-hit to 9.
+            mods = None
 
-        holding_ranged = False if len(weapons) == 0 else weapon.is_ranged_weapon()
-        move = fighter.details['current']['basic-move']
+            # Get some details
 
-        if action['action-name'] == 'all-out-attack':
-            if holding_ranged:
-                text = ['All out attack',
-                        ' Choice of:',
-                        '   +1 to hit',
-                        '   suppression fire (if ROF > 4)',
-                        ' Defense: NONE',
-                        ' Move: 1/2 = %d' % (move/2)]
+            weapons = fighter.get_current_weapons()
+            if (action['weapon-index'] is None or
+                    action['weapon-index'] >= len(weapons)):
+                return None  # No timer
+            weapon = weapons[action['weapon-index']]
+            if weapon is None:
+                return None  # No timer
+
+            holding_ranged = False if len(weapons) == 0 else weapon.is_ranged_weapon()
+            move = fighter.details['current']['basic-move']
+
+            if action['action-name'] == 'all-out-attack':
+                if holding_ranged:
+                    text = ['All out attack',
+                            ' Choice of:',
+                            '   +1 to hit',
+                            '   suppression fire (if ROF > 4)',
+                            ' Defense: NONE',
+                            ' Move: 1/2 = %d' % (move/2)]
+                else:
+                    text = ['All out attack',
+                            ' Choice of:',
+                            '   +4 to hit',
+                            '   double attack (simple melee weapon)',
+                            '   feint',
+                            '   +2 damage',
+                            ' Defense: NONE',
+                            ' Move: 1/2 = %d' % (move/2)]
+
+            elif action['action-name'] == 'attack':
+                text = ['Attack', ' Defense: any', ' Move: step']
+
+            elif action['action-name'] == 'move-and-attack':
+                # FP: B426
+                no_fatigue_penalty = self.get_option('no-fatigue-penalty')
+                if ((no_fatigue_penalty is None or not no_fatigue_penalty) and
+                        (fighter.details['current']['fp'] <
+                            (fighter.details['permanent']['fp'] / 3))):
+                    move_string = 'half=%d (FP:B426)' % (move/2)
+                else:
+                    move_string = 'full=%d' % move
+
+                # Move and attack info
+                text = ['Move & Attack',
+                        ' Defense: Dodge,block',
+                        ' Move: %s' % move_string]
+                opponent = (None if fight_handler is None else
+                        fight_handler.get_opponent_for(fighter))
+
+                for weapon in weapons:
+                    modes = weapon.get_attack_modes()
+                    for mode in modes:
+                        text.append(' %s' % mode)
+                        shots_fired = (None if 'shots_fired' not in action else
+                                       action['shots_fired'])
+
+                        to_hit, ignore_why = self.get_to_hit(fighter,
+                                                             opponent,
+                                                             weapon,
+                                                             mode,
+                                                             shots_fired,
+                                                             moving=True)
+
+                        crit, fumble = self.__get_crit_fumble(to_hit)
+                        text.append('  %s to-hit: %d, crit <= %d, fumble >= %d' % (
+                            weapon.details['name'], to_hit, crit, fumble))
+
             else:
-                text = ['All out attack',
-                        ' Choice of:',
-                        '   +4 to hit',
-                        '   double attack (simple melee weapon)',
-                        '   feint',
-                        '   +2 damage',
-                        ' Defense: NONE',
-                        ' Move: 1/2 = %d' % (move/2)]
+                text = ['<<UNHANDLED ACTION: %s' % action['action-name']]
 
-        elif action['action-name'] == 'attack':
-            text = ['Attack', ' Defense: any', ' Move: step']
+            timer.from_pieces({'parent-name': fighter.name,
+                               'rounds': 1 - ca_timers.Timer.announcement_margin,
+                               'string': text})
+            if 'shots_fired' in action:
+                timer.details['info'] = {'shots_fired': action['shots_fired']}
+            if action['action-name'] == 'move-and-attack':
+                timer.details['move-and-attack'] = True
 
-        elif action['action-name'] == 'move-and-attack':
-            # FP: B426
-            no_fatigue_penalty = self.get_option('no-fatigue-penalty')
-            if ((no_fatigue_penalty is None or not no_fatigue_penalty) and
-                    (fighter.details['current']['fp'] <
-                        (fighter.details['permanent']['fp'] / 3))):
-                move_string = 'half=%d (FP:B426)' % (move/2)
-            else:
-                move_string = 'full=%d' % move
-
-            # Move and attack info
-            text = ['Move & Attack',
-                    ' Defense: Dodge,block',
-                    ' Move: %s' % move_string]
-            opponent = (None if fight_handler is None else
-                    fight_handler.get_opponent_for(fighter))
-
-            for weapon in weapons:
-                modes = weapon.get_attack_modes()
-                for mode in modes:
-                    text.append(' %s' % mode)
-                    to_hit, ignore_why = self.get_to_hit(fighter,
-                                                         opponent,
-                                                         weapon,
-                                                         mode,
-                                                         moving=True)
-
-                    crit, fumble = self.__get_crit_fumble(to_hit)
-                    text.append('  %s to-hit: %d, crit <= %d, fumble >= %d' % (
-                        weapon.details['name'], to_hit, crit, fumble))
+            return timer
 
         else:
-            text = ['<<UNHANDLED ACTION: %s' % action['action-name']]
+            # This is the 1st part of a 2-part action.  This part of
+            # the action asks questions of the user and sends the
+            # second part.  The 1st part isn't executed when playing
+            # back.
 
-        timer.from_pieces({'parent-name': fighter.name,
-                           'rounds': 1 - ca_timers.Timer.announcement_margin,
-                           'string': text})
-        if action['action-name'] == 'move-and-attack':
-            timer.details['move-and-attack'] = True
+            # Multiple shots per round describes machine guns or shotguns
+            weapon_needs_multiple_shot_handling = True
 
-        return timer
+            # Don't do the first part when playing back.
+            if (fight_handler is not None and
+                    fight_handler.world.playing_back):
+                return None  # No timers
+
+            # Get the current weapon
+            weapons = fighter.get_current_weapons()
+            if (weapons is None or
+                    fighter.details['current-weapon'] >= len(weapons)):
+                weapon_needs_multiple_shot_handling = False
+
+            if weapon_needs_multiple_shot_handling:
+                weapon = weapons[fighter.details['current-weapon']]
+                if weapon is None:
+                    weapon_needs_multiple_shot_handling = False
+
+            # Does the weapon shoot multiple rounds?
+            if weapon_needs_multiple_shot_handling:
+                if ('shots_per_round' not in weapon.details or
+                        weapon.details['shots_per_round'] <= 1):
+                    weapon_needs_multiple_shot_handling = False
+
+            max_shots_this_round = 1    # Just a default value
+            if weapon_needs_multiple_shot_handling:
+                max_shots_this_round = weapon.details['shots_per_round']
+                if max_shots_this_round <= 1:
+                    weapon_needs_multiple_shot_handling = False
+
+            # TODO: add this to weapons: 'shots_per_round' and 'pellets_per_shot'
+
+            # Do we have more than 1 round in the clip?
+            if weapon_needs_multiple_shot_handling:
+                clip = weapon.get_clip()
+                if clip is None:
+                    weapon_needs_multiple_shot_handling = False
+
+            if weapon_needs_multiple_shot_handling:
+                shots_left = weapon.shots_left()
+                if shots_left < max_shots_this_round:
+                    max_shots_this_round = shots_left
+                    if max_shots_this_round <= 0:
+                        weapon_needs_multiple_shot_handling = False
+
+            # Ask how many rounds we want to expend
+            if weapon_needs_multiple_shot_handling:
+                shots_fired = 1 if shots_left == 1 else None
+                while shots_fired is None:
+                    shots_fired = self._window_manager.input_box_number(
+                            1, 20,
+                            'Fire how many rounds (%d max)?' %
+                                max_shots_this_round)
+                    if shots_fired > max_shots_this_round or shots_fired < 0:
+                        self._window_manager.error(
+                            ['Gotta shoot between 0 and %d shots' %
+                                max_shots_this_round]
+                        )
+                        shots_fired = None
+
+            # TODO: In other event, maybe, show the tables and such
+
+            # Send the action for the second part
+
+            # Do a deepcopy for the second part to copy the comment --
+            # that's what gets displayed for the history command.
+
+            new_action = copy.deepcopy(action)
+            if weapon_needs_multiple_shot_handling and shots_fired is not None:
+                new_action['shots_fired'] = shots_fired
+            new_action['part'] = 2
+            self.do_action(fighter, new_action, fight_handler)
+
+            return None # No timers for part 1
 
     def __do_nothing(self,
                      fighter,      # Fighter object
@@ -5476,6 +5611,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         has_2_parts = {
                        'adjust-attribute': True,
                        'aim': True,
+                       'attack': True,
                        'cast-spell': True,
                        'reload': True}
 
