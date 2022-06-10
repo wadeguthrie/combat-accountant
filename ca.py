@@ -23,8 +23,6 @@ import ca_gurps_ruleset
 import ca_timers
 
 
-# TODO: shotgun support: damage stuff for shotguns
-
 # TODO: include powerstone handling
 # TODO: on importing advantages: "notes" should be included in name in parens
 # TODO: should ask when update character wants to delete a spell
@@ -7424,7 +7422,7 @@ class Options(object):
 
 # Main
 if __name__ == '__main__':
-    VERSION = '00.04.02 provisional'    # major version, minor version, bug fixes
+    VERSION = '00.04.03 provisional'    # major version, minor version, bug fixes
 
     parser = MyArgumentParser()
     parser.add_argument(
