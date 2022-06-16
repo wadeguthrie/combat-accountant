@@ -1247,7 +1247,7 @@ class Ruleset(object):
             # Put a non-zero count clip back in equipment list
             if weapon.shots_left() > 0 and not reload_by_1:
                 old_clip = weapon.remove_old_clip()
-                if old_clip is not None: # and not infinite_clips):
+                if old_clip is not None and not infinite_clips:
                     if (old_clip['shots_left'] > 0 or
                             ('discard-when-empty' in old_clip and
                              not old_clip['discard-when-empty'])):
