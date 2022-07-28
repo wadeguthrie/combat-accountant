@@ -32,7 +32,7 @@ class Ruleset(object):
     }
     '''
 
-    (UNHANDLED, HANDLED_OK, HANDLED_ERROR, DONT_LOG) = range(4)
+    (UNHANDLED, HANDLED_OK, HANDLED_ERROR, DONT_LOG) = list(range(4))
 
     has_2_parts = {'reload': True, 'user-defined': True}
     timing_headings = ['name', 'group', 'time', 'action', 'state', 'round']
@@ -480,7 +480,7 @@ class Ruleset(object):
         if 'permanent' not in fighter.details:
             return
 
-        for stat in fighter.details['permanent'].iterkeys():
+        for stat in fighter.details['permanent'].keys():
             fighter.details['current'][stat] = (
                                         fighter.details['permanent'][stat])
         if fighter.details['state'] != 'fight':
@@ -541,11 +541,11 @@ class Ruleset(object):
         # This is just a shim to let pre-2-weapon crash files work (for
         # testing).  If we get a 'draw' action with None weapon, we'll turn
         # it into a 'holster' action for all of the weapons we're carrying.
-        if type(creature['weapon-index']) is not list:
+        if not isinstance(creature['weapon-index'], list):
             new_stuff = [creature['weapon-index']]
             creature['weapon-index'] = new_stuff
         if ("preferred-weapon-index" in creature and
-                type(creature['preferred-weapon-index']) is not list):
+                not isinstance(creature['preferred-weapon-index'], list)):
             new_stuff = ([] if creature['preferred-weapon-index'] is None
                          else [creature['preferred-weapon-index']])
             creature['preferred-weapon-index'] = new_stuff
@@ -559,7 +559,7 @@ class Ruleset(object):
 
         # First, let's make sure that they have all the required parts.
 
-        for key, value in ca_fighter.Fighter.strawman.iteritems():
+        for key, value in ca_fighter.Fighter.strawman.items():
             if key not in creature:
                 creature[key] = value
 
@@ -1247,7 +1247,7 @@ class Ruleset(object):
             # Put a non-zero count clip back in equipment list
             if weapon.shots_left() > 0 and not reload_by_1:
                 old_clip = weapon.remove_old_clip()
-                if old_clip is not None and not infinite_clips:
+                if old_clip is not None: # and not infinite_clips):
                     if (old_clip['shots_left'] > 0 or
                             ('discard-when-empty' in old_clip and
                              not old_clip['discard-when-empty'])):
@@ -1856,23 +1856,23 @@ class Ruleset(object):
             items_string = 'weapons'
             natural_item = 'natural-weapon'
 
-        print '\n--- %s\'s %s ---' % (fighter.name, items_string)
+        print('\n--- %s\'s %s ---' % (fighter.name, items_string))
         for index in index_list:
             item = fighter.equipment.get_item_by_index(index)
             name = '<None>' if item is None else item['name']
-            print '  %d: %s' % (index, name)
+            print('  %d: %s' % (index, name))
 
-        print '--- in use %s ---' % items_string
+        print('--- in use %s ---' % items_string)
         for index in fighter.details[action_index]:
             item = fighter.equipment.get_item_by_index(index)
             name = '<None>' if item is None else item['name']
-            print '  %d: %s' % (index, name)
+            print('  %d: %s' % (index, name))
 
-        print '--- preferred %s ---' % items_string
+        print('--- preferred %s ---' % items_string)
         for index in fighter.details[preferred_index]:
             item = fighter.equipment.get_item_by_index(index)
             name = '<None>' if item is None else item['name']
-            print '  %d: %s' % (index, name)
+            print('  %d: %s' % (index, name))
 
     def __start_turn(self,
                      fighter,          # Fighter object

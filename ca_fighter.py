@@ -332,12 +332,12 @@ class Fighter(ThingsInFight):
 
      INJURED,  # Injured is separate since it's tracked by HP
      ABSENT,
-     FIGHT) = range(6)
+     FIGHT) = list(range(6))
 
     MAX_WEAPONS = 2 # because we only have 2 arms
 
     # When adding a new weapon, make it preferred?
-    NOT_PREFERRED, ADD_PREFERRED, REPLACE_PREFERRED = range(3)
+    NOT_PREFERRED, ADD_PREFERRED, REPLACE_PREFERRED = list(range(3))
 
     conscious_map = {
         'alive': ALIVE,
@@ -380,7 +380,7 @@ class Fighter(ThingsInFight):
 
     @staticmethod
     def get_name_from_state_number(number):
-        for name, value in Fighter.conscious_map.iteritems():
+        for name, value in Fighter.conscious_map.items():
             if value == number:
                 return name
         return '<unknown>'
@@ -1014,7 +1014,7 @@ class Fighter(ThingsInFight):
         '''
         # NOTE: ONLY CALLED FROM ACTION OR TESTING
 
-        for state_name, state_num in Fighter.conscious_map.iteritems():
+        for state_name, state_num in Fighter.conscious_map.items():
             if state_num == conscious_number:
                 self.details['state'] = state_name
                 break
@@ -1164,7 +1164,7 @@ class Fighter(ThingsInFight):
         '''
         best_skill = None
         best_value = None
-        for skill_camel, value in weapon['type'][mode]['skill'].iteritems():
+        for skill_camel, value in weapon['type'][mode]['skill'].items():
             skill_lower = skill_camel.lower()
             found_skill = False
             if skill_camel in self.details['skills']:

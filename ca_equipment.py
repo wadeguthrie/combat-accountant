@@ -8,7 +8,7 @@ import pprint
 class Equipment(object):
     (RELOAD_NONE,   # for a thrown dagger or suriken
      RELOAD_ONE,    # for a shotgun or grenade launcher, loaded one at a time
-     RELOAD_CLIP) = range(3)   # reload_type
+     RELOAD_CLIP) = list(range(3))   # reload_type
     '''
     Object that manipulates a list of equipment.  The list is assumed to be
     from somewhere in the Game File data but that's not strictly a requirement.
@@ -225,7 +225,7 @@ class Equipment(object):
         ''' For debugging purposes. '''
         PP = pprint.PrettyPrinter(indent=3, width=150)
         for index, item in enumerate(self.__equipment):
-            print '>>> INDEX %d:' % index
+            print('>>> INDEX %d:' % index)
             PP.pprint(item)
 
     #
@@ -250,10 +250,10 @@ class Equipment(object):
         if isinstance(lhs, dict):
             if not isinstance(rhs, dict):
                 return False
-            for key in rhs.iterkeys():
+            for key in rhs.keys():
                 if key not in lhs:
                     return False
-            for key in lhs.iterkeys():
+            for key in lhs.keys():
                 if key not in rhs:
                     return False
                 elif not self.__is_same_thing(lhs[key], rhs[key], level):
@@ -339,8 +339,8 @@ class EquipmentManager(object):
 
         char_detail.append([{'text': ''.join(texts), 'mode': mode}])
 
-        for type_name, item_type in item['type'].iteritems():
-            if type(item_type) is not dict:
+        for type_name, item_type in item['type'].items():
+            if not isinstance(item_type, dict):
                 continue
 
             if 'damage' in item_type:
@@ -552,7 +552,7 @@ class Weapon(object):
         self.name = self.details['name']
 
     def get_attack_modes(self):
-        modes = [mode for mode in self.details['type'].iterkeys()
+        modes = [mode for mode in self.details['type'].keys()
                  if mode != 'container']
         return modes
 

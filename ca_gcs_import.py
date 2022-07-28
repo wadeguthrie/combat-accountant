@@ -178,11 +178,11 @@ class Skills(object):
         # Add modifiers due to equipment
         if 'equip' in skill:
             PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
-            for looking_for, plus in skill['equip'].iteritems():
+            for looking_for, plus in skill['equip'].items():
                 if Skills.is_item_in_equipment(looking_for, char.stuff):
                     level += plus
         if 'advantage' in skill:
-            for looking_for, plus in skill['advantage'].iteritems():
+            for looking_for, plus in skill['advantage'].items():
                 if looking_for in char.char['advantages']:
                     level += plus
 
@@ -314,7 +314,7 @@ class CharacterGcs(object):
         if name is not None:
             # This strips all the unicode characters that aren't ASCII out --
             #   it means Atatche' case doesn't cause CURSES to crash
-            unicode_name = unicode(name, "utf-8")
+            unicode_name = str(name, "utf-8")
             new_thing['name'] = unicodedata.normalize(
                     'NFKD', unicode_name).encode('ascii', 'ignore').decode()
         count = 1 if 'quantity' not in item else item['quantity']
@@ -333,7 +333,7 @@ class CharacterGcs(object):
                         new_thing['type']['armor'] = {'dr': amount}
 
                         blank_item = self.__ruleset.make_empty_armor()
-                        for key, value in blank_item.iteritems():
+                        for key, value in blank_item.items():
                             if key not in new_thing:
                                 new_thing[key] = value
 
@@ -861,7 +861,7 @@ class CharacterGcs(object):
                 new_thing['parry'] = int(weapon['parry'])
 
         blank_item = self.__ruleset.make_empty_melee_weapon()
-        for key, value in blank_item.iteritems():
+        for key, value in blank_item.items():
             if key not in new_thing:
                 new_thing[key] = value
 
@@ -933,7 +933,7 @@ class CharacterGcs(object):
             '''
 
         blank_item = self.__ruleset.make_empty_missile_weapon()
-        for key, value in blank_item.iteritems():
+        for key, value in blank_item.items():
             if key not in new_thing:
                 new_thing[key] = value
 
@@ -1048,7 +1048,7 @@ class ImportCharacter(object):
         self.__import_equipment(squash=False)
 
     def pprint(self):
-        print '\n=== Import Creature ==='
+        print('\n=== Import Creature ===')
         PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
         PP.pprint(self.__char_json)
 
@@ -1282,7 +1282,7 @@ class ImportCharacter(object):
             return changes
 
         items_to_remove = []
-        for name in things_json.iterkeys():
+        for name in things_json.keys():
             if name not in things_gcs:
                 remove_menu = [('yes', True), ('no', False)]
                 remove, ignore = self.__window_manager.menu(
@@ -1312,7 +1312,7 @@ class ImportCharacter(object):
             # del removes a dict item
             del self.__char_json[heading][name]
 
-        for name in things_gcs.iterkeys():
+        for name in things_gcs.keys():
             changes.append('%s (%d) %s added' %
                     (name, things_gcs[name], heading_singular))
             things_json[name] = things_gcs[name]
@@ -1469,14 +1469,14 @@ class ImportCharacter(object):
             if not isinstance(item_gcs, dict):
                 return # Not worth merging if they're not the same type
 
-            for key, value in item_gcs.iteritems():
+            for key, value in item_gcs.items():
                 if key not in item_json:
                     item_json[key] = value
                 elif item_json[key] != item_gcs[key]:
                     if self.__is_scalar(item_json[key]):
                         # TODO: |str| instead of |basestring| in python 3
-                        if (isinstance(item_gcs[key], basestring) and
-                                isinstance(item_json[key], basestring)):
+                        if (isinstance(item_gcs[key], str) and
+                                isinstance(item_json[key], str)):
                             if len(item_json[key]) == 0:
                                 item_json[key] = item_gcs[key]
                         else:

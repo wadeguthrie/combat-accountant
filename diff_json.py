@@ -33,17 +33,17 @@ class GmJson(object):
                         error_array.append(error_msg)
 
                     if self.__window_manager is None:
-                        print ''
+                        print('')
                         for message in error_array:
-                            print '%s' % message
-                        print ''
+                            print('%s' % message)
+                        print('')
                     else:
                         self.__window_manager.error(error_array)
 
         except:
             message = 'Could not read JSON file "%s"' % self.__filename
             if self.__window_manager is None:
-                print message
+                print(message)
             else:
                 self.__window_manager.error([message])
             self.read_data = None
@@ -51,12 +51,12 @@ class GmJson(object):
 
     def __exit__(self, exception_type, exception_value, exception_traceback):
         if exception_type is IOError:
-            print 'IOError: %r' % exception_type
-            print 'EXCEPTION val: %s' % exception_value
+            print('IOError: %r' % exception_type)
+            print('EXCEPTION val: %s' % exception_value)
             traceback.print_exc()  # or traceback.format_exc()
         elif exception_type is not None:
-            print 'EXCEPTION type: %r' % exception_type
-            print 'EXCEPTION val: %s' % exception_value
+            print('EXCEPTION type: %r' % exception_type)
+            print('EXCEPTION val: %s' % exception_value)
             traceback.print_exc()  # or traceback.format_exc()
 
         if self.write_data is not None:
@@ -77,7 +77,7 @@ class GmJson(object):
     @staticmethod
     def __byteify(data, ignore_dicts=False):
         # if this is a unicode string, return its string representation
-        if isinstance(data, unicode):
+        if isinstance(data, str):
             return data.encode('utf-8')
         # if this is a list of values, return list of byteified values
         if isinstance(data, list):
@@ -89,7 +89,7 @@ class GmJson(object):
             return {
                 GmJson.__byteify(key, ignore_dicts=True):
                     GmJson.__byteify(value, ignore_dicts=True)
-                    for key, value in data.iteritems()
+                    for key, value in data.items()
             }
         # if it's anything else, return it in its original form
         return data
@@ -111,49 +111,49 @@ def are_equal(lhs,
               ):
     if isinstance(lhs, dict):
         if not isinstance(rhs, dict):
-            print '\n---------------------'
-            print '** TYPE: %s%s is a DICT, but not in %s' % (
-                    ARGS.filename[0], path, ARGS.filename[1])
+            print('\n---------------------')
+            print('** TYPE: %s%s is a DICT, but not in %s' % (
+                    ARGS.filename[0], path, ARGS.filename[1]))
             if ARGS.verbose:
-                print '\nlhs'
+                print('\nlhs')
                 PP.pprint(lhs)
-                print '\nrhs'
+                print('\nrhs')
                 PP.pprint(rhs)
             return False
-        for key in rhs.iterkeys():
+        for key in rhs.keys():
             if key not in lhs:
-                print '\n---------------------'
-                print '** KEY (%s): %s%s[%s] does not exist' % (
-                        path, ARGS.filename[0], path, key)
+                print('\n---------------------')
+                print('** KEY (%s): %s%s[%s] does not exist' % (
+                        path, ARGS.filename[0], path, key))
                 if ARGS.verbose:
-                    print '\nlhs'
+                    print('\nlhs')
                     PP.pprint(lhs)
-                    print '\nrhs'
+                    print('\nrhs')
                     PP.pprint(rhs)
                 else:
-                    print '\n%s%s[%s]:' % (ARGS.filename[1], path, key)
+                    print('\n%s%s[%s]:' % (ARGS.filename[1], path, key))
                     PP.pprint(rhs[key])
                 return False
         result = True
-        for key in lhs.iterkeys():
+        for key in lhs.keys():
             new_path = path + ('[%s]' % key)
             if key not in rhs:
-                print '\n---------------------'
-                print '** KEY (%s): %s%s[%s] does not exist' % (
-                        key, ARGS.filename[1], path, key)
+                print('\n---------------------')
+                print('** KEY (%s): %s%s[%s] does not exist' % (
+                        key, ARGS.filename[1], path, key))
                 if ARGS.verbose:
-                    print '\nlhs'
+                    print('\nlhs')
                     PP.pprint(lhs)
-                    print '\nrhs'
+                    print('\nrhs')
                     PP.pprint(rhs)
                 else:
-                    print '\n%s%s[%s]:' % (ARGS.filename[0], path, key)
+                    print('\n%s%s[%s]:' % (ARGS.filename[0], path, key))
                     PP.pprint(lhs[key])
                 result = False
             elif not are_equal(lhs[key], rhs[key], new_path):
-                print '\nSo, %s%s[%r] != %s[...][%r]' % (
+                print('\nSo, %s%s[%r] != %s[...][%r]' % (
                         ARGS.filename[0], path, key,
-                        ARGS.filename[1], key)
+                        ARGS.filename[1], key))
                 # print '\nlhs'
                 # PP.pprint(lhs)
                 # print '\nrhs'
@@ -163,33 +163,33 @@ def are_equal(lhs,
 
     elif isinstance(lhs, list):
         if not isinstance(rhs, list):
-            print '\n---------------------'
-            print '** TYPE: %s%s is a LIST, not so in %s' % (
-                    ARGS.filename[0], path, ARGS.filename[1])
+            print('\n---------------------')
+            print('** TYPE: %s%s is a LIST, not so in %s' % (
+                    ARGS.filename[0], path, ARGS.filename[1]))
             if ARGS.verbose:
-                print '\nlhs'
+                print('\nlhs')
                 PP.pprint(lhs)
-                print '\nrhs'
+                print('\nrhs')
                 PP.pprint(rhs)
             return False
         if len(lhs) != len(rhs):
-            print '\n---------------------'
-            print '** LENGTH: len(%s%s) =%d != len(%s[...]) =%d' % (
+            print('\n---------------------')
+            print('** LENGTH: len(%s%s) =%d != len(%s[...]) =%d' % (
                     ARGS.filename[0], path, len(lhs),
-                    ARGS.filename[1], len(rhs))
+                    ARGS.filename[1], len(rhs)))
             if ARGS.verbose:
-                print '\nlhs'
+                print('\nlhs')
                 PP.pprint(lhs)
-                print '\nrhs'
+                print('\nrhs')
                 PP.pprint(rhs)
             return False
         result = True
         for i in range(len(lhs)):
             new_path = path + ('[%d]' % i)
             if not are_equal(lhs[i], rhs[i], new_path):
-                print '\nSo, %s%s[%d] != %s[...][%d]' % (
+                print('\nSo, %s%s[%d] != %s[...][%d]' % (
                         ARGS.filename[0], path, i,
-                        ARGS.filename[1], i)
+                        ARGS.filename[1], i))
                 # print '\nlhs'
                 # PP.pprint(lhs)
                 # print '\nrhs'
@@ -199,14 +199,14 @@ def are_equal(lhs,
 
     else:
         if lhs != rhs:
-            print '\n---------------------'
-            print '** VALUE: %s%s =%r != %s[...] =%r' % (
+            print('\n---------------------')
+            print('** VALUE: %s%s =%r != %s[...] =%r' % (
                     ARGS.filename[0], path, lhs,
-                    ARGS.filename[1], rhs)
+                    ARGS.filename[1], rhs))
             if ARGS.verbose:
-                print '\nlhs'
+                print('\nlhs')
                 PP.pprint(lhs)
-                print '\nrhs'
+                print('\nrhs')
                 PP.pprint(rhs)
             return False
         else:
@@ -232,11 +232,11 @@ if __name__ == '__main__':
 
     PP = pprint.PrettyPrinter(indent=3, width=150)
 
-    print 'LHS: %s' % ARGS.filename[0]
-    print 'RHS: %s' % ARGS.filename[1]
-    print ''
+    print('LHS: %s' % ARGS.filename[0])
+    print('RHS: %s' % ARGS.filename[1])
+    print('')
 
     with GmJson(ARGS.filename[0]) as file1:
         with GmJson(ARGS.filename[1]) as file2:
             if are_equal(file1.read_data, file2.read_data, ''):
-                print 'files are equal'
+                print('files are equal')

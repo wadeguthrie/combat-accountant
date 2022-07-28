@@ -155,7 +155,7 @@ class MainGmWindow(ca_gui.GmWindow):
                     - (self._command_ribbon['lines_for_choices'] + 1))
                                 # ...a space for the command ribbon + margin
 
-        width = (cols / 2) - 1  # -1 for margin
+        width = int((cols / 2) - 1)  # -1 for margin
 
         self.__char_list_window = ca_gui.GmScrollableWindow(
                                                  self.__char_list,
@@ -313,7 +313,7 @@ class PersonnelGmWindow(ca_gui.GmWindow):
             - (self._command_ribbon['lines_for_choices'] + 1))
                                         # ...a space for the command ribbon.
 
-        width = (cols / 2) - 2  # -1 for margin
+        width = int((cols / 2) - 2)  # -1 for margin
 
         self.__char_list_window = ca_gui.GmScrollableWindow(
                                                  self.__char_list,
@@ -991,7 +991,7 @@ class World(object):
                                                           country_menu)
         if country_name is None:
             randomly_generate = True
-            country_name = random.choice(self.details['names'].keys())
+            country_name = random.choice(list(self.details['names'].keys()))
 
         # Gender
 
@@ -1194,6 +1194,9 @@ class ScreenHandler(object):
         keep_going = True
         while keep_going:
             string = self._window_manager.get_one_character()
+            if isinstance(string, bytes):
+                window_manager.error(['5: converting "%r"' % string])
+                string = string.decode('utf-8')
             if string in self._choices:
                 keep_going = self._choices[string]['func']()
             else:
@@ -1229,7 +1232,7 @@ class ScreenHandler(object):
         '''
 
         # Check for errors...
-        for key in self._choices.iterkeys():
+        for key in self._choices.keys():
             if key in new_choices:
                 if key < 256:
                     self._window_manager.error(
@@ -1298,7 +1301,7 @@ class ScreenHandler(object):
         max_name_len = 0
         margin_len = 2
         max_help_len = 0
-        for key, value in self._choices.iteritems():
+        for key, value in self._choices.items():
             if key in ca_gui.GmWindow.SCREEN_MOVEMENT_CHARS:
                 char = ca_gui.GmWindow.SCREEN_MOVEMENT_CHARS[key]
             elif key < 256:
@@ -1328,7 +1331,7 @@ class ScreenHandler(object):
         # Put in sorted order
 
         keys = []
-        for key in self._choices.iterkeys():
+        for key in self._choices.keys():
             if key in ca_gui.GmWindow.SCREEN_MOVEMENT_CHARS:
                 char = ca_gui.GmWindow.SCREEN_MOVEMENT_CHARS[key]
             elif key < 256:
@@ -1454,7 +1457,7 @@ class AttributeWidget(object):
                 change_current = True if attr_type == 'current' else False
 
             attr_menu = [(attr, attr)
-                         for attr in self.__fighter.details[attr_type].keys()]
+                         for attr in list(self.__fighter.details[attr_type].keys())]
 
             attr, starting_attribute = self.__window_manager.menu(
                     'Attr To Modify', attr_menu, starting_attribute)
@@ -1523,7 +1526,7 @@ class PersonnelHandler(ScreenHandler):
     '''
     (NPCs,
      PCs,
-     MONSTERs) = range(3)
+     MONSTERs) = list(range(3))
 
     (CHAR_LIST,
      CHAR_DETAIL) = (1, 2)  # These are intended to be bits so they can be ored
@@ -2131,7 +2134,7 @@ class PersonnelHandler(ScreenHandler):
         keep_asking = True
         spell_menu = [(spell_name, spell_name)
                       for spell_name in
-                      sorted(self.world.ruleset.spells.iterkeys())]
+                      sorted(self.world.ruleset.spells.keys())]
         current_selection = 0
         while keep_asking:
             new_spell_name, current_selection = self._window_manager.menu(
@@ -2251,7 +2254,7 @@ class PersonnelHandler(ScreenHandler):
         if fighter is None:
             return None
 
-        state_menu = sorted(ca_fighter.Fighter.conscious_map.iteritems(),
+        state_menu = sorted(iter(ca_fighter.Fighter.conscious_map.items()),
                             key=lambda x: x[1])
         new_state_number, ignore = self._window_manager.menu('New State',
                                                              state_menu)
@@ -2639,10 +2642,10 @@ class PersonnelHandler(ScreenHandler):
         to_creature = {}
         allowable_section_names = self.world.ruleset.get_sections_in_template()
 
-        for section_name, section_body in from_creature.details.iteritems():
+        for section_name, section_body in from_creature.details.items():
             if section_name == 'permanent':
                 to_creature['permanent'] = {}
-                for stat_name, stat_body in section_body.iteritems():
+                for stat_name, stat_body in section_body.items():
                     to_creature['permanent'][stat_name] = {
                                                     'type': 'value',
                                                     'value': stat_body}
@@ -3053,7 +3056,7 @@ class PersonnelHandler(ScreenHandler):
         # Build the Fighter object array
 
         the_fight_itself = None
-        for name, details in self.__critters['data'].iteritems():
+        for name, details in self.__critters['data'].items():
             if name == ca_fighter.Venue.name:
                 the_fight_itself = details
             else:
@@ -3070,6 +3073,9 @@ class PersonnelHandler(ScreenHandler):
                 self.__critters['data'][
                         ca_fighter.Venue.name] = ca_fighter.Venue.empty_venue
                 group = self.world.details['fights'][self.__group_name]
+                if isinstance(group, bytes):
+                    window_manager.error(['9: converting "%r"' % group])
+                    group = group.decode('utf-8')
                 fight = ca_fighter.Venue(
                         self.__group_name,
                         group['monsters'][ca_fighter.Venue.name],
@@ -3160,6 +3166,9 @@ class PersonnelHandler(ScreenHandler):
             base_name = self._window_manager.input_box(1,      # height
                                                        cols-4,  # width
                                                        'Monster Name')
+            if isinstance(base_name, bytes):
+                window_manager.error(['10: converting "%r"' % base_name])
+                base_name = base_name.decode('utf-8')
             if base_name is None or len(base_name) == 0:
                 base_name, where, gender = self.world.get_random_name()
                 if base_name is None:
@@ -3213,10 +3222,12 @@ class PersonnelHandler(ScreenHandler):
         '''
 
         with ca_json.GmJson('gm-npc-random-detail.json') as npc_detail:
-            for name, traits in npc_detail.read_data['traits'].iteritems():
+            if 'traits' not in npc_detail.read_data:
+                return
+            for name, traits in npc_detail.read_data['traits'].items():
                 if name == 'oneline':
                     # These are collections of things that go on a single line
-                    for line_name, line_pieces in traits.iteritems():
+                    for line_name, line_pieces in traits.items():
                         pieces = []
                         for piece_list in line_pieces:
                             piece = random.choice(piece_list)
@@ -3500,9 +3511,9 @@ class PersonnelHandler(ScreenHandler):
         if from_creature_name != empty_creature:
             from_creature = (self.world.details['templates'][
                              self.__template_group][from_creature_name])
-            for key, value in from_creature.iteritems():
+            for key, value in from_creature.items():
                 if key == 'permanent':
-                    for ikey, ivalue in value.iteritems():
+                    for ikey, ivalue in value.items():
                         to_creature['permanent'][ikey] = (
                             self.__get_value_from_template(ivalue,
                                                            from_creature))
@@ -3584,7 +3595,7 @@ class PersonnelHandler(ScreenHandler):
                     notes = '\n'.join(new_creature['notes'])
                 notes = self._window_manager.edit_window(
                             lines - 4,
-                            cols/2,
+                            int(cols/2),
                             notes,  # initial string (w/ \n) for the window
                             'Notes',
                             '^G to exit')
@@ -3632,6 +3643,10 @@ class PersonnelHandler(ScreenHandler):
 
         # Set the name and group of the new group
 
+        if isinstance(group_name, bytes):
+            window_manager.error(['8: converting "%r"' % group_name])
+            group_name = group_name.decode('utf-8')
+
         self.__group_name = group_name
         fights = self.world.get_fights()  # New groups can only be in fights.
 
@@ -3642,9 +3657,9 @@ class PersonnelHandler(ScreenHandler):
 
         self.__critters['data'][
                         ca_fighter.Venue.name] = ca_fighter.Venue.empty_venue
+        fight_name = fights[group_name]['monsters'][ca_fighter.Venue.name]
         fight = ca_fighter.Venue(group_name,
-                                 fights[group_name]['monsters'][
-                                                    ca_fighter.Venue.name],
+                                 fight_name,
                                  self.world.ruleset,
                                  self._window_manager)
         self.__critters['obj'].insert(0, fight)
@@ -3818,7 +3833,7 @@ class PersonnelHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         if self.__critters is not None:
-            for name, creature in self.__critters['data'].iteritems():
+            for name, creature in self.__critters['data'].items():
                 self.world.ruleset.is_creature_consistent(name, creature)
 
         # TODO (eventually): do I need to del self._window?
@@ -3966,7 +3981,7 @@ class PersonnelHandler(ScreenHandler):
 
         ability_menu = [(name, {'name': name, 'predicate': predicate})
                         for name, predicate in
-                        self.__ruleset_abilities[param].iteritems()]
+                        self.__ruleset_abilities[param].items()]
 
         keep_asking_menu = [('yes', True), ('no', False)]
 
@@ -3992,7 +4007,7 @@ class PersonnelHandler(ScreenHandler):
                 else:
                     title = 'String for %s' % new_ability['name']
                     lines, cols = self._window.getmaxyx()
-                    width = cols/2
+                    width = int(cols/2)
                 height = 1
                 adj_string = self._window_manager.input_box(height,
                                                             width,
@@ -5059,10 +5074,11 @@ class FightHandler(ScreenHandler):
             # the case if we're jumping into a fight that was saved) to
             # maintain, just generate the initiative for all of the fighters.
             for fighter in self.__fighters:
-                init[(fighter.name,
-                      fighter.group)] = self.world.ruleset.initiative(
+                init_tuple = self.world.ruleset.initiative(
                               fighter,
                               self.__fighters)
+
+                init[(fighter.name, fighter.group)] = init_tuple
         else:
             # We're assuming that every fighter in fight_order is in
             # self.__fighters but not necessarily the other way around.
@@ -5115,6 +5131,9 @@ class FightHandler(ScreenHandler):
 
         # Put the fight info (if any) at the top of the list.
         if the_fight_itself is not None:
+            if isinstance(monster_group, bytes):
+                window_manager.error(['7: converting "%r"' % monster_group])
+                monster_group = monster_group.decode('utf-8')
             fight = ca_fighter.Venue(monster_group,
                                      the_fight_itself,
                                      self.world.ruleset,
@@ -5283,7 +5302,7 @@ class FightHandler(ScreenHandler):
         if now_dead is None:
             return True  # Keep fighting
 
-        state_menu = sorted(ca_fighter.Fighter.conscious_map.iteritems(),
+        state_menu = sorted(iter(ca_fighter.Fighter.conscious_map.items()),
                             key=lambda x: x[1])
 
         new_state_number, ignore = self._window_manager.menu('New State',
@@ -6886,7 +6905,7 @@ class MainHandler(ScreenHandler):
 
         notes = self._window_manager.edit_window(
                     lines - 4,
-                    cols / 2,  # arbitrary width
+                    int(cols / 2),  # arbitrary width
                     notes,     # initial string (w/ \n) for the window
                     'Notes',
                     '^G to exit')
@@ -7141,7 +7160,7 @@ class MainHandler(ScreenHandler):
             monsters = self.world.get_creature_details_list(group)
             if monsters is not None:
                 the_fight_itself = None
-                for name, details in monsters.iteritems():
+                for name, details in monsters.items():
                     if name == ca_fighter.Venue.name:
                         the_fight_itself = details
                     else:
@@ -7159,6 +7178,9 @@ class MainHandler(ScreenHandler):
                 # exist.
 
                 elif the_fight_itself is not None:
+                    if isinstance(group, bytes):
+                        window_manager.error(['6: converting "%r"' % group])
+                        group = group.decode('utf-8')
                     fight = ca_fighter.Venue(group,
                                              the_fight_itself,
                                              self.world.ruleset,
@@ -7252,11 +7274,11 @@ def are_equal(self, lhs, rhs):
     if isinstance(lhs, dict):
         if not isinstance(rhs, dict):
             return False
-        for key in rhs.iterkeys():
+        for key in rhs.keys():
             if key not in lhs:
                 return False
         are_equal = True
-        for key in lhs.iterkeys():
+        for key in lhs.keys():
             if key not in rhs:
                 are_equal = False
             elif not self.__are_equal(lhs[key], rhs[key]):
@@ -7375,7 +7397,7 @@ class Program(object):
         # Copy the snapshot files into the bug report directory.
 
         new_snapshots = {}
-        for key, path_name in self.__snapshots.iteritems():
+        for key, path_name in self.__snapshots.items():
             shutil.copy(path_name, new_debug_folder)
             folder_name, filename = os.path.split(path_name)
             new_snapshots[key] = filename
@@ -7422,7 +7444,7 @@ class Options(object):
 
 # Main
 if __name__ == '__main__':
-    VERSION = '00.04.03 provisional'    # major version, minor version, bug fixes
+    VERSION = '00.05.00'    # major version, minor version, bug fixes
 
     parser = MyArgumentParser()
     parser.add_argument(
@@ -7503,15 +7525,18 @@ if __name__ == '__main__':
                     f.write('{ }')  # Provide a default preferences file
 
             with ca_json.GmJson(prefs_filename) as read_prefs:
-                prefs = read_prefs.read_data
+                prefs = {} if read_prefs.read_data is None else read_prefs.read_data
 
                 # Get the Campaign's Name
                 if filename is not None:
                     read_prefs.write_data = prefs
                     prefs['campaign'] = filename
 
-                elif 'campaign' in prefs:
+                elif prefs is not None and 'campaign' in prefs:
                     filename = prefs['campaign']
+                    if isinstance(filename, bytes):
+                        window_manager.error(['1: converting "%r"' % filename])
+                        filename = filename.decode('utf-8')
 
                 if filename is None:
                     existing_file_menu = [('new file', False),
@@ -7525,6 +7550,9 @@ if __name__ == '__main__':
                                 window_manager)
                         filename = filename_window.get_filename(['.json',
                                                                  '.JSON'])
+                        if isinstance(filename, bytes):
+                            window_manager.error(['2: converting "%r"' % filename])
+                            filename = filename.decode('utf-8')
 
                     lines, cols = window_manager.getmaxyx()
                     while filename is None:
@@ -7532,6 +7560,10 @@ if __name__ == '__main__':
                         filename = window_manager.input_box(1,
                                                             cols-4,
                                                             'Campaign name')
+                        if isinstance(filename, bytes):
+                            window_manager.error(['3: converting "%r"' % filename])
+                            filename = filename.decode('utf-8')
+
                         if len(filename) <= 0:
                             # Guess we're not going to run the program
                             sys.exit(2)
@@ -7548,9 +7580,12 @@ if __name__ == '__main__':
                                                        window_manager)
                             world_data = World.get_empty_world(
                                                     ruleset.get_sample_items())
-                            game_file.open_write_json_and_close(world_data)
+                            game_file.open_write_close(world_data)
 
                     read_prefs.write_data = prefs
+                    if isinstance(filename, bytes):
+                        window_manager.error(['4: converting "%r"' % filename])
+                        filename = filename.decode('utf-8')
                     prefs['campaign'] = filename
 
         # Read the Campaign Data
@@ -7624,10 +7659,10 @@ if __name__ == '__main__':
         # Write a crashdump of the shutdown
         if not orderly_shutdown:
             if program is not None:
-                print '\n** Making crash report **'
+                print('\n** Making crash report **')
                 crash_filename = program.make_bug_report(
                         None, 'CRASH', filename, 'crash')
-                print '   Written to: %s' % crash_filename
+                print('   Written to: %s' % crash_filename)
 
 else:
     # Just to get some tests to pass
