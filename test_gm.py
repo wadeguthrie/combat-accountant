@@ -75,9 +75,9 @@ class TestPersonnelHandler(ca.PersonnelHandler):
                                  ):
         if ARGS.verbose:
             if character < 256:
-                print '\n  set_command_ribbon_input: add: %c' % character
+                print('\n  set_command_ribbon_input: add: %c' % character)
             else:
-                print '\n  set_command_ribbon_input: add: %r' % character
+                print('\n  set_command_ribbon_input: add: %r' % character)
 
         if character in [curses.KEY_HOME, curses.KEY_UP, curses.KEY_DOWN,
                          curses.KEY_PPAGE, curses.KEY_NPAGE, curses.KEY_LEFT,
@@ -87,8 +87,8 @@ class TestPersonnelHandler(ca.PersonnelHandler):
             self.__command_ribbon_input.append(ord(character))
 
         if ARGS.verbose:
-            print '  gives us a response queue of:'
-            print '    ',
+            print('  gives us a response queue of:')
+            print('    ', end=' ')
             queue = []
             for c in self.__command_ribbon_input:
                 queue.append(chr(c) if c < 256 else c)
@@ -111,10 +111,10 @@ class TestPersonnelHandler(ca.PersonnelHandler):
 
             if ARGS.verbose:
                 if string < 256:
-                    print '\n  handle_user_input_until_done: got %c' % string
+                    print('\n  handle_user_input_until_done: got %c' % string)
                 else:
-                    print '\n  handle_user_input_until_done: got %r' % string
-                print '    gives us a response queue of:',
+                    print('\n  handle_user_input_until_done: got %r' % string)
+                print('    gives us a response queue of:', end=' ')
                 queue = []
                 for c in self.__command_ribbon_input:
                     queue.append(chr(c) if c < 256 else c)
@@ -330,7 +330,7 @@ class MockWindowManager(object):
      FOUND_EXPECTED_ERROR,
      FOUND_WRONG_ERROR,  # Error state won't advance from here
      FOUND_EXTRA_ERROR  # Error state won't advance from here
-     ) = range(4)
+     ) = list(range(4))
 
     def __init__(self):
         self.__menu_responses = {}  # {menu_title: [selection, selection...]
@@ -361,7 +361,7 @@ class MockWindowManager(object):
                 self.error_state = MockWindowManager.FOUND_EXPECTED_ERROR
             else:
                 self.error_state == MockWindowManager.FOUND_WRONG_ERROR
-                print '\n** Found wrong error:'
+                print('\n** Found wrong error:')
                 PP.pprint(string_array)
 
         elif self.error_state == MockWindowManager.FOUND_NO_ERROR:
@@ -369,11 +369,11 @@ class MockWindowManager(object):
 
         elif self.error_state == MockWindowManager.FOUND_EXPECTED_ERROR:
             self.error_state == MockWindowManager.FOUND_EXTRA_ERROR
-            print '\n** Found extra error:'
+            print('\n** Found extra error:')
             PP.pprint(string_array)
 
         else:
-            print '\n** Found another error:'
+            print('\n** Found another error:')
             PP.pprint(string_array)
 
     def get_build_fight_gm_window(self, command_ribbon_choices):
@@ -410,7 +410,7 @@ class MockWindowManager(object):
              starting_index=0  # Who is selected when the menu starts
              ):
         if ARGS.verbose:
-            print '\n  menu title: "%s"' % title
+            print('\n  menu title: "%s"' % title)
 
         # If the menu has only one entry, just return that -- no need to check
         # responses.
@@ -418,13 +418,13 @@ class MockWindowManager(object):
         # Now, go check responses for longer menus
 
         if title not in self.__menu_responses:
-            print ('\n** menu: title "%s" not found in stored responses' %
-                   title)
+            print(('\n** menu: title "%s" not found in stored responses' %
+                   title))
             PP.pprint(self.__menu_responses)
             assert False
         if len(self.__menu_responses[title]) == 0:
-            print ('\n** menu: responses["%s"] is empty, can\'t respond' %
-                   title)
+            print(('\n** menu: responses["%s"] is empty, can\'t respond' %
+                   title))
             assert False
 
         # FIFO queue
@@ -442,10 +442,10 @@ class MockWindowManager(object):
                 menu_result = (menu_result['doit'])(param)
 
         if ARGS.verbose:
-            print '  menu: title: "%s", returning:' % title,
+            print('  menu: title: "%s", returning:' % title, end=' ')
             PP.pprint(menu_result)
-            print '    gives us a response queue of:'
-            print '      ',
+            print('    gives us a response queue of:')
+            print('      ', end=' ')
             PP.pprint(self.__menu_responses)
 
         return menu_result, 0 # supply a dummy index to the menu
@@ -472,22 +472,22 @@ class MockWindowManager(object):
                   width,  # ignore
                   title):
         if title not in self.__input_box_responses:
-            print ('** input_box: title "%s" not found in stored responses' %
-                   title)
+            print(('** input_box: title "%s" not found in stored responses' %
+                   title))
             assert False
         if len(self.__input_box_responses[title]) == 0:
-            print ('** input_boxes: responses["%s"] is empty, can\'t respond' %
-                   title)
+            print(('** input_boxes: responses["%s"] is empty, can\'t respond' %
+                   title))
             assert False
 
         # FIFO queue
         result = self.__input_box_responses[title].pop(0)
 
         if ARGS.verbose:
-            print '\n  input_box title: "%s", returning:' % title,
+            print('\n  input_box title: "%s", returning:' % title, end=' ')
             PP.pprint(result)
-            print '    gives us a response queue of:'
-            print '    ',
+            print('    gives us a response queue of:')
+            print('    ', end=' ')
             PP.pprint(self.__input_box_responses)
 
         return result
@@ -497,23 +497,23 @@ class MockWindowManager(object):
                          width,  # ignore
                          title):
         if title not in self.__input_box_responses:
-            print ('** input_box_number: title "%s" not found in stored responses' %
-                   title)
+            print(('** input_box_number: title "%s" not found in stored responses' %
+                   title))
             PP.pprint(self.__input_box_responses)
             assert False
         if len(self.__input_box_responses[title]) == 0:
-            print ('** input_box_number: responses["%s"] is empty, can\'t respond' %
-                   title)
+            print(('** input_box_number: responses["%s"] is empty, can\'t respond' %
+                   title))
             assert False
 
         # FIFO queue
         result = self.__input_box_responses[title].pop(0)
 
         if ARGS.verbose:
-            print '\n  input_box_number title: "%s", returning:' % title,
+            print('\n  input_box_number title: "%s", returning:' % title, end=' ')
             PP.pprint(result)
-            print '    gives us a response queue of:'
-            print '    ',
+            print('    gives us a response queue of:')
+            print('    ', end=' ')
             PP.pprint(self.__input_box_responses)
 
         return result
@@ -543,7 +543,7 @@ class MockWindowManager(object):
     def get_one_character(self):
 
         if len(self.__char_responses) == 0:
-            print '** character responses is empty, can\'t respond'
+            print('** character responses is empty, can\'t respond')
             assert False
         result = self.__char_responses.pop()
 
@@ -1102,70 +1102,70 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
     def __are_equal(self, lhs, rhs):
         if isinstance(lhs, dict):
             if not isinstance(rhs, dict):
-                print '** lhs is a dict but rhs is not'
-                print '\nlhs'
+                print('** lhs is a dict but rhs is not')
+                print('\nlhs')
                 PP.pprint(lhs)
-                print '\nrhs'
+                print('\nrhs')
                 PP.pprint(rhs)
                 return False
-            for key in rhs.iterkeys():
+            for key in rhs.keys():
                 if key not in lhs:
-                    print '** KEY "%s" not in lhs' % key
-                    print '\nlhs'
+                    print('** KEY "%s" not in lhs' % key)
+                    print('\nlhs')
                     PP.pprint(lhs)
-                    print '\nrhs'
+                    print('\nrhs')
                     PP.pprint(rhs)
                     return False
             are_equal = True
-            for key in lhs.iterkeys():
+            for key in lhs.keys():
                 if key not in rhs:
-                    print '** KEY "%s" not in rhs' % key
-                    print '\nlhs'
+                    print('** KEY "%s" not in rhs' % key)
+                    print('\nlhs')
                     PP.pprint(lhs)
-                    print '\nrhs'
+                    print('\nrhs')
                     PP.pprint(rhs)
                     are_equal = False
                 elif not self.__are_equal(lhs[key], rhs[key]):
-                    print 'lhs[%r] != rhs[%r]' % (key, key)
-                    print '\nlhs'
+                    print('lhs[%r] != rhs[%r]' % (key, key))
+                    print('\nlhs')
                     PP.pprint(lhs)
-                    print '\nrhs'
+                    print('\nrhs')
                     PP.pprint(rhs)
                     are_equal = False
             return are_equal
 
         elif isinstance(lhs, list):
             if not isinstance(rhs, list):
-                print '** lhs is a list but rhs is not'
-                print '\nlhs'
+                print('** lhs is a list but rhs is not')
+                print('\nlhs')
                 PP.pprint(lhs)
-                print '\nrhs'
+                print('\nrhs')
                 PP.pprint(rhs)
                 return False
             if len(lhs) != len(rhs):
-                print '** length lhs=%d != len rhs=%d' % (len(lhs), len(rhs))
-                print '\nlhs'
+                print('** length lhs=%d != len rhs=%d' % (len(lhs), len(rhs)))
+                print('\nlhs')
                 PP.pprint(lhs)
-                print '\nrhs'
+                print('\nrhs')
                 PP.pprint(rhs)
                 return False
             are_equal = True
             for i in range(len(lhs)):
                 if not self.__are_equal(lhs[i], rhs[i]):
-                    print '** lhs[%d] != rhs[%d]' % (i, i)
-                    print '\nlhs'
+                    print('** lhs[%d] != rhs[%d]' % (i, i))
+                    print('\nlhs')
                     PP.pprint(lhs)
-                    print '\nrhs'
+                    print('\nrhs')
                     PP.pprint(rhs)
                     are_equal = False
             return are_equal
 
         else:
             if lhs != rhs:
-                print '** lhs=%r != rhs=%r' % (lhs, rhs)
-                print '\nlhs'
+                print('** lhs=%r != rhs=%r' % (lhs, rhs))
+                print('\nlhs')
                 PP.pprint(lhs)
-                print '\nrhs'
+                print('\nrhs')
                 PP.pprint(rhs)
                 return False
             else:
@@ -1196,7 +1196,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         GURPS-specific test
         '''
         if ARGS.verbose:
-            print '\n=== test_get_dodge_skill ===\n'
+            print('\n=== test_get_dodge_skill ===\n')
 
         # Deepcopy so that we don't taint the original
         mock_fight_handler = MockFightHandler()
@@ -1267,7 +1267,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         GURPS-specific test
         '''
         if ARGS.verbose:
-            print '\n=== test_get_block_skill ===\n'
+            print('\n=== test_get_block_skill ===\n')
 
         # TODO: need non-trivial block tests
         vodou_priest_fighter = ca_fighter.Fighter(
@@ -1315,7 +1315,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         GURPS-specific test
         '''
         if ARGS.verbose:
-            print '\n=== test_get_parry_skill ===\n'
+            print('\n=== test_get_parry_skill ===\n')
 
         # Unarmed
         weapon = None
@@ -1428,7 +1428,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         GURPS-specific test
         '''
         if ARGS.verbose:
-            print '\n=== test_get_unarmed_info ===\n'
+            print('\n=== test_get_unarmed_info ===\n')
 
         # Vodou Priest
         mock_fight_handler = MockFightHandler()
@@ -1607,7 +1607,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         Partially GURPS-specific test
         '''
         if ARGS.verbose:
-            print '\n=== test_initiative_order ===\n'
+            print('\n=== test_initiative_order ===\n')
 
         world_data = WorldData(self.init_world_dict)
         mock_program = MockProgram()
@@ -1620,15 +1620,24 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
         # Pestilence and Moe have same basic speed but different dx
-        expected = [{'name': 'Famine',     'group': 'horsemen'},  # 5.75, 12, 4
-                    {'name': 'Jack',       'group': 'PCs'},      # 5.75, 12, 2
-                    {'name': 'Moe',        'group': 'PCs'},      # 5.5,  12, 4
-                    {'name': 'Pestilence', 'group': 'horsemen'},  # 5.5,  11, 4
+
+        # Start with:
+        #   'Manny':        5.25, 10, rand=1
+        #   'Jack':         5.75, 12, rand=3
+        #   'Moe':          5.5,  12, rand=3
+        #   'Famine':       5.75, 12, rand=1
+        #   'Pestilence':   5.5,  11, rand=5
+
+        expected = [
+                    {'name': 'Jack',       'group': 'PCs'},      # 5.75, 12, 3
+                    {'name': 'Famine',     'group': 'horsemen'}, # 5.75, 12, 1
+                    {'name': 'Moe',        'group': 'PCs'},      # 5.5,  12, 3
+                    {'name': 'Pestilence', 'group': 'horsemen'}, # 5.5,  11, 5
                     {'name': 'Manny',      'group': 'PCs'}]      # 5.25, 10, 1
 
         # Do this multiple times just to verify that the random stuff works
         for i in range(10):
-            # random.randint(1, 6) should generate: 1 2 4 4 4 4 5 6 4 4
+            # random.randint(1, 6) should generate: 1 3 3 1 5 3 5 5 5 1
             random.seed(9001)  # 9001 is an arbitrary number
             fight_handler = ca.FightHandler(self.__window_manager,
                                             world,
@@ -1747,9 +1756,15 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # verify that the only thing that's changed among the fighters is that
         # one is injured, one is unconscious, and one is dead.
 
+        # 'Jack': copy.deepcopy(self.__tank_fighter),
+        # 'Famine': copy.deepcopy(self.__thief_fighter),
+        # 'Moe': copy.deepcopy(self.__one_more_guy),
+        # 'Pestilence': copy.deepcopy(self.__vodou_priest_fighter),
+        # 'Manny': copy.deepcopy(self.__bokor_fighter),
+
         expected_fighters = [
-            copy.deepcopy(self.__thief_fighter),
             copy.deepcopy(self.__tank_fighter),
+            copy.deepcopy(self.__thief_fighter),
             copy.deepcopy(self.__one_more_guy),
             copy.deepcopy(self.__vodou_priest_fighter),
             copy.deepcopy(self.__bokor_fighter)]
@@ -1775,7 +1790,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         reordered randomly and a different random seed is used.
         '''
         if ARGS.verbose:
-            print '\n=== test_initiative_order_again ===\n'
+            print('\n=== test_initiative_order_again ===\n')
 
         world_data = WorldData(self.init_world_dict_2)
         mock_program = MockProgram()
@@ -1786,19 +1801,24 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                          self.__window_manager,
                          save_snapshot=False)
 
-        # Famine and Jack have the same basic speed and dx -- it's up to rand
-        # Pestilence and Moe have same basic speed but different dx
+        # Start with:
+        #   'Bob': 5.5, 11, rand=3
+        #   'Ted': 5.75, 12, rand=1
+        #   'Groucho': 5.5, 12, rand=4
+        #   'Harpo': 5.75, 12, rand=4
+        #   'Chico': 5.25, 10, rand=5
+
         expected = [
-                    {'name': 'Harpo',   'group': 'marx'},  # 5.75, 12, 5
-                    {'name': 'Ted',     'group': 'PCs'},  # 5.75, 12, 3
+                    {'name': 'Harpo',   'group': 'marx'},  # 5.75, 12, 4
+                    {'name': 'Ted',     'group': 'PCs'},   # 5.75, 12, 1
                     {'name': 'Groucho', 'group': 'marx'},  # 5.5,  12, 4
-                    {'name': 'Bob',     'group': 'PCs'},  # 5.5,  11, 2
-                    {'name': 'Chico',   'group': 'marx'},  # 5.25, 10, 3
+                    {'name': 'Bob',     'group': 'PCs'},   # 5.5,  11, 3
+                    {'name': 'Chico',   'group': 'marx'},  # 5.25, 10, 5
                    ]
 
         # Do this multiple times just to verify that the random stuff works
         for i in range(10):
-            # random.randint(1, 6) should generate: 2 3 4 5 3
+            # random.randint(1, 6) should generate: 3 1 4 4 5
             random.seed(8534)  # 8534 is an arbitrary number
             fight_handler = ca.FightHandler(self.__window_manager,
                                             world,
@@ -1820,7 +1840,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         mirrors a bug that I thought I saw a while ago.
         '''
         if ARGS.verbose:
-            print '\n=== test_change_opponents ===\n'
+            print('\n=== test_change_opponents ===\n')
 
         world_data = WorldData(self.init_world_dict)
         mock_program = MockProgram()
@@ -1833,10 +1853,11 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # Famine and Jack have the same basic speed and dx -- it's up to rand
         # Pestilence and Moe have same basic speed but different dx
-        expected = [{'name': 'Famine',     'group': 'horsemen'},  # 5.75, 12, 4
-                    {'name': 'Jack',       'group': 'PCs'},      # 5.75, 12, 2
-                    {'name': 'Moe',        'group': 'PCs'},      # 5.5,  12, 4
-                    {'name': 'Pestilence', 'group': 'horsemen'},  # 5.5,  11, 4
+        expected = [
+                    {'name': 'Jack',       'group': 'PCs'},      # 5.75, 12, 3
+                    {'name': 'Famine',     'group': 'horsemen'}, # 5.75, 12, 1
+                    {'name': 'Moe',        'group': 'PCs'},      # 5.5,  12, 3
+                    {'name': 'Pestilence', 'group': 'horsemen'}, # 5.5,  11, 5
                     {'name': 'Manny',      'group': 'PCs'}]      # 5.25, 10, 1
 
         injured_hp = 3  # This is arbitrary
@@ -1928,9 +1949,15 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # Set expectations to the final configuration.
 
+        # {'name': 'Jack',       'group': 'PCs'},      # 5.75, 12, 3 -- __tank_fighter
+        # {'name': 'Famine',     'group': 'horsemen'}, # 5.75, 12, 1 -- __thief_fighter
+        # {'name': 'Moe',        'group': 'PCs'},      # 5.5,  12, 3 -- __one_more_guy
+        # {'name': 'Pestilence', 'group': 'horsemen'}, # 5.5,  11, 5 -- __vodou_priest_fighter
+        # {'name': 'Manny',      'group': 'PCs'}]      # 5.25, 10, 1 -- __bokor_fighter
+
         expected_fighters = [
-            copy.deepcopy(self.__thief_fighter),
             copy.deepcopy(self.__tank_fighter),
+            copy.deepcopy(self.__thief_fighter),
             copy.deepcopy(self.__one_more_guy),
             copy.deepcopy(self.__vodou_priest_fighter),
             copy.deepcopy(self.__bokor_fighter)]
@@ -1953,7 +1980,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         GURPS-specific test
         '''
         if ARGS.verbose:
-            print '\n=== test_ranged_to_hit ===\n'
+            print('\n=== test_ranged_to_hit ===\n')
 
         self.__window_manager = MockWindowManager()
         self.__ruleset = TestRuleset(self.__window_manager)
@@ -2197,7 +2224,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         GURPS-specific test
         '''
         if ARGS.verbose:
-            print '\n=== test_messed_up_aim ===\n'
+            print('\n=== test_messed_up_aim ===\n')
 
         self.__window_manager = MockWindowManager()
         self.__ruleset = TestRuleset(self.__window_manager)
@@ -2436,7 +2463,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         GURPS-specific test
         '''
         if ARGS.verbose:
-            print '\n=== test_melee_to_hit ===\n'
+            print('\n=== test_melee_to_hit ===\n')
 
         self.__window_manager = MockWindowManager()
         self.__ruleset = TestRuleset(self.__window_manager)
@@ -2542,7 +2569,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         GURPS-specific test
         '''
         if ARGS.verbose:
-            print '\n=== test_adjust_hp ===\n'
+            print('\n=== test_adjust_hp ===\n')
 
         # Setup
 
@@ -2969,7 +2996,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         GURPS-specific test
         '''
         if ARGS.verbose:
-            print '\n=== test_adjust_hp_2 ===\n'
+            print('\n=== test_adjust_hp_2 ===\n')
 
         # Setup
 
@@ -3127,7 +3154,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         GURPS-specific test
         '''
         if ARGS.verbose:
-            print '\n=== test_spell_casting ===\n'
+            print('\n=== test_spell_casting ===\n')
 
         # Setup
 
@@ -3377,7 +3404,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         General test
         '''
         if ARGS.verbose:
-            print '\n=== test_don_doff_armor ===\n'
+            print('\n=== test_don_doff_armor ===\n')
 
         # Setup
 
@@ -3426,7 +3453,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         General test
         '''
         if ARGS.verbose:
-            print '\n=== test_draw_sheathe_weapon ===\n'
+            print('\n=== test_draw_sheathe_weapon ===\n')
 
         # Setup
 
@@ -3469,7 +3496,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         General test
         '''
         if ARGS.verbose:
-            print '\n=== test_reload ===\n'
+            print('\n=== test_reload ===\n')
 
         # Setup
 
@@ -3596,7 +3623,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         General test
         '''
         if ARGS.verbose:
-            print '\n=== test_reload_2 ===\n'
+            print('\n=== test_reload_2 ===\n')
 
         # Setup
 
@@ -3697,7 +3724,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         MIXED test
         '''
         if ARGS.verbose:
-            print '\n=== test_stun_and_consciousness ===\n'
+            print('\n=== test_stun_and_consciousness ===\n')
 
         # Setup
 
@@ -3792,7 +3819,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         GURPS test
         '''
         if ARGS.verbose:
-            print '\n=== test_defend ===\n'
+            print('\n=== test_defend ===\n')
 
         # Setup
 
@@ -3852,7 +3879,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         Basic test
         '''
         if ARGS.verbose:
-            print '\n=== test_timers ===\n'
+            print('\n=== test_timers ===\n')
 
         fighter = ca_fighter.Fighter(
                 'Tank',
@@ -3992,7 +4019,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         Basic test
         '''
         if ARGS.verbose:
-            print '\n=== test_save ===\n'
+            print('\n=== test_save ===\n')
 
         base_world_dict = copy.deepcopy(self.base_world_dict)
 
@@ -4002,7 +4029,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # Test that leaving a fight moves the bad guys to the dead monster
         # list
         if ARGS.verbose:
-            print '\n----------- LEAVE FIGHT -----------\n'
+            print('\n----------- LEAVE FIGHT -----------\n')
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
@@ -4036,7 +4063,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # test that SAVING the fight works
         #
         if ARGS.verbose:
-            print '\n----------- SAVE FIGHT -----------\n'
+            print('\n----------- SAVE FIGHT -----------\n')
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
@@ -4077,7 +4104,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # test that KEEPING the fight works
         #
         if ARGS.verbose:
-            print '\n----------- KEEP FIGHT -----------\n'
+            print('\n----------- KEEP FIGHT -----------\n')
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
@@ -4114,7 +4141,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         Basic test
         '''
         if ARGS.verbose:
-            print '\n=== test_add_remove_equipment ===\n'
+            print('\n=== test_add_remove_equipment ===\n')
 
         fighter = ca_fighter.Fighter(
                 'Tank',
@@ -4342,7 +4369,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
 
         if ARGS.verbose:
-            print '\n=== test_preferred_add_remove_weapon ===\n'
+            print('\n=== test_preferred_add_remove_weapon ===\n')
 
         fighter = ca_fighter.Fighter(
                 'Tank',
@@ -4562,7 +4589,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         Basic test
         '''
         if ARGS.verbose:
-            print '\n=== test_give_equipment ===\n'
+            print('\n=== test_give_equipment ===\n')
 
         tank = ca_fighter.Fighter(
                 'Tank',
@@ -4665,7 +4692,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         Basic test
         '''
         if ARGS.verbose:
-            print '\n=== test_redirects ===\n'
+            print('\n=== test_redirects ===\n')
 
         base_world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(base_world_dict)
@@ -4689,7 +4716,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         Basic test
         '''
         if ARGS.verbose:
-            print '\n=== test_redirects_promote_to_NPC ===\n'
+            print('\n=== test_redirects_promote_to_NPC ===\n')
 
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
@@ -4702,13 +4729,14 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
                          save_snapshot=False)
         self.__window_manager.reset_error_state()
 
-        # random.randint(1, 6) should generate: 1 2 4 4 4 4 5 6 4 4
+        # random.randint(1, 6) should generate: 1 3 3 1 5 3 5 5 5 1
         random.seed(9001)  # 9001 is an arbitrary number
 
-        # expected = [{'name': 'Famine',    'group': 'horsemen'}, # 5.75, 12, 4
-        monster_famine_index = 0
+        # expected = [
         #            {'name': 'Jack',       'group': 'PCs'},      # 5.75, 12, 2
-        pc_jack_index = 1
+        pc_jack_index = 0
+        #            {'name': 'Famine',    'group': 'horsemen'}, # 5.75, 12, 4
+        monster_famine_index = 1
         #            {'name': 'Moe',        'group': 'PCs'},      # 5.5,  12, 4
         pc_moe_index = 2
         #            {'name': 'Pestilence', 'group': 'horsemen'}, # 5.5,  11, 4
@@ -4752,7 +4780,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         Basic test
         '''
         if ARGS.verbose:
-            print '\n=== test_NPC_joins ===\n'
+            print('\n=== test_NPC_joins ===\n')
 
         # NOTE: These indexes assume that we're NOT creating a fight.  When we
         # create a fight, a Fight object '<< ROOM >>' will be created and
@@ -4817,7 +4845,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # PersonnelHandler.NPC_joins_monsters - not an NPC #
 
         if ARGS.verbose:
-            print '\n----------- NPC_joins_monsters - not an NPC -----------\n'
+            print('\n----------- NPC_joins_monsters - not an NPC -----------\n')
 
         self.__window_manager.reset_error_state()
 
@@ -4834,7 +4862,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # PersonnelHandler.NPC_joins_monsters - works #
 
         if ARGS.verbose:
-            print '\n----------- NPC_joins_monsters - works -----------\n'
+            print('\n----------- NPC_joins_monsters - works -----------\n')
 
         self.__window_manager.reset_error_state()
 
@@ -4852,7 +4880,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # PersonnelHandler.NPC_joins_monsters - NPC already in fight #
 
         if ARGS.verbose:
-            print '\n--- NPC_joins_monsters - NPC already with monster ---\n'
+            print('\n--- NPC_joins_monsters - NPC already with monster ---\n')
 
         npc_handler.set_viewing_index(groucho_index)
         fighter = npc_handler.get_obj_from_index()
@@ -4870,7 +4898,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # PersonnelHandler.NPC_joins_PCs -- not a PC #
 
         if ARGS.verbose:
-            print '\n----------- NPC_joins_PCs - not a PC -----------\n'
+            print('\n----------- NPC_joins_PCs - not a PC -----------\n')
 
         pc_handler.set_viewing_index(pc_manny_index)
         fighter = pc_handler.get_obj_from_index()
@@ -4886,7 +4914,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # PersonnelHandler.NPC_joins_PCs -- works #
 
         if ARGS.verbose:
-            print '\n----------- NPC_joins_PCs - works -----------\n'
+            print('\n----------- NPC_joins_PCs - works -----------\n')
 
         self.__window_manager.reset_error_state()
 
@@ -4929,7 +4957,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # CREATE FIGHT -- WORKING #
 
         if ARGS.verbose:
-            print '\n=== test_new_fight_new_creatures ===\n'
+            print('\n=== test_new_fight_new_creatures ===\n')
 
         world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(world_dict)
@@ -4964,7 +4992,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         if 'test_new_fight' in fights:
             creatures = world.get_creature_details_list('test_new_fight')
             if ARGS.verbose:
-                print 'Expect: Room, Horatio:'
+                print('Expect: Room, Horatio:')
                 PP.pprint(creatures)
             # The 'creatures' should be '<< ROOM >>', '1 - Horatio'
             assert '1 - Horatio' in creatures
@@ -4972,7 +5000,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # FIGHT ALREADY EXISTS #
 
         if ARGS.verbose:
-            print '\n--- Test: Fight Already Exists ---\n'
+            print('\n--- Test: Fight Already Exists ---\n')
 
         self.__window_manager.reset_error_state()
         self.__window_manager.clear_menu_responses()
@@ -5006,7 +5034,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # ADD A CREATURE, DELETE A MONSTER -- WORKS #
 
         if ARGS.verbose:
-            print '\n--- Test: Add and Delete Monster ---\n'
+            print('\n--- Test: Add and Delete Monster ---\n')
 
         self.__window_manager.clear_menu_responses()
         self.__window_manager.set_menu_response('New or Pre-Existing',
@@ -5049,7 +5077,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # ADD PCs -- WORKS #
 
         if ARGS.verbose:
-            print '\n--- Test: Add PCs ---\n'
+            print('\n--- Test: Add PCs ---\n')
 
         group = 'PCs'
         self.__window_manager.clear_menu_responses()
@@ -5073,7 +5101,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # ADD NPCs #
 
         if ARGS.verbose:
-            print '\n--- Test: Add NPCs ---\n'
+            print('\n--- Test: Add NPCs ---\n')
 
         group = 'NPCs'
         self.__window_manager.clear_menu_responses()
@@ -5101,7 +5129,7 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         # CREATE FIGHT -- WORKING #
 
         if ARGS.verbose:
-            print '\n=== test_containers ===\n'
+            print('\n=== test_containers ===\n')
 
         mock_fight_handler = MockFightHandler()
 

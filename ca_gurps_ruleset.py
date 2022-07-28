@@ -1617,7 +1617,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
     (MAJOR_WOUND_SUCCESS,
      MAJOR_WOUND_SIMPLE_FAIL,
-     MAJOR_WOUND_BAD_FAIL) = range(3)
+     MAJOR_WOUND_BAD_FAIL) = list(range(3))
 
     def __init__(self,
                  window_manager  # GmWindowManager object for menus and errors
@@ -1653,7 +1653,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         spell_info = []
 
-        for spell_name in sorted(GurpsRuleset.spells.iterkeys()):
+        for spell_name in sorted(GurpsRuleset.spells.keys()):
             spell = GurpsRuleset.spells[spell_name]
 
             # TODO (now): should be an option
@@ -1794,7 +1794,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         modes = weapon.get_attack_modes()
         for mode in modes:
-            for skill in weapon.details['type'][mode]['skill'].iterkeys():
+            for skill in weapon.details['type'][mode]['skill'].keys():
                 if skill in GurpsRuleset.all_unarmed_skills:
                     return True
 
@@ -1880,7 +1880,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # Posture SUB-menu
 
         posture_menu = []
-        for posture in GurpsRuleset.posture.iterkeys():
+        for posture in GurpsRuleset.posture.keys():
             if posture != fighter.details['posture']:
                 posture_menu.append((posture,
                                      {'action':
@@ -2342,7 +2342,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         first_row_pieces = {}
         for row in range(2):
             found_one_this_row = False
-            for item_key in character.details['permanent'].iterkeys():
+            for item_key in character.details['permanent'].keys():
                 in_first_row = item_key in first_row
                 if row == 0 and not in_first_row:
                     continue
@@ -2444,8 +2444,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         found_one = False
         for advantage, value in sorted(
-                character.details['advantages'].iteritems(),
-                key=lambda (k, v): (k, v)):
+                iter(character.details['advantages'].items()),
+                key=lambda k_v: (k_v[0], k_v[1])):
             found_one = True
             output.append([{'text': '  %s: %r' % (advantage, value),
                             'mode': mode}])
@@ -2466,8 +2466,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     ] = tech['value'] + default_value
 
         found_one = False
-        for skill, value in sorted(skills_dict.iteritems(),
-                                   key=lambda (k, v): (k, v)):
+        for skill, value in sorted(iter(skills_dict.items()),
+                                   key=lambda k_v1: (k_v1[0], k_v1[1])):
             found_one = True
             crit, fumble = self.__get_crit_fumble(value)
             output.append([{'text': '  %s: %d --- crit <=%d, fumble >=%d' %
@@ -2485,7 +2485,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             found_one = False
             for spell in sorted(character.details['spells'],
-                                key=lambda(x): x['name']):
+                                key=lambda x: x['name']):
                 if spell['name'] not in GurpsRuleset.spells:
                     self._window_manager.error(
                         ['Spell "%s" not in GurpsRuleset.spells' %
@@ -3234,7 +3234,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         weapon_skills = {}
         for mode in modes:
             skills = weapon.details['type'][mode]['skill']
-            for name, value in skills.iteritems():
+            for name, value in skills.items():
                 if name in weapon_skills:
                     if value > weapon_skills[name]:
                         weapon_skills[name] = value
@@ -3584,7 +3584,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             found_skill = False
             skills = {}
             if 'skill' in item:
-                for item_skill in item['skill'].iterkeys():
+                for item_skill in item['skill'].keys():
                     if item_skill.lower() not in creature['current']:
                         skills[item_skill] = 1
                     if (item_skill.lower() not in creature['current'] and
@@ -3596,7 +3596,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 for mode in modes:
                     if found_skill:
                         break
-                    for item_skill in item['type'][mode]['skill'].iterkeys():
+                    for item_skill in item['type'][mode]['skill'].keys():
                         if item_skill.lower() not in creature['current']:
                             skills[item_skill] = 1
                         if (item_skill.lower() not in creature['current'] and
@@ -3609,7 +3609,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             if not found_skill:
                 if len(skills) == 0:
                     skill_list_string = '** NONE **'
-                skill_list_string = ', '.join(skills.iterkeys())
+                skill_list_string = ', '.join(iter(skills.keys()))
                 self._window_manager.error([
                     'Creature "%s"' % name,
                     '  has item "%s"' % item['name'],
@@ -3693,7 +3693,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 #"skill": {"*UNKNOWN*": 0},
         }
 
-        for key, value in strawman.iteritems():
+        for key, value in strawman.items():
             if key not in item:
                 item[key] = value
 
@@ -3718,7 +3718,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 # clip is not required
         }
 
-        for key, value in strawman.iteritems():
+        for key, value in strawman.items():
             if key not in item:
                 item[key] = value
 
@@ -4007,7 +4007,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     [{'text': '', 'mode': curses.A_NORMAL}]
                                ]
             else:
-                window_text = []
+                window_text = [
+                    [{'text': ('...%s' % fighter.name),
+                      'mode': curses.A_NORMAL}],
+                    [{'text': '', 'mode': curses.A_NORMAL}]
+                               ]
 
             # Adjust for armor
             dr = 0
@@ -4116,7 +4120,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # Check for Major Injury (B420)
             if (still_conscious and
                     -adj > (fighter.details['permanent']['hp'] / 2)):
-                (SUCCESS, SIMPLE_FAIL, BAD_FAIL) = range(3)
+                (SUCCESS, SIMPLE_FAIL, BAD_FAIL) = list(range(3))
                 total = fighter.details['current']['ht']
 
                 no_knockdown = self.get_option('no-knockdown')
@@ -5768,7 +5772,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         # Which attribute
         attr_menu = [(attr, attr)
-                     for attr in fighter.details[current_perm].keys()]
+                     for attr in list(fighter.details[current_perm].keys())]
 
         attr, ignore = self._window_manager.menu(
                 'Select Attribute', attr_menu)

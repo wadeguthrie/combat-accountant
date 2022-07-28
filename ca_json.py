@@ -1,14 +1,45 @@
 #! /usr/bin/python
+import ca_gui
 
 import json
 import traceback
 
+class BytesEncoder(json.JSONEncoder):
+    window_manager = None
+
+    '''
+    Class to provide default encoding for byte array into a JSON file (there
+    isn't an encoding provided).  This class converts to an ASCII string.
+    '''
+    def set_window_manager(self, window_manager):
+        BytesEncoder.window_manager = window_manager
+
+    def default(self, obj):
+        if isinstance(obj, bytes):
+            if window_manager is not None:
+                window_manager.error(['Converting "%r"' % obj])
+            return obj.decode('utf-8')
+        return json.JSONEncoder.default(self, obj)
 
 class GmJson(object):
     '''
     Context manager that opens and loads a JSON file.  Does so in a context
-    manager and does all this in ASCII (for v2.7 Python).  Needs to know about
-    a window manager for error reporting.
+    manager and does all this in ASCII.  Needs to know about a window manager
+    for error reporting.
+
+    NOTE: this solution is for unicode that's encoded into a byte array (and
+    the solution is to convert it into ASCII in a string.  There's a better
+    solution.  The program could encode unicode directly into strings and no
+    'BytesEncoder' class would be necessary.  This solution, I think, needs
+    more Python 3 knowledge than I have at this point.  Here are the
+    beginnings of my thoughts on the matter.
+
+    From: https://stackoverflow.com/questions/18337407/
+          saving-utf-8-texts-with-json-dumps-as-utf8-not-as-u-escape-sequence
+
+    with open('filename', 'w', encoding='utf8') as json_file:
+        json.dump(<unicode string>, json_file, ensure_ascii=False)
+
     '''
 
     def __init__(self,
@@ -21,115 +52,57 @@ class GmJson(object):
         self.write_data = None
 
     def __enter__(self):
+        self.open_read_close()
+        return self
+
+    def __exit__(self, exception_type, exception_value, exception_traceback):
+        if exception_type is IOError:
+            print('IOError: %r' % exception_type)
+            print('EXCEPTION val: %s' % exception_value)
+            traceback.print_exc()  # or traceback.format_exc()
+        elif exception_type is not None:
+            print('EXCEPTION type: %r' % exception_type)
+            print('EXCEPTION val: %s' % exception_value)
+            traceback.print_exc()  # or traceback.format_exc()
+
+        self.open_write_close(self.write_data)
+
+        return True
+
+
+    def open_read_close(self):
         try:
             with open(self.__filename, 'r') as f:
-                self.read_data, error_msg = GmJson.__json_load_byteified(f)
+                self.read_data = json.load(f)
                 if self.read_data is None:
-                    error_array = ['Could not read JSON file "%s"' %
+                    error_array = ['* Could not read JSON file "%s"' %
                                    self.__filename]
                     if error_msg is not None:
                         error_array.append(error_msg)
 
                     if self.__window_manager is None:
-                        print ''
+                        print('')
                         for message in error_array:
-                            print '%s' % message
-                        print ''
+                            print('%s' % message)
+                        print('')
                     else:
                         self.__window_manager.error(error_array)
 
-        except:
-            message = 'Could not read JSON file "%s"' % self.__filename
+        except FileNotFoundError:
+            message = '** JSON file "%s" does not exist' % self.__filename
             if self.__window_manager is None:
-                print message
+                print(message)
             else:
                 self.__window_manager.error([message])
             self.read_data = None
-        return self
 
-    def __exit__(self, exception_type, exception_value, exception_traceback):
-        if exception_type is IOError:
-            print 'IOError: %r' % exception_type
-            print 'EXCEPTION val: %s' % exception_value
-            traceback.print_exc()  # or traceback.format_exc()
-        elif exception_type is not None:
-            print 'EXCEPTION type: %r' % exception_type
-            print 'EXCEPTION val: %s' % exception_value
-            traceback.print_exc()  # or traceback.format_exc()
 
-        self.open_write_json_and_close(self.write_data)
-
-        return True
-
-    # Used to keep JSON load from automatically converting to Unicode.
-    # Alternatively, I could have gone to Python 3 (which doesn't have that
-    # problem) but I didn't want to install a new version of Python and a new
-    # version of Curses.
-    #
-    # Solution from https://stackoverflow.com/questions/956867/
-    #        how-to-get-string-objects-instead-of-unicode-from-json?
-    #        utm_medium=organic&utm_source=google_rich_qa&
-    #        utm_campaign=google_rich_qa
-
-    @staticmethod
-    def __byteify(data, ignore_dicts=False):
-        # if this is a unicode string, return its string representation
-        if isinstance(data, unicode):
-            return data.encode('utf-8')
-        # if this is a list of values, return list of byteified values
-        if isinstance(data, list):
-            return [GmJson.__byteify(item,
-                                     ignore_dicts=True) for item in data]
-        # if this is a dictionary, return dictionary of byteified keys and
-        # values but only if we haven't already byteified it
-        if isinstance(data, dict) and not ignore_dicts:
-            return {
-                GmJson.__byteify(key, ignore_dicts=True):
-                    GmJson.__byteify(value, ignore_dicts=True)
-                    for key, value in data.iteritems()
-            }
-        # if it's anything else, return it in its original form
-        return data
-
-    @staticmethod
-    def __json_load_byteified(file_handle):
-        error_message = None
-
-        # Doesn't work:
-        #original_errmsg= json.decoder.errmsg
-
-        #def our_errmsg(msg, doc, pos, end=None):
-        #    json.last_error_position= json.decoder.linecol(doc, pos)
-        #    return original_errmsg(msg, doc, pos, end)
-
-        #json.decoder.errmsg= our_errmsg
-
-        try:
-            my_dict = json.load(file_handle, object_hook=GmJson.__byteify)
-        except ValueError as e:
-            print 'XXX'
-            print 'Couldn\'t read JSON: "%s"' % e
-            # Doesn't work:
-            #print 'line: %d, col: %d' % (e.lineno, e.colno)
-            #print '%r' % json.decoder.linecol('', 0)
-            #print("error at %r" % json.last_error_position)
-            print 'YYY'
-
-        except Exception as e:
-            print 'Couldn\'t read JSON: "%s"' % e
-            #print e.args
-            #print '----'
-            #traceback.print_exc()
-            return None, 'Couldn\'t read JSON: "%s"' % str(e)
-
-        return GmJson.__byteify(my_dict, ignore_dicts=True), None
-
-    def open_write_json_and_close(self,
-                                  write_data   # Data to be written to the file
-                                  ):
+    def open_write_close(self,
+                         write_data   # Data to be written to the file
+                         ):
         '''
         Dump Python data to the JSON file.
         '''
         if write_data is not None:
             with open(self.__filename, 'w') as f:
-                json.dump(write_data, f, indent=2)
+                json.dump(write_data, f, indent=2, cls=BytesEncoder) # , ensure_ascii=False)

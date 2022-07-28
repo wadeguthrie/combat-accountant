@@ -122,7 +122,7 @@ class Timer(object):
 
         if ('string' in self.details and self.details['string'] is not None
                 and len(self.details['string']) > 0):
-            if type(self.details['string']) is list:
+            if isinstance(self.details['string'], list):
                 for substring in self.details['string']:
                     this_line.append('%s' % (substring))
                     result.append(''.join(this_line))
@@ -165,7 +165,7 @@ class Timer(object):
 
         if ('string' in self.details and self.details['string'] is not None
                 and len(self.details['string']) > 0):
-            if type(self.details['string']) is list:
+            if isinstance(self.details['string'], list):
                 this_line.append('%s' % (self.details['string'][0]))
             else:
                 this_line.append('%s' % (self.details['string']))

@@ -118,8 +118,8 @@ class GmWindow(object):
         cols = self._command_ribbon['cols']
 
         line = lines - 1  # -1 because last line is lines-1
-        for subline in reversed(range(
-                            self._command_ribbon['lines_for_choices'])):
+        for subline in reversed(list(range(
+                            self._command_ribbon['lines_for_choices']))):
             line = lines - (subline + 1)  # -1 because last line is lines-1
             left = 0
             for i in range(self._command_ribbon['choices_per_line']):
@@ -204,7 +204,7 @@ class GmWindow(object):
         len_file_string = len(file_string)
         len_whole_string = len_file_string + (
                 0 if not maintain_game_file else len(wont_be_saved_string))
-        start_file_string = (cols - len_whole_string) / 2
+        start_file_string = int((cols - len_whole_string) / 2)
 
         mode = curses.A_NORMAL
         self._window.addstr(0,
@@ -265,7 +265,7 @@ class GmWindow(object):
             'choice_strings': []
         }
 
-        for command, body in choices.iteritems():
+        for command, body in choices.items():
             if command in GmWindow.SCREEN_MOVEMENT_CHARS:
                 command_string = GmWindow.SCREEN_MOVEMENT_CHARS[command]
             elif command < 256:
@@ -316,7 +316,7 @@ class GmWindowManager(object):
      CYAN_BLACK,
      WHITE_BLACK,
 
-     RED_WHITE) = range(1, 9)
+     RED_WHITE) = list(range(1, 9))
 
     # NOTE: remember to call win.refresh()
     # win.addstr(y, x, 'String', attrib)
@@ -398,13 +398,13 @@ class GmWindowManager(object):
 
     def __exit__(self, exception_type, exception_value, exception_traceback):
         if exception_type is IOError:
-            print 'IOError: %r' % exception_type
-            print 'EXCEPTION val: %s' % exception_value
-            print 'Traceback: %r' % exception_traceback
+            print('IOError: %r' % exception_type)
+            print('EXCEPTION val: %s' % exception_value)
+            print('Traceback: %r' % exception_traceback)
         elif exception_type is not None:
-            print 'EXCEPTION type: %r' % exception_type
-            print 'EXCEPTION val: %s' % exception_value
-            print 'Traceback: %r' % exception_traceback
+            print('EXCEPTION type: %r' % exception_type)
+            print('EXCEPTION val: %s' % exception_value)
+            print('Traceback: %r' % exception_traceback)
 
         self.__stdscr.keypad(0)
         curses.nocbreak()
@@ -623,7 +623,7 @@ class GmWindowManager(object):
                                                             width,
                                                             title)
         if footer is not None:
-            footer_start = ((width+2) - (len(footer))) / 2
+            footer_start = int(((width+2) - (len(footer))) / 2)
             border_win.addstr((height+1), footer_start, footer)
             border_win.refresh()
             edit_win.refresh()
@@ -698,6 +698,11 @@ class GmWindowManager(object):
         curses.nocbreak()
         curses.echo()
         string = window.getstr()
+
+        # I believe that window.getstr() always returns a byte string
+        if isinstance(string, bytes):
+            string = string.decode('utf-8')
+
         curses.cbreak()
         curses.noecho()
         return string
@@ -808,6 +813,9 @@ class GmWindowManager(object):
         Returns input number (does _not_ allow calculations to the number).
         '''
         number_string = self.input_box(height, width, title)
+        if isinstance(number_string, bytes):
+            self.error(['12: converting "%r"' % number_string])
+            number_string = number_string.decode('utf-8')
         if len(number_string) <= 0:
             return None
 
@@ -845,7 +853,7 @@ class GmWindowManager(object):
 
         The result value in strings_results can be anything and take any form.
         '''
-        (MENU_STRING, MENU_RESULT) = range(0, 2)
+        (MENU_STRING, MENU_RESULT) = list(range(0, 2))
 
         if starting_index is None:
             starting_index = 0
@@ -987,7 +995,8 @@ class GmWindowManager(object):
         if width is None:
             width = curses.COLS
 
-        window = curses.newwin(height, width, top_line, left_column)
+        window = curses.newwin(int(height), int(width), int(top_line),
+                               int(left_column))
         return window
 
     def pop_gm_window(self,
@@ -1001,7 +1010,7 @@ class GmWindowManager(object):
                 del self.__window_stack[index]
                 return
 
-        print 'ERROR: could not find window %r' % window
+        print('ERROR: could not find window %r' % window)
 
     def printit(self,
                 string  # String to print
@@ -1055,8 +1064,8 @@ class GmWindowManager(object):
             width = curses.COLS - box_margin
 
         # x and y of text box (not border)
-        begin_x = (curses.COLS / 2) - (width/2)
-        begin_y = (curses.LINES / 2) - (height/2)
+        begin_x = int((curses.COLS / 2) - (width/2))
+        begin_y = int((curses.LINES / 2) - (height/2))
 
         # print 'c h:%d, w:%d, y:%d, x:%d' % (
         #    height+2, width+2, begin_y-1, begin_x-1)
@@ -1071,7 +1080,7 @@ class GmWindowManager(object):
             if len(title) >= max_title_len:
                 title = title[:(max_title_len-1)]
 
-            title_start = (max_title_len - (len(title))) / 2
+            title_start = int((max_title_len - (len(title))) / 2)
             border_win.addstr(0, title_start, title)
 
         border_win.refresh()
@@ -1145,7 +1154,7 @@ class GmScrollableWindow(object):
         self.refresh()
 
         win_line_cnt, win_col_cnt = self.__window.getmaxyx()
-        self.__default_scroll_lines = win_line_cnt / 2
+        self.__default_scroll_lines = int(win_line_cnt / 2)
 
     def clear(self):
         ''' Removes the printable data from the window. '''
@@ -1329,7 +1338,10 @@ class GetFilenameWindow(object):
         os.chdir(starting_dir)
         # NOTE: return value can be split with os.path.split() or
         # os.path.basename() and os.path.dirname()
-        return None if result is None else os.path.join(directory, result)
+        if result is not None:
+            result = os.path.join(directory, result)
+            result = result.decode('utf-8')
+        return result
 
 
 
