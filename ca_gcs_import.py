@@ -39,10 +39,13 @@ class Skills(object):
 
     # Skills:
     # To go from (cost, difficulty, attribute) to skill-level:
-    #   level_from_cost[cost] = base level
-    #   difficulty_offset[difficulty] : add to base-level
+    #   level_from_cost[points put into spell] = base skill level
+    #   difficulty_offset[difficulty] : add to base-level (Easy/Ave/Hard/VH)
     #   attribute : add to base-level
-    level_from_cost = {1:0, 2:1, 4:2, 8:3, 12:4, 16:5, 20:6, 24:7, 28:5}
+
+    # This is for easy skills.  More difficult skills are found using the
+    # |difficulty_offset|
+    level_from_cost = {1:0, 2:1, 4:2, 8:3, 12:4, 16:5, 20:6, 24:7, 28:8}
     difficulty_offset = {'E':0, 'A':-1, 'H':-2, 'VH':-3}
     skills = {
         'Acrobatics':           {'attr':'dx', 'diff':'H', 'default':-6},
@@ -59,8 +62,10 @@ class Skills(object):
         'Brawling':             {'attr':'dx', 'diff':'E', 'default':None},
         'Broadsword':           {'attr':'dx', 'diff':'A', 'default':None},
         'Camouflage':           {'attr':'iq', 'diff':'E', 'default':-4},
+        'Carousing':            {'attr':'ht', 'diff':'E', 'default':-4},
         'Climbing':             {'attr':'dx', 'diff':'A', 'default':-5},
-        'Computer Hacking':     {'attr':'iq', 'diff':'VH', 'default':None},
+        'Computer Hacking':     {'attr':'iq', 'diff':'VH', 'default':None,
+                                 'equip': {'Hacking Equipment +1': 1}},
         'Computer Operation':   {'attr':'iq', 'diff':'E', 'default':-4},
         'Computer Programming': {'attr':'iq', 'diff':'H', 'default':None},
         'Connoisseur':          {'attr':'iq', 'diff':'A', 'default':-5},
@@ -83,6 +88,7 @@ class Skills(object):
                                  'advantage': {'Combat Reflexes': 1}},
         'Fast-Talk':            {'attr':'iq', 'diff':'A', 'default':-5},
         'Filch':                {'attr':'dx', 'diff':'A', 'default':-5},
+        'Finance':              {'attr':'iq', 'diff':'H', 'default':None},
         'First Aid':            {'attr':'iq', 'diff':'E', 'default':-4,
                                  'equip': {'first aid kit': 1}},
         'Forensics':            {'attr':'iq', 'diff':'H', 'default':-6},
@@ -101,17 +107,24 @@ class Skills(object):
         'Karate':               {'attr':'dx', 'diff':'H', 'default':None},
         'Knife':                {'attr':'dx', 'diff':'E', 'default':None},
         'Law':                  {'attr':'iq', 'diff':'H', 'default':-6},
-        'Leadership':           {'attr':'iq', 'diff':'A', 'default':-5},
+        'Leadership':           {'attr':'iq', 'diff':'A', 'default':-5,
+                                 'advantage': {'Charisma': 1}},
         'Lip Reading':          {'attr':'per', 'diff':'A', 'default':-10},
         'Lockpicking':          {'attr':'iq', 'diff':'A', 'default':-5},
         'Mathematics':          {'attr':'iq', 'diff':'H', 'default':-6},
         'Mechanic':             {'attr':'iq', 'diff':'A', 'default':-5},
         'Observation':          {'attr':'per', 'diff':'A', 'default':-5},
+        'Panhandling':          {'attr':'iq', 'diff':'E', 'default':-4,
+                                 'advantage': {'Charisma': 1}},
+        'Persuade':             {'attr':'wi', 'diff':'H', 'default':None},
         'Poisons':              {'attr':'iq', 'diff':'H', 'default':-6},
+        'Politics':             {'attr':'iq', 'diff':'A', 'default':-5},
         'Physician':            {'attr':'iq', 'diff':'H', 'default':-7},
         'Physics':              {'attr':'iq', 'diff':'VH', 'default':-6},
         'Pickpocket':           {'attr':'dx', 'diff':'H', 'default':-6},
         'Piloting':             {'attr':'dx', 'diff':'A', 'default':None},
+        'Public Speaking':      {'attr':'iq', 'diff':'A', 'default':-5,
+                                 'advantage': {'Charisma': 1}},
         'Running':              {'attr':'ht', 'diff':'A', 'default':-5},
         'Savoir-Faire':         {'attr':'iq', 'diff':'E', 'default':-4},
         'Scrounging':           {'attr':'per', 'diff':'E', 'default':-4},
@@ -134,6 +147,7 @@ class Skills(object):
     @staticmethod
     def get_gcs_level(window_manager,   # ca_gui.GmWindowManager object
                       char,             # Character object
+                      skill_gcs,        # dict: skill from GCS
                       skill_name,       # name of skill
                       cost              # points spent on skill
                      ):
@@ -141,29 +155,90 @@ class Skills(object):
         #   - axe/mace: ?
         #   - armory: good quality equipment and ?
         #   - fast draw ammo: ?
+
+        '''
+        skill_gcs
+        {
+           'name': 'Beam Weapons',
+           'specialization': 'Pistol',
+           'defaulted_from': {'adjusted_level': 16, 'level': 16, 'modifier': -4,
+                              'name': 'Beam Weapons', 'points': 8,
+                              'type': 'Skill'},
+           'defaults': [  {'modifier': -4, 'type': 'DX'},
+                          {'modifier': -4, 'name': 'Beam Weapons',
+                           'type': 'Skill'},
+                          {'modifier': -4, 'name': 'Guns',
+                           'specialization': 'Pistol', 'type': 'Skill'}],
+           'difficulty': 'DX/E',
+           'points': 0}
+        '''
+
+        # print('\n=== %s ===' % skill_name) # TODO: remove
         if skill_name not in Skills.skills:
-            window_manager.error(['Need to add "%s" to ca_gcs_import' %
-                skill_name])
-            return 0
-        skill = Skills.skills[skill_name]   # {'attr':'DX', 'diff':'E', 'default':-4}
-        if skill['attr'] not in char.char['permanent']:
+            # print('NAME NOT IN SKILLS') # TODO: remove
+            # Get the skill info from GCS
+            if 'difficulty' not in skill_gcs:
+                # print('** "difficulty" not in skill_gcs') # TODO: remove
+                return 0
+            match = re.match(
+                    '(?P<attrib>[A-Za-z]+)(?P<slash>/)' +
+                    '(?P<difficulty>[A-Za-z]+)',
+                    skill_gcs['difficulty'])
+            if match is None:
+                # print('** match is None') # TODO: remove
+                return 0
+            skill_native = {'attr': match.group('attrib').lower(),
+                            'diff': match.group('difficulty').upper()}
+            # PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+            # PP.pprint(skill_native) # TODO: remove
+        else:
+            # {'attr':'dx', 'diff':'E', 'default':-4}
+            skill_native = Skills.skills[skill_name]
+
+        if skill_native['attr'] not in char.char['permanent']:
             window_manager.error([
-                'Required attribute "%s" not supplied' % skill['attr']
+                'Required attribute "%s" not supplied' % skill_native['attr']
                         ])
             return 0
 
         # Return a default value
         if cost == 0:
-            if skill['default'] is None:
+            # Easiest way to go -- GCS already calculated it and put it in
+            # the skill.
+            if ('defaulted_from' in skill_gcs and
+                    'level' in skill_gcs['defaulted_from']):
+                return skill_gcs['defaulted_from']['level']
+
+            # Well crap, we have to use our own default calculation, then.
+            if skill_native['default'] is None:
                 window_manager.error([
                     'No default for skill "%s"' % skill_name
                             ])
                 return 0
-            return char.char['permanent'][skill['attr']] + skill['default']
+            return char.char['permanent'][skill_native['attr']] + skill_native['default']
 
-        # Adjust cost down if someone has extra points in a skill
+        # If the user has more points than we have in our table, adjust
+        # upwards.  Each level from the top costs 4 more than the previous.
+
+        highest_cost = 0
+        for cost_in_table in Skills.level_from_cost.keys():
+            if highest_cost < cost_in_table:
+                highest_cost = cost_in_table
+                highest_level = Skills.level_from_cost[highest_cost]
+
+        while cost > highest_cost:
+            # print('expanding skill cost table') # TODO: remove
+            highest_cost += 4
+            highest_level += 1
+            Skills.level_from_cost[highest_cost] = highest_level
+
+        # Adjust cost down if someone has extra points (more spent points
+        # than required for one skill level but not enough to get to the next
+        # one) in a skill
         while cost not in Skills.level_from_cost and cost > 1:
+            # print('reducing points spent because it is in between levels') # TODO: remove
             cost -= 1
+        # print('spent points: %d' % cost) # TODO: remove
         if cost < 1 and not default:
             window_manager.error([
                 'Cost %d invalid for skill %s' % (cost, skill_name)
@@ -171,20 +246,26 @@ class Skills(object):
             return 0
 
         # Calculate the skill level
-        level = Skills.level_from_cost[cost]
-        level += Skills.difficulty_offset[skill['diff']]
-        level += char.char['permanent'][skill['attr']]
+        level = char.char['permanent'][skill_native['attr']]
+        # print('attribute (%s) = %d' % (skill_native['attr'], level)) # TODO: remove
+        level += Skills.level_from_cost[cost]
+        # print('add %d points for cost %d' % (Skills.level_from_cost[cost], cost)) # TODO: remove
+        # print('level if it were an easy skill: %d' % level) # TODO: remove
+        level += Skills.difficulty_offset[skill_native['diff']]
+        # print('level at difficulty %s: %d' % (skill_native['diff'], level)) # TODO: remove
 
         # Add modifiers due to equipment
-        if 'equip' in skill:
+        if 'equip' in skill_native:
             PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
-            for looking_for, plus in skill['equip'].items():
+            for looking_for, plus in skill_native['equip'].items():
                 if Skills.is_item_in_equipment(looking_for, char.stuff):
                     level += plus
-        if 'advantage' in skill:
-            for looking_for, plus in skill['advantage'].items():
+        if 'advantage' in skill_native:
+            for looking_for, plus in skill_native['advantage'].items():
                 if looking_for in char.char['advantages']:
                     level += plus
+
+        # print('final level %d' % level) # TODO: remove
 
         return level
 
@@ -219,15 +300,19 @@ class Skills(object):
             plus = table[len(table) - 1] + points + 1 - len(table)
         return plus
 
-class CharacterGcs(object):
+class FromGcs(object):
+    '''
+    Reads the data from the GCS file and converts the data into native format.
+    Maintains that data separate from the native data, though.
+    '''
     def __init__(self,
                  window_manager,    # ca_gui.GmWindowManager object (for I/O)
                  ruleset,
-                 gcs_file   # filename holding GCS information
+                 gcs_file           # filename holding GCS information
                 ):
 
         with ca_json.GmJson(gcs_file) as char_file:
-            self.__char_gcs = char_file.read_data
+            self.__gcs_data = char_file.read_data
 
         self.__window_manager = window_manager
         self.__ruleset = ruleset
@@ -236,6 +321,7 @@ class CharacterGcs(object):
         # Easier to build a separate 'stuff' list given containers and such.
         self.stuff = [] # [{'name':names.lower(), 'count': count, ...},... ]
 
+    def build_character(self):
         # Alphabetical (which works out for required order of execution).
         # Dependencies are as follows:
         #   advantages <- attribs
@@ -250,13 +336,13 @@ class CharacterGcs(object):
         self.__build_spells()
 
     def get_name(self):
-        if 'player_name' in self.__char_gcs['profile']:
-            player_name = self.__char_gcs['profile']['player_name']
+        if 'player_name' in self.__gcs_data['profile']:
+            player_name = self.__gcs_data['profile']['player_name']
         else:
             player_name = None
 
-        if 'name' in self.__char_gcs['profile']:
-            character_name = self.__char_gcs['profile']['name']
+        if 'name' in self.__gcs_data['profile']:
+            character_name = self.__gcs_data['profile']['name']
         else:
             character_name = None
 
@@ -287,7 +373,17 @@ class CharacterGcs(object):
                         continue
 
                     if 'cost' in modifier:
-                        cost_gcs += int(modifier['cost'])
+                        if ('cost_type' in modifier and
+                                modifier['cost_type'] == 'percentage'):
+                            factor = int(modifier['cost']) / 100 # Make it a percentage
+                            if factor > 0:
+                                factor += 1 # if we're adding 50%, that's 150%
+                            else:
+                                factor *= -1 # if we're doing -50%, that's 50%
+                            cost_gcs *= factor
+                            cost_gcs = int(cost_gcs + 0.5)
+                        else: # Just assuming cost_type == points
+                            cost_gcs += int(modifier['cost'])
 
                     # Spell bonuses from a Lwa (if that applies)
 
@@ -312,11 +408,7 @@ class CharacterGcs(object):
         new_thing = self.__ruleset.make_empty_item()
         name = item['description']
         if name is not None:
-            # This strips all the unicode characters that aren't ASCII out --
-            #   it means Atatche' case doesn't cause CURSES to crash
-            unicode_name = str(name, "utf-8")
-            new_thing['name'] = unicodedata.normalize(
-                    'NFKD', unicode_name).encode('ascii', 'ignore').decode()
+            new_thing['name'] = name
         count = 1 if 'quantity' not in item else item['quantity']
         new_thing['count'] = count
 
@@ -358,7 +450,7 @@ class CharacterGcs(object):
             new_thing['type']['misc'] = {}
 
         for thing in stuff_gcs:
-            if ImportCharacter.find_differences(thing, new_thing) is None:
+            if ToNative.find_differences(thing, new_thing) is None:
                 thing['count'] += new_thing['count']
                 new_thing = None
                 break
@@ -430,7 +522,7 @@ class CharacterGcs(object):
         ## ADVANTAGES #####
         # Checks points spent
 
-        advantages = self.__char_gcs['advantages']
+        advantages = self.__gcs_data['advantages']
         for advantage in advantages:
             self.__add_advantage_to_gcs_list(advantage,
                                              self.char['advantages'])
@@ -470,9 +562,9 @@ class CharacterGcs(object):
     def __build_equipment(self):
         ## EQUIPMENT #####
         # Build the equipment list up front so that skills may make use of it
-        if 'equipment' not in self.__char_gcs:
+        if 'equipment' not in self.__gcs_data:
             return
-        for item in self.__char_gcs['equipment']:
+        for item in self.__gcs_data['equipment']:
             self.__add_item_to_gcs_list(item, self.stuff, 'TOP LEVEL')
 
     def __build_skills(self):
@@ -480,42 +572,44 @@ class CharacterGcs(object):
         self.char['techniques'] = [] # {"name":...,"default":[...],"value":#}
 
         # Checks skill cost
-        # NOTE: Must run |__build_advantages| and |__build_equipment| before
-        #   this because some skills are affected by advantages and equipment
-        #   (a scope for a rifle, for instance).
+        # NOTE: Must run |__build_attribs|, |__build_advantages|, and
+        #   |__build_equipment| before |__build_skills| because skills depend
+        #   on attributes, some skills are affected by advantages, and
+        #   equipment (a scope for a rifle, for instance).
 
-        if 'skills' not in self.__char_gcs:
+        if 'skills' not in self.__gcs_data:
             return
 
-        for skill in self.__char_gcs['skills']:
-            base_name = skill['name']
-            if 'type' not in skill:
+        for skill_gcs in self.__gcs_data['skills']:
+            base_name = skill_gcs['name']
+            if 'type' not in skill_gcs:
                 pass
 
-            elif skill['type'] == 'skill':
-                if ('specialization' in skill and
-                        len(skill['specialization']) > 0):
-                    name_text = '%s (%s)' % (skill['name'],
-                                             skill['specialization'])
+            elif skill_gcs['type'] == 'skill':
+                if ('specialization' in skill_gcs and
+                        len(skill_gcs['specialization']) > 0):
+                    name_text = '%s (%s)' % (skill_gcs['name'],
+                                             skill_gcs['specialization'])
                 else:
-                    name_text = skill['name']
+                    name_text = skill_gcs['name']
 
-                cost_gcs = 0 if 'points' not in skill else skill['points']
+                cost_gcs = 0 if 'points' not in skill_gcs else skill_gcs['points']
 
                 level_gcs = Skills.get_gcs_level(
-                        self.__window_manager, self, base_name, cost_gcs)
+                        self.__window_manager, self, skill_gcs, base_name, cost_gcs)
                 self.char['skills'][name_text] = level_gcs
-            elif skill['type'] == 'technique':
-                difficulty = skill['difficulty'] # 'H', 'A'
-                cost_gcs = 0 if 'points' not in skill else skill['points']
+            elif skill_gcs['type'] == 'technique':
+                # print('\n=== Technique: %s ===' % base_name) # TODO: remove
+                difficulty = skill_gcs['difficulty'] # 'H', 'A'
+                cost_gcs = 0 if 'points' not in skill_gcs else skill_gcs['points']
                 plus = Skills.tech_plus_from_pts(difficulty, cost_gcs) ###################33
 
-                default = skill['default']['name']
-                if 'specialization' in skill['default']:
-                    default += (' (%s)' % skill['default']['specialization'])
-
-                skill_base = (0 if 'modifier' not in skill['default'] else ####################
-                              skill['default']['modifier'])
+                default = skill_gcs['default']['name']
+                if 'specialization' in skill_gcs['default']:
+                    default += (' (%s)' % skill_gcs['default']['specialization'])
+                skill_base = (0 if 'modifier' not in skill_gcs['default'] else ####################
+                              skill_gcs['default']['modifier'])
+                # print('based on %s = %d+%d' % (default, plus, skill_base)) # TODO: remove
 
                 technique = {
                     'name': base_name,
@@ -526,6 +620,7 @@ class CharacterGcs(object):
 
     def __build_spells(self):
         ## SPELLS #####
+        #print('\n=== SPELLS ===') # TODO: remove
 
         # takes points
         skill_add_to_iq = {
@@ -555,29 +650,32 @@ class CharacterGcs(object):
                     ]
                     }
 
-        if ('spells' not in self.__char_gcs or
-                len(self.__char_gcs['spells']) == 0):
+        if ('spells' not in self.__gcs_data or
+                len(self.__gcs_data['spells']) == 0):
+            #print('** gcs data has no spells') # TODO: remove
             return
 
         # NOTE: Only add 'spell's if the character has some.
 
         self.char['spells'] = [] # {'name': xx, 'skill': xx}, ...
-        for spell_gcs in self.__char_gcs['spells']:
+        for spell_gcs in self.__gcs_data['spells']:
             name = spell_gcs['name']
+            #print('\n--- Spell: %s ---' % name) # TODO: remove
 
             skill_gcs = self.char['permanent']['iq']
+            #print('Start with IQ: %d' % skill_gcs) # TODO: remove
 
             # Spell difficulty
             # 'difficulty' = 'IQ/H' or 'IQ/VH'
 
             match = re.match(
-                    '(?P<attrib>[A-Z]+)(?P<slash>/)' +
-                    '(?P<difficulty>[A-Z]+)',
+                    '(?P<attrib>[A-Za-z]+)(?P<slash>/)' +
+                    '(?P<difficulty>[A-Za-z]+)',
                     spell_gcs['difficulty'])
             if match is None:
                 continue
 
-            difficulty = ('hard' if match.group('difficulty') == 'H'
+            difficulty = ('hard' if match.group('difficulty').upper() == 'H'
                           else 'very_hard')
 
             # Points they need put into this spell to cast
@@ -587,17 +685,26 @@ class CharacterGcs(object):
             points = 1 if 'points' not in spell_gcs else spell_gcs['points']
 
             # College
-            college = None if 'college' not in spell_gcs else spell_gcs['college']
-            if college in self.__spell_advantages:
-                skill_gcs += self.__spell_advantages[college]
+            colleges = [] if 'college' not in spell_gcs else spell_gcs['college']
+            best_plus = 0
+            for college in colleges:
+                if college in self.__spell_advantages:
+                    if best_plus < self.__spell_advantages[college]:
+                        best_plus = self.__spell_advantages[college]
+                        #print('best_plus: %d for college: %s' % (best_plus, college)) # TODO: remove
+
+            skill_gcs += best_plus
 
             # Get the skill level
             # TODO: doesn't deal with more points than 24 or 28
             for lookup in skill_add_to_iq[difficulty]:
                 if points >= lookup['points']:
                     skill_gcs += lookup['add_to_iq']
+                    #print('points: %d, plusses: %d' % (points, # TODO: remove
+                    #    lookup['add_to_iq'])) # TODO: remove
                     break
 
+            #print('for a total of %d\n' % skill_gcs) # TODO: remove
             self.char['spells'].append({'name': name, 'skill': skill_gcs})
 
     def __get_advantage_cost(self,
@@ -708,11 +815,11 @@ class CharacterGcs(object):
             'basic-speed': 'basic_speed',
             'basic-move': 'basic_move',
         }
-        if 'attributes' not in self.__char_gcs:
+        if 'attributes' not in self.__gcs_data:
             return None
 
         src_name = attrs[dest_name]
-        for gcs_attr in self.__char_gcs['attributes']:
+        for gcs_attr in self.__gcs_data['attributes']:
             if src_name == gcs_attr['attr_id']:
                 return gcs_attr['calc']['value']
         return None
@@ -724,8 +831,6 @@ class CharacterGcs(object):
         '''
         Gets the specified attribute.  Calculates the attribute if need-be.
         '''
-        # TODO: add move, and speed -- gcs has points spent / json
-        # has result
         # CA names are lower_case, GCS names are upper_case
         #   'gcs stat' = the base attribute in GCS
         #   'adj' = GCS stat that adds to the native stat
@@ -759,37 +864,37 @@ class CharacterGcs(object):
             # Derived attributes
             'hp': {'gcs stat': 'ST',
                    'new_stat': 'hp',
-                   'adj': 'HP_adj',
+                   'adj': ['HP_adj'],
                    'cost_for_adv': 2,
                    'advantage': 'Extra Hit Points',
                    'disadvantage': 'Fewer Hit Points'},
             'fp': {'gcs stat': 'HT',
                    'new_stat': 'fp',
-                   'adj': 'FP_adj',
+                   'adj': ['FP_adj'],
                    'cost_for_adv': 3,
                    'advantage': 'Extra Fatigue Points',
                    'disadvantage': 'Fewer Fatigue Points'},
             'wi': {'gcs stat': 'IQ',
                    'new_stat': 'will',
-                   'adj': 'will_adj',
+                   'adj': ['will_adj'],
                    'cost_for_adv': 5,
                    'advantage': 'Increased Will',
                    'disadvantage': 'Decreased Will'},
             'per': {'gcs stat': 'IQ',
                    'new_stat': 'per',
-                   'adj': 'per_adj',
+                   'adj': ['per_adj'],
                    'cost_for_adv': 5,
                    'advantage': 'Increased Perception',
                    'disadvantage': 'Decreased Perception'},
             'basic-speed': {'gcs stat': None,
                    'new_stat': 'basic_speed',
-                   'adj': 'speed_adj',
+                   'adj': ['speed_adj'],
                    'cost_for_adv': 5,
                    'advantage': 'Increased Basic Speed',
                    'disadvantage': 'Decreased Basic Speed'},
             'basic-move': {'gcs stat': None,  # Derived from basic-speed
                    'new_stat': 'basic_move',
-                   'adj': 'speed_adj',    # TODO: move_adj
+                   'adj': ['speed_adj', 'move_adj'],
                    'cost_for_adv': 5,
                    'advantage': 'Increased Basic Move',
                    'disadvantage': 'Decreased Basic Move'},
@@ -799,21 +904,30 @@ class CharacterGcs(object):
         attr = attrs[dest_name]
 
         if dest_name == 'basic-move' or dest_name == 'basic-speed':
-            if 'HT' not in self.__char_gcs or 'DX' not in self.__char_gcs:
+            if 'HT' not in self.__gcs_data or 'DX' not in self.__gcs_data:
                 return None
-            attr_value = (self.__char_gcs['HT'] + self.__char_gcs['DX']) / 4.0
+            attr_value = (self.__gcs_data['HT'] + self.__gcs_data['DX']) / 4.0
+
+            # If they've bought up the main attribute, this adds the adjustment
+            # Do it before basic-move truncates the value
+            if attr['adj'] is not None:
+                for adj in attr['adj']:
+                    if adj in self.__gcs_data:
+                        attr_value += self.__gcs_data[adj]
+
             if dest_name == 'basic-move':
                 attr_value = int(attr_value)
 
-        elif attr['gcs stat'] in self.__char_gcs:
-            attr_value = self.__char_gcs[attr['gcs stat']]
+        elif attr['gcs stat'] in self.__gcs_data:
+            attr_value = self.__gcs_data[attr['gcs stat']]
 
+            # If they've bought up the main attribute, this adds the adjustment
+            if attr['adj'] is not None:
+                for adj in attr['adj']:
+                    if adj in self.__gcs_data:
+                        attr_value += self.__gcs_data[adj]
         else:
             return None
-
-        # If they've bought up the main attribute, this adds the adjustment
-        if attr['adj'] is not None and attr['adj'] in self.__char_gcs:
-            attr_value += self.__char_gcs[attr['adj']]
 
 
         # Add advantage / disadvantage adjustments
@@ -922,7 +1036,7 @@ class CharacterGcs(object):
                             new_thing['reload_type'] = (
                                     ca_equipment.Equipment.RELOAD_CLIP)
 
-                    new_thing['reload'] = int(match.group('reload'))
+                        new_thing['reload'] = int(match.group('reload'))
 
             '''
             {
@@ -937,15 +1051,19 @@ class CharacterGcs(object):
             if key not in new_thing:
                 new_thing[key] = value
 
-class ImportCharacter(object):
+class ToNative(object):
+    '''
+    Objects of this class transfer items from the GCS data into a native
+    database.
+    '''
     def __init__(self,
                  window_manager,
-                 char_json, # dict for this char directly from CA
-                 char_gcs   # CharacterGcs object
+                 native_data,   # dict for this char directly from CA
+                 gcs_data       # FromGcs object from file
                 ):
         self.__window_manager = window_manager
-        self.__char_json = char_json
-        self.__char_gcs = char_gcs
+        self.__native_data = native_data
+        self.__gcs_data = gcs_data
 
     @staticmethod
     def find_differences(existing_item,   # dict:
@@ -971,28 +1089,28 @@ class ImportCharacter(object):
         if ('melee weapon' in existing_item['type'] or
             'swung weapon' in existing_item['type'] or
             'thrust weapon' in existing_item['type']):
-            if not ImportCharacter.is_optional_element_equal('parry',
-                                                             existing_item,
-                                                             new_item):
+            if not ToNative.is_optional_element_equal('parry',
+                                                      existing_item,
+                                                      new_item):
                 found_differences = True
                 differences.append('parry')
 
         if 'ranged weapon' in existing_item['type']:
-            if not ImportCharacter.is_optional_element_equal('bulk',
-                                                             existing_item,
-                                                             new_item):
+            if not ToNative.is_optional_element_equal('bulk',
+                                                      existing_item,
+                                                      new_item):
                 found_differences = True
                 differences.append('bulk')
 
-            if not ImportCharacter.is_optional_element_equal('acc',
-                                                             existing_item,
-                                                             new_item):
+            if not ToNative.is_optional_element_equal('acc',
+                                                      existing_item,
+                                                      new_item):
                 found_differences = True
                 differences.append('acc')
 
-            if not ImportCharacter.is_optional_element_equal('reload',
-                                                             existing_item,
-                                                             new_item):
+            if not ToNative.is_optional_element_equal('reload',
+                                                      existing_item,
+                                                      new_item):
                 found_differences = True
                 differences.append('reload')
 
@@ -1009,7 +1127,7 @@ class ImportCharacter(object):
             for thing in existing_item['stuff']:
                 found_match = False
                 for index, new_thing in enumerate(new_contents):
-                    new_differences = ImportCharacter.find_differences(
+                    new_differences = ToNative.find_differences(
                             thing, new_thing)
                     if new_differences is None:
                         new_contents.pop(index)
@@ -1039,7 +1157,7 @@ class ImportCharacter(object):
 
         return True
 
-    def import_data(self):
+    def import_character(self):
         self.__import_attribs()
         self.__import_advantages()
         self.__import_skills()
@@ -1047,10 +1165,40 @@ class ImportCharacter(object):
         self.__import_spells()
         self.__import_equipment(squash=False)
 
+    def import_equipment_list(self):
+        '''
+        "rows": [
+            {
+                "type": "equipment",
+                "id": "a5863dd4-b9f3-41a0-bd99-fae58e552c67",
+                "quantity": 1,
+                "description": "Antibiotic",
+                "tech_level": "6",
+                "value": "20",
+                "weight": "0 lb",
+                "reference": "B289",
+                "calc": {
+                    "extended_value": "20",
+                    "extended_weight": "0 lb"
+                },
+                "notes": "Prevents or cures (in 1d days) infections.",
+                "categories": [
+                    "Medical Gear"
+                ]
+            },
+            {
+                "type": "equipment",
+                "id": "4f2a9783-adb2-4c52-abdd-fa5d112b8a9b",
+                "quantity": 1,
+        '''
+        xxx
+        while xxx:
+            self.__import_equipment(squash=False)
+
     def pprint(self):
         print('\n=== Import Creature ===')
         PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
-        PP.pprint(self.__char_json)
+        PP.pprint(self.__native_data)
 
     def update_data(self):
         changes = []
@@ -1102,20 +1250,6 @@ class ImportCharacter(object):
 
         return new_list
 
-    #def __get_advantage_cost(self,
-    #                         advantage_gcs # dict
-    #                        ):
-    #    cost_text_gcs = advantage_gcs.find('base_points')
-    #    cost_gcs = 0 if cost_text_gcs is None else int(cost_text_gcs.text)
-    #    levels_element = advantage_gcs.find('levels')
-    #    if levels_element is not None:
-    #        levels = int(levels_element.text)
-    #        points_per_level_element = advantage_gcs.find('points_per_level')
-    #        if points_per_level_element is not None:
-    #            levels *= int(points_per_level_element.text)
-    #            cost_gcs += levels
-    #    return cost_gcs
-
     def __get_stuff_count(self,
                           item
                           ):
@@ -1137,26 +1271,26 @@ class ImportCharacter(object):
                            'basic-speed', 'basic-move' ]
         changes = []
         for attr_name in attrs_to_check:
-            attr_gcs = self.__char_gcs.char['permanent'][attr_name]
-            attr_json = self.__char_json['permanent'][attr_name]
+            attr_gcs = self.__gcs_data.char['permanent'][attr_name]
+            attr_json = self.__native_data['permanent'][attr_name]
             if attr_gcs != attr_json:
                 changes.append('%s changed from %r to %r' %
                         (attr_name, attr_json, attr_gcs))
-                self.__char_json['permanent'][attr_name] = attr_gcs
-                self.__char_json['current'][attr_name] = attr_gcs
+                self.__native_data['permanent'][attr_name] = attr_gcs
+                self.__native_data['current'][attr_name] = attr_gcs
         return changes
 
     def __import_equipment(self,
                            squash   # Bool: whether to flatten containers
                            ):
         changes = []
-        if 'stuff' not in self.__char_json:
-            self.__char_json['stuff'] = []
+        if 'stuff' not in self.__native_data:
+            self.__native_data['stuff'] = []
 
         stuff_json = self.__copy_json_equipment_list(
-                self.__char_json['stuff'], squash)
+                self.__native_data['stuff'], squash)
         stuff_gcs = self.__copy_json_equipment_list(
-                self.__char_gcs.stuff, squash)
+                self.__gcs_data.stuff, squash)
 
         PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
         standout_mode = curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK)
@@ -1164,8 +1298,8 @@ class ImportCharacter(object):
         for item_json in stuff_json:    # item_json is {}
             match_gcs = False
             for index, item_gcs in enumerate(stuff_gcs):
-                if ImportCharacter.find_differences(item_json,
-                                                    item_gcs) is None:
+                if ToNative.find_differences(item_json,
+                                             item_gcs) is None:
                     stuff_gcs.pop(index)
                     match_gcs = True
                     break
@@ -1175,7 +1309,7 @@ class ImportCharacter(object):
                 for index, item_gcs in enumerate(stuff_gcs):
                     if item_json['name'].lower() == item_gcs['name'].lower():
 
-                        differences = ImportCharacter.find_differences(
+                        differences = ToNative.find_differences(
                                 item_json, item_gcs)
 
                         # Make the user descide if these are the same item
@@ -1244,18 +1378,18 @@ class ImportCharacter(object):
                                 changes.append('"%s" equipment item removed' %
                                         item_json['name'])
                                 # remove removes a list element by value
-                                self.__char_json['stuff'].remove(item_json['name'])
+                                self.__native_data['stuff'].remove(item_json['name'])
 
         for item_gcs in stuff_gcs:
             name_gcs = item_gcs['name']
 
-            if ('ignored-equipment' in self.__char_json and
-                    name_gcs.lower() in self.__char_json['ignored-equipment']):
+            if ('ignored-equipment' in self.__native_data and
+                    name_gcs.lower() in self.__native_data['ignored-equipment']):
                 changes.append('"%s" equipment IGNORED -- no change' %
                         item_gcs['name'])
             else:
                 changes.append('"%s" equipment item added' % item_gcs['name'])
-                self.__char_json['stuff'].append(item_gcs)
+                self.__native_data['stuff'].append(item_gcs)
 
         return changes
 
@@ -1265,15 +1399,15 @@ class ImportCharacter(object):
                         ):
         changes = []
 
-        if heading in self.__char_json:
-            things_json = self.__char_json[heading]
+        if heading in self.__native_data:
+            things_json = self.__native_data[heading]
         else:
             things_json = {}
 
         # Make the copy so we can delete matches from the list and not mess up
         # the original character.
-        if heading in self.__char_gcs.char:
-            things_gcs = copy.deepcopy(self.__char_gcs.char[heading])
+        if heading in self.__gcs_data.char:
+            things_gcs = copy.deepcopy(self.__gcs_data.char[heading])
         else:
             things_gcs = {}
 
@@ -1310,7 +1444,7 @@ class ImportCharacter(object):
         while len(items_to_remove) > 0:
             name = items_to_remove.pop()
             # del removes a dict item
-            del self.__char_json[heading][name]
+            del self.__native_data[heading][name]
 
         for name in things_gcs.keys():
             changes.append('%s (%d) %s added' %
@@ -1324,12 +1458,12 @@ class ImportCharacter(object):
 
     def __import_spells(self):
         changes = []
-        if 'spells' not in self.__char_json:
-            self.__char_json['spells'] = []
-        spells_json = self.__char_json['spells']
+        if 'spells' not in self.__native_data:
+            self.__native_data['spells'] = []
+        spells_json = self.__native_data['spells']
 
-        if 'spells' in self.__char_gcs.char:
-            spells_gcs = copy.deepcopy(self.__char_gcs.char['spells'])
+        if 'spells' in self.__gcs_data.char:
+            spells_gcs = copy.deepcopy(self.__gcs_data.char['spells'])
         else:
             spells_gcs = []
 
@@ -1390,12 +1524,12 @@ class ImportCharacter(object):
         # different under the hood so the 'do we copy' stuff needs to be
         # custom.
         changes = []
-        if 'techniques' not in self.__char_json:
-            self.__char_json['techniques'] = []
-        techniques_json = self.__char_json['techniques']
+        if 'techniques' not in self.__native_data:
+            self.__native_data['techniques'] = []
+        techniques_json = self.__native_data['techniques']
 
-        if 'techniques' in self.__char_gcs.char:
-            techniques_gcs = copy.deepcopy(self.__char_gcs.char['techniques'])
+        if 'techniques' in self.__gcs_data.char:
+            techniques_gcs = copy.deepcopy(self.__gcs_data.char['techniques'])
         else:
             techniques_gcs = []
 
@@ -1427,7 +1561,7 @@ class ImportCharacter(object):
                             name, technique_json['value']), remove_menu)
                 if remove:
                     changes.append('"%s" technique removed' % name)
-                    self.__char_json['techniques'].remove(technique_json)
+                    self.__native_data['techniques'].remove(technique_json)
             else:
                 if match_gcs['value'] != technique_json['value']:
                     if match_gcs['value'] > technique_json['value']:
@@ -1542,62 +1676,86 @@ class GcsImport(object):
         self.__window_manager = window_manager
 
     def import_creature(self,
-                        char_json,           # dict contains original creature
+                        native_data,         # dict = empty creature
                         ruleset,             # ca_ruleset.Ruleset object
                         gcs_filename=None,   # string
                         ):
         '''
         Returns: name of the creature and the dict containing the creature
+
+        |native_data| contains a template that fills-in stuff that the ruleset
+        needs but may not be provided by the imported creature.
         '''
-        gcs_filename = self.__extract_gcs_filename(char_json, gcs_filename)
-        char_gcs = CharacterGcs(self.__window_manager, ruleset, gcs_filename)
-        name = char_gcs.get_name()
-        character = ImportCharacter(self.__window_manager, char_json, char_gcs)
-        character.import_data()
+        gcs_filename = self.__extract_gcs_filename(native_data, gcs_filename)
+
+        gcs_data = FromGcs(self.__window_manager, ruleset, gcs_filename)
+        gcs_data.build_character()
+        name = gcs_data.get_name()
+
+        character = ToNative(self.__window_manager, native_data, gcs_data)
+        character.import_character()
         # character.pprint() ######################
-        return name, char_json
+        return name, native_data
+
+    def import_equipment(self,
+                         native_data,         # array = original equipment list
+                         ruleset,             # ca_ruleset.Ruleset object
+                         gcs_filename=None,   # string
+                         ):
+        '''
+        Returns: array containing the equipment list
+        '''
+        gcs_filename = self.__extract_gcs_filename(native_data, gcs_filename)
+
+        gcs_data = FromGcs(self.__window_manager, ruleset, gcs_filename)
+        gcs_data.build_equipment()
+
+        equipment = ToNative(self.__window_manager, native_data, gcs_data)
+        equipment.import_equipment_list()
+        # equipment.pprint() ######################
+        return native_data
 
     def update_creature(self,
-                        char_json,           # dict contains original creature
+                        native_data,           # dict contains original creature
                         ruleset,             # ca_ruleset.Ruleset object
                         gcs_filename=None,   # string
                         ):
-        gcs_filename = self.__extract_gcs_filename(char_json, gcs_filename)
-        char_gcs = CharacterGcs(self.__window_manager, ruleset, gcs_filename)
-        name = char_gcs.get_name()
-        character = ImportCharacter(self.__window_manager, char_json, char_gcs)
+        gcs_filename = self.__extract_gcs_filename(native_data, gcs_filename)
+        gcs_data = FromGcs(self.__window_manager, ruleset, gcs_filename)
+        name = gcs_data.get_name()
+        character = ToNative(self.__window_manager, native_data, gcs_data)
         changes = character.update_data()
         return changes
 
     def __extract_gcs_filename(
             self,
-            char_json,           # dict contains original creature
-            gcs_filename=None,   # string: in/outuser-supplied
+            native_data,        # dict contains original creature
+            gcs_filename=None,  # string: in/outuser-supplied
             ):
         '''
         Gets the GCS filename.  Checks the user-supplied value, first, and
-        fills with the value in char_json if the former value is None.
+        fills with the value in native_data if the former value is None.
 
         Returns extracted GCS filename.
         '''
 
         if gcs_filename is None:
-            if 'gcs-file' in char_json:
-                gcs_filename = char_json['gcs-file']
+            if 'gcs-file' in native_data:
+                gcs_filename = native_data['gcs-file']
             else:
                 self.__window_manager.error([
                     'Need a GCS filename from which to import'])
                 return None
 
-        if ('gcs-file' not in char_json or char_json['gcs-file'] is None or
-            len(char_json['gcs-file']) == 0):
-            char_json['gcs-file'] = gcs_filename
-        elif char_json['gcs-file'] != gcs_filename:
-            char_json['gcs-file'] = gcs_filename
+        if ('gcs-file' not in native_data or native_data['gcs-file'] is None or
+            len(native_data['gcs-file']) == 0):
+            native_data['gcs-file'] = gcs_filename
+        elif native_data['gcs-file'] != gcs_filename:
+            native_data['gcs-file'] = gcs_filename
             self.__window_manager.display_window(
                     'NOTE',
                     [[{'text': ('Changing gcs-file from %s to %s' %
-                                (char_json['gcs-file'], gcs_filename)),
+                                (native_data['gcs-file'], gcs_filename)),
                         'mode': curses.A_NORMAL}]])
 
         return gcs_filename
