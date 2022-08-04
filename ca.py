@@ -1584,13 +1584,18 @@ class PersonnelHandler(ScreenHandler):
                        'help': 'Modify the currently selected creature by ' +
                                'changing attributes, adding or removing' +
                                'equipment, or changing some other feature.'},
+            ord('E'): {'name': 'import equipment',
+                       'func': self.__import_equipment,
+                       'help': 'Import equipment from GURPS Character ' +
+                               'Sheet.'},
             ord('g'): {'name': 'create template group',
                        'func': self.__create_template_group,
                        'help': 'Make a new collection of templates (like ' +
                                'bad guys or space marines).'},
             ord('I'): {'name': 'Import character.',
                        'func': self.__import_creature,
-                       'help': 'Import character into combat accountant.'},
+                       'help': 'Import character from GURPS Character ' +
+                               'Sheet.'},
             # TODO (now): ruleset-based
             ord('s'): {'name': 'list Spells',
                        'func': self.__list_spells,
@@ -1898,6 +1903,68 @@ class PersonnelHandler(ScreenHandler):
                                     self.__new_char_name,
                                     self.__viewing_index)
         return True
+
+    def __import_equipment(self):
+        '''
+        Command ribbon method.
+
+        Imports equipment into this program.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        # get the filename to import
+
+        extension = self.world.ruleset.get_import_file_extension()
+        filename_window = ca_gui.GetFilenameWindow(self._window_manager)
+        filename = filename_window.get_filename(extension)
+        if filename is None:
+            return True
+
+        # actually import the new creature
+
+        name, item = self.world.ruleset.import_equipment_from_file(filename)
+        if item is None:
+            return True
+
+        # get the creature's name
+
+        '''
+        if name in self.__critters['data']:
+            self._window_manager.error(
+                    ['Creature with name "%s" already exists' % name])
+            name = None
+
+        if name is None:
+            keep_going = True
+            while keep_going:
+                lines, cols = self._window.getmaxyx()
+                name = self._window_manager.input_box(1,      # height
+                                                      cols-4,  # width
+                                                      'Creature Name')
+                if name is None:
+                    return True
+                elif name in self.__critters['data']:
+                    self._window_manager.error(
+                            ['Creature with name "%s" already exists' % name])
+                else:
+                    keep_going = False
+
+        # install in the current group
+
+        self.__critters['data'][name] = creature
+        self.__critters['obj'].append(self.world.get_creature(
+                                                    name,
+                                                    self.__group_name))
+        self.__viewing_index = len(self.__critters['obj']) - 1
+
+
+        self.__new_char_name = name
+        self._window.show_creatures(self.__critters['obj'],
+                                    self.__new_char_name,
+                                    self.__viewing_index)
+        '''
+        return True
+
 
     def __left_pane(self):
         '''
@@ -3222,7 +3289,8 @@ class PersonnelHandler(ScreenHandler):
         '''
 
         with ca_json.GmJson('gm-npc-random-detail.json') as npc_detail:
-            if 'traits' not in npc_detail.read_data:
+            if (npc_detail.read_data is None or
+                    'traits' not in npc_detail.read_data):
                 return
             for name, traits in npc_detail.read_data['traits'].items():
                 if name == 'oneline':

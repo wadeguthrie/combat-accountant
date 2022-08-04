@@ -1340,7 +1340,8 @@ class GetFilenameWindow(object):
         # os.path.basename() and os.path.dirname()
         if result is not None:
             result = os.path.join(directory, result)
-            result = result.decode('utf-8')
+            if isinstance(result, bytes):
+                result = result.decode('utf-8')
         return result
 
 

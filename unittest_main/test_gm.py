@@ -73,11 +73,11 @@ class TestPersonnelHandler(ca.PersonnelHandler):
     def set_command_ribbon_input(self,
                                  character  # command ribbon input
                                  ):
-        if ARGS.verbose:
-            if character < 256:
-                print('\n  set_command_ribbon_input: add: %c' % character)
-            else:
-                print('\n  set_command_ribbon_input: add: %r' % character)
+        #if ARGS.verbose:
+        #    if character < 256:
+        #        print('\n  set_command_ribbon_input: add: %c' % character)
+        #    else:
+        #        print('\n  set_command_ribbon_input: add: %r' % character)
 
         if character in [curses.KEY_HOME, curses.KEY_UP, curses.KEY_DOWN,
                          curses.KEY_PPAGE, curses.KEY_NPAGE, curses.KEY_LEFT,
@@ -86,13 +86,13 @@ class TestPersonnelHandler(ca.PersonnelHandler):
         else:
             self.__command_ribbon_input.append(ord(character))
 
-        if ARGS.verbose:
-            print('  gives us a response queue of:')
-            print('    ', end=' ')
-            queue = []
-            for c in self.__command_ribbon_input:
-                queue.append(chr(c) if c < 256 else c)
-            PP.pprint(queue)
+        #if ARGS.verbose:
+        #    print('  gives us a response queue of:')
+        #    print('    ', end=' ')
+        #    queue = []
+        #    for c in self.__command_ribbon_input:
+        #        queue.append(chr(c) if c < 256 else c)
+        #    PP.pprint(queue)
 
     def handle_user_input_until_done(self):
         if len(self.__command_ribbon_input) == 0:
@@ -109,16 +109,16 @@ class TestPersonnelHandler(ca.PersonnelHandler):
             # FIFO queue
             string = self.__command_ribbon_input.pop(0)
 
-            if ARGS.verbose:
-                if string < 256:
-                    print('\n  handle_user_input_until_done: got %c' % string)
-                else:
-                    print('\n  handle_user_input_until_done: got %r' % string)
-                print('    gives us a response queue of:', end=' ')
-                queue = []
-                for c in self.__command_ribbon_input:
-                    queue.append(chr(c) if c < 256 else c)
-                PP.pprint(queue)
+            #if ARGS.verbose:
+            #    if string < 256:
+            #        print('\n  handle_user_input_until_done: got %c' % string)
+            #    else:
+            #        print('\n  handle_user_input_until_done: got %r' % string)
+            #    print('    gives us a response queue of:', end=' ')
+            #    queue = []
+            #    for c in self.__command_ribbon_input:
+            #        queue.append(chr(c) if c < 256 else c)
+            #    PP.pprint(queue)
 
             if string in self._choices:
                 keep_going = self._choices[string]['func']()
@@ -409,8 +409,8 @@ class MockWindowManager(object):
              strings_results,  # array of tuples (string, return value)
              starting_index=0  # Who is selected when the menu starts
              ):
-        if ARGS.verbose:
-            print('\n  menu title: "%s"' % title)
+        #if ARGS.verbose:
+        #    print('\n  menu title: "%s"' % title)
 
         # If the menu has only one entry, just return that -- no need to check
         # responses.
@@ -441,12 +441,12 @@ class MockWindowManager(object):
                          else menu_result['param'])
                 menu_result = (menu_result['doit'])(param)
 
-        if ARGS.verbose:
-            print('  menu: title: "%s", returning:' % title, end=' ')
-            PP.pprint(menu_result)
-            print('    gives us a response queue of:')
-            print('      ', end=' ')
-            PP.pprint(self.__menu_responses)
+        #if ARGS.verbose:
+        #    print('  menu: title: "%s", returning:' % title, end=' ')
+        #    PP.pprint(menu_result)
+        #    print('    gives us a response queue of:')
+        #    print('      ', end=' ')
+        #    PP.pprint(self.__menu_responses)
 
         return menu_result, 0 # supply a dummy index to the menu
 
@@ -483,12 +483,12 @@ class MockWindowManager(object):
         # FIFO queue
         result = self.__input_box_responses[title].pop(0)
 
-        if ARGS.verbose:
-            print('\n  input_box title: "%s", returning:' % title, end=' ')
-            PP.pprint(result)
-            print('    gives us a response queue of:')
-            print('    ', end=' ')
-            PP.pprint(self.__input_box_responses)
+        #if ARGS.verbose:
+        #    print('\n  input_box title: "%s", returning:' % title, end=' ')
+        #    PP.pprint(result)
+        #    print('    gives us a response queue of:')
+        #    print('    ', end=' ')
+        #    PP.pprint(self.__input_box_responses)
 
         return result
 
@@ -509,12 +509,12 @@ class MockWindowManager(object):
         # FIFO queue
         result = self.__input_box_responses[title].pop(0)
 
-        if ARGS.verbose:
-            print('\n  input_box_number title: "%s", returning:' % title, end=' ')
-            PP.pprint(result)
-            print('    gives us a response queue of:')
-            print('    ', end=' ')
-            PP.pprint(self.__input_box_responses)
+        #if ARGS.verbose:
+        #    print('\n  input_box_number title: "%s", returning:' % title, end=' ')
+        #    PP.pprint(result)
+        #    print('    gives us a response queue of:')
+        #    print('    ', end=' ')
+        #    PP.pprint(self.__input_box_responses)
 
         return result
 
@@ -1195,8 +1195,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        if ARGS.verbose:
-            print('\n=== test_get_dodge_skill ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_get_dodge_skill ===\n')
 
         # Deepcopy so that we don't taint the original
         mock_fight_handler = MockFightHandler()
@@ -1266,8 +1266,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        if ARGS.verbose:
-            print('\n=== test_get_block_skill ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_get_block_skill ===\n')
 
         # TODO: need non-trivial block tests
         vodou_priest_fighter = ca_fighter.Fighter(
@@ -1314,8 +1314,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        if ARGS.verbose:
-            print('\n=== test_get_parry_skill ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_get_parry_skill ===\n')
 
         # Unarmed
         weapon = None
@@ -1427,8 +1427,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        if ARGS.verbose:
-            print('\n=== test_get_unarmed_info ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_get_unarmed_info ===\n')
 
         # Vodou Priest
         mock_fight_handler = MockFightHandler()
@@ -1606,8 +1606,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         Partially GURPS-specific test
         '''
-        if ARGS.verbose:
-            print('\n=== test_initiative_order ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_initiative_order ===\n')
 
         world_data = WorldData(self.init_world_dict)
         mock_program = MockProgram()
@@ -1789,8 +1789,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         This is just like test_initiative_order except the fighters are
         reordered randomly and a different random seed is used.
         '''
-        if ARGS.verbose:
-            print('\n=== test_initiative_order_again ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_initiative_order_again ===\n')
 
         world_data = WorldData(self.init_world_dict_2)
         mock_program = MockProgram()
@@ -1839,8 +1839,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         any of the fighters (except that the opponent was changed).  This
         mirrors a bug that I thought I saw a while ago.
         '''
-        if ARGS.verbose:
-            print('\n=== test_change_opponents ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_change_opponents ===\n')
 
         world_data = WorldData(self.init_world_dict)
         mock_program = MockProgram()
@@ -1979,8 +1979,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        if ARGS.verbose:
-            print('\n=== test_ranged_to_hit ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_ranged_to_hit ===\n')
 
         self.__window_manager = MockWindowManager()
         self.__ruleset = TestRuleset(self.__window_manager)
@@ -2223,8 +2223,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        if ARGS.verbose:
-            print('\n=== test_messed_up_aim ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_messed_up_aim ===\n')
 
         self.__window_manager = MockWindowManager()
         self.__ruleset = TestRuleset(self.__window_manager)
@@ -2462,8 +2462,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        if ARGS.verbose:
-            print('\n=== test_melee_to_hit ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_melee_to_hit ===\n')
 
         self.__window_manager = MockWindowManager()
         self.__ruleset = TestRuleset(self.__window_manager)
@@ -2568,8 +2568,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        if ARGS.verbose:
-            print('\n=== test_adjust_hp ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_adjust_hp ===\n')
 
         # Setup
 
@@ -2995,8 +2995,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        if ARGS.verbose:
-            print('\n=== test_adjust_hp_2 ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_adjust_hp_2 ===\n')
 
         # Setup
 
@@ -3153,8 +3153,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         GURPS-specific test
         '''
-        if ARGS.verbose:
-            print('\n=== test_spell_casting ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_spell_casting ===\n')
 
         # Setup
 
@@ -3403,8 +3403,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         General test
         '''
-        if ARGS.verbose:
-            print('\n=== test_don_doff_armor ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_don_doff_armor ===\n')
 
         # Setup
 
@@ -3452,8 +3452,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         General test
         '''
-        if ARGS.verbose:
-            print('\n=== test_draw_sheathe_weapon ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_draw_sheathe_weapon ===\n')
 
         # Setup
 
@@ -3495,8 +3495,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         General test
         '''
-        if ARGS.verbose:
-            print('\n=== test_reload ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_reload ===\n')
 
         # Setup
 
@@ -3622,8 +3622,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         General test
         '''
-        if ARGS.verbose:
-            print('\n=== test_reload_2 ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_reload_2 ===\n')
 
         # Setup
 
@@ -3723,8 +3723,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         MIXED test
         '''
-        if ARGS.verbose:
-            print('\n=== test_stun_and_consciousness ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_stun_and_consciousness ===\n')
 
         # Setup
 
@@ -3818,8 +3818,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         GURPS test
         '''
-        if ARGS.verbose:
-            print('\n=== test_defend ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_defend ===\n')
 
         # Setup
 
@@ -3878,8 +3878,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        if ARGS.verbose:
-            print('\n=== test_timers ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_timers ===\n')
 
         fighter = ca_fighter.Fighter(
                 'Tank',
@@ -4018,8 +4018,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        if ARGS.verbose:
-            print('\n=== test_save ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_save ===\n')
 
         base_world_dict = copy.deepcopy(self.base_world_dict)
 
@@ -4028,8 +4028,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # Test that leaving a fight moves the bad guys to the dead monster
         # list
-        if ARGS.verbose:
-            print('\n----------- LEAVE FIGHT -----------\n')
+        #if ARGS.verbose:
+        #    print('\n----------- LEAVE FIGHT -----------\n')
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
@@ -4062,8 +4062,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         #
         # test that SAVING the fight works
         #
-        if ARGS.verbose:
-            print('\n----------- SAVE FIGHT -----------\n')
+        #if ARGS.verbose:
+        #    print('\n----------- SAVE FIGHT -----------\n')
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
@@ -4103,8 +4103,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         #
         # test that KEEPING the fight works
         #
-        if ARGS.verbose:
-            print('\n----------- KEEP FIGHT -----------\n')
+        #if ARGS.verbose:
+        #    print('\n----------- KEEP FIGHT -----------\n')
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
@@ -4140,8 +4140,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        if ARGS.verbose:
-            print('\n=== test_add_remove_equipment ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_add_remove_equipment ===\n')
 
         fighter = ca_fighter.Fighter(
                 'Tank',
@@ -4368,8 +4368,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         Basic test
         '''
 
-        if ARGS.verbose:
-            print('\n=== test_preferred_add_remove_weapon ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_preferred_add_remove_weapon ===\n')
 
         fighter = ca_fighter.Fighter(
                 'Tank',
@@ -4588,8 +4588,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        if ARGS.verbose:
-            print('\n=== test_give_equipment ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_give_equipment ===\n')
 
         tank = ca_fighter.Fighter(
                 'Tank',
@@ -4691,8 +4691,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        if ARGS.verbose:
-            print('\n=== test_redirects ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_redirects ===\n')
 
         base_world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(base_world_dict)
@@ -4715,8 +4715,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        if ARGS.verbose:
-            print('\n=== test_redirects_promote_to_NPC ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_redirects_promote_to_NPC ===\n')
 
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
@@ -4779,8 +4779,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         Basic test
         '''
-        if ARGS.verbose:
-            print('\n=== test_NPC_joins ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_NPC_joins ===\n')
 
         # NOTE: These indexes assume that we're NOT creating a fight.  When we
         # create a fight, a Fight object '<< ROOM >>' will be created and
@@ -4844,8 +4844,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # PersonnelHandler.NPC_joins_monsters - not an NPC #
 
-        if ARGS.verbose:
-            print('\n----------- NPC_joins_monsters - not an NPC -----------\n')
+        #if ARGS.verbose:
+        #    print('\n----------- NPC_joins_monsters - not an NPC -----------\n')
 
         self.__window_manager.reset_error_state()
 
@@ -4861,8 +4861,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # PersonnelHandler.NPC_joins_monsters - works #
 
-        if ARGS.verbose:
-            print('\n----------- NPC_joins_monsters - works -----------\n')
+        #if ARGS.verbose:
+        #    print('\n----------- NPC_joins_monsters - works -----------\n')
 
         self.__window_manager.reset_error_state()
 
@@ -4879,8 +4879,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # PersonnelHandler.NPC_joins_monsters - NPC already in fight #
 
-        if ARGS.verbose:
-            print('\n--- NPC_joins_monsters - NPC already with monster ---\n')
+        #if ARGS.verbose:
+        #    print('\n--- NPC_joins_monsters - NPC already with monster ---\n')
 
         npc_handler.set_viewing_index(groucho_index)
         fighter = npc_handler.get_obj_from_index()
@@ -4897,8 +4897,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # PersonnelHandler.NPC_joins_PCs -- not a PC #
 
-        if ARGS.verbose:
-            print('\n----------- NPC_joins_PCs - not a PC -----------\n')
+        #if ARGS.verbose:
+        #    print('\n----------- NPC_joins_PCs - not a PC -----------\n')
 
         pc_handler.set_viewing_index(pc_manny_index)
         fighter = pc_handler.get_obj_from_index()
@@ -4913,8 +4913,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # PersonnelHandler.NPC_joins_PCs -- works #
 
-        if ARGS.verbose:
-            print('\n----------- NPC_joins_PCs - works -----------\n')
+        #if ARGS.verbose:
+        #    print('\n----------- NPC_joins_PCs - works -----------\n')
 
         self.__window_manager.reset_error_state()
 
@@ -4956,8 +4956,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         # CREATE FIGHT -- WORKING #
 
-        if ARGS.verbose:
-            print('\n=== test_new_fight_new_creatures ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_new_fight_new_creatures ===\n')
 
         world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(world_dict)
@@ -4991,16 +4991,16 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         assert 'test_new_fight' in fights  # verify that fight  exists
         if 'test_new_fight' in fights:
             creatures = world.get_creature_details_list('test_new_fight')
-            if ARGS.verbose:
-                print('Expect: Room, Horatio:')
-                PP.pprint(creatures)
+            #if ARGS.verbose:
+            #    print('Expect: Room, Horatio:')
+            #    PP.pprint(creatures)
             # The 'creatures' should be '<< ROOM >>', '1 - Horatio'
             assert '1 - Horatio' in creatures
 
         # FIGHT ALREADY EXISTS #
 
-        if ARGS.verbose:
-            print('\n--- Test: Fight Already Exists ---\n')
+        #if ARGS.verbose:
+        #    print('\n--- Test: Fight Already Exists ---\n')
 
         self.__window_manager.reset_error_state()
         self.__window_manager.clear_menu_responses()
@@ -5033,8 +5033,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # ADD A CREATURE, DELETE A MONSTER -- WORKS #
 
-        if ARGS.verbose:
-            print('\n--- Test: Add and Delete Monster ---\n')
+        #if ARGS.verbose:
+        #    print('\n--- Test: Add and Delete Monster ---\n')
 
         self.__window_manager.clear_menu_responses()
         self.__window_manager.set_menu_response('New or Pre-Existing',
@@ -5076,8 +5076,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # ADD PCs -- WORKS #
 
-        if ARGS.verbose:
-            print('\n--- Test: Add PCs ---\n')
+        #if ARGS.verbose:
+        #    print('\n--- Test: Add PCs ---\n')
 
         group = 'PCs'
         self.__window_manager.clear_menu_responses()
@@ -5100,8 +5100,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
 
         # ADD NPCs #
 
-        if ARGS.verbose:
-            print('\n--- Test: Add NPCs ---\n')
+        #if ARGS.verbose:
+        #    print('\n--- Test: Add NPCs ---\n')
 
         group = 'NPCs'
         self.__window_manager.clear_menu_responses()
@@ -5128,8 +5128,8 @@ class GmTestCase(unittest.TestCase):  # Derive from unittest.TestCase
         '''
         # CREATE FIGHT -- WORKING #
 
-        if ARGS.verbose:
-            print('\n=== test_containers ===\n')
+        #if ARGS.verbose:
+        #    print('\n=== test_containers ===\n')
 
         mock_fight_handler = MockFightHandler()
 

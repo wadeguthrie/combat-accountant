@@ -3524,11 +3524,19 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # that may not be in the file
 
         ignore_name, creature = super(GurpsRuleset,
-                               self).import_creature_from_file(filename)
+                self).import_creature_from_file(filename)
 
         gcs_import = ca_gcs_import.GcsImport(self._window_manager)
         name, creature = gcs_import.import_creature(creature, self, filename)
         return name, creature
+
+    def import_equipment_from_file(self,
+                                   filename # string
+                                   ):
+        gcs_import = ca_gcs_import.GcsImport(self._window_manager)
+        name, creature = gcs_import.import_creature(creature, self, filename)
+        return name, creature
+
 
     def initiative(self,
                    fighter, # Fighter object
@@ -3711,7 +3719,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 "acc": 0,
                 #"damage": {"dice": { "plus": 0, "num_dice": 0, "type": "pi" }},
                 "bulk": -10,
-                "reload": 10,
+                # "reload": 10,
                 # ca_equipment.Equipment.RELOAD_CLIP
                 #"skill": {"*UNKNOWN*": 0},
                 "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
