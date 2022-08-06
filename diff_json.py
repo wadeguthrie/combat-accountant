@@ -105,112 +105,124 @@ class GmJson(object):
         return GmJson.__byteify(my_dict, ignore_dicts=True), None
 
 
-def are_equal(lhs,
-              rhs,
-              path  # string describing stack of containers that got us here
-              ):
-    if isinstance(lhs, dict):
-        if not isinstance(rhs, dict):
-            print('\n---------------------')
-            print('** TYPE: %s%s is a DICT, but not in %s' % (
-                    ARGS.filename[0], path, ARGS.filename[1]))
-            if ARGS.verbose:
-                print('\nlhs')
-                PP.pprint(lhs)
-                print('\nrhs')
-                PP.pprint(rhs)
-            return False
-        for key in rhs.keys():
-            if key not in lhs:
+class DiffJson(object):
+    def __init__(self,
+                 first_input_string,    # identifier for 1st object
+                 second_input_string,   # identifier for 2nd object
+                 verbose
+                 ):
+        self.__first_input_string = first_input_string
+        self.__second_input_string = second_input_string
+        self.__verbose = verbose
+        self.__PP = pprint.PrettyPrinter(indent=3, width=150)
+
+    def are_equal(self,
+                  lhs,
+                  rhs,
+                  path  # string describing stack of containers that got us here
+                  ):
+        if isinstance(lhs, dict):
+            if not isinstance(rhs, dict):
                 print('\n---------------------')
-                print('** KEY (%s): %s%s[%s] does not exist' % (
-                        path, ARGS.filename[0], path, key))
-                if ARGS.verbose:
+                print('** TYPE: %s%s is a DICT, but not in %s' % (
+                        self.__first_input_string, path, self.__second_input_string))
+                if self.__verbose:
                     print('\nlhs')
-                    PP.pprint(lhs)
+                    self.__PP.pprint(lhs)
                     print('\nrhs')
-                    PP.pprint(rhs)
-                else:
-                    print('\n%s%s[%s]:' % (ARGS.filename[1], path, key))
-                    PP.pprint(rhs[key])
+                    self.__PP.pprint(rhs)
                 return False
-        result = True
-        for key in lhs.keys():
-            new_path = path + ('[%s]' % key)
-            if key not in rhs:
+            for key in rhs.keys():
+                if key not in lhs:
+                    print('\n---------------------')
+                    print('** KEY (%s): %s%s[%s] does not exist' % (
+                            path, self.__first_input_string, path, key))
+                    if self.__verbose:
+                        print('\nlhs')
+                        self.__PP.pprint(lhs)
+                        print('\nrhs')
+                        self.__PP.pprint(rhs)
+                    else:
+                        print('\n%s%s[%s]:' % (self.__second_input_string, path, key))
+                        self.__PP.pprint(rhs[key])
+                    return False
+            result = True
+            for key in lhs.keys():
+                new_path = path + ('[%s]' % key)
+                if key not in rhs:
+                    print('\n---------------------')
+                    print('** KEY (%s): %s%s[%s] does not exist' % (
+                            key, self.__second_input_string, path, key))
+                    if self.__verbose:
+                        print('\nlhs')
+                        self.__PP.pprint(lhs)
+                        print('\nrhs')
+                        self.__PP.pprint(rhs)
+                    else:
+                        print('\n%s%s[%s]:' % (self.__first_input_string, path, key))
+                        self.__PP.pprint(lhs[key])
+                    result = False
+                elif not self.are_equal(lhs[key], rhs[key], new_path):
+                    print('\nSo, %s%s[%r] != %s[...][%r]' % (
+                            self.__first_input_string, path, key,
+                            self.__second_input_string, key))
+                    # print '\nlhs'
+                    # self.__PP.pprint(lhs)
+                    # print '\nrhs'
+                    # self.__PP.pprint(rhs)
+                    result = False
+            return result
+
+        elif isinstance(lhs, list):
+            if not isinstance(rhs, list):
                 print('\n---------------------')
-                print('** KEY (%s): %s%s[%s] does not exist' % (
-                        key, ARGS.filename[1], path, key))
-                if ARGS.verbose:
+                print('** TYPE: %s%s is a LIST, not so in %s' % (
+                        self.__first_input_string, path, self.__second_input_string))
+                if self.__verbose:
                     print('\nlhs')
-                    PP.pprint(lhs)
+                    self.__PP.pprint(lhs)
                     print('\nrhs')
-                    PP.pprint(rhs)
-                else:
-                    print('\n%s%s[%s]:' % (ARGS.filename[0], path, key))
-                    PP.pprint(lhs[key])
-                result = False
-            elif not are_equal(lhs[key], rhs[key], new_path):
-                print('\nSo, %s%s[%r] != %s[...][%r]' % (
-                        ARGS.filename[0], path, key,
-                        ARGS.filename[1], key))
-                # print '\nlhs'
-                # PP.pprint(lhs)
-                # print '\nrhs'
-                # PP.pprint(rhs)
-                result = False
-        return result
+                    self.__PP.pprint(rhs)
+                return False
+            if len(lhs) != len(rhs):
+                print('\n---------------------')
+                print('** LENGTH: len(%s%s) =%d != len(%s[...]) =%d' % (
+                        self.__first_input_string, path, len(lhs),
+                        self.__second_input_string, len(rhs)))
+                if self.__verbose:
+                    print('\nlhs')
+                    self.__PP.pprint(lhs)
+                    print('\nrhs')
+                    self.__PP.pprint(rhs)
+                return False
+            result = True
+            for i in range(len(lhs)):
+                new_path = path + ('[%d]' % i)
+                if not self.are_equal(lhs[i], rhs[i], new_path):
+                    print('\nSo, %s%s[%d] != %s[...][%d]' % (
+                            self.__first_input_string, path, i,
+                            self.__second_input_string, i))
+                    # print '\nlhs'
+                    # self.__PP.pprint(lhs)
+                    # print '\nrhs'
+                    # self.__PP.pprint(rhs)
+                    result = False
+            return result
 
-    elif isinstance(lhs, list):
-        if not isinstance(rhs, list):
-            print('\n---------------------')
-            print('** TYPE: %s%s is a LIST, not so in %s' % (
-                    ARGS.filename[0], path, ARGS.filename[1]))
-            if ARGS.verbose:
-                print('\nlhs')
-                PP.pprint(lhs)
-                print('\nrhs')
-                PP.pprint(rhs)
-            return False
-        if len(lhs) != len(rhs):
-            print('\n---------------------')
-            print('** LENGTH: len(%s%s) =%d != len(%s[...]) =%d' % (
-                    ARGS.filename[0], path, len(lhs),
-                    ARGS.filename[1], len(rhs)))
-            if ARGS.verbose:
-                print('\nlhs')
-                PP.pprint(lhs)
-                print('\nrhs')
-                PP.pprint(rhs)
-            return False
-        result = True
-        for i in range(len(lhs)):
-            new_path = path + ('[%d]' % i)
-            if not are_equal(lhs[i], rhs[i], new_path):
-                print('\nSo, %s%s[%d] != %s[...][%d]' % (
-                        ARGS.filename[0], path, i,
-                        ARGS.filename[1], i))
-                # print '\nlhs'
-                # PP.pprint(lhs)
-                # print '\nrhs'
-                # PP.pprint(rhs)
-                result = False
-        return result
-
-    else:
-        if lhs != rhs:
-            print('\n---------------------')
-            print('** VALUE: %s%s =%r != %s[...] =%r' % (
-                    ARGS.filename[0], path, lhs,
-                    ARGS.filename[1], rhs))
-            if ARGS.verbose:
-                print('\nlhs')
-                PP.pprint(lhs)
-                print('\nrhs')
-                PP.pprint(rhs)
-            return False
         else:
-            return True
+            if lhs != rhs:
+                print('\n---------------------')
+                print('** VALUE: %s%s =%r != %s[...] =%r' % (
+                        self.__first_input_string, path, lhs,
+                        self.__second_input_string, rhs))
+                if self.__verbose:
+                    print('\nlhs')
+                    self.__PP.pprint(lhs)
+                    print('\nrhs')
+                    self.__PP.pprint(rhs)
+                return False
+            else:
+                return True
 
 
 class MyArgumentParser(argparse.ArgumentParser):
@@ -230,13 +242,15 @@ if __name__ == '__main__':
 
     ARGS = parser.parse_args()
 
-    PP = pprint.PrettyPrinter(indent=3, width=150)
-
     print('LHS: %s' % ARGS.filename[0])
     print('RHS: %s' % ARGS.filename[1])
     print('')
 
     with GmJson(ARGS.filename[0]) as file1:
         with GmJson(ARGS.filename[1]) as file2:
-            if are_equal(file1.read_data, file2.read_data, ''):
+            diff_json = DiffJson(ARGS.filename[0],
+                                 ARGS.filename[1],
+                                 ARGS.verbose)
+
+            if diff_json.are_equal(file1.read_data, file2.read_data, ''):
                 print('files are equal')

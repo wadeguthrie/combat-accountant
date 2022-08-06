@@ -1,0 +1,23 @@
+Discrepencies between GCS and combat accountant.
+
+--
+Janice
+o Skill: Stealth gcs:13, ca: 16 - OK, that's encumbrance
+
+Vasilis
+o Skill: Beam Weapons (pistol) gcs(17), ca(16) <- doesn't include laser sight
+
+Deri
+o Skill: Detect Lies gcs(15), ca(17) - I think this is a bug in GCS (empathy
+  is -1 instead of -3)
+o Skill: Piloting gcs(9), ca(8) - I think this is a bug in GCS
+
+Lawerence
+o Skill: Beam Weapons (pistol) gcs(18), ca(17) - OK, gcs includes laser
+o Skill: Dual Weapon (pistol) gcs(15), ca(14) - OK, based on Beam Weapons (pistol)
+o Skill: Karate gcs(14), ca(15) - OK, that's encumbrance
+o Skill: off hand weapons training, beam weapons (pistol) gcs(14), ca(13) - OK, based on Beam Weapons (pistol)
+o Skill: stealth gcs(15), ca(16) - OK, that's encumbrance
+
+
+
