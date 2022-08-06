@@ -1,0 +1,1391 @@
+{
+	"type": "character",
+	"version": 1,
+	"id": "42afb2d0-b028-478b-a2b7-59d12ed360d7",
+	"settings": {
+		"version": 1,
+		"default_length_units": "ft_in",
+		"default_weight_units": "lb",
+		"user_description_display": "tooltip",
+		"modifiers_display": "inline",
+		"notes_display": "inline",
+		"base_will_and_per_on_10": false,
+		"use_multiplicative_modifiers": false,
+		"use_modifying_dice_plus_adds": false,
+		"use_know_your_own_strength": false,
+		"use_reduced_swing": false,
+		"use_thrust_equals_swing_minus_2": false,
+		"use_simple_metric_conversions": true,
+		"show_college_in_sheet_spells": false,
+		"use_title_in_footer": false,
+		"block_layout": [
+			"reactions",
+			"melee",
+			"ranged",
+			"advantages skills",
+			"spells",
+			"equipment",
+			"other_equipment",
+			"notes"
+		]
+	},
+	"created_date": "Jul 7, 2018, 12:00 AM",
+	"modified_date": "Mar 19, 2022, 12:00 AM",
+	"profile": {
+		"player_name": "test",
+		"name": "Vasilis Illyan",
+		"title": "N/A",
+		"age": 27,
+		"birthday": "March 26",
+		"eyes": "Grey",
+		"hair": "Black, Shaved",
+		"skin": "Light",
+		"handedness": "Left",
+		"height": "5' 10\"",
+		"weight": "145 lb",
+		"gender": "Male",
+		"body_type": "humanoid",
+		"tech_level": "8",
+		"religion": "N/A"
+	},
+	"HP_adj": 2,
+	"FP_adj": 1,
+	"total_points": 215,
+	"ST": 10,
+	"DX": 13,
+	"IQ": 14,
+	"HT": 9,
+	"speed_adj": 0.5,
+	"advantages": [
+		{
+			"type": "advantage",
+			"version": 1,
+			"id": "67093b3d-3b20-4717-9436-c7d9979c9c0d",
+			"name": "Cannot Speak (Mute) - Computer Voice Synthesizer",
+			"physical": true,
+			"base_points": -10,
+			"reference": "B125",
+			"categories": [
+				"Disadvantage"
+			]
+		},
+		{
+			"type": "advantage",
+			"version": 1,
+			"id": "3c6d3506-6b82-4266-b03c-6d7649606c1d",
+			"name": "Humble",
+			"mental": true,
+			"base_points": -1,
+			"reference": "B164",
+			"categories": [
+				"Quirk"
+			]
+		},
+		{
+			"type": "advantage",
+			"version": 1,
+			"id": "228503ac-d497-4e48-b638-eb50888ab6e0",
+			"name": "Secret (Turned in evidence on brutal mob hit)",
+			"social": true,
+			"modifiers": [
+				{
+					"type": "modifier",
+					"version": 1,
+					"id": "88501524-8963-4657-bd02-93d17234c689",
+					"disabled": true,
+					"name": "Serious Embarrassment",
+					"reference": "B152",
+					"cost_type": "points",
+					"cost": -5,
+					"affects": "total"
+				},
+				{
+					"type": "modifier",
+					"version": 1,
+					"id": "6f516aff-c3ef-43c9-b132-4fe325270552",
+					"disabled": true,
+					"name": "Utter Rejection",
+					"reference": "B152",
+					"cost_type": "points",
+					"cost": -10,
+					"affects": "total"
+				},
+				{
+					"type": "modifier",
+					"version": 1,
+					"id": "7875455f-3194-4af5-b10c-a821dbcafeea",
+					"disabled": true,
+					"name": "Imprisonment",
+					"reference": "B152",
+					"cost_type": "points",
+					"cost": -20,
+					"affects": "total"
+				},
+				{
+					"type": "modifier",
+					"version": 1,
+					"id": "4afb39da-8332-43fb-8b7d-511bf97dad3d",
+					"name": "Possible Death",
+					"reference": "B152",
+					"cost_type": "points",
+					"cost": -30,
+					"affects": "total"
+				}
+			],
+			"reference": "B152",
+			"categories": [
+				"Disadvantage"
+			]
+		},
+		{
+			"type": "advantage",
+			"version": 1,
+			"id": "4873a716-6c29-4352-a908-4837774fe05e",
+			"name": "Squeamish",
+			"physical": true,
+			"base_points": -10,
+			"cr": 12,
+			"reference": "B156",
+			"categories": [
+				"Disadvantage"
+			]
+		},
+		{
+			"type": "advantage",
+			"version": 1,
+			"id": "002d7f66-9381-4045-b6f1-c98e9be23dc2",
+			"name": "Eidetic Memory",
+			"mental": true,
+			"base_points": 5,
+			"modifiers": [
+				{
+					"type": "modifier",
+					"version": 1,
+					"id": "54144aed-73c9-4915-9f3e-83a2ae1045b0",
+					"disabled": true,
+					"name": "Photographic",
+					"reference": "B51",
+					"cost_type": "points",
+					"cost": 5,
+					"affects": "total"
+				}
+			],
+			"reference": "B51",
+			"categories": [
+				"Advantage"
+			]
+		},
+		{
+			"type": "advantage",
+			"version": 1,
+			"id": "4d79f118-63ab-4961-8b57-f7055af54b10",
+			"name": "Acute Vision",
+			"physical": true,
+			"levels": "1",
+			"points_per_level": 2,
+			"reference": "B35",
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"amount": 1,
+					"per_level": true,
+					"attribute": "vision"
+				}
+			],
+			"categories": [
+				"Advantage"
+			]
+		},
+		{
+			"type": "advantage",
+			"version": 1,
+			"id": "fe7071ad-d6c8-4f95-b784-18d5c01bf817",
+			"name": "G-Experience",
+			"mental": true,
+			"levels": "1",
+			"points_per_level": 1,
+			"reference": "B57",
+			"notes": "0.2",
+			"categories": [
+				"Advantage"
+			]
+		},
+		{
+			"type": "advantage",
+			"version": 1,
+			"id": "8cf314e7-abc5-4cce-b7c0-779ba56bee9d",
+			"name": "Fit",
+			"physical": true,
+			"base_points": 5,
+			"reference": "B55",
+			"notes": "+1 to all HT rolls to stay conscious, avoid death, resist disease, resist poison; recover FP at twice the normal rate (but not FP spent for spells or psi powers)",
+			"categories": [
+				"Advantage"
+			]
+		}
+	],
+	"skills": [
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "2b39c82a-5ef4-40a7-a531-ad8eda589e7d",
+			"name": "Brawling",
+			"reference": "B182",
+			"difficulty": "DX/E",
+			"points": 1,
+			"features": [
+				{
+					"type": "weapon_bonus",
+					"amount": 1,
+					"per_level": true,
+					"selection_type": "weapons_with_required_skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Brawling"
+					},
+					"level": {
+						"compare": "at_least",
+						"qualifier": 2
+					}
+				}
+			],
+			"categories": [
+				"Combat/Weapon",
+				"Melee Combat"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "ad72a584-51dc-4e1e-b00a-29470a1d3c52",
+			"name": "Beam Weapons",
+			"reference": "B179",
+			"specialization": "Pistol",
+			"tech_level": "8",
+			"difficulty": "DX/E",
+			"points": 0,
+			"defaulted_from": {
+				"type": "Skill",
+				"name": "Beam Weapons",
+				"modifier": -4,
+				"level": 16,
+				"adjusted_level": 16,
+				"points": 8
+			},
+			"defaults": [
+				{
+					"type": "DX",
+					"modifier": -4
+				},
+				{
+					"type": "Skill",
+					"name": "Beam Weapons",
+					"modifier": -4
+				},
+				{
+					"type": "Skill",
+					"name": "Guns",
+					"specialization": "Pistol",
+					"modifier": -4
+				}
+			],
+			"categories": [
+				"Combat/Weapon",
+				"Ranged Combat"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "0f7cd27b-e2e2-4489-a405-92bf71475324",
+			"name": "Beam Weapons",
+			"reference": "B179",
+			"specialization": "Rifle",
+			"tech_level": "8",
+			"difficulty": "DX/E",
+			"points": 24,
+			"defaulted_from": {
+				"type": "DX",
+				"modifier": -4,
+				"level": 9,
+				"adjusted_level": 9,
+				"points": -9
+			},
+			"defaults": [
+				{
+					"type": "DX",
+					"modifier": -4
+				},
+				{
+					"type": "Skill",
+					"name": "Beam Weapons",
+					"modifier": -4
+				},
+				{
+					"type": "Skill",
+					"name": "Guns",
+					"specialization": "Rifle",
+					"modifier": -4
+				}
+			],
+			"categories": [
+				"Combat/Weapon",
+				"Ranged Combat"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "f97f1f0e-bf08-43c9-a6a5-16aac3545f7e",
+			"name": "Axe/Mace",
+			"reference": "B208",
+			"difficulty": "DX/A",
+			"points": 2,
+			"defaulted_from": {
+				"type": "DX",
+				"modifier": -5,
+				"level": 8,
+				"adjusted_level": 8,
+				"points": -8
+			},
+			"defaults": [
+				{
+					"type": "DX",
+					"modifier": -5
+				},
+				{
+					"type": "Skill",
+					"name": "Two-Handed Axe/Mace",
+					"modifier": -3
+				},
+				{
+					"type": "Skill",
+					"name": "Flail",
+					"modifier": -4
+				}
+			],
+			"categories": [
+				"Combat/Weapon",
+				"Melee Combat"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "8c44a265-82dd-42ca-821f-112bbe5be6ae",
+			"name": "Law",
+			"reference": "B204",
+			"specialization": "Conglomerate, trans-territorial jurisdiction/the void",
+			"difficulty": "IQ/H",
+			"points": 1,
+			"defaulted_from": {
+				"type": "IQ",
+				"modifier": -6,
+				"level": 8,
+				"adjusted_level": 8,
+				"points": -8
+			},
+			"defaults": [
+				{
+					"type": "IQ",
+					"modifier": -6
+				}
+			],
+			"categories": [
+				"Business",
+				"Police",
+				"Social Sciences/Humanities"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "9bb060e5-8858-48d2-a77e-fdaf9f00861f",
+			"name": "Cryptography",
+			"reference": "B186",
+			"tech_level": "8",
+			"difficulty": "IQ/H",
+			"points": 2,
+			"defaults": [
+				{
+					"type": "Skill",
+					"name": "Mathematics",
+					"specialization": "Cryptology",
+					"modifier": -5
+				}
+			],
+			"categories": [
+				"Military",
+				"Spy"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "47ec0c92-bea5-44d4-9186-dcfa49ba58d3",
+			"name": "Electronics Operation",
+			"reference": "B189",
+			"specialization": "Security",
+			"tech_level": "8",
+			"difficulty": "IQ/A",
+			"points": 2,
+			"defaulted_from": {
+				"type": "IQ",
+				"modifier": -5,
+				"level": 9,
+				"adjusted_level": 9,
+				"points": -9
+			},
+			"defaults": [
+				{
+					"type": "IQ",
+					"modifier": -5
+				},
+				{
+					"type": "Skill",
+					"name": "Electronics Operation",
+					"specialization": "Security",
+					"modifier": -5
+				},
+				{
+					"type": "Skill",
+					"name": "Engineer",
+					"specialization": "Electronics",
+					"modifier": -5
+				},
+				{
+					"type": "Skill",
+					"name": "Electronics Operation",
+					"modifier": -4
+				}
+			],
+			"categories": [
+				"Criminal/Street",
+				"Spy",
+				"Technical"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "6b05c851-f7df-4f4f-80f1-d2dbbecb8f78",
+			"name": "Expert Skill",
+			"reference": "B193",
+			"specialization": "Computer Security",
+			"difficulty": "IQ/H",
+			"points": 2,
+			"categories": [
+				"Knowledge",
+				"Scholarly",
+				"Spy"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "7a129372-8c7a-4195-a684-539c1dd604c0",
+			"name": "Computer Programming",
+			"reference": "B184",
+			"tech_level": "8",
+			"difficulty": "IQ/H",
+			"points": 2,
+			"categories": [
+				"Design/Invention"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "6a5ca79f-2422-41f5-8bcf-8fbd2b00475c",
+			"name": "Piloting",
+			"reference": "B214",
+			"specialization": "Low-Performance Spacecraft",
+			"tech_level": "8",
+			"difficulty": "DX/A",
+			"points": 28,
+			"defaulted_from": {
+				"type": "IQ",
+				"modifier": -6,
+				"level": 8,
+				"adjusted_level": 8,
+				"points": -8
+			},
+			"defaults": [
+				{
+					"type": "IQ",
+					"modifier": -6
+				},
+				{
+					"type": "Skill",
+					"name": "Piloting",
+					"specialization": "Aerospace",
+					"modifier": -4
+				},
+				{
+					"type": "Skill",
+					"name": "Piloting",
+					"specialization": "High-Performance Spacecraft",
+					"modifier": -2
+				}
+			],
+			"categories": [
+				"Vehicle"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "c8c3881d-8af2-4ccc-a4d5-dd129ea84340",
+			"name": "Piloting",
+			"reference": "B214",
+			"specialization": "Loader Mech",
+			"tech_level": "8",
+			"difficulty": "DX/A",
+			"points": 0,
+			"defaulted_from": {
+				"type": "Skill",
+				"name": "Piloting",
+				"modifier": -4,
+				"level": 16,
+				"adjusted_level": 16,
+				"points": 12
+			},
+			"defaults": [
+				{
+					"type": "IQ",
+					"modifier": -6
+				},
+				{
+					"type": "Skill",
+					"name": "Piloting",
+					"specialization": "High-Performance Airplane",
+					"modifier": -2
+				},
+				{
+					"type": "Skill",
+					"name": "Piloting",
+					"modifier": -4
+				}
+			],
+			"categories": [
+				"Vehicle"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "48e0523d-92a5-4e9a-b41d-cff2b3d14b6e",
+			"name": "Engineer",
+			"reference": "B190",
+			"specialization": "Electronics",
+			"tech_level": "8",
+			"difficulty": "IQ/H",
+			"points": 2,
+			"prereqs": {
+				"type": "prereq_list",
+				"all": true,
+				"when_tl": {
+					"compare": "at_least",
+					"qualifier": 5
+				},
+				"prereqs": [
+					{
+						"type": "skill_prereq",
+						"has": true,
+						"name": {
+							"compare": "is",
+							"qualifier": "mathematics"
+						},
+						"specialization": {
+							"compare": "is",
+							"qualifier": "applied"
+						}
+					}
+				]
+			},
+			"defaults": [
+				{
+					"type": "Skill",
+					"name": "Electronics Repair",
+					"modifier": -6
+				}
+			],
+			"categories": [
+				"Design/Invention",
+				"Engineer"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "a7262cc6-3e72-4ecd-9cbe-2fcd027f7c4a",
+			"name": "Engineer",
+			"reference": "B190",
+			"specialization": "Starships",
+			"tech_level": "8",
+			"difficulty": "IQ/H",
+			"points": 2,
+			"prereqs": {
+				"type": "prereq_list",
+				"all": true,
+				"when_tl": {
+					"compare": "at_least",
+					"qualifier": 5
+				},
+				"prereqs": [
+					{
+						"type": "skill_prereq",
+						"has": true,
+						"name": {
+							"compare": "is",
+							"qualifier": "mathematics"
+						},
+						"specialization": {
+							"compare": "is",
+							"qualifier": "applied"
+						}
+					}
+				]
+			},
+			"defaults": [
+				{
+					"type": "Skill",
+					"name": "Mechanic",
+					"specialization": "Starships",
+					"modifier": -6
+				}
+			],
+			"categories": [
+				"Design/Invention",
+				"Engineer"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "1d6d6da2-129e-450a-aabc-737e94cc8592",
+			"name": "Computer Hacking",
+			"reference": "B184",
+			"tech_level": "8",
+			"difficulty": "IQ/VH",
+			"points": 20,
+			"prereqs": {
+				"type": "prereq_list",
+				"all": true,
+				"prereqs": [
+					{
+						"type": "skill_prereq",
+						"has": true,
+						"name": {
+							"compare": "is",
+							"qualifier": "computer programming"
+						},
+						"specialization": {
+							"compare": "is"
+						}
+					}
+				]
+			},
+			"categories": [
+				"Criminal/Street",
+				"Spy"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "6307409a-0190-4177-b3ef-0ccf65c16f2e",
+			"name": "Mathematics",
+			"reference": "B207",
+			"specialization": "Applied",
+			"tech_level": "8",
+			"difficulty": "IQ/H",
+			"points": 1,
+			"defaulted_from": {
+				"type": "IQ",
+				"modifier": -6,
+				"level": 8,
+				"adjusted_level": 8,
+				"points": -8
+			},
+			"defaults": [
+				{
+					"type": "IQ",
+					"modifier": -6
+				},
+				{
+					"type": "Skill",
+					"name": "Physics",
+					"modifier": -5
+				},
+				{
+					"type": "Skill",
+					"name": "Engineer",
+					"modifier": -5
+				}
+			],
+			"categories": [
+				"Natural Science"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "cd4e3f86-3d0a-49fd-9308-ec2b11d45883",
+			"name": "Physics",
+			"reference": "B213",
+			"tech_level": "8",
+			"difficulty": "IQ/VH",
+			"points": 2,
+			"defaulted_from": {
+				"type": "IQ",
+				"modifier": -6,
+				"level": 8,
+				"adjusted_level": 8,
+				"points": -8
+			},
+			"prereqs": {
+				"type": "prereq_list",
+				"all": true,
+				"when_tl": {
+					"compare": "at_least",
+					"qualifier": 5
+				},
+				"prereqs": [
+					{
+						"type": "skill_prereq",
+						"has": true,
+						"name": {
+							"compare": "is",
+							"qualifier": "mathematics"
+						},
+						"specialization": {
+							"compare": "is",
+							"qualifier": "applied"
+						}
+					}
+				]
+			},
+			"defaults": [
+				{
+					"type": "IQ",
+					"modifier": -6
+				}
+			],
+			"categories": [
+				"Natural Science"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "46e5385e-5719-432d-b6f9-910dcccfa50c",
+			"name": "Armoury",
+			"reference": "B178",
+			"specialization": "Small Arms",
+			"tech_level": "8",
+			"difficulty": "IQ/A",
+			"points": 2,
+			"defaulted_from": {
+				"type": "IQ",
+				"modifier": -5,
+				"level": 9,
+				"adjusted_level": 9,
+				"points": -9
+			},
+			"defaults": [
+				{
+					"type": "IQ",
+					"modifier": -5
+				},
+				{
+					"type": "Skill",
+					"name": "Engineer",
+					"specialization": "Small Arms",
+					"modifier": -4
+				}
+			],
+			"categories": [
+				"Military",
+				"Repair/Maintainance"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "01feea45-a0b1-4d79-8f06-7eaeb23464d2",
+			"name": "Climbing",
+			"reference": "B183",
+			"encumbrance_penalty_multiplier": 1,
+			"difficulty": "DX/A",
+			"points": 2,
+			"defaulted_from": {
+				"type": "DX",
+				"modifier": -5,
+				"level": 8,
+				"adjusted_level": 8,
+				"points": -8
+			},
+			"defaults": [
+				{
+					"type": "DX",
+					"modifier": -5
+				}
+			],
+			"categories": [
+				"Athletic",
+				"Criminal/Street",
+				"Outdoor/Exploration"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "08e2b721-e424-4bde-8153-152b9807a895",
+			"name": "Forensics",
+			"reference": "B196",
+			"tech_level": "8",
+			"difficulty": "IQ/H",
+			"points": 4,
+			"defaulted_from": {
+				"type": "IQ",
+				"modifier": -6,
+				"level": 8,
+				"adjusted_level": 8,
+				"points": -8
+			},
+			"defaults": [
+				{
+					"type": "IQ",
+					"modifier": -6
+				},
+				{
+					"type": "Skill",
+					"name": "Criminology",
+					"modifier": -4
+				}
+			],
+			"categories": [
+				"Police"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "c4bf1bed-5845-40e2-9d15-c4da691fc618",
+			"name": "Search",
+			"reference": "B219",
+			"difficulty": "Per/A",
+			"points": 2,
+			"defaulted_from": {
+				"type": "Per",
+				"modifier": -5,
+				"level": 9,
+				"adjusted_level": 9,
+				"points": -9
+			},
+			"defaults": [
+				{
+					"type": "Per",
+					"modifier": -5
+				},
+				{
+					"type": "Skill",
+					"name": "Criminology",
+					"modifier": -5
+				}
+			],
+			"categories": [
+				"Police",
+				"Spy"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "5a5c2d14-99ac-4a34-9639-4007ccb015d8",
+			"name": "Lip Reading",
+			"reference": "B205",
+			"difficulty": "Per/A",
+			"points": 1,
+			"defaulted_from": {
+				"type": "Per",
+				"modifier": -10,
+				"level": 4,
+				"adjusted_level": 4,
+				"points": -4
+			},
+			"defaults": [
+				{
+					"type": "Per",
+					"modifier": -10
+				}
+			],
+			"categories": [
+				"Spy"
+			]
+		},
+		{
+			"type": "skill",
+			"version": 1,
+			"id": "942a0177-765a-41a2-adb0-4ec4abd72246",
+			"name": "Fast-Draw",
+			"reference": "B194",
+			"specialization": "Ammo",
+			"tech_level": "8",
+			"difficulty": "DX/E",
+			"points": 4,
+			"categories": [
+				"Combat/Weapon",
+				"Ranged Combat"
+			]
+		}
+	],
+	"equipment": [
+		{
+			"type": "equipment",
+			"version": 1,
+			"id": "917088a5-4046-4bea-a3f6-8cabf34fa945",
+			"equipped": true,
+			"quantity": 76500,
+			"description": "eRuble",
+			"value": "0.1"
+		},
+		{
+			"type": "equipment",
+			"version": 1,
+			"id": "27239611-a5bb-4796-81aa-c05c2d5f562d",
+			"equipped": true,
+			"quantity": 1,
+			"description": "Hacking Equipment +1",
+			"tech_level": "8",
+			"value": "5000",
+			"features": [
+				{
+					"type": "skill_bonus",
+					"amount": 1,
+					"selection_type": "skills_with_name",
+					"name": {
+						"compare": "is",
+						"qualifier": "Computer Hacking"
+					}
+				}
+			]
+		},
+		{
+			"type": "equipment",
+			"version": 1,
+			"id": "fd4bc27e-1d15-4014-8dbd-de8edba3b834",
+			"equipped": true,
+			"quantity": 1,
+			"description": "Sick Stick",
+			"tech_level": "9",
+			"legality_class": "3",
+			"value": "500",
+			"weapons": [
+				{
+					"type": "melee_weapon",
+					"damage": {
+						"type": "fat",
+						"base": "1d+1"
+					},
+					"strength": "9",
+					"usage": "Swung",
+					"reach": "1",
+					"parry": "0",
+					"block": "No",
+					"defaults": [
+						{
+							"type": "DX",
+							"modifier": -5
+						},
+						{
+							"type": "Skill",
+							"name": "Force Sword",
+							"modifier": -4
+						},
+						{
+							"type": "Skill",
+							"name": "Broadsword"
+						},
+						{
+							"type": "Skill",
+							"name": "Rapier",
+							"modifier": -4
+						},
+						{
+							"type": "Skill",
+							"name": "Saber",
+							"modifier": -4
+						},
+						{
+							"type": "Skill",
+							"name": "Shortsword",
+							"modifier": -2
+						},
+						{
+							"type": "Skill",
+							"name": "Two-Handed Sword",
+							"modifier": -4
+						},
+						{
+							"type": "Skill",
+							"name": "Axe/Mace"
+						}
+					]
+				}
+			],
+			"notes": "On hit: make HT roll or vomit (out 1d/3 turns)",
+			"categories": [
+				"Melee Weapon"
+			]
+		},
+		{
+			"type": "equipment",
+			"version": 1,
+			"id": "e6ca8a35-70ba-4067-81a3-7b3278b00dcf",
+			"equipped": true,
+			"quantity": 1,
+			"description": "Laser Sight",
+			"tech_level": "8",
+			"value": "100",
+			"reference": "B289",
+			"features": [
+				{
+					"type": "skill_bonus",
+					"amount": 1,
+					"selection_type": "skills_with_name",
+					"name": {
+						"compare": "is",
+						"qualifier": "Beam Weapons"
+					}
+				}
+			],
+			"notes": "+1 to skill; see Laser Sights (B412). 6 hrs.",
+			"categories": [
+				"Weapon and Combat Accessories"
+			]
+		},
+		{
+			"type": "equipment",
+			"version": 1,
+			"id": "a477159d-6250-41f9-b6b1-9f34898cd9ed",
+			"equipped": true,
+			"quantity": 1,
+			"description": "Voice Synthesizer",
+			"value": "1000"
+		},
+		{
+			"type": "equipment",
+			"version": 1,
+			"id": "19a07376-019d-4239-aabc-5c6e9557224d",
+			"equipped": true,
+			"quantity": 1,
+			"description": "Holster, Belt",
+			"value": "25",
+			"reference": "ACT1:28",
+			"notes": "For pistols.",
+			"categories": [
+				"Combat Accessories"
+			]
+		},
+		{
+			"type": "equipment",
+			"version": 1,
+			"id": "6865f9b6-3d81-4316-8dd8-cd649aa8ee0b",
+			"equipped": true,
+			"quantity": 1,
+			"description": "Blaster Pistol, Colt Series 170D",
+			"tech_level": "9",
+			"legality_class": "3",
+			"value": "1500",
+			"weight": "2.5 lb",
+			"weapons": [
+				{
+					"type": "ranged_weapon",
+					"damage": {
+						"type": "HP",
+						"base": "1d+4"
+					},
+					"strength": "9",
+					"accuracy": "3",
+					"range": "175/350",
+					"rate_of_fire": "1",
+					"shots": "9(2)",
+					"bulk": "-2",
+					"recoil": "2",
+					"defaults": [
+						{
+							"type": "DX",
+							"modifier": -4
+						},
+						{
+							"type": "Skill",
+							"name": "Beam Weapons",
+							"specialization": "Pistol"
+						},
+						{
+							"type": "Skill",
+							"name": "Beam Weapons",
+							"modifier": -4
+						},
+						{
+							"type": "Skill",
+							"name": "Guns",
+							"specialization": "Pistol",
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"notes": "C/9 shots",
+			"categories": [
+				"Missile Weapon",
+				"Weaponry"
+			]
+		},
+		{
+			"type": "equipment",
+			"version": 1,
+			"id": "1d1d0ef2-374f-46b0-a4f8-0a9dd5e4108e",
+			"equipped": true,
+			"quantity": 1,
+			"description": "Armor Support Garment",
+			"tech_level": "8",
+			"value": "500"
+		},
+		{
+			"type": "equipment",
+			"version": 1,
+			"id": "275cbba0-7918-485b-9fcf-e757d458a4d8",
+			"equipped": true,
+			"quantity": 1,
+			"description": "Ballistic DR5",
+			"value": "1600",
+			"features": [
+				{
+					"type": "dr_bonus",
+					"amount": 5,
+					"location": "torso"
+				}
+			]
+		},
+		{
+			"type": "equipment",
+			"version": 1,
+			"id": "a7565b66-860d-4181-92a6-9ab01c8d0811",
+			"equipped": true,
+			"quantity": 1,
+			"description": "Ablative DR5",
+			"tech_level": "8",
+			"value": "1000",
+			"weight": "10 lb",
+			"features": [
+				{
+					"type": "dr_bonus",
+					"amount": 0,
+					"location": "torso"
+				}
+			]
+		},
+		{
+			"type": "equipment",
+			"version": 1,
+			"id": "b4dc47b1-9d5e-4fd1-b20e-61d8f95a1ddc",
+			"equipped": false,
+			"quantity": 1,
+			"description": "Camera",
+			"value": "2500"
+		},
+		{
+			"type": "equipment_container",
+			"version": 1,
+			"id": "0f5385e0-f06f-45ce-9ff9-31f5bebcd400",
+			"equipped": true,
+			"description": "Backpack, Small",
+			"value": "120",
+			"weight": "1.5 lb",
+			"reference": "ACT1:29",
+			"prereqs": {
+				"type": "prereq_list",
+				"all": true,
+				"prereqs": [
+					{
+						"type": "contained_weight_prereq",
+						"has": true,
+						"qualifier": {
+							"compare": "at_most",
+							"qualifier": "50 lb"
+						}
+					}
+				]
+			},
+			"categories": [
+				"Luggage"
+			],
+			"open": true,
+			"children": [
+				{
+					"type": "equipment",
+					"version": 1,
+					"id": "57502aac-9eaa-464b-a576-49fd0acf1268",
+					"equipped": false,
+					"quantity": 1,
+					"description": "Duct Tape",
+					"value": "1",
+					"weight": "2 lb",
+					"reference": "ACT1:30",
+					"weapons": [
+						{
+							"type": "ranged_weapon",
+							"damage": {
+								"type": "cr",
+								"st": "sw",
+								"base": "+2"
+							},
+							"strength": "10",
+							"usage": "Thrown",
+							"accuracy": "1",
+							"range": "x1/x1.5",
+							"rate_of_fire": "1",
+							"shots": "T(1)",
+							"bulk": "-3",
+							"defaults": [
+								{
+									"type": "DX",
+									"modifier": -4
+								},
+								{
+									"type": "Skill",
+									"name": "Thrown Weapon",
+									"specialization": "Axe/Mace"
+								}
+							]
+						}
+					],
+					"notes": "60 yard roll. ST-3 or Escape roll to break free.",
+					"categories": [
+						"Tools"
+					]
+				},
+				{
+					"type": "equipment",
+					"version": 1,
+					"id": "d6eea4ff-0854-4a7e-9e28-7c1fd232043e",
+					"equipped": false,
+					"quantity": 1,
+					"description": "First Aid Kit",
+					"value": "50",
+					"weight": "2 lb",
+					"reference": "B289",
+					"features": [
+						{
+							"type": "skill_bonus",
+							"amount": 1,
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "First Aid"
+							}
+						}
+					],
+					"notes": "A complete kit for treating wounds, with bandages, ointments, etc.",
+					"categories": [
+						"Medical Gear"
+					]
+				},
+				{
+					"type": "equipment",
+					"version": 1,
+					"id": "fa33380e-e6ee-4000-9a81-96f37ec8e188",
+					"equipped": false,
+					"quantity": 1,
+					"description": "Multi-Tool with Flashlight",
+					"value": "50",
+					"weight": "0.5 lb",
+					"reference": "ACT1:29",
+					"notes": "Most repairs -5.",
+					"categories": [
+						"Personal Accessories"
+					]
+				},
+				{
+					"type": "equipment",
+					"version": 1,
+					"id": "495a4127-c487-4ba8-89bd-430d2b8216e6",
+					"equipped": false,
+					"quantity": 4,
+					"description": "Spare Batteries",
+					"features": [
+						{
+							"type": "skill_bonus",
+							"amount": 1,
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is"
+							}
+						}
+					]
+				},
+				{
+					"type": "equipment",
+					"version": 1,
+					"id": "55f0015e-ed7d-4de5-928b-22ecefd97a30",
+					"equipped": true,
+					"quantity": 1,
+					"description": "Battery 3/10"
+				},
+				{
+					"type": "equipment",
+					"version": 1,
+					"id": "a4a918ba-fa3d-48f5-af4a-91f68964de17",
+					"equipped": false,
+					"quantity": 1,
+					"description": "Heavy Heal Patch"
+				}
+			]
+		}
+	],
+	"other_equipment": [
+		{
+			"type": "equipment",
+			"version": 1,
+			"id": "f4b720fa-813b-4269-b006-473b69f182fb",
+			"equipped": false,
+			"quantity": 1,
+			"description": "Voice Synthesizer",
+			"value": "1000"
+		},
+		{
+			"type": "equipment",
+			"version": 1,
+			"id": "e3405765-5919-4ca2-9f0f-1df650131724",
+			"equipped": false,
+			"quantity": 1,
+			"description": "Disrupter DR5 Armor",
+			"value": "2000",
+			"weight": "10 lb",
+			"features": [
+				{
+					"type": "dr_bonus",
+					"amount": 5,
+					"location": "torso"
+				}
+			]
+		}
+	],
+	"notes": [
+		{
+			"type": "note",
+			"version": 1,
+			"id": "a4a43df4-4fec-476b-8fae-b6913f7f63e9"
+		},
+		{
+			"type": "note_container",
+			"version": 1,
+			"id": "2b7d2f46-2c89-4a5d-95ea-0a1d971e0e56",
+			"text": "",
+			"open": true
+		}
+	]
+}

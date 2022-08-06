@@ -1688,10 +1688,12 @@ class GcsImport(object):
         '''
         gcs_filename = self.__extract_gcs_filename(native_data, gcs_filename)
 
+        # Read the GCS file into an intermediate (mostly native) format
         gcs_data = FromGcs(self.__window_manager, ruleset, gcs_filename)
         gcs_data.build_character()
         name = gcs_data.get_name()
 
+        # Stuff the intermediate format into a native creature
         character = ToNative(self.__window_manager, native_data, gcs_data)
         character.import_character()
         # character.pprint() ######################
