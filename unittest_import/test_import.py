@@ -95,7 +95,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                   },
                   "count": 4, "notes": "", "owners": None, "parry": -1,
                   "bulk": -2, "acc": 0,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
+                  "reload_type": 0
                 },
                 {
                   "name": "Leopard Print Armor",
@@ -138,7 +138,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                   },
                   "count": 5, "notes": "", "owners": None, "parry": -1,
                   "bulk": -1, "acc": 0,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
+                  "reload_type": 0
                 },
                 {
                   "name": "Death Powder ",
@@ -155,7 +155,8 @@ class GmTestCaseImport(GmTestCaseCommon):
                   },
                   "count": 1, "notes": "", "owners": None,
                   "bulk": -2, "acc": 4,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
+                  "reload_type": 2, "reload": 2,
+                  "ammo": { "name": "*UNKNOWN*", "shots": 8, "shots_left": 8 }
                 }
               ],
               "timers": [],
@@ -239,21 +240,21 @@ class GmTestCaseImport(GmTestCaseCommon):
               "preferred-armor-index": [], "preferred-weapon-index": [],
               "state": "alive",
               "stuff": [
-                {
+                { # 0
                   "name": "eRuble",
                   "type": { "misc": {} },
                   "count": 76500,
                   "notes": "",
                   "owners": None
                 },
-                {
+                { # 1
                   "name": "Hacking Equipment +1",
                   "type": { "misc": {} },
                   "count": 1,
                   "notes": "",
                   "owners": None
                 },
-                {
+                { # 2
                   "name": "Sick Stick",
                   "type": {
                     "swung weapon": {
@@ -272,24 +273,24 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "owners": None,
                   "parry": 0
                 },
-                {
+                { # 3
                   "name": "Laser Sight",
                   "type": { "misc": {} },
                   "count": 1,
                   "notes": "+1 to skill; see Laser Sights (B412). 6 hrs.",
                   "owners": None
                 },
-                {
+                { # 4
                   "name": "Voice Synthesizer",
                   "type": { "misc": {} },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 5
                   "name": "Holster, Belt",
                   "type": { "misc": {} },
                   "count": 1, "notes": "For pistols.", "owners": None
                 },
-                {
+                { # 6
                   "name": "Blaster Pistol, Colt Series 170D",
                   "type": {
                     "ranged weapon": {
@@ -304,34 +305,35 @@ class GmTestCaseImport(GmTestCaseCommon):
                   },
                   "count": 1, "notes": "C/9 shots", "owners": None,
                   "bulk": -2, "acc": 3,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
+                  "reload_type": 2, "reload": 2,
+                  "ammo": { "name": "*UNKNOWN*", "shots": 9, "shots_left": 9 }
                 },
-                {
+                { # 7
                   "name": "Armor Support Garment",
                   "type": { "misc": {} },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { #8
                   "name": "Ballistic DR5",
                   "type": { "armor": { "dr": 5 } },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 9
                   "name": "Ablative DR5",
                   "type": { "armor": { "dr": 0 } },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 10
                   "name": "Camera",
                   "type": { "misc": {} },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 11
                   "name": "Backpack, Small",
                   "type": { "container": {} },
                   "count": 1, "notes": "", "owners": None,
                   "stuff": [
-                    {
+                    { # 0
                       "name": "Duct Tape",
                       "type": {
                         "ranged weapon": {
@@ -342,31 +344,31 @@ class GmTestCaseImport(GmTestCaseCommon):
                       "count": 1,
                       "notes": "60 yard roll. ST-3 or Escape roll to break free.",
                       "owners": None, "bulk": -3, "acc": 1,
-                      "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
+                      "reload_type": 0
                     },
-                    {
+                    { # 1
                       "name": "First Aid Kit",
                       "type": { "misc": {} },
                       "count": 1,
                       "notes": "A complete kit for treating wounds, with bandages, ointments, etc.",
                       "owners": None
                     },
-                    {
+                    { # 2
                       "name": "Multi-Tool with Flashlight",
                       "type": { "misc": {} },
                       "count": 1, "notes": "Most repairs -5.", "owners": None
                     },
-                    {
+                    { # 3
                       "name": "Spare Batteries",
                       "type": { "misc": {} },
                       "count": 4, "notes": "", "owners": None
                     },
-                    {
+                    { # 4
                       "name": "Battery 3/10",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 5
                       "name": "Heavy Heal Patch",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
@@ -436,47 +438,47 @@ class GmTestCaseImport(GmTestCaseCommon):
               "preferred-armor-index": [], "preferred-weapon-index": [],
               "state": "alive",
               "stuff": [
-                {
+                { # 0
                   "name": "Backpack, Small",
                   "type": { "container": {} },
                   "count": 1, "notes": "", "owners": None,
                   "stuff": [
-                    {
+                    { # 0
                       "name": "Alpaca hat",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 1
                       "name": "Alpaca lapel pin",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 2
                       "name": "Alpaca socks",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 3
                       "name": "Alpaca T-Shirt",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 4
                       "name": "Alpaca wool",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 5
                       "name": "Cigarette Lighter",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 6
                       "name": "Drop Spindle",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 7
                       "name": "Duct Tape",
                       "type": {
                         "ranged weapon": {
@@ -487,65 +489,65 @@ class GmTestCaseImport(GmTestCaseCommon):
                       "count": 1,
                       "notes": "60 yard roll. ST-3 or Escape roll to break free.",
                       "owners": None, "bulk": -3, "acc": 1,
-                      "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
+                      "reload_type": 0
                     },
-                    {
+                    { # 8
                       "name": "Flashlight, Heavy",
                       "type": { "misc": {} },
                       "count": 1, "notes": "30' beam, lasts 5 hours",
                       "owners": None
                     },
-                    {
+                    { # 9
                       "name": "Keys",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 10
                       "name": "Knitting Needles, Pair",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 11
                       "name": "Sheep Skin Alpaca",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 12
                       "name": "Sunglasses",
                       "type": { "armor": { "dr": 1 } },
                       "count": 1,
                       "notes": "Protected Vision vs. ordinary light.",
                       "owners": None
                     },
-                    {
+                    { # 13
                       "name": "Weed",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 14
                       "name": "Whistle",
                       "type": { "armor": { "dr": 4 }
                       },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 15
                       "name": "Wooden Alpaca Figure",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 16
                       "name": "Wool",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 17
                       "name": "Yarn Alpaca",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     }
                   ]
                 },
-                {
+                { # 1
                   "name": "Blaster Pistol, Sig Sauer D65",
                   "type": {
                     "ranged weapon": {
@@ -560,19 +562,20 @@ class GmTestCaseImport(GmTestCaseCommon):
                   },
                   "count": 1, "notes": "C/9 shots", "owners": None,
                   "bulk": -2, "acc": 4,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
+                  "reload_type": 2, "reload": 3,
+                  "ammo": { "name": "*UNKNOWN*", "shots": 9, "shots_left": 9 }
                 },
-                {
+                { # 2
                   "name": "Armor",
                   "type": { "armor": { "dr": 5 } },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 3
                   "name": "Camera",
                   "type": { "misc": {} },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 4
                   "name": "Large Knife",
                   "type": {
                     "swung weapon": {
@@ -600,9 +603,9 @@ class GmTestCaseImport(GmTestCaseCommon):
                   },
                   "count": 1, "notes": "", "owners": None,
                   "parry": -1, "bulk": -2, "acc": 0,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
+                  "reload_type": 0
                 },
-                {
+                { # 5
                   "name": "Sick Stick",
                   "type": {
                     "swung weapon": {
@@ -622,7 +625,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "owners": None,
                   "parry": 0
                 },
-                {
+                { # 6
                   "name": "Small Knife",
                   "type": {
                     "swung weapon": {
@@ -647,29 +650,29 @@ class GmTestCaseImport(GmTestCaseCommon):
                   },
                   "count": 1, "notes": "", "owners": None,
                   "parry": -1, "bulk": -1, "acc": 0,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
+                  "reload_type": 0
                 },
-                {
+                { # 7
                   "name": "Wristwatch",
                   "type": { "armor": { "dr": 4 } },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 8
                   "name": "Flash drive with logs from tereshkova",
                   "type": { "misc": {} },
                   "count": 2, "notes": "", "owners": None
                 },
-                {
+                { # 9
                   "name": "major heal finger bone",
                   "type": { "misc": {} },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 10
                   "name": "shrunken head stick",
                   "type": { "misc": {} },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 11
                   "name": "pretty beaded necklaces",
                   "type": { "misc": {} },
                   "count": 1, "notes": "", "owners": None
@@ -801,11 +804,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                   },
                   "count": 1, "notes": "", "owners": None,
                   "bulk": -5, "acc": 3,
-                  "ammo": {
-                    "name": "*UNKNOWN*",
-                    "shots": 7,
-                    "shots_left": 7
-                  },
+                  "ammo": { "name": "*UNKNOWN*", "shots": 7, "shots_left": 7 },
                   "reload_type": 1, "reload": 2
                 }
               ],
@@ -874,38 +873,38 @@ class GmTestCaseImport(GmTestCaseCommon):
               "preferred-armor-index": [], "preferred-weapon-index": [],
               "state": "alive",
               "stuff": [
-                {
+                { # 0
                   "name": "Ablative & Ballistic Armor",
                   "type": { "armor": { "dr": 5 } },
                   "count": 1,
                   "notes": "Support Garment with ablative & Ballistic properties",
                   "owners": None
                 },
-                {
+                { # 1
                   "name": "Wicking Undergarment",
                   "type": { "misc": {} },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 2
                   "name": "Ballistic Gloves",
                   "type": { "armor": { "dr": 16 } },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 3
                   "name": "Holster, Shoulder",
                   "type": { "container": {} },
                   "count": 1,
                   "notes": "Allows use of Holdout, but gives -1 to Fast-Draw.",
                   "owners": None,
                   "stuff": [
-                    {
+                    { # 0
                       "name": "Lanyard, Woven Steel",
                       "type": { "container": {} },
                       "count": 1,
                       "notes": "Lets you retrieve a dropped weapon on a DX roll. Each attempt requires a Ready maneuver. Can be cut: -6 to hit, DR 6, HP 4.",
                       "owners": None,
                       "stuff": [
-                        {
+                        { # 0
                           "name": "Blaster Pistol, Sig Sauer D65",
                           "type": {
                             "ranged weapon": {
@@ -926,13 +925,14 @@ class GmTestCaseImport(GmTestCaseCommon):
                           },
                           "count": 1, "notes": "9/9", "owners": None,
                           "bulk": -2, "acc": 4,
+                          "reload_type": 2, "reload": 3,
                           "ammo": {
                             "name": "*UNKNOWN*",
-                            "shots": 1,
-                            "shots_left": 1
+                            "shots": 9,
+                            "shots_left": 9
                           }
                         },
-                        {
+                        { # 1
                           "name": "Targeting Laser (Sidearm)",
                           "type": { "misc": {} },
                           "count": 1,
@@ -943,7 +943,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                     }
                   ]
                 },
-                {
+                { # 4
                   "name": "Holster, Shoulder",
                   "type": { "container": {} },
                   "count": 1,
@@ -978,10 +978,11 @@ class GmTestCaseImport(GmTestCaseCommon):
                           },
                           "count": 1, "notes": "8/8 shots",
                           "owners": None, "bulk": -2, "acc": 2,
+                          "reload_type": 2, "reload": 3,
                           "ammo": {
                             "name": "*UNKNOWN*",
-                            "shots": 1,
-                            "shots_left": 1
+                            "shots": 8,
+                            "shots_left": 8
                           }
                         },
                         {
@@ -995,7 +996,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                     }
                   ]
                 },
-                {
+                { # 5
                   "name": "Web Gear",
                   "type": { "container": {} },
                   "count": 1,
@@ -1056,11 +1057,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                           },
                           "count": 1, "notes": "", "owners": None,
                           "parry": -1, "bulk": -2, "acc": 0,
-                          "ammo": {
-                            "name": "*UNKNOWN*",
-                            "shots": 1,
-                            "shots_left": 1
-                          }
+                          "reload_type": 0
                         }
                       ]
                     },
@@ -1191,94 +1188,94 @@ class GmTestCaseImport(GmTestCaseCommon):
                     }
                   ]
                 },
-                {
+                { # 6
                   "name": "Ballistic Sunglasses",
                   "type": { "armor": { "dr": 4 } },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 7
                   "name": "Attach\u00c3\u00a9 Case",
                   "type": { "container": {} },
                   "count": 1,
                   "notes": "",
                   "owners": None,
                   "stuff": [
-                    {
+                    { # 0
                       "name": "Camera, Digital, Full-Sized",
                       "type": { "misc": {} },
                       "count": 1,
                       "notes": "Photography +0. Runs for 10hrs.",
                       "owners": None
                     },
-                    {
+                    { # 1
                       "name": "Electronic Lockpick",
                       "type": { "misc": {} },
                       "count": 1, "notes": "A/2hr.", "owners": None
                     },
-                    {
+                    { # 2
                       "name": "First Aid Kit",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 3
                       "name": "Multi-Tool",
                       "type": { "misc": {} },
                       "count": 1, "notes": "Most repairs -5.", "owners": None
                     },
-                    {
+                    { # 4
                       "name": "Microfiber Towel",
                       "type": { "misc": {} },
                       "count": 1, "notes": "2'x4'", "owners": None
                     },
-                    {
+                    { # 5
                       "name": "Index Cards",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 6
                       "name": "Marker",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 7
                       "name": "Measuring laser",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 8
                       "name": "Nitrile Gloves",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 9
                       "name": "Plastic Bags",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 10
                       "name": "Fire-Starter Paste",
                       "type": { "misc": {} },
                       "count": 1, "notes": "Enough for 20 fires.",
                       "owners": None
                     },
-                    {
+                    { # 11
                       "name": "Glowstick",
                       "type": { "misc": {} },
                       "count": 1, "notes": "Lasts 12 hours.", "owners": None
                     },
-                    {
+                    { # 12
                       "name": "Snack",
                       "type": { "misc": {} },
                       "count": 1, "notes": "", "owners": None
                     },
-                    {
+                    { # 13
                       "name": "Cards",
                       "type": { "misc": {} },
                       "count": 1,
                       "notes": "1 Conseco 2 Campanera 28Hernandez 1Sazaki 1Pasqual 2Rose",
                       "owners": None
                     },
-                    {
+                    { # 14
                       "name": "\"Zip Taser\" (Battery Launcher)",
                       "type": {
                         "ranged weapon": {
@@ -1294,18 +1291,16 @@ class GmTestCaseImport(GmTestCaseCommon):
                           }
                         }
                       },
-                      "count": 1,
-                      "notes": "6/6",
-                      "owners": None,
-                      "bulk": -3,
-                      "acc": 1,
+                      "count": 1, "notes": "6/6", "owners": None,
+                      "bulk": -3, "acc": 1,
+                      "reload_type": 2, "reload": 3,
                       "ammo": {
                         "name": "*UNKNOWN*",
-                        "shots": 1,
-                        "shots_left": 1
+                        "shots": 6,
+                        "shots_left": 6
                       }
                     },
-                    {
+                    { # 15
                       "name": "Heavy Zip Taser",
                       "type": {
                         "ranged weapon": {
@@ -1321,20 +1316,18 @@ class GmTestCaseImport(GmTestCaseCommon):
                           }
                         }
                       },
-                      "count": 1,
-                      "notes": "",
-                      "owners": None,
-                      "bulk": -4,
-                      "acc": 1,
+                      "count": 1, "notes": "", "owners": None,
+                      "bulk": -4, "acc": 1,
+                      "reload_type": 2, "reload": 4,
                       "ammo": {
                         "name": "*UNKNOWN*",
-                        "shots": 1,
-                        "shots_left": 1
+                        "shots": 6,
+                        "shots_left": 6
                       }
                     }
                   ]
                 },
-                {
+                { # 8
                   "name": "eRubles",
                   "type": {
                     "misc": {}
@@ -1433,7 +1426,7 @@ class GmTestCaseImport(GmTestCaseCommon):
               "preferred-armor-index": [], "preferred-weapon-index": [],
               "state": "alive",
               "stuff": [
-                {
+                { # 0
                   "name": "Sick Stick",
                   "type": {
                     "swung weapon": {
@@ -1461,7 +1454,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "owners": None,
                   "parry": 0
                 },
-                {
+                { # 1
                   "name": "Blaster Pistol, Sig Sauer D65",
                   "type": {
                     "ranged weapon": {
@@ -1482,10 +1475,11 @@ class GmTestCaseImport(GmTestCaseCommon):
                   },
                   "count": 1, "notes": "C/9 shots", "owners": None,
                   "bulk": -2, "acc": 4,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1
+                  "reload_type": 2, "reload": 3,
+                  "ammo": { "name": "*UNKNOWN*", "shots": 9, "shots_left": 9
                   }
                 },
-                {
+                { # 2
                   "name": "Laser pistol from David Smith Austin Diamond Protocol",
                   "type": {
                     "ranged weapon": {
@@ -1506,49 +1500,50 @@ class GmTestCaseImport(GmTestCaseCommon):
                   },
                   "count": 1, "notes": "C/7 shots", "owners": None,
                   "bulk": -2, "acc": 2,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
+                  "reload_type": 2, "reload": 3,
+                  "ammo": { "name": "*UNKNOWN*", "shots": 7, "shots_left": 7 }
                 },
-                {
+                { # 3
                   "name": "Papa Jorge's Blazer",
                   "type": { "misc": {} },
                   "count": 1, "notes": "-5 damage reduction.", "owners": None
                 },
-                {
+                { # 4
                   "name": "Plans for my character",
                   "type": { "misc": {} },
                   "count": 1,
                   "notes": "Add blink, Add points to the pain spell to get to 20 so it goes faster.",
                   "owners": None
                 },
-                {
+                { # 5
                   "name": "C cells",
                   "type": { "misc": {} },
                   "count": 3,
                   "notes": " shots each xxxxxxx xxxxxxx in weapon: 1234567",
                   "owners": None
                 },
-                {
+                { # 6
                   "name": "Antitoxin Kit",
                   "type": { "misc": {} },
                   "count": 6,
                   "notes": "Antidote for specific poison. 10 uses",
                   "owners": None
                 },
-                {
+                { # 7
                   "name": "Antibiotic",
                   "type": { "misc": {} },
                   "count": 8,
                   "notes": "Prevents or cures (in 1d days) infections.",
                   "owners": None
                 },
-                {
+                { # 8
                   "name": "Bandages",
                   "type": { "misc": {} },
                   "count": 1,
                   "notes": "Bandages for a  half-dozen wounds. Might be clean cloth, adhesive dressings, or spray-on \"Plastiskin\", depending on TL. Basic equipment for First Aid skill.",
                   "owners": None
                 },
-                {
+                { # 9
                   "name": "Backpack, Small",
                   "type": { "container": {} },
                   "count": 1, "notes": "", "owners": None,
@@ -1560,57 +1555,57 @@ class GmTestCaseImport(GmTestCaseCommon):
                     }
                   ]
                 },
-                {
+                { # 10
                   "name": "First Aid Kit",
                   "type": { "misc": {} },
                   "count": 1,
                   "notes": "A complete kit for treating wounds, with bandages, ointments, etc.",
                   "owners": None
                 },
-                {
+                { # 11
                   "name": "Orb",
                   "type": { "misc": {} },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 12
                   "name": "Teddy Bear",
                   "type": { "misc": {} },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 13
                   "name": "Armor ",
                   "type": { "armor": { "dr": 5 }
                   },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 14
                   "name": "Erubles (divide by 20 for dollars)",
                   "type": { "misc": {} },
                   "count": 100000, "notes": "", "owners": None
                 },
-                {
+                { # 15
                   "name": "fog fingerbone",
                   "type": { "misc": {} },
                   "count": 2, "notes": "", "owners": None
                 },
-                {
+                { # 16
                   "name": "Large Knife",
                   "type": { "misc": {} },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 17
                   "name": "Brown finger bone of utter dome",
                   "type": { "misc": {} },
                   "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 18
                   "name": "Heavy heal patch2",
                   "type": { "misc": {} },
                   "count": 1,
                   "notes": "2d healing for 1d6 hours if magically healed in that time it is permanent",
                   "owners": None
                 },
-                {
+                { # 19
                   "name": "Karen's cobbled together version of the Belt Holster from Master Library",
                   "type": { "misc": {} },
                   "count": 1, "notes": "", "owners": None
@@ -1762,7 +1757,7 @@ class GmTestCaseImport(GmTestCaseCommon):
               "preferred-armor-index": [], "preferred-weapon-index": [],
               "state": "alive",
               "stuff": [
-                {
+                { # 0
                   "name": "Armor",
                   "type": { "armor": { "dr": 5 }
                   },
@@ -1770,7 +1765,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "notes": "Currently support garment and ablative (dr5) abaltive, (dr5) balistic, ",
                   "owners": None
                 },
-                {
+                { # 1
                   "name": "Belt",
                   "type": { "container": {} },
                   "count": 1,
@@ -1837,11 +1832,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                           "parry": -1,
                           "bulk": -2,
                           "acc": 0,
-                          "ammo": {
-                            "name": "*UNKNOWN*",
-                            "shots": 1,
-                            "shots_left": 1
-                          }
+                          "reload_type": 0
                         }
                       ]
                     },
@@ -1907,11 +1898,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                           "parry": -1,
                           "bulk": -1,
                           "acc": 0,
-                          "ammo": {
-                            "name": "*UNKNOWN*",
-                            "shots": 1,
-                            "shots_left": 1
-                          }
+                          "reload_type": 0
                         }
                       ]
                     },
@@ -1948,28 +1935,22 @@ class GmTestCaseImport(GmTestCaseCommon):
                     }
                   ]
                 },
-                {
+                { # 2
                   "name": "Cigarette Lighter (Metal Refillable)",
                   "type": { "misc": {} },
-                  "count": 1,
-                  "notes": "",
-                  "owners": None
+                  "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 3
                   "name": "Conglomerate Marshal Uniform",
                   "type": { "misc": {} },
-                  "count": 1,
-                  "notes": "",
-                  "owners": None
+                  "count": 1, "notes": "", "owners": None
                 },
-                {
+                { # 4
                   "name": "E-Rubles",
                   "type": { "misc": {} },
-                  "count": 24600,
-                  "notes": "",
-                  "owners": None
+                  "count": 24600, "notes": "", "owners": None
                 },
-                {
+                { # 5
                   "name": "Laser Rifle",
                   "type": {
                     "ranged weapon": {
@@ -1979,21 +1960,19 @@ class GmTestCaseImport(GmTestCaseCommon):
                       "skill": { "DX": -4, "Beam Weapons (Rifle)": 0 }
                     }
                   },
-                  "count": 1,
-                  "notes": "",
-                  "owners": None,
-                  "bulk": -4,
-                  "acc": 8,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
+                  "count": 1, "notes": "", "owners": None,
+                  "bulk": -4, "acc": 8,
+                  "reload_type": 2, "reload": 3,
+                  "ammo": { "name": "*UNKNOWN*", "shots": 10, "shots_left": 10 }
                 },
-                {
+                { # 6
                   "name": "Holster, Shoulder",
                   "type": { "container": {} },
                   "count": 1,
                   "notes": "Allows use of Holdout, but gives -1 to Fast-Draw.",
                   "owners": None,
                   "stuff": [
-                    {
+                    { # 0
                       "name": "Blaster Pistol, Sig Sauer D65",
                       "type": {
                         "ranged weapon": {
@@ -2001,10 +1980,8 @@ class GmTestCaseImport(GmTestCaseCommon):
                             "dice": { "num_dice": 1, "plus": 4, "type": "fat" }
                           },
                           "skill": {
-                            "DX": -4,
-                            "Beam Weapons (Pistol)": 0,
-                            "Beam Weapons": -4,
-                            "Guns (Pistol)": -4
+                            "DX": -4, "Beam Weapons (Pistol)": 0,
+                            "Beam Weapons": -4, "Guns (Pistol)": -4
                           }
                         }
                       },
@@ -2013,45 +1990,38 @@ class GmTestCaseImport(GmTestCaseCommon):
                       "owners": None,
                       "bulk": -2,
                       "acc": 4,
+                      "reload_type": 2, "reload": 3,
                       "ammo": { "name": "*UNKNOWN*",
-                                "shots": 1, "shots_left": 1 }
+                                "shots": 9, "shots_left": 9 }
                     }
                   ]
                 },
-                {
+                { # 7
                   "name": "Blaster Pistol, Sig Sauer D65",
                   "type": {
                     "ranged weapon": {
                       "damage": {
-                        "dice": {
-                          "num_dice": 1,
-                          "plus": 4,
-                          "type": "fat"
-                        }
+                        "dice": { "num_dice": 1, "plus": 4, "type": "fat" }
                       },
                       "skill": {
-                        "DX": -4,
-                        "Beam Weapons (Pistol)": 0,
-                        "Beam Weapons": -4,
-                        "Guns (Pistol)": -4
+                        "DX": -4, "Beam Weapons (Pistol)": 0,
+                        "Beam Weapons": -4, "Guns (Pistol)": -4
                       }
                     }
                   },
-                  "count": 1,
-                  "notes": "C/9 shots",
-                  "owners": None,
-                  "bulk": -2,
-                  "acc": 4,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
+                  "count": 1, "notes": "C/9 shots", "owners": None,
+                  "bulk": -2, "acc": 4,
+                  "reload_type": 2, "reload": 3,
+                  "ammo": { "name": "*UNKNOWN*", "shots": 9, "shots_left": 9 }
                 },
-                {
+                { # 8
                   "name": "Medicine Bag",
                   "type": { "misc": {} },
                   "count": 1,
                   "notes": "",
                   "owners": None
                 },
-                {
+                { # 9
                   "name": "Messenger Bag/Shoulder Bag",
                   "type": { "container": {} },
                   "count": 1,
@@ -2095,21 +2065,21 @@ class GmTestCaseImport(GmTestCaseCommon):
                     }
                   ]
                 },
-                {
+                { # 10
                   "name": "C cell",
                   "type": { "misc": {} },
                   "count": 3,
                   "notes": "",
                   "owners": None
                 },
-                {
+                { # 11
                   "name": "Heavy Heal Patch",
                   "type": { "misc": {} },
                   "count": 2,
                   "notes": "Heals 2D for 1D hours",
                   "owners": None
                 },
-                {
+                { # 12
                   "name": "Finger Bones",
                   "type": { "container": {} },
                   "count": 1, "notes": "", "owners": None,
@@ -2202,19 +2172,21 @@ class GmTestCaseImport(GmTestCaseCommon):
                 'unittest_import/Char7.gcs',
                 'unittest_import/Char8.gcs',
             ]
-        # PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+        PP = pprint.PrettyPrinter(indent=3, width=150)
         stdscr = curses.initscr() # needed for stuff in ca_gcs_import.py
         curses.start_color()
         curses.use_default_colors()
-        found_issue = False
 
         for test_case in test_cases:
             name, creature = self._ruleset.import_creature_from_file(test_case)
-            diff = diff_json.DiffJson('Test Creature',
-                                      'Good Creature',
+            diff = diff_json.DiffJson('Test (%s)' % test_case,
+                                      'Expected',
                                       verbose=False)
             if not diff.are_equal(creature,
                                   GmTestCaseImport.good_data[test_case],
                                   ''):
-                found_issue = 1
+                print('\n--- TEST: %s ---' % test_case)
+                PP.pprint(creature)
+                print('\n--- EXPECTED ---')
+                PP.pprint(GmTestCaseImport.good_data[test_case])
                 assert(0) # just to raise the exception

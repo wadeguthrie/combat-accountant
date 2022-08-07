@@ -22,13 +22,18 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: import equipment should ask about ammo
+# TODO: import equipment (one or all - keep asking)
+# TODO: imported knives should have no ammo
 
+# TODO: have some token for an item that a) replaces most of the information
+#   about that item and b) points to that same item in the equipment list.
+#   This saves space in the campaign file, informs the reader that the item
+#   is a 'standard' version of the item, and allows changes in the item in
+#   the master equipment list to propogate to all users of that item.
 # TODO: include powerstone handling
 # TODO: on importing advantages: "notes" should be included in name in parens
 # TODO: should ask when update character wants to delete a spell
-
-# TODO: add RoF (rate of fire) and make it work with shotguns.
-#   see https://www.themook.net/gamegeekery/this-is-my-boomstick/
 
 # TODO: GmScrollableWindow should have their lines public and all access to
 #   those should be through the object's data
