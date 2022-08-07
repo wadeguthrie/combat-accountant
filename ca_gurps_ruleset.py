@@ -3722,7 +3722,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 # "reload": 10,
                 # ca_equipment.Equipment.RELOAD_CLIP
                 #"skill": {"*UNKNOWN*": 0},
-                "ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
+                #"ammo": { "name": "*UNKNOWN*", "shots": 1, "shots_left": 1 }
                 # clip is not required
         }
 

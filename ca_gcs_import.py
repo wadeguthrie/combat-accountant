@@ -17,9 +17,6 @@ import ca_equipment
 import ca_gui
 import ca_json
 
-# TODO: ammo should default to None.  Merging None with not None should be not
-#   None.  The code should handle None as something that doesn't take ammo
-#   (even if it's a missile weapon).
 # TODO: damage type should be 'pi' by default
 # TODO: fast-draw(knife) doesn't include +1 from combat reflexes
 # TODO: spells don't deal with more points than 24 or 28
@@ -1014,17 +1011,18 @@ class FromGcs(object):
             if 'shots' in weapon and len(weapon['shots']) > 0:
                 match = re.match(
                         '(?P<shots>T|[0-9]+) *' +
-                        '(?P<plus_one>\+1) *' +
+                        '(?P<plus_one>\+1)? *' +
                         '\( *(?P<reload>[0-9]+)' +
                         '(?P<individual>i?)\).*',
                         weapon['shots'])
                 # TODO: eventually handle 'plus_pne' (one in the chamber)
                 if match:
                     if match.group('shots') == 'T': # Thrown
-                        new_thing['ammo'] = None
+                        # print('** THROWN **') # TODO: remove
                         new_thing['reload_type'] = (
                                 ca_equipment.Equipment.RELOAD_NONE)
                     else:
+                        # print('** NEEDS AMMO **') # TODO: remove
                         new_thing['ammo'] = { 'name': '*UNKNOWN*'}
                         shots = int(match.group('shots'))
                         new_thing['ammo']['shots'] = shots
