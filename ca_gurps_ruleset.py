@@ -2771,9 +2771,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                  fighter.name)])
         return notes
 
-    def get_import_file_extension(self):
+    def get_import_creature_file_extension(self):
         ''' Returns the filename extension for files from which to import.'''
         return ['.gcs']
+
+    def get_import_equipment_file_extension(self):
+        ''' Returns the filename extension for files from which to import.'''
+        return ['.eqp']
 
     def get_parry_skill(self,                       # Public to aid in testing
                         fighter,        # Fighter object
@@ -3531,12 +3535,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         return name, creature
 
     def import_equipment_from_file(self,
-                                   filename # string
+                                   filename,    # string
+                                   native_list  # [] current equipment list
                                    ):
         gcs_import = ca_gcs_import.GcsImport(self._window_manager)
-        name, creature = gcs_import.import_creature(creature, self, filename)
-        return name, creature
-
+        gcs_import.import_equipment(native_list, self, filename)
+        return
 
     def initiative(self,
                    fighter, # Fighter object

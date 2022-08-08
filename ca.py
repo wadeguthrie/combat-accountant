@@ -23,14 +23,7 @@ import ca_gurps_ruleset
 import ca_timers
 
 # TODO: import equipment should ask about ammo
-# TODO: import equipment (one or all - keep asking)
-# TODO: imported knives should have no ammo
 
-# TODO: have some token for an item that a) replaces most of the information
-#   about that item and b) points to that same item in the equipment list.
-#   This saves space in the campaign file, informs the reader that the item
-#   is a 'standard' version of the item, and allows changes in the item in
-#   the master equipment list to propogate to all users of that item.
 # TODO: include powerstone handling
 # TODO: on importing advantages: "notes" should be included in name in parens
 # TODO: should ask when update character wants to delete a spell
@@ -62,6 +55,12 @@ import ca_timers
 # TODO: PC joins NPCs in PC editing mode
 
 # TODO: consistency check for preferred weapons/armor should only ask once
+
+# TODO: have some token for an item that a) replaces most of the information
+#   about that item and b) points to that same item in the equipment list.
+#   This saves space in the campaign file, informs the reader that the item
+#   is a 'standard' version of the item, and allows changes in the item in
+#   the master equipment list to propogate to all users of that item.
 
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
@@ -1860,7 +1859,7 @@ class PersonnelHandler(ScreenHandler):
         '''
         # get the filename to import
 
-        extension = self.world.ruleset.get_import_file_extension()
+        extension = self.world.ruleset.get_import_creature_file_extension()
         filename_window = ca_gui.GetFilenameWindow(self._window_manager)
         filename = filename_window.get_filename(extension)
         if filename is None:
@@ -1919,57 +1918,17 @@ class PersonnelHandler(ScreenHandler):
         '''
         # get the filename to import
 
-        extension = self.world.ruleset.get_import_file_extension()
+        extension = self.world.ruleset.get_import_equipment_file_extension()
         filename_window = ca_gui.GetFilenameWindow(self._window_manager)
         filename = filename_window.get_filename(extension)
         if filename is None:
             return True
 
-        # actually import the new creature
+        # actually import the equipment
 
-        name, item = self.world.ruleset.import_equipment_from_file(filename)
-        if item is None:
-            return True
-
-        # get the creature's name
-
-        '''
-        if name in self.__critters['data']:
-            self._window_manager.error(
-                    ['Creature with name "%s" already exists' % name])
-            name = None
-
-        if name is None:
-            keep_going = True
-            while keep_going:
-                lines, cols = self._window.getmaxyx()
-                name = self._window_manager.input_box(1,      # height
-                                                      cols-4,  # width
-                                                      'Creature Name')
-                if name is None:
-                    return True
-                elif name in self.__critters['data']:
-                    self._window_manager.error(
-                            ['Creature with name "%s" already exists' % name])
-                else:
-                    keep_going = False
-
-        # install in the current group
-
-        self.__critters['data'][name] = creature
-        self.__critters['obj'].append(self.world.get_creature(
-                                                    name,
-                                                    self.__group_name))
-        self.__viewing_index = len(self.__critters['obj']) - 1
-
-
-        self.__new_char_name = name
-        self._window.show_creatures(self.__critters['obj'],
-                                    self.__new_char_name,
-                                    self.__viewing_index)
-        '''
+        self.world.ruleset.import_equipment_from_file(
+                filename, self.world.details['stuff'])
         return True
-
 
     def __left_pane(self):
         '''
@@ -2058,7 +2017,7 @@ class PersonnelHandler(ScreenHandler):
         if need_file_message is not None:
             self._window_manager.error('%s' % need_file_message)
 
-            extension = self.world.ruleset.get_import_file_extension()
+            extension = self.world.ruleset.get_import_creature_file_extension()
             filename_window = ca_gui.GetFilenameWindow(self._window_manager)
             filename = filename_window.get_filename(extension)
             if filename is None:

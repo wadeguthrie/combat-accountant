@@ -319,6 +319,10 @@ class FromGcs(object):
         self.stuff = [] # [{'name':names.lower(), 'count': count, ...},... ]
 
     def build_character(self):
+        '''
+        Builds a local character description from the JSON extracted from a
+        GCS .gcs file.
+        '''
         # Alphabetical (which works out for required order of execution).
         # Dependencies are as follows:
         #   advantages <- attribs
@@ -331,6 +335,14 @@ class FromGcs(object):
         self.__build_equipment()
         self.__build_skills()
         self.__build_spells()
+
+    def build_equipment(self):
+        '''
+        Builds a local equipment list from the JSON extracted from a GCS
+        .eqp file.
+        '''
+        self.__build_equipment('rows')
+        # Result is in self.stuff
 
     def get_name(self):
         if 'player_name' in self.__gcs_data['profile']:
@@ -406,6 +418,7 @@ class FromGcs(object):
         name = item['description']
         if name is not None:
             new_thing['name'] = name
+
         count = 1 if 'quantity' not in item else item['quantity']
         new_thing['count'] = count
 
@@ -500,7 +513,8 @@ class FromGcs(object):
 				#       <modifier>-4</modifier>
 				#   </default>
 
-                if skill.lower() in self.char['permanent']:
+                if ('permanent' not in self.char or
+                        skill.lower() in self.char['permanent']):
                     # Then we're talking 'dx' or something as a default
                     weapon_dest['type'][mode]['skill'][skill] = modifier
                     still_need_a_skill = False
@@ -556,12 +570,12 @@ class FromGcs(object):
 
             self.char['permanent'][attr_dest] = value
 
-    def __build_equipment(self):
-        ## EQUIPMENT #####
-        # Build the equipment list up front so that skills may make use of it
-        if 'equipment' not in self.__gcs_data:
+    def __build_equipment(self,
+                          heading='equipment' # where in file is equipment found
+                          ):
+        if heading not in self.__gcs_data:
             return
-        for item in self.__gcs_data['equipment']:
+        for item in self.__gcs_data[heading]:
             self.__add_item_to_gcs_list(item, self.stuff, 'TOP LEVEL')
 
     def __build_skills(self):
@@ -731,12 +745,32 @@ class FromGcs(object):
 
     def __get_damage(
             self,
-            weapon # dict: the whole weapon
+            name,   # string: for error messages, really
+            weapon  # dict: the whole weapon
             ):
         _st = ''
         _type = ''
         _base = ''
         damage = {}
+
+        # 'damage': {'base': '-1', 'st': 'sw', 'type': 'imp'},
+
+        match = None
+        if 'base' in weapon['damage']:
+            # "damage": { "type": "HP", "base": "1d+4" }, # blaster
+            # "damage": { "type": "fat", "base": "1d+1" }, # sick stick
+            # "damage": { "type": "FP", "base": "1d+3" }, # zip tazer
+            # "damage": { "type": "", "base": "2d+4" }, # laser pistol
+            # "damage": { "type": "burn", "base": "3d", "armor_divisor": 2 }, # lasor rifle
+            # "damage": { "type": "", "base": "3d", "armor_divisor": 3 }, # laser rifle
+            #
+            # "damage": { "type": "cut", "st": "sw", "base": "1d"},
+            #
+            # {"damage": {"dice":{"plus":1,"num_dice":1,"type":"fat"}}}
+            match = re.match(
+                    '(?P<dice>[0-9]*)(?P<d>d?)' +
+                    '(?P<sign>[+-]?)(?P<plus>[0-9]*)',
+                    weapon['damage']['base'])
 
         if 'damage' in weapon:
             if 'st' in weapon['damage']:
@@ -751,8 +785,26 @@ class FromGcs(object):
                 # {"damage": {"st": "sw", "type": "cut", "plus": -2}},
                 _st = weapon['damage']['st']
                 _type = weapon['damage']['type']
-                _base = (0 if 'base' not in weapon['damage']
-                         else int(weapon['damage']['base']))
+                there_is_a_d = (match is not None and
+                        match.group('d') is not None and
+                        len(match.group('d')) > 0)
+
+                # "damage": { "type": "cut", "st": "sw", "base": "1d"}
+                if there_is_a_d:
+                    # Not the usual case
+                    # TODO: support strength + dice of damage.  It's easy,
+                    # here, but it's a little harder in ca_gurps_ruleset.
+                    # Such as in:
+                    # "damage": { "type": "cut", "st": "sw", "base": "1d"},
+                    self.__window_manager.error([
+                        'Not currently supporting strength + dice damage',
+                        'together.  Weapon %s will be malformed' % name])
+                    _base = (0 if 'base' not in weapon['damage']
+                             else int(match.group('dice')))
+                else:
+                    _base = (0 if 'base' not in weapon['damage']
+                             else int(weapon['damage']['base']))
+
                 damage = {'st': _st, 'plus': _base, 'type': _type}
 
             elif 'base' in weapon['damage']:
@@ -958,7 +1010,7 @@ class FromGcs(object):
         for weapon in item['weapons']:
             if 'type' not in weapon or weapon['type'] != 'melee_weapon':
                 continue
-            damage = self.__get_damage(weapon)
+            damage = self.__get_damage(new_thing['name'], weapon)
             usage = 'Swung' if ('usage' not in weapon or
                                 len(weapon['usage']) == 0) else weapon['usage']
             item_type = ('unknown weapon' if usage not in type_from_usage else
@@ -968,8 +1020,18 @@ class FromGcs(object):
             self.__add_skill_to_weapon(new_thing, item_type, weapon)
 
             if ('parry' in weapon and len(weapon['parry']) > 0 and
-                    weapon['parry'] != 'no'):
-                new_thing['parry'] = int(weapon['parry'])
+                    weapon['parry'].lower() != 'no'):
+
+                match = re.match(
+                        '(?P<value>[+-]?[0-9]*)' +
+                        '(?P<modifier>[a-zA-Z]*)',
+                        weapon['parry'])
+                # Modifier would be 'F' (meaning fencing weapon) or 'U' meaning
+                # unbalenced).  See B269.
+                # TODO: do something with the modifier here and in the fighting
+                # rules.
+                if match is not None:
+                    new_thing['parry'] = int(match.group('value'))
 
         blank_item = self.__ruleset.make_empty_melee_weapon()
         for key, value in blank_item.items():
@@ -987,13 +1049,14 @@ class FromGcs(object):
         for weapon in item['weapons']:
             if 'type' not in weapon or weapon['type'] != 'ranged_weapon':
                 continue
-            damage = self.__get_damage(weapon)
+            damage = self.__get_damage(new_thing['name'], weapon)
 
             new_thing['type']['ranged weapon'] = {'damage': damage}
             self.__add_skill_to_weapon(new_thing, 'ranged weapon', weapon)
 
             if 'bulk' in weapon:
-                new_thing['bulk'] = int(weapon['bulk'])
+                int_value = 0 if weapon['bulk'] == '-' else int(weapon['bulk'])
+                new_thing['bulk'] = int_value
 
             # accuracy x+y where |x| is the accuracy of the weapon and |y| is
             # the accuracy of the built-in scope
@@ -1004,7 +1067,8 @@ class FromGcs(object):
                 accuracy_text = accuracy_text.replace('+', ' ')
                 values = accuracy_text.split()
                 for value in values:
-                    new_thing['acc'] += int(value)
+                    int_value = 0 if value == '-' else int(value)
+                    new_thing['acc'] += int_value
 
             # shots: T(1), or 8(3) or 8 (3)
 
@@ -1161,37 +1225,18 @@ class ToNative(object):
         self.__import_skills()
         self.__import_techniques()
         self.__import_spells()
-        self.__import_equipment(squash=False)
+
+        if 'stuff' not in self.__native_data:
+            self.__native_data['stuff'] = []
+
+        self.__import_equipment(self.__native_data['stuff'],
+                                self.__gcs_data.stuff,
+                                squash=False)
 
     def import_equipment_list(self):
-        '''
-        "rows": [
-            {
-                "type": "equipment",
-                "id": "a5863dd4-b9f3-41a0-bd99-fae58e552c67",
-                "quantity": 1,
-                "description": "Antibiotic",
-                "tech_level": "6",
-                "value": "20",
-                "weight": "0 lb",
-                "reference": "B289",
-                "calc": {
-                    "extended_value": "20",
-                    "extended_weight": "0 lb"
-                },
-                "notes": "Prevents or cures (in 1d days) infections.",
-                "categories": [
-                    "Medical Gear"
-                ]
-            },
-            {
-                "type": "equipment",
-                "id": "4f2a9783-adb2-4c52-abdd-fa5d112b8a9b",
-                "quantity": 1,
-        '''
-        xxx
-        while xxx:
-            self.__import_equipment(squash=False)
+        self.__import_equipment(self.__native_data,
+                                self.__gcs_data,
+                                squash=False)
 
     def pprint(self):
         print('\n=== Import Creature ===')
@@ -1205,7 +1250,13 @@ class ToNative(object):
         changes.extend(self.__import_skills())
         changes.extend(self.__import_techniques())
         changes.extend(self.__import_spells())
-        changes.extend(self.__import_equipment(squash=True))
+
+        if 'stuff' not in self.__native_data:
+            self.__native_data['stuff'] = []
+
+        changes.extend(self.__import_equipment(self.__native_data['stuff'],
+                                               self.__gcs_data.stuff,
+                                               squash=True))
 
         if len(changes) == 0:
             changes.append('Character up to date -- no changes')
@@ -1279,36 +1330,45 @@ class ToNative(object):
         return changes
 
     def __import_equipment(self,
-                           squash   # Bool: whether to flatten containers
+                           native_data, # []: contains native data, In/Output
+                           gcs_data,    # []: contains GCS data
+                           squash       # Bool: whether to flatten containers
                            ):
-        changes = []
-        if 'stuff' not in self.__native_data:
-            self.__native_data['stuff'] = []
+        '''
+        Merges GCS equipment list with native one.  Discards exact duplicate
+        items, merges similar items, and copies unique items into
+        |native_data|.
 
-        stuff_json = self.__copy_json_equipment_list(
-                self.__native_data['stuff'], squash)
-        stuff_gcs = self.__copy_json_equipment_list(
-                self.__gcs_data.stuff, squash)
+        Returns (in addition to |native_data| being changed) a list of changes
+        to show the user.
+        '''
 
         PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
+
+        changes = []
+        stuff_native = self.__copy_json_equipment_list(native_data, squash)
+        stuff_gcs = self.__copy_json_equipment_list(gcs_data, squash)
+
         standout_mode = curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK)
 
-        for item_json in stuff_json:    # item_json is {}
+        for item_native in stuff_native:    # item_native is {}
+
+            # Remove duplicates from GCS list
             match_gcs = False
             for index, item_gcs in enumerate(stuff_gcs):
-                if ToNative.find_differences(item_json,
+                if ToNative.find_differences(item_native,
                                              item_gcs) is None:
                     stuff_gcs.pop(index)
                     match_gcs = True
                     break
 
             if not match_gcs:
-                # Do a second pass looking for items that are similar
+                # Do a second pass looking for items that are similar.
                 for index, item_gcs in enumerate(stuff_gcs):
-                    if item_json['name'].lower() == item_gcs['name'].lower():
+                    if item_native['name'].lower() == item_gcs['name'].lower():
 
                         differences = ToNative.find_differences(
-                                item_json, item_gcs)
+                                item_native, item_gcs)
 
                         # Make the user descide if these are the same item
                         output = []
@@ -1325,9 +1385,9 @@ class ToNative(object):
 
                         output.append([{'text': '',
                                         'mode': curses.A_NORMAL}])
-                        output.append([{'text': ('--- CA Item: %s ---' % item_json['name']),
+                        output.append([{'text': ('--- CA Item: %s ---' % item_native['name']),
                                         'mode': curses.A_NORMAL}])
-                        string = PP.pformat(item_json)
+                        string = PP.pformat(item_native)
                         strings = string.split('\n')
                         for string in strings:
                             mode = curses.A_NORMAL
@@ -1337,7 +1397,7 @@ class ToNative(object):
                             output.append([{'text': string, 'mode': mode}])
 
                         # Merged
-                        new_item = copy.deepcopy(item_json)
+                        new_item = copy.deepcopy(item_native)
                         self.__merge_items(new_item, item_gcs)
                         output.append([{'text': '',
                                         'mode': curses.A_NORMAL}])
@@ -1351,11 +1411,10 @@ class ToNative(object):
                                 if string.find(difference) >= 0:
                                     mode = standout_mode
                             output.append([{'text': string, 'mode': mode}])
-                        #
 
                         self.__window_manager.display_window(
                                 ('Examine These %s -- Are They The Same Item?' %
-                                    item_json['name']),
+                                    item_native['name']),
                                 output)
                         request_menu = [('yes', True), ('no', False)]
                         they_are_the_same, ignore = self.__window_manager.menu(
@@ -1365,19 +1424,21 @@ class ToNative(object):
                             stuff_gcs.pop(index)
                             match_gcs = True
                             # TODO: copy unmatched things from GCS to CA
-                            self.__merge_items(item_json, item_gcs)
+                            self.__merge_items(item_native, item_gcs)
                             break
                         else:
                             remove_menu = [('yes', True), ('no', False)]
                             remove, ignore = self.__window_manager.menu(
                                 'Remove "%s" (in CA) but NOT in GCS' %
-                                item_json['name'], remove_menu)
+                                item_native['name'], remove_menu)
                             if remove:
                                 changes.append('"%s" equipment item removed' %
-                                        item_json['name'])
+                                        item_native['name'])
                                 # remove removes a list element by value
-                                self.__native_data['stuff'].remove(item_json['name'])
+                                native_data.remove(item_native['name'])
 
+        # Adds in GCS items that aren't already represented by native items
+        # into the native item list.
         for item_gcs in stuff_gcs:
             name_gcs = item_gcs['name']
 
@@ -1387,7 +1448,7 @@ class ToNative(object):
                         item_gcs['name'])
             else:
                 changes.append('"%s" equipment item added' % item_gcs['name'])
-                self.__native_data['stuff'].append(item_gcs)
+                native_data.append(item_gcs)
 
         return changes
 
@@ -1589,40 +1650,40 @@ class ToNative(object):
         return changes
 
     def __merge_items(self,
-                      item_json,    # dict, destination
+                      item_native,    # dict, destination
                       item_gcs      # dict
                       ):
         '''
-        Merges equipment item |item_gcs| into |item_json|
+        Merges equipment item |item_gcs| into |item_native|
         '''
-        if item_json == item_gcs or item_gcs is None:
+        if item_native == item_gcs or item_gcs is None:
             return
-        if isinstance(item_json, dict):
+        if isinstance(item_native, dict):
             if not isinstance(item_gcs, dict):
                 return # Not worth merging if they're not the same type
 
             for key, value in item_gcs.items():
-                if key not in item_json:
-                    item_json[key] = value
-                elif item_json[key] != item_gcs[key]:
-                    if self.__is_scalar(item_json[key]):
+                if key not in item_native:
+                    item_native[key] = value
+                elif item_native[key] != item_gcs[key]:
+                    if self.__is_scalar(item_native[key]):
                         # TODO: |str| instead of |basestring| in python 3
                         if (isinstance(item_gcs[key], str) and
-                                isinstance(item_json[key], str)):
-                            if len(item_json[key]) == 0:
-                                item_json[key] = item_gcs[key]
+                                isinstance(item_native[key], str)):
+                            if len(item_native[key]) == 0:
+                                item_native[key] = item_gcs[key]
                         else:
-                            item_json[key] = item_gcs[key]
+                            item_native[key] = item_gcs[key]
                     else:
-                        self.__merge_items(item_json[key], item_gcs[key])
+                        self.__merge_items(item_native[key], item_gcs[key])
 
-        elif isinstance(item_json, list):
+        elif isinstance(item_native, list):
             if not isinstance(item_gcs, list):
                 return # Not worth merging if they're not the same type
 
             for value in item_gcs:
-                if value not in item_json:
-                    item_json.append(value)
+                if value not in item_native:
+                    item_native.append(value)
 
     def  __is_scalar(self,
                      item
@@ -1703,17 +1764,16 @@ class GcsImport(object):
                          gcs_filename=None,   # string
                          ):
         '''
-        Returns: array containing the equipment list
+        Returns: Nothing
         '''
-        gcs_filename = self.__extract_gcs_filename(native_data, gcs_filename)
-
         gcs_data = FromGcs(self.__window_manager, ruleset, gcs_filename)
         gcs_data.build_equipment()
 
-        equipment = ToNative(self.__window_manager, native_data, gcs_data)
+        equipment = ToNative(self.__window_manager,
+                             native_data,
+                             gcs_data.stuff)
         equipment.import_equipment_list()
-        # equipment.pprint() ######################
-        return native_data
+        return
 
     def update_creature(self,
                         native_data,           # dict contains original creature

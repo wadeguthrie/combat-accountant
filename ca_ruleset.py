@@ -435,7 +435,10 @@ class Ruleset(object):
 
         return  # No need to return action menu since it was a parameter
 
-    def get_import_file_extension(self):
+    def get_import_creature_file_extension(self):
+        return None # No restriction on filename
+
+    def get_import_equipment_file_extension(self):
         return None # No restriction on filename
 
     def get_option(self,
