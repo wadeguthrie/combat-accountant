@@ -2858,16 +2858,18 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             {
                 "count": 1,
                 "notes": "1d for HT+1d hrs unless other healing",
-                "type": {"misc": 1},
-                "owners": None,
+                "type": { "misc": 1 },
+                "owners": [],
                 "name": "Patch: light heal"
             },
             {
-              "count": 1,
-              "owners": [],
-              "name": "Armor, Light Street",
-              "type": {"armor": {"dr": 3}},
-              "notes": "Some combo of ballistic, ablative, and disruptor."
+                "count": 1,
+                "owners": [ "Renata" ],
+                "type": {
+                    "armor": { "dr": 3 }
+                },
+                "notes": "Some combination of ballistic, ablative, and disruptor.",
+                "name": "Armor, Light Street"
             },
             {
                 "count": 1,
@@ -2875,37 +2877,50 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 "name": "Tonfa",
                 "notes": "",
                 "parry": 0,
-                "skill": {"Tonfa": 0},
                 "type": {
-                    "thrust weapon": {"damage":
-                        {"st": "thr", "type": "cr", "plus": 1}},
-                    "swung weapon": {"damage":
-                        {"st": "sw", "type": "cr", "plus": 0}}
+                    "swung weapon": {
+                        "skill": { "Tonfa": 0 },
+                        "damage": { "type": "cr", "plus": 0, "st": "sw" }
+                    },
+                    "thrust weapon": {
+                        "skill": { "Tonfa": 0 },
+                        "damage": { "type": "cr", "plus": 1, "st": "thr" }
                     }
+                }
             },
             {
                 "acc": 2,
                 "count": 1,
-                "owners": None,
+                "owners": [],
                 "name": "pistol, Baretta DX 192",
-                "notes": "",
-                "damage": {
-                    "dice": {"plus": 4, "num_dice": 1, "type": "pi"}
+                "clip": {
+                    "type": { "misc": 1 },
+                    "name": "C Cell",
+                    "shots": 8,
+                    "shots_left": 8
                 },
                 "reload": 3,
-                "skill": {"Beam Weapons (Pistol)": 0},
-                # TODO: incorporate damage, above, into ranged weapon, below
-                "type": {"ranged weapon": 1},
-                "ammo": {"name": "C Cell", "shots": 8, "shots_left": 8}
+                "notes": "",
+                "bulk": -2,
+                "reload_type": 2,
+                "type": {
+                    "ranged weapon": {
+                        "skill": { "Beam Weapons (Pistol)": 0 },
+                        "damage": {
+                            "dice": { "plus": 4, "num_dice": 1, "type": "pi" }
+                            }
+                    }
+                },
+                "ammo": { "count": 1, "name": "C Cell", "shots": 8 }
             },
             {
                 "count": 1,
                 "notes": "",
-                "type": {"misc": 1},
-                "owners": None,
+                "type": { "misc": 1 },
+                "owners": null,
                 "name": "C Cell"
             }
-        ]
+            ]
 
     def get_sections_in_template(self):
         '''
