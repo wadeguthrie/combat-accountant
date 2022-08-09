@@ -413,6 +413,7 @@ class MockWindowManager(object):
 
         # Now, go check responses for longer menus
 
+        PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
         if title not in self.__menu_responses:
             print(('\n** menu: title "%s" not found in stored responses' %
                    title))

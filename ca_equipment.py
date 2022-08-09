@@ -9,6 +9,7 @@ class Equipment(object):
     (RELOAD_NONE,   # for a thrown dagger or suriken
      RELOAD_ONE,    # for a shotgun or grenade launcher, loaded one at a time
      RELOAD_CLIP) = list(range(3))   # reload_type
+    UNKNOWN_STRING = '** UNKNOWN **'
     '''
     Object that manipulates a list of equipment.  The list is assumed to be
     from somewhere in the Game File data but that's not strictly a requirement.
@@ -58,6 +59,32 @@ class Equipment(object):
         container.append(new_item)
 
         return len(self.__equipment) - 1  # current index of the added item
+
+    def fix_ammo(self,
+                 window_manager  # GmWindowManager object for menus and errors
+                 ):
+        '''
+        Looks through the equipment list and, if there're items that need
+        ammo, asks the user which item in the equipment list is the right kind
+        of ammo.
+        '''
+        starting_ammo_index = 0
+        ammo_menu = [(' %s' % Equipment.UNKNOWN_STRING,
+                      Equipment.UNKNOWN_STRING)]
+        for maybe_ammo in self.__equipment:
+            if 'misc' in maybe_ammo['type']:
+                ammo_menu.append((maybe_ammo['name'], maybe_ammo['name']))
+        ammo_menu = sorted(ammo_menu, key=lambda x: x[0].upper())
+
+        for item in self.__equipment:
+            if (Weapon.uses_ammo_static(item) and
+                    'ammo' in item and 'name' in item['ammo'] and
+                    item['ammo']['name'] == Equipment.UNKNOWN_STRING):
+                ammo, starting_ammo_index = window_manager.menu(
+                        ('Select Ammo For %s' % item['name']),
+                        ammo_menu, starting_ammo_index)
+                if ammo is not None:
+                    item['ammo']['name'] = ammo
 
     def get_container(self,
                       container_stack   # stack of indexes of containers
@@ -545,6 +572,13 @@ class Weapon(object):
             return True
         return False
 
+    @staticmethod
+    def uses_ammo_static(item  # dict
+                         ):
+        return (True if 'reload_type' in item and
+                item['reload_type'] != Equipment.RELOAD_NONE
+                else False)
+
     def __init__(self,
                  weapon_details    # dict from world file
                  ):
@@ -671,6 +705,4 @@ class Weapon(object):
         return True
 
     def uses_ammo(self):
-        return (True if 'reload_type' in self.details and
-                self.details['reload_type'] != Equipment.RELOAD_NONE
-                else False)
+        return Weapon.uses_ammo_static(self.details)

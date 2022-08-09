@@ -5,6 +5,7 @@ import pprint
 import traceback
 import unittest
 
+import ca_gcs_import
 import diff_json
 
 from unittest_main.test_common import GmTestCaseCommon
@@ -156,7 +157,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "count": 1, "notes": "", "owners": None,
                   "bulk": -2, "acc": 4,
                   "reload_type": 2, "reload": 2,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 8, "shots_left": 8 }
+                  "ammo": { "name": "** UNKNOWN **", "shots": 8, "shots_left": 8 }
                 }
               ],
               "timers": [],
@@ -306,7 +307,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "count": 1, "notes": "C/9 shots", "owners": None,
                   "bulk": -2, "acc": 3,
                   "reload_type": 2, "reload": 2,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 9, "shots_left": 9 }
+                  "ammo": { "name": "** UNKNOWN **", "shots": 9, "shots_left": 9 }
                 },
                 { # 7
                   "name": "Armor Support Garment",
@@ -563,7 +564,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "count": 1, "notes": "C/9 shots", "owners": None,
                   "bulk": -2, "acc": 4,
                   "reload_type": 2, "reload": 3,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 9, "shots_left": 9 }
+                  "ammo": { "name": "** UNKNOWN **", "shots": 9, "shots_left": 9 }
                 },
                 { # 2
                   "name": "Armor",
@@ -804,7 +805,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                   },
                   "count": 1, "notes": "", "owners": None,
                   "bulk": -5, "acc": 3,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 7, "shots_left": 7 },
+                  "ammo": { "name": "** UNKNOWN **", "shots": 7, "shots_left": 7 },
                   "reload_type": 1, "reload": 2
                 }
               ],
@@ -927,7 +928,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                           "bulk": -2, "acc": 4,
                           "reload_type": 2, "reload": 3,
                           "ammo": {
-                            "name": "*UNKNOWN*",
+                            "name": "** UNKNOWN **",
                             "shots": 9,
                             "shots_left": 9
                           }
@@ -980,7 +981,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                           "owners": None, "bulk": -2, "acc": 2,
                           "reload_type": 2, "reload": 3,
                           "ammo": {
-                            "name": "*UNKNOWN*",
+                            "name": "** UNKNOWN **",
                             "shots": 8,
                             "shots_left": 8
                           }
@@ -1295,7 +1296,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                       "bulk": -3, "acc": 1,
                       "reload_type": 2, "reload": 3,
                       "ammo": {
-                        "name": "*UNKNOWN*",
+                        "name": "** UNKNOWN **",
                         "shots": 6,
                         "shots_left": 6
                       }
@@ -1320,7 +1321,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                       "bulk": -4, "acc": 1,
                       "reload_type": 2, "reload": 4,
                       "ammo": {
-                        "name": "*UNKNOWN*",
+                        "name": "** UNKNOWN **",
                         "shots": 6,
                         "shots_left": 6
                       }
@@ -1476,7 +1477,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "count": 1, "notes": "C/9 shots", "owners": None,
                   "bulk": -2, "acc": 4,
                   "reload_type": 2, "reload": 3,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 9, "shots_left": 9
+                  "ammo": { "name": "** UNKNOWN **", "shots": 9, "shots_left": 9
                   }
                 },
                 { # 2
@@ -1501,7 +1502,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "count": 1, "notes": "C/7 shots", "owners": None,
                   "bulk": -2, "acc": 2,
                   "reload_type": 2, "reload": 3,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 7, "shots_left": 7 }
+                  "ammo": { "name": "** UNKNOWN **", "shots": 7, "shots_left": 7 }
                 },
                 { # 3
                   "name": "Papa Jorge's Blazer",
@@ -1963,7 +1964,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "count": 1, "notes": "", "owners": None,
                   "bulk": -4, "acc": 8,
                   "reload_type": 2, "reload": 3,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 10, "shots_left": 10 }
+                  "ammo": { "name": "** UNKNOWN **", "shots": 10, "shots_left": 10 }
                 },
                 { # 6
                   "name": "Holster, Shoulder",
@@ -1991,7 +1992,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                       "bulk": -2,
                       "acc": 4,
                       "reload_type": 2, "reload": 3,
-                      "ammo": { "name": "*UNKNOWN*",
+                      "ammo": { "name": "** UNKNOWN **",
                                 "shots": 9, "shots_left": 9 }
                     }
                   ]
@@ -2012,7 +2013,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "count": 1, "notes": "C/9 shots", "owners": None,
                   "bulk": -2, "acc": 4,
                   "reload_type": 2, "reload": 3,
-                  "ammo": { "name": "*UNKNOWN*", "shots": 9, "shots_left": 9 }
+                  "ammo": { "name": "** UNKNOWN **", "shots": 9, "shots_left": 9 }
                 },
                 { # 8
                   "name": "Medicine Bag",
@@ -2178,6 +2179,10 @@ class GmTestCaseImport(GmTestCaseCommon):
         curses.use_default_colors()
 
         for test_case in test_cases:
+
+            self._window_manager.set_menu_response('Add Which Equipment',
+                    {'op': ca_gcs_import.ToNative.EQUIP_ADD_ALL})
+
             name, creature = self._ruleset.import_creature_from_file(test_case)
             diff = diff_json.DiffJson('Test (%s)' % test_case,
                                       'Expected',

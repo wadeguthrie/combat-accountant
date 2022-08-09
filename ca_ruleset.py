@@ -1308,7 +1308,7 @@ class Ruleset(object):
             clip_menu = []
             clip_name = weapon.details['ammo']['name']
             if clip_name is None:
-                clip_name = '** UNKNOWN **'
+                clip_name = ca_equipment.Equipment.UNKNOWN_STRING
             for index, item in enumerate(fighter.details['stuff']):
                 if item['name'] == clip_name:
                     if 'notes' in item and len(item['notes']) > 0:

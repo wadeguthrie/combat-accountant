@@ -22,9 +22,11 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO (now): add ammo check (to figure out what ammo should be in anything
+#   with UNKOWN ammo) in GURPS ruleset
+
 # TODO: import equipment should ask about ammo
 
-# TODO: include powerstone handling
 # TODO: on importing advantages: "notes" should be included in name in parens
 # TODO: should ask when update character wants to delete a spell
 
@@ -42,11 +44,7 @@ import ca_timers
 # TODO: grenade support (missile-like but not with clips)
 
 # TODO: ISSUE 9: maintain spell
-# TODO: ISSUE 20: need a way to generate equipment
 
-# TODO: HouseRule: reload and spells should happen at the end of the timer.  The
-#       'reloading' timer should launch the second part of the action when it
-#       fires.
 # TODO: why do redirect entries have 'stuff' and 'timers' entries?
 
 # TODO: FP should ask if using DR
@@ -984,7 +982,6 @@ class World(object):
         # naming categories is permitted.
         randomly_generate = False
 
-        # TODO (eventually): 'names' should be optional
         if 'names' not in self.details or self.details['names'] is None:
             return None, None, None
 
@@ -1917,7 +1914,6 @@ class PersonnelHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         # get the filename to import
-
         extension = self.world.ruleset.get_import_equipment_file_extension()
         filename_window = ca_gui.GetFilenameWindow(self._window_manager)
         filename = filename_window.get_filename(extension)
@@ -1925,9 +1921,13 @@ class PersonnelHandler(ScreenHandler):
             return True
 
         # actually import the equipment
-
         self.world.ruleset.import_equipment_from_file(
                 filename, self.world.details['stuff'])
+
+        # Then, fix any issues with the equipment
+        equipment = ca_equipment.Equipment('Equipment Store',
+                                           self.world.details['stuff'])
+        equipment.fix_ammo(self._window_manager)
         return True
 
     def __left_pane(self):
