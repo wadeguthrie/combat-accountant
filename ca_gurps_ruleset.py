@@ -2257,7 +2257,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             why.extend(dodge_why)
             notes.append(dodge_string)
 
-        # TODO; figure out how to pull the unarmed stuff out of the loop
+        # TODO: figure out how to pull the unarmed stuff out of the loop
         # TODO: this doesn't work if there're no weapons -- unarmed
         for weapon in weapons:
             if weapon is None:
@@ -2735,7 +2735,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                     'ammo' in weapon.details):
                                 clip_name = weapon.details['ammo']['name']
                                 if clip_name is None:
-                                    clip_name = '** UNKNOWN **'
+                                    clip_name = ca_equipment.Equipment.UNKNOWN_STRING
                                 reloads = 0  # Counts clips, not rounds
                                 for item in fighter.details['stuff']:
                                     if item['name'] == clip_name:
@@ -5017,8 +5017,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 max_shots_this_round = weapon.details['shots_per_round']
                 if max_shots_this_round <= 1:
                     weapon_needs_multiple_shot_handling = False
-
-            # TODO: add this to weapons: 'shots_per_round' and 'pellets_per_shot'
 
             # Do we have more than 1 round in the clip?
             if weapon_needs_multiple_shot_handling:
