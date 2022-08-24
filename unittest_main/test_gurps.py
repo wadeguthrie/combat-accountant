@@ -1705,6 +1705,11 @@ class GmTestCaseGurps(GmTestCaseCommon):
 
         assert original_fp == vodou_priest.details['permanent']['fp']
 
+        # Just to load the spells from the file
+        with (ca_gurps_ruleset.GurpsRuleset(self._window_manager)
+                as gurps_ruleset):
+            pass
+
         for trial in trials:
             opponent.timers.clear_all()
 

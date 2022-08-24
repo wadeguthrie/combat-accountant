@@ -847,6 +847,7 @@ class World(object):
         Returns nothing.
         '''
         self.__gm_json.write_data = self.__gm_json.read_data
+        self.ruleset.do_save_on_exit()
         ScreenHandler.maintain_game_file = False
 
     def dont_save_on_exit(self):
@@ -857,6 +858,7 @@ class World(object):
         Returns nothing.
         '''
         self.__gm_json.write_data = None
+        self.ruleset.dont_save_on_exit()
         ScreenHandler.maintain_game_file = True
 
     def get_creature(self,
@@ -1619,6 +1621,9 @@ class PersonnelHandler(ScreenHandler):
                        'func': self.__quit,
                        'help': 'Quit changing personnel.'},
         })
+
+        # TODO: add this in
+        # self._add_to_choice_dict(self.world.ruleset.get_import_commands(self))
 
         if creature_type == PersonnelHandler.NPCs:
             self._add_to_choice_dict({
@@ -7495,11 +7500,6 @@ if __name__ == '__main__':
             help='Don\'t overwrite the input Game File.  Debugging only.',
             action='store_true',
             default=False)
-    #parser.add_argument(
-    #        '-p', '--player',
-    #        help='Run in "player" mode -- one fighter, unknown monster stats.',
-    #        action='store_true',
-    #        default=False)
     parser.add_argument('-r', '--replay',
                         help='Play history from bug report folder.')
 
@@ -7513,8 +7513,8 @@ if __name__ == '__main__':
     replay_history = None
 
     program = None
-    with CaGmWindowManager() as window_manager:
-        ruleset = ca_gurps_ruleset.GurpsRuleset(window_manager)
+    with (CaGmWindowManager() as window_manager,
+            ca_gurps_ruleset.GurpsRuleset(window_manager) as ruleset):
 
         # Prefs
         # NOTE: When other things find their way into the prefs, the scope

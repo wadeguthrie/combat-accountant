@@ -9,9 +9,9 @@ import ca_fighter
 import ca_equipment
 import ca_gcs_import
 import ca_gui
+import ca_json
 import ca_ruleset
 import ca_timers
-
 
 class GurpsRuleset(ca_ruleset.Ruleset):
     '''
@@ -133,1455 +133,33 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                          'sw':  {'num_dice': 5, 'plus': -1}}
                     }
 
-    abilities = {
-        'skills': {
-            # 'name': {'ask': 'number' | 'string' }
-            #         {'value': value}
-            "Acting": {'ask': 'number'},
-            "Acrobatics": {'ask': 'number'},
-            "Area Knowledge (Space Station)": {'ask': 'number'},
-            "Armoury (Heavy Weapons)": {'ask': 'number'},
-            "Armoury (Small Arms)": {'ask': 'number'},
-            "Artillery (Cannon)": {'ask': 'number'},
-            "Axe/Mace": {'ask': 'number'},
-            "Bartender": {'ask': 'number'},
-            "Beam Weapons (Pistol)": {'ask': 'number'},
-            "Beam Weapons (Rifle)": {'ask': 'number'},
-            "Biology": {'ask': 'number'},
-            "Brawling": {'ask': 'number'},
-            "Broadsword": {'ask': 'number'},
-            "Camouflage": {'ask': 'number'},
-            "Climbing": {'ask': 'number'},
-            "Connoisseur (Whisky)": {'ask': 'number'},
-            "Computer Hacking": {'ask': 'number'},
-            "Computer Operation": {'ask': 'number'},
-            "Computer Programming": {'ask': 'number'},
-            "Connoisseur (Visual Arts)": {'ask': 'number'},
-            "Cryptography": {'ask': 'number'},
-            "Current Affairs (Teraforming)": {'ask': 'number'},
-            "Detect Lies": {'ask': 'number'},
-            "Disarming (Knife)": {'ask': 'number'},
-            "Diplomacy": {'ask': 'number'},
-            "Electronics Operation (Security)": {'ask': 'number'},
-            "Electronics Operation (Sensors)": {'ask': 'number'},
-            "Electronics Operation (Teraforming)": {'ask': 'number'},
-            "Electronics Repair (Security)": {'ask': 'number'},
-            "Electronics Repair (Teraforming)": {'ask': 'number'},
-            "Engineer (Electronics)": {'ask': 'number'},
-            "Engineer (Starships)": {'ask': 'number'},
-            "Escape": {'ask': 'number'},
-            "Expert Skill (Computer Security)": {'ask': 'number'},
-            "Fast-Draw (Ammo)": {'ask': 'number'},
-            "Fast-Draw (Knife)": {'ask': 'number'},
-            "Fast-Draw (Pistol)": {'ask': 'number'},
-            "Fast-Talk": {'ask': 'number'},
-            "Filch": {'ask': 'number'},
-            "First Aid": {'ask': 'number'},
-            "Forensics": {'ask': 'number'},
-            "Forgery": {'ask': 'number'},
-            "Gambling": {'ask': 'number'},
-            "Gesture": {'ask': 'number'},
-            "Gunner (Beams)": {'ask': 'number'},
-            "Guns (Grenade Launcher)": {'ask': 'number'},
-            "Guns (Pistol)": {'ask': 'number'},
-            "Hazardous Materials (Chemical)": {'ask': 'number'},
-            "Holdout": {'ask': 'number'},
-            "Interrogation": {'ask': 'number'},
-            "Intimidation": {'ask': 'number'},
-            "Karate": {'ask': 'number'},
-            "Knife": {'ask': 'number'},
-            "Law (Conglomerate)": {'ask': 'number'},
-            "Law (Conglomerate, Trans territorial jurisdiction/the void)":
-            {'ask': 'number'},
-            "Lip Reading": {'ask': 'number'},
-            "Lockpicking": {'ask': 'number'},
-            "Mathematics (Applied)": {'ask': 'number'},
-            "Mechanic (Spacecraft)": {'ask': 'number'},
-            "Observation": {'ask': 'number'},
-            "Off-Hand Weapon Training (Knife)": {'ask': 'number'},
-            "Physician": {'ask': 'number'},
-            "Physics": {'ask': 'number'},
-            "Pickpocket": {'ask': 'number'},
-            "Piloting (Loader Mech)": {'ask': 'number'},
-            "Piloting (Low-Performance Spacecraft)": {'ask': 'number'},
-            "Poisons": {'ask': 'number'},
-            "Running": {'ask': 'number'},
-            "Savoir-Faire (Mafia)": {'ask': 'number'},
-            "Savoir-Faire (Police)": {'ask': 'number'},
-            "Scrounging": {'ask': 'number'},
-            "Search": {'ask': 'number'},
-            "Shadowing": {'ask': 'number'},
-            "Smuggling": {'ask': 'number'},
-            "Stealth": {'ask': 'number'},
-            "Streetwise": {'ask': 'number'},
-            "Theology (Vodun)": {'ask': 'number'},
-            "Throwing": {'ask': 'number'},
-            "Thrown Weapon (Knife)": {'ask': 'number'},
-            "Tonfa": {'ask': 'number'},
-            "Traps": {'ask': 'number'},
-            "Urban Survival": {'ask': 'number'},
-        },
-        'advantages': {
-            "Acute Vision": {'ask': 'number'},
-            "Always snacking, always carrying food": {'value': -1},
-            "Phobia": {'ask': 'string'},
-            "Alcohol Intolerance": {'value': -1},
-            "Appearance": {'ask': 'string'},
-            "Bad Sight": {'value': -25},
-            "Bad Temper": {'value': -10},
-            "Cannot Speak": {'value': -10},
-            "Channeling": {'value': 10},
-            "Code of Honor": {'ask': 'string'},
-            "Combat Reflexes": {'value': 15},
-            "Compulsive Behavior": {'ask': 'string'},
-            "Cultural Familiarity": {'ask': 'string'},
-            "Curious": {'value': -5},
-            "Debt": {'ask': 'number'},
-            "Deep Sleeper": {'value': 1},
-            "Delusions": {'ask': 'string'},
-            "Distractible": {'value': 1},
-            "Dreamer": {'value': -1},
-            "Dyslexia": {'value': -10},
-            "Eidetic Memory": {'ask': 'number'},
-            "Empathy": {'ask': 'number'},
-            "Enemy": {'ask': 'string'},
-            "Extra Hit Points": {'ask': 'number'},
-            "Fit": {'value': 5},
-            "Flashbacks": {'ask': 'string'},
-            "G-Experience": {'ask': 'number'},
-            "Guilt Complex": {'ask': 'string'},
-            "Habit": {'ask': 'string'},
-            "High Pain Threshold": {'value': 10},
-            "Honest Face": {'value': 1},
-            "Humble": {'value', -1},
-            "Impulsiveness": {'ask': 'number'},
-            "Light Sleeper": {'value': -5},
-            "Like (Quirk) ": {'ask': 'string'},
-            "Lwa": {'ask': 'string'},
-            "Miserliness": {'ask': 'number'},
-            "Night Vision": {'ask': 'number'},
-            "No Sense of Humor": {'value': -10},
-            "Nosy": {'value': -1},
-            "Obsession": {'value': -1},
-            "Overconfidence": {'ask': 'number'},
-            "Personality Change": {'ask': 'string'},
-            "Pyromania": {'value': -10},
-            "Rapid Healing": {'value': 5},
-            "Responsive": {'value': -1},
-            "Secret": {'ask': 'string'},
-            "Short Attention Span": {'value': -10},
-            "Squeamish": {'value': -10},
-            "Versatile": {'value': 5},
-            "Vodou Practitioner (level 0)": {'value': 5},
-            "Vodou Practitioner (Mambo/Hougan 1)": {'value': 15},
-            "Vodou Practitioner (Mambo/Hougan 2)": {'value': 35},
-            "Vodou Practitioner (Mambo/Hougan 3)": {'value': 65},
-            "Vodou Practitioner (Bokor 1)": {'value': 20},
-            "Vodou Practitioner (Bokor 2)": {'value': 45},
-            "Vodou Practitioner (Bokor 3)": {'value': 75},
-            "Vow": {'ask': 'string'},
-            "Wealth": {'ask': 'string'},
-            "Weirdness Magnet": {'value': -15},
-        }
-    }
-
     # These are specific to the Persephone version of the GURPS ruleset
-    spells = {
 
-        # Alphabetized for conevenience
-        # "Agonize": {
-        #   "cost": 8, <-- None means 'ask
-        #   "notes": "M40, HT negates", <-- at least give book reference
-        #                                   M40 means page 40 in GURPS
-        #                                   Magic
-        #   "maintain": 6,
-        #   "casting time": 1, <-- None or 0 means 'ask
-        #   "duration": 60, <-- None means 'ask', 0 means 'Instant'
-        # },
+    abilities = {}
+    # skills:
+    #   'name': {'ask': 'number' | 'string' }
+    #           {'value': value}
 
-        # 'range': touch, missile, area, normal.
-        # specially mark those with 1 or 2 second cast time
-        # 'save': 'wi', 'ht', xxx, (cast a spell dialog needs to show this)
+    spells = {}
+    # Spells:
+    #   "range" not in the .spl file#
+    #   duration:0 means instant
+    #   save:  # NOTE: need to handle "wi-1"
 
-        "Agonize": {
-          "cost": 8,
-          "notes": "M40",
-          "maintain": 6,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Alarm": {
-          "cost": 1,
-          "notes": "M100",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 604800,   # one week
-          "range": 'regular',
-          "save": [],
-        },
-        "Alter Visage": {
-          "cost": 4,
-          "notes": "M41",
-          "maintain": 0,
-          "casting time": 60,
-          "duration": 3600,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Analyze Magic": {
-          "cost": 8,
-          "notes": "M102",
-          "maintain": None,
-          "casting time": 3600,
-          "duration": 0,    # Instant
-          "range": 'regular',
-          "save": ['spell'],
-        },
-        "Animate Shadow": {
-          "cost": 4,
-          "notes": "M154, Subject's shadow attacks them",
-          "maintain": 4,
-          "casting time": 2,
-          "duration": 5,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Armor": {
-          "cost": None,
-          "notes": "M167, cost DR*2, max DR=5",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Awaken": {
-          "cost": 1,
-          "notes": "M90",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'area',
-          "save": [],
-        },
-        "Bless Plants": {
-          "cost": 1,
-          "notes": "M161",
-          "maintain": 4,
-          "casting time": 300,
-          "duration": 0,    # One season - no need to keep track
-          "range": 'area',
-          "save": [],
-        },
-        "Blink": {
-          "cost": 2,
-          "notes": "M148, Caster must make Body Sense (B181) roll to act.",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'block',
-          "save": [],
-        },
-        "Body of Metal" :{
-          "cost": 12,
-          "notes": "M183, B262, DR9, et al.",
-          "maintain": 6,
-          "casting time": 5,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Body of Plastic" :{
-          "cost": 10,
-          "notes": "M183",
-          "maintain": 5,
-          "casting time": 5,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Boost Dexterity": {
-          "cost": 1,
-          "notes": "M37",
-          "maintain": 2,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'regular',
-          "save": [],
-        },
-        "Bravery": {
-          "cost": 2,
-          "notes": "M134",
-          "maintain": 2,
-          "casting time": 1,
-          "duration": 3600,
-          "range": 'regular',
-          "save": ['wi-1'], # NOTE: need to handle 'wi-1'
-        },
-        "Charm": {
-          "cost": 6,
-          "notes": "M139",
-          "maintain": 3,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['wi'],
-        },
-        "Choke": {
-          "cost": 4,
-          "notes": "M40",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 30,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Climbing": {
-          "cost": 1,
-          "notes": "M35",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Clumsiness": {
-          "cost": 1,
-          "notes": "M36",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Command": {
-          "cost": 4,
-          "notes": "M136",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'block',
-          "save": ['wi'],
-        },
-        "Communicate": {
-          "cost": 4,
-          "notes": "M48",
-          "maintain": 4,
-          "casting time": 4,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Compel Truth": {
-          "cost": 4,
-          "notes": "M47",
-          "maintain": 2,
-          "casting time": 1,
-          "duration": 300,
-          "range": 'inform',
-          "save": ['wi'],
-        },
-        "Conceal Magic": {
-          "cost": 1,
-          "notes": "M122",
-          "maintain": None,
-          "casting time": 3,
-          "duration": 36000,    # 10 hours
-          "range": 'regular',
-          "save": [],
-        },
-        "Control Person": {
-          "cost": 6,
-          "notes": "M49",
-          "maintain": 3,
-          "casting time": 10,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['wi'],
-        },
-        "Control Zombie": {
-          "cost": 3,
-          "notes": "M152 - permanent",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'regular',
-          "save": ['spell'],
-        },
-        "Counterspell": {
-          "cost": None,
-          "notes": "M21",
-          "maintain": None,
-          "casting time": 5,
-          "duration": 0,
-          "range": 'regular',
-          "save": ['spell'],
-        },
-        "Create Fuel" :{
-          "cost": None,
-          "notes": "M179",
-          "maintain": None,
-          "casting time": 30,
-          "duration": None,
-          "range": 'regular',
-          "save": [],
-        },
-        "Cure Disease": {
-          "cost": 4,
-          "notes": "M91",
-          "maintain": 2,
-          "casting time": 600,
-          "duration": 0,
-          "range": 'regular',
-          "save": [],
-        },
-        "Daze": {
-          "cost": 3,
-          "notes": "M134",
-          "maintain": 2,
-          "casting time": 2,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Death Touch": {
-          "cost": None,
-          "notes": "M41, 1-3",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'melee',
-          "save": [],
-        },
-        "Death Vision": {
-          "cost": 2,
-          "notes": "M149, until IQ roll made",
-          "maintain": None,
-          "casting time": 3,
-          "duration": 1,
-          "range": 'regular',
-          "save": [],
-        },
-        "Detect Magic": {
-          "cost": 2,
-          "notes": "M101",
-          "maintain": None,
-          "casting time": 300,
-          "duration": 0,
-          "range": 'regular',
-          "save": [],
-        },
-        "Dispel Magic": {
-          "cost": 3,
-          "notes": "M126 - casting time = cost",
-          "maintain": None,
-          "casting time": None,
-          "duration": 0,
-          "range": 'area',
-          "save": ['spell'],
-        },
-        "Dispel Possession": {
-          "cost": 10,
-          "notes": "M49",
-          "maintain": None,
-          "casting time": 10,
-          "duration": None,
-          "range": 'regular',
-          "save": ['spell'],
-        },
-        "Emotion Control": {
-          "cost": 2,
-          "notes": "M137",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 3600,
-          "range": 'area',
-          "save": ['wi'],
-        },
-        "Enchant": {
-          "cost": None,
-          "notes": "M56",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 0,    # Permanent - no need to track
-          "range": 'enchantment',
-          "save": [],
-        },
-        "Enslave": {
-          "cost": 30,
-          "notes": "M141",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,    # Permanent - no need to track
-          "range": 'regular',
-          "save": ['wi'],
-        },
-        "Evisceration": {
-          "cost": 10,
-          "notes": "M154, Magery 3",
-          "maintain": 0,
-          "casting time": 5,
-          "duration": 0,
-          "range": 'regular',
-          "save": ['ht', 'iq'], # ht _or_ iq
-        },
-        "Explosive Lightning": {
-          "cost": None,
-          "notes": "M196, cost 2-mage level, damage 1d-1 /2",
-          "maintain": 0,
-          "casting time": None,
-          "duration": 0,
-          "range": 'missile',
-          "save": [],
-        },
-        "False Memory": {
-          "cost": 3,
-          "notes": "M139",
-          "maintain": 0,
-          "casting time": 5,
-          "duration": None,  # Ask
-          "range": 'regular',
-          "save": ['wi'],
-        },
-        "Far Hearing": {
-          "cost": 4,
-          "notes": "M173",
-          "maintain": 2,
-          "casting time": 3,
-          "duration": 60,
-          "range": 'information',
-          "save": [],
-        },
-        "Fear": {
-          "cost": 1,
-          "notes": "M134",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 600,    # 10 minutes
-          "range": 'area',
-          "save": ['wi'],
-        },
-        "Fog": {
-          "cost": None,
-          "notes": "M193, cost: 2/yard radius, lasts 1 minute",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'area',
-          "save": [],
-        },
-        "Foolishness": {
-          "cost": None,
-          "notes": "M134",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['wi'],
-        },
-        "Force Dome" :{
-          "cost": 3,
-          "notes": "M170",
-          "maintain": 2,
-          "casting time": 1,
-          "duration": 600,
-          "range": 'area',
-          "save": [],
-        },
-        "Force Wall" :{
-          "cost": None,
-          "notes": "M170, cost: 2/yard length",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Fumble": {
-          "cost": 3,
-          "notes": "M38",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'block',
-          "save": ['dx'],
-        },
-        "Glitch" :{
-          "cost": 3,
-          "notes": "M176",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 0,    # Instantaneous
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Golem": {
-          "cost": 250,
-          "notes": "M59",
-          "maintain": 0,
-          "casting time": 0,
-          "duration": 0,    # Permanent -- no need to track
-          "range": 'enchantment',
-          "save": [],
-        },
-        "Grace": {
-          "cost": 4,
-          "notes": "M37",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Great Ward": {
-          "cost": None,
-          "notes": "M122, cost: 1/person (min:4)",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'block',
-          "save": ['spell'],
-        },
-        "Hair Growth": {
-          "cost": 1,
-          "notes": "M39",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 5,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Haircut": {
-          "cost": 2,
-          "notes": "M39",
-          "maintain": None,
-          "casting time": 2,
-          "duration": 0,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Hallucination": {
-          "cost": 4,
-          "notes": "M140, 1 item exists or does not",
-          "maintain": 2,
-          "casting time": 2,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['wi'],
-        },
-        "Heal Plant": {
-          "cost": 3,
-          "notes": "M161",
-          "maintain": None,
-          "casting time": 60,
-          "duration": 0,    # Permanent -- no need to track
-          "range": 'area',
-          "save": [],
-        },
-        "Identify Plant": {
-          "cost": 2,
-          "notes": "M161",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'information',
-          "save": [],
-        },
-        "Identify Spell": {
-          "cost": 2,
-          "notes": "M102",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'information',
-          "save": [],
-        },
-        "Itch": {
-          "cost": 2,
-          "notes": "M35",
-          "maintain": None,
-          "casting time": 1,
-          "duration": None,  # Ask
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Lend Energy": {
-          "cost": None,
-          "notes": "M89",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,    # Permanent -- no need to track
-          "range": 'regular',
-          "save": [],
-        },
-        "Lend Vitality": {
-          "cost": None,
-          "notes": "M89",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 3600,
-          "range": 'regular',
-          "save": [],
-        },
-        "Lesser Geas": {
-          "cost": 12,
-          "notes": "M140",
-          "maintain": 0,
-          "casting time": 30,
-          "duration": 0,    # Permanent -- no need to track
-          "range": 'regular',
-          "save": ['wi'],
-        },
-        "Light": {
-          "cost": 1,
-          "notes": "M110",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Lightning": {
-          "cost": None,
-          "notes": "M196, cost 1-3, cast=cost, needs an attack",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'missile',
-          "save": [],
-        },
-        "Lightning Whip": {
-          "cost": None,
-          "notes": "M196, cost 1 per 2 yards reach",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 10,
-          "range": 'regular',
-          "save": [],
-        },
-        "Loyalty": {
-          "cost": 2,
-          "notes": "M136",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 3600,
-          "range": 'regular',
-          "save": ['wi'],
-        },
-        "Luck": {
-          "cost": 2,
-          "notes": "V2",
-          "maintain": 1,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'regular',
-          "save": ['wi'],
-        },
-        "Lure": {
-          "cost": 1,
-          "notes": "M137",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 3600,
-          "range": 'area',
-          "save": ['wi'],
-        },
-        "Madness": {
-          "cost": None,
-          "notes": "M136, cost: 2-6",
-          "maintain": 0,
-          "casting time": 2,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['wi-2'], # NOTE: need to deal with will-2
-        },
-        "Magelock" :{
-          "cost": 3,
-          "notes": "M166, locks door magically",
-          "maintain": 2,
-          "casting time": 4,
-          "duration": 21600, # 6 hours
-          "range": 'regular',
-          "save": [],
-        },
-        "Major Healing": {
-          "cost": None,
-          "notes": "M91",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 0,    # Permanent -- no need to track
-          "range": 'regular',
-          "save": [],
-        },
-        "Malfunction": {
-          "cost": 5,
-          "notes": "M177",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'melee',
-          "save": ['ht'],
-        },
-        "Manastone": {
-          "cost": None,
-          "notes": "M70",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,    # Indefinite -- no need to track
-          "range": 'enchantment',
-          "save": [],
-        },
-        "Mass Sleep": {
-          "cost": 3,
-          "notes": "M137, 2 yards minimum radius, time=1 sec/energy",
-          "maintain": 0,
-          "casting time": None,
-          "duration": 0,    # Indefinite -- no need to track
-          "range": 'area',
-          "save": ['ht'],
-        },
-        "Might": {
-          "cost": None,
-          "notes": "M37",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Mind-Reading": {
-          "cost": 4,
-          "notes": "M46",
-          "maintain": 2,
-          "casting time": 10,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['wi'],
-        },
-        "Mind-Search": {
-          "cost": 6,
-          "notes": "M46",
-          "maintain": 3,
-          "casting time": 60,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['wi'],
-        },
-        "Mind-Sending": {
-          "cost": 4,
-          "notes": "M47",
-          "maintain": 4,
-          "casting time": 4,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Minor Healing": {
-          "cost": None,
-          "notes": "M91",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 0,    # Permanent -- no need to track
-          "range": 'regular',
-          "save": [],
-        },
-        "Mystic Mist" :{
-          "cost": 1,
-          "notes": "M168, +1 defense rolls",
-          "maintain": None,
-          "casting time": 300,
-          "duration": 36000, # 10 hours
-          "range": 'area',
-          "save": [],
-        },
-        "Nauseate": {
-          "cost": 2,
-          "notes": "M38",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 10,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "No-Smell": {
-          "cost": 2,
-          "notes": "M24",
-          "maintain": 2,
-          "casting time": 1,
-          "duration": 3600,
-          "range": 'regular',
-          "save": [],
-        },
-        "Odor": {
-          "cost": 1,
-          "notes": "M24",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 3600,
-          "range": 'area',
-          "save": [],
-        },
-        "Pain": {
-          "cost": 2,
-          "notes": "M36",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 1,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Panic": {
-          "cost": 4,
-          "notes": "M134",
-          "maintain": 2,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'area',
-          "save": ['wi'],
-        },
-        "Perfume": {
-          "cost": 2,
-          "notes": "M35",
-          "maintain": 1,
-          "casting time": 1,
-          "duration": 600,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Phase": {
-          "cost": 3,
-          "notes": "M83, avoid an attack",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'block',
-          "save": [],
-        },
-        "Planar Summons": {
-          "cost": None,
-          "notes": "M82",
-          "maintain": 0,
-          "casting time": 300,
-          "duration": 3600,
-          "range": 'special',
-          "save": [],
-        },
-        "Possession": {
-          "cost": 10,
-          "notes": "M49",
-          "maintain": 4,
-          "casting time": 60,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['wi'],
-        },
-        "Powerstone": {
-          "cost": 20,
-          "notes": "M69",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 0,    # Permanent -- no need to track
-          "range": 'enchantment',
-          "save": [],
-        },
-        "Purify Air": {
-          "cost": 1,
-          "notes": "M23",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,    # Instant -- no need to track
-          "range": 'area',
-          "save": [],
-        },
-        "Rebuild" :{
-          "cost": None,
-          "notes": "M177",
-          "maintain": None,
-          "casting time": None,
-          "duration": None,
-          "range": 'regular',
-          "save": [],
-        },
-        "Recover Energy" :{
-          "cost": None,
-          "notes": "M89",
-          "maintain": None,
-          "casting time": None,
-          "duration": None,
-          "range": 'special',
-          "save": [],
-        },
-        "Reflect" :{
-          "cost": 4,
-          "notes": "M122",
-          "maintain": None,
-          "casting time": 0,
-          "duration": 0,
-          "range": 'regular',
-          "save": [],
-        },
-        "Regeneration" :{
-          "cost": 20,
-          "notes": "M93",
-          "maintain": None,
-          "casting time": 60,
-          "duration": 0,
-          "range": 'regular',
-          "save": [],
-        },
-        "Relieve Sickness": {
-          "cost": 2,
-          "notes": "M90",
-          "maintain": 2,
-          "casting time": 10,
-          "duration": 600,  # 10 minutes
-          "range": 'regular',
-          "save": ['spell'],
-        },
-        "Repair": {
-          "cost": None,
-          "notes": "M118",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,    # Permanent -- no need to track
-          "range": 'regular',
-          "save": [],
-        },
-        "Resist Lightning" :{
-          "cost": 2,
-          "notes": "M196",
-          "maintain": 1,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Resist Pain" :{
-          "cost": 4,
-          "notes": "M38",
-          "maintain": 2,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Resist Poison" :{
-          "cost": 4,
-          "notes": "M91",
-          "maintain": 3,
-          "casting time": 10,
-          "duration": 3600,
-          "range": 'regular',
-          "save": [],
-        },
-        "Restoration": {
-          "cost": 15,
-          "notes": "M93",
-          "maintain": 0,
-          "casting time": 60,
-          "duration": 0,    # Permanent -- no need to track
-          "range": 'regular',
-          "save": [],
-        },
-        "Retch": {
-          "cost": 3,
-          "notes": "M38",
-          "maintain": 0,
-          "casting time": 4,
-          "duration": 0,    # Instant -- no need to track
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Rotting Death": {
-          "cost": 3,
-          "notes": "M154",
-          "maintain": 2,
-          "casting time": 1,
-          "duration": 1,
-          "range": 'melee',
-          "save": ['ht'],
-        },
-        "Schematic" :{
-          "cost": None,
-          "notes": "M177",
-          "maintain": None,
-          "casting time": 5,
-          "duration": 60,
-          "range": 'information',
-          "save": [],
-        },
-        "Seek Machine": {
-          "cost": 3,
-          "notes": "M175",
-          "maintain": None,
-          "casting time": 10,
-          "duration": 0,
-          "range": 'information',
-          "save": [],
-        },
-        "Seek Plant": {
-          "cost": 2,
-          "notes": "M161",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'information',
-          "save": [],
-        },
-        "Sense Danger" :{
-          "cost": 3,
-          "notes": "M166",
-          "maintain": 6,
-          "casting time": 1,
-          "duration": 1,
-          "range": 'information',
-          "save": [],
-        },
-        "Sense Emotion": {
-          "cost": 2,
-          "notes": "M45",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'regular',
-          "save": [],
-        },
-        "Sense Foes": {
-          "cost": 2,
-          "notes": "M45",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'area',
-          "save": [],
-        },
-        "Sense Life": {
-          "cost": None,
-          "notes": "M45, cost 1/2 per yard radius, see M11",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'area',
-          "save": [],
-        },
-        "Sense Observation" :{
-          "cost": None,
-          "notes": "M167, cost: 1 (3 if on person)",
-          "maintain": None,
-          "casting time": 5,
-          "duration": 3600,
-          "range": 'area',
-          "save": [],
-        },
-        "Sense Spirit" :{
-          "cost": None,
-          "notes": "M149",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 0,    # Instant -- no need to track
-          "range": 'area',
-          "save": [],
-        },
-        "Sensitize": {
-          "cost": 3,
-          "notes": "M39",
-          "maintain": 2,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Shape Metal" :{
-          "cost": 6,
-          "notes": "M182",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Shapeshifting": {
-          "cost": None,
-          "notes": "M32",
-          "maintain": None,
-          "casting time": 3,
-          "duration": 3600,
-          "range": 'special',
-          "save": [],
-        },
-        "Share Energy": {
-          "cost": None,
-          "notes": "M89",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 1,
-          "range": 'regular',
-          "save": [],
-        },
-        "Share Vitality": {
-          "cost": 0,
-          "notes": "M90",
-          "maintain": 0,
-          "casting time": None,
-          "duration": 1,
-          "range": 'regular',
-          "save": [],
-        },
-        "Shield": {
-          "cost": 2,
-          "notes": "M167",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Sleep": {
-          "cost": 4,
-          "notes": "M135",
-          "maintain": 0,
-          "casting time": 3,
-          "duration": 0,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Soul Rider": {
-          "cost": 5,
-          "notes": "M49",
-          "maintain": 2,
-          "casting time": 3,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['wi'],
-        },
-        "Spasm": {
-          "cost": 2,
-          "notes": "M35",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Spell Shield": {
-          "cost": 3,
-          "notes": "M124, only non-missile spells",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'area',
-          "save": [],
-        },
-        "Spell Wall": {
-          "cost": None,
-          "notes": "M124, cost: 2/yard, only non-missile spells",
-          "maintain": None,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": ['spell'],
-        },
-        "Steal Energy" :{
-          "cost": None,
-          "notes": "M150, takes 3FP, gives 1FP",
-          "maintain": 0,
-          "casting time": 60,
-          "duration": 0, # Permanent
-          "range": 'regular',
-          "save": [],
-        },
-        "Steal Power" :{
-          "cost": 0,
-          "notes": "M180",
-          "maintain": 6,
-          "casting time": 5,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Steal Vitality" :{
-          "cost": None,
-          "notes": "M150, takes 3HP, gives 1HP",
-          "maintain": 0,
-          "casting time": 60,
-          "duration": 0, # Permanent
-          "range": 'regular',
-          "save": [],
-        },
-        "Stop Power": {
-          "cost": None,
-          "notes": "M179, 3 pts /1.5 yard radius",
-          "maintain": 0,
-          "casting time": 3,
-          "duration": 60,
-          "range": 'area',
-          "save": [],
-        },
-        "Strike Blind": {
-          "cost": 4,
-          "notes": "M38",
-          "maintain": 2,
-          "casting time": 1,
-          "duration": 10,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Stun": {
-          "cost": 2,
-          "notes": "M37, B420",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'regular',
-          "save": ['ht'],
-        },
-        "Summon Demon": {
-          "cost": 20,
-          "notes": "M155",
-          "maintain": 0,
-          "casting time": 300,
-          "duration": 3600,
-          "range": 'special',
-          "save": [],
-        },
-        "Summon Spirit": {
-          "cost": 20,
-          "notes": "M150",
-          "maintain": 0,
-          "casting time": 300,
-          "duration": 60,
-          "range": 'information',
-          "save": ['wi'],
-        },
-        "Teleport": {
-          "cost": None,
-          "notes": "M147, cost: 5 for 100 yards",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'special',
-          "save": [],
-        },
-        "Terror": {
-          "cost": 4,
-          "notes": "M134, Area",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'area',
-          "save": ['wi'],
-        },
-        "Tell Time": {
-          "cost": 1,
-          "notes": "M100",
-          "maintain": 2,
-          "casting time": 1,
-          "duration": 0,
-          "range": 'information',
-          "save": [],
-        },
-        "Throw Spell": {
-          "cost": 3,
-          "notes": "M128",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 0,    # Indefinite -- no need to track
-          "range": 'missile',
-          "save": [],   # "special"
-        },
-        "Timeslip": {
-          "cost": 1,
-          "notes": "M81",
-          "maintain": 0,
-          "casting time": 0,
-          "duration": 0,
-          "range": 'regular',
-          "save": [],
-        },
-        "Total Paralysis": {
-          "cost": None,
-          "notes": "M40, cost: 2-6",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'melee',
-          "save": ['ht'],
-        },
-        "Truthsayer": {
-          "cost": 2,
-          "notes": "M45",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": None,
-          "range": 'information',
-          "save": ['wi'],
-        },
-        "Turn Spirit": {
-          "cost": 4,
-          "notes": "M151",
-          "maintain": 2,
-          "casting time": 1,
-          "duration": 10,
-          "range": 'regular',
-          "save": ['wi'],
-        },
-        "Turn Zombie": {
-          "cost": 2,
-          "notes": "M152",
-          "maintain": 0,
-          "casting time": 4,
-          "duration": 86400,
-          "range": 'area',
-          "save": [],
-        },
-        "Wall Of Lightning": {
-          "cost": None,
-          "notes": "M197",
-          "maintain": 0,
-          "casting time": 1,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Watchdog" :{
-          "cost": 1,
-          "notes": "M167, caster is aware of hostile intent",
-          "maintain": 1,
-          "casting time": 10,
-          "duration": 36000,
-          "range": 'area',
-          "save": [],
-        },
-        "Wizard Eye": {
-          "cost": 4,
-          "notes": "M104",
-          "maintain": 2,
-          "casting time": 2,
-          "duration": 60,
-          "range": 'regular',
-          "save": [],
-        },
-        "Zombie": {
-          "cost": 8,
-          "notes": "M151",
-          "maintain": None,
-          "casting time": 60,
-          "duration": 0,    # Permanent -- no need to track
-          "range": 'regular',
-          "save": [],
-        },
-        "Zombie Summoning": {
-          "cost": 5,
-          "notes": "M151",
-          "maintain": 2,
-          "casting time": 4,
-          "duration": 60,
-          "range": 'special',
-          "save": [],
-        }
-    }
+    # Alphabetized for conevenience
+    # "Agonize": {
+    #   "cost": 8, <-- None means 'ask
+    #   "notes": "M40, HT negates", <-- at least give book reference
+    #                                   M40 means page 40 in GURPS
+    #                                   Magic
+    #   "maintain": 6,
+    #   "casting time": 1, <-- None or 0 means 'ask
+    #   "duration": 60, <-- None means 'ask', 0 means 'Instant'
+    # },
+
+    # 'range': touch, missile, area, normal.
+    # specially mark those with 1 or 2 second cast time
+    # 'save': 'wi', 'ht', xxx, (cast a spell dialog needs to show this)
 
     # Posture: B551; 'attack' is melee, 'target' is ranged
     posture = {
@@ -1624,6 +202,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                  ):
         super(GurpsRuleset, self).__init__(window_manager)
 
+        # Read the skills, spells, and attributes from the file
+
+        self.__gurps_info = ca_json.GmJson('gurps_info.json')
+        if self.__gurps_info.open_read_close():
+            GurpsRuleset.spells = self.__gurps_info.read_data['spells']
+            GurpsRuleset.abilities = self.__gurps_info.read_data['abilities']
+
         # If the fighter does one of these things and the turn is over, he
         # clearly hasn't forgotten to do something.  Other actions are passive
         # and their existence doesn't mean that the fighter has actually tried
@@ -1639,85 +224,30 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'use-item',        'user-defined'
         ])
 
-    @staticmethod
-    def show_spells(window_manager):
-                        # Output: recepticle for character
-                        # detail.
-                        # [[{'text','mode'},...],  # line 0
-                        #  [...],               ]  # line 1...
-        '''
-        Displays the spells in a window
+    # Context manager stuff deals with gurps_info.json, a file that contains
+    # spells, skills, advantages, etc.  It's in a context manager so that we
+    # can import additional information into these fields from GURPS Character
+    # sheet and the new information can be saved on exit.
 
-        Returns nothing.
-        '''
+    def __enter__(self):
+        super(GurpsRuleset, self).__enter__()
+        return self
 
-        spell_info = []
-
-        for spell_name in sorted(GurpsRuleset.spells.keys()):
-            spell = GurpsRuleset.spells[spell_name]
-
-            # TODO (now): should be an option
-            # Highlight the spells that a bad guy might want to cast during
-            # battle.
-            mode = (curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK)
-                    if ((spell['casting time'] is None or
-                         spell['casting time'] <= 2) and
-                        spell['range'] != 'melee')
-                    else curses.A_NORMAL)
-
-            # Top line
-
-            line = [{'text': '%s' % spell_name, 'mode': mode | curses.A_UNDERLINE}]
-
-            texts = ['; %s ' % spell['range']]
-            if len(spell['save']) > 0:
-                texts.append('; resisted by ')
-                texts.append(', '.join(spell['save']))
-
-            line.append({'text': ''.join(texts), 'mode': mode})
-            spell_info.append(line)
-
-            # Next line
-
-            texts = ['  cost: ']
-            if spell['cost'] is None:
-                texts.append('special')
-            else:
-                texts.append('%d' % spell['cost'])
-
-            texts.append(', maintain: ')
-            if spell['maintain'] is None:
-                texts.append('special')
-            else:
-                texts.append('%d' % spell['maintain'])
-
-            texts.append(', casting time: ')
-            if spell['casting time'] is None:
-                texts.append('special')
-            else:
-                texts.append('%d second(s)' % spell['casting time'])
-
-            texts.append(', duration: ')
-            if spell['duration'] is None:
-                texts.append('special')
-            elif spell['duration'] == 0:
-                texts.append('instantaneous/permanent')
-            elif spell['duration'] < 60:
-                texts.append('%d second(s)' % spell['duration'])
-            elif spell['duration'] < 3660:
-                texts.append('%d minute(s)' % (spell['duration'] / 60))
-            elif spell['duration'] < 86400:
-                texts.append('%d hour(s)' % (spell['duration'] / 3660))
-            else:
-                texts.append('%d day(s)' % (spell['duration'] / 86400))
-            spell_info.append([{'text': ''.join(texts), 'mode': mode}])
-
-            # Notes
-
-            texts = ['  %s' % spell['notes']]
-            spell_info.append([{'text': ''.join(texts), 'mode': mode}])
-
-        window_manager.display_window('Spells', spell_info)
+    def __exit__ (self, exception_type, exception_value, exception_traceback):
+        super(GurpsRuleset, self).__exit__(exception_type,
+                                           exception_value,
+                                           exception_traceback)
+        if exception_type is IOError:
+            print('IOError: %r' % exception_type)
+            print('EXCEPTION val: %s' % exception_value)
+            print('Traceback: %r' % exception_traceback)
+        elif exception_type is not None:
+            print('EXCEPTION type: %r' % exception_type)
+            print('EXCEPTION val: %s' % exception_value)
+            print('Traceback: %r' % exception_traceback)
+        if self.__gurps_info is not None:
+            self.__gurps_info.open_write_close(self.__gurps_info.write_data)
+        return True
 
     #
     # Public Methods
@@ -1777,6 +307,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return ', '.join(results)
 
+    def do_save_on_exit(self):
+        '''
+        Causes the local copy of the Game File data to be written back to the
+        file when the program ends.
+
+        Returns nothing.
+        '''
+        super(GurpsRuleset, self).do_save_on_exit()
+
+        # TODO: only set the following if BOTH do_save_on_exit is called _and_
+        #   we've added data with an import.
+
+        # self.__gurps_info.write_data = self.__gurps_info.read_data
+
     def does_weapon_use_unarmed_skills(self,
                                        weapon  # Weapon object
                                        ):
@@ -1799,6 +343,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     return True
 
         return False
+
+    def dont_save_on_exit(self):
+        '''
+        Causes the local copy of the Game File data NOT to be written back
+        to the file when the program ends.
+
+        Returns nothing.
+        '''
+        super(GurpsRuleset, self).dont_save_on_exit()
+        self.__gurps_info.open_read_close()
+        self.__gurps_info.write_data = None
 
     def end_turn(self,
                  fighter,       # Fighter object
@@ -2771,6 +1326,43 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                  fighter.name)])
         return notes
 
+    def get_import_commands(self):
+        '''
+        TODO: fix this
+        Returns fight commands that are specific to the GURPS ruleset.  These
+        commands are structured for a command ribbon.  The functions point
+        right back to local functions of the GurpsRuleset.
+        '''
+        return {
+            ord('K'): {'name': 'import Skills',
+                       'func': self.import_skills_from_file,
+                                #filename,    # string
+                                #native_list  # [] current skills list
+                       'param': {
+                            'view': None,
+                            'current-opponent': None,
+                            'current': None,
+                       },
+                       'show': True,
+                       'help': 'Removes fatigue points from the currently ' +
+                               'selected fighter, or the current opponent ' +
+                               '(if nobody is selected), or (if neither ' +
+                               'of those) the ' +
+                               'fighter that currently has the initiative. ',
+                       },
+            ord('S'): {'name': 'import Spells',
+                       'func': self.import_spells_from_file,
+                       'param': {
+                            'view': None,
+                            'current-opponent': None,
+                            'current': None,
+                       },
+                       'show': True,
+                       'help': 'Causes the selected fighter to be ' +
+                               'stunned (GURPS B420)',
+                       },
+            }
+
     def get_import_creature_file_extension(self):
         ''' Returns the filename extension for files from which to import.'''
         return ['.gcs']
@@ -3553,6 +2145,40 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                    filename,    # string
                                    native_list  # [] current equipment list
                                    ):
+        '''
+        The GURPS Ruleset method imports equipment from a GURPS Character
+        Sheet (GCS) file.
+
+        Returns nothing.
+        '''
+        gcs_import = ca_gcs_import.GcsImport(self._window_manager)
+        gcs_import.import_equipment(native_list, self, filename)
+        return
+
+    def import_skills_from_file(self,
+                                filename,    # string
+                                native_list  # [] current skills list
+                                ):
+        '''
+        The GURPS Ruleset method imports equipment from a GURPS Character
+        Sheet (GCS) file.
+
+        Returns nothing.
+        '''
+        gcs_import = ca_gcs_import.GcsImport(self._window_manager)
+        gcs_import.import_equipment(native_list, self, filename)
+        return
+
+    def import_spells_from_file(self,
+                                filename,    # string
+                                native_list  # [] current spell list
+                                ):
+        '''
+        The GURPS Ruleset method imports equipment from a GURPS Character
+        Sheet (GCS) file.
+
+        Returns nothing.
+        '''
         gcs_import = ca_gcs_import.GcsImport(self._window_manager)
         gcs_import.import_equipment(native_list, self, filename)
         return
@@ -3802,6 +2428,85 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                  creature['skills'][skill])})
 
         return result
+
+    def show_spells(self):
+                        # Output: recepticle for character
+                        # detail.
+                        # [[{'text','mode'},...],  # line 0
+                        #  [...],               ]  # line 1...
+        '''
+        Displays the spells in a window
+
+        Returns nothing.
+        '''
+
+        spell_info = []
+
+        for spell_name in sorted(GurpsRuleset.spells.keys()):
+            spell = GurpsRuleset.spells[spell_name]
+
+            # TODO (now): should be an option
+            # Highlight the spells that a bad guy might want to cast during
+            # battle.
+            mode = (curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK)
+                    if ((spell['casting time'] is None or
+                         spell['casting time'] <= 2) and
+                        spell['range'] != 'melee')
+                    else curses.A_NORMAL)
+
+            # Top line
+
+            line = [{'text': '%s' % spell_name, 'mode': mode | curses.A_UNDERLINE}]
+
+            texts = ['; %s ' % spell['range']]
+            if len(spell['save']) > 0:
+                texts.append('; resisted by ')
+                texts.append(', '.join(spell['save']))
+
+            line.append({'text': ''.join(texts), 'mode': mode})
+            spell_info.append(line)
+
+            # Next line
+
+            texts = ['  cost: ']
+            if spell['cost'] is None:
+                texts.append('special')
+            else:
+                texts.append('%d' % spell['cost'])
+
+            texts.append(', maintain: ')
+            if spell['maintain'] is None:
+                texts.append('special')
+            else:
+                texts.append('%d' % spell['maintain'])
+
+            texts.append(', casting time: ')
+            if spell['casting time'] is None:
+                texts.append('special')
+            else:
+                texts.append('%d second(s)' % spell['casting time'])
+
+            texts.append(', duration: ')
+            if spell['duration'] is None:
+                texts.append('special')
+            elif spell['duration'] == 0:
+                texts.append('instantaneous/permanent')
+            elif spell['duration'] < 60:
+                texts.append('%d second(s)' % spell['duration'])
+            elif spell['duration'] < 3660:
+                texts.append('%d minute(s)' % (spell['duration'] / 60))
+            elif spell['duration'] < 86400:
+                texts.append('%d hour(s)' % (spell['duration'] / 3660))
+            else:
+                texts.append('%d day(s)' % (spell['duration'] / 86400))
+            spell_info.append([{'text': ''.join(texts), 'mode': mode}])
+
+            # Notes
+
+            texts = ['  %s' % spell['notes']]
+            spell_info.append([{'text': ''.join(texts), 'mode': mode}])
+
+        self._window_manager.display_window('Spells', spell_info)
 
     def start_fight(self,
                     fighter  # Fighter object

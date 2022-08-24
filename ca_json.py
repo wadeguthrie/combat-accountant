@@ -69,8 +69,8 @@ class GmJson(object):
 
         return True
 
-
     def open_read_close(self):
+        file_will_open = True
         try:
             with open(self.__filename, 'r') as f:
                 self.read_data = json.load(f)
@@ -89,6 +89,7 @@ class GmJson(object):
                         self.__window_manager.error(error_array)
 
         except FileNotFoundError:
+            file_will_open = False
             message = '** JSON file "%s" does not exist' % self.__filename
             if self.__window_manager is None:
                 print(message)
@@ -96,6 +97,7 @@ class GmJson(object):
                 self.__window_manager.error([message])
             self.read_data = None
 
+        return file_will_open
 
     def open_write_close(self,
                          write_data   # Data to be written to the file
