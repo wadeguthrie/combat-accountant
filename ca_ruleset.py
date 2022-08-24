@@ -59,6 +59,28 @@ class Ruleset(object):
             result += random.randint(1, dice)
         return result
 
+    def __enter__(self):
+        #try:
+        #    self.f = open(self.filename, self.mode)
+        #except:
+        #    self.__exit__(*sys.exc_info())
+        #return self.f
+        return self
+
+    def __exit__ (self, exception_type, exception_value, exception_traceback):
+        if exception_type is IOError:
+            print('IOError: %r' % exception_type)
+            print('EXCEPTION val: %s' % exception_value)
+            print('Traceback: %r' % exception_traceback)
+        elif exception_type is not None:
+            print('EXCEPTION type: %r' % exception_type)
+            print('EXCEPTION val: %s' % exception_value)
+            print('Traceback: %r' % exception_traceback)
+        #if self.f is not None:
+        #    self.f.close()
+        #    self.f = None
+        return True
+
     #
     # Public Methods
     #
@@ -90,6 +112,24 @@ class Ruleset(object):
 
         handled = self._perform_action(fighter, action, fight_handler, logit)
         self._record_action(fighter, action, fight_handler, handled, logit)
+
+    def do_save_on_exit(self):
+        '''
+        Causes the local copy of the Game File data to be written back to the
+        file when the program ends.
+
+        Returns nothing.
+        '''
+        return
+
+    def dont_save_on_exit(self):
+        '''
+        Causes the local copy of the Game File data NOT to be written back
+        to the file when the program ends.
+
+        Returns nothing.
+        '''
+        return
 
     def get_action_menu(self,
                         action_menu,    # menu for user [(name, predicate)...]

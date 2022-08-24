@@ -15,6 +15,7 @@ import unicodedata
 
 import ca_equipment
 import ca_gui
+import ca_gurps_ruleset
 import ca_json
 
 # TODO: damage type should be 'pi' by default
@@ -33,6 +34,7 @@ class Skills(object):
     # +1              +1 point    +1 point
 
     tech_plus_from_pts_table = { 'A': [0, 1, 2], 'H': [0, 0, 1]}
+    skills = {}
 
     # Skills:
     # To go from (cost, difficulty, attribute) to skill-level:
@@ -44,105 +46,20 @@ class Skills(object):
     # |difficulty_offset|
     level_from_cost = {1:0, 2:1, 4:2, 8:3, 12:4, 16:5, 20:6, 24:7, 28:8}
     difficulty_offset = {'E':0, 'A':-1, 'H':-2, 'VH':-3}
-    skills = {
-        'Acrobatics':           {'attr':'dx', 'diff':'H', 'default':-6},
-        'Acting':               {'attr':'iq', 'diff':'A', 'default':-5},
-        'Administration':       {'attr':'iq', 'diff':'A', 'default':-5},
-        'Area Knowledge':       {'attr':'iq', 'diff':'E', 'default':-4},
-        'Armoury':              {'attr':'iq', 'diff':'A', 'default':-5},
-        'Axe/Mace':             {'attr':'dx', 'diff':'A', 'default':None},
-        'Beam Weapons':         {'attr':'dx', 'diff':'E', 'default':-4,
-                                 'equip': {'laser sight': 1}},
-        # Bartender is really a professional skill
-        'Bartender':            {'attr':'iq', 'diff':'A', 'default':-5},
-        'Biology':              {'attr':'iq', 'diff':'VH', 'default':-6},
-        'Brawling':             {'attr':'dx', 'diff':'E', 'default':None},
-        'Broadsword':           {'attr':'dx', 'diff':'A', 'default':None},
-        'Camouflage':           {'attr':'iq', 'diff':'E', 'default':-4},
-        'Carousing':            {'attr':'ht', 'diff':'E', 'default':-4},
-        'Climbing':             {'attr':'dx', 'diff':'A', 'default':-5},
-        'Computer Hacking':     {'attr':'iq', 'diff':'VH', 'default':None,
-                                 'equip': {'Hacking Equipment +1': 1}},
-        'Computer Operation':   {'attr':'iq', 'diff':'E', 'default':-4},
-        'Computer Programming': {'attr':'iq', 'diff':'H', 'default':None},
-        'Connoisseur':          {'attr':'iq', 'diff':'A', 'default':-5},
-        'Cryptography':         {'attr':'iq', 'diff':'H', 'default':None},
-        'Current Affairs':      {'attr':'iq', 'diff':'E', 'default':-4},
-        'Detect Lies':          {'attr':'per', 'diff':'H', 'default':-6,
-                                 'advantage': {'Empathy': 3,
-                                               'Empathy (sensitive)': 1}},
-        'Diagnosis':            {'attr':'iq', 'diff':'H', 'default':-6},
-        'Diplomacy':            {'attr':'iq', 'diff':'H', 'default':-6},
-        'Electronics Operation':{'attr':'iq', 'diff':'A', 'default':-5},
-        'Electronics Repair':   {'attr':'iq', 'diff':'A', 'default':-5},
-        'Expert Skill':         {'attr':'iq', 'diff':'H', 'default':None},
-        'Explosives':           {'attr':'iq', 'diff':'A', 'default':-5},
-        'Engineer':             {'attr':'iq', 'diff':'H', 'default':None},
-        'Environment Suit':     {'attr':'dx', 'diff':'A', 'default':-5},
-        'Escape':               {'attr':'dx', 'diff':'H', 'default':-6},
-        'Fast-Draw':            {'attr':'dx', 'diff':'E', 'default':None,
-                                 # TODO: doesn't handle 'Fast-Draw (knife)'
-                                 'advantage': {'Combat Reflexes': 1}},
-        'Fast-Talk':            {'attr':'iq', 'diff':'A', 'default':-5},
-        'Filch':                {'attr':'dx', 'diff':'A', 'default':-5},
-        'Finance':              {'attr':'iq', 'diff':'H', 'default':None},
-        'First Aid':            {'attr':'iq', 'diff':'E', 'default':-4,
-                                 'equip': {'first aid kit': 1}},
-        'Forensics':            {'attr':'iq', 'diff':'H', 'default':-6},
-        'Forgery':              {'attr':'iq', 'diff':'H', 'default':-6},
-        'Forward Observer':     {'attr':'iq', 'diff':'A', 'default':-5},
-        'Gambling':             {'attr':'iq', 'diff':'A', 'default':-5},
-        'Gesture':              {'attr':'iq', 'diff':'E', 'default':-4},
-        'Gunner':               {'attr':'dx', 'diff':'E', 'default':-4},
-        'Guns':                 {'attr':'dx', 'diff':'E', 'default':-4},
-        'Hazardous Materials':  {'attr':'iq', 'diff':'A', 'default':-5},
-        'Hiking':               {'attr':'ht', 'diff':'A', 'default':-5},
-        'Holdout':              {'attr':'iq', 'diff':'A', 'default':-5},
-        'Interrogation':        {'attr':'iq', 'diff':'A', 'default':-5},
-        'Intimidation':         {'attr':'wi', 'diff':'A', 'default':-5},
-        'Jumping':              {'attr':'dx', 'diff':'E', 'default':None},
-        'Karate':               {'attr':'dx', 'diff':'H', 'default':None},
-        'Knife':                {'attr':'dx', 'diff':'E', 'default':None},
-        'Law':                  {'attr':'iq', 'diff':'H', 'default':-6},
-        'Leadership':           {'attr':'iq', 'diff':'A', 'default':-5,
-                                 'advantage': {'Charisma': 1}},
-        'Lip Reading':          {'attr':'per', 'diff':'A', 'default':-10},
-        'Lockpicking':          {'attr':'iq', 'diff':'A', 'default':-5},
-        'Mathematics':          {'attr':'iq', 'diff':'H', 'default':-6},
-        'Mechanic':             {'attr':'iq', 'diff':'A', 'default':-5},
-        'Observation':          {'attr':'per', 'diff':'A', 'default':-5},
-        'Panhandling':          {'attr':'iq', 'diff':'E', 'default':-4,
-                                 'advantage': {'Charisma': 1}},
-        'Persuade':             {'attr':'wi', 'diff':'H', 'default':None},
-        'Poisons':              {'attr':'iq', 'diff':'H', 'default':-6},
-        'Politics':             {'attr':'iq', 'diff':'A', 'default':-5},
-        'Physician':            {'attr':'iq', 'diff':'H', 'default':-7},
-        'Physics':              {'attr':'iq', 'diff':'VH', 'default':-6},
-        'Pickpocket':           {'attr':'dx', 'diff':'H', 'default':-6},
-        'Piloting':             {'attr':'dx', 'diff':'A', 'default':None},
-        'Public Speaking':      {'attr':'iq', 'diff':'A', 'default':-5,
-                                 'advantage': {'Charisma': 1}},
-        'Running':              {'attr':'ht', 'diff':'A', 'default':-5},
-        'Savoir-Faire':         {'attr':'iq', 'diff':'E', 'default':-4},
-        'Scrounging':           {'attr':'per', 'diff':'E', 'default':-4},
-        'Search':               {'attr':'per', 'diff':'A', 'default':-5},
-        'Shadowing':            {'attr':'iq', 'diff':'A', 'default':-5},
-        'Smuggling':            {'attr':'iq', 'diff':'A', 'default':-5},
-        'Soldier':              {'attr':'iq', 'diff':'A', 'default':-5},
-        'Stealth':              {'attr':'dx', 'diff':'A', 'default':-5},
-        'Streetwise':           {'attr':'iq', 'diff':'A', 'default':-5},
-        'Surgery':              {'attr':'iq', 'diff':'VH', 'default':None},
-        'Survival':             {'attr':'per', 'diff':'A', 'default':None},
-        'Tactics':              {'attr':'iq', 'diff':'H', 'default':-6},
-        'Theology':             {'attr':'iq', 'diff':'H', 'default':-6},
-        'Throwing':             {'attr':'dx', 'diff':'A', 'default':-3},
-        'Thrown Weapon':        {'attr':'dx', 'diff':'E', 'default':-4},
-        'Traps':                {'attr':'iq', 'diff':'A', 'default':-5},
-        'Urban Survival':       {'attr':'per', 'diff':'A', 'default':-5},
-    }
+    # Bartender is really a professional skill
+    # TODO: Fast-Draw doesn't handle 'Fast-Draw (knife)'
 
-    @staticmethod
-    def get_gcs_level(window_manager,   # ca_gui.GmWindowManager object
+    def __init__(self,
+                 window_manager):
+        self.__ruleset = ca_gurps_ruleset.GurpsRuleset(window_manager)
+        # load up the skills in the ruleset
+        with self.__ruleset as g:
+            pass
+        abilities = self.__ruleset.get_creature_abilities()
+        Skills.skills = abilities['skills']
+
+    def get_gcs_level(self,
+                      window_manager,   # ca_gui.GmWindowManager object
                       char,             # Character object
                       skill_gcs,        # dict: skill from GCS
                       skill_name,       # name of skill
@@ -170,24 +87,26 @@ class Skills(object):
            'points': 0}
         '''
 
-        # print('\n=== %s ===' % skill_name) # TODO: remove
+        #print('\n=== %s ===' % skill_name) # TODO: remove
+        #PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+        #print('-- Skills.skills --') # TODO: remove
+        #PP.pprint(Skills.skills) # TODO: remove
         if skill_name not in Skills.skills:
-            # print('NAME NOT IN SKILLS') # TODO: remove
+            #print('NAME NOT IN SKILLS') # TODO: remove
             # Get the skill info from GCS
             if 'difficulty' not in skill_gcs:
-                # print('** "difficulty" not in skill_gcs') # TODO: remove
+                #print('** "difficulty" not in skill_gcs') # TODO: remove
                 return 0
             match = re.match(
                     '(?P<attrib>[A-Za-z]+)(?P<slash>/)' +
                     '(?P<difficulty>[A-Za-z]+)',
                     skill_gcs['difficulty'])
             if match is None:
-                # print('** match is None') # TODO: remove
+                #print('** match is None') # TODO: remove
                 return 0
             skill_native = {'attr': match.group('attrib').lower(),
                             'diff': match.group('difficulty').upper()}
-            # PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
-            # PP.pprint(skill_native) # TODO: remove
+            #PP.pprint(skill_native) # TODO: remove
         else:
             # {'attr':'dx', 'diff':'E', 'default':-4}
             skill_native = Skills.skills[skill_name]
@@ -224,7 +143,7 @@ class Skills(object):
                 highest_level = Skills.level_from_cost[highest_cost]
 
         while cost > highest_cost:
-            # print('expanding skill cost table') # TODO: remove
+            #print('expanding skill cost table') # TODO: remove
             highest_cost += 4
             highest_level += 1
             Skills.level_from_cost[highest_cost] = highest_level
@@ -233,9 +152,9 @@ class Skills(object):
         # than required for one skill level but not enough to get to the next
         # one) in a skill
         while cost not in Skills.level_from_cost and cost > 1:
-            # print('reducing points spent because it is in between levels') # TODO: remove
+            #print('reducing points spent because it is in between levels') # TODO: remove
             cost -= 1
-        # print('spent points: %d' % cost) # TODO: remove
+        #print('spent points: %d' % cost) # TODO: remove
         if cost < 1 and not default:
             window_manager.error([
                 'Cost %d invalid for skill %s' % (cost, skill_name)
@@ -244,12 +163,12 @@ class Skills(object):
 
         # Calculate the skill level
         level = char.char['permanent'][skill_native['attr']]
-        # print('attribute (%s) = %d' % (skill_native['attr'], level)) # TODO: remove
+        #print('attribute (%s) = %d' % (skill_native['attr'], level)) # TODO: remove
         level += Skills.level_from_cost[cost]
-        # print('add %d points for cost %d' % (Skills.level_from_cost[cost], cost)) # TODO: remove
-        # print('level if it were an easy skill: %d' % level) # TODO: remove
+        #print('add %d points for cost %d' % (Skills.level_from_cost[cost], cost)) # TODO: remove
+        #print('level if it were an easy skill: %d' % level) # TODO: remove
         level += Skills.difficulty_offset[skill_native['diff']]
-        # print('level at difficulty %s: %d' % (skill_native['diff'], level)) # TODO: remove
+        #print('level at difficulty %s: %d' % (skill_native['diff'], level)) # TODO: remove
 
         # Add modifiers due to equipment
         if 'equip' in skill_native:
@@ -259,10 +178,12 @@ class Skills(object):
                     level += plus
         if 'advantage' in skill_native:
             for looking_for, plus in skill_native['advantage'].items():
+                #print('> looking for advantage: %s, plus=%d' % (looking_for, plus)) # TODO: remove
                 if looking_for in char.char['advantages']:
                     level += plus
+                    #print('* adding PLUS to get level=%d' % level) # TODO: remove
 
-        # print('final level %d' % level) # TODO: remove
+        #print('final level %d' % level) # TODO: remove
 
         return level
 
@@ -341,8 +262,8 @@ class FromGcs(object):
         Builds a local equipment list from the JSON extracted from a GCS
         .eqp file.
         '''
-        self.__build_equipment('rows')
         # Result is in self.stuff
+        self.__build_equipment('rows')
 
     def get_name(self):
         if 'player_name' in self.__gcs_data['profile']:
@@ -592,6 +513,8 @@ class FromGcs(object):
         if 'skills' not in self.__gcs_data:
             return
 
+        skills = Skills(self.__window_manager)
+
         for skill_gcs in self.__gcs_data['skills']:
             base_name = skill_gcs['name']
             if 'type' not in skill_gcs:
@@ -607,7 +530,7 @@ class FromGcs(object):
 
                 cost_gcs = 0 if 'points' not in skill_gcs else skill_gcs['points']
 
-                level_gcs = Skills.get_gcs_level(
+                level_gcs = skills.get_gcs_level(
                         self.__window_manager, self, skill_gcs, base_name, cost_gcs)
                 self.char['skills'][name_text] = level_gcs
             elif skill_gcs['type'] == 'technique':
@@ -1884,6 +1807,9 @@ class GcsImport(object):
                          gcs_filename=None,   # string
                          ):
         '''
+        Reads the data into a local format and then writes the data into the
+        local store.
+
         Returns: Nothing
         '''
         gcs_data = FromGcs(self.__window_manager, ruleset, gcs_filename)
