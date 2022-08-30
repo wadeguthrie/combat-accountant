@@ -584,7 +584,8 @@ class Ruleset(object):
         # This is just a shim to let pre-2-weapon crash files work (for
         # testing).  If we get a 'draw' action with None weapon, we'll turn
         # it into a 'holster' action for all of the weapons we're carrying.
-        if not isinstance(creature['weapon-index'], list):
+        if ('weapon-index' in creature and
+                not isinstance(creature['weapon-index'], list)):
             new_stuff = [creature['weapon-index']]
             creature['weapon-index'] = new_stuff
         if ("preferred-weapon-index" in creature and
@@ -1209,7 +1210,7 @@ class Ruleset(object):
 
             height = 1
             title = 'What Action Is Performed'
-            width = self._window_manager.getmaxyx()
+            unused_lines, width = self._window_manager.getmaxyx()
             comment_string = self._window_manager.input_box(height,
                                                             width,
                                                             title)
@@ -1287,10 +1288,13 @@ class Ruleset(object):
                     ca_equipment.Equipment.RELOAD_ONE):
                 reload_by_1 = True
 
+            # TODO: only do this if the shots_left is < shots
+
             # Put a non-zero count clip back in equipment list
-            if weapon.shots_left() > 0 and not reload_by_1:
+            if (not infinite_clips and weapon.shots_left() > 0 and
+                    not reload_by_1):
                 old_clip = weapon.remove_old_clip()
-                if old_clip is not None: # and not infinite_clips):
+                if old_clip is not None:
                     if (old_clip['shots_left'] > 0 or
                             ('discard-when-empty' in old_clip and
                              not old_clip['discard-when-empty'])):
@@ -1367,8 +1371,9 @@ class Ruleset(object):
                     'No clips of type %s available for %s' % (clip_name,
                                                               weapon.name)])
 
-            clip_index, ignore = self._window_manager.menu('Reload With What',
-                                                           clip_menu)
+            clip_index, ignore = self._window_manager.menu(
+                    ('(%s) Reload With What' % fighter.name),
+                    clip_menu)
             if clip_index is None:
                 # TODO (eventually): there should be a way to tell the derived
                 #   ruleset that we're aborting early.

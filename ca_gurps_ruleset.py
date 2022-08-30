@@ -1294,7 +1294,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                 reloads = 0  # Counts clips, not rounds
                                 for item in fighter.details['stuff']:
                                     if item['name'] == clip_name:
-                                        reloads += item['count']
+                                        reloads += (1 if 'count' not in item
+                                                    else item['count'])
 
                                 notes.append('    %d/%d shots, %d reloads' % (
                                                     weapon.shots_left(),
@@ -1446,7 +1447,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
         Returns a list of sample equipment for creating new game files.
         '''
-        return [
+        sample_items = [
             {
                 "count": 1,
                 "notes": "1d for HT+1d hrs unless other healing",
@@ -1509,10 +1510,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 "count": 1,
                 "notes": "",
                 "type": { "misc": 1 },
-                "owners": null,
+                "owners": None,
                 "name": "C Cell"
             }
             ]
+        return sample_items
 
     def get_sections_in_template(self):
         '''
