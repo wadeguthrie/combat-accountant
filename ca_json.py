@@ -48,6 +48,7 @@ class GmJson(object):
                  ):
         self.__filename = filename
         self.__window_manager = window_manager
+        self.found_file = None
         self.read_data = None
         self.write_data = None
 
@@ -73,6 +74,7 @@ class GmJson(object):
         file_will_open = True
         try:
             with open(self.__filename, 'r') as f:
+                self.found_file = True
                 self.read_data = json.load(f)
                 if self.read_data is None:
                     error_array = ['* Could not read JSON file "%s"' %
@@ -89,6 +91,7 @@ class GmJson(object):
                         self.__window_manager.error(error_array)
 
         except FileNotFoundError:
+            self.found_file = False
             file_will_open = False
             message = '** JSON file "%s" does not exist' % self.__filename
             if self.__window_manager is None:
@@ -96,7 +99,13 @@ class GmJson(object):
             else:
                 self.__window_manager.error([message])
             self.read_data = None
-
+        #except Exception as e:
+        #    message = str(e)
+        #    if self.__window_manager is None:
+        #        print(message)
+        #    else:
+        #        self.__window_manager.error([message])
+        #    self.read_data = None
         return file_will_open
 
     def open_write_close(self,

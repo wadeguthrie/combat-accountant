@@ -270,6 +270,10 @@ class GmTestCase(GmTestCaseCommon):
 
         self._window_manager = MockWindowManager()
         self._ruleset = TestRuleset(self._window_manager)
+
+        options = ca.Options({'infinite-clips': False}, {})
+        self._ruleset.set_options(options)
+
         mock_fight_handler = MockFightHandler()
 
         vodou_priest = ca_fighter.Fighter(
@@ -294,6 +298,7 @@ class GmTestCase(GmTestCaseCommon):
 
         clip = vodou_priest.equipment.get_item_by_index(
                 self._vodou_priest_ammo_index)
+
         # check the number of clips/batteries
 
         assert clip['count'] == self._vodou_priest_ammo_count
@@ -323,7 +328,7 @@ class GmTestCase(GmTestCaseCommon):
 
         # Now, reload
 
-        self._window_manager.set_menu_response('Reload With What', 1)
+        self._window_manager.set_menu_response('(Priest) Reload With What', 1)
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'reload'},
                                  mock_fight_handler)
@@ -353,7 +358,7 @@ class GmTestCase(GmTestCaseCommon):
                                          mock_fight_handler)
                 # To simulate the start of the round
                 vodou_priest.details['current-weapon'] = 0
-            self._window_manager.set_menu_response('Reload With What', 1)
+            self._window_manager.set_menu_response('(Priest) Reload With What', 1)
             self._ruleset.do_action(vodou_priest,
                                      {'action-name': 'reload'},
                                      mock_fight_handler)
@@ -374,7 +379,7 @@ class GmTestCase(GmTestCaseCommon):
 
         # D. Reload when there's nothing left with which to reload
 
-        self._window_manager.set_menu_response('Reload With What', None)
+        self._window_manager.set_menu_response('(Priest) Reload With What', None)
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'reload'},
                                  mock_fight_handler)
@@ -397,6 +402,10 @@ class GmTestCase(GmTestCaseCommon):
 
         self._window_manager = MockWindowManager()
         self._ruleset = TestRuleset(self._window_manager)
+
+        options = ca.Options({'infinite-clips': False}, {})
+        self._ruleset.set_options(options)
+
         mock_fight_handler = MockFightHandler()
 
         vodou_priest = ca_fighter.Fighter(
@@ -442,7 +451,7 @@ class GmTestCase(GmTestCaseCommon):
         # Reload and verify that there are two different types of clips (a
         # bunch of full ones and one partially full one)
 
-        self._window_manager.set_menu_response('Reload With What', 1)
+        self._window_manager.set_menu_response('(Priest) Reload With What', 1)
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'reload'},
                                  mock_fight_handler)
@@ -470,7 +479,7 @@ class GmTestCase(GmTestCaseCommon):
         vodou_priest.details['current-weapon'] = 0
 
         # Reload with the partial (the previously ejected one)
-        self._window_manager.set_menu_response('Reload With What',
+        self._window_manager.set_menu_response('(Priest) Reload With What',
                                                 second_index)
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'reload'},
@@ -479,7 +488,7 @@ class GmTestCase(GmTestCaseCommon):
                 (self._vodou_priest_initial_shots - shots_taken))
 
         # Now, reload with a full one
-        self._window_manager.set_menu_response('Reload With What',
+        self._window_manager.set_menu_response('(Priest) Reload With What',
                                                 first_index)
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'reload'},

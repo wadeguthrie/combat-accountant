@@ -22,11 +22,6 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO (now): add ammo check (to figure out what ammo should be in anything
-#   with UNKOWN ammo) in GURPS ruleset
-
-# TODO: import equipment should ask about ammo
-
 # TODO: on importing advantages: "notes" should be included in name in parens
 # TODO: should ask when update character wants to delete a spell
 
@@ -7463,7 +7458,6 @@ class Options(object):
     def get_option(self,
                    option_name  # string
                    ):
-        # NOTE: campaign options override global options
         if option_name in self.__campaign_options:
             return self.__campaign_options[option_name]
 
@@ -7477,7 +7471,6 @@ class Options(object):
 
     def set_global_option(self, option_name, option_value):
         self.__global_options[option_name] = option_value
-
 
 # Main
 if __name__ == '__main__':
@@ -7551,6 +7544,9 @@ if __name__ == '__main__':
         else:
             filename = ARGS.filename
 
+            # Open the preferences file (there may be a campaign file name in
+            # there).
+
             prefs_filename = 'gm-prefs.json'
             if not os.path.exists(prefs_filename):
                 with open(prefs_filename, 'w') as f:
@@ -7570,6 +7566,8 @@ if __name__ == '__main__':
                         window_manager.error(['1: converting "%r"' % filename])
                         filename = filename.decode('utf-8')
 
+                # Ok, if we _still_ don't have a filename, ask the user.
+
                 if filename is None:
                     existing_file_menu = [('new file', False),
                                           ('existing file', True) ]
@@ -7585,6 +7583,9 @@ if __name__ == '__main__':
                         if isinstance(filename, bytes):
                             window_manager.error(['2: converting "%r"' % filename])
                             filename = filename.decode('utf-8')
+
+                    # If we're here, the user is asking for a new filname (or
+                    # they noped-out of the 'here, pick a filename' question).
 
                     lines, cols = window_manager.getmaxyx()
                     while filename is None:

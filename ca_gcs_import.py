@@ -22,7 +22,7 @@ import ca_json
 # TODO: fast-draw(knife) doesn't include +1 from combat reflexes
 # TODO: spells don't deal with more points than 24 or 28
 
-class Skills(object):
+class SkillsCalcs(object):
     # Techniques:
     # Your Final      Difficulty of Technique
     # Skill Level*    Average     Hard
@@ -36,7 +36,7 @@ class Skills(object):
     tech_plus_from_pts_table = { 'A': [0, 1, 2], 'H': [0, 0, 1]}
     skills = {}
 
-    # Skills:
+    # SkillsCalcs:
     # To go from (cost, difficulty, attribute) to skill-level:
     #   level_from_cost[points put into spell] = base skill level
     #   difficulty_offset[difficulty] : add to base-level (Easy/Ave/Hard/VH)
@@ -47,7 +47,6 @@ class Skills(object):
     level_from_cost = {1:0, 2:1, 4:2, 8:3, 12:4, 16:5, 20:6, 24:7, 28:8}
     difficulty_offset = {'E':0, 'A':-1, 'H':-2, 'VH':-3}
     # Bartender is really a professional skill
-    # TODO: Fast-Draw doesn't handle 'Fast-Draw (knife)'
 
     def __init__(self,
                  window_manager):
@@ -56,7 +55,7 @@ class Skills(object):
         with self.__ruleset as g:
             pass
         abilities = self.__ruleset.get_creature_abilities()
-        Skills.skills = abilities['skills']
+        SkillsCalcs.skills = abilities['skills']
 
     def get_gcs_level(self,
                       window_manager,   # ca_gui.GmWindowManager object
@@ -89,9 +88,9 @@ class Skills(object):
 
         #print('\n=== %s ===' % skill_name) # TODO: remove
         #PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
-        #print('-- Skills.skills --') # TODO: remove
-        #PP.pprint(Skills.skills) # TODO: remove
-        if skill_name not in Skills.skills:
+        #print('-- SkillsCalcs.skills --') # TODO: remove
+        #PP.pprint(SkillsCalcs.skills) # TODO: remove
+        if skill_name not in SkillsCalcs.skills:
             #print('NAME NOT IN SKILLS') # TODO: remove
             # Get the skill info from GCS
             if 'difficulty' not in skill_gcs:
@@ -109,7 +108,7 @@ class Skills(object):
             #PP.pprint(skill_native) # TODO: remove
         else:
             # {'attr':'dx', 'diff':'E', 'default':-4}
-            skill_native = Skills.skills[skill_name]
+            skill_native = SkillsCalcs.skills[skill_name]
 
         if skill_native['attr'] not in char.char['permanent']:
             window_manager.error([
@@ -137,21 +136,21 @@ class Skills(object):
         # upwards.  Each level from the top costs 4 more than the previous.
 
         highest_cost = 0
-        for cost_in_table in Skills.level_from_cost.keys():
+        for cost_in_table in SkillsCalcs.level_from_cost.keys():
             if highest_cost < cost_in_table:
                 highest_cost = cost_in_table
-                highest_level = Skills.level_from_cost[highest_cost]
+                highest_level = SkillsCalcs.level_from_cost[highest_cost]
 
         while cost > highest_cost:
             #print('expanding skill cost table') # TODO: remove
             highest_cost += 4
             highest_level += 1
-            Skills.level_from_cost[highest_cost] = highest_level
+            SkillsCalcs.level_from_cost[highest_cost] = highest_level
 
         # Adjust cost down if someone has extra points (more spent points
         # than required for one skill level but not enough to get to the next
         # one) in a skill
-        while cost not in Skills.level_from_cost and cost > 1:
+        while cost not in SkillsCalcs.level_from_cost and cost > 1:
             #print('reducing points spent because it is in between levels') # TODO: remove
             cost -= 1
         #print('spent points: %d' % cost) # TODO: remove
@@ -164,17 +163,17 @@ class Skills(object):
         # Calculate the skill level
         level = char.char['permanent'][skill_native['attr']]
         #print('attribute (%s) = %d' % (skill_native['attr'], level)) # TODO: remove
-        level += Skills.level_from_cost[cost]
-        #print('add %d points for cost %d' % (Skills.level_from_cost[cost], cost)) # TODO: remove
+        level += SkillsCalcs.level_from_cost[cost]
+        #print('add %d points for cost %d' % (SkillsCalcs.level_from_cost[cost], cost)) # TODO: remove
         #print('level if it were an easy skill: %d' % level) # TODO: remove
-        level += Skills.difficulty_offset[skill_native['diff']]
+        level += SkillsCalcs.difficulty_offset[skill_native['diff']]
         #print('level at difficulty %s: %d' % (skill_native['diff'], level)) # TODO: remove
 
         # Add modifiers due to equipment
         if 'equip' in skill_native:
             PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
             for looking_for, plus in skill_native['equip'].items():
-                if Skills.is_item_in_equipment(looking_for, char.stuff):
+                if SkillsCalcs.is_item_in_equipment(looking_for, char.stuff):
                     level += plus
         if 'advantage' in skill_native:
             for looking_for, plus in skill_native['advantage'].items():
@@ -196,7 +195,7 @@ class Skills(object):
             if looking_for_lower == item['name'].lower():
                 return True
             if 'container' in item['type']:
-                result = Skills.is_item_in_equipment(looking_for,
+                result = SkillsCalcs.is_item_in_equipment(looking_for,
                                                      item['stuff'])
                 if result == True:
                     return result
@@ -206,7 +205,7 @@ class Skills(object):
     def tech_plus_from_pts(difficulty, # 'H' or 'A'
                            points   # int
                            ):
-        table = Skills.tech_plus_from_pts_table[difficulty.upper()]
+        table = SkillsCalcs.tech_plus_from_pts_table[difficulty.upper()]
         if points < len(table):
             plus = table[points]
         else:
@@ -264,6 +263,15 @@ class FromGcs(object):
         '''
         # Result is in self.stuff
         self.__build_equipment('rows')
+
+    def build_skill_descriptions(self):
+        '''
+        Builds a local equipment list from the JSON extracted from a GCS
+        .eqp file.
+        '''
+        # Result is in self.stuff
+        skills, techniques = self.__build_skill_descriptions('rows')
+        return skills, techniques
 
     def get_name(self):
         if 'player_name' in self.__gcs_data['profile']:
@@ -500,7 +508,132 @@ class FromGcs(object):
         for item in self.__gcs_data[heading]:
             self.__add_item_to_gcs_list(item, self.stuff, 'TOP LEVEL')
 
+    def __build_skill_descriptions(self):
+        skills_result = {} # name: skill-level, ...
+        techniques_result = [] # {"name":...,"default":[...],"value":#}
+
+        if 'skills' not in self.__gcs_data:
+            return skills_result, techniques_result
+
+        skills = SkillsCalcs(self.__window_manager)
+
+        for skill_gcs in self.__gcs_data['skills']:
+            base_name = skill_gcs['name']
+
+            if 'type' not in skill_gcs:
+                pass
+
+            elif skill_gcs['type'] == 'skill':
+                '''
+                {
+                    "type": "skill",
+                    "id": "c699cfb8-f28b-4996-a990-66ab6a1fd3cd",
+                    "name": "Guns",
+                    "reference": "B198",
+                    "specialization": "Grenade Launcher",
+                    "tech_level": "",
+                    "difficulty": "dx/e",
+                    "points": 1,
+                    "defaults": [
+                        { "type": "dx", "modifier": -4 },
+                        { "type": "skill", "name": "Guns", "modifier": -4 }
+                    ],
+                    "categories": [
+                        "Combat/Weapon",
+                        "Ranged Combat"
+                    ]
+                },
+
+                "Beam Weapons": {"ask": "number",
+                    "attr":"dx", "diff":"E", "default":-4,
+                    "equip": {"laser sight": 1}},
+                '''
+                skill = {'ask': 'number'}
+
+                # Name
+                if ('specialization' in skill_gcs and
+                        len(skill_gcs['specialization']) > 0):
+                    name_text = '%s (%s)' % (skill_gcs['name'],
+                                             skill_gcs['specialization'])
+                else:
+                    name_text = skill_gcs['name']
+
+                # attribute / difficulty
+                match = re.match(
+                        '(?P<attrib>[A-Za-z]+)(?P<slash>/)' +
+                        '(?P<difficulty>[A-Za-z]+)',
+                        skill_gcs['difficulty'])
+                if match is None:
+                    #print('** match is None') # TODO: remove
+                    continue
+
+                skill['attr'] = match.group('attrib').lower()
+                skill['diff'] = match.group('difficulty').upper()
+
+                # default
+                if 'defaults' not in skill_gcs:
+                    skill['default'] = None
+                else:
+                    for default in skill_gcs['defaults']:
+                        if default['type'] == skill['attr']:
+                            skill['default'] = int(default['modifier'])
+                            break
+
+                # equipment / advantages -- not in GCS skill file
+
+                skills_result[name_text] = skill
+
+            #elif skill_gcs['type'] == 'technique':
+            '''
+                GCS entry:
+                {
+                    "type": "technique",
+                    "id": "91f80f7e-4757-470e-adab-5b022b920b1d",
+                    "name": "Off-Hand Weapon Training",
+                    "reference": "B232",
+                    "difficulty": "h",
+                    "points": 2,
+                    "limit": 0,
+                    "default": {
+                        "type": "skill",
+                        "name": "Broadsword",
+                        "modifier": -4
+                    },
+                    "categories": [
+                        "Combat/Weapon",
+                        "Melee Combat",
+                        "Technique"
+                    ]
+                }
+
+                CA entry:
+                "Off-Hand Weapon Training (Knife)": {"ask": "number"},
+            '''
+            #    # print('\n=== Technique: %s ===' % base_name) # TODO: remove
+            #    difficulty = skill_gcs['difficulty'] # 'H', 'A'
+            #    cost_gcs = 0 if 'points' not in skill_gcs else skill_gcs['points']
+            #    plus = SkillsCalcs.tech_plus_from_pts(difficulty, cost_gcs) ###################33
+
+            #    default = skill_gcs['default']['name']
+            #    if 'specialization' in skill_gcs['default']:
+            #        default += (' (%s)' % skill_gcs['default']['specialization'])
+            #    skill_base = (0 if 'modifier' not in skill_gcs['default'] else ####################
+            #                  skill_gcs['default']['modifier'])
+            #    # print('based on %s = %d+%d' % (default, plus, skill_base)) # TODO: remove
+
+            #    technique = {
+            #        'name': base_name,
+            #        'default': default,
+            #        'value': plus + skill_base
+            #        }
+            #    techniques_result.append(technique)
+            return skills_result, techniques_result
+
     def __build_skills(self):
+        '''
+        Builds a list of skills and techniques, stored in the object, from GCS
+        data.
+        '''
         self.char['skills'] = {} # name: skill-level, ...
         self.char['techniques'] = [] # {"name":...,"default":[...],"value":#}
 
@@ -513,7 +646,7 @@ class FromGcs(object):
         if 'skills' not in self.__gcs_data:
             return
 
-        skills = Skills(self.__window_manager)
+        skills = SkillsCalcs(self.__window_manager)
 
         for skill_gcs in self.__gcs_data['skills']:
             base_name = skill_gcs['name']
@@ -531,13 +664,13 @@ class FromGcs(object):
                 cost_gcs = 0 if 'points' not in skill_gcs else skill_gcs['points']
 
                 level_gcs = skills.get_gcs_level(
-                        self.__window_manager, self, skill_gcs, base_name, cost_gcs)
+                        self.__window_manager, self, skill_gcs, name_text, cost_gcs)
                 self.char['skills'][name_text] = level_gcs
             elif skill_gcs['type'] == 'technique':
                 # print('\n=== Technique: %s ===' % base_name) # TODO: remove
                 difficulty = skill_gcs['difficulty'] # 'H', 'A'
                 cost_gcs = 0 if 'points' not in skill_gcs else skill_gcs['points']
-                plus = Skills.tech_plus_from_pts(difficulty, cost_gcs) ###################33
+                plus = SkillsCalcs.tech_plus_from_pts(difficulty, cost_gcs) ###################33
 
                 default = skill_gcs['default']['name']
                 if 'specialization' in skill_gcs['default']:
@@ -1171,6 +1304,12 @@ class ToNative(object):
                                 sync=False,
                                 squash=False)
 
+    def import_skills(self):
+        self.__import_skills(self.__native_data,
+                                self.__gcs_data,
+                                sync=False,
+                                squash=False)
+
     def pprint(self):
         print('\n=== Import Creature ===')
         PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
@@ -1232,6 +1371,132 @@ class ToNative(object):
                 new_list.append(item)
 
         return new_list
+
+    def __equip_add_this(self,
+                         operation,     # {'op': EQUIP_ADD_THIS,
+                                        #  'item_gcs': item_gcs}
+                         native_list,
+                         gcs_list
+                         ):
+        item_gcs = operation['item_gcs']
+        changes = ['"%s" equipment item added' % item_gcs['name']]
+        native_list.append(item_gcs)
+        return changes
+
+    def __equip_merge_this(self,
+                           operation,   # {'op': EQUIP_MERGE_THIS,
+                                        #  'index_native': index_native,
+                                        #  'index_gcs': index_gcs,
+                                        #  'differences': differences}
+                           native_list,
+                           gcs_list
+                           ):
+        PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
+
+        index_native = operation['index_native']
+        item_native = native_list[index_native]
+        index_gcs = operation['index_gcs']
+        item_gcs = gcs_list[index_gcs]
+        differences = operation['differences']
+
+        # Show differences between the items
+
+        output = []
+        standout_mode = curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK)
+        output.append([{'text': ('--- GCS Item: %s ---' % item_gcs['name']),
+                        'mode': curses.A_NORMAL}])
+        string = PP.pformat(item_gcs)
+        strings = string.split('\n')
+        for string in strings:
+            mode = curses.A_NORMAL
+            for difference in differences:
+                if string.find(difference) >= 0:
+                    mode = standout_mode
+            output.append([{'text': string, 'mode': mode}])
+
+        output.append([{'text': '',
+                        'mode': curses.A_NORMAL}])
+        output.append([{'text': ('--- CA Item: %s ---' % item_native['name']),
+                        'mode': curses.A_NORMAL}])
+        string = PP.pformat(item_native)
+        strings = string.split('\n')
+        for string in strings:
+            mode = curses.A_NORMAL
+            for difference in differences:
+                if string.find(difference) >= 0:
+                    mode = standout_mode
+            output.append([{'text': string, 'mode': mode}])
+
+        # Merge the GCS and Native items into a new (temporary-ish) item
+
+        new_item = copy.deepcopy(item_native)
+        self.__merge_items(new_item, item_gcs)
+        output.append([{'text': '',
+                        'mode': curses.A_NORMAL}])
+        output.append([{'text': ('--- MERGED Item: %s ---' % new_item['name']),
+                        'mode': curses.A_NORMAL}])
+        string = PP.pformat(new_item)
+        strings = string.split('\n')
+        for string in strings:
+            mode = curses.A_NORMAL
+            for difference in differences:
+                if string.find(difference) >= 0:
+                    mode = standout_mode
+            output.append([{'text': string, 'mode': mode}])
+
+        # Ask the user what to do about it
+
+        self.__window_manager.display_window(
+                ('Examine These %s -- They look really similar' %
+                    item_native['name']),
+                output)
+        request_menu = [('Merge Them', ToNative.EQUIP_MERGE_THIS),
+                        ('Replace with the GCS version',
+                            ToNative.EQUIP_REPLACE_THIS),
+                        ('Keep Both Copies', ToNative.EQUIP_ADD_THIS)]
+        what_to_do, ignore = self.__window_manager.menu(
+                'What Do You Want To Do?', request_menu)
+
+        # Do what the user asks
+
+        # Ask the user if these are the same item (i.e., accept
+        # the merged item)
+        if what_to_do == ToNative.EQUIP_MERGE_THIS:
+            changes = ['"%s" merged GCS item into Native item' %
+                    item_gcs['name']]
+            self.__merge_items(item_native, item_gcs) # Result -> item_native
+
+        elif what_to_do == ToNative.EQUIP_REPLACE_THIS:
+            changes = self. __equip_replace_this(
+                             {'op': ToNative.EQUIP_REPLACE_THIS,
+                              'index_native': index_native,
+                              'index_gcs': index_gcs},
+                             native_list,
+                             gcs_list)
+
+        elif what_to_do == ToNative.EQUIP_ADD_THIS:
+            changes = self.__equip_add_this(
+                         {'op': ToNative.EQUIP_ADD_THIS,
+                          'item_gcs': item_gcs},
+                         native_list,
+                         gcs_list)
+        return changes
+
+    def __equip_replace_this(self,
+                             operation,     # {'op': EQUIP_REPLACE_THIS,
+                                            #  'index_native': index_native,
+                                            #  'index_gcs': index_gcs}))
+                             native_list,
+                             gcs_list
+                             ):
+        index_native = operation['index_native']
+        item_native = native_list[index_native]
+        index_gcs = operation['index_gcs']
+        item_gcs = gcs_list[index_gcs]
+
+        changes = ['"%s" equipment item replaced with GCS version' % item_native['name']]
+        native_list[operation['index_native']] = item_gcs
+        return changes
 
     def __get_stuff_count(self,
                           item
@@ -1370,132 +1635,6 @@ class ToNative(object):
 
         return changes
 
-    def __equip_add_this(self,
-                         operation,     # {'op': EQUIP_ADD_THIS,
-                                        #  'item_gcs': item_gcs}
-                         native_list,
-                         gcs_list
-                         ):
-        item_gcs = operation['item_gcs']
-        changes = ['"%s" equipment item added' % item_gcs['name']]
-        native_list.append(item_gcs)
-        return changes
-
-    def __equip_merge_this(self,
-                           operation,   # {'op': EQUIP_MERGE_THIS,
-                                        #  'index_native': index_native,
-                                        #  'index_gcs': index_gcs,
-                                        #  'differences': differences}
-                           native_list,
-                           gcs_list
-                           ):
-        PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
-
-        index_native = operation['index_native']
-        item_native = native_list[index_native]
-        index_gcs = operation['index_gcs']
-        item_gcs = gcs_list[index_gcs]
-        differences = operation['differences']
-
-        # Show differences between the items
-
-        output = []
-        standout_mode = curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK)
-        output.append([{'text': ('--- GCS Item: %s ---' % item_gcs['name']),
-                        'mode': curses.A_NORMAL}])
-        string = PP.pformat(item_gcs)
-        strings = string.split('\n')
-        for string in strings:
-            mode = curses.A_NORMAL
-            for difference in differences:
-                if string.find(difference) >= 0:
-                    mode = standout_mode
-            output.append([{'text': string, 'mode': mode}])
-
-        output.append([{'text': '',
-                        'mode': curses.A_NORMAL}])
-        output.append([{'text': ('--- CA Item: %s ---' % item_native['name']),
-                        'mode': curses.A_NORMAL}])
-        string = PP.pformat(item_native)
-        strings = string.split('\n')
-        for string in strings:
-            mode = curses.A_NORMAL
-            for difference in differences:
-                if string.find(difference) >= 0:
-                    mode = standout_mode
-            output.append([{'text': string, 'mode': mode}])
-
-        # Merge the GCS and Native items into a new (temporary-ish) item
-
-        new_item = copy.deepcopy(item_native)
-        self.__merge_items(new_item, item_gcs)
-        output.append([{'text': '',
-                        'mode': curses.A_NORMAL}])
-        output.append([{'text': ('--- MERGED Item: %s ---' % new_item['name']),
-                        'mode': curses.A_NORMAL}])
-        string = PP.pformat(new_item)
-        strings = string.split('\n')
-        for string in strings:
-            mode = curses.A_NORMAL
-            for difference in differences:
-                if string.find(difference) >= 0:
-                    mode = standout_mode
-            output.append([{'text': string, 'mode': mode}])
-
-        # Ask the user what to do about it
-
-        self.__window_manager.display_window(
-                ('Examine These %s -- They look really similar' %
-                    item_native['name']),
-                output)
-        request_menu = [('Merge Them', ToNative.EQUIP_MERGE_THIS),
-                        ('Replace with the GCS version',
-                            ToNative.EQUIP_REPLACE_THIS),
-                        ('Keep Both Copies', ToNative.EQUIP_ADD_THIS)]
-        what_to_do, ignore = self.__window_manager.menu(
-                'What Do You Want To Do?', request_menu)
-
-        # Do what the user asks
-
-        # Ask the user if these are the same item (i.e., accept
-        # the merged item)
-        if what_to_do == ToNative.EQUIP_MERGE_THIS:
-            changes = ['"%s" merged GCS item into Native item' %
-                    item_gcs['name']]
-            self.__merge_items(item_native, item_gcs) # Result -> item_native
-
-        elif what_to_do == ToNative.EQUIP_REPLACE_THIS:
-            changes = self. __equip_replace_this(
-                             {'op': ToNative.EQUIP_REPLACE_THIS,
-                              'index_native': index_native,
-                              'index_gcs': index_gcs},
-                             native_list,
-                             gcs_list)
-
-        elif what_to_do == ToNative.EQUIP_ADD_THIS:
-            changes = self.__equip_add_this(
-                         {'op': ToNative.EQUIP_ADD_THIS,
-                          'item_gcs': item_gcs},
-                         native_list,
-                         gcs_list)
-        return changes
-
-    def __equip_replace_this(self,
-                             operation,     # {'op': EQUIP_REPLACE_THIS,
-                                            #  'index_native': index_native,
-                                            #  'index_gcs': index_gcs}))
-                             native_list,
-                             gcs_list
-                             ):
-        index_native = operation['index_native']
-        item_native = native_list[index_native]
-        index_gcs = operation['index_gcs']
-        item_gcs = gcs_list[index_gcs]
-
-        changes = ['"%s" equipment item replaced with GCS version' % item_native['name']]
-        native_list[operation['index_native']] = item_gcs
-        return changes
-
     def __import_heading(self,
                         heading,            # string: 'skills', 'advantages', etc
                         heading_singular    # string: 'skill', 'advantage', etc
@@ -1558,6 +1697,113 @@ class ToNative(object):
 
     def __import_skills(self):
         return self.__import_heading('skills', 'skill')
+
+    def __import_skills_description(self,
+                                    native_list, # []: contains native data, I/O
+                                    gcs_list,    # []: contains GCS data
+                                    sync         # Bool: sync or copy (see below)
+                                    ):
+        '''
+        Merges GCS equipment list with native one.  Discards exact duplicate
+        items, merges similar items, and copies unique items into
+        |native_list|.
+
+        The |sync| parameter indicates whether we're synchronizing items
+        between the native and GCS lists or copying them.  If an item from
+        is in the native list but not the GCS list, syncing the lists will
+        (optionally) keep the native item where copying will delete the item.
+
+        Returns (in addition to |native_list| being changed) a list of changes
+        to show the user.
+        '''
+        # TODO: replace with actual code
+
+        changes = []
+        stuff_native = self.__copy_json_equipment_list(native_list, squash)
+        stuff_gcs = self.__copy_json_equipment_list(gcs_list, squash)
+
+        equip_menu = [(' - Do All The Things -', {'op': ToNative.EQUIP_ADD_ALL})]
+        gcs_indexes_already_handled = []
+
+        # Handle duplicates
+
+        for index_gcs, item_gcs in enumerate(stuff_gcs):
+            for index_native, item_native in enumerate(stuff_native):
+                # Remove duplicates from GCS list
+                differences = ToNative.find_differences(item_native, item_gcs)
+                if differences is None:
+                    gcs_indexes_already_handled.append(index_gcs)
+                    break
+
+                # Merge (maybe) similar items
+                elif item_native['name'].lower() == item_gcs['name'].lower():
+                    equip_menu.append(
+                            ('%s (MERGE?)' % item_native['name'],
+                                {'op': ToNative.EQUIP_MERGE_THIS,
+                                 'index_gcs': index_gcs,
+                                 'index_native': index_native,
+                                 'differences': differences}))
+                    gcs_indexes_already_handled.append(index_gcs)
+                    break
+
+        # Adds in GCS items that aren't already represented by native items
+        # into the native item list.
+
+        for index, item_gcs in enumerate(stuff_gcs):
+            if index in gcs_indexes_already_handled:
+                continue
+
+            name_gcs = item_gcs['name']
+
+            if ('ignored-equipment' in self.__native_data and
+                    name_gcs.lower() in self.__native_data['ignored-equipment']):
+                changes.append('"%s" equipment IGNORED -- no change' %
+                        item_gcs['name'])
+            else:
+                equip_menu.append(('%s' % item_gcs['name'],
+                                   {'op': ToNative.EQUIP_ADD_THIS,
+                                    'item_gcs': item_gcs}))
+
+        # Now, ask the user about all of the stuff
+
+        keep_asking = True
+        keep_asking_menu = [('yes', True), ('no', False)]
+        while keep_asking:
+            # TODO (now): I could put the self.__xxx() function in the menu entry
+            #   {'doit': self.__whatever, 'param': passed_to_doit_method}
+
+            doit, ignore = self.__window_manager.menu('Add Which Equipment',
+                                                      equip_menu)
+            if doit is None:
+                keep_asking = False
+
+            if doit['op'] == ToNative.EQUIP_ADD_ALL:
+                keep_asking = False
+                for (string, operation) in equip_menu:
+                    if operation['op'] == ToNative.EQUIP_ADD_THIS:
+                        changes.append(self.__equip_add_this(
+                                       operation, native_list, gcs_list))
+                    if operation['op'] == ToNative.EQUIP_MERGE_THIS:
+                        changes.append(self.__equip_merge_this(
+                                       operation, native_list, gcs_list))
+                    if operation['op'] == ToNative.EQUIP_REPLACE_THIS:
+                        changes.append(self.__equip_replace_this(
+                                       operation, native_list, gcs_list))
+            elif doit['op'] == ToNative.EQUIP_ADD_THIS:
+                changes.append(self.__equip_add_this(
+                               operation, native_list))
+            elif doit['op'] == ToNative.EQUIP_MERGE_THIS:
+                changes.append(self.__equip_merge_this(
+                               operation, native_list, gcs_list))
+            elif doit['op'] == ToNative.EQUIP_REPLACE_THIS:
+                changes.append(self.__equip_replace_this(
+                               operation, native_list, gcs_list))
+
+            if keep_asking:
+                keep_asking, ignore = self.__window_manager.menu(
+                    'Continue adding items', keep_asking_menu)
+
+        return changes
 
     def __import_spells(self):
         changes = []
@@ -1815,10 +2061,30 @@ class GcsImport(object):
         gcs_data = FromGcs(self.__window_manager, ruleset, gcs_filename)
         gcs_data.build_equipment()
 
-        equipment = ToNative(self.__window_manager,
+        to_native = ToNative(self.__window_manager,
                              native_data,
                              gcs_data.stuff)
-        equipment.import_equipment_list()
+        to_native.import_equipment_list()
+        return
+
+    def import_skills(self,
+                      native_data,         # array = original equipment list
+                      ruleset,             # ca_ruleset.Ruleset object
+                      gcs_filename=None,   # string
+                      ):
+        '''
+        Reads the data into a local format and then writes the data into the
+        local store.
+
+        Returns: Nothing
+        '''
+        gcs_data = FromGcs(self.__window_manager, ruleset, gcs_filename)
+        skills, techniques = gcs_data.build_skills_description()
+
+        equipment = ToNative(self.__window_manager,
+                             native_data,
+                             (skills, techniques))
+        equipment.import_skills()
         return
 
     def update_creature(self,
