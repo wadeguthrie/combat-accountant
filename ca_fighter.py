@@ -136,6 +136,7 @@ class ThingsInFight(object):
             fighter,        # Fighter object
             opponent,       # Fighter object
             is_attacker,    # True | False
+            fight_handler   # FightHandler object
             ):
 
         '''
@@ -845,6 +846,7 @@ class Fighter(ThingsInFight):
             fighter,        # Fighter object
             opponent,       # Fighter object
             is_attacker,    # True | False
+            fight_handler   # FightHandler object
             ):
         '''
         Returns a string that contains a short (but not the shortest)
@@ -853,7 +855,8 @@ class Fighter(ThingsInFight):
         self._ruleset.get_fighter_description_medium(output,
                                                      self,
                                                      opponent,
-                                                     is_attacker)
+                                                     is_attacker,
+                                                     fight_handler)
 
     def get_description_short(self,
                               fight_handler  # FightHandler, ignored

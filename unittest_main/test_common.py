@@ -1097,6 +1097,7 @@ class GmTestCaseCommon(unittest.TestCase):  # Derive from unittest.TestCase
         pass
 
     def _are_equal(self, lhs, rhs):
+        PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
         if isinstance(lhs, dict):
             if not isinstance(rhs, dict):
                 print('** lhs is a dict but rhs is not')

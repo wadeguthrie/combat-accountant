@@ -671,7 +671,11 @@ class FightGmWindow(ca_gui.GmWindow):
         Returns nothing.
         '''
         output = []
-        fighter.get_description_medium(output, fighter, opponent, is_attacker)
+        fighter.get_description_medium(output,
+                                       fighter,
+                                       opponent,
+                                       is_attacker,
+                                       self.__fight_handler)
 
         #
         # Display the output
@@ -3182,18 +3186,12 @@ class PersonnelHandler(ScreenHandler):
 
         lines, cols = self._window.getmaxyx()
 
-        # We're not filling in the holes if we delete a monster, we're
-        #   just adding to the total of monsters created
-        # NOTE: this is still imperfect.  If you delete a monster and then
-        #   come back later, you'll still have numbering problems.
-        # ALSO NOTE: we use 'len' rather than 'len'+1 because we've added
-        #   a Venue to the list -- the Venue has an implied prefix of '0'
-        previous_creature_count = (0 if self.__critters is None else
-                                   len(self.__critters['data']))
-        creature_num = (previous_creature_count + self.__deleted_critter_count)
         keep_asking = True
         creature_name = '** Anonymous **'  # Shouldn't need this
         while keep_asking:
+            # Not sure if 'base_name' can be replaced by 'creature_name'.
+            # It was originally here so that we could add a number to monster
+            # names but that's being handled differently, now.
             base_name = self._window_manager.input_box(1,      # height
                                                        cols-4,  # width
                                                        'Monster Name')
@@ -3212,10 +3210,7 @@ class PersonnelHandler(ScreenHandler):
                     if gender is not None:
                         new_creature['notes'].append('gender: %s' % gender)
 
-            if self.__group_name == 'NPCs' or self.__group_name == 'PCs':
-                creature_name = base_name
-            else:
-                creature_name = '%d - %s' % (creature_num, base_name)
+            creature_name = base_name
 
             if self.__critters is None:
                 keep_asking = False
@@ -4426,6 +4421,7 @@ class FightHandler(ScreenHandler):
             self._saved_fight['round'] = 0
             self._saved_fight['index'] = 0
             self._saved_fight['monsters'] = monster_group
+            self.__number_monsters(monster_group)
 
         init = self.__build_fighter_list(monster_group, fight_order)
         self.__build_saved_fight(init)  # From self.__fighters
@@ -4499,6 +4495,18 @@ class FightHandler(ScreenHandler):
         '''
         result = self.__fighters[self._saved_fight['index']]
         return result
+
+    def get_display_name(self,
+                         fighter  # Fighter object
+                         ):
+        '''
+        Returns the name of the fighter (from a dict) with the monster number
+        added (if it exists).
+        '''
+        if 'monster-number' in fighter.details:
+            return '%d - %s' % (fighter.details['monster-number'],
+                                fighter.name)
+        return fighter.name
 
     def get_fighter_object(self,
                            name,  # <string> name of a fighter in that group
@@ -4675,14 +4683,14 @@ class FightHandler(ScreenHandler):
                 elif not self.world.playing_back:
                     self.add_to_history(
                             {'comment': ('(%s) did nothing (dead)' %
-                                         current_fighter.name)})
+                                self.get_display_name(current_fighter))})
             elif current_fighter.is_absent():
                 if raw_modify:
                     keep_going = False
                 elif not self.world.playing_back:
                     self.add_to_history(
                             {'comment': ('(%s) did nothing (absent)' %
-                                         current_fighter.name)})
+                                self.get_display_name(current_fighter))})
 
             elif (current_fighter.group != 'PCs' and
                     not current_fighter.is_conscious()):
@@ -4691,7 +4699,7 @@ class FightHandler(ScreenHandler):
                 elif not self.world.playing_back:
                     self.add_to_history(
                             {'comment': ('(%s) did nothing (unconscious)' %
-                                         current_fighter.name)})
+                                self.get_display_name(current_fighter))})
             else:
                 keep_going = False
 
@@ -4744,9 +4752,12 @@ class FightHandler(ScreenHandler):
                             default_selection = len(opponent_menu)
                         menu_text = fighter.name
                     else:
+                        opponent = self.world.get_creature(
+                                fighter.details['opponent']['name'],
+                                fighter.details['opponent']['group'])
                         menu_text = '%s (fighting %s)' % (
-                                fighter.name,
-                                fighter.details['opponent']['name'])
+                                self.get_display_name(fighter),
+                                self.get_display_name(opponent))
                     opponent_menu.append((menu_text, {'name': fighter.name,
                                                       'group': fighter.group}))
         if len(opponent_menu) <= 0:
@@ -5906,6 +5917,28 @@ class FightHandler(ScreenHandler):
                                    self._saved_fight['index'],
                                    self.__viewing_index)
         return True  # Keep going
+
+    def __number_monsters(self,
+                          monster_group  # String
+                          ):
+        '''
+        Adds numbers to monsters so that the GM knows which miniatures
+        correspond to which monsters.
+        '''
+        if monster_group is None:
+            return
+
+        monster_number = 1
+        # These are sorted alphabetically so that the monster numbering can
+        # be predictable -- for testing.
+        for name in sorted(self.world.get_creature_details_list(monster_group)):
+            details = self.world.get_creature_details(name,
+                                                      monster_group)
+            if details is None or name == ca_fighter.Venue.name:
+                continue
+
+            details['monster-number'] = monster_number
+            monster_number += 1
 
     def __replay_history(self):
         '''

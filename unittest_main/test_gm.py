@@ -158,6 +158,11 @@ class GmTestCase(GmTestCaseCommon):
                                                      'pick-opponent']
         expected_fighters[injured_index]['current']['hp'] -= injured_hp
 
+        # These fighters are in a 'monster' group -- they're numbered
+        # alphabetically
+        expected_fighters[1]['monster-number'] = 1
+        expected_fighters[3]['monster-number'] = 2
+
         # Check that everything is as it should be
 
         assert len(expected_fighters) == len(fighters)
@@ -1711,8 +1716,8 @@ class GmTestCase(GmTestCaseCommon):
             #if ARGS.verbose:
             #    print('Expect: Room, Horatio:')
             #    PP.pprint(creatures)
-            # The 'creatures' should be '<< ROOM >>', '1 - Horatio'
-            assert '1 - Horatio' in creatures
+            # The 'creatures' should be '<< ROOM >>', 'Horatio'
+            assert 'Horatio' in creatures
 
         # FIGHT ALREADY EXISTS #
 
@@ -1776,7 +1781,7 @@ class GmTestCase(GmTestCaseCommon):
         build_fight.set_command_ribbon_input(curses.KEY_UP)
         build_fight.set_command_ribbon_input('d')   # Delete Horatio
         self._window_manager.set_menu_response(
-                'Delete "1 - Horatio" ARE YOU SURE?', 'yes')
+                'Delete "Horatio" ARE YOU SURE?', 'yes')
         # finish up the test
 
         self._window_manager.set_menu_response('What Next', 'quit')
@@ -1788,8 +1793,8 @@ class GmTestCase(GmTestCaseCommon):
         assert 'test_new_fight' in fights  # verify that fight  exists
         if 'test_new_fight' in fights:
             creatures = world.get_creature_details_list('test_new_fight')
-            assert '1 - Horatio' not in creatures
-            assert '2 - Ophelia' in creatures
+            assert 'Horatio' not in creatures
+            assert 'Ophelia' in creatures
 
         # ADD PCs -- WORKS #
 
