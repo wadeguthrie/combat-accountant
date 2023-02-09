@@ -1098,12 +1098,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             fighter,        # Fighter object
             opponent,       # Fighter object
             is_attacker,    # True | False
+            fight_handler   # FightHandler object
             ):
         '''
         Returns medium-length description of the fighter
         '''
+        fighter_name = (fighter.name if fight_handler is None else
+                fight_handler.get_display_name(fighter))
         fighter_string = '%s HP: %d/%d FP: %d/%d' % (
-                                    fighter.name,
+                                    fighter_name,
                                     fighter.details['current']['hp'],
                                     fighter.details['permanent']['hp'],
                                     fighter.details['current']['fp'],
@@ -1179,7 +1182,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                       fighter,      # Fighter object
                                       fight_handler # FightHandler object
                                       ):
-        fighter_string = '%s HP:%d/%d' % (fighter.name,
+        fighter_name = (fighter.name if fight_handler is None else
+                fight_handler.get_display_name(fighter))
+        fighter_string = '%s HP:%d/%d' % (fighter_name,
                                           fighter.details['current']['hp'],
                                           fighter.details['permanent']['hp'])
 

@@ -2091,6 +2091,11 @@ class GmTestCaseGurps(GmTestCaseCommon):
         expected_fighters[unconscious_index]['state'] = "unconscious"
         expected_fighters[dead_index]['state'] = "dead"
 
+        # These fighters are in a 'monster' group -- they're numbered
+        # alphabetically
+        expected_fighters[1]['monster-number'] = 1
+        expected_fighters[3]['monster-number'] = 2
+
         fighters = fight_handler.get_fighters()
         assert len(expected_fighters) == len(fighters)
 
