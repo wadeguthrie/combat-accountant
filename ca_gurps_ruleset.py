@@ -157,7 +157,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
     #   "duration": 60, <-- None means 'ask', 0 means 'Instant'
     # },
 
-    # 'range': touch, missile, area, normal.
+    # 'range': block, missile, area, melee.
     # specially mark those with 1 or 2 second cast time
     # 'save': 'wi', 'ht', xxx, (cast a spell dialog needs to show this)
 
@@ -253,6 +253,87 @@ class GurpsRuleset(ca_ruleset.Ruleset):
     # Public Methods
     #
 
+    @staticmethod
+    def show_spells(window_manager  # ca_gui.CaWindowManager object
+                    ):
+                        # Output: recepticle for character
+                        # detail.
+                        # [[{'text','mode'},...],  # line 0
+                        #  [...],               ]  # line 1...
+        '''
+        Displays the spells in a window
+
+        Returns nothing.
+        '''
+
+        spell_info = []
+
+        for spell_name in sorted(GurpsRuleset.spells.keys()):
+            spell = GurpsRuleset.spells[spell_name]
+
+            # TODO (now): should be an option
+            # Highlight the spells that a bad guy might want to cast during
+            # battle.
+            mode = (curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK)
+                    if ((spell['casting time'] is None or
+                         spell['casting time'] <= 2) and
+                        spell['range'] != 'melee')
+                    else curses.A_NORMAL)
+
+            # Top line
+
+            line = [{'text': '%s' % spell_name, 'mode': mode | curses.A_UNDERLINE}]
+
+            texts = ['; %s ' % spell['range']]
+            if 'save' in spell and len(spell['save']) > 0:
+                texts.append('; resisted by ')
+                texts.append(', '.join(spell['save']))
+
+            line.append({'text': ''.join(texts), 'mode': mode})
+            spell_info.append(line)
+
+            # Next line
+
+            texts = ['  cost: ']
+            if spell['cost'] is None:
+                texts.append('special')
+            else:
+                texts.append('%d' % spell['cost'])
+
+            texts.append(', maintain: ')
+            if spell['maintain'] is None:
+                texts.append('special (or none)')
+            else:
+                texts.append('%d' % spell['maintain'])
+
+            texts.append(', casting time: ')
+            if spell['casting time'] is None:
+                texts.append('special')
+            else:
+                texts.append('%d second(s)' % spell['casting time'])
+
+            texts.append(', duration: ')
+            if spell['duration'] is None:
+                texts.append('special')
+            elif spell['duration'] == 0:
+                texts.append('instantaneous/permanent')
+            elif spell['duration'] < 60:
+                texts.append('%d second(s)' % spell['duration'])
+            elif spell['duration'] < 3660:
+                texts.append('%d minute(s)' % (spell['duration'] / 60))
+            elif spell['duration'] < 86400:
+                texts.append('%d hour(s)' % (spell['duration'] / 3660))
+            else:
+                texts.append('%d day(s)' % (spell['duration'] / 86400))
+            spell_info.append([{'text': ''.join(texts), 'mode': mode}])
+
+            # Notes
+
+            texts = ['  %s' % spell['notes']]
+            spell_info.append([{'text': ''.join(texts), 'mode': mode}])
+
+        window_manager.display_window('Spells', spell_info)
+
     def can_finish_turn(self,
                         fighter,        # Fighter object
                         fight_handler   # FightHandler object
@@ -318,8 +399,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         # TODO: only set the following if BOTH do_save_on_exit is called _and_
         #   we've added data with an import.
-
-        # self.__gurps_info.write_data = self.__gurps_info.read_data
+        self.__gurps_info.write_data = self.__gurps_info.read_data
 
     def does_weapon_use_unarmed_skills(self,
                                        weapon  # Weapon object
@@ -1339,35 +1419,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         commands are structured for a command ribbon.  The functions point
         right back to local functions of the GurpsRuleset.
         '''
-        return {
-            ord('K'): {'name': 'import Skills',
-                       'func': self.import_skills_from_file,
-                                #filename,    # string
-                                #native_list  # [] current skills list
-                       'param': {
-                            'view': None,
-                            'current-opponent': None,
-                            'current': None,
-                       },
-                       'show': True,
-                       'help': 'Removes fatigue points from the currently ' +
-                               'selected fighter, or the current opponent ' +
-                               '(if nobody is selected), or (if neither ' +
-                               'of those) the ' +
-                               'fighter that currently has the initiative. ',
-                       },
-            ord('S'): {'name': 'import Spells',
-                       'func': self.import_spells_from_file,
-                       'param': {
-                            'view': None,
-                            'current-opponent': None,
-                            'current': None,
-                       },
-                       'show': True,
-                       'help': 'Causes the selected fighter to be ' +
-                               'stunned (GURPS B420)',
-                       },
-            }
+
+        return [
+            ('skills', {'doit': self.import_skills_from_file_user}),
+            ('Spells', {'doit': self.import_spells_from_file}),
+            ]
 
     def get_import_creature_file_extension(self):
         ''' Returns the filename extension for files from which to import.'''
@@ -2162,6 +2218,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         gcs_import.import_equipment(native_list, self, filename)
         return
 
+    def import_skills_from_file_user(self,
+                                     throw_away
+                                     ):
+        filename = None
+        native_list = None
+        # TODO: get filename
+        # TODO: get native list
+        self.import_skills_from_file(filename, native_list)
+        return True
+
     def import_skills_from_file(self,
                                 filename,    # string
                                 native_list  # [] current skills list
@@ -2177,18 +2243,27 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         return
 
     def import_spells_from_file(self,
-                                filename,    # string
-                                native_list  # [] current spell list
+                                throw_away
                                 ):
         '''
-        The GURPS Ruleset method imports equipment from a GURPS Character
-        Sheet (GCS) file.
+        The GURPS Ruleset method imports spells from a GURPS Character
+        Sheet spell list (spl) file.
 
         Returns nothing.
         '''
+        # Get the source file
+        filename_window = ca_gui.GetFilenameWindow(self._window_manager)
+        filename = filename_window.get_filename(['.spl'])
+        if filename is None:
+            return True
+
+        native_list = GurpsRuleset.spells
         gcs_import = ca_gcs_import.GcsImport(self._window_manager)
-        gcs_import.import_equipment(native_list, self, filename)
-        return
+        gcs_import.import_spells(self._window_manager,
+                                 native_list,
+                                 self, filename)
+
+        return True
 
     def initiative(self,
                    fighter, # Fighter object
@@ -2435,85 +2510,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                  creature['skills'][skill])})
 
         return result
-
-    def show_spells(self):
-                        # Output: recepticle for character
-                        # detail.
-                        # [[{'text','mode'},...],  # line 0
-                        #  [...],               ]  # line 1...
-        '''
-        Displays the spells in a window
-
-        Returns nothing.
-        '''
-
-        spell_info = []
-
-        for spell_name in sorted(GurpsRuleset.spells.keys()):
-            spell = GurpsRuleset.spells[spell_name]
-
-            # TODO (now): should be an option
-            # Highlight the spells that a bad guy might want to cast during
-            # battle.
-            mode = (curses.color_pair(ca_gui.GmWindowManager.YELLOW_BLACK)
-                    if ((spell['casting time'] is None or
-                         spell['casting time'] <= 2) and
-                        spell['range'] != 'melee')
-                    else curses.A_NORMAL)
-
-            # Top line
-
-            line = [{'text': '%s' % spell_name, 'mode': mode | curses.A_UNDERLINE}]
-
-            texts = ['; %s ' % spell['range']]
-            if len(spell['save']) > 0:
-                texts.append('; resisted by ')
-                texts.append(', '.join(spell['save']))
-
-            line.append({'text': ''.join(texts), 'mode': mode})
-            spell_info.append(line)
-
-            # Next line
-
-            texts = ['  cost: ']
-            if spell['cost'] is None:
-                texts.append('special')
-            else:
-                texts.append('%d' % spell['cost'])
-
-            texts.append(', maintain: ')
-            if spell['maintain'] is None:
-                texts.append('special')
-            else:
-                texts.append('%d' % spell['maintain'])
-
-            texts.append(', casting time: ')
-            if spell['casting time'] is None:
-                texts.append('special')
-            else:
-                texts.append('%d second(s)' % spell['casting time'])
-
-            texts.append(', duration: ')
-            if spell['duration'] is None:
-                texts.append('special')
-            elif spell['duration'] == 0:
-                texts.append('instantaneous/permanent')
-            elif spell['duration'] < 60:
-                texts.append('%d second(s)' % spell['duration'])
-            elif spell['duration'] < 3660:
-                texts.append('%d minute(s)' % (spell['duration'] / 60))
-            elif spell['duration'] < 86400:
-                texts.append('%d hour(s)' % (spell['duration'] / 3660))
-            else:
-                texts.append('%d day(s)' % (spell['duration'] / 86400))
-            spell_info.append([{'text': ''.join(texts), 'mode': mode}])
-
-            # Notes
-
-            texts = ['  %s' % spell['notes']]
-            spell_info.append([{'text': ''.join(texts), 'mode': mode}])
-
-        self._window_manager.display_window('Spells', spell_info)
 
     def start_fight(self,
                     fighter  # Fighter object
@@ -3219,6 +3215,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # modifications for skill level 15-19, 20-24, 25-29, etc.
             #
             # TODO (now): maintain spell gets same discount
+            # TODO (now): the effective skill includes a + for magery level
             skill = complete_spell['skill'] - 15
             first_time = True
             while skill >= 0:
