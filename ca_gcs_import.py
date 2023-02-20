@@ -86,26 +86,18 @@ class SkillsCalcs(object):
            'points': 0}
         '''
 
-        #print('\n=== %s ===' % skill_name) # TODO: remove
-        #PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
-        #print('-- SkillsCalcs.skills --') # TODO: remove
-        #PP.pprint(SkillsCalcs.skills) # TODO: remove
         if skill_name not in SkillsCalcs.skills:
-            #print('NAME NOT IN SKILLS') # TODO: remove
             # Get the skill info from GCS
             if 'difficulty' not in skill_gcs:
-                #print('** "difficulty" not in skill_gcs') # TODO: remove
                 return 0
             match = re.match(
                     '(?P<attrib>[A-Za-z]+)(?P<slash>/)' +
                     '(?P<difficulty>[A-Za-z]+)',
                     skill_gcs['difficulty'])
             if match is None:
-                #print('** match is None') # TODO: remove
                 return 0
             skill_native = {'attr': match.group('attrib').lower(),
                             'diff': match.group('difficulty').upper()}
-            #PP.pprint(skill_native) # TODO: remove
         else:
             # {'attr':'dx', 'diff':'E', 'default':-4}
             skill_native = SkillsCalcs.skills[skill_name]
@@ -142,7 +134,6 @@ class SkillsCalcs(object):
                 highest_level = SkillsCalcs.level_from_cost[highest_cost]
 
         while cost > highest_cost:
-            #print('expanding skill cost table') # TODO: remove
             highest_cost += 4
             highest_level += 1
             SkillsCalcs.level_from_cost[highest_cost] = highest_level
@@ -151,9 +142,7 @@ class SkillsCalcs(object):
         # than required for one skill level but not enough to get to the next
         # one) in a skill
         while cost not in SkillsCalcs.level_from_cost and cost > 1:
-            #print('reducing points spent because it is in between levels') # TODO: remove
             cost -= 1
-        #print('spent points: %d' % cost) # TODO: remove
         if cost < 1 and not default:
             window_manager.error([
                 'Cost %d invalid for skill %s' % (cost, skill_name)
@@ -162,12 +151,8 @@ class SkillsCalcs(object):
 
         # Calculate the skill level
         level = char.char['permanent'][skill_native['attr']]
-        #print('attribute (%s) = %d' % (skill_native['attr'], level)) # TODO: remove
         level += SkillsCalcs.level_from_cost[cost]
-        #print('add %d points for cost %d' % (SkillsCalcs.level_from_cost[cost], cost)) # TODO: remove
-        #print('level if it were an easy skill: %d' % level) # TODO: remove
         level += SkillsCalcs.difficulty_offset[skill_native['diff']]
-        #print('level at difficulty %s: %d' % (skill_native['diff'], level)) # TODO: remove
 
         # Add modifiers due to equipment
         if 'equip' in skill_native:
@@ -177,12 +162,8 @@ class SkillsCalcs(object):
                     level += plus
         if 'advantage' in skill_native:
             for looking_for, plus in skill_native['advantage'].items():
-                #print('> looking for advantage: %s, plus=%d' % (looking_for, plus)) # TODO: remove
                 if looking_for in char.char['advantages']:
                     level += plus
-                    #print('* adding PLUS to get level=%d' % level) # TODO: remove
-
-        #print('final level %d' % level) # TODO: remove
 
         return level
 
@@ -238,6 +219,149 @@ class FromGcs(object):
         # Easier to build a separate 'stuff' list given containers and such.
         self.stuff = [] # [{'name':names.lower(), 'count': count, ...},... ]
 
+    @staticmethod
+    def build_spell_list(window_manager, # ca_gui.GmWindowManager obj (errors)
+                         gcs_filename):
+        native_spells = {}
+        with ca_json.GmJson(gcs_filename) as gcs_spell_file:
+            gcs_spell_data = gcs_spell_file.read_data
+            if 'rows' not in gcs_spell_data:
+                window_manager.error(['No "rows" element in file'])
+                return native_spells
+
+            for gcs_spell in gcs_spell_data['rows']:
+                if gcs_spell['type'] != 'spell':
+                    continue
+                if 'name' not in gcs_spell:
+                    continue
+                name = gcs_spell['name']
+                if name in native_spells:
+                    window_manager.error([
+                        'Spell %s in %s multiple times' % (name,
+                                                           gcs_filename)])
+                    continue
+
+                native_spell = {
+                        'range': 'regular',
+                        'cost': None,
+                        'maintain': None,
+                        'casting time': None,
+                        'duration': None,
+                        'notes': '',
+                        'save': [] # not in GCS
+                        }
+                if 'difficulty' in gcs_spell:
+                    native_spell['difficulty'] = gcs_spell['difficulty'] # "IQ/H"
+                if 'spell_class' in gcs_spell:
+                    gcs_range = gcs_spell['spell_class'].lower()
+                    # Used in code: block, missile, area, melee
+                    if gcs_range in ['blocking', 'regular/blocking',
+                            'blocking/special', 'regular blocking']:
+                        native_spell['range'] = 'block'
+                    elif gcs_range in ['missile', 'missile/special']:
+                        native_spell['range'] = 'missile'
+                    elif gcs_range in ['area', 'area/info', 'regular/area',
+                            'info/area', 'special/area']:
+                        native_spell['range'] = 'area'
+                    elif gcs_range in ['melee']:
+                        native_spell['range'] = 'melee'
+                    else: # regular, enchantment, info, special
+                        native_spell['range'] = gcs_range
+
+                if 'casting_cost' in gcs_spell:
+                    match = re.match('^ *(?P<cost>[0-9]+) *(?P<extra>([Mm]inimum)?) *$',
+                         gcs_spell['casting_cost'])
+                    if match is None:
+                        native_spell['cost'] = (0
+                                if gcs_spell['casting_cost'] == 'None' # ironic
+                                else None) # special / ask
+                    else:
+                        try:
+                            # for area spells, this is the base cost
+                            native_spell['cost'] = int(match.group('cost'))
+                        except ValueError:
+                            native_spell['cost'] = None # special / ask
+                if 'maintenance_cost' in gcs_spell:
+                    try:
+                        native_spell['maintain'] = int(gcs_spell['maintenance_cost'])
+                    except ValueError:
+                        native_spell['maintain'] = None # Can't be maintained
+                if 'casting_time' in gcs_spell:
+                    native_spell['casting time'] = FromGcs.get_seconds_from_time_string(
+                            gcs_spell['casting_time'])
+                if 'duration' in gcs_spell:
+                    # None = special
+                    # 0 = instantaneous / permanent
+                    if gcs_spell['duration'] in ['Permanent', 'Instant', '-']:
+                        native_spell['duration'] = 0
+                    else:
+                        # returns None if no match
+                        native_spell['duration'] = FromGcs.get_seconds_from_time_string(
+                                gcs_spell['duration'])
+
+
+                notes = ''
+                if 'reference' in gcs_spell:
+                    notes = notes + gcs_spell['reference']
+
+                if (native_spell['casting time'] is None and
+                        gcs_spell['casting_time'] != '-'):
+                    '; '.join([notes,
+                              gcs_spell['casting_time']])
+                if (native_spell['duration'] is None and
+                        gcs_spell['duration'] != '-'):
+                    '; '.join([notes,
+                               gcs_spell['duration']])
+                if len(notes) > 0:
+                    native_spell['notes'] = notes
+
+                native_spells[name] = native_spell
+
+        return native_spells
+
+    @staticmethod
+    def get_seconds_from_time_string(string):
+        if string is None:
+            return None
+
+        if string.lower() == 'instant':
+            return 0
+
+        match = re.match('^ *(?P<count>[0-9]+) *(?P<units>[A-Za-z]+) *$',
+                         string)
+
+        if match is None:
+            # This can be anything from '-' (which means, depending on the
+            # spell, 'instantaneous' or 'ask') to sec=cost, 1 min/pt, 1-3
+            # secs, min=cost, Varies, or 2/4/6 sec.  In all these cases, we
+            # just want to ask the caster.
+            return None
+
+        multiplier = None
+        if (match.group('units').lower() == 'sec' or
+                match.group('units').lower() == 'secs'):
+            multiplier = 1
+        elif (match.group('units').lower() == 'min' or
+                match.group('units').lower() == 'mins'):
+            multiplier = 60
+        elif (match.group('units').lower() == 'hr' or
+                match.group('units').lower() == 'hrs' or
+                match.group('units').lower() == 'hour' or
+                match.group('units').lower() == 'hours'):
+            multiplier = 3600
+        elif (match.group('units').lower() == 'day' or
+                match.group('units').lower() == 'days'):
+            multiplier = 86400
+        elif (match.group('units').lower() == 'week' or
+                match.group('units').lower() == 'weeks'):
+            multiplier = 604800
+
+        if multiplier is None:
+            return None
+
+        result = int(match.group('count')) * multiplier
+        return result
+
     def build_character(self):
         '''
         Builds a local character description from the JSON extracted from a
@@ -272,6 +396,7 @@ class FromGcs(object):
         # Result is in self.stuff
         skills, techniques = self.__build_skill_descriptions('rows')
         return skills, techniques
+
 
     def get_name(self):
         if 'player_name' in self.__gcs_data['profile']:
@@ -328,9 +453,13 @@ class FromGcs(object):
                     if 'features' in modifier:
                         for feature in modifier['features']:
                             if feature['type'] == 'spell_bonus':
-                                college = feature['name']['qualifier']
-                                amount = feature['amount']
-                                self.__spell_advantages[college] = amount
+                                if feature['match'] == 'all_colleges':
+                                    self.__spell_advantage_global += (
+                                            feature['amount'])
+                                else:
+                                    college = feature['name']['qualifier']
+                                    amount = feature['amount']
+                                    self.__spell_advantages[college] = amount
 
             advantages_gcs[name] = cost_gcs
 
@@ -464,6 +593,7 @@ class FromGcs(object):
         # Checks points spent
 
         advantages = self.__gcs_data['advantages']
+        self.__spell_advantage_global = 0
         for advantage in advantages:
             self.__add_advantage_to_gcs_list(advantage,
                                              self.char['advantages'])
@@ -564,7 +694,6 @@ class FromGcs(object):
                         '(?P<difficulty>[A-Za-z]+)',
                         skill_gcs['difficulty'])
                 if match is None:
-                    #print('** match is None') # TODO: remove
                     continue
 
                 skill['attr'] = match.group('attrib').lower()
@@ -688,8 +817,6 @@ class FromGcs(object):
 
     def __build_spells(self):
         ## SPELLS #####
-        #print('\n=== SPELLS ===') # TODO: remove
-
         # takes points
         skill_add_to_iq = {
                 'hard' : [
@@ -720,7 +847,6 @@ class FromGcs(object):
 
         if ('spells' not in self.__gcs_data or
                 len(self.__gcs_data['spells']) == 0):
-            #print('** gcs data has no spells') # TODO: remove
             return
 
         # NOTE: Only add 'spell's if the character has some.
@@ -728,10 +854,8 @@ class FromGcs(object):
         self.char['spells'] = [] # {'name': xx, 'skill': xx}, ...
         for spell_gcs in self.__gcs_data['spells']:
             name = spell_gcs['name']
-            #print('\n--- Spell: %s ---' % name) # TODO: remove
 
             skill_gcs = self.char['permanent']['iq']
-            #print('Start with IQ: %d' % skill_gcs) # TODO: remove
 
             # Spell difficulty
             # 'difficulty' = 'IQ/H' or 'IQ/VH'
@@ -759,20 +883,17 @@ class FromGcs(object):
                 if college in self.__spell_advantages:
                     if best_plus < self.__spell_advantages[college]:
                         best_plus = self.__spell_advantages[college]
-                        #print('best_plus: %d for college: %s' % (best_plus, college)) # TODO: remove
 
             skill_gcs += best_plus
+            skill_gcs += self.__spell_advantage_global
 
             # Get the skill level
             # TODO (now): doesn't deal with more points than 24 or 28
             for lookup in skill_add_to_iq[difficulty]:
                 if points >= lookup['points']:
                     skill_gcs += lookup['add_to_iq']
-                    #print('points: %d, plusses: %d' % (points, # TODO: remove
-                    #    lookup['add_to_iq'])) # TODO: remove
                     break
 
-            #print('for a total of %d\n' % skill_gcs) # TODO: remove
             self.char['spells'].append({'name': name, 'skill': skill_gcs})
 
     def __get_advantage_cost(self,
@@ -1139,11 +1260,9 @@ class FromGcs(object):
                 # TODO: eventually handle 'plus_pne' (one in the chamber)
                 if match:
                     if match.group('shots') == 'T': # Thrown
-                        # print('** THROWN **') # TODO: remove
                         new_thing['reload_type'] = (
                                 ca_equipment.Equipment.RELOAD_NONE)
                     else:
-                        # print('** NEEDS AMMO **') # TODO: remove
                         new_thing['ammo'] = { 'name':
                                 ca_equipment.Equipment.UNKNOWN_STRING}
                         shots = int(match.group('shots'))
@@ -1267,6 +1386,39 @@ class ToNative(object):
                 found_differences = True
 
         return differences if found_differences else None
+
+    @staticmethod
+    def import_spell_list(window_manager,   # ca_gui.WindowManager for errors
+                          native_data,  # dict: {name: {details}, ...
+                          gcs_spells    # dict: {name: {details}, ...
+                          ):
+        PP = pprint.PrettyPrinter(indent=3, width=150) # Do not remove
+        for gcs_name, gcs_spell in gcs_spells.items():
+            if gcs_name not in native_data:
+                native_data[gcs_name] = gcs_spell
+            elif native_data[gcs_name] == gcs_spell:
+                continue # Ignore an exact duplicate
+            else:
+                native_spell = native_data[gcs_name]
+                same_except_notes_save = True
+                for name, item in gcs_spell.items():
+                    if name not in native_spell:
+                        native_spell[name] = item
+                    if (item != native_spell[name] and name != 'notes' and
+                            name != 'save'):
+                        same_except_notes_save = False
+                if not same_except_notes_save:
+                    error_strings = ['Spell "%s" different in GCS:' % gcs_name]
+                    gcs_string = PP.pformat(gcs_spell)
+                    gcs_strings = gcs_string.split('\n')
+                    error_strings.extend(gcs_strings)
+
+                    error_strings.append('than stored natively:')
+                    native_string = PP.pformat(native_spell)
+                    native_strings = native_string.split('\n')
+                    error_strings.extend(native_strings)
+
+                    window_manager.error(error_strings)
 
     @staticmethod
     def is_optional_element_equal(element,          # string: comaring this
@@ -2085,6 +2237,22 @@ class GcsImport(object):
                              native_data,
                              (skills, techniques))
         equipment.import_skills()
+        return
+
+    def import_spells(self,
+                      window_manager,   # ca_gui.WindowManager, or errors
+                      native_data,      # array = original equipment list
+                      ruleset,          # ca_ruleset.Ruleset object
+                      gcs_filename=None,# string
+                      ):
+        '''
+        Reads the data into a local format and then writes the data into the
+        local store.
+
+        Returns: Nothing
+        '''
+        gcs_spells = FromGcs.build_spell_list(window_manager, gcs_filename)
+        ToNative.import_spell_list(window_manager, native_data, gcs_spells)
         return
 
     def update_creature(self,

@@ -1621,9 +1621,6 @@ class PersonnelHandler(ScreenHandler):
                        'help': 'Quit changing personnel.'},
         })
 
-        # TODO: add this in
-        # self._add_to_choice_dict(self.world.ruleset.get_import_commands(self))
-
         if creature_type == PersonnelHandler.NPCs:
             self._add_to_choice_dict({
                 ord('p'): {'name': 'NPC joins PCs',
@@ -6640,6 +6637,13 @@ class MainHandler(ScreenHandler):
 
                  ord('h'): {'name': 'Heal all PCs',
                             'func': self.__fully_heal},
+                 ord('I'): {'name': 'Import capabilities',
+                            'func': self.__import_stuff,
+                            'help': 'Lets the user import capabilities ' +
+                                    'to augment the ruleset.  You can ' +
+                                    'import things such as skills, spells ' +
+                                    'and attributes to make them ' +
+                                    'available for character creation.'},
                  ord('M'): {'name': 'show MONSTERs or PC/NPC',
                             'func': self.__toggle_Monster_PC_NPC_display,
                             'help': 'Select whom to display on the main ' +
@@ -6693,6 +6697,7 @@ class MainHandler(ScreenHandler):
                                     'on the screen if that creature\'s ' +
                                     'group is currently displayed.'}
                  })
+
         self._window = self._window_manager.get_main_gm_window(self._choices)
 
         # name of monster group or 'None' for PC/NPC list
@@ -6905,6 +6910,21 @@ class MainHandler(ScreenHandler):
 
         self.world.ruleset.heal_fighter(fighter, self.world)
         self._draw_screen()
+
+        return True
+
+    def __import_stuff(self):
+        '''
+        Command ribbon method.
+
+        Heals the selected creature.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+
+        import_menu = self.world.ruleset.get_import_commands()
+        ignore_item, ignore_index = self._window_manager.menu(
+                'Import What', import_menu)
 
         return True
 
