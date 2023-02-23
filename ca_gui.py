@@ -913,12 +913,12 @@ class GmWindowManager(object):
                 new_index += 1
             elif user_input == curses.KEY_NPAGE:
                 menu_win.scroll_down()
-                showable = menu_win.get_showable_menu_lines()
+                showable = menu_win.get_showable_lines()
                 if index < showable['top_line']:
                     new_index = showable['top_line']
             elif user_input == curses.KEY_PPAGE:
                 menu_win.scroll_up()
-                showable = menu_win.get_showable_menu_lines()
+                showable = menu_win.get_showable_lines()
                 if index > showable['bottom_line']:
                     new_index = showable['bottom_line']
             elif user_input == ord('\n'):
@@ -934,7 +934,7 @@ class GmWindowManager(object):
                 return None, None
             else:
                 # Look for a match and return the selection
-                showable = menu_win.get_showable_menu_lines()
+                showable = menu_win.get_showable_lines()
                 for index, entry in enumerate(strings_results):
                     # (string, return value)
                     # entry[MENU_STRING][0] is the 1st char of the string
@@ -971,7 +971,7 @@ class GmWindowManager(object):
                 # NOTE: assumes we're only changing by one line at a time so
                 # we don't have to worry about scrolling more than once to get
                 # to the current index.
-                showable = menu_win.get_showable_menu_lines()
+                showable = menu_win.get_showable_lines()
                 if (index > showable['bottom_line'] or
                         index < showable['top_line']):
                     menu_win.scroll_to(index)
@@ -1152,7 +1152,7 @@ class GmScrollableWindow(object):
                                                                 width,
                                                                 top_line,
                                                                 left_column)
-        self.top_line = 0
+        self.top_line = 0   # top displayed line
         self.draw_window()
         self.refresh()
 
@@ -1188,7 +1188,7 @@ class GmScrollableWindow(object):
             #else:
             #    line += y - y_start
 
-    def get_showable_menu_lines(self):
+    def get_showable_lines(self):
         '''
         Returns a dict containing the ordinal number of the line at the top
         window and the ordinal number of the line at the bottom of the window.

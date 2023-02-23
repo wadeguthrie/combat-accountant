@@ -245,6 +245,9 @@ class MainGmWindow(ca_gui.GmWindow):
 
         Returns nothing.
         '''
+
+        # Build the character list
+
         del self.__char_list[:]
 
         if char_list is None:
@@ -267,6 +270,15 @@ class MainGmWindow(ca_gui.GmWindow):
 
             self.__char_list.append([{'text': char.detailed_name,
                                       'mode': mode}])
+
+        # Perhaps scroll to the right place
+
+        showable_lines = self.__char_list_window.get_showable_lines()
+        if (current_index < showable_lines['top_line'] or
+                current_index > showable_lines['bottom_line']):
+            self.__char_list_window.scroll_to(current_index)
+
+        # Now, draw everything
 
         self.__char_list_window.draw_window()
         self.refresh()
@@ -401,6 +413,8 @@ class PersonnelGmWindow(ca_gui.GmWindow):
         Returns nothing.
         '''
 
+        # Rebuild the character list
+
         # self.__char_list = []   # [[{'text', 'mode'}, ...],   # line 0
         #                         #  [...],                  ]  # line 1...
 
@@ -426,6 +440,14 @@ class PersonnelGmWindow(ca_gui.GmWindow):
 
             self.__char_list.append([{'text': char.detailed_name,
                                       'mode': mode}])
+
+        # Perhaps scroll to the right place
+
+        if viewing_index is not None:
+            showable_lines = self.__char_list_window.get_showable_lines()
+            if (viewing_index < showable_lines['top_line'] or
+                    viewing_index > showable_lines['bottom_line']):
+                self.__char_list_window.scroll_to(viewing_index)
 
         # ...and show the screen
 
@@ -1619,6 +1641,16 @@ class PersonnelHandler(ScreenHandler):
             ord('q'): {'name': 'quit',
                        'func': self.__quit,
                        'help': 'Quit changing personnel.'},
+             ord('/'): {'name': 'search',
+                        'func': self.__search,
+                        'help': 'Search through all of the various ' +
+                                'creatures in your game for a regular ' +
+                                'expressions.  You will be told where, ' +
+                                'in each search result, the search ' +
+                                'found your search term.  Selecting one ' +
+                                'of the results selects that creature ' +
+                                'on the screen if that creature\'s ' +
+                                'group is currently displayed.'}
         })
 
         if creature_type == PersonnelHandler.NPCs:
@@ -1990,6 +2022,74 @@ class PersonnelHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
         self.__current_pane = PersonnelHandler.CHAR_DETAIL
+        return True
+
+    def __search(self):
+        '''
+        Asks the user for a string.  Searches for that string through the PCs,
+        NPCs, and all of the fights.  If the user selects one of the matches,
+        this method makes that the currently selected creature.
+
+        Returns nothing.
+        '''
+
+        lines, cols = self._window.getmaxyx()
+        look_for_string = self._window_manager.input_box(1,
+                                                         cols-4,
+                                                         'Search For What?')
+
+        if look_for_string is None or len(look_for_string) <= 0:
+            return True
+        look_for_re = re.compile(look_for_string)
+
+        all_results = []
+
+        for creature in self.__critters['obj']:
+            name = creature.name
+            result = self.world.ruleset.search_one_creature(
+                    name,
+                    creature.group,
+                    creature.details,
+                    look_for_re)
+            if result is not None and len(result) > 0:
+                all_results.extend(result)
+
+        if len(all_results) <= 0:
+            self._window_manager.error(['"%s" not found' % look_for_string])
+        else:
+            lines = []
+            result_menu = []
+
+            for match in all_results:
+                if 'notes' in match:
+                    match_string = '%s (%s): in %s - %s' % (match['name'],
+                                                            match['group'],
+                                                            match['location'],
+                                                            match['notes'])
+                else:
+                    match_string = '%s (%s): in %s' % (match['name'],
+                                                       match['group'],
+                                                       match['location'])
+
+                index = None
+                for i, character in enumerate(self.__critters['obj']):
+                    if (character.name == match['name'] and
+                            character.group == match['group']):
+                        index = i
+
+                result_menu.append((match_string, index))
+
+            menu_title = 'Found "%s"' % look_for_string
+
+            select_result, ignore = self._window_manager.menu(
+                    menu_title,
+                    result_menu,
+                    starting_index=0,
+                    skip_singles=False)
+            if select_result is not None:
+                self.__viewing_index = select_result
+                self._draw_screen()
+
         return True
 
     def __update_creature(self):
