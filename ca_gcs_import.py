@@ -219,103 +219,167 @@ class FromGcs(object):
         # Easier to build a separate 'stuff' list given containers and such.
         self.stuff = [] # [{'name':names.lower(), 'count': count, ...},... ]
 
-    @staticmethod
-    def build_spell_list(window_manager, # ca_gui.GmWindowManager obj (errors)
-                         gcs_filename):
+    def __map_attrib(self,
+                     attrib   # string
+                     ):
+        attrib_gcs_to_native = {
+                'will' : 'wi'
+                }
+        if attrib not in attrib_gcs_to_native:
+            return attrib
+        return attrib_gcs_to_native[attrib]
+
+    def build_skill_list(self,
+                         window_manager, # ca_gui.GmWindowManager obj (errors)
+                         ):
+        native_skills = {}
+        if 'rows' not in self.__gcs_data:
+            window_manager.error(['No "rows" element in file'])
+            return native_skills
+
+        for gcs_skill in self.__gcs_data['rows']:
+            if gcs_skill['type'] != 'skill':
+                continue
+            if 'name' not in gcs_skill:
+                continue
+            name = gcs_skill['name']
+            if 'specialization' in gcs_skill:
+                name = '%s (%s)' % (name, gcs_skill['specialization'])
+            if name in native_skills:
+                window_manager.error([
+                    'Skill %s in input file multiple times' % name])
+                continue
+
+            native_skill = {
+                    'ask': 'number',
+                    'attr': 'iq',
+                    'diff': 'E',
+                    'default': None,
+                    # 'equip': { 'first aid kit': 1 } # optional
+                    # 'advantage': { xxx } # optional
+                    }
+            if 'difficulty' in gcs_skill:
+                # attribute / difficulty
+                match = re.match(
+                        '(?P<attrib>[A-Za-z]+)(?P<slash>/)' +
+                        '(?P<difficulty>[A-Za-z]+)',
+                        gcs_skill['difficulty'])
+                if match is not None:
+                    native_skill['attr'] = self.__map_attrib(
+                                match.group('attrib').lower())
+                    native_skill['diff'] = match.group('difficulty').upper()
+
+            if 'reference' in gcs_skill:
+                native_skill['notes'] = gcs_skill['reference']
+
+            if 'defaults' in gcs_skill:
+                for default in gcs_skill['defaults']:
+                    if 'type' in default:
+                        default_type = self.__map_attrib(default['type'])
+                        if default_type == native_skill['attr']:
+                            native_skill['default'] = default['modifier']
+                            break
+
+            native_skills[name] = native_skill
+
+        return native_skills
+
+    def build_spell_list(self,
+                         window_manager, # ca_gui.GmWindowManager obj (errors)
+                         ):
         native_spells = {}
-        with ca_json.GmJson(gcs_filename) as gcs_spell_file:
-            gcs_spell_data = gcs_spell_file.read_data
-            if 'rows' not in gcs_spell_data:
-                window_manager.error(['No "rows" element in file'])
-                return native_spells
 
-            for gcs_spell in gcs_spell_data['rows']:
-                if gcs_spell['type'] != 'spell':
-                    continue
-                if 'name' not in gcs_spell:
-                    continue
-                name = gcs_spell['name']
-                if name in native_spells:
-                    window_manager.error([
-                        'Spell %s in %s multiple times' % (name,
-                                                           gcs_filename)])
-                    continue
+        if 'rows' not in self.__gcs_data:
+            window_manager.error(['No "rows" element in file'])
+            return native_skills
 
-                native_spell = {
-                        'range': 'regular',
-                        'cost': None,
-                        'maintain': None,
-                        'casting time': None,
-                        'duration': None,
-                        'notes': '',
-                        'save': [] # not in GCS
-                        }
-                if 'difficulty' in gcs_spell:
-                    native_spell['difficulty'] = gcs_spell['difficulty'] # "IQ/H"
-                if 'spell_class' in gcs_spell:
-                    gcs_range = gcs_spell['spell_class'].lower()
-                    # Used in code: block, missile, area, melee
-                    if gcs_range in ['blocking', 'regular/blocking',
-                            'blocking/special', 'regular blocking']:
-                        native_spell['range'] = 'block'
-                    elif gcs_range in ['missile', 'missile/special']:
-                        native_spell['range'] = 'missile'
-                    elif gcs_range in ['area', 'area/info', 'regular/area',
-                            'info/area', 'special/area']:
-                        native_spell['range'] = 'area'
-                    elif gcs_range in ['melee']:
-                        native_spell['range'] = 'melee'
-                    else: # regular, enchantment, info, special
-                        native_spell['range'] = gcs_range
+        for gcs_spell in self.__gcs_data['rows']:
+            if gcs_spell['type'] != 'spell':
+                continue
+            if 'name' not in gcs_spell:
+                continue
+            name = gcs_spell['name']
+            if name in native_spells:
+                window_manager.error([
+                    'Spell %s in %s multiple times' % (name,
+                                                       gcs_filename)])
+                continue
 
-                if 'casting_cost' in gcs_spell:
-                    match = re.match('^ *(?P<cost>[0-9]+) *(?P<extra>([Mm]inimum)?) *$',
-                         gcs_spell['casting_cost'])
-                    if match is None:
-                        native_spell['cost'] = (0
-                                if gcs_spell['casting_cost'] == 'None' # ironic
-                                else None) # special / ask
-                    else:
-                        try:
-                            # for area spells, this is the base cost
-                            native_spell['cost'] = int(match.group('cost'))
-                        except ValueError:
-                            native_spell['cost'] = None # special / ask
-                if 'maintenance_cost' in gcs_spell:
+            native_spell = {
+                    'range': 'regular',
+                    'cost': None,
+                    'maintain': None,
+                    'casting time': None,
+                    'duration': None,
+                    'notes': '',
+                    'save': [] # not in GCS
+                    }
+            if 'difficulty' in gcs_spell:
+                native_spell['difficulty'] = gcs_spell['difficulty'] # "IQ/H"
+            if 'spell_class' in gcs_spell:
+                gcs_range = gcs_spell['spell_class'].lower()
+                # Used in code: block, missile, area, melee
+                if gcs_range in ['blocking', 'regular/blocking',
+                        'blocking/special', 'regular blocking']:
+                    native_spell['range'] = 'block'
+                elif gcs_range in ['missile', 'missile/special']:
+                    native_spell['range'] = 'missile'
+                elif gcs_range in ['area', 'area/info', 'regular/area',
+                        'info/area', 'special/area']:
+                    native_spell['range'] = 'area'
+                elif gcs_range in ['melee']:
+                    native_spell['range'] = 'melee'
+                else: # regular, enchantment, info, special
+                    native_spell['range'] = gcs_range
+
+            if 'casting_cost' in gcs_spell:
+                match = re.match('^ *(?P<cost>[0-9]+) *(?P<extra>([Mm]inimum)?) *$',
+                     gcs_spell['casting_cost'])
+                if match is None:
+                    native_spell['cost'] = (0
+                            if gcs_spell['casting_cost'] == 'None' # ironic
+                            else None) # special / ask
+                else:
                     try:
-                        native_spell['maintain'] = int(gcs_spell['maintenance_cost'])
+                        # for area spells, this is the base cost
+                        native_spell['cost'] = int(match.group('cost'))
                     except ValueError:
-                        native_spell['maintain'] = None # Can't be maintained
-                if 'casting_time' in gcs_spell:
-                    native_spell['casting time'] = FromGcs.get_seconds_from_time_string(
-                            gcs_spell['casting_time'])
-                if 'duration' in gcs_spell:
-                    # None = special
-                    # 0 = instantaneous / permanent
-                    if gcs_spell['duration'] in ['Permanent', 'Instant', '-']:
-                        native_spell['duration'] = 0
-                    else:
-                        # returns None if no match
-                        native_spell['duration'] = FromGcs.get_seconds_from_time_string(
-                                gcs_spell['duration'])
+                        native_spell['cost'] = None # special / ask
+            if 'maintenance_cost' in gcs_spell:
+                try:
+                    native_spell['maintain'] = int(gcs_spell['maintenance_cost'])
+                except ValueError:
+                    native_spell['maintain'] = None # Can't be maintained
+            if 'casting_time' in gcs_spell:
+                native_spell['casting time'] = FromGcs.get_seconds_from_time_string(
+                        gcs_spell['casting_time'])
+            if 'duration' in gcs_spell:
+                # None = special
+                # 0 = instantaneous / permanent
+                if gcs_spell['duration'] in ['Permanent', 'Instant', '-']:
+                    native_spell['duration'] = 0
+                else:
+                    # returns None if no match
+                    native_spell['duration'] = FromGcs.get_seconds_from_time_string(
+                            gcs_spell['duration'])
 
 
-                notes = ''
-                if 'reference' in gcs_spell:
-                    notes = notes + gcs_spell['reference']
+            notes = ''
+            if 'reference' in gcs_spell:
+                notes = notes + gcs_spell['reference']
 
-                if (native_spell['casting time'] is None and
-                        gcs_spell['casting_time'] != '-'):
-                    '; '.join([notes,
-                              gcs_spell['casting_time']])
-                if (native_spell['duration'] is None and
-                        gcs_spell['duration'] != '-'):
-                    '; '.join([notes,
-                               gcs_spell['duration']])
-                if len(notes) > 0:
-                    native_spell['notes'] = notes
+            if (native_spell['casting time'] is None and
+                    gcs_spell['casting_time'] != '-'):
+                '; '.join([notes,
+                          gcs_spell['casting_time']])
+            if (native_spell['duration'] is None and
+                    gcs_spell['duration'] != '-'):
+                '; '.join([notes,
+                           gcs_spell['duration']])
+            if len(notes) > 0:
+                native_spell['notes'] = notes
 
-                native_spells[name] = native_spell
+            native_spells[name] = native_spell
 
         return native_spells
 
@@ -1388,6 +1452,43 @@ class ToNative(object):
         return differences if found_differences else None
 
     @staticmethod
+    def import_skill_list(window_manager,   # ca_gui.WindowManager for errors
+                          native_data,  # dict: {name: {details}, ...
+                          gcs_skills    # dict: {name: {details}, ...
+                          ):
+        '''
+        This routine imports the list of skills from which a character can
+        choose to improve the character.
+        '''
+        PP = pprint.PrettyPrinter(indent=3, width=150) # Do not remove
+        for gcs_name, gcs_skill in gcs_skills.items():
+            if gcs_name not in native_data:
+                native_data[gcs_name] = gcs_skill
+            elif native_data[gcs_name] == gcs_skill:
+                continue # Ignore an exact duplicate
+            else:
+                native_skill = native_data[gcs_name]
+                same_except_notes = True
+                for name, item in gcs_skill.items():
+                    if name not in native_skill:
+                        native_skill[name] = item
+                    if (item != native_skill[name] and name != 'notes' and
+                            name != 'save'):
+                        same_except_notes = False
+                if not same_except_notes:
+                    error_strings = ['Skill "%s" different in GCS:' % gcs_name]
+                    gcs_string = PP.pformat(gcs_skill)
+                    gcs_strings = gcs_string.split('\n')
+                    error_strings.extend(gcs_strings)
+
+                    error_strings.append('than stored natively:')
+                    native_string = PP.pformat(native_skill)
+                    native_strings = native_string.split('\n')
+                    error_strings.extend(native_strings)
+
+                    window_manager.error(error_strings)
+
+    @staticmethod
     def import_spell_list(window_manager,   # ca_gui.WindowManager for errors
                           native_data,  # dict: {name: {details}, ...
                           gcs_spells    # dict: {name: {details}, ...
@@ -1456,11 +1557,14 @@ class ToNative(object):
                                 sync=False,
                                 squash=False)
 
-    def import_skills(self):
-        self.__import_skills(self.__native_data,
-                                self.__gcs_data,
-                                sync=False,
-                                squash=False)
+    #def import_skills(self):
+    #    '''
+    #    This is for importing the skills a character already has.
+    #    '''
+    #    self.__import_skills(self.__native_data,
+    #                            self.__gcs_data,
+    #                            sync=False,
+    #                            squash=False)
 
     def pprint(self):
         print('\n=== Import Creature ===')
@@ -2219,39 +2323,41 @@ class GcsImport(object):
         to_native.import_equipment_list()
         return
 
-    def import_skills(self,
-                      native_data,         # array = original equipment list
-                      ruleset,             # ca_ruleset.Ruleset object
-                      gcs_filename=None,   # string
-                      ):
+    def import_skill_list(self,
+                          window_manager,   # ca_gui.WindowManager, or errors
+                          native_data,      # array = original skill list
+                          ruleset,          # ca_ruleset.Ruleset object
+                          gcs_filename=None,# string
+                          ):
         '''
+        Reads the list of spells from a file into the local spell list.
+
         Reads the data into a local format and then writes the data into the
         local store.
 
         Returns: Nothing
         '''
-        gcs_data = FromGcs(self.__window_manager, ruleset, gcs_filename)
-        skills, techniques = gcs_data.build_skills_description()
-
-        equipment = ToNative(self.__window_manager,
-                             native_data,
-                             (skills, techniques))
-        equipment.import_skills()
+        from_gcs = FromGcs(window_manager, ruleset, gcs_filename)
+        gcs_skills = from_gcs.build_skill_list(window_manager)
+        ToNative.import_skill_list(window_manager, native_data, gcs_skills)
         return
 
-    def import_spells(self,
-                      window_manager,   # ca_gui.WindowManager, or errors
-                      native_data,      # array = original equipment list
-                      ruleset,          # ca_ruleset.Ruleset object
-                      gcs_filename=None,# string
-                      ):
+    def import_spell_list(self,
+                          window_manager,   # ca_gui.WindowManager, or errors
+                          native_data,      # array = original spell list
+                          ruleset,          # ca_ruleset.Ruleset object
+                          gcs_filename=None,# string
+                          ):
         '''
+        Reads the list of spells from a file into the local spell list.
+
         Reads the data into a local format and then writes the data into the
         local store.
 
         Returns: Nothing
         '''
-        gcs_spells = FromGcs.build_spell_list(window_manager, gcs_filename)
+        from_gcs = FromGcs(window_manager, ruleset, gcs_filename)
+        gcs_spells = from_gcs.build_spell_list(window_manager)
         ToNative.import_spell_list(window_manager, native_data, gcs_spells)
         return
 

@@ -1421,7 +1421,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
 
         return [
-            ('skills', {'doit': self.import_skills_from_file_user}),
+            ('skills', {'doit': self.import_skills_from_file}),
             ('Spells', {'doit': self.import_spells_from_file}),
             ]
 
@@ -2218,19 +2218,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         gcs_import.import_equipment(native_list, self, filename)
         return
 
-    def import_skills_from_file_user(self,
-                                     throw_away
-                                     ):
-        filename = None
-        native_list = None
-        # TODO: get filename
-        # TODO: get native list
-        self.import_skills_from_file(filename, native_list)
-        return True
-
     def import_skills_from_file(self,
-                                filename,    # string
-                                native_list  # [] current skills list
+                                throw_away
                                 ):
         '''
         The GURPS Ruleset method imports equipment from a GURPS Character
@@ -2238,8 +2227,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         Returns nothing.
         '''
+        # Get the source file
+        filename_window = ca_gui.GetFilenameWindow(self._window_manager)
+        filename = filename_window.get_filename(['.skl'])
+        if filename is None:
+            return True
+
+        native_list = GurpsRuleset.abilities['skills']
         gcs_import = ca_gcs_import.GcsImport(self._window_manager)
-        gcs_import.import_equipment(native_list, self, filename)
+        gcs_import.import_skill_list(self._window_manager,
+                                     native_list,
+                                     self, filename)
+        #PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
+        #print('\n--- skill list ---') # TODO: remove
+        #PP.pprint(native_list) # TODO: remove
         return
 
     def import_spells_from_file(self,
@@ -2259,10 +2260,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         native_list = GurpsRuleset.spells
         gcs_import = ca_gcs_import.GcsImport(self._window_manager)
-        gcs_import.import_spells(self._window_manager,
-                                 native_list,
-                                 self, filename)
-
+        gcs_import.import_spell_list(self._window_manager,
+                                     native_list,
+                                     self, filename)
         return True
 
     def initiative(self,
