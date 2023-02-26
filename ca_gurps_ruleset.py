@@ -1421,8 +1421,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
 
         return [
-            ('skills', {'doit': self.import_skills_from_file}),
-            ('Spells', {'doit': self.import_spells_from_file}),
+            ('advantages',  {'doit': self.import_advantages_from_file}),
+            ('equipment',   {'doit': self.import_equipment_from_file}),
+            ('skills',      {'doit': self.import_skills_from_file}),
+            ('Spells',      {'doit': self.import_spells_from_file}),
             ]
 
     def get_import_creature_file_extension(self):
@@ -2204,9 +2206,31 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         name, creature = gcs_import.import_creature(creature, self, filename)
         return name, creature
 
+    def import_advantages_from_file(self,
+                                    throw_away
+                                    ):
+        '''
+        The GURPS Ruleset method imports equipment from a GURPS Character
+        Sheet (GCS) file.
+
+        Returns nothing.
+        '''
+        # Get the source file
+        filename_window = ca_gui.GetFilenameWindow(self._window_manager)
+        filename = filename_window.get_filename(['.adq'])
+        if filename is None:
+            return True
+
+        gcs_import = ca_gcs_import.GcsImport(self._window_manager)
+        gcs_import.import_advantages_from_file(
+                self._window_manager,
+                self.__gurps_info.read_data['abilities']['advantages'],
+                self,
+                filename)
+        return True
+
     def import_equipment_from_file(self,
-                                   filename,    # string
-                                   native_list  # [] current equipment list
+                                   throw_away
                                    ):
         '''
         The GURPS Ruleset method imports equipment from a GURPS Character
@@ -2214,9 +2238,20 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         Returns nothing.
         '''
+        # Get the source file
+        filename_window = ca_gui.GetFilenameWindow(self._window_manager)
+        filename = filename_window.get_filename(['.adq'])
+        if filename is None:
+            return True
+
         gcs_import = ca_gcs_import.GcsImport(self._window_manager)
-        gcs_import.import_equipment(native_list, self, filename)
-        return
+        gcs_import.import_equipment_from_file(
+                self._window_manager,
+                # TODO: where do i keep my equipment?
+                self.__gurps_info.read_data['abilities']['advantages'],
+                self,
+                filename)
+        return True
 
     def import_skills_from_file(self,
                                 throw_away
@@ -2233,15 +2268,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         if filename is None:
             return True
 
-        native_list = GurpsRuleset.abilities['skills']
         gcs_import = ca_gcs_import.GcsImport(self._window_manager)
-        gcs_import.import_skill_list(self._window_manager,
-                                     native_list,
-                                     self, filename)
-        #PP = pprint.PrettyPrinter(indent=3, width=150) # TODO: remove
-        #print('\n--- skill list ---') # TODO: remove
-        #PP.pprint(native_list) # TODO: remove
-        return
+        gcs_import.import_skills_from_file(
+                self._window_manager,
+                self.__gurps_info.read_data['abilities']['skills'],
+                self,
+                filename)
+        return True
 
     def import_spells_from_file(self,
                                 throw_away
@@ -2258,11 +2291,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         if filename is None:
             return True
 
-        native_list = GurpsRuleset.spells
         gcs_import = ca_gcs_import.GcsImport(self._window_manager)
-        gcs_import.import_spell_list(self._window_manager,
-                                     native_list,
-                                     self, filename)
+        gcs_import.import_spells_from_file(
+                self._window_manager,
+                self.__gurps_info.read_data['spells'],
+                self,
+                filename)
         return True
 
     def initiative(self,

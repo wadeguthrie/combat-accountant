@@ -229,6 +229,93 @@ class FromGcs(object):
             return attrib
         return attrib_gcs_to_native[attrib]
 
+    def build_advantage_list(
+            self,
+            window_manager, # ca_gui.GmWindowManager obj (errors)
+            ):
+        native_advantages = {}
+
+        if 'rows' not in self.__gcs_data:
+            window_manager.error(['No "rows" element in file'])
+            return native_skills
+
+        for gcs_advantage in self.__gcs_data['rows']:
+            if gcs_advantage['type'] != 'advantage':
+                continue
+            if 'name' not in gcs_advantage:
+                continue
+            name = gcs_advantage['name']
+            if name in gcs_advantage:
+                window_manager.error([
+                    'Advantage %s in %s multiple times' % (name,
+                                                           gcs_filename)])
+                continue
+
+            native_advantage = { }
+            if 'points_per_level' in gcs_advantage:
+                native_advantage['ask'] = 'string'
+            if 'base_points' in gcs_advantage:
+                native_advantage['value'] = gcs_advantage['base_points']
+            if ('modifiers' in gcs_advantage or
+                    'points_per_level' in gcs_advantage):
+                native_advantage['ask'] = 'number'
+
+
+            notes = ''
+            if 'reference' in gcs_advantage:
+                notes = notes + gcs_advantage['reference']
+
+            if len(notes) > 0:
+                native_advantage['notes'] = notes
+
+            native_advantages[name] = native_advantage
+
+        return native_advantages
+
+    def build_equipment_list(
+            self,
+            window_manager, # ca_gui.GmWindowManager obj (errors)
+            ):
+        # TODO: do this
+        native_advantages = {}
+
+        if 'rows' not in self.__gcs_data:
+            window_manager.error(['No "rows" element in file'])
+            return native_skills
+
+        for gcs_advantage in self.__gcs_data['rows']:
+            if gcs_advantage['type'] != 'advantage':
+                continue
+            if 'name' not in gcs_advantage:
+                continue
+            name = gcs_advantage['name']
+            if name in gcs_advantage:
+                window_manager.error([
+                    'Advantage %s in %s multiple times' % (name,
+                                                           gcs_filename)])
+                continue
+
+            native_advantage = { }
+            if 'points_per_level' in gcs_advantage:
+                native_advantage['ask'] = 'string'
+            if 'base_points' in gcs_advantage:
+                native_advantage['value'] = gcs_advantage['base_points']
+            if ('modifiers' in gcs_advantage or
+                    'points_per_level' in gcs_advantage):
+                native_advantage['ask'] = 'number'
+
+
+            notes = ''
+            if 'reference' in gcs_advantage:
+                notes = notes + gcs_advantage['reference']
+
+            if len(notes) > 0:
+                native_advantage['notes'] = notes
+
+            native_advantages[name] = native_advantage
+
+        return native_advantages
+
     def build_skill_list(self,
                          window_manager, # ca_gui.GmWindowManager obj (errors)
                          ):
@@ -426,10 +513,9 @@ class FromGcs(object):
         result = int(match.group('count')) * multiplier
         return result
 
-    def build_character(self):
+    def convert_character(self):
         '''
-        Builds a local character description from the JSON extracted from a
-        GCS .gcs file.
+        Converts a GCS-formatted character to our native format.
         '''
         # Alphabetical (which works out for required order of execution).
         # Dependencies are as follows:
@@ -438,19 +524,11 @@ class FromGcs(object):
         #   equipment <- skills
         #   advantages <- spells
 
-        self.__build_advantages()
-        self.__build_attribs()
-        self.__build_equipment()
-        self.__build_skills()
-        self.__build_spells()
-
-    def build_equipment(self):
-        '''
-        Builds a local equipment list from the JSON extracted from a GCS
-        .eqp file.
-        '''
-        # Result is in self.stuff
-        self.__build_equipment('rows')
+        self.__convert_advantages()
+        self.__convert_attribs()
+        self.__convert_equipment()
+        self.__convert_skills()
+        self.__convert_spells()
 
     def build_skill_descriptions(self):
         '''
@@ -527,14 +605,18 @@ class FromGcs(object):
 
             advantages_gcs[name] = cost_gcs
 
-    def __add_item_to_gcs_list(self,
-                               item,        # ca dict
-                               stuff_gcs,   # container of items (each, a dict)
-                               container_name   # string (for debugging)
-                              ):
+    def __convert_and_store_equipment_item(
+            self,
+            item,           # source (dict) equipment item in GCS format
+            stuff_gcs,      # dest container of native items (each, a dict)
+            container_name  # string (for debugging)
+            ):
         '''
-        Adds entries into passed-in list for each item (and, recursively, each
-        item in containers) in equipment list of a GCS character.
+        Converts a single item of equipment from  GCS format to our native
+        format.  If the item is a container, this routine calls itself
+        recursively for the items in the container.
+
+        Native-formatted results are added to the passed-in list.
         '''
         new_thing = self.__ruleset.make_empty_item()
         name = item['description']
@@ -575,7 +657,9 @@ class FromGcs(object):
             new_thing['type']['container'] = {}
             new_thing['stuff'] = []
             for contents in item['children']:
-                self.__add_item_to_gcs_list(contents, new_thing['stuff'], new_thing['name'])
+                self.__convert_and_store_equipment_item(contents,
+                                                        new_thing['stuff'],
+                                                        new_thing['name'])
 
         # Now add to the creature
         if len(new_thing['type']) == 0:
@@ -649,7 +733,11 @@ class FromGcs(object):
                 weapon_dest['name']
                 ])
 
-    def __build_advantages(self):
+    def __convert_advantages(self):
+        '''
+        Converts GCS-formatted advantages that are owned by a character to our
+        native format.
+        '''
         self.char['advantages'] = {} # name: cost
         self.__spell_advantages = {}
 
@@ -662,7 +750,11 @@ class FromGcs(object):
             self.__add_advantage_to_gcs_list(advantage,
                                              self.char['advantages'])
 
-    def __build_attribs(self):
+    def __convert_attribs(self):
+        '''
+        Converts GCS-formatted attributes that are owned by a character to our
+        native format.
+        '''
         self.char['permanent'] = {} # name: value
 
         # TODO: add move, and speed -- gcs has points spent / json
@@ -694,13 +786,19 @@ class FromGcs(object):
 
             self.char['permanent'][attr_dest] = value
 
-    def __build_equipment(self,
-                          heading='equipment' # where in file is equipment found
-                          ):
+    def __convert_equipment(self,
+                            heading='equipment' # where in file is equipment found
+                            ):
+        '''
+        Converts GCS-formatted equipment that is owned by a character into our
+        native format.
+        '''
         if heading not in self.__gcs_data:
             return
         for item in self.__gcs_data[heading]:
-            self.__add_item_to_gcs_list(item, self.stuff, 'TOP LEVEL')
+            self.__convert_and_store_equipment_item(item,
+                                                    self.stuff,
+                                                    'TOP LEVEL')
 
     def __build_skill_descriptions(self):
         skills_result = {} # name: skill-level, ...
@@ -822,17 +920,17 @@ class FromGcs(object):
             #    techniques_result.append(technique)
             return skills_result, techniques_result
 
-    def __build_skills(self):
+    def __convert_skills(self):
         '''
-        Builds a list of skills and techniques, stored in the object, from GCS
-        data.
+        Converts GCS-formatted skills and techniques that are owned by a
+        character into our local format.
         '''
         self.char['skills'] = {} # name: skill-level, ...
         self.char['techniques'] = [] # {"name":...,"default":[...],"value":#}
 
         # Checks skill cost
-        # NOTE: Must run |__build_attribs|, |__build_advantages|, and
-        #   |__build_equipment| before |__build_skills| because skills depend
+        # NOTE: Must run |__convert_attribs|, |__convert_advantages|, and
+        #   |__convert_equipment| before |__convert_skills| because skills depend
         #   on attributes, some skills are affected by advantages, and
         #   equipment (a scope for a rifle, for instance).
 
@@ -879,7 +977,11 @@ class FromGcs(object):
                     }
                 self.char['techniques'].append(technique)
 
-    def __build_spells(self):
+    def __convert_spells(self):
+        '''
+        Converts GCS-formatted spells that are owned by a character into our
+        local format.
+        '''
         ## SPELLS #####
         # takes points
         skill_add_to_iq = {
@@ -1452,6 +1554,60 @@ class ToNative(object):
         return differences if found_differences else None
 
     @staticmethod
+    def import_advantage_list(
+            window_manager,   # ca_gui.WindowManager for errors
+            native_data,  # dict: {name: {details}, ...
+            gcs_advantages    # dict: {name: {details}, ...
+            ):
+        '''
+        This routine imports the list of advantages from which a character can
+        choose to improve the character.
+        '''
+        # TODO: combine the import functions
+        PP = pprint.PrettyPrinter(indent=3, width=150) # Do not remove
+        for gcs_name, gcs_advantage in gcs_advantages.items():
+            if gcs_name not in native_data:
+                native_data[gcs_name] = gcs_advantage
+            elif native_data[gcs_name] == gcs_advantage:
+                continue # Ignore an exact duplicate
+            else:
+                native_advantage = native_data[gcs_name]
+                same_except_notes = True
+                for name, item in gcs_advantage.items():
+                    if name not in native_advantage:
+                        native_advantage[name] = item
+                    if (item != native_advantage[name] and name != 'notes' and
+                            name != 'save'):
+                        same_except_notes = False
+                if not same_except_notes:
+                    error_strings = ['Advantage "%s" different in GCS:' % gcs_name]
+                    gcs_string = PP.pformat(gcs_advantage)
+                    gcs_strings = gcs_string.split('\n')
+                    error_strings.extend(gcs_strings)
+
+                    error_strings.append('than stored natively:')
+                    native_string = PP.pformat(native_advantage)
+                    native_strings = native_string.split('\n')
+                    error_strings.extend(native_strings)
+
+                    window_manager.error(error_strings)
+
+    @staticmethod
+    def import_equipment_list(
+            window_manager, # ca_gui.WindowManager for errors
+            native_data,    # dict: {name: {details}, ...
+            gcs_equipment   # dict: {name: {details}, ...
+            ):
+        '''
+        This routine imports the list of advantages from which a character can
+        choose to improve the character.
+        '''
+        self.__import_equipment(native_data,
+                                gcs_equipment,
+                                sync=False,
+                                squash=False)
+
+    @staticmethod
     def import_skill_list(window_manager,   # ca_gui.WindowManager for errors
                           native_data,  # dict: {name: {details}, ...
                           gcs_skills    # dict: {name: {details}, ...
@@ -1550,21 +1706,6 @@ class ToNative(object):
                                 self.__gcs_data.stuff,
                                 sync=True,
                                 squash=False)
-
-    def import_equipment_list(self):
-        self.__import_equipment(self.__native_data,
-                                self.__gcs_data,
-                                sync=False,
-                                squash=False)
-
-    #def import_skills(self):
-    #    '''
-    #    This is for importing the skills a character already has.
-    #    '''
-    #    self.__import_skills(self.__native_data,
-    #                            self.__gcs_data,
-    #                            sync=False,
-    #                            squash=False)
 
     def pprint(self):
         print('\n=== Import Creature ===')
@@ -1954,113 +2095,6 @@ class ToNative(object):
     def __import_skills(self):
         return self.__import_heading('skills', 'skill')
 
-    def __import_skills_description(self,
-                                    native_list, # []: contains native data, I/O
-                                    gcs_list,    # []: contains GCS data
-                                    sync         # Bool: sync or copy (see below)
-                                    ):
-        '''
-        Merges GCS equipment list with native one.  Discards exact duplicate
-        items, merges similar items, and copies unique items into
-        |native_list|.
-
-        The |sync| parameter indicates whether we're synchronizing items
-        between the native and GCS lists or copying them.  If an item from
-        is in the native list but not the GCS list, syncing the lists will
-        (optionally) keep the native item where copying will delete the item.
-
-        Returns (in addition to |native_list| being changed) a list of changes
-        to show the user.
-        '''
-        # TODO: replace with actual code
-
-        changes = []
-        stuff_native = self.__copy_json_equipment_list(native_list, squash)
-        stuff_gcs = self.__copy_json_equipment_list(gcs_list, squash)
-
-        equip_menu = [(' - Do All The Things -', {'op': ToNative.EQUIP_ADD_ALL})]
-        gcs_indexes_already_handled = []
-
-        # Handle duplicates
-
-        for index_gcs, item_gcs in enumerate(stuff_gcs):
-            for index_native, item_native in enumerate(stuff_native):
-                # Remove duplicates from GCS list
-                differences = ToNative.find_differences(item_native, item_gcs)
-                if differences is None:
-                    gcs_indexes_already_handled.append(index_gcs)
-                    break
-
-                # Merge (maybe) similar items
-                elif item_native['name'].lower() == item_gcs['name'].lower():
-                    equip_menu.append(
-                            ('%s (MERGE?)' % item_native['name'],
-                                {'op': ToNative.EQUIP_MERGE_THIS,
-                                 'index_gcs': index_gcs,
-                                 'index_native': index_native,
-                                 'differences': differences}))
-                    gcs_indexes_already_handled.append(index_gcs)
-                    break
-
-        # Adds in GCS items that aren't already represented by native items
-        # into the native item list.
-
-        for index, item_gcs in enumerate(stuff_gcs):
-            if index in gcs_indexes_already_handled:
-                continue
-
-            name_gcs = item_gcs['name']
-
-            if ('ignored-equipment' in self.__native_data and
-                    name_gcs.lower() in self.__native_data['ignored-equipment']):
-                changes.append('"%s" equipment IGNORED -- no change' %
-                        item_gcs['name'])
-            else:
-                equip_menu.append(('%s' % item_gcs['name'],
-                                   {'op': ToNative.EQUIP_ADD_THIS,
-                                    'item_gcs': item_gcs}))
-
-        # Now, ask the user about all of the stuff
-
-        keep_asking = True
-        keep_asking_menu = [('yes', True), ('no', False)]
-        while keep_asking:
-            # TODO (now): I could put the self.__xxx() function in the menu entry
-            #   {'doit': self.__whatever, 'param': passed_to_doit_method}
-
-            doit, ignore = self.__window_manager.menu('Add Which Equipment',
-                                                      equip_menu)
-            if doit is None:
-                keep_asking = False
-
-            if doit['op'] == ToNative.EQUIP_ADD_ALL:
-                keep_asking = False
-                for (string, operation) in equip_menu:
-                    if operation['op'] == ToNative.EQUIP_ADD_THIS:
-                        changes.append(self.__equip_add_this(
-                                       operation, native_list, gcs_list))
-                    if operation['op'] == ToNative.EQUIP_MERGE_THIS:
-                        changes.append(self.__equip_merge_this(
-                                       operation, native_list, gcs_list))
-                    if operation['op'] == ToNative.EQUIP_REPLACE_THIS:
-                        changes.append(self.__equip_replace_this(
-                                       operation, native_list, gcs_list))
-            elif doit['op'] == ToNative.EQUIP_ADD_THIS:
-                changes.append(self.__equip_add_this(
-                               operation, native_list))
-            elif doit['op'] == ToNative.EQUIP_MERGE_THIS:
-                changes.append(self.__equip_merge_this(
-                               operation, native_list, gcs_list))
-            elif doit['op'] == ToNative.EQUIP_REPLACE_THIS:
-                changes.append(self.__equip_replace_this(
-                               operation, native_list, gcs_list))
-
-            if keep_asking:
-                keep_asking, ignore = self.__window_manager.menu(
-                    'Continue adding items', keep_asking_menu)
-
-        return changes
-
     def __import_spells(self):
         changes = []
         if 'spells' not in self.__native_data:
@@ -2294,7 +2328,7 @@ class GcsImport(object):
 
         # Read the GCS file into an intermediate (mostly native) format
         gcs_data = FromGcs(self.__window_manager, ruleset, gcs_filename)
-        gcs_data.build_character()
+        gcs_data.convert_character()
         name = gcs_data.get_name()
 
         # Stuff the intermediate format into a native creature
@@ -2303,32 +2337,57 @@ class GcsImport(object):
         # character.pprint() ######################
         return name, native_data
 
-    def import_equipment(self,
-                         native_data,         # array = original equipment list
-                         ruleset,             # ca_ruleset.Ruleset object
-                         gcs_filename=None,   # string
-                         ):
+    def import_advantages_from_file(
+            self,
+            window_manager,   # ca_gui.WindowManager, or errors
+            native_data,      # array = original skill list
+            ruleset,          # ca_ruleset.Ruleset object
+            gcs_filename=None,# string
+            ):
         '''
+        Reads the list of spells from a file into the local spell list.
+
         Reads the data into a local format and then writes the data into the
         local store.
 
         Returns: Nothing
         '''
-        gcs_data = FromGcs(self.__window_manager, ruleset, gcs_filename)
-        gcs_data.build_equipment()
-
-        to_native = ToNative(self.__window_manager,
-                             native_data,
-                             gcs_data.stuff)
-        to_native.import_equipment_list()
+        from_gcs = FromGcs(window_manager, ruleset, gcs_filename)
+        gcs_advantages = from_gcs.build_advantage_list(window_manager)
+        ToNative.import_advantage_list(window_manager,
+                                       native_data,
+                                       gcs_advantages)
         return
 
-    def import_skill_list(self,
-                          window_manager,   # ca_gui.WindowManager, or errors
-                          native_data,      # array = original skill list
-                          ruleset,          # ca_ruleset.Ruleset object
-                          gcs_filename=None,# string
-                          ):
+    def import_equipment_from_file(
+            self,
+            window_manager,   # ca_gui.WindowManager, or errors
+            native_data,      # array = original skill list
+            ruleset,          # ca_ruleset.Ruleset object
+            gcs_filename=None,# string
+            ):
+        '''
+        Reads the list of spells from a file into the local spell list.
+
+        Reads the data into a local format and then writes the data into the
+        local store.
+
+        Returns: Nothing
+        '''
+        from_gcs = FromGcs(window_manager, ruleset, gcs_filename)
+        gcs_equipment = from_gcs.build_equipment_list(window_manager)
+        ToNative.import_equipment_list(window_manager,
+                                       native_data,
+                                       gcs_equipment)
+        return
+
+    def import_skills_from_file(
+            self,
+            window_manager,   # ca_gui.WindowManager, or errors
+            native_data,      # array = original skill list
+            ruleset,          # ca_ruleset.Ruleset object
+            gcs_filename=None,# string
+            ):
         '''
         Reads the list of spells from a file into the local spell list.
 
@@ -2342,12 +2401,13 @@ class GcsImport(object):
         ToNative.import_skill_list(window_manager, native_data, gcs_skills)
         return
 
-    def import_spell_list(self,
-                          window_manager,   # ca_gui.WindowManager, or errors
-                          native_data,      # array = original spell list
-                          ruleset,          # ca_ruleset.Ruleset object
-                          gcs_filename=None,# string
-                          ):
+    def import_spells_from_file(
+            self,
+            window_manager,   # ca_gui.WindowManager, or errors
+            native_data,      # array = original spell list
+            ruleset,          # ca_ruleset.Ruleset object
+            gcs_filename=None,# string
+            ):
         '''
         Reads the list of spells from a file into the local spell list.
 
