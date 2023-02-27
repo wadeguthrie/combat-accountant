@@ -1069,10 +1069,6 @@ class GmWindowManager(object):
         begin_x = int((curses.COLS / 2) - (width/2))
         begin_y = int((curses.LINES / 2) - (height/2))
 
-        #print ('c h:%r, w:%r, y:%r, x:%r' % # TODO: remove
-        #        (height+box_margin, width+box_margin, # TODO: remove
-        #            begin_y-1, begin_x-1)) # TODO: remove
-
         border_win = curses.newwin(height+box_margin,
                                    width+box_margin,
                                    begin_y-1,

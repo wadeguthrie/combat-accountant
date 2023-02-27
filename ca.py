@@ -14,6 +14,7 @@ import shutil
 import sys
 import traceback
 
+import ca_debug
 import ca_equipment
 import ca_fighter
 import ca_json
@@ -2116,7 +2117,7 @@ class PersonnelHandler(ScreenHandler):
                     fighter.details['gcs-file'])
 
         if need_file_message is not None:
-            self._window_manager.error('%s' % need_file_message)
+            self._window_manager.error(['%s' % need_file_message])
 
             extension = self.world.ruleset.get_import_creature_file_extension()
             filename_window = ca_gui.GetFilenameWindow(self._window_manager)
@@ -7022,7 +7023,7 @@ class MainHandler(ScreenHandler):
         Returns: False to exit the current ScreenHandler, True to stay.
         '''
 
-        import_menu = self.world.ruleset.get_import_commands()
+        import_menu = self.world.ruleset.get_import_commands(self.world)
         ignore_item, ignore_index = self._window_manager.menu(
                 'Import What', import_menu)
 
@@ -7843,6 +7844,9 @@ if __name__ == '__main__':
             orderly_shutdown = main_handler.handle_user_input_until_done()
 
         # Write a crashdump of the shutdown
+        debug = ca_debug.Debug()
+        debug.finish_up()
+
         if not orderly_shutdown:
             if program is not None:
                 print('\n** Making crash report **')
