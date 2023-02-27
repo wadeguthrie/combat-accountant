@@ -4,6 +4,7 @@ import copy
 import curses
 import pprint
 import random
+import re
 
 import ca_fighter
 import ca_equipment
@@ -639,7 +640,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns a tuple of:
             1) the number the defender needs to roll to successfully block an
                attack
-            2) a string describing the calculations that went into the number
+            2) array of strings describing the calculations that went into
+               the number
         '''
         skill = None
         if weapon is not None:
@@ -726,6 +728,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             return '(None)', why
 
         return results, why
+
     def get_dodge_skill(self,                       # Public to aid in testing
                         fighter,        # Fighter object
                         opponent=None   # Fighter object
@@ -734,7 +737,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns a tuple of:
             1) the number the defender needs to roll to successfully dodge an
                attack
-            2) a string describing the calculations that went into the number
+            2) array of strings describing the calculations that went into
+               the number
         '''
         dodge_why = []
         dodge_skill_modified = False
@@ -1412,7 +1416,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                  fighter.name)])
         return notes
 
-    def get_import_commands(self):
+    def get_import_commands(self,
+                            world   # World object
+                            ):
         '''
         TODO: fix this
         Returns fight commands that are specific to the GURPS ruleset.  These
@@ -1422,7 +1428,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return [
             ('advantages',  {'doit': self.import_advantages_from_file}),
-            ('equipment',   {'doit': self.import_equipment_from_file}),
+            ('equipment',   {'doit': self.import_equipment_from_file,
+                             'param': world}),
             ('skills',      {'doit': self.import_skills_from_file}),
             ('Spells',      {'doit': self.import_spells_from_file}),
             ]
@@ -2230,7 +2237,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         return True
 
     def import_equipment_from_file(self,
-                                   throw_away
+                                   world # world object
                                    ):
         '''
         The GURPS Ruleset method imports equipment from a GURPS Character
@@ -2240,15 +2247,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
         # Get the source file
         filename_window = ca_gui.GetFilenameWindow(self._window_manager)
-        filename = filename_window.get_filename(['.adq'])
+        filename = filename_window.get_filename(['.eqp'])
         if filename is None:
             return True
 
         gcs_import = ca_gcs_import.GcsImport(self._window_manager)
         gcs_import.import_equipment_from_file(
                 self._window_manager,
-                # TODO: where do i keep my equipment?
-                self.__gurps_info.read_data['abilities']['advantages'],
+                world.details['stuff'],  # From the world's json file
                 self,
                 filename)
         return True
@@ -2365,6 +2371,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 for mode in modes:
                     if found_skill:
                         break
+                    if mode == 'misc':
+                        continue
                     for item_skill in item['type'][mode]['skill'].keys():
                         if item_skill.lower() not in creature['current']:
                             skills[item_skill] = 1

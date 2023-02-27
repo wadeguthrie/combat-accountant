@@ -5,12 +5,14 @@ import pprint
 import traceback
 import unittest
 
+import ca_debug
 import ca_gcs_import
 import diff_json
 
 from unittest_main.test_common import GmTestCaseCommon
 
 class GmTestCaseImport(GmTestCaseCommon):
+    debug = ca_debug.Debug()
     good_data = {
         'unittest_import/Char1.gcs': {
               "actions_this_turn": [],
@@ -71,7 +73,9 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "type": { "misc": {} },
                   "count": 1,
                   "notes": "A complete kit for treating wounds, with bandages, ointments, etc.",
-                  "owners": None
+                  "owners": None,
+                  "bonus": [{'amount': 1, 'name': 'First Aid', 'type': 'skill'}]
+
                 },
                 {
                   "name": "Large Knife",
@@ -148,7 +152,9 @@ class GmTestCaseImport(GmTestCaseCommon):
                 },
                 {
                   "name": "Laser Pistol",
+                  "stuff": [],
                   "type": {
+                    "container": 1,
                     "ranged weapon": {
                       "damage": { "dice": { "num_dice": 2, "plus": 4, "type": "pi" } },
                       "skill": {}
@@ -253,7 +259,8 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "type": { "misc": {} },
                   "count": 1,
                   "notes": "",
-                  "owners": None
+                  "owners": None,
+                  "bonus": [{'amount': 1, 'name': 'Computer Hacking', 'type': 'skill'}]
                 },
                 { # 2
                   "name": "Sick Stick",
@@ -279,7 +286,8 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "type": { "misc": {} },
                   "count": 1,
                   "notes": "+1 to skill; see Laser Sights (B412). 6 hrs.",
-                  "owners": None
+                  "owners": None,
+                  "bonus": [{'amount': 1, 'name': 'Beam Weapons', 'type': 'skill'}]
                 },
                 { # 4
                   "name": "Voice Synthesizer",
@@ -293,7 +301,9 @@ class GmTestCaseImport(GmTestCaseCommon):
                 },
                 { # 6
                   "name": "Blaster Pistol, Colt Series 170D",
+                  "stuff": [],
                   "type": {
+                    "container": 1,
                     "ranged weapon": {
                       "damage": {
                         "dice": { "num_dice": 1, "plus": 4, "type": "HP" }
@@ -352,7 +362,8 @@ class GmTestCaseImport(GmTestCaseCommon):
                       "type": { "misc": {} },
                       "count": 1,
                       "notes": "A complete kit for treating wounds, with bandages, ointments, etc.",
-                      "owners": None
+                      "owners": None,
+                      "bonus": [{'amount': 1, 'name': 'First Aid', 'type': 'skill'}]
                     },
                     { # 2
                       "name": "Multi-Tool with Flashlight",
@@ -397,7 +408,7 @@ class GmTestCaseImport(GmTestCaseCommon):
               "skills": {
                 "Brawling": 13,
                 "Beam Weapons (Pistol)": 16,
-                "Beam Weapons (Rifle)": 21,
+                "Beam Weapons (Rifle)": 20,
                 "Axe/Mace": 13,
                 "Law (Conglomerate, trans-territorial jurisdiction/the void)": 12,
                 "Cryptography": 13,
@@ -550,7 +561,9 @@ class GmTestCaseImport(GmTestCaseCommon):
                 },
                 { # 1
                   "name": "Blaster Pistol, Sig Sauer D65",
+                  "stuff": [],
                   "type": {
+                    "container": 1,
                     "ranged weapon": {
                       "damage": {
                         "dice": { "num_dice": 1, "plus": 4, "type": "fat" }
@@ -778,9 +791,11 @@ class GmTestCaseImport(GmTestCaseCommon):
               "preferred-armor-index": [], "preferred-weapon-index": [],
               "state": "alive",
               "stuff": [
-                {
+                { # 0
                   "name": "Pump Shotgun, 12G",
+                  "stuff": [],
                   "type": {
+                    "container": 1,
                     "ranged weapon": {
                       "damage": {
                         "dice": {
@@ -907,7 +922,9 @@ class GmTestCaseImport(GmTestCaseCommon):
                       "stuff": [
                         { # 0
                           "name": "Blaster Pistol, Sig Sauer D65",
+                          "stuff": [],
                           "type": {
+                              "container": 1,
                             "ranged weapon": {
                               "damage": {
                                 "dice": {
@@ -938,7 +955,8 @@ class GmTestCaseImport(GmTestCaseCommon):
                           "type": { "misc": {} },
                           "count": 1,
                           "notes": "150-yard range. 2xXS/50hrs.",
-                          "owners": None
+                          "owners": None,
+                          "bonus": [{'amount': 1, 'name': 'Beam Weapons', 'type': 'skill'}]
                         }
                       ]
                     }
@@ -960,7 +978,9 @@ class GmTestCaseImport(GmTestCaseCommon):
                       "stuff": [
                         {
                           "name": "Blaster Pistol, Baretta DX 192",
+                          "stuff": [],
                           "type": {
+                            "container": 1,
                             "ranged weapon": {
                               "damage": {
                                 "dice": {
@@ -1216,7 +1236,8 @@ class GmTestCaseImport(GmTestCaseCommon):
                     { # 2
                       "name": "First Aid Kit",
                       "type": { "misc": {} },
-                      "count": 1, "notes": "", "owners": None
+                      "count": 1, "notes": "", "owners": None,
+                      "bonus": [{'amount': 1, 'name': 'First Aid', 'type': 'skill'}]
                     },
                     { # 3
                       "name": "Multi-Tool",
@@ -1278,7 +1299,9 @@ class GmTestCaseImport(GmTestCaseCommon):
                     },
                     { # 14
                       "name": "\"Zip Taser\" (Battery Launcher)",
+                      "stuff": [],
                       "type": {
+                        "container": 1,
                         "ranged weapon": {
                           "damage": {
                             "dice": {
@@ -1303,7 +1326,9 @@ class GmTestCaseImport(GmTestCaseCommon):
                     },
                     { # 15
                       "name": "Heavy Zip Taser",
+                      "stuff": [],
                       "type": {
+                        "container": 1,
                         "ranged weapon": {
                           "damage": {
                             "dice": {
@@ -1457,7 +1482,9 @@ class GmTestCaseImport(GmTestCaseCommon):
                 },
                 { # 1
                   "name": "Blaster Pistol, Sig Sauer D65",
+                  "stuff": [],
                   "type": {
+                    "container": 1,
                     "ranged weapon": {
                       "damage": {
                         "dice": {
@@ -1482,7 +1509,9 @@ class GmTestCaseImport(GmTestCaseCommon):
                 },
                 { # 2
                   "name": "Laser pistol from David Smith Austin Diamond Protocol",
+                  "stuff": [],
                   "type": {
+                    "container": 1,
                     "ranged weapon": {
                       "damage": {
                         "dice": {
@@ -1561,7 +1590,8 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "type": { "misc": {} },
                   "count": 1,
                   "notes": "A complete kit for treating wounds, with bandages, ointments, etc.",
-                  "owners": None
+                  "owners": None,
+                  "bonus": [{'amount': 1, 'name': 'First Aid', 'type': 'skill'}]
                 },
                 { # 11
                   "name": "Orb",
@@ -1953,7 +1983,9 @@ class GmTestCaseImport(GmTestCaseCommon):
                 },
                 { # 5
                   "name": "Laser Rifle",
+                  "stuff": [],
                   "type": {
+                    "container": 1,
                     "ranged weapon": {
                       "damage": {
                         "dice": { "num_dice": 3, "plus": 0, "type": "pi" }
@@ -1975,7 +2007,9 @@ class GmTestCaseImport(GmTestCaseCommon):
                   "stuff": [
                     { # 0
                       "name": "Blaster Pistol, Sig Sauer D65",
+                      "stuff": [],
                       "type": {
+                        "container": 1,
                         "ranged weapon": {
                           "damage": {
                             "dice": { "num_dice": 1, "plus": 4, "type": "fat" }
@@ -1999,7 +2033,9 @@ class GmTestCaseImport(GmTestCaseCommon):
                 },
                 { # 7
                   "name": "Blaster Pistol, Sig Sauer D65",
+                  "stuff": [],
                   "type": {
+                    "container": 1,
                     "ranged weapon": {
                       "damage": {
                         "dice": { "num_dice": 1, "plus": 4, "type": "fat" }
@@ -2034,7 +2070,8 @@ class GmTestCaseImport(GmTestCaseCommon):
                       "type": { "misc": {} },
                       "count": 1,
                       "notes": "A complete kit for treating wounds, with bandages, ointments, etc.",
-                      "owners": None
+                      "owners": None,
+                      "bonus": [{'amount': 1, 'name': 'First Aid', 'type': 'skill'}]
                     },
                     {
                       "name": "Sick Stick",
@@ -2173,12 +2210,12 @@ class GmTestCaseImport(GmTestCaseCommon):
                 'unittest_import/Char7.gcs',
                 'unittest_import/Char8.gcs',
             ]
-        PP = pprint.PrettyPrinter(indent=3, width=150)
         stdscr = curses.initscr() # needed for stuff in ca_gcs_import.py
         curses.start_color()
         curses.use_default_colors()
 
         for test_case in test_cases:
+            self.debug.header1('TEST: %s' % test_case)
 
             self._window_manager.set_menu_response('Add Which Equipment',
                     {'op': ca_gcs_import.ToNative.EQUIP_ADD_ALL})
@@ -2190,8 +2227,8 @@ class GmTestCaseImport(GmTestCaseCommon):
             if not diff.are_equal(creature,
                                   GmTestCaseImport.good_data[test_case],
                                   ''):
-                print('\n--- TEST: %s ---' % test_case)
-                PP.pprint(creature)
-                print('\n--- EXPECTED ---')
-                PP.pprint(GmTestCaseImport.good_data[test_case])
+                self.debug.header2('TEST: %s' % test_case)
+                self.debug.pprint(creature)
+                self.debug.header2('EXPECTED')
+                self.debug.pprint(GmTestCaseImport.good_data[test_case])
                 assert(0) # just to raise the exception

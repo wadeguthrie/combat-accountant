@@ -1315,17 +1315,7 @@
 					"id": "495a4127-c487-4ba8-89bd-430d2b8216e6",
 					"equipped": false,
 					"quantity": 4,
-					"description": "Spare Batteries",
-					"features": [
-						{
-							"type": "skill_bonus",
-							"amount": 1,
-							"selection_type": "skills_with_name",
-							"name": {
-								"compare": "is"
-							}
-						}
-					]
+					"description": "Spare Batteries"
 				},
 				{
 					"type": "equipment",

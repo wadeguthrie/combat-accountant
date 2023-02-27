@@ -13,6 +13,7 @@ import sys
 import traceback
 import unicodedata
 
+import ca_debug
 import ca_equipment
 import ca_gui
 import ca_gurps_ruleset
@@ -57,18 +58,17 @@ class SkillsCalcs(object):
         abilities = self.__ruleset.get_creature_abilities()
         SkillsCalcs.skills = abilities['skills']
 
-    def get_gcs_level(self,
-                      window_manager,   # ca_gui.GmWindowManager object
-                      char,             # Character object
-                      skill_gcs,        # dict: skill from GCS
-                      skill_name,       # name of skill
-                      cost              # points spent on skill
-                     ):
+    def get_gcs_skill_level(self,
+                            window_manager,   # ca_gui.GmWindowManager object
+                            char,             # Character object
+                            skill_gcs,        # dict: skill from GCS
+                            skill_name,       # name of skill
+                            cost              # points spent on skill
+                           ):
         # TODO: the following skills are augmented by stuff
         #   - axe/mace: ?
         #   - armory: good quality equipment and ?
         #   - fast draw ammo: ?
-
         '''
         skill_gcs
         {
@@ -85,7 +85,7 @@ class SkillsCalcs(object):
            'difficulty': 'DX/E',
            'points': 0}
         '''
-
+        debug = ca_debug.Debug() # TODO: remove
         if skill_name not in SkillsCalcs.skills:
             # Get the skill info from GCS
             if 'difficulty' not in skill_gcs:
@@ -108,8 +108,9 @@ class SkillsCalcs(object):
                         ])
             return 0
 
-        # Return a default value
+        # Return a default value if the player didn't buy this skill.
         if cost == 0:
+            debug.print('** DEFAULT **')
             # Easiest way to go -- GCS already calculated it and put it in
             # the skill.
             if ('defaulted_from' in skill_gcs and
@@ -150,37 +151,172 @@ class SkillsCalcs(object):
             return 0
 
         # Calculate the skill level
+        # NOTE: don't use "calc" entry in the GCS sheet because they may
+        #   include a laser sight for 'beam weapons' skill -- this code applies
+        #   that the laser sight benefit later.
         level = char.char['permanent'][skill_native['attr']]
+        debug.print('  %s = %d' % (skill_native['attr'], level)) # TODO: remove
         level += SkillsCalcs.level_from_cost[cost]
         level += SkillsCalcs.difficulty_offset[skill_native['diff']]
+        debug.print('  %s (paid %d) = %d' % (skill_native['diff'],
+                                             cost,
+                                             level))
 
         # Add modifiers due to equipment
-        if 'equip' in skill_native:
-            PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
-            for looking_for, plus in skill_native['equip'].items():
-                if SkillsCalcs.is_item_in_equipment(looking_for, char.stuff):
-                    level += plus
+        plus = self.__get_equipment_bonuses(char.stuff, 'skill', skill_name)
+        level += plus
+        debug.print('  equipment +%d = %d' % (plus, level)) # TODO: remove
+
+        #if 'equip' in skill_native:
+        #    PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
+        #    for looking_for, plus in skill_native['equip'].items():
+        #        if SkillsCalcs.is_item_in_equipment(looking_for, char.stuff):
+        #            level += plus
         if 'advantage' in skill_native:
             for looking_for, plus in skill_native['advantage'].items():
                 if looking_for in char.char['advantages']:
                     level += plus
+        debug.print('  after advantages: %d' % level) # TODO: remove
 
         return level
 
-    @staticmethod
-    def is_item_in_equipment(looking_for, # string
-                             equipment    # list of dict, maybe w/containers
-                             ):
-        looking_for_lower = looking_for.lower()
+    '''
+    TODO: get skill
+			"features": []
+
+                {
+					"type": "skill_bonus",
+					"amount": 1,
+					"selection_type": "skills_with_name",
+					"name": {
+						"compare": "starts_with",
+						"qualifier": "navigation"
+					}
+				}
+            	{
+					"type": "skill_bonus",
+					"amount": 2,
+					"selection_type": "skills_with_name",
+					"name": {
+						"compare": "is",
+						"qualifier": "First Aid"
+					}
+				}
+                {
+					"type": "skill_bonus",
+					"amount": 1,
+					"selection_type": "skills_with_name",
+					"name": {
+						"compare": "is",
+						"qualifier": "Disguise"
+					}
+				}
+				{ "type": "attribute_bonus", "amount": 3, "attribute": "dodge" },
+				{ "type": "attribute_bonus", "amount": 3, "attribute": "parry" },
+				{ "type": "attribute_bonus", "amount": 3, "attribute": "block" }
+				{
+					"type": "skill_bonus",
+					"amount": -5,
+					"selection_type": "skills_with_name",
+					"name": {
+						"compare": "is",
+						"qualifier": "Escape"
+					}
+				}
+				{
+					"type": "skill_bonus",
+					"amount": 1,
+					"selection_type": "skills_with_name",
+					"name": {
+						"compare": "starts_with",
+						"qualifier": "navigation"
+					}
+                }
+
+                ---
+
+                'bonus' : [{'type': 'skill' / 'attribute',
+                            'amount': <number>,
+                            'name': '<regex>'}, ...
+
+    '''
+    def __get_equipment_bonuses(self,
+                                equipment,   # list of dict, maybe w/containers
+                                type_name, # 'attribute' or 'skill'
+                                skill_name,
+                                #must_be_in_use=False # weapons or armor
+                                ):
+        # These equipment bonuses are handled differently.  Instead of giving,
+        # for example, bonuses on all beam weapons when you have a laser
+        # sight, this program requires that you attach a laser sight to a
+        # specific beam weapon in order to get the plus.
+        dont_get_bonuses_for_these_skills = ['Beam Weapons (Pistol)',
+                                             'Beam Weapons (Rifle)'
+                                             ]
+        if skill_name in dont_get_bonuses_for_these_skills:
+            return 0
+
+        # Figure out what items are currently in use.  This is for currently
+        # held weapons and armor.
+
+        # NOTE: this is probably not used when importing characters.
+
+        #in_use_items = []
+
+        #armor_index_list = character.get_current_armor_indexes()
+        #armor_list = character.get_items_from_indexes(armor_index_list)
+
+        #for armor_in_use in armor_list:
+        #    in_use_items.append(armor_in_use)
+        #weapons = character.get_current_weapons()
+
+        #for weapon_in_use in weapons:
+        #    if weapon_in_use is None:
+        #        continue
+        #    in_use_items.append(weapon_in_use.details)
+
+        # Look through each item of equipment for bonuses
+
+        #'bonus' : [{'type': 'skill' / 'attribute',
+        #            'amount': <number>,
+        #            'name': '<regex>'}, ...
+
+
+        debug2 = ca_debug.Debug()
+
+        total_bonus = 0
         for item in equipment:
-            if looking_for_lower == item['name'].lower():
-                return True
-            if 'container' in item['type']:
-                result = SkillsCalcs.is_item_in_equipment(looking_for,
-                                                     item['stuff'])
-                if result == True:
-                    return result
-        return False
+            #if must_be_in_use and item not in in_use_items:
+            #    continue
+
+            if 'bonus' in item:
+                for bonus in item['bonus']:
+                    if bonus['type'] != type_name:
+                        continue
+                    # NOTE:  bonus['name'] is a regex
+                    if re.match(bonus['name'], skill_name, re.IGNORECASE):
+                        total_bonus += bonus['amount']
+
+            if 'stuff' in item:
+                total_bonus += self.__get_equipment_bonuses(
+                        item['stuff'], type_name, skill_name)
+
+        return total_bonus
+
+    #@staticmethod
+    #def is_item_in_equipment(looking_for, # string
+    #                         equipment    # list of dict, maybe w/containers
+    #                         ):
+    #    looking_for_lower = looking_for.lower()
+    #    for item in equipment:
+    #        if looking_for_lower == item['name'].lower():
+    #            return True
+    #        if 'container' in item['type']:
+    #            result = SkillsCalcs.is_item_in_equipment(looking_for,
+    #                                                 item['stuff'])
+    #            if result == True:
+    #                return result
+    #    return False
 
     @staticmethod
     def tech_plus_from_pts(difficulty, # 'H' or 'A'
@@ -276,45 +412,21 @@ class FromGcs(object):
             self,
             window_manager, # ca_gui.GmWindowManager obj (errors)
             ):
-        # TODO: do this
-        native_advantages = {}
+        native_equipment = []
 
         if 'rows' not in self.__gcs_data:
             window_manager.error(['No "rows" element in file'])
             return native_skills
 
-        for gcs_advantage in self.__gcs_data['rows']:
-            if gcs_advantage['type'] != 'advantage':
-                continue
-            if 'name' not in gcs_advantage:
-                continue
-            name = gcs_advantage['name']
-            if name in gcs_advantage:
-                window_manager.error([
-                    'Advantage %s in %s multiple times' % (name,
-                                                           gcs_filename)])
+        for item in self.__gcs_data['rows']:
+            if (item['type'] != 'equipment' and
+                    item['type'] != 'equipment_container'):
                 continue
 
-            native_advantage = { }
-            if 'points_per_level' in gcs_advantage:
-                native_advantage['ask'] = 'string'
-            if 'base_points' in gcs_advantage:
-                native_advantage['value'] = gcs_advantage['base_points']
-            if ('modifiers' in gcs_advantage or
-                    'points_per_level' in gcs_advantage):
-                native_advantage['ask'] = 'number'
-
-
-            notes = ''
-            if 'reference' in gcs_advantage:
-                notes = notes + gcs_advantage['reference']
-
-            if len(notes) > 0:
-                native_advantage['notes'] = notes
-
-            native_advantages[name] = native_advantage
-
-        return native_advantages
+            self.__convert_and_store_equipment_item(item, # source
+                                                    native_equipment, # dest
+                                                    'TOP LEVEL')
+        return native_equipment
 
     def build_skill_list(self,
                          window_manager, # ca_gui.GmWindowManager obj (errors)
@@ -524,6 +636,10 @@ class FromGcs(object):
         #   equipment <- skills
         #   advantages <- spells
 
+        debug = ca_debug.Debug() # TODO: remove
+        name = self.get_name() # TODO: remove
+        debug.header1('convert_character: %s' % name) # TODO: remove
+
         self.__convert_advantages()
         self.__convert_attribs()
         self.__convert_equipment()
@@ -535,7 +651,6 @@ class FromGcs(object):
         Builds a local equipment list from the JSON extracted from a GCS
         .eqp file.
         '''
-        # Result is in self.stuff
         skills, techniques = self.__build_skill_descriptions('rows')
         return skills, techniques
 
@@ -608,7 +723,7 @@ class FromGcs(object):
     def __convert_and_store_equipment_item(
             self,
             item,           # source (dict) equipment item in GCS format
-            stuff_gcs,      # dest container of native items (each, a dict)
+            stuff_gcs,      # dest container (list) of native items (dict)
             container_name  # string (for debugging)
             ):
         '''
@@ -619,6 +734,12 @@ class FromGcs(object):
         Native-formatted results are added to the passed-in list.
         '''
         new_thing = self.__ruleset.make_empty_item()
+        #if ('features' in item and 'type' in item['features'][0] and
+        #        'amount' in item['features'][0]):
+        #    name = '%s (%s: %d)' % (item['description'],
+        #                            item['features'][0]['type'],
+        #                            item['features'][0]['amount'])
+        #else:
         name = item['description']
         if name is not None:
             new_thing['name'] = name
@@ -642,6 +763,39 @@ class FromGcs(object):
                         for key, value in blank_item.items():
                             if key not in new_thing:
                                 new_thing[key] = value
+                    elif feature['type'] == 'skill_bonus':
+                        #{
+                        #    "type": "skill_bonus",
+                        #    "amount": 1,
+                        #    "selection_type": "skills_with_name",
+                        #    "name": {
+                        #        "compare": "starts_with",
+                        #        "qualifier": "navigation"
+                        #    }
+                        #}
+
+                        #'bonus' : [{'type': 'skill' / 'attribute',
+                        #        'amount': <number>,
+                        #        'name': '<regex>'}, ...
+                        if 'bonus' not in new_thing:
+                            new_thing['bonus'] = []
+                        name = feature['name']['qualifier']
+                        compare = feature['name']['compare']
+                        name_regex = (('%s.*' % name)
+                                if compare == 'starts_with' else name)
+                        bonus = {'type': 'skill',
+                                 'amount': feature['amount'],
+                                 'name': name_regex}
+                        new_thing['bonus'].append(bonus)
+
+                    # The following is only for shields and cloaks, does not
+                    # apply to firearms, and only from the front or side --
+                    # not a priority since there're no mechanics for most of
+                    # this.
+                    #
+                    #elif feature['type'] == 'attribute_bonus':
+				    #    # { "type": "attribute_bonus", "amount": 3, "attribute": "dodge" },
+                    #    # TODO: fill this in
 
         # Is it a weapon?
         if 'weapons' in item:
@@ -659,7 +813,7 @@ class FromGcs(object):
             for contents in item['children']:
                 self.__convert_and_store_equipment_item(contents,
                                                         new_thing['stuff'],
-                                                        new_thing['name'])
+                                                        name)
 
         # Now add to the creature
         if len(new_thing['type']) == 0:
@@ -941,6 +1095,10 @@ class FromGcs(object):
 
         for skill_gcs in self.__gcs_data['skills']:
             base_name = skill_gcs['name']
+
+            debug = ca_debug.Debug() # TODO: remove
+            debug.header2(base_name) # TODO: remove
+
             if 'type' not in skill_gcs:
                 pass
 
@@ -949,12 +1107,13 @@ class FromGcs(object):
                         len(skill_gcs['specialization']) > 0):
                     name_text = '%s (%s)' % (skill_gcs['name'],
                                              skill_gcs['specialization'])
+                    debug.print(' %s' % name_text) # TODO: remove
                 else:
                     name_text = skill_gcs['name']
 
                 cost_gcs = 0 if 'points' not in skill_gcs else skill_gcs['points']
 
-                level_gcs = skills.get_gcs_level(
+                level_gcs = skills.get_gcs_skill_level(
                         self.__window_manager, self, skill_gcs, name_text, cost_gcs)
                 self.char['skills'][name_text] = level_gcs
             elif skill_gcs['type'] == 'technique':
@@ -1443,6 +1602,10 @@ class FromGcs(object):
 
                         new_thing['reload'] = int(match.group('reload'))
 
+                        # Make it a container so it can include a scope
+                        new_thing['stuff'] = []
+                        new_thing['type']['container'] = 1
+
             '''
             {
               "clip": {
@@ -1592,8 +1755,8 @@ class ToNative(object):
 
                     window_manager.error(error_strings)
 
-    @staticmethod
     def import_equipment_list(
+            self,
             window_manager, # ca_gui.WindowManager for errors
             native_data,    # dict: {name: {details}, ...
             gcs_equipment   # dict: {name: {details}, ...
@@ -1987,7 +2150,15 @@ class ToNative(object):
                 changes.append('"%s" equipment IGNORED -- no change' %
                         item_gcs['name'])
             else:
-                equip_menu.append(('%s' % item_gcs['name'],
+                #if ('features' in item and 'type' in item['features'][0] and
+                #        'amount' in item['features'][0]):
+                #    name = '%s (%s: %d)' % (item_gcs['description'],
+                #                            item_gcs['features'][0]['type'],
+                #                            item_gcs['features'][0]['amount'])
+                #else:
+                name = item_gcs['name']
+
+                equip_menu.append(('%s' % name,
                                    {'op': ToNative.EQUIP_ADD_THIS,
                                     'item_gcs': item_gcs}))
 
@@ -2004,26 +2175,26 @@ class ToNative(object):
             if doit is None:
                 keep_asking = False
 
-            if doit['op'] == ToNative.EQUIP_ADD_ALL:
+            elif doit['op'] == ToNative.EQUIP_ADD_ALL:
                 keep_asking = False
                 for (string, operation) in equip_menu:
                     if operation['op'] == ToNative.EQUIP_ADD_THIS:
-                        changes.append(self.__equip_add_this(
+                        changes.extend(self.__equip_add_this(
                                        operation, native_list, gcs_list))
                     if operation['op'] == ToNative.EQUIP_MERGE_THIS:
-                        changes.append(self.__equip_merge_this(
+                        changes.extend(self.__equip_merge_this(
                                        operation, native_list, gcs_list))
                     if operation['op'] == ToNative.EQUIP_REPLACE_THIS:
-                        changes.append(self.__equip_replace_this(
+                        changes.extend(self.__equip_replace_this(
                                        operation, native_list, gcs_list))
             elif doit['op'] == ToNative.EQUIP_ADD_THIS:
-                changes.append(self.__equip_add_this(
+                changes.extend(self.__equip_add_this(
                                operation, native_list))
             elif doit['op'] == ToNative.EQUIP_MERGE_THIS:
-                changes.append(self.__equip_merge_this(
+                changes.extend(self.__equip_merge_this(
                                operation, native_list, gcs_list))
             elif doit['op'] == ToNative.EQUIP_REPLACE_THIS:
-                changes.append(self.__equip_replace_this(
+                changes.extend(self.__equip_replace_this(
                                operation, native_list, gcs_list))
 
             if keep_asking:
@@ -2376,9 +2547,11 @@ class GcsImport(object):
         '''
         from_gcs = FromGcs(window_manager, ruleset, gcs_filename)
         gcs_equipment = from_gcs.build_equipment_list(window_manager)
-        ToNative.import_equipment_list(window_manager,
-                                       native_data,
-                                       gcs_equipment)
+
+        to_native = ToNative(window_manager, native_data, None)
+        to_native.import_equipment_list(window_manager,
+                                        native_data,
+                                        gcs_equipment)
         return
 
     def import_skills_from_file(
@@ -2428,6 +2601,7 @@ class GcsImport(object):
                         ):
         gcs_filename = self.__extract_gcs_filename(native_data, gcs_filename)
         gcs_data = FromGcs(self.__window_manager, ruleset, gcs_filename)
+        gcs_data.convert_character()
         name = gcs_data.get_name()
         character = ToNative(self.__window_manager, native_data, gcs_data)
         changes = character.update_data()
