@@ -564,11 +564,20 @@ class Weapon(object):
         return False
 
     @staticmethod
+    def is_item_natural_weapon(item  # dict from JSON
+                              ):
+        if 'natural weapon' in item['type']:
+            return True
+        return False
+
+    @staticmethod
     def is_weapon(item  # dict from JSON
                   ):
         if Weapon.is_item_melee_weapon(item):
             return True
         if Weapon.is_item_ranged_weapon(item):
+            return True
+        if Weapon.is_item_natural_weapon(item):
             return True
         return False
 
