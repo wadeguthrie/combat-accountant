@@ -23,6 +23,9 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: 'done dealing with non-preferred weapons' menu should include 'Done for all characters'
+# TODO: monster joins NPCs needs to be added - NPC joins PCs, 
+
 # TODO: on importing advantages: "notes" should be included in name in parens
 # TODO: should ask when update character wants to delete a spell
 
@@ -1678,6 +1681,19 @@ class PersonnelHandler(ScreenHandler):
                                    '(changing one will change the other).'},
             })
 
+        if creature_type == PersonnelHandler.MONSTERs:
+            self._add_to_choice_dict({
+                ord('N'): {'name': 'Monster joins NPCs',
+                           'func': self.Monster_joins_NPCs,
+                           'help': 'Make the currently selected monster join ' +
+                                   'the non-player characters.  The monster will ' +
+                                   'be listed in both groups but they will ' +
+                                   'both refer to the same creature ' +
+                                   '(changing one will change the other).'},
+            })
+
+
+
         self._window = self._window_manager.get_build_fight_gm_window(
                                                                 self._choices)
         self.__current_pane = PersonnelHandler.CHAR_DETAIL
@@ -1689,10 +1705,9 @@ class PersonnelHandler(ScreenHandler):
         # NPCs, or monster group) sorted by the the Fighters' names (with the
         # venue, if it exists, stuffed at the top).  The dict is:
         # {
-        #   'data': array of dict found in the data file
-        #   'obj':  array of Fighter/Venue object
+        #   'data': array of dict found in the data file - indexed by name
+        #   'obj':  array of Fighter/Venue object - indexed by viewing order
         # }
-        # NOTE: [data][n] is the same creature as [obj][n]
         self.__critters = None
 
         self.__deleted_critter_count = 0
@@ -1837,6 +1852,48 @@ class PersonnelHandler(ScreenHandler):
             return True
 
         self.world.details['PCs'][npc.name] = {'redirect': 'NPCs'}
+
+        self._window.show_creatures(self.__critters['obj'],
+                                    self.__new_char_name,
+                                    self.__viewing_index)
+        return True
+
+    def Monster_joins_NPCs(self):               # Public to support testing
+        '''
+        Command ribbon method.
+
+        Adds an existing NPC to the PC list (that NPC also stays in the NPC
+        list).  This is useful if an NPC wishes to fight alongside the party.
+
+        Operates on the currently selected NPC.
+
+        Returns: False to exit the current ScreenHandler, True to stay.
+        '''
+        monster = self.get_obj_from_index()
+        if monster is None:
+            return True
+
+        if monster.group == 'NPCs' or monster.group == 'PCs':
+            self._window_manager.error(['"%s" not a Monster' % monster.name])
+            return True
+
+        if monster.name in self.world.details['NPCs']:
+            self._window_manager.error(['"%s" already a NPC' % monster.name])
+            return True
+
+        if self.world.details['current-fight']['saved']:
+            self._window_manager.error(['Can\'t promote a monster mid-fight'])
+            return True
+
+        # Move actual creature
+        self.world.details['NPCs'][monster.name] = monster.details
+        self.world.details['fights'][monster.group][monster.name] = {'redirect': 'NPCs'}
+
+        # Move pointers
+        self.__critters['data'][monster.name] = monster.details
+        self.__critters['obj'][self.__viewing_index] = self.world.get_creature(
+                                                                monster.name,
+                                                                monster.group)
 
         self._window.show_creatures(self.__critters['obj'],
                                     self.__new_char_name,
