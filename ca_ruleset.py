@@ -1604,6 +1604,9 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
+        if fight_handler is None:
+            return Ruleset.HANDLED_OK
+
         in_place = (True if 'in-place' in action and action['in-place']
                     else False)
         fight_handler.wait_end_action(action['name'],
