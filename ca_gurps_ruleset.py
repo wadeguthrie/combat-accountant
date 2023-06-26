@@ -6,6 +6,7 @@ import pprint
 import random
 import re
 
+import ca_debug
 import ca_fighter
 import ca_equipment
 import ca_gcs_import
@@ -1677,15 +1678,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             skill_full = fighter.get_best_skill_for_weapon(weapon.details,
                                                            mode)
             skill = skill_full['value']
+            skill_1ary_name = skill_full['name']
 
             # 2nd weapon
             skill_full = fighter.get_best_skill_for_weapon(weapon_2ary.details)
             skill_2ary = skill_full['value']
+            skill_2ary_name = skill_full['name']
 
             if skill == skill_2ary:
-                defaults = [skill]
+                defaults = [skill_1ary_name]
             else:
-                defaults = [skill, skill_2ary]
+                defaults = [skill_1ary_name, skill_2ary_name]
 
             technique = self.__get_technique(
                     techniques, 'Dual-Weapon Attack', defaults)
@@ -1701,7 +1704,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # Off-hand weapon fighting (B417)
 
             found_match = False # Found a rule to override default 2-weapon?
-            # If what we're holding is identically equal to the second weapon
+
+            # This method is called once for each hand.  If this is called for
+            # the off-hand, what we're holding is identically equal to the
+            # second weapon.  The code, below, is for that case.
             if weapon.details is weapon_2ary.details:
                 if 'Ambidexterity' in fighter.details['advantages']:
                     found_match = True
@@ -1711,7 +1717,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     technique = self.__get_technique(
                             techniques,
                             'Off-Hand Weapon Training',
-                            [skill_2ary])
+                            [skill_2ary_name])
                     if technique is not None:
                         found_match = True
                         skill += technique['value']
@@ -4185,24 +4191,24 @@ class GurpsRuleset(ca_ruleset.Ruleset):
     def __get_technique(self,
                         techniques,     # list from Fighter.details
                         technique_name, # string
-                        defaults        # list of strings to match (in order)
+                        defaults        # list of skill names (in order) we're
+                                        #  using for this weapon
                         ):
         '''
         Finds a technique that matches the input parameters.
         Returns matching technique (None if no match).
         '''
-
         if techniques is None or len(techniques) == 0:
             return None
 
         for technique in techniques:
             if (technique['name'] != technique_name or
-                    len(technique["default"]) != len(defaults)):
+                    technique['default'] not in defaults):
                 continue
-            found_match = True
-            for index, default in enumerate(defaults):
-                if default != technique["default"][index]:
-                    found_match = False
+            found_match = False # We've found a match so far but we're scheptical
+            for default in defaults:
+                if default == technique['default']:
+                    found_match = True
                     break
             if found_match:
                 return technique

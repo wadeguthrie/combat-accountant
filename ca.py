@@ -24,7 +24,6 @@ import ca_gurps_ruleset
 import ca_timers
 
 # TODO: 'done dealing with non-preferred weapons' menu should include 'Done for all characters'
-# TODO: monster joins NPCs needs to be added - NPC joins PCs, 
 
 # TODO: on importing advantages: "notes" should be included in name in parens
 # TODO: should ask when update character wants to delete a spell
@@ -2461,7 +2460,7 @@ class PersonnelHandler(ScreenHandler):
                         ca_fighter.Fighter.get_name_from_state_number(
                                                             new_state_number))
                 },
-                self)
+                None) # self)
 
         self._draw_screen()
         return True  # anything but 'None' for a successful menu handler
