@@ -2341,18 +2341,21 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 ca_ruleset.Ruleset.roll(1, 6)
                 )
 
-    def is_creature_consistent(self,
-                               name,     # string: creature's name
-                               creature, # dict from Game File
-                               fight_handler=None
-                               ):
+    def check_creature_consistent(self,
+                                  name,     # string: creature's name
+                                  creature, # dict from Game File
+                                  check_weapons_and_armor=True,  # bool
+                                  fight_handler=None
+                                  ):
         '''
         Make sure creature has skills for all their stuff.  Trying to make
         sure that one or the other of the skills wasn't entered incorrectly.
         '''
-        result = super(GurpsRuleset, self).is_creature_consistent(name,
-                                                                  creature,
-                                                                  fight_handler)
+        result = super(GurpsRuleset,
+                       self).check_creature_consistent(name,
+                                                       creature,
+                                                       check_weapons_and_armor,
+                                                       fight_handler)
 
         if 'skills' not in creature:
             return result
@@ -2398,7 +2401,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     '  has item "%s"' % item['name'],
                     '  but none of the skills to use it:',
                     '  %s' % skill_list_string])
-                result = False
+                #result = False
         if 'spells' in creature:
             duplicate_check = {}
             for spell in creature['spells']:

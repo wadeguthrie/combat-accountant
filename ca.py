@@ -2525,8 +2525,8 @@ class PersonnelHandler(ScreenHandler):
         self._window_manager.menu('Do what', sub_menu)
 
         # Do a consistency check once you're done equipping
-        self.world.ruleset.is_creature_consistent(fighter.name,
-                                                  fighter.details)
+        self.world.ruleset.check_creature_consistent(fighter.name,
+                                                     fighter.details)
 
         self._window.touchwin()
         self._window.refresh()
@@ -3189,8 +3189,8 @@ class PersonnelHandler(ScreenHandler):
         self._window_manager.menu('Do what', sub_menu)
 
         # Do a consistency check once you're done equipping
-        self.world.ruleset.is_creature_consistent(fighter.name,
-                                                  fighter.details)
+        self.world.ruleset.check_creature_consistent(fighter.name,
+                                                     fighter.details)
 
         self._window.touchwin()
         self._window.refresh()
@@ -4015,7 +4015,10 @@ class PersonnelHandler(ScreenHandler):
         '''
         if self.__critters is not None:
             for name, creature in self.__critters['data'].items():
-                self.world.ruleset.is_creature_consistent(name, creature)
+                value = self.world.ruleset.check_creature_consistent(name,
+                                                                     creature)
+                if value == ca_ruleset.Ruleset.STOP_CHECKING:
+                    break
 
         # TODO (eventually): do I need to del self._window?
         self._window.close()
@@ -4589,7 +4592,10 @@ class FightHandler(ScreenHandler):
                 details = self.world.get_creature_details(name,
                                                           monster_group)
                 if details is not None:
-                    self.world.ruleset.is_creature_consistent(name, details)
+                    value = self.world.ruleset.check_creature_consistent(name,
+                                                                         details)
+                    if value == ca_ruleset.Ruleset.STOP_CHECKING:
+                        break
 
         # Setup the first fighter.
 
@@ -6870,7 +6876,9 @@ class MainHandler(ScreenHandler):
         for name in self.world.get_creature_details_list('PCs'):
             details = self.world.get_creature_details(name, 'PCs')
             if details is not None:
-                self.world.ruleset.is_creature_consistent(name, details)
+                value = self.world.ruleset.check_creature_consistent(name, details)
+                if value == ca_ruleset.Ruleset.STOP_CHECKING:
+                    break
 
     #
     # Public Methods
@@ -7474,7 +7482,9 @@ class MainHandler(ScreenHandler):
         #        creature = self.world.get_creature_details(
         #                                           name,
         #                                           self.__current_display)
-        #        self.world.ruleset.is_creature_consistent(name, creature)
+        #        value = self.world.ruleset.check_creature_consistent(name, creature)
+        #        if value == ca_ruleset.Ruleset.STOP_CHECKING:
+        #            break
 
         return True
 

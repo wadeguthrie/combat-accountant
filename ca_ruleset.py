@@ -34,6 +34,11 @@ class Ruleset(object):
 
     (UNHANDLED, HANDLED_OK, HANDLED_ERROR, DONT_LOG) = list(range(4))
 
+    # return value of check_creature_consistent
+    (KEEP_CHECKING_CONSISTENCY,
+     STOP_CHECKING_WEAPONS_AND_ARMOR,
+     STOP_CHECKING) = list(range(3))
+
     has_2_parts = {'reload': True, 'user-defined': True}
     timing_headings = ['name', 'group', 'time', 'action', 'state', 'round']
 
@@ -566,19 +571,20 @@ class Ruleset(object):
         creature = self.make_empty_creature()
         return None, creature
 
-    def is_creature_consistent(self,
-                               name,     # string: creature's name
-                               creature, # dict from Game File
-                               fight_handler=None
-                               ):
+    def check_creature_consistent(self,
+                                  name,     # string: creature's name
+                                  creature, # dict from Game File
+                                  check_weapons_and_armor=True,  # bool
+                                  fight_handler=None
+                                  ):
         '''
         Make sure creature's information makes sense.
         '''
-        result = True
+        result = Ruleset.KEEP_CHECKING_CONSISTENCY
 
         # Don't need to check if the room is consistent.
         if name == ca_fighter.Venue.name:
-            return True
+            return result
 
         # TODO: remove <<<
         # This is just a shim to let pre-2-weapon crash files work (for
@@ -613,9 +619,12 @@ class Ruleset(object):
         playing_back = (False if fight_handler is None else
                         fight_handler.world.playing_back)
 
-        if not playing_back:
-            self.__configure_armor_weapons(fighter, is_armor=True)  # Armor
-            self.__configure_armor_weapons(fighter, is_armor=False) # Weapons
+        if check_weapons_and_armor and not playing_back:
+            result = self.__configure_armor_weapons(fighter, is_armor=True)  # Armor
+            check_weapons_and_armor = False if result != Ruleset.KEEP_CHECKING_CONSISTENCY else True
+
+        if check_weapons_and_armor and not playing_back:
+            result = self.__configure_armor_weapons(fighter, is_armor=False) # Weapons
 
         return result
 
@@ -888,6 +897,8 @@ class Ruleset(object):
         If, after all that, there's no armor/weapons being worn but there's
             natural armor/weapons, wear that.
         '''
+        result = Ruleset.KEEP_CHECKING_CONSISTENCY
+
         if is_armor:
             index_list = fighter.get_current_armor_indexes()
             preferred_index = 'preferred-armor-index'
@@ -1015,6 +1026,12 @@ class Ruleset(object):
                 item_list_menu.append(
                         (('done dealing with non-preferred %s' % items_string),
                             None))
+                item_list_menu.append(
+                        (('Done dealing with non-preferred %s for ALL creatures' % items_string),
+                            ('quit', Ruleset.STOP_CHECKING_WEAPONS_AND_ARMOR)))
+                item_list_menu.append(
+                        (('Quit checking ALL creatures (1 time)'),
+                            ('quit', Ruleset.STOP_CHECKING)))
                 title = 'Stop using %s\'s non-preferred %s?' % (fighter.name,
                                                                  item_string)
                 item_index, ignore = self._window_manager.menu(title,
@@ -1029,10 +1046,13 @@ class Ruleset(object):
                                    None)
                 elif item_index[0] == 'prefer':
                     fighter.details[preferred_index].append(item_index[1])
+                elif item_index[0] == 'quit':
+                    result = item_index[1]
+                    keep_asking = False
 
         # Now, add preferred armor/weapon
 
-        keep_asking = True
+        keep_asking = True if result == Ruleset.KEEP_CHECKING_CONSISTENCY else False
         while keep_asking:
             index_list = (fighter.get_current_armor_indexes() if is_armor else
                 fighter.get_current_weapon_indexes())
@@ -1052,6 +1072,14 @@ class Ruleset(object):
             else:
                 item_list_menu.append(
                     (('done dealing with preferred %s' % items_string), None))
+
+                item_list_menu.append(
+                        (('Done dealing with preferred %s for ALL creatures' % items_string),
+                            ('quit', Ruleset.STOP_CHECKING_WEAPONS_AND_ARMOR)))
+                item_list_menu.append(
+                        (('Quit checking ALL creatures (1 time)'),
+                            ('quit', Ruleset.STOP_CHECKING)))
+
                 preferred_item_index, ignore = self._window_manager.menu(
                         'Use %s\'s preferred %s?' % (fighter.name,
                                                      item_string),
@@ -1066,6 +1094,10 @@ class Ruleset(object):
                                    None)
                 elif preferred_item_index[0] == 'unprefer':
                     fighter.details[preferred_index].remove(preferred_item_index[1])
+
+                elif preferred_item_index[0] == 'quit':
+                    result = preferred_item_index[1]
+                    keep_asking = False
 
         # Add natural weapon/armor if they're not wearing any other kind -- ok, I think
 
@@ -1083,7 +1115,8 @@ class Ruleset(object):
 
         # Make sure that all missile weapons have their associated ammo.
 
-        if not is_armor:    # Just weapons (just ranged weapons, actually)
+        # Just weapons (just ranged weapons, actually)
+        if result == Ruleset.KEEP_CHECKING_CONSISTENCY and not is_armor:
             for weapon in fighter.details['stuff']:
                 if ('ranged weapon' not in weapon['type'] or
                         'ammo' not in weapon):
@@ -1101,6 +1134,8 @@ class Ruleset(object):
                         '"%s"' % fighter.name,
                         '  is carrying a weapon (%s) with no ammo (%s).' % (
                             weapon['name'], clip_name)])
+
+        return result
 
     def __do_attack(self,
                     fighter,          # Fighter object
