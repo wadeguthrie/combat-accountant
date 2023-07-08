@@ -1372,6 +1372,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                             crit, fumble = self.__get_crit_fumble(to_hit)
                             notes.append('    to-hit: %d, crit <= %d, fumble >= %d' %
                                     (to_hit, crit, fumble))
+
+                            #if (weapon.is_ranged_weapon() and xxx):
+                            #    ammo = weapon.get_damage()
+                            #    xxx
+
                             notes.append('    damage: %s' % damage_str)
 
                             # Ranged weapon status
@@ -4124,6 +4129,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         # weapon[type][mode]: swung weapon, thrust weapon, thrown weapon,
         #                      missile weapon
+
+        #if weapon.details['type'][mode] == 'ranged weapon':
+        #    # weapon.get_damage()
+        #    # Get_ranged_weapon_damage
+        #    # TODO: get ammo - if it's a container, get the first ammo
+        #    #   and use that damage
+        #    # if not a container but it's got damage, use that
+        #    # if there's not damage, use the weapon's damage
+
+
         damage = weapon.details['type'][mode]['damage']
 
         if 'st' in damage:

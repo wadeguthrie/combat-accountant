@@ -3,11 +3,11 @@
 import argparse
 import copy
 import curses
-import pprint
 import random
 import unittest
 
 import ca   # combat accountant
+import ca_debug
 import ca_fighter
 import ca_gurps_ruleset
 import ca_timers
@@ -31,8 +31,9 @@ class GmTestCase(GmTestCaseCommon):
         any of the fighters (except that the opponent was changed).  This
         mirrors a bug that I thought I saw a while ago.
         '''
+        debug = ca_debug.Debug()
         #if ARGS.verbose:
-        #    print('\n=== test_change_opponents ===\n')
+        #    debug.print('\n=== test_change_opponents ===\n')
 
         world_data = WorldData(self.init_world_dict)
         mock_program = MockProgram()
@@ -176,8 +177,9 @@ class GmTestCase(GmTestCaseCommon):
         '''
         General test
         '''
+        debug = ca_debug.Debug()
         #if ARGS.verbose:
-        #    print('\n=== test_don_doff_armor ===\n')
+        #    debug.print('\n=== test_don_doff_armor ===\n')
 
         # Setup
 
@@ -225,8 +227,9 @@ class GmTestCase(GmTestCaseCommon):
         '''
         General test
         '''
+        debug = ca_debug.Debug()
         #if ARGS.verbose:
-        #    print('\n=== test_draw_sheathe_weapon ===\n')
+        #    debug.print('\n=== test_draw_sheathe_weapon ===\n')
 
         # Setup
 
@@ -268,8 +271,9 @@ class GmTestCase(GmTestCaseCommon):
         '''
         General test
         '''
+        debug = ca_debug.Debug()
         #if ARGS.verbose:
-        #    print('\n=== test_reload ===\n')
+        #    debug.print('\n=== test_reload ===\n')
 
         # Setup
 
@@ -400,8 +404,9 @@ class GmTestCase(GmTestCaseCommon):
         '''
         General test
         '''
+        debug = ca_debug.Debug()
         #if ARGS.verbose:
-        #    print('\n=== test_reload_2 ===\n')
+        #    debug.print('\n=== test_reload_2 ===\n')
 
         # Setup
 
@@ -505,8 +510,10 @@ class GmTestCase(GmTestCaseCommon):
         '''
         MIXED test
         '''
-        #if ARGS.verbose:
-        #    print('\n=== test_stun_and_consciousness ===\n')
+        debug = ca_debug.Debug()
+
+        if ARGS.verbose:
+            debug.print('\n=== test_stun_and_consciousness ===\n')
 
         # Setup
 
@@ -600,8 +607,9 @@ class GmTestCase(GmTestCaseCommon):
         '''
         Basic test
         '''
+        debug = ca_debug.Debug()
         #if ARGS.verbose:
-        #    print('\n=== test_timers ===\n')
+        #    debug.print('\n=== test_timers ===\n')
 
         fighter = ca_fighter.Fighter(
                 'Tank',
@@ -740,8 +748,9 @@ class GmTestCase(GmTestCaseCommon):
         '''
         Basic test
         '''
+        debug = ca_debug.Debug()
         #if ARGS.verbose:
-        #    print('\n=== test_save ===\n')
+        #    debug.print('\n=== test_save ===\n')
 
         base_world_dict = copy.deepcopy(self.base_world_dict)
 
@@ -751,7 +760,7 @@ class GmTestCase(GmTestCaseCommon):
         # Test that leaving a fight moves the bad guys to the dead monster
         # list
         #if ARGS.verbose:
-        #    print('\n----------- LEAVE FIGHT -----------\n')
+        #    debug.print('\n----------- LEAVE FIGHT -----------\n')
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
@@ -785,7 +794,7 @@ class GmTestCase(GmTestCaseCommon):
         # test that SAVING the fight works
         #
         #if ARGS.verbose:
-        #    print('\n----------- SAVE FIGHT -----------\n')
+        #    debug.print('\n----------- SAVE FIGHT -----------\n')
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
@@ -826,7 +835,7 @@ class GmTestCase(GmTestCaseCommon):
         # test that KEEPING the fight works
         #
         #if ARGS.verbose:
-        #    print('\n----------- KEEP FIGHT -----------\n')
+        #    debug.print('\n----------- KEEP FIGHT -----------\n')
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
@@ -862,8 +871,9 @@ class GmTestCase(GmTestCaseCommon):
         '''
         Basic test
         '''
+        debug = ca_debug.Debug()
         #if ARGS.verbose:
-        #    print('\n=== test_add_remove_equipment ===\n')
+        #    debug.print('\n=== test_add_remove_equipment ===\n')
 
         fighter = ca_fighter.Fighter(
                 'Tank',
@@ -1089,9 +1099,10 @@ class GmTestCase(GmTestCaseCommon):
         '''
         Basic test
         '''
+        debug = ca_debug.Debug()
 
         #if ARGS.verbose:
-        #    print('\n=== test_preferred_add_remove_weapon ===\n')
+        #    debug.print('\n=== test_preferred_add_remove_weapon ===\n')
 
         fighter = ca_fighter.Fighter(
                 'Tank',
@@ -1310,8 +1321,9 @@ class GmTestCase(GmTestCaseCommon):
         '''
         Basic test
         '''
+        debug = ca_debug.Debug()
         #if ARGS.verbose:
-        #    print('\n=== test_give_equipment ===\n')
+        #    debug.print('\n=== test_give_equipment ===\n')
 
         tank = ca_fighter.Fighter(
                 'Tank',
@@ -1413,8 +1425,9 @@ class GmTestCase(GmTestCaseCommon):
         '''
         Basic test
         '''
+        debug = ca_debug.Debug()
         #if ARGS.verbose:
-        #    print('\n=== test_redirects ===\n')
+        #    debug.print('\n=== test_redirects ===\n')
 
         base_world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(base_world_dict)
@@ -1437,8 +1450,9 @@ class GmTestCase(GmTestCaseCommon):
         '''
         Basic test
         '''
+        debug = ca_debug.Debug()
         #if ARGS.verbose:
-        #    print('\n=== test_redirects_promote_to_NPC ===\n')
+        #    debug.print('\n=== test_redirects_promote_to_NPC ===\n')
 
         init_world_dict = copy.deepcopy(self.init_world_dict)
         world_data = WorldData(init_world_dict)
@@ -1501,8 +1515,9 @@ class GmTestCase(GmTestCaseCommon):
         '''
         Basic test
         '''
+        debug = ca_debug.Debug()
         #if ARGS.verbose:
-        #    print('\n=== test_NPC_joins ===\n')
+        #    debug.print('\n=== test_NPC_joins ===\n')
 
         # NOTE: These indexes assume that we're NOT creating a fight.  When we
         # create a fight, a Fight object '<< ROOM >>' will be created and
@@ -1567,7 +1582,7 @@ class GmTestCase(GmTestCaseCommon):
         # PersonnelHandler.NPC_joins_monsters - not an NPC #
 
         #if ARGS.verbose:
-        #    print('\n----------- NPC_joins_monsters - not an NPC -----------\n')
+        #    debug.print('\n----------- NPC_joins_monsters - not an NPC -----------\n')
 
         self._window_manager.reset_error_state()
 
@@ -1584,7 +1599,7 @@ class GmTestCase(GmTestCaseCommon):
         # PersonnelHandler.NPC_joins_monsters - works #
 
         #if ARGS.verbose:
-        #    print('\n----------- NPC_joins_monsters - works -----------\n')
+        #    debug.print('\n----------- NPC_joins_monsters - works -----------\n')
 
         self._window_manager.reset_error_state()
 
@@ -1602,7 +1617,7 @@ class GmTestCase(GmTestCaseCommon):
         # PersonnelHandler.NPC_joins_monsters - NPC already in fight #
 
         #if ARGS.verbose:
-        #    print('\n--- NPC_joins_monsters - NPC already with monster ---\n')
+        #    debug.print('\n--- NPC_joins_monsters - NPC already with monster ---\n')
 
         npc_handler.set_viewing_index(groucho_index)
         fighter = npc_handler.get_obj_from_index()
@@ -1620,7 +1635,7 @@ class GmTestCase(GmTestCaseCommon):
         # PersonnelHandler.NPC_joins_PCs -- not a PC #
 
         #if ARGS.verbose:
-        #    print('\n----------- NPC_joins_PCs - not a PC -----------\n')
+        #    debug.print('\n----------- NPC_joins_PCs - not a PC -----------\n')
 
         pc_handler.set_viewing_index(pc_manny_index)
         fighter = pc_handler.get_obj_from_index()
@@ -1636,7 +1651,7 @@ class GmTestCase(GmTestCaseCommon):
         # PersonnelHandler.NPC_joins_PCs -- works #
 
         #if ARGS.verbose:
-        #    print('\n----------- NPC_joins_PCs - works -----------\n')
+        #    debug.print('\n----------- NPC_joins_PCs - works -----------\n')
 
         self._window_manager.reset_error_state()
 
@@ -1657,7 +1672,7 @@ class GmTestCase(GmTestCaseCommon):
         # There isn't a case where something's already a PC where it doesn't
         # fire the 'Not an NPC' error.
         # if ARGS.verbose:
-        #    print '\n-------- NPC_joins_PCs - NPC already a PC  --------\n'
+        #    debug.print '\n-------- NPC_joins_PCs - NPC already a PC  --------\n'
 
         # Zeppo should have been put at the end of the alphabetized PC list by
         # the last test.  Now we know the index of an NPC that is also a PC.
@@ -1676,10 +1691,11 @@ class GmTestCase(GmTestCaseCommon):
         '''
         Basic test
         '''
+        debug = ca_debug.Debug()
         # CREATE FIGHT -- WORKING #
 
         #if ARGS.verbose:
-        #    print('\n=== test_new_fight_new_creatures ===\n')
+        #    debug.print('\n=== test_new_fight_new_creatures ===\n')
 
         world_dict = copy.deepcopy(self.base_world_dict)
         world_data = WorldData(world_dict)
@@ -1714,15 +1730,15 @@ class GmTestCase(GmTestCaseCommon):
         if 'test_new_fight' in fights:
             creatures = world.get_creature_details_list('test_new_fight')
             #if ARGS.verbose:
-            #    print('Expect: Room, Horatio:')
-            #    PP.pprint(creatures)
+            #    debug.print('Expect: Room, Horatio:')
+            #    debug.pprint(creatures)
             # The 'creatures' should be '<< ROOM >>', 'Horatio'
             assert 'Horatio' in creatures
 
         # FIGHT ALREADY EXISTS #
 
         #if ARGS.verbose:
-        #    print('\n--- Test: Fight Already Exists ---\n')
+        #    debug.print('\n--- Test: Fight Already Exists ---\n')
 
         self._window_manager.reset_error_state()
         self._window_manager.clear_menu_responses()
@@ -1756,7 +1772,7 @@ class GmTestCase(GmTestCaseCommon):
         # ADD A CREATURE, DELETE A MONSTER -- WORKS #
 
         #if ARGS.verbose:
-        #    print('\n--- Test: Add and Delete Monster ---\n')
+        #    debug.print('\n--- Test: Add and Delete Monster ---\n')
 
         self._window_manager.clear_menu_responses()
         self._window_manager.set_menu_response('New or Pre-Existing',
@@ -1799,7 +1815,7 @@ class GmTestCase(GmTestCaseCommon):
         # ADD PCs -- WORKS #
 
         #if ARGS.verbose:
-        #    print('\n--- Test: Add PCs ---\n')
+        #    debug.print('\n--- Test: Add PCs ---\n')
 
         group = 'PCs'
         self._window_manager.clear_menu_responses()
@@ -1823,7 +1839,7 @@ class GmTestCase(GmTestCaseCommon):
         # ADD NPCs #
 
         #if ARGS.verbose:
-        #    print('\n--- Test: Add NPCs ---\n')
+        #    debug.print('\n--- Test: Add NPCs ---\n')
 
         group = 'NPCs'
         self._window_manager.clear_menu_responses()
@@ -1848,10 +1864,11 @@ class GmTestCase(GmTestCaseCommon):
         '''
         Basic test
         '''
+        debug = ca_debug.Debug()
         # CREATE FIGHT -- WORKING #
 
         #if ARGS.verbose:
-        #    print('\n=== test_containers ===\n')
+        #    debug.print('\n=== test_containers ===\n')
 
         mock_fight_handler = MockFightHandler()
 
@@ -2027,6 +2044,5 @@ if __name__ == '__main__':
                         default=False)
     ARGS = parser.parse_args()
 
-    PP = pprint.PrettyPrinter(indent=3, width=150)
     unittest.main()  # runs all tests in this file
 

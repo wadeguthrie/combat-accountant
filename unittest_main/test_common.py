@@ -2,10 +2,10 @@
 
 import copy
 import curses
-import pprint
 import unittest
 
 import ca   # combat accountant
+import ca_debug
 import ca_gurps_ruleset
 
 '''
@@ -69,11 +69,12 @@ class TestPersonnelHandler(ca.PersonnelHandler):
     def set_command_ribbon_input(self,
                                  character  # command ribbon input
                                  ):
+        debug = ca_debug.Debug()
         #if ARGS.verbose:
         #    if character < 256:
-        #        print('\n  set_command_ribbon_input: add: %c' % character)
+        #        debug.print('\n  set_command_ribbon_input: add: %c' % character)
         #    else:
-        #        print('\n  set_command_ribbon_input: add: %r' % character)
+        #        debug.print('\n  set_command_ribbon_input: add: %r' % character)
 
         if character in [curses.KEY_HOME, curses.KEY_UP, curses.KEY_DOWN,
                          curses.KEY_PPAGE, curses.KEY_NPAGE, curses.KEY_LEFT,
@@ -83,16 +84,17 @@ class TestPersonnelHandler(ca.PersonnelHandler):
             self.__command_ribbon_input.append(ord(character))
 
         #if ARGS.verbose:
-        #    print('  gives us a response queue of:')
-        #    print('    ', end=' ')
+        #    debug.print('  gives us a response queue of:')
+        #    debug.print('    ', end=' ')
         #    queue = []
         #    for c in self.__command_ribbon_input:
         #        queue.append(chr(c) if c < 256 else c)
-        #    PP.pprint(queue)
+        #    debug.pprint(queue)
 
     def handle_user_input_until_done(self):
+        debug = ca_debug.Debug()
         if len(self.__command_ribbon_input) == 0:
-            print ('** command ribbon input is empty, can\'t respond')
+            debug.print ('** command ribbon input is empty, can\'t respond')
             assert False
 
         keep_going = True
@@ -107,14 +109,14 @@ class TestPersonnelHandler(ca.PersonnelHandler):
 
             #if ARGS.verbose:
             #    if string < 256:
-            #        print('\n  handle_user_input_until_done: got %c' % string)
+            #        debug.print('\n  handle_user_input_until_done: got %c' % string)
             #    else:
-            #        print('\n  handle_user_input_until_done: got %r' % string)
-            #    print('    gives us a response queue of:', end=' ')
+            #        debug.print('\n  handle_user_input_until_done: got %r' % string)
+            #    debug.print('    gives us a response queue of:', end=' ')
             #    queue = []
             #    for c in self.__command_ribbon_input:
             #        queue.append(chr(c) if c < 256 else c)
-            #    PP.pprint(queue)
+            #    debug.pprint(queue)
 
             if string in self._choices:
                 keep_going = self._choices[string]['func']()
@@ -352,25 +354,26 @@ class MockWindowManager(object):
         self.__expected_error = string_array
 
     def error(self, string_array):
+        debug = ca_debug.Debug()
         if len(self.__expected_error) > 0:
             if string_array == self.__expected_error:
                 self.error_state = MockWindowManager.FOUND_EXPECTED_ERROR
             else:
                 self.error_state == MockWindowManager.FOUND_WRONG_ERROR
-                print('\n** Found wrong error:')
-                PP.pprint(string_array)
+                debug.print('\n** Found wrong error:')
+                debug.pprint(string_array)
 
         elif self.error_state == MockWindowManager.FOUND_NO_ERROR:
             self.error_state == MockWindowManager.FOUND_EXTRA_ERROR
 
         elif self.error_state == MockWindowManager.FOUND_EXPECTED_ERROR:
             self.error_state == MockWindowManager.FOUND_EXTRA_ERROR
-            print('\n** Found extra error:')
-            PP.pprint(string_array)
+            debug.print('\n** Found extra error:')
+            debug.pprint(string_array)
 
         else:
-            print('\n** Found another error:')
-            PP.pprint(string_array)
+            debug.print('\n** Found another error:')
+            debug.pprint(string_array)
 
     def get_build_fight_gm_window(self, command_ribbon_choices):
         return MockPersonnelGmWindow()
@@ -388,39 +391,40 @@ class MockWindowManager(object):
                           title,
                           selection  # SECOND part of string_results tuple
                           ):
-        # print 'set_menu_response: title: %s, add selection:' % title
-        # print '    ',
-        # PP.pprint(selection)
+        debug = ca_debug.Debug()
+        # debug.print 'set_menu_response: title: %s, add selection:' % title
+        # debug.print '    ',
+        # debug.pprint(selection)
 
         if title not in self.__menu_responses:
             self.__menu_responses[title] = []
         self.__menu_responses[title].append(selection)
 
-        # print '  gives us a response queue of:'
-        # print '    ',
-        # PP.pprint(self.__menu_responses)
+        # debug.print '  gives us a response queue of:'
+        # debug.print '    ',
+        # debug.pprint(self.__menu_responses)
 
     def menu(self,
              title,
              strings_results,  # array of tuples (string, return value)
              starting_index=0  # Who is selected when the menu starts
              ):
+        debug = ca_debug.Debug()
         #if ARGS.verbose:
-        #    print('\n  menu title: "%s"' % title)
+        #    debug.print('\n  menu title: "%s"' % title)
 
         # If the menu has only one entry, just return that -- no need to check
         # responses.
 
         # Now, go check responses for longer menus
 
-        PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
         if title not in self.__menu_responses:
-            print(('\n** menu: title "%s" not found in stored responses' %
+            debug.print(('\n** menu: title "%s" not found in stored responses' %
                    title))
-            PP.pprint(self.__menu_responses)
+            debug.pprint(self.__menu_responses)
             assert False
         if len(self.__menu_responses[title]) == 0:
-            print(('\n** menu: responses["%s"] is empty, can\'t respond' %
+            debug.print(('\n** menu: responses["%s"] is empty, can\'t respond' %
                    title))
             assert False
 
@@ -439,11 +443,11 @@ class MockWindowManager(object):
                 menu_result = (menu_result['doit'])(param)
 
         #if ARGS.verbose:
-        #    print('  menu: title: "%s", returning:' % title, end=' ')
-        #    PP.pprint(menu_result)
-        #    print('    gives us a response queue of:')
-        #    print('      ', end=' ')
-        #    PP.pprint(self.__menu_responses)
+        #    debug.print('  menu: title: "%s", returning:' % title, end=' ')
+        #    debug.pprint(menu_result)
+        #    debug.print('    gives us a response queue of:')
+        #    debug.print('      ', end=' ')
+        #    debug.pprint(self.__menu_responses)
 
         return menu_result, 0 # supply a dummy index to the menu
 
@@ -454,26 +458,28 @@ class MockWindowManager(object):
         '''
         NOTE: |input_box| and |input_box_number| share the same response queue
         '''
-        # print 'set_input_box_response: title: %s, add selection:' % title,
-        # PP.pprint(selection)
+        debug = ca_debug.Debug()
+        # debug.print 'set_input_box_response: title: %s, add selection:' % title,
+        # debug.pprint(selection)
 
         if title not in self.__input_box_responses:
             self.__input_box_responses[title] = []
         self.__input_box_responses[title].append(selection)
 
-        # print '  gives us a response queue of:'
-        # PP.pprint(self.__input_box_responses)
+        # debug.print '  gives us a response queue of:'
+        # debug.pprint(self.__input_box_responses)
 
     def input_box(self,
                   height,  # ignore
                   width,  # ignore
                   title):
+        debug = ca_debug.Debug()
         if title not in self.__input_box_responses:
-            print(('** input_box: title "%s" not found in stored responses' %
+            debug.print(('** input_box: title "%s" not found in stored responses' %
                    title))
             assert False
         if len(self.__input_box_responses[title]) == 0:
-            print(('** input_boxes: responses["%s"] is empty, can\'t respond' %
+            debug.print(('** input_boxes: responses["%s"] is empty, can\'t respond' %
                    title))
             assert False
 
@@ -481,11 +487,11 @@ class MockWindowManager(object):
         result = self.__input_box_responses[title].pop(0)
 
         #if ARGS.verbose:
-        #    print('\n  input_box title: "%s", returning:' % title, end=' ')
-        #    PP.pprint(result)
-        #    print('    gives us a response queue of:')
-        #    print('    ', end=' ')
-        #    PP.pprint(self.__input_box_responses)
+        #    debug.print('\n  input_box title: "%s", returning:' % title, end=' ')
+        #    debug.pprint(result)
+        #    debug.print('    gives us a response queue of:')
+        #    debug.print('    ', end=' ')
+        #    debug.pprint(self.__input_box_responses)
 
         return result
 
@@ -493,13 +499,14 @@ class MockWindowManager(object):
                          height,  # ignore
                          width,  # ignore
                          title):
+        debug = ca_debug.Debug()
         if title not in self.__input_box_responses:
-            print(('** input_box_number: title "%s" not found in stored responses' %
+            debug.print(('** input_box_number: title "%s" not found in stored responses' %
                    title))
-            PP.pprint(self.__input_box_responses)
+            debug.pprint(self.__input_box_responses)
             assert False
         if len(self.__input_box_responses[title]) == 0:
-            print(('** input_box_number: responses["%s"] is empty, can\'t respond' %
+            debug.print(('** input_box_number: responses["%s"] is empty, can\'t respond' %
                    title))
             assert False
 
@@ -507,11 +514,11 @@ class MockWindowManager(object):
         result = self.__input_box_responses[title].pop(0)
 
         #if ARGS.verbose:
-        #    print('\n  input_box_number title: "%s", returning:' % title, end=' ')
-        #    PP.pprint(result)
-        #    print('    gives us a response queue of:')
-        #    print('    ', end=' ')
-        #    PP.pprint(self.__input_box_responses)
+        #    debug.print('\n  input_box_number title: "%s", returning:' % title, end=' ')
+        #    debug.pprint(result)
+        #    debug.print('    gives us a response queue of:')
+        #    debug.print('    ', end=' ')
+        #    debug.pprint(self.__input_box_responses)
 
         return result
 
@@ -527,29 +534,31 @@ class MockWindowManager(object):
     def set_char_response(self,
                           selection  # character
                           ):
-        # print 'set_char_response: add selection:'
-        # print '    ',
-        # PP.pprint(chr(selection))
+        debug = ca_debug.Debug()
+        # debug.print 'set_char_response: add selection:'
+        # debug.print '    ',
+        # debug.pprint(chr(selection))
 
         self.__char_responses.append(selection)
 
-        # print '  gives us a response queue of:'
-        # print '    ',
-        # PP.pprint(self.__char_responses)
+        # debug.print '  gives us a response queue of:'
+        # debug.print '    ',
+        # debug.pprint(self.__char_responses)
 
     def get_one_character(self):
 
+        debug = ca_debug.Debug()
         if len(self.__char_responses) == 0:
-            print('** character responses is empty, can\'t respond')
+            debug.print('** character responses is empty, can\'t respond')
             assert False
         result = self.__char_responses.pop()
 
-        # print 'get_one_character: returning:'
-        # print '    ',
-        # PP.pprint(chr(result))
-        # print '  gives us a response queue of:'
-        # print '    ',
-        # PP.pprint(self.__char_responses)
+        # debug.print 'get_one_character: returning:'
+        # debug.print '    ',
+        # debug.pprint(chr(result))
+        # debug.print '  gives us a response queue of:'
+        # debug.print '    ',
+        # debug.pprint(self.__char_responses)
 
         return result
 
@@ -1097,74 +1106,74 @@ class GmTestCaseCommon(unittest.TestCase):  # Derive from unittest.TestCase
         pass
 
     def _are_equal(self, lhs, rhs):
-        PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
+        debug = ca_debug.Debug()
         if isinstance(lhs, dict):
             if not isinstance(rhs, dict):
-                print('** lhs is a dict but rhs is not')
-                print('\nlhs')
-                PP.pprint(lhs)
-                print('\nrhs')
-                PP.pprint(rhs)
+                debug.print('** lhs is a dict but rhs is not')
+                debug.print('\nlhs')
+                debug.pprint(lhs)
+                debug.print('\nrhs')
+                debug.pprint(rhs)
                 return False
             for key in rhs.keys():
                 if key not in lhs:
-                    print('** KEY "%s" not in lhs' % key)
-                    print('\nlhs')
-                    PP.pprint(lhs)
-                    print('\nrhs')
-                    PP.pprint(rhs)
+                    debug.print('** KEY "%s" not in lhs' % key)
+                    debug.print('\nlhs')
+                    debug.pprint(lhs)
+                    debug.print('\nrhs')
+                    debug.pprint(rhs)
                     return False
             are_equal = True
             for key in lhs.keys():
                 if key not in rhs:
-                    print('** KEY "%s" not in rhs' % key)
-                    print('\nlhs')
-                    PP.pprint(lhs)
-                    print('\nrhs')
-                    PP.pprint(rhs)
+                    debug.print('** KEY "%s" not in rhs' % key)
+                    debug.print('\nlhs')
+                    debug.pprint(lhs)
+                    debug.print('\nrhs')
+                    debug.pprint(rhs)
                     are_equal = False
                 elif not self._are_equal(lhs[key], rhs[key]):
-                    print('lhs[%r] != rhs[%r]' % (key, key))
-                    print('\nlhs')
-                    PP.pprint(lhs)
-                    print('\nrhs')
-                    PP.pprint(rhs)
+                    debug.print('lhs[%r] != rhs[%r]' % (key, key))
+                    debug.print('\nlhs')
+                    debug.pprint(lhs)
+                    debug.print('\nrhs')
+                    debug.pprint(rhs)
                     are_equal = False
             return are_equal
 
         elif isinstance(lhs, list):
             if not isinstance(rhs, list):
-                print('** lhs is a list but rhs is not')
-                print('\nlhs')
-                PP.pprint(lhs)
-                print('\nrhs')
-                PP.pprint(rhs)
+                debug.print('** lhs is a list but rhs is not')
+                debug.print('\nlhs')
+                debug.pprint(lhs)
+                debug.print('\nrhs')
+                debug.pprint(rhs)
                 return False
             if len(lhs) != len(rhs):
-                print('** length lhs=%d != len rhs=%d' % (len(lhs), len(rhs)))
-                print('\nlhs')
-                PP.pprint(lhs)
-                print('\nrhs')
-                PP.pprint(rhs)
+                debug.print('** length lhs=%d != len rhs=%d' % (len(lhs), len(rhs)))
+                debug.print('\nlhs')
+                debug.pprint(lhs)
+                debug.print('\nrhs')
+                debug.pprint(rhs)
                 return False
             are_equal = True
             for i in range(len(lhs)):
                 if not self._are_equal(lhs[i], rhs[i]):
-                    print('** lhs[%d] != rhs[%d]' % (i, i))
-                    print('\nlhs')
-                    PP.pprint(lhs)
-                    print('\nrhs')
-                    PP.pprint(rhs)
+                    debug.print('** lhs[%d] != rhs[%d]' % (i, i))
+                    debug.print('\nlhs')
+                    debug.pprint(lhs)
+                    debug.print('\nrhs')
+                    debug.pprint(rhs)
                     are_equal = False
             return are_equal
 
         else:
             if lhs != rhs:
-                print('** lhs=%r != rhs=%r' % (lhs, rhs))
-                print('\nlhs')
-                PP.pprint(lhs)
-                print('\nrhs')
-                PP.pprint(rhs)
+                debug.print('** lhs=%r != rhs=%r' % (lhs, rhs))
+                debug.print('\nlhs')
+                debug.pprint(lhs)
+                debug.print('\nrhs')
+                debug.pprint(rhs)
                 return False
             else:
                 return True
