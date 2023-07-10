@@ -1582,7 +1582,7 @@ class FromGcs(object):
                         '\( *(?P<reload>[0-9]+)' +
                         '(?P<individual>i?)\).*',
                         weapon['shots'])
-                # TODO: eventually handle 'plus_pne' (one in the chamber)
+                # TODO: eventually handle 'plus_one' (one in the chamber)
                 if match:
                     if match.group('shots') == 'T': # Thrown
                         new_thing['reload_type'] = (
@@ -1592,7 +1592,7 @@ class FromGcs(object):
                                 ca_equipment.Equipment.UNKNOWN_STRING}
                         shots = int(match.group('shots'))
                         new_thing['ammo']['shots'] = shots
-                        new_thing['ammo']['shots_left'] = shots
+                        #new_thing['ammo']['shots_left'] = shots
                         if len(match.group('individual')) > 0:
                             new_thing['reload_type'] = (
                                     ca_equipment.Equipment.RELOAD_ONE)

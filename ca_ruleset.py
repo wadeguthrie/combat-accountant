@@ -173,6 +173,7 @@ class Ruleset(object):
                 continue
             if weapon.is_ranged_weapon():
                 holding_ranged = True
+                # TODO: not?
                 if not weapon.uses_ammo() or weapon.shots_left() > 0:
                     holding_loaded_ranged = True
             else:

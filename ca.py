@@ -23,8 +23,6 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: 'done dealing with non-preferred weapons' menu should include 'Done for all characters'
-
 # TODO: on importing advantages: "notes" should be included in name in parens
 # TODO: should ask when update character wants to delete a spell
 

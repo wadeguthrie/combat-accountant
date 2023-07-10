@@ -7,10 +7,13 @@ class Debug(object):
 
     filename = 'debug.txt'
     did_output = False
+    quiet = False
 
     def __init__(self,
+                 quiet=False,   # Way to shut down all output easily
                  filename=None
                  ):
+        Debug.quiet = quiet
         if filename is not None:
             Debug.filename = filename
         self.PP = pprint.PrettyPrinter(indent=3, width=150)
@@ -22,21 +25,30 @@ class Debug(object):
     def header1(self,
                 string
                 ):
+        if Debug.quiet:
+            return
         self.print('\n==== %s ====' % string)
 
     def header2(self,
                 string
                 ):
+        if Debug.quiet:
+            return
         self.print('\n---- %s ----' % string)
 
     def header3(self,
                 string
                 ):
+        if Debug.quiet:
+            return
         self.print('\n~~ %s ~~' % string)
 
     def print(self,
               string # string to be output
               ):
+        if Debug.quiet:
+            return
+
         if not Debug.did_output:
             fmt = '%Y-%m-%d %H:%M:%S'
             date = datetime.datetime.now().strftime(fmt).format()
@@ -51,5 +63,7 @@ class Debug(object):
     def pprint(self,
                thing # the thing to be pretty printed
                ):
+        if Debug.quiet:
+            return
         string = self.PP.pformat(thing)
         self.print(string)
