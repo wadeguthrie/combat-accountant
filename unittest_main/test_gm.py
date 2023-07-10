@@ -10,6 +10,7 @@ import ca   # combat accountant
 import ca_debug
 import ca_fighter
 import ca_gurps_ruleset
+import ca_ruleset
 import ca_timers
 
 from .test_common import GmTestCaseCommon
@@ -57,6 +58,9 @@ class GmTestCase(GmTestCaseCommon):
         injured_index = 2
 
         random.seed(9001)  # 9001 is an arbitrary number
+        self._window_manager.set_menu_response(
+                "Use Pestilence's preferred armor?",
+                ('quit', ca_ruleset.Ruleset.STOP_CHECKING))
         fight_handler = ca.FightHandler(self._window_manager,
                                         world,
                                         'horsemen',
@@ -512,8 +516,8 @@ class GmTestCase(GmTestCaseCommon):
         '''
         debug = ca_debug.Debug()
 
-        if ARGS.verbose:
-            debug.print('\n=== test_stun_and_consciousness ===\n')
+        #if ARGS.verbose:
+        #    debug.print('\n=== test_stun_and_consciousness ===\n')
 
         # Setup
 
@@ -528,6 +532,9 @@ class GmTestCase(GmTestCaseCommon):
                          mock_program,
                          self._window_manager,
                          save_snapshot=False)
+        self._window_manager.set_menu_response(
+                "Use Pestilence's preferred armor?",
+                ('quit', ca_ruleset.Ruleset.STOP_CHECKING))
         fight_handler = ca.FightHandler(self._window_manager,
                                         world,
                                         'horsemen',
@@ -771,6 +778,9 @@ class GmTestCase(GmTestCaseCommon):
                          self._window_manager,
                          save_snapshot=False)
 
+        self._window_manager.set_menu_response(
+                "Use Bokor Fighter's preferred weapon?",
+                ('quit', ca_ruleset.Ruleset.STOP_CHECKING))
         fight_handler = ca.FightHandler(self._window_manager,
                                         world,
                                         "Dima's Crew",
@@ -1480,6 +1490,9 @@ class GmTestCase(GmTestCaseCommon):
         #            {'name': 'Manny',      'group': 'PCs'}]      # 5.25, 10, 1
         pc_manny_index = 4
 
+        self._window_manager.set_menu_response(
+                "Use Pestilence's preferred armor?",
+                ('quit', ca_ruleset.Ruleset.STOP_CHECKING))
         fight_handler = ca.FightHandler(self._window_manager,
                                         world,
                                         "horsemen",
@@ -1831,6 +1844,9 @@ class GmTestCase(GmTestCaseCommon):
 
         build_fight.set_command_ribbon_input('a')
         build_fight.set_command_ribbon_input('q')
+        self._window_manager.set_menu_response(
+                "Use Vodou Priest's preferred armor?",
+                ('quit', ca_ruleset.Ruleset.STOP_CHECKING))
         build_fight.handle_user_input_until_done()
 
         creatures = world.get_creature_details_list(group)

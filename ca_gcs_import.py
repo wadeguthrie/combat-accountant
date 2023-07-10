@@ -85,7 +85,7 @@ class SkillsCalcs(object):
            'difficulty': 'DX/E',
            'points': 0}
         '''
-        debug = ca_debug.Debug() # TODO: remove
+        #debug = ca_debug.Debug() # TODO: remove
         if skill_name not in SkillsCalcs.skills:
             # Get the skill info from GCS
             if 'difficulty' not in skill_gcs:
@@ -110,7 +110,7 @@ class SkillsCalcs(object):
 
         # Return a default value if the player didn't buy this skill.
         if cost == 0:
-            debug.print('** DEFAULT **')
+            #debug.print('** DEFAULT **')
             # Easiest way to go -- GCS already calculated it and put it in
             # the skill.
             if ('defaulted_from' in skill_gcs and
@@ -155,17 +155,17 @@ class SkillsCalcs(object):
         #   include a laser sight for 'beam weapons' skill -- this code applies
         #   that the laser sight benefit later.
         level = char.char['permanent'][skill_native['attr']]
-        debug.print('  %s = %d' % (skill_native['attr'], level)) # TODO: remove
+        #debug.print('  %s = %d' % (skill_native['attr'], level)) # TODO: remove
         level += SkillsCalcs.level_from_cost[cost]
         level += SkillsCalcs.difficulty_offset[skill_native['diff']]
-        debug.print('  %s (paid %d) = %d' % (skill_native['diff'],
-                                             cost,
-                                             level))
+        #debug.print('  %s (paid %d) = %d' % (skill_native['diff'],
+        #                                     cost,
+        #                                     level))
 
         # Add modifiers due to equipment
         plus = self.__get_equipment_bonuses(char.stuff, 'skill', skill_name)
         level += plus
-        debug.print('  equipment +%d = %d' % (plus, level)) # TODO: remove
+        #debug.print('  equipment +%d = %d' % (plus, level)) # TODO: remove
 
         #if 'equip' in skill_native:
         #    PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
@@ -176,7 +176,7 @@ class SkillsCalcs(object):
             for looking_for, plus in skill_native['advantage'].items():
                 if looking_for in char.char['advantages']:
                     level += plus
-        debug.print('  after advantages: %d' % level) # TODO: remove
+        #debug.print('  after advantages: %d' % level) # TODO: remove
 
         return level
 
@@ -282,7 +282,7 @@ class SkillsCalcs(object):
         #            'name': '<regex>'}, ...
 
 
-        debug2 = ca_debug.Debug()
+        #debug2 = ca_debug.Debug()
 
         total_bonus = 0
         for item in equipment:
@@ -636,9 +636,9 @@ class FromGcs(object):
         #   equipment <- skills
         #   advantages <- spells
 
-        debug = ca_debug.Debug() # TODO: remove
+        #debug = ca_debug.Debug() # TODO: remove
         name = self.get_name() # TODO: remove
-        debug.header1('convert_character: %s' % name) # TODO: remove
+        #debug.header1('convert_character: %s' % name) # TODO: remove
 
         self.__convert_advantages()
         self.__convert_attribs()
@@ -1096,8 +1096,8 @@ class FromGcs(object):
         for skill_gcs in self.__gcs_data['skills']:
             base_name = skill_gcs['name']
 
-            debug = ca_debug.Debug() # TODO: remove
-            debug.header2(base_name) # TODO: remove
+            #debug = ca_debug.Debug() # TODO: remove
+            #debug.header2(base_name) # TODO: remove
 
             if 'type' not in skill_gcs:
                 pass
@@ -1107,7 +1107,7 @@ class FromGcs(object):
                         len(skill_gcs['specialization']) > 0):
                     name_text = '%s (%s)' % (skill_gcs['name'],
                                              skill_gcs['specialization'])
-                    debug.print(' %s' % name_text) # TODO: remove
+                    #debug.print(' %s' % name_text) # TODO: remove
                 else:
                     name_text = skill_gcs['name']
 
