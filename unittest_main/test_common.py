@@ -589,6 +589,10 @@ class GmTestCaseCommon(unittest.TestCase):  # Derive from unittest.TestCase
             "Death Vision": 4,
         }
         self._vodou_priest_fighter = {
+            "fight-notes": [],
+            "gcs-file": None,
+            "notes": [],
+            "ignored-equipment": [],
             "shock": 0,
             "stunned": False,
             "actions_this_turn": [],
@@ -679,6 +683,10 @@ class GmTestCaseCommon(unittest.TestCase):  # Derive from unittest.TestCase
         # that his dex is different.  I know that makes the calculation for
         # basic speed wrong but that's not really the point of this exercise
         self._one_more_guy = {
+            "fight-notes": [],
+            "gcs-file": None,
+            "notes": [],
+            "ignored-equipment": [],
             "shock": 0,
             "stunned": False,
             "actions_this_turn": [],
@@ -686,7 +694,7 @@ class GmTestCaseCommon(unittest.TestCase):  # Derive from unittest.TestCase
             "aim": {"rounds": 0, "braced": False},
             "weapon-index": [],
             "current-weapon": 0,
-            "armor-index": None,
+            "armor-index": [],
             "preferred-weapon-index": [],
             "preferred-armor-index": [],
             "stuff": [
@@ -730,6 +738,10 @@ class GmTestCaseCommon(unittest.TestCase):  # Derive from unittest.TestCase
             "opponent": None
         }
         self._bokor_fighter = {
+            "fight-notes": [],
+            "gcs-file": None,
+            "notes": [],
+            "ignored-equipment": [],
             "shock": 0,
             "stunned": False,
             "actions_this_turn": [],
@@ -785,6 +797,10 @@ class GmTestCaseCommon(unittest.TestCase):  # Derive from unittest.TestCase
         #self.__tank_fighter_stuff_count = 3
 
         self._tank_fighter = {
+            "fight-notes": [],
+            "gcs-file": None,
+            "notes": [],
+            "ignored-equipment": [],
             "shock": 0,
             "stunned": False,
             "actions_this_turn": [],
@@ -850,6 +866,10 @@ class GmTestCaseCommon(unittest.TestCase):  # Derive from unittest.TestCase
         self._thief_knife_skill = 14
 
         self._thief_fighter = {
+            "fight-notes": [],
+            "gcs-file": None,
+            "notes": [],
+            "ignored-equipment": [],
             "shock": 0,
             "stunned": False,
             "actions_this_turn": [],

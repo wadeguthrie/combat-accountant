@@ -8,6 +8,7 @@ import ca
 import ca_debug
 import ca_fighter
 import ca_gurps_ruleset
+import ca_ruleset
 
 from .test_common import GmTestCaseCommon
 from .test_common import MockFightHandler
@@ -1936,8 +1937,8 @@ class GmTestCaseGurps(GmTestCaseCommon):
         Partially GURPS-specific test
         '''
         debug = ca_debug.Debug()
-        if ARGS.verbose:
-            debug.print('\n=== test_initiative_order ===\n')
+        #if ARGS.verbose:
+        #    debug.print('\n=== test_initiative_order ===\n')
 
         world_data = WorldData(self.init_world_dict)
         mock_program = MockProgram()
@@ -1969,6 +1970,9 @@ class GmTestCaseGurps(GmTestCaseCommon):
         for i in range(10):
             # random.randint(1, 6) should generate: 1 3 3 1 5 3 5 5 5 1
             random.seed(9001)  # 9001 is an arbitrary number
+            self._window_manager.set_menu_response(
+                    "Use Pestilence's preferred armor?",
+                    ('quit', ca_ruleset.Ruleset.STOP_CHECKING))
             fight_handler = ca.FightHandler(self._window_manager,
                                             world,
                                             'horsemen',
@@ -2156,6 +2160,10 @@ class GmTestCaseGurps(GmTestCaseCommon):
         for i in range(10):
             # random.randint(1, 6) should generate: 3 1 4 4 5
             random.seed(8534)  # 8534 is an arbitrary number
+
+            self._window_manager.set_menu_response(
+                    "Use Groucho's preferred weapon?",
+                    ('quit', ca_ruleset.Ruleset.STOP_CHECKING))
             fight_handler = ca.FightHandler(self._window_manager,
                                             world,
                                             'marx',
