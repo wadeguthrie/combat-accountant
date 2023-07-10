@@ -386,6 +386,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 string.append('%s: ' % damage['attack_type'])
             string.append('%dd%+d ' % (damage['num_dice'], damage['plus']))
             string.append('(%s)' % damage['damage_type'])
+            if 'notes' in damage and damage['notes'] is not None:
+                string.append(', %s' % damage['notes'])
             results.append(''.join(string))
 
         return ', '.join(results)
@@ -509,6 +511,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 continue
             if weapon.is_ranged_weapon():
                 holding_ranged = True
+                # TODO: not?
                 if not weapon.uses_ammo() or weapon.shots_left() > 0:
                     holding_loaded_ranged = True
             else:
@@ -1366,17 +1369,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                              weapon,
                                                              mode,
                                                              None)
-                        if to_hit is not None:  # No reason for it to me None
+                        if to_hit is not None:  # No reason for it to be None
+                            debug = ca_debug.Debug()
                             damage, ignore_why = self.get_damage(fighter, weapon, mode)
+                            debug.header1('getting DAMAGE')
+                            debug.pprint(damage)
                             damage_str = self.damage_to_string(damage)
+                            debug.print('string: "%s"' % damage_str)
                             crit, fumble = self.__get_crit_fumble(to_hit)
                             notes.append('    to-hit: %d, crit <= %d, fumble >= %d' %
                                     (to_hit, crit, fumble))
-
-                            #if (weapon.is_ranged_weapon() and xxx):
-                            #    ammo = weapon.get_damage()
-                            #    xxx
-
                             notes.append('    damage: %s' % damage_str)
 
                             # Ranged weapon status
@@ -4127,20 +4129,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         results = []
         why = []
 
-        # weapon[type][mode]: swung weapon, thrust weapon, thrown weapon,
-        #                      missile weapon
-
-        #if weapon.details['type'][mode] == 'ranged weapon':
-        #    # weapon.get_damage()
-        #    # Get_ranged_weapon_damage
-        #    # TODO: get ammo - if it's a container, get the first ammo
-        #    #   and use that damage
-        #    # if not a container but it's got damage, use that
-        #    # if there's not damage, use the weapon's damage
-
-
-        damage = weapon.details['type'][mode]['damage']
-
+        damage, notes = weapon.get_damage_next_shot(mode)
         if 'st' in damage:
             attack_type = damage['st']  # 'sw' or 'thr'
             # This is 'cut', 'imp', 'pi' or ...
@@ -4151,7 +4140,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     GurpsRuleset.melee_damage[st][attack_type]['num_dice'],
                  'plus': GurpsRuleset.melee_damage[st][attack_type]['plus'] +
                     damage['plus'],
-                 'damage_type': damage_type_str})
+                 'damage_type': damage_type_str,
+                 'notes': notes})
 
             why.append('Weapon %s, %s' % (weapon.details['name'], mode))
             why.append('  Damage: %s%+d' % ( attack_type, damage['plus']))
@@ -4170,9 +4160,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # if we're here, the damage is based on the weapon and not the
             # capabilities of the wielder.  Therefore, the damage may be a
             # function of the ammo in the clip.  Check that.
-            clip = weapon.get_clip()
-            if clip is not None and 'damage' in clip:
-                damage = clip['damage']
 
             # {'damage': {'dice': {'plus':#, 'num_dice':#, 'type': 'pi' or ...
             damage_type_str = self.__get_damage_type_str(
@@ -4181,11 +4168,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 {'attack_type': None,
                  'num_dice': damage['dice']['num_dice'],
                  'plus': damage['dice']['plus'],
-                 'damage_type': damage_type_str})
+                 'damage_type': damage_type_str,
+                 'notes': notes})
             why.append('Weapon %s, %s' % (weapon.details['name'], mode))
             why.append('  Damage: %dd%+d' % (damage['dice']['num_dice'],
                                              damage['dice']['plus']))
-
         return results, why
 
     def __get_damage_type_str(self,

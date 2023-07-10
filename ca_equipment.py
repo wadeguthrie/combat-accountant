@@ -4,6 +4,7 @@ import copy
 import curses
 import pprint
 
+import ca_debug
 
 class Equipment(object):
     (RELOAD_NONE,   # for a thrown dagger or suriken
@@ -603,6 +604,47 @@ class Weapon(object):
         clip = None if 'clip' not in self.details else self.details['clip']
         return clip
 
+    def get_damage_next_shot(self,
+                             mode   # string: how is the weapon used?
+                             ):
+        # weapon[type][mode]: swung weapon, thrust weapon, thrown weapon,
+        #                      missile weapon
+        #
+        # returns (damage dict, notes for this shot)
+        notes = None
+
+        debug = ca_debug.Debug(quiet=True)
+        debug.header2('get_damage_next_shot')
+        # start with the weapon's inherent damage
+        damage = self.details['type'][mode]['damage']
+        notes = (None if ('ammo' not in self.details or
+                         'stuff' not in self.details['ammo'] or
+                         len(self.details['ammo']['stuff']) <= 0 or
+                         'notes' not in self.details['ammo']['stuff'][0]) else
+                 self.details['ammo']['stuff'][0]['notes'])
+
+        debug.print('type[%r] = "%r"' % (mode, self.details['type'][mode]))
+        if mode == 'ranged weapon':
+            clip = self.get_clip()
+            debug.print('  it is a ranged weapon, clip:')
+            debug.pprint(clip)
+            if clip is None:
+                return damage, notes
+
+            if 'damage' in clip:
+                damage = clip['damage']
+
+            if 'stuff' in clip:
+                debug.print('stuff is in clip')
+                bullet = clip['stuff'][0]
+                if 'damage' in bullet:
+                    damage = bullet['damage']
+                if 'notes' in bullet:
+                    notes = bullet['notes']
+                    debug.print('notes in bullet: "%s"' % notes)
+
+        return damage, notes
+
     def is_melee_weapon(self):
         return Weapon.is_item_melee_weapon(self.details)
 
@@ -703,14 +745,27 @@ class Weapon(object):
         '''
         Returns True if successful, False otherwise
         '''
+        debug = ca_debug.Debug()
+        debug.print('use_one_ammo')
         if not self.uses_ammo():
+            debug.print('  DOES NOT USE AMMO')
             return True
         clip = self.get_clip()
         if clip is None:
             return False
+
         if self.shots_left() < rounds:
             return False
-        clip['shots_left'] -= rounds
+        debug.print('  clip is not none')
+        for round in range(rounds):
+            clip['shots_left'] -= 1
+            debug.pprint(clip)
+            if 'stuff' in clip:
+                if len(clip['stuff']) <= 0:
+                    debug.print('  LEN(STUFF) <= 0')
+                    return False
+                debug.print('  ** POPPED **')
+                clip['stuff'].pop(0)
         return True
 
     def uses_ammo(self):
