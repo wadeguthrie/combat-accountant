@@ -745,7 +745,7 @@ class Weapon(object):
         '''
         Returns True if successful, False otherwise
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         debug.print('use_one_ammo')
         if not self.uses_ammo():
             debug.print('  DOES NOT USE AMMO')

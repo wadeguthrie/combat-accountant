@@ -1071,14 +1071,14 @@ class Ruleset(object):
             if len(item_list_menu) == 0:
                 keep_asking = False
             else:
-                item_list_menu.append(
-                    (('done dealing with preferred %s' % items_string), None))
+                #item_list_menu.append(
+                #    (('done dealing with preferred %s' % items_string), None))
 
+                #item_list_menu.append(
+                #        (('Done dealing with preferred %s for ALL creatures' % items_string),
+                #            ('quit', Ruleset.STOP_CHECKING_WEAPONS_AND_ARMOR)))
                 item_list_menu.append(
-                        (('Done dealing with preferred %s for ALL creatures' % items_string),
-                            ('quit', Ruleset.STOP_CHECKING_WEAPONS_AND_ARMOR)))
-                item_list_menu.append(
-                        (('Quit checking ALL creatures (1 time)'),
+                        (('quit checking ALL creatures (1 time)'),
                             ('quit', Ruleset.STOP_CHECKING)))
 
                 preferred_item_index, ignore = self._window_manager.menu(

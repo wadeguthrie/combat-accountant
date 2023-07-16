@@ -4908,7 +4908,7 @@ class FightHandler(ScreenHandler):
                     if fighter.details['opponent'] is None:
                         if default_selection is None:
                             default_selection = len(opponent_menu)
-                        menu_text = fighter.name
+                        menu_text = self.get_display_name(fighter)
                     else:
                         opponent = self.world.get_creature(
                                 fighter.details['opponent']['name'],
