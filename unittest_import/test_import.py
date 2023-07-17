@@ -12,7 +12,7 @@ import diff_json
 from unittest_main.test_common import GmTestCaseCommon
 
 class GmTestCaseImport(GmTestCaseCommon):
-    debug = ca_debug.Debug()
+    debug = ca_debug.Debug(quiet=True)
     good_data = {
         'unittest_import/Char1.gcs': {
               "actions_this_turn": [],
@@ -2215,7 +2215,7 @@ class GmTestCaseImport(GmTestCaseCommon):
         curses.use_default_colors()
 
         for test_case in test_cases:
-            self.debug.header1('TEST: %s' % test_case)
+            #self.debug.header1('TEST: %s' % test_case)
 
             self._window_manager.set_menu_response('Add Which Equipment',
                     {'op': ca_gcs_import.ToNative.EQUIP_ADD_ALL})

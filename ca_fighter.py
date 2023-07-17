@@ -650,16 +650,17 @@ class Fighter(ThingsInFight):
     def get_current_armor_indexes(self):
         '''
         Gets the armor the Fighter is wearing.
-
-        Returns a tuple:
-            1) a dict (from the Game File)
-            2) index of the armor
+        Returns: list of indexes
         '''
         if 'armor-index' not in self.details:
             return []
         return self.details['armor-index']
 
     def get_current_weapon_indexes(self):
+        '''
+        Gets the weapons the Fighter is wielding.
+        Returns: list of indexes
+        '''
         if 'weapon-index' not in self.details:
             return []
         return self.details['weapon-index']

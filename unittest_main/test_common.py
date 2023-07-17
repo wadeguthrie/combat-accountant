@@ -70,11 +70,10 @@ class TestPersonnelHandler(ca.PersonnelHandler):
                                  character  # command ribbon input
                                  ):
         debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    if character < 256:
-        #        debug.print('\n  set_command_ribbon_input: add: %c' % character)
-        #    else:
-        #        debug.print('\n  set_command_ribbon_input: add: %r' % character)
+        #if character < 256:
+        #    debug.print('\n  set_command_ribbon_input: add: %c' % character)
+        #else:
+        #    debug.print('\n  set_command_ribbon_input: add: %r' % character)
 
         if character in [curses.KEY_HOME, curses.KEY_UP, curses.KEY_DOWN,
                          curses.KEY_PPAGE, curses.KEY_NPAGE, curses.KEY_LEFT,
@@ -83,13 +82,12 @@ class TestPersonnelHandler(ca.PersonnelHandler):
         else:
             self.__command_ribbon_input.append(ord(character))
 
-        #if ARGS.verbose:
-        #    debug.print('  gives us a response queue of:')
-        #    debug.print('    ', end=' ')
-        #    queue = []
-        #    for c in self.__command_ribbon_input:
-        #        queue.append(chr(c) if c < 256 else c)
-        #    debug.pprint(queue)
+        #debug.print('  gives us a response queue of:')
+        #debug.print('    ', end=' ')
+        #queue = []
+        #for c in self.__command_ribbon_input:
+        #    queue.append(chr(c) if c < 256 else c)
+        #debug.pprint(queue)
 
     def handle_user_input_until_done(self):
         debug = ca_debug.Debug()
@@ -107,16 +105,15 @@ class TestPersonnelHandler(ca.PersonnelHandler):
             # FIFO queue
             string = self.__command_ribbon_input.pop(0)
 
-            #if ARGS.verbose:
-            #    if string < 256:
-            #        debug.print('\n  handle_user_input_until_done: got %c' % string)
-            #    else:
-            #        debug.print('\n  handle_user_input_until_done: got %r' % string)
-            #    debug.print('    gives us a response queue of:', end=' ')
-            #    queue = []
-            #    for c in self.__command_ribbon_input:
-            #        queue.append(chr(c) if c < 256 else c)
-            #    debug.pprint(queue)
+            #if string < 256:
+            #    debug.print('\n  handle_user_input_until_done: got %c' % string)
+            #else:
+            #    debug.print('\n  handle_user_input_until_done: got %r' % string)
+            #debug.print('    gives us a response queue of:', end=' ')
+            #queue = []
+            #for c in self.__command_ribbon_input:
+            #    queue.append(chr(c) if c < 256 else c)
+            #debug.pprint(queue)
 
             if string in self._choices:
                 keep_going = self._choices[string]['func']()
@@ -442,12 +439,11 @@ class MockWindowManager(object):
                          else menu_result['param'])
                 menu_result = (menu_result['doit'])(param)
 
-        #if ARGS.verbose:
-        #    debug.print('  menu: title: "%s", returning:' % title, end=' ')
-        #    debug.pprint(menu_result)
-        #    debug.print('    gives us a response queue of:')
-        #    debug.print('      ', end=' ')
-        #    debug.pprint(self.__menu_responses)
+        #debug.print('  menu: title: "%s", returning:' % title, end=' ')
+        #debug.pprint(menu_result)
+        #debug.print('    gives us a response queue of:')
+        #debug.print('      ', end=' ')
+        #debug.pprint(self.__menu_responses)
 
         return menu_result, 0 # supply a dummy index to the menu
 
@@ -486,12 +482,11 @@ class MockWindowManager(object):
         # FIFO queue
         result = self.__input_box_responses[title].pop(0)
 
-        #if ARGS.verbose:
-        #    debug.print('\n  input_box title: "%s", returning:' % title, end=' ')
-        #    debug.pprint(result)
-        #    debug.print('    gives us a response queue of:')
-        #    debug.print('    ', end=' ')
-        #    debug.pprint(self.__input_box_responses)
+        #debug.print('\n  input_box title: "%s", returning:' % title, end=' ')
+        #debug.pprint(result)
+        #debug.print('    gives us a response queue of:')
+        #debug.print('    ', end=' ')
+        #debug.pprint(self.__input_box_responses)
 
         return result
 
@@ -513,12 +508,11 @@ class MockWindowManager(object):
         # FIFO queue
         result = self.__input_box_responses[title].pop(0)
 
-        #if ARGS.verbose:
-        #    debug.print('\n  input_box_number title: "%s", returning:' % title, end=' ')
-        #    debug.pprint(result)
-        #    debug.print('    gives us a response queue of:')
-        #    debug.print('    ', end=' ')
-        #    debug.pprint(self.__input_box_responses)
+        #debug.print('\n  input_box_number title: "%s", returning:' % title, end=' ')
+        #debug.pprint(result)
+        #debug.print('    gives us a response queue of:')
+        #debug.print('    ', end=' ')
+        #debug.pprint(self.__input_box_responses)
 
         return result
 
@@ -634,7 +628,7 @@ class GmTestCaseCommon(unittest.TestCase):  # Derive from unittest.TestCase
                  {"count": 1,
                   "type": {"armor": {"dr": self._vodou_priest_armor_dr}},
                   "notes": "Enchanted w/fortify spell [M66]",
-                  "name": "Sport coat/Jeans"}  # index 2
+                  "name": "Sport coat/Jeans"}, # index 2
             ],
             "spells": [
               {

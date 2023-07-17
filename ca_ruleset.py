@@ -6,6 +6,7 @@ import datetime
 import pprint
 import random
 
+import ca_debug
 import ca_equipment
 import ca_fighter
 import ca_timers
@@ -581,6 +582,7 @@ class Ruleset(object):
         '''
         Make sure creature's information makes sense.
         '''
+        debug = ca_debug.Debug()
         result = Ruleset.KEEP_CHECKING_CONSISTENCY
 
         # Don't need to check if the room is consistent.
@@ -622,11 +624,10 @@ class Ruleset(object):
 
         if check_weapons_and_armor and not playing_back:
             result = self.__configure_armor_weapons(fighter, is_armor=True)  # Armor
-            check_weapons_and_armor = False if result != Ruleset.KEEP_CHECKING_CONSISTENCY else True
-
+            check_weapons_and_armor = (False
+                    if result != Ruleset.KEEP_CHECKING_CONSISTENCY else True)
         if check_weapons_and_armor and not playing_back:
             result = self.__configure_armor_weapons(fighter, is_armor=False) # Weapons
-
         return result
 
     def make_empty_armor(self):
@@ -899,7 +900,7 @@ class Ruleset(object):
             natural armor/weapons, wear that.
         '''
         result = Ruleset.KEEP_CHECKING_CONSISTENCY
-
+        debug = ca_debug.Debug()
         if is_armor:
             index_list = fighter.get_current_armor_indexes()
             preferred_index = 'preferred-armor-index'
@@ -953,7 +954,6 @@ class Ruleset(object):
                 result = False
 
         # Dump non-armor/weapon that is preferred armor/weapon
-
         preferred_item_list = []
         preferred_index_list = fighter.details[preferred_index]
 
@@ -981,8 +981,9 @@ class Ruleset(object):
                 fighter.details[preferred_index].remove(index)
                 result = False
 
-        # Check to see if they have preferred armor/weapon at all
 
+        # Check to see if they have preferred armor/weapon at all - if not and
+        # we only have 1 armor, make that our preferred armor
         if len(fighter.details[preferred_index]) == 0:
             owned_item_count = 0
             item_index = None
@@ -1000,6 +1001,7 @@ class Ruleset(object):
                 self._window_manager.error([
                     'Creature "%s" has no preferred %s' %
                     (fighter.name, item_string)])
+
 
         # Next, remove non-preferred weapon/armor
 
@@ -1052,12 +1054,15 @@ class Ruleset(object):
                     keep_asking = False
 
         # Now, add preferred armor/weapon
-
         keep_asking = True if result == Ruleset.KEEP_CHECKING_CONSISTENCY else False
         while keep_asking:
+            # Get list of items currently in use
             index_list = (fighter.get_current_armor_indexes() if is_armor else
                 fighter.get_current_weapon_indexes())
             item_list_menu = []
+
+            # Build list of preferred items not being used / items being used
+            # that aren't in the preferred list.
             for preferred_item_index in fighter.details[preferred_index]:
                 if preferred_item_index not in index_list:
                     item = fighter.equipment.get_item_by_index(
@@ -1068,6 +1073,7 @@ class Ruleset(object):
                     item_list_menu.append(
                         ('Un-prefer %s' % item['name'],
                             ('unprefer', preferred_item_index)))
+
             if len(item_list_menu) == 0:
                 keep_asking = False
             else:
@@ -1135,7 +1141,6 @@ class Ruleset(object):
                         '"%s"' % fighter.name,
                         '  is carrying a weapon (%s) with no ammo (%s).' % (
                             weapon['name'], clip_name)])
-
         return result
 
     def __do_attack(self,
