@@ -909,6 +909,20 @@ class World(object):
 
         return self.__fighters[group][name]
 
+    def get_creature_or_none(self,
+                             name,
+                             group
+                             ):
+        '''
+        Debugging routine.  Returns None if creature isn't in the local list,
+        otherwise returns the creature.
+        '''
+        if group not in self.__fighters:
+            return None
+        if name not in self.__fighters[group]:
+            return None
+        return self.get_creature(name, group)
+
     def get_creature_details(self,
                              name,       # string name of creature
                              group_name  # string name of creature's group
@@ -4362,6 +4376,8 @@ class FightHandler(ScreenHandler):
                  save_snapshot=True     # Here so tests can disable it
                  ):
         super(FightHandler, self).__init__(window_manager, world)
+
+        debug = ca_debug.Debug()
         self.__bodies_looted = False
         self.__keep_monsters = False  # Move monsters to 'dead' after fight
         self.__equipment_manager = ca_equipment.EquipmentManager(

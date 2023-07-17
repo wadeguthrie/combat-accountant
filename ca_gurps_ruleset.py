@@ -1370,7 +1370,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                              mode,
                                                              None)
                         if to_hit is not None:  # No reason for it to be None
-                            debug = ca_debug.Debug()
+                            debug = ca_debug.Debug(quiet=True)
                             damage, ignore_why = self.get_damage(fighter, weapon, mode)
                             debug.header1('getting DAMAGE')
                             debug.pprint(damage)
@@ -2358,12 +2358,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Make sure creature has skills for all their stuff.  Trying to make
         sure that one or the other of the skills wasn't entered incorrectly.
         '''
+        debug = ca_debug.Debug()
+
         result = super(GurpsRuleset,
                        self).check_creature_consistent(name,
                                                        creature,
                                                        check_weapons_and_armor,
                                                        fight_handler)
-
         if 'skills' not in creature:
             return result
 

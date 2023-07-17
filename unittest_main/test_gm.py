@@ -162,6 +162,10 @@ class GmTestCase(GmTestCaseCommon):
                                                      'pick-opponent']
         expected_fighters[injured_index]['current']['hp'] -= injured_hp
 
+        # The Vodou priest only has 1 armor so the fight will automatically
+        # make that the fighter's preferred armor
+        expected_fighters[3]['preferred-armor-index'] = [self._vodou_armor_index]
+
         # These fighters are in a 'monster' group -- they're numbered
         # alphabetically
         expected_fighters[1]['monster-number'] = 1
@@ -747,8 +751,8 @@ class GmTestCase(GmTestCaseCommon):
         '''
         Basic test
         '''
-        debug = ca_debug.Debug(quiet=True)
-        debug.header1('test_save')
+        #debug = ca_debug.Debug(quiet=True)
+        #debug.header1('test_save')
 
         base_world_dict = copy.deepcopy(self.base_world_dict)
 
@@ -757,7 +761,7 @@ class GmTestCase(GmTestCaseCommon):
 
         # Test that leaving a fight moves the bad guys to the dead monster
         # list
-        debug.print('\n----------- LEAVE FIGHT -----------\n')
+        #debug.print('\n----------- LEAVE FIGHT -----------\n')
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
@@ -793,7 +797,7 @@ class GmTestCase(GmTestCaseCommon):
         #
         # test that SAVING the fight works
         #
-        debug.print('\n----------- SAVE FIGHT -----------\n')
+        #debug.print('\n----------- SAVE FIGHT -----------\n')
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
@@ -840,7 +844,7 @@ class GmTestCase(GmTestCaseCommon):
         #
         # test that KEEPING the fight works
         #
-        debug.print('\n----------- KEEP FIGHT -----------\n')
+        #debug.print('\n----------- KEEP FIGHT -----------\n')
 
         world_data = WorldData(base_world_dict)
         mock_program = MockProgram()
@@ -1520,8 +1524,8 @@ class GmTestCase(GmTestCaseCommon):
         '''
         Basic test
         '''
-        debug = ca_debug.Debug(quiet=True)
-        debug.header1('test_NPC_joins')
+        #debug = ca_debug.Debug(quiet=True)
+        #debug.header1('test_NPC_joins')
 
         # NOTE: These indexes assume that we're NOT creating a fight.  When we
         # create a fight, a Fight object '<< ROOM >>' will be created and
@@ -1585,7 +1589,7 @@ class GmTestCase(GmTestCaseCommon):
 
         # PersonnelHandler.NPC_joins_monsters - not an NPC #
 
-        debug.print('\n----------- NPC_joins_monsters - not an NPC -----------\n')
+        #debug.print('\n----------- NPC_joins_monsters - not an NPC -----------\n')
 
         self._window_manager.reset_error_state()
 
@@ -1601,7 +1605,7 @@ class GmTestCase(GmTestCaseCommon):
 
         # PersonnelHandler.NPC_joins_monsters - works #
 
-        debug.print('\n----------- NPC_joins_monsters - works -----------\n')
+        #debug.print('\n----------- NPC_joins_monsters - works -----------\n')
 
         self._window_manager.reset_error_state()
 
@@ -1618,7 +1622,7 @@ class GmTestCase(GmTestCaseCommon):
 
         # PersonnelHandler.NPC_joins_monsters - NPC already in fight #
 
-        debug.print('\n--- NPC_joins_monsters - NPC already with monster ---\n')
+        #debug.print('\n--- NPC_joins_monsters - NPC already with monster ---\n')
 
         npc_handler.set_viewing_index(groucho_index)
         fighter = npc_handler.get_obj_from_index()
@@ -1635,7 +1639,7 @@ class GmTestCase(GmTestCaseCommon):
 
         # PersonnelHandler.NPC_joins_PCs -- not a PC #
 
-        debug.print('\n----------- NPC_joins_PCs - not a PC -----------\n')
+        #debug.print('\n----------- NPC_joins_PCs - not a PC -----------\n')
 
         pc_handler.set_viewing_index(pc_manny_index)
         fighter = pc_handler.get_obj_from_index()
@@ -1650,7 +1654,7 @@ class GmTestCase(GmTestCaseCommon):
 
         # PersonnelHandler.NPC_joins_PCs -- works #
 
-        debug.print('\n----------- NPC_joins_PCs - works -----------\n')
+        #debug.print('\n----------- NPC_joins_PCs - works -----------\n')
 
         self._window_manager.reset_error_state()
 
@@ -1689,8 +1693,8 @@ class GmTestCase(GmTestCaseCommon):
         '''
         Basic test
         '''
-        debug = ca_debug.Debug(quiet=True)
-        debug.header1('test_new_fight_new_creatures')
+        #debug = ca_debug.Debug(quiet=True)
+        #debug.header1('test_new_fight_new_creatures')
 
         # CREATE FIGHT -- WORKING #
 
@@ -1726,14 +1730,14 @@ class GmTestCase(GmTestCaseCommon):
         assert 'test_new_fight' in fights  # verify that fight  exists
         if 'test_new_fight' in fights:
             creatures = world.get_creature_details_list('test_new_fight')
-            debug.print('Expect: Room, Horatio:')
-            debug.pprint(creatures)
+            #debug.print('Expect: Room, Horatio:')
+            #debug.pprint(creatures)
             # The 'creatures' should be '<< ROOM >>', 'Horatio'
             assert 'Horatio' in creatures
 
         # FIGHT ALREADY EXISTS #
 
-        debug.print('\n--- Test: Fight Already Exists ---\n')
+        #debug.print('\n--- Test: Fight Already Exists ---\n')
 
         self._window_manager.reset_error_state()
         self._window_manager.clear_menu_responses()
@@ -1766,7 +1770,7 @@ class GmTestCase(GmTestCaseCommon):
 
         # ADD A CREATURE, DELETE A MONSTER -- WORKS #
 
-        debug.print('\n--- Test: Add and Delete Monster ---\n')
+        #debug.print('\n--- Test: Add and Delete Monster ---\n')
 
         self._window_manager.clear_menu_responses()
         self._window_manager.set_menu_response('New or Pre-Existing',
@@ -1808,7 +1812,7 @@ class GmTestCase(GmTestCaseCommon):
 
         # ADD PCs -- WORKS #
 
-        debug.print('\n--- Test: Add PCs ---\n')
+        #debug.print('\n--- Test: Add PCs ---\n')
 
         group = 'PCs'
         self._window_manager.clear_menu_responses()
@@ -1834,7 +1838,7 @@ class GmTestCase(GmTestCaseCommon):
 
         # ADD NPCs #
 
-        debug.print('\n--- Test: Add NPCs ---\n')
+        #debug.print('\n--- Test: Add NPCs ---\n')
 
         group = 'NPCs'
         self._window_manager.clear_menu_responses()
@@ -1862,8 +1866,8 @@ class GmTestCase(GmTestCaseCommon):
         '''
         Basic test
         '''
-        debug = ca_debug.Debug(quiet=True)
-        debug.header1('test_containers')
+        #debug = ca_debug.Debug(quiet=True)
+        #debug.header1('test_containers')
 
         # CREATE FIGHT -- WORKING #
 

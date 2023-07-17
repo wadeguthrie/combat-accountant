@@ -26,8 +26,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         GURPS-specific test
         '''
         debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    debug.print('\n=== test_get_dodge_skill ===\n')
+        # debug.header1('test_get_dodge_skill')
 
         # Deepcopy so that we don't taint the original
         mock_fight_handler = MockFightHandler()
@@ -98,8 +97,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         GURPS-specific test
         '''
         debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    debug.print('\n=== test_get_block_skill ===\n')
+        #debug.header1('test_get_block_skill')
 
         # TODO: need non-trivial block tests
         vodou_priest_fighter = ca_fighter.Fighter(
@@ -147,8 +145,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         GURPS-specific test
         '''
         debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    debug.print('\n=== test_get_parry_skill ===\n')
+        #debug.header1('test_get_parry_skill')
 
         # Unarmed
         weapon = None
@@ -261,8 +258,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         GURPS-specific test
         '''
         debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    debug.print('\n=== test_get_unarmed_info ===\n')
+        #debug.header1('test_get_unarmed_info')
 
         # Vodou Priest
         mock_fight_handler = MockFightHandler()
@@ -441,8 +437,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         GURPS-specific test
         '''
         debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    debug.print('\n=== test_ranged_to_hit ===\n')
+        #debug.header1('test_ranged_to_hit')
 
         self._window_manager = MockWindowManager()
         self._ruleset = TestRuleset(self._window_manager)
@@ -686,8 +681,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         GURPS-specific test
         '''
         debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    debug.print('\n=== test_messed_up_aim ===\n')
+        #debug.header1('test_messed_up_aim')
 
         self._window_manager = MockWindowManager()
         self._ruleset = TestRuleset(self._window_manager)
@@ -926,8 +920,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         GURPS-specific test
         '''
         debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    debug.print('\n=== test_melee_to_hit ===\n')
+        #debug.header1('test_melee_to_hit')
 
         self._window_manager = MockWindowManager()
         self._ruleset = TestRuleset(self._window_manager)
@@ -1033,8 +1026,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         GURPS-specific test
         '''
         debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    debug.print('\n=== test_adjust_hp ===\n')
+        #debug.header1('test_adjust_hp')
 
         # Setup
 
@@ -1461,8 +1453,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         GURPS-specific test
         '''
         debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    debug.print('\n=== test_adjust_hp_2 ===\n')
+        #debug.header1('test_adjust_hp_2')
 
         # Setup
 
@@ -1620,8 +1611,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         GURPS-specific test
         '''
         debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    debug.print('\n=== test_spell_casting ===\n')
+        #debug.header1('test_spell_casting')
 
         # Setup
 
@@ -1876,8 +1866,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         GURPS test
         '''
         debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    debug.print('\n=== test_defend ===\n')
+        #debug.header1('test_defend')
 
         # Setup
 
@@ -1936,9 +1925,8 @@ class GmTestCaseGurps(GmTestCaseCommon):
         '''
         Partially GURPS-specific test
         '''
-        debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    debug.print('\n=== test_initiative_order ===\n')
+        #debug = ca_debug.Debug(quiet=True)
+        #debug.header1('test_initiative_order')
 
         world_data = WorldData(self.init_world_dict)
         mock_program = MockProgram()
@@ -1978,6 +1966,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
                                             'horsemen',
                                             None,  # replay history
                                             save_snapshot=False)
+
             fighters = fight_handler.get_fighters()
 
             # Check the order against the one that I expect
@@ -2107,6 +2096,10 @@ class GmTestCaseGurps(GmTestCaseCommon):
         expected_fighters[unconscious_index]['state'] = "unconscious"
         expected_fighters[dead_index]['state'] = "dead"
 
+        # The Vodou priest only has 1 armor so the fight will automatically
+        # make that the fighter's preferred armor
+        expected_fighters[3]['preferred-armor-index'] = [self._vodou_armor_index]
+
         # These fighters are in a 'monster' group -- they're numbered
         # alphabetically
         expected_fighters[1]['monster-number'] = 1
@@ -2129,8 +2122,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         reordered randomly and a different random seed is used.
         '''
         debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    debug.print('\n=== test_initiative_order_again ===\n')
+        #debug.header1('test_initiative_order_again')
 
         world_data = WorldData(self.init_world_dict_2)
         mock_program = MockProgram()
