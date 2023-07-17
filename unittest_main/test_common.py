@@ -410,8 +410,6 @@ class MockWindowManager(object):
              starting_index=0  # Who is selected when the menu starts
              ):
         debug = ca_debug.Debug()
-        #if ARGS.verbose:
-        #    debug.print('\n  menu title: "%s"' % title)
 
         # If the menu has only one entry, just return that -- no need to check
         # responses.
@@ -422,10 +420,12 @@ class MockWindowManager(object):
             debug.print(('\n** menu: title "%s" not found in stored responses' %
                    title))
             debug.pprint(self.__menu_responses)
+            debug.print_tb()
             assert False
         if len(self.__menu_responses[title]) == 0:
             debug.print(('\n** menu: responses["%s"] is empty, can\'t respond' %
                    title))
+            debug.print_tb()
             assert False
 
         # FIFO queue
