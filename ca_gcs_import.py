@@ -1592,7 +1592,7 @@ class FromGcs(object):
                                 ca_equipment.Equipment.UNKNOWN_STRING}
                         shots = int(match.group('shots'))
                         new_thing['ammo']['shots'] = shots
-                        #new_thing['ammo']['shots_left'] = shots
+                        new_thing['ammo']['shots_left'] = shots # TODO: remove?
                         if len(match.group('individual')) > 0:
                             new_thing['reload_type'] = (
                                     ca_equipment.Equipment.RELOAD_ONE)

@@ -2,6 +2,7 @@
 
 import datetime
 import pprint
+import traceback
 
 class Debug(object):
 
@@ -67,3 +68,9 @@ class Debug(object):
             return
         string = self.PP.pformat(thing)
         self.print(string)
+
+    def print_tb(self):
+        #tb = traceback.extract_stack()
+        #strings = traceback.format_tb(tb)
+        stack = traceback.format_stack()
+        self.pprint(stack)
