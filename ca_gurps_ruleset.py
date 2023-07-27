@@ -1385,6 +1385,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
                             if (weapon.is_ranged_weapon() and
                                     'ammo' in weapon.details):
+                                if ('shots_per_round' in weapon.details and
+                                        'pellets_per_shot' in weapon.details):
+                                    notes.append(
+                                            '      per pellet (? for more info)')
+
                                 clip_name = weapon.details['ammo']['name']
                                 if clip_name is None:
                                     clip_name = ca_equipment.Equipment.UNKNOWN_STRING
@@ -4174,6 +4179,28 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             why.append('Weapon %s, %s' % (weapon.details['name'], mode))
             why.append('  Damage: %dd%+d' % (damage['dice']['num_dice'],
                                              damage['dice']['plus']))
+
+            # Shotguns need more explanation B373
+            if (weapon.is_ranged_weapon() and
+                    'ammo' in weapon.details):
+                if ('shots_per_round' in weapon.details and
+                        'pellets_per_shot' in weapon.details):
+                    mult_factor = int(weapon.details['pellets_per_shot'] / 2)
+
+                    why.append('    Shotgun range is 50/125 (so 5 yards for CLOSE range)')
+                    why.append('    Farther than 5 yards, number of pellets that hit is')
+                    why.append('      1 (on hit success) + margin of HIT success')
+                    why.append('    Closer than 5 yards, DR *= %d, but...' % mult_factor)
+                    why.append('      ...Damage: %dd%+d per shot taken' % (
+                        (mult_factor * damage['dice']['num_dice']),
+                        (mult_factor * damage['dice']['plus'])))
+                    why.append('    Dodge success removes 1 pellet + 1 pellet per margin ')
+                    why.append('      of success (closer than 5 yards, it\'s the shot,')
+                    why.append('      not the pellet that\'s dodged)')
+                    why.append('    See B409, B373 (rapid fire), B375 (dodge)')
+
+
+
         return results, why
 
     def __get_damage_type_str(self,
