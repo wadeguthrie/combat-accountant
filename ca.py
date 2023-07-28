@@ -23,6 +23,10 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: make sure damage for a shotgun can be specified for the shell instead
+#   of the gun if you want.  Also, make sure that the number of pellets can be
+#   specified by the shell.
+
 # TODO: on importing advantages: "notes" should be included in name in parens
 # TODO: should ask when update character wants to delete a spell
 

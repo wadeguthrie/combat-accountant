@@ -610,18 +610,32 @@ class Weapon(object):
         # weapon[type][mode]: swung weapon, thrust weapon, thrown weapon,
         #                      missile weapon
         #
-        # returns (damage dict, notes for this shot)
-        notes = None
+        # returns (damage dict, notes (scalar string) for this shot)
 
+        damage = self.get_param('damage', mode)
+        notes = self.get_param('notes', mode)
+        return damage, notes
+
+    def get_param(self,
+                  param, # string: parameter being retrieved
+                  mode   # string: how is the weapon used?
+                  ):
+        '''
+        Gets a named parameter from the weapon.  It tries to get the parameter
+        from the next bullet (if the weapon has bullets).  If not, it tries to
+        get the parameter from the weapon's clip (if the weapon takes clips).
+        If not, it tries to get the parameter from the weapon.  If not, it
+        returns None.
+        '''
+        # weapon[type][mode]: swung weapon, thrust weapon, thrown weapon,
+        #                      missile weapon
         debug = ca_debug.Debug(quiet=True)
-        debug.header2('get_damage_next_shot')
-        # start with the weapon's inherent damage
-        damage = self.details['type'][mode]['damage']
-        notes = (None if ('ammo' not in self.details or
-                         'stuff' not in self.details['ammo'] or
-                         len(self.details['ammo']['stuff']) <= 0 or
-                         'notes' not in self.details['ammo']['stuff'][0]) else
-                 self.details['ammo']['stuff'][0]['notes'])
+        debug.header2('get_param')
+
+        # start with the weapon's inherent value
+        result = (None if mode not in self.details['type']
+                or param not in self.details['type'][mode]
+                else self.details['type'][mode][param])
 
         debug.print('type[%r] = "%r"' % (mode, self.details['type'][mode]))
         if mode == 'ranged weapon':
@@ -629,21 +643,18 @@ class Weapon(object):
             debug.print('  it is a ranged weapon, clip:')
             debug.pprint(clip)
             if clip is None:
-                return damage, notes
+                return result
 
-            if 'damage' in clip:
-                damage = clip['damage']
+            if param in clip:
+                result = clip[param]
 
-            if 'stuff' in clip:
+            if 'stuff' in clip: # bullets contained in clip
                 debug.print('stuff is in clip')
-                bullet = clip['stuff'][0]
-                if 'damage' in bullet:
-                    damage = bullet['damage']
-                if 'notes' in bullet:
-                    notes = bullet['notes']
-                    debug.print('notes in bullet: "%s"' % notes)
+                bullet = clip['stuff'][0] # next bullet to be fired
+                if param in bullet:
+                    result = bullet[param]
 
-        return damage, notes
+        return result
 
     def is_melee_weapon(self):
         return Weapon.is_item_melee_weapon(self.details)
