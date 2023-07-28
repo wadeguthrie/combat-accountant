@@ -630,14 +630,22 @@ class Weapon(object):
         # weapon[type][mode]: swung weapon, thrust weapon, thrown weapon,
         #                      missile weapon
         debug = ca_debug.Debug(quiet=True)
-        debug.header2('get_param')
+        debug.header2('get_param: %s, %s' % (param, mode))
 
         # start with the weapon's inherent value
-        result = (None if mode not in self.details['type']
-                or param not in self.details['type'][mode]
-                else self.details['type'][mode][param])
+        debug.print('details:')
+        debug.pprint(self.details)
+        result = None
+        if param in self.details:
+            result = self.details[param]
+
+        # check mode-specific information
+        if mode in self.details['type'] and param in self.details['type'][mode]:
+            result = self.details['type'][mode][param]
 
         debug.print('type[%r] = "%r"' % (mode, self.details['type'][mode]))
+
+        # check the clip (and bullets therein)
         if mode == 'ranged weapon':
             clip = self.get_clip()
             debug.print('  it is a ranged weapon, clip:')

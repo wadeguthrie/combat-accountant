@@ -4113,6 +4113,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             weapon, # Weapon object
             st,     # number: fighter's current strength
             ):
+        debug = ca_debug.Debug(quiet=True)
+        debug.header1('__get_damage_one_case: %s' % weapon.name)
         '''
         Damage is described in the following ways:
 
@@ -4136,7 +4138,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         why = []
 
         damage, notes = weapon.get_damage_next_shot(mode)
+        debug.pprint(damage)
         if 'st' in damage:
+            debug.print('found ST')
             attack_type = damage['st']  # 'sw' or 'thr'
             # This is 'cut', 'imp', 'pi' or ...
             damage_type_str = self.__get_damage_type_str(damage['type'])
@@ -4168,6 +4172,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # function of the ammo in the clip.  Check that.
 
             # {'damage': {'dice': {'plus':#, 'num_dice':#, 'type': 'pi' or ...
+            debug.print('found DICE')
             damage_type_str = self.__get_damage_type_str(
                     damage['dice']['type'])
             results.append(
@@ -4181,11 +4186,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                              damage['dice']['plus']))
 
             # Shotguns need more explanation B373
-            if (weapon.is_ranged_weapon() and
-                    'ammo' in weapon.details):
-                if ('shots_per_round' in weapon.details and
-                        'pellets_per_shot' in weapon.details):
-                    mult_factor = int(weapon.details['pellets_per_shot'] / 2)
+            debug.print('is ranged?')
+            if weapon.is_ranged_weapon():
+                debug.print('*IS* ranged')
+                pellets_per_shot = weapon.get_param('pellets_per_shot',
+                                                    'ranged weapon')
+                debug.print('pellets_per_shot: %r' % pellets_per_shot)
+                if pellets_per_shot is not None:
+                    mult_factor = int(pellets_per_shot / 2)
 
                     why.append('    Shotgun range is 50/125 (so 5 yards for CLOSE range)')
                     why.append('    Farther than 5 yards, number of pellets that hit is')
