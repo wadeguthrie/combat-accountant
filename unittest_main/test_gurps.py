@@ -370,7 +370,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
                                                                 weapon)
 
         assert hand_to_hand_info['punch_skill'] == 14
-        assert hand_to_hand_info['punch_damage'] == 'thr: 1d-1 (cr=x1.0)'
+        assert hand_to_hand_info['punch_damage'] == 'thr: 1d-1 (cr=x1.0), B271'
         assert hand_to_hand_info['kick_skill'] == 12
         assert hand_to_hand_info['kick_damage'] == '1d-1 (cr=x1.0)'
         assert hand_to_hand_info['parry_skill'] == 10
