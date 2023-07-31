@@ -221,9 +221,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'cast-spell',      'change-posture',  'concentrate',
             'defend',          'doff-armor',      'don-armor',
             'draw-weapon',     'evaluate',        'feint',
-            'holster-weapon',  'move',            'move-and-attack',
-            'nothing',         'reload',          'stun',
-            'use-item',        'user-defined'
+            'holster-weapon',  'maintain-spell',  'move',
+            'move-and-attack', 'nothing',         'reload',
+            'stun',            'use-item',        'user-defined'
         ])
 
     # Context manager stuff deals with gurps_info.json, a file that contains
@@ -560,43 +560,65 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # Spell casters.
 
         if 'spells' in fighter.details:
+
+            # Build the 'Cast' menu
+
             spell_menu = []
             for index, spell in enumerate(fighter.details['spells']):
-                if spell['name'] not in GurpsRuleset.spells:
-                    self._window_manager.error(
-                        ['Spell "%s" not in GurpsRuleset.spells' %
-                            spell['name']]
-                    )
-                    continue
-                complete_spell = copy.deepcopy(spell)
-                complete_spell.update(GurpsRuleset.spells[spell['name']])
-
-                cast_text_array = ['%s -' % complete_spell['name']]
-
-                for piece in ['cost',
-                              'skill',
-                              'casting time',
-                              'duration',
-                              'notes',
-                              'range',
-                              'save']:
-                    if piece in complete_spell:
-                        if piece == 'save': # array needs to be handled
-                            amalgam = ', '.join(complete_spell[piece])
-                            cast_text_array.append('%s:%r' %
-                                                   (piece,
-                                                    amalgam))
-                        else:
-                            cast_text_array.append('%s:%r' %
-                                                   (piece,
-                                                    complete_spell[piece]))
-                cast_text = ' '.join(cast_text_array)
-                spell_menu.append((cast_text,
-                                   {'action': {'action-name': 'cast-spell',
-                                               'spell-index': index}}))
+                menu_item = self.__build_cast_spell_menu_item(spell, index)
+                if menu_item is not None:
+                    spell_menu.append(menu_item)
             spell_menu = sorted(spell_menu, key=lambda x: x[0].upper())
-
             action_menu.append(('cast Spell', {'menu': spell_menu}))
+
+            # Build the 'Maintain' menu for currently expiring spells
+
+            # What spells just expired (they're in the 'just fired' timers)
+            maintain_spell_menu = []
+            for timer in fighter.timers.get_just_fired():
+                # ignore the timer if it's not for a spell
+                if 'data' not in timer.details:
+                    continue
+                if 'spell' not in timer.details['data']:
+                    continue
+                spell_name = timer.details['data']['spell']['name']
+
+                # ignore the spell if there's no maintainence cost
+                spell_data = GurpsRuleset.spells[spell_name]
+                if 'maintain' not in spell_data:
+                    continue
+                if spell_data['maintain'] is None:
+                    # This _should_ be 'ask' but there was an error in the
+                    # spell import code that said 'cannot be maintained' is
+                    # None.  Sigh.
+                    continue
+                if spell_data['maintain'] == 0:
+                    continue  # THIS means it can't be maintained
+
+                # Build the menu item
+
+                # Find the spell in the fighter's list
+                spell_found = None
+                index_found = None
+                for index, spell in enumerate(fighter.details['spells']):
+                    if spell_name == spell['name']:
+                        spell_found = spell
+                        index_found = index
+                        break
+
+                if spell_found is None or index_found is None:
+                    continue # Shouldn't happen; caster should know this spell
+
+                # Build the menu item and add it to the menu
+                menu_item = self.__build_cast_spell_menu_item(spell_found,
+                                                              index_found,
+                                                              maintain=True)
+                if menu_item is not None:
+                    maintain_spell_menu.append(menu_item)
+
+            if len(maintain_spell_menu) > 0:
+                action_menu.append(('maintain Spell',
+                                    {'menu': maintain_spell_menu}))
 
         action_menu.append(('evaluate (B364)',
                             {'action': {'action-name': 'evaluate'}}))
@@ -3056,6 +3078,52 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return None  # No timers
 
+    def __build_cast_spell_menu_item(
+            self,
+            spell, # dict from fighter's list
+            index, # int: index of spell in fighter's list
+            maintain=False
+            ):
+        if spell['name'] not in GurpsRuleset.spells:
+            self._window_manager.error(
+                ['Spell "%s" not in GurpsRuleset.spells' %
+                    spell['name']])
+            return None
+
+        complete_spell = copy.deepcopy(spell)
+        complete_spell.update(GurpsRuleset.spells[spell['name']])
+
+        cast_text_array = ['%s -' % complete_spell['name']]
+
+        for piece in ['cost',
+                      'skill',
+                      'casting time',
+                      'duration',
+                      'notes',
+                      'range',
+                      'save']:
+            if piece in complete_spell:
+                if piece == 'save': # array needs to be handled
+                    amalgam = ', '.join(complete_spell[piece])
+                    cast_text_array.append('%s:%r' %
+                                           (piece,
+                                            amalgam))
+                else:
+                    cast_text_array.append('%s:%r' %
+                                           (piece,
+                                            complete_spell[piece]))
+        cast_text = ' '.join(cast_text_array)
+        if maintain:
+            result = (cast_text,
+                      {'action': {'action-name': 'maintain-spell',
+                                  'spell-index': index,
+                                  'complete spell': complete_spell}})
+        else:
+            result = (cast_text,
+                      {'action': {'action-name': 'cast-spell',
+                                  'spell-index': index}})
+        return result
+
     def __cast_spell(self,
                      fighter,       # Fighter object
                      action,        # {'action-name': 'cast-spell'
@@ -3077,8 +3145,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
         '''
-        #PP = pprint.PrettyPrinter(indent=3, width=150)
-
         if 'part' in action and action['part'] == 2:
             # This is the 2nd part of a 2-part action.  The 2nd part of this
             # action actually perfoms all the actions and side-effects of
@@ -3108,7 +3174,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                             'rounds': complete_spell['duration'],
                             'string': ('CAST SPELL (%s) ACTIVE' %
                                        complete_spell['name']),
-                            'fire_when': ca_timers.Timer.FIRE_ROUND_START
+                            'fire_when': ca_timers.Timer.FIRE_ROUND_START,
+                            'data': {'spell': complete_spell}
                             })
 
             # Casting Timer
@@ -3279,13 +3346,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # Adjust cost and time for skill (M8, M9).  This loop looks at
             # modifications for skill level 15-19, 20-24, 25-29, etc.
             #
-            # TODO (now): maintain spell gets same discount
             # TODO (now): the effective skill includes a + for magery level
             skill = complete_spell['skill'] - 15
+            maintenance_cost = (None if 'maintain' not in complete_spell else
+                                complete_spell['maintain'])
             first_time = True
             while skill >= 0:
                 if complete_spell['range'] != 'block':
                     complete_spell['cost'] -= 1
+                    if maintenance_cost is not None:
+                        maintenance_cost -= 1
                     skill -= 5
                 # |first_time| is used because there's no time modification
                 # for skill from 15-19 (i.e., the first time through this
@@ -3299,6 +3369,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     complete_spell['casting time'] = int(casting_time)
             if complete_spell['cost'] <= 0:
                 complete_spell['cost'] = 0
+
+            if maintenance_cost is not None:
+                if maintenance_cost <= 0:
+                    maintenance_cost = 0
+                complete_spell['maintain'] = maintenance_cost
 
             if complete_spell['skill'] <= 9:
                 complete_spell['casting time'] *= 2
@@ -3376,6 +3451,99 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             self.do_action(fighter, new_action, fight_handler)
 
             return None  # No new timers
+
+
+    def __maintain_spell(self,
+                         fighter,       # Fighter object
+                         action,        # {'action-name': 'maintain-spell'
+                                        #  'spell-index': <index in 'spells'>,
+                                        #  'complete spell': <dict> # this
+                                        #     is a combination of the spell
+                                        #     in the character details and
+                                        #     the same spell from the
+                                        #     ruleset
+                                        #  'comment': <string>, # optional
+                                        #  'part': 2 # optional
+                         fight_handler  # FightHandler object
+                         ):
+        '''
+        Action handler for GurpsRuleset.
+
+        Handles the action of casting a magic spell.
+
+        Returns: Timer (if any) to add to Fighter.  Used for keeping track
+            of what the Fighter is doing.
+        '''
+
+        complete_spell = action['complete spell']
+
+        # Charge the spell caster for the spell.
+
+        if complete_spell['maintain'] > 0:
+            self.do_action(fighter,
+                           {'action-name': 'adjust-fp',
+                            'adj': -complete_spell['maintain']},
+                           fight_handler,
+                           logit=False)
+
+        # Duration Timer
+
+        # If the spell lasts any time at all, put a timer up so that we see
+        # that it's active
+
+        duration_timer = None
+        if complete_spell['duration'] > 0:
+            duration_timer = ca_timers.Timer(None)
+            duration_timer.from_pieces(
+                       {'parent-name': fighter.name,
+                        'rounds': complete_spell['duration'],
+                        'string': ('MAINTAIN SPELL (%s) ACTIVE' %
+                                   complete_spell['name']),
+                        'fire_when': ca_timers.Timer.FIRE_ROUND_START,
+                        'data': {'spell': complete_spell}
+                        })
+
+        # Opponent's Timers
+
+        if 'opponent' in action and fight_handler is not None:
+            ignore, opponent = fight_handler.get_fighter_object(
+                                            action['opponent']['name'],
+                                            action['opponent']['group'])
+            spell_timer = None
+            if complete_spell['duration'] > 0:
+                spell_timer = ca_timers.Timer(None)
+                spell_timer.from_pieces(
+                         {'parent-name': opponent.name,
+                          'rounds': complete_spell['duration'],
+                          'string': ('SPELL "%s" AGAINST ME' %
+                                     complete_spell['name']),
+                          'fire_when': ca_timers.Timer.FIRE_ROUND_START
+                          })
+
+            delay_timer = ca_timers.Timer(None)
+
+            actions = {}
+            if spell_timer is not None:
+                actions['timer'] = spell_timer.details
+            if complete_spell['duration'] == 0:
+                actions['announcement'] = ('SPELL (%s) AGAINST ME FIRED' %
+                                           complete_spell['name'])
+
+            # Add 1 to the timer because the first thing the opponent will
+            # see is a decrement (the caster only sees the decrement on the
+            # _next_ round)
+            delay_timer.from_pieces(
+                     {'parent-name': opponent.name,
+                      'rounds': (1 + complete_spell['casting time']),
+                      'string': ('Waiting for "%s" spell to take affect' %
+                                 complete_spell['name']),
+                      'actions': actions,
+                      'fire_when': ca_timers.Timer.FIRE_ROUND_START
+                      })
+
+            opponent.timers.add(delay_timer)
+
+        return duration_timer
 
     def __change_posture(self,
                          fighter,          # Fighter object
@@ -4551,6 +4719,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'holster-weapon':       {'doit': self.__holster_weapon},
             'evaluate':             {'doit': self.__do_nothing},
             'feint':                {'doit': self.__do_nothing},
+            'maintain-spell':       {'doit': self.__maintain_spell},
             'move':                 {'doit': self.__do_nothing},
             'move-and-attack':      {'doit': self.__do_attack},
             'nothing':              {'doit': self.__do_nothing},
