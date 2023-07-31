@@ -917,7 +917,7 @@ class Fighter(ThingsInFight):
         Returns: nothing
         '''
         self._ruleset.end_turn(self, fight_handler)
-        self.timers.remove_expired_kill_dying()
+        self.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
 
     def explain_numbers(self,
                         fight_handler  # FightHandler object
@@ -1066,7 +1066,7 @@ class Fighter(ThingsInFight):
         '''
         self._ruleset.start_turn(self, fight_handler)
         self.timers.decrement_all()
-        self.timers.remove_expired_keep_dying()
+        self.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_START)
         for timer in self.timers.get_all():
             if 'busy' in timer.details and timer.details['busy']:
                 window_text = []

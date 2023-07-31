@@ -638,10 +638,10 @@ class GmTestCase(GmTestCaseCommon):
             assert fighter.details['timers'][0]['string'] == timer_text
             # At the _end_ of a fighter's turn, we remove all his expired
             # timers.  That causes the timer expiring this round to be shown.
-            fighter.timers.remove_expired_kill_dying()
+            fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
             fighter.timers.decrement_all()
 
-        fighter.timers.remove_expired_kill_dying()
+        fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
         assert len(fighter.details['timers']) == 0
 
         # Test 3 timers simultaneously
@@ -660,7 +660,7 @@ class GmTestCase(GmTestCaseCommon):
             fighter.timers.add(timer_obj)
 
         # round 0
-        fighter.timers.remove_expired_kill_dying()
+        fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
         fighter.timers.decrement_all()
         assert len(fighter.details['timers']) == 3
         expected = ['0', '1', '2']
@@ -669,7 +669,7 @@ class GmTestCase(GmTestCaseCommon):
             expected.remove(timer['string'])
 
         # round 1
-        fighter.timers.remove_expired_kill_dying()
+        fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
         fighter.timers.decrement_all()
         assert len(fighter.details['timers']) == 2
         expected = ['1', '2']
@@ -678,7 +678,7 @@ class GmTestCase(GmTestCaseCommon):
             expected.remove(timer['string'])
 
         # round 2
-        fighter.timers.remove_expired_kill_dying()
+        fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
         fighter.timers.decrement_all()
         assert len(fighter.details['timers']) == 1
         expected = ['2']
@@ -686,22 +686,24 @@ class GmTestCase(GmTestCaseCommon):
             assert timer['string'] in expected
             expected.remove(timer['string'])
 
-        fighter.timers.remove_expired_kill_dying()
+        fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
         assert len(fighter.details['timers']) == 0
 
-        # Test a 0.9 timer.  The 0.9 round timer is supposed to show during
-        # the current round but not the beginning of the next round.  The
-        # normal way this works is:
+        # Test a FIRE_ROUND_START timer.  The FIRE_ROUND_START timer is
+        # supposed to show during the current round but not the beginning of
+        # the next round.  The normal way this works is:
         #   - start turn
-        #   - set 0.9 timer (shows through the end of this round)
+        #   - set FIRE_ROUND_START timer (shows through the end of this round)
         #   - end turn # kills regular timers that showed this turn
-        #   - start turn # kills 0.9 timer before stuff is shown this turn
+        #   - start turn # kills FIRE_ROUND_START timer before stuff is shown
+        #     this turn
 
         # add 1 turn timer -- a regular timer are show through the next turn
         timer_id = 0
         round_count = 1
         timer0_text = '%d' % timer_id
         timer_obj = ca_timers.Timer(None)
+
         timer_obj.from_pieces({'parent-name': fighter.name,
                                'rounds': round_count,
                                'string': timer0_text})
@@ -710,20 +712,21 @@ class GmTestCase(GmTestCaseCommon):
 
         # start turn -- decrement 1-turn timer, timer = 0, keep it this turn
         fighter.timers.decrement_all()
-        fighter.timers.remove_expired_keep_dying()
+        fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_START)
 
         # assert 1 timer -- didn't kill the 1-turn timer
         assert len(fighter.details['timers']) == 1
         assert fighter.details['timers'][0]['string'] == timer0_text
 
-        # add 0.9 timer -- shown through this turn, killed before next turn
+        # add FIRE_ROUND_START timer -- shown through this turn, killed before next turn
         timer_id = 1
-        round_count = 0.9
+        round_count = 1
         timer1_text = '%d' % timer_id
         timer_obj = ca_timers.Timer(None)
         timer_obj.from_pieces({'parent-name': fighter.name,
                                'rounds': round_count,
-                               'string': timer1_text})
+                               'string': timer1_text,
+                               'fire_when': ca_timers.Timer.FIRE_ROUND_START})
         fighter.timers.add(timer_obj)
 
         # assert 2 timers -- right: both timers are there
@@ -734,7 +737,7 @@ class GmTestCase(GmTestCaseCommon):
             expected.remove(timer['string'])
 
         # end turn -- kills 1 turn timer
-        fighter.timers.remove_expired_kill_dying()
+        fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
 
         # assert 1 timer -- show that the 1-turn timer was killed
         assert len(fighter.details['timers']) == 1
@@ -742,7 +745,7 @@ class GmTestCase(GmTestCaseCommon):
 
         # start turn - kills 0.9 timer before the next turn's stuff is shown
         fighter.timers.decrement_all()
-        fighter.timers.remove_expired_keep_dying()
+        fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_START)
 
         # assert 0 timers -- yup, 0.9 timer is now gone
         assert len(fighter.details['timers']) == 0

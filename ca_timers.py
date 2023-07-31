@@ -2,6 +2,11 @@
 
 import copy
 import curses
+import ca_debug
+
+# TODO:
+# 1) spells should have the option to go off 1 round earlier than
+#    specified
 
 
 class Timer(object):
@@ -15,9 +20,8 @@ class Timer(object):
     round_count_string = '%d Rnds: '  # assume rounds takes same space as '%d'
     len_timer_leader = len(round_count_string)
 
-    # time removed from an announcement timer so that it'll go off at the
-    # beginning of a round rather than the end
-    announcement_margin = 0.1
+    (FIRE_ROUND_START,
+     FIRE_ROUND_END) = list(range(2))
 
     def __init__(self,
                  details    # dict from the Game File, contains timer's info
@@ -80,7 +84,10 @@ class Timer(object):
                              #               'announcement': <text>},
                              #                          string to display (in
                              #                          its own window) when
-                             #                          timer fires
+                             #                          timer fires,
+                             #   'fire_when': FIRE_ROUND_START or
+                             #                          FIRE_ROUND_END.  When
+                             #                          the timer should fire.
                              # }
                     ):
         '''
@@ -98,16 +105,7 @@ class Timer(object):
         this_line = []
 
         rounds = self.details['rounds']
-
-        if ('announcement' in self.details['actions'] and
-                self.details['actions']['announcement'] is not None):
-            # Add back in the little bit we shave off of an announcement so
-            # that the timer will announce as the creature's round starts
-            # rather than at the end.
-            rounds += Timer.announcement_margin
-
-        round_count_string = Timer.round_count_string % (
-                rounds + Timer.announcement_margin)
+        round_count_string = Timer.round_count_string % rounds
         this_line.append(round_count_string)
         if 'announcement' in self.details['actions']:
             this_line.append('[%s]' % self.details['actions']['announcement'])
@@ -146,15 +144,7 @@ class Timer(object):
 
         rounds = self.details['rounds']
 
-        if ('announcement' in self.details['actions'] and
-                self.details['actions']['announcement'] is not None):
-            # Add back in the little bit we shave off of an announcement so
-            # that the timer will announce as the creature's round starts
-            # rather than at the end.
-            rounds += Timer.announcement_margin
-
-        round_count_string = Timer.round_count_string % (
-                rounds + Timer.announcement_margin)
+        round_count_string = Timer.round_count_string % rounds
         this_line.append(round_count_string)
 
         needs_headline = True
@@ -194,6 +184,8 @@ class Timer(object):
             self.details['rounds'] = 1
         if 'actions' not in self.details:
             self.details['actions'] = {}
+        if 'fire_when' not in self.details:
+            self.details['fire_when'] = Timer.FIRE_ROUND_END
 
 
 class TimersWidget(object):
@@ -282,15 +274,17 @@ class TimersWidget(object):
 
         # Install the timer.
 
-        if 'announcement' in param and param['announcement'] is not None:
-            # Shave a little off the time so that the timer will announce
-            # as his round starts rather than at the end.
-            rounds -= Timer.announcement_margin
+        # We want announcements to go off at the beginning of a round but
+        # messages to stay up until the round is over.
+        fire_when = Timer.FIRE_ROUND_START if ('announcement' in param and
+                     param['announcement'] is not None) else Timer.FIRE_ROUND_END
 
         timer_dict = {'parent-name': timer_recipient_name,
                       'rounds': rounds,
                       'string': param['continuous_message'],
-                      'actions': {}}
+                      'actions': {},
+                      'fire_when': fire_when
+                      }
 
         if param['announcement'] is not None:
             timer_dict['actions']['announcement'] = param['announcement']
@@ -403,6 +397,8 @@ class Timers(object):
         # 'obj' is the Timer object from that data.
         self.__timers = {'data': timer_details,
                          'obj': []}
+        self.__just_fired = {'data': [],
+                             'obj': []}
 
         self.__owner = owner
 
@@ -433,6 +429,10 @@ class Timers(object):
             self.__timers['data'].pop()
         self.__timers['obj'] = []
 
+        while len(self.__just_fired['data']) > 0:
+            self.__just_fired['data'].pop()
+        self.__just_fired['obj'] = []
+
     def decrement_all(self):
         ''' Decrements all timers. '''
         for timer_obj in self.__timers['obj']:
@@ -452,6 +452,10 @@ class Timers(object):
         ''' Returns a complete list of this list's Timer objects.  '''
         return self.__timers['obj']
 
+    def get_just_fired(self):
+        ''' Returns a complete list of this list's Timer objects.  '''
+        return self.__just_fired['obj']
+
     def is_busy(self):
         '''Returns 'True' if a current timer has the owner marked as busy.'''
         for timer_obj in self.__timers['obj']:
@@ -459,7 +463,9 @@ class Timers(object):
                 return True
         return False
 
-    def remove_expired_keep_dying(self):
+    def fire_expired_timers(self,
+                            when # FIRE_ROUND_START or FIRE_ROUND_END
+                            ):
         '''
         Removes expired timers BUT KEEPS the timers that are dying this
         round.  Call this at the beginning of the round.  Standard timers that
@@ -467,41 +473,53 @@ class Timers(object):
 
         Returns nothing.
         '''
-        remove_these = []
+        fire_and_remove_these = []
         for index, timer in enumerate(self.__timers['obj']):
-            if timer.details['rounds'] < 0:  # keeps timers dying this round
-                remove_these.insert(0, index)  # largest indexes last
+            if timer.details['rounds'] <= 0:
+                if timer.details['fire_when'] == when:
+                    fire_and_remove_these.insert(0, index)  # largest indexes last
 
-        for index in remove_these:
+        for index in fire_and_remove_these:
             self.__fire_timer(self.__timers['obj'][index])
-            self.remove_timer_by_index(index)
+            self.remove_timer_by_index(index, when)
 
-    def remove_expired_kill_dying(self):
-        '''
-        Removes expired timers AND REMOVES the timers that are dying this
-        round.  Call this at the end of the round to scrape off the timers
-        that expire this round.
-
-        Returns nothing.
-        '''
-        remove_these = []
-        for index, timer in enumerate(self.__timers['obj']):
-            if timer.details['rounds'] <= 0:  # kills timers dying this round
-                remove_these.insert(0, index)  # largest indexes last
-        for index in remove_these:
-            self.__fire_timer(self.__timers['obj'][index])
-            self.remove_timer_by_index(index)
+        # Remove all of the timers that were fired at the beginning of the
+        # round.  We were saving them in case they were spells or something
+        # that the user might want to maintain.
+        if when == Timer.FIRE_ROUND_END:
+            while len(self.__just_fired['data']) > 0:
+                self.__just_fired['data'].pop()
+                self.__just_fired['obj'].pop()
 
     def remove_timer_by_index(self,
-                              index  # Index of the timer to be removed
+                              index,  # Index of the timer to be removed
+                              when    # FIRE_ROUND_START or FIRE_ROUND_END
                               ):
         '''
         Removes a timer from the timer list.
 
         Returns nothing.
         '''
-        del self.__timers['data'][index]
-        del self.__timers['obj'][index]
+        timer_data = self.__timers['data'].pop(index)
+        timer_obj = self.__timers['obj'].pop(index)
+
+        # Save any timer deleted earlier this round in case the user would
+        # want to access it.  We'll delete them all at the end of the round.
+        if when == Timer.FIRE_ROUND_START:
+            self.__just_fired['data'].append(timer_data)
+            self.__just_fired['obj'].append(timer_obj)
+
+    def show_all(self):
+        ''' Displays all timers.  '''
+        debug = ca_debug.Debug()
+        debug.print('\n<< Timer list')
+        printed_something = False
+        for timer in self.__timers['obj']:
+            debug.pprint(timer.details)
+            printed_something = True
+        if not printed_something:
+            debug.print('  (Empty)')
+        debug.print('>>\n')
 
     #
     # Private methods
