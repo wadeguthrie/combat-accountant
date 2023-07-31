@@ -5736,7 +5736,8 @@ class FightHandler(ScreenHandler):
         even if he's not able to do anything overtly.
         '''
         out_of_commision_fighter.timers.decrement_all()
-        out_of_commision_fighter.timers.remove_expired_kill_dying()
+        out_of_commision_fighter.timers.fire_expired_timers(
+                ca_timers.Timer.FIRE_ROUND_END)
         # NOTE: if a ruleset has bleeding rules, there would be a call to the
         # ruleset, here.
 

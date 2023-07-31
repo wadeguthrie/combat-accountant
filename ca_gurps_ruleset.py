@@ -3105,10 +3105,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 duration_timer = ca_timers.Timer(None)
                 duration_timer.from_pieces(
                            {'parent-name': fighter.name,
-                            'rounds': (complete_spell['duration'] -
-                                       ca_timers.Timer.announcement_margin),
+                            'rounds': complete_spell['duration'],
                             'string': ('CAST SPELL (%s) ACTIVE' %
-                                       complete_spell['name'])
+                                       complete_spell['name']),
+                            'fire_when': ca_timers.Timer.FIRE_ROUND_START
                             })
 
             # Casting Timer
@@ -3134,10 +3134,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
                 casting_timer.from_pieces(
                         {'parent-name': fighter.name,
-                         'rounds': (complete_spell['casting time'] -
-                                    ca_timers.Timer.announcement_margin),
+                         'rounds': complete_spell['casting time'],
                          'string': text,
-                         'actions': actions})
+                         'actions': actions,
+                         'fire_when': ca_timers.Timer.FIRE_ROUND_START
+                         })
                 casting_timer.mark_owner_as_busy()  # When casting, owner is busy
 
                 # "Zombie Summoning": {
@@ -3161,10 +3162,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     spell_timer = ca_timers.Timer(None)
                     spell_timer.from_pieces(
                              {'parent-name': opponent.name,
-                              'rounds': (complete_spell['duration'] -
-                                         ca_timers.Timer.announcement_margin),
+                              'rounds': complete_spell['duration'],
                               'string': ('SPELL "%s" AGAINST ME' %
-                                         complete_spell['name'])
+                                         complete_spell['name']),
+                              'fire_when': ca_timers.Timer.FIRE_ROUND_START
                               })
 
                 delay_timer = ca_timers.Timer(None)
@@ -3181,11 +3182,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 # _next_ round)
                 delay_timer.from_pieces(
                          {'parent-name': opponent.name,
-                          'rounds': (1 + complete_spell['casting time'] -
-                                     ca_timers.Timer.announcement_margin),
+                          'rounds': (1 + complete_spell['casting time']),
                           'string': ('Waiting for "%s" spell to take affect' %
                                      complete_spell['name']),
-                          'actions': actions
+                          'actions': actions,
+                          'fire_when': ca_timers.Timer.FIRE_ROUND_START
                           })
 
                 opponent.timers.add(delay_timer)
@@ -3400,13 +3401,15 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         timer = ca_timers.Timer(None)
 
         timer.from_pieces({'parent-name': fighter.name,
-                           'rounds': 1 - ca_timers.Timer.announcement_margin,
+                           'rounds': 1,
                            'string': ['Change posture',
                                       ' NOTE: crouch 1st action = free',
                                       '       crouch->stand = free',
                                       '       kneel->stand = step',
                                       ' Defense: any',
-                                      ' Move: none']})
+                                      ' Move: none'],
+                           'fire_when': ca_timers.Timer.FIRE_ROUND_START
+                           })
 
         return timer
 
@@ -3609,11 +3612,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             timer = ca_timers.Timer(None)
             timer.from_pieces(
                     {'parent-name': fighter.name,
-                     'rounds': 1 - ca_timers.Timer.announcement_margin,
+                     'rounds': 1,
                      'string': [('Aim%s' % (' (braced)' if action['braced']
                                             else '')),
                                 ' Defense: any loses aim',
-                                ' Move: step']})
+                                ' Move: step'],
+                     'fire_when': ca_timers.Timer.FIRE_ROUND_START
+                     })
 
             return timer
 
@@ -3745,8 +3750,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 text = ['<<UNHANDLED ACTION: %s' % action['action-name']]
 
             timer.from_pieces({'parent-name': fighter.name,
-                               'rounds': 1 - ca_timers.Timer.announcement_margin,
-                               'string': text})
+                               'rounds': 1,
+                               'string': text,
+                               'fire_when': ca_timers.Timer.FIRE_ROUND_START
+                               })
             if 'shots_fired' in action:
                 timer.details['info'] = {'shots_fired': action['shots_fired']}
             if action['action-name'] == 'move-and-attack':
@@ -3919,8 +3926,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             text = ['<<UNHANDLED ACTION: %s' % action['action-name']]
 
         timer.from_pieces({'parent-name': fighter.name,
-                           'rounds': 1 - ca_timers.Timer.announcement_margin,
-                           'string': text})
+                           'rounds': 1,
+                           'string': text,
+                           'fire_when': ca_timers.Timer.FIRE_ROUND_START
+                           })
 
         return timer
 
@@ -3963,9 +3972,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             timer = ca_timers.Timer(None)
             timer.from_pieces(
                 {'parent-name': fighter.name,
-                 'rounds': (action['time'] -
-                            ca_timers.Timer.announcement_margin),
-                 'string': 'RELOADING'})
+                 'rounds': action['time'],
+                 'string': 'RELOADING',
+                 'fire_when': ca_timers.Timer.FIRE_ROUND_START
+                 })
 
             timer.mark_owner_as_busy()  # When reloading, the owner is busy
 
@@ -4076,10 +4086,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         item = fighter.equipment.get_item_by_index(action['weapon-index'])
         weapon = ca_equipment.Weapon(item)
         timer.from_pieces({'parent-name': fighter.name,
-                           'rounds': 1 - ca_timers.Timer.announcement_margin,
+                           'rounds': 1,
                            'string': ['Draw %s' % weapon.details['name'],
                                       ' Defense: any',
-                                      ' Move: step']})
+                                      ' Move: step'],
+                           'fire_when': ca_timers.Timer.FIRE_ROUND_START
+                           })
         return timer
 
     def __get_crit_fumble(self,
@@ -4279,10 +4291,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         timer = ca_timers.Timer(None)
         timer.from_pieces({'parent-name': fighter.name,
-                           'rounds': 1 - ca_timers.Timer.announcement_margin,
+                           'rounds': 1,
                            'string': ['Holster weapon',
                                       ' Defense: any',
-                                      ' Move: step']})
+                                      ' Move: step'],
+                           'fire_when': ca_timers.Timer.FIRE_ROUND_START
+                           })
         return timer
 
     def __move_and_attack_mods(self,
@@ -4669,10 +4683,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             timer = ca_timers.Timer(None)
             timer.from_pieces(
                     {'parent-name': fighter.name,
-                     'rounds': 1 - ca_timers.Timer.announcement_margin,
+                     'rounds': 1,
                      'string': ['All out defense',
                                 ' Defense: double',
-                                ' Move: step']})
+                                ' Move: step'],
+                     'fire_when': ca_timers.Timer.FIRE_ROUND_START
+                     })
 
         elif action['action-name'] == 'doff-armor':
             timer = ca_timers.Timer(None)
@@ -4683,8 +4699,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 title = 'Doff %s' % armor['name']
                 timer.from_pieces(
                         {'parent-name': fighter.name,
-                         'rounds': 1 - ca_timers.Timer.announcement_margin,
-                         'string': [title, ' Defense: none', ' Move: none']})
+                         'rounds': 1,
+                         'string': [title, ' Defense: none', ' Move: none'],
+                         'fire_when': ca_timers.Timer.FIRE_ROUND_START
+                         })
         elif action['action-name'] == 'don-armor':
             timer = ca_timers.Timer(None)
             armor_index = action['armor-index']
@@ -4693,8 +4711,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 title = 'Don %s' % armor['name']
                 timer.from_pieces(
                         {'parent-name': fighter.name,
-                         'rounds': 1 - ca_timers.Timer.announcement_margin,
-                         'string': [title, ' Defense: none', ' Move: none']})
+                         'rounds': 1,
+                         'string': [title, ' Defense: none', ' Move: none'],
+                         'fire_when': ca_timers.Timer.FIRE_ROUND_START
+                         })
 
         return timer
 
