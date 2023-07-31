@@ -39,8 +39,6 @@ import ca_timers
 # TODO: flesh-out attack, all-out
 # TODO: grenade support (missile-like but not with clips)
 
-# TODO: ISSUE 9: maintain spell
-
 # TODO: why do redirect entries have 'stuff' and 'timers' entries?
 
 # TODO: FP should ask if using DR

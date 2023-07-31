@@ -88,6 +88,7 @@ class Timer(object):
                              #   'fire_when': FIRE_ROUND_START or
                              #                          FIRE_ROUND_END.  When
                              #                          the timer should fire.
+                             #   'data': {whatever}
                              # }
                     ):
         '''
@@ -186,6 +187,8 @@ class Timer(object):
             self.details['actions'] = {}
         if 'fire_when' not in self.details:
             self.details['fire_when'] = Timer.FIRE_ROUND_END
+        if 'data' not in self.details:
+            self.details['data'] = {}
 
 
 class TimersWidget(object):
@@ -473,6 +476,7 @@ class Timers(object):
 
         Returns nothing.
         '''
+        self.show_all() # TODO: remove
         fire_and_remove_these = []
         for index, timer in enumerate(self.__timers['obj']):
             if timer.details['rounds'] <= 0:
