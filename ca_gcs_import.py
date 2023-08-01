@@ -19,6 +19,8 @@ import ca_gui
 import ca_gurps_ruleset
 import ca_json
 
+# This code converts a Gurps Character Sheet (GCS v4.37.1) file to the local format.
+
 # TODO: damage type should be 'pi' by default
 # TODO: fast-draw(knife) doesn't include +1 from combat reflexes
 # TODO: spells don't deal with more points than 24 or 28
