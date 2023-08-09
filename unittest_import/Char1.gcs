@@ -1,86 +1,628 @@
 {
 	"type": "character",
-	"version": 1,
+	"version": 4,
 	"id": "680ec5f1-1202-4169-8569-8cfe05e5157f",
-	"settings": {
-		"version": 1,
-		"default_length_units": "ft_in",
-		"default_weight_units": "lb",
-		"user_description_display": "tooltip",
-		"modifiers_display": "inline",
-		"notes_display": "inline",
-		"base_will_and_per_on_10": false,
-		"use_multiplicative_modifiers": false,
-		"use_modifying_dice_plus_adds": false,
-		"use_know_your_own_strength": false,
-		"use_reduced_swing": false,
-		"use_thrust_equals_swing_minus_2": false,
-		"use_simple_metric_conversions": true,
-		"show_college_in_sheet_spells": false,
-		"use_title_in_footer": false,
-		"block_layout": [
-			"reactions",
-			"melee",
-			"ranged",
-			"advantages skills",
-			"spells",
-			"equipment",
-			"other_equipment",
-			"notes"
-		]
-	},
-	"created_date": "Apr 17, 2020, 12:00 AM",
-	"modified_date": "May 26, 2021, 11:47 AM",
+	"total_points": 185,
+	"points_record": [
+		{
+			"when": "2023-08-13T10:03:38-07:00",
+			"points": 185,
+			"reason": "Reconciliation"
+		}
+	],
 	"profile": {
-		"player_name": "test",
 		"name": "Janice Shaner",
-		"age": 17,
+		"age": "17",
 		"birthday": "March 18",
 		"eyes": "Grey",
 		"hair": "Copious Blonde",
 		"skin": "Alibaster",
 		"handedness": "Right",
-		"height": "4' 10\"",
-		"weight": "103 lb",
 		"gender": "Female",
-		"body_type": "humanoid",
+		"height": "4'10\"",
+		"weight": "103 lb",
+		"player_name": "test",
 		"tech_level": "9"
 	},
-	"HP_adj": 2,
-	"fp_damage": 1,
-	"total_points": 185,
-	"ST": 8,
-	"DX": 15,
-	"IQ": 13,
-	"HT": 9,
-	"advantages": [
-		{
-			"type": "advantage",
-			"version": 1,
-			"id": "6207da01-2604-4355-a95e-71769c970ad7",
-			"name": "Always snacking, always carrying food",
-			"mental": true,
-			"levels": "0",
-			"base_points": -1,
-			"reference": "B164",
-			"categories": [
-				"Quirk"
+	"settings": {
+		"page": {
+			"paper_size": "letter",
+			"orientation": "portrait",
+			"top_margin": "0.25 in",
+			"left_margin": "0.25 in",
+			"bottom_margin": "0.25 in",
+			"right_margin": "0.25 in"
+		},
+		"block_layout": [
+			"reactions",
+			"melee",
+			"ranged",
+			"traits skills",
+			"spells",
+			"equipment",
+			"other_equipment",
+			"notes",
+			"conditional_modifiers"
+		],
+		"attributes": [
+			{
+				"id": "st",
+				"type": "integer",
+				"name": "ST",
+				"full_name": "Strength",
+				"attribute_base": "10",
+				"cost_per_point": 10,
+				"cost_adj_percent_per_sm": 10
+			},
+			{
+				"id": "dx",
+				"type": "integer",
+				"name": "DX",
+				"full_name": "Dexterity",
+				"attribute_base": "10",
+				"cost_per_point": 20
+			},
+			{
+				"id": "iq",
+				"type": "integer",
+				"name": "IQ",
+				"full_name": "Intelligence",
+				"attribute_base": "10",
+				"cost_per_point": 20
+			},
+			{
+				"id": "ht",
+				"type": "integer",
+				"name": "HT",
+				"full_name": "Health",
+				"attribute_base": "10",
+				"cost_per_point": 10
+			},
+			{
+				"id": "will",
+				"type": "integer",
+				"name": "Will",
+				"attribute_base": "$iq",
+				"cost_per_point": 5
+			},
+			{
+				"id": "fright_check",
+				"type": "integer",
+				"name": "Fright Check",
+				"attribute_base": "$will",
+				"cost_per_point": 2
+			},
+			{
+				"id": "per",
+				"type": "integer",
+				"name": "Per",
+				"full_name": "Perception",
+				"attribute_base": "$iq",
+				"cost_per_point": 5
+			},
+			{
+				"id": "vision",
+				"type": "integer",
+				"name": "Vision",
+				"attribute_base": "$per",
+				"cost_per_point": 2
+			},
+			{
+				"id": "hearing",
+				"type": "integer",
+				"name": "Hearing",
+				"attribute_base": "$per",
+				"cost_per_point": 2
+			},
+			{
+				"id": "taste_smell",
+				"type": "integer",
+				"name": "Taste \u0026 Smell",
+				"attribute_base": "$per",
+				"cost_per_point": 2
+			},
+			{
+				"id": "touch",
+				"type": "integer",
+				"name": "Touch",
+				"attribute_base": "$per",
+				"cost_per_point": 2
+			},
+			{
+				"id": "basic_speed",
+				"type": "decimal",
+				"name": "Basic Speed",
+				"attribute_base": "($dx+$ht)/4",
+				"cost_per_point": 20
+			},
+			{
+				"id": "basic_move",
+				"type": "integer",
+				"name": "Basic Move",
+				"attribute_base": "floor($basic_speed)",
+				"cost_per_point": 5
+			},
+			{
+				"id": "fp",
+				"type": "pool",
+				"name": "FP",
+				"full_name": "Fatigue Points",
+				"attribute_base": "$ht",
+				"cost_per_point": 3,
+				"thresholds": [
+					{
+						"state": "Unconscious",
+						"expression": "-$fp",
+						"ops": [
+							"halve_move",
+							"halve_dodge",
+							"halve_st"
+						]
+					},
+					{
+						"state": "Collapse",
+						"expression": "0",
+						"explanation": "Roll vs. Will to do anything besides talk or rest; failure causes unconsciousness\nEach FP you lose below 0 also causes 1 HP of injury\nMove, Dodge and ST are halved (B426)",
+						"ops": [
+							"halve_move",
+							"halve_dodge",
+							"halve_st"
+						]
+					},
+					{
+						"state": "Tired",
+						"expression": "round($fp/3)",
+						"explanation": "Move, Dodge and ST are halved (B426)",
+						"ops": [
+							"halve_move",
+							"halve_dodge",
+							"halve_st"
+						]
+					},
+					{
+						"state": "Tiring",
+						"expression": "$fp-1"
+					},
+					{
+						"state": "Rested",
+						"expression": "$fp"
+					}
+				]
+			},
+			{
+				"id": "hp",
+				"type": "pool",
+				"name": "HP",
+				"full_name": "Hit Points",
+				"attribute_base": "$st",
+				"cost_per_point": 2,
+				"cost_adj_percent_per_sm": 10,
+				"thresholds": [
+					{
+						"state": "Dead",
+						"expression": "round(-$hp*5)",
+						"ops": [
+							"halve_move",
+							"halve_dodge"
+						]
+					},
+					{
+						"state": "Dying #4",
+						"expression": "round(-$hp*4)",
+						"explanation": "Roll vs. HT to avoid death\nRoll vs. HT-4 every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
+						"ops": [
+							"halve_move",
+							"halve_dodge"
+						]
+					},
+					{
+						"state": "Dying #3",
+						"expression": "round(-$hp*3)",
+						"explanation": "Roll vs. HT to avoid death\nRoll vs. HT-3 every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
+						"ops": [
+							"halve_move",
+							"halve_dodge"
+						]
+					},
+					{
+						"state": "Dying #2",
+						"expression": "round(-$hp*2)",
+						"explanation": "Roll vs. HT to avoid death\nRoll vs. HT-2 every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
+						"ops": [
+							"halve_move",
+							"halve_dodge"
+						]
+					},
+					{
+						"state": "Dying #1",
+						"expression": "-$hp",
+						"explanation": "Roll vs. HT to avoid death\nRoll vs. HT-1 every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
+						"ops": [
+							"halve_move",
+							"halve_dodge"
+						]
+					},
+					{
+						"state": "Collapse",
+						"expression": "0",
+						"explanation": "Roll vs. HT every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
+						"ops": [
+							"halve_move",
+							"halve_dodge"
+						]
+					},
+					{
+						"state": "Reeling",
+						"expression": "round($hp/3)",
+						"explanation": "Move and Dodge are halved (B419)",
+						"ops": [
+							"halve_move",
+							"halve_dodge"
+						]
+					},
+					{
+						"state": "Wounded",
+						"expression": "$hp-1"
+					},
+					{
+						"state": "Healthy",
+						"expression": "$hp"
+					}
+				]
+			}
+		],
+		"body_type": {
+			"name": "Humanoid",
+			"roll": "3d",
+			"locations": [
+				{
+					"id": "eye",
+					"choice_name": "Eyes",
+					"table_name": "Eyes",
+					"hit_penalty": -9,
+					"description": "An attack that misses by 1 hits the torso instead. Only\nimpaling (imp), piercing (pi-, pi, pi+, pi++), and\ntight-beam burning (burn) attacks can target the eye – and\nonly from the front or sides. Injury over HP÷10 blinds the\neye. Otherwise, treat as skull, but without the extra DR!",
+					"calc": {
+						"roll_range": "-",
+						"dr": {
+							"all": 0
+						}
+					}
+				},
+				{
+					"id": "skull",
+					"choice_name": "Skull",
+					"table_name": "Skull",
+					"slots": 2,
+					"hit_penalty": -7,
+					"dr_bonus": 2,
+					"description": "An attack that misses by 1 hits the torso instead. Wounding\nmodifier is x4. Knockdown rolls are at -10. Critical hits\nuse the Critical Head Blow Table (B556). Exception: These\nspecial effects do not apply to toxic (tox) damage.",
+					"calc": {
+						"roll_range": "3-4",
+						"dr": {
+							"all": 2
+						}
+					}
+				},
+				{
+					"id": "face",
+					"choice_name": "Face",
+					"table_name": "Face",
+					"slots": 1,
+					"hit_penalty": -5,
+					"description": "An attack that misses by 1 hits the torso instead. Jaw,\ncheeks, nose, ears, etc. If the target has an open-faced\nhelmet, ignore its DR. Knockdown rolls are at -5. Critical\nhits use the Critical Head Blow Table (B556). Corrosion\n(cor) damage gets a x1½ wounding modifier, and if it\ninflicts a major wound, it also blinds one eye (both eyes on\ndamage over full HP). Random attacks from behind hit the\nskull instead.",
+					"calc": {
+						"roll_range": "5",
+						"dr": {
+							"all": 0
+						}
+					}
+				},
+				{
+					"id": "leg",
+					"choice_name": "Leg",
+					"table_name": "Right Leg",
+					"slots": 2,
+					"hit_penalty": -2,
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ½ HP from one blow) cripples the limb.\nDamage beyond that threshold is lost.",
+					"calc": {
+						"roll_range": "6-7",
+						"dr": {
+							"all": 0
+						}
+					}
+				},
+				{
+					"id": "arm",
+					"choice_name": "Arm",
+					"table_name": "Right Arm",
+					"slots": 1,
+					"hit_penalty": -2,
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ½ HP from one blow) cripples the limb.\nDamage beyond that threshold is lost. If holding a shield,\ndouble the penalty to hit: -4 for shield arm instead of -2.",
+					"calc": {
+						"roll_range": "8",
+						"dr": {
+							"all": 0
+						}
+					}
+				},
+				{
+					"id": "torso",
+					"choice_name": "Torso",
+					"table_name": "Torso",
+					"slots": 2,
+					"calc": {
+						"roll_range": "9-10",
+						"dr": {
+							"all": 4
+						}
+					}
+				},
+				{
+					"id": "groin",
+					"choice_name": "Groin",
+					"table_name": "Groin",
+					"slots": 1,
+					"hit_penalty": -3,
+					"description": "An attack that misses by 1 hits the torso instead. Human\nmales and the males of similar species suffer double shock\nfrom crushing (cr) damage, and get -5 to knockdown rolls.\nOtherwise, treat as a torso hit.",
+					"calc": {
+						"roll_range": "11",
+						"dr": {
+							"all": 0
+						}
+					}
+				},
+				{
+					"id": "arm",
+					"choice_name": "Arm",
+					"table_name": "Left Arm",
+					"slots": 1,
+					"hit_penalty": -2,
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ½ HP from one blow) cripples the limb.\nDamage beyond that threshold is lost. If holding a shield,\ndouble the penalty to hit: -4 for shield arm instead of -2.",
+					"calc": {
+						"roll_range": "12",
+						"dr": {
+							"all": 0
+						}
+					}
+				},
+				{
+					"id": "leg",
+					"choice_name": "Leg",
+					"table_name": "Left Leg",
+					"slots": 2,
+					"hit_penalty": -2,
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ½ HP from one blow) cripples the limb.\nDamage beyond that threshold is lost.",
+					"calc": {
+						"roll_range": "13-14",
+						"dr": {
+							"all": 0
+						}
+					}
+				},
+				{
+					"id": "hand",
+					"choice_name": "Hand",
+					"table_name": "Hand",
+					"slots": 1,
+					"hit_penalty": -4,
+					"description": "If holding a shield, double the penalty to hit: -8 for\nshield hand instead of -4. Reduce the wounding multiplier of\nlarge piercing (pi+), huge piercing (pi++), and impaling\n(imp) damage to x1. Any major wound (loss of over ⅓ HP\nfrom one blow) cripples the extremity. Damage beyond that\nthreshold is lost.",
+					"calc": {
+						"roll_range": "15",
+						"dr": {
+							"all": 0
+						}
+					}
+				},
+				{
+					"id": "foot",
+					"choice_name": "Foot",
+					"table_name": "Foot",
+					"slots": 1,
+					"hit_penalty": -4,
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ⅓ HP from one blow) cripples the\nextremity. Damage beyond that threshold is lost.",
+					"calc": {
+						"roll_range": "16",
+						"dr": {
+							"all": 0
+						}
+					}
+				},
+				{
+					"id": "neck",
+					"choice_name": "Neck",
+					"table_name": "Neck",
+					"slots": 2,
+					"hit_penalty": -5,
+					"description": "An attack that misses by 1 hits the torso instead. Neck and\nthroat. Increase the wounding multiplier of crushing (cr)\nand corrosion (cor) attacks to x1½, and that of cutting\n(cut) damage to x2. At the GM’s option, anyone killed by a\ncutting (cut) blow to the neck is decapitated!",
+					"calc": {
+						"roll_range": "17-18",
+						"dr": {
+							"all": 0
+						}
+					}
+				},
+				{
+					"id": "vitals",
+					"choice_name": "Vitals",
+					"table_name": "Vitals",
+					"hit_penalty": -3,
+					"description": "An attack that misses by 1 hits the torso instead. Heart,\nlungs, kidneys, etc. Increase the wounding modifier for an\nimpaling (imp) or any piercing (pi-, pi, pi+, pi++) attack\nto x3. Increase the wounding modifier for a tight-beam\nburning (burn) attack to x2. Other attacks cannot target the\nvitals.",
+					"calc": {
+						"roll_range": "-",
+						"dr": {
+							"all": 4
+						}
+					}
+				}
 			]
 		},
+		"damage_progression": "basic_set",
+		"default_length_units": "ft_in",
+		"default_weight_units": "lb",
+		"user_description_display": "tooltip",
+		"modifiers_display": "inline",
+		"notes_display": "inline",
+		"skill_level_adj_display": "tooltip",
+		"show_spell_adj": true,
+		"exclude_unspent_points_from_total": false
+	},
+	"attributes": [
 		{
-			"type": "advantage",
-			"version": 1,
+			"attr_id": "st",
+			"adj": -2,
+			"calc": {
+				"value": 8,
+				"points": -20
+			}
+		},
+		{
+			"attr_id": "dx",
+			"adj": 5,
+			"calc": {
+				"value": 15,
+				"points": 100
+			}
+		},
+		{
+			"attr_id": "iq",
+			"adj": 3,
+			"calc": {
+				"value": 13,
+				"points": 60
+			}
+		},
+		{
+			"attr_id": "ht",
+			"adj": -1,
+			"calc": {
+				"value": 9,
+				"points": -10
+			}
+		},
+		{
+			"attr_id": "will",
+			"adj": 0,
+			"calc": {
+				"value": 13,
+				"points": 0
+			}
+		},
+		{
+			"attr_id": "fright_check",
+			"adj": 0,
+			"calc": {
+				"value": 15,
+				"points": 0
+			}
+		},
+		{
+			"attr_id": "per",
+			"adj": 0,
+			"calc": {
+				"value": 13,
+				"points": 0
+			}
+		},
+		{
+			"attr_id": "vision",
+			"adj": 0,
+			"calc": {
+				"value": 13,
+				"points": 0
+			}
+		},
+		{
+			"attr_id": "hearing",
+			"adj": 0,
+			"calc": {
+				"value": 13,
+				"points": 0
+			}
+		},
+		{
+			"attr_id": "taste_smell",
+			"adj": 0,
+			"calc": {
+				"value": 13,
+				"points": 0
+			}
+		},
+		{
+			"attr_id": "touch",
+			"adj": 0,
+			"calc": {
+				"value": 13,
+				"points": 0
+			}
+		},
+		{
+			"attr_id": "basic_speed",
+			"adj": 0,
+			"calc": {
+				"value": 6,
+				"points": 0
+			}
+		},
+		{
+			"attr_id": "basic_move",
+			"adj": 0,
+			"calc": {
+				"value": 6,
+				"points": 0
+			}
+		},
+		{
+			"attr_id": "fp",
+			"adj": 0,
+			"damage": 1,
+			"calc": {
+				"value": 9,
+				"current": 8,
+				"points": 0
+			}
+		},
+		{
+			"attr_id": "hp",
+			"adj": 2,
+			"calc": {
+				"value": 10,
+				"current": 10,
+				"points": 4
+			}
+		}
+	],
+	"traits": [
+		{
+			"id": "6207da01-2604-4355-a95e-71769c970ad7",
+			"type": "trait",
+			"name": "Always snacking, always carrying food",
+			"reference": "B164",
+			"tags": [
+				"Mental",
+				"Quirk"
+			],
+			"base_points": -1,
+			"calc": {
+				"points": -1
+			}
+		},
+		{
 			"id": "1bd471c7-303c-4505-8aa0-5a1cb7e8a59f",
+			"type": "trait",
 			"name": "Combat Reflexes",
-			"mental": true,
-			"base_points": 15,
 			"reference": "B43",
+			"notes": "Never freeze; +6 on all IQ rolls to wake up or to recover from surprise or mental stun; Your side gets +1 to initiative rolls (+2 if you're the leader)",
+			"tags": [
+				"Advantage",
+				"Mental"
+			],
+			"base_points": 15,
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
-						"type": "advantage_prereq",
+						"type": "trait_prereq",
 						"has": false,
 						"name": {
 							"compare": "is",
@@ -92,239 +634,240 @@
 			"features": [
 				{
 					"type": "skill_bonus",
-					"amount": 1,
 					"selection_type": "skills_with_name",
 					"name": {
 						"compare": "starts_with",
 						"qualifier": "fast-draw"
-					}
+					},
+					"amount": 1
 				},
 				{
 					"type": "attribute_bonus",
-					"amount": 1,
-					"attribute": "dodge"
+					"attribute": "dodge",
+					"amount": 1
 				},
 				{
 					"type": "attribute_bonus",
-					"amount": 1,
-					"attribute": "parry"
+					"attribute": "parry",
+					"amount": 1
 				},
 				{
 					"type": "attribute_bonus",
-					"amount": 1,
-					"attribute": "block"
+					"attribute": "block",
+					"amount": 1
 				},
 				{
 					"type": "attribute_bonus",
-					"amount": 2,
-					"attribute": "fright_check"
+					"attribute": "fright_check",
+					"amount": 2
 				}
 			],
-			"notes": "Never freeze; +6 on all IQ rolls to wake up or to recover from surprise or mental stun; Your side gets +1 to initiative rolls (+2 if you're the leader)",
-			"categories": [
-				"Advantage"
-			]
+			"calc": {
+				"points": 15
+			}
 		},
 		{
-			"type": "advantage",
-			"version": 1,
 			"id": "50d808fe-abe5-42f8-821d-73bf36f8613a",
+			"type": "trait",
 			"name": "Debt",
-			"social": true,
-			"levels": "10",
-			"points_per_level": -1,
 			"reference": "B26",
 			"notes": "Owes something to Konstantin, head of the Bratva (the local Russian mob)",
-			"categories": [
-				"Disadvantage"
-			]
+			"tags": [
+				"Disadvantage",
+				"Social"
+			],
+			"levels": 10,
+			"points_per_level": -1,
+			"can_level": true,
+			"calc": {
+				"points": -10
+			}
 		},
 		{
-			"type": "advantage",
-			"version": 1,
 			"id": "d49f5c80-ec83-44b0-8a29-4524f607b324",
+			"type": "trait",
 			"name": "G-Experience",
-			"mental": true,
-			"levels": "3",
-			"points_per_level": 1,
 			"reference": "B57",
-			"categories": [
-				"Advantage"
-			]
+			"tags": [
+				"Advantage",
+				"Mental"
+			],
+			"levels": 3,
+			"points_per_level": 1,
+			"can_level": true,
+			"calc": {
+				"points": 3
+			}
 		},
 		{
-			"type": "advantage",
-			"version": 1,
 			"id": "cb3229cb-20d4-4bae-8a50-1bc3432ced75",
+			"type": "trait",
 			"name": "High Pain Threshold",
-			"physical": true,
-			"base_points": 10,
 			"reference": "B59",
 			"notes": "Never suffer shock penalties when injured; +3 on all HT rolls to avoid knockdown and stunning; +3 to resist torture",
-			"categories": [
-				"Advantage"
-			]
+			"tags": [
+				"Advantage",
+				"Physical"
+			],
+			"base_points": 10,
+			"calc": {
+				"points": 10
+			}
 		},
 		{
-			"type": "advantage",
-			"version": 1,
 			"id": "4b95d5be-689a-4af4-8fd0-c813483ec515",
+			"type": "trait",
 			"name": "Miserliness",
-			"mental": true,
+			"reference": "B144",
+			"tags": [
+				"Disadvantage",
+				"Mental"
+			],
 			"base_points": -10,
 			"cr": 12,
-			"reference": "B144",
-			"categories": [
-				"Disadvantage"
-			]
+			"calc": {
+				"points": -10
+			}
 		},
 		{
-			"type": "advantage",
-			"version": 1,
 			"id": "f861b155-917c-41fb-9ab7-3b02cded18d6",
+			"type": "trait",
 			"name": "Obsession",
-			"mental": true,
-			"levels": "0",
-			"base_points": -1,
 			"reference": "B164",
 			"notes": "Shiny",
-			"categories": [
+			"tags": [
+				"Mental",
 				"Quirk"
-			]
+			],
+			"base_points": -1,
+			"calc": {
+				"points": -1
+			}
 		},
 		{
-			"type": "advantage",
-			"version": 1,
 			"id": "e6ec5fe1-4fc1-47e4-b100-08a1e93cccfb",
+			"type": "trait",
 			"name": "Overconfidence",
-			"mental": true,
+			"reference": "B148",
+			"tags": [
+				"Disadvantage",
+				"Mental"
+			],
 			"base_points": -5,
 			"cr": 9,
-			"reference": "B148",
-			"categories": [
-				"Disadvantage"
-			]
+			"calc": {
+				"points": -7
+			}
 		},
 		{
-			"type": "advantage",
-			"version": 1,
 			"id": "2d5e0c2c-79f6-4519-8ac7-7e36cd0cd6b3",
+			"type": "trait",
 			"name": "Wealth",
-			"social": true,
+			"reference": "B25",
+			"tags": [
+				"Advantage",
+				"Disadvantage",
+				"Social"
+			],
 			"modifiers": [
 				{
-					"type": "modifier",
-					"version": 1,
 					"id": "ea2feeaa-fc2a-4211-83c0-3f2b90e56efb",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Dead Broke",
 					"reference": "B25",
-					"cost_type": "points",
+					"notes": "Starting wealth is $0",
 					"cost": -25,
-					"affects": "total",
-					"notes": "Starting wealth is $0"
+					"cost_type": "points",
+					"disabled": true
 				},
 				{
-					"type": "modifier",
-					"version": 1,
 					"id": "b6f80f9b-7f65-4f38-9f55-a9dc2639e502",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Poor",
 					"reference": "B25",
-					"cost_type": "points",
+					"notes": "Starting wealth is 1/5 average",
 					"cost": -15,
-					"affects": "total",
-					"notes": "Starting wealth is 1/5 average"
+					"cost_type": "points",
+					"disabled": true
 				},
 				{
-					"type": "modifier",
-					"version": 1,
 					"id": "e5ab2b4b-5547-4bec-822d-27a1463928cd",
+					"type": "modifier",
 					"name": "Struggling",
 					"reference": "B25",
-					"cost_type": "points",
+					"notes": "Starting wealth is 1/2 average",
 					"cost": -10,
-					"affects": "total",
-					"notes": "Starting wealth is 1/2 average"
+					"cost_type": "points"
 				},
 				{
-					"type": "modifier",
-					"version": 1,
 					"id": "988860e1-3f94-42e6-b08e-3c8f8b085256",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Average",
 					"reference": "B25",
 					"cost_type": "points",
-					"cost": 0,
-					"affects": "total"
+					"disabled": true
 				},
 				{
-					"type": "modifier",
-					"version": 1,
 					"id": "8e2972a2-8acb-4d11-a893-37ecc85a8ecb",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Comfortable",
 					"reference": "B25",
-					"cost_type": "points",
+					"notes": "Starting wealth is 2x average",
 					"cost": 10,
-					"affects": "total",
-					"notes": "Starting wealth is 2x average"
+					"cost_type": "points",
+					"disabled": true
 				},
 				{
-					"type": "modifier",
-					"version": 1,
 					"id": "7e8dff60-5195-4ad6-9cd6-c1fd938f1684",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Wealthy",
 					"reference": "B25",
-					"cost_type": "points",
+					"notes": "Starting wealth is 5x average",
 					"cost": 20,
-					"affects": "total",
-					"notes": "Starting wealth is 5x average"
+					"cost_type": "points",
+					"disabled": true
 				},
 				{
-					"type": "modifier",
-					"version": 1,
 					"id": "53f7cfee-a2b4-4f75-a9c5-f0beb104e40f",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Very Wealthy",
 					"reference": "B25",
-					"cost_type": "points",
+					"notes": "Starting wealth is 20x average",
 					"cost": 30,
-					"affects": "total",
-					"notes": "Starting wealth is 20x average"
+					"cost_type": "points",
+					"disabled": true
 				},
 				{
-					"type": "modifier",
-					"version": 1,
 					"id": "4fe0121a-284c-4464-8105-bdef794867e1",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Filthy Rich",
 					"reference": "B25",
-					"cost_type": "points",
+					"notes": "Starting wealth is 100x average",
 					"cost": 50,
-					"affects": "total",
-					"notes": "Starting wealth is 100x average"
+					"cost_type": "points",
+					"disabled": true
 				}
 			],
-			"reference": "B25",
-			"categories": [
-				"Advantage",
-				"Disadvantage"
-			]
+			"calc": {
+				"points": -10
+			}
 		}
 	],
 	"skills": [
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "2eed1715-bb79-4bbb-98fc-c2e7e8dc09fb",
+			"type": "skill",
 			"name": "Urban Survival",
 			"reference": "B228",
-			"difficulty": "Per/A",
+			"tags": [
+				"Criminal",
+				"Police",
+				"Street"
+			],
+			"difficulty": "per/a",
 			"points": 1,
 			"defaulted_from": {
-				"type": "Per",
+				"type": "per",
 				"modifier": -5,
 				"level": 8,
 				"adjusted_level": 8,
@@ -332,26 +875,30 @@
 			},
 			"defaults": [
 				{
-					"type": "Per",
+					"type": "per",
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Police"
-			]
+			"calc": {
+				"level": 12,
+				"rsl": "Per-1"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "90019b3a-cfc6-4414-a6f9-995fc3a4c4b2",
+			"type": "skill",
 			"name": "Thrown Weapon",
 			"reference": "B226",
+			"tags": [
+				"Combat",
+				"Ranged Combat",
+				"Weapon"
+			],
 			"specialization": "Knife",
-			"difficulty": "DX/E",
+			"difficulty": "dx/e",
 			"points": 1,
 			"defaulted_from": {
-				"type": "DX",
+				"type": "dx",
 				"modifier": -4,
 				"level": 11,
 				"adjusted_level": 11,
@@ -359,25 +906,30 @@
 			},
 			"defaults": [
 				{
-					"type": "DX",
+					"type": "dx",
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Ranged Combat"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "DX+0"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "a7db5a55-578f-4bc0-9dad-972966f690f3",
+			"type": "skill",
 			"name": "Streetwise",
 			"reference": "B223",
-			"difficulty": "IQ/A",
+			"tags": [
+				"Criminal",
+				"Police",
+				"Social",
+				"Street"
+			],
+			"difficulty": "iq/a",
 			"points": 1,
 			"defaulted_from": {
-				"type": "IQ",
+				"type": "iq",
 				"modifier": -5,
 				"level": 8,
 				"adjusted_level": 8,
@@ -385,27 +937,31 @@
 			},
 			"defaults": [
 				{
-					"type": "IQ",
+					"type": "iq",
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Police",
-				"Social"
-			]
+			"calc": {
+				"level": 12,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "cf10454f-5c11-4072-bd1a-0ba1415c5ad6",
+			"type": "skill",
 			"name": "Stealth",
 			"reference": "B222",
-			"encumbrance_penalty_multiplier": 1,
-			"difficulty": "DX/A",
+			"tags": [
+				"Criminal",
+				"Police",
+				"Spy",
+				"Street"
+			],
+			"difficulty": "dx/a",
 			"points": 4,
+			"encumbrance_penalty_multiplier": 1,
 			"defaulted_from": {
-				"type": "DX",
+				"type": "dx",
 				"modifier": -5,
 				"level": 10,
 				"adjusted_level": 10,
@@ -413,30 +969,33 @@
 			},
 			"defaults": [
 				{
-					"type": "IQ",
+					"type": "iq",
 					"modifier": -5
 				},
 				{
-					"type": "DX",
+					"type": "dx",
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Police",
-				"Spy"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "DX+1"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "19d4bb3c-bdeb-4711-bbba-3c5658c72cbc",
+			"type": "skill",
 			"name": "Smuggling",
 			"reference": "B221",
-			"difficulty": "IQ/A",
+			"tags": [
+				"Criminal",
+				"Spy",
+				"Street"
+			],
+			"difficulty": "iq/a",
 			"points": 2,
 			"defaulted_from": {
-				"type": "IQ",
+				"type": "iq",
 				"modifier": -5,
 				"level": 8,
 				"adjusted_level": 8,
@@ -444,63 +1003,70 @@
 			},
 			"defaults": [
 				{
-					"type": "IQ",
+					"type": "iq",
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Spy"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "0c8a4df9-33c8-410a-be66-62dbe247f5d6",
+			"type": "skill",
 			"name": "Shadowing",
 			"reference": "B219",
-			"difficulty": "IQ/A",
+			"tags": [
+				"Criminal",
+				"Police",
+				"Spy",
+				"Street"
+			],
+			"difficulty": "iq/a",
 			"points": 1,
 			"defaulted_from": {
-				"type": "Skill",
+				"type": "skill",
 				"name": "Stealth",
 				"modifier": -4,
-				"level": 12,
-				"adjusted_level": 12,
-				"points": 1
+				"level": 9,
+				"adjusted_level": 9,
+				"points": -9
 			},
 			"defaults": [
 				{
-					"type": "IQ",
+					"type": "iq",
 					"modifier": -5
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Observation",
 					"modifier": -5
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Stealth",
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Police",
-				"Spy"
-			]
+			"calc": {
+				"level": 12,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "1767864a-3d69-438d-9b17-d02842d246d5",
+			"type": "skill",
 			"name": "Search",
 			"reference": "B219",
-			"difficulty": "Per/A",
+			"tags": [
+				"Police",
+				"Spy"
+			],
+			"difficulty": "per/a",
 			"points": 1,
 			"defaulted_from": {
-				"type": "Per",
+				"type": "per",
 				"modifier": -5,
 				"level": 8,
 				"adjusted_level": 8,
@@ -508,59 +1074,35 @@
 			},
 			"defaults": [
 				{
-					"type": "Per",
+					"type": "per",
 					"modifier": -5
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Criminology",
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Police",
-				"Spy"
-			]
+			"calc": {
+				"level": 12,
+				"rsl": "Per-1"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "f6907268-4af9-47c6-8b23-6205bb6b09d6",
+			"type": "skill",
 			"name": "Savoir-Faire",
 			"reference": "B218",
-			"specialization": "Police",
-			"difficulty": "IQ/E",
-			"points": 1,
-			"defaulted_from": {
-				"type": "IQ",
-				"modifier": -4,
-				"level": 9,
-				"adjusted_level": 9,
-				"points": -9
-			},
-			"defaults": [
-				{
-					"type": "IQ",
-					"modifier": -4
-				}
-			],
-			"categories": [
+			"tags": [
 				"Knowledge",
 				"Police",
 				"Social"
-			]
-		},
-		{
-			"type": "skill",
-			"version": 1,
-			"id": "2aff30ff-cbce-49a3-9269-6ba1648ff669",
-			"name": "Savoir-Faire",
-			"reference": "B218",
-			"specialization": "Mafia",
-			"difficulty": "IQ/E",
+			],
+			"specialization": "Police",
+			"difficulty": "iq/e",
 			"points": 1,
 			"defaulted_from": {
-				"type": "IQ",
+				"type": "iq",
 				"modifier": -4,
 				"level": 9,
 				"adjusted_level": 9,
@@ -568,32 +1110,68 @@
 			},
 			"defaults": [
 				{
-					"type": "IQ",
+					"type": "iq",
+					"modifier": -4
+				}
+			],
+			"calc": {
+				"level": 13,
+				"rsl": "IQ+0"
+			}
+		},
+		{
+			"id": "2aff30ff-cbce-49a3-9269-6ba1648ff669",
+			"type": "skill",
+			"name": "Savoir-Faire",
+			"reference": "B218",
+			"tags": [
+				"Criminal",
+				"Knowledge",
+				"Social",
+				"Street"
+			],
+			"specialization": "Mafia",
+			"difficulty": "iq/e",
+			"points": 1,
+			"defaulted_from": {
+				"type": "iq",
+				"modifier": -4,
+				"level": 9,
+				"adjusted_level": 9,
+				"points": -9
+			},
+			"defaults": [
+				{
+					"type": "iq",
 					"modifier": -4
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Streetwise",
 					"modifier": -3
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Knowledge",
-				"Social"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "e1650b3d-5ca8-4dab-a95e-c7c0fac975ba",
+			"type": "skill",
 			"name": "Poisons",
 			"reference": "B214",
+			"tags": [
+				"Criminal",
+				"Medical",
+				"Spy",
+				"Street"
+			],
 			"tech_level": "3",
-			"difficulty": "IQ/H",
+			"difficulty": "iq/h",
 			"points": 4,
 			"defaulted_from": {
-				"type": "IQ",
+				"type": "iq",
 				"modifier": -6,
 				"level": 7,
 				"adjusted_level": 7,
@@ -601,41 +1179,43 @@
 			},
 			"defaults": [
 				{
-					"type": "IQ",
+					"type": "iq",
 					"modifier": -6
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Chemistry",
 					"modifier": -5
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Pharmacy",
 					"modifier": -3
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Physician",
 					"modifier": -3
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Medical",
-				"Spy"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "ccb95495-1a51-42af-8160-fe3a7e811725",
+			"type": "skill",
 			"name": "Pickpocket",
 			"reference": "B213",
-			"difficulty": "DX/H",
+			"tags": [
+				"Criminal",
+				"Street"
+			],
+			"difficulty": "dx/h",
 			"points": 4,
 			"defaulted_from": {
-				"type": "DX",
+				"type": "dx",
 				"modifier": -6,
 				"level": 9,
 				"adjusted_level": 9,
@@ -643,55 +1223,66 @@
 			},
 			"defaults": [
 				{
-					"type": "DX",
+					"type": "dx",
 					"modifier": -6
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Filch",
 					"modifier": -5
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Sleight of Hand",
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Criminal/Street"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "DX+0"
+			}
 		},
 		{
-			"type": "technique",
-			"version": 1,
 			"id": "c3caa696-0ece-47df-bc4b-c6df1c7e567d",
+			"type": "technique",
 			"name": "Off-Hand Weapon Training",
 			"reference": "B232",
-			"difficulty": "H",
+			"tags": [
+				"Combat",
+				"Melee Combat",
+				"Technique",
+				"Weapon"
+			],
+			"difficulty": "h",
 			"points": 2,
-			"limit": 0,
 			"default": {
-				"type": "Skill",
+				"type": "skill",
 				"name": "Knife",
 				"modifier": -4
 			},
-			"categories": [
-				"Combat/Weapon",
-				"Melee Combat",
-				"Technique"
-			]
+			"limit": 0,
+			"calc": {
+				"level": 14,
+				"rsl": "-3"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "ad1df193-b716-44a9-9362-edfbc0c0939a",
+			"type": "skill",
 			"name": "Lockpicking",
 			"reference": "B206",
+			"tags": [
+				"Criminal",
+				"Police",
+				"Spy",
+				"Street",
+				"Technical"
+			],
 			"tech_level": "3",
-			"difficulty": "IQ/A",
+			"difficulty": "iq/a",
 			"points": 2,
 			"defaulted_from": {
-				"type": "IQ",
+				"type": "iq",
 				"modifier": -5,
 				"level": 8,
 				"adjusted_level": 8,
@@ -699,27 +1290,29 @@
 			},
 			"defaults": [
 				{
-					"type": "IQ",
+					"type": "iq",
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Police",
-				"Spy",
-				"Technical"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "27eff5d4-5b51-431b-8790-3ea75ee57fdd",
+			"type": "skill",
 			"name": "Knife",
 			"reference": "B208",
-			"difficulty": "DX/E",
+			"tags": [
+				"Combat",
+				"Melee Combat",
+				"Weapon"
+			],
+			"difficulty": "dx/e",
 			"points": 4,
 			"defaulted_from": {
-				"type": "DX",
+				"type": "dx",
 				"modifier": -4,
 				"level": 11,
 				"adjusted_level": 11,
@@ -727,40 +1320,44 @@
 			},
 			"defaults": [
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Force Sword",
 					"modifier": -3
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Main-Gauche",
 					"modifier": -3
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Shortsword",
 					"modifier": -3
 				},
 				{
-					"type": "DX",
+					"type": "dx",
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Melee Combat"
-			]
+			"calc": {
+				"level": 17,
+				"rsl": "DX+2"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "2335e245-f7f9-4277-9f09-ace412c0f669",
+			"type": "skill",
 			"name": "Holdout",
 			"reference": "B200",
-			"difficulty": "IQ/A",
+			"tags": [
+				"Criminal",
+				"Spy",
+				"Street"
+			],
+			"difficulty": "iq/a",
 			"points": 1,
 			"defaulted_from": {
-				"type": "IQ",
+				"type": "iq",
 				"modifier": -5,
 				"level": 8,
 				"adjusted_level": 8,
@@ -768,32 +1365,36 @@
 			},
 			"defaults": [
 				{
-					"type": "IQ",
+					"type": "iq",
 					"modifier": -5
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Sleight of Hand",
 					"modifier": -3
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Spy"
-			]
+			"calc": {
+				"level": 12,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "10bc0d84-7ced-4548-9b19-74fab2286cff",
+			"type": "skill",
 			"name": "Beam Weapons",
 			"reference": "B179",
+			"tags": [
+				"Combat",
+				"Ranged Combat",
+				"Weapon"
+			],
 			"specialization": "Pistol",
 			"tech_level": "9",
-			"difficulty": "DX/E",
+			"difficulty": "dx/e",
 			"points": 1,
 			"defaulted_from": {
-				"type": "DX",
+				"type": "dx",
 				"modifier": -4,
 				"level": 11,
 				"adjusted_level": 11,
@@ -801,36 +1402,40 @@
 			},
 			"defaults": [
 				{
-					"type": "DX",
+					"type": "dx",
 					"modifier": -4
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Beam Weapons",
 					"modifier": -4
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Guns",
 					"specialization": "Pistol",
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Ranged Combat"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "DX+0"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "8169eaa2-cf6c-4e46-b087-704660d8ad97",
+			"type": "skill",
 			"name": "Filch",
 			"reference": "B195",
-			"difficulty": "DX/A",
+			"tags": [
+				"Criminal",
+				"Spy",
+				"Street"
+			],
+			"difficulty": "dx/a",
 			"points": 2,
 			"defaulted_from": {
-				"type": "Skill",
+				"type": "skill",
 				"name": "Pickpocket",
 				"modifier": -4,
 				"level": 11,
@@ -839,35 +1444,40 @@
 			},
 			"defaults": [
 				{
-					"type": "DX",
+					"type": "dx",
 					"modifier": -5
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Pickpocket",
 					"modifier": -4
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Sleight of Hand",
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Spy"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "DX+0"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "daad9c45-8af3-485f-b8e9-28b78255c0b4",
+			"type": "skill",
 			"name": "Fast-Talk",
 			"reference": "B195",
-			"difficulty": "IQ/A",
+			"tags": [
+				"Criminal",
+				"Social",
+				"Spy",
+				"Street"
+			],
+			"difficulty": "iq/a",
 			"points": 4,
 			"defaulted_from": {
-				"type": "IQ",
+				"type": "iq",
 				"modifier": -5,
 				"level": 8,
 				"adjusted_level": 8,
@@ -875,45 +1485,51 @@
 			},
 			"defaults": [
 				{
-					"type": "IQ",
+					"type": "iq",
 					"modifier": -5
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Acting",
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Social",
-				"Spy"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ+1"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "e42612f9-63f5-49af-b37c-9fd123aade88",
+			"type": "skill",
 			"name": "Fast-Draw",
 			"reference": "B194",
+			"tags": [
+				"Combat",
+				"Melee Combat",
+				"Weapon"
+			],
 			"specialization": "Knife",
-			"difficulty": "DX/E",
+			"difficulty": "dx/e",
 			"points": 1,
-			"categories": [
-				"Combat/Weapon",
-				"Melee Combat"
-			]
+			"calc": {
+				"level": 16,
+				"rsl": "DX+1"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "f55e82ed-c838-4d8d-9326-3d4c09915139",
+			"type": "skill",
 			"name": "Escape",
 			"reference": "B192",
-			"difficulty": "DX/H",
+			"tags": [
+				"Criminal",
+				"Street"
+			],
+			"difficulty": "dx/h",
 			"points": 1,
 			"defaulted_from": {
-				"type": "DX",
+				"type": "dx",
 				"modifier": -6,
 				"level": 9,
 				"adjusted_level": 9,
@@ -921,70 +1537,81 @@
 			},
 			"defaults": [
 				{
-					"type": "DX",
+					"type": "dx",
 					"modifier": -6
 				}
 			],
-			"categories": [
-				"Criminal/Street"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "DX-2"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "ed0155db-0503-42d8-8456-689539d2b745",
+			"type": "skill",
 			"name": "Electronics Operation",
 			"reference": "B189",
+			"tags": [
+				"Technical"
+			],
 			"specialization": "Sensors",
 			"tech_level": "3",
-			"difficulty": "IQ/A",
+			"difficulty": "iq/a",
 			"points": 2,
 			"defaulted_from": {
-				"type": "IQ",
-				"modifier": -5,
-				"level": 8,
-				"adjusted_level": 8,
-				"points": -8
+				"type": "skill",
+				"name": "Electronics Operation",
+				"specialization": "Security",
+				"modifier": -4,
+				"level": 9,
+				"adjusted_level": 9,
+				"points": -9
 			},
 			"defaults": [
 				{
-					"type": "IQ",
+					"type": "iq",
 					"modifier": -5
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Electronics Repair",
 					"specialization": "Sensors",
 					"modifier": -5
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Engineer",
 					"specialization": "Electronics",
 					"modifier": -5
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Electronics Operation",
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Technical"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "9bf7a3ba-bc2d-476b-b752-93ab95010559",
+			"type": "skill",
 			"name": "Electronics Operation",
 			"reference": "B189",
+			"tags": [
+				"Criminal",
+				"Spy",
+				"Street",
+				"Technical"
+			],
 			"specialization": "Security",
 			"tech_level": "3",
-			"difficulty": "IQ/A",
+			"difficulty": "iq/a",
 			"points": 2,
 			"defaulted_from": {
-				"type": "IQ",
+				"type": "iq",
 				"modifier": -5,
 				"level": 8,
 				"adjusted_level": 8,
@@ -992,63 +1619,71 @@
 			},
 			"defaults": [
 				{
-					"type": "IQ",
+					"type": "iq",
 					"modifier": -5
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Electronics Operation",
 					"specialization": "Security",
 					"modifier": -5
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Engineer",
 					"specialization": "Electronics",
 					"modifier": -5
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Electronics Operation",
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Spy",
-				"Technical"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "technique",
-			"version": 1,
 			"id": "67fd56d0-b3be-47db-96a9-2a743b133d29",
+			"type": "technique",
 			"name": "Disarming",
 			"reference": "B230",
-			"difficulty": "H",
+			"tags": [
+				"Combat",
+				"Melee Combat",
+				"Technique",
+				"Weapon"
+			],
+			"difficulty": "h",
 			"points": 2,
-			"limit": 5,
 			"default": {
-				"type": "Skill",
+				"type": "skill",
 				"name": "Knife"
 			},
-			"categories": [
-				"Combat/Weapon",
-				"Melee Combat",
-				"Technique"
-			]
+			"limit": 5,
+			"calc": {
+				"level": 18,
+				"rsl": "+1"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "85c06322-a5cd-4091-97e2-8b4e0686b1d4",
+			"type": "skill",
 			"name": "Connoisseur",
 			"reference": "B185",
+			"tags": [
+				"Arts",
+				"Entertainment",
+				"Knowledge",
+				"Social"
+			],
 			"specialization": "Wine",
-			"difficulty": "IQ/A",
+			"difficulty": "iq/a",
 			"points": 1,
 			"defaulted_from": {
-				"type": "IQ",
+				"type": "iq",
 				"modifier": -5,
 				"level": 8,
 				"adjusted_level": 8,
@@ -1056,27 +1691,32 @@
 			},
 			"defaults": [
 				{
-					"type": "IQ",
+					"type": "iq",
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Arts/Entertainment",
-				"Knowledge",
-				"Social"
-			]
+			"calc": {
+				"level": 12,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "ca287555-f2ef-4f53-a1f4-033b9fcd4c61",
+			"type": "skill",
 			"name": "Climbing",
 			"reference": "B183",
-			"encumbrance_penalty_multiplier": 1,
-			"difficulty": "DX/A",
+			"tags": [
+				"Athletic",
+				"Criminal",
+				"Exploration",
+				"Outdoor",
+				"Street"
+			],
+			"difficulty": "dx/a",
 			"points": 2,
+			"encumbrance_penalty_multiplier": 1,
 			"defaulted_from": {
-				"type": "DX",
+				"type": "dx",
 				"modifier": -5,
 				"level": 10,
 				"adjusted_level": 10,
@@ -1084,29 +1724,30 @@
 			},
 			"defaults": [
 				{
-					"type": "DX",
+					"type": "dx",
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Athletic",
-				"Criminal/Street",
-				"Outdoor/Exploration"
-			]
+			"calc": {
+				"level": 12,
+				"rsl": "DX+0"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "1303be19-4738-4bd7-add5-041e673a5a36",
+			"type": "skill",
 			"name": "Brawling",
 			"reference": "B182",
-			"difficulty": "DX/E",
+			"tags": [
+				"Combat",
+				"Melee Combat",
+				"Weapon"
+			],
+			"difficulty": "dx/e",
 			"points": 1,
 			"features": [
 				{
 					"type": "weapon_bonus",
-					"amount": 1,
-					"per_level": true,
 					"selection_type": "weapons_with_required_skill",
 					"name": {
 						"compare": "is",
@@ -1115,26 +1756,31 @@
 					"level": {
 						"compare": "at_least",
 						"qualifier": 2
-					}
+					},
+					"amount": 1,
+					"per_level": true
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Melee Combat"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "DX+0"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "989f2dd8-49ea-45dc-97f4-b71d86197dda",
+			"type": "skill",
 			"name": "Biology",
 			"reference": "B180",
+			"tags": [
+				"Natural Science",
+				"Plant"
+			],
 			"specialization": "Biochemistry",
 			"tech_level": "3",
-			"difficulty": "IQ/VH",
+			"difficulty": "iq/vh",
 			"points": 1,
 			"defaulted_from": {
-				"type": "IQ",
+				"type": "iq",
 				"modifier": -6,
 				"level": 7,
 				"adjusted_level": 7,
@@ -1142,32 +1788,36 @@
 			},
 			"defaults": [
 				{
-					"type": "IQ",
+					"type": "iq",
 					"modifier": -6
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Naturalist",
 					"modifier": -6
 				}
 			],
-			"categories": [
-				"Natural Science",
-				"Plant"
-			]
+			"calc": {
+				"level": 10,
+				"rsl": "IQ-3"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "2f0e6731-76bf-42f0-894c-25d5c3db102a",
+			"type": "skill",
 			"name": "Beam Weapons",
 			"reference": "B179",
+			"tags": [
+				"Combat",
+				"Ranged Combat",
+				"Weapon"
+			],
 			"specialization": "Pistol",
 			"tech_level": "3",
-			"difficulty": "DX/E",
+			"difficulty": "dx/e",
 			"points": 1,
 			"defaulted_from": {
-				"type": "DX",
+				"type": "dx",
 				"modifier": -4,
 				"level": 11,
 				"adjusted_level": 11,
@@ -1175,37 +1825,41 @@
 			},
 			"defaults": [
 				{
-					"type": "DX",
+					"type": "dx",
 					"modifier": -4
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Beam Weapons",
 					"modifier": -4
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Guns",
 					"specialization": "Pistol",
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Ranged Combat"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "DX+0"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "a3b64667-8cee-4017-8174-535bdb8bafce",
+			"type": "skill",
 			"name": "Area Knowledge",
 			"reference": "B176",
+			"notes": "All important businesses, streets, citizens, leaders, etc.",
+			"tags": [
+				"Everyman",
+				"Knowledge"
+			],
 			"specialization": "Persephone; Lived there",
-			"difficulty": "IQ/E",
+			"difficulty": "iq/e",
 			"points": 1,
 			"defaulted_from": {
-				"type": "IQ",
+				"type": "iq",
 				"modifier": -4,
 				"level": 9,
 				"adjusted_level": 9,
@@ -1213,32 +1867,33 @@
 			},
 			"defaults": [
 				{
-					"type": "IQ",
+					"type": "iq",
 					"modifier": -4
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Geography",
 					"specialization": "Underworld",
 					"modifier": -3
 				}
 			],
-			"notes": "All important businesses, streets, citizens, leaders, etc.",
-			"categories": [
-				"Everyman",
-				"Knowledge"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "skill",
-			"version": 1,
 			"id": "095cc26c-cefe-4a1f-bc4a-5fbee15277a3",
+			"type": "skill",
 			"name": "Acrobatics",
 			"reference": "B174",
-			"difficulty": "DX/H",
+			"tags": [
+				"Athletic"
+			],
+			"difficulty": "dx/h",
 			"points": 1,
 			"defaulted_from": {
-				"type": "DX",
+				"type": "dx",
 				"modifier": -6,
 				"level": 9,
 				"adjusted_level": 9,
@@ -1246,258 +1901,307 @@
 			},
 			"defaults": [
 				{
-					"type": "DX",
+					"type": "dx",
 					"modifier": -6
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Aerobatics",
 					"modifier": -4
 				},
 				{
-					"type": "Skill",
+					"type": "skill",
 					"name": "Aquabatics",
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Athletic"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "DX-2"
+			}
 		}
 	],
 	"equipment": [
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "2b4208e2-ea30-4350-b1f9-abdd94146d6a",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Antitoxin Kit",
-			"tech_level": "6",
-			"value": "25",
-			"weight": "0.5 lb",
 			"reference": "B289",
 			"notes": "Antidote for specific poison. 10 uses",
-			"categories": [
+			"tech_level": "6",
+			"tags": [
 				"Medical Gear"
-			]
+			],
+			"quantity": 1,
+			"value": 25,
+			"weight": "0.5 lb",
+			"equipped": true,
+			"calc": {
+				"extended_value": 25,
+				"extended_weight": "0.5 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "1c52792e-0c49-4bda-99f9-a46e5bafc068",
-			"equipped": true,
-			"quantity": 8355,
+			"type": "equipment",
 			"description": "Baseball cards",
-			"tech_level": "1",
-			"value": "1",
-			"weight": "0.004 lb",
 			"reference": "B264",
 			"notes": "Value in $, equivalent to 10 eRubles",
-			"categories": [
+			"tech_level": "1",
+			"tags": [
 				"Money: GURPS Standard Medieval Coins"
-			]
+			],
+			"quantity": 8355,
+			"value": 1,
+			"weight": "0.004 lb",
+			"equipped": true,
+			"calc": {
+				"extended_value": 8355,
+				"extended_weight": "33.42 lb"
+			}
 		},
 		{
-			"type": "equipment_container",
-			"version": 1,
 			"id": "2bb47818-6baa-41a3-8b91-56ddea4890d1",
-			"equipped": true,
-			"description": "Finger Bones",
+			"type": "equipment_container",
 			"open": true,
 			"children": [
 				{
-					"type": "equipment",
-					"version": 1,
 					"id": "107c800d-07ec-432f-a4c0-222b9e7e9e1c",
-					"equipped": true,
+					"type": "equipment",
+					"description": "Fog finger bone (gray) ",
 					"quantity": 1,
-					"description": "Fog finger bone (gray) "
+					"equipped": true,
+					"calc": {
+						"extended_value": 0,
+						"extended_weight": "0 lb"
+					}
 				},
 				{
-					"type": "equipment",
-					"version": 1,
 					"id": "6bf01af5-7cd1-424f-b46c-890a20c82191",
-					"equipped": true,
+					"type": "equipment",
+					"description": "Luck Finger Bone (yellow) ",
 					"quantity": 1,
-					"description": "Luck Finger Bone (yellow) "
+					"equipped": true,
+					"calc": {
+						"extended_value": 0,
+						"extended_weight": "0 lb"
+					}
 				},
 				{
-					"type": "equipment",
-					"version": 1,
 					"id": "5d927e76-32c7-4700-8900-5b3beeab90d6",
-					"equipped": true,
+					"type": "equipment",
+					"description": "Major Heal finger bone (green) ",
 					"quantity": 1,
-					"description": "Major Heal finger bone (green) "
+					"equipped": true,
+					"calc": {
+						"extended_value": 0,
+						"extended_weight": "0 lb"
+					}
 				}
-			]
+			],
+			"description": "Finger Bones",
+			"quantity": 1,
+			"equipped": true,
+			"calc": {
+				"extended_value": 0,
+				"extended_weight": "0 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "36114770-e962-4a25-beac-4da4987bfb08",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "First Aid Kit",
-			"tech_level": "0",
-			"value": "50",
-			"weight": "2 lb",
 			"reference": "B289",
+			"notes": "A complete kit for treating wounds, with bandages, ointments, etc.",
+			"tech_level": "0",
+			"tags": [
+				"Medical Gear"
+			],
+			"quantity": 1,
+			"value": 50,
+			"weight": "2 lb",
 			"features": [
 				{
 					"type": "skill_bonus",
-					"amount": 1,
 					"selection_type": "skills_with_name",
 					"name": {
 						"compare": "is",
 						"qualifier": "First Aid"
+					},
+					"amount": 1
+				}
+			],
+			"equipped": true,
+			"calc": {
+				"extended_value": 50,
+				"extended_weight": "2 lb"
+			}
+		},
+		{
+			"id": "050ae910-8cd9-4dfd-a32e-aed0e6308a7a",
+			"type": "equipment",
+			"description": "Large Knife",
+			"reference": "B272",
+			"tech_level": "0",
+			"tags": [
+				"Melee Weapon",
+				"Missile Weapon"
+			],
+			"quantity": 1,
+			"value": 40,
+			"weight": "1 lb",
+			"weapons": [
+				{
+					"id": "dfeb2de9-1a40-4dc6-9d5c-bb48132f5a18",
+					"type": "melee_weapon",
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "-2"
+					},
+					"strength": "6",
+					"usage": "Swung",
+					"reach": "C,1",
+					"parry": "-1",
+					"block": "No",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": "Knife"
+						},
+						{
+							"type": "skill",
+							"name": "Force Sword",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": "Main-Gauche",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": "Shortsword",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": "Sword!"
+						}
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-4 cut"
+					}
+				},
+				{
+					"id": "aa2f3a2e-9eee-4a29-a54b-a9c69356926c",
+					"type": "melee_weapon",
+					"damage": {
+						"type": "imp",
+						"st": "thr"
+					},
+					"strength": "6",
+					"usage": "Thrust",
+					"reach": "C",
+					"parry": "-1",
+					"block": "No",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": "Knife"
+						},
+						{
+							"type": "skill",
+							"name": "Force Sword",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": "Main-Gauche",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": "Shortsword",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": "Sword!"
+						}
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-3 imp"
+					}
+				},
+				{
+					"id": "825202f7-2105-4c0a-92fe-5517454a2baf",
+					"type": "ranged_weapon",
+					"damage": {
+						"type": "imp",
+						"st": "thr"
+					},
+					"strength": "6",
+					"usage": "Thrown",
+					"accuracy": "+0",
+					"range": "x0.8/x1.5",
+					"rate_of_fire": "1",
+					"shots": "T(1)",
+					"bulk": "-2",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": "Thrown Weapon",
+							"specialization": "Knife"
+						}
+					],
+					"calc": {
+						"level": 15,
+						"range": "6/12",
+						"damage": "1d-3 imp"
 					}
 				}
 			],
-			"notes": "A complete kit for treating wounds, with bandages, ointments, etc.",
-			"categories": [
-				"Medical Gear"
-			]
-		},
-		{
-			"type": "equipment",
-			"version": 1,
-			"id": "050ae910-8cd9-4dfd-a32e-aed0e6308a7a",
 			"equipped": true,
-			"quantity": 1,
-			"description": "Large Knife",
-			"tech_level": "0",
-			"value": "40",
-			"weight": "1 lb",
-			"reference": "B272",
-			"weapons": [
-				{
-					"type": "melee_weapon",
-					"damage": {
-						"type": "cut",
-						"st": "sw",
-						"base": "-2"
-					},
-					"strength": "6",
-					"usage": "Swung",
-					"reach": "C,1",
-					"parry": "-1",
-					"block": "No",
-					"defaults": [
-						{
-							"type": "DX",
-							"modifier": -4
-						},
-						{
-							"type": "Skill",
-							"name": "Knife"
-						},
-						{
-							"type": "Skill",
-							"name": "Force Sword",
-							"modifier": -3
-						},
-						{
-							"type": "Skill",
-							"name": "Main-Gauche",
-							"modifier": -3
-						},
-						{
-							"type": "Skill",
-							"name": "Shortsword",
-							"modifier": -3
-						},
-						{
-							"type": "Skill",
-							"name": "Sword!"
-						}
-					]
-				},
-				{
-					"type": "melee_weapon",
-					"damage": {
-						"type": "imp",
-						"st": "thr"
-					},
-					"strength": "6",
-					"usage": "Thrust",
-					"reach": "C",
-					"parry": "-1",
-					"block": "No",
-					"defaults": [
-						{
-							"type": "DX",
-							"modifier": -4
-						},
-						{
-							"type": "Skill",
-							"name": "Knife"
-						},
-						{
-							"type": "Skill",
-							"name": "Force Sword",
-							"modifier": -3
-						},
-						{
-							"type": "Skill",
-							"name": "Main-Gauche",
-							"modifier": -3
-						},
-						{
-							"type": "Skill",
-							"name": "Shortsword",
-							"modifier": -3
-						},
-						{
-							"type": "Skill",
-							"name": "Sword!"
-						}
-					]
-				},
-				{
-					"type": "ranged_weapon",
-					"damage": {
-						"type": "imp",
-						"st": "thr"
-					},
-					"strength": "6",
-					"usage": "Thrown",
-					"accuracy": "+0",
-					"range": "x0.8/x1.5",
-					"rate_of_fire": "1",
-					"shots": "T(1)",
-					"bulk": "-2",
-					"defaults": [
-						{
-							"type": "DX",
-							"modifier": -4
-						},
-						{
-							"type": "Skill",
-							"name": "Thrown Weapon",
-							"specialization": "Knife"
-						}
-					]
-				}
-			],
-			"categories": [
-				"Melee Weapon",
-				"Missile Weapon"
-			]
+			"calc": {
+				"extended_value": 40,
+				"extended_weight": "1 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "9e97eb49-233e-4ae0-a8ae-a5969b777a36",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Large Knife",
-			"tech_level": "0",
-			"value": "40",
-			"weight": "1 lb",
 			"reference": "B272",
+			"tech_level": "0",
+			"tags": [
+				"Melee Weapon",
+				"Missile Weapon"
+			],
+			"quantity": 1,
+			"value": 40,
+			"weight": "1 lb",
 			"weapons": [
 				{
+					"id": "d676c408-4975-4940-b6d2-a9bce2812233",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "cut",
@@ -1511,35 +2215,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-4 cut"
+					}
 				},
 				{
+					"id": "68212924-70ff-4c6d-afd1-dec0588b30ef",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "imp",
@@ -1552,35 +2263,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-3 imp"
+					}
 				},
 				{
+					"id": "007153b2-4ac7-4da3-bb79-ef69941d884b",
 					"type": "ranged_weapon",
 					"damage": {
 						"type": "imp",
@@ -1595,35 +2313,44 @@
 					"bulk": "-2",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Thrown Weapon",
 							"specialization": "Knife"
 						}
-					]
+					],
+					"calc": {
+						"level": 15,
+						"range": "6/12",
+						"damage": "1d-3 imp"
+					}
 				}
 			],
-			"categories": [
-				"Melee Weapon",
-				"Missile Weapon"
-			]
+			"equipped": true,
+			"calc": {
+				"extended_value": 40,
+				"extended_weight": "1 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "80b98fcd-debb-4cd1-980c-bbd0e7a9294e",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Large Knife",
-			"tech_level": "0",
-			"value": "40",
-			"weight": "1 lb",
 			"reference": "B272",
+			"tech_level": "0",
+			"tags": [
+				"Melee Weapon",
+				"Missile Weapon"
+			],
+			"quantity": 1,
+			"value": 40,
+			"weight": "1 lb",
 			"weapons": [
 				{
+					"id": "e4c2afb2-54eb-4a24-be11-0eb6ad74ad21",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "cut",
@@ -1637,35 +2364,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-4 cut"
+					}
 				},
 				{
+					"id": "b7efc9e2-f7cf-4bab-800b-f2bdcf3c26bb",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "imp",
@@ -1678,35 +2412,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-3 imp"
+					}
 				},
 				{
+					"id": "2b14458a-fd05-4a38-be92-a8c1485b6c3a",
 					"type": "ranged_weapon",
 					"damage": {
 						"type": "imp",
@@ -1721,35 +2462,44 @@
 					"bulk": "-2",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Thrown Weapon",
 							"specialization": "Knife"
 						}
-					]
+					],
+					"calc": {
+						"level": 15,
+						"range": "6/12",
+						"damage": "1d-3 imp"
+					}
 				}
 			],
-			"categories": [
-				"Melee Weapon",
-				"Missile Weapon"
-			]
+			"equipped": true,
+			"calc": {
+				"extended_value": 40,
+				"extended_weight": "1 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "0e0c8426-efcf-4850-a740-6bcea14c32f0",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Large Knife",
-			"tech_level": "0",
-			"value": "40",
-			"weight": "1 lb",
 			"reference": "B272",
+			"tech_level": "0",
+			"tags": [
+				"Melee Weapon",
+				"Missile Weapon"
+			],
+			"quantity": 1,
+			"value": 40,
+			"weight": "1 lb",
 			"weapons": [
 				{
+					"id": "f7ad788a-9210-4c03-9ce9-c99af82aedab",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "cut",
@@ -1763,35 +2513,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-4 cut"
+					}
 				},
 				{
+					"id": "aec1f3a1-a3d5-4ca0-9058-e0763f35c274",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "imp",
@@ -1804,35 +2561,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-3 imp"
+					}
 				},
 				{
+					"id": "54a13cb8-07f5-4784-9a2d-3c645b0cd02c",
 					"type": "ranged_weapon",
 					"damage": {
 						"type": "imp",
@@ -1847,82 +2611,105 @@
 					"bulk": "-2",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Thrown Weapon",
 							"specialization": "Knife"
 						}
-					]
+					],
+					"calc": {
+						"level": 15,
+						"range": "6/12",
+						"damage": "1d-3 imp"
+					}
 				}
 			],
-			"categories": [
-				"Melee Weapon",
-				"Missile Weapon"
-			]
+			"equipped": true,
+			"calc": {
+				"extended_value": 40,
+				"extended_weight": "1 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "60ea7cdd-1115-43cc-813f-3ba82658dee0",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Leopard Print Armor",
+			"quantity": 1,
 			"features": [
 				{
 					"type": "dr_bonus",
-					"amount": 4,
-					"location": "torso"
+					"location": "torso",
+					"amount": 4
+				},
+				{
+					"type": "dr_bonus",
+					"location": "vitals",
+					"amount": 4
 				}
-			]
+			],
+			"equipped": true,
+			"calc": {
+				"extended_value": 0,
+				"extended_weight": "0 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "87769fe6-3161-45df-ad49-dd624abadc20",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Lockpicks",
-			"tech_level": "3",
-			"value": "50",
 			"reference": "B289",
 			"notes": "Basic equipment for Lockpicking skill",
-			"categories": [
+			"tech_level": "3",
+			"tags": [
 				"Law-Enforcement",
 				"Spy Gear",
 				"Thief"
-			]
+			],
+			"quantity": 1,
+			"value": 50,
+			"equipped": true,
+			"calc": {
+				"extended_value": 50,
+				"extended_weight": "0 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "683d8fb7-4ee1-4895-9f2e-d619e8f3ddfa",
-			"equipped": true,
-			"quantity": 20,
+			"type": "equipment",
 			"description": "Poison",
-			"tech_level": "6",
-			"value": "20",
 			"reference": "B289",
 			"notes": "2d HP damage, no delay, follow-up (on knife tip) poison",
-			"categories": [
+			"tech_level": "6",
+			"tags": [
 				"Medical Gear"
-			]
+			],
+			"quantity": 20,
+			"value": 20,
+			"equipped": true,
+			"calc": {
+				"extended_value": 400,
+				"extended_weight": "0 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "ce0b211d-a418-495a-9cc5-9fb1bc5bc1e6",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Small Knife",
-			"tech_level": "0",
-			"value": "30",
-			"weight": "0.5 lb",
 			"reference": "B272",
+			"tech_level": "0",
+			"tags": [
+				"Melee Weapon",
+				"Missile Weapon"
+			],
+			"quantity": 1,
+			"value": 30,
+			"weight": "0.5 lb",
 			"weapons": [
 				{
+					"id": "519b9a63-abcf-4f5a-b2e7-19f2e9844d50",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "cut",
@@ -1936,35 +2723,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-5 cut"
+					}
 				},
 				{
+					"id": "a5cb0222-8e19-4f1d-b258-e2f8ae385124",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "imp",
@@ -1978,35 +2772,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-4 imp"
+					}
 				},
 				{
+					"id": "7f7ef624-9c44-4684-b2fa-da57750e826f",
 					"type": "ranged_weapon",
 					"damage": {
 						"type": "imp",
@@ -2022,35 +2823,44 @@
 					"bulk": "-1",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Thrown Weapon",
 							"specialization": "Knife"
 						}
-					]
+					],
+					"calc": {
+						"level": 15,
+						"range": "4/8",
+						"damage": "1d-4 imp"
+					}
 				}
 			],
-			"categories": [
-				"Melee Weapon",
-				"Missile Weapon"
-			]
+			"equipped": true,
+			"calc": {
+				"extended_value": 30,
+				"extended_weight": "0.5 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "fec7ac1e-f681-4f35-ab73-e3a2bcf560fa",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Small Knife",
-			"tech_level": "0",
-			"value": "30",
-			"weight": "0.5 lb",
 			"reference": "B272",
+			"tech_level": "0",
+			"tags": [
+				"Melee Weapon",
+				"Missile Weapon"
+			],
+			"quantity": 1,
+			"value": 30,
+			"weight": "0.5 lb",
 			"weapons": [
 				{
+					"id": "b0306265-3749-4cda-bfe0-66ae61d59f6e",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "cut",
@@ -2064,35 +2874,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-5 cut"
+					}
 				},
 				{
+					"id": "bffa8881-64db-4f5e-94af-6b266d8b19b7",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "imp",
@@ -2106,35 +2923,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-4 imp"
+					}
 				},
 				{
+					"id": "4ae8f6f5-1ea4-4218-b3d3-c83b02875b72",
 					"type": "ranged_weapon",
 					"damage": {
 						"type": "imp",
@@ -2150,35 +2974,44 @@
 					"bulk": "-1",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Thrown Weapon",
 							"specialization": "Knife"
 						}
-					]
+					],
+					"calc": {
+						"level": 15,
+						"range": "4/8",
+						"damage": "1d-4 imp"
+					}
 				}
 			],
-			"categories": [
-				"Melee Weapon",
-				"Missile Weapon"
-			]
+			"equipped": true,
+			"calc": {
+				"extended_value": 30,
+				"extended_weight": "0.5 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "680ef64d-8a33-449f-bdfa-39a2e6033136",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Small Knife",
-			"tech_level": "0",
-			"value": "30",
-			"weight": "0.5 lb",
 			"reference": "B272",
+			"tech_level": "0",
+			"tags": [
+				"Melee Weapon",
+				"Missile Weapon"
+			],
+			"quantity": 1,
+			"value": 30,
+			"weight": "0.5 lb",
 			"weapons": [
 				{
+					"id": "777c6afc-f3aa-498b-9dad-aec97dd5e46c",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "cut",
@@ -2192,35 +3025,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-5 cut"
+					}
 				},
 				{
+					"id": "f8a1d1af-4b6d-4fb5-8b5d-142053ff7292",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "imp",
@@ -2234,35 +3074,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-4 imp"
+					}
 				},
 				{
+					"id": "e9200405-fbf4-471e-bdba-f9e08149fadb",
 					"type": "ranged_weapon",
 					"damage": {
 						"type": "imp",
@@ -2278,35 +3125,44 @@
 					"bulk": "-1",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Thrown Weapon",
 							"specialization": "Knife"
 						}
-					]
+					],
+					"calc": {
+						"level": 15,
+						"range": "4/8",
+						"damage": "1d-4 imp"
+					}
 				}
 			],
-			"categories": [
-				"Melee Weapon",
-				"Missile Weapon"
-			]
+			"equipped": true,
+			"calc": {
+				"extended_value": 30,
+				"extended_weight": "0.5 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "b1e8cab1-5ac9-4d1e-9e55-befe5b21f075",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Small Knife",
-			"tech_level": "0",
-			"value": "30",
-			"weight": "0.5 lb",
 			"reference": "B272",
+			"tech_level": "0",
+			"tags": [
+				"Melee Weapon",
+				"Missile Weapon"
+			],
+			"quantity": 1,
+			"value": 30,
+			"weight": "0.5 lb",
 			"weapons": [
 				{
+					"id": "9f548c6d-2101-45c9-97e0-d4327e8b165f",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "cut",
@@ -2320,35 +3176,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-5 cut"
+					}
 				},
 				{
+					"id": "ea4fbdcf-a3e9-473f-a0f5-080ae1336a6d",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "imp",
@@ -2362,35 +3225,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-4 imp"
+					}
 				},
 				{
+					"id": "e40a25d5-7289-4d11-a9db-f5484b867470",
 					"type": "ranged_weapon",
 					"damage": {
 						"type": "imp",
@@ -2406,35 +3276,44 @@
 					"bulk": "-1",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Thrown Weapon",
 							"specialization": "Knife"
 						}
-					]
+					],
+					"calc": {
+						"level": 15,
+						"range": "4/8",
+						"damage": "1d-4 imp"
+					}
 				}
 			],
-			"categories": [
-				"Melee Weapon",
-				"Missile Weapon"
-			]
+			"equipped": true,
+			"calc": {
+				"extended_value": 30,
+				"extended_weight": "0.5 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "b1c2cc05-d1fa-471a-be6e-0d38eb3ce848",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Small Knife",
-			"tech_level": "0",
-			"value": "30",
-			"weight": "0.5 lb",
 			"reference": "B272",
+			"tech_level": "0",
+			"tags": [
+				"Melee Weapon",
+				"Missile Weapon"
+			],
+			"quantity": 1,
+			"value": 30,
+			"weight": "0.5 lb",
 			"weapons": [
 				{
+					"id": "832b4fa7-e25e-459a-afc0-45448c3fa238",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "cut",
@@ -2448,35 +3327,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-5 cut"
+					}
 				},
 				{
+					"id": "e44deafb-1a9f-419e-ac42-155745b248bc",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "imp",
@@ -2490,35 +3376,42 @@
 					"block": "No",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Knife"
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Force Sword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Main-Gauche",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Shortsword",
 							"modifier": -3
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Sword!"
 						}
-					]
+					],
+					"calc": {
+						"level": 17,
+						"parry": "11",
+						"block": "No",
+						"damage": "1d-4 imp"
+					}
 				},
 				{
+					"id": "ffd4affe-b3ac-49d9-9487-76e3884b197c",
 					"type": "ranged_weapon",
 					"damage": {
 						"type": "imp",
@@ -2534,40 +3427,48 @@
 					"bulk": "-1",
 					"defaults": [
 						{
-							"type": "DX",
+							"type": "dx",
 							"modifier": -4
 						},
 						{
-							"type": "Skill",
+							"type": "skill",
 							"name": "Thrown Weapon",
 							"specialization": "Knife"
 						}
-					]
+					],
+					"calc": {
+						"level": 15,
+						"range": "4/8",
+						"damage": "1d-4 imp"
+					}
 				}
 			],
-			"categories": [
-				"Melee Weapon",
-				"Missile Weapon"
-			]
+			"equipped": true,
+			"calc": {
+				"extended_value": 30,
+				"extended_weight": "0.5 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "a9af0a7c-a158-4c77-bac2-071f0f21491c",
-			"equipped": true,
+			"type": "equipment",
+			"description": "Death Powder ",
 			"quantity": 1,
-			"description": "Death Powder "
+			"equipped": true,
+			"calc": {
+				"extended_value": 0,
+				"extended_weight": "0 lb"
+			}
 		},
 		{
-			"type": "equipment",
-			"version": 1,
 			"id": "e3ad2d2c-f15b-43b8-aa8b-c406cbf8eedb",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Laser Pistol",
+			"quantity": 1,
 			"weight": "3.3 lb",
 			"weapons": [
 				{
+					"id": "e74108e8-474e-4630-9c14-8ad9f9149f5f",
 					"type": "ranged_weapon",
 					"damage": {
 						"type": "",
@@ -2579,9 +3480,42 @@
 					"rate_of_fire": "1",
 					"shots": "8 (2)",
 					"bulk": "-2",
-					"recoil": "1"
+					"recoil": "1",
+					"calc": {
+						"range": "100/300",
+						"damage": "2d+4"
+					}
 				}
-			]
+			],
+			"equipped": true,
+			"calc": {
+				"extended_value": 0,
+				"extended_weight": "3.3 lb"
+			}
 		}
-	]
+	],
+	"created_date": "2020-04-17T00:00:00-07:00",
+	"modified_date": "2021-05-26T11:47:00-07:00",
+	"calc": {
+		"swing": "1d-2",
+		"thrust": "1d-3",
+		"basic_lift": "13 lb",
+		"dodge_bonus": 1,
+		"parry_bonus": 1,
+		"block_bonus": 1,
+		"move": [
+			6,
+			4,
+			3,
+			2,
+			1
+		],
+		"dodge": [
+			10,
+			9,
+			8,
+			7,
+			6
+		]
+	}
 }

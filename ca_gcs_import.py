@@ -87,7 +87,8 @@ class SkillsCalcs(object):
            'difficulty': 'DX/E',
            'points': 0}
         '''
-        #debug = ca_debug.Debug() # TODO: remove
+        debug = ca_debug.Debug(quiet=GcsImport.QUIET_SKILLS)
+
         if skill_name not in SkillsCalcs.skills:
             # Get the skill info from GCS
             if 'difficulty' not in skill_gcs:
@@ -112,7 +113,7 @@ class SkillsCalcs(object):
 
         # Return a default value if the player didn't buy this skill.
         if cost == 0:
-            #debug.print('** DEFAULT **')
+            debug.print('** DEFAULT **')
             # Easiest way to go -- GCS already calculated it and put it in
             # the skill.
             if ('defaulted_from' in skill_gcs and
@@ -157,17 +158,17 @@ class SkillsCalcs(object):
         #   include a laser sight for 'beam weapons' skill -- this code applies
         #   that the laser sight benefit later.
         level = char.char['permanent'][skill_native['attr']]
-        #debug.print('  %s = %d' % (skill_native['attr'], level)) # TODO: remove
+        debug.print('  %s = %d' % (skill_native['attr'], level)) # TODO: remove
         level += SkillsCalcs.level_from_cost[cost]
         level += SkillsCalcs.difficulty_offset[skill_native['diff']]
-        #debug.print('  %s (paid %d) = %d' % (skill_native['diff'],
-        #                                     cost,
-        #                                     level))
+        debug.print('  %s (paid %d) = %d' % (skill_native['diff'],
+                                             cost,
+                                             level))
 
         # Add modifiers due to equipment
         plus = self.__get_equipment_bonuses(char.stuff, 'skill', skill_name)
         level += plus
-        #debug.print('  equipment +%d = %d' % (plus, level)) # TODO: remove
+        debug.print('  equipment +%d = %d' % (plus, level)) # TODO: remove
 
         #if 'equip' in skill_native:
         #    PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
@@ -178,7 +179,7 @@ class SkillsCalcs(object):
             for looking_for, plus in skill_native['advantage'].items():
                 if looking_for in char.char['advantages']:
                     level += plus
-        #debug.print('  after advantages: %d' % level) # TODO: remove
+        debug.print('  after advantages: %d' % level) # TODO: remove
 
         return level
 
@@ -283,9 +284,6 @@ class SkillsCalcs(object):
         #            'amount': <number>,
         #            'name': '<regex>'}, ...
 
-
-        #debug2 = ca_debug.Debug()
-
         total_bonus = 0
         for item in equipment:
             #if must_be_in_use and item not in in_use_items:
@@ -349,6 +347,10 @@ class FromGcs(object):
 
         with ca_json.GmJson(gcs_file) as char_file:
             self.__gcs_data = char_file.read_data
+
+        debug = ca_debug.Debug(quiet=GcsImport.QUIET_IMPORT)
+        debug.header1('FromGcs: %s' % gcs_file)
+        debug.pprint(self.__gcs_data)
 
         self.__window_manager = window_manager
         self.__ruleset = ruleset
@@ -638,9 +640,9 @@ class FromGcs(object):
         #   equipment <- skills
         #   advantages <- spells
 
-        #debug = ca_debug.Debug() # TODO: remove
-        name = self.get_name() # TODO: remove
-        #debug.header1('convert_character: %s' % name) # TODO: remove
+        debug = ca_debug.Debug(quiet=GcsImport.QUIET_IMPORT)
+        name = self.get_name()
+        debug.header1('convert_character: %s' % name)
 
         self.__convert_advantages()
         self.__convert_attribs()
@@ -680,21 +682,39 @@ class FromGcs(object):
                                advantage_gcs,   # advantage dict
                                advantages_gcs   # {name: cost, ...
                               ):
-        if advantage_gcs['type'] == 'advantage_container':
+        debug = ca_debug.Debug(quiet=GcsImport.QUIET_ADVANTAGES)
+        debug.header3('__add_advantage_to_gcs_list: %s' % advantage_gcs['name'])
+
+        debug.print('OK so far')
+        if advantage_gcs['type'] == 'trait_container':
+            debug.print('CONTAINER')
             #print '<< CONTAINER'
             for advantage in advantage_gcs['children']:
                 self.__add_advantage_to_gcs_list(advantage, advantages_gcs)
             #print '>> CONTAINER'
         else:
+            debug.print('regular advantage (not container)')
             name = advantage_gcs['name']
             cost_gcs = self.__get_advantage_cost(advantage_gcs)
+            debug.print('cost: %r' % cost_gcs)
+
+            #if 'tags' not in advantage_gcs:
+            #    return
+            #if ('Disadvantage' not in advantage_gcs['tags'] and
+            #        'Advantage' not in advantage_gcs['tags'] and
+            #        'Quirk' not in advantage_gcs['tags'] and
+            #        'Perk' not in advantage_gcs['tags']):
+            #    return
 
             if 'modifiers' in advantage_gcs:
                 for modifier in advantage_gcs['modifiers']:
                     if 'disabled' in modifier and modifier['disabled']:
+                        debug.print('** DISABLED: %s **' % name)
                         continue
 
-                    if 'cost' in modifier:
+                    if 'calc' in advantage_gcs and 'points' in advantage_gcs['calc']:
+                        pass # Already calculated all modifiers
+                    elif 'cost' in modifier:
                         if ('cost_type' in modifier and
                                 modifier['cost_type'] == 'percentage'):
                             factor = int(modifier['cost']) / 100 # Make it a percentage
@@ -706,6 +726,8 @@ class FromGcs(object):
                             cost_gcs = int(cost_gcs + 0.5)
                         else: # Just assuming cost_type == points
                             cost_gcs += int(modifier['cost'])
+
+                        debug.print('modified cost: %r' % cost_gcs)
 
                     # Spell bonuses from a Lwa (if that applies)
 
@@ -721,6 +743,7 @@ class FromGcs(object):
                                     self.__spell_advantages[college] = amount
 
             advantages_gcs[name] = cost_gcs
+            debug.print('DONE: advantage[%s] = %r' % (name, cost_gcs))
 
     def __convert_and_store_equipment_item(
             self,
@@ -735,6 +758,8 @@ class FromGcs(object):
 
         Native-formatted results are added to the passed-in list.
         '''
+        debug = ca_debug.Debug(quiet=GcsImport.QUIET_EQUIPMENT)
+
         new_thing = self.__ruleset.make_empty_item()
         #if ('features' in item and 'type' in item['features'][0] and
         #        'amount' in item['features'][0]):
@@ -745,6 +770,9 @@ class FromGcs(object):
         name = item['description']
         if name is not None:
             new_thing['name'] = name
+
+        debug.header2('__convert_and_store_equipment_item: %r' % name)
+        debug.pprint(item)
 
         count = 1 if 'quantity' not in item else item['quantity']
         new_thing['count'] = count
@@ -842,6 +870,9 @@ class FromGcs(object):
 
         Returns nothing.
         '''
+        debug = ca_debug.Debug(quiet=GcsImport.QUIET_EQUIPMENT)
+        debug.header4('__add_skill_to_weapon')
+
         weapon_dest['type'][mode]['skill'] = {}
 
         # Skill -- find the first one with skill modifier == 0
@@ -870,15 +901,15 @@ class FromGcs(object):
                 still_need_a_skill = False
             else:
                 # Looking for something like this:
-				#   <default>
-			    #       <type>DX</type>
-				#       <modifier>-4</modifier>
-				#   </default>
+				#   {
+                #       "type": "dx",
+                #       "modifier": -4
+				#   }
 
                 if ('permanent' not in self.char or
                         skill.lower() in self.char['permanent']):
                     # Then we're talking 'dx' or something as a default
-                    weapon_dest['type'][mode]['skill'][skill] = modifier
+                    weapon_dest['type'][mode]['skill'][skill.lower()] = modifier
                     still_need_a_skill = False
 
         if still_need_a_skill:
@@ -900,11 +931,20 @@ class FromGcs(object):
         ## ADVANTAGES #####
         # Checks points spent
 
-        advantages = self.__gcs_data['advantages']
+        debug = ca_debug.Debug(quiet=GcsImport.QUIET_ADVANTAGES)
+
+        advantages = self.__gcs_data['traits']
+
+        debug.header2('__convert_advantages: gcs')
+        debug.pprint(advantages)
+
         self.__spell_advantage_global = 0
         for advantage in advantages:
             self.__add_advantage_to_gcs_list(advantage,
                                              self.char['advantages'])
+
+        debug.header2('__convert_advantages: native')
+        debug.pprint(self.char['advantages'])
 
     def __convert_attribs(self):
         '''
@@ -1090,6 +1130,9 @@ class FromGcs(object):
         #   on attributes, some skills are affected by advantages, and
         #   equipment (a scope for a rifle, for instance).
 
+        debug = ca_debug.Debug(quiet=GcsImport.QUIET_SKILLS)
+        debug.header2('__convert_skills: gcs')
+
         if 'skills' not in self.__gcs_data:
             return
 
@@ -1098,8 +1141,7 @@ class FromGcs(object):
         for skill_gcs in self.__gcs_data['skills']:
             base_name = skill_gcs['name']
 
-            #debug = ca_debug.Debug() # TODO: remove
-            #debug.header2(base_name) # TODO: remove
+            debug.header3(base_name) # TODO: remove
 
             if 'type' not in skill_gcs:
                 pass
@@ -1109,7 +1151,7 @@ class FromGcs(object):
                         len(skill_gcs['specialization']) > 0):
                     name_text = '%s (%s)' % (skill_gcs['name'],
                                              skill_gcs['specialization'])
-                    #debug.print(' %s' % name_text) # TODO: remove
+                    debug.print(' %s' % name_text) # TODO: remove
                 else:
                     name_text = skill_gcs['name']
 
@@ -1119,7 +1161,7 @@ class FromGcs(object):
                         self.__window_manager, self, skill_gcs, name_text, cost_gcs)
                 self.char['skills'][name_text] = level_gcs
             elif skill_gcs['type'] == 'technique':
-                # print('\n=== Technique: %s ===' % base_name) # TODO: remove
+                debug.print('\n=== Technique: %s ===' % base_name) # TODO: remove
                 difficulty = skill_gcs['difficulty'] # 'H', 'A'
                 cost_gcs = 0 if 'points' not in skill_gcs else skill_gcs['points']
                 plus = SkillsCalcs.tech_plus_from_pts(difficulty, cost_gcs) ###################33
@@ -1129,7 +1171,7 @@ class FromGcs(object):
                     default += (' (%s)' % skill_gcs['default']['specialization'])
                 skill_base = (0 if 'modifier' not in skill_gcs['default'] else ####################
                               skill_gcs['default']['modifier'])
-                # print('based on %s = %d+%d' % (default, plus, skill_base)) # TODO: remove
+                debug.print('based on %s = %d+%d' % (default, plus, skill_base)) # TODO: remove
 
                 technique = {
                     'name': base_name,
@@ -1172,17 +1214,22 @@ class FromGcs(object):
                     ]
                     }
 
+        debug = ca_debug.Debug(quiet=GcsImport.QUIET_SPELLS)
+
         if ('spells' not in self.__gcs_data or
                 len(self.__gcs_data['spells']) == 0):
             return
+
+        debug.header2('__convert_spells')
 
         # NOTE: Only add 'spell's if the character has some.
 
         self.char['spells'] = [] # {'name': xx, 'skill': xx}, ...
         for spell_gcs in self.__gcs_data['spells']:
             name = spell_gcs['name']
-
+            debug.header3(name)
             skill_gcs = self.char['permanent']['iq']
+            debug.print('start w/iq: %d' % skill_gcs)
 
             # Spell difficulty
             # 'difficulty' = 'IQ/H' or 'IQ/VH'
@@ -1196,6 +1243,7 @@ class FromGcs(object):
 
             difficulty = ('hard' if match.group('difficulty').upper() == 'H'
                           else 'very_hard')
+            debug.print('difficulty: %s' % difficulty)
 
             # Points they need put into this spell to cast
             # match = re.match('^(?P<cost>[0-9]+)$', spell_gcs['casting_cost'])
@@ -1206,6 +1254,10 @@ class FromGcs(object):
             # College
             colleges = [] if 'college' not in spell_gcs else spell_gcs['college']
             best_plus = 0
+            debug.print('spell advantages for colleges:')
+            debug.pprint(self.__spell_advantages)
+            debug.print('THIS spell is in the following colleges:')
+            debug.pprint(colleges)
             for college in colleges:
                 if college in self.__spell_advantages:
                     if best_plus < self.__spell_advantages[college]:
@@ -1214,18 +1266,26 @@ class FromGcs(object):
             skill_gcs += best_plus
             skill_gcs += self.__spell_advantage_global
 
+            debug.print('adding plus: %d and lwa: %d to get %d' %
+                    (best_plus, self.__spell_advantage_global, skill_gcs))
+
             # Get the skill level
             # TODO (now): doesn't deal with more points than 24 or 28
             for lookup in skill_add_to_iq[difficulty]:
                 if points >= lookup['points']:
                     skill_gcs += lookup['add_to_iq']
+                    debug.print('adding skill: %d' % lookup['add_to_iq'])
                     break
 
+            debug.print('to get: %d' % skill_gcs)
             self.char['spells'].append({'name': name, 'skill': skill_gcs})
 
     def __get_advantage_cost(self,
                              advantage_gcs # advantage dict
                             ):
+
+        if 'calc' in advantage_gcs and 'points' in advantage_gcs['calc']:
+            return advantage_gcs['calc']['points']
 
         cost_gcs = (0 if 'base_points' not in advantage_gcs else
                     advantage_gcs['base_points'])
@@ -1504,6 +1564,8 @@ class FromGcs(object):
                            new_thing,   # dict for receiving item
                            item         # dict, source for item
                            ):
+        debug = ca_debug.Debug(quiet=GcsImport.QUIET_EQUIPMENT)
+        debug.header3('__get_melee_weapon')
         type_from_usage = {'Swung': 'swung weapon',
                            'Thrust': 'thrust weapon',
                            'Thrown': 'thrown weapon',
@@ -2481,6 +2543,14 @@ def get_dest_filename(json_filename):
     return dest_filename
 
 class GcsImport(object):
+    # For debug output
+    QUIET_IMPORT = True
+    QUIET_SKILLS = True
+    QUIET_EQUIPMENT = True
+    QUIET_ADVANTAGES = True
+    QUIET_ATTRIBUTES = True
+    QUIET_SPELLS = True
+
     def __init__(self,
                  window_manager,    # ca_gui.GmWindowManager object
                  ):

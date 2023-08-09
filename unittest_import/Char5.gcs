@@ -1,41 +1,50 @@
 {
 	"type": "character",
-	"version": 2,
+	"version": 4,
 	"id": "966cbda4-18f2-4d57-ac4e-723f10e196ff",
+	"total_points": 215,
+	"points_record": [
+		{
+			"when": "2023-08-08T21:20:58-07:00",
+			"points": 215,
+			"reason": "Reconciliation"
+		}
+	],
+	"profile": {
+		"name": "Lawerence Langelier",
+		"age": "28",
+		"birthday": "February 23",
+		"eyes": "Brown",
+		"hair": "Brown, Wavy, Long",
+		"skin": "Tan",
+		"handedness": "Right",
+		"gender": "Male",
+		"height": "5'8\"",
+		"weight": "162 lb",
+		"player_name": "test",
+		"title": "Deputy Marshall",
+		"religion": "Raised Catholic",
+		"tech_level": "9"
+	},
 	"settings": {
-		"default_length_units": "ft_in",
-		"default_weight_units": "lb",
-		"user_description_display": "tooltip",
-		"modifiers_display": "inline",
-		"notes_display": "inline",
-		"skill_level_adj_display": "tooltip",
-		"use_multiplicative_modifiers": false,
-		"use_modifying_dice_plus_adds": false,
-		"damage_progression": "basic_set",
-		"use_simple_metric_conversions": true,
-		"show_college_in_sheet_spells": false,
-		"show_difficulty": false,
-		"show_advantage_modifier_adj": false,
-		"show_equipment_modifier_adj": false,
-		"show_spell_adj": true,
-		"use_title_in_footer": false,
 		"page": {
-			"paper_size": "na-letter",
+			"paper_size": "letter",
+			"orientation": "portrait",
 			"top_margin": "0.25 in",
 			"left_margin": "0.25 in",
 			"bottom_margin": "0.25 in",
-			"right_margin": "0.25 in",
-			"orientation": "portrait"
+			"right_margin": "0.25 in"
 		},
 		"block_layout": [
 			"reactions",
 			"melee",
 			"ranged",
-			"advantages skills",
+			"traits skills",
 			"spells",
 			"equipment",
 			"other_equipment",
-			"notes"
+			"notes",
+			"conditional_modifiers"
 		],
 		"attributes": [
 			{
@@ -53,8 +62,7 @@
 				"name": "DX",
 				"full_name": "Dexterity",
 				"attribute_base": "10",
-				"cost_per_point": 20,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 20
 			},
 			{
 				"id": "iq",
@@ -62,8 +70,7 @@
 				"name": "IQ",
 				"full_name": "Intelligence",
 				"attribute_base": "10",
-				"cost_per_point": 20,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 20
 			},
 			{
 				"id": "ht",
@@ -71,26 +78,21 @@
 				"name": "HT",
 				"full_name": "Health",
 				"attribute_base": "10",
-				"cost_per_point": 10,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 10
 			},
 			{
 				"id": "will",
 				"type": "integer",
 				"name": "Will",
-				"full_name": "",
 				"attribute_base": "$iq",
-				"cost_per_point": 5,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 5
 			},
 			{
 				"id": "fright_check",
 				"type": "integer",
 				"name": "Fright Check",
-				"full_name": "",
 				"attribute_base": "$will",
-				"cost_per_point": 2,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 2
 			},
 			{
 				"id": "per",
@@ -98,62 +100,49 @@
 				"name": "Per",
 				"full_name": "Perception",
 				"attribute_base": "$iq",
-				"cost_per_point": 5,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 5
 			},
 			{
 				"id": "vision",
 				"type": "integer",
 				"name": "Vision",
-				"full_name": "",
 				"attribute_base": "$per",
-				"cost_per_point": 2,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 2
 			},
 			{
 				"id": "hearing",
 				"type": "integer",
 				"name": "Hearing",
-				"full_name": "",
 				"attribute_base": "$per",
-				"cost_per_point": 2,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 2
 			},
 			{
 				"id": "taste_smell",
 				"type": "integer",
-				"name": "Taste & Smell",
-				"full_name": "",
+				"name": "Taste \u0026 Smell",
 				"attribute_base": "$per",
-				"cost_per_point": 2,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 2
 			},
 			{
 				"id": "touch",
 				"type": "integer",
 				"name": "Touch",
-				"full_name": "",
 				"attribute_base": "$per",
-				"cost_per_point": 2,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 2
 			},
 			{
 				"id": "basic_speed",
 				"type": "decimal",
 				"name": "Basic Speed",
-				"full_name": "",
 				"attribute_base": "($dx+$ht)/4",
-				"cost_per_point": 20,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 20
 			},
 			{
 				"id": "basic_move",
 				"type": "integer",
 				"name": "Basic Move",
-				"full_name": "",
 				"attribute_base": "floor($basic_speed)",
-				"cost_per_point": 5,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 5
 			},
 			{
 				"id": "fp",
@@ -162,14 +151,10 @@
 				"full_name": "Fatigue Points",
 				"attribute_base": "$ht",
 				"cost_per_point": 3,
-				"cost_adj_percent_per_sm": 0,
 				"thresholds": [
 					{
 						"state": "Unconscious",
-						"explanation": "",
-						"multiplier": -1,
-						"divisor": 1,
-						"addition": 0,
+						"expression": "-$fp",
 						"ops": [
 							"halve_move",
 							"halve_dodge",
@@ -178,10 +163,8 @@
 					},
 					{
 						"state": "Collapse",
+						"expression": "0",
 						"explanation": "Roll vs. Will to do anything besides talk or rest; failure causes unconsciousness\nEach FP you lose below 0 also causes 1 HP of injury\nMove, Dodge and ST are halved (B426)",
-						"multiplier": 0,
-						"divisor": 1,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge",
@@ -190,10 +173,8 @@
 					},
 					{
 						"state": "Tired",
+						"expression": "round($fp/3)",
 						"explanation": "Move, Dodge and ST are halved (B426)",
-						"multiplier": 1,
-						"divisor": 3,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge",
@@ -202,23 +183,11 @@
 					},
 					{
 						"state": "Tiring",
-						"explanation": "",
-						"multiplier": 1,
-						"divisor": 1,
-						"addition": -1,
-						"ops": [
-
-						]
+						"expression": "$fp-1"
 					},
 					{
 						"state": "Rested",
-						"explanation": "",
-						"multiplier": 1,
-						"divisor": 1,
-						"addition": 0,
-						"ops": [
-
-						]
+						"expression": "$fp"
 					}
 				]
 			},
@@ -233,10 +202,7 @@
 				"thresholds": [
 					{
 						"state": "Dead",
-						"explanation": "",
-						"multiplier": -5,
-						"divisor": 1,
-						"addition": 0,
+						"expression": "round(-$hp*5)",
 						"ops": [
 							"halve_move",
 							"halve_dodge"
@@ -244,10 +210,8 @@
 					},
 					{
 						"state": "Dying #4",
+						"expression": "round(-$hp*4)",
 						"explanation": "Roll vs. HT to avoid death\nRoll vs. HT-4 every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
-						"multiplier": -4,
-						"divisor": 1,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge"
@@ -255,10 +219,8 @@
 					},
 					{
 						"state": "Dying #3",
+						"expression": "round(-$hp*3)",
 						"explanation": "Roll vs. HT to avoid death\nRoll vs. HT-3 every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
-						"multiplier": -3,
-						"divisor": 1,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge"
@@ -266,10 +228,8 @@
 					},
 					{
 						"state": "Dying #2",
+						"expression": "round(-$hp*2)",
 						"explanation": "Roll vs. HT to avoid death\nRoll vs. HT-2 every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
-						"multiplier": -2,
-						"divisor": 1,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge"
@@ -277,10 +237,8 @@
 					},
 					{
 						"state": "Dying #1",
+						"expression": "-$hp",
 						"explanation": "Roll vs. HT to avoid death\nRoll vs. HT-1 every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
-						"multiplier": -1,
-						"divisor": 1,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge"
@@ -288,10 +246,8 @@
 					},
 					{
 						"state": "Collapse",
+						"expression": "0",
 						"explanation": "Roll vs. HT every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
-						"multiplier": 0,
-						"divisor": 1,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge"
@@ -299,10 +255,8 @@
 					},
 					{
 						"state": "Reeling",
+						"expression": "round($hp/3)",
 						"explanation": "Move and Dodge are halved (B419)",
-						"multiplier": 1,
-						"divisor": 3,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge"
@@ -310,29 +264,16 @@
 					},
 					{
 						"state": "Wounded",
-						"explanation": "",
-						"multiplier": 1,
-						"divisor": 1,
-						"addition": -1,
-						"ops": [
-
-						]
+						"expression": "$hp-1"
 					},
 					{
 						"state": "Healthy",
-						"explanation": "",
-						"multiplier": 1,
-						"divisor": 1,
-						"addition": 0,
-						"ops": [
-
-						]
+						"expression": "$hp"
 					}
 				]
 			}
 		],
-		"hit_locations": {
-			"id": "humanoid",
+		"body_type": {
 			"name": "Humanoid",
 			"roll": "3d",
 			"locations": [
@@ -340,10 +281,8 @@
 					"id": "eye",
 					"choice_name": "Eyes",
 					"table_name": "Eyes",
-					"slots": 0,
 					"hit_penalty": -9,
-					"dr_bonus": 0,
-					"description": "An attack that misses by 1 hits the torso instead. Only impaling (imp), piercing (pi-, pi, pi+, pi++), and tight-beam burning (burn) attacks can target the eye – and only from the front or sides. Injury over HP÷10 blinds the eye. Otherwise, treat as skull, but without the extra DR!",
+					"description": "An attack that misses by 1 hits the torso instead. Only\nimpaling (imp), piercing (pi-, pi, pi+, pi++), and\ntight-beam burning (burn) attacks can target the eye – and\nonly from the front or sides. Injury over HP÷10 blinds the\neye. Otherwise, treat as skull, but without the extra DR!",
 					"calc": {
 						"roll_range": "-",
 						"dr": {
@@ -358,7 +297,7 @@
 					"slots": 2,
 					"hit_penalty": -7,
 					"dr_bonus": 2,
-					"description": "An attack that misses by 1 hits the torso instead. Wounding modifier is x4. Knockdown rolls are at -10. Critical hits use the Critical Head Blow Table (B556). Exception: These special effects do not apply to toxic (tox) damage.",
+					"description": "An attack that misses by 1 hits the torso instead. Wounding\nmodifier is x4. Knockdown rolls are at -10. Critical hits\nuse the Critical Head Blow Table (B556). Exception: These\nspecial effects do not apply to toxic (tox) damage.",
 					"calc": {
 						"roll_range": "3-4",
 						"dr": {
@@ -372,8 +311,7 @@
 					"table_name": "Face",
 					"slots": 1,
 					"hit_penalty": -5,
-					"dr_bonus": 0,
-					"description": "An attack that misses by 1 hits the torso instead. Jaw, cheeks, nose, ears, etc. If the target has an open-faced helmet, ignore its DR. Knockdown rolls are at -5. Critical hits use the Critical Head Blow Table (B556). Corrosion (cor) damage gets a x1½ wounding modifier, and if it inflicts a major wound, it also blinds one eye (both eyes on damage over full HP). Random attacks from behind hit the skull instead.",
+					"description": "An attack that misses by 1 hits the torso instead. Jaw,\ncheeks, nose, ears, etc. If the target has an open-faced\nhelmet, ignore its DR. Knockdown rolls are at -5. Critical\nhits use the Critical Head Blow Table (B556). Corrosion\n(cor) damage gets a x1½ wounding modifier, and if it\ninflicts a major wound, it also blinds one eye (both eyes on\ndamage over full HP). Random attacks from behind hit the\nskull instead.",
 					"calc": {
 						"roll_range": "5",
 						"dr": {
@@ -387,8 +325,7 @@
 					"table_name": "Right Leg",
 					"slots": 2,
 					"hit_penalty": -2,
-					"dr_bonus": 0,
-					"description": "Reduce the wounding multiplier of large piercing (pi+), huge piercing (pi++), and impaling (imp) damage to x1. Any major wound (loss of over ½ HP from one blow) cripples the limb. Damage beyond that threshold is lost.",
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ½ HP from one blow) cripples the limb.\nDamage beyond that threshold is lost.",
 					"calc": {
 						"roll_range": "6-7",
 						"dr": {
@@ -402,8 +339,7 @@
 					"table_name": "Right Arm",
 					"slots": 1,
 					"hit_penalty": -2,
-					"dr_bonus": 0,
-					"description": "Reduce the wounding multiplier of large piercing (pi+), huge piercing (pi++), and impaling (imp) damage to x1. Any major wound (loss of over ½ HP from one blow) cripples the limb. Damage beyond that threshold is lost. If holding a shield, double the penalty to hit: -4 for shield arm instead of -2.",
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ½ HP from one blow) cripples the limb.\nDamage beyond that threshold is lost. If holding a shield,\ndouble the penalty to hit: -4 for shield arm instead of -2.",
 					"calc": {
 						"roll_range": "8",
 						"dr": {
@@ -416,9 +352,6 @@
 					"choice_name": "Torso",
 					"table_name": "Torso",
 					"slots": 2,
-					"hit_penalty": 0,
-					"dr_bonus": 0,
-					"description": "",
 					"calc": {
 						"roll_range": "9-10",
 						"dr": {
@@ -432,8 +365,7 @@
 					"table_name": "Groin",
 					"slots": 1,
 					"hit_penalty": -3,
-					"dr_bonus": 0,
-					"description": "An attack that misses by 1 hits the torso instead. Human males and the males of similar species suffer double shock from crushing (cr) damage, and get -5 to knockdown rolls. Otherwise, treat as a torso hit.",
+					"description": "An attack that misses by 1 hits the torso instead. Human\nmales and the males of similar species suffer double shock\nfrom crushing (cr) damage, and get -5 to knockdown rolls.\nOtherwise, treat as a torso hit.",
 					"calc": {
 						"roll_range": "11",
 						"dr": {
@@ -447,8 +379,7 @@
 					"table_name": "Left Arm",
 					"slots": 1,
 					"hit_penalty": -2,
-					"dr_bonus": 0,
-					"description": "Reduce the wounding multiplier of large piercing (pi+), huge piercing (pi++), and impaling (imp) damage to x1. Any major wound (loss of over ½ HP from one blow) cripples the limb. Damage beyond that threshold is lost. If holding a shield, double the penalty to hit: -4 for shield arm instead of -2.",
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ½ HP from one blow) cripples the limb.\nDamage beyond that threshold is lost. If holding a shield,\ndouble the penalty to hit: -4 for shield arm instead of -2.",
 					"calc": {
 						"roll_range": "12",
 						"dr": {
@@ -462,8 +393,7 @@
 					"table_name": "Left Leg",
 					"slots": 2,
 					"hit_penalty": -2,
-					"dr_bonus": 0,
-					"description": "Reduce the wounding multiplier of large piercing (pi+), huge piercing (pi++), and impaling (imp) damage to x1. Any major wound (loss of over ½ HP from one blow) cripples the limb. Damage beyond that threshold is lost.",
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ½ HP from one blow) cripples the limb.\nDamage beyond that threshold is lost.",
 					"calc": {
 						"roll_range": "13-14",
 						"dr": {
@@ -477,8 +407,7 @@
 					"table_name": "Hand",
 					"slots": 1,
 					"hit_penalty": -4,
-					"dr_bonus": 0,
-					"description": "If holding a shield, double the penalty to hit: -8 for shield hand instead of -4. Reduce the wounding multiplier of large piercing (pi+), huge piercing (pi++), and impaling (imp) damage to x1. Any major wound (loss of over ⅓ HP from one blow) cripples the extremity. Damage beyond that threshold is lost.",
+					"description": "If holding a shield, double the penalty to hit: -8 for\nshield hand instead of -4. Reduce the wounding multiplier of\nlarge piercing (pi+), huge piercing (pi++), and impaling\n(imp) damage to x1. Any major wound (loss of over ⅓ HP\nfrom one blow) cripples the extremity. Damage beyond that\nthreshold is lost.",
 					"calc": {
 						"roll_range": "15",
 						"dr": {
@@ -492,8 +421,7 @@
 					"table_name": "Foot",
 					"slots": 1,
 					"hit_penalty": -4,
-					"dr_bonus": 0,
-					"description": "Reduce the wounding multiplier of large piercing (pi+), huge piercing (pi++), and impaling (imp) damage to x1. Any major wound (loss of over ⅓ HP from one blow) cripples the extremity. Damage beyond that threshold is lost.",
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ⅓ HP from one blow) cripples the\nextremity. Damage beyond that threshold is lost.",
 					"calc": {
 						"roll_range": "16",
 						"dr": {
@@ -507,8 +435,7 @@
 					"table_name": "Neck",
 					"slots": 2,
 					"hit_penalty": -5,
-					"dr_bonus": 0,
-					"description": "An attack that misses by 1 hits the torso instead. Neck and throat. Increase the wounding multiplier of crushing (cr) and corrosion (cor) attacks to x1½, and that of cutting (cut) damage to x2. At the GM’s option, anyone killed by a cutting (cut) blow to the neck is decapitated!",
+					"description": "An attack that misses by 1 hits the torso instead. Neck and\nthroat. Increase the wounding multiplier of crushing (cr)\nand corrosion (cor) attacks to x1½, and that of cutting\n(cut) damage to x2. At the GM’s option, anyone killed by a\ncutting (cut) blow to the neck is decapitated!",
 					"calc": {
 						"roll_range": "17-18",
 						"dr": {
@@ -520,10 +447,8 @@
 					"id": "vitals",
 					"choice_name": "Vitals",
 					"table_name": "Vitals",
-					"slots": 0,
 					"hit_penalty": -3,
-					"dr_bonus": 0,
-					"description": "An attack that misses by 1 hits the torso instead. Heart, lungs, kidneys, etc. Increase the wounding modifier for an impaling (imp) or any piercing (pi-, pi, pi+, pi++) attack to x3. Increase the wounding modifier for a tight-beam burning (burn) attack to x2. Other attacks cannot target the vitals.",
+					"description": "An attack that misses by 1 hits the torso instead. Heart,\nlungs, kidneys, etc. Increase the wounding modifier for an\nimpaling (imp) or any piercing (pi-, pi, pi+, pi++) attack\nto x3. Increase the wounding modifier for a tight-beam\nburning (burn) attack to x2. Other attacks cannot target the\nvitals.",
 					"calc": {
 						"roll_range": "-",
 						"dr": {
@@ -532,25 +457,16 @@
 					}
 				}
 			]
-		}
-	},
-	"created_date": "Jul 7, 2018, 12:00 AM",
-	"modified_date": "May 2, 2022, 6:13 PM",
-	"profile": {
-		"player_name": "test",
-		"name": "Lawerence Langelier",
-		"title": "Deputy Marshall",
-		"age": "28",
-		"birthday": "February 23",
-		"eyes": "Brown",
-		"hair": "Brown, Wavy, Long",
-		"skin": "Tan",
-		"handedness": "Right",
-		"height": "5' 8\"",
-		"weight": "162 lb",
-		"gender": "Male",
-		"tech_level": "9",
-		"religion": "Raised Catholic"
+		},
+		"damage_progression": "basic_set",
+		"default_length_units": "ft_in",
+		"default_weight_units": "lb",
+		"user_description_display": "tooltip",
+		"modifiers_display": "inline",
+		"notes_display": "inline",
+		"skill_level_adj_display": "tooltip",
+		"show_spell_adj": true,
+		"exclude_unspent_points_from_total": false
 	},
 	"attributes": [
 		{
@@ -660,7 +576,6 @@
 		{
 			"attr_id": "fp",
 			"adj": 0,
-			"damage": 0,
 			"calc": {
 				"value": 11,
 				"current": 11,
@@ -670,7 +585,6 @@
 		{
 			"attr_id": "hp",
 			"adj": 2,
-			"damage": 0,
 			"calc": {
 				"value": 12,
 				"current": 12,
@@ -678,52 +592,52 @@
 			}
 		}
 	],
-	"total_points": 215,
-	"advantages": [
+	"traits": [
 		{
-			"type": "advantage",
 			"id": "f84dfb1e-68c1-4a4d-8c30-e15d5af8f4c3",
+			"type": "trait",
 			"name": "Alcohol Intolerance",
-			"physical": true,
-			"base_points": -1,
 			"reference": "B165",
+			"tags": [
+				"Physical",
+				"Quirk"
+			],
+			"base_points": -1,
 			"calc": {
 				"points": -1
-			},
-			"categories": [
-				"Quirk"
-			]
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "4571f949-def3-4ccb-94af-49c4f01f071e",
+			"type": "trait",
 			"name": "Code of Honor (Professional)",
-			"mental": true,
-			"base_points": -5,
 			"reference": "B127",
+			"tags": [
+				"Disadvantage",
+				"Mental"
+			],
+			"base_points": -5,
 			"calc": {
 				"points": -5
-			},
-			"categories": [
-				"Disadvantage"
-			]
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "88d3a00e-47d8-4d0a-85a2-29c3b14a2131",
+			"type": "trait",
 			"name": "Combat Reflexes",
-			"mental": true,
-			"base_points": 15,
 			"reference": "B43",
-			"calc": {
-				"points": 15
-			},
+			"notes": "Never freeze; +6 on all IQ rolls to wake up or to recover from surprise or mental stun; Your side gets +1 to initiative rolls (+2 if you're the leader)",
+			"tags": [
+				"Advantage",
+				"Mental"
+			],
+			"base_points": 15,
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
-						"type": "advantage_prereq",
+						"type": "trait_prereq",
 						"has": false,
 						"name": {
 							"compare": "is",
@@ -735,188 +649,185 @@
 			"features": [
 				{
 					"type": "skill_bonus",
-					"amount": 1,
 					"selection_type": "skills_with_name",
 					"name": {
 						"compare": "starts_with",
 						"qualifier": "fast-draw"
-					}
+					},
+					"amount": 1
 				},
 				{
 					"type": "attribute_bonus",
-					"amount": 1,
-					"attribute": "dodge"
+					"attribute": "dodge",
+					"amount": 1
 				},
 				{
 					"type": "attribute_bonus",
-					"amount": 1,
-					"attribute": "parry"
+					"attribute": "parry",
+					"amount": 1
 				},
 				{
 					"type": "attribute_bonus",
-					"amount": 1,
-					"attribute": "block"
+					"attribute": "block",
+					"amount": 1
 				},
 				{
 					"type": "attribute_bonus",
-					"amount": 2,
-					"attribute": "fright_check"
+					"attribute": "fright_check",
+					"amount": 2
 				}
 			],
-			"notes": "Never freeze; +6 on all IQ rolls to wake up or to recover from surprise or mental stun; Your side gets +1 to initiative rolls (+2 if you're the leader)",
-			"categories": [
-				"Advantage"
-			]
+			"calc": {
+				"points": 15
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "b4ae4f9d-e8fe-4cec-8856-92d09476df24",
+			"type": "trait",
 			"name": "Dyslexia",
-			"mental": true,
-			"base_points": -10,
 			"reference": "B134",
+			"tags": [
+				"Disadvantage",
+				"Mental"
+			],
+			"base_points": -10,
 			"calc": {
 				"points": -10
-			},
-			"categories": [
-				"Disadvantage"
-			]
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "497614f4-8e9c-4bb6-9196-da6d545766cd",
+			"type": "trait",
 			"name": "G-Experience",
-			"mental": true,
-			"levels": "3",
-			"points_per_level": 1,
 			"reference": "B57",
+			"tags": [
+				"Advantage",
+				"Mental"
+			],
+			"levels": 3,
+			"points_per_level": 1,
+			"can_level": true,
 			"calc": {
 				"points": 3
-			},
-			"categories": [
-				"Advantage"
-			]
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "68eeb477-9a0f-42d3-8099-6cbfb8c97508",
+			"type": "trait",
 			"name": "High Pain Threshold",
-			"physical": true,
-			"base_points": 10,
 			"reference": "B59",
+			"notes": "Never suffer shock penalties when injured; +3 on all HT rolls to avoid knockdown and stunning; +3 to resist torture",
+			"tags": [
+				"Advantage",
+				"Physical"
+			],
+			"base_points": 10,
 			"calc": {
 				"points": 10
-			},
-			"notes": "Never suffer shock penalties when injured; +3 on all HT rolls to avoid knockdown and stunning; +3 to resist torture",
-			"categories": [
-				"Advantage"
-			]
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "0b473596-abd2-4ef4-adeb-b84db73fb577",
+			"type": "trait",
 			"name": "Night Vision",
-			"physical": true,
-			"levels": "4",
-			"points_per_level": 1,
 			"reference": "B71",
+			"tags": [
+				"Advantage",
+				"Physical"
+			],
+			"levels": 4,
+			"points_per_level": 1,
+			"can_level": true,
 			"calc": {
 				"points": 4
-			},
-			"categories": [
-				"Advantage"
-			]
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "e04debce-cd7b-4511-a4ca-a8c64727c706",
+			"type": "trait",
 			"name": "No Sense of Humor",
-			"physical": true,
-			"base_points": -10,
 			"reference": "B146",
+			"notes": "-2 Reaction",
+			"tags": [
+				"Disadvantage",
+				"Physical"
+			],
+			"base_points": -10,
 			"calc": {
 				"points": -10
-			},
-			"notes": "-2 Reaction",
-			"categories": [
-				"Disadvantage"
-			]
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "3c632f2f-f853-411a-8fae-804fc21b8c23",
+			"type": "trait",
 			"name": "Nosy",
-			"mental": true,
-			"base_points": -1,
 			"reference": "B164",
+			"tags": [
+				"Mental",
+				"Quirk"
+			],
+			"base_points": -1,
 			"calc": {
 				"points": -1
-			},
-			"categories": [
-				"Quirk"
-			]
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "4676b8e3-2ad6-46f6-a266-86f21d82377b",
+			"type": "trait",
 			"name": "Pyromania",
-			"mental": true,
+			"reference": "B150",
+			"tags": [
+				"Disadvantage",
+				"Mental"
+			],
 			"base_points": -10,
 			"cr": 15,
-			"reference": "B150",
 			"calc": {
 				"points": -5
-			},
-			"categories": [
-				"Disadvantage"
-			]
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "63e47980-cbfe-4bff-a799-17bcf88afbe0",
+			"type": "trait",
 			"name": "Weirdness Magnet",
-			"mental": true,
-			"supernatural": true,
-			"base_points": -15,
+			"reference": "B161",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Supernatural"
+			],
 			"modifiers": [
 				{
-					"type": "modifier",
 					"id": "9d3b6312-0dff-4e5b-b551-12e6367df550",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Origins Magnet",
 					"reference": "SU32",
-					"cost_type": "percentage",
-					"cost": 0,
-					"affects": "total"
+					"disabled": true
 				}
 			],
-			"reference": "B161",
+			"base_points": -15,
 			"calc": {
 				"points": -15
-			},
-			"categories": [
-				"Disadvantage"
-			]
+			}
 		}
 	],
 	"skills": [
 		{
-			"type": "skill",
 			"id": "b5d10959-d312-4a51-a15b-3c9dff7727c8",
+			"type": "skill",
 			"name": "Acting",
 			"reference": "B174",
+			"tags": [
+				"Social",
+				"Spy"
+			],
 			"difficulty": "iq/a",
-			"points": 0,
 			"defaulted_from": {
 				"type": "iq",
 				"modifier": -5,
 				"level": 7,
 				"adjusted_level": 7,
 				"points": -7
-			},
-			"calc": {
-				"level": 7,
-				"rsl": "IQ-5"
 			},
 			"defaults": [
 				{
@@ -934,16 +845,21 @@
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Social",
-				"Spy"
-			]
+			"calc": {
+				"level": 7,
+				"rsl": "IQ-5"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "06bcdfd6-b90c-4205-8396-269f418e6991",
+			"type": "skill",
 			"name": "Armoury",
 			"reference": "B178",
+			"tags": [
+				"Maintainance",
+				"Military",
+				"Repair"
+			],
 			"specialization": "Small Arms",
 			"tech_level": "8",
 			"difficulty": "iq/a",
@@ -954,10 +870,6 @@
 				"level": 7,
 				"adjusted_level": 7,
 				"points": -7
-			},
-			"calc": {
-				"level": 11,
-				"rsl": "IQ-1"
 			},
 			"defaults": [
 				{
@@ -971,16 +883,21 @@
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Military",
-				"Repair/Maintainance"
-			]
+			"calc": {
+				"level": 11,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "24dea0bb-742f-47d0-b926-93b77d9ff87b",
+			"type": "skill",
 			"name": "Axe/Mace",
 			"reference": "B208",
+			"tags": [
+				"Combat",
+				"Melee Combat",
+				"Weapon"
+			],
 			"difficulty": "dx/a",
 			"points": 1,
 			"defaulted_from": {
@@ -989,10 +906,6 @@
 				"level": 10,
 				"adjusted_level": 10,
 				"points": -10
-			},
-			"calc": {
-				"level": 14,
-				"rsl": "DX-1"
 			},
 			"defaults": [
 				{
@@ -1010,30 +923,33 @@
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Melee Combat"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "DX-1"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "2222d771-cd05-4068-aeec-ff4a0f233ab6",
+			"type": "skill",
 			"name": "Beam Weapons",
 			"reference": "B179",
+			"tags": [
+				"Combat",
+				"Ranged Combat",
+				"Weapon"
+			],
 			"specialization": "Pistol",
 			"tech_level": "8",
 			"difficulty": "dx/e",
 			"points": 4,
 			"defaulted_from": {
-				"type": "dx",
+				"type": "skill",
+				"name": "Beam Weapons",
+				"specialization": "Rifle",
 				"modifier": -4,
-				"level": 11,
-				"adjusted_level": 11,
-				"points": -11
-			},
-			"calc": {
-				"level": 18,
-				"rsl": "DX+3"
+				"level": 14,
+				"adjusted_level": 14,
+				"points": -14
 			},
 			"defaults": [
 				{
@@ -1052,16 +968,21 @@
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Ranged Combat"
-			]
+			"calc": {
+				"level": 18,
+				"rsl": "DX+3"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "4f4d7c02-66c4-4fb6-8826-14c24b0f8161",
+			"type": "skill",
 			"name": "Beam Weapons",
 			"reference": "B179",
+			"tags": [
+				"Combat",
+				"Ranged Combat",
+				"Weapon"
+			],
 			"specialization": "Rifle",
 			"tech_level": "8",
 			"difficulty": "dx/e",
@@ -1072,10 +993,6 @@
 				"level": 11,
 				"adjusted_level": 11,
 				"points": -11
-			},
-			"calc": {
-				"level": 18,
-				"rsl": "DX+3"
 			},
 			"defaults": [
 				{
@@ -1094,27 +1011,26 @@
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Ranged Combat"
-			]
+			"calc": {
+				"level": 18,
+				"rsl": "DX+3"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "582ff64e-1120-482e-ae05-ce507dcc8f68",
+			"type": "skill",
 			"name": "Brawling",
 			"reference": "B182",
+			"tags": [
+				"Combat",
+				"Melee Combat",
+				"Weapon"
+			],
 			"difficulty": "dx/e",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "DX+0"
-			},
 			"features": [
 				{
 					"type": "weapon_bonus",
-					"amount": 1,
-					"per_level": true,
 					"selection_type": "weapons_with_required_skill",
 					"name": {
 						"compare": "is",
@@ -1123,19 +1039,26 @@
 					"level": {
 						"compare": "at_least",
 						"qualifier": 2
-					}
+					},
+					"amount": 1,
+					"per_level": true
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Melee Combat"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "DX+0"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "38c607df-43c9-45a0-a227-77f249268443",
+			"type": "skill",
 			"name": "Broadsword",
 			"reference": "B208",
+			"tags": [
+				"Combat",
+				"Melee Combat",
+				"Weapon"
+			],
 			"difficulty": "dx/a",
 			"points": 1,
 			"defaulted_from": {
@@ -1144,10 +1067,6 @@
 				"level": 10,
 				"adjusted_level": 10,
 				"points": -10
-			},
-			"calc": {
-				"level": 14,
-				"rsl": "DX-1"
 			},
 			"defaults": [
 				{
@@ -1180,54 +1099,59 @@
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Melee Combat"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "DX-1"
+			}
 		},
 		{
-			"type": "technique",
 			"id": "cc1e5015-f71b-479a-a77b-20e420ceb303",
+			"type": "technique",
 			"name": "Dual-Weapon Attack",
 			"reference": "B230,MA83",
+			"tags": [
+				"Cinematic Techniques",
+				"Combat",
+				"Ranged Combat",
+				"Weapon"
+			],
 			"difficulty": "h",
 			"points": 2,
-			"calc": {
-				"level": 15,
-				"rsl": "-3"
-			},
-			"limit": 0,
 			"default": {
 				"type": "skill",
 				"name": "Beam Weapons",
 				"specialization": "Pistol",
 				"modifier": -4
 			},
-			"categories": [
-				"Cinematic Techniques",
-				"Combat/Weapon",
-				"Ranged Combat"
-			]
+			"limit": 0,
+			"calc": {
+				"level": 15,
+				"rsl": "-3"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "6f9bf35e-ff56-470e-879c-838ff24c02ac",
+			"type": "skill",
 			"name": "Explosives",
 			"reference": "B194",
+			"tags": [
+				"Criminal",
+				"Military",
+				"Street",
+				"Technical"
+			],
 			"specialization": "Demolition",
 			"tech_level": "9",
 			"difficulty": "iq/a",
 			"points": 8,
 			"defaulted_from": {
-				"type": "iq",
-				"modifier": -5,
-				"level": 7,
-				"adjusted_level": 7,
-				"points": -7
-			},
-			"calc": {
-				"level": 14,
-				"rsl": "IQ+2"
+				"type": "skill",
+				"name": "Explosives",
+				"specialization": "Explosive Ordnance Disposal",
+				"modifier": -4,
+				"level": 9,
+				"adjusted_level": 9,
+				"points": -9
 			},
 			"defaults": [
 				{
@@ -1258,17 +1182,21 @@
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Military",
-				"Technical"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ+2"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "0638da50-e1fd-42d4-9937-74cc4d221be7",
+			"type": "skill",
 			"name": "Explosives",
 			"reference": "B194",
+			"tags": [
+				"Military",
+				"Police",
+				"Technical"
+			],
 			"specialization": "Explosive Ordnance Disposal",
 			"tech_level": "9",
 			"difficulty": "iq/a",
@@ -1279,25 +1207,6 @@
 				"level": 7,
 				"adjusted_level": 7,
 				"points": -7
-			},
-			"calc": {
-				"level": 13,
-				"rsl": "IQ+1"
-			},
-			"prereqs": {
-				"type": "prereq_list",
-				"all": true,
-				"prereqs": [
-					{
-						"type": "attribute_prereq",
-						"has": true,
-						"which": "dx",
-						"qualifier": {
-							"compare": "at_least",
-							"qualifier": 12
-						}
-					}
-				]
 			},
 			"defaults": [
 				{
@@ -1316,17 +1225,36 @@
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Military",
-				"Police",
-				"Technical"
-			]
+			"prereqs": {
+				"type": "prereq_list",
+				"all": true,
+				"prereqs": [
+					{
+						"type": "attribute_prereq",
+						"has": true,
+						"qualifier": {
+							"compare": "at_least",
+							"qualifier": 12
+						},
+						"which": "dx"
+					}
+				]
+			},
+			"calc": {
+				"level": 13,
+				"rsl": "IQ+1"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "9453626c-2928-4e66-a32a-4abad18d2455",
+			"type": "skill",
 			"name": "Fast-Draw",
 			"reference": "B194",
+			"tags": [
+				"Combat",
+				"Ranged Combat",
+				"Weapon"
+			],
 			"specialization": "Ammo",
 			"tech_level": "8",
 			"difficulty": "dx/e",
@@ -1334,34 +1262,37 @@
 			"calc": {
 				"level": 16,
 				"rsl": "DX+1"
-			},
-			"categories": [
-				"Combat/Weapon",
-				"Ranged Combat"
-			]
+			}
 		},
 		{
-			"type": "skill",
 			"id": "10e3f7fd-be7f-4f8f-a1e5-7dd1c8ee54a2",
+			"type": "skill",
 			"name": "Fast-Draw",
 			"reference": "B194",
+			"tags": [
+				"Combat",
+				"Ranged Combat",
+				"Weapon"
+			],
 			"specialization": "Pistol",
 			"difficulty": "dx/e",
 			"points": 1,
 			"calc": {
 				"level": 16,
 				"rsl": "DX+1"
-			},
-			"categories": [
-				"Combat/Weapon",
-				"Ranged Combat"
-			]
+			}
 		},
 		{
-			"type": "skill",
 			"id": "9bd78028-ffd3-43c0-81a5-92e9078fbb8c",
+			"type": "skill",
 			"name": "Fast-Talk",
 			"reference": "B195",
+			"tags": [
+				"Criminal",
+				"Social",
+				"Spy",
+				"Street"
+			],
 			"difficulty": "iq/a",
 			"points": 4,
 			"defaulted_from": {
@@ -1370,10 +1301,6 @@
 				"level": 7,
 				"adjusted_level": 7,
 				"points": -7
-			},
-			"calc": {
-				"level": 13,
-				"rsl": "IQ+1"
 			},
 			"defaults": [
 				{
@@ -1386,17 +1313,20 @@
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Social",
-				"Spy"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "IQ+1"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "91c8c16b-53d0-4465-b753-11de7c1d6be5",
+			"type": "skill",
 			"name": "First Aid",
 			"reference": "B195",
+			"tags": [
+				"Everyman",
+				"Medical"
+			],
 			"tech_level": "9",
 			"difficulty": "iq/e",
 			"points": 2,
@@ -1406,10 +1336,6 @@
 				"level": 8,
 				"adjusted_level": 8,
 				"points": -8
-			},
-			"calc": {
-				"level": 14,
-				"rsl": "IQ+2"
 			},
 			"defaults": [
 				{
@@ -1430,28 +1356,28 @@
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Everyman",
-				"Medical"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ+2"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "19b88173-4a0f-4c91-96fb-e5e0e88aa05d",
+			"type": "skill",
 			"name": "Gambling",
 			"reference": "B197",
+			"tags": [
+				"Criminal",
+				"Social",
+				"Street"
+			],
 			"difficulty": "iq/a",
-			"points": 0,
 			"defaulted_from": {
 				"type": "iq",
 				"modifier": -5,
 				"level": 7,
 				"adjusted_level": 7,
 				"points": -7
-			},
-			"calc": {
-				"level": 7,
-				"rsl": "IQ-5"
 			},
 			"defaults": [
 				{
@@ -1465,16 +1391,21 @@
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Social"
-			]
+			"calc": {
+				"level": 7,
+				"rsl": "IQ-5"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "702bec72-e711-4b6d-b79a-42a421542205",
+			"type": "skill",
 			"name": "Guns",
 			"reference": "B198",
+			"tags": [
+				"Combat",
+				"Ranged Combat",
+				"Weapon"
+			],
 			"specialization": "Grenade Launcher",
 			"tech_level": "8",
 			"difficulty": "dx/e",
@@ -1485,10 +1416,6 @@
 				"level": 11,
 				"adjusted_level": 11,
 				"points": -11
-			},
-			"calc": {
-				"level": 15,
-				"rsl": "DX+0"
 			},
 			"defaults": [
 				{
@@ -1501,16 +1428,21 @@
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Ranged Combat"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "DX+0"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "887caf00-f7a5-4ea0-8b86-59c28353a785",
+			"type": "skill",
 			"name": "Guns",
 			"reference": "B198",
+			"tags": [
+				"Combat",
+				"Ranged Combat",
+				"Weapon"
+			],
 			"specialization": "Pistol",
 			"tech_level": "9",
 			"difficulty": "dx/e",
@@ -1523,10 +1455,6 @@
 				"level": 13,
 				"adjusted_level": 13,
 				"points": -13
-			},
-			"calc": {
-				"level": 15,
-				"rsl": "DX+0"
 			},
 			"defaults": [
 				{
@@ -1588,16 +1516,21 @@
 					"modifier": -2
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Ranged Combat"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "DX+0"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "50aef7b3-a53a-43d4-80e4-bbe199b338e4",
+			"type": "skill",
 			"name": "Holdout",
 			"reference": "B200",
+			"tags": [
+				"Criminal",
+				"Spy",
+				"Street"
+			],
 			"difficulty": "iq/a",
 			"points": 1,
 			"defaulted_from": {
@@ -1606,10 +1539,6 @@
 				"level": 7,
 				"adjusted_level": 7,
 				"points": -7
-			},
-			"calc": {
-				"level": 11,
-				"rsl": "IQ-1"
 			},
 			"defaults": [
 				{
@@ -1622,16 +1551,21 @@
 					"modifier": -3
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Spy"
-			]
+			"calc": {
+				"level": 11,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "4fb8d823-01a2-4bff-8dbc-e55d57f23e77",
+			"type": "skill",
 			"name": "Interrogation",
 			"reference": "B202",
+			"tags": [
+				"Military",
+				"Police",
+				"Spy"
+			],
 			"difficulty": "iq/a",
 			"points": 2,
 			"defaulted_from": {
@@ -1640,10 +1574,6 @@
 				"level": 7,
 				"adjusted_level": 7,
 				"points": -7
-			},
-			"calc": {
-				"level": 12,
-				"rsl": "IQ+0"
 			},
 			"defaults": [
 				{
@@ -1661,43 +1591,40 @@
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Military",
-				"Police",
-				"Spy"
-			]
+			"calc": {
+				"level": 12,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "7c543f27-d233-4823-b259-6eb8bfaa8ed2",
+			"type": "skill",
 			"name": "Karate",
 			"reference": "B203",
-			"encumbrance_penalty_multiplier": 1,
+			"tags": [
+				"Combat",
+				"Melee Combat",
+				"Weapon"
+			],
 			"difficulty": "dx/h",
 			"points": 4,
-			"calc": {
-				"level": 14,
-				"rsl": "DX+0"
-			},
+			"encumbrance_penalty_multiplier": 1,
 			"features": [
 				{
 					"type": "weapon_bonus",
-					"amount": 1,
-					"per_level": true,
 					"selection_type": "weapons_with_required_skill",
 					"name": {
 						"compare": "is",
 						"qualifier": "Karate"
 					},
 					"level": {
-						"compare": "at_least",
-						"qualifier": 0
-					}
+						"compare": "at_least"
+					},
+					"amount": 1,
+					"per_level": true
 				},
 				{
 					"type": "weapon_bonus",
-					"amount": 1,
-					"per_level": true,
 					"selection_type": "weapons_with_required_skill",
 					"name": {
 						"compare": "is",
@@ -1706,19 +1633,26 @@
 					"level": {
 						"compare": "at_least",
 						"qualifier": 1
-					}
+					},
+					"amount": 1,
+					"per_level": true
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Melee Combat"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "DX+0"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "4f54d77e-b1f3-48ab-a90c-9bfcf247596d",
+			"type": "skill",
 			"name": "Knife",
 			"reference": "B208",
+			"tags": [
+				"Combat",
+				"Melee Combat",
+				"Weapon"
+			],
 			"difficulty": "dx/e",
 			"points": 4,
 			"defaulted_from": {
@@ -1727,10 +1661,6 @@
 				"level": 11,
 				"adjusted_level": 11,
 				"points": -11
-			},
-			"calc": {
-				"level": 17,
-				"rsl": "DX+2"
 			},
 			"defaults": [
 				{
@@ -1753,16 +1683,22 @@
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Melee Combat"
-			]
+			"calc": {
+				"level": 17,
+				"rsl": "DX+2"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "4a254974-02ab-4b0e-810c-d1a166628a4f",
+			"type": "skill",
 			"name": "Law",
 			"reference": "B204",
+			"tags": [
+				"Business",
+				"Humanities",
+				"Police",
+				"Social Sciences"
+			],
 			"specialization": "Conglomerate",
 			"difficulty": "iq/h",
 			"points": 1,
@@ -1773,27 +1709,29 @@
 				"adjusted_level": 6,
 				"points": -6
 			},
-			"calc": {
-				"level": 10,
-				"rsl": "IQ-2"
-			},
 			"defaults": [
 				{
 					"type": "iq",
 					"modifier": -6
 				}
 			],
-			"categories": [
-				"Business",
-				"Police",
-				"Social Sciences/Humanities"
-			]
+			"calc": {
+				"level": 10,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "834e5557-a483-4c27-a6c1-41f8451d2c8f",
+			"type": "skill",
 			"name": "Lockpicking",
 			"reference": "B206",
+			"tags": [
+				"Criminal",
+				"Police",
+				"Spy",
+				"Street",
+				"Technical"
+			],
 			"tech_level": "8",
 			"difficulty": "iq/a",
 			"points": 2,
@@ -1804,28 +1742,29 @@
 				"adjusted_level": 7,
 				"points": -7
 			},
-			"calc": {
-				"level": 12,
-				"rsl": "IQ+0"
-			},
 			"defaults": [
 				{
 					"type": "iq",
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Police",
-				"Spy",
-				"Technical"
-			]
+			"calc": {
+				"level": 12,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "b1aae2ad-8e5e-4245-a9ab-4b2baf4bcfd7",
+			"type": "skill",
 			"name": "Observation",
 			"reference": "B211",
+			"tags": [
+				"Criminal",
+				"Military",
+				"Police",
+				"Spy",
+				"Street"
+			],
 			"difficulty": "per/a",
 			"points": 4,
 			"defaulted_from": {
@@ -1834,10 +1773,6 @@
 				"level": 8,
 				"adjusted_level": 8,
 				"points": -8
-			},
-			"calc": {
-				"level": 14,
-				"rsl": "Per+1"
 			},
 			"defaults": [
 				{
@@ -1850,66 +1785,69 @@
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Military",
-				"Police",
-				"Spy"
-			]
-		},
-		{
-			"type": "technique",
-			"id": "2fa3e9c5-7ef3-4d19-b871-837ae63911c9",
-			"name": "Off-Hand Weapon Training",
-			"reference": "B232",
-			"difficulty": "h",
-			"points": 0,
 			"calc": {
 				"level": 14,
-				"rsl": "-4"
-			},
-			"limit": 0,
+				"rsl": "Per+1"
+			}
+		},
+		{
+			"id": "2fa3e9c5-7ef3-4d19-b871-837ae63911c9",
+			"type": "technique",
+			"name": "Off-Hand Weapon Training",
+			"reference": "B232",
+			"tags": [
+				"Combat",
+				"Ranged Combat",
+				"Technique",
+				"Weapon"
+			],
+			"difficulty": "h",
 			"default": {
 				"type": "skill",
 				"name": "Beam Weapons",
 				"specialization": "Pistol",
 				"modifier": -4
 			},
-			"categories": [
-				"Combat/Weapon",
-				"Ranged Combat",
-				"Technique"
-			]
+			"limit": 0,
+			"calc": {
+				"level": 14,
+				"rsl": "-4"
+			}
 		},
 		{
-			"type": "technique",
 			"id": "8b976b67-f7ac-4485-9530-b839372d3790",
+			"type": "technique",
 			"name": "Off-Hand Weapon Training",
 			"reference": "B232",
+			"tags": [
+				"Combat",
+				"Ranged Combat",
+				"Technique",
+				"Weapon"
+			],
 			"difficulty": "h",
 			"points": 2,
-			"calc": {
-				"level": 12,
-				"rsl": "-3"
-			},
-			"limit": 0,
 			"default": {
 				"type": "skill",
 				"name": "Guns",
 				"specialization": "Pistol",
 				"modifier": -4
 			},
-			"categories": [
-				"Combat/Weapon",
-				"Ranged Combat",
-				"Technique"
-			]
+			"limit": 0,
+			"calc": {
+				"level": 12,
+				"rsl": "-3"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "636fa852-193d-4b4c-aa9f-558e1811d6f3",
+			"type": "skill",
 			"name": "Search",
 			"reference": "B219",
+			"tags": [
+				"Police",
+				"Spy"
+			],
 			"difficulty": "per/a",
 			"points": 1,
 			"defaulted_from": {
@@ -1918,10 +1856,6 @@
 				"level": 8,
 				"adjusted_level": 8,
 				"points": -8
-			},
-			"calc": {
-				"level": 12,
-				"rsl": "Per-1"
 			},
 			"defaults": [
 				{
@@ -1934,29 +1868,31 @@
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Police",
-				"Spy"
-			]
+			"calc": {
+				"level": 12,
+				"rsl": "Per-1"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "5fa7aea3-6ee0-4dcb-8d8c-14fe5ca19961",
+			"type": "skill",
 			"name": "Stealth",
 			"reference": "B222",
-			"encumbrance_penalty_multiplier": 1,
+			"tags": [
+				"Criminal",
+				"Police",
+				"Spy",
+				"Street"
+			],
 			"difficulty": "dx/a",
 			"points": 4,
+			"encumbrance_penalty_multiplier": 1,
 			"defaulted_from": {
 				"type": "dx",
 				"modifier": -5,
 				"level": 10,
 				"adjusted_level": 10,
 				"points": -10
-			},
-			"calc": {
-				"level": 15,
-				"rsl": "DX+1"
 			},
 			"defaults": [
 				{
@@ -1968,17 +1904,22 @@
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Police",
-				"Spy"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "DX+1"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "c9520378-19b2-4330-9181-8256a42e878d",
+			"type": "skill",
 			"name": "Streetwise",
 			"reference": "B223",
+			"tags": [
+				"Criminal",
+				"Police",
+				"Social",
+				"Street"
+			],
 			"difficulty": "iq/a",
 			"points": 2,
 			"defaulted_from": {
@@ -1988,27 +1929,28 @@
 				"adjusted_level": 7,
 				"points": -7
 			},
-			"calc": {
-				"level": 12,
-				"rsl": "IQ+0"
-			},
 			"defaults": [
 				{
 					"type": "iq",
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Police",
-				"Social"
-			]
+			"calc": {
+				"level": 12,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "62de9f8e-ecf8-4bd0-bac8-9bd9dbf88c96",
+			"type": "skill",
 			"name": "Throwing",
 			"reference": "B226",
+			"tags": [
+				"Athletic",
+				"Combat",
+				"Ranged Combat",
+				"Weapon"
+			],
 			"difficulty": "dx/a",
 			"points": 2,
 			"defaulted_from": {
@@ -2017,10 +1959,6 @@
 				"level": 12,
 				"adjusted_level": 12,
 				"points": -12
-			},
-			"calc": {
-				"level": 15,
-				"rsl": "DX+0"
 			},
 			"defaults": [
 				{
@@ -2033,17 +1971,21 @@
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Athletic",
-				"Combat/Weapon",
-				"Ranged Combat"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "DX+0"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "30556dfa-dc82-4133-b7f5-8dabbf6af318",
+			"type": "skill",
 			"name": "Traps",
 			"reference": "B226",
+			"tags": [
+				"Criminal",
+				"Military",
+				"Street"
+			],
 			"tech_level": "8",
 			"difficulty": "iq/a",
 			"points": 2,
@@ -2054,10 +1996,6 @@
 				"level": 9,
 				"adjusted_level": 9,
 				"points": -9
-			},
-			"calc": {
-				"level": 12,
-				"rsl": "IQ+0"
 			},
 			"defaults": [
 				{
@@ -2070,197 +2008,170 @@
 					"modifier": -3
 				}
 			],
-			"categories": [
-				"Criminal/Street",
-				"Military"
-			]
+			"calc": {
+				"level": 12,
+				"rsl": "IQ+0"
+			}
 		}
 	],
 	"equipment": [
 		{
-			"type": "equipment",
 			"id": "dad75945-c166-4fb5-9dc3-3e94b6dc2942",
-			"equipped": true,
+			"type": "equipment",
+			"description": "Ablative \u0026 Ballistic Armor",
+			"notes": "Support Garment with ablative \u0026 Ballistic properties",
 			"quantity": 1,
-			"description": "Ablative & Ballistic Armor",
-			"value": "0",
-			"weight": "0 lb",
-			"calc": {
-				"extended_value": "0",
-				"extended_weight": "0 lb"
-			},
 			"features": [
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "eye"
+					"location": "eye",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "skull"
+					"location": "skull",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "face"
+					"location": "face",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "neck"
+					"location": "neck",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "torso"
+					"location": "torso",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "vitals"
+					"location": "vitals",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "groin"
+					"location": "groin",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "arm"
+					"location": "arm",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "hand"
+					"location": "hand",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "leg"
+					"location": "leg",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "foot"
+					"location": "foot",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "tail"
+					"location": "tail",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "wing"
+					"location": "wing",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "fin"
+					"location": "fin",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "brain"
+					"location": "brain",
+					"amount": 5
 				}
 			],
-			"notes": "Support Garment with ablative & Ballistic properties"
+			"equipped": true,
+			"calc": {
+				"extended_value": 0,
+				"extended_weight": "0 lb"
+			}
 		},
 		{
-			"type": "equipment",
 			"id": "71c9bc39-04e2-4fe5-9369-3289b64f2467",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Wicking Undergarment",
-			"tech_level": "8",
-			"value": "30",
-			"weight": "0 lb",
 			"reference": "HT64",
-			"calc": {
-				"extended_value": "30",
-				"extended_weight": "0 lb"
-			},
-			"categories": [
+			"tech_level": "8",
+			"tags": [
 				"Defenses"
-			]
+			],
+			"quantity": 1,
+			"value": 30,
+			"equipped": true,
+			"calc": {
+				"extended_value": 30,
+				"extended_weight": "0 lb"
+			}
 		},
 		{
-			"type": "equipment",
 			"id": "6ca8f9f6-24ef-4769-a671-a809eb0393a5",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Ballistic Gloves",
-			"tech_level": "11",
-			"value": "150",
-			"weight": "0 lb",
 			"reference": "B284",
-			"calc": {
-				"extended_value": "150",
-				"extended_weight": "0 lb"
-			},
+			"tech_level": "11",
+			"tags": [
+				"Gloves"
+			],
+			"quantity": 1,
+			"value": 150,
 			"features": [
 				{
 					"type": "dr_bonus",
-					"amount": 16,
-					"location": "hand"
+					"location": "hand",
+					"amount": 16
 				}
 			],
-			"categories": [
-				"Gloves"
-			]
+			"equipped": true,
+			"calc": {
+				"extended_value": 150,
+				"extended_weight": "0 lb"
+			}
 		},
 		{
-			"type": "equipment_container",
 			"id": "9a262c2f-73a3-4b6c-89b8-7a7bd03f0cb3",
-			"equipped": true,
-			"description": "Holster, Shoulder",
-			"tech_level": "5",
-			"value": "50",
-			"weight": "1 lb",
-			"reference": "B289",
-			"calc": {
-				"extended_value": "2215",
-				"extended_weight": "2.75 lb"
-			},
-			"notes": "Allows use of Holdout, but gives -1 to Fast-Draw.",
-			"categories": [
-				"Weapon and Combat Accessories"
-			],
+			"type": "equipment_container",
 			"open": true,
 			"children": [
 				{
-					"type": "equipment_container",
 					"id": "3d223506-ce33-478c-a65a-4726ffb7b5f9",
-					"equipped": true,
-					"description": "Lanyard, Woven Steel",
-					"tech_level": "6",
-					"value": "15",
-					"weight": "0 lb",
-					"reference": "B289",
-					"calc": {
-						"extended_value": "2165",
-						"extended_weight": "1.75 lb"
-					},
-					"notes": "Lets you retrieve a dropped weapon on a DX roll. Each attempt requires a Ready maneuver. Can be cut: -6 to hit, DR 6, HP 4.",
-					"categories": [
-						"Weapon and Combat Accessories"
-					],
+					"type": "equipment_container",
 					"open": true,
 					"children": [
 						{
-							"type": "equipment",
 							"id": "891d0033-d5df-4b87-9fad-03594b1f444d",
-							"equipped": true,
-							"quantity": 1,
+							"type": "equipment",
 							"description": "Blaster Pistol, Sig Sauer D65",
+							"notes": "9/9",
 							"tech_level": "9",
 							"legality_class": "3",
-							"value": "2000",
+							"tags": [
+								"Missile Weapon",
+								"Weaponry"
+							],
+							"quantity": 1,
+							"value": 2000,
 							"weight": "1.5 lb",
 							"weapons": [
 								{
+									"id": "2e1d142e-142a-4086-9c78-ade7151dbc27",
 									"type": "ranged_weapon",
 									"damage": {
 										"type": "fat",
@@ -2273,11 +2184,6 @@
 									"shots": "9(3)",
 									"bulk": "-2",
 									"recoil": "2",
-									"calc": {
-										"level": 18,
-										"range": "200/400",
-										"damage": "1d+4 fat"
-									},
 									"defaults": [
 										{
 											"type": "dx",
@@ -2299,108 +2205,115 @@
 											"specialization": "Pistol",
 											"modifier": -4
 										}
-									]
+									],
+									"calc": {
+										"level": 18,
+										"range": "200/400",
+										"damage": "1d+4 fat"
+									}
 								}
 							],
+							"equipped": true,
 							"calc": {
-								"extended_value": "2000",
+								"extended_value": 2000,
 								"extended_weight": "1.5 lb"
-							},
-							"notes": "9/9",
-							"categories": [
-								"Missile Weapon",
-								"Weaponry"
-							]
+							}
 						},
 						{
-							"type": "equipment",
 							"id": "3d1b0d78-5bf6-445c-87c9-0f8659b6116c",
-							"equipped": true,
-							"quantity": 1,
+							"type": "equipment",
 							"description": "Targeting Laser (Sidearm)",
+							"reference": "HT157",
+							"notes": "150-yard range. 2xXS/50hrs.",
 							"tech_level": "8",
 							"legality_class": "3",
-							"value": "150",
+							"tags": [
+								"Firearm Accessories"
+							],
+							"quantity": 1,
+							"value": 150,
 							"weight": "0.25 lb",
-							"reference": "HT157",
-							"calc": {
-								"extended_value": "150",
-								"extended_weight": "0.25 lb"
-							},
 							"features": [
 								{
 									"type": "skill_bonus",
-									"amount": 1,
 									"selection_type": "skills_with_name",
+									"name": {
+										"compare": "is",
+										"qualifier": "Beam Weapons"
+									},
 									"specialization": {
 										"compare": "is",
 										"qualifier": "Pistol"
 									},
-									"name": {
-										"compare": "is",
-										"qualifier": "Beam Weapons"
-									}
+									"amount": 1
 								}
 							],
-							"notes": "150-yard range. 2xXS/50hrs.",
-							"categories": [
-								"Firearm Accessories"
-							]
+							"equipped": true,
+							"calc": {
+								"extended_value": 150,
+								"extended_weight": "0.25 lb"
+							}
 						}
-					]
+					],
+					"description": "Lanyard, Woven Steel",
+					"reference": "B289",
+					"notes": "Lets you retrieve a dropped weapon on a DX roll. Each attempt requires a Ready maneuver. Can be cut: -6 to hit, DR 6, HP 4.",
+					"tech_level": "6",
+					"tags": [
+						"Weapon and Combat Accessories"
+					],
+					"quantity": 1,
+					"value": 15,
+					"equipped": true,
+					"calc": {
+						"extended_value": 2165,
+						"extended_weight": "1.75 lb"
+					}
 				}
-			]
-		},
-		{
-			"type": "equipment_container",
-			"id": "6a53c804-edb5-4c92-81e9-341ddcb0e37f",
-			"equipped": true,
+			],
 			"description": "Holster, Shoulder",
-			"tech_level": "5",
-			"value": "50",
-			"weight": "1 lb",
 			"reference": "B289",
-			"calc": {
-				"extended_value": "1315",
-				"extended_weight": "3.25 lb"
-			},
 			"notes": "Allows use of Holdout, but gives -1 to Fast-Draw.",
-			"categories": [
+			"tech_level": "5",
+			"tags": [
 				"Weapon and Combat Accessories"
 			],
+			"quantity": 1,
+			"value": 50,
+			"weight": "1 lb",
+			"equipped": true,
+			"calc": {
+				"extended_value": 2215,
+				"extended_weight": "2.75 lb"
+			}
+		},
+		{
+			"id": "6a53c804-edb5-4c92-81e9-341ddcb0e37f",
+			"type": "equipment_container",
 			"open": true,
 			"children": [
 				{
-					"type": "equipment_container",
 					"id": "5ed6d9ce-696b-4869-8186-297a67a2b431",
-					"equipped": true,
-					"description": "Lanyard, Woven Steel",
-					"tech_level": "6",
-					"value": "15",
-					"weight": "0 lb",
-					"reference": "B289",
-					"calc": {
-						"extended_value": "1265",
-						"extended_weight": "2.25 lb"
-					},
-					"notes": "Lets you retrieve a dropped weapon on a DX roll. Each attempt requires a Ready maneuver. Can be cut: -6 to hit, DR 6, HP 4.",
-					"categories": [
-						"Weapon and Combat Accessories"
-					],
+					"type": "equipment_container",
 					"open": true,
 					"children": [
 						{
-							"type": "equipment",
 							"id": "c2655b83-b370-459c-b9d8-d453cc5a8502",
-							"equipped": true,
-							"quantity": 1,
+							"type": "equipment",
 							"description": "Blaster Pistol, Baretta DX 192",
+							"notes": "8/8 shots",
 							"tech_level": "9",
 							"legality_class": "3",
-							"value": "1100",
+							"tags": [
+								"Missile Weapon",
+								"Weaponry"
+							],
+							"quantity": 1,
+							"value": 1100,
 							"weight": "2 lb",
 							"weapons": [
 								{
+									"id": "009faff8-3dc0-4671-af39-08191b82cb4d",
 									"type": "ranged_weapon",
 									"damage": {
 										"type": "fat",
@@ -2413,11 +2326,6 @@
 									"shots": "8(3)",
 									"bulk": "-2",
 									"recoil": "2",
-									"calc": {
-										"level": 18,
-										"range": "150/300",
-										"damage": "1d+4 fat"
-									},
 									"defaults": [
 										{
 											"type": "dx",
@@ -2439,92 +2347,99 @@
 											"specialization": "Pistol",
 											"modifier": -4
 										}
-									]
+									],
+									"calc": {
+										"level": 18,
+										"range": "150/300",
+										"damage": "1d+4 fat"
+									}
 								}
 							],
+							"equipped": true,
 							"calc": {
-								"extended_value": "1100",
+								"extended_value": 1100,
 								"extended_weight": "2 lb"
-							},
-							"notes": "8/8 shots",
-							"categories": [
-								"Missile Weapon",
-								"Weaponry"
-							]
+							}
 						},
 						{
-							"type": "equipment",
 							"id": "da5b1e05-727a-4d49-b962-d7d64fa41c4f",
-							"equipped": true,
-							"quantity": 1,
+							"type": "equipment",
 							"description": "Targeting Laser (Sidearm)",
+							"reference": "HT157",
+							"notes": "150-yard range. 2xXS/50hrs.",
 							"tech_level": "8",
 							"legality_class": "3",
-							"value": "150",
-							"weight": "0.25 lb",
-							"reference": "HT157",
-							"calc": {
-								"extended_value": "150",
-								"extended_weight": "0.25 lb"
-							},
-							"notes": "150-yard range. 2xXS/50hrs.",
-							"categories": [
+							"tags": [
 								"Firearm Accessories"
-							]
+							],
+							"quantity": 1,
+							"value": 150,
+							"weight": "0.25 lb",
+							"equipped": true,
+							"calc": {
+								"extended_value": 150,
+								"extended_weight": "0.25 lb"
+							}
 						}
-					]
+					],
+					"description": "Lanyard, Woven Steel",
+					"reference": "B289",
+					"notes": "Lets you retrieve a dropped weapon on a DX roll. Each attempt requires a Ready maneuver. Can be cut: -6 to hit, DR 6, HP 4.",
+					"tech_level": "6",
+					"tags": [
+						"Weapon and Combat Accessories"
+					],
+					"quantity": 1,
+					"value": 15,
+					"equipped": true,
+					"calc": {
+						"extended_value": 1265,
+						"extended_weight": "2.25 lb"
+					}
 				}
-			]
-		},
-		{
-			"type": "equipment_container",
-			"id": "9e8e6cc8-6cfc-4f80-bba9-880a09613621",
-			"equipped": true,
-			"description": "Web Gear",
-			"tech_level": "6",
-			"value": "50",
-			"weight": "2 lb",
+			],
+			"description": "Holster, Shoulder",
 			"reference": "B289",
-			"calc": {
-				"extended_value": "908",
-				"extended_weight": "9.15 lb"
-			},
-			"notes": "Belt and suspenders with puches and rings for gear",
-			"categories": [
+			"notes": "Allows use of Holdout, but gives -1 to Fast-Draw.",
+			"tech_level": "5",
+			"tags": [
 				"Weapon and Combat Accessories"
 			],
+			"quantity": 1,
+			"value": 50,
+			"weight": "1 lb",
+			"equipped": true,
+			"calc": {
+				"extended_value": 1315,
+				"extended_weight": "3.25 lb"
+			}
+		},
+		{
+			"id": "9e8e6cc8-6cfc-4f80-bba9-880a09613621",
+			"type": "equipment_container",
 			"open": true,
 			"children": [
 				{
-					"type": "equipment_container",
 					"id": "0df46646-b949-41c8-b637-4ad3675ad571",
-					"equipped": true,
-					"description": "Sheath",
-					"tech_level": "5",
-					"value": "25",
-					"weight": "0.5 lb",
-					"reference": "HT153",
-					"calc": {
-						"extended_value": "65",
-						"extended_weight": "1.5 lb"
-					},
-					"categories": [
-						"Knife Accessories"
-					],
+					"type": "equipment_container",
 					"open": true,
 					"children": [
 						{
-							"type": "equipment",
 							"id": "c4e094e4-1d6a-427c-9896-a186faf9d795",
-							"equipped": true,
-							"quantity": 1,
+							"type": "equipment",
 							"description": "Large Knife",
-							"tech_level": "0",
-							"value": "40",
-							"weight": "1 lb",
 							"reference": "B272",
+							"tech_level": "0",
+							"tags": [
+								"Melee Weapon",
+								"Missile Weapon"
+							],
+							"quantity": 1,
+							"value": 40,
+							"weight": "1 lb",
 							"weapons": [
 								{
+									"id": "bb41e583-edeb-4228-a176-1c2bd7d84a80",
 									"type": "melee_weapon",
 									"damage": {
 										"type": "cut",
@@ -2536,12 +2451,6 @@
 									"reach": "C,1",
 									"parry": "-1",
 									"block": "No",
-									"calc": {
-										"level": 17,
-										"parry": "11",
-										"block": "No",
-										"damage": "1d-2 cut"
-									},
 									"defaults": [
 										{
 											"type": "dx",
@@ -2570,9 +2479,16 @@
 											"type": "skill",
 											"name": "Sword!"
 										}
-									]
+									],
+									"calc": {
+										"level": 17,
+										"parry": "11",
+										"block": "No",
+										"damage": "1d-2 cut"
+									}
 								},
 								{
+									"id": "26ebd11e-5730-4a5a-aa83-5b54d8abb8a9",
 									"type": "melee_weapon",
 									"damage": {
 										"type": "imp",
@@ -2583,12 +2499,6 @@
 									"reach": "C",
 									"parry": "-1",
 									"block": "No",
-									"calc": {
-										"level": 17,
-										"parry": "11",
-										"block": "No",
-										"damage": "1d-2 imp"
-									},
 									"defaults": [
 										{
 											"type": "dx",
@@ -2617,9 +2527,16 @@
 											"type": "skill",
 											"name": "Sword!"
 										}
-									]
+									],
+									"calc": {
+										"level": 17,
+										"parry": "11",
+										"block": "No",
+										"damage": "1d-2 imp"
+									}
 								},
 								{
+									"id": "f5651f6f-80e4-41eb-a2af-70b67a0e075a",
 									"type": "ranged_weapon",
 									"damage": {
 										"type": "imp",
@@ -2632,11 +2549,6 @@
 									"rate_of_fire": "1",
 									"shots": "T(1)",
 									"bulk": "-2",
-									"calc": {
-										"level": 11,
-										"range": "8/15",
-										"damage": "1d-2 imp"
-									},
 									"defaults": [
 										{
 											"type": "dx",
@@ -2647,51 +2559,56 @@
 											"name": "Thrown Weapon",
 											"specialization": "Knife"
 										}
-									]
+									],
+									"calc": {
+										"level": 11,
+										"range": "8/15",
+										"damage": "1d-2 imp"
+									}
 								}
 							],
+							"equipped": true,
 							"calc": {
-								"extended_value": "40",
+								"extended_value": 40,
 								"extended_weight": "1 lb"
-							},
-							"categories": [
-								"Melee Weapon",
-								"Missile Weapon"
-							]
+							}
 						}
-					]
+					],
+					"description": "Sheath",
+					"reference": "HT153",
+					"tech_level": "5",
+					"tags": [
+						"Knife Accessories"
+					],
+					"quantity": 1,
+					"value": 25,
+					"weight": "0.5 lb",
+					"equipped": true,
+					"calc": {
+						"extended_value": 65,
+						"extended_weight": "1.5 lb"
+					}
 				},
 				{
-					"type": "equipment_container",
 					"id": "c96fd243-b12c-40da-9a35-3ca78178408f",
-					"equipped": true,
-					"description": "Sheath",
-					"tech_level": "5",
-					"value": "25",
-					"weight": "0.5 lb",
-					"reference": "B289",
-					"calc": {
-						"extended_value": "75",
-						"extended_weight": "2 lb"
-					},
-					"notes": "Fits most pistols",
-					"categories": [
-						"Weapon and Combat Accessories"
-					],
+					"type": "equipment_container",
 					"open": true,
 					"children": [
 						{
-							"type": "equipment",
 							"id": "27f03e4f-0722-407e-9e35-a1a0b9669a34",
-							"equipped": true,
-							"quantity": 1,
+							"type": "equipment",
 							"description": "Machete",
-							"tech_level": "5",
-							"value": "50",
-							"weight": "1.5 lb",
 							"reference": "HT200",
+							"tech_level": "5",
+							"tags": [
+								"Melee Weapons"
+							],
+							"quantity": 1,
+							"value": 50,
+							"weight": "1.5 lb",
 							"weapons": [
 								{
+									"id": "8f099955-2080-460c-aa42-3dfe421c4336",
 									"type": "melee_weapon",
 									"damage": {
 										"type": "cut",
@@ -2701,12 +2618,6 @@
 									"strength": "7",
 									"reach": "C,1",
 									"parry": "0",
-									"calc": {
-										"level": 17,
-										"parry": "12",
-										"block": "",
-										"damage": "1d+1 cut"
-									},
 									"defaults": [
 										{
 											"type": "skill",
@@ -2731,9 +2642,15 @@
 											"type": "skill",
 											"name": "Knife"
 										}
-									]
+									],
+									"calc": {
+										"level": 17,
+										"parry": "12",
+										"damage": "1d+1 cut"
+									}
 								},
 								{
+									"id": "4aea6b62-d3af-49bb-b1ae-8e16335eec5a",
 									"type": "melee_weapon",
 									"damage": {
 										"type": "imp",
@@ -2743,12 +2660,6 @@
 									"strength": "7",
 									"reach": "C",
 									"parry": "0",
-									"calc": {
-										"level": 17,
-										"parry": "12",
-										"block": "",
-										"damage": "1d-3 imp"
-									},
 									"defaults": [
 										{
 											"type": "dx",
@@ -2773,31 +2684,53 @@
 											"name": "Shortsword",
 											"modifier": -3
 										}
-									]
+									],
+									"calc": {
+										"level": 17,
+										"parry": "12",
+										"damage": "1d-3 imp"
+									}
 								}
 							],
+							"equipped": true,
 							"calc": {
-								"extended_value": "50",
+								"extended_value": 50,
 								"extended_weight": "1.5 lb"
-							},
-							"categories": [
-								"Melee Weapons"
-							]
+							}
 						}
-					]
+					],
+					"description": "Sheath",
+					"reference": "B289",
+					"notes": "Fits most pistols",
+					"tech_level": "5",
+					"tags": [
+						"Weapon and Combat Accessories"
+					],
+					"quantity": 1,
+					"value": 25,
+					"weight": "0.5 lb",
+					"equipped": true,
+					"calc": {
+						"extended_value": 75,
+						"extended_weight": "2 lb"
+					}
 				},
 				{
-					"type": "equipment",
 					"id": "06d19a46-3f6a-46cc-b5c9-42485fa652cd",
-					"equipped": true,
-					"quantity": 1,
+					"type": "equipment",
 					"description": "Sick Stick",
+					"notes": "On hit: make HT roll or vomit (out 1d/3 turns)",
 					"tech_level": "9",
 					"legality_class": "3",
-					"value": "500",
+					"tags": [
+						"Melee Weapon"
+					],
+					"quantity": 1,
+					"value": 500,
 					"weight": "2 lb",
 					"weapons": [
 						{
+							"id": "846b4311-980d-4862-a3bb-a72e6cf2b441",
 							"type": "melee_weapon",
 							"damage": {
 								"type": "fat",
@@ -2808,12 +2741,6 @@
 							"reach": "1",
 							"parry": "0",
 							"block": "No",
-							"calc": {
-								"level": 14,
-								"parry": "11",
-								"block": "No",
-								"damage": "1d+1 fat"
-							},
 							"defaults": [
 								{
 									"type": "dx",
@@ -2852,334 +2779,657 @@
 									"type": "skill",
 									"name": "Axe/Mace"
 								}
-							]
+							],
+							"calc": {
+								"level": 14,
+								"parry": "11",
+								"block": "No",
+								"damage": "1d+1 fat"
+							}
 						}
 					],
+					"equipped": true,
 					"calc": {
-						"extended_value": "500",
+						"extended_value": 500,
 						"extended_weight": "2 lb"
-					},
-					"notes": "On hit: make HT roll or vomit (out 1d/3 turns)",
-					"categories": [
-						"Melee Weapon"
-					]
+					}
 				},
 				{
-					"type": "equipment",
 					"id": "1486e43a-8549-4203-bbc8-81f70d25ec73",
-					"equipped": true,
-					"quantity": 1,
+					"type": "equipment",
 					"description": "Pocket Watch",
-					"tech_level": "5",
-					"value": "100",
-					"weight": "0 lb",
 					"reference": "HT31",
-					"calc": {
-						"extended_value": "100",
-						"extended_weight": "0 lb"
-					},
-					"categories": [
+					"tech_level": "5",
+					"tags": [
 						"General Equipment"
-					]
+					],
+					"quantity": 1,
+					"value": 100,
+					"equipped": true,
+					"calc": {
+						"extended_value": 100,
+						"extended_weight": "0 lb"
+					}
 				},
 				{
-					"type": "equipment",
 					"id": "f582468e-8fe7-45a5-b84b-747a6442f0be",
-					"equipped": true,
-					"quantity": 1,
+					"type": "equipment",
 					"description": "Electronic Cuffs",
-					"tech_level": "9",
-					"value": "40",
-					"weight": "0.25 lb",
 					"reference": "UT107",
-					"calc": {
-						"extended_value": "40",
-						"extended_weight": "0.25 lb"
-					},
 					"notes": "ST 20. DR 10. A/1wk.",
-					"categories": [
-						"Enforcement and Coercion"
-					]
-				},
-				{
-					"type": "equipment",
-					"id": "79aa55c3-861f-4efb-95b2-adcb7ae84b11",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Cigarette Lighter",
-					"tech_level": "8",
-					"value": "30",
-					"weight": "0 lb",
-					"reference": "HT57",
-					"calc": {
-						"extended_value": "30",
-						"extended_weight": "0 lb"
-					},
-					"notes": "Windproof. Waterproof.",
-					"categories": [
-						"General Equipment"
-					]
-				},
-				{
-					"type": "equipment",
-					"id": "ab2864f9-e501-4c94-9a92-58e32c5abfc3",
-					"equipped": true,
-					"quantity": 6,
-					"description": "B cell clip",
 					"tech_level": "9",
-					"value": "3",
-					"weight": "0.05 lb",
-					"reference": "UT19",
+					"tags": [
+						"Enforcement and Coercion"
+					],
+					"quantity": 1,
+					"value": 40,
+					"weight": "0.25 lb",
+					"equipped": true,
 					"calc": {
-						"extended_value": "18",
-						"extended_weight": "0.3 lb"
-					},
-					"categories": [
-						"Power"
-					]
+						"extended_value": 40,
+						"extended_weight": "0.25 lb"
+					}
 				},
 				{
+					"id": "79aa55c3-861f-4efb-95b2-adcb7ae84b11",
 					"type": "equipment",
-					"id": "4224db33-2461-401e-b644-ef2a0c4f959e",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Flashlight",
+					"description": "Cigarette Lighter",
+					"reference": "HT57",
+					"notes": "Windproof. Waterproof.",
 					"tech_level": "8",
-					"value": "20",
-					"weight": "1 lb",
-					"reference": "HT52",
-					"calc": {
-						"extended_value": "20",
-						"extended_weight": "1 lb"
-					},
-					"notes": "10-yard beam. 2xS/50hrs.",
-					"categories": [
+					"tags": [
 						"General Equipment"
-					]
-				},
-				{
-					"type": "equipment",
-					"id": "0e031f76-48dc-46cf-9449-afc3070f60b5",
-					"equipped": true,
+					],
 					"quantity": 1,
-					"description": "Pepper Spray",
-					"tech_level": "8",
-					"value": "10",
-					"weight": "0.1 lb",
-					"reference": "HT180",
-					"weapons": [
-						{
-							"type": "melee_weapon",
-							"damage": {
-								"type": "HT-4 aff"
-							},
-							"strength": "3",
-							"usage": "(coughing)",
-							"reach": "1,2",
-							"parry": "no",
-							"block": "no",
-							"calc": {
-								"level": 11,
-								"parry": "no",
-								"block": "no",
-								"damage": "HT-4 aff"
-							},
-							"defaults": [
-								{
-									"type": "skill",
-									"name": "Liquid Projector",
-									"specialization": "Sprayer"
-								},
-								{
-									"type": "dx",
-									"modifier": -4
-								},
-								{
-									"type": "skill",
-									"name": "Liquid Projector",
-									"modifier": -4
-								}
-							]
-						},
-						{
-							"type": "melee_weapon",
-							"damage": {
-								"type": "HT-4 aff"
-							},
-							"usage": "Follow-Up (blindness)",
-							"calc": {
-								"level": 0,
-								"parry": "",
-								"block": "",
-								"damage": "HT-4 aff"
-							}
-						}
-					],
-					"calc": {
-						"extended_value": "10",
-						"extended_weight": "0.1 lb"
-					},
-					"categories": [
-						"Liquid Projectors"
-					]
-				},
-				{
-					"type": "equipment",
-					"id": "135666ae-3a8f-4dfb-aa10-e182e1d81648",
+					"value": 30,
 					"equipped": true,
-					"description": "Tear Gas Spray",
-					"tech_level": "7",
-					"value": "10",
-					"weight": "0.1 lb",
-					"reference": "HT180",
-					"weapons": [
-						{
-							"type": "melee_weapon",
-							"damage": {
-								"type": "HT-2 aff"
-							},
-							"strength": "3",
-							"usage": "(coughing)",
-							"reach": "1,2",
-							"parry": "no",
-							"block": "no",
-							"calc": {
-								"level": 11,
-								"parry": "no",
-								"block": "no",
-								"damage": "HT-2 aff"
-							},
-							"defaults": [
-								{
-									"type": "skill",
-									"name": "Liquid Projector",
-									"specialization": "Sprayer"
-								},
-								{
-									"type": "dx",
-									"modifier": -4
-								},
-								{
-									"type": "skill",
-									"name": "Liquid Projector",
-									"modifier": -4
-								}
-							]
-						},
-						{
-							"type": "melee_weapon",
-							"damage": {
-								"type": "HT-2 aff"
-							},
-							"usage": "Follow-Up (blindness)",
-							"calc": {
-								"level": 0,
-								"parry": "",
-								"block": "",
-								"damage": "HT-2 aff"
-							}
-						}
-					],
 					"calc": {
-						"extended_value": "0",
+						"extended_value": 30,
 						"extended_weight": "0 lb"
-					},
-					"categories": [
-						"Liquid Projectors"
-					]
+					}
 				},
 				{
+					"id": "ab2864f9-e501-4c94-9a92-58e32c5abfc3",
 					"type": "equipment",
-					"id": "e882825a-3db9-4deb-ae41-71fbcd1ded54",
-					"equipped": true,
+					"description": "B cell clip",
+					"reference": "UT19",
+					"tech_level": "9",
+					"tags": [
+						"Power"
+					],
 					"quantity": 6,
+					"value": 3,
+					"weight": "0.05 lb",
+					"equipped": true,
+					"calc": {
+						"extended_value": 18,
+						"extended_weight": "0.3 lb"
+					}
+				},
+				{
+					"id": "4224db33-2461-401e-b644-ef2a0c4f959e",
+					"type": "equipment",
+					"description": "Flashlight",
+					"reference": "HT52",
+					"notes": "10-yard beam. 2xS/50hrs.",
+					"tech_level": "8",
+					"tags": [
+						"General Equipment"
+					],
+					"quantity": 1,
+					"value": 20,
+					"weight": "1 lb",
+					"equipped": true,
+					"calc": {
+						"extended_value": 20,
+						"extended_weight": "1 lb"
+					}
+				},
+				{
+					"id": "0e031f76-48dc-46cf-9449-afc3070f60b5",
+					"type": "equipment",
+					"description": "Pepper Spray",
+					"reference": "HT180",
+					"tech_level": "8",
+					"tags": [
+						"Liquid Projectors"
+					],
+					"quantity": 1,
+					"value": 10,
+					"weight": "0.1 lb",
+					"weapons": [
+						{
+							"id": "e49de876-b061-4969-91a5-e733265b506a",
+							"type": "melee_weapon",
+							"damage": {
+								"type": "HT-4 aff"
+							},
+							"strength": "3",
+							"usage": "(coughing)",
+							"reach": "1,2",
+							"parry": "no",
+							"block": "no",
+							"defaults": [
+								{
+									"type": "skill",
+									"name": "Liquid Projector",
+									"specialization": "Sprayer"
+								},
+								{
+									"type": "dx",
+									"modifier": -4
+								},
+								{
+									"type": "skill",
+									"name": "Liquid Projector",
+									"modifier": -4
+								}
+							],
+							"calc": {
+								"level": 11,
+								"parry": "no",
+								"block": "no",
+								"damage": "HT-4 aff"
+							}
+						},
+						{
+							"id": "4a198507-990e-4c7d-8edf-993469d7b688",
+							"type": "melee_weapon",
+							"damage": {
+								"type": "HT-4 aff"
+							},
+							"usage": "Follow-Up (blindness)",
+							"calc": {
+								"damage": "HT-4 aff"
+							}
+						}
+					],
+					"equipped": true,
+					"calc": {
+						"extended_value": 10,
+						"extended_weight": "0.1 lb"
+					}
+				},
+				{
+					"id": "135666ae-3a8f-4dfb-aa10-e182e1d81648",
+					"type": "equipment",
+					"description": "Tear Gas Spray",
+					"reference": "HT180",
+					"tech_level": "7",
+					"tags": [
+						"Liquid Projectors"
+					],
+					"value": 10,
+					"weight": "0.1 lb",
+					"weapons": [
+						{
+							"id": "70a4dc75-bdce-46d8-b395-5898e8f8df7c",
+							"type": "melee_weapon",
+							"damage": {
+								"type": "HT-2 aff"
+							},
+							"strength": "3",
+							"usage": "(coughing)",
+							"reach": "1,2",
+							"parry": "no",
+							"block": "no",
+							"defaults": [
+								{
+									"type": "skill",
+									"name": "Liquid Projector",
+									"specialization": "Sprayer"
+								},
+								{
+									"type": "dx",
+									"modifier": -4
+								},
+								{
+									"type": "skill",
+									"name": "Liquid Projector",
+									"modifier": -4
+								}
+							],
+							"calc": {
+								"level": 11,
+								"parry": "no",
+								"block": "no",
+								"damage": "HT-2 aff"
+							}
+						},
+						{
+							"id": "23db096e-74e8-4da9-b925-09a8a471cf15",
+							"type": "melee_weapon",
+							"damage": {
+								"type": "HT-2 aff"
+							},
+							"usage": "Follow-Up (blindness)",
+							"calc": {
+								"damage": "HT-2 aff"
+							}
+						}
+					],
+					"equipped": true,
+					"calc": {
+						"extended_value": 0,
+						"extended_weight": "0 lb"
+					}
+				},
+				{
+					"id": "e882825a-3db9-4deb-ae41-71fbcd1ded54",
+					"type": "equipment",
 					"description": "C Cells",
-					"value": "0",
-					"weight": "0 lb",
+					"notes": "P(3/9), P(8/9)",
+					"quantity": 6,
+					"equipped": true,
 					"calc": {
-						"extended_value": "0",
+						"extended_value": 0,
 						"extended_weight": "0 lb"
-					},
-					"notes": "P(3/9), P(8/9)"
+					}
 				},
 				{
-					"type": "equipment",
 					"id": "effab06c-3858-4ae0-a906-dbd65ea63d28",
-					"equipped": true,
-					"quantity": 1,
+					"type": "equipment",
 					"description": "Fingerbone of Luck",
-					"value": "0",
-					"weight": "0 lb",
+					"quantity": 1,
+					"equipped": true,
 					"calc": {
-						"extended_value": "0",
+						"extended_value": 0,
 						"extended_weight": "0 lb"
 					}
 				},
 				{
-					"type": "equipment",
 					"id": "aaeba87c-3ffe-4af0-af7d-1ba909ade484",
-					"equipped": true,
-					"quantity": 1,
+					"type": "equipment",
 					"description": "Fingerbone of Major Healing",
-					"value": "0",
-					"weight": "0 lb",
+					"quantity": 1,
+					"equipped": true,
 					"calc": {
-						"extended_value": "0",
+						"extended_value": 0,
 						"extended_weight": "0 lb"
 					}
 				},
 				{
-					"type": "equipment",
 					"id": "49d58371-1447-4647-b6e6-4c85764f847e",
-					"equipped": true,
-					"quantity": 1,
+					"type": "equipment",
 					"description": "Fingerbone of Teleport",
-					"value": "0",
-					"weight": "0 lb",
+					"quantity": 1,
+					"equipped": true,
 					"calc": {
-						"extended_value": "0",
+						"extended_value": 0,
 						"extended_weight": "0 lb"
 					}
 				}
-			]
+			],
+			"description": "Web Gear",
+			"reference": "B289",
+			"notes": "Belt and suspenders with puches and rings for gear",
+			"tech_level": "6",
+			"tags": [
+				"Weapon and Combat Accessories"
+			],
+			"quantity": 1,
+			"value": 50,
+			"weight": "2 lb",
+			"equipped": true,
+			"calc": {
+				"extended_value": 908,
+				"extended_weight": "9.15 lb"
+			}
 		},
 		{
-			"type": "equipment",
 			"id": "e503c173-773e-49f3-ae02-c77168c1d842",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Ballistic Sunglasses",
-			"tech_level": "8",
-			"value": "35",
-			"weight": "0 lb",
 			"reference": "HT71",
-			"calc": {
-				"extended_value": "35",
-				"extended_weight": "0 lb"
-			},
+			"tech_level": "8",
+			"tags": [
+				"Defenses"
+			],
+			"quantity": 1,
+			"value": 35,
 			"features": [
 				{
 					"type": "dr_bonus",
-					"amount": 4,
-					"location": "eye"
+					"location": "eye",
+					"amount": 4
 				}
 			],
-			"categories": [
-				"Defenses"
-			]
+			"equipped": true,
+			"calc": {
+				"extended_value": 35,
+				"extended_weight": "0 lb"
+			}
 		},
 		{
-			"type": "equipment_container",
 			"id": "c099bdb7-5d81-43e8-b1b6-36933476e57c",
-			"equipped": true,
+			"type": "equipment_container",
+			"open": true,
+			"children": [
+				{
+					"id": "3baccb23-05de-4a9c-b658-837c825b4a1b",
+					"type": "equipment",
+					"description": "Camera, Digital, Full-Sized",
+					"reference": "ACT1:30",
+					"notes": "Photography +0. Runs for 10hrs.",
+					"tags": [
+						"Surveillance"
+					],
+					"quantity": 1,
+					"value": 2500,
+					"weight": "0.5 lb",
+					"equipped": true,
+					"calc": {
+						"extended_value": 2500,
+						"extended_weight": "0.5 lb"
+					}
+				},
+				{
+					"id": "a19044a0-5734-4731-a2fe-00acac480472",
+					"type": "equipment",
+					"description": "Electronic Lockpick",
+					"reference": "UT95",
+					"notes": "A/2hr.",
+					"tech_level": "9",
+					"legality_class": "2",
+					"tags": [
+						"Deception and Intrusion"
+					],
+					"quantity": 1,
+					"value": 1500,
+					"weight": "0.2 lb",
+					"equipped": true,
+					"calc": {
+						"extended_value": 1500,
+						"extended_weight": "0.2 lb"
+					}
+				},
+				{
+					"id": "63b0f104-dbbc-4d59-aac9-c1fb97a229b6",
+					"type": "equipment",
+					"description": "First Aid Kit",
+					"reference": "UT198",
+					"tech_level": "9",
+					"tags": [
+						"Medical"
+					],
+					"quantity": 1,
+					"value": 50,
+					"weight": "2 lb",
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "First Aid"
+							},
+							"amount": 1
+						}
+					],
+					"equipped": true,
+					"calc": {
+						"extended_value": 50,
+						"extended_weight": "2 lb"
+					}
+				},
+				{
+					"id": "edc250e0-58b7-4c09-a1e3-4a40f219682c",
+					"type": "equipment",
+					"description": "Multi-Tool",
+					"reference": "ACT1:29",
+					"notes": "Most repairs -5.",
+					"tags": [
+						"Personal Accessories"
+					],
+					"quantity": 1,
+					"value": 50,
+					"weight": "0.5 lb",
+					"equipped": true,
+					"calc": {
+						"extended_value": 50,
+						"extended_weight": "0.5 lb"
+					}
+				},
+				{
+					"id": "1c48ea4c-d0b7-4077-b5cc-1af02f69c7cd",
+					"type": "equipment",
+					"description": "Microfiber Towel",
+					"reference": "HT31",
+					"notes": "2'x4'",
+					"tech_level": "7",
+					"tags": [
+						"General Equipment"
+					],
+					"quantity": 1,
+					"value": 30,
+					"weight": "0.25 lb",
+					"equipped": true,
+					"calc": {
+						"extended_value": 30,
+						"extended_weight": "0.25 lb"
+					}
+				},
+				{
+					"id": "1ea55ee8-9d86-4726-8d37-19f4500cdfde",
+					"type": "equipment",
+					"description": "Index Cards",
+					"quantity": 1,
+					"value": 6,
+					"equipped": true,
+					"calc": {
+						"extended_value": 6,
+						"extended_weight": "0 lb"
+					}
+				},
+				{
+					"id": "e5b10051-26bf-4e43-8851-85d32ad21436",
+					"type": "equipment",
+					"description": "Marker",
+					"quantity": 1,
+					"value": 6,
+					"equipped": true,
+					"calc": {
+						"extended_value": 6,
+						"extended_weight": "0 lb"
+					}
+				},
+				{
+					"id": "1f429a23-7f8c-47d9-8089-08ed97e9091c",
+					"type": "equipment",
+					"description": "Measuring laser",
+					"quantity": 1,
+					"value": 6,
+					"equipped": true,
+					"calc": {
+						"extended_value": 6,
+						"extended_weight": "0 lb"
+					}
+				},
+				{
+					"id": "ec961122-bc3f-452c-91de-e9610d31c87e",
+					"type": "equipment",
+					"description": "Nitrile Gloves",
+					"quantity": 1,
+					"value": 6,
+					"equipped": true,
+					"calc": {
+						"extended_value": 6,
+						"extended_weight": "0 lb"
+					}
+				},
+				{
+					"id": "075055dc-1cce-44da-9150-935070b5f04d",
+					"type": "equipment",
+					"description": "Plastic Bags",
+					"quantity": 1,
+					"value": 6,
+					"equipped": true,
+					"calc": {
+						"extended_value": 6,
+						"extended_weight": "0 lb"
+					}
+				},
+				{
+					"id": "4db5ebf9-8350-4102-86eb-eea06d22ef25",
+					"type": "equipment",
+					"description": "Fire-Starter Paste",
+					"reference": "HT58",
+					"notes": "Enough for 20 fires.",
+					"tech_level": "6",
+					"tags": [
+						"General Equipment"
+					],
+					"quantity": 1,
+					"value": 5,
+					"weight": "0.25 lb",
+					"equipped": true,
+					"calc": {
+						"extended_value": 5,
+						"extended_weight": "0.25 lb"
+					}
+				},
+				{
+					"id": "be6631ab-7117-49a3-9f1d-4af9246e0aa6",
+					"type": "equipment",
+					"description": "Glowstick",
+					"reference": "HT52",
+					"notes": "Lasts 12 hours.",
+					"tech_level": "7",
+					"tags": [
+						"General Equipment"
+					],
+					"quantity": 1,
+					"value": 2,
+					"weight": "0.1 lb",
+					"equipped": true,
+					"calc": {
+						"extended_value": 2,
+						"extended_weight": "0.1 lb"
+					}
+				},
+				{
+					"id": "34ba7492-97fb-4873-a078-3f863fd36273",
+					"type": "equipment",
+					"description": "Snack",
+					"reference": "HT35",
+					"tech_level": "7",
+					"tags": [
+						"General Equipment"
+					],
+					"quantity": 1,
+					"value": 2,
+					"weight": "0.25 lb",
+					"equipped": true,
+					"calc": {
+						"extended_value": 2,
+						"extended_weight": "0.25 lb"
+					}
+				},
+				{
+					"id": "57c59120-8f97-4e12-a90f-f9cfbc8586b0",
+					"type": "equipment",
+					"description": "Cards",
+					"notes": "1 Conseco 2 Campanera 28Hernandez 1Sazaki 1Pasqual 2Rose",
+					"quantity": 1,
+					"equipped": true,
+					"calc": {
+						"extended_value": 0,
+						"extended_weight": "0 lb"
+					}
+				},
+				{
+					"id": "3656d3fe-3451-42b2-a080-2d2c54d894f6",
+					"type": "equipment",
+					"description": "\"Zip Taser\" (Battery Launcher)",
+					"notes": "6/6",
+					"tech_level": "9",
+					"tags": [
+						"Missile Weapon",
+						"Weaponry"
+					],
+					"quantity": 1,
+					"weapons": [
+						{
+							"id": "7d9118e0-187a-47f9-837f-95b30678b76a",
+							"type": "ranged_weapon",
+							"damage": {
+								"type": "FP",
+								"base": "1d+3"
+							},
+							"accuracy": "1",
+							"range": "50",
+							"rate_of_fire": "1",
+							"shots": "6(3)",
+							"bulk": "-3",
+							"recoil": "2",
+							"defaults": [
+								{
+									"type": "skill",
+									"name": "Guns",
+									"specialization": "Pistol"
+								}
+							],
+							"calc": {
+								"level": 15,
+								"range": "50",
+								"damage": "1d+3 FP"
+							}
+						}
+					],
+					"equipped": true,
+					"calc": {
+						"extended_value": 0,
+						"extended_weight": "0 lb"
+					}
+				},
+				{
+					"id": "1e1662e4-5a3b-4fc4-a59e-25b6dd0ca95c",
+					"type": "equipment",
+					"description": "Heavy Zip Taser",
+					"quantity": 1,
+					"weapons": [
+						{
+							"id": "c2e6e2ad-e4df-449c-9dee-686db4f14551",
+							"type": "ranged_weapon",
+							"damage": {
+								"type": "",
+								"base": "2d"
+							},
+							"accuracy": "1",
+							"range": "50",
+							"rate_of_fire": "1",
+							"shots": "6 (4)",
+							"bulk": "-4",
+							"recoil": "2",
+							"defaults": [
+								{
+									"type": "skill",
+									"name": "Guns",
+									"specialization": "Grenade Launcher"
+								}
+							],
+							"calc": {
+								"level": 15,
+								"range": "50",
+								"damage": "2d"
+							}
+						}
+					],
+					"equipped": true,
+					"calc": {
+						"extended_value": 0,
+						"extended_weight": "0 lb"
+					}
+				}
+			],
 			"description": "Attaché Case",
-			"value": "20",
-			"weight": "2 lb",
 			"reference": "ACT1:29",
-			"calc": {
-				"extended_value": "4189",
-				"extended_weight": "6.05 lb"
-			},
+			"tags": [
+				"Luggage"
+			],
+			"quantity": 1,
+			"value": 20,
+			"weight": "2 lb",
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
@@ -3194,535 +3444,175 @@
 					}
 				]
 			},
-			"categories": [
-				"Luggage"
-			],
-			"open": true,
-			"children": [
-				{
-					"type": "equipment",
-					"id": "3baccb23-05de-4a9c-b658-837c825b4a1b",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Camera, Digital, Full-Sized",
-					"value": "2500",
-					"weight": "0.5 lb",
-					"reference": "ACT1:30",
-					"calc": {
-						"extended_value": "2500",
-						"extended_weight": "0.5 lb"
-					},
-					"notes": "Photography +0. Runs for 10hrs.",
-					"categories": [
-						"Surveillance"
-					]
-				},
-				{
-					"type": "equipment",
-					"id": "a19044a0-5734-4731-a2fe-00acac480472",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Electronic Lockpick",
-					"tech_level": "9",
-					"legality_class": "2",
-					"value": "1500",
-					"weight": "0.2 lb",
-					"reference": "UT95",
-					"calc": {
-						"extended_value": "1500",
-						"extended_weight": "0.2 lb"
-					},
-					"notes": "A/2hr.",
-					"categories": [
-						"Deception and Intrusion"
-					]
-				},
-				{
-					"type": "equipment",
-					"id": "63b0f104-dbbc-4d59-aac9-c1fb97a229b6",
-					"equipped": true,
-					"quantity": 1,
-					"description": "First Aid Kit",
-					"tech_level": "9",
-					"value": "50",
-					"weight": "2 lb",
-					"reference": "UT198",
-					"calc": {
-						"extended_value": "50",
-						"extended_weight": "2 lb"
-					},
-					"features": [
-						{
-							"type": "skill_bonus",
-							"amount": 1,
-							"selection_type": "skills_with_name",
-							"name": {
-								"compare": "is",
-								"qualifier": "First Aid"
-							}
-						}
-					],
-					"categories": [
-						"Medical"
-					]
-				},
-				{
-					"type": "equipment",
-					"id": "edc250e0-58b7-4c09-a1e3-4a40f219682c",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Multi-Tool",
-					"value": "50",
-					"weight": "0.5 lb",
-					"reference": "ACT1:29",
-					"calc": {
-						"extended_value": "50",
-						"extended_weight": "0.5 lb"
-					},
-					"notes": "Most repairs -5.",
-					"categories": [
-						"Personal Accessories"
-					]
-				},
-				{
-					"type": "equipment",
-					"id": "1c48ea4c-d0b7-4077-b5cc-1af02f69c7cd",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Microfiber Towel",
-					"tech_level": "7",
-					"value": "30",
-					"weight": "0.25 lb",
-					"reference": "HT31",
-					"calc": {
-						"extended_value": "30",
-						"extended_weight": "0.25 lb"
-					},
-					"notes": "2'x4'",
-					"categories": [
-						"General Equipment"
-					]
-				},
-				{
-					"type": "equipment",
-					"id": "1ea55ee8-9d86-4726-8d37-19f4500cdfde",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Index Cards",
-					"value": "6",
-					"weight": "0 lb",
-					"calc": {
-						"extended_value": "6",
-						"extended_weight": "0 lb"
-					}
-				},
-				{
-					"type": "equipment",
-					"id": "e5b10051-26bf-4e43-8851-85d32ad21436",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Marker",
-					"value": "6",
-					"weight": "0 lb",
-					"calc": {
-						"extended_value": "6",
-						"extended_weight": "0 lb"
-					}
-				},
-				{
-					"type": "equipment",
-					"id": "1f429a23-7f8c-47d9-8089-08ed97e9091c",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Measuring laser",
-					"value": "6",
-					"weight": "0 lb",
-					"calc": {
-						"extended_value": "6",
-						"extended_weight": "0 lb"
-					}
-				},
-				{
-					"type": "equipment",
-					"id": "ec961122-bc3f-452c-91de-e9610d31c87e",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Nitrile Gloves",
-					"value": "6",
-					"weight": "0 lb",
-					"calc": {
-						"extended_value": "6",
-						"extended_weight": "0 lb"
-					}
-				},
-				{
-					"type": "equipment",
-					"id": "075055dc-1cce-44da-9150-935070b5f04d",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Plastic Bags",
-					"value": "6",
-					"weight": "0 lb",
-					"calc": {
-						"extended_value": "6",
-						"extended_weight": "0 lb"
-					}
-				},
-				{
-					"type": "equipment",
-					"id": "4db5ebf9-8350-4102-86eb-eea06d22ef25",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Fire-Starter Paste",
-					"tech_level": "6",
-					"value": "5",
-					"weight": "0.25 lb",
-					"reference": "HT58",
-					"calc": {
-						"extended_value": "5",
-						"extended_weight": "0.25 lb"
-					},
-					"notes": "Enough for 20 fires.",
-					"categories": [
-						"General Equipment"
-					]
-				},
-				{
-					"type": "equipment",
-					"id": "be6631ab-7117-49a3-9f1d-4af9246e0aa6",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Glowstick",
-					"tech_level": "7",
-					"value": "2",
-					"weight": "0.1 lb",
-					"reference": "HT52",
-					"calc": {
-						"extended_value": "2",
-						"extended_weight": "0.1 lb"
-					},
-					"notes": "Lasts 12 hours.",
-					"categories": [
-						"General Equipment"
-					]
-				},
-				{
-					"type": "equipment",
-					"id": "34ba7492-97fb-4873-a078-3f863fd36273",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Snack",
-					"tech_level": "7",
-					"value": "2",
-					"weight": "0.25 lb",
-					"reference": "HT35",
-					"calc": {
-						"extended_value": "2",
-						"extended_weight": "0.25 lb"
-					},
-					"categories": [
-						"General Equipment"
-					]
-				},
-				{
-					"type": "equipment",
-					"id": "57c59120-8f97-4e12-a90f-f9cfbc8586b0",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Cards",
-					"value": "0",
-					"weight": "0 lb",
-					"calc": {
-						"extended_value": "0",
-						"extended_weight": "0 lb"
-					},
-					"notes": "1 Conseco 2 Campanera 28Hernandez 1Sazaki 1Pasqual 2Rose"
-				},
-				{
-					"type": "equipment",
-					"id": "3656d3fe-3451-42b2-a080-2d2c54d894f6",
-					"equipped": true,
-					"quantity": 1,
-					"description": "\"Zip Taser\" (Battery Launcher)",
-					"tech_level": "9",
-					"value": "0",
-					"weight": "0 lb",
-					"weapons": [
-						{
-							"type": "ranged_weapon",
-							"damage": {
-								"type": "FP",
-								"base": "1d+3"
-							},
-							"accuracy": "1",
-							"range": "50",
-							"rate_of_fire": "1",
-							"shots": "6(3)",
-							"bulk": "-3",
-							"recoil": "2",
-							"calc": {
-								"level": 15,
-								"range": "50",
-								"damage": "1d+3 FP"
-							},
-							"defaults": [
-								{
-									"type": "skill",
-									"name": "Guns",
-									"specialization": "Pistol"
-								}
-							]
-						}
-					],
-					"calc": {
-						"extended_value": "0",
-						"extended_weight": "0 lb"
-					},
-					"notes": "6/6",
-					"categories": [
-						"Missile Weapon",
-						"Weaponry"
-					]
-				},
-				{
-					"type": "equipment",
-					"id": "1e1662e4-5a3b-4fc4-a59e-25b6dd0ca95c",
-					"equipped": true,
-					"quantity": 1,
-					"description": "Heavy Zip Taser",
-					"value": "0",
-					"weight": "0 lb",
-					"weapons": [
-						{
-							"type": "ranged_weapon",
-							"damage": {
-								"type": "",
-								"base": "2d"
-							},
-							"accuracy": "1",
-							"range": "50",
-							"rate_of_fire": "1",
-							"shots": "6 (4)",
-							"bulk": "-4",
-							"recoil": "2",
-							"calc": {
-								"level": 15,
-								"range": "50",
-								"damage": "2d"
-							},
-							"defaults": [
-								{
-									"type": "skill",
-									"name": "Guns",
-									"specialization": "Grenade Launcher"
-								}
-							]
-						}
-					],
-					"calc": {
-						"extended_value": "0",
-						"extended_weight": "0 lb"
-					}
-				}
-			]
+			"equipped": true,
+			"calc": {
+				"extended_value": 4189,
+				"extended_weight": "6.05 lb"
+			}
 		},
 		{
-			"type": "equipment",
 			"id": "b74cba03-c37b-401b-874b-048e17108167",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "eRubles",
-			"value": "0",
-			"weight": "0 lb",
+			"notes": "218,766",
+			"quantity": 1,
+			"equipped": true,
 			"calc": {
-				"extended_value": "0",
+				"extended_value": 0,
 				"extended_weight": "0 lb"
-			},
-			"notes": "218,766"
+			}
 		}
 	],
 	"notes": [
 		{
-			"type": "note",
 			"id": "396d1ca2-69f3-494b-ba90-a3d3fc20aa47",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note_container",
 			"id": "e6a6915d-4197-4398-b6fa-48824e7d03c4",
-			"text": "",
+			"type": "note_container",
 			"open": true,
 			"children": [
 				{
-					"type": "note",
 					"id": "ce4d2901-b815-430e-a49c-a3ca0ee79bd4",
-					"text": ""
+					"type": "note"
 				},
 				{
-					"type": "note",
 					"id": "dfbf8241-a14b-4e4a-82cf-79850e031a34",
-					"text": ""
+					"type": "note"
 				}
 			]
 		},
 		{
-			"type": "note",
 			"id": "ebe193d3-132b-45ec-9810-0c38f60a8e38",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "7f802c3e-bd97-4315-a562-2089900faa8e",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "12828586-70c6-4a5d-9875-203654708f47",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "14293da9-5b8a-4426-b47a-b410b35cae6a",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "92fbfe83-fca4-4f1b-812a-5ef6064476a4",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "e5a056bb-6228-44e9-9e7c-ecde9f84b8b4",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "f8c363b2-dd67-487c-83b4-c4eefe72da2c",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "5ef0fccb-2be8-443d-9608-426e3a62dca7",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "76a3cd61-030b-470e-a3b7-beba0f71b860",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "eb02ae09-3ae7-408d-86d3-ca443db0cc36",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "740f6fc3-1659-48fe-80b8-582942656b66",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "4c38b918-f174-40f2-a46d-f09b7c4b9b49",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "5d0ebb4b-ee9f-4de1-825e-ecdd1bac61c3",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "33d63f39-066a-4081-86bc-7ae68b490a2e",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "44ae1122-3fcd-4181-91a1-7d3c7b9581e5",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "1c0b6d57-18a4-4fe1-93d8-ac7fb2c7ded9",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "226ec1cf-128a-4433-b0d8-d72d0d798c3f",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "471247a9-1827-432c-a556-d12e0d273393",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "ac999eea-123c-4d95-929a-e5f0f5aef6af",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "60e3aff3-bf2b-4874-a59f-05b363336240",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "d9a5e2d6-30ca-4d70-a95d-14bea9eadf0e",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "e437d9ef-9033-49be-8d36-6f3736f848f7",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "e7767a6c-a99b-43b1-b703-a6b61074c095",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "e0d4c791-b573-4eac-b6c1-a56711cf0866",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "b1b841ee-9b1d-4506-88b7-8880ea2cc3a3",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "742037ae-80c5-402b-8680-b2be1ec5adbe",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "e2dcb33e-1a9a-4c92-8bc0-8f893afd65d4",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "9bc7cac2-09be-4881-8342-2ff52c20bbc3",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "6e2b4942-5713-4cf7-82f0-afb255734643",
-			"text": ""
+			"type": "note"
 		},
 		{
-			"type": "note",
 			"id": "775a2ff1-c691-4355-9a2e-8ca015bdf02b",
-			"text": ""
+			"type": "note"
 		}
 	],
+	"created_date": "2018-07-07T00:00:00-07:00",
+	"modified_date": "2023-08-08T21:57:06-07:00",
 	"calc": {
 		"swing": "1d",
 		"thrust": "1d-2",
 		"basic_lift": "20 lb",
-		"lifting_st_bonus": 0,
-		"striking_st_bonus": 0,
-		"throwing_st_bonus": 0,
+		"dodge_bonus": 1,
+		"parry_bonus": 1,
+		"block_bonus": 1,
 		"move": [
 			6,
 			4,
@@ -3736,9 +3626,6 @@
 			8,
 			7,
 			6
-		],
-		"dodge_bonus": 1,
-		"block_bonus": 1,
-		"parry_bonus": 1
+		]
 	}
 }
